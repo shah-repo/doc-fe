@@ -18,9 +18,10 @@ const helpContent = {
 interface Props {
   persistent?: boolean
   draggable?: boolean
+  className?: string
 }
 
-const HelpCenter: React.FC<Props> = ({ persistent }) => {
+const HelpCenter: React.FC<Props> = ({ persistent, className }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -49,7 +50,7 @@ const HelpCenter: React.FC<Props> = ({ persistent }) => {
 
   return (
     <>
-      <IconButton color="inherit" size="small" onClick={openMenu} data-cy="help-center.opener">
+      <IconButton className={className} color="inherit" size="small" onClick={openMenu} data-cy="help-center.opener">
         <HelpIcon />
       </IconButton>
       <HelpCenterNavigation

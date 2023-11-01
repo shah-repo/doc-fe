@@ -4,10 +4,11 @@ import FormHeaderPresenter from './FormHeader.presenter';
 interface Props {
   isCreateDocumentDisabled: boolean
   setDoNotPrompt?: (value: boolean) => void
+  isSliderView?: boolean
 }
 
-const FormHeader: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled, setDoNotPrompt }) => (
-  <FormHeaderPresenter {...{ isCreateDocumentDisabled, setDoNotPrompt }} />
+const FormHeader: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled, setDoNotPrompt, isSliderView }) => (
+  <FormHeaderPresenter {...{ isCreateDocumentDisabled, setDoNotPrompt, isSliderView }} />
 );
 
 export default FormHeader;

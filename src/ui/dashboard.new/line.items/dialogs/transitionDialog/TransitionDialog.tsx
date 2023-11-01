@@ -113,7 +113,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                 variant="h2"
                 component="h2"
                 id="simple-modal-title"
-                className={classes.modeltitle}
+                className={classes.modalTitle}
               >
                 {!hideLabel && <Text
                   translation={
@@ -166,7 +166,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                     variant="h2"
                     component="h2"
                     id="simple-modal-title"
-                    className={classes.modeltitle}
+                    className={classes.modalTitle}
                   >
                     <Text translation="transition.action.cancel.schedule.title" />
                   </Typography>

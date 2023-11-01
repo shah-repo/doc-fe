@@ -94,6 +94,14 @@ export default makeStyles((theme) =>
 
       borderRadius: theme.spacing(0.5, 0.5, 0, 0),
     },
+    cellautoUpdate: {
+      width: '10%',
+      display: 'flex',
+      alignItems: 'center',
+      '& > #field-autoUpdate': {
+        margin: 0, // Need to be "10.5px 14px"
+      },
+    },
     cellOne: {
       width: '24%',
       display: 'flex',
@@ -102,6 +110,12 @@ export default makeStyles((theme) =>
       paddingRight: theme.spacing(1),
       '& > .MuiBox-root': {
         width: '100%',
+      },
+    },
+    smallCellOther: {
+      width: '33%',
+      '& .MuiOutlinedInput-multiline': {
+        padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
       },
     },
     cellOther: {
@@ -294,6 +308,13 @@ export default makeStyles((theme) =>
       padding: theme.spacing(0.25),
       fontSize: 12,
       whiteSpace: 'pre-line',
+    },
+    customTooltip: {
+      backgroundColor: Colors.black,
+      whiteSpace: 'pre-wrap',
+    },
+    customArrow: {
+      color: Colors.black,
     },
   }),
 );

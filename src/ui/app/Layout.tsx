@@ -3,13 +3,35 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
-import GeneralSettingsContainer from '../administration/generalsettings/GeneralSettings.container';
+import GeneralSettingsPage from '../administration/general.settings';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import ChangeRequestCreateContainer from '../change.request/ChangeRequestCreate.container';
 import ChangeRequestContainer from '../change.request/Container';
 import ChangeRequestListContainer from '../change.request/grid/container';
 import WatermarkFooterContainer from '../components/watermarkFooter/container';
-import { ASYNC_TASKS_URL, CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DASHBOARD_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GENERAL_SETTINGS_URL, GLOBAL_SEARCH_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from '../constants/urls';
+import {
+  ASYNC_TASKS_URL,
+  CHANGE_REQUEST_CREATE_URL,
+  CHANGE_REQUEST_LIST_URL,
+  CHANGE_REQUEST_ROOT_URL,
+  DASHBOARD_URL,
+  DOCUMENT_BY_CATEGORY_LIST_URL,
+  DOCUMENT_BY_TYPE_LIST_URL,
+  DOCUMENT_REVISION_CREATE_URL,
+  DOCUMENT_REVISION_LIST_URL,
+  DOCUMENT_REVISION_ROOT_URL,
+  DOCUMENT_TYPE_MANAGEMENT_URL,
+  EQUIPMENT_SPECIFICATION_LIST_URL,
+  GENERAL_SETTINGS_URL,
+  GLOBAL_SEARCH_URL,
+  GROUP_MANAGEMENT_ROOT_URL,
+  HOME_URL,
+  PAGE_DETAILS_MANAGEMENT_URL,
+  SLACK_ROOT_URL,
+  TRAINING_DETAIL_URL,
+  TRAINING_URL,
+  USER_MANAGEMENT_ROOT_URL,
+} from '../constants/urls';
 import DashboardLayout from '../dashboard.new/Dashboard.layout';
 import DashboardContainer from '../dashboard/Dashboard.container';
 import DocumentRevisionContainer from '../document.revision/container';
@@ -18,12 +40,13 @@ import { DocumentTypeManagementContainer } from '../document.type.management/ken
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
+import EquipmentSpecificationListContainer from '../equipment.specification/grid/container';
 import GroupManagementListContainer from '../group.management/kendo/container';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
 import SlackContainer from '../slack/Container';
-import TrainingListContainer from '../training/grid/container';
 import TrainingDetailContainer from '../training/TrainingDetail.container';
+import TrainingListContainer from '../training/grid/container';
 import UserManagementListContainer from '../user.management/kendo/container';
 import DataFetcherContainer from './DataFetcher.container';
 import HeaderContainer from './Header.container';
@@ -54,6 +77,11 @@ const Layout: React.FunctionComponent = () => {
         <DataFetcherContainer />
         <Switch>
           <Route
+            path={DOCUMENT_REVISION_LIST_URL}
+            exact
+            component={DocumentRevisionListContainer}
+          />
+          <Route
             path={DOCUMENT_REVISION_CREATE_URL}
             exact
             component={DocumentRevisionCreateContainer}
@@ -73,6 +101,11 @@ const Layout: React.FunctionComponent = () => {
             component={DashboardLayout}
           />
           <Route
+            path={EQUIPMENT_SPECIFICATION_LIST_URL}
+            exact
+            component={EquipmentSpecificationListContainer}
+          />
+          <Route
             path={CHANGE_REQUEST_CREATE_URL}
             exact
             component={ChangeRequestCreateContainer}
@@ -85,11 +118,6 @@ const Layout: React.FunctionComponent = () => {
             path={CHANGE_REQUEST_LIST_URL}
             exact
             component={ChangeRequestListContainer}
-          />
-          <Route
-            path={DOCUMENT_REVISION_LIST_URL}
-            exact
-            component={DocumentRevisionListContainer}
           />
           <Route
             path={TRAINING_DETAIL_URL}
@@ -137,7 +165,7 @@ const Layout: React.FunctionComponent = () => {
           />
           <Route
             path={GENERAL_SETTINGS_URL}
-            component={GeneralSettingsContainer}
+            component={GeneralSettingsPage}
           />
           <Redirect to={HOME_URL} />
         </Switch>

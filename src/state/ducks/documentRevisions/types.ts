@@ -419,6 +419,7 @@ export interface FBDocumentRevisionProps {
   id?: string
   formTemplate?: FBFormTemplateProps
   formDocument?: FBDocumentRevisionProps
+  formDocumentId?: string
   formInput?: Record<string, any>
   document?: Partial<DocumentRevisionDocumentRequest>
   revision?: number

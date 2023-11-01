@@ -1,21 +1,23 @@
 import React from 'react';
 import { translate } from '../../../../../common/intl';
+import { ActionsCell } from './components/Actions';
 import { CostCell } from './components/CostCell';
 import { LeadTimeCell } from './components/LeadTimeCell';
 import PartIDCell from './components/PartIDCell';
 import { RevCell } from './components/RevCell';
 import { StatusCell } from './components/StatusCell';
 import { TitleCell } from './components/TitleCell';
-import { ActionsCell } from './components/Actions';
 import { SchemaOptions } from './types';
 
-export const buildSchema = ({ onConfirm, onDiscard, onDelete, actionsClass, isDisabled }: SchemaOptions) => ([
+export const buildSchema = ({ onConfirm, onDiscard, onDelete, onRefresh, actionsClass, isDisabled }: SchemaOptions) => ([
   {
     id: 'id',
     field: 'docId',
     title: translate('bom.drawerTable.field.docId.title'),
     width: 150,
-    template: PartIDCell,
+    template: (props) => (
+      <PartIDCell {...props} onRefresh={onRefresh} />
+    ),
   },
   {
     id: 'revision',

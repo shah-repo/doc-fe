@@ -1,10 +1,10 @@
 import { debounce, get, has, isEmpty, set } from 'lodash';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { authSelectors } from '../../state/ducks/auth';
 import { changeRequestsActions } from '../../state/ducks/changeRequest';
-import { ChangeRequest, ChangeRequestEditRequestBody } from '../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestEditRequestBody, ChangeRequestStatus } from '../../state/ducks/changeRequest/types';
 import { ApplicationState } from '../../state/reducers';
 import ChangeRequestFormContainer from '../change.request/form/ChangeRequestForm.container';
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../change.request/form/transform';
@@ -15,7 +15,7 @@ import { compareValuesToSubmit } from '../components/forms/helpers';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import useAsync from '../hooks/useAsync';
-import { canEditChangeRequest } from './helpers';
+import { useCanUpdateChangeRequest } from './helpers';
 import ChangeRequestSummaryContainer from './summary/container';
 
 interface StateProps {
@@ -32,6 +32,7 @@ interface OwnProps {
   hideSideBar?: boolean
   inDialog?: boolean
   currentDocRevId?: string
+  isEditing?: boolean
 }
 
 type ChangeRequestUpdateContainerProps = OwnProps &
@@ -42,11 +43,31 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
-const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
-  { save, changeRequest, currentUserEmail, loadAudit, hideSideBar = false, inDialog = false, currentDocRevId }) => {
-
+const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = ({
+  changeRequest,
+  currentDocRevId,
+  currentUserEmail,
+  hideSideBar = false,
+  inDialog = false,
+  isEditing = false,
+  save,
+  loadAudit,
+}) => {
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+  const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, isEditing);
+  const history = useHistory();
+  const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
+
+  useEffect(() => {
+    FBDataStore?.setRefreshData({
+      ...FBDataStore?.refreshData,
+      changeRequest: {
+        ...FBDataStore?.refreshData?.changeRequest,
+        formInput: initialValues.formInput,
+      },
+    });
+  }, [initialValues.formInput]);
 
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
@@ -57,9 +78,18 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       });
 
       loadAudit(changeRequest.id);
+
+      if (isEditing) {
+        history.push(changeRequestPreviewPath(changeRequest.id));
+      }
     },
   });
-  if (!canEditChangeRequest(changeRequest, currentUserEmail)) {
+
+  if (isEditing && !isInReview) {
+    return <Redirect to={changeRequestPreviewPath(changeRequest.id)} />;
+  }
+
+  if (!canEditChangeRequest) {
     if (inDialog) {
       return (
         <ChangeRequestSummaryContainer
@@ -82,6 +112,10 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     );
 
     if (isEmpty(dataToSubmit)) {
+      if (isEditing) {
+        setDoNotPrompt(true);
+        history.push(changeRequestPreviewPath(changeRequest.id));
+      }
       return;
     }
 
@@ -107,15 +141,16 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const debouncedSubmit = debounce(onSubmit, 1000);
 
   return (
-    <FormContext.Provider value={{ submitOnChange: true }}>
+    <FormContext.Provider value={{ submitOnChange: !isEditing, isEditing }}>
       <ChangeRequestFormContainer
         asyncState={async.asyncState}
         onSubmit={debouncedSubmit}
         initialValues={initialValues}
         changeRequest={changeRequest}
         doNotPrompt={doNotPrompt}
+        setDoNotPrompt={setDoNotPrompt}
         hideSideBar={hideSideBar}
-        currentDocRevId = {currentDocRevId}
+        currentDocRevId={currentDocRevId}
         inDialog={inDialog}
       />
     </FormContext.Provider>

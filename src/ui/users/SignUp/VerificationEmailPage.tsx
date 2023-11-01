@@ -1,9 +1,9 @@
 import { Paper, Typography } from '@material-ui/core';
+import classMerge from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import Text from '../../components/Text';
 import { styles } from './SignUp.styles';
-
 interface Props {
   email: string
   logo: string
@@ -24,7 +24,7 @@ const VerificationEmailPage: React.FunctionComponent<Props> = ({ email, logo, me
         <Typography id="VerificationEmailPage-title" variant="h4" className={classes.title}>
           <Text translation="signup.verification" />
         </Typography>
-        <Typography id="VerificationEmailPage-email" variant="h4" className={classes.boldTitle}>
+        <Typography id="VerificationEmailPage-email" variant="h4" className={classMerge(classes.boldTitle, classes.verificationEmailMobile)}>
           {`"${email.toLowerCase()}"`}
         </Typography>
         <Typography id="VerificationEmailPage-message" variant="subtitle1" className={classes.title}>

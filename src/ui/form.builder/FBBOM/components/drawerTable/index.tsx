@@ -2,9 +2,7 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import NoDataFound from '../../../../components/common/kendo/NoDataFound';
@@ -19,11 +17,8 @@ import { AlternatePart, AlternatePartEditEvent, EditableAlternatePart, FBBOMDraw
 import { buildSchema } from './schema';
 import useStyles from './styles';
 
-const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ parentRevId, isDisabled }) => {
+const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ partRevId, basePartRevId, isDisabled }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { _documentRevisionFormState } = SM.useStores();
-  const basePartNodeRevId = _documentRevisionFormState?.documentRevision?.id ?? '';
 
   const fetchAlternateParts = useActionCreator(
     documentRevisionsActions.fetchAlternateParts,
@@ -42,9 +37,9 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
       alternatePartAsync.start(
         addAlternateParts,
         {
-          parentNodeRevId: parentRevId,
-          alternatePartNodeRevId: values.id,
-          basePartNodeRevId,
+          partRevId,
+          alternatePartRevId: values.id,
+          basePartRevId,
         },
         alternatePartAsync,
       );
@@ -54,10 +49,10 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
     onSuccess: () => {
       fetchAlternatePartAsync.start(
         fetchAlternateParts,
-        parentRevId,
+        basePartRevId,
+        partRevId,
         fetchAlternatePartAsync,
       );
-      dispatch(documentRevisionsActions.loadAudit(basePartNodeRevId));
     },
     onError: (response) => {
       toastError(response);
@@ -75,15 +70,25 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
   });
 
   useEffect(() => {
-    if (!parentRevId) {
+    if (!partRevId) {
       return;
     }
     fetchAlternatePartAsync.start(
       fetchAlternateParts,
-      parentRevId,
+      basePartRevId,
+      partRevId,
       fetchAlternatePartAsync,
     );
-  }, [parentRevId]);
+  }, [partRevId]);
+
+  const onRefresh = () => {
+    fetchAlternatePartAsync.start(
+      fetchAlternateParts,
+      basePartRevId,
+      partRevId,
+      fetchAlternatePartAsync,
+    );
+  };
 
   const handleAddAlternatePart = () => setEditedAlternatePart({
     id: uuidv4(),
@@ -101,9 +106,9 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
     if (!isDisabled) {
       alternatePartAsync.start(
         deleteAlternateParts,
-        parentRevId,
+        partRevId,
         dataItem.id,
-        basePartNodeRevId,
+        basePartRevId,
         alternatePartAsync,
       );
     }
@@ -111,6 +116,8 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
 
   const rowRender: DataGridProps<EditableAlternatePart>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableAlternatePart;
+    item.basePartRevId = basePartRevId;
+    item.partRevId = partRevId;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
 
     if (!isUpdating) {
@@ -143,6 +150,7 @@ const FBBOMDrawerTable: React.FunctionComponent<FBBOMDrawerTableProps> = ({ pare
     onConfirm: formik.submitForm,
     onDiscard: discardAlternatePart,
     onDelete: deleteAlternatePart,
+    onRefresh,
     isDisabled,
   });
 

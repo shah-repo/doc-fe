@@ -70,7 +70,9 @@ export const buildSchema = ({
       field: SUPPLIER_FIELD,
       title: 'form.builder.part.vendors.vendor',
       filterCell: InputFilter,
-      template: (props) => <SupplierCellTemplate {...props} options={suppliers} onClick={onRowClick} />,
+      template: (props) => (
+        <SupplierCellTemplate{...props} options={suppliers.filter(s => !s.isUnselectable)} onClick={onRowClick} />
+      ),
       width: 200,
     },
     {

@@ -4,7 +4,6 @@ import { DocumentRevision } from '../../../../state/ducks/documentRevisions/type
 import { SelectOption } from '../../forms/fields/Select';
 
 export interface PrintLabelDetailsDialogProps {
-  setSelectedOption: React.Dispatch<React.SetStateAction<SelectOption | undefined>>
   onNumberOfLabelChange: (value: Number) => void
   openDialog: () => void
   closeDialog: () => void
@@ -12,6 +11,7 @@ export interface PrintLabelDetailsDialogProps {
   onSerialChange: (event: React.ChangeEventHandler<HTMLInputElement>) => void
   onPrintClick: () => void
   onDescriptionChange: (event: React.ChangeEventHandler<HTMLInputElement>) => void
+  onActorChange: (event: React.ChangeEvent<{}>, value: SelectOption) => void
   isOpen: boolean
   companyEmployees: Employee[]
   selectedOption: SelectOption

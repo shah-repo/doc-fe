@@ -1,10 +1,6 @@
-import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { SelectOption } from '../../components/forms/fields/Select';
-import { ChangeRequestUserProps } from './types';
-
-export const canEditChangeRequest = ({ dataProp: changeRequest, currentUserEmail }: ChangeRequestUserProps) => (
-  currentUserEmail === changeRequest.owner.user.email && changeRequest.state === ChangeRequestStatus.Draft
-);
+import { canEditChangeRequest } from '../helpers';
 
 export const canChangeCROwner = (
   state: ChangeRequestStatus,
@@ -12,7 +8,7 @@ export const canChangeCROwner = (
   ownerId: string,
   isCompanyAdmin: boolean,
   hasOwnerShipTag: boolean,
-) =>
+): boolean =>
   ((
     state === ChangeRequestStatus.Draft
     || state === ChangeRequestStatus.InReview
@@ -24,11 +20,11 @@ export const canChangeCROwner = (
   || hasOwnerShipTag;
 
 export const canEditApprovers
-  = ({ dataProp: changeRequest, currentUserEmail }: ChangeRequestUserProps) =>
-    canEditChangeRequest({ dataProp: changeRequest, currentUserEmail })
-    || (currentUserEmail === changeRequest.owner.user.email && changeRequest.state === ChangeRequestStatus.InReview);
+  = (changeRequest: ChangeRequest, currentEmployeeId: string): boolean =>
+    canEditChangeRequest(changeRequest, currentEmployeeId)
+    || (currentEmployeeId === changeRequest.owner.id && changeRequest.state === ChangeRequestStatus.InReview);
 
-export const changeRequestStatusOption = () => {
+export const changeRequestStatusOption = (): SelectOption[] => {
   const options: SelectOption[] = [];
   Object.keys(ChangeRequestStatus).forEach((key) => {
     // TODO: Change ChangeRequestStatus status into key = value, value = text

@@ -2,8 +2,9 @@ import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../layout/theme/utils/colors';
 import { COLLAPSE_BAR_SPACE, HEADER_GAP, HEADER_HEIGHT } from './Header.styles';
 import { DRAWER_WIDTH } from './Navigation.styles';
+import { NextTheme } from '../layout/theme-next/provider';
 
-export default makeStyles(() => createStyles({
+export default makeStyles((theme: NextTheme) => createStyles({
   root: ({ isDashboard, open }: {isDashboard: boolean, open: boolean}) => ({
     position: isDashboard ? 'absolute' : 'fixed',
     top: isDashboard ? HEADER_GAP : HEADER_HEIGHT,
@@ -12,4 +13,10 @@ export default makeStyles(() => createStyles({
     left: open ? DRAWER_WIDTH : COLLAPSE_BAR_SPACE,
     backgroundColor: Colors.alabaster,
   }),
+  [theme.media.mobile]: {
+    root: {
+      left: '0 !important',
+      marginTop: theme.spacing(2.5),
+    },
+  },
 }));

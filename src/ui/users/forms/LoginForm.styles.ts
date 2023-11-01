@@ -1,6 +1,7 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
+import { NextTheme } from '../../layout/theme-next/provider';
 
-export default (theme: Theme) =>
+export default (theme: NextTheme) =>
   createStyles({
     status: {
       marginTop: theme.spacing(3),
@@ -60,7 +61,7 @@ export default (theme: Theme) =>
     input: {
       marginTop: '5px !important',
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.media.mobile]: {
       title: {
         width: '100%',
         marginBottom: theme.spacing(2.5),

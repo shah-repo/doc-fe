@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM_APP_CONFIG } from '../../../../common/constants';
-import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import { companySelectors } from '../../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, Reference } from '../../../../state/ducks/documentRevisions/types';
@@ -57,8 +56,8 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
           if(!isEmptyArray(referenceTo)) {
             const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
-            const description = documentRevision[documentRevision.length - 1].description;
-            setDescription(convertHtmlEntities(description.replace(/(<([^>]+)>|\/n)/g, '')));
+            const description = documentRevision.find(item => item.displayRevision === selectedItem?.precalc?.lot_part_revision)?.name;
+            setDescription(description);
           }
           setData(data);
       },
@@ -141,6 +140,10 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setSelectedNumberOfLabel(value);
     };
 
+    const onActorChange = ( event: React.ChangeEvent<{}>, value: SelectOption ) => {
+      setSelectedOption(value);
+    };
+
     const onPrintClick = () => {
       const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));
       const params = {
@@ -148,7 +151,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         description: description.slice(0, 90),
         partDocId: initialValues.partId,
         revision: initialValues.revision,
-        actor: selectedOption?.text,
+        actor: selectedOption?.text ?? selectedOption,
         lotNumber: initialValues?.lotId?.split('#')[1],
         lotRevUrl: `${SM_APP_CONFIG.REACT_APP_FRONTEND_URL}/document_revision/${data?.documentId}/version/${data?.id}`,
         serial: serial,
@@ -167,7 +170,6 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     return Component({
       ...(props as T),
       companyEmployees: employees,
-      setSelectedOption,
       handleDateChange,
       selectedOption,
       selectedDate,
@@ -183,6 +185,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       closeDialog,
       onNumberOfLabelChange,
       selectedNumberOfLabel,
+      onActorChange,
     });
   };
 

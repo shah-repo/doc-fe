@@ -36,6 +36,10 @@ export interface BOM {
   availableRevisions?: AvailableRevisions
   changeRequestDetails?: ChangeRequestDetails
   costRollUp?: number
+  isEditEnabled?: boolean
+  uniqid?: string
+  enabledFieldsForEditing?: string[]
+  inRestrictedEditMode?: boolean
 }
 
 export interface EditableBOM extends BOM {
@@ -47,12 +51,14 @@ export interface EditableBOM extends BOM {
   childNodeDocumentId?: string
   newChildNodeRevId?: string
   isParentOwner?: boolean
-  isEditEnabled?: boolean
   alternatePartsCount?: number
   attachmentNames?: string[]
   isDisabled?: boolean
+  isSliderView?: boolean
   isUpgradeDisabled?: boolean
   replacementStatus?: string
+  isMaximizedWindow?: boolean
+  parentDocId?: string
 }
 
 export interface BOMEditEvent {
@@ -66,7 +72,7 @@ interface ChangeRequestDetails {
   crId: string
 }
 
-interface AvailableRevisions {
+export interface AvailableRevisions {
   isReleased: boolean
   name: string
   id: string

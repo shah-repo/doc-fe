@@ -2,7 +2,7 @@ import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListColumnProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { BOM } from '../../interface';
+import { AvailableRevisions, BOM } from '../../interface';
 import { ALTERNATE_PART_KEY } from './constants';
 
 export interface FBBOMProps {
@@ -11,6 +11,8 @@ export interface FBBOMProps {
   isDiffViewEnabled?: boolean
   isShowOnly?: boolean
   isUpgradeDisabled?: boolean
+  isMaxDialogOpen?: boolean
+  isSliderView?: boolean
 }
 
 export interface BOMState {
@@ -26,7 +28,8 @@ interface DataState {
 }
 
 export interface FBBOMDrawerTableProps {
-  parentRevId?: string
+  partRevId?: string
+  basePartRevId?: string
   isDisabled?: boolean
 }
 
@@ -48,6 +51,9 @@ export interface AlternatePart {
   cost?: string
   docId?: string
   leadTime?: string
+  availableRevisions?: AvailableRevisions
+  basePartRevId?: string
+  partRevId?: string
   [ALTERNATE_PART_KEY]?: boolean
 }
 

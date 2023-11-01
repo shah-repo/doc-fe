@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -25,8 +25,8 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
-import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DateTime from './DateTime';
+import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
@@ -156,9 +156,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'securityEmployees':
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
         break;
-      case 'documentRevisions':
-        returnValue = (audit.nextValue as DocumentRevision).name;
+      case 'documentRevisions': {
+        const { displayRevision, document, name } = audit.nextValue as DocumentRevision;
+        const displayName = name ? ` - ${name}` : '';
+        returnValue = (<div data-cy={dataCy}>{document?.docId} - Rev {displayRevision}{displayName}</div>);
         break;
+      }
       case 'tasks.dueDate':
       case 'effectiveDate':
         returnValue = getFormattedDateString(audit.nextValue as string, MomentFormats.MonthDateYear);
@@ -313,7 +316,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 }}
               />
               }
-              { quantity && <Text
+              { (quantity !== undefined) && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.quantity.updated"
                 values={{ quantity }}
@@ -352,7 +355,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 }}
               />
               }
-              { quantity && <Text
+              { (quantity !== undefined) && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.quantity.added"
                 values={{ quantity }}
@@ -384,6 +387,26 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'bomAlternateParts':
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
+        break;
+      case 'bomItemUpgraded':
+        try {
+          const prevValue: string = audit.previousValue as string;
+          const { displayRevision: oldDisplayRevision, docId: oldDocId } = JSON.parse(prevValue);
+
+          const nextValue: string = audit.nextValue as string;
+          const { displayRevision: newDisplayRevision, docId: newDocId, arId } = JSON.parse(nextValue);
+
+          const values = {
+            oldDisplayRevision, oldDocId, newDisplayRevision, newDocId,
+          };
+
+          const text = arId
+            ? intl.formatMessage({ id: 'documentRevision.audit.bomItemUpgraded.lineItem.upgraded.arId' }, { ...values, arId })
+            : intl.formatMessage({ id: 'documentRevision.audit.bomItemUpgraded.lineItem.upgraded' }, { ...values });
+          returnValue = (<div data-cy={`${dataCy}-bom-item-upgraded`}>{text}</div>);
+        } catch (err) {
+          // do nothing
+        }
         break;
       case 'relatedPartsStatus':
         if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
@@ -432,7 +455,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const value: POLineItem = JSON.parse(auditValue);
-          const { capitalEquipment, partNumber, serviceId, supplierPartNumber, order, unitPrice, description, partNumberTitle, units, glCode, tax } = value;
+          const { capitalEquipment, partNumber, serviceId, supplierPartNumber, order, unitPrice, description, partNumberTitle, units, glCode, tax, formattedDate } = value;
           const partNumberText = poDefinePartNumberText(value);
           const values = {
             ...value,
@@ -446,6 +469,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             units: units ?? '',
             glCode: glCode ?? '',
             tax: `${Boolean(tax)}`,
+            formattedDate: formattedDate ?? '',
           };
           const text
             = !serviceId

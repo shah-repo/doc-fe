@@ -1,4 +1,4 @@
-import { Avatar, Box, Collapse, Grid, IconButton, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import { Avatar, Box, Button, Collapse, Grid, IconButton, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import React from 'react';
 import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
 import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images/approve_solid.svg';
@@ -17,6 +17,7 @@ import Text from '../../../../components/Text';
 import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
 import ApprovalTitle from '../../common/ApprovalTitle/presenter';
+import DismissAction from '../../common/DismissAction';
 import { getDocIcon } from '../../common/DocIcon';
 import DocId from '../../common/DocId/presenter';
 import { StyledListItem } from '../../common/StyledListItem';
@@ -24,13 +25,12 @@ import { StyleTooltip } from '../../common/StyleTooltip';
 import { DocTypeGroups } from '../../common/types';
 import ApproveDialogueContainer from '../../dialogs/approveDialogueContainer';
 import useStyles from './taskApproval.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
   type: string
   arId: string
-  docRevs: {
+  docRevs: Array<{
     docTypeGroup: DocTypeGroups
     documentRevisionId: string
     documentId: string
@@ -39,7 +39,7 @@ interface Props {
     name: string
     justificationOfChange: string
     descriptionOfChange: string
-  }[]
+  }>
   arChangeRequestId: string
   timestamp: string
   docRevOwnerAvatar: Nullable<string>
@@ -137,11 +137,12 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         className={classes.listItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
+        onClick={handleClick}
       >
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
+          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemAvatar>
           {docRevOwnerAvatar ? (
@@ -163,39 +164,40 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={`${classes.typographyBold} ${classes.margin5}`}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {docRevOwnerName}
-                  </Typography>
+              <Grid item={true} lg={12} className={classes.innerWrap} onClick={handleClick}>
+                <Grid
+                  container={true}
+                  wrap="nowrap"
+                  justify="flex-start"
+                  alignItems="center"
+                  className={classes.textArlapMobile}
+                >
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyBold} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {docRevOwnerName}
+                    </Typography>
+                  </Grid>
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={`${classes.typography} ${classes.margin5}`}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      <Text translation="require.approval" />
+                    </Typography>
+                    <DocId url={changeRequestEditPath(arChangeRequestId)} docId = {arId} />
+                  </Grid>
                 </Grid>
                 <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={`${classes.typography} ${classes.margin5}`}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    <Text translation="require.approval" />
-                  </Typography>
-                </Grid>
-                <Grid item={true}>
-                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId = {arId} />
-                </Grid>
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <ApprovalTitle  url={changeRequestEditPath(arChangeRequestId)} title={title || ''} />
+                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)} title={title || ''} />
                 </Grid>
               </Grid>
               <Grid
@@ -228,7 +230,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           >
             <span>
               {!rejectHover && (
-                <RejectIcon
+                <RejectIcon fill={Colors.raven} stroke={Colors.raven}
                   data-cy="transition-reject"
                   onMouseEnter={onMouseHoverRejectIcon}
                   className={classes.cursorPointer}
@@ -251,7 +253,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             </span>
             <span className={classes.actionIcon}>
               {!approveHover && (
-                <ApproveIcon
+                <ApproveIcon fill={Colors.raven}
                   data-cy="transition-approve"
                   onMouseEnter={onMouseHoverApproveIcon}
                   className={classes.cursorPointer}
@@ -310,7 +312,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
             </span>
             {dismissLineItem && (
-              <DismissAction classes={classes} onClick={handleDismiss} />
+              <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
             )}
           </Box>
         )}
@@ -330,7 +332,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           </span>
         )}
         {hoverItem && dismissLineItem && (
-          <DismissAction classes={classes} onClick={handleDismiss} />
+          <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -349,7 +351,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     justify="flex-start"
                     alignItems="center"
                   >
-                    <Grid item={true}>
+                    <Grid item={true} >
                       <Typography
                         component="span"
                         variant="body2"
@@ -393,7 +395,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   </Grid>
                 }
               />
-              <Box component="div">
+              <Box component="div" className={classes.viewIconMobile}>
                 {viewHoverItem !== prItem.docId && (
                   <ViewIcon className={classes.cursorPointer}
                     onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
@@ -447,6 +449,24 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               </Box>
             </StyledListItem>
           ))}
+          <Grid className={classes.gridMobile}>
+            <Button
+              className={classes.rejectButton}
+              data-cy="transition-reject"
+              onClick={handleRejectClick}
+            >
+              <RejectIcon fill={Colors.white} stroke={Colors.white} />
+              <Text message="common.reject" />
+            </Button>
+            <Button
+              className={classes.approvalButton}
+              data-cy="transition-approve"
+              onClick={handleApproveClick}
+            >
+              <ApproveIcon fill={Colors.white} />
+              <Text message="common.approve" />
+            </Button>
+          </Grid>
         </List>
       </Collapse>
       <ApproveDialogueContainer

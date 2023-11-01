@@ -8,6 +8,7 @@ import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionCon
 import { WhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { BOM } from '../../../ui/form.builder/FBBOM/interface';
 import { Vendor } from '../../../ui/form.builder/FBPartVendors/types';
+import FBDataStore from '../../../ui/form.builder/FBStore/FBDataStore';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Audit, AuditActionPayload } from '../audit/types';
@@ -220,6 +221,7 @@ const approveAndRelease = (
   id: string,
   body: ApproveAndReleaseRequest,
   password,
+  isSliderView,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
@@ -227,8 +229,12 @@ const approveAndRelease = (
   data: body,
   password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
-    dispatch(load(id));
-    dispatch(loadDocument(docRev.document.id));
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: docRev.document.id, documentRevision: docRev, reRender: true };
+    } else {
+      dispatch(load(id));
+      dispatch(loadDocument(docRev.document.id));
+    }
   },
   handlers,
 });
@@ -487,6 +493,17 @@ const updateBOMBranch = (
     handlers,
   });
 
+const alternatePartRevUpdate = (
+  data,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_ALTERNATE_PART}`,
+    method: 'patch',
+    data,
+    handlers,
+  });
+
 const changeOrderBOMBranch = (
   parentNodeRevId,
   data,
@@ -510,22 +527,23 @@ const deleteBOMBranch = (
     handlers,
   });
 
-const fetchAlternateParts = (
-  parentNodeRevId,
-  handlers: Handlers,
-): ApiAction<BOM[]> =>
-  apiActionWithCallbacks({
-    url: `${FETCH_ALTERNATE_PART}/${parentNodeRevId}`,
-    method: 'get',
-    handlers,
-  });
-
 const fetchVendors = (
   parentNodeRevId,
   handlers: Handlers,
 ): ApiAction<Vendor[]> =>
   apiActionWithCallbacks({
     url: `${FETCH_VENDORS}/${parentNodeRevId}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchAlternateParts = (
+  basePartRevId: string,
+  partRevId: string,
+  handlers: Handlers,
+): ApiAction<BOM[]> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_ALTERNATE_PART}/${basePartRevId}/${partRevId}`,
     method: 'get',
     handlers,
   });
@@ -542,13 +560,13 @@ const addAlternatePart = (
   });
 
 const deleteAlternatePart = (
-  parentRevId: string,
-  alternatePartNodeRevId: string,
-  basePartNodeRevId: string,
+  partRevId: string,
+  alternatePartRevId: string,
+  basePartRevId: string,
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `${DELETE_ALTERNATE_PART}/${parentRevId}/${alternatePartNodeRevId}/${basePartNodeRevId}`,
+    url: `${DELETE_ALTERNATE_PART}/${basePartRevId}/${partRevId}/${alternatePartRevId}`,
     method: 'delete',
     handlers,
   });
@@ -683,6 +701,7 @@ export default {
   changeOrderBOMBranch,
   fetchWhereUsedTree,
   fetchHasATree,
+  alternatePartRevUpdate,
   updateLotStatus,
   getAllApprovalRequests,
 };

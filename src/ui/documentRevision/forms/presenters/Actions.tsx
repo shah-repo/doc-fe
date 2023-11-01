@@ -61,7 +61,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
   // of create button until correct doc id is generated
-  const { isCreateDocumentDisabled, setDoNotPrompt } = props;
+  const { isCreateDocumentDisabled, setDoNotPrompt, isSliderView } = props;
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
 
@@ -263,15 +263,20 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.['lhr-build-type']);
   const isRenderHTMLDefined = documentRevision?.formDocument?.renderHTMLDefined;
+
+  const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
   const showCancelEditPartButton = isPart && documentRevision?.isBeingEditedAfterRelease
-    && documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;
+    && documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER
+    && (isUserDocumentOwner || hasPermisstionToEditRestrictedPart);
 
   if (showCancelEditPartButton) {
     accessableButtons.push(PreviewControlButtons.CancelEditPartButton);
   }
 
   const cancelPartEdit = () => {
-    dispatch(documentRevisionsActions.cancelPartEdit(documentRevision.id));
+    if (isDocumentRevisionInDraft(status)) {
+      dispatch(documentRevisionsActions.cancelPartEdit(documentRevision.id));
+    }
   };
 
   if (
@@ -392,6 +397,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               docRevId={values.id as string}
               owner={documentRevision?.owner}
               renderAsButton={renderAsButton}
+              isSliderView={isSliderView}
               {...{
                 isRecord,
                 documentTypeId,

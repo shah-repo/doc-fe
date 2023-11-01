@@ -37,6 +37,7 @@ interface OwnProps {
   documentRevisionId: string
   isNewVersion?: boolean
   isNewOutput?: boolean
+  isSliderView?: boolean
 }
 
 export let isOperator = React.createContext<boolean>(false);
@@ -77,6 +78,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
   currentEmployeeId,
   isCompanyAdmin,
   selectedDocument,
+  isSliderView,
 }) => {
   const loadDocumentRevisionAction = useCallback(() => {
     if (documentRevisionId) {
@@ -100,7 +102,11 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
   const availableOperators = operators.map((operator) => operator.user.email);
   const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
   const hasChangeOwnershipPermission = useSelector(getHasPermission(Permission.DOCUMENT_OWNER_CHANGE));
-  const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator) || (documentRevision?.isBeingEditedAfterRelease && documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER);
+  const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
+
+  const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)
+    || (documentRevision?.isBeingEditedAfterRelease && hasPermisstionToEditRestrictedPart
+      && documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER);
   const isPOEditState
     = useGetHasTag(GroupTag.PO_ADMIN)
     && checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)
@@ -146,6 +152,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
           documentId={documentId}
           canChangeOwnerShip={canChangeOwnerShip}
           isNewVersion={isNewVersion as boolean}
+          isSliderView={isSliderView}
         />
       )}
       {canPreview && (

@@ -1,5 +1,13 @@
 /* eslint-disable max-len */
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, USER_MANAGEMENT_ROOT_URL } from '../../../ui/constants/urls';
+import {
+  CHANGE_REQUEST_LIST_URL,
+  DOCUMENT_REVISION_LIST_URL,
+  DOCUMENT_TYPE_MANAGEMENT_URL,
+  GROUP_MANAGEMENT_ROOT_URL,
+  HOME_URL,
+  PAGE_DETAILS_MANAGEMENT_URL,
+  USER_MANAGEMENT_ROOT_URL,
+} from '../../../ui/constants/urls';
 import { GroupTag } from '../auth/types';
 import { NavigationItem } from './types';
 
@@ -8,6 +16,7 @@ export const SET_COMPANY_MINE = 'company/SET_COMPANY_MINE';
 export const UPDATE_NAVIGATION_ITEM = 'company/UPDATE_NAVIGATION_ITEM';
 export const AUTOSAVE_CONFIG = 'company/AUTOSAVE_CONFIG';
 export const REDLINE_CONFIG = 'company/REDLINE_CONFIG';
+export const SET_GENERAL_SETTINGS = 'company/SET_GENERAL_SETTINGS';
 
 export const WHITE_LABEL_DEFAULT = {
   logo: '',

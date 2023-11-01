@@ -2,13 +2,14 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
-import React, { useState } from 'react';
+import React from 'react';
 import { translate } from '../../../../../../common/intl';
+import useHover from '../../../../../hooks/useHover';
 import { styles } from './styles';
 
 export const Issues: React.FC<TreeListHeaderCellProps> = () => {
   const classes = styles();
-  const [isHovered, setIsHovered] = useState(false);
+  const [issuesContainerRef, isHovered] = useHover<HTMLButtonElement>();
 
   return (
     <Grid
@@ -17,21 +18,22 @@ export const Issues: React.FC<TreeListHeaderCellProps> = () => {
       alignContent="flex-start"
       justify="flex-start"
     >
-      <div
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+      <Tooltip
+        title={translate('bom.table.title.issues')}
+        placement="top"
+        arrow
       >
-        <Tooltip
-          title={translate('bom.table.title.issues')}
-          placement="top"
-          arrow
-        >
+        <span ref={issuesContainerRef} className={classes.iconContainer}>
           <FontAwesomeIcon
-            className={classes.issues}
-            icon={isHovered ? solid('hexagon-exclamation') : regular('hexagon-exclamation')}
+            className={classes.icon}
+            icon={
+              isHovered
+                ? solid('hexagon-exclamation')
+                : regular('hexagon-exclamation')
+            }
           />
-        </Tooltip>
-      </div>
+        </span>
+      </Tooltip>
     </Grid>
   );
 };

@@ -1,21 +1,30 @@
-import { Box } from '@material-ui/core';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Tooltip } from '@material-ui/core';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent, useEffect } from 'react';
+import { isNil } from 'lodash';
+import React, { ChangeEvent, MouseEventHandler, useEffect } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
+import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import useDialog from '../../../../../hooks/useDialog';
+import { Colors } from '../../../../../layout/theme-next';
 import { EditableBOM } from '../../../interface';
 import { SELECTED_PART_KEY_SEPARATOR } from '../../treelist/constants';
-import { CustomTemplateProps } from '../types';
 import { AlternatePart } from '../../treelist/interface';
+import { CustomTemplateProps } from '../types';
+import { styles } from './styles';
 
-const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
+const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, onRefresh, ...props }) => {
   const { dataItem, field } = props;
+  const classes = styles();
   const isAddMode = [Mode.add].includes(dataItem[MODE_FIELD]);
   const { getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
 
@@ -24,6 +33,44 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
       setParts(data);
+    },
+  });
+
+  const dialog = useDialog();
+  const openRevChangeDialog: MouseEventHandler = (event) => {
+    dialog.open();
+    event.stopPropagation();
+  };
+
+  const onRevChange: MouseEventHandler = (event) => {
+    event?.stopPropagation();
+    if (isNil(dataItem.availableRevisions)) {
+      return;
+    }
+    fetchRevUpdatePartAsync.start(
+      alternatePartRevUpdate,
+      {
+        existingAlternatePartRevId: dataItem.id,
+        newAlternatePartRevId: dataItem.availableRevisions?.id,
+        partRevId: dataItem.partRevId,
+        basePartRevId: dataItem.basePartRevId,
+      },
+      fetchRevUpdatePartAsync,
+    );
+  };
+
+  const getInfoIcon = () => (
+    <span className={cx(classes.infoIcon, classes.defaultIcon)} onClick={openRevChangeDialog}>
+      <Tooltip arrow title={translate('bom.revision.available')} placement="top-start">
+        <FontAwesomeIcon data-cy="new-revision-available" color={Colors.primaryLight} className={cx(classes.defaultIcon)} icon={solid('circle-exclamation')} />
+      </Tooltip>
+    </span>
+  );
+
+  const fetchRevUpdatePartAsync = useAsync<AlternatePart[]>({
+    onSuccess: (data) => {
+      dialog.close();
+      onRefresh?.();
     },
   });
 
@@ -56,6 +103,7 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
 
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
   const fetchSelectedPartsAction = useActionCreator(documentRevisionsActions.fetchBOMBranch);
+  const alternatePartRevUpdate = useActionCreator(documentRevisionsActions.alternatePartRevUpdate);
 
   const renderOptions = () => {
     return parts.map((part) => ({
@@ -118,8 +166,17 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, ...props }) => {
 
   return (
     <Box onClick={onRowClick}>
+      {dataItem.availableRevisions?.isReleased && getInfoIcon()}
       {isAddMode && getFieldInfo()}
       {!isAddMode && <span>{dataItem[field]}</span> }
+      <AlertDialog
+        confirmAction={onRevChange}
+        cancelAction={dialog.close}
+        confirmLabel="common.yes.proceed"
+        cancelLabel="common.cancel"
+        message="bom.revision.alert.message"
+        {...{ dialog }}
+      />
     </Box>
   );
 };

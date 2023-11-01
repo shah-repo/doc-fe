@@ -14,6 +14,7 @@ import { changeRequestEditPath } from '../../../../change.request/utils/paths';
 import Text from '../../../../components/Text';
 import Colors from '../../../../layout/theme/utils/colors';
 import ApprovalTitle from '../../common/ApprovalTitle/presenter';
+import DismissAction from '../../common/DismissAction';
 import { getDocIcon } from '../../common/DocIcon';
 import DocId from '../../common/DocId/presenter';
 import { StyledListItem } from '../../common/StyledListItem';
@@ -22,7 +23,6 @@ import { DocTypeGroups } from '../../common/types';
 import useStyles from './approvalClosed.styles';
 import { HoverStyleChip } from './HoverStyleChipApprovalClosed';
 import { NormalStyleChip } from './NormalStyleChipApprovalClosed';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -32,7 +32,7 @@ interface Props {
   arChangeRequestId: string
   arStatus: string
   timestamp: string
-  docRevs: {
+  docRevs: Array<{
     docTypeGroup: DocTypeGroups
     documentRevisionId: string
     documentId: string
@@ -41,7 +41,7 @@ interface Props {
     name: string
     justificationOfChange: string
     descriptionOfChange: string
-  }[]
+  }>
   hoverItemId: string
   onMouseHoverItem: (id: string) => void
   pinned: boolean
@@ -109,6 +109,7 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
         className={classes.listItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
+        onClick={handleClick}
       >
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
@@ -126,6 +127,7 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
                 wrap="nowrap"
                 justify="flex-start"
                 alignItems="center"
+                onClick={handleClick}
               >
                 <Grid item={true}>
                   <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId} />

@@ -1,8 +1,9 @@
-import { makeStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import Colors from '../../../../layout/theme/utils/colors';
 import { grayDotStyles, lineItemStyles } from '../../common/styles';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 
-export default makeStyles((theme: Theme) => ({
+export default makeStyles((theme: NextTheme) => ({
   ...lineItemStyles(theme),
   ...grayDotStyles(theme, {
     right: 4,
@@ -34,5 +35,10 @@ export default makeStyles((theme: Theme) => ({
     right: 4,
     position: 'relative',
     background: Colors.latest_yellow_varient,
+  },
+  [theme.media.mobile]: {
+    itemlistMobile: {
+      flexWrap: 'wrap',
+    },
   },
 }));

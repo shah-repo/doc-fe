@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Popover, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { translate } from '../../../../common/intl';
-import { ChangeControlOptions, DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { ChangeControlOptions, DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { Button, ButtonGroup } from '../../../components/forms/fields-next';
 import Text from '../../../components/Text';
+import { BOM_FIELDS_CHANGES_KEY, BOM_LINE_CHANGES_KEY, cccKeyNamesOrder } from '../../../document.revision/utils/helpers';
 import { styles } from './cancelEditPartButton.styles';
 
 interface Props {
@@ -32,10 +33,15 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
     setAnchorEl(null);
   };
 
-  const changeControlOptions = documentRevision.changeControlOptions as ChangeControlOptions;
+  const changeControlOptions = (documentRevision.changeControlOptions ?? {}) as ChangeControlOptions;
   const formInput = changeControlOptions?.formInput ?? {};
   const schemaMap = changeControlOptions?.schemaMap ?? {};
   const { docId, displayRevision } = changeControlOptions;
+
+  let cccKeyNamesToUse = cccKeyNamesOrder;
+  if (formInput[BOM_LINE_CHANGES_KEY] === 'Yes') {
+    cccKeyNamesToUse = cccKeyNamesToUse.filter(keyName => keyName !== BOM_FIELDS_CHANGES_KEY);
+  }
 
   return (
     <ButtonGroup
@@ -46,6 +52,7 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
         id="cancelEditPartButton"
         data-cy="cancelEditPartButton"
         onClick={cancelPartEdit}
+        className={documentRevision.status !== DocumentRevisionStatus.Draft ? classes.disabled : ''}
       >
         <Text message="Cancel Edit" />
       </Button>
@@ -82,11 +89,13 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
           <span className={classes.formDetails}>{docId} rev{displayRevision}</span>
         </Typography>
         <ul className={classes.optionsList}>
-          {Object.keys(formInput).map((key: string) => (
-            <li key={key} className={classes.listItem}>
-              <span className={classes.listItemLabel}>{schemaMap[key]}</span> -
-              <span className={classes.listItemValue}>{formInput[key]}</span>
-            </li>
+          {cccKeyNamesToUse.map((key: string) => (
+            <>
+              { schemaMap[key] && <li key={key} className={classes.listItem}>
+                <span className={classes.listItemLabel}>{schemaMap[key]}</span> -
+                <span className={classes.listItemValue}>{key === BOM_FIELDS_CHANGES_KEY ? formInput[key]?.join(' , ') : formInput[key]}</span>
+              </li>}
+            </>
           ))}
         </ul>
       </Popover>

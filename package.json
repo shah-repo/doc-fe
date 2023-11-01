@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "Document Management - Frontend Application",
-  "version": "23.3",
+  "version": "23.3.1",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": ">1.12.7",
@@ -66,6 +66,7 @@
     "hellosign-embedded": "^2.6.0",
     "html-react-parser": "^0.10.1",
     "html-to-draftjs": "1.5.0",
+    "is-mobile": "^4.0.0",
     "jest-junit": "8.0.0",
     "lodash": "4.17.15",
     "marked": "^0.8.0",
@@ -120,7 +121,7 @@
     "yup": "0.28.0"
   },
   "engines": {
-    "node": "v18.16.0"
+    "node": "v18.18.1"
   },
   "scripts": {
     "start": "EXTEND_ESLINT=true react-scripts --openssl-legacy-provider start",

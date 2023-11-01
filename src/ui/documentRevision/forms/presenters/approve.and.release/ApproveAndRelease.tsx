@@ -31,6 +31,7 @@ import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { FB } from '../../../../form.builder';
 import { BOM } from '../../../../form.builder/FBBOM/interface';
+import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import CustomLabelTooltip from '../../../../hooks/docCustomization/CustomLabelTooltip';
 import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -58,6 +59,7 @@ interface Props {
   renderAsButton?: boolean
   isBOMExists?: boolean
   isPart?: boolean
+  isSliderView?: boolean
 }
 
 const ApproveAndRelease: React.FunctionComponent<Props> = ({
@@ -75,6 +77,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   renderAsButton,
   isBOMExists = false,
   isPart = false,
+  isSliderView,
 }) => {
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
@@ -292,7 +295,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       approvers: values.approvals
         .map((approval) => approval.value)
         .concat(owner?.id).filter((id) => id)
-        .map((id) => ({ id })),
+        .map((id) => ({ approver: { id } })),
       documentRevisions: [{
         descriptionOfChange: intl.formatMessage({ id: 'common.numeric.release' }),
         id: FB.uniqid,
@@ -383,12 +386,16 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const closeCRDialog = () => {
     approvalRequestDialog.close();
-    dispatch(documentRevisionsActions.load(docRevId));
+    if (isSliderView) {
+      FBDataStore.selectedSliderInfo = { documentId: documentRevision.document.id, documentRevision: documentRevision, reRender: true };
+    } else {
+      dispatch(documentRevisionsActions.load(docRevId));
+    }
   };
 
   const getApproverPayload = (approverId?: string): ApproverPayload => ({
-    approver: { id: approverId || null },
-    signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approverId)?.id || null },
+    approver: { id: approverId ?? null },
+    signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approverId)?.id ?? null },
   });
 
   const onSubmit = (values: any) => {
@@ -446,6 +453,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         formDocument: { id: formDocument },
       },
       password,
+      isSliderView,
       async,
     );
   };
@@ -511,7 +519,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             classes={{ root: classes.dialogContent }}
             id="ApproveAndRelease-content"
           >
-            <FormContext.Provider value={{ submitOnChange: false }}>
+            <FormContext.Provider value={{ submitOnChange: false, isEditing: false }}>
               <Formik
                 initialValues={initialValues}
                 onSubmit={onSubmit}

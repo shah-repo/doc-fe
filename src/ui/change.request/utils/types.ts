@@ -13,9 +13,6 @@ export interface ContainerDispatchProps {
   load: typeof changeRequestsActions.load
 }
 
-// Common
-export type ChangeRequestUserProps = DataProps<ChangeRequest> & AuthProps;
-
 export interface RouteParams {
   changeRequestId: string
 }

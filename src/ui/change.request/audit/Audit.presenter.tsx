@@ -26,6 +26,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 }) => {
   const classes = styles();
 
+  const excludeFewAuditRecords = (change: Audit): boolean => {
+    const fieldName = change.field.replace(/\[(.+?)\]/g, '');
+    return fieldName.includes('proposedDocumentRevision.id')
+    || fieldName.includes('documentRevisions.id')
+    || fieldName.includes('approver.id')
+    || fieldName.includes('signatureGroupId.id')
+    || fieldName.includes('formInput.approvers');
+  };
+
   const getMessage = (change: Audit, isRemovingApproverAction: boolean): string => {
     if (isRemovingApproverAction) {
       return 'changeRequest.audit.approvers.ARRAY_DELETED';
@@ -48,9 +57,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           break;
         }
       }
-
       return `${label} ${messageType}`;
     }
+
+    if (change.fbSchemaItem?.name === 'documentRevisions') {
+      const fieldName = change.field.replace(/\[(.+?)\]/g, '');
+      return `changeRequest.audit.${fieldName}.${change.type}`;
+    }
+
     return `changeRequest.audit.${change.field}.${change.type}`;
   };
 
@@ -109,6 +123,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             };
           }
         }
+
+        if (excludeFewAuditRecords(change)) {
+          return null;
+        }
+
         singleFields.push(
           <Box
             mb={1}

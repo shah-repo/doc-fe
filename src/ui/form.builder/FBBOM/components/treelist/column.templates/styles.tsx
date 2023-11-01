@@ -220,6 +220,6 @@ export const styles = makeStyles((theme) => ({
     },
   },
   unitCell: {
-    width: 140,
+    width: 125,
   },
 }));

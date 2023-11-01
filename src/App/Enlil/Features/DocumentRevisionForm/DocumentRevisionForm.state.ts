@@ -28,6 +28,8 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public disabledAction = false;
   @observable public isBOMExists = false;
   @observable public isDiffViewEnabled = false;
+  @observable public isMaximizedView = false;
+  @observable public selectedSliderInfo: {documentId: string, documentRevision?: DocumentRevision} = { documentId: '' };
   @observable public showPartInDialog = false;
   @observable public newlyCreatedDocumentRevision?: DocumentRevision;
   @observable public childPartInfo = { dataItem: {}, level: [] };
@@ -192,6 +194,14 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setDiffViewEnabled = (isDiffViewEnabled: boolean) => {
     set(this, 'isDiffViewEnabled', isDiffViewEnabled);
+  };
+
+  @action public setIsMaximizedView = (isMaximizedView: boolean) => {
+    set(this, 'isMaximizedView', isMaximizedView);
+  };
+
+  @action public setSelectedSliderInfo = (sliderInfo) => {
+    set(this, 'selectedSliderInfo', sliderInfo);
   };
 
   @action public toggleShowPartInDialog = () => {
