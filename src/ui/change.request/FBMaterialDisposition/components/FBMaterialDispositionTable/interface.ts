@@ -5,6 +5,8 @@ import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDat
 export interface MaterialDispositionItem {
   id: string
   partDocRevId: string
+  basePartDocRevId: string
+  lotDocRevId: string
   partDocId: string
   revisionsFromTo: string
   lotDocId: string

@@ -31,4 +31,12 @@ export const styles = makeStyles((theme) => ({
       marginBottom: theme.spacing(1.875),
     },
   },
+  link: {
+    color: `${Colors.navy_active} !important`,
+    cursor: 'Pointer',
+    textDecoration: 'initial !important',
+    '&:hover': {
+      textDecoration: 'underline !important',
+    },
+  },
 }));
