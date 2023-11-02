@@ -263,8 +263,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.['lhr-build-type']);
   const isRenderHTMLDefined = documentRevision?.formDocument?.renderHTMLDefined;
+
+  const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
   const showCancelEditPartButton = isPart && documentRevision?.isBeingEditedAfterRelease
-    && documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;
+    && documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER
+    && (isUserDocumentOwner || hasPermisstionToEditRestrictedPart);
 
   if (showCancelEditPartButton) {
     accessableButtons.push(PreviewControlButtons.CancelEditPartButton);

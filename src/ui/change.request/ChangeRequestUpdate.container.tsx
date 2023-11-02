@@ -112,6 +112,10 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     );
 
     if (isEmpty(dataToSubmit)) {
+      if (isEditing) {
+        setDoNotPrompt(true);
+        history.push(changeRequestPreviewPath(changeRequest.id));
+      }
       return;
     }
 

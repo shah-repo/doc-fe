@@ -4,20 +4,20 @@ import { Dictionary, isEmpty, isObject } from 'lodash';
 import moment from 'moment';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { getStartOfDayDateString, TIME_ZONE } from '../../../../../common/utils/date';
+import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
 import { Group } from '../../../../../state/ducks/auth/types';
 import { Owner } from '../../../../../state/ducks/common/types';
 import { AsyncState, AsyncStatus } from '../../../../../state/types';
 import Approvers from '../../../../change.request/form/approvers';
 import { TemplateOption } from '../../../../change.request/form/types';
+import Text from '../../../../components/Text';
+import FormMessage from '../../../../components/forms/FormMessage';
+import FormProgress from '../../../../components/forms/FormProgress';
 import { Button } from '../../../../components/forms/fields-next';
 import AutocompleteField from '../../../../components/forms/fields/Autocomplete/Autocomplete';
 import DatePickerField from '../../../../components/forms/fields/DatePickerField';
 import InputField from '../../../../components/forms/fields/Input';
 import { required, validator } from '../../../../components/forms/fields/validators';
-import FormMessage from '../../../../components/forms/FormMessage';
-import FormProgress from '../../../../components/forms/FormProgress';
-import Text from '../../../../components/Text';
 import { FBFormState, FBSchemaProps } from '../../../../form.builder';
 import Colors from '../../../../layout/theme/utils/colors';
 import { ApproveAndReleaseFormValues } from '../../types';
@@ -37,7 +37,7 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   isDocumentPO: boolean
   checkedGroups: Group[]
   initialGroups: Group[]
-  setCheckedGroups(groups: Group[]): void
+  setCheckedGroups: (groups: Group[]) => void
   setFormDocument: (value: string) => void
   setDocumentType: (value: string) => void
   setSelectedInvalid: (value: boolean) => void
@@ -66,7 +66,6 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   initialGroups,
   asyncGetDocTypeState,
 }) => {
-
   // MARK: @selectors
 
   // MARK: @state
@@ -125,7 +124,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           case 'approvers': {
             return {
               ...acc,
-              [item.name]: [{ id: uuidv4() }],
+              [item.name]: [{ approver: { id: uuidv4() } }],
             };
           }
           default: {

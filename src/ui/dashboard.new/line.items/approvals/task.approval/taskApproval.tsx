@@ -456,7 +456,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               data-cy="transition-reject"
               onClick={handleRejectClick}
             >
-              <RejectIcon fill={Colors.white} />
+              <RejectIcon fill={Colors.white} stroke={Colors.white} />
               <Text message="common.reject" />
             </Button>
             <Button
