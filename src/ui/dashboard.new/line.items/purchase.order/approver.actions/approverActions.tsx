@@ -1,4 +1,5 @@
 import { Avatar, Box, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
@@ -190,7 +191,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         className={classes.listItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
-        onTouchStart={handleClick}
+        {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }}
       >
         {type === ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED
         && open ? (
