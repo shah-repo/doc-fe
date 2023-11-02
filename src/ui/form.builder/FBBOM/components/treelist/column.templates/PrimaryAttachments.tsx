@@ -1,5 +1,6 @@
 import { CircularProgress, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
+import { isMobile } from 'is-mobile';
 import React from 'react';
 import { attachmentsActions } from '../../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../../state/ducks/attachments/types';
@@ -32,7 +33,11 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, '_parent');
+      if (isMobile()) {
+        downloadInfo && (window.location.href = downloadInfo.url);
+      } else {
+        downloadInfo && window.open(downloadInfo.url, '_parent');
+      }
     },
     onError: (message) => {
       message && toastError(message);

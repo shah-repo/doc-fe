@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
@@ -221,7 +222,11 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const downloadAsync = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, '_blank');
+      if (isMobile()) {
+        downloadInfo && (window.location.href = downloadInfo.url);
+      } else {
+        downloadInfo && window.open(downloadInfo.url, '_blank');
+      }
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {

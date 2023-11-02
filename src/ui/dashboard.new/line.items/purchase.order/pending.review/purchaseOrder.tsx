@@ -1,4 +1,5 @@
 import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import isMobile from 'is-mobile';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
@@ -202,7 +203,11 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, '_blank');
+      if (isMobile()) {
+        downloadInfo && (window.location.href = downloadInfo.url);
+      } else {
+        downloadInfo && window.open(downloadInfo.url, '_blank');
+      }
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {
