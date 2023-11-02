@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
+import { EMPTY_VALUE_PLACEHOLDER } from '../FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 import KendoTextEditor from './KendoTextEditor';
@@ -80,7 +81,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
           <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
-            {entry?.revisionFormTo ?? (documentRevision?.revision || '-')}
+            {entry?.revisionFormTo ?? (documentRevision?.revision || EMPTY_VALUE_PLACEHOLDER)}
           </div>
           <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
@@ -100,8 +101,8 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               rules="required"
             />
           </div>
-          <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)}>
-            -
+          <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)} data-cy="edit-where-used">
+            {EMPTY_VALUE_PLACEHOLDER}
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>

@@ -9,12 +9,12 @@ export const styles = makeStyles((theme) => ({
   avatarSection: {
     display: 'flex',
     alignItems: 'center',
-    maxWidth: '167px',
+    maxWidth: 167,
   },
   avatar: {
-    width: '25px',
-    height: '25px',
-    fontSize: '12px',
+    width: 25,
+    height: 25,
+    fontSize: 12,
     fontWeight: 600,
     color: Colors.white,
     fontFamily: 'Sora',
@@ -25,17 +25,17 @@ export const styles = makeStyles((theme) => ({
     fontFamily: 'Sora',
     fontStyle: 'normal',
     fontWeight: 'normal',
-    fontSize: '14px',
+    fontSize: 14,
     lineHeight: '18px',
     color: Colors.almost_black,
   },
   selectedUsersGrid: {
-    marginTop: '10px',
+    marginTop: theme.spacing(1.25),
     width: 'max-content',
     gap: '13px',
     '&:hover': {
       background: Colors.bright_gray,
-      borderRadius: '4px',
+      borderRadius: theme.spacing(0.5),
     },
   },
   commentCell: {
@@ -54,7 +54,7 @@ export const styles = makeStyles((theme) => ({
   assigneeAction: {
     display: 'flex',
     padding: theme.spacing(1, 1.75),
-    minHeight: '30px',
+    minHeight: 30,
   },
   assigneeActionStatusContainer: {
     display: 'flex',

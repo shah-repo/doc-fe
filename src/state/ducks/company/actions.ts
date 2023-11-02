@@ -3,7 +3,7 @@ import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL } from '../../../ui/constants/ur
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
-import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
+import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettings, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
   type: SELECT_COMPANY,
@@ -71,7 +71,7 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
-const updateGeneralSettings = (body: any): ApiAction<GeneralSettingsState> => apiAction({
+const updateGeneralSettings = (body: GeneralSettings): ApiAction<GeneralSettingsState> => apiAction({
   url: COMPANY_SETTINGS_URL,
   method: 'post',
   data: body,

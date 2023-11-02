@@ -171,7 +171,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
         </div>
         <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
-          <FontAwesomeIcon icon={isWhereUsedTreeExists ? solid('circle') : regular('circle')} onClick={openWhereUsedDialog} className={classes.dot} />
+          <FontAwesomeIcon icon={isWhereUsedTreeExists ? solid('circle') : regular('circle')} data-cy="view-where-used" onClick={openWhereUsedDialog} className={classes.dot} />
         </div>
       </div>
       {
