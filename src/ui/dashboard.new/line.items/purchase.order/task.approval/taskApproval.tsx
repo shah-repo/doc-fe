@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, Collapse, Grid, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import isMobile from 'is-mobile';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
@@ -151,7 +152,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         onMouseEnter={onMouseHoverListItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         className={classes.buttoncursor}
-        onClick={handleClick}
+        {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }}
       >
         {open ? (
           <CollapseIcon className={`${classes.icon} ${classes.collapseIcon}`} data-cy="collapse-icon" onClick={handleClick} />
