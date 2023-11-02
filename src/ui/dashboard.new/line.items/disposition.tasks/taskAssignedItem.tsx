@@ -5,6 +5,7 @@ import { ReactComponent as CollapseIcon } from '../../../../assets/images/collap
 import { ReactComponent as ExpandIcon } from '../../../../assets/images/expand.svg';
 import { ReactComponent as PinIcon } from '../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../assets/images/pin_solid.svg';
+import { translate } from '../../../../common/intl';
 import { Nullable } from '../../../../state/ducks/common/types';
 import { changeRequestPreviewPath } from '../../../change.request/utils/paths';
 import { getInitalsFromName } from '../../../components/icons/avatar/helpers';
@@ -148,7 +149,7 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
                       color="textPrimary"
                       noWrap
                     >
-                      <Text translation="task.assignment" />
+                      <Text translation="dashboard.task.assignment" />
                     </Typography>
                     <DocId url={changeRequestPreviewPath(arChangeRequestId)} docId = {arId} />
                   </Grid>
@@ -188,10 +189,9 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
             <span className={classes.actionIcon}>
               <Link
                 to={`${changeRequestPreviewPath(arChangeRequestId)}?tabId=material_disposition`}
-                target="_blank"
                 className={classes.link}
               >
-                View
+                {translate('dashboard.task.view')}
               </Link>
             </span>
             <span className={classes.actionIcon}>
@@ -274,7 +274,7 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
                       color="textPrimary"
                       noWrap
                     >
-                      Instruction:
+                      {translate('dashboard.task.instruction')}
                     </Typography>
                     <Typography
                       component="span"

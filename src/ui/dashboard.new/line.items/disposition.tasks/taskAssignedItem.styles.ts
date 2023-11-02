@@ -25,6 +25,7 @@ export default makeStyles((theme: NextTheme) => ({
     backgroundColor: Colors.almost_black,
     fontSize: '12px',
     textDecoration: 'none',
+    cursor: 'pointer',
     '&:hover': {
       backgroundColor: Colors.navy_active,
       textDecoration: 'none',
