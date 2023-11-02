@@ -1540,6 +1540,7 @@
   "training.assign": "A training is assigned to you",
   "require.approval": "needs your approval for",
   "pending.approval": "pending approvals from",
+  "task.assignment": "has assigned a task to you on",
   "training.stats.all": "ALL",
   "training.stats.title": "TRAININGS OUTSTANDING",
   "training.stats.totalOutstanding": "Total Outstanding",

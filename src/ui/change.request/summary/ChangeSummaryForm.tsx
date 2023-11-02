@@ -1,8 +1,9 @@
 import { BoxProps } from '@material-ui/core';
 import { cloneDeep, map } from 'lodash';
 import { Observer } from 'mobx-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from '../../../App';
 import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
 import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
@@ -60,6 +61,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const { _tabsState } = SM.useStores();
   _formState?.setMode(mode);
 
+  const location = useLocation();
   const [isDrawerOpen, setOpen] = React.useState(true);
   const showAdditionalColumns = [ChangeRequestStatus.Approved, ChangeRequestStatus.Closed].includes(changeRequest.state);
 
@@ -87,6 +89,14 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       type: TabTypeOptions.MATERIAL_DISPOSITION,
     });
   }
+
+  useEffect(() => {
+    const navigateToTabId = new URLSearchParams(location.search).get('tabId');
+    if (navigateToTabId) {
+      _tabsState?.setActiveTabId(navigateToTabId);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   return (
     <SMForm
