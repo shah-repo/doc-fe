@@ -1,5 +1,4 @@
 import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
-import isMobile from 'is-mobile';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
@@ -17,6 +16,7 @@ import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachmen
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { Attachment } from '../../../../change.request/form/types';
+import { downloadAttachmentPdf } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -203,11 +203,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      if (isMobile()) {
-        downloadInfo && (window.location.href = downloadInfo.url);
-      } else {
-        downloadInfo && window.open(downloadInfo.url, '_blank');
-      }
+      downloadAttachmentPdf(downloadInfo);
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {

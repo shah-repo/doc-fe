@@ -1,3 +1,4 @@
+import isMobile from 'is-mobile';
 import { chain, set } from 'lodash';
 import { KendoColumn } from '../../components/common/kendo/types';
 
@@ -12,7 +13,6 @@ export const removeLastCharacterIfNotAlphaNumeric = (text = '') => {
   }
   return text;
 };
-
 export const getSchemaFromColumns = (columns: KendoColumn[]) => {
   const schemaObjFieldsObj = {};
   const fields = chain(columns)
@@ -29,4 +29,11 @@ export const getSchemaFromColumns = (columns: KendoColumn[]) => {
     }
   });
   return [schemaObjFieldsObj];
+};
+export const downloadAttachmentPdf = (downloadInfo) => {
+  if (isMobile()) {
+    downloadInfo && (window.location.href = downloadInfo.url);
+  } else {
+    downloadInfo && window.open(downloadInfo.url, '_blank');
+  }
 };

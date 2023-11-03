@@ -1,5 +1,4 @@
 import { Avatar, Box, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
-import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
@@ -17,6 +16,7 @@ import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachmen
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { ActionTypes, STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { Attachment } from '../../../../change.request/form/types';
+import { downloadAttachmentPdf } from '../../../../common/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
@@ -172,11 +172,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      if (isMobile()) {
-        downloadInfo && (window.location.href = downloadInfo.url);
-      } else {
-        downloadInfo && window.open(downloadInfo.url, '_blank');
-      }
+      downloadAttachmentPdf(downloadInfo);
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {
