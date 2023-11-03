@@ -1,6 +1,6 @@
 import { action, observable, set } from 'mobx';
 import { Size } from 'react-virtualized';
-import { TabChangePrompt } from './SMTabs.types';
+import { TabChangePrompt } from '../../..';
 
 export default class SMTabsState {
   @observable public activeTabId = '';
