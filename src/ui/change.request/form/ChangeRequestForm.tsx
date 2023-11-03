@@ -13,6 +13,7 @@ import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import TabChangePromptIfDirty from '../../components/forms/TabChangePromptIfDirty';
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
@@ -111,6 +112,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         doNotPrompt={doNotPrompt}
         onConfirm={handlePromptConfirm}
       />
+      <TabChangePromptIfDirty />
       <SMTemplate
         boxProps={{ className: 'hide-scroll' }}
         templateBoxProps={{ stretchY: '100%' }}
