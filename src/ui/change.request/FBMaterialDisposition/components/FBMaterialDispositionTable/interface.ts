@@ -48,6 +48,11 @@ export interface SchemaOptions {
   onRowClick?: (e: MDItemEditEvent) => void
 }
 
+export interface PendingMDInfoResponse{
+  pendingTasksCount: number
+  lotStatusWillBeUpdated: boolean
+}
+
 export interface CustomTemplateProps extends CellTemplateProps<EditableMDItem> {
   onClick?: (e: MDItemEditEvent) => void
 }

@@ -1,5 +1,5 @@
 import { ButtonProps } from '@material-ui/core/Button';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
 import { ChangeRequestTransition, ChangeRequestTransitionResponse } from '../../../state/ducks/changeRequest/types';
@@ -10,6 +10,7 @@ import TransitionDialog from '../../components/transitionDialog/TransitionDialog
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
+import { PendingMDInfoResponse } from '../FBMaterialDisposition/components/FBMaterialDispositionTable/interface';
 import { EffectiveDateFormValues, PasswordFormValues } from '../form/types';
 
 interface Props {
@@ -31,6 +32,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
   const tasksDialog = useDialog();
   const lotStatusDialog = useDialog();
   const effectiveDateDialog = useDialog();
+  const [pendingMDInfo, setPendingMDInfo] = useState({ lotStatusWillBeUpdated: false });
   const applyTransitionAction = useActionCreator(changeRequestsActions.applyTransition);
   const fetchPendingTasksCount = useActionCreator(taskActions.getPendingTasksCount);
   const settings = useSelector(companySelectors.getGeneralSettings);
@@ -50,8 +52,9 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
   });
 
   const tasksAsync = useAsync({
-    onSuccess: (res?: {pendingTasksCount: number}) => {
-      if (res && res?.pendingTasksCount > 0) {
+    onSuccess: (response?: PendingMDInfoResponse) => {
+      response && setPendingMDInfo(response);
+      if (response && response?.pendingTasksCount > 0) {
         tasksDialog.open();
       } else {
         effectiveDateDialog.open();
@@ -64,9 +67,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
 
   const onConfirm = () => {
     tasksDialog.close();
-    if (settings?.autoUpdateLotStatus) {
-      // consider MD items count and modified values
-      // i.e Scrap or Use-as-is selected or not
+    if (settings?.autoUpdateLotStatus && pendingMDInfo.lotStatusWillBeUpdated) {
       lotStatusDialog.open();
     } else {
       effectiveDateDialog.open();

@@ -1,5 +1,5 @@
 import { Box, Button, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
@@ -18,6 +18,7 @@ import { companySelectors } from '../../../../../state/ducks/company';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import { PendingMDInfoResponse } from '../../../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/interface';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -77,11 +78,12 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   dismissLineItem,
 }) => {
   const classes = useStyles();
-  const [closeHover, setCloseHover] = React.useState(false);
-  const [pinHover, setPinHover] = React.useState(false);
-  const [closed, setClosed] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [viewHoverItem, setViewHoverItem] = React.useState('');
+  const [closeHover, setCloseHover] = useState(false);
+  const [pinHover, setPinHover] = useState(false);
+  const [closed, setClosed] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [pendingMDInfo, setPendingMDInfo] = useState({ lotStatusWillBeUpdated: false });
+  const [viewHoverItem, setViewHoverItem] = useState('');
   const transitionDialog = useDialog();
   const hoverItem = hoverItemId === id;
   const tasksDialog = useDialog();
@@ -90,8 +92,9 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   const settings = useSelector(companySelectors.getGeneralSettings);
 
   const tasksAsync = useAsync({
-    onSuccess: (res?: {pendingTasksCount: number}) => {
-      if (res && res?.pendingTasksCount > 0) {
+    onSuccess: (response?: PendingMDInfoResponse) => {
+      response && setPendingMDInfo(response);
+      if (response && response?.pendingTasksCount > 0) {
         tasksDialog.open();
       } else {
         openClosedDialog();
@@ -103,9 +106,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   });
   const onConfirm = () => {
     tasksDialog.close();
-    if (settings?.autoUpdateLotStatus) {
-      // consider MD items count and modified values
-      // i.e Scrap or Use-as-is selected or not
+    if (settings?.autoUpdateLotStatus && pendingMDInfo.lotStatusWillBeUpdated) {
       lotStatusDialog.open();
     } else {
       openClosedDialog();
