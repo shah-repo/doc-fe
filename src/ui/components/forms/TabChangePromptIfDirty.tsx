@@ -4,7 +4,7 @@ import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import useDialog from '../../hooks/useDialog';
 import { AlertDialog } from '../dialogs';
-export interface Props {
+interface Props {
   message?: string
 }
 const TabChangePromptIfDirty: React.FunctionComponent<Props> = ({ message = 'common.navigate.away.prompt' }) => {
