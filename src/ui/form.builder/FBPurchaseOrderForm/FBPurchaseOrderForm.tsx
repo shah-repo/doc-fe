@@ -16,7 +16,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
   children,
 }) => {
   const classes = FBAutoCompleteStyle();
-  return  (
+  return (
     <FBForm {...{ formState }} >
       <FBRadioGroup
         name="type"
@@ -98,7 +98,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         </Box>
       </Box>
       <FBAutocompleteAsync
-        label="GL code"
+        label="form.builder.field.glCode"
         optionId="9"
         name="glCode"
       />
