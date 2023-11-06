@@ -250,7 +250,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       return (
                         <AutoSizer onResize={handleResize}>
                           {({ width }) => (
-                            <SMBox key={index} width={width} pb={2}>
+                            <SMBox key={index} style={{ width }} pb={2}>
                               {tabType === 'MIXED' && (
                                 <>
                                   <DocumentRevisionFormPresenter
