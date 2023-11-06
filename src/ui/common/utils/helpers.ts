@@ -34,11 +34,12 @@ export const downloadAttachmentPdf = (downloadFile: { url: string }) => {
   const openInNewTab = !isMobile();
   const target = openInNewTab ? '_blank' : '_self';
 
-  if (downloadFile) {
-    if (openInNewTab) {
-      window.open(downloadFile.url, target);
-    } else {
-      window.location.href = downloadFile.url;
-    }
+  if (!downloadFile) {
+    return;
+  }
+  if (openInNewTab) {
+    window.open(downloadFile.url, target);
+  } else {
+    window.location.href = downloadFile.url;
   }
 };
