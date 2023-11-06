@@ -937,7 +937,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     updateState({
       ...state,
       dataState: dataState,
-      expanded: isEmpty(event.filter) ? data[0]?.id : expanded,
+      expanded: isEmpty(event.filter) ? [data[0]?.id] : expanded,
     });
   };
 
