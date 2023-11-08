@@ -55,6 +55,16 @@ export default (theme: NextTheme) =>
     mobileMake: {
       display: 'none',
     },
+    mobileLogoText: {
+      marginLeft: theme.spacing(2),
+      fontSize: 15,
+      fontWeight: 600,
+    },
+    mobileAvatar: {
+      width: 35,
+      height: 35,
+      borderRadius: '50%',
+    },
     [theme.media.mobile]: {
       welcomeText: {
         fontSize: '1.25rem',
@@ -65,19 +75,16 @@ export default (theme: NextTheme) =>
         display: 'none',
       },
       mobileMake: {
-        background: 'linear-gradient(166deg, #2f01bb, #2ea2dc 100%, #783bff 100%)',
-        paddingLeft: 24,
-        height: '52px',
-        paddingTop: 12,
-        paddingBottom: 11,
         display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
-      },
-      textMake: {
-        marginLeft: 16,
-        fontSize: 15,
-        fontWeight: 600,
-
+        height: 52,
+        padding: `${theme.spacing(1.5)}px`,
+        background: 'linear-gradient(166deg, #2f01bb, #2ea2dc 100%, #783bff 100%)',
+        '& > div': {
+          display: 'flex',
+          alignItems: 'center',
+        },
       },
       mobileGrwFlex: {
         display: 'none',
@@ -94,14 +101,5 @@ export default (theme: NextTheme) =>
           display: 'none',
         },
       },
-      avatarMobile: {
-        width: 35,
-        height: 35,
-        marginLeft: 65,
-        margin: `${theme.spacing(1)} 0 0 ${theme.spacing(4)}`,
-        borderRadius: '50%',
-      },
-
     },
-
   });

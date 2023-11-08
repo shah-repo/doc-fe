@@ -21,9 +21,7 @@ export interface HeaderPresenterProps {
   toggleCustomLabels: () => void
   customLabelsValue: boolean
   canToggleCustomLabels: boolean
-  logo
-  showEnvironment
-  open
+  open: boolean
 }
 
 const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof styles>> = ({
@@ -37,30 +35,29 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   const user = store.getState().auth.user;
   const companyName = user.employee.company.name;
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
+
   return (
     <AppBar className={classes.appBar}>
-      <Grid className={classes.mobileMake}>
-        <Grid sm={2}>
+      <div className={classes.mobileMake}>
+        <div>
           <MobileLogo />
-        </Grid>
-        <Grid xs={8}>
-          <Typography variant="caption" className={classes.textMake} component="div">
+          <Typography variant="caption" className={classes.mobileLogoText} component="div">
             <Text translation="header.design.make" />
           </Typography>
-        </Grid>
-        <Grid xs={4}>
+        </div>
+        <div>
           {whiteLabeling.avatar ? (
             <img
               id="logo"
-              className={classes.avatarMobile}
+              className={classes.mobileAvatar}
               src={whiteLabeling.avatar}
               alt={companyName}
             />
           ) : (
-            <CompanyAvatar className={classes.avatarMobile} />
+            <CompanyAvatar className={classes.mobileAvatar} />
           )}
-        </Grid>
-      </Grid>
+        </div>
+      </div>
       <Toolbar className={classes.toolbar}>
         <Grid
           container
