@@ -955,7 +955,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           ...column,
           locked: !locked,
           reorderable: locked,
-          orderIndex: !locked ? 0 : column.mainOrderIndex,
+          orderIndex: !locked ? 0 : undefined,
         });
         setColumns(newColumns);
         closeMenu?.();
