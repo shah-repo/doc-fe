@@ -8,7 +8,6 @@ import { DateInfo } from './DateInfo';
 import { POAmount } from './POAmount';
 import { Status } from './Status';
 import { UserAvatar } from './UserAvatar';
-import { MultiSelectList } from './MultiSelectList';
 
 export const cellTemplateMapping: Record<KendoCellTemplates, (props: CustomGridCellProps) => JSX.Element | null> = {
   Active,
@@ -20,5 +19,4 @@ export const cellTemplateMapping: Record<KendoCellTemplates, (props: CustomGridC
   POAmount,
   DocumentTypeCellTemplate,
   DurationCell,
-  MultiSelectList,
 };
