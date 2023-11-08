@@ -62,10 +62,12 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   const selectedUsers = values[field] ?? [];
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+    if (!value?.value) { return; }
     setFieldValue(field, [...selectedUsers, { employeeId: value?.value }]);
   };
 
   const removeUser = (id) => {
+    if (!id) { return; }
     setFieldValue(field, selectedUsers.filter(({ employeeId }) => employeeId !== id));
   };
 
