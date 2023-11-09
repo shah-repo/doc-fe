@@ -5,13 +5,13 @@ import { changeRequestsActions } from '../../../state/ducks/changeRequest';
 import { ChangeRequestTransition, ChangeRequestTransitionResponse } from '../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { taskActions } from '../../../state/ducks/tasks';
-import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import TransitionDialog from '../../components/transitionDialog/TransitionDialog';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import { PendingMDInfoResponse } from '../FBMaterialDisposition/components/FBMaterialDispositionTable/interface';
 import { EffectiveDateFormValues, PasswordFormValues } from '../form/types';
+import TasksInfoDialog from './TasksInfoDialog';
 
 interface Props {
   changeRequestId: string
@@ -101,7 +101,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
         effectiveDateDialog,
       }}
     />
-    <AlertDialog
+    <TasksInfoDialog
       dialog={tasksDialog}
       message="approvalRequest.tasks.incomplete.message"
       type="warning"
@@ -110,7 +110,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
       cancelLabel="common.no.go.back"
       confirmAction={onConfirm}
     />
-    <AlertDialog
+    <TasksInfoDialog
       dialog={lotStatusDialog}
       message="approvalRequest.lot.status.alert.message"
       type="info"

@@ -47,16 +47,6 @@ export const styles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(0.25),
       paddingRight: theme.spacing(2.5),
     },
-    warningIcon: {
-      width: 25,
-      height: 25,
-      color: Colors.light_yellow_warning,
-    },
-    infoIcon: {
-      width: 25,
-      height: 25,
-      color: Colors.dodger_blue,
-    },
     alertTitle: {
       fontWeight: 600,
       fontSize: '18px',
