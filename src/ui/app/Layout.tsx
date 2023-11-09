@@ -21,7 +21,6 @@ import {
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
   DOCUMENT_TYPE_MANAGEMENT_URL,
-  EQUIPMENT_SPECIFICATION_LIST_URL,
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
   GROUP_MANAGEMENT_ROOT_URL,
@@ -40,7 +39,6 @@ import { DocumentTypeManagementContainer } from '../document.type.management/ken
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
-import EquipmentSpecificationListContainer from '../equipment.specification/grid/container';
 import GroupManagementListContainer from '../group.management/kendo/container';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
@@ -99,11 +97,6 @@ const Layout: React.FunctionComponent = () => {
             path={HOME_URL}
             exact
             component={DashboardLayout}
-          />
-          <Route
-            path={EQUIPMENT_SPECIFICATION_LIST_URL}
-            exact
-            component={EquipmentSpecificationListContainer}
           />
           <Route
             path={CHANGE_REQUEST_CREATE_URL}

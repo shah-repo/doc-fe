@@ -32,6 +32,34 @@ export const hasSameParent = (arr1: number[], arr2: number[]): boolean => {
   return true;
 };
 
+const getARID = (dataItem: EditableBOM) => {
+  const changeReqDetails = dataItem?.changeRequestDetails;
+  const arID = changeReqDetails?.crId;
+  if (
+    [
+      DocumentRevisionStatus.Approved,
+      DocumentRevisionStatus.PendingChange,
+      DocumentRevisionStatus.InReview,
+    ].includes(dataItem?.status)
+  ) {
+    return arID;
+  }
+};
+
+const getHasChanges = (dataItem: EditableBOM) => {
+  const changeReqDetails = dataItem.availableRevisions?.changeRequestDetails;
+  const arID = changeReqDetails?.crId;
+  const isReleased = dataItem.availableRevisions?.isReleased;
+
+  if (!dataItem.availableRevisions || isReleased) {
+    return CELL_EMPTY_VALUE;
+  }
+  if (!changeReqDetails) {
+    return dataItem.availableRevisions?.displayRevision;
+  }
+  return arID;
+};
+
 export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): EditableBOM[] => {
   bomTreeRelations.unshift(parentRevDetails);
   const dataTree: EditableBOM[] = [];
@@ -54,6 +82,8 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
             isParentOwner: parentPartRelation.isOwner,
             parentDocId: parentPartRelation.docId,
             isEditEnabled: [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(parentPartRelation.status),
+            hasChanges: getHasChanges(aData),
+            arId: getARID(aData),
           }),
         );
       });

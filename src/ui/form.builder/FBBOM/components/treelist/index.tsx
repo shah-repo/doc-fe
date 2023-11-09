@@ -937,7 +937,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     updateState({
       ...state,
       dataState: dataState,
-      expanded: isEmpty(event.filter) ? data[0]?.id : expanded,
+      expanded: isEmpty(event.filter) ? [data[0]?.id] : expanded,
     });
   };
 
@@ -955,7 +955,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           ...column,
           locked: !locked,
           reorderable: locked,
-          orderIndex: !locked ? 0 : column.mainOrderIndex,
+          orderIndex: !locked ? 0 : undefined,
         });
         setColumns(newColumns);
         closeMenu?.();
