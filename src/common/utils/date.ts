@@ -28,7 +28,6 @@ export enum MomentFormats {
   MonthDateYearTwoDigit = 'MM/DD/YYYY',
   MonthDateYearAlt = 'MMMM D, YYYY',
   DateTime = 'MMMM D, YYYY hh:mm A z',
-  DateTimeWithoutZone = 'MMMM D, YYYY hh:mm A',
   BriefDate = 'MMM D, YYYY',
   ShortBriefDate = 'MMM D',
   BriefDateTime = 'MMM D, YYYY hh:mm A z',

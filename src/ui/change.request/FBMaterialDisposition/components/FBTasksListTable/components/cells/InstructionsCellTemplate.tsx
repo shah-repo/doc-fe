@@ -21,7 +21,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
         inputProps={{
           rowsMax: 5,
           rows: 2,
-
         }}
         type="text"
         size="small"

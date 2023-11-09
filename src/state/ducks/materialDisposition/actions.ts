@@ -18,7 +18,7 @@ const updateMDItem = (
   apiActionWithCallbacks({
     url: `${MATERIAL_DISPOSITION_ROOT_URL}/${id}/${materialDispositionId}`,
     method: 'patch',
-    data: { ...data },
+    data,
     handlers,
   });
 

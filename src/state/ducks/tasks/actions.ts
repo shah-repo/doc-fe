@@ -12,9 +12,9 @@ const fetchTasksList = (arId: string, handlers: Handlers): ApiAction =>
 
 const addTask = (data: TasksListEditRequestBody, handlers: Handlers): ApiAction<TasksListItem, TasksListEditRequestBody> =>
   apiActionWithCallbacks({
-    url: `${TASKS_LIST}`,
+    url: TASKS_LIST,
     method: 'post',
-    data: { ...data },
+    data,
     handlers,
   });
 
@@ -27,7 +27,7 @@ const updateTask = (
   apiActionWithCallbacks({
     url: `${TASKS_LIST}/${arId}/${taskId}`,
     method: 'patch',
-    data: { ...data },
+    data,
     handlers,
   });
 

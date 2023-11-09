@@ -1,6 +1,5 @@
 import { Box } from '@material-ui/core';
 import { AttachFile } from '@material-ui/icons';
-import { cloneDeep } from 'lodash';
 import React from 'react';
 import { ReactComponent as CloseIcon } from '../../../../../../assets/images/trash.svg';
 import { attachmentsActions } from '../../../../../../state/ducks/attachments';
@@ -90,8 +89,8 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
                 <ViewFile
                   isOpen={dialogHandler.isOpen}
                   handleClose={dialogHandler.close}
-                  attachments={[cloneDeep(file)]}
-                  attachment={cloneDeep(file)}
+                  attachments={[file]}
+                  attachment={file}
                 />
               )}
               {!disabled && (

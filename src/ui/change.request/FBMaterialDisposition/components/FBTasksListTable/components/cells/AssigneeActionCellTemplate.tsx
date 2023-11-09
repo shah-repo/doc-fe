@@ -1,4 +1,3 @@
-// import { useFormikContext } from 'formik';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get } from 'lodash';
@@ -52,7 +51,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
                   <span className={classes.assigneeActionStatusDate}>
                     {getFormattedDateString(
                       new Date(updatedAt),
-                      MomentFormats.DateTimeWithoutZone,
+                      MomentFormats.DateTime,
                     )}
                   </span>
                 </div>

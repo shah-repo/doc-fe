@@ -60,9 +60,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
         effectiveDateDialog.open();
       }
     },
-    onError: () => {
-      transitionDialog.close();
-    },
+    onError: transitionDialog.close,
   });
 
   const onConfirm = () => {

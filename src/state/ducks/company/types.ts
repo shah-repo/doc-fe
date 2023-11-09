@@ -144,7 +144,7 @@ interface ZebraPrintSettings {
   }>
 }
 export interface GeneralSettings {
-  zebraPrint?: ZebraPrintSettings
+  zebraPrint: ZebraPrintSettings
   approvalRequestAdmin: boolean
   autoUpdateLotStatus: boolean
 }
