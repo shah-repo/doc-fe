@@ -32,7 +32,7 @@ export const hasSameParent = (arr1: number[], arr2: number[]): boolean => {
   return true;
 };
 
-const getARID = (dataItem: EditableBOM) => {
+const getARID = (dataItem: BOM) => {
   const changeReqDetails = dataItem?.changeRequestDetails;
   const arID = changeReqDetails?.crId;
   if (
@@ -46,7 +46,7 @@ const getARID = (dataItem: EditableBOM) => {
   }
 };
 
-const getHasChanges = (dataItem: EditableBOM) => {
+const getHasChanges = (dataItem: BOM) => {
   const changeReqDetails = dataItem.availableRevisions?.changeRequestDetails;
   const arID = changeReqDetails?.crId;
   const isReleased = dataItem.availableRevisions?.isReleased;
@@ -66,6 +66,8 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
 
   bomTreeRelations = bomTreeRelations.map(relation => ({
     ...relation,
+    arId: getARID(relation),
+    hasChanges: getHasChanges(relation),
     childNodes: [],
   }));
 
