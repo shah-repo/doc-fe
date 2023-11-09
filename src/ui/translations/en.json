@@ -926,6 +926,7 @@
   "form.builder.part.number": "Part Number",
   "form.builder.fileUploadCandidate": "Attachments",
   "form.builder.partLot": "Part Lot",
+  "form.builder.field.glCode": "GL Code",
   "form.builder.lot.transfers.audit.transfer": "{type} {quantity} from {from} to {to} at {date}",
   "form.builder.lot.transfers.title": "Material Transfer / Allocation",
   "form.builder.lot.transfers.lot_transfers": "Item",
