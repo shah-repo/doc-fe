@@ -13,6 +13,7 @@ export const removeLastCharacterIfNotAlphaNumeric = (text = '') => {
   }
   return text;
 };
+
 export const getSchemaFromColumns = (columns: KendoColumn[]) => {
   const schemaObjFieldsObj = {};
   const fields = chain(columns)
@@ -30,14 +31,16 @@ export const getSchemaFromColumns = (columns: KendoColumn[]) => {
   });
   return [schemaObjFieldsObj];
 };
-export const downloadFile = (url?: string) => {
-  const openInNewTab = !isMobile();
+
+export const downloadFile = (url?: string): void => {
   if (!url) {
     return;
   }
-  if (openInNewTab) {
-    window.open(url, '_blank');
-  } else {
+
+  if (isMobile()) {
     window.location.href = url;
+    return;
   }
+
+  window.open(url, '_blank');
 };
