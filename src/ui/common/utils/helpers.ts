@@ -30,11 +30,11 @@ export const getSchemaFromColumns = (columns: KendoColumn[]) => {
   });
   return [schemaObjFieldsObj];
 };
-export const downloadFile = (url: string) => {
+export const downloadFile = (url?: string) => {
   const openInNewTab = !isMobile();
   const target = openInNewTab ? '_blank' : '_self';
 
-  if (!downloadFile) {
+  if (!url) {
     return;
   }
   if (openInNewTab) {

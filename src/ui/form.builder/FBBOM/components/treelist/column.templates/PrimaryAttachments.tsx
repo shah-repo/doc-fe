@@ -33,7 +33,7 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadFile(downloadInfo?.url as string);
+      downloadFile(downloadInfo?.url);
     },
     onError: (message) => {
       message && toastError(message);
