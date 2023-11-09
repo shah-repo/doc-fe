@@ -39,6 +39,7 @@ const Editor: React.FC<Props> = ({ field, options }) => {
         options={options}
         value={value}
         getOptionLabel={getOptionLabel}
+        getOptionDisabled={(option: SupplierOption) => option.isUnselectable ?? false}
         onChange={handleChange}
         size="small"
       />
