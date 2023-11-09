@@ -32,13 +32,11 @@ export const getSchemaFromColumns = (columns: KendoColumn[]) => {
 };
 export const downloadFile = (url?: string) => {
   const openInNewTab = !isMobile();
-  const target = openInNewTab ? '_blank' : '_self';
-
   if (!url) {
     return;
   }
   if (openInNewTab) {
-    window.open(url, target);
+    window.open(url, '_blank');
   } else {
     window.location.href = url;
   }
