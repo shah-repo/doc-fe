@@ -17,7 +17,7 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import OverflowingContent from '../../commonCells/OveflowContent';
-import { TasksListItem } from '../interface';
+import { TasksListItem } from '../types';
 
 interface Props extends FBFilesPresenterProps {
   employeeId: string

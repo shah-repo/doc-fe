@@ -17,9 +17,9 @@ import { FBSection } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { COMMENTS_FIELD, EmployeeStatus } from './constants';
-import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './interface';
 import { buildSchema } from './schema';
 import useStyles from './styles';
+import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './types';
 
 interface props {
   changeRequest?: ChangeRequest

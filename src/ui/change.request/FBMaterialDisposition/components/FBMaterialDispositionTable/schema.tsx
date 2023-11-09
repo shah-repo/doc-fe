@@ -6,7 +6,7 @@ import { LOTIDCellTemplate } from './components/cells/LOTIDCellTemplate';
 import { PartIDCellTemplate } from './components/cells/PartIDCellTemplate';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { OPTIONS } from './constants';
-import { EditableMDItem, SchemaOptions } from './interface';
+import { EditableMDItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
   actionsClass,

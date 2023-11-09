@@ -18,7 +18,7 @@ import { ReactComponent as ViewChecked } from '../../../../../../assets/images/v
 import { ColumnDefinition } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import Text from '../../../../../components/Text';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
-import { EditableMDItem } from '../interface';
+import { EditableMDItem } from '../types';
 import { styles } from './ColumnShowHideMDMenu.styles';
 
 interface Props {

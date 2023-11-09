@@ -23,9 +23,9 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
 import { DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK } from './constants';
-import { EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './interface';
 import { buildSchema } from './schema';
 import useStyles from './styles';
+import { EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './types';
 import { getExcelColumns } from './utils';
 
 interface props {

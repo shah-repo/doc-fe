@@ -6,7 +6,7 @@ import { AssigneeActionCellTemplate } from './components/cells/AssigneeActionCel
 import { CommentCellTemplate } from './components/cells/CommentCellTemplate';
 import { InstructionsCellTemplate } from './components/cells/InstructionsCellTemplate';
 import { UploadEvidenceCellTemplate } from './components/cells/UploadEvidenceCellTemplate';
-import { EditableTLItem, SchemaOptions } from './interface';
+import { EditableTLItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
   actionsClass,

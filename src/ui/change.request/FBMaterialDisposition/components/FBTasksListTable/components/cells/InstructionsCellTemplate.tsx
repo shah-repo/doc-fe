@@ -5,7 +5,7 @@ import { FormikField, TextField } from '../../../../../../components/forms/field
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowingContent from '../../../commonCells/OveflowContent';
 import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
-import { CustomTemplateProps } from '../../interface';
+import { CustomTemplateProps } from '../../types';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   const { getFieldProps } = useFormikContext();

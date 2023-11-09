@@ -12,7 +12,7 @@ import { getInitalsFromName } from '../../../../../../components/icons/avatar/he
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 import Colors from '../../../../../../layout/theme/utils/colors';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { CustomTemplateProps, EditableTLItem } from '../../interface';
+import { CustomTemplateProps, EditableTLItem } from '../../types';
 import { styles } from './styles';
 
 const renderUsers = (selectedUsers, removeUser?) => {

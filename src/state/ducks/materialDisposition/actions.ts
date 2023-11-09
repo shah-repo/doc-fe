@@ -1,4 +1,4 @@
-import { MaterialDispositionItem, MDItemEditRequestBody } from '../../../ui/change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/interface';
+import { MaterialDispositionItem, MDItemEditRequestBody } from '../../../ui/change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { MATERIAL_DISPOSITION_ROOT_URL } from './constants';

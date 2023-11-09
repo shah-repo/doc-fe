@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Tooltip from '../../../../../../components/common/kendo/Tooltip';
 import { documentPreviewPath } from '../../../../../../document.revision/utils/paths';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { CustomTemplateProps } from '../../interface';
+import { CustomTemplateProps } from '../../types';
 import { styles } from './styles';
 
 export const LOTIDCellTemplate: React.FC<CustomTemplateProps> = (props) => {

@@ -6,7 +6,7 @@ import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { ChangeRequestStatus } from '../../../../../../../state/ducks/changeRequest/types';
 import { FB, FBFileField, FBFileUploadState, FBProvider } from '../../../../../../form.builder';
 import { EmployeeStatus, EMPLOYEE_RESPONSE_FIELD, EMPTY_VALUE_PLACEHOLDER } from '../../constants';
-import { CustomTemplateProps } from '../../interface';
+import { CustomTemplateProps } from '../../types';
 import FBAttachmentNamePresenter from '../FBAttachmentNamePresenter';
 import { styles } from './styles';
 

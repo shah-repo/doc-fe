@@ -21,7 +21,7 @@ import {
   EMPTY_DROPDOWN_PLACEHOLDER,
   ON_ORDER_PO_ACTION_COLUMN,
 } from '../../constants';
-import { CustomTemplateProps, EditableMDItem } from '../../interface';
+import { CustomTemplateProps, EditableMDItem } from '../../types';
 import { generateDocTitleText } from '../../utils';
 import { styles } from './styles';
 
