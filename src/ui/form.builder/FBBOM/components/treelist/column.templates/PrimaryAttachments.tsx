@@ -3,7 +3,7 @@ import cx from 'classnames';
 import React from 'react';
 import { attachmentsActions } from '../../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../../state/ducks/attachments/types';
-import { downloadAttachmentPdf } from '../../../../../common/utils/helpers';
+import { downloadFile } from '../../../../../common/utils/helpers';
 import { attachmentColorByType } from '../../../../../components/common/attachment.icon/attachmentColorByType';
 import { renderPrimaryAttachment } from '../../../../../components/common/attachment.icon/attachmentIcons';
 import ViewFile from '../../../../../components/common/view.file/container';
@@ -33,7 +33,7 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadAttachmentPdf(downloadInfo);
+      downloadFile(downloadInfo?.url as string);
     },
     onError: (message) => {
       message && toastError(message);

@@ -3,6 +3,7 @@ import isMobile from 'is-mobile';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
+import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/download_pdf.svg';
@@ -11,13 +12,12 @@ import { ReactComponent as InReviewIcon } from '../../../../../assets/images/in_
 import { ReactComponent as InReviewWhiteIcon } from '../../../../../assets/images/in_review_status_white.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
-import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { Attachment } from '../../../../change.request/form/types';
-import { downloadAttachmentPdf } from '../../../../common/utils/helpers';
+import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -31,8 +31,8 @@ import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
 import { HoverStyleChip } from '../../common/HoverStyleChipPendingReview';
 import { NormalStyleChip } from '../../common/NormalStyleChipPendingReview';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency, getPendingTooltipText } from '../../common/Utils';
 import EmailModal from '../../dialogs/email/EmailDialog';
 import useStyles from './purchaseOrder.styles';
@@ -204,7 +204,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadAttachmentPdf(downloadInfo);
+      downloadFile(downloadInfo?.url as string);
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {

@@ -30,7 +30,7 @@ export const getSchemaFromColumns = (columns: KendoColumn[]) => {
   });
   return [schemaObjFieldsObj];
 };
-export const downloadAttachmentPdf = (downloadFile: { url: string }) => {
+export const downloadFile = (url: string) => {
   const openInNewTab = !isMobile();
   const target = openInNewTab ? '_blank' : '_self';
 
@@ -38,8 +38,8 @@ export const downloadAttachmentPdf = (downloadFile: { url: string }) => {
     return;
   }
   if (openInNewTab) {
-    window.open(downloadFile.url, target);
+    window.open(url, target);
   } else {
-    window.location.href = downloadFile.url;
+    window.location.href = url;
   }
 };
