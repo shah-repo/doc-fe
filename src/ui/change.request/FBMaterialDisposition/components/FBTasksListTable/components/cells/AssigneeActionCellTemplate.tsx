@@ -18,7 +18,7 @@ import {
   EMPLOYEE_RESPONSE_FIELD,
   EMPTY_VALUE_PLACEHOLDER,
 } from '../../constants';
-import { CustomTemplateProps } from '../../interface';
+import { CustomTemplateProps } from '../../types';
 import { styles } from './styles';
 
 export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (

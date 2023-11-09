@@ -9,7 +9,7 @@ import TransitionDialog from '../../components/transitionDialog/TransitionDialog
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
-import { PendingMDInfoResponse } from '../FBMaterialDisposition/components/FBMaterialDispositionTable/interface';
+import { PendingMDInfoResponse } from '../FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import { EffectiveDateFormValues, PasswordFormValues } from '../form/types';
 import TasksInfoDialog from './TasksInfoDialog';
 
@@ -65,7 +65,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
 
   const onConfirm = () => {
     tasksDialog.close();
-    if (settings?.autoUpdateLotStatus && pendingMDInfo.lotStatusWillBeUpdated) {
+    if (settings?.shouldAutoUpdateLotStatus && pendingMDInfo.lotStatusWillBeUpdated) {
       lotStatusDialog.open();
     } else {
       effectiveDateDialog.open();

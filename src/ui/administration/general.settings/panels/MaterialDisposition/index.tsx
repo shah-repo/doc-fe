@@ -12,8 +12,8 @@ const MaterialDispositionSettings: React.FC<SettingsPanelProps> = (props) => {
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.md')}>
       <SwitchControl
-        {...getFieldProps('autoUpdateLotStatus')}
-        checked={values.autoUpdateLotStatus}
+        {...getFieldProps('shouldAutoUpdateLotStatus')}
+        checked={values.shouldAutoUpdateLotStatus}
         label={translate('administration.general.settings.md.label')}
       />
     </SettingsPanel>

@@ -7,7 +7,7 @@ import { ChangeRequestStatus } from '../../../../../../../state/ducks/changeRequ
 import { FormikField, TextField } from '../../../../../../components/forms/fields-next';
 import OverflowingContent from '../../../commonCells/OveflowContent';
 import { COMMENTS_FIELD, EmployeeStatus, EMPLOYEE_RESPONSE_FIELD, EMPTY_VALUE_PLACEHOLDER } from '../../constants';
-import { CustomTemplateProps } from '../../interface';
+import { CustomTemplateProps } from '../../types';
 import { styles } from './styles';
 
 interface Props extends CustomTemplateProps {

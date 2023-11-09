@@ -19,7 +19,7 @@ import { companySelectors } from '../../../../../state/ducks/company';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
-import { PendingMDInfoResponse } from '../../../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/interface';
+import { PendingMDInfoResponse } from '../../../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -107,7 +107,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   });
   const onConfirm = () => {
     tasksDialog.close();
-    if (settings?.autoUpdateLotStatus && pendingMDInfo.lotStatusWillBeUpdated) {
+    if (settings?.shouldAutoUpdateLotStatus && pendingMDInfo.lotStatusWillBeUpdated) {
       lotStatusDialog.open();
     } else {
       openClosedDialog();
