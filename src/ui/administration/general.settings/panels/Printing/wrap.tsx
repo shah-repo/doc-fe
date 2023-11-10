@@ -87,7 +87,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     };
 
     return Component({
-      ...(props as T),
+      ...(props),
       onAddNew,
       onCancel,
       onSelectionChange,

@@ -80,7 +80,7 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
           enabled: true,
           drag: false,
           cell: true,
-          mode: 'multiple'
+          mode: 'multiple',
         }}
         onSelectionChange={onSelectionChange}>
         <GridColumn
