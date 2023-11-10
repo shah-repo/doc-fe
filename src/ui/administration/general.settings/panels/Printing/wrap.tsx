@@ -10,11 +10,6 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    onAddNew,
-    onCancel,
-    onDelete,
-    confirmDeletePrinter,
-    cancelDeletePrinter,
     ...props
   }: T) => {
     const { getFieldProps, submitForm, setFieldValue } = useFormikContext();
@@ -49,7 +44,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     });
 
     const { setValues, resetForm } = formik;
-    onAddNew = (editData: ZebraPrintSettings) => {
+    const onAddNew = (editData: ZebraPrintSettings) => {
       if (editData) {
         setEditData(editData);
         setValues(editData);
@@ -57,39 +52,39 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       setIsOpen(true);
     };
 
-    onDelete = (data: ZebraPrintSettings) => {
+    const onDelete = (data: ZebraPrintSettings) => {
       confirmationDialog.open();
       setDeleteData(data);
     };
 
-    confirmDeletePrinter = () => {
+    const confirmDeletePrinter = () => {
       const newData = dataResult.filter(item => item.apiKey !== deleteData.apiKey);
       setFieldValue('zebraPrint', newData);
       submitForm();
       confirmationDialog.close();
     };
 
-    cancelDeletePrinter = () => {
+    const cancelDeletePrinter = () => {
       confirmationDialog.close();
     };
 
-    onCancel = () => {
+    const onCancel = () => {
       setEditData({});
       setIsOpen(false);
     };
 
     const onSelectionChange = (event: GridSelectionChangeEvent) => {
-        if (event?.dataItem) {
-          const { dataItem, dataItems } = event;
-          dataItems.map(item => {
-            if (item.apiKey === dataItem.apiKey) {
-              item.printers.isActive = !item.printers.isActive;
-            }
-            return item;
-          });
-          setDataResult(dataItems);
-        }
-      };
+      if (event?.dataItem) {
+        const { dataItem, dataItems } = event;
+        dataItems.map(item => {
+          if (item.apiKey === dataItem.apiKey) {
+            item.printers.isActive = !item.printers.isActive;
+          }
+          return item;
+        });
+        setDataResult(dataItems);
+      }
+    };
 
     return Component({
       ...(props as T),
