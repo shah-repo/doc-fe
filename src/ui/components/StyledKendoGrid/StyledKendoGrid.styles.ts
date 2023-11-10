@@ -406,7 +406,7 @@ export default makeStyles((theme) => ({
       },
     },
     '.k-dropdown': {
-      width: '100%',
+      width: 'auto',
 
       '& .k-dropdown-wrap': {
         ...baseInputStyles(theme),
