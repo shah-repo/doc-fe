@@ -1,3 +1,4 @@
+import isMobile from 'is-mobile';
 import { chain, set } from 'lodash';
 import { KendoColumn } from '../../components/common/kendo/types';
 
@@ -29,4 +30,17 @@ export const getSchemaFromColumns = (columns: KendoColumn[]) => {
     }
   });
   return [schemaObjFieldsObj];
+};
+
+export const downloadFile = (url?: string): void => {
+  if (!url) {
+    return;
+  }
+
+  if (isMobile()) {
+    window.location.href = url;
+    return;
+  }
+
+  window.open(url, '_blank');
 };

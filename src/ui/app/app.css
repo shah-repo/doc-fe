@@ -11,6 +11,7 @@
   font-display: block;
   src: url("../../assets/fonts/fa-regular-400-set.woff2") format("woff2");
 }
+
 @font-face {
   font-family: FontAwesome;
   font-style: normal;
@@ -78,7 +79,7 @@
 .containing-box-scrollbar::-webkit-scrollbar {
   background-color: transparent;
   width: 6px;
-  height: 6px;
+  height: 9px !important;
 }
 
 .containing-box-scrollbar::-webkit-scrollbar-thumb {
