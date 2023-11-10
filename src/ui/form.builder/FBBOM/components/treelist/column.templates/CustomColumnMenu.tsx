@@ -25,7 +25,7 @@ interface ColumnMenuContextProps {
 
 export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} as ColumnMenuContextProps);
 
-export const styles = makeStyles(() =>
+const styles = makeStyles(() =>
   createStyles({
     icon: {
       color: Colors.light_gray_III,
