@@ -6,7 +6,7 @@ import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { CustomTemplateProps, EditableVendor, SupplierOption } from '../types';
-import OverflowingContent from './OveflowContent';
+import OverflowContent from '../../../components/OverflowContent';
 
 interface Props extends CustomTemplateProps {
   options: SupplierOption[]
@@ -64,8 +64,8 @@ export const SupplierCellTemplate: React.FC<Props> = (props) => {
   const displayValue = dataItem[field] as string;
 
   return (
-    <OverflowingContent onClick={handleClick} title={displayValue}>
+    <OverflowContent onClick={handleClick} title={displayValue}>
       {linkPath ? <Link target="_blank" to={linkPath}>{displayValue}</Link> : displayValue}
-    </OverflowingContent>
+    </OverflowContent>
   );
 };

@@ -5,7 +5,7 @@ import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableVendor } from '../types';
-import OverflowingContent from './OveflowContent';
+import OverflowContent from '../../../components/OverflowContent';
 
 interface Props extends CustomTemplateProps {
   options: string[]
@@ -52,8 +52,8 @@ export const UnitsCellTemplate: React.FC<Props> = (props) => {
   const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
 
   return (
-    <OverflowingContent onClick={handleClick}>
+    <OverflowContent onClick={handleClick}>
       {displayValue}
-    </OverflowingContent>
+    </OverflowContent>
   );
 };
