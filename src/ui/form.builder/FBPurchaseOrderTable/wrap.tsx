@@ -149,15 +149,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         const url = urlTpl({ symboName: selectedCurrency });
         purchaseOrderState?.exchangeRate.setUrl(url);
         const data = await purchaseOrderState?.exchangeRate?.fetch();
-        if (
-          !isTotalAmountUnderThreshold(
-            null,
-            null,
-            null,
-            data?.rate,
-            selectedCurrency,
-          )
-        ) {
+        if (!isTotalAmountUnderThreshold(null, null, null, data?.rate, selectedCurrency)) {
           return;
         }
       }
