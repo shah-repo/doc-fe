@@ -43,8 +43,8 @@ export default makeStyles((theme) => ({
           height: 46,
           '&.k-state-selected > td': {
             backgroundColor: 'transparent',
-          }
-      }
+          },
+      },
     },
     '.k-grid-toolbar': {
       padding: theme.spacing(1.25, 2, 0),
