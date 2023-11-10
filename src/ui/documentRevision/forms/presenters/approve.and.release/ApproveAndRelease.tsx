@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
-import { getStartOfDayDateString, TIME_ZONE } from '../../../../../common/utils/date';
+import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Group, Permission } from '../../../../../state/ducks/auth/types';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
@@ -25,10 +25,10 @@ import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRe
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from '../../../../change.request/form/transform';
 import { ApproverPayload, InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
-import { Button } from '../../../../components/forms/fields-next';
-import { FormContext } from '../../../../components/forms/FormContext';
-import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import { FormContext } from '../../../../components/forms/FormContext';
+import { Button } from '../../../../components/forms/fields-next';
+import { toastError } from '../../../../components/notifications';
 import { FB } from '../../../../form.builder';
 import { BOM } from '../../../../form.builder/FBBOM/interface';
 import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
@@ -295,7 +295,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       approvers: values.approvals
         .map((approval) => approval.value)
         .concat(owner?.id).filter((id) => id)
-        .map((id) => ({ id })),
+        .map((id) => ({ approver: { id } })),
       documentRevisions: [{
         descriptionOfChange: intl.formatMessage({ id: 'common.numeric.release' }),
         id: FB.uniqid,
@@ -394,8 +394,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   };
 
   const getApproverPayload = (approverId?: string): ApproverPayload => ({
-    approver: { id: approverId || null },
-    signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approverId)?.id || null },
+    approver: { id: approverId ?? null },
+    signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approverId)?.id ?? null },
   });
 
   const onSubmit = (values: any) => {
@@ -519,7 +519,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             classes={{ root: classes.dialogContent }}
             id="ApproveAndRelease-content"
           >
-            <FormContext.Provider value={{ submitOnChange: false }}>
+            <FormContext.Provider value={{ submitOnChange: false, isEditing: false }}>
               <Formik
                 initialValues={initialValues}
                 onSubmit={onSubmit}

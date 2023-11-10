@@ -228,6 +228,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         const id = workspaceState?.id;
         if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
       });
+      workspaceState?.saveDocRev(formState?.getValues());
     }
 
     // MARK: @methods

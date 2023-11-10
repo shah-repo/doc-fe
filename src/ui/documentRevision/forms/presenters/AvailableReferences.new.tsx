@@ -5,11 +5,11 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import { debounce, isArray, map, some } from 'lodash';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as RemoveReference } from '../../../../assets/images/trash.svg';
+import { translate } from '../../../../common/intl';
 import { TypographyProps } from '../../../../state/ducks/common/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DocRevQueryParam, DocumentGroupOptionsType } from '../../../../state/ducks/documentRevisions/documentType/types';
@@ -20,14 +20,13 @@ import { useFormContext } from '../../../components/forms/FormContext';
 import Text from '../../../components/Text';
 import { FBTooltip } from '../../../form.builder';
 import useActionCreator from '../../../hooks/useActionCreator';
-import { isTranslation } from '../../../translations/types';
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from '../../helpers/checkDocumentGroup';
 import { getHighestReleasedRevision, getHighestRevision } from '../transform';
 import { styles } from './AvailableReferences.new.styles';
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean
-  availableReferences: {label: string, value: string, deleteDisabled?: boolean }[]
+  availableReferences: Array<{label: string, value: string, deleteDisabled?: boolean }>
   documentReferences: Reference[]
   documentGroupOptions?: DocumentGroupOptionsType[]
 }
@@ -53,11 +52,6 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
-  const intl = useIntl();
-  const getDisplayText = (localiseString) =>
-    isTranslation(localiseString)
-      ? intl.formatMessage({ id: localiseString })
-      : null;
   const classes = styles();
   const { submitForm } = useFormContext();
   const { _documentRevisionFormState } = SM.useStores();
@@ -65,7 +59,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState('');
 
-  const loadAction =  useActionCreator(documentRevisionsActions.loadList);
+  const loadAction = useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
 
@@ -217,7 +211,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                label={!open && getDisplayText('common.select.placeholder')}
+                placeholder={open ? undefined : translate('common.select.placeholder')}
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: '0px 30px 0px 9px', height: value.length ? '100%' : '40px' },
@@ -280,7 +274,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         ))}
       </Box>
     </Field>
-  ); };
+  );
+};
 
 type AvailableReferencesFieldProps = AvailableReferencesProps &
 FieldConfig &

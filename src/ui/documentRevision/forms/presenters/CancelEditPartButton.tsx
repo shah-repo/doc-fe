@@ -1,13 +1,14 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Popover, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import React, { useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { ChangeControlOptions, DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
-import { Button, ButtonGroup } from '../../../components/forms/fields-next';
 import Text from '../../../components/Text';
-import { cccKeyNamesOrder } from '../../../document.revision/utils/helpers';
-import { styles } from './cancelEditPartButton.styles';
+import { Button, ButtonGroup } from '../../../components/forms/fields-next';
+import { BOM_FIELDS_CHANGES_KEY, BOM_LINE_CHANGES_KEY, cccKeyNamesOrder } from '../../../document.revision/utils/helpers';
+import useStyles from './cancelEditPartButton.styles';
 
 interface Props {
   documentRevision: DocumentRevision
@@ -18,7 +19,7 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
   documentRevision,
   cancelPartEdit,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const showAssociatedControlOptions = (event) => {
@@ -38,16 +39,20 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
   const schemaMap = changeControlOptions?.schemaMap ?? {};
   const { docId, displayRevision } = changeControlOptions;
 
+  let cccKeyNamesToUse = cccKeyNamesOrder;
+  if (formInput[BOM_LINE_CHANGES_KEY] === 'Yes') {
+    cccKeyNamesToUse = cccKeyNamesToUse.filter(keyName => keyName !== BOM_FIELDS_CHANGES_KEY);
+  }
+
   return (
     <ButtonGroup
-      color="primary"
-      variant="outlined"
+      kind="white"
     >
       <Button
         id="cancelEditPartButton"
         data-cy="cancelEditPartButton"
         onClick={cancelPartEdit}
-        className={documentRevision.status !== DocumentRevisionStatus.Draft ? classes.disabled : ''}
+        className={cx(classes.buttonText, { [classes.disabled]: documentRevision.status !== DocumentRevisionStatus.Draft })}
       >
         <Text message="Cancel Edit" />
       </Button>
@@ -55,6 +60,7 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
         id="controlOptionsInfoButton"
         data-cy="controlOptionsInfoButton"
         onClick={showAssociatedControlOptions}
+        className={classes.buttonIcon}
       >
         <FontAwesomeIcon
           className={classes.controlOptionsInfo}
@@ -84,11 +90,11 @@ const CancelEditPartButton: React.FunctionComponent<Props> = ({
           <span className={classes.formDetails}>{docId} rev{displayRevision}</span>
         </Typography>
         <ul className={classes.optionsList}>
-          {cccKeyNamesOrder.map((key: string) => (
+          {cccKeyNamesToUse.map((key: string) => (
             <>
               { schemaMap[key] && <li key={key} className={classes.listItem}>
                 <span className={classes.listItemLabel}>{schemaMap[key]}</span> -
-                <span className={classes.listItemValue}>{key === 'bom-fields-edit' ? formInput[key]?.join(' , ') : formInput[key]}</span>
+                <span className={classes.listItemValue}>{key === BOM_FIELDS_CHANGES_KEY ? formInput[key]?.join(' , ') : formInput[key]}</span>
               </li>}
             </>
           ))}
