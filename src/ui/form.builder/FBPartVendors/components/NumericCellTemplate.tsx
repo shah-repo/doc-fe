@@ -6,7 +6,7 @@ import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { positiveNumber, validator } from '../../../components/forms/fields/validators';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
-import OverflowingContent from './OveflowContent';
+import OverflowContent from '../../../components/OverflowContent';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -40,8 +40,8 @@ export const NumericCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
 
   return (
-    <OverflowingContent onClick={handleClick}>
+    <OverflowContent onClick={handleClick}>
       {displayValue}
-    </OverflowingContent>
+    </OverflowContent>
   );
 };
