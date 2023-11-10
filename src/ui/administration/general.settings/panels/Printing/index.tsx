@@ -14,7 +14,7 @@ import AddNewPrinter from './AddNewPrinter';
 import useStyles from './styles';
 import { withLabelPrinting } from './wrap';
 
-const SELECTED_FIELD = 'printers.isActive';
+const SELECTED_FIELD = 'printer.isActive';
 const DATA_ITEM_KEY = 'apiKey';
 
 const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
@@ -34,14 +34,14 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
 }) => {
   const ActionCell = (props: ZebraPrintSettings) => {
     const { dataItem } = props;
-    const { cellStyle, deleteButton } = useStyles({ isActive: dataItem.printers?.isActive });
+    const { cellStyle, deleteButton } = useStyles({ isActive: dataItem.printer?.isActive });
     return (<td className={`${cellStyle} k-command-cell`} >
       <Tooltip title={translate('common.edit')}>
         <IconButton
           kind="simple"
           color="primary"
           style={{ marginRight: '10px' }}
-          disabled={!dataItem.printers?.isActive}
+          disabled={!dataItem.printer?.isActive}
           onClick={() => onAddNew(dataItem)}
         >
           <FontAwesomeIcon
@@ -54,7 +54,7 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
           kind="simple"
           onClick={() => onDelete(dataItem)}
           className={deleteButton}
-          disabled={!dataItem.printers?.isActive}
+          disabled={!dataItem.printer?.isActive}
         >
           <FontAwesomeIcon
             icon={regular('trash-can')}
@@ -66,7 +66,7 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
 
   const cellRender = (props) => {
     const { dataItem, field } = props;
-    const { cellStyle } = useStyles({ isActive: dataItem?.printers?.isActive });
+    const { cellStyle } = useStyles({ isActive: dataItem?.printer?.isActive });
     return (<td className={`${cellStyle} k-command-cell`} >{get(dataItem, field)}</td>);
   };
 
@@ -84,16 +84,16 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
         }}
         onSelectionChange={onSelectionChange}>
         <GridColumn
-          field="printers.isActive"
+          field="printer.isActive"
           title="Active"
           width={80}
           headerCell={() => <span>Active</span>} />
         <GridColumn
-          field="printers.sn"
+          field="printer.sn"
           cell={cellRender}
           title="Serial Number" />
         <GridColumn
-          field="printers.name"
+          field="printer.name"
           cell={cellRender}
           title="Name" />
         <GridColumn

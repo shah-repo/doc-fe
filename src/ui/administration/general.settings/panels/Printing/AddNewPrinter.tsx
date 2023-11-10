@@ -30,12 +30,12 @@ const AddNewPrinter: React.FunctionComponent<SettingsPanelProps> = ({
             spacing={2}>
             <Grid item xs={6}>
               <FormField label="Name">
-                <TextField {...formik?.getFieldProps('printers.name')} />
+                <TextField {...formik?.getFieldProps('printer.name')} />
               </FormField>
             </Grid>
             <Grid item xs={6}>
               <FormField label="administration.general.settings.printing.printer.serial">
-                <TextField {...formik?.getFieldProps('printers.sn')} />
+                <TextField {...formik?.getFieldProps('printer.sn')} />
               </FormField>
             </Grid>
             <Grid item xs={12}>

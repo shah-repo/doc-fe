@@ -138,7 +138,7 @@ export interface RedlineAction {
 export interface ZebraPrintSettings {
   apiKey: string
   tenantId: string
-  printers: {
+  printer: {
     sn: string
     isActive: boolean
     name: string

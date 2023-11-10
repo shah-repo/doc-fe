@@ -25,7 +25,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     }, [PrintersData?.value]);
 
     const formik = useFormik<ZebraPrintSettings>({
-      initialValues: { apiKey: '', tenantId: '', printers: { isActive: true, name: '', sn: '' } },
+      initialValues: { apiKey: '', tenantId: '', printer: { isActive: true, name: '', sn: '' } },
       onSubmit: values => {
         if (!isEmpty(editData)) {
           const index = dataResult.findIndex(item => item.apiKey === values.apiKey);
@@ -33,7 +33,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
           newDataResult[index] = values;
           setFieldValue('zebraPrint', newDataResult);
         } else {
-          values.printers.isActive = true;
+          values.printer.isActive = true;
           const newData = cloneDeep(dataResult);
           newData.push(values);
           setFieldValue('zebraPrint', newData);
@@ -78,7 +78,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
         const { dataItem, dataItems } = event;
         dataItems.map(item => {
           if (item.apiKey === dataItem.apiKey) {
-            item.printers.isActive = !item.printers.isActive;
+            item.printer.isActive = !item.printer.isActive;
           }
           return item;
         });
