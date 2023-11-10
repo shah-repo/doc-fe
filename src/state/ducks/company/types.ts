@@ -135,16 +135,17 @@ export interface RedlineAction {
   payload: RedlineState
 }
 
-interface ZebraPrintSettings {
+export interface ZebraPrintSettings {
   apiKey: string
   tenantId: string
-  printers: Array<{
+  printers: {
     sn: string
     isActive: boolean
-  }>
+    name: string
+  }
 }
 export interface GeneralSettings {
-  zebraPrint: ZebraPrintSettings
+  zebraPrint: [ZebraPrintSettings]
   approvalRequestAdmin: boolean
 }
 

@@ -1,4 +1,7 @@
 import { ExpansionPanelProps, SwitchProps } from '@material-ui/core';
+import { FormikContextType } from 'formik';
+import { ZebraPrintSettings } from '../../../state/ducks/company/types';
+import { DialogHandler } from '../../hooks/useDialog';
 
 export enum GeneralSettingsTabs {
   Printing = 'Printing',
@@ -13,10 +16,22 @@ export interface GeneralSettingsProps {
   updatedAt?: string
   onSave: () => void
 }
+
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
   onToggle: () => void
-  onAddNew?: () => void
+  onAddNew?: (editData: ZebraPrintSettings) => void
+  onDelete?: (data: ZebraPrintSettings) => void
+  onUpdate?: () => void
+  onCancel?: () => void
+  isOpen?: boolean
+  dataResult?: []
+  editData?: ZebraPrintSettings
+  onSelectionChange?: () => void
+  formik?: FormikContextType<ZebraPrintSettings>
+  confirmationDialog?: DialogHandler
+  confirmDeletePrinter?: () => void
+  cancelDeletePrinter?: () => void
 }
 
 export interface SwitchControlProps extends SwitchProps {
