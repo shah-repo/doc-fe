@@ -945,8 +945,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     ({
       field,
       locked,
-      closeMenu,
-    }: CustomTreeListColumnProps & { closeMenu: () => void }) => {
+    }: CustomTreeListColumnProps) => {
       const index = columns.findIndex((c) => c.field === field);
       const column = columns[index];
       if (column) {
@@ -958,7 +957,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           orderIndex: !locked ? 0 : undefined,
         });
         setColumns(newColumns);
-        closeMenu?.();
       }
     },
     [columns],

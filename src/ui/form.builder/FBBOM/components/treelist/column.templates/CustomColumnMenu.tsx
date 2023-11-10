@@ -1,13 +1,17 @@
-import { ColumnMenuItem, ColumnMenuProps, ColumnMenuTextColumn } from '@progress/kendo-react-data-tools';
+import { createStyles, makeStyles } from '@material-ui/core';
+import { ColumnMenuItem, ColumnMenuProps } from '@progress/kendo-react-data-tools';
+import cx from 'classnames';
 import React, { ComponentType } from 'react';
 import { translate } from '../../../../../../common/intl';
+import HeaderMenu from '../../../../../components/common/header/Menu';
 import { DisplayText, TranslatedText } from '../../../../../components/common/kendo/helpers';
+import Colors from '../../../../../layout/theme/utils/colors';
 import { CustomTreeListColumnProps } from '../interface';
 
 interface CustomColumnMenuProps extends ColumnMenuProps {
   columns: CustomTreeListColumnProps[]
   onColumnShowHide: (column: CustomTreeListColumnProps) => void
-  onLock: ({ field, locked, closeMenu }) => void
+  onLock: ({ field, locked }) => void
 }
 
 interface ColumnMenuContextProps {
@@ -19,34 +23,39 @@ interface ColumnMenuContextProps {
 
 export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} as ColumnMenuContextProps);
 
+export const styles = makeStyles(() =>
+  createStyles({
+    columnMenuItem: {
+      color: Colors.light_gray_II,
+      backgroundColor: Colors.white,
+      margin: '0px',
+      padding: '0px',
+      width: '230px',
+    },
+  }));
+
 export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) => {
   const { field, onLock, columns, onColumnShowHide } = props;
   const column: CustomTreeListColumnProps | undefined = columns.find(c => c.field === field);
   const isLocked = Boolean(column?.locked);
-
-  const itemsRender = (rendering: Array<React.ReactElement<HTMLDivElement, string | React.JSXElementConstructor<any>> | null>, colProps: { closeMenu: () => void, field?: string | undefined}) => {
-    const items: Array<React.ReactElement<HTMLDivElement, string | React.JSXElementConstructor<any>> | null> = [...rendering];
-    items.pop();
-    !column?.disableShowOrHideSelection && items.push((
-      <ColumnMenuItem
-        {...props}
-        iconClass="k-i-preview k-i-eye k-grid-menu-icon"
-        onClick={() => onColumnShowHide(column as CustomTreeListColumnProps)}
-        title={translate(TranslatedText[DisplayText.HIDE_COLUMN])}
-      />));
-    items.push((
-      <ColumnMenuItem
-        {...props}
-        iconClass={`k-icon k-grid-menu-icon ${column?.locked ? 'k-i-unlock' : 'k-i-lock'}`}
-        onClick={() => onLock({ ...colProps, locked: isLocked, field })}
-        title={translate(isLocked ? TranslatedText[DisplayText.UNLOCK_COLUMN] : TranslatedText[DisplayText.LOCK_COLUMN])}
-      />));
-    return items;
-  };
+  const classes = styles();
 
   return (
     <>
-      {column?.isShowedMenu ?? <ColumnMenuTextColumn {...props} sortAsc={false} sortDesc={false} itemsRender={itemsRender} />}
+      <HeaderMenu columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem)}>
+        <ColumnMenuItem
+          {...props}
+          iconClass="k-i-preview k-i-eye k-grid-menu-icon"
+          onClick={() => onColumnShowHide(column as CustomTreeListColumnProps)}
+          title={translate(TranslatedText[DisplayText.HIDE_COLUMN])}
+        />
+        <ColumnMenuItem
+          {...props}
+          iconClass={`k-icon k-grid-menu-icon ${column?.locked ? 'k-i-unlock' : 'k-i-lock'}`}
+          onClick={() => onLock({ locked: isLocked, field })}
+          title={translate(isLocked ? TranslatedText[DisplayText.UNLOCK_COLUMN] : TranslatedText[DisplayText.LOCK_COLUMN])}
+        />
+      </HeaderMenu>
     </>
   );
 };
