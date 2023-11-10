@@ -1,3 +1,5 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createStyles, makeStyles } from '@material-ui/core';
 import { ColumnMenuItem, ColumnMenuProps } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
@@ -25,6 +27,13 @@ export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} 
 
 export const styles = makeStyles(() =>
   createStyles({
+    icon: {
+      color: Colors.light_gray_III,
+    },
+    iconButton: {
+      marginRight: 0,
+      cursor: 'pointer',
+    },
     columnMenuItem: {
       color: Colors.light_gray_II,
       backgroundColor: Colors.white,
@@ -39,10 +48,13 @@ export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) =>
   const column: CustomTreeListColumnProps | undefined = columns.find(c => c.field === field);
   const isLocked = Boolean(column?.locked);
   const classes = styles();
-
   return (
     <>
-      <HeaderMenu columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem)}>
+      <HeaderMenu
+        columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem)}
+        menuIconButtonClass={classes.iconButton}
+        icon={<FontAwesomeIcon className={cx('k-icon', classes.icon)} icon={solid('ellipsis-vertical')} />}
+      >
         <ColumnMenuItem
           {...props}
           iconClass="k-i-preview k-i-eye k-grid-menu-icon"
