@@ -59,6 +59,13 @@ const columnsShema: Array<ColumnDefinition<FBPurchaseOrderItem>> = [
     width: 65,
   },
   {
+    field: 'glCode',
+    id: 'glCode',
+    title: 'form.builder.field.glCode',
+    cell: ContentCell,
+    width: 130,
+  },
+  {
     id: 'data',
     field: 'formattedDate',
     title: 'form.builder.field.date.required',

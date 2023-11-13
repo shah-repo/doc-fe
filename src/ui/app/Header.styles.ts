@@ -1,9 +1,9 @@
 import { createStyles } from '@material-ui/core';
 import EnlilLogo from '../../assets/images/enlil_logo.svg';
+import { NextTheme } from '../layout/theme-next/provider';
 import Colors from '../layout/theme/utils/colors';
 import { HeaderPresenterProps } from './Header.presenter';
 import { DRAWER_WIDTH } from './Navigation.styles';
-import { NextTheme } from '../layout/theme-next/provider';
 
 export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
@@ -55,6 +55,16 @@ export default (theme: NextTheme) =>
     mobileMake: {
       display: 'none',
     },
+    mobileLogoText: {
+      marginLeft: theme.spacing(2),
+      fontSize: 15,
+      fontWeight: 600,
+    },
+    mobileAvatar: {
+      width: 35,
+      height: 35,
+      borderRadius: '50%',
+    },
     [theme.media.mobile]: {
       welcomeText: {
         fontSize: '1.25rem',
@@ -65,19 +75,16 @@ export default (theme: NextTheme) =>
         display: 'none',
       },
       mobileMake: {
-        background: 'linear-gradient(166deg, #2f01bb, #2ea2dc 100%, #783bff 100%)',
-        paddingLeft: 24,
-        height: '52px',
-        paddingTop: 12,
-        paddingBottom: 11,
         display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
-      },
-      textMake: {
-        marginLeft: 16,
-        fontSize: 15,
-        fontWeight: 600,
-
+        height: 52,
+        padding: `${theme.spacing(1.5)}px`,
+        background: 'linear-gradient(166deg, #2f01bb, #2ea2dc 100%, #783bff 100%)',
+        '& > div': {
+          display: 'flex',
+          alignItems: 'center',
+        },
       },
       mobileGrwFlex: {
         display: 'none',
@@ -94,7 +101,5 @@ export default (theme: NextTheme) =>
           display: 'none',
         },
       },
-
     },
-
   });

@@ -1,13 +1,13 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
-import OverflowTooltip from '../../../components/OverflowTooltip';
+import OverflowTooltip from './OverflowTooltip';
 
 interface Props {
   title?: React.ReactNode
   onClick?: () => void
 }
 
-const OverflowingContent: React.FC<Props> = ({ title, children, onClick }) => (
+const OverflowContent: React.FC<Props> = ({ title, children, onClick }) => (
   <Box onClick={onClick}>
     <OverflowTooltip
       title={title ?? children}
@@ -20,4 +20,4 @@ const OverflowingContent: React.FC<Props> = ({ title, children, onClick }) => (
   </Box>
 );
 
-export default OverflowingContent;
+export default OverflowContent;

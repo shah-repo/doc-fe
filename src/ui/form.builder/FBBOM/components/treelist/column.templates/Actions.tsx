@@ -12,7 +12,7 @@ interface Props extends BOMActionsProps<EditableBOM> {
 
 const useStyles = makeStyles({
   popper: {
-    zIndex: 1400,
+    zIndex: 1300,
   },
 });
 
