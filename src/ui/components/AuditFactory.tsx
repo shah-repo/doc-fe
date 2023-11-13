@@ -76,6 +76,44 @@ const AuditFactory: React.FunctionComponent<Props> = ({
     return partNumberText;
   };
 
+  const generateAuditLogForDisplayStatus = (auditValue: any, dataCy: string | undefined): JSX.Element => {
+    try {
+      const { displayRevision, changeRequestId, status, isRestrictedEdit } = JSON.parse(auditValue) as IDisplayStatusAuditEntry;
+      if (isRestrictedEdit) {
+        const displayText = changeRequestId
+          ? intl.formatMessage({ id: 'documentRevision.audit.restrictedEdit.display.released.text' },
+            { status, name: audit.owner?.user.name, changeRequestId, displayRevision })
+          : intl.formatMessage({ id: 'documentRevision.audit.restrictedEdit.display.draft.text' },
+            { status, displayRevision });
+        return (<div data-cy={dataCy}>{displayText}</div>);
+      } else {
+        return (
+          <Text
+            dataCy={dataCy}
+            translation="changeRequest.audit.status.updated.by.withChangeRequest"
+            values={{
+              status,
+              name: audit.owner?.user.name,
+              changeRequestId,
+            }}
+          />
+        );
+      }
+    } catch (err) {
+      // Not valid JSON, so older data and is string
+      return (
+        <Text
+          dataCy={dataCy}
+          translation="changeRequest.audit.status.updated.by"
+          values={{
+            status: audit.nextValue,
+            name: audit.owner?.user.name,
+          }}
+        />
+      );
+    }
+  };
+
   if (isFBField) {
     const fbValue = {
       texteditor () {
@@ -211,42 +249,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
-        try {
-          const { displayRevision, changeRequestId, status, isRestrictedEdit }
-            = JSON.parse(auditValue) as { displayRevision: string, changeRequestId: string, status: string, isRestrictedEdit: boolean};
-          if (isRestrictedEdit) {
-            const displayText = changeRequestId
-              ? intl.formatMessage({ id: 'documentRevision.audit.restrictedEdit.display.released.text' },
-                { status, name: audit.owner?.user.name, changeRequestId, displayRevision })
-              : intl.formatMessage({ id: 'documentRevision.audit.restrictedEdit.display.draft.text' },
-                { status, displayRevision });
-            returnValue = (<div data-cy={dataCy}>{displayText}</div>);
-          } else {
-            returnValue = (
-              <Text
-                dataCy={dataCy}
-                translation="changeRequest.audit.status.updated.by.withChangeRequest"
-                values={{
-                  status,
-                  name: audit.owner?.user.name,
-                  changeRequestId,
-                }}
-              />
-            );
-          }
-        } catch (err) {
-          // Not valid JSON, so older data and is string
-          returnValue = (
-            <Text
-              dataCy={dataCy}
-              translation="changeRequest.audit.status.updated.by"
-              values={{
-                status: audit.nextValue,
-                name: audit.owner?.user.name,
-              }}
-            />
-          );
-        }
+        return generateAuditLogForDisplayStatus(auditValue, dataCy);
         break;
       case 'poStatus':
         returnValue = (
@@ -547,5 +550,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
     </Fragment>
   );
 };
+
+interface IDisplayStatusAuditEntry {
+  displayRevision: string
+  changeRequestId: string
+  status: string
+  isRestrictedEdit: boolean
+}
 
 export default AuditFactory;
