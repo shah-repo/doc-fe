@@ -13,6 +13,8 @@ enum Colors {
   // gray
   hint_gray = '#b4c0ca',
   light_gray = '#F2F4F6',
+  light_gray_II= '#4d4d4d',
+  light_gray_III= '#424242',
   medium_gray = '#D4DBE1',
   gray = '#8A9DAD',
   dark_gray = '#474747',

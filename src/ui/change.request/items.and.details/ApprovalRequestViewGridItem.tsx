@@ -133,7 +133,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
             color="primary"
             control={
               <MuiCheckbox
-                checked={autoUpdate}
+                checked={Boolean(autoUpdate)}
                 name="autoUpdate"
                 color="primary"
                 disabled={true}

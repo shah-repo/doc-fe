@@ -8,9 +8,12 @@ import { styles } from './Menu.styles';
 
 interface Props {
   children: any
+  columnMenuItemClasses?: string
+  menuIconButtonClass?: string
+  icon?: React.ReactNode
 }
 
-const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
+const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemClasses, icon, menuIconButtonClass }) => {
   if (!children.length) {
     children = [children];
   }
@@ -37,10 +40,10 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
           onClick={handleClick}
           data-cy="HeaderMenuButton"
           id="HeaderMenuButton"
-          className={classes.iconButton}
+          className={menuIconButtonClass ?? classes.iconButton}
           disableRipple
         >
-          <MoreVerticalIcon />
+          {icon ?? <MoreVerticalIcon />}
         </IconButton>
       ) : (
         <IconButton
@@ -76,7 +79,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
                 display:
                   menuItem.props.shouldDisplay === false ? 'none' : 'block',
               }}
-              className={classes.menuItem}
+              className={columnMenuItemClasses ?? classes.menuItem}
               key={index}
             >
               {menuItem}
