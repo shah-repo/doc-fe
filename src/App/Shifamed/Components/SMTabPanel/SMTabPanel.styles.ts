@@ -4,7 +4,7 @@ export default makeStyles((theme) => ({
   content: {
     overflowY: 'auto',
     margin: theme.spacing(-4.5, -2, 0),
-    padding: theme.spacing(8, 2, 0),
+    padding: ({ isCreateUrl }) => theme.spacing(!isCreateUrl ? 8 : 6.5, 2, 0),
   },
   bomTabContent: {
     overflowY: 'auto',
