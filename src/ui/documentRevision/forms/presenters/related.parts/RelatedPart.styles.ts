@@ -8,7 +8,7 @@ export default makeStyles((theme) =>
     },
     title: {
       display: 'flex',
-      padding: theme.spacing(.5),
+      padding: theme.spacing(0.5),
       alignItems: 'center',
     },
     fullWidth: {
@@ -25,12 +25,12 @@ export default makeStyles((theme) =>
       },
     },
     fullLengthButton: {
-      'borderStyle': 'dashed',
-      'borderColor': Colors.blue,
-      'width': '100%',
-      'margin': 0,
-      'borderRadius': theme.spacing(0, 0, .5, .5),
-      'color': Colors.navy,
+      borderStyle: 'dashed',
+      borderColor: Colors.blue,
+      width: '100%',
+      margin: 0,
+      borderRadius: theme.spacing(0, 0, 0.5, 0.5),
+      color: Colors.navy,
       '&:hover': {
         backgroundColor: 'transparent',
         borderStyle: 'solid',
@@ -101,7 +101,7 @@ export default makeStyles((theme) =>
       justifyContent: 'space-evenly',
       padding: theme.spacing(0, 1.5),
       alignItems: 'center',
-      columnGap: theme.spacing(.5),
+      columnGap: theme.spacing(0.5),
     },
     editRowChildDivTwo: {
       width: '50%',
@@ -124,38 +124,38 @@ export default makeStyles((theme) =>
     actionButtonParentDiv: {
       width: '100%',
       position: 'relative',
-      marginBottom: theme.spacing(.25),
+      marginBottom: theme.spacing(0.25),
     },
     actionButtonChildDiv: {
       backgroundColor: Colors.dodger_blue,
       position: 'absolute',
       right: 0,
-      borderRadius: theme.spacing(0, 0, .5, .5),
+      borderRadius: theme.spacing(0, 0, 0.5, 0.5),
       display: 'flex',
       justifyContent: 'center',
       zIndex: 21,
     },
     actionButton: {
       backgroundColor: Colors.white,
-      padding: theme.spacing(.5),
+      padding: theme.spacing(0.5),
       minWidth: 'auto',
       border: theme.spacing(1),
     },
     iconButton: {
-      'fontSize': '16px',
-      'fill': Colors.black,
+      fontSize: '16px',
+      fill: Colors.black,
       '&:hover': {
         fill: Colors.white,
       },
     },
     deleteIconButton: {
-      'fontSize': '16px',
+      fontSize: '16px',
       '&:hover': {
         fill: Colors.white,
       },
     },
     viewIcon: {
-      marginTop: theme.spacing(.5),
+      marginTop: theme.spacing(0.5),
       cursor: 'pointer',
       color: Colors.raven,
     },
@@ -183,7 +183,7 @@ export default makeStyles((theme) =>
     },
     tableCellOne: {
       width: '30%',
-      borderRadius: theme.spacing(.5, 0, 0, 0),
+      borderRadius: theme.spacing(0.5, 0, 0, 0),
       paddingLeft: theme.spacing(2),
     },
     tableCellTwo: {
@@ -196,7 +196,7 @@ export default makeStyles((theme) =>
     },
     tableCellFour: {
       width: '10%',
-      borderRadius: theme.spacing(0, .5, 0, 0),
+      borderRadius: theme.spacing(0, 0.5, 0, 0),
     },
     verticalDivider: {
       borderLeft: '2px solid white',
@@ -209,7 +209,7 @@ export default makeStyles((theme) =>
       alignItems: 'center',
     },
     textField: {
-      'padding': theme.spacing(1, .75),
+      padding: theme.spacing(1, 0.75),
       '& .MuiInputBase-root': {
         marginTop: 0,
         padding: 0,
@@ -221,30 +221,30 @@ export default makeStyles((theme) =>
       },
       '& .MuiFormHelperText-root': {
         lineHeight: '1.15rem',
-        margin: theme.spacing(1, 0, 0, .5),
+        margin: theme.spacing(1, 0, 0, 0.5),
       },
     },
     smallText: {
       fontSize: '12px',
     },
     relatedPartRowTitleCell: {
-      'display': '-webkit-box',
+      display: '-webkit-box',
       '-webkit-line-clamp': 1,
       '-webkit-box-orient': 'vertical',
-      'overflow': 'hidden',
+      overflow: 'hidden',
       'word-break': 'break-word',
     },
     itemRow: {
-      'display': 'flex',
-      'alignItems': 'center',
-      'width': '100%',
-      'minHeight': '48px',
-      'borderBottom': `1px solid ${Colors.platinum_grey}`,
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
+      minHeight: '48px',
+      borderBottom: `1px solid ${Colors.platinum_grey}`,
       '&:last-child': {
         borderBottom: '1px solid transparent',
       },
-      'cursor': 'pointer',
-      'backgroundColor': Colors.white,
+      cursor: 'pointer',
+      backgroundColor: Colors.white,
     },
     relatedPartViewRowCell: {
       paddingLeft: theme.spacing(1.25),
@@ -257,8 +257,8 @@ export default makeStyles((theme) =>
       backgroundColor: Colors.light_red,
     },
     link: {
-      'textDecoration': 'none',
-      'color': 'inherit',
+      textDecoration: 'none',
+      color: 'inherit',
       '&:hover': {
         textDecoration: 'underline',
       },
@@ -314,6 +314,9 @@ export default makeStyles((theme) =>
     dialogDiv: {
       display: 'flex',
       fontWeight: 600,
+    },
+    dialogContent: {
+      height: '72vh',
     },
   }),
 );

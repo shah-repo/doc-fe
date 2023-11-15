@@ -40,7 +40,6 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
   onNewTabOpen,
   documentRevisionId,
 }) => {
-
   const classes = useStyles();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -103,7 +102,7 @@ const RelatedPartsQuickViewDialog: React.FunctionComponent<Props> = ({
             <CloseIcon />
           </IconButton></div>
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent dividers className={classes.dialogContent}>
         {isLoading && <Loader />}
         {!isLoading && documentRevision
             && <DocumentRevisionSummary {...{ documentRevision, isSideBarHidden: true, canChangeOwnerShip: false }} /> }
