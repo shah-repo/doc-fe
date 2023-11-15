@@ -29,7 +29,7 @@ const SidebarContainer: React.FunctionComponent<
   useEffect(() => {
     const index = localStorage.getItem(SIDE_BAR_TAB_INDEX);
     if (index) {
-      setIndex(Number(index) > sidebarList.length ? 0 : Number(index));
+      setIndex(parseInt(index, 10) > sidebarList.length ? 0 : parseInt(index, 10));
     }
   }, []);
 
