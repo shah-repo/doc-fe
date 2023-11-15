@@ -12,8 +12,9 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   tabIndex,
   children,
   panelProps,
+  isCreateUrl,
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ isCreateUrl });
   const active = _tabsState?.isTabActive(tabId);
 
   if (!active) {
