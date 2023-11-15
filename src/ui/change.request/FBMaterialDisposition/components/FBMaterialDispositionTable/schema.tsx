@@ -2,8 +2,8 @@ import React from 'react';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { DropDownCellTemplate } from './components/cells/DropDownCellTemplate';
-import { LOTIDCellTemplate } from './components/cells/LOTIDCellTemplate';
-import { PartIDCellTemplate } from './components/cells/PartIDCellTemplate';
+import { LotIdCellTemplate } from './components/cells/LotIdCellTemplate';
+import { PartIdCellTemplate } from './components/cells/PartIdCellTemplate';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { OPTIONS } from './constants';
 import { EditableMDItem, SchemaOptions } from './types';
@@ -19,7 +19,7 @@ export const buildSchema = ({
       id: 'partDocId',
       field: 'partDocId',
       title: 'approvalRequest.grid.heading.partId',
-      template: (props) => <PartIDCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <PartIdCellTemplate {...props} onClick={onRowClick} />,
       show: true,
       width: 201,
     },
@@ -35,7 +35,7 @@ export const buildSchema = ({
       id: 'lotDocId',
       field: 'lotDocId',
       title: 'approvalRequest.grid.heading.lot',
-      template: (props) => <LOTIDCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <LotIdCellTemplate {...props} onClick={onRowClick} />,
       show: true,
       width: 201,
     },

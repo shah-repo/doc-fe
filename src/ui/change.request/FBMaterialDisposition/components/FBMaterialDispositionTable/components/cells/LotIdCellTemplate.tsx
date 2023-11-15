@@ -6,7 +6,7 @@ import OverflowingContent from '../../../commonCells/OveflowContent';
 import { CustomTemplateProps } from '../../types';
 import { styles } from './styles';
 
-export const LOTIDCellTemplate: React.FC<CustomTemplateProps> = (props) => {
+export const LotIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem, field, onClick } = props;
 

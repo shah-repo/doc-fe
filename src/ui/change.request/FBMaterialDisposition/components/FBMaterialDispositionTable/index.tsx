@@ -65,9 +65,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     onSuccess: (data) => {
       setData(data as EditableMDItem[]);
     },
-    onError: (err) => {
-      toastError(err);
-    },
+    onError: toastError,
   });
 
   const partAsync = useAsync({
@@ -76,9 +74,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
       }
     },
-    onError: (err) => {
-      toastError(err);
-    },
+    onError: toastError,
   });
 
   const fetchMaterialDispositionTableData = () => {
@@ -98,6 +94,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         }
         return count;
       }, 0);
+
       if (count > 1) {
         onOpen();
       } else {

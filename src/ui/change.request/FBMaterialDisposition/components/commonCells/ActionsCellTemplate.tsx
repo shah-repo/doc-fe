@@ -15,13 +15,11 @@ const useStyles = makeStyles({
 export const ActionsCellTemplate: React.FC<ActionsProps> = (props) => {
   const { dataItem } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-
-  const ref = useRef<HTMLDivElement>(null);
-  const classes = useStyles();
-
   if (!isEditMode) {
     return null;
   }
+  const ref = useRef<HTMLDivElement>(null);
+  const classes = useStyles();
 
   return (
     <>

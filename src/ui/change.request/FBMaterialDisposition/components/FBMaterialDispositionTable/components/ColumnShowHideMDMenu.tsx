@@ -36,12 +36,10 @@ const ColumnShowHideMDMenu: React.FunctionComponent<Props> = ({
   const classes = styles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+
+  const handleClose = () => setAnchorEl(null);
   return (
     <FormControl variant="outlined">
       <StyleTooltip
@@ -91,15 +89,11 @@ const ColumnShowHideMDMenu: React.FunctionComponent<Props> = ({
                 <Box flexGrow={1} mr={5} />
                 {item.show ? (
                   <SolidIcon
-                    onClick={() => {
-                      onChange(item);
-                    }}
+                    onClick={() => onChange(item)}
                   />
                 ) : (
                   <ViewChecked
-                    onClick={() => {
-                      onChange(item);
-                    }}
+                    onClick={() => onChange(item)}
                   />
                 )}
               </MenuItem>

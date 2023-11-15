@@ -11,7 +11,7 @@ import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import { PendingMDInfoResponse } from '../FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import { EffectiveDateFormValues, PasswordFormValues } from '../form/types';
-import TasksInfoDialog from './TasksInfoDialog';
+import TasksInfoDialog, { DialogTypes } from './TasksInfoDialog';
 
 interface Props {
   changeRequestId: string
@@ -104,7 +104,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
     <TasksInfoDialog
       dialog={tasksDialog}
       message="approvalRequest.tasks.incomplete.message"
-      type="warning"
+      type={DialogTypes.Warning}
       title="common.warning"
       confirmLabel="common.yes.continue"
       cancelLabel="common.no.go.back"
@@ -113,7 +113,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
     <TasksInfoDialog
       dialog={lotStatusDialog}
       message="approvalRequest.lot.status.alert.message"
-      type="info"
+      type={DialogTypes.Info}
       title="approvalRequest.lot.status.alert.title"
       confirmLabel="common.ok.proceed"
       cancelLabel="common.cancel"

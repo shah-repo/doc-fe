@@ -20,7 +20,7 @@ interface Props {
   title?: Translation
 }
 
-enum DialogTypes {
+export enum DialogTypes {
   Warning = 'warning',
   Info = 'info',
   Alert = 'alert',
