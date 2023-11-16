@@ -561,7 +561,7 @@
   "dashboard.revision": "Rev",
   "dashboard.task.assignment": "has assigned a task to you on",
   "dashboard.task.view": "View",
-  "dashboard.task.instruction": "Instruction :",
+  "dashboard.task.instruction": "Instruction:",
   "document.add": "Add {name}",
   "document.type": "Document Type",
   "document.output.type": "Output Document Type",

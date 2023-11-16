@@ -16,7 +16,7 @@ interface Props {
   dialog: DialogHandler
   confirmLabel?: Translation
   cancelLabel?: Translation
-  type?: string
+  type?: DialogTypes
   title?: Translation
 }
 

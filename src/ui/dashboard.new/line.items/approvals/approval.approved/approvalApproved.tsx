@@ -18,7 +18,7 @@ import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/chan
 import { companySelectors } from '../../../../../state/ducks/company';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
-import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import TasksInfoDialog, { DialogTypes } from '../../../../change.request/dialogs/TasksInfoDialog';
 import { PendingMDInfoResponse } from '../../../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
 import Text from '../../../../components/Text';
@@ -79,14 +79,14 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   dismissLineItem,
 }) => {
   const classes = useStyles();
-  const [closeHover, setCloseHover] = useState(false);
-  const [pinHover, setPinHover] = useState(false);
-  const [closed, setClosed] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [isCloseHover, setIsCloseHover] = useState(false);
+  const [isPinHover, setIsPinHover] = useState(false);
+  const [isClosed, setIsClosed] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
   const [pendingMDInfo, setPendingMDInfo] = useState({ lotStatusWillBeUpdated: false });
   const [viewHoverItem, setViewHoverItem] = useState('');
   const transitionDialog = useDialog();
-  const hoverItem = hoverItemId === id;
+  const isHoverItem = hoverItemId === id;
   const tasksDialog = useDialog();
   const lotStatusDialog = useDialog();
   const fetchPendingTasksCount = useActionCreator(taskActions.getPendingTasksCount);
@@ -101,9 +101,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
         openClosedDialog();
       }
     },
-    onError: () => {
-      transitionDialog.close();
-    },
+    onError: transitionDialog.close,
   });
   const onConfirm = () => {
     tasksDialog.close();
@@ -115,7 +113,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   };
 
   const handleClick = () => {
-    setOpen(!open);
+    setIsOpened(!isOpened);
   };
   const handleDismiss = () => {
     dismissLineItem?.(id);
@@ -128,23 +126,23 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   };
   const handleCloseClick = () => {
     tasksAsync.start(fetchPendingTasksCount, arChangeRequestId, tasksAsync);
-    setClosed(!closed);
+    setIsClosed(!isClosed);
   };
   const openClosedDialog = () => {
     async.reset();
     transitionDialog.open();
   };
   const onMouseLeaveActionIcons = () => {
-    setCloseHover(false);
-    setPinHover(false);
+    setIsCloseHover(false);
+    setIsPinHover(false);
   };
   const onMouseHoverPinIcon = () => {
-    setCloseHover(false);
-    setPinHover(true);
+    setIsCloseHover(false);
+    setIsPinHover(true);
   };
   const onMouseHoverCloseIcon = () => {
-    setPinHover(false);
-    setCloseHover(true);
+    setIsPinHover(false);
+    setIsCloseHover(true);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
@@ -174,11 +172,11 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
         divider
         disableRipple
         className={classes.listItem}
-        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        style={isOpened || isHoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
         {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }}
       >
-        {open ? (
+        {isOpened ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
           <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
@@ -221,7 +219,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    {!hoverItem && (
+                    {!isHoverItem && (
                       <NormalStyleChip
                         size="small"
                         color="primary"
@@ -229,7 +227,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                         label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
-                    {hoverItem && (
+                    {isHoverItem && (
                       <HoverStyleChip
                         color="primary"
                         size="small"
@@ -261,21 +259,21 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </>
           }
         />
-        {hoverItem && (
+        {isHoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             <span>
-              {!closeHover && (
+              {!isCloseHover && (
                 <CloseIcon
                   data-cy="close-icon"
                   className={classes.cursorPointer}
                   onMouseEnter={onMouseHoverCloseIcon}
                 />
               )}
-              {closeHover && (
+              {isCloseHover && (
                 <StyleTooltip
                   title={<Text translation="common.close" />}
                   placement="top"
@@ -292,14 +290,14 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </span>
             {!pinned && (
               <span className={classes.actionIcon}>
-                {!pinHover && isPinShown && (
+                {!isPinHover && isPinShown && (
                   <PinIcon
                     data-cy="pin-icon"
                     className={classes.cursorPointer}
                     onMouseEnter={onMouseHoverPinIcon}
                   />
                 )}
-                {pinHover && isPinShown && (
+                {isPinHover && isPinShown && (
                   <StyleTooltip
                     title={<Text translation="common.pin" />}
                     placement="top"
@@ -352,11 +350,11 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </StyleTooltip>
           </span>
         )}
-        {hoverItem && dismissLineItem && (
+        {isHoverItem && dismissLineItem && (
           <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={isOpened} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
           {docRevs.map((prItem, index) => (
             <StyledListItem button className={classes.nested} key={index} disableRipple>
@@ -485,19 +483,19 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
         transitionDialog={transitionDialog}
         label="transition.action.reject"
       />
-      <AlertDialog
+      <TasksInfoDialog
         dialog={tasksDialog}
         message="approvalRequest.tasks.incomplete.message"
-        type="warning"
+        type={DialogTypes.Warning}
         title="common.warning"
         confirmLabel="common.yes.continue"
         cancelLabel="common.no.go.back"
         confirmAction={onConfirm}
       />
-      <AlertDialog
+      <TasksInfoDialog
         dialog={lotStatusDialog}
         message="approvalRequest.lot.status.alert.message"
-        type="info"
+        type={DialogTypes.Info}
         title="approvalRequest.lot.status.alert.title"
         confirmLabel="common.ok.proceed"
         cancelLabel="common.cancel"

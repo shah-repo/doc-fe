@@ -34,6 +34,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
   const currentUserId = useSelector(authSelectors.currentEmployeeId);
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   const isClosedAR = currentState === ChangeRequestStatus.Closed;
+
   return (
     <>
       {assigneList?.map(({ employeeId, status, updatedAt }) => {

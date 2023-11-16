@@ -35,7 +35,7 @@ const ColumnShowHideMDMenu: React.FunctionComponent<Props> = ({
     key ? intl.formatMessage({ id: key }) : '';
   const classes = styles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const isOpened = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
 
@@ -55,7 +55,7 @@ const ColumnShowHideMDMenu: React.FunctionComponent<Props> = ({
         id="long-menu"
         anchorEl={anchorEl}
         keepMounted
-        open={open}
+        open={isOpened}
         onClose={handleClose}
       >
         <Card>

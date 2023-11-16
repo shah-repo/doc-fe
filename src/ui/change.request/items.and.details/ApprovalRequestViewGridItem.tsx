@@ -41,7 +41,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate, revisionFormTo, whereUsedView,
   } = entry;
 
-  const isWhereUsedTreeExists = (whereUsedView ?? []).length > 1;
+  const isWhereUsedTreeExist = (whereUsedView ?? []).length > 1;
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
   const [docRelatedParts, setDocRelatedParts]
@@ -113,7 +113,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
 
   const whereUsedDialog = useDialog();
   const openWhereUsedDialog: MouseEventHandler = (e) => {
-    isWhereUsedTreeExists && whereUsedDialog.open();
+    isWhereUsedTreeExist && whereUsedDialog.open();
     e.stopPropagation();
   };
   const closeWhereUsedDialog: MouseEventHandler = (e) => {
@@ -171,7 +171,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
         </div>
         <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
-          <FontAwesomeIcon icon={isWhereUsedTreeExists ? solid('circle') : regular('circle')} data-cy="view-where-used" onClick={openWhereUsedDialog} className={classes.dot} />
+          <FontAwesomeIcon icon={isWhereUsedTreeExist ? solid('circle') : regular('circle')} data-cy="view-where-used" onClick={openWhereUsedDialog} className={classes.dot} />
         </div>
       </div>
       {

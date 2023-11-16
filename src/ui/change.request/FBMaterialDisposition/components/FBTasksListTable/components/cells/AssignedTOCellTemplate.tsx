@@ -19,6 +19,7 @@ const renderUsers = (selectedUsers, removeUser?) => {
   const classes = styles();
   const approvers = useSelector((state: ApplicationState) => changeRequestsSelectors.usersById(state));
   const users = selectedUsers?.map(({ employeeId }) => approvers[employeeId]);
+
   return (
     <>
       {!isEmpty(users) && users.map(({ id, user }, index) => (
@@ -33,7 +34,7 @@ const renderUsers = (selectedUsers, removeUser?) => {
             <Avatar
               className={classes.avatar}
               alt={user.name}
-              src={user.avatar ? user.avatar : undefined}
+              src={user.avatar}
               style={user.avatar ? {} : { background: user.initialColor, color: Colors.white }}
             >
               {!user.avatar && getInitalsFromName(user.name)}

@@ -57,9 +57,9 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
   dismissLineItem,
 }) => {
   const classes = useStyles();
-  const [pinHover, setPinHover] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const hoverItem = hoverItemId === id;
+  const [isPinHover, setIsPinHover] = React.useState(false);
+  const [isOpened, setIsOpened] = React.useState(false);
+  const isHoverItem = hoverItemId === id;
 
   const handleDismiss = () => {
     dismissLineItem?.(id);
@@ -71,17 +71,17 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
     unPinLineItem?.(id);
   };
   const onMouseHoverPinIcon = () => {
-    setPinHover(true);
+    setIsPinHover(true);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
   const handleClick = () => {
-    setOpen(!open);
+    setIsOpened(!isOpened);
   };
 
   const onMouseLeaveActionIcons = () => {
-    setPinHover(false);
+    setIsPinHover(false);
   };
 
   const isPinShown = pinLineItem && !pinned;
@@ -94,11 +94,11 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
         divider
         disableRipple
         className={classes.listItem}
-        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        style={isOpened || isHoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
         onClick={handleClick}
       >
-        {open ? (
+        {isOpened ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
           <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
@@ -180,7 +180,7 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
             </>
           }
         />
-        {hoverItem && (
+        {isHoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -195,14 +195,14 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
               </Link>
             </span>
             <span className={classes.actionIcon}>
-              {!pinHover && isPinShown && (
+              {!isPinHover && isPinShown && (
                 <PinIcon
                   data-cy="pin-icon"
                   onMouseEnter={onMouseHoverPinIcon}
                   className={classes.cursorPointer}
                 />
               )}
-              {pinHover && isPinShown && (
+              {isPinHover && isPinShown && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
@@ -251,11 +251,11 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
             </StyleTooltip>
           </span>
         )}
-        {hoverItem && dismissLineItem && (
+        {isHoverItem && dismissLineItem && (
           <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={isOpened} timeout="auto" unmountOnExit>
         <List dense className={classes.collapsedList}>
           <StyledListItem button className={classes.nested} disableRipple>
             <ListItemText

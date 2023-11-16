@@ -148,6 +148,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const rowRender: DataGridProps<MaterialDispositionItem>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as MaterialDispositionItem;
     const isUpdating = [Mode.edit].includes(item[MODE_FIELD]);
+
     if (!isUpdating) {
       return row;
     }
@@ -243,7 +244,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
                 >
                   <ColumnShowHideMDMenu
                     columnDefinition={columns}
-                    onChange={(item) => onColumnShowHide(item)}
+                    onChange={onColumnShowHide}
                   />
                 </Grid>
               </Grid>
