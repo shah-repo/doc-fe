@@ -16,7 +16,6 @@ export const buildSchema = ({
   onDelete,
   isDisabled,
   currentState,
-  employeeCommentUpdates,
   employeeStatusUpdates,
   employeeEvidenceUpdates,
 }: SchemaOptions): Array<ColumnDefinition<EditableTLItem>> => {
@@ -58,7 +57,7 @@ export const buildSchema = ({
       field: 'comments',
       title: 'approvalRequest.grid.heading.comments',
       show: false,
-      template: (props) => <CommentCellTemplate {...props} {...{ employeeCommentUpdates, isDisabled, currentState }} />,
+      template: (props) => <CommentCellTemplate {...props} {...{ isDisabled, currentState }} />,
       width: 324,
     },
     {
