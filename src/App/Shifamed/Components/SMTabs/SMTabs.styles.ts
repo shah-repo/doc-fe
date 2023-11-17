@@ -32,4 +32,7 @@ export default makeStyles({
   indicator: {
     background: Colors.cerulean,
   },
+  hide: {
+    display: 'none',
+  },
 });
