@@ -1,11 +1,14 @@
+import { Typography } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
+import Tooltip from '../../../../../../components/common/kendo/Tooltip';
 import { FormikField, TextField } from '../../../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowingContent from '../../../commonCells/OveflowContent';
 import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
+import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   const { getFieldProps } = useFormikContext();
@@ -37,13 +40,16 @@ export const InstructionsCellTemplate: React.FC<CustomTemplateProps> = (props) =
     return <Editor {...props} />;
   }
 
+  const classes = styles();
   const handleClick = () => onClick?.({ dataItem });
 
   const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
 
   return (
     <OverflowingContent onClick={handleClick}>
-      {displayValue}
+      <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={displayValue} childrenElement={
+        <Typography component="p" data-cy={`instruction-cell-${dataItem.number}`} className={classes.truncate}>{displayValue}</Typography>
+      } />
     </OverflowingContent>
   );
 };
