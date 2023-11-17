@@ -8,8 +8,8 @@ import { useSelector } from 'react-redux';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { ApplicationState } from '../../../state/reducers';
-import Text from '../../components/Text';
 import { useFormContext } from '../../components/forms/FormContext';
+import Text from '../../components/Text';
 import { FBFormState } from '../../form.builder';
 import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
 import useStyles from './ApprovalRequestGrid.styles';
@@ -144,13 +144,13 @@ const ItemsAndDetails: React.FunctionComponent<{
     })}>
       { itemsAndDetailsState.loadingState && <Loader /> }
       <TopSection showEditRow={showEditRow} isButtonShown={itemsAndDetailsState.viewItemActionsVisible && !isEditing} />
-      <ApprovalRequestGridHeader lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute} />
+      <ApprovalRequestGridHeader isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted} />
       { isEditRowVisible && <ApprovalRequestEditGridItem
         {...{ formState }}
         disabledOptions={disabledOptions()}
         addRevisionToChangeRequest={addRevisionToChangeRequest}
         resetAndCancelEdit={resetAndCancelEdit}
-        lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute}
+        isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
         documentRevision={documentRevision}
       />}
       {
@@ -164,7 +164,7 @@ const ItemsAndDetails: React.FunctionComponent<{
             handleUpdate = {handleUpdate}
             viewItemActionsVisible = {itemsAndDetailsState.viewItemActionsVisible}
             itemsAndDetailsState = {itemsAndDetailsState}
-            lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute}
+            isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
             isDeletionDisabled={isEditing}
           />
         ))

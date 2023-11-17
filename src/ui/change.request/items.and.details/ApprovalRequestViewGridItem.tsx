@@ -27,13 +27,13 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   editItem: () => void
   handleRemove: (docRevId: string) => void
   viewItemActionsVisible: boolean
-  lineItemPartCanSubstitute?: boolean
+  isLineItemPartCanBeSubstituted?: boolean
 }> = ({
   entry,
   editItem,
   handleRemove,
   viewItemActionsVisible,
-  lineItemPartCanSubstitute,
+  isLineItemPartCanBeSubstituted,
 }) => {
   const classes = useStyles();
 
@@ -128,7 +128,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       })}
       data-cy="enclosing-div-view-item">
       <div className={classes.itemRow} data-cy="ar-item-view-row">
-        {lineItemPartCanSubstitute && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
+        {isLineItemPartCanBeSubstituted && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
           <FormControlLabel
             color="primary"
             control={
@@ -164,10 +164,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         <div className={cx(classes.cellRev, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={revisionFormTo as string} childrenElement={getTableElementData(revisionFormTo, 'rev-from-to')} />
         </div>
-        <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
+        <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />
         </div>
-        <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
+        <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
         </div>
         <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>

@@ -21,7 +21,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   titleText?: string
   handleRemove?: (docRevId: string) => void
   entry?: ApprovalRequestGridItem
-  lineItemPartCanSubstitute?: boolean
+  isLineItemPartCanBeSubstituted?: boolean
   documentRevision?: DocumentRevision
   isDeletionDisabled?: boolean
 }> = ({
@@ -32,7 +32,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   showAutoComplete = true,
   titleText,
   handleRemove,
-  lineItemPartCanSubstitute,
+  isLineItemPartCanBeSubstituted,
   entry,
   documentRevision,
   isDeletionDisabled,
@@ -47,7 +47,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
         <div className={cx(classes.itemRow, classes.editItemRow)} data-cy="ar-item-edit-row">
-          {lineItemPartCanSubstitute && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
+          {isLineItemPartCanBeSubstituted && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
             <FormControlLabel
               color="primary"
               control={
@@ -83,7 +83,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
           <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
             {entry?.revisionFormTo ?? (documentRevision?.revision || EMPTY_VALUE_PLACEHOLDER)}
           </div>
-          <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther,
+          <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
               name="descriptionOfChange"
@@ -92,7 +92,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               rules="required"
             />
           </div>
-          <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther,
+          <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
               name="justificationOfChange"

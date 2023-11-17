@@ -83,7 +83,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   const [isPinHover, setIsPinHover] = useState(false);
   const [isClosed, setIsClosed] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
-  const [pendingMDInfo, setPendingMDInfo] = useState({ lotStatusWillBeUpdated: false });
+  const [pendingMDInfo, setPendingMDInfo] = useState({ isLotStatusWillBeUpdated: false });
   const [viewHoverItem, setViewHoverItem] = useState('');
   const transitionDialog = useDialog();
   const isHoverItem = hoverItemId === id;
@@ -105,7 +105,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   });
   const onConfirm = () => {
     tasksDialog.close();
-    if (settings?.shouldAutoUpdateLotStatus && pendingMDInfo.lotStatusWillBeUpdated) {
+    if (settings?.shouldAutoUpdateLotStatus && pendingMDInfo.isLotStatusWillBeUpdated) {
       lotStatusDialog.open();
     } else {
       openClosedDialog();

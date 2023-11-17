@@ -20,7 +20,7 @@ export interface TasksListItem {
 export interface TasksListEditRequestBody {
   employeeIds: string[]
   instruction: string
-  partOf: string
+  partOfId: string
 }
 
 export interface EditableTLItem extends TasksListItem {

@@ -32,7 +32,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
   const tasksDialog = useDialog();
   const lotStatusDialog = useDialog();
   const effectiveDateDialog = useDialog();
-  const [pendingMDInfo, setPendingMDInfo] = useState({ lotStatusWillBeUpdated: false });
+  const [pendingMDInfo, setPendingMDInfo] = useState({ isLotStatusWillBeUpdated: false });
   const applyTransitionAction = useActionCreator(changeRequestsActions.applyTransition);
   const fetchPendingTasksCount = useActionCreator(taskActions.getPendingTasksCount);
   const settings = useSelector(companySelectors.getGeneralSettings);
@@ -65,7 +65,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
 
   const onConfirm = () => {
     tasksDialog.close();
-    if (settings?.shouldAutoUpdateLotStatus && pendingMDInfo.lotStatusWillBeUpdated) {
+    if (settings?.shouldAutoUpdateLotStatus && pendingMDInfo.isLotStatusWillBeUpdated) {
       lotStatusDialog.open();
     } else {
       effectiveDateDialog.open();

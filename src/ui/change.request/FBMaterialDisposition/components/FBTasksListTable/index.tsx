@@ -81,7 +81,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         const payload = {
           instruction: values?.instruction,
           employeeIds: values?.employeeResponse?.map(data => data.employeeId),
-          partOf: changeRequest?.id,
+          partOfId: changeRequest?.id,
         };
 
         addTaskAsync.start(addTask, payload, addTaskAsync);
@@ -89,7 +89,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         const payload = {
           instruction: values?.instruction,
           employeeIds: values?.employeeResponse?.map(data => data.employeeId),
-          partOf: changeRequest?.id,
+          partOfId: changeRequest?.id,
           employeeUpdates: values?.employeeResponse?.map(data => ({
             employeeId: data.employeeId,
           })),

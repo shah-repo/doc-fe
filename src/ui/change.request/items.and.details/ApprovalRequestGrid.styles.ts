@@ -112,6 +112,12 @@ export default makeStyles((theme) =>
         width: '100%',
       },
     },
+    smallCellOther: {
+      width: '25%',
+      '& .MuiOutlinedInput-multiline': {
+        padding: theme.spacing(1.28, 1.75),
+      },
+    },
     cellOther: {
       width: '25%',
       '& .MuiOutlinedInput-multiline': {

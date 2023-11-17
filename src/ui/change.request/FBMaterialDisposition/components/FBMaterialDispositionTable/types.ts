@@ -50,7 +50,7 @@ export interface SchemaOptions {
 
 export interface PendingMDInfoResponse{
   pendingTasksCount: number
-  lotStatusWillBeUpdated: boolean
+  isLotStatusWillBeUpdated: boolean
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableMDItem> {

@@ -6,11 +6,11 @@ import Text from '../../components/Text';
 import useStyles from './ApprovalRequestGrid.styles';
 
 const ApprovalRequestGridHeader: React.FunctionComponent<{
-  lineItemPartCanSubstitute?: boolean}> = ({ lineItemPartCanSubstitute }) => {
+  isLineItemPartCanBeSubstituted?: boolean}> = ({ isLineItemPartCanBeSubstituted }) => {
   const classes = useStyles();
   return (
     <div className={classes.header}>
-      { lineItemPartCanSubstitute && <div className={classes.cellautoUpdate}>
+      { isLineItemPartCanBeSubstituted && <div className={classes.cellautoUpdate}>
         <Tooltip title={translate('approvalRequest.grid.heading.autoUpdate.title')} placement="right"
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           arrow>
@@ -18,7 +18,7 @@ const ApprovalRequestGridHeader: React.FunctionComponent<{
         </Tooltip>
       </div> }
       <div className={classes.cellOne}>
-        <span className={cx(lineItemPartCanSubstitute ? classes.verticalDivider : '')}>
+        <span className={cx(isLineItemPartCanBeSubstituted ? classes.verticalDivider : '')}>
           <Text translation="approvalRequest.grid.heading.item" />
         </span>
       </div>
