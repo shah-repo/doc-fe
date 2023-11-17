@@ -95,7 +95,7 @@ export default makeStyles((theme) =>
       borderRadius: theme.spacing(0.5, 0.5, 0, 0),
     },
     cellautoUpdate: {
-      width: '5%',
+      width: '8%',
       display: 'flex',
       alignItems: 'center',
       '& > #field-autoUpdate': {
@@ -125,10 +125,10 @@ export default makeStyles((theme) =>
       },
     },
     cellRev: {
-      width: '18%',
+      width: '16%',
     },
     cellWhereUsed: {
-      width: '10%',
+      width: '8%',
       textAlign: 'center',
     },
     hiddenLegend: {
