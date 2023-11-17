@@ -47,7 +47,7 @@ export const InstructionsCellTemplate: React.FC<CustomTemplateProps> = (props) =
 
   return (
     <OverflowingContent onClick={handleClick}>
-      <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={displayValue} childrenElement={
+      <Tooltip customTooltipClass={classes.tooltipBox} showTooltip data={displayValue} childrenElement={
         <Typography component="p" data-cy={`instruction-cell-${dataItem.number}`} className={classes.truncate}>{displayValue}</Typography>
       } />
     </OverflowingContent>
