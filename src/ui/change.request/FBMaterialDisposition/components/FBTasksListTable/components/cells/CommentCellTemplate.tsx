@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { find, get, isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
@@ -14,7 +14,7 @@ interface Props extends CustomTemplateProps {
   employeeId: string
 }
 
-const Editor: React.FC<Props> = ({ field, dataItem, employeeCommentUpdates, employeeId, disabled }) => {
+const Editor: React.FC<Props> = ({ field, dataItem, employeeCommentUpdates, employeeId, isDisabled }) => {
   const { values, getFieldProps } = useFormikContext();
   const classes = styles();
   const employeeResponse = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
@@ -24,7 +24,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, employeeCommentUpdates, empl
     !isEmpty(value) && employeeCommentUpdates?.(taskId, employeeResponse);
   };
 
-  const employee = find(employeeResponse, { employeeId });
+  const employee = employeeResponse?.find((data) => data.employeeId === employeeId);
   const value = get(values, field, undefined) ?? employee?.comment;
 
   return (
@@ -39,7 +39,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, employeeCommentUpdates, empl
         type="text"
         size="small"
         onBlur={onBlur}
-        disabled={disabled}
+        disabled={isDisabled}
       />
     </FormikField>
   );

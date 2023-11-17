@@ -36,7 +36,7 @@ export interface SchemaOptions {
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: () => void
-  disabled: boolean
+  isDisabled: boolean
   currentState?: ChangeRequestStatus
   onRowClick?: (e: TLItemEditEvent) => void
   employeeCommentUpdates: (taskId: string, employeeResponse: EmployeeResponse[]) => void
@@ -46,7 +46,7 @@ export interface SchemaOptions {
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableTLItem> {
   onClick?: (e: TLItemEditEvent) => void
-  disabled?: boolean
+  isDisabled?: boolean
   currentState?: ChangeRequestStatus
   employeeCommentUpdates?: (taskId: string, employeeResponse: EmployeeResponse[]) => void
   employeeStatusUpdates?: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void

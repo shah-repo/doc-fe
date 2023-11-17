@@ -15,9 +15,10 @@ interface Props extends CustomTemplateProps {
   name: string
 }
 
-const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, name, disabled }) => {
+const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, name, isDisabled }) => {
   const classes = styles();
   const { fileUploadState } = FB.useStores();
+
   React.useEffect(() => {
     const disposer = reaction(
       () => fileUploadState?.files,
@@ -37,7 +38,7 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
     <FBFileField className={classes.uploadEvidenceField}
       labelClassName={classes.uploadEvidenceFieldLabel}
       iconClassName={classes.uploadEvidenceFieldIcon}
-      disabled={disabled}
+      disabled={isDisabled}
       name={name}
     />);
 };
@@ -57,7 +58,7 @@ export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props)
         {(!attachmentId && showEditor(employeeId, status)) ? (<FBProvider {...{ fileUploadState }}>
           <Editor {...props} {...{ employeeId, name } } />
         </FBProvider>)
-          : (!attachmentId) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: [{ id: attachmentId }], dataItem, employeeEvidenceUpdates, employeeId, status, disabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentName }} />}
+          : (!attachmentId) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: [{ id: attachmentId }], dataItem, employeeEvidenceUpdates, employeeId, status, isDisabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentName }} />}
       </div>;
     })}
   </>);

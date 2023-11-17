@@ -21,9 +21,8 @@ import { TasksListItem } from '../types';
 
 interface Props extends FBFilesPresenterProps {
   employeeId: string
-  status: string
   dataItem: TasksListItem
-  disabled?: boolean
+  isDisabled?: boolean
   employeeEvidenceUpdates?: (
     dataItem: TasksListItem,
     employeeId: string,
@@ -36,31 +35,33 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
   boxProps,
   employeeId,
   dataItem,
-  status,
-  disabled,
+  isDisabled,
   employeeEvidenceUpdates,
 }) => {
   const removeAttachment = () => {
     employeeEvidenceUpdates?.(dataItem, employeeId, '');
   };
+
   const dialogHandler = useDialog();
+
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
       downloadInfo && window.open(downloadInfo.url, '_parent');
     },
-    onError: (message) => {
-      message && toastError(message);
-    },
+    onError: toastError,
   });
+
   const downloadAttachment = useActionCreator(attachmentsActions.download);
-  const downloadOrViewFile = (file) => {
+
+  const downloadOrViewFile = (file: FBAttachment) => {
     if (checkIfFileIsViewable(file?.type)) {
       dialogHandler.open();
     } else {
       async.start(downloadAttachment, file, async);
     }
   };
+
   return (
     <Box
       {...boxProps}
@@ -93,7 +94,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
                   attachment={file}
                 />
               )}
-              {!disabled && (
+              {!isDisabled && (
                 <CloseIcon cursor="pointer" onClick={removeAttachment} />
               )}
             </>

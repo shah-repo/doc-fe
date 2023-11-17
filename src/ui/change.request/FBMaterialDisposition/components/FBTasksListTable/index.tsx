@@ -24,10 +24,10 @@ import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from
 interface props {
   changeRequest?: ChangeRequest
   isShowOnly?: boolean
-  showAdditionalColumns?: boolean
+  isAdditionalColumnsShown?: boolean
 }
 
-const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly = false, showAdditionalColumns }) => {
+const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly = false, isAdditionalColumnsShown }) => {
   const classes = useStyles();
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
@@ -43,44 +43,32 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   const updateTask = useActionCreator(taskActions.updateTask);
   const deleteTask = useActionCreator(taskActions.deleteTask);
 
+  const loadTasksTableData = () => {
+    tasksAsync.start(fetchTasksList, changeRequest?.id, tasksAsync);
+  };
+
   const tasksAsync = useAsync({
     onSuccess: (data) => {
       setData((data as EditableTLItem[]) ?? []);
     },
-    onError: (err) => {
-      toastError(err);
-    },
+    onError: toastError,
   });
   const addTaskAsync = useAsync({
     onSuccess: (data) => {
       setData(prev => [...prev, data as EditableTLItem]);
     },
-    onError: (err) => {
-      toastError(err);
-    },
+    onError: toastError,
   });
 
   const deleteTaskAsync = useAsync({
-    onSuccess: () => {
-      loadTasksTableData();
-    },
-    onError: (err) => {
-      toastError(err);
-    },
+    onSuccess: loadTasksTableData,
+    onError: toastError,
   });
 
   const updateTaskAsync = useAsync({
-    onSuccess: (data) => {
-      loadTasksTableData();
-    },
-    onError: (err) => {
-      toastError(err);
-    },
+    onSuccess: loadTasksTableData,
+    onError: toastError,
   });
-
-  const loadTasksTableData = () => {
-    tasksAsync.start(fetchTasksList, changeRequest?.id, tasksAsync);
-  };
 
   useEffect(() => {
     loadTasksTableData();
@@ -194,12 +182,12 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     employeeCommentUpdates: employeeCommentUpdates,
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: employeeEvidenceUpdates,
-    disabled: ChangeRequestStatus.Closed === changeRequest?.state,
+    isDisabled: ChangeRequestStatus.Closed === changeRequest?.state,
     currentState: changeRequest?.state,
   });
 
   const getColumns = () => {
-    return schema.filter(({ show }) => show || showAdditionalColumns);
+    return schema.filter(({ show }) => show || isAdditionalColumnsShown);
   };
 
   const rowRender: DataGridProps<TasksListItem>['rowRender'] = (row, { dataItem }) => {

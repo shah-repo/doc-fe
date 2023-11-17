@@ -63,7 +63,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
   const location = useLocation();
   const [isDrawerOpen, setOpen] = React.useState(true);
-  const showAdditionalColumns = [ChangeRequestStatus.Approved, ChangeRequestStatus.Closed].includes(changeRequest.state);
+  const isAdditionalColumnsShown = [ChangeRequestStatus.Approved, ChangeRequestStatus.Closed].includes(changeRequest.state);
 
   const changeSidebarOpenStatus = (status) => {
     setOpen(status);
@@ -180,7 +180,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           )}
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                             && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
-                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} isShowOnly={true} showAdditionalColumns={showAdditionalColumns} />
+                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} isShowOnly={true} isAdditionalColumnsShown={isAdditionalColumnsShown} />
                           }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
