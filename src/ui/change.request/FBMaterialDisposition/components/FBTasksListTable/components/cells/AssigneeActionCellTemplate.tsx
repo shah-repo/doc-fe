@@ -12,7 +12,6 @@ import {
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { ChangeRequestStatus } from '../../../../../../../state/ducks/changeRequest/types';
 import { Button } from '../../../../../../components/forms/fields-next';
-import OverflowingContent from '../../../commonCells/OveflowContent';
 import {
   EmployeeStatus,
   EMPLOYEE_RESPONSE_FIELD,
@@ -41,22 +40,20 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
         return (
           <div className={classes.employeeResponseFields}>
             {status === EmployeeStatus.Done ? (
-              <OverflowingContent>
-                <div className={classes.assigneeActionStatusContainer}>
-                  <CompletedIcon />
-                  <span className={classes.assigneeActionStatus}>
-                    {translate(
-                      'approvalRequest.tasks.list.assignee.status.completed',
-                    )}
-                  </span>
-                  <span className={classes.assigneeActionStatusDate}>
-                    {getFormattedDateString(
-                      new Date(updatedAt),
-                      MomentFormats.DateTime,
-                    )}
-                  </span>
-                </div>
-              </OverflowingContent>
+              <div className={classes.assigneeActionStatusContainer}>
+                <CompletedIcon />
+                <span className={classes.assigneeActionStatus}>
+                  {translate(
+                    'approvalRequest.tasks.list.assignee.status.completed',
+                  )}
+                </span>
+                <span className={classes.assigneeActionStatusDate}>
+                  {getFormattedDateString(
+                    new Date(updatedAt),
+                    MomentFormats.DateTime,
+                  )}
+                </span>
+              </div>
             ) : employeeId === currentUserId ? (
               isClosedAR ? EMPTY_VALUE_PLACEHOLDER : (
                 <Button

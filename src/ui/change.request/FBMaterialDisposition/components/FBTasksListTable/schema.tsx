@@ -66,7 +66,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.assignee.action',
       show: false,
       template: (props) => <AssigneeActionCellTemplate {...props} {...{ employeeStatusUpdates, isDisabled, currentState }} />,
-      width: 290,
+      width: 350,
     },
     {
       id: 'actions',
