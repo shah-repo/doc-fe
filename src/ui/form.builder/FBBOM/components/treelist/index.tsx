@@ -14,6 +14,7 @@ import {
   extendDataItem,
   filterBy,
   mapTree,
+  mapTreeItem,
   orderBy, TreeList,
   TreeListCellProps,
   TreeListColumnReorderEvent,
@@ -249,8 +250,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     const expanded = event.value
       ? state.expanded.filter((id) => id !== event.dataItem.id)
       : uniq([...state.expanded, event.dataItem.id]);
+
+    const tree: BOM[] = [...state.data];
+    mapTreeItem(tree, event.level, SUB_ITEMS_FIELD, (item) =>
+      extendDataItem(item, SUB_ITEMS_FIELD, { expanded: expanded }),
+    );
+
     updateState({
       ...state,
+      data: tree,
       expanded,
     });
   };
@@ -623,6 +631,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     item.isUpgradeDisabled = isUpgradeDisabled;
     item.enabledFieldsForEditing = enabledFieldsForEditing;
     item.inRestrictedEditMode = inRestrictedEditMode;
+    if (!item.id) {
+      return;
+    }
     if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
     }
@@ -1054,6 +1065,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   );
 
   const sortedColumnDefinitions = orderByLockedState(getColumns());
+  console.log('processData() :', processData(), size?.height);
 
   return (
     <>
@@ -1076,13 +1088,16 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                   fileName={EXCEL_FILE_NAME}
                 >
                   <TreeList
+                    style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
                     {...state.dataState}
-                    tableProps={{ style: { width: '2681px' } }}
+                    tableProps={{ style: { tableLayout: 'fixed' } }}
+                    rowHeight={50}
+                    scrollable="virtual"
                     editField={MODE_FIELD}
                     expandField={EXPAND_FIELD}
                     dataItemKey={DATA_ITEM_KEY}
                     subItemsField={SUB_ITEMS_FIELD}
-                    className={cx(classes.treeList, 'containing-box-scrollbar')}
+                    // className={cx(classes.treeList, 'containing-box-scrollbar')}
                     onExpandChange={onExpandChange}
                     rowRender={rowRender}
                     data={processData()}
@@ -1186,4 +1201,4 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   );
 };
 
-export default withThemeNext(React.forwardRef(FBBOMTreeList));
+export default React.memo(withThemeNext(React.forwardRef(FBBOMTreeList)));

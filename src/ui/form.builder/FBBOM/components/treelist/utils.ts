@@ -145,5 +145,5 @@ export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTre
 };
 
 export const getChildPartId = (part: EditableBOM): string => {
-  return part?.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
+  return part?.id?.split(SELECTED_PART_KEY_SEPARATOR)[0];
 };

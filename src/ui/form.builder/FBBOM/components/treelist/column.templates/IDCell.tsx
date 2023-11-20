@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { Formik, FormikProps, useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import { Observer } from 'mobx-react';
-import React, { ChangeEvent, ComponentType, useEffect, useState } from 'react';
+import React, { ChangeEvent, ComponentType, memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { SM } from '../../../../../../App';
@@ -169,7 +169,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     }
     let fieldValue = '';
     if (!dataItem[ADD_FIELD]) {
-      fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
+      fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem?.documentId}`;
     } else {
       const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
       if (!isEmpty(part) && showFormDialog.isOpen) {
@@ -246,12 +246,6 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         <FontAwesomeIcon data-cy="new-revision-available" color={Colors.primaryLight} className={cx(classes.defaultIcon)} icon={solid('circle-exclamation')} />
       </Tooltip>
     </span>
-  );
-
-  const getDrawer = () => (
-    <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
-      <DocumentRevisionDrawer {...{ dataItem, closeDrawer, isSliderView: isPartsDrawerOpened }} />
-    </FBBOMDetailDrawer>
   );
 
   const [initialValues, setInitialValues] = React.useState<MultipleFormInitialValues>({ selectType: [] });
@@ -428,7 +422,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId
           ? <Link onClick={e => { e.preventDefault(); openDrawer(); }} className={classes.link}
-            to={documentVersionPath(getChildPartId(dataItem), dataItem.documentId!)}
+            to={documentVersionPath(getChildPartId(dataItem), dataItem?.documentId!)}
             target="_blank"
           >
             {dataItem.docId}
@@ -484,7 +478,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           </>
         )}
       </Observer>
-      {getDrawer()}
+      <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
+        <DocumentRevisionDrawer {...{ dataItem, closeDrawer, isSliderView: isPartsDrawerOpened }} />
+      </FBBOMDetailDrawer>
       <AlertDialog
         confirmAction={onRevChange}
         cancelAction={dialog.close}
@@ -503,4 +499,4 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   );
 };
 
-export default IDCell;
+export default memo(IDCell);

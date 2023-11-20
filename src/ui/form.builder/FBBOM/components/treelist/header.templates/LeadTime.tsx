@@ -2,7 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
-import React from 'react';
+import React, { memo } from 'react';
 import { translate } from '../../../../../../common/intl';
 import useHover from '../../../../../hooks/useHover';
 import {
@@ -11,7 +11,7 @@ import {
 } from '../column.templates/CustomColumnMenu';
 import { styles } from './styles';
 
-export const LeadTime: React.FC<TreeListHeaderCellProps> = (props) => {
+export const LeadTime: React.FC<TreeListHeaderCellProps> = memo((props) => {
   const classes = styles();
   const { onLock, columns, onColumnShowHide, isMaximizedView }
     = React.useContext(ColumnMenuContext);
@@ -53,4 +53,4 @@ export const LeadTime: React.FC<TreeListHeaderCellProps> = (props) => {
       )}
     </Grid>
   );
-};
+});
