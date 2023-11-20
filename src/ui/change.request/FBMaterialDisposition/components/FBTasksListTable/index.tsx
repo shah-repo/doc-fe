@@ -119,20 +119,8 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     deleteTaskAsync.start(deleteTask, editedTLItem?.taskId, deleteTaskAsync);
   };
 
-  const employeeCommentUpdates = (taskId: string, employeeResponse: EmployeeResponse[]) => {
-    const { values } = formik;
-    const payload = {
-      employeeUpdates: employeeResponse?.map(data => ({
-        employeeId: data.employeeId,
-        comment: values?.[taskId]?.[COMMENTS_FIELD]?.[data?.employeeId],
-        status: data.status,
-        attachmentId: data.attachmentId,
-      })),
-    };
-    updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);
-  };
-
   const employeeStatusUpdates = (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => {
+    const { values } = formik;
     const payload = {
       employeeUpdates: employeeResponse?.map(data => {
         if (data.employeeId !== employeeId) {
@@ -140,12 +128,14 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
             employeeId: data.employeeId,
             status: data.status,
             attachmentId: data.attachmentId,
+            comment: data.comment,
           };
         }
         return {
           employeeId: data.employeeId,
           status: employeeId === data.employeeId ? EmployeeStatus.Done : data.status,
           attachmentId: data.attachmentId,
+          comment: values?.[taskId]?.[COMMENTS_FIELD]?.[employeeId] ?? data?.comment,
         };
       }),
     };
@@ -179,7 +169,6 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     onConfirm: submitForm,
     onDiscard: discardTLItem,
     onDelete: deleteTaskItem,
-    employeeCommentUpdates: employeeCommentUpdates,
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: employeeEvidenceUpdates,
     isDisabled: ChangeRequestStatus.Closed === changeRequest?.state,
