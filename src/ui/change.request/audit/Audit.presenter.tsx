@@ -99,7 +99,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
 
     orderBy(audits, ['field']).forEach((change, index) => {
-      if (change.field.includes('attachments')) {
+      if (change.field.includes('attachments') && !change.field.includes('upload-attachments-as-needed')) {
         attachments.push(change);
       } else if (change.field.includes('referenceTo')) {
         references.push(change);

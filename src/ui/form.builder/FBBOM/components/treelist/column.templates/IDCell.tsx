@@ -152,19 +152,15 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   };
 
   const openDrawer = () => {
-    if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(false);
-    }
-    setIsPartsDrawerOpened(true);
+      setIsPartsDrawerOpened(true);
   };
   const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const closeDrawer = () => {
-    if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
-    }
-    FBDataStore.selectedSliderInfo = undefined;
-    setIsPartsDrawerOpened(false);
+      FBDataStore.selectedSliderInfo = undefined;
+      setIsPartsDrawerOpened(false);
   };
 
   useEffect(() => {

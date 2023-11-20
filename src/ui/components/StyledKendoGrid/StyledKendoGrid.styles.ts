@@ -132,6 +132,7 @@ export default makeStyles((theme) => ({
 
           '& > .k-link': {
             padding: theme.spacing(0.5, 1.5),
+            cursor: 'default',
           },
         },
         '&:not(.k-grid-header-sticky) + .k-grid-header-sticky': {

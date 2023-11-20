@@ -5,7 +5,9 @@ import { MomentFormats } from '../../../../common/utils/date';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { DatePicker, FormikField } from '../../../components/forms/fields-next';
 import { CustomTemplateProps } from '../types';
-import OverflowingContent from './OveflowContent';
+import OverflowContent from '../../../components/OverflowContent';
+import cx from 'classnames';
+import useStyles from '../styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -33,6 +35,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
 export const DateCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem, field, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const classes = useStyles();
 
   if (isEditMode) {
     return <Editor {...props} />;
@@ -42,8 +45,11 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const displayValue = dataItem[field] as string;
 
   return (
-    <OverflowingContent onClick={handleClick}>
+    <OverflowContent
+      title={<div className={cx('containing-box-scrollbar', classes.tooltipContent)}>{displayValue}</div>}
+      onClick={handleClick}
+    >
       {displayValue}
-    </OverflowingContent>
+    </OverflowContent>
   );
 };
