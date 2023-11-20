@@ -18,3 +18,10 @@ export interface IRelation {
   sourceAnchor: AnchorPositionType
   style?: {[key: string]: string}
 }
+
+export interface IWhereUsedRequest {
+  arId?: string
+  lotRevIds?: string[]
+  statusOnly: boolean
+  firstLevelOnly: boolean
+}

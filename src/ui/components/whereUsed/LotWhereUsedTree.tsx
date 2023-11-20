@@ -1,11 +1,13 @@
 import cx from 'classnames';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import Colors from '../../layout/theme/utils/colors';
 import Text from '../Text';
-import { whereUsedLotStaticData } from './staticData';
 import { IRelation, IWhereUsedLot } from './whereUsed.interface';
 import useStyles from './whereUsedTree.styles';
 
@@ -28,13 +30,30 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
 
   const classes = useStyles({ size: undefined });
 
+  const fetchWhereUsedLotTreesAction = useActionCreator(documentRevisionsActions.fetchWhereUsedLotTree);
+  const fetchWhereUsedLotTreesAsync = useAsync({
+    onSuccess: (treeList: IWhereUsedLot[]| undefined) => {
+      setDataInLevels(depthMapper(treeList));
+      setRelationsMap(relationMapper(treeList));
+      setLoading(false);
+    },
+  });
+  const fetchWhereUsedLotTree = (lotRevId: string) => {
+    setLoading(true);
+    fetchWhereUsedLotTreesAsync.start(fetchWhereUsedLotTreesAction,
+      { lotRevIds: [lotRevId], statusOnly: false, firstLevelOnly: false },
+      fetchWhereUsedLotTreesAsync);
+  };
+
   useEffect(() => {
-    setDataInLevels(depthMapper(whereUsedLotStaticData));
-    setRelationsMap(relationMapper(whereUsedLotStaticData));
-    setTimeout(() => setLoading(false), 1000);
+    fetchWhereUsedLotTree(lotRevId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lotRevId]);
 
-  const depthMapper = (whereUsedLotData: IWhereUsedLot[]) => {
+  const depthMapper = useMemo(() => (whereUsedLotData: IWhereUsedLot[]| undefined) => {
+    if (!whereUsedLotData) {
+      return;
+    }
     const whereUsedDataDepthMap: {[key: string]: IWhereUsedLot[]} = {};
     whereUsedLotData.forEach((whereUsedEntry: IWhereUsedLot) => {
       const depthToUse = whereUsedEntry.depth.toString();
@@ -44,11 +63,13 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
       whereUsedDataDepthMap[depthToUse].push(whereUsedEntry);
     });
     return whereUsedDataDepthMap;
-  };
+  }, []);
 
-  const relationMapper = (whereUsedLotData: IWhereUsedLot[]) => {
+  const relationMapper = useMemo(() => (whereUsedLotData: IWhereUsedLot[]| undefined) => {
+    if (!whereUsedLotData) {
+      return;
+    }
     const relationMap: {[key: string]: IRelation[]} = {};
-
     const whereUsedLotMap = {};
     whereUsedLotData.forEach(entry => {
       whereUsedLotMap[entry.lotRevId] = entry;
@@ -67,16 +88,15 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
         });
       }
     });
-    console.log(relationMap);
     return relationMap;
-  };
+  }, []);
 
-  const statusClassDecider = (parentDisplayStatus: string) => {
-    if (parentDisplayStatus === DocumentRevisionStatus.Released) {
+  const statusClassDecider = (displayStatus: string) => {
+    if (displayStatus === DocumentRevisionStatus.Released) {
       return classes.statusReleased;
-    } else if (parentDisplayStatus === DocumentRevisionStatus.Draft) {
+    } else if (displayStatus === DocumentRevisionStatus.Draft) {
       return classes.statusDraft;
-    } else if (parentDisplayStatus === DocumentRevisionStatus.PendingChange) {
+    } else if (displayStatus === DocumentRevisionStatus.PendingChange) {
       return classes.statusPendingChange;
     }
 
@@ -93,7 +113,6 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
       <div className={classes.treeMap}>
         <ArcherContainer
           strokeColor={Colors.bright_grey}
-          // endShape={'circle' as ShapeType}
         >
           {
             dataInLevels && relationsMap && Object.keys(dataInLevels).map((level: string) => {
@@ -103,7 +122,6 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
                   {
                     whereUsedEntries.map(whereUsedEntry => {
                       const { lotName, lhrName, displayRevision, displayStatus } = whereUsedEntry;
-                      console.log(whereUsedEntry.lotRevId, relationsMap[whereUsedEntry.lotRevId]);
                       return (
                         <ArcherElement
                           id = {idGenerator(whereUsedEntry)}

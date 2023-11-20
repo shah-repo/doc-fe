@@ -22,7 +22,7 @@ export default makeStyles((theme) =>
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        marginBottom: '8px',
+        marginBottom: theme.spacing(1),
       },
     },
     depthDiv: {
@@ -32,9 +32,9 @@ export default makeStyles((theme) =>
       justifyContent: 'space-evenly',
     },
     entry: {
-      padding: '8px 12px',
-      borderRadius: '8px',
-      margin: '12px',
+      padding: theme.spacing(1, 1.5),
+      borderRadius: theme.spacing(1),
+      margin: theme.spacing(1.5),
       backgroundColor: Colors.white,
     },
     statusReleased: {
@@ -50,7 +50,7 @@ export default makeStyles((theme) =>
       color: Colors.latest_yellow_varient,
     },
     metadataInfo: {
-      margin: '2px 0',
+      margin: theme.spacing(0.25, 0),
       fontSize: '12px',
     },
     defaultStatus: {
@@ -105,21 +105,8 @@ export default makeStyles((theme) =>
       height: 24,
       width: 24,
       backgroundColor: Colors.athens_gray,
-      borderRadius: '6px',
+      borderRadius: theme.spacing(0.75),
       margin: theme.spacing(0, 1.25),
-    },
-    content: {
-      padding: 0,
-    },
-    actions: {
-      padding: 0,
-      backgroundColor: Colors.white,
-    },
-    heading: {
-      fontWeight: 600,
-      fontSize: '14px',
-      flex: 1,
-      color: Colors.almost_black,
     },
     loader: {
       position: 'absolute',
