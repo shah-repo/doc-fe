@@ -22,7 +22,6 @@ const Loader = () => {
 };
 
 export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: string }): JSX.Element {
-  // const [data, setData] = React.useState<IWhereUsedLot[]>();
   const [dataInLevels, setDataInLevels] = React.useState<{[key: string]: IWhereUsedLot[]}>();
   const [isLoading, setLoading] = React.useState(true);
 

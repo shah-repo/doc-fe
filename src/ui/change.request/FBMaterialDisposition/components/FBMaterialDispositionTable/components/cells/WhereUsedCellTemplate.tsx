@@ -6,9 +6,8 @@ import useDialog from '../../../../../../hooks/useDialog';
 import { CustomTemplateProps } from '../../types';
 import { styles } from './styles';
 
-export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = (props) => {
+export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem }) => {
   const classes = styles();
-  const { dataItem } = props;
 
   const { lotDocRevId, whereUsed } = dataItem;
   const isWhereUsedTreeExist = whereUsed > 0;
