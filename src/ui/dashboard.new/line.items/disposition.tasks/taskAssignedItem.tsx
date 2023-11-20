@@ -32,7 +32,7 @@ interface Props {
   arChangeRequestId: string
   hoverItemId: string
   onMouseHoverItem: (id: string) => void
-  pinned: boolean
+  isPinned: boolean
   pinLineItem?: (id: string) => void
   unPinLineItem?: (id: string) => void
   dismissLineItem?: (id: string) => void
@@ -53,7 +53,7 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
   onMouseHoverItem,
   unPinLineItem,
   pinLineItem,
-  pinned,
+  isPinned,
   dismissLineItem,
 }) => {
   const classes = useStyles();
@@ -84,8 +84,8 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
     setIsPinHover(false);
   };
 
-  const isPinShown = pinLineItem && !pinned;
-  const isUnpinShown = unPinLineItem && pinned;
+  const isPinShown = pinLineItem && !isPinned;
+  const isUnpinShown = unPinLineItem && isPinned;
 
   return (
     <>
