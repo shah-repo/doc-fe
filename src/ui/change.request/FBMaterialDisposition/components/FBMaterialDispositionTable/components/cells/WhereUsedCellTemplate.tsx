@@ -10,8 +10,8 @@ export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem } = props;
 
-  const { lotDocRevId, whereUsedView } = dataItem;
-  const isWhereUsedTreeExist = (whereUsedView ?? []).length > 1;
+  const { lotDocRevId, whereUsed } = dataItem;
+  const isWhereUsedTreeExist = whereUsed > 0;
 
   const whereUsedDialog = useDialog();
   const openWhereUsedDialog: MouseEventHandler = (e) => {
