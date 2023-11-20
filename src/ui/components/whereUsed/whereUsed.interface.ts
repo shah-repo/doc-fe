@@ -22,6 +22,6 @@ export interface IRelation {
 export interface IWhereUsedRequest {
   arId?: string
   lotRevIds?: string[]
-  statusOnly: boolean
-  firstLevelOnly: boolean
+  isStatusOnly: boolean
+  isFirstLevelOnly: boolean
 }

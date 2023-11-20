@@ -1,8 +1,8 @@
 import cx from 'classnames';
 import React, { useEffect, useMemo } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
-import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -41,7 +41,7 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
   const fetchWhereUsedLotTree = (lotRevId: string) => {
     setLoading(true);
     fetchWhereUsedLotTreesAsync.start(fetchWhereUsedLotTreesAction,
-      { lotRevIds: [lotRevId], statusOnly: false, firstLevelOnly: false },
+      { lotRevIds: [lotRevId], isStatusOnly: false, isFirstLevelOnly: false },
       fetchWhereUsedLotTreesAsync);
   };
 
