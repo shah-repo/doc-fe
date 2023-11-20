@@ -5,6 +5,7 @@ import { DropDownCellTemplate } from './components/cells/DropDownCellTemplate';
 import { LotIdCellTemplate } from './components/cells/LotIdCellTemplate';
 import { PartIdCellTemplate } from './components/cells/PartIdCellTemplate';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
+import { WhereUsedCellTemplate } from './components/cells/WhereUsedCellTemplate';
 import { OPTIONS } from './constants';
 import { EditableMDItem, SchemaOptions } from './types';
 
@@ -38,6 +39,14 @@ export const buildSchema = ({
       template: (props) => <LotIdCellTemplate {...props} onClick={onRowClick} />,
       show: true,
       width: 201,
+    },
+    {
+      id: 'whereUsedView',
+      field: 'whereUsedView',
+      title: '',
+      template: (props) => <WhereUsedCellTemplate {...props} onClick={onRowClick} />,
+      show: true,
+      width: 120,
     },
     {
       id: 'onOrderPOAction',

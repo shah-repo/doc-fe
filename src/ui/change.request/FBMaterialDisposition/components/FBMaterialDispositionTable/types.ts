@@ -20,6 +20,7 @@ export interface MaterialDispositionItem {
   usedLocation: string
   comment: string
   openedPO: DocumentRevision[]
+  whereUsedView: string[]
 }
 
 export interface MDItemEditRequestBody{
