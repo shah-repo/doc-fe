@@ -2,7 +2,7 @@ import { PasswordType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import axios from 'axios';
 import { intl, translate } from '../../../common/intl';
 import { toastError } from '../../../ui/components/notifications';
-import { IWhereUsedRequest } from '../../../ui/components/whereUsed/whereUsed.interface';
+import { IWhereUsedRequest } from '../../../ui/components/whereUsed/WhereUsed.interface';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';

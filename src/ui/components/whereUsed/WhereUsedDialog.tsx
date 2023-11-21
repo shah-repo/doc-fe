@@ -1,10 +1,10 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
-import TreeCreator from '../../form.builder/FBBOM/components/treelist/TreeCreator';
 import { DialogHandler } from '../../hooks/useDialog';
 import Text from '../Text';
-import LotWhereUsedTreeCreator from './LotWhereUsedTree';
+import LotWhereUsedTree from './LotWhereUsedTree';
+import PartWhereUsedTree from './PartWhereUsedTree';
 import useStyles from './WhereUsedDialog.styles';
 
 export enum WhereUsedType {
@@ -56,8 +56,8 @@ const WhereUsedDialog: React.FunctionComponent<Props> = ({
       <DialogContent dividers
         id="WhereUsed-content"
       >
-        { type === WhereUsedType.PART && <TreeCreator docRevId={revId} /> }
-        { type === WhereUsedType.LOT && <LotWhereUsedTreeCreator lotRevId={revId} /> }
+        { type === WhereUsedType.PART && <PartWhereUsedTree docRevId={revId} /> }
+        { type === WhereUsedType.LOT && <LotWhereUsedTree lotRevId={revId} /> }
       </DialogContent>
     </Dialog>
   );

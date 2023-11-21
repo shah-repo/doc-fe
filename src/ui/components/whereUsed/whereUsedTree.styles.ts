@@ -23,40 +23,67 @@ export default makeStyles((theme) =>
         alignItems: 'center',
         justifyContent: 'space-evenly',
         marginBottom: theme.spacing(1),
+        width: 'fit-content',
       },
     },
-    depthDiv: {
-      position: 'absolute',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-evenly',
+    depthDivPart: {
+      width: '240px',
+    },
+    depthDivLot: {
+      width: '320px',
     },
     entry: {
       padding: theme.spacing(1, 1.5),
       borderRadius: theme.spacing(1),
       margin: theme.spacing(1.5),
-      backgroundColor: Colors.white,
-    },
-    statusReleased: {
-      border: `1px solid ${Colors.green}`,
-      color: Colors.green,
-    },
-    statusDraft: {
-      border: `1px solid ${Colors.bright_blue}`,
-      color: Colors.bright_blue,
-    },
-    statusPendingChange: {
-      border: `1px solid ${Colors.latest_yellow_varient}`,
-      color: Colors.latest_yellow_varient,
+      backgroundColor: Colors.light_gray,
+      border: `1px solid ${Colors.gray}`,
+      width: '60%',
     },
     metadataInfo: {
-      margin: theme.spacing(0.25, 0),
+      margin: theme.spacing(0.75, 0, 0.5, 0),
       fontSize: '12px',
     },
-    defaultStatus: {
-      border: `1px solid ${Colors.font_gray}`,
-      backgroundColor: Colors.white,
-      color: Colors.font_gray,
+    mainContent: {
+      margin: theme.spacing(0.5, 0, 0.75, 0),
+    },
+    name: {
+      color: Colors.dark_gray,
+      fontWeight: 500,
+    },
+    chip: {
+      display: 'flex',
+      flexDirection: 'row',
+      padding: '0px !important',
+      borderRadius: 3,
+      background: Colors.white,
+      fontWeight: 700,
+      fontSize: '10px',
+      lineHeight: '13px',
+      textTransform: 'uppercase',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    GREEN_STATUS: {
+      color: Colors.green_blue,
+    },
+    RED_STATUS: {
+      color: Colors.latest_red_varient,
+    },
+    CLOSED_STATUS: {
+      color: Colors.dawn,
+    },
+    PENDING_STATUS: {
+      color: Colors.school_bus_yellow,
+    },
+    GRAY_STATUS: {
+      color: Colors.mandy,
+    },
+    WIP_STATUS: {
+      color: Colors.raven,
+    },
+    undefined: {
+      color: Colors.dodger_blue,
     },
     disableRipple: {
       '&:hover': {

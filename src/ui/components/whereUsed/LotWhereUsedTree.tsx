@@ -3,17 +3,18 @@ import React, { useEffect, useMemo } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
 
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import Colors from '../../layout/theme/utils/colors';
 import Text from '../Text';
-import { IRelation, IWhereUsedLot } from './whereUsed.interface';
+import StatusChip from './StatusChip';
+import { IRelation, IWhereUsedLot } from './WhereUsed.interface';
 import useStyles from './whereUsedTree.styles';
+
+const DIV_WIDTH = 320;
 
 const Loader = () => {
   const classes = useStyles({ size: undefined });
-
   return (
     <div data-cy="tree-items-loader" className={classes.loader}>
       <Text translation="common.loading" />
@@ -21,19 +22,24 @@ const Loader = () => {
   );
 };
 
-export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: string }): JSX.Element {
+export default function LotWhereUsedTree ({ lotRevId }: { lotRevId: string }): JSX.Element {
   const [dataInLevels, setDataInLevels] = React.useState<{[key: string]: IWhereUsedLot[]}>();
   const [isLoading, setLoading] = React.useState(true);
 
-  const [relationsMap, setRelationsMap] = React.useState<{[key: string]: IRelation[]}>();
+  const [relationMap, setRelationMap] = React.useState<{[key: string]: IRelation[]}>();
 
   const classes = useStyles({ size: undefined });
 
   const fetchWhereUsedLotTreesAction = useActionCreator(documentRevisionsActions.fetchWhereUsedLotTree);
   const fetchWhereUsedLotTreesAsync = useAsync({
     onSuccess: (treeList: IWhereUsedLot[]| undefined) => {
+      if (!treeList || treeList.length === 1) {
+        setLoading(false);
+        return;
+      }
+
       setDataInLevels(depthMapper(treeList));
-      setRelationsMap(relationMapper(treeList));
+      setRelationMap(relationMapper(treeList));
       setLoading(false);
     },
   });
@@ -49,12 +55,9 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lotRevId]);
 
-  const depthMapper = useMemo(() => (whereUsedLotData: IWhereUsedLot[]| undefined) => {
-    if (!whereUsedLotData) {
-      return;
-    }
+  const depthMapper = useMemo(() => (treeList: IWhereUsedLot[]) => {
     const whereUsedDataDepthMap: {[key: string]: IWhereUsedLot[]} = {};
-    whereUsedLotData.forEach((whereUsedEntry: IWhereUsedLot) => {
+    treeList.forEach((whereUsedEntry: IWhereUsedLot) => {
       const depthToUse = whereUsedEntry.depth.toString();
       if (!whereUsedDataDepthMap[depthToUse]) {
         whereUsedDataDepthMap[depthToUse] = [];
@@ -64,24 +67,22 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
     return whereUsedDataDepthMap;
   }, []);
 
-  const relationMapper = useMemo(() => (whereUsedLotData: IWhereUsedLot[]| undefined) => {
-    if (!whereUsedLotData) {
-      return;
-    }
+  const relationMapper = useMemo(() => (whereUsedLotData: IWhereUsedLot[]) => {
     const relationMap: {[key: string]: IRelation[]} = {};
     const whereUsedLotMap = {};
     whereUsedLotData.forEach(entry => {
-      whereUsedLotMap[entry.lotRevId] = entry;
+      whereUsedLotMap[`${entry.name}:${entry.depth}`] = entry;
     });
 
     whereUsedLotData.forEach((whereUsedEntry: IWhereUsedLot) => {
       const childLotRevId = whereUsedEntry.childLotRevId;
       if (childLotRevId) {
-        if (!relationMap[childLotRevId]) {
-          relationMap[childLotRevId] = [];
+        const keyToConsider = `${childLotRevId}:${whereUsedEntry.depth}`;
+        if (!relationMap[keyToConsider]) {
+          relationMap[keyToConsider] = [];
         }
-        relationMap[childLotRevId].push({
-          targetId: idGenerator(whereUsedLotMap[whereUsedEntry.lotRevId]),
+        relationMap[keyToConsider].push({
+          targetId: idGenerator(whereUsedLotMap[`${whereUsedEntry.name}:${whereUsedEntry.depth}`]),
           targetAnchor: 'left',
           sourceAnchor: 'right',
         });
@@ -90,20 +91,8 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
     return relationMap;
   }, []);
 
-  const statusClassDecider = (displayStatus: string) => {
-    if (displayStatus === DocumentRevisionStatus.Released) {
-      return classes.statusReleased;
-    } else if (displayStatus === DocumentRevisionStatus.Draft) {
-      return classes.statusDraft;
-    } else if (displayStatus === DocumentRevisionStatus.PendingChange) {
-      return classes.statusPendingChange;
-    }
-
-    return classes.defaultStatus;
-  };
-
   const idGenerator = (entry: IWhereUsedLot) => {
-    return `${entry.lotRevId}:${entry.childLotRevId}:${entry.depth}`;
+    return `${entry.name}:${entry.childLotRevId}:${entry.depth}:${entry.displayRevision}`;
   };
 
   return (
@@ -111,26 +100,31 @@ export default function LotWhereUsedTreeCreator ({ lotRevId }: { lotRevId: strin
       {isLoading && <Loader />}
       <div className={classes.treeMap}>
         <ArcherContainer
-          strokeColor={Colors.bright_grey}
+          strokeColor={Colors.font_gray}
+          svgContainerStyle={{ width: dataInLevels ? Object.keys(dataInLevels).length * DIV_WIDTH : '100%' }}
+          strokeWidth={0.75}
         >
           {
-            dataInLevels && relationsMap && Object.keys(dataInLevels).map((level: string) => {
+            dataInLevels && relationMap && Object.keys(dataInLevels).map((level: string) => {
               const whereUsedEntries = dataInLevels[level];
               return (
-                <div className={`depthDiv depth-${level}`}>
+                <div className={cx(classes.depthDivLot, classes[`depth-${level}`])} key = {level}>
                   {
                     whereUsedEntries.map(whereUsedEntry => {
-                      const { lotName, lhrName, displayRevision, displayStatus } = whereUsedEntry;
+                      const { name, lhrName, displayRevision, displayStatus } = whereUsedEntry;
                       return (
                         <ArcherElement
                           id = {idGenerator(whereUsedEntry)}
-                          relations= {relationsMap[whereUsedEntry.lotRevId] ?? []}
+                          relations= {relationMap[`${whereUsedEntry.lotRevId}:${whereUsedEntry.depth + 1}`] ?? []}
                         >
                           <div
-                            className={cx(classes.entry, statusClassDecider(displayStatus))}
+                            className={classes.entry}
                             id={idGenerator(whereUsedEntry)}>
-                            <b>{lotName}</b>
+                            <p className={classes.mainContent}>
+                              <span className={classes.name}>{name}</span>
+                            </p>
                             <p className={classes.metadataInfo}>{lhrName} - Rev {displayRevision}</p>
+                            <StatusChip status={displayStatus} />
                           </div>
                         </ArcherElement>
                       );

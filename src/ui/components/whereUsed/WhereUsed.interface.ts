@@ -6,7 +6,7 @@ export interface IWhereUsedLot {
   lhrDocumentId?: string
   displayRevision: string
   displayStatus: string
-  lotName?: string
+  name: string
   lotRevId: string
   childLotRevId?: string
   depth: number
