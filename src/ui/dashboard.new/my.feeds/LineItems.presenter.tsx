@@ -597,7 +597,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
                   dismissLineItem={dismissLineItem}
-                  pinned={pendingAction.pinned}
+                  isPinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                 />
               );
