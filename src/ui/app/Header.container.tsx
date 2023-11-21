@@ -6,7 +6,13 @@ import { GroupTag } from '../../state/ducks/auth/types';
 import useGetHasTag from '../hooks/useGetHasTag';
 import HeaderPresenter from './Header.presenter';
 
-const HeaderContainer: React.FC<{open: boolean}> = ({ open }) => {
+interface HeaderContainerProps {
+  handleDrawerOpen: () => void
+  open: boolean
+  className: string
+}
+
+const HeaderContainer: React.FC<HeaderContainerProps> = ({ open, handleDrawerOpen, className }) => {
   const fullHeight = SM.isHomeURL;
   const name = useSelector(authSelectors.currentUserName);
   const canToggleCustomLabels = useGetHasTag(GroupTag.LABEL_TOOLTIPS);
@@ -25,6 +31,8 @@ const HeaderContainer: React.FC<{open: boolean}> = ({ open }) => {
         toggleCustomLabels,
         canToggleCustomLabels,
         open,
+        handleDrawerOpen,
+        className,
       }}
     />
   );

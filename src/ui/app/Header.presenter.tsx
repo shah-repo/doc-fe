@@ -1,19 +1,20 @@
-import { FormControlLabel, Grid, Switch, Typography } from '@material-ui/core';
+import { FormControlLabel, Grid, Switch, Toolbar, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
+import cx from 'classnames';
 import React from 'react';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
 import { SearchBar } from '../../App/Enlil/Features/Search';
 import { ReactComponent as CompanyAvatar } from '../../assets/images/company_avatar.svg';
 import { ReactComponent as MobileLogo } from '../../assets/images/enlil_white_logo.svg';
+import { ReactComponent as MobileSideMenuIcon } from '../../assets/images/mobileSide.svg';
 import Config from '../../config';
 import { WhiteLabelingEnv } from '../../state/ducks/company/types';
 import { store } from '../../state/store';
 import Text from '../components/Text';
 import { ThemeEnv } from '../layout/theme/utils/types';
-import AutosaveToggle from './autosave/autosave';
 import styles from './Header.styles';
+import AutosaveToggle from './autosave/autosave';
 
 export interface HeaderPresenterProps {
   name: string
@@ -22,6 +23,8 @@ export interface HeaderPresenterProps {
   customLabelsValue: boolean
   canToggleCustomLabels: boolean
   open: boolean
+  handleDrawerOpen: () => void
+  className: string
 }
 
 const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof styles>> = ({
@@ -31,16 +34,19 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   toggleCustomLabels,
   customLabelsValue,
   canToggleCustomLabels,
+  handleDrawerOpen,
+  className,
 }) => {
   const user = store.getState().auth.user;
   const companyName = user.employee.company.name;
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
 
   return (
-    <AppBar className={classes.appBar}>
+    <AppBar className={cx(classes.appBar, className)}>
       <div className={classes.mobileMake}>
         <div>
-          <MobileLogo />
+          <MobileSideMenuIcon className={classes.mobileSide} onClick={handleDrawerOpen} />
+          <MobileLogo className={classes.logoMobile} />
           <Typography variant="caption" className={classes.mobileLogoText} component="div">
             <Text translation="header.design.make" />
           </Typography>

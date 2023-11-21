@@ -142,8 +142,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
                     key={link.label}
                     currentPath={location.pathname}
                     {...link}
-                    open={open}
-                  />
+                    open={open} />
                 ))}
               </List>
             )

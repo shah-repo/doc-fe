@@ -14,9 +14,13 @@ export default makeStyles((theme: NextTheme) => createStyles({
     backgroundColor: Colors.alabaster,
   }),
   [theme.media.mobile]: {
-    root: {
-      left: '0 !important',
-      marginTop: theme.spacing(2.5),
+    mobileLayout: {
+      left: ({ open }) => open ? 235 : -5,
+      marginLeft: 5,
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
     },
   },
 }));

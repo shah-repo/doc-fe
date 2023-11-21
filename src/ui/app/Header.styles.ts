@@ -101,5 +101,15 @@ export default (theme: NextTheme) =>
           display: 'none',
         },
       },
+      mobileSide: {
+        width: 30,
+        height: 30,
+        borderRadius: 4,
+        padding: 10,
+        background: 'rgba(255, 255, 255, 0.1)',
+      },
+      logoMobile: {
+        marginLeft: 8,
+      },
     },
   });

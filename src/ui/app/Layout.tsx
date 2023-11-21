@@ -1,4 +1,6 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
+import cx from 'classnames';
+import isMobile from 'is-mobile';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
@@ -55,7 +57,7 @@ import SocketsContainer from './sockets/container';
 
 const Layout: React.FunctionComponent = () => {
   const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
-  const [open, setOpen] = React.useState(isExpanded);
+  const [open, setOpen] = React.useState(isMobile() ? false : isExpanded);
   const classes = useStyles({ isDashboard: SM.isHomeURL, open: open });
   const handleDrawerOpen = () => {
     localStorage.setItem(IS_SIDEBAR_EXPANDED, !open ? '1' : '0');
@@ -67,11 +69,13 @@ const Layout: React.FunctionComponent = () => {
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer open={open} />
+      <div className={classes.mobileLayout}>
+        <HeaderContainer open={open} handleDrawerOpen={handleDrawerOpen} className={classes.mobileLayout} />
+      </div>
       <Navigation handleDrawerOpen={handleDrawerOpen} open={open} />
       <SocketsContainer />
       <WatermarkFooterContainer />
-      <main className={classes.root}>
+      <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
         <Switch>
           <Route
@@ -163,6 +167,7 @@ const Layout: React.FunctionComponent = () => {
           <Redirect to={HOME_URL} />
         </Switch>
       </main>
+
     </>
   );
 };
