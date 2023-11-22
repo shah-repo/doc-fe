@@ -49,10 +49,6 @@ export const IntegerNumberCell: React.FunctionComponent<GridCellProps> = ({
   }
   const max = field !== 'startingNumber' ? undefined : Math.pow(10, dataItem.numOfDocDigits) - 1;
 
-  if (editMode) {
-    console.log(max);
-  }
-
   return (
     <td
       colSpan={colSpan}
