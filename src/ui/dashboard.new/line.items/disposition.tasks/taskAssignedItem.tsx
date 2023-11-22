@@ -281,7 +281,6 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
                       variant="body2"
                       className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
-                      noWrap
                     >
                       {instruction}
                     </Typography>
