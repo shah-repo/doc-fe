@@ -475,6 +475,7 @@
   "common.equipmentEnforceProd": "Equipment Enforce Prod",
   "common.equipmentEnforce": "Equipment Prod Enforce",
   "common.starting.number": "Starting Number",
+  "common.doc.digits": "Doc Digits",
   "common.default.rev.stage": "Default Revision Stage",
   "common.hidden.message": "Users Without Tags",
   "common.group": "Group",

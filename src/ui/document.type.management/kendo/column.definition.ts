@@ -95,7 +95,8 @@ const columns: KendoColumn[] = [{
   groupable: true,
   showColumnMenu: true,
   orderIndex: 7,
-}, {
+},
+{
   field: 'startingNumber',
   title: 'common.starting.number',
   cell: DTMCellTemplates.INTEGER_NUMBER_CELL,
@@ -107,6 +108,17 @@ const columns: KendoColumn[] = [{
   orderIndex: 8,
 },
 {
+  field: 'numOfDocDigits',
+  title: 'common.doc.digits',
+  cell: DTMCellTemplates.DOC_DIGITS_CELL,
+  filter: 'numeric',
+  show: true,
+  width: '100px',
+  groupable: false,
+  showColumnMenu: false,
+  orderIndex: 9,
+},
+{
   field: 'defaultRevStage',
   title: 'document.revision.stage',
   cell: DTMCellTemplates.REVISION_STAGE,
@@ -115,7 +127,7 @@ const columns: KendoColumn[] = [{
   width: '165px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 9,
+  orderIndex: 10,
 },
 {
   field: 'hiddenForCreationForUsersWithoutTagsFormatted',
@@ -126,7 +138,7 @@ const columns: KendoColumn[] = [{
   width: '200px',
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 10,
+  orderIndex: 11,
 },
 {
   field: 'group',
@@ -137,7 +149,7 @@ const columns: KendoColumn[] = [{
   width: '125px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 11,
+  orderIndex: 12,
 }, {
   field: 'equipmentEnforceProd',
   title: 'common.equipmentEnforce',
@@ -147,7 +159,7 @@ const columns: KendoColumn[] = [{
   width: '125px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 12,
+  orderIndex: 13,
 },
 {
   field: 'category',
@@ -156,7 +168,7 @@ const columns: KendoColumn[] = [{
   width: '125px',
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 13,
+  orderIndex: 14,
 }, {
   field: 'schema',
   title: 'common.schema',
@@ -166,7 +178,7 @@ const columns: KendoColumn[] = [{
   width: '110px',
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 14,
+  orderIndex: 15,
 }, {
   field: 'fieldsConfig',
   title: 'common.fields.config',
@@ -176,7 +188,7 @@ const columns: KendoColumn[] = [{
   width: '110px',
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 15,
+  orderIndex: 16,
 }, {
   field: '',
   title: '',
@@ -188,7 +200,7 @@ const columns: KendoColumn[] = [{
   reorderable: false,
   resizable: false,
   showColumnMenu: false,
-  orderIndex: 16,
+  orderIndex: 17,
 }];
 
 const initialDataState: PageState = { skip: 0, take: 25, group: [] };
