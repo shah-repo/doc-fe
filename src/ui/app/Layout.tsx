@@ -167,7 +167,6 @@ const Layout: React.FunctionComponent = () => {
           <Redirect to={HOME_URL} />
         </Switch>
       </main>
-
     </>
   );
 };

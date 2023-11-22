@@ -105,7 +105,7 @@ export default (theme: NextTheme) =>
         width: 30,
         height: 30,
         borderRadius: 4,
-        padding: 10,
+        padding: theme.spacing(1),
         background: 'rgba(255, 255, 255, 0.1)',
       },
       logoMobile: {
