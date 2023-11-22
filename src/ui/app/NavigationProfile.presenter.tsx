@@ -72,13 +72,9 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
   const handleSwitchCompany = () => {
     dispatch(authActions.clearNonAuthData());
     dispatch(tableSearchActions.clearAllTables());
-
     IotService.getInstance().end();
     dispatch(authActions.setCredentials(null));
-
     FBStore.clearStores();
-
-    // history.push(LOGIN_URL);
   };
 
   return (<Box
@@ -123,7 +119,6 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
               <Text translation="header.logout" />
             </ListItemText>
           </MenuItem>
-
         </ListItem>
       </List>
       <Divider />

@@ -64,7 +64,6 @@ export default (theme: NextTheme) =>
         borderRadius: 10,
         display: 'block',
         width: 225,
-
       },
       headerButton: {
         display: 'none',
