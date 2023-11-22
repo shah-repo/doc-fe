@@ -8,18 +8,18 @@ import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FBSection } from '..';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { Button } from '../../components/forms/fields-next';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import { ActionsCell } from './components/ActionsCell';
 import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
+import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer, LotTransferType } from './types';
 import { getOptionLabel, useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
 
@@ -180,7 +180,9 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   const transferList = transfers.reduce((list, transfer) => {
     const isLotTransferEdited = editedLotTransfer && editedLotTransfer.id === transfer.id;
     const employee = employees.find(employee => employee.id === transfer.by);
-    const employeeName = employee?.user?.name ?? EMPTY_VALUE_PLACEHOLDER;
+    const employeeName = transfer.type === LotTransferType.Scrap
+      ? translate('common.server.automation')
+      : employee?.user?.name ?? EMPTY_VALUE_PLACEHOLDER;
     const build = builds?.find(build => build.id === transfer.build?.id);
     const buildName = build ? getOptionLabel(build) : EMPTY_VALUE_PLACEHOLDER;
     const reference = records?.find(record => record.id === transfer.reference?.id);
