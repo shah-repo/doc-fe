@@ -113,7 +113,7 @@ const columns: KendoColumn[] = [{
   cell: DTMCellTemplates.DOC_DIGITS_CELL,
   filter: 'numeric',
   show: true,
-  width: '100px',
+  width: '120px',
   groupable: false,
   showColumnMenu: false,
   orderIndex: 9,
