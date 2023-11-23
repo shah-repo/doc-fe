@@ -13,7 +13,7 @@ export default function StatusChip ({ status }: { status: string }) {
         classes[FormHeaderStatusClassMapping[status || '']]
       }`}
       label={STATUS_TYPES_LABEL[status]}
-      data-cy="HeaderInfo-status"
+      data-cy="where-used-status"
     />
   );
 }

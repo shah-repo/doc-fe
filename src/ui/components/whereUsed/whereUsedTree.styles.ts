@@ -16,7 +16,7 @@ export default makeStyles((theme) =>
     },
     treeMap: {
       height: '75vh',
-      margin: '40px',
+      margin: theme.spacing(5),
       '& > div > div': {
         display: 'flex',
         flexDirection: 'row',
@@ -27,10 +27,10 @@ export default makeStyles((theme) =>
       },
     },
     depthDivPart: {
-      width: '240px',
+      width: 240,
     },
     depthDivLot: {
-      width: '360px',
+      width: 360,
     },
     entry: {
       padding: theme.spacing(1, 1.5),

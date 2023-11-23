@@ -7,21 +7,12 @@ import { IWhereUsedTree } from '../../form.builder/FBBOM/components/treelist/int
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import Colors from '../../layout/theme/utils/colors';
-import Text from '../Text';
 import StatusChip from './StatusChip';
 import { IRelation } from './WhereUsed.interface';
+import { WhereUsedLoader } from './WhereUsedLoader';
 import useStyles from './whereUsedTree.styles';
 
 const DIV_WIDTH = 240;
-
-const Loader = () => {
-  const classes = useStyles({ size: undefined });
-  return (
-    <div data-cy="tree-items-loader" className={classes.loader}>
-      <Text translation="common.loading" />
-    </div>
-  );
-};
 
 export default function PartWhereUsedTree ({ docRevId }: { docRevId: string }): JSX.Element {
   const [dataInLevels, setDataInLevels] = React.useState<{[key: string]: IWhereUsedTree[]}>();
@@ -33,7 +24,7 @@ export default function PartWhereUsedTree ({ docRevId }: { docRevId: string }): 
 
   const fetchWhereUsedTreesAction = useActionCreator(documentRevisionsActions.fetchWhereUsedTree);
   const fetchWhereUsedTreesAsync = useAsync({
-    onSuccess: (treeList: IWhereUsedTree[]| undefined) => {
+    onSuccess: (treeList?: IWhereUsedTree[]) => {
       if (!treeList || treeList.length === 1) {
         setLoading(false);
         return;
@@ -99,7 +90,7 @@ export default function PartWhereUsedTree ({ docRevId }: { docRevId: string }): 
 
   return (
     <>
-      {isLoading && <Loader />}
+      {isLoading && <WhereUsedLoader />}
       {!isLoading && dataInLevels && relationsMap
         && <div className={classes.treeMap}>
           <ArcherContainer

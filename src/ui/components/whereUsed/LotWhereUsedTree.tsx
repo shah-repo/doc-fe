@@ -6,21 +6,12 @@ import { documentRevisionsActions } from '../../../state/ducks/documentRevisions
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import Colors from '../../layout/theme/utils/colors';
-import Text from '../Text';
 import StatusChip from './StatusChip';
 import { IRelation, IWhereUsedLot } from './WhereUsed.interface';
+import { WhereUsedLoader } from './WhereUsedLoader';
 import useStyles from './whereUsedTree.styles';
 
 const DIV_WIDTH = 320;
-
-const Loader = () => {
-  const classes = useStyles({ size: undefined });
-  return (
-    <div data-cy="tree-items-loader" className={classes.loader}>
-      <Text translation="common.loading" />
-    </div>
-  );
-};
 
 export default function LotWhereUsedTree ({ lotRevId }: { lotRevId: string }): JSX.Element {
   const [dataInLevels, setDataInLevels] = React.useState<{[key: string]: IWhereUsedLot[]}>();
@@ -32,7 +23,7 @@ export default function LotWhereUsedTree ({ lotRevId }: { lotRevId: string }): J
 
   const fetchWhereUsedLotTreesAction = useActionCreator(documentRevisionsActions.fetchWhereUsedLotTree);
   const fetchWhereUsedLotTreesAsync = useAsync({
-    onSuccess: (treeList: IWhereUsedLot[]| undefined) => {
+    onSuccess: (treeList?: IWhereUsedLot[]) => {
       if (!treeList || treeList.length === 1) {
         setLoading(false);
         return;
@@ -97,7 +88,7 @@ export default function LotWhereUsedTree ({ lotRevId }: { lotRevId: string }): J
 
   return (
     <>
-      {isLoading && <Loader />}
+      {isLoading && <WhereUsedLoader />}
       <div className={classes.treeMap}>
         <ArcherContainer
           strokeColor={Colors.font_gray}
