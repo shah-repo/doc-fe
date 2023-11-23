@@ -101,9 +101,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
 
         addTaskAsync.start(addTask, payload, addTaskAsync);
       } else {
-        if (!formContext.isEditing) {
-          updateTaskItem(values);
-        } else {
+        if (formContext.isEditing) {
           isEditMode.current = true;
           setDataToSubmit(values);
           setData(prev => {
@@ -118,6 +116,8 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
               return item;
             });
           });
+        } else {
+          updateTaskItem(values);
         }
       }
       discardTLItem();
@@ -152,6 +152,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         employeeId: data.employeeId,
       })),
     };
+
     updateTaskAsync.start(updateTask, changeRequest?.id, values.taskId, payload, updateTaskAsync);
   };
 

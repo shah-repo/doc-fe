@@ -125,10 +125,10 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       if (count > 1) {
         onOpen();
       } else {
-        if (!formContext.isEditing) {
-          updateMaterialDispositionTableData(values);
-        } else {
+        if (formContext.isEditing) {
           updateUnsavedData(values);
+        } else {
+          updateMaterialDispositionTableData(values);
         }
         discardMDItem();
       }
@@ -143,10 +143,10 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   };
 
   const onConfirm = () => {
-    if (!formContext.isEditing) {
-      updateMaterialDispositionTableData(formik.values);
-    } else {
+    if (formContext.isEditing) {
       updateUnsavedData(formik.values);
+    } else {
+      updateMaterialDispositionTableData(formik.values);
     }
     dialog.close();
     discardMDItem();
