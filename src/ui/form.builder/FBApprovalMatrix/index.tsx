@@ -1,14 +1,15 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
-import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
-import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDialog, FBDialogState, FBDocTypeGroup, FBProvider } from '..';
+import { FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
 import { translate } from '../../../common/intl';
+import { Dialog } from '../../components/dialogs';
 import { IconButton } from '../../components/forms/fields-next';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
+import useDialog from '../../hooks/useDialog';
 import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
 import { DEFAULT_CATEGORY_LABEL } from './constants';
@@ -18,10 +19,40 @@ import { withFBApprovalMatrix } from './wrap';
 
 const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 
+const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
+  isDialog,
+  children,
+  onDialogClose,
+},
+) => {
+  if (!isDialog) {
+    return <>{children}</>;
+  }
+  return (
+    <Dialog
+      open
+      fullScreen
+      title="tabId.matrixdetails"
+      onClose={onDialogClose}
+      contentProps={{
+        style: {
+          display: 'flex',
+          flexDirection: 'column',
+        },
+        dividers: true,
+      }
+      }
+    >
+      {children}
+    </Dialog>
+  );
+};
+
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
+  const dialog = useDialog();
 
   const schema = createSchema({
     data,
@@ -55,54 +86,39 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
     am.docType.updatedCategory = isEmpty(am.docType.category) ? DEFAULT_CATEGORY_LABEL : am.docType.category;
   });
 
-  const renderTable = () => (
-    <GridTable
-      data={approvalMatrix}
-      schema={schema}
-      disabled={disabled}
-      generateNewItem={generateNewItem}
-      onSave={handleSave}
-      withoutStatus={withoutStatus}
-    />
-  );
-
-  const dialogState = FB.useRef(FBDialogState);
-  const handleFullscreenClick = () => {
-    dialogState.config({
-      title: 'tabId.matrixdetails',
-      content: (
-        <Box className={cx(classes.container, classes.fullScreen)}>
-          {renderTable()}
-        </Box>
-      ),
-      open: true,
-    });
-  };
-
   return (
-    <FBProvider dialogState={dialogState}>
-      <FBDialog fullscreen />
-      <Box
-        className={classes.container}
-        {...size && { height: size.height - 80 }}
+    <Box
+      className={classes.container}
+      {...size && { height: size.height - 80 }}
+    >
+      <StyleTooltip
+        title={translate('form.builder.fullscreen.mode')}
+        placement="top"
+        arrow
       >
-        <StyleTooltip
-          title={translate('form.builder.fullscreen.mode')}
-          placement="top"
-          arrow
+        <IconButton
+          className={classes.buttonFullscreen}
+          kind="ghost"
+          data-cy="button-fullscreen"
+          onClick={dialog.open}
         >
-          <IconButton
-            className={classes.buttonFullscreen}
-            kind="ghost"
-            data-cy="button-fullscreen"
-            onClick={handleFullscreenClick}
-          >
-            <FontAwesomeIcon icon={solid('expand')} />
-          </IconButton>
-        </StyleTooltip>
-        {renderTable()}
-      </Box>
-    </FBProvider>
+          <FontAwesomeIcon icon={solid('expand')} />
+        </IconButton>
+      </StyleTooltip>
+      <FBGridTableContainer
+        isDialog={dialog.isOpen}
+        onDialogClose={dialog.close}
+      >
+        <GridTable
+          data={approvalMatrix}
+          schema={schema}
+          disabled={disabled}
+          generateNewItem={generateNewItem}
+          onSave={handleSave}
+          withoutStatus={withoutStatus}
+        />
+      </FBGridTableContainer>
+    </Box>
   );
 };
 
