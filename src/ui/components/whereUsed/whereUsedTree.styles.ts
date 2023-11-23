@@ -30,7 +30,7 @@ export default makeStyles((theme) =>
       width: '240px',
     },
     depthDivLot: {
-      width: '320px',
+      width: '360px',
     },
     entry: {
       padding: theme.spacing(1, 1.5),

@@ -121,9 +121,9 @@ export default function LotWhereUsedTree ({ lotRevId }: { lotRevId: string }): J
                             className={classes.entry}
                             id={idGenerator(whereUsedEntry)}>
                             <p className={classes.mainContent}>
-                              <span className={classes.name}>{name}</span>
+                              <span className={classes.name}>{name}</span><span className={classes.metadataInfo}> - Rev {displayRevision}</span>
                             </p>
-                            <p className={classes.metadataInfo}>{lhrName} - Rev {displayRevision}</p>
+                            { lhrName && <p className={classes.metadataInfo}>{lhrName}</p> }
                             <StatusChip status={displayStatus} />
                           </div>
                         </ArcherElement>
