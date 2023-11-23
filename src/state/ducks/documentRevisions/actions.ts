@@ -647,7 +647,7 @@ const fetchWhereUsedLotTree = (
   handlers: Handlers,
 ): ApiAction<WhereUsedTree[]> =>
   apiActionWithCallbacks({
-    url: `${MATERIAL_DISPOSITION_WHERE_USED_URL}`,
+    url: MATERIAL_DISPOSITION_WHERE_USED_URL,
     method: 'post',
     data: body,
     handlers,
