@@ -7,10 +7,12 @@ import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { ChangeRequest } from '../../../../../state/ducks/changeRequest/types';
+import { companySelectors } from '../../../../../state/ducks/company';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { useFormContext } from '../../../../components/forms/FormContext';
@@ -42,6 +44,8 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
   const isEditMode = React.useRef<boolean>(false);
   const [data, setData] = React.useState<EditableMDItem[]>([]);
+  const settings = useSelector(companySelectors.getGeneralSettings);
+
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
     if (isShowOnly || formik.dirty || isEditMode.current) {
       return;
@@ -122,7 +126,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         return count;
       }, 0);
 
-      if (count > 1) {
+      if (count > 1 && settings?.shouldAutoUpdateLotStatus) {
         onOpen();
       } else {
         if (formContext.isEditing) {
