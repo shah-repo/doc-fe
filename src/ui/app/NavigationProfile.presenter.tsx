@@ -18,14 +18,13 @@ import { WithStyles, withStyles } from '@material-ui/core/styles';
 import cx from 'classnames';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { IotService } from '../../common/utils/iot/iotService';
 import { authActions } from '../../state/ducks/auth';
 import { Nullable } from '../../state/ducks/common/types';
-import { tableSearchActions } from '../../state/ducks/tableSearch';
 import Text from '../../ui/components/Text';
 import SwitchCompanyButtonContainer from '../components/icons/SwitchCompanyButton/SwitchCompanyButton.container';
 import FBStore from '../form.builder/stores/ui/FBStore';
 import UserProfileContainer from '../user.management/profile/UserProfile.container';
+import { UserMenuContext } from './NavigationProfile.container';
 import styles from './NavigationProfile.styles';
 import UserAvatar from './UserMenu/UserAvatar';
 import UserMenu from './UserMenu/UserMenu.container';
@@ -69,13 +68,11 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
     dispatch(authActions.logout());
     FBStore.clearStores();
   };
-  const handleSwitchCompany = () => {
-    dispatch(authActions.clearNonAuthData());
-    dispatch(tableSearchActions.clearAllTables());
-    IotService.getInstance().end();
-    dispatch(authActions.setCredentials(null));
-    FBStore.clearStores();
-  };
+
+  const {
+    handleSwitchCompany,
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  } = React.useContext(UserMenuContext)!;
 
   return (<Box
     alignItems="center"

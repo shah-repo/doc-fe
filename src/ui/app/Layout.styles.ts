@@ -1,8 +1,8 @@
 import { createStyles, makeStyles } from '@material-ui/core';
-import Colors from '../layout/theme/utils/colors';
-import { COLLAPSE_BAR_SPACE, HEADER_GAP, HEADER_HEIGHT } from './Header.styles';
-import { DRAWER_WIDTH } from './Navigation.styles';
 import { NextTheme } from '../layout/theme-next/provider';
+import Colors from '../layout/theme/utils/colors';
+import { COLLAPSE_BAR_SPACE, HEADER_GAP, HEADER_HEIGHT, MOBILECOLLAPSE_BAR_SPACE } from './Header.styles';
+import { DRAWER_WIDTH, MOBILEDRAWER_WIDTH } from './Navigation.styles';
 
 export default makeStyles((theme: NextTheme) => createStyles({
   root: ({ isDashboard, open }: {isDashboard: boolean, open: boolean}) => ({
@@ -15,12 +15,8 @@ export default makeStyles((theme: NextTheme) => createStyles({
   }),
   [theme.media.mobile]: {
     mobileLayout: {
-      left: ({ open }) => open ? 235 : -5,
+      left: ({ open }) => open ? MOBILEDRAWER_WIDTH : MOBILECOLLAPSE_BAR_SPACE,
       marginLeft: 5,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
     },
   },
 }));

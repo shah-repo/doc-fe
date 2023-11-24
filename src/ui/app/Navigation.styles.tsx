@@ -4,6 +4,8 @@ import Colors from '../layout/theme/utils/colors';
 
 export const DRAWER_WIDTH = 240;
 
+export const MOBILEDRAWER_WIDTH = 235;
+
 export default (theme: NextTheme) =>
   createStyles({
     drawer: {

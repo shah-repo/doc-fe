@@ -51,6 +51,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
             <Text translation="header.design.make" />
           </Typography>
         </div>
+
         <div>
           {whiteLabeling.avatar ? (
             <img

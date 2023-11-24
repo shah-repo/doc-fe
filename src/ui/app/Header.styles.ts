@@ -9,6 +9,7 @@ export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
 export const HEADER_GAP = 96;
 export const COLLAPSE_BAR_SPACE = 72;
+export const MOBILECOLLAPSE_BAR_SPACE = -5;
 
 export default (theme: NextTheme) =>
   createStyles({
@@ -111,5 +112,6 @@ export default (theme: NextTheme) =>
       logoMobile: {
         marginLeft: 8,
       },
+
     },
   });
