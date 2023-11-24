@@ -8,7 +8,6 @@ import { Permission } from '../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../app/alert.dialog/AlertDialog';
-import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
@@ -43,11 +42,7 @@ const HeaderLotStatus: React.FC<Props> = ({ documentRevision }) => {
   const canLotStatusBeChanged = !disabledStatuses.includes(documentRevision.status);
   const isLotStatusEditable = canChangeLotStatus && canLotStatusBeChanged;
 
-  const statusLabel = getLotStatusLabel(
-    FBDataStore?.refreshData?.lotStatus === LotStatus.SCRAP
-      ? FBDataStore?.refreshData?.lotStatus
-      : documentRevision.lotStatus,
-  );
+  const statusLabel = getLotStatusLabel(documentRevision.lotStatus);
 
   const updateLotStatus = useRef<() => void>();
   const nextStatus = useRef<LotStatus>();
