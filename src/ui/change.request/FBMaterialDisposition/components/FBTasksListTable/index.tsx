@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
+import { debounce } from 'lodash';
 import React, { useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
+import { Attachment } from '../../../../../state/ducks/attachments/types';
 import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
 import { Button } from '../../../../components/forms/fields-next';
@@ -127,14 +129,14 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
           return {
             employeeId: data.employeeId,
             status: data.status,
-            attachmentId: data.attachmentId,
+            attachments: data.attachments,
             comment: data.comment,
           };
         }
         return {
           employeeId: data.employeeId,
           status: employeeId === data.employeeId ? EmployeeStatus.Done : data.status,
-          attachmentId: data.attachmentId,
+          attachments: data.attachments,
           comment: values?.[taskId]?.[COMMENTS_FIELD]?.[employeeId] ?? data?.comment,
         };
       }),
@@ -142,26 +144,26 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);
   };
 
-  const employeeEvidenceUpdates = (dataItem: TasksListItem, employeeId: string, attachmentId: string) => {
+  const employeeEvidenceUpdates = (dataItem: TasksListItem, employeeId: string, attachments: Attachment[]) => {
     const { taskId, employeeResponse } = dataItem;
     const payload = {
       employeeUpdates: employeeResponse?.map(data => {
         if (data.employeeId !== employeeId) {
           return {
-            employeeId: data.employeeId,
             status: data.status,
-            attachmentId: data.attachmentId,
+            attachments: data.attachments,
           };
         }
         return {
-          employeeId: data.employeeId,
           status: data.status,
-          attachmentId: attachmentId,
+          attachments,
         };
       }),
     };
     updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);
   };
+
+  const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
 
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
@@ -170,7 +172,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     onDiscard: discardTLItem,
     onDelete: deleteTaskItem,
     employeeStatusUpdates: employeeStatusUpdates,
-    employeeEvidenceUpdates: employeeEvidenceUpdates,
+    employeeEvidenceUpdates: debounceEmployeeEvidenceUpdates,
     isDisabled: ChangeRequestStatus.Closed === changeRequest?.state,
     currentState: changeRequest?.state,
   });
