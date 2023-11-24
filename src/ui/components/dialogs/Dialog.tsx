@@ -49,6 +49,7 @@ const Dialog: React.FC<DialogProps> = ({
   titleProps,
   contentProps = { dividers: true },
   actionsProps,
+  fullScreen,
   onConfirm,
   onCancel,
   onClose,
@@ -56,7 +57,7 @@ const Dialog: React.FC<DialogProps> = ({
   ...props
 }) => {
   const classes = useStyles({ dividers: contentProps.dividers });
-  const isFullScreen = useMediaQuery(themeNext.breakpoints.down(breakpoint));
+  const isFullScreen = useMediaQuery(themeNext.breakpoints.down(breakpoint)) || fullScreen;
 
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const handleClose = (eventName: DialogCloseReason) =>
