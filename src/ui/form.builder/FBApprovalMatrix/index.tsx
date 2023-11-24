@@ -22,6 +22,7 @@ const GridTable = Grid as React.ComponentType<GridProps<FBApprovalMatrixItem>>;
 const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
   isDialog,
   children,
+  dialogContentStyle,
   onDialogClose,
 },
 ) => {
@@ -35,10 +36,7 @@ const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
       title="tabId.matrixdetails"
       onClose={onDialogClose}
       contentProps={{
-        style: {
-          display: 'flex',
-          flexDirection: 'column',
-        },
+        className: dialogContentStyle,
         dividers: true,
       }
       }
@@ -107,6 +105,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       </StyleTooltip>
       <FBGridTableContainer
         isDialog={dialog.isOpen}
+        dialogContentStyle={classes.dialogContentStyle}
         onDialogClose={dialog.close}
       >
         <GridTable

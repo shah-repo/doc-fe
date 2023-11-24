@@ -13,6 +13,7 @@ export type FBApprovalMatrixProps =
 
 export interface FBGridTableContainerProps {
   isDialog: boolean
+  dialogContentStyle: string
   onDialogClose: () => void
 }
 

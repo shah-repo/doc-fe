@@ -15,7 +15,6 @@ export enum DialogCloseReason {
 export interface DialogProps extends Omit<MuiDialogProps, 'title' | 'onClose'> {
   breakpoint?: DialogBreakpoint
   loading?: boolean
-  fullScreen?: boolean
   hideCloseButton?: boolean
   title?: React.ReactNode | Translation
   titleProps?: PropsWithDataset<MuiDialogTitleProps>
