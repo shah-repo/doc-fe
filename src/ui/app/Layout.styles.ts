@@ -2,7 +2,7 @@ import { createStyles, makeStyles } from '@material-ui/core';
 import { NextTheme } from '../layout/theme-next/provider';
 import Colors from '../layout/theme/utils/colors';
 import { COLLAPSE_BAR_SPACE, HEADER_GAP, HEADER_HEIGHT, MOBILECOLLAPSE_BAR_SPACE } from './Header.styles';
-import { DRAWER_WIDTH, MOBILEDRAWER_WIDTH } from './Navigation.styles';
+import { DRAWER_WIDTH, MOBILE_DRAWER_WIDTH } from './Navigation.styles';
 
 export default makeStyles((theme: NextTheme) => createStyles({
   root: ({ isDashboard, open }: {isDashboard: boolean, open: boolean}) => ({
@@ -15,7 +15,7 @@ export default makeStyles((theme: NextTheme) => createStyles({
   }),
   [theme.media.mobile]: {
     mobileLayout: {
-      left: ({ open }) => open ? MOBILEDRAWER_WIDTH : MOBILECOLLAPSE_BAR_SPACE,
+      left: ({ open }) => open ? MOBILE_DRAWER_WIDTH : MOBILECOLLAPSE_BAR_SPACE,
       marginLeft: 5,
     },
   },

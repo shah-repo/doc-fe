@@ -92,7 +92,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
             <Typography data-cy="UserEmail" className={classes.emailStyle} noWrap={true}> {email}</Typography>
           </Grid>
         </ListItem>
-        <Divider />
+        <Divider className={classes.hrLine} />
         <ListItem>
           <MenuItem onClick={handleSwitchCompany} className={classes.menu}>
             <ListItemIcon className={classes.listItemIcon}>

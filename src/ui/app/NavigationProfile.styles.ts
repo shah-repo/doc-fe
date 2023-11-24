@@ -72,10 +72,18 @@ export default (theme: NextTheme) =>
         fontSize: 9,
       },
       listItemIcon: {
-        color: Colors.font_gray,
+        color: Colors.dark_gray2,
+        minWidth: 30,
       },
       text: {
-        color: Colors.font_gray,
+        color: Colors.dark_gray2,
+        fontSize: 14,
+        fontWeight: 400,
+      },
+      hrLine: {
+        backgroundColor: Colors.dark_gray2,
+        width: 200,
+        marginLeft: 12,
       },
     },
   });

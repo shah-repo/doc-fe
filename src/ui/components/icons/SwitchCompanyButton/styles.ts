@@ -10,7 +10,7 @@ export default makeStyles((theme: NextTheme) => ({
   },
   [theme.media.mobile]: {
     text: {
-      color: Colors.textGray,
+      color: Colors.buttonDisabled,
     },
   },
 }));
