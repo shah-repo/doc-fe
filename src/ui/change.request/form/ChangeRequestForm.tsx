@@ -17,10 +17,11 @@ import TabChangePromptIfDirty from '../../components/forms/TabChangePromptIfDirt
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
+import FBMaterialDisposition from '../FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
+import FormHeader from './assessmentForm/FormHeader';
 import ChangeRequestSidebar from './ChangeRequest.sidebar';
 import ChangeRequestFormHeader from './ChangeRequestFormHeader';
-import FormHeader from './assessmentForm/FormHeader';
 import { ChangeRequestFormValues } from './types';
 
 type ChangeRequestFormProps =
@@ -87,6 +88,14 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       labelId: 'tabId.items',
       tabId: TabTypeOptions.ITEMS.toLowerCase(),
       type: TabTypeOptions.ITEMS,
+    });
+  }
+
+  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
+    tabConfig.splice(2, 0, {
+      labelId: 'tabId.materialDisposition',
+      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
+      type: TabTypeOptions.MATERIAL_DISPOSITION,
     });
   }
 
@@ -176,6 +185,10 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               asyncState={asyncState}
                             />
                           )}
+                          {tabType === TabTypeOptions.MATERIAL_DISPOSITION
+                            && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
+                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} />
+                          }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
                             && <FBWorkspace

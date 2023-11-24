@@ -4,9 +4,12 @@ import cx from 'classnames';
 import { isEmpty, map, some } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
-import Text from '../../components/Text';
+import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
+import { ApplicationState } from '../../../state/reducers';
 import { useFormContext } from '../../components/forms/FormContext';
+import Text from '../../components/Text';
 import { FBFormState } from '../../form.builder';
 import ApprovalRequestEditGridItem from './ApprovalRequestEditGridItem';
 import useStyles from './ApprovalRequestGrid.styles';
@@ -84,6 +87,10 @@ const ItemsAndDetails: React.FunctionComponent<{
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const { isEditing } = useFormContext();
 
+  const documentRevision = useSelector(
+    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, itemsAndDetailsState.approvalRequstItemInEditMode),
+  );
+
   useEffect(() => {
     if (itemsAndDetailsState.approvalRequstItemInEditMode !== '') {
       formState.setFieldValue('proposedDocumentRevision', { id: itemsAndDetailsState.approvalRequstItemInEditMode });
@@ -137,13 +144,14 @@ const ItemsAndDetails: React.FunctionComponent<{
     })}>
       { itemsAndDetailsState.loadingState && <Loader /> }
       <TopSection showEditRow={showEditRow} isButtonShown={itemsAndDetailsState.viewItemActionsVisible && !isEditing} />
-      <ApprovalRequestGridHeader lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute} />
+      <ApprovalRequestGridHeader isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted} />
       { isEditRowVisible && <ApprovalRequestEditGridItem
         {...{ formState }}
         disabledOptions={disabledOptions()}
         addRevisionToChangeRequest={addRevisionToChangeRequest}
         resetAndCancelEdit={resetAndCancelEdit}
-        lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute}
+        isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
+        documentRevision={documentRevision}
       />}
       {
         itemsAndDetailsState.approvalRequestItemsList.map((entry: ApprovalRequestGridItem) => (
@@ -156,7 +164,7 @@ const ItemsAndDetails: React.FunctionComponent<{
             handleUpdate = {handleUpdate}
             viewItemActionsVisible = {itemsAndDetailsState.viewItemActionsVisible}
             itemsAndDetailsState = {itemsAndDetailsState}
-            lineItemPartCanSubstitute={changeRequest?.lineItemPartCanSubstitute}
+            isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
             isDeletionDisabled={isEditing}
           />
         ))

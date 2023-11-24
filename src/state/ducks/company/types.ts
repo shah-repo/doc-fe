@@ -146,6 +146,7 @@ interface ZebraPrintSettings {
 export interface GeneralSettings {
   zebraPrint: ZebraPrintSettings
   approvalRequestAdmin: boolean
+  shouldAutoUpdateLotStatus: boolean
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

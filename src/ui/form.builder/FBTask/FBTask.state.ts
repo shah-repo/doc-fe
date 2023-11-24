@@ -13,7 +13,7 @@ class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps>
 
   public tasks?: FBTaskItem[];
 
-  public constructor(tasks?: FBTaskItem[]) {
+  public constructor (tasks?: FBTaskItem[]) {
     super();
     this.tasks = tasks;
   }
@@ -54,7 +54,7 @@ class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps>
   public getTask = (id?: string): FBTaskItem | undefined =>
     this.tasks?.find((task) => task.id === id);
 
-  public onSuccess() {
+  public onSuccess () {
     if (!this.data) { return; }
     const { id } = this.data;
     switch (this.method) {
@@ -83,16 +83,16 @@ class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps>
     super.onSuccess();
   }
 
-  private addTask = (task: FBTaskItem) => {
+  private readonly addTask = (task: FBTaskItem) => {
     this.setUrl(FBEndpoint.Tasks);
     this.setBody(task);
     this.post();
   };
 
-  private updateTask = (task: FBTaskItem) => this.set({
+  private readonly updateTask = (task: FBTaskItem) => this.set({
     url: FBEndpoint.Task,
     urlValues: { id: task.id },
-    body: { ...omit(task, ['id', 'type', 'partOf']) },
+    body: { ...omit(task, ['id', 'type', 'partOfId']) },
     method: 'patch',
   });
 }

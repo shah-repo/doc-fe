@@ -1,6 +1,7 @@
 import { Box, Button, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import isMobile from 'is-mobile';
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as CloseIcon } from '../../../../../assets/images/close.svg';
@@ -14,9 +15,14 @@ import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin
 import { ReactComponent as ViewIcon } from '../../../../../assets/images/view.svg';
 import { ReactComponent as ViewSolidIcon } from '../../../../../assets/images/view_solid.svg';
 import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
+import { companySelectors } from '../../../../../state/ducks/company';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import { taskActions } from '../../../../../state/ducks/tasks';
+import TasksInfoDialog, { DialogTypes } from '../../../../change.request/dialogs/TasksInfoDialog';
+import { PendingMDInfoResponse } from '../../../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
 import Text from '../../../../components/Text';
+import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
@@ -73,16 +79,41 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   dismissLineItem,
 }) => {
   const classes = useStyles();
-  const [closeHover, setCloseHover] = React.useState(false);
-  const [pinHover, setPinHover] = React.useState(false);
-  const [closed, setClosed] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [viewHoverItem, setViewHoverItem] = React.useState('');
+  const [isCloseHover, setIsCloseHover] = useState(false);
+  const [isPinHover, setIsPinHover] = useState(false);
+  const [isClosed, setIsClosed] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
+  const [pendingMDInfo, setPendingMDInfo] = useState({ isLotStatusWillBeUpdated: false });
+  const [viewHoverItem, setViewHoverItem] = useState('');
   const transitionDialog = useDialog();
-  const hoverItem = hoverItemId === id;
+  const isHoverItem = hoverItemId === id;
+  const tasksDialog = useDialog();
+  const lotStatusDialog = useDialog();
+  const fetchPendingTasksCount = useActionCreator(taskActions.getPendingTasksCount);
+  const settings = useSelector(companySelectors.getGeneralSettings);
+
+  const tasksAsync = useAsync({
+    onSuccess: (response?: PendingMDInfoResponse) => {
+      response && setPendingMDInfo(response);
+      if (response && response?.pendingTasksCount > 0) {
+        tasksDialog.open();
+      } else {
+        openClosedDialog();
+      }
+    },
+    onError: transitionDialog.close,
+  });
+  const onConfirm = () => {
+    tasksDialog.close();
+    if (settings?.shouldAutoUpdateLotStatus && pendingMDInfo.isLotStatusWillBeUpdated) {
+      lotStatusDialog.open();
+    } else {
+      openClosedDialog();
+    }
+  };
 
   const handleClick = () => {
-    setOpen(!open);
+    setIsOpened(!isOpened);
   };
   const handleDismiss = () => {
     dismissLineItem?.(id);
@@ -94,24 +125,24 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
     unPinLineItem?.(id);
   };
   const handleCloseClick = () => {
-    openClosedDialog();
-    setClosed(!closed);
+    tasksAsync.start(fetchPendingTasksCount, arChangeRequestId, tasksAsync);
+    setIsClosed(!isClosed);
   };
   const openClosedDialog = () => {
     async.reset();
     transitionDialog.open();
   };
   const onMouseLeaveActionIcons = () => {
-    setCloseHover(false);
-    setPinHover(false);
+    setIsCloseHover(false);
+    setIsPinHover(false);
   };
   const onMouseHoverPinIcon = () => {
-    setCloseHover(false);
-    setPinHover(true);
+    setIsCloseHover(false);
+    setIsPinHover(true);
   };
   const onMouseHoverCloseIcon = () => {
-    setPinHover(false);
-    setCloseHover(true);
+    setIsPinHover(false);
+    setIsCloseHover(true);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
@@ -141,11 +172,11 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
         divider
         disableRipple
         className={classes.listItem}
-        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        style={isOpened || isHoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
         {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }}
       >
-        {open ? (
+        {isOpened ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
           <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
@@ -188,7 +219,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    {!hoverItem && (
+                    {!isHoverItem && (
                       <NormalStyleChip
                         size="small"
                         color="primary"
@@ -196,7 +227,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                         label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
-                    {hoverItem && (
+                    {isHoverItem && (
                       <HoverStyleChip
                         color="primary"
                         size="small"
@@ -228,21 +259,21 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </>
           }
         />
-        {hoverItem && (
+        {isHoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             <span>
-              {!closeHover && (
+              {!isCloseHover && (
                 <CloseIcon
                   data-cy="close-icon"
                   className={classes.cursorPointer}
                   onMouseEnter={onMouseHoverCloseIcon}
                 />
               )}
-              {closeHover && (
+              {isCloseHover && (
                 <StyleTooltip
                   title={<Text translation="common.close" />}
                   placement="top"
@@ -259,14 +290,14 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </span>
             {!pinned && (
               <span className={classes.actionIcon}>
-                {!pinHover && isPinShown && (
+                {!isPinHover && isPinShown && (
                   <PinIcon
                     data-cy="pin-icon"
                     className={classes.cursorPointer}
                     onMouseEnter={onMouseHoverPinIcon}
                   />
                 )}
-                {pinHover && isPinShown && (
+                {isPinHover && isPinShown && (
                   <StyleTooltip
                     title={<Text translation="common.pin" />}
                     placement="top"
@@ -319,11 +350,11 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </StyleTooltip>
           </span>
         )}
-        {hoverItem && dismissLineItem && (
+        {isHoverItem && dismissLineItem && (
           <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={isOpened} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
           {docRevs.map((prItem, index) => (
             <StyledListItem button className={classes.nested} key={index} disableRipple>
@@ -451,6 +482,27 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
         title={title}
         transitionDialog={transitionDialog}
         label="transition.action.reject"
+      />
+      <TasksInfoDialog
+        dialog={tasksDialog}
+        message="approvalRequest.tasks.incomplete.message"
+        type={DialogTypes.Warning}
+        title="common.warning"
+        confirmLabel="common.yes.continue"
+        cancelLabel="common.no.go.back"
+        confirmAction={onConfirm}
+      />
+      <TasksInfoDialog
+        dialog={lotStatusDialog}
+        message="approvalRequest.lot.status.alert.message"
+        type={DialogTypes.Info}
+        title="approvalRequest.lot.status.alert.title"
+        confirmLabel="common.ok.proceed"
+        cancelLabel="common.cancel"
+        confirmAction={() => {
+          lotStatusDialog.close();
+          openClosedDialog();
+        }}
       />
     </>
   );
