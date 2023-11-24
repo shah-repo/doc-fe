@@ -2,7 +2,8 @@ import { makeStyles } from '@material-ui/core';
 
 export default makeStyles((theme) => ({
   label: {
-    margin: theme.spacing(0, 0, 1),
+    alignItems: 'end',
+    display: 'flex',
   },
   loading: {
     verticalAlign: '-.25em',

@@ -1,7 +1,10 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { range } from 'lodash';
+import { get, includes, range } from 'lodash';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { companySelectors } from '../../../../state/ducks/company';
+import { labelTemplatesProps, ZebraPrintSettings } from '../../../../state/ducks/company/types';
 import { FBLabel } from '../../../form.builder';
 import { Autocomplete, FormField, TextField } from '../../forms/fields-next';
 import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
@@ -20,6 +23,9 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   onPrintClick,
   onDescriptionChange,
   onNumberOfLabelChange,
+  onPrinterChange,
+  onLabelTypeChange,
+  onFieldCheck,
   isOpen,
   companyEmployees,
   selectedOption,
@@ -30,8 +36,11 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   serial,
   description,
   selectedNumberOfLabel,
+  selectedParams,
+  labelTypeData,
 }) => {
   const classes = styles();
+  const { zebraPrint } = useSelector(companySelectors.getGeneralSettings); console.log('---initialValues--', { zebraPrint }, get(zebraPrint, 'printer.name'));
   const qtyUnitsRender = () => {
     const gridSize = selectedNumberOfLabel < 6 ? (gridMaxWidth / selectedNumberOfLabel) : (gridMaxWidth / 5);
     const qtyClasses = qtyLabelStyle(gridSize);
@@ -63,8 +72,30 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           container
           alignItems="center"
           spacing={2} >
+          <Grid item xs={6}>
+            <FormField label="print.label.dialog.field.printer">
+              <Autocomplete
+                disableClearable
+                data-cy="printer-name"
+                options={zebraPrint}
+                getOptionLabel={(option: ZebraPrintSettings) => option.printer?.name}
+                onChange={onPrinterChange} />
+            </FormField>
+          </Grid>
+          <Grid item xs={6}>
+            <FormField label="print.label.dialog.field.label.type">
+              <Autocomplete
+                disableClearable
+                data-cy="label-type"
+                options={labelTypeData}
+                getOptionLabel={(option: labelTemplatesProps) => option?.name}
+                onChange={onLabelTypeChange} />
+            </FormField>
+          </Grid>
           <Grid item xs={8}>
-            <FormField label="print.label.dialog.field.partId">
+            <FormField label="print.label.dialog.field.partId" {...{ onFieldCheck }}
+              checkboxName="partDocId"
+              checked={includes(selectedParams, 'partDocId')}>
               <TextField
                 disabled
                 value={initialValues?.partId}
@@ -72,7 +103,9 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             </FormField>
           </Grid>
           <Grid item xs={4}>
-            <FormField label="print.label.dialog.field.revision">
+            <FormField label="print.label.dialog.field.revision" {...{ onFieldCheck }}
+              checkboxName="revision"
+              checked={includes(selectedParams, 'revision')}>
               <TextField
                 disabled
                 value={initialValues?.revision}
@@ -81,7 +114,9 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           </Grid>
           <Grid item xs={12}>
             <Box display="flex">
-              <FormField label="print.label.dialog.field.description" fullWidth={false} />
+              <FormField label="print.label.dialog.field.description" fullWidth={false} {...{ onFieldCheck }}
+                checkboxName="description"
+                checked={includes(selectedParams, 'description')} />
               <FBLabel label="print.label.dialog.field.description.info"
                 fontSize="12px"
                 labelProps={labelPropsStyle} />
@@ -92,7 +127,9 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
               onChange={onDescriptionChange} />
           </Grid>
           <Grid item xs={6}>
-            <FormField label="print.label.dialog.field.lot">
+            <FormField label="print.label.dialog.field.lot" {...{ onFieldCheck }}
+              checkboxName="lotNumber"
+              checked={includes(selectedParams, 'lotNumber')}>
               <TextField
                 disabled
                 value={initialValues?.lotId}
@@ -101,7 +138,9 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           </Grid>
           <Grid item xs={6}>
             <Box display="flex">
-              <FormField label="print.label.dialog.field.serial" fullWidth={false} />
+              <FormField label="print.label.dialog.field.serial" fullWidth={false} {...{ onFieldCheck }}
+                checkboxName="serial"
+                checked={includes(selectedParams, 'serial')} />
               <FBLabel label="print.label.dialog.field.serial.info"
                 fontSize="12px"
                 labelProps={labelPropsStyle} />
@@ -112,20 +151,24 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
               value={serial.slice(0, 14)} />
           </Grid>
           <Grid item xs={6}>
-            <FormField label="print.label.dialog.field.by">
+            <FormField label="print.label.dialog.field.by" {...{ onFieldCheck }}
+              checkboxName="actor"
+              checked={includes(selectedParams, 'actor')}>
               <Autocomplete
                 freeSolo
                 value={selectedOption}
                 data-cy="by"
                 options={companyEmployees}
-                getOptionLabel={(option) => option?.text ? `${option.text} (${option.email})` : option }
+                getOptionLabel={(option) => option?.text ? `${option.text} (${option.email})` : option}
                 onChange={onActorChange}
                 onInputChange={onActorChange}
               />
             </FormField>
           </Grid>
           <Grid item xs={6} >
-            <FormField label="print.label.dialog.field.date">
+            <FormField label="print.label.dialog.field.date" {...{ onFieldCheck }}
+              checkboxName="printDate"
+              checked={includes(selectedParams, 'printDate')}>
               <Datepicker
                 value={selectedDate}
                 data-cy="date"

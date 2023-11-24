@@ -2,6 +2,8 @@ import { GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { useFormik, useFormikContext } from 'formik';
 import { cloneDeep, isArray, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { companyActions } from '../../../../../state/ducks/company';
 import { ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import useDialog from '../../../../hooks/useDialog';
 import { SettingsPanelProps } from '../../types';
@@ -12,13 +14,14 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
   const Comp = ({
     ...props
   }: T) => {
-    const { getFieldProps, submitForm, setFieldValue } = useFormikContext();
+    const { getFieldProps, values: formValues } = useFormikContext();
     const PrintersData = getFieldProps('zebraPrint');
     const [isOpen, setIsOpen] = useState(false);
     const [dataResult, setDataResult] = React.useState(isArray(PrintersData?.value) ? PrintersData?.value : []);
     const [editData, setEditData] = React.useState({});
     const [deleteData, setDeleteData] = React.useState({});
     const confirmationDialog = useDialog();
+    const dispatch = useDispatch();
 
     useEffect(() => {
       setDataResult(isArray(PrintersData?.value) ? PrintersData?.value : []);
@@ -31,15 +34,16 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
           const index = dataResult.findIndex(item => item.apiKey === values.apiKey);
           const newDataResult = cloneDeep(dataResult);
           newDataResult[index] = values;
-          setFieldValue('zebraPrint', newDataResult);
+          formValues.zebraPrint = newDataResult;
+          dispatch(companyActions.updateGeneralSettings(formValues, formValues.id, 'PUT'));
         } else {
           values.printer.isActive = true;
           const newData = cloneDeep(dataResult);
           newData.push(values);
-          setFieldValue('zebraPrint', newData);
+          formValues.zebraPrint = newData;
+          dispatch(companyActions.updateGeneralSettings(formValues));
         }
         setIsOpen(false);
-        submitForm();
       },
     });
 
@@ -48,7 +52,10 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       if (editData) {
         setEditData(editData);
         setValues(editData);
-      } else { resetForm(); }
+      } else {
+        resetForm();
+        setEditData(editData);
+      }
       setIsOpen(true);
     };
 
@@ -59,8 +66,8 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
 
     const confirmDeletePrinter = () => {
       const newData = dataResult.filter(item => item.apiKey !== deleteData.apiKey);
-      setFieldValue('zebraPrint', newData);
-      submitForm();
+      formValues.zebraPrint = newData;
+      dispatch(companyActions.updateGeneralSettings(formValues, formValues.id, 'PUT'));
       confirmationDialog.close();
     };
 
@@ -83,6 +90,8 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
           return item;
         });
         setDataResult(dataItems);
+        formValues.zebraPrint = dataItems;
+        dispatch(companyActions.updateGeneralSettings(formValues, formValues.id, 'PUT'));
       }
     };
 

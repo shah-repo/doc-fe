@@ -73,7 +73,7 @@ const getAllLocations = (state: ApplicationState) => state.company.companyMine.l
 
 const getGeneralSettings = (state: ApplicationState) => omit(
   state.company.generalSettings,
-  ['id', 'companyId', 'createdAt', 'updatedAt', 'status', 'message'],
+  ['companyId', 'createdAt', 'updatedAt', 'status', 'message'],
 );
 
 const getZebraPrintSettings = (state: ApplicationState) => state.company.generalSettings.zebraPrint;

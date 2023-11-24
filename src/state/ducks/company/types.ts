@@ -135,6 +135,10 @@ export interface RedlineAction {
   payload: RedlineState
 }
 
+export interface labelTemplatesProps {
+  id: string
+  name: string
+}
 export interface ZebraPrintSettings {
   apiKey: string
   tenantId: string
@@ -142,11 +146,13 @@ export interface ZebraPrintSettings {
     sn: string
     isActive: boolean
     name: string
+    labelTemplates: [labelTemplatesProps]
   }
 }
 export interface GeneralSettings {
   zebraPrint: [ZebraPrintSettings]
   approvalRequestAdmin: boolean
+  id: string
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

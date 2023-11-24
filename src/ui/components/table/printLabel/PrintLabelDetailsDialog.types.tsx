@@ -1,5 +1,5 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import { Employee } from '../../../../state/ducks/company/types';
+import { Employee, labelTemplatesProps } from '../../../../state/ducks/company/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { SelectOption } from '../../forms/fields/Select';
 
@@ -12,6 +12,9 @@ export interface PrintLabelDetailsDialogProps {
   onPrintClick: () => void
   onDescriptionChange: (event: React.ChangeEventHandler<HTMLInputElement>) => void
   onActorChange: (event: React.ChangeEvent<{}>, value: SelectOption) => void
+  onPrinterChange: (event: React.ChangeEvent<{}>, value: SelectOption) => void
+  onLabelTypeChange: (event: React.ChangeEvent<{}>, value: SelectOption) => void
+	onFieldCheck: () => void
   isOpen: boolean
   companyEmployees: Employee[]
   selectedOption: SelectOption
@@ -23,4 +26,6 @@ export interface PrintLabelDetailsDialogProps {
   qtyUnits: Array<String>
   serial: String
   description: String
+	selectedParams: Array<String>
+	labelTypeData: Array<labelTemplatesProps>
 }

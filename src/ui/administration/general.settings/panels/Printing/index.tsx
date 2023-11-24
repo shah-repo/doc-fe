@@ -7,6 +7,7 @@ import React from 'react';
 import { translate } from '../../../../../common/intl';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { IconButton } from '../../../../components/forms/fields-next';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import StyledKendoGrid from '../../../../components/StyledKendoGrid/StyledKendoGrid';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
@@ -19,7 +20,6 @@ const DATA_ITEM_KEY = 'apiKey';
 
 const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
   onAddNew,
-  onConfirm,
   onCancel,
   onSelectionChange,
   onDelete,
@@ -41,7 +41,6 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
           kind="simple"
           color="primary"
           style={{ marginRight: '10px' }}
-          disabled={!dataItem.printer?.isActive}
           onClick={() => onAddNew(dataItem)}
         >
           <FontAwesomeIcon
@@ -54,7 +53,6 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
           kind="simple"
           onClick={() => onDelete(dataItem)}
           className={deleteButton}
-          disabled={!dataItem.printer?.isActive}
         >
           <FontAwesomeIcon
             icon={regular('trash-can')}
@@ -66,8 +64,8 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
 
   const cellRender = (props) => {
     const { dataItem, field } = props;
-    const { cellStyle } = useStyles({ isActive: dataItem?.printer?.isActive });
-    return (<td className={`${cellStyle} k-command-cell`} >{get(dataItem, field)}</td>);
+    const value = get(dataItem, field);
+    return (<td className="k-command-cell"><OverflowTooltip title={value}>{value}</OverflowTooltip></td>);
   };
 
   return (
@@ -90,7 +88,6 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
           headerCell={() => <span>Active</span>} />
         <GridColumn
           field="printer.sn"
-          cell={cellRender}
           title="Serial Number" />
         <GridColumn
           field="printer.name"
@@ -102,7 +99,7 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
           width={80} />
       </StyledKendoGrid>
       <AddNewPrinter {...{ isOpen, onCancel, editData, formik }} />
-      {confirmationDialog.isOpen && (
+      {confirmationDialog?.isOpen && (
         <AlertDialog
           dialog={confirmationDialog}
           confirmAction={confirmDeletePrinter}

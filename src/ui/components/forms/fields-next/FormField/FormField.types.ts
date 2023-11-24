@@ -9,4 +9,7 @@ export type FormFieldProps = FormControlProps & {
   helperText?: React.ReactNode
   labelProps?: PropsWithDataset<Partial<InputLabelProps>>
   helperTextProps?: PropsWithDataset<Partial<FormHelperTextProps>>
+  onFieldCheck?: () => void
+  checkboxName?: string
+  checked?: boolean
 };
