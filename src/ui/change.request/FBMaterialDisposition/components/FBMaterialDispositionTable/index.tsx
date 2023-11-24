@@ -7,9 +7,11 @@ import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { ChangeRequest } from '../../../../../state/ducks/changeRequest/types';
+import { companySelectors } from '../../../../../state/ducks/company';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
@@ -37,6 +39,8 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const classes = useStyles();
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
   const [data, setData] = React.useState<EditableMDItem[]>([]);
+  const settings = useSelector(companySelectors.getGeneralSettings);
+
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
     if (isShowOnly) {
       return;
@@ -95,7 +99,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         return count;
       }, 0);
 
-      if (count > 1) {
+      if (count > 1 && settings?.shouldAutoUpdateLotStatus) {
         onOpen();
       } else {
         updateMaterialDispositionTableData();

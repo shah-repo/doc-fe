@@ -166,6 +166,10 @@ DocumentRevisionFormContainerProps
       if (isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema)) {
         documentRevision.approvals = FBDataStore.inlineApprovals as Approval[];
       }
+
+      if (FBDataStore?.refreshData?.lotStatus) {
+        documentRevision.lotStatus = FBDataStore?.refreshData?.lotStatus;
+      }
     }
   });
 
