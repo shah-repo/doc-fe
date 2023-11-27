@@ -11,17 +11,16 @@ import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/do
 import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
-import { useFormContext } from '../../components/forms/FormContext';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import TabChangePromptIfDirty from '../../components/forms/TabChangePromptIfDirty';
-import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
+import { FB, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
 import FBMaterialDisposition from '../FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
-import FormHeader from './assessmentForm/FormHeader';
 import ChangeRequestSidebar from './ChangeRequest.sidebar';
 import ChangeRequestFormHeader from './ChangeRequestFormHeader';
+import FormHeader from './assessmentForm/FormHeader';
 import { ChangeRequestFormValues } from './types';
 
 type ChangeRequestFormProps =
@@ -39,7 +38,7 @@ type ChangeRequestFormProps =
   mode: FBWorkspaceMode
   withoutBottomBar: boolean
   autosave: boolean
-  formInput?: Record<string, any>
+  formInput?: Record<string, unknown>
   hideSideBar: boolean
   currentDocRevId?: string
   inDialog: boolean
@@ -64,11 +63,22 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   inDialog = false,
 }) => {
   const { _tabsState } = SM.useStores();
-  const { isEditing } = useFormContext();
+  const { formState } = FB.useStores();
+
+  useEffect(() => {
+    formState?.setSchema(schema);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schema]);
+
+  useEffect(() => {
+    if (formState) {
+      formState.workspaceMode = mode;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   _formState?.setMode(mode);
   _formState?.setAutosave(autosave);
-  _formState?.setDirty(isEditing);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
 
@@ -162,10 +172,12 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
                       return (
                         <SMBox key={index} pt={0.25}>
+                          <pre style={{ fontSize: '8px', lineHeight: 1 }}><code>{JSON.stringify(formState?.getValues(), null, '  ')}</code></pre>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest
                               && <FBWorkspace
                                 isPortal={false}
                                 initialValues={formInput}
+                                formState={formState}
                                 changeRequest={cloneDeep(changeRequest)}
                                 autosave={autosave}
                                 withoutBottomBar={withoutBottomBar}
@@ -179,7 +191,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                             <ItemsAndDetailsWrapper
                               currentDocRevId={currentDocRevId}
                               changeRequest={cloneDeep(changeRequest)}
-                              initialValues={formInput ?? {}}
                               autosave={autosave}
                               mode={mode}
                               asyncState={asyncState}
@@ -194,6 +205,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                             && <FBWorkspace
                               isPortal={false}
                               initialValues={formInput}
+                              formState={formState}
                               changeRequest={cloneDeep(changeRequest)}
                               autosave={autosave}
                               withoutBottomBar={withoutBottomBar}

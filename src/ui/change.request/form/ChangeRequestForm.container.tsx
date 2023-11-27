@@ -112,7 +112,7 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
           <Formik
             initialValues={calcInitialValues}
             onSubmit={onSubmit}
-            enableReinitialize={true}
+            enableReinitialize
           >
             {render}
           </Formik>
