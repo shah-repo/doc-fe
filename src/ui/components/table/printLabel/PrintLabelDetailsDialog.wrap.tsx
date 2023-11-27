@@ -7,7 +7,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM_APP_CONFIG } from '../../../../common/constants';
 import { companySelectors } from '../../../../state/ducks/company';
-import { labelTemplatesProps, ZebraPrintSettings } from '../../../../state/ducks/company/types';
+import { LabelTemplatesProps, ZebraPrintSettings } from '../../../../state/ducks/company/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, Reference } from '../../../../state/ducks/documentRevisions/types';
 import { printLabelsActions } from '../../../../state/ducks/printLabels';
@@ -57,14 +57,14 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const executePrintLotLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLotLabelAsyncTask);
 
     const async = useAsync({
-      onSuccess: ( data ) => {
+      onSuccess: (data) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
-          if(!isEmptyArray(referenceTo)) {
-            const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
-            const description = documentRevision.find(item => item.displayRevision === selectedItem?.precalc?.lot_part_revision)?.name;
-            setDescription(description);
-          }
-          setData(data);
+        if (!isEmptyArray(referenceTo)) {
+          const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
+          const description = documentRevision.find(item => item.displayRevision === selectedItem?.precalc?.lot_part_revision)?.name;
+          setDescription(description);
+        }
+        setData(data);
       },
     });
 
@@ -88,7 +88,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
 
     useEffect(() => {
       const activeEmployees = companyEmployees.map((employee) => {
-        if(employee.user?.name) {
+        if (employee.user?.name) {
           return ({
             value: employee.id as string,
             text: employee.user?.name || '',
@@ -101,7 +101,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       }
 
       const defaultEmployee = activeEmployees.find(item => item?.email === authUser.email);
-      if(defaultEmployee) {
+      if (defaultEmployee) {
         setSelectedOption(defaultEmployee);
       }
     }, [companyEmployees]);
@@ -110,8 +110,8 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setSelectedDate(new Date(date?.toISOString()));
     };
 
-    const onQtyUnitsChange = (event: React.ChangeEventHandler<HTMLInputElement>, index: Number) => {
-      if(event.target.value < 0) {
+    const onQtyUnitsChange = (event: React.ChangeEventHandler<HTMLInputElement>, index: number) => {
+      if (event.target.value < 0) {
         return;
       }
       const newQtyUnits = [...qtyUnits];
@@ -120,7 +120,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onSerialChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-      if(event.target.value.length > 14) {
+      if (event.target.value.length > 14) {
         return;
       }
       setSerial(event.target.value);
@@ -131,21 +131,20 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setDescription(event.target.value);
     };
 
-    const onNumberOfLabelChange = (value: Number) => {
-      if(selectedNumberOfLabel < value) {
+    const onNumberOfLabelChange = (value: number) => {
+      if (selectedNumberOfLabel < value) {
         const newQtyUnits = [...qtyUnits];
         for (let index = 0; index < (value - selectedNumberOfLabel); index++) {
           newQtyUnits.push(initialValues?.qtyUnits);
         }
         setQtyUnits(newQtyUnits);
-      }
-      else {
+      } else {
         qtyUnits.splice(Number(value));
       }
       setSelectedNumberOfLabel(value);
     };
 
-    const onActorChange = ( event: React.ChangeEvent<{}>, value: SelectOption ) => {
+    const onActorChange = (event: React.ChangeEvent<{}>, value: SelectOption) => {
       setSelectedOption(value);
     };
 
@@ -154,7 +153,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setLabelTypeData(value?.printer?.labelTemplates);
     };
 
-    const onLabelTypeChange = (event: React.ChangeEvent<HTMLSelectElement>, value: labelTemplatesProps) => {
+    const onLabelTypeChange = (event: React.ChangeEvent<HTMLSelectElement>, value: LabelTemplatesProps) => {
       setLabelTemplate(value.id);
     };
 

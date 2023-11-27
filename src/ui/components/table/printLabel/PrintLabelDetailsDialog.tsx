@@ -4,11 +4,11 @@ import { get, includes, range } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { companySelectors } from '../../../../state/ducks/company';
-import { labelTemplatesProps, ZebraPrintSettings } from '../../../../state/ducks/company/types';
+import { LabelTemplatesProps, ZebraPrintSettings } from '../../../../state/ducks/company/types';
 import { FBLabel } from '../../../form.builder';
+import Text from '../../Text';
 import { Autocomplete, FormField, TextField } from '../../forms/fields-next';
 import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
-import Text from '../../Text';
 import { labelPropsStyle, qtyLabelStyle, styles } from '../styles';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 import { withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
@@ -88,7 +88,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 disableClearable
                 data-cy="label-type"
                 options={labelTypeData}
-                getOptionLabel={(option: labelTemplatesProps) => option?.name}
+                getOptionLabel={(option: LabelTemplatesProps) => option?.name}
                 onChange={onLabelTypeChange} />
             </FormField>
           </Grid>
@@ -184,8 +184,8 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 value={selectedNumberOfLabel}
                 data-cy="number-of-labels"
                 options={range(1, 11, 1)}
-                getOptionLabel={(option) => typeof (option) == 'number' ? String(option) : option}
-                onChange={(e, value: Number) => onNumberOfLabelChange(value)} />
+                getOptionLabel={(option) => typeof (option) === 'number' ? String(option) : option}
+                onChange={(e, value: number) => onNumberOfLabelChange(value)} />
             </FormField>
           </Grid>
           {qtyUnitsRender()}
