@@ -8,6 +8,7 @@ import { ReactComponent as PinSolidIcon } from '../../../../assets/images/pin_so
 import { translate } from '../../../../common/intl';
 import { Nullable } from '../../../../state/ducks/common/types';
 import { changeRequestPreviewPath } from '../../../change.request/utils/paths';
+import Tooltip from '../../../components/common/kendo/Tooltip';
 import { getInitalsFromName } from '../../../components/icons/avatar/helpers';
 import Text from '../../../components/Text';
 import Colors from '../../../layout/theme/utils/colors';
@@ -276,15 +277,9 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
                     >
                       {translate('dashboard.task.instruction')}
                     </Typography>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {instruction}
-                    </Typography>
+                    <Tooltip customTooltipClass={classes.tooltipBox} showTooltip data={instruction} childrenElement={
+                      <Typography component="span" variant="body2" color="textPrimary" data-cy="instruction-cell" className={`${classes.typography} ${classes.margin5} ${classes.truncateInstrution}`}>{instruction}</Typography>
+                    } />
                   </Grid>
                 </Grid>
               }

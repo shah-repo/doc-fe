@@ -31,4 +31,20 @@ export default makeStyles((theme: NextTheme) => ({
       textDecoration: 'none',
     },
   },
+  truncateInstrution: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'pre-line',
+    display: '-webkit-box',
+    '-webkit-line-clamp': 4,
+    'line-clamp': 4,
+    '-webkit-box-orient': 'vertical',
+  },
+  tooltipBox: {
+    maxHeight: '200px !important',
+    overflow: 'auto',
+    padding: theme.spacing(0.25),
+    fontSize: 12,
+    whiteSpace: 'pre-line',
+  },
 }));
