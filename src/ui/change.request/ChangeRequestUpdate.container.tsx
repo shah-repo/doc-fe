@@ -1,10 +1,11 @@
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { authSelectors } from '../../state/ducks/auth';
 import { changeRequestsActions } from '../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestStatus } from '../../state/ducks/changeRequest/types';
+import { companyActions } from '../../state/ducks/company';
 import { ApplicationState } from '../../state/reducers';
 import ChangeRequestFormContainer from '../change.request/form/ChangeRequestForm.container';
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../change.request/form/transform';
@@ -59,6 +60,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, isEditing);
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     FBDataStore?.setRefreshData({
@@ -69,6 +71,12 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       },
     });
   }, [initialValues.formInput]);
+
+  useEffect(() => {
+    if (canEditChangeRequest && isEditing && isInReview) {
+      dispatch(companyActions.setAutosaveConfig(false));
+    }
+  }, [canEditChangeRequest, isEditing, isInReview, dispatch]);
 
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
@@ -81,16 +89,13 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       loadAudit(changeRequest.id);
 
       if (isEditing) {
+        dispatch(companyActions.setAutosaveConfig(true));
         history.push(changeRequestPreviewPath(changeRequest.id));
       }
     },
   });
 
-  if (isEditing && !isInReview) {
-    return <Redirect to={changeRequestPreviewPath(changeRequest.id)} />;
-  }
-
-  if (!canEditChangeRequest) {
+  if (!canEditChangeRequest || (isEditing && !isInReview)) {
     if (inDialog) {
       return (
         <ChangeRequestSummaryContainer

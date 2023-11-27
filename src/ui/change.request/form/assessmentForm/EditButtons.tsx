@@ -1,7 +1,9 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
 import { ChangeRequest, ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
+import { companyActions } from '../../../../state/ducks/company';
 import { useFormContext } from '../../../components/forms/FormContext';
 import { Button } from '../../../components/forms/fields-next';
 import { useCanUpdateChangeRequest } from '../../helpers';
@@ -12,12 +14,14 @@ export const EditButtons: React.FC<{ changeRequest: ChangeRequest }> = ({ change
   const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, true);
   const history = useHistory();
   const formContext = useFormContext();
+  const dispatch = useDispatch();
 
   const editChangeRequest = () => {
     history.push(changeRequestUpdatePath(changeRequest.id));
   };
 
   const undoChanges = () => {
+    dispatch(companyActions.setAutosaveConfig(true));
     history.push(changeRequestPreviewPath(changeRequest.id));
   };
 
