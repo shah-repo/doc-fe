@@ -26,6 +26,7 @@ interface StateProps {
 interface DispatchProps {
   save: typeof changeRequestsActions.save
   loadAudit: typeof changeRequestsActions.loadAudit
+  setAutosave: typeof companyActions.setAutosaveConfig
 }
 
 interface OwnProps {
@@ -53,6 +54,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   isEditing = false,
   save,
   loadAudit,
+  setAutosave,
 }) => {
   const history = useHistory();
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
@@ -74,12 +76,12 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
 
   useEffect(() => {
     if (canEditChangeRequest && isEditing && isInReview) {
-      dispatch(companyActions.setAutosaveConfig(false));
+      setAutosave(false);
     }
     return () => {
-      dispatch(companyActions.setAutosaveConfig(true));
+      setAutosave(true);
     };
-  }, [canEditChangeRequest, isEditing, isInReview, dispatch]);
+  }, [canEditChangeRequest, isEditing, isInReview, setAutosave]);
 
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
@@ -167,5 +169,6 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   {
     save: changeRequestsActions.save,
     loadAudit: changeRequestsActions.loadAudit,
+    setAutosave: companyActions.setAutosaveConfig,
   },
 )(ChangeRequestUpdateContainer);

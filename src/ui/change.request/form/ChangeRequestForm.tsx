@@ -96,7 +96,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   };
 
   const handlePromptCancel = () => {
-    console.log({ isEditing });
     if (isEditing) {
       dispatch(companyActions.setAutosaveConfig(false));
     }
