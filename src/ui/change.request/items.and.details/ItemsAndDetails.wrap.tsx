@@ -26,6 +26,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
   const formState = FB.useRef(FBFormState, {});
   const initialAsyncStatus = useRef(asyncState?.status);
   const formContext = useFormContext();
+  const formInput = parentFormState?.getValues();
 
   const { submitForm } = useFormContext();
 
@@ -109,7 +110,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
       itemsAndDetailsState.setViewItemActionsVisibility(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps, max-len
-  }, [JSON.stringify(changeRequest?.documentRevisions.map((docRev: DocumentRevision) => docRev.id) ?? []), changeRequest?.formInput]);
+  }, [JSON.stringify(changeRequest?.documentRevisions.map((docRev: DocumentRevision) => docRev.id) ?? []), formInput]);
 
   const processChangeRequest = () => {
     let currentDocRevPresent = false;
@@ -117,7 +118,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
     if (changeRequest) {
       const documentRevisionsData = changeRequest.documentRevisions;
 
-      const documentRevisionsAssigned = (changeRequest.formInput?.documentRevisions ?? []) as FBDocumentRevisionsValue[];
+      const documentRevisionsAssigned = (formInput?.documentRevisions ?? []) as FBDocumentRevisionsValue[];
       // Happens only when one of the expressAR options is chosen, not when viewing from the link
       if (currentDocRevId) {
         currentDocRevPresent = documentRevisionsAssigned.some(docRev => docRev.proposedDocumentRevision.id === currentDocRevId);
