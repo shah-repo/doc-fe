@@ -176,7 +176,9 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   };
 
   const isLotTransferAdded = editedLotTransfer?.[MODE_FIELD] === Mode.add;
-  const serverAutomationLotTransferBy = 'a39f2748-8d77-4a16-82e2-493673965f6a';
+
+  // Value for serverAutomationLotTransferBy will be static and same for all envs.
+  const serverAutomationLotTransferBy = '541dce6c-97bf-43b5-9aeb-b58b2ecb4371';
 
   const transferList = transfers.reduce((list, transfer) => {
     const isLotTransferEdited = editedLotTransfer && editedLotTransfer.id === transfer.id;
