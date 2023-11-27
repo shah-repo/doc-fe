@@ -47,6 +47,8 @@ export const IntegerNumberCell: React.FunctionComponent<GridCellProps> = ({
   if (rowType === 'groupHeader') {
     return null;
   }
+  const max = field !== 'startingNumber' ? undefined : Math.pow(10, dataItem.numOfDocDigits) - 1;
+
   return (
     <td
       colSpan={colSpan}
@@ -59,6 +61,7 @@ export const IntegerNumberCell: React.FunctionComponent<GridCellProps> = ({
         <NumericTextBox
           id="k-input-dtm-sn"
           min={0}
+          max={max}
           format="0"
           defaultValue={dataValue}
           onChange={handleChange}
