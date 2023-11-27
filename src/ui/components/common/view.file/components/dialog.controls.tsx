@@ -10,7 +10,7 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
   attachment = {},
   attachments,
 }) => {
-  const setFile = useContext(SetFile);
+  const setFile = useContext(SetFile ?? {});
   const { setPreviousAttachment, setNextAttachment } = useMemo(() => {
     const viewableFiles = attachments.filter((item) => checkIfFileIsViewable(item.type));
     if (viewableFiles.length === 1) {

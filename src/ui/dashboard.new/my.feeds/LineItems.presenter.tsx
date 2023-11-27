@@ -25,6 +25,7 @@ import PendingReview from '../line.items/approvals/pending.review/pendingReview'
 import ARTaskApproval from '../line.items/approvals/task.approval/taskApproval';
 import CalibrationItem from '../line.items/calibration/calibrationItem';
 import DefaultLineItem from '../line.items/default/defaultLineItem';
+import TaskAssignedItemPresenter from '../line.items/disposition.tasks/taskAssignedItem';
 import POApproverActions from '../line.items/purchase.order/approver.actions/approverActions';
 import PurchaseOrder from '../line.items/purchase.order/default/purchaseOrder';
 import PurchaseOrderPendingReview from '../line.items/purchase.order/pending.review/purchaseOrder';
@@ -573,6 +574,33 @@ const LineItemsPresenter: React.FC<Props> = ({
                   />
                 );
               }
+              break;
+            case ActionTypes.DISPOSITION_TASKS_ASSIGNED:
+              return (
+                <TaskAssignedItemPresenter
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  type={pendingAction.type}
+                  arOwnerName={pendingAction.arOwnerName}
+                  arOwnerAvatar={pendingAction.arOwnerAvatar}
+                  arOwnerInitialColor={pendingAction.arOwnerInitialColor}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime,
+                  )}
+                  status={pendingAction.taskStatus}
+                  instruction={pendingAction.taskInstruction}
+                  arTitle={pendingAction.arTitle}
+                  arId={pendingAction.arId}
+                  arChangeRequestId={pendingAction.arChangeRequestId}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
+                  isPinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                />
+              );
               // falls through
             default:
               return (

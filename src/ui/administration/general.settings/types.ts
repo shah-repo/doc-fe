@@ -9,6 +9,7 @@ export enum GeneralSettingsTabs {
   Navigation = 'Navigation',
   APITokens = 'API Tokens',
   AR = 'Approval Requests',
+  MD = 'Material Disposition',
 }
 
 export interface GeneralSettingsProps {

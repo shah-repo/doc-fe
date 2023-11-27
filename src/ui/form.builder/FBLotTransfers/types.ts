@@ -1,8 +1,8 @@
 import { FBInputProps } from '..';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks/documentRevisions/types';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD } from './constants';
 
 export interface SchemaOptions {
@@ -50,6 +50,7 @@ export enum LotTransferType {
   Move = 'move',
   Issue = 'issue',
   Backflush='backflush',
+  Scrap='scrap',
 }
 
 export interface LotTransfer {
