@@ -37,6 +37,7 @@ export interface RelatedPartsListItem {
   revision?: number
   displayRevision?: string
   revisionChangeType?: RevisionChangeType
+  whereUsedCount: number
 }
 
 export interface ListItemEdited {

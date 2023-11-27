@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
 import cx from 'classnames';
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import React, { MouseEvent, MouseEventHandler, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
@@ -21,6 +21,14 @@ import useDialog from '../../hooks/useDialog';
 import useStyles from './ApprovalRequestGrid.styles';
 import { generateDocTitleText } from './helpers';
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
+
+interface IDocRelatedPart {
+  revId: string
+  titleText: string
+  documentId: string
+  revisionChangeType?: RevisionChangeType
+  whereUsedCount: number
+}
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem
@@ -44,9 +52,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   const isWhereUsedTreeExist = (whereUsedView ?? []).length > 1;
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
-  const [docRelatedParts, setDocRelatedParts]
-    = useState<Array<{revId: string, titleText: string, documentId: string, revisionChangeType?: RevisionChangeType}>>([]);
+  const [docRelatedParts, setDocRelatedParts] = useState<IDocRelatedPart[]>([]);
   const [isExpanded, setExpanded] = useState(false);
+
+  const [whereUsedDocRevId, setWhereUsedDocRevId] = useState(docRevId);
 
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
   documentDetailsApi.setUrl({
@@ -56,7 +65,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
 
   const getRelatedParts = async (documentRevisionId, displayRevision) => {
     // get the related parts for this document.
-    documentDetailsApi.setUrl(`${RELATED_PARTS_ROOT_URL}/${documentRevisionId}`);
+    documentDetailsApi.setUrl(`${RELATED_PARTS_ROOT_URL}/${documentRevisionId}?getWhereUsedStatus=true`);
     const relatedPartsResponse: RelatedPartsListItem[] = await documentDetailsApi.fetch();
     if (relatedPartsResponse.length > 0) {
       const childrenDetails = relatedPartsResponse
@@ -69,6 +78,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
             documentId: part.documentId,
             titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
             revisionChangeType: part.revisionChangeType,
+            whereUsedCount: part.whereUsedCount,
           }
         ));
       setDocRelatedParts(childrenDetails);
@@ -112,9 +122,12 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   };
 
   const whereUsedDialog = useDialog();
-  const openWhereUsedDialog: MouseEventHandler = (e) => {
-    isWhereUsedTreeExist && whereUsedDialog.open();
+  const openWhereUsedDialog = (e: MouseEvent, docRevId?: string) => {
     e.stopPropagation();
+    if (docRevId) {
+      setWhereUsedDocRevId(docRevId);
+    }
+    whereUsedDialog.open();
   };
   const closeWhereUsedDialog: MouseEventHandler = (e) => {
     whereUsedDialog.close();
@@ -171,7 +184,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
         </div>
         <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
-          <FontAwesomeIcon icon={isWhereUsedTreeExist ? solid('circle') : regular('circle')} data-cy="view-where-used" onClick={openWhereUsedDialog} className={classes.dot} />
+          <FontAwesomeIcon icon={isWhereUsedTreeExist ? solid('circle') : regular('circle')} data-cy="view-where-used"
+            onClick={e => isWhereUsedTreeExist && openWhereUsedDialog(e)} className={classes.dot} />
         </div>
       </div>
       {
@@ -190,13 +204,14 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
                     onClick={(event) => {
                       event.stopPropagation();
                     }}
-                  >
-                    {part.titleText}
+                  > {part.titleText}
                   </Link>
                   {
                     part.revisionChangeType === RevisionChangeType.Obsolete
                      && <InfoIcon color="secondary" />
                   }
+                  <FontAwesomeIcon icon={part.whereUsedCount ? solid('circle') : regular('circle')} data-cy="view-where-used"
+                    onClick={e => part.whereUsedCount > 0 && openWhereUsedDialog(e, part.revId)} className={classes.dot} />
                 </li>
               ))
             }
@@ -206,7 +221,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       {
         whereUsedDialog.isOpen
         && <WhereUsedDialog
-          revId={docRevId}
+          revId={whereUsedDocRevId}
           whereUsedDialog={whereUsedDialog}
           closeDialog = {closeWhereUsedDialog}
           type={WhereUsedType.PART}
