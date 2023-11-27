@@ -19,7 +19,7 @@ import { ActionsCell } from './components/ActionsCell';
 import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer, LotTransferType } from './types';
+import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
 import { getOptionLabel, useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
 
@@ -176,11 +176,12 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
   };
 
   const isLotTransferAdded = editedLotTransfer?.[MODE_FIELD] === Mode.add;
+  const serverAutomationLotTransferBy = 'a39f2748-8d77-4a16-82e2-493673965f6a';
 
   const transferList = transfers.reduce((list, transfer) => {
     const isLotTransferEdited = editedLotTransfer && editedLotTransfer.id === transfer.id;
     const employee = employees.find(employee => employee.id === transfer.by);
-    const employeeName = transfer.type === LotTransferType.Scrap
+    const employeeName = transfer.by === serverAutomationLotTransferBy
       ? translate('common.server.automation')
       : employee?.user?.name ?? EMPTY_VALUE_PLACEHOLDER;
     const build = builds?.find(build => build.id === transfer.build?.id);
