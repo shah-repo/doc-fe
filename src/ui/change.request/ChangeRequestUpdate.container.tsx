@@ -1,4 +1,4 @@
-import { debounce, isEmpty } from 'lodash';
+import { cloneDeep, debounce, isEmpty } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
@@ -36,9 +36,9 @@ interface OwnProps {
   isEditing?: boolean
 }
 
-type ChangeRequestUpdateContainerProps = OwnProps &
-DispatchProps &
-StateProps;
+type ChangeRequestUpdateContainerProps = OwnProps
+& DispatchProps
+& StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
@@ -76,6 +76,9 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     if (canEditChangeRequest && isEditing && isInReview) {
       dispatch(companyActions.setAutosaveConfig(false));
     }
+    return () => {
+      dispatch(companyActions.setAutosaveConfig(true));
+    };
   }, [canEditChangeRequest, isEditing, isInReview, dispatch]);
 
   const async = useAsync<ChangeRequest>({
@@ -108,10 +111,11 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     return <Redirect to={changeRequestPreviewPath(changeRequest.id)} />;
   }
 
-  Object.seal(initialValues);
+  const frozenInitialValues = cloneDeep(initialValues);
+
   const onSubmit = (values: ChangeRequestFormValues) => {
     const dataToSubmit = compareValuesToSubmit(
-      initialValues,
+      frozenInitialValues,
       {
         ...values,
         formInput: formState.getValues(),
@@ -140,7 +144,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const debouncedSubmit = debounce(onSubmit, 1000);
 
   return (
-    <FormContext.Provider value={{ submitOnChange: !isEditing, isEditing }}>
+    <FormContext.Provider value={{ submitOnChange: true, isEditing }}>
       <FBProvider formState={formState}>
         <ChangeRequestFormContainer
           asyncState={async.asyncState}

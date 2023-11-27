@@ -12,7 +12,6 @@ import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import TabChangePromptIfDirty from '../../components/forms/TabChangePromptIfDirty';
 import { FB, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
@@ -131,7 +130,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         doNotPrompt={doNotPrompt}
         onConfirm={handlePromptConfirm}
       />
-      <TabChangePromptIfDirty />
       <SMTemplate
         boxProps={{ className: 'hide-scroll' }}
         templateBoxProps={{ stretchY: '100%' }}
@@ -172,7 +170,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
                       return (
                         <SMBox key={index} pt={0.25}>
-                          <pre style={{ fontSize: '8px', lineHeight: 1 }}><code>{JSON.stringify(formState?.getValues(), null, '  ')}</code></pre>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest
                               && <FBWorkspace
                                 isPortal={false}
