@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
 import cx from 'classnames';
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import React, { MouseEvent, MouseEventHandler, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
@@ -54,6 +54,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
   const [docRelatedParts, setDocRelatedParts] = useState<IDocRelatedPart[]>([]);
   const [isExpanded, setExpanded] = useState(false);
+
+  const [whereUsedDocRevId, setWhereUsedDocRevId] = useState(docRevId);
 
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
   documentDetailsApi.setUrl({
@@ -120,8 +122,11 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   };
 
   const whereUsedDialog = useDialog();
-  const openWhereUsedDialog: MouseEventHandler = (e) => {
+  const openWhereUsedDialog = (e: MouseEvent, docRevId?: string) => {
     e.stopPropagation();
+    if (docRevId) {
+      setWhereUsedDocRevId(docRevId);
+    }
     whereUsedDialog.open();
   };
   const closeWhereUsedDialog: MouseEventHandler = (e) => {
@@ -199,15 +204,14 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
                     onClick={(event) => {
                       event.stopPropagation();
                     }}
-                  >
-                    {part.titleText}
+                  > {part.titleText}
                   </Link>
                   {
                     part.revisionChangeType === RevisionChangeType.Obsolete
                      && <InfoIcon color="secondary" />
                   }
                   <FontAwesomeIcon icon={part.whereUsedCount ? solid('circle') : regular('circle')} data-cy="view-where-used"
-                    onClick={e => part.whereUsedCount > 0 && openWhereUsedDialog(e)} className={classes.dot} />
+                    onClick={e => part.whereUsedCount > 0 && openWhereUsedDialog(e, part.revId)} className={classes.dot} />
                 </li>
               ))
             }
@@ -217,7 +221,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       {
         whereUsedDialog.isOpen
         && <WhereUsedDialog
-          revId={docRevId}
+          revId={whereUsedDocRevId}
           whereUsedDialog={whereUsedDialog}
           closeDialog = {closeWhereUsedDialog}
           type={WhereUsedType.PART}
