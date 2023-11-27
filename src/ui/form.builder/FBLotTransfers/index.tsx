@@ -16,7 +16,7 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import FBInput from '../FBInput/FBInput';
 import { ActionsCell } from './components/ActionsCell';
-import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_FIELD } from './constants';
+import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_FIELD, SERVER_AUTOMATION_LOT_TRANSFER_BY } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
@@ -177,13 +177,10 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
   const isLotTransferAdded = editedLotTransfer?.[MODE_FIELD] === Mode.add;
 
-  // Value for serverAutomationLotTransferBy will be static and same for all envs.
-  const serverAutomationLotTransferBy = '541dce6c-97bf-43b5-9aeb-b58b2ecb4371';
-
   const transferList = transfers.reduce((list, transfer) => {
     const isLotTransferEdited = editedLotTransfer && editedLotTransfer.id === transfer.id;
     const employee = employees.find(employee => employee.id === transfer.by);
-    const employeeName = transfer.by === serverAutomationLotTransferBy
+    const employeeName = transfer.by === SERVER_AUTOMATION_LOT_TRANSFER_BY
       ? translate('common.server.automation')
       : employee?.user?.name ?? EMPTY_VALUE_PLACEHOLDER;
     const build = builds?.find(build => build.id === transfer.build?.id);
