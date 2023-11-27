@@ -4,15 +4,17 @@ import React, { useEffect, useRef } from 'react';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
-import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from '../../form.builder';
+import { FB, FBFormState, FBWorkspaceModeOptions } from '../../form.builder';
 import ItemsAndDetailsState from '../items.and.details/ItemsAndDetails.state';
 import ItemsAndDetails from './ItemsAndDetails';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from './ItemsAndDetails.types';
 import { formDataToStoreData, storeDataToFormData } from './helpers';
 
-const ItemsAndDetailsContainer: React.FunctionComponent<
-ItemsAndDetailsWrapperProps & {name: string}
-> = ({
+interface Props extends ItemsAndDetailsWrapperProps {
+  name: string
+}
+
+const ItemsAndDetailsContainer: React.FC<Props> = ({
   currentDocRevId,
   changeRequest,
   name,
@@ -72,6 +74,7 @@ ItemsAndDetailsWrapperProps & {name: string}
 
   const submitData = (dataToSend) => {
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
+
     if (autosave && !formContext.isEditing) {
       submitForm();
       itemsAndDetailsState.setLoadingState(true);
@@ -91,8 +94,7 @@ ItemsAndDetailsWrapperProps & {name: string}
 
   useEffect(() => {
     initialAsyncStatus.current = asyncState?.status;
-    if (asyncState && (asyncState.status === AsyncStatus.Success
-      || asyncState.status === AsyncStatus.Error)) {
+    if (asyncState && (asyncState.status === AsyncStatus.Success || asyncState.status === AsyncStatus.Error)) {
       // i.e. processing completed
       itemsAndDetailsState.setLoadingState(false);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
@@ -111,15 +113,14 @@ ItemsAndDetailsWrapperProps & {name: string}
 
   const processChangeRequest = () => {
     let currentDocRevPresent = false;
-    let entries: any[] = [];
+    let entries: ApprovalRequestGridItem[] = [];
     if (changeRequest) {
       const documentRevisionsData = changeRequest.documentRevisions;
 
-      const documentRevisionsAssigned: FBDocumentRevisionsValue[] = changeRequest.formInput?.documentRevisions ?? [];
+      const documentRevisionsAssigned = (changeRequest.formInput?.documentRevisions ?? []) as FBDocumentRevisionsValue[];
       // Happens only when one of the expressAR options is chosen, not when viewing from the link
       if (currentDocRevId) {
-        currentDocRevPresent = documentRevisionsAssigned.findIndex(
-          (docRev: FBDocumentRevisionsValue) => (docRev.proposedDocumentRevision.id === currentDocRevId)) !== -1;
+        currentDocRevPresent = documentRevisionsAssigned.some(docRev => docRev.proposedDocumentRevision.id === currentDocRevId);
       }
 
       entries = formDataToStoreData(documentRevisionsAssigned, documentRevisionsData);
@@ -136,35 +137,20 @@ ItemsAndDetailsWrapperProps & {name: string}
 
   return useObserver(() => (
     <ItemsAndDetails
-      changeRequest = {changeRequest}
-      formState = {formState}
-      handleAdd = {handleAdd}
-      handleRemove = {handleRemove}
-      handleUpdate = {handleUpdate}
-      itemsAndDetailsState = {itemsAndDetailsState}
+      {...{
+        changeRequest,
+        formState,
+        handleAdd,
+        handleRemove,
+        handleUpdate,
+        itemsAndDetailsState,
+      }}
     />
   ));
 };
 
-const ItemsAndDetailsWrapper: React.FunctionComponent<ItemsAndDetailsWrapperProps> = ({
-  changeRequest,
-  initialValues,
-  autosave,
-  mode,
-  asyncState,
-  currentDocRevId,
-}) => (
-  <FBForm {...{ initialValues }}>
-    <ItemsAndDetailsContainer
-      currentDocRevId={currentDocRevId}
-      changeRequest={changeRequest}
-      name="documentRevisions"
-      autosave={autosave}
-      initialValues={initialValues}
-      mode={mode}
-      asyncState={asyncState}
-    />
-  </FBForm>
+const ItemsAndDetailsWrapper: React.FunctionComponent<ItemsAndDetailsWrapperProps> = (props) => (
+  <ItemsAndDetailsContainer name="documentRevisions" {...props} />
 );
 
 export default ItemsAndDetailsWrapper;
