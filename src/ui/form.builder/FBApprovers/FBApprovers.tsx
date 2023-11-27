@@ -29,7 +29,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       gutter={false}
       omitFormValue={true}
       name={`fb-approvers-${name}`}
-      {...{ loading, renderOption, defaultValue, disabled, autosave, onBlur  }}
+      {...{ loading, renderOption, defaultValue, disabled, autosave, onBlur }}
     />
     <Box display="flex" flexDirection="row" flexWrap="wrap">
       <Box display="flex" flexWrap="wrap" >
@@ -45,9 +45,9 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
         </FBMapWrapper>
       </Box>
       <Box flexBasis="100%" >
-        {changeRequestApprovals && changeRequestApprovals.length > 0
-      && <Approvers dataProp={changeRequestApprovals} />
-        }
+        {changeRequestApprovals && changeRequestApprovals.length > 0 && (
+          <Approvers dataProp={changeRequestApprovals} />
+        )}
       </Box>
     </Box>
   </FBInput>
