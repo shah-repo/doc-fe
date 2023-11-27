@@ -65,7 +65,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
 
   const getRelatedParts = async (documentRevisionId, displayRevision) => {
     // get the related parts for this document.
-    documentDetailsApi.setUrl(`${RELATED_PARTS_ROOT_URL}/${documentRevisionId}?getWhereUsedStatus=true`);
+    documentDetailsApi.setUrl(`${RELATED_PARTS_ROOT_URL}/${documentRevisionId}?isGetWhereUsedStatus=true`);
     const relatedPartsResponse: RelatedPartsListItem[] = await documentDetailsApi.fetch();
     if (relatedPartsResponse.length > 0) {
       const childrenDetails = relatedPartsResponse
