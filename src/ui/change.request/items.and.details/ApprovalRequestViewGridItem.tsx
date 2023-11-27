@@ -12,11 +12,11 @@ import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '..
 import { RELATED_PARTS_ROOT_URL } from '../../../state/ducks/relatedParts/constants';
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import Tooltip from '../../components/common/kendo/Tooltip';
+import WhereUsedDialog, { WhereUsedType } from '../../components/whereUsed/WhereUsedDialog';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../form.builder';
 import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
 import FBRequest from '../../form.builder/FBApi/FBApi.request';
-import WhereUsedDialog from '../../form.builder/FBBOM/components/treelist/WhereUsedDialog';
 import useDialog from '../../hooks/useDialog';
 import useStyles from './ApprovalRequestGrid.styles';
 import { generateDocTitleText } from './helpers';
@@ -206,9 +206,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       {
         whereUsedDialog.isOpen
         && <WhereUsedDialog
-          docRevId={docRevId}
+          revId={docRevId}
           whereUsedDialog={whereUsedDialog}
           closeDialog = {closeWhereUsedDialog}
+          type={WhereUsedType.PART}
         />
       }
     </div>
