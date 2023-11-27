@@ -20,8 +20,8 @@ import { toastError, toastSuccess } from '../../notifications';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 
 const SELECTED_FIELD = 'print';
+const initialSelectedParams = ['partDocId', 'revision', 'description', 'lotNumber', 'serial', 'actor', 'printDate'];
 export const printColumnProps: KendoColumnProps = { field: SELECTED_FIELD, title: toUpper(SELECTED_FIELD), show: true, sortable: false, locked: true, width: 80 };
-export const initialSelectedParams = ['partDocId', 'revision', 'description', 'lotNumber', 'serial', 'actor', 'printDate'];
 export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogProps>(
   Component: React.FunctionComponent<T>,
 ) => {
