@@ -1,6 +1,6 @@
 import { cloneDeep, debounce, isEmpty } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { authSelectors } from '../../state/ducks/auth';
 import { changeRequestsActions } from '../../state/ducks/changeRequest';
@@ -62,7 +62,6 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, isEditing);
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
-  const dispatch = useDispatch();
 
   useEffect(() => {
     FBDataStore?.setRefreshData({
@@ -94,7 +93,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       loadAudit(changeRequest.id);
 
       if (isEditing) {
-        dispatch(companyActions.setAutosaveConfig(true));
+        setAutosave(true);
         history.push(changeRequestPreviewPath(changeRequest.id));
       }
     },
