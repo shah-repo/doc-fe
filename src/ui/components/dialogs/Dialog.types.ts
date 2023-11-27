@@ -29,11 +29,11 @@ export interface DialogProps extends Omit<MuiDialogProps, 'title' | 'onClose'> {
   onConfirm?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: {
-    bivarianceHack(event: {}, reason: DialogCloseReason): void
+    bivarianceHack: (event: {}, reason: DialogCloseReason) => void
   }['bivarianceHack']
 }
 
 export type DialogActionsProps = Pick<
-  DialogProps,
-  'confirmLabel' | 'onConfirm' | 'cancelLabel' | 'onCancel' | 'confirmProps' | 'cancelProps'
+DialogProps,
+'confirmLabel' | 'onConfirm' | 'cancelLabel' | 'onCancel' | 'confirmProps' | 'cancelProps'
 >;

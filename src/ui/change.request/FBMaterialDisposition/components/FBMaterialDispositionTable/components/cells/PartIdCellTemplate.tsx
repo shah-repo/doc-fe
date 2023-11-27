@@ -10,7 +10,7 @@ export const PartIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem, field, onClick } = props;
 
-  const { partDocId, basePartDocRevId } = dataItem;
+  const { partDocId, partDocRevId } = dataItem;
   const fieldValue = dataItem[field];
 
   return (
@@ -19,7 +19,7 @@ export const PartIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
         data={fieldValue}
         childrenElement={
           <Link
-            to={documentPreviewPath(basePartDocRevId, partDocId)}
+            to={documentPreviewPath(partDocRevId, partDocId)}
             target="_blank"
             className={classes.link}
           >
