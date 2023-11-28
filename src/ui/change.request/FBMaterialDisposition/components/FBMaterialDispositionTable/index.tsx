@@ -4,16 +4,18 @@ import { Grid, Typography } from '@material-ui/core';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { FormikProvider, useFormik } from 'formik';
-import { map, omit, pick } from 'lodash';
+import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import { isEmpty, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { ChangeRequest } from '../../../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import { useFormContext } from '../../../../components/forms/FormContext';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -23,6 +25,7 @@ import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleT
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
+import { changeRequestPreviewPath } from '../../../utils/paths';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
 import { DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK } from './constants';
 import { buildSchema } from './schema';
@@ -33,16 +36,18 @@ import { getExcelColumns } from './utils';
 interface props {
   changeRequest?: ChangeRequest
   isShowOnly?: boolean
+  setDoNotPrompt?: (state: boolean) => void
 }
 
-const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly }) => {
+const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly, setDoNotPrompt }) => {
   const classes = useStyles();
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
+  const isEditMode = React.useRef<boolean>(false);
   const [data, setData] = React.useState<EditableMDItem[]>([]);
   const settings = useSelector(companySelectors.getGeneralSettings);
 
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
-    if (isShowOnly) {
+    if (isShowOnly || formik.dirty || isEditMode.current) {
       return;
     }
     const updatedDataItem = omit(dataItem, DROPDOWN_FIELDS);
@@ -62,6 +67,10 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     return columns.filter(({ show }) => show);
   };
   const dialog = useDialog();
+  const formContext = useFormContext();
+  const parentFormik = useFormikContext();
+  const [dataToSubmit, setDataToSubmit] = React.useState<Partial<EditableMDItem>>({});
+  const history = useHistory();
 
   const load = useActionCreator(materialDispositionActions.loadMaterialDispositionList);
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
@@ -76,6 +85,9 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     onSuccess: (response) => {
       if (response?.affected > 0) {
         materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
+        if (formContext.isEditing) {
+          history.push(changeRequestPreviewPath(changeRequest?.id ?? ''));
+        }
       }
     },
     onError: toastError,
@@ -88,6 +100,21 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   useEffect(() => {
     fetchMaterialDispositionTableData();
   }, []);
+
+  const updateUnsavedData = (values: Partial<EditableMDItem>) => {
+    isEditMode.current = true;
+    setDataToSubmit(values);
+    setData(prev => {
+      return prev.map(item => {
+        if (item.id === values.id) {
+          return {
+            ...(values as EditableMDItem),
+          };
+        }
+        return item;
+      });
+    });
+  };
 
   const formik = useFormik<Partial<EditableMDItem>>({
     initialValues: {},
@@ -102,7 +129,11 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       if (count > 1 && settings?.shouldAutoUpdateLotStatus) {
         onOpen();
       } else {
-        updateMaterialDispositionTableData();
+        if (formContext.isEditing) {
+          updateUnsavedData(values);
+        } else {
+          updateMaterialDispositionTableData(values);
+        }
         discardMDItem();
       }
     },
@@ -110,14 +141,17 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const { submitForm, resetForm, setValues } = formik;
 
-  const updateMaterialDispositionTableData = () => {
-    const values = formik.values;
+  const updateMaterialDispositionTableData = (values: Partial<EditableMDItem>) => {
     const partToSave = pick(values, FIELDS_TO_PICK);
     partAsync.start(updateItem, changeRequest?.id, values.id, partToSave, partAsync);
   };
 
   const onConfirm = () => {
-    updateMaterialDispositionTableData();
+    if (formContext.isEditing) {
+      updateUnsavedData(formik.values);
+    } else {
+      updateMaterialDispositionTableData(formik.values);
+    }
     dialog.close();
     discardMDItem();
   };
@@ -129,6 +163,13 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   useEffect(() => {
     resetForm({ values: editedMDItem ?? {} });
   }, [editedMDItem, setValues, resetForm]);
+
+  useEffect(() => {
+    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(dataToSubmit)) {
+      setDoNotPrompt?.(true);
+      updateMaterialDispositionTableData(dataToSubmit);
+    }
+  }, [parentFormik.isSubmitting]);
 
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
