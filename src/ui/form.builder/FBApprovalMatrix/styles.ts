@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { Colors } from '../../layout/theme-next';
 
 export default makeStyles(() => ({
   buttonFullscreen: {
@@ -29,5 +30,8 @@ export default makeStyles(() => ({
   dialogContentStyle: {
     display: 'flex',
     flexDirection: 'column',
+  },
+  error: {
+    color: Colors.error,
   },
 }));
