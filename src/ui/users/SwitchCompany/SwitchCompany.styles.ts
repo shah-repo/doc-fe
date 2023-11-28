@@ -54,10 +54,14 @@ export const styles = makeStyles((theme: NextTheme) =>
     companyName: {
       margin: '18px 0 18px 16px',
     },
+    switchclosemobile: {
+      display: 'none',
+    },
     [theme.media.mobile]: {
       container: {
         width: '100%',
         padding: theme.spacing(3),
+        marginTop: 2,
       },
       title: {
         textAlign: 'center',
@@ -67,6 +71,16 @@ export const styles = makeStyles((theme: NextTheme) =>
       },
       companyButton: {
         width: '100%',
+      },
+      switchclosemobile: {
+        width: 30,
+        height: 30,
+        top: 10,
+        padding: theme.spacing(1),
+        borderRadius: 4,
+        backgroundColor: '#EBEFF7',
+        marginLeft: '90%',
+        display: 'unset',
       },
     },
   }),
