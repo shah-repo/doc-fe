@@ -41,9 +41,8 @@ const InputCellTemplate: CellTemplate = (props) => {
   const handleBlur: InputProps['onBlur'] = (event) => {
     if (required && !event.currentTarget.value) {
       setError('validators.required');
-    } else {
-      setError('');
-    }
+      return;
+    } setError('');
   };
 
   if (!canBeModified) {
