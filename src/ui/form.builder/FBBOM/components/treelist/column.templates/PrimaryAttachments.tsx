@@ -58,7 +58,7 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
     >
       {type && (
         <Tooltip title={fileName} placement="top" arrow>
-          <span onClick={downloadOrViewFile}>
+          <span onClick={downloadOrViewFile} className={classes.attachmentContainer}>
             {async.isLoading && (
               <CircularProgress className={classes.progress} />
             )}

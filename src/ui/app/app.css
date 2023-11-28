@@ -78,7 +78,7 @@
 
 .containing-box-scrollbar::-webkit-scrollbar {
   background-color: transparent;
-  width: 6px;
+  width: 9px !important;
   height: 9px !important;
 }
 

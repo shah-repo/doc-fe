@@ -25,7 +25,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     const { taskState } = FB.useStores();
     const { id } = workspaceState || {};
 
-    function handleAdd() {
+    function handleAdd () {
       if (!id) {
         toastError('Please save the document first.');
         return handleCancel();
@@ -41,7 +41,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
       formik?.resetForm();
     }
 
-    function handleAddDescription() {
+    function handleAddDescription () {
       const formValue = formState?.getValues();
       taskState?.setTask({
         ...pick(formValue, ['id', 'dueDate']),
@@ -55,11 +55,11 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
           id: formValue?.assigned.id,
         },
         fieldId: name,
-        partOf: { id },
+        partOfId: { id },
       } as FBTaskItem);
     }
 
-    function handleAddNote() {
+    function handleAddNote () {
       const formValues = formState?.getValues() as FBClosingNoteProps;
       const task = {
         id: formValues.id,
@@ -68,7 +68,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
       taskState?.finishTask(task);
     }
 
-    function handleCancel() {
+    function handleCancel () {
       dialogState?.closeDialog();
     }
 

@@ -40,7 +40,7 @@ import {
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
@@ -99,6 +99,27 @@ import {
   updateDataAtLevels,
 } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
+
+const TimeoutRendering: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [rendered, setRendered] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(
+      () => {
+        setRendered(true);
+      },
+      500,
+    );
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!rendered) {
+    return null;
+  }
+
+  return children;
+};
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({
   documentRevision,
@@ -655,11 +676,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       || (!inRestrictedEditMode && !item.isParentOwner)
       || disableEditInRestrictedEditMode(item);
     if (showWithoutActions) {
-      return React.cloneElement(row, {
-        ...modifiedProps,
-        ['data-cy' as string]: `bom-row-${item.docId}`,
-        ['data-parent-rel' as string]: parentChildRelkey,
-      });
+      return (
+        <TimeoutRendering>
+          {React.cloneElement(row, {
+            ...modifiedProps,
+            ['data-cy' as string]: `bom-row-${item.docId}`,
+            ['data-parent-rel' as string]: parentChildRelkey,
+          })}
+        </TimeoutRendering>
+      );
     }
     const isOwner = item.isOwner;
     const isAddPartEnabled
@@ -690,15 +715,19 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       </td>
     );
 
-    return React.cloneElement(
-      row,
-      {
-        ...modifiedProps,
-        ['data-cy' as string]: `bom-row-${item.docId}`,
-        ['data-parent-rel' as string]: parentChildRelkey,
-        className: cx(row.props.className, classes.updatingRow),
-      },
-      [row.props.children, actions],
+    return (
+      <TimeoutRendering>
+        {React.cloneElement(
+          row,
+          {
+            ...modifiedProps,
+            ['data-cy' as string]: `bom-row-${item.docId}`,
+            ['data-parent-rel' as string]: parentChildRelkey,
+            className: cx(row.props.className, classes.updatingRow),
+          },
+          [row.props.children, actions],
+        )}
+      </TimeoutRendering>
     );
   };
 
