@@ -1,6 +1,6 @@
 import { GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { useFormik, useFormikContext } from 'formik';
-import { cloneDeep, isArray, isEmpty, omit } from 'lodash';
+import { cloneDeep, isArray, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { companyActions } from '../../../../../state/ducks/company';
@@ -36,13 +36,13 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
           newDataResult[index] = values;
           const fValues: GeneralSettings = cloneDeep(formValues);
           fValues.zebraPrint = newDataResult;
-          dispatch(companyActions.updateGeneralSettings(omit(fValues, 'id'), formValues.id, 'PUT'));
+          dispatch(companyActions.updateGeneralSettings(fValues, formValues.id, 'PUT'));
         } else {
           values.printer.isActive = true;
           const newData = cloneDeep(dataResult);
           newData.push(values);
           formValues.zebraPrint = newData;
-          dispatch(companyActions.updateGeneralSettings(omit(formValues, 'id')));
+          dispatch(companyActions.updateGeneralSettings(formValues));
         }
         setIsOpen(false);
       },
@@ -69,7 +69,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       const newData = dataResult.filter(item => item.apiKey !== deleteData.apiKey);
       const fValues: GeneralSettings = cloneDeep(formValues);
       fValues.zebraPrint = newData;
-      dispatch(companyActions.updateGeneralSettings(omit(fValues, 'id'), formValues.id, 'PUT'));
+      dispatch(companyActions.updateGeneralSettings(fValues, formValues.id, 'PUT'));
       confirmationDialog.close();
     };
 
@@ -94,7 +94,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
         setDataResult(dataItems);
         const fValues: GeneralSettings = cloneDeep(formValues);
         fValues.zebraPrint = dataItems;
-        dispatch(companyActions.updateGeneralSettings(omit(fValues, 'id'), formValues.id, 'PUT'));
+        dispatch(companyActions.updateGeneralSettings(fValues, formValues.id, 'PUT'));
       }
     };
 

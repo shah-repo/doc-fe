@@ -155,7 +155,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onLabelTypeChange = (event: React.ChangeEvent<HTMLSelectElement>, value: labelTemplatesProps) => {
-      setLabelTemplate(value.name);
+      setLabelTemplate(value.id);
     };
 
     const onFieldCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
