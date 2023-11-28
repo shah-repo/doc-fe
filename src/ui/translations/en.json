@@ -1665,7 +1665,7 @@
   "approvalRequest.material.disposition.refresh.date": "As of {date}",
   "approvalRequest.material.disposition.refresh": "Refresh",
   "approvalRequest.material.disposition.warning.alert": "The Lot Status and part revision will not be auto updated in the Lot item as there are conflicting selections.\n\nWould you like to proceed?",
-  "approvalRequest.material.disposition.options.mustConform": "Must conform",
+  "approvalRequest.material.disposition.options.mustConform": "Must conform (Approved per specification)",
   "approvalRequest.material.disposition.options.rework": "Rework",
   "approvalRequest.material.disposition.options.useAsIs": "Use as-is",
   "approvalRequest.material.disposition.options.reInspect": "Re-inspect",
