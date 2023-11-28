@@ -84,6 +84,12 @@ export default (theme: NextTheme) =>
         backgroundColor: Colors.dark_gray2,
         width: 200,
         marginLeft: 12,
+        marginTop: 10,
+        marginBottom: 10,
+      },
+      userSideProfile: {
+        height: 40,
+        paddingLeft: theme.spacing(0.5),
       },
     },
   });

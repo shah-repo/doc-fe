@@ -81,7 +81,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
   >
     <Grid container wrap="nowrap" spacing={2} className={classes.mobileUserProfile}>
       <List>
-        <ListItem>
+        <ListItem className={classes.userSideProfile}>
           <Grid item>
             <ListItemAvatar className={classes.listItemAvatar}>
               <UserAvatar {...{ avatar, initialColor, name }} />
@@ -93,7 +93,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
           </Grid>
         </ListItem>
         <Divider className={classes.hrLine} />
-        <ListItem>
+        <ListItem className={classes.userSideProfile}>
           <MenuItem onClick={handleSwitchCompany} className={classes.menu}>
             <ListItemIcon className={classes.listItemIcon}>
               <FontAwesomeIcon className={classes.icon} icon={light('arrow-up-arrow-down')} rotation={90} />
@@ -103,7 +103,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
             </ListItemText>
           </MenuItem>
         </ListItem>
-        <ListItem>
+        <ListItem className={classes.userSideProfile}>
           <MenuItem
             data-cy="header.logout"
             onClick={handleLogout}
