@@ -69,38 +69,6 @@ const getGeneralSettings = (): ApiAction => apiAction({
   url: COMPANY_SETTINGS_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
-    console.log('--data---', { data });
-    data = {
-      createdAt: '2023-10-11T12:06:51.419Z',
-      updatedAt: '2023-10-26T10:36:36.686Z',
-      id: '238bf130-f652-43b7-970d-a83f8b807349',
-      companyId: 'cdce82eb-bf68-481e-af5f-f9c16853d7c0',
-      zebraPrint: [
-          {
-            apiKey: '1111C0focWIzjJFEL2Yai3VioUNGYvEeCBXN',
-          printer:
-              {
-labelTemplates: [{ id: 'Type1', name: 'Type 1, 3.4" x 1"' }, { id: 'Type2', name: 'Type 2, 4" x 2"' }],
-                  sn: '111111111',
-                  isActive: true,
-                  name: '1111'
-              },
-          tenantId: 'bb42c8d2b03adda0adf0b1c0029ceffd'
-        },
-          {
-            apiKey: '2222C0focWIzjJFEL2Yai3VioUNGYvEeCBXN',
-          printer:
-              {
-labelTemplates: [{ id: 'Type1', name: 'Type 1, 3.4" x 1"' }, { id: 'Type2', name: 'Type 2, 4" x 2"' }],
-                  'sn': '22222222',
-                  'isActive': true,
-                  name: '22222 testing name er ere r ere reeeaaa'
-              },
-          tenantId: 'bb42c8d2b03adda0adf0b1c0029ceffd'
-        },
-        ],
-      approvalRequestAdmin: true, shouldAutoUpdateLotStatus: false
-  };
     dispatch(setGeneralSettings(data));
   },
 });
