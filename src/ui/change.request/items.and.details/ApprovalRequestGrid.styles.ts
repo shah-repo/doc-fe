@@ -255,7 +255,7 @@ export default makeStyles((theme) =>
       paddingBottom: theme.spacing(1.75),
     },
     docListItem: {
-      padding: theme.spacing(0.75, 0),
+      padding: theme.spacing(0.75, 3, 0.75, 0),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',

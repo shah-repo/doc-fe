@@ -26,4 +26,8 @@ export default makeStyles(() => ({
   fullScreen: {
     height: '100%',
   },
+  dialogContentStyle: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
 }));

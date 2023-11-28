@@ -1,5 +1,5 @@
 import { Button, Grid } from '@material-ui/core';
-import { FilterDescriptor, process, State } from '@progress/kendo-data-query';
+import { FilterDescriptor, State, process } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import {
   GridColumn,
@@ -20,22 +20,22 @@ import { useDispatch } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
 import Config from '../../../config';
 import { documentTypeActions } from '../../../state/ducks/documentRevisions/documentType';
-import { DocumentType, DOC_TYPE_GROUP_OPTION, GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP_OPTION, DocumentType, GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
+import Text from '../../components/Text';
 import CellRender from '../../components/common/kendo.column.templates/CellRender';
 import { DropdownFilterTemplate } from '../../components/common/kendo.column.templates/DropdownFilterTemplate';
 import ColumnHeader from '../../components/common/kendo/ColumnHeader';
 import ExportListIcon from '../../components/common/kendo/ExportListIcon';
-import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, TranslatedText } from '../../components/common/kendo/helpers';
 import Loader from '../../components/common/kendo/Loader';
 import NoDataFound from '../../components/common/kendo/NoDataFound';
+import { DisplayText, TranslatedText, hideColumnTitleOnResize, hideOperatorTooltip } from '../../components/common/kendo/helpers';
 import { KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
-import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
-import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import { toastError } from '../../components/notifications';
-import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import { TablePanelStateProps } from '../../components/table/types';
-import Text from '../../components/Text';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
@@ -59,14 +59,14 @@ interface DocumentTypeCustom extends DocumentType {
   isNewRecord?: boolean
 }
 interface ResultProps {
-  dataSource: {
+  dataSource: Array<{
     text: string
     value: string | boolean
-  }[]
+  }>
   operator: string
 
 }
-export function KendoPanel({
+export function KendoPanel ({
   gridData,
   gridConfiguration,
   tableName,
@@ -221,7 +221,7 @@ export function KendoPanel({
   };
 
   const DropdownFilterCellTemplate = (props: GridFilterCellProps) => {
-    const result: ResultProps  = getDropDownDataSource(props.field || '');
+    const result: ResultProps = getDropDownDataSource(props.field || '');
     return <DropdownFilterTemplate
       {...props}
       data={result.dataSource}
@@ -327,7 +327,7 @@ export function KendoPanel({
   // On field config: inline edit
   const update = (dataItem: DTMRowItem) => {
     // need to convert
-    dataItem.active = dataItem.active === true || dataItem.active.toString()
+    dataItem.active = dataItem.active || dataItem.active.toString()
     === getTranslatedText(TranslatedText[DisplayText.ACTIVE]);
     const newData = {
       documentTypeName: dataItem.documentTypeName,
@@ -337,7 +337,8 @@ export function KendoPanel({
       isQms: dataItem.isQms,
       needsSignature: dataItem.needsSignature,
       defaultTraining: dataItem.defaultTraining,
-      startingNumber: +dataItem.startingNumber,
+      numOfDocDigits: Number(dataItem.numOfDocDigits),
+      startingNumber: Number(dataItem.startingNumber),
       hiddenForCreationForUsersWithoutTags:
       dataItem.hiddenForCreationForUsersWithoutTagsFormatted,
       group: dataItem.group,
@@ -351,7 +352,6 @@ export function KendoPanel({
     const emptyFields: string[] = gridCellValidation(newData);
     if (!isEmpty(emptyFields)) {
       toastError(`${emptyFields.join(',')} is missing.`);
-      return;
     } else {
       dataItem.inEdit = false;
       onFieldConfig(newData, dataItem.id);
@@ -400,7 +400,6 @@ export function KendoPanel({
     const emptyFields: string[] = gridCellValidation(values);
     if (!isEmpty(emptyFields)) {
       toastError(`${emptyFields.join(',')} is missing.`);
-      return;
     } else {
       const startingNumber = values?.startingNumber;
       values.startingNumber = startingNumber
