@@ -6,14 +6,12 @@ import { documentRevisionsActions } from '../../../state/ducks/documentRevisions
 import { DocumentType, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
-import FormProgress from '../../components/forms/FormProgress';
 import FormWrapper from '../../components/forms/FormWrapper';
 import AutocompleteField from '../../components/forms/fields/Autocomplete/Autocomplete';
 import { checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { DialogHandler } from '../../hooks/useDialog';
-import { docIdAsyncContext } from '../list/CreateDocumentByType';
 import { styles } from './FormListDialog/FormListDialog.styles';
 
 interface DocumentTypeDialogProps extends FormikProps<any> {
@@ -49,12 +47,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
 
-  const docIdAsyncState = React.useContext(docIdAsyncContext);
   const activeDocTypes = documentTypes.filter((type) => type.active);
-
-  const handleSelect = (id: string) => {
-    handleSelection(id);
-  };
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
@@ -109,6 +102,11 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
     }));
   };
 
+  const shouldDisplayLoader
+    = !documentTypes
+      || documentTypes.length === 0
+      || (documentTypes.length === 1 && (!formIds || formIds?.length === 0));
+
   return (
     <>
       {dialog.isOpen
@@ -118,7 +116,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
         onClose={closeMultipleFormDialog}
         classes={{ paper: classes.dialogPaper }}
       >
-        {documentTypes?.length > 0 ? (
+        {!shouldDisplayLoader ? (
           <>
             <DialogTitle>
               <Grid container className={classes.containerWrap}>
@@ -143,7 +141,6 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                 initialValues={initialValues}
                 resetForm={resetForm}
               >
-                <FormProgress asyncState={docIdAsyncState} />
                 <AutocompleteField
                   name="selectType"
                   size="sm"
@@ -156,7 +153,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
                     label: docType.documentTypeName,
                     value: docType.id,
                   }))}
-                  onClick={(option) => handleSelect(option.value)}
+                  onClick={(option) => handleSelection(option.value)}
                   label={isRecord ? 'record.select.type' : 'supplier.select.type' }
                   data-cy={isRecord ? 'record.select.type' : 'supplier.select.type' }
                 />
