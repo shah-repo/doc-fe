@@ -17,7 +17,6 @@ import { documentsActions } from '../../../state/ducks/documents';
 import { DocumentProposedId } from '../../../state/ducks/documents/types';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ApplicationState } from '../../../state/reducers';
-import { AsyncState } from '../../../state/types';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import Text from '../../components/Text';
 import ExportListIcon from '../../components/common/kendo/ExportListIcon';
@@ -30,7 +29,7 @@ import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from '
 import CustomLabelTooltip from '../../hooks/docCustomization/CustomLabelTooltip';
 import { useCreateDocumentByTypeButton } from '../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../hooks/useActionCreator';
-import useAsync, { ASYNC_DEFAULT_STATE } from '../../hooks/useAsync';
+import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import FormListDialog from '../dialogs/FormListDialog/FormListDialog.presenter';
 import MultipleFormTemplateDialog from '../dialogs/MultipleFormTemplateDialog';
@@ -53,8 +52,7 @@ interface Props {
 
 type DocCreator = (form: DocumentRevision) => void;
 
-export let docIdAsyncContext = React.createContext<AsyncState>(ASYNC_DEFAULT_STATE);
-export const useHandleCreateDoc = (selectedDocumentTypeId: string, selectedTypeLabel: string): DocCreator => {
+export const useHandleCreateDoc = (selectedDocumentTypeId: string): DocCreator => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const history = useHistory();
@@ -69,7 +67,6 @@ export const useHandleCreateDoc = (selectedDocumentTypeId: string, selectedTypeL
       toastError(error);
     },
   });
-  docIdAsyncContext = React.createContext(fetchDocIdAsync.asyncState);
   const createDocAction = useActionCreator(documentRevisionsActions.create);
   const createDocAsync = useAsync<DocumentRevision>({
     onSuccess: (documentRevision) => {
@@ -110,11 +107,13 @@ export const useHandleCreateDoc = (selectedDocumentTypeId: string, selectedTypeL
   return (selectedForm: DocumentRevision) => {
     const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
     if (selectedDocumentTypeId) {
+      console.log('selectedDocumentTypeId');
       fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
       setForm(selectedForm);
       return;
     }
     if (outputDocumentTypes.length === 1) {
+      console.log('outputDocumentTypes.length === 1');
       fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
       setForm(selectedForm);
       return;
@@ -154,7 +153,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const selectedTypeLabel = useMemo(() => {
     return documentTypes.find((type) => type.id === selectedDocumentTypeId)?.documentTypeName ?? '';
   }, [documentTypes, selectedDocumentTypeId]);
-  const handleCreateDocument = useHandleCreateDoc(selectedDocumentTypeId, selectedTypeLabel);
+  const handleCreateDocument = useHandleCreateDoc(selectedDocumentTypeId);
 
   const buttonLabel = isByCategory ? labelName : label;
   const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
@@ -215,7 +214,6 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             value: docTypes[0].id,
           }],
         });
-        idAsync.start(getDocRevByIds, docTypes[0].id, idAsync);
         return;
       }
       if (isEmpty(docTypes)) {
@@ -256,8 +254,14 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       return;
     }
     setSelectedDocumentTypeId(docTypeId);
-    idAsync.start(getDocRevByIds, docTypeId, idAsync);
   };
+
+  useEffect(() => {
+    if (selectedDocumentTypeId) {
+      idAsync.start(getDocRevByIds, selectedDocumentTypeId, idAsync);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDocumentTypeId]);
 
   const renderFormListDialog = (props: FormikProps<any>) => (
     <FormListDialog
@@ -374,7 +378,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         )
       }
       <FormContext.Provider value={{ submitOnChange: false }}>
-        <Formik initialValues={initialValues} onSubmit={handleDocTypeSelection}>
+        <Formik initialValues={initialValues} enableReinitialize onSubmit={handleDocTypeSelection}>
           {renderFormTemplateDialog}
         </Formik>
       </FormContext.Provider>
