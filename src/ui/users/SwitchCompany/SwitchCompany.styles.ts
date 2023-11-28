@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core';
+import Colors from '../../layout/theme-next/colors';
 import { NextTheme } from '../../layout/theme-next/provider';
 
 export const styles = makeStyles((theme: NextTheme) =>
@@ -78,7 +79,7 @@ export const styles = makeStyles((theme: NextTheme) =>
         top: 10,
         padding: theme.spacing(1),
         borderRadius: 4,
-        backgroundColor: '#EBEFF7',
+        backgroundColor: Colors.hover,
         marginLeft: '90%',
         display: 'unset',
       },
