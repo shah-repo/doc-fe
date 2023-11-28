@@ -11,6 +11,12 @@ export type FBApprovalMatrixProps =
   size?: Size
 };
 
+export interface FBGridTableContainerProps {
+  isDialog: boolean
+  dialogContentStyle: string
+  onDialogClose: () => void
+}
+
 export enum FBApprovalMatrixRoleTitles {
   stage1 = 'form.builder.approvals.numeric',
   stage2 = 'form.builder.approvals.numeric.alpha',

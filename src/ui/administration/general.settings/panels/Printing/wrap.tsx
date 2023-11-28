@@ -2,8 +2,8 @@ import { GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { useFormik, useFormikContext } from 'formik';
 import { cloneDeep, isArray, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { companyActions } from '../../../../../state/ducks/company';
+import { useDispatch, useSelector } from 'react-redux';
+import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings, ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import useDialog from '../../../../hooks/useDialog';
 import { SettingsPanelProps } from '../../types';
@@ -22,6 +22,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     const [deleteData, setDeleteData] = React.useState({});
     const confirmationDialog = useDialog();
     const dispatch = useDispatch();
+    const settingsId = useSelector(companySelectors.getGeneralSettingsId);
 
     useEffect(() => {
       setDataResult(isArray(PrintersData?.value) ? PrintersData?.value : []);
@@ -36,7 +37,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
           newDataResult[index] = values;
           const fValues: GeneralSettings = cloneDeep(formValues);
           fValues.zebraPrint = newDataResult;
-          dispatch(companyActions.updateGeneralSettings(fValues, formValues.id, 'PUT'));
+          dispatch(companyActions.updateGeneralSettings(fValues, settingsId, 'PUT'));
         } else {
           values.printer.isActive = true;
           const newData = cloneDeep(dataResult);
@@ -69,7 +70,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       const newData = dataResult.filter(item => item.apiKey !== deleteData.apiKey);
       const fValues: GeneralSettings = cloneDeep(formValues);
       fValues.zebraPrint = newData;
-      dispatch(companyActions.updateGeneralSettings(fValues, formValues.id, 'PUT'));
+      dispatch(companyActions.updateGeneralSettings(fValues, settingsId, 'PUT'));
       confirmationDialog.close();
     };
 
@@ -94,7 +95,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
         setDataResult(dataItems);
         const fValues: GeneralSettings = cloneDeep(formValues);
         fValues.zebraPrint = dataItems;
-        dispatch(companyActions.updateGeneralSettings(fValues, formValues.id, 'PUT'));
+        dispatch(companyActions.updateGeneralSettings(fValues, settingsId, 'PUT'));
       }
     };
 

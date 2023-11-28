@@ -21,7 +21,7 @@ export interface FBTaskItem {
   fieldId: string
   status?: FBTaskItemStatus
   attachments?: Attachment[]
-  partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>
+  partOfId?: Partial<DocumentRevision> | Partial<ChangeRequest>
 }
 
 export type FBClosingNoteProps = Pick<FBTaskItem, 'id' | 'closingNoteInput' | 'attachments'>;

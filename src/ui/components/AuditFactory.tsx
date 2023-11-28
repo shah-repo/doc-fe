@@ -279,7 +279,16 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         );
         break;
       case 'lotStatus':
-        returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
+        try {
+          const obj = JSON.parse(audit.nextValue as string);
+          returnValue = <Text
+            dataCy={dataCy}
+            translation={obj.comments ? 'changeRequest.audit.lotStatus.update.with.comments' : 'changeRequest.audit.lotStatus.update.with.out.comments'}
+            values={{ ...obj, ...{ ownerName: audit.ownerName } } }
+          />;
+        } catch (e) {
+          returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
+        }
         break;
       case 'EMAIL_SENT':
         returnValue = (
