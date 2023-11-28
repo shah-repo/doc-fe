@@ -10,7 +10,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
-import { ChangeRequest } from '../../../../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
@@ -39,6 +39,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const classes = useStyles();
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
   const [data, setData] = React.useState<EditableMDItem[]>([]);
+  const [lastRefreshedAt, setLastRefreshedAt] = React.useState<Date>();
   const settings = useSelector(companySelectors.getGeneralSettings);
 
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
@@ -66,8 +67,9 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const load = useActionCreator(materialDispositionActions.loadMaterialDispositionList);
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
   const materialDispositionAsync = useAsync({
-    onSuccess: (data) => {
-      setData(data as EditableMDItem[]);
+    onSuccess: (data: {records: EditableMDItem[], lastRefreshedAt: Date}) => {
+      setData(data.records);
+      setLastRefreshedAt(data.lastRefreshedAt);
     },
     onError: toastError,
   });
@@ -190,8 +192,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     }
   };
 
-  const currentDate = new Date();
-
   return (<>
     <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
       <KendoDataGrid<EditableMDItem>
@@ -213,22 +213,22 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
                 <Grid className={classes.refreshContainer}
                 >
                   <Grid container>
-                    <StyleTooltip
+                    { changeRequest?.state === ChangeRequestStatus.Draft && <StyleTooltip
                       title={translate('approvalRequest.material.disposition.refresh')}
                       placement="top"
                       arrow
                     >
                       <FontAwesomeIcon icon={regular('arrows-rotate')} onClick={fetchMaterialDispositionTableData} className={classes.icon} />
-                    </StyleTooltip>
-                    <Typography
+                    </StyleTooltip> }
+                    { lastRefreshedAt && <Typography
                       variant="h6"
                       component="h6"
                       className={classes.refreshText}
                     >
                       <Text translation="approvalRequest.material.disposition.refresh.date"
-                        values={{ date: getFormattedDateString(currentDate, MomentFormats.BriefDate) }}
+                        values={{ date: getFormattedDateString(lastRefreshedAt, MomentFormats.BriefDate) }}
                       />
-                    </Typography>
+                    </Typography> }
                   </Grid>
                 </Grid>
                 <Grid item >
