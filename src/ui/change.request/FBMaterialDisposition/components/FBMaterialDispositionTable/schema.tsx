@@ -54,7 +54,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.onOrder',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
-      width: 201,
+      width: 380,
     },
     {
       id: 'inInspectionAction',
@@ -62,7 +62,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.Inspection',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
-      width: 201,
+      width: 380,
     },
     {
       id: 'inInventoryAction',
@@ -70,7 +70,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.Inventory',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
-      width: 201,
+      width: 380,
     },
     {
       id: 'inWipAction',
@@ -78,7 +78,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.wip',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
-      width: 201,
+      width: 380,
     },
     {
       id: 'asFinishedGoodsAction',
@@ -86,7 +86,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.finishedGoods',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
-      width: 201,
+      width: 380,
     },
     {
       field: 'usedLocation',
@@ -94,7 +94,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.field',
       show: true,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
-      width: 201,
+      width: 380,
     },
     {
       id: 'comment',
@@ -102,7 +102,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.comments',
       show: true,
       template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
-      width: 324,
+      width: 380,
     },
     {
       id: 'actions',
