@@ -62,7 +62,7 @@ export const styles = makeStyles((theme: NextTheme) =>
       container: {
         width: '100%',
         padding: theme.spacing(3),
-        marginTop: 2,
+        marginTop: theme.spacing(0.24),
       },
       title: {
         textAlign: 'center',
@@ -76,7 +76,7 @@ export const styles = makeStyles((theme: NextTheme) =>
       switchclosemobile: {
         width: 30,
         height: 30,
-        top: 10,
+        top: theme.spacing(1.3),
         padding: theme.spacing(1),
         borderRadius: 4,
         backgroundColor: Colors.hover,
