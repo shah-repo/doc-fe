@@ -38,7 +38,6 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     isReleased,
     ...props
   }: T) => {
-
     // MARK: @config
     const dispatch = useDispatch();
     const [lhrsQuantity, setLhrsQuantity] = useState(1);
@@ -56,7 +55,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const smartReferencesTo = useMemo(() =>
       smartRef?.filter((ref) =>
       ref?.active
-      && ((ref.fromDocRev?.version || 1 ) <= (version || 1))),
+      && ((ref.fromDocRev?.version || 1) <= (version || 1))),
     [smartRef, version]);
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
@@ -71,7 +70,6 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     redlineActive = useSelector(companySelectors.getRedlineActive);
 
     useEffect(() => {
-
       if (!mpiProcedureState || !smartReferencesTo) { return; }
       setFilteredParts(smartReferencesTo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -131,14 +129,16 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             overrideDocId: ref?.toDocRev?.document.docId,
             pmDueDate: ref.toDocRev?.precalc?.pm_due_date,
             calDueDate: ref.toDocRev?.precalc?.cali_due_date,
+            lotPartRevision: ref.toDocRev?.precalc?.lot_part_revision,
+
           });
         }
         return selected;
-      }, [] as Partial<FBMPIProcedureSelectValue>[]);
+      }, [] as Array<Partial<FBMPIProcedureSelectValue>>);
       mpiProcedureState?.setPartsSelected(partsSelected);
     };
 
-    function onClose() {
+    function onClose () {
       formState?.unlockField(`${name}.${type}`);
       dialogState?.closeDialog();
     }

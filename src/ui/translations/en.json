@@ -1233,7 +1233,7 @@
   "form.builder.mpi.procedure.equipment.title.id": "{id}: {title} ",
   "form.builder.mpi.procedure.equipment.title": "{title}",
   "form.builder.lhrs.procedure.equipment.title": "{title} - rev {revision}",
-  "form.builder.mpi.part.selection.materials": "{docId} | {lotPart} | {quantity} {unit}",
+  "form.builder.mpi.part.selection.materials": "{docId} | {lotPart}.{lotPartRevision} | {quantity} {unit}",
   "form.builder.mpi.part.selection.equipment": "{docId}",
   "form.builder.action.mode": "{mode} {title}",
   "form.builder.edit": "Edit",
