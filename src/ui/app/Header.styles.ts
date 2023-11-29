@@ -103,14 +103,14 @@ export default (theme: NextTheme) =>
         },
       },
       mobileSide: {
-        width: 30,
-        height: 30,
+        width: 15,
+        height: 15,
         borderRadius: 4,
         padding: theme.spacing(1),
         background: Colors.gradient_color,
       },
       logoMobile: {
-        marginLeft: 8,
+        marginLeft: theme.spacing(1),
       },
 
     },

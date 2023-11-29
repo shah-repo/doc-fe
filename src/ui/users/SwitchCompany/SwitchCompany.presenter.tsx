@@ -13,9 +13,9 @@ const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numb
   const history = useHistory();
 
   const handleClose = () => {
-    // Navigate back to the last URL
     history.goBack();
   };
+
   return (
     <div className={classes.root}>
 

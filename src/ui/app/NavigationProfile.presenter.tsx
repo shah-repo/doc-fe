@@ -18,6 +18,7 @@ import { WithStyles, withStyles } from '@material-ui/core/styles';
 import cx from 'classnames';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { authActions } from '../../state/ducks/auth';
 import { Nullable } from '../../state/ducks/common/types';
 import Text from '../../ui/components/Text';
@@ -39,7 +40,7 @@ interface Props extends WithStyles<typeof styles> {
   anchorEl: Nullable<HTMLElement>
   handleCloseMenu: () => void
   open: boolean
-  location: any
+  location: ReturnType<typeof useLocation>
 }
 
 const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
@@ -105,7 +106,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
         </ListItem>
         <ListItem className={classes.userSideProfile}>
           <MenuItem
-            data-cy="header.logout"
+            data-cy="header-logout"
             onClick={handleLogout}
             className={classes.menu}
           >
@@ -113,7 +114,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
               <FontAwesomeIcon className={classes.icon} icon={light('arrow-right-from-bracket')} />
             </ListItemIcon>
             <ListItemText className={classes.text} disableTypography>
-              <Text translation="header.logout" />
+              <Text translation="common.logout" />
             </ListItemText>
           </MenuItem>
         </ListItem>

@@ -1,3 +1,5 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormControlLabel, Grid, Switch, Toolbar, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
@@ -7,7 +9,6 @@ import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
 import { SearchBar } from '../../App/Enlil/Features/Search';
 import { ReactComponent as CompanyAvatar } from '../../assets/images/company_avatar.svg';
 import { ReactComponent as MobileLogo } from '../../assets/images/enlil_white_logo.svg';
-import { ReactComponent as MobileSideMenuIcon } from '../../assets/images/mobileSide.svg';
 import Config from '../../config';
 import { WhiteLabelingEnv } from '../../state/ducks/company/types';
 import { store } from '../../state/store';
@@ -43,14 +44,13 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
   const {
     handleSwitchCompany,
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   } = React.useContext(UserMenuContext)! ?? {};
 
   return (
     <AppBar className={cx(classes.appBar, className)}>
       <div className={classes.mobileMake}>
         <div>
-          <MobileSideMenuIcon className={classes.mobileSide} onClick={handleDrawerOpen} />
+          <FontAwesomeIcon icon={solid('bars-sort')} className={classes.mobileSide} onClick={handleDrawerOpen} />
           <MobileLogo className={classes.logoMobile} />
           <Typography variant="caption" className={classes.mobileLogoText} component="div">
             <Text translation="header.design.make" />
