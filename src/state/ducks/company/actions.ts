@@ -4,7 +4,7 @@ import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHel
 import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
+import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettings, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
@@ -53,6 +53,11 @@ const autosaveConfig = () => ({
   type: AUTOSAVE_CONFIG,
 });
 
+const setAutosaveConfig = (active: boolean) => ({
+  type: SET_AUTOSAVE_CONFIG,
+  payload: { active },
+});
+
 const redlineConfig = (redlineActive: boolean) => ({
   type: REDLINE_CONFIG,
   payload: { redlineActive },
@@ -89,6 +94,7 @@ export default {
   updateCompanyMine,
   updateNavigationMenuItem,
   autosaveConfig,
+  setAutosaveConfig,
   redlineConfig,
   getGeneralSettings,
   updateGeneralSettings,

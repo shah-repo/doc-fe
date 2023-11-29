@@ -184,6 +184,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
           printDate: selectedParams.includes('printDate') ? moment(selectedDate).format('MMM DD, YYYY') : null,
           labelsToPrint: Number(selectedNumberOfLabel),
           quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: isEmpty(item.value) ? null : Number(item.value) }), {}),
+          quantityUnits: selectedItem.formInput?.lot_usable_quantity_unit ?? '',
         },
       };
       asyncPrintLabel.start(

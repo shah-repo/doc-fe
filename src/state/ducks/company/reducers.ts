@@ -4,8 +4,8 @@ import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncStatus } from '../../types';
 import { LOGOUT_USER } from '../auth/constants';
 import { LogoutUserAction } from '../auth/types';
-import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from './constants';
-import { AutosaveAction, AutosaveState, CompanyMineAction, GeneralSettingsAction, GeneralSettingsState, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, UpdateNavigationMenuItem } from './types';
+import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from './constants';
+import { AutosaveAction, AutosaveState, CompanyMineAction, GeneralSettingsAction, GeneralSettingsState, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, SetAutosaveAction, UpdateNavigationMenuItem } from './types';
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   id: '',
@@ -124,12 +124,16 @@ const companyMine = (
 
 const autosaveConfig = (
   state: AutosaveState = AUTOSAVE_DEFAULT_STATE,
-  action: AutosaveAction | LogoutUserAction,
+  action: AutosaveAction | SetAutosaveAction | LogoutUserAction,
 ): AutosaveState => {
   switch (action.type) {
     case AUTOSAVE_CONFIG:
       return {
         autosaveEnabled: !state.autosaveEnabled,
+      };
+    case SET_AUTOSAVE_CONFIG:
+      return {
+        autosaveEnabled: action.payload.active,
       };
     case LOGOUT_USER:
       return AUTOSAVE_DEFAULT_STATE;
