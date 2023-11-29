@@ -7,6 +7,9 @@ export const BUILD_FIELD = 'buildName';
 export const REFERENCE_FIELD = 'referenceName';
 export const DATE_FIELD = 'dateFormatted';
 
+// Value for SERVER_AUTOMATION_LOT_TRANSFER_BY will be static and same for all envs.
+export const SERVER_AUTOMATION_LOT_TRANSFER_BY = '541dce6c-97bf-43b5-9aeb-b58b2ecb4371';
+
 export const FIELDS_TO_OMIT = [MODE_FIELD, EMPLOYEE_FIELD, BUILD_FIELD, REFERENCE_FIELD, DATE_FIELD];
 
 export const INITIAL_QUANTITY_FIELD = 'lot_usable_quantity';
