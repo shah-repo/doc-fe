@@ -40,7 +40,7 @@ import {
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
@@ -62,8 +62,11 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import useHover from '../../../../hooks/useHover';
 import { withThemeNext } from '../../../../layout/theme-next';
+import FBDataStore from '../../../FBStore/FBDataStore';
 import { FBBOM } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
+import FBBOMDetailDrawer from '../drawer/AlternateParts';
+import DocumentRevisionDrawer from '../drawer/DocumentRevisionDrawer';
 import { ActionsCell } from './column.templates/Actions';
 import {
   ColumnMenuContext,
@@ -90,7 +93,7 @@ import {
   CustomTreeListRowProps,
   FBBOMProps,
 } from './interface';
-import { TreeColumns } from './schema';
+import { TreeListSchema } from './schema';
 import useStyles from './styles';
 import {
   getExcelColumns,
@@ -108,7 +111,7 @@ const TimeoutRendering: React.FC<{ children: ReactNode }> = ({ children }) => {
       () => {
         setRendered(true);
       },
-      500,
+      100,
     );
 
     return () => clearTimeout(timer);
@@ -261,8 +264,23 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     },
   );
 
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
+  const [selectedDataItem, setSelectedDataItem] = React.useState(undefined);
+
+  const openDetailDrawer = (dataItem) => {
+    setIsPartsDrawerOpened(true);
+    setSelectedDataItem(dataItem);
+  };
+  const closeDetailDrawer = () => {
+    FBDataStore.selectedSliderInfo = undefined;
+    setIsPartsDrawerOpened(false);
+    setSelectedDataItem(undefined);
+  };
+
+  const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer });
+
   const [columns, setColumns]
-    = React.useState<CustomTreeListColumnProps[]>(TreeColumns);
+    = React.useState<CustomTreeListColumnProps[]>(schema);
 
   const onExpandChange = (event: CustomTreeListExpandChangeEvent) => {
     if (!isExactBOMViewWindow()) {
@@ -292,6 +310,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       ...state,
       dataState: event.dataState,
     });
+  };
+
+  const onSelectionChange = (event) => {
+    console.log('event ::', event);
   };
 
   const confirmationDialog = useDialog();
@@ -344,12 +366,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
   const addExpandField = (dataTree: BOM[]) => {
     const { expanded, inEdit } = state;
-    return mapTree(dataTree, SUB_ITEMS_FIELD, (item) =>
+    return useMemo(() => mapTree(dataTree, SUB_ITEMS_FIELD, (item) =>
       extendDataItem(item, SUB_ITEMS_FIELD, {
         [EXPAND_FIELD]: expanded.includes(item.id),
         [MODE_FIELD]: Boolean(inEdit.find((i) => i.id === item.id)),
       }),
-    );
+    ), [dataTree, expanded, inEdit]);
   };
 
   const processData = () => {
@@ -676,15 +698,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       || (!inRestrictedEditMode && !item.isParentOwner)
       || disableEditInRestrictedEditMode(item);
     if (showWithoutActions) {
-      return (
-        <TimeoutRendering>
-          {React.cloneElement(row, {
-            ...modifiedProps,
-            ['data-cy' as string]: `bom-row-${item.docId}`,
-            ['data-parent-rel' as string]: parentChildRelkey,
-          })}
-        </TimeoutRendering>
-      );
+      return React.cloneElement(row, {
+        ...modifiedProps,
+        ['data-cy' as string]: `bom-row-${item.docId}`,
+        ['data-parent-rel' as string]: parentChildRelkey,
+      });
     }
     const isOwner = item.isOwner;
     const isAddPartEnabled
@@ -715,19 +733,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       </td>
     );
 
-    return (
-      <TimeoutRendering>
-        {React.cloneElement(
-          row,
-          {
-            ...modifiedProps,
-            ['data-cy' as string]: `bom-row-${item.docId}`,
-            ['data-parent-rel' as string]: parentChildRelkey,
-            className: cx(row.props.className, classes.updatingRow),
-          },
-          [row.props.children, actions],
-        )}
-      </TimeoutRendering>
+    return React.cloneElement(
+      row,
+      {
+        ...modifiedProps,
+        ['data-cy' as string]: `bom-row-${item.docId}`,
+        ['data-parent-rel' as string]: parentChildRelkey,
+        className: cx(row.props.className, classes.updatingRow),
+      },
+      [row.props.children, actions],
     );
   };
 
@@ -1110,29 +1124,31 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
             }}
           >
             <Grid container>
-              <Grid item xs={12} ref={treeListRef}>
-                <ExcelExport
-                  ref={(exporter) => (_export = exporter)}
-                  hierarchy
-                  fileName={EXCEL_FILE_NAME}
-                >
-                  <TreeList
-                    style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
-                    {...state.dataState}
-                    tableProps={{ style: { tableLayout: 'fixed' } }}
-                    rowHeight={50}
-                    scrollable="virtual"
-                    editField={MODE_FIELD}
-                    expandField={EXPAND_FIELD}
-                    dataItemKey={DATA_ITEM_KEY}
-                    subItemsField={SUB_ITEMS_FIELD}
-                    // className={cx(classes.treeList, 'containing-box-scrollbar')}
-                    onExpandChange={onExpandChange}
-                    rowRender={rowRender}
-                    data={processData()}
-                    onDataStateChange={handleDataStateChange}
-                    columns={sortedColumnDefinitions}
-                    columnMenu={
+              <TimeoutRendering>
+                <Grid item xs={12} ref={treeListRef}>
+                  <ExcelExport
+                    ref={(exporter) => (_export = exporter)}
+                    hierarchy
+                    fileName={EXCEL_FILE_NAME}
+                  >
+                    <TreeList
+                      style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
+                      {...state.dataState}
+                      tableProps={{ style: { tableLayout: 'fixed' } }}
+                      rowHeight={50}
+                      scrollable="virtual"
+                      editField={MODE_FIELD}
+                      expandField={EXPAND_FIELD}
+                      dataItemKey={DATA_ITEM_KEY}
+                      subItemsField={SUB_ITEMS_FIELD}
+                      className={cx(classes.treeList, 'containing-box-scrollbar')}
+                      onExpandChange={onExpandChange}
+                      rowRender={rowRender}
+                      data={processData()}
+                      onDataStateChange={handleDataStateChange}
+                      onSelectionChange={onSelectionChange}
+                      columns={sortedColumnDefinitions}
+                      columnMenu={
                       _documentRevisionFormState?.isMaximizedView
                         ? undefined
                         : (props) => (
@@ -1145,23 +1161,24 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                             }}
                           />
                         )
-                    }
-                    onRowClick={editBOM}
-                    onColumnReorder={onColumnReorder}
-                    onFilterChange={onFilterChange}
-                    resizable={TREELIST_CONFIG.resizable}
-                    reorderable={TREELIST_CONFIG.reorderable}
-                    sortable={TREELIST_CONFIG.sortable}
-                    toolbar={renderToolbar}
-                    cellRender={cellRender}
-                    onRowDrop={onRowDrop}
-                    row={TreeListDraggableRow}
-                  />
-                </ExcelExport>
-                {(treeListAsync.isLoading
+                      }
+                      onRowClick={editBOM}
+                      onColumnReorder={onColumnReorder}
+                      onFilterChange={onFilterChange}
+                      resizable={TREELIST_CONFIG.resizable}
+                      reorderable={TREELIST_CONFIG.reorderable}
+                      sortable={TREELIST_CONFIG.sortable}
+                      toolbar={renderToolbar}
+                      cellRender={cellRender}
+                      onRowDrop={onRowDrop}
+                      row={TreeListDraggableRow}
+                    />
+                  </ExcelExport>
+                  {(treeListAsync.isLoading
                   || partAsync.isLoading
                   || partChangeOrderAsync.isLoading) && <Loader />}
-              </Grid>
+                </Grid>
+              </TimeoutRendering>
               {confirmationDialog.isOpen && (
                 <AlertDialog
                   dialog={confirmationDialog}
@@ -1195,6 +1212,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           closeDialog={closeWhereUsedDialog}
         />
       )}
+      <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer: closeDetailDrawer, dataItem: selectedDataItem }} >
+        <DocumentRevisionDrawer {...{ dataItem: selectedDataItem, closeDrawer: closeDetailDrawer, isSliderView: isPartsDrawerOpened }} />
+      </FBBOMDetailDrawer>
       <Dialog
         open={maxDialog.isOpen}
         fullScreen

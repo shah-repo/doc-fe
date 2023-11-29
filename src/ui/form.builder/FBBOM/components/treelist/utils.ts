@@ -93,6 +93,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
       dataTree.push({ ...aData, [MODE_FIELD]: false });
     }
   });
+  console.log(JSON.stringify(dataTree));
   return dataTree;
 };
 
