@@ -87,7 +87,6 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     const validationErrors = requiredSchemaFields.reduce((result, field) => {
       const value = get(activeItem, field);
       const error = !value ? 'validators.required' : undefined;
-      set(activeItem, ['errors', field], error);
       return {
         ...result,
         ...(error ? { [field]: error } : {}),
