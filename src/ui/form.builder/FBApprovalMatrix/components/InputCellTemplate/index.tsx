@@ -14,11 +14,11 @@ const InputCellTemplate: CellTemplate = (props) => {
   const mode = get(dataItem, MODE_FIELD);
   const path = field ?? '';
   const value = String(get(dataItem, path) ?? '');
-
   const classes = useStyles();
-  const [error, setError] = React.useState('');
-
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
+
+  const [error, setError] = React.useState<string>();
+  const finalError = error ?? get(dataItem, ['errors', path]);
 
   const handleChange: InputProps['onChange'] = debounce(
     (event) => {
@@ -63,8 +63,9 @@ const InputCellTemplate: CellTemplate = (props) => {
         defaultValue={value}
         onChange={handleChange}
         onBlur={handleBlur}
+        valid={!finalError}
       />
-      {error && <Box className={classes.error}>{translate(error)}</Box>}
+      {finalError && <Box className={classes.error}>{translate(finalError)}</Box>}
     </>
   );
 };
