@@ -25,7 +25,8 @@ const InputCellTemplate: CellTemplate = (props) => {
       if (required && !event.value) {
         setError('validators.required');
         return;
-      } setError('');
+      }
+      setError('');
 
       onChange?.({
         dataIndex,
