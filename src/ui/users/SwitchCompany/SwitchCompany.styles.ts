@@ -58,6 +58,9 @@ export const styles = makeStyles((theme: NextTheme) =>
     switchclosemobile: {
       display: 'none',
     },
+    selectedIcon: {
+      display: 'none',
+    },
     [theme.media.mobile]: {
       container: {
         width: '100%',
@@ -89,6 +92,8 @@ export const styles = makeStyles((theme: NextTheme) =>
         fontWeight: 900,
         marginLeft: theme.spacing(10),
         marginTop: theme.spacing(2),
+        display: 'unset',
+
       },
     },
   }),
