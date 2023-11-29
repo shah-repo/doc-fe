@@ -59,6 +59,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const history = useHistory();
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+  const [isMDTab, setMDTab] = React.useState(false);
   const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, isEditing);
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
@@ -125,7 +126,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     );
 
     if (isEmpty(dataToSubmit)) {
-      if (isEditing) {
+      if (isEditing && !isMDTab) {
         setDoNotPrompt(true);
         history.push(changeRequestPreviewPath(changeRequest.id));
       }
@@ -154,6 +155,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
           changeRequest={changeRequest}
           doNotPrompt={doNotPrompt}
           setDoNotPrompt={setDoNotPrompt}
+          setMDTab={setMDTab}
           hideSideBar={hideSideBar}
           currentDocRevId={currentDocRevId}
           inDialog={inDialog}

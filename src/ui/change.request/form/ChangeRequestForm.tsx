@@ -34,6 +34,7 @@ type ChangeRequestFormProps =
   changeRequest?: ChangeRequest
   doNotPrompt?: boolean
   setDoNotPrompt?: (state: boolean) => void
+  setMDTab?: (state: boolean) => void
   changeOpenStatus: (status: boolean) => void
   schema?: FBSchemaProps[]
   mode: FBWorkspaceMode
@@ -62,6 +63,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   hideSideBar = false,
   currentDocRevId,
   inDialog = false,
+  setMDTab,
 }) => {
   const { _tabsState } = SM.useStores();
   const { formState } = FB.useStores();
@@ -138,6 +140,10 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   useEffect(() => {
     _formState?.setDirty(!isEqual(values, formValues.initialValues));
   }, [_formState, formState, formValues.initialValues, values]);
+
+  if (_tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)) {
+    setMDTab?.(true);
+  }
 
   return (
     <SMForm
@@ -220,7 +226,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           )}
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                             && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
-                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} />
+                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} {...{ setDoNotPrompt }} />
                           }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
