@@ -33,5 +33,6 @@ export default makeStyles(() => ({
   },
   error: {
     color: Colors.error,
+    fontSize: 12,
   },
 }));
