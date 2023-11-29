@@ -1,25 +1,26 @@
 import { Button, Dialog, Grid } from '@material-ui/core';
 import React from 'react';
 import { HeaderTableType } from '../../../state/ducks/documentRevisions/types';
-import ExportListIcon from '../../components/common/kendo/ExportListIcon';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import Text from '../../components/Text';
+import ExportListIcon from '../../components/common/kendo/ExportListIcon';
 import ExportListDialog from '../../document.revision/list/ExportListDialog/ExportListDialog';
 import { DialogHandler } from '../../hooks/useDialog';
 import { TemplateOption } from '../form/types';
+import { styles } from './FormList.styles';
 import FormListContent from './dialog/FormListContent';
 import FormListHeader from './dialog/FormListHeader';
-import { styles } from './FormList.styles';
 
 interface Props {
   templateOptions: TemplateOption[]
   dialog: DialogHandler
-  handleCreateButton(): void
+  handleCreateButton: () => void
   handleTemplateSelection: (option: TemplateOption) => void
   headers: HeaderTableType[]
   data: any[]
   exportDialog: DialogHandler
   isGrouped: boolean
+  isLoading?: boolean
 }
 
 const FormListPresenter: React.FunctionComponent<Props> = ({
@@ -31,6 +32,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
   headers,
   data,
   isGrouped,
+  isLoading,
 }) => {
   const classes = styles();
   return (
@@ -72,7 +74,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
         classes={{ paper: classes.dialogPaper }}
       >
         <FormListHeader {...{ dialog }} />
-        <FormListContent {...{ dialog, templateOptions, handleTemplateSelection }} />
+        <FormListContent {...{ dialog, templateOptions, handleTemplateSelection, isLoading }} />
       </Dialog>
     </>
   );

@@ -118,8 +118,8 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
       {renderTransitionButton(canSendToReview, 'in_review')}
       {renderDialogButton(canApproveOrReject, 'reject', { disabled: formHasErrors })}
       {renderDialogButton(canApproveOrReject, 'approve', { disabled: formHasErrors })}
-      {renderDialogButton(canClose, 'closed')}
       {renderAlertDialogButton(canWithdraw, 'withdrawn')}
+      {renderDialogButton(canClose, 'closed')}
       <HeaderMenu>
         {canSendToReview && <AssessmentFormVoidContainer changeRequest={changeRequest} />}
         {
