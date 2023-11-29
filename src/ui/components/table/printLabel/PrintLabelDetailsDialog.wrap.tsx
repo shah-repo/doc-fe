@@ -59,7 +59,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const async = useAsync({
       onSuccess: (data) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
-        if (!isEmptyArray(referenceTo)) {
+        if(!isEmptyArray(referenceTo)) {
           const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
           const description = documentRevision.find(item => item.displayRevision === selectedItem?.precalc?.lot_part_revision)?.name;
           setDescription(description);
@@ -111,7 +111,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onQtyUnitsChange = (event: React.ChangeEventHandler<HTMLInputElement>, index: number) => {
-      if (event.target.value < 0) {
+      if(Number(event?.target?.value) < 0) {
         return;
       }
       const newQtyUnits = [...qtyUnits];

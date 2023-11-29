@@ -1,19 +1,45 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Typography } from '@material-ui/core';
+import { Box, Button, createStyles, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { get, includes, range } from 'lodash';
-import React from 'react';
+import { includes, range } from 'lodash';
+import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
+import { translate } from '../../../../common/intl';
 import { companySelectors } from '../../../../state/ducks/company';
 import { LabelTemplatesProps, ZebraPrintSettings } from '../../../../state/ducks/company/types';
 import { FBLabel } from '../../../form.builder';
-import Text from '../../Text';
-import { Autocomplete, FormField, TextField } from '../../forms/fields-next';
+import { Autocomplete, Checkbox, FormField, TextField } from '../../forms/fields-next';
 import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
+import Text from '../../Text';
 import { labelPropsStyle, qtyLabelStyle, styles } from '../styles';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 import { withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
 
 const gridMaxWidth = 920;
+
+const useStyle = makeStyles(theme => createStyles({
+  checkBoxField: {
+    margin: theme.spacing(0, 1, 0, 0),
+  },
+}));
+
+interface FieldCheckboxProps {
+  label: string
+  checked: boolean
+  checkboxName: string
+  onFieldCheck: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void
+  fullWidth?: boolean
+  children?: React.ReactNode
+}
+
+const FieldCheckbox: React.FC<FieldCheckboxProps> = ({ label, checked, checkboxName, onFieldCheck, fullWidth = true, children }) => {
+  const style = useStyle();
+  return (
+    <FormField {...{ fullWidth }} label={<Box>
+      <Checkbox className={style.checkBoxField} {...{ checked }} name={checkboxName} onChange={onFieldCheck} />
+      <>{translate(label)}</>
+    </Box>}>{children}</FormField>
+  );
+};
 
 const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   onActorChange,
@@ -40,7 +66,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   labelTypeData,
 }) => {
   const classes = styles();
-  const { zebraPrint } = useSelector(companySelectors.getGeneralSettings); console.log('---initialValues--', { zebraPrint }, get(zebraPrint, 'printer.name'));
+  const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
   const qtyUnitsRender = () => {
     const gridSize = selectedNumberOfLabel < 6 ? (gridMaxWidth / selectedNumberOfLabel) : (gridMaxWidth / 5);
     const qtyClasses = qtyLabelStyle(gridSize);
@@ -77,7 +103,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
               <Autocomplete
                 disableClearable
                 data-cy="printer-name"
-                options={zebraPrint}
+                options={zebraPrint.filter(item => item.printer.isActive)}
                 getOptionLabel={(option: ZebraPrintSettings) => option.printer?.name}
                 onChange={onPrinterChange} />
             </FormField>
@@ -93,28 +119,28 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             </FormField>
           </Grid>
           <Grid item xs={8}>
-            <FormField label="print.label.dialog.field.partId" {...{ onFieldCheck }}
+            <FieldCheckbox label="print.label.dialog.field.partId" {...{ onFieldCheck }}
               checkboxName="partDocId"
               checked={includes(selectedParams, 'partDocId')}>
               <TextField
                 disabled
                 value={initialValues?.partId}
                 data-cy="part-id" />
-            </FormField>
+            </FieldCheckbox>
           </Grid>
           <Grid item xs={4}>
-            <FormField label="print.label.dialog.field.revision" {...{ onFieldCheck }}
+            <FieldCheckbox label="print.label.dialog.field.revision" {...{ onFieldCheck }}
               checkboxName="revision"
               checked={includes(selectedParams, 'revision')}>
               <TextField
                 disabled
                 value={initialValues?.revision}
                 data-cy="revision" />
-            </FormField>
+            </FieldCheckbox>
           </Grid>
           <Grid item xs={12}>
-            <Box display="flex">
-              <FormField label="print.label.dialog.field.description" fullWidth={false} {...{ onFieldCheck }}
+            <Box display="flex" alignItems="center">
+              <FieldCheckbox label="print.label.dialog.field.description" fullWidth={false} {...{ onFieldCheck }}
                 checkboxName="description"
                 checked={includes(selectedParams, 'description')} />
               <FBLabel label="print.label.dialog.field.description.info"
@@ -127,18 +153,18 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
               onChange={onDescriptionChange} />
           </Grid>
           <Grid item xs={6}>
-            <FormField label="print.label.dialog.field.lot" {...{ onFieldCheck }}
+            <FieldCheckbox label="print.label.dialog.field.lot" {...{ onFieldCheck }}
               checkboxName="lotNumber"
               checked={includes(selectedParams, 'lotNumber')}>
               <TextField
                 disabled
                 value={initialValues?.lotId}
                 data-cy="lot" />
-            </FormField>
+            </FieldCheckbox>
           </Grid>
           <Grid item xs={6}>
-            <Box display="flex">
-              <FormField label="print.label.dialog.field.serial" fullWidth={false} {...{ onFieldCheck }}
+            <Box display="flex" alignItems="center">
+              <FieldCheckbox label="print.label.dialog.field.serial" fullWidth={false} {...{ onFieldCheck }}
                 checkboxName="serial"
                 checked={includes(selectedParams, 'serial')} />
               <FBLabel label="print.label.dialog.field.serial.info"
@@ -151,7 +177,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
               value={serial.slice(0, 14)} />
           </Grid>
           <Grid item xs={6}>
-            <FormField label="print.label.dialog.field.by" {...{ onFieldCheck }}
+            <FieldCheckbox label="print.label.dialog.field.by" {...{ onFieldCheck }}
               checkboxName="actor"
               checked={includes(selectedParams, 'actor')}>
               <Autocomplete
@@ -163,10 +189,10 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 onChange={onActorChange}
                 onInputChange={onActorChange}
               />
-            </FormField>
+            </FieldCheckbox>
           </Grid>
           <Grid item xs={6} >
-            <FormField label="print.label.dialog.field.date" {...{ onFieldCheck }}
+            <FieldCheckbox label="print.label.dialog.field.date" {...{ onFieldCheck }}
               checkboxName="printDate"
               checked={includes(selectedParams, 'printDate')}>
               <Datepicker
@@ -175,7 +201,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 size="medium"
                 onChange={handleDateChange}
               />
-            </FormField>
+            </FieldCheckbox>
           </Grid>
           <Grid item xs={12}>
             <FormField label="print.label.dialog.field.number.of.labels">

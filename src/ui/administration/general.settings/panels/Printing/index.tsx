@@ -2,13 +2,16 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import { GridColumn } from '@progress/kendo-react-grid';
+import { FormikContextType } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
+import { ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { IconButton } from '../../../../components/forms/fields-next';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
 import StyledKendoGrid from '../../../../components/StyledKendoGrid/StyledKendoGrid';
+import { DialogHandler } from '../../../../hooks/useDialog';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
 import AddNewPrinter from './AddNewPrinter';
@@ -18,22 +21,36 @@ import { withLabelPrinting } from './wrap';
 const SELECTED_FIELD = 'printer.isActive';
 const DATA_ITEM_KEY = 'apiKey';
 
-const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
+interface PrintinfPanelProps extends SettingsPanelProps {
+  onEdit?: (editData: ZebraPrintSettings) => void
+  onDelete?: (data: ZebraPrintSettings) => void
+  onUpdate?: () => void
+  onCancel?: () => void
+  isOpen?: boolean
+  dataResult?: []
+  onSelectionChange?: () => void
+  formik?: FormikContextType<ZebraPrintSettings>
+  confirmationDialog?: DialogHandler
+  confirmDeletePrinter?: () => void
+  cancelDeletePrinter?: () => void
+}
+
+const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
   onAddNew,
+  onEdit,
   onCancel,
   onSelectionChange,
   onDelete,
   isOpen,
   dataResult,
-  editData,
   formik,
   confirmationDialog,
   confirmDeletePrinter,
   cancelDeletePrinter,
   ...props
 }) => {
-  const ActionCell = (props: ZebraPrintSettings) => {
-    const { dataItem } = props;
+  const ActionCell = (props) => {
+    const { dataItem, dataIndex } = props;
     const { cellStyle, deleteButton } = useStyles({ isActive: dataItem.printer?.isActive });
     return (<td className={`${cellStyle} k-command-cell`} >
       <Tooltip title={translate('common.edit')}>
@@ -41,7 +58,7 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
           kind="simple"
           color="primary"
           style={{ marginRight: '10px' }}
-          onClick={() => onAddNew(dataItem)}
+          onClick={() => onEdit(dataItem, dataIndex)}
         >
           <FontAwesomeIcon
             icon={regular('pen-to-square')}
@@ -83,22 +100,22 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = ({
         onSelectionChange={onSelectionChange}>
         <GridColumn
           field="printer.isActive"
-          title="Active"
+          title={translate('administration.general.settings.printing.table.column.active')}
           width={80}
-          headerCell={() => <span>Active</span>} />
+          headerCell={() => <span className="k-column-title">Active</span>} />
         <GridColumn
           field="printer.sn"
-          title="Serial Number" />
+          title={translate('administration.general.settings.printing.table.column.serial.number')} />
         <GridColumn
           field="printer.name"
           cell={cellRender}
-          title="Name" />
+          title={translate('administration.general.settings.printing.table.column.name')} />
         <GridColumn
-          title="Actions"
+          title={translate('administration.general.settings.printing.table.column.actions')}
           cell={ActionCell}
           width={80} />
       </StyledKendoGrid>
-      <AddNewPrinter {...{ isOpen, onCancel, editData, formik }} />
+      <AddNewPrinter {...{ isOpen, onCancel, formik }} />
       {confirmationDialog?.isOpen && (
         <AlertDialog
           dialog={confirmationDialog}

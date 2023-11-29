@@ -1,6 +1,6 @@
 import { GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { useFormik, useFormikContext } from 'formik';
-import { cloneDeep, isArray, isEmpty } from 'lodash';
+import { cloneDeep, isArray } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
@@ -18,8 +18,9 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     const PrintersData = getFieldProps('zebraPrint');
     const [isOpen, setIsOpen] = useState(false);
     const [dataResult, setDataResult] = React.useState(isArray(PrintersData?.value) ? PrintersData?.value : []);
-    const [editData, setEditData] = React.useState({});
+    const [isEdit, setIsEdit] = React.useState({});
     const [deleteData, setDeleteData] = React.useState({});
+    const [rowIndex, setRowIndex] = React.useState(0);
     const confirmationDialog = useDialog();
     const dispatch = useDispatch();
     const settingsId = useSelector(companySelectors.getGeneralSettingsId);
@@ -31,13 +32,11 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     const formik = useFormik<ZebraPrintSettings>({
       initialValues: { apiKey: '', tenantId: '', printer: { isActive: true, name: '', sn: '' } },
       onSubmit: values => {
-        if (!isEmpty(editData)) {
-          const index = dataResult.findIndex(item => item.apiKey === values.apiKey);
+        if (isEdit) {
           const newDataResult = cloneDeep(dataResult);
-          newDataResult[index] = values;
-          const fValues: GeneralSettings = cloneDeep(formValues);
-          fValues.zebraPrint = newDataResult;
-          dispatch(companyActions.updateGeneralSettings(fValues, settingsId, 'PUT'));
+          newDataResult[rowIndex] = values;
+          formValues.zebraPrint = newDataResult;
+          dispatch(companyActions.updateGeneralSettings(formValues, settingsId, 'PUT'));
         } else {
           values.printer.isActive = true;
           const newData = cloneDeep(dataResult);
@@ -50,15 +49,17 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     });
 
     const { setValues, resetForm } = formik;
-    const onAddNew = (editData: ZebraPrintSettings) => {
-      if (editData) {
-        setEditData(editData);
-        setValues(editData);
-      } else {
-        resetForm();
-        setEditData(editData);
-      }
+    const onAddNew = () => {
+      setIsEdit(false);
+      resetForm();
       setIsOpen(true);
+    };
+
+    const onEdit = (editData: ZebraPrintSettings, rowIndex: number) => {
+      setIsEdit(true);
+      setValues(editData);
+      setIsOpen(true);
+      setRowIndex(rowIndex);
     };
 
     const onDelete = (data: ZebraPrintSettings) => {
@@ -79,7 +80,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     };
 
     const onCancel = () => {
-      setEditData({});
+      setIsEdit(false);
       setIsOpen(false);
     };
 
@@ -102,12 +103,12 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     return Component({
       ...(props),
       onAddNew,
+      onEdit,
       onCancel,
       onSelectionChange,
       onDelete,
       dataResult,
       isOpen,
-      editData,
       formik,
       confirmationDialog,
       confirmDeletePrinter,

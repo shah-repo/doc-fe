@@ -1,21 +1,26 @@
 import { DialogContent, Grid } from '@material-ui/core';
-import { FormikProvider } from 'formik';
+import { FormikContextType, FormikProvider } from 'formik';
 import { isEmpty } from 'lodash';
 import React from 'react';
+import { ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import Dialog from '../../../../components/dialogs';
 import { FormField, TextField } from '../../../../components/forms/fields-next';
-import { SettingsPanelProps } from '../../types';
 
-const AddNewPrinter: React.FunctionComponent<SettingsPanelProps> = ({
+interface AddNewPrinterProps {
+  onCancel: () => void
+  isOpen: boolean
+  formik: FormikContextType<ZebraPrintSettings>
+}
+
+const AddNewPrinter: React.FunctionComponent<AddNewPrinterProps> = ({
   onCancel,
   isOpen = false,
-  editData,
   formik,
 }) => {
   return (
     <Dialog
-      title={`${isEmpty(editData) ? 'Add' : 'Edit'} Printer`}
-      confirmLabel={isEmpty(editData) ? 'common.add.printer' : 'common.save.changes'}
+      title={`${isEmpty(formik?.getFieldProps('apiKey')) ? 'Add' : 'Edit'} Printer`}
+      confirmLabel={isEmpty(formik?.getFieldProps('apiKey')) ? 'common.add.printer' : 'common.save.changes'}
       cancelLabel="common.cancel"
       open={isOpen}
       onConfirm={formik?.handleSubmit}
