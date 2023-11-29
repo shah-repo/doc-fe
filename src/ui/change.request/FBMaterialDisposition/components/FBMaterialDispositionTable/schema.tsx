@@ -43,7 +43,7 @@ export const buildSchema = ({
     {
       id: 'whereUsedView',
       field: 'whereUsedView',
-      title: '',
+      title: 'approvalRequest.grid.heading.whereUsedView',
       template: (props) => <WhereUsedCellTemplate {...props} onClick={onRowClick} />,
       show: true,
       width: 120,

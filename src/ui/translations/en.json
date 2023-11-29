@@ -1690,6 +1690,7 @@
   "approvalRequest.grid.heading.where.used": "Where-Used",
   "approvalRequest.grid.heading.partId": "Part Id",
   "approvalRequest.grid.heading.lot": "LOT #",
+  "approvalRequest.grid.heading.whereUsedView": "Where Used",
   "approvalRequest.grid.heading.onOrder": "ON-Order (PO)",
   "approvalRequest.grid.heading.Inspection": "Inspection",
   "approvalRequest.grid.heading.Inventory": "Inventory",

@@ -77,8 +77,8 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
   const materialDispositionAsync = useAsync({
     onSuccess: (data: {records: EditableMDItem[], lastRefreshedAt: Date}) => {
-      setData(data.records);
-      setLastRefreshedAt(data.lastRefreshedAt);
+      setData(data?.records ?? []);
+      setLastRefreshedAt(data?.lastRefreshedAt);
     },
     onError: toastError,
   });
@@ -214,7 +214,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     );
   };
 
-  const MDItemList = data.reduce<EditableMDItem[]>((list, item) => {
+  const MDItemList = data?.reduce<EditableMDItem[]>((list, item) => {
     const isMDItemEdited = editedMDItem && editedMDItem.id === item.id;
 
     return [
