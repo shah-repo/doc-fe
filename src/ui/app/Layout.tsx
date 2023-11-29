@@ -57,11 +57,11 @@ import SocketsContainer from './sockets/container';
 
 const Layout: React.FunctionComponent = () => {
   const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
-  const [isOpen, setOpen] = React.useState(isMobile() ? false : isExpanded);
-  const classes = useStyles({ isDashboard: SM.isHomeURL, isOpen: isOpen });
+  const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
+  const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
   const handleDrawerOpen = () => {
-    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpen ? '1' : '0');
-    setOpen(!isOpen);
+    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
+    setOpen(!isOpened);
   };
 
   return (
@@ -69,8 +69,8 @@ const Layout: React.FunctionComponent = () => {
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer className={classes.mobileLayout} open={isOpen} handleDrawerOpen={handleDrawerOpen} />
-      <Navigation handleDrawerOpen={handleDrawerOpen} open={isOpen} />
+      <HeaderContainer className={classes.mobileLayout} open={isOpened} handleDrawerOpen={handleDrawerOpen} />
+      <Navigation handleDrawerOpen={handleDrawerOpen} open={isOpened} />
       <SocketsContainer />
       <WatermarkFooterContainer />
       <main className={cx(classes.root, classes.mobileLayout)} >

@@ -8,11 +8,11 @@ import HeaderPresenter from './Header.presenter';
 
 interface HeaderContainerProps {
   handleDrawerOpen: () => void
-  open: boolean
+  isOpened: boolean
   className: string
 }
 
-const HeaderContainer: React.FC<HeaderContainerProps> = ({ open, handleDrawerOpen, className }) => {
+const HeaderContainer: React.FC<HeaderContainerProps> = ({ isOpened, handleDrawerOpen, className }) => {
   const fullHeight = SM.isHomeURL;
   const name = useSelector(authSelectors.currentUserName);
   const canToggleCustomLabels = useGetHasTag(GroupTag.LABEL_TOOLTIPS);
@@ -30,7 +30,7 @@ const HeaderContainer: React.FC<HeaderContainerProps> = ({ open, handleDrawerOpe
         customLabelsValue,
         toggleCustomLabels,
         canToggleCustomLabels,
-        open,
+        isOpened,
         handleDrawerOpen,
         className,
       }}

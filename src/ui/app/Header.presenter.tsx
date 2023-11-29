@@ -24,7 +24,7 @@ export interface HeaderPresenterProps {
   toggleCustomLabels: () => void
   customLabelsValue: boolean
   canToggleCustomLabels: boolean
-  open: boolean
+  isOpened: boolean
   handleDrawerOpen: () => void
   className: string
 }
