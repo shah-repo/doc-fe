@@ -150,11 +150,13 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
       employeeUpdates: employeeResponse?.map(data => {
         if (data.employeeId !== employeeId) {
           return {
+            employeeId: data.employeeId,
             status: data.status,
             attachments: data.attachments,
           };
         }
         return {
+          employeeId: data.employeeId,
           status: data.status,
           attachments,
         };
