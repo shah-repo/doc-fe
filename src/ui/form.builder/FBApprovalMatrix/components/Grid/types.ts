@@ -4,6 +4,10 @@ import { Mode, MODE_FIELD } from './constants';
 export type GridItem<T> = T & {
   id?: string
   [MODE_FIELD]?: Mode
+  docType: {
+    name: string
+    acronym: string
+  }
 };
 
 export interface GridProps<T> extends DataGridProps<T> {

@@ -77,13 +77,17 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       setActiveItem(cloneDeep(dataItem));
     }
   };
+  const requiredSchemaFields = schema.filter(field => field.required);
+  const isAnyRequiredFieldMissing = requiredSchemaFields.some(({ field }) => !activeItem?.[field as string]);
 
   const handleItemSave = (): void => {
+    if (isAnyRequiredFieldMissing) {
+      return;
+    }
     const newData = data.map((dataItem) => {
       if (activeItem && dataItem.id === activeItem.id) {
         return set(activeItem, MODE_FIELD, Mode.show);
       }
-
       return dataItem;
     });
 
