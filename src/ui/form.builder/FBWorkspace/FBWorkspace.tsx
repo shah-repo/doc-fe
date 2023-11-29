@@ -8,6 +8,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   workspaceState,
   children,
   portalContainer,
+  formState,
   dialogState,
   snackbarState,
   schema,
@@ -24,7 +25,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
     <FBDialog />
     {/* The workspaceMode of the form should be what is passed in Or
     by default be the mode in which the workspace is, instead of being 'none' */}
-    <FBForm {...{ initialValues }}
+    <FBForm {...{ initialValues, formState }}
       workspaceMode={mode || workspaceState?.mode || FBWorkspaceModeOptions.NONE}
       initialValidation={true} includeLocking={true}>
       <FBLock>

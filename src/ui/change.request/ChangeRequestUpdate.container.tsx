@@ -1,10 +1,11 @@
-import { debounce, get, has, isEmpty, set } from 'lodash';
+import { cloneDeep, debounce, isEmpty } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { authSelectors } from '../../state/ducks/auth';
 import { changeRequestsActions } from '../../state/ducks/changeRequest';
-import { ChangeRequest, ChangeRequestEditRequestBody, ChangeRequestStatus } from '../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestStatus } from '../../state/ducks/changeRequest/types';
+import { companyActions } from '../../state/ducks/company';
 import { ApplicationState } from '../../state/reducers';
 import ChangeRequestFormContainer from '../change.request/form/ChangeRequestForm.container';
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../change.request/form/transform';
@@ -12,7 +13,7 @@ import { ChangeRequestFormValues } from '../change.request/form/types';
 import { changeRequestPreviewPath } from '../change.request/utils/paths';
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
-import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
+import { FB, FBFormState, FBProvider } from '../form.builder';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import useAsync from '../hooks/useAsync';
 import { useCanUpdateChangeRequest } from './helpers';
@@ -25,6 +26,7 @@ interface StateProps {
 interface DispatchProps {
   save: typeof changeRequestsActions.save
   loadAudit: typeof changeRequestsActions.loadAudit
+  setAutosave: typeof companyActions.setAutosaveConfig
 }
 
 interface OwnProps {
@@ -35,9 +37,9 @@ interface OwnProps {
   isEditing?: boolean
 }
 
-type ChangeRequestUpdateContainerProps = OwnProps &
-DispatchProps &
-StateProps;
+type ChangeRequestUpdateContainerProps = OwnProps
+& DispatchProps
+& StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
@@ -52,12 +54,14 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   isEditing = false,
   save,
   loadAudit,
+  setAutosave,
 }) => {
+  const history = useHistory();
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const [isMDTab, setMDTab] = React.useState(false);
   const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, isEditing);
-  const history = useHistory();
+  const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
 
   useEffect(() => {
@@ -70,6 +74,15 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     });
   }, [initialValues.formInput]);
 
+  useEffect(() => {
+    if (canEditChangeRequest && isEditing && isInReview) {
+      setAutosave(false);
+    }
+    return () => {
+      setAutosave(true);
+    };
+  }, [canEditChangeRequest, isEditing, isInReview, setAutosave]);
+
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
       setDoNotPrompt(true);
@@ -81,16 +94,13 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       loadAudit(changeRequest.id);
 
       if (isEditing) {
+        setAutosave(true);
         history.push(changeRequestPreviewPath(changeRequest.id));
       }
     },
   });
 
-  if (isEditing && !isInReview) {
-    return <Redirect to={changeRequestPreviewPath(changeRequest.id)} />;
-  }
-
-  if (!canEditChangeRequest) {
+  if (!canEditChangeRequest || (isEditing && !isInReview)) {
     if (inDialog) {
       return (
         <ChangeRequestSummaryContainer
@@ -103,12 +113,15 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     return <Redirect to={changeRequestPreviewPath(changeRequest.id)} />;
   }
 
+  const frozenInitialValues = cloneDeep(initialValues);
+
   const onSubmit = (values: ChangeRequestFormValues) => {
-    // Hack to take updated formInput
-    const formStateContext = FBFormStateContext as any;
     const dataToSubmit = compareValuesToSubmit(
-      initialValues,
-      { ...values, formInput: formStateContext?._currentValue },
+      frozenInitialValues,
+      {
+        ...values,
+        formInput: formState.getValues(),
+      },
       toChangeRequestEditRequestBody,
     );
 
@@ -120,21 +133,12 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       return;
     }
 
-    // Update form input with the hidden field data
-    const currentFormInputData = get(dataToSubmit, 'formInput', {});
-    if (!isEmpty(currentFormInputData)) {
-      for (const [key, value] of Object.entries(initialValues?.formInput || {})) {
-        if (!has(currentFormInputData, key)) {
-          set(dataToSubmit, `formInput.${key}`, value);
-        }
-      }
-    }
     async.reset();
 
     async.start(
       save,
       changeRequest.id,
-      dataToSubmit as unknown as ChangeRequestEditRequestBody,
+      dataToSubmit,
       async,
     );
   };
@@ -142,19 +146,21 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const debouncedSubmit = debounce(onSubmit, 1000);
 
   return (
-    <FormContext.Provider value={{ submitOnChange: !isEditing, isEditing }}>
-      <ChangeRequestFormContainer
-        asyncState={async.asyncState}
-        onSubmit={debouncedSubmit}
-        initialValues={initialValues}
-        changeRequest={changeRequest}
-        doNotPrompt={doNotPrompt}
-        setDoNotPrompt={setDoNotPrompt}
-        setMDTab={setMDTab}
-        hideSideBar={hideSideBar}
-        currentDocRevId={currentDocRevId}
-        inDialog={inDialog}
-      />
+    <FormContext.Provider value={{ submitOnChange: true, isEditing }}>
+      <FBProvider formState={formState}>
+        <ChangeRequestFormContainer
+          asyncState={async.asyncState}
+          onSubmit={debouncedSubmit}
+          initialValues={initialValues}
+          changeRequest={changeRequest}
+          doNotPrompt={doNotPrompt}
+          setDoNotPrompt={setDoNotPrompt}
+          setMDTab={setMDTab}
+          hideSideBar={hideSideBar}
+          currentDocRevId={currentDocRevId}
+          inDialog={inDialog}
+        />
+      </FBProvider>
     </FormContext.Provider>
   );
 };
@@ -164,5 +170,6 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   {
     save: changeRequestsActions.save,
     loadAudit: changeRequestsActions.loadAudit,
+    setAutosave: companyActions.setAutosaveConfig,
   },
 )(ChangeRequestUpdateContainer);

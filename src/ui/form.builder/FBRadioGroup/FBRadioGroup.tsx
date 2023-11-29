@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, RadioGroup } from '@material-ui/core';
+import { RadioGroup, createStyles, makeStyles } from '@material-ui/core';
 import React from 'react';
 import { FBInput, FBRadioGroupProps } from '..';
 import { FBFontStyle } from '../styles/FBFont.styles';
@@ -14,21 +14,32 @@ const styles = makeStyles(() =>
     },
   }));
 
-const FBRadioGroup: React.FunctionComponent<FBRadioGroupProps> = ({
+const FBRadioGroupComp: React.FC<FBRadioGroupProps> = ({
   controls,
-  row = true,
-  type = 'radiogroup',
   onBlur,
   ...props
 }) => {
   const classes = styles();
   return (
-    <FBInput {...props} {...{ type }} labelProps={FBFontStyle.labelProps}>
-      <RadioGroup {...props} {...{ row }} className={classes.radio}>
-        {controls}
-      </RadioGroup>
+    <RadioGroup {...props} className={classes.radio}>
+      {controls}
+    </RadioGroup>
+  );
+};
+
+const FBRadioGroupChild = withFBRadioGroup(FBRadioGroupComp);
+
+const FBRadioGroup: React.FC<FBRadioGroupProps> = ({
+  controls,
+  row = true,
+  type = 'radiogroup',
+  ...props
+}) => {
+  return (
+    <FBInput {...props} type={type} labelProps={FBFontStyle.labelProps}>
+      <FBRadioGroupChild {...props} {...{ row, controls }} />
     </FBInput>
   );
 };
 
-export default withFBRadioGroup(FBRadioGroup);
+export default FBRadioGroup;
