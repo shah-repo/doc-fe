@@ -42,7 +42,8 @@ const InputCellTemplate: CellTemplate = (props) => {
     if (required && !event.currentTarget.value) {
       setError('validators.required');
       return;
-    } setError('');
+    }
+    setError('');
   };
 
   if (!canBeModified) {
