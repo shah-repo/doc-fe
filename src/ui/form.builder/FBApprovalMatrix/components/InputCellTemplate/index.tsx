@@ -36,7 +36,7 @@ const InputCellTemplate: CellTemplate = (props) => {
         value: event.value,
       });
     },
-    500,
+    200,
   );
 
   const handleBlur: InputProps['onBlur'] = (event) => {
