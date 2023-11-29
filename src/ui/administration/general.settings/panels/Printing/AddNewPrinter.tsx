@@ -1,10 +1,11 @@
-import { DialogContent, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { FormikContextType, FormikProvider } from 'formik';
 import { isEmpty } from 'lodash';
 import React from 'react';
+import { translate } from '../../../../../common/intl';
 import { ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import Dialog from '../../../../components/dialogs';
-import { FormField, TextField } from '../../../../components/forms/fields-next';
+import { FormikField, TextField } from '../../../../components/forms/fields-next';
 
 interface AddNewPrinterProps {
   onCancel: () => void
@@ -19,43 +20,57 @@ const AddNewPrinter: React.FunctionComponent<AddNewPrinterProps> = ({
 }) => {
   return (
     <Dialog
-      title={`${isEmpty(formik?.getFieldProps('apiKey')) ? 'Add' : 'Edit'} Printer`}
+      title={`${isEmpty(formik?.getFieldProps('apiKey')) ? translate('common.add') : translate('common.edit')} Printer`}
       confirmLabel={isEmpty(formik?.getFieldProps('apiKey')) ? 'common.add.printer' : 'common.save.changes'}
       cancelLabel="common.cancel"
       open={isOpen}
       onConfirm={formik?.handleSubmit}
       onCancel={onCancel}
       onClose={onCancel}>
-      <DialogContent>
-        <FormikProvider value={formik ?? {}}>
-          <Grid
-            container
-            alignItems="center"
-            justify="space-between"
-            spacing={2}>
-            <Grid item xs={6}>
-              <FormField label="Name">
-                <TextField {...formik?.getFieldProps('printer.name')} />
-              </FormField>
-            </Grid>
-            <Grid item xs={6}>
-              <FormField label="administration.general.settings.printing.printer.serial">
-                <TextField {...formik?.getFieldProps('printer.sn')} />
-              </FormField>
-            </Grid>
-            <Grid item xs={12}>
-              <FormField label="administration.general.settings.printing.consumer.key">
-                <TextField {...formik?.getFieldProps('apiKey')} />
-              </FormField>
-            </Grid>
-            <Grid item xs={12}>
-              <FormField label="administration.general.settings.printing.tenant.id">
-                <TextField {...formik?.getFieldProps('tenantId')} />
-              </FormField>
-            </Grid>
+      <FormikProvider value={formik ?? {}}>
+        <Grid
+          container
+          alignItems="center"
+          justify="space-between"
+          spacing={2}>
+          <Grid item xs={6}>
+            <FormikField
+              name="printer.name"
+              required
+              label="Name"
+              error={!isEmpty(formik?.errors?.printer?.name)}>
+              <TextField {...formik?.getFieldProps('printer.name')} />
+            </FormikField>
           </Grid>
-        </FormikProvider>
-      </DialogContent>
+          <Grid item xs={6}>
+            <FormikField
+              name="printer.sn"
+              required
+              label="administration.general.settings.printing.printer.serial"
+              error={!isEmpty(formik?.errors?.printer?.sn)}>
+              <TextField {...formik?.getFieldProps('printer.sn')} />
+            </FormikField>
+          </Grid>
+          <Grid item xs={12}>
+            <FormikField
+              name="apiKey"
+              required
+              label="administration.general.settings.printing.consumer.key"
+              error={!isEmpty(formik?.errors.apiKey)}>
+              <TextField {...formik?.getFieldProps('apiKey')} />
+            </FormikField>
+          </Grid>
+          <Grid item xs={12}>
+            <FormikField
+              name="tenantId"
+              required
+              label="administration.general.settings.printing.tenant.id"
+              error={!isEmpty(formik?.errors.tenantId)}>
+              <TextField {...formik?.getFieldProps('tenantId')} />
+            </FormikField>
+          </Grid>
+        </Grid>
+      </FormikProvider>
     </Dialog>
   );
 };
