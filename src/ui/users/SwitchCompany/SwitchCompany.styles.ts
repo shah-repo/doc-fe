@@ -83,6 +83,17 @@ export const styles = makeStyles((theme: NextTheme) =>
         marginLeft: '90%',
         display: 'unset',
       },
+      selectedIcon: {
+        color: '#4D88FF',
+        width: 11,
+        height: 17,
+        fontSize: 18,
+        fontWeight: 900,
+        lineHeight: 16.8,
+        marginLeft: '25%',
+        marginBottom: '8%',
+        marginTop: '-17px',
+      },
     },
   }),
 );

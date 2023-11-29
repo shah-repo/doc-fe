@@ -14,6 +14,7 @@ import { store } from '../../state/store';
 import Text from '../components/Text';
 import { ThemeEnv } from '../layout/theme/utils/types';
 import styles from './Header.styles';
+import { UserMenuContext } from './NavigationProfile.container';
 import AutosaveToggle from './autosave/autosave';
 
 export interface HeaderPresenterProps {
@@ -40,6 +41,10 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   const user = store.getState().auth.user;
   const companyName = user.employee.company.name;
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
+  const {
+    handleSwitchCompany,
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  } = React.useContext(UserMenuContext)! ?? {};
 
   return (
     <AppBar className={cx(classes.appBar, className)}>
@@ -51,7 +56,6 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
             <Text translation="header.design.make" />
           </Typography>
         </div>
-
         <div>
           {whiteLabeling.avatar ? (
             <img
@@ -59,9 +63,10 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
               className={classes.mobileAvatar}
               src={whiteLabeling.avatar}
               alt={companyName}
+              onClick={handleSwitchCompany}
             />
           ) : (
-            <CompanyAvatar className={classes.mobileAvatar} />
+            <CompanyAvatar className={classes.mobileAvatar} onClick={handleSwitchCompany} />
           )}
         </div>
       </div>

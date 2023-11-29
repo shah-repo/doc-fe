@@ -107,7 +107,7 @@ export default (theme: NextTheme) =>
         height: 30,
         borderRadius: 4,
         padding: theme.spacing(1),
-        background: 'rgba(255, 255, 255, 0.1)',
+        background: Colors.gradient_color,
       },
       logoMobile: {
         marginLeft: 8,
