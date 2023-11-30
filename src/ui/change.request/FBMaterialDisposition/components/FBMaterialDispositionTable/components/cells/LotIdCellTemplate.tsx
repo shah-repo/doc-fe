@@ -11,6 +11,7 @@ export const LotIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem, field, onClick } = props;
 
   const { lotDocId, lotDocRevId } = dataItem;
+  console.log('DataItem ::', dataItem);
   const fieldValue = dataItem[field];
 
   return (
@@ -19,7 +20,7 @@ export const LotIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
         data={fieldValue}
         childrenElement={
           <Link
-            to={documentPreviewPath(lotDocRevId, lotDocId)}
+            to={documentPreviewPath(lotDocRevId, '0706db03-1b97-4195-874d-1edcf60876b8' ?? lotDocId)}
             target="_blank"
             className={classes.link}
           >
