@@ -11,11 +11,11 @@ const fileSize = (filesSize: number) => {
 
 const LIMIT = fileSize(FILE_UPLOAD_LIMIT);
 
-export const handleFileSizeExceedLimit = (names: string[], filesSize: number, event: React.FormEvent<HTMLInputElement>) => {
+export const handleFileSizeExceedLimit = (names: string[], filesSize: number, event: React.FormEvent<HTMLInputElement>): void => {
   const formattedSize = fileSize(filesSize);
   event.currentTarget.value = '';
-  names.map(name => {
-    return toastError(
+  names.forEach(name => {
+    toastError(
       intl.formatMessage(
         { id: 'common.attachment.exceeds.size.error' },
         { name, size: formattedSize, limit: LIMIT },
@@ -24,5 +24,5 @@ export const handleFileSizeExceedLimit = (names: string[], filesSize: number, ev
   });
 };
 
-export const calculateTotalFileSize = (files: FileList | null) => Array.from(files
+export const calculateTotalFileSize = (files: FileList | null): number => Array.from(files
    ?? []).reduce((acc, file) => acc + file.size, 0);

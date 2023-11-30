@@ -3,8 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBFileFieldProps, FBFileFieldState } from '..';
-import { calculateTotalFileSize } from '../../components/common/attachment.field/calculateTotalFileSize';
-import { FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
+import { FILE_UPLOAD_LIMIT, calculateTotalFileSize, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
 import { toastError } from '../../components/notifications';
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(

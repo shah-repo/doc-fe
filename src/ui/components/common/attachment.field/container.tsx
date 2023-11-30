@@ -12,9 +12,8 @@ import useAsync from '../../../hooks/useAsync';
 import { useFormContext } from '../../forms/FormContext';
 import { withFormik } from '../../hoc/formik';
 import { toastError } from '../../notifications';
-import { calculateTotalFileSize } from './calculateTotalFileSize';
 import Presenter from './presenter';
-import { FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from './utils';
+import { FILE_UPLOAD_LIMIT, calculateTotalFileSize, handleFileSizeExceedLimit } from './utils';
 import { AttachmentContainerProps } from './utils/types';
 
 const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({

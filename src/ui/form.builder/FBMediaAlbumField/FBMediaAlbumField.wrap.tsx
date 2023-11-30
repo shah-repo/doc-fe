@@ -7,8 +7,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from '..';
 import { companySelectors } from '../../../state/ducks/company';
-import { calculateTotalFileSize } from '../../components/common/attachment.field/calculateTotalFileSize';
-import { FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
+import { FILE_UPLOAD_LIMIT, calculateTotalFileSize, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
 import { toastError } from '../../components/notifications';
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
