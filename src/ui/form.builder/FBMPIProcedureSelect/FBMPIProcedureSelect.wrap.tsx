@@ -70,6 +70,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
                 pmDueDate: ref.toDocRev?.precalc?.pm_due_date,
                 calDueDate: ref.toDocRev?.precalc?.cali_due_date,
                 overrideDocId: ref.toDocRev?.document.docId,
+                lotPartRevision: ref.toDocRev?.precalc?.lot_part_revision,
               });
             }
             return selected;

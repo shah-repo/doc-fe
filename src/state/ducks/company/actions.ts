@@ -1,8 +1,10 @@
+import { omit } from 'lodash';
+import { generatePath } from 'react-router-dom';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
-import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
+import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
+import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettings, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
@@ -51,6 +53,11 @@ const autosaveConfig = () => ({
   type: AUTOSAVE_CONFIG,
 });
 
+const setAutosaveConfig = (active: boolean) => ({
+  type: SET_AUTOSAVE_CONFIG,
+  payload: { active },
+});
+
 const redlineConfig = (redlineActive: boolean) => ({
   type: REDLINE_CONFIG,
   payload: { redlineActive },
@@ -71,10 +78,10 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
-const updateGeneralSettings = (body: GeneralSettings): ApiAction<GeneralSettingsState> => apiAction({
-  url: COMPANY_SETTINGS_URL,
-  method: 'post',
-  data: body,
+const updateGeneralSettings = (body: GeneralSettings, id: string, method = 'post'): ApiAction<GeneralSettingsState> => apiAction({
+  url: id ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id: id }) : COMPANY_SETTINGS_URL,
+  method: method,
+  data: omit(body, 'id'),
   asyncType: SET_GENERAL_SETTINGS,
   onSuccess: (data, dispatch) => {
     dispatch(setGeneralSettings(data));
@@ -87,6 +94,7 @@ export default {
   updateCompanyMine,
   updateNavigationMenuItem,
   autosaveConfig,
+  setAutosaveConfig,
   redlineConfig,
   getGeneralSettings,
   updateGeneralSettings,

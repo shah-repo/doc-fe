@@ -5,7 +5,7 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from '..';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import {
@@ -78,7 +78,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    function newPMDisabled(): boolean {
+    function newPMDisabled (): boolean {
       return !(
         formState?.getFieldValue(`${name}.preventativeForm`)
         && formState?.getFieldValue(`${name}.frequency`)
@@ -155,14 +155,14 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       async.start(create, body, async);
     };
 
-    const filterOutOption = (docRev: AvailableMaintenanceForm, inputValue: string ) => {
+    const filterOutOption = (docRev: AvailableMaintenanceForm, inputValue: string) => {
       const filterValue = lowerCase(inputValue);
 
       return lowerCase(docRev.name).includes(filterValue)
              || lowerCase(docRev.docId).includes(filterValue);
     };
 
-    function handleFilter(
+    function handleFilter (
       data: AvailableMaintenanceForm[],
       state: FilterOptionsState,
     ) {
@@ -171,7 +171,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       const options = data?.filter((form) =>
         filterOutOption(form, inputValue)
         && form.documentRevisions.some((doc) =>
-          doc.status === DocumentRevisionStatus.Released && form.id !== typeValue ));
+          doc.status === DocumentRevisionStatus.Released && form.id !== typeValue));
       return options;
     }
 
@@ -179,7 +179,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       handleFilter(options, state);
 
     getOptionLabel = (option) => {
-      if (!option?.documentRevisions?.find((doc) => doc.status === DocumentRevisionStatus.Released)) {
+      if (option?.documentRevisions && !option?.documentRevisions?.find((doc) => doc.status === DocumentRevisionStatus.Released)) {
         const title = option?.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Obsolete)?.name;
         return `${option.docId} - OBS - ${title}`;
       }

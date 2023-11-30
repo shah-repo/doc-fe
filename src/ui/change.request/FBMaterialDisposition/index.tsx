@@ -7,12 +7,13 @@ interface props {
   changeRequest?: ChangeRequest
   isShowOnly?: boolean
   isAdditionalColumnsShown?: boolean
+  setDoNotPrompt?: (state: boolean) => void
 }
 
-const FBMaterialDisposition: React.FunctionComponent<props> = ({ changeRequest, isShowOnly, isAdditionalColumnsShown }) => {
+const FBMaterialDisposition: React.FunctionComponent<props> = ({ changeRequest, isShowOnly, isAdditionalColumnsShown, setDoNotPrompt }) => {
   return (<>
-    <FBMaterialDispositionTable {...{ changeRequest, isShowOnly }} />
-    <FBTasksListTable {...{ changeRequest, isShowOnly, isAdditionalColumnsShown }} />
+    <FBMaterialDispositionTable {...{ changeRequest, isShowOnly, setDoNotPrompt }} />
+    <FBTasksListTable {...{ changeRequest, isShowOnly, isAdditionalColumnsShown, setDoNotPrompt }} />
   </>);
 };
 

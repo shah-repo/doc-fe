@@ -3,7 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceMode, FBWorkspaceProps, FBWorkspaceState, FBWorkspaceModeOptions } from '..';
+import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceProps, FBWorkspaceState } from '..';
 import { SM } from '../../../App';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { store } from '../../../state/store';
@@ -28,6 +28,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     workspaceState,
     dialogState,
     snackbarState,
+    formState,
     mode,
     document,
     changeRequest,
@@ -187,6 +188,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       snackbarState,
       autosave,
       withoutBottomBar,
+      formState,
       _tabsState,
       isStarterRequired,
     });

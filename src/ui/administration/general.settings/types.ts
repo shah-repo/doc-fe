@@ -14,6 +14,7 @@ export interface GeneralSettingsProps {
   updatedAt?: string
   onSave: () => void
 }
+
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
   onToggle: () => void

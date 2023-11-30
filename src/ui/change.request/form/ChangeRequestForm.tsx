@@ -1,27 +1,27 @@
 import { BoxProps } from '@material-ui/core';
 import { FormikProps } from 'formik';
-import { cloneDeep, map } from 'lodash';
-import { Observer } from 'mobx-react';
+import { cloneDeep, isEqual, map } from 'lodash';
+import { Observer, useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from '../../../App';
 import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { companyActions } from '../../../state/ducks/company';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import TabChangePromptIfDirty from '../../components/forms/TabChangePromptIfDirty';
-import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
+import { FB, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
 import FBMaterialDisposition from '../FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
-import FormHeader from './assessmentForm/FormHeader';
 import ChangeRequestSidebar from './ChangeRequest.sidebar';
 import ChangeRequestFormHeader from './ChangeRequestFormHeader';
+import FormHeader from './assessmentForm/FormHeader';
 import { ChangeRequestFormValues } from './types';
 
 type ChangeRequestFormProps =
@@ -34,12 +34,13 @@ type ChangeRequestFormProps =
   changeRequest?: ChangeRequest
   doNotPrompt?: boolean
   setDoNotPrompt?: (state: boolean) => void
+  setMDTab?: (state: boolean) => void
   changeOpenStatus: (status: boolean) => void
   schema?: FBSchemaProps[]
   mode: FBWorkspaceMode
   withoutBottomBar: boolean
   autosave: boolean
-  formInput?: Record<string, any>
+  formInput?: Record<string, unknown>
   hideSideBar: boolean
   currentDocRevId?: string
   inDialog: boolean
@@ -62,13 +63,27 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   hideSideBar = false,
   currentDocRevId,
   inDialog = false,
+  setMDTab,
 }) => {
   const { _tabsState } = SM.useStores();
+  const { formState } = FB.useStores();
   const { isEditing } = useFormContext();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    formState?.setSchema(schema);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schema]);
+
+  useEffect(() => {
+    if (formState) {
+      formState.workspaceMode = mode;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   _formState?.setMode(mode);
   _formState?.setAutosave(autosave);
-  _formState?.setDirty(isEditing);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
 
@@ -77,7 +92,16 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     changeOpenStatus(status);
   };
 
-  const handlePromptConfirm = () => setDoNotPrompt?.(true);
+  const handlePromptConfirm = () => {
+    setDoNotPrompt?.(true);
+    dispatch(companyActions.setAutosaveConfig(true));
+  };
+
+  const handlePromptCancel = () => {
+    if (isEditing) {
+      dispatch(companyActions.setAutosaveConfig(false));
+    }
+  };
 
   const docTypeGroup = changeRequest?.documentType.group ?? 'OTHER';
   const tabConfig = useSelector((state: ApplicationState) =>
@@ -99,12 +123,27 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
+  const values = useObserver(() => ({
+    ...formValues.values,
+    formInput: formState?.getValues(),
+  }));
+
+  const isDirty = useObserver(() => _formState?.isDirty ?? false);
+
   useEffect(() => {
     if (inDialog) {
       _tabsState?.setActiveTabId(TabTypeOptions.ITEMS.toLowerCase());
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    _formState?.setDirty(!isEqual(values, formValues.initialValues));
+  }, [_formState, formState, formValues.initialValues, values]);
+
+  if (_tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)) {
+    setMDTab?.(true);
+  }
 
   return (
     <SMForm
@@ -117,11 +156,11 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     >
       <PromptIfDirty
         isDialog
-        dirty={_formState?.isDirty ?? false}
+        dirty={isDirty}
         doNotPrompt={doNotPrompt}
         onConfirm={handlePromptConfirm}
+        onCancel={handlePromptCancel}
       />
-      <TabChangePromptIfDirty />
       <SMTemplate
         boxProps={{ className: 'hide-scroll' }}
         templateBoxProps={{ stretchY: '100%' }}
@@ -166,6 +205,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               && <FBWorkspace
                                 isPortal={false}
                                 initialValues={formInput}
+                                formState={formState}
                                 changeRequest={cloneDeep(changeRequest)}
                                 autosave={autosave}
                                 withoutBottomBar={withoutBottomBar}
@@ -179,7 +219,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                             <ItemsAndDetailsWrapper
                               currentDocRevId={currentDocRevId}
                               changeRequest={cloneDeep(changeRequest)}
-                              initialValues={formInput ?? {}}
                               autosave={autosave}
                               mode={mode}
                               asyncState={asyncState}
@@ -187,13 +226,14 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           )}
                           {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                             && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
-                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} />
+                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} {...{ setDoNotPrompt }} />
                           }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
                             && <FBWorkspace
                               isPortal={false}
                               initialValues={formInput}
+                              formState={formState}
                               changeRequest={cloneDeep(changeRequest)}
                               autosave={autosave}
                               withoutBottomBar={withoutBottomBar}

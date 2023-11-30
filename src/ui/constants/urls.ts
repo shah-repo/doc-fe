@@ -64,3 +64,5 @@ export const GLOBAL_SEARCH_URL = '/search';
 export const GENERAL_SETTINGS_URL = '/general_settings';
 
 export const COMPANY_SETTINGS_URL = '/company/settings';
+
+export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
