@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as RemoveReference } from '../../../../assets/images/trash.svg';
-import { translate } from '../../../../common/intl';
+import { intl } from '../../../../common/intl';
 import { TypographyProps } from '../../../../state/ducks/common/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DocRevQueryParam, DocumentGroupOptionsType } from '../../../../state/ducks/documentRevisions/documentType/types';
@@ -211,7 +211,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                placeholder={open ? undefined : translate('search.min.char')}
+                placeholder={open ? undefined : intl.formatMessage({ id: 'search.min.char' }, { count: 3 })}
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: '0px 30px 0px 9px', height: value.length ? '100%' : '40px' },
