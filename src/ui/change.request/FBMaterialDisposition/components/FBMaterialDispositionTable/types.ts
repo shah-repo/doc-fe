@@ -10,6 +10,7 @@ export interface MaterialDispositionItem {
   partDocId: string
   revisionsFromTo: string
   lotDocId: string
+  lotDocumentId?: string
   arId: string
   onOrderPOAction: string
   inInspectionAction: string
