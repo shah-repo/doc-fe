@@ -1,7 +1,6 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
-import { GridColumn } from '@progress/kendo-react-grid';
 import { FormikContextType } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
@@ -9,8 +8,9 @@ import { translate } from '../../../../../common/intl';
 import { ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { IconButton } from '../../../../components/forms/fields-next';
+import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
+import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
-import StyledKendoGrid from '../../../../components/StyledKendoGrid/StyledKendoGrid';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
@@ -34,6 +34,42 @@ interface PrintinfPanelProps extends SettingsPanelProps {
   confirmDeletePrinter?: () => void
   cancelDeletePrinter?: () => void
 }
+
+interface SchemaBuilderProps {
+  ActionCell: (props: any) => JSX.Element
+  cellRender: (props: any) => JSX.Element
+}
+
+type schemaBuilder = (options: SchemaBuilderProps) => Array<ColumnDefinition<T>>;
+  const buildSchema: schemaBuilder = ({ ActionCell, cellRender }) => {
+    return [
+      {
+        id: 'isActive',
+        field: 'printer.isActive',
+        title: 'administration.general.settings.printing.table.column.active',
+        width: 80,
+      },
+      {
+        id: 'sn',
+        field: 'printer.sn',
+        title: 'administration.general.settings.printing.table.column.serial.number',
+      },
+      {
+        id: 'name',
+        field: 'printer.name',
+        title: 'administration.general.settings.printing.table.column.serial.number',
+        cell: cellRender,
+      },
+      {
+        id: 'actions',
+        field: 'actions',
+        filterable: false,
+        title: 'administration.general.settings.printing.table.column.actions',
+        cell: ActionCell,
+        width: 80,
+      },
+    ];
+  };
 
 const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
   onAddNew,
@@ -85,10 +121,12 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
     return (<td className="k-command-cell"><OverflowTooltip title={value}>{value}</OverflowTooltip></td>);
   };
 
+  const scheama = buildSchema({ ActionCell, cellRender });
+
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.printing')} onAddNew={onAddNew}>
-      <StyledKendoGrid
-        data={dataResult}
+      <KendoDataGrid schema={scheama}
+        data={dataResult ?? []}
         selectedField={SELECTED_FIELD}
         dataItemKey={DATA_ITEM_KEY}
         selectable={{
@@ -97,24 +135,7 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
           cell: true,
           mode: 'multiple',
         }}
-        onSelectionChange={onSelectionChange}>
-        <GridColumn
-          field="printer.isActive"
-          title={translate('administration.general.settings.printing.table.column.active')}
-          width={80}
-          headerCell={() => <span className="k-column-title">Active</span>} />
-        <GridColumn
-          field="printer.sn"
-          title={translate('administration.general.settings.printing.table.column.serial.number')} />
-        <GridColumn
-          field="printer.name"
-          cell={cellRender}
-          title={translate('administration.general.settings.printing.table.column.name')} />
-        <GridColumn
-          title={translate('administration.general.settings.printing.table.column.actions')}
-          cell={ActionCell}
-          width={80} />
-      </StyledKendoGrid>
+        onSelectionChange={onSelectionChange} />
       <AddNewPrinter {...{ isOpen, onCancel, formik }} />
       {confirmationDialog?.isOpen && (
         <AlertDialog
