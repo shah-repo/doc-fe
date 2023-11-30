@@ -151,7 +151,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   };
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
-    if (inputVal && inputVal.length > 2) {
+    if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
       setInputValue(inputVal);
       setOffset(0);
       queryApi(0, inputVal);
