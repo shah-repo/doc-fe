@@ -3,6 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBFileFieldProps, FBFileFieldState } from '..';
+import { FILE_UPLOAD_LIMIT, calculateTotalFileSize, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
 import { toastError } from '../../components/notifications';
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(
@@ -16,7 +17,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     name = '',
     ...props
   }: T) => {
-    const { fileUploadState, workspaceState, formState  } = FB.useStores();
+    const { fileUploadState, workspaceState, formState } = FB.useStores();
     const { id } = workspaceState || {};
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
 
@@ -26,18 +27,18 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       fileUploadEl.onclick = registerCancel;
     }
 
-    function registerCancel() {
+    function registerCancel () {
       document.body.onfocus = removeLock;
     }
 
-    function removeLock() {
+    function removeLock () {
       if (fileUploadEl?.nodeValue?.length) { return; }
       setTimeout(() => {
         formState?.unlockField(name);
       }, 1000);
     }
 
-    function handleLockField() {
+    function handleLockField () {
       if (formState?.isBackdropOpen) { return; }
       if (!id) { return; }
       if (!name) { return; }
@@ -59,6 +60,13 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       const eventFiles = get(event, 'currentTarget.files', []);
       const invalidFiles: string[] = [];
 
+      const filesSize = calculateTotalFileSize(event?.currentTarget?.files);
+      const names = Array.from(event.currentTarget.files || []).map(file => file.name);
+      if (filesSize > FILE_UPLOAD_LIMIT) {
+        handleFileSizeExceedLimit(names, filesSize, event);
+
+        return;
+      }
       const validFiles: File[] = filter(eventFiles, (file) => {
         const fileName = get(file, 'name', '');
         const type = fileName.split('.').pop();
