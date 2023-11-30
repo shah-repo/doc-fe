@@ -211,7 +211,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                placeholder={open ? undefined : translate('common.select.placeholder')}
+                placeholder={open ? undefined : translate('search.min.char')}
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: '0px 30px 0px 9px', height: value.length ? '100%' : '40px' },
