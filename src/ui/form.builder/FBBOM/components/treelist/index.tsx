@@ -272,6 +272,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
     setSelectedDataItem(undefined);
+    _documentRevisionFormState?.setBOMChangesInProgress(false);
+    dispatch(documentRevisionsActions.reload(documentRevision?.id));
+    treeListAsync.start(
+      fetchBOMTreeList,
+      documentRevision.id,
+      documentRevision.documentId,
+      treeListAsync,
+    );
   };
 
   const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer });
@@ -1104,7 +1112,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   );
 
   const sortedColumnDefinitions = orderByLockedState(getColumns());
-  console.log('processData() :', processData(), size?.height);
 
   return (
     <>

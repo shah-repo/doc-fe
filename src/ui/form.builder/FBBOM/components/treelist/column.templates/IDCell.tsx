@@ -63,7 +63,6 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
       setParts(data);
     },
   });
-  console.log('ID cell rendering', dataItem.docId);
 
   const dialog = useDialog();
 
