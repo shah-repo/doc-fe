@@ -51,7 +51,7 @@ export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) =>
   return (
     <>
       <HeaderMenu
-        columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem)}
+        columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem, `index-${column?.mainOrderIndex}`)}
         menuIconButtonClass={classes.iconButton}
         icon={<FontAwesomeIcon className={cx('k-icon', classes.icon)} icon={solid('ellipsis-vertical')} />}
       >
