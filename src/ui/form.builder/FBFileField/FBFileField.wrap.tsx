@@ -3,6 +3,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBFileFieldProps, FBFileFieldState } from '..';
+import { calculateTotalFileSize } from '../../components/common/attachment.field/calculateTotalFileSize';
 import { FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
 import { toastError } from '../../components/notifications';
 
@@ -60,7 +61,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       const eventFiles = get(event, 'currentTarget.files', []);
       const invalidFiles: string[] = [];
 
-      const filesSize = Array.from(event.currentTarget.files || []).map(file => file).reduce((acc, file) => file.size + acc, 0);
+      const filesSize = calculateTotalFileSize(event?.currentTarget?.files);
       const names = Array.from(event.currentTarget.files || []).map(file => file.name);
       if (filesSize > FILE_UPLOAD_LIMIT) {
         handleFileSizeExceedLimit(names, filesSize, event);

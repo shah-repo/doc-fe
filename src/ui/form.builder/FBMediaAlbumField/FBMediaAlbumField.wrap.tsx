@@ -7,6 +7,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from '..';
 import { companySelectors } from '../../../state/ducks/company';
+import { calculateTotalFileSize } from '../../components/common/attachment.field/calculateTotalFileSize';
 import { FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
 import { toastError } from '../../components/notifications';
 
@@ -78,7 +79,8 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       const eventFiles = get(event, 'currentTarget.files', []);
       const invalidFiles: string[] = [];
       const duplicateNamedFiles: string[] = [];
-      const filesSize = Array.from(event.currentTarget.files || []).map(file => file).reduce((acc, file) => file.size + acc, 0);
+
+      const filesSize = calculateTotalFileSize(event?.currentTarget?.files);
       const names = Array.from(event.currentTarget.files || []).map(file => file.name);
       if (filesSize > FILE_UPLOAD_LIMIT) {
         handleFileSizeExceedLimit(names, filesSize, event);

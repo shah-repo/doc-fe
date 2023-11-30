@@ -1,6 +1,7 @@
 import { intl } from '../../../../common/intl';
 import { toastError } from '../../notifications';
 
+// 4GB file upload limit
 export const FILE_UPLOAD_LIMIT = 4 * 1024 * 1024 * 1024;
 
 const fileSize = (filesSize: number) => {
@@ -13,7 +14,7 @@ const LIMIT = fileSize(FILE_UPLOAD_LIMIT);
 export const handleFileSizeExceedLimit = (names: string[], filesSize: number, event: React.FormEvent<HTMLInputElement>) => {
   const formattedSize = fileSize(filesSize);
   event.currentTarget.value = '';
-  const errorMessages = names.map(name => {
+  names.map(name => {
     return toastError(
       intl.formatMessage(
         { id: 'common.attachment.exceeds.size.error' },
@@ -21,5 +22,7 @@ export const handleFileSizeExceedLimit = (names: string[], filesSize: number, ev
       ),
     );
   });
-  return errorMessages;
 };
+
+export const calculateTotalFileSize = (files: FileList | null) => Array.from(files
+   ?? []).reduce((acc, file) => acc + file.size, 0);

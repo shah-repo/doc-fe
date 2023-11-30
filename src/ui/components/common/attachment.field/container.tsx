@@ -12,6 +12,7 @@ import useAsync from '../../../hooks/useAsync';
 import { useFormContext } from '../../forms/FormContext';
 import { withFormik } from '../../hoc/formik';
 import { toastError } from '../../notifications';
+import { calculateTotalFileSize } from './calculateTotalFileSize';
 import Presenter from './presenter';
 import { FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from './utils';
 import { AttachmentContainerProps } from './utils/types';
@@ -89,14 +90,15 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
   const onChange = (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlertedNoDocFiles = false;
     let isUserAlrtedCleanCopyMismatch = false;
-    const filesSize = Array.from(event.currentTarget.files || []).map(file => file).reduce((acc, file) => file.size + acc, 0);
-    const names = Array.from(event.currentTarget.files || []).map(file => file.name);
+    const files = Array.from(event.currentTarget.files || []);
+    const filesSize = calculateTotalFileSize(event?.currentTarget?.files);
+    const names = files.map(file => file.name);
     if (filesSize > FILE_UPLOAD_LIMIT) {
       handleFileSizeExceedLimit(names, filesSize, event);
       return;
     }
 
-    const filteredFiles = Array.from(event.currentTarget.files || []).filter(
+    const filteredFiles = files.filter(
       (file) => {
         const type = file.name.split('.').pop();
         if (type === 'doc') {
