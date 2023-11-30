@@ -45,6 +45,8 @@ const getReferenceValues = (
   return { highestRev, isReferencePart, canReferenceCreateInspection };
 };
 
+const MIN_SEARCH_TERM_LENGTH = 3;
+
 const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithFormik> = ({
   availableReferences,
   disabled = false,
@@ -211,7 +213,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                placeholder={open ? undefined : intl.formatMessage({ id: 'search.min.char' }, { count: 3 })}
+                placeholder={open ? undefined : intl.formatMessage({ id: 'search.min.char' }, { count: MIN_SEARCH_TERM_LENGTH })}
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: '0px 30px 0px 9px', height: value.length ? '100%' : '40px' },
