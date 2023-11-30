@@ -121,11 +121,11 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
     return (<td className="k-command-cell"><OverflowTooltip title={value}>{value}</OverflowTooltip></td>);
   };
 
-  const scheama = buildSchema({ ActionCell, cellRender });
+  const schema = buildSchema({ ActionCell, cellRender });
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.printing')} onAddNew={onAddNew}>
-      <KendoDataGrid schema={scheama}
+      <KendoDataGrid schema={schema}
         data={dataResult ?? []}
         selectedField={SELECTED_FIELD}
         dataItemKey={DATA_ITEM_KEY}
