@@ -33,6 +33,7 @@
   "header.title": "Enlil",
   "header.welcome": "Welcome",
   "header.name": "{name}",
+  "header.logout": "Logout",
   "header.menu.my.profile": "My profile",
   "header.menu.my.settings": "Settings",
   "navigation.common.management": "Management",
