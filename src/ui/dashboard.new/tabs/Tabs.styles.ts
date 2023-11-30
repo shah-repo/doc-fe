@@ -1,7 +1,8 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
+import { NextTheme } from '../../layout/theme-next/provider';
 
-export default makeStyles((theme) => ({
+export default makeStyles((theme: NextTheme) => ({
   root: {
     height: '100%',
     display: 'flex',
@@ -35,5 +36,10 @@ export default makeStyles((theme) => ({
     fontSize: 14,
     fontWeight: 400,
     marginLeft: 5,
+  },
+  [theme.media.mobile]: {
+    mobileTab: {
+      display: 'none',
+    },
   },
 }));

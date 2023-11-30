@@ -1,6 +1,8 @@
 import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
@@ -9,29 +11,29 @@ import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
-import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { Attachment } from '../../../../change.request/form/types';
+import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
+import DismissAction from '../../common/DismissAction';
 import { getStatusLabel } from '../../common/DocIcon';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
 import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
 import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
-import { DocTypeGroups } from '../../common/types';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
+import { DocTypeGroups } from '../../common/types';
 import useStyles from './purchaseOrder.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -48,11 +50,11 @@ interface Props {
   purchaseOrderSupplierDocId: string
   status: string
   timestamp: string
-  purchaseOrderAttachments: {
+  purchaseOrderAttachments: Array<{
     name: string
     type: string
     id: string
-  }[]
+  }>
   purchaseOrdeLineItemCount: number
   purchaseOrderDescription: string
   purchaseOrderCurrency: string
@@ -162,7 +164,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, '_blank');
+      downloadFile(downloadInfo?.url);
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {
@@ -181,11 +183,12 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         className={classes.listItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
+        {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }}
       >
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
+          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemIcon>
           <POIcon height={30} width={30} />
@@ -296,23 +299,24 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
                   className={classes.cursorPointer}
+                  stroke={Colors.font_gray}
                 />
               </span>
             )}
             <StyleTooltip
-                title={<Text translation="common.download.pdf" />}
-                placement="top"
-                arrow
-              >
-                <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
-                  <DownloadHtmlPreview
-                    id={docRevId}
-                    data-cy="transition-download-pdf"
-                    downloadPdfHover={downloadPdfHover}
-                    dialogPDF={dialogPDF}
-                  />
-                </span>
-              </StyleTooltip>
+              title={<Text translation="common.download.pdf" />}
+              placement="top"
+              arrow
+            >
+              <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
+                <DownloadHtmlPreview
+                  id={docRevId}
+                  data-cy="transition-download-pdf"
+                  downloadPdfHover={downloadPdfHover}
+                  dialogPDF={dialogPDF}
+                />
+              </span>
+            </StyleTooltip>
             <span className={classes.actionIcon}>
               {!pinHover && isPinShown && (
                 <PinIcon

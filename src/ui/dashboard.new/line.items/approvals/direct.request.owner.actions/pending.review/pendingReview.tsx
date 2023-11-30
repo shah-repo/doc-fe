@@ -10,6 +10,7 @@ import { dashboardMyFeedsActions } from '../../../../../../state/ducks/dashboard
 import Text from '../../../../../components/Text';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import Colors from '../../../../../layout/theme/utils/colors';
+import DismissAction from '../../../common/DismissAction';
 import { getDocIcon, getStatusLabel } from '../../../common/DocIcon';
 import DocId from '../../../common/DocId/presenter';
 import DocTitle from '../../../common/DocTitle/presenter';
@@ -21,7 +22,6 @@ import { DocTypeGroups } from '../../../common/types';
 import { getPendingTooltipText } from '../../../common/Utils';
 import EmailModal from '../../../dialogs/email/EmailDialog';
 import useStyles from './pendingReview.styles';
-import DismissAction from '../../../common/DismissAction';
 
 interface Props {
   id: string
@@ -124,65 +124,67 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'}>
-                <Grid item={true}>
-                  <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />
-                </Grid>
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <DocTitle
-                    url= {documentVersionPath(docRevId || '', docDocumentId)}
-                    docRevVersion={docRevVersion}
-                    docRevName={docRevName}
-                  />
-                </Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={`${classes.typography} ${classes.margin5}`}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    <Text translation="common.is" />
-                  </Typography>
-                </Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={`${classes.typographyStatus} ${classes.margin7}`}
-                    color="textSecondary"
-                    noWrap
-                    onClick={openApproversModel}
-                  >
-                    {!hoverItem && (
-                      <NormalStyleChip
-                        size="small"
-                        color="primary"
-                        icon={<InReviewIcon />}
-                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
-                      />
-                    )}
-                    {hoverItem && (
-                      <HoverStyleChip
-                        color="primary"
-                        size="small"
-                        icon={<InReviewWhiteIcon />}
-                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
-                      />
-                    )}
-                  </Typography>
-                </Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    <Text translation="pending.approval" />
-                  </Typography>
+              <Grid item={true} lg={12} className={classes.innerPedingReview}>
+                <Grid container={true} alignItems="center" data-cy={docId + 'InReview'} className={classes.innerReview}>
+                  <Grid item={true}>
+                    <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />
+                  </Grid>
+                  <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                    <DocTitle
+                      url= {documentVersionPath(docRevId || '', docDocumentId)}
+                      docRevVersion={docRevVersion}
+                      docRevName={docRevName}
+                    />
+                  </Grid>
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={`${classes.typography} ${classes.margin5}`}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      <Text translation="common.is" />
+                    </Typography>
+                  </Grid>
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin7}`}
+                      color="textSecondary"
+                      noWrap
+                      onClick={openApproversModel}
+                    >
+                      {!hoverItem && (
+                        <NormalStyleChip
+                          size="small"
+                          color="primary"
+                          icon={<InReviewIcon />}
+                          label={getStatusLabel(docTypeGroup, status, displaystatus) }
+                        />
+                      )}
+                      {hoverItem && (
+                        <HoverStyleChip
+                          color="primary"
+                          size="small"
+                          icon={<InReviewWhiteIcon />}
+                          label={getStatusLabel(docTypeGroup, status, displaystatus) }
+                        />
+                      )}
+                    </Typography>
+                  </Grid>
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      <Text translation="pending.approval" />
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Grid>
               <Grid
@@ -239,7 +241,7 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin5}`}
-                 />
+                />
                 <Grid item={true}>
                   <Typography
                     component="span"

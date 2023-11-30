@@ -6,12 +6,12 @@ import { ReactComponent as PinSolidIcon } from '../../../../assets/images/pin_so
 import { ActionTypes } from '../../../../state/ducks/dashboard.new/my.feeds/types';
 import Text from '../../../components/Text';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
+import DismissAction from '../common/DismissAction';
 import DocId from '../common/DocId/presenter';
 import DocTitle from '../common/DocTitle/presenter';
 import { StyledListItem } from '../common/StyledListItem';
 import { StyleTooltip } from '../common/StyleTooltip';
 import useStyles from './calibrationItem.styles';
-import DismissAction from '../common/DismissAction';
 
 interface Props {
   id: string

@@ -138,6 +138,7 @@ export enum TabTypeOptions {
   BOM = 'BOM',
   MIXED = 'MIXED',
   ITEMS = 'ITEMS',
+  MATERIAL_DISPOSITION='MATERIAL_DISPOSITION',
 }
 
 export enum CATEGORY {
@@ -488,7 +489,7 @@ export interface DocumentTypeByIdState {
   [key: string]: DocumentType
 }
 
-type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS';
+type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS' | 'MATERIAL_DISPOSITION';
 
 export interface TabInfo {
   labelId: string

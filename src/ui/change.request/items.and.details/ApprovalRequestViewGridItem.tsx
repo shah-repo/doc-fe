@@ -1,8 +1,11 @@
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
@@ -13,6 +16,8 @@ import { documentVersionPath } from '../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../form.builder';
 import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
 import FBRequest from '../../form.builder/FBApi/FBApi.request';
+import WhereUsedDialog from '../../form.builder/FBBOM/components/treelist/WhereUsedDialog';
+import useDialog from '../../hooks/useDialog';
 import useStyles from './ApprovalRequestGrid.styles';
 import { generateDocTitleText } from './helpers';
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
@@ -22,18 +27,21 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   editItem: () => void
   handleRemove: (docRevId: string) => void
   viewItemActionsVisible: boolean
+  isLineItemPartCanBeSubstituted?: boolean
 }> = ({
   entry,
   editItem,
   handleRemove,
   viewItemActionsVisible,
+  isLineItemPartCanBeSubstituted,
 }) => {
   const classes = useStyles();
 
   const {
-    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange,
+    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate, revisionFormTo, whereUsedView,
   } = entry;
 
+  const isWhereUsedTreeExist = (whereUsedView ?? []).length > 1;
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
   const [docRelatedParts, setDocRelatedParts]
@@ -103,6 +111,16 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     return <span data-cy="document">{docTitle.replace(/(Rev [0-9A-Z.]*)(.*)/, '$1')}</span>;
   };
 
+  const whereUsedDialog = useDialog();
+  const openWhereUsedDialog: MouseEventHandler = (e) => {
+    isWhereUsedTreeExist && whereUsedDialog.open();
+    e.stopPropagation();
+  };
+  const closeWhereUsedDialog: MouseEventHandler = (e) => {
+    whereUsedDialog.close();
+    e.stopPropagation();
+  };
+
   return (
     <div onClick={() => viewItemActionsVisible && editItem()}
       className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
@@ -110,6 +128,20 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       })}
       data-cy="enclosing-div-view-item">
       <div className={classes.itemRow} data-cy="ar-item-view-row">
+        {isLineItemPartCanBeSubstituted && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
+          <FormControlLabel
+            color="primary"
+            control={
+              <MuiCheckbox
+                checked={Boolean(autoUpdate)}
+                name="autoUpdate"
+                color="primary"
+                disabled={true}
+              />
+            }
+            label=""
+          />
+        </div> }
         <div className={classes.cellOne}>
           {
             docRelatedParts.length > 0
@@ -129,11 +161,17 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           </Link>
           }
         </div>
-        <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
+        <div className={cx(classes.cellRev, classes.itemLeftPadding)}>
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={revisionFormTo as string} childrenElement={getTableElementData(revisionFormTo, 'rev-from-to')} />
+        </div>
+        <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />
         </div>
-        <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
+        <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
+        </div>
+        <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
+          <FontAwesomeIcon icon={isWhereUsedTreeExist ? solid('circle') : regular('circle')} data-cy="view-where-used" onClick={openWhereUsedDialog} className={classes.dot} />
         </div>
       </div>
       {
@@ -164,6 +202,14 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
             }
           </ul>
         </div>
+      }
+      {
+        whereUsedDialog.isOpen
+        && <WhereUsedDialog
+          docRevId={docRevId}
+          whereUsedDialog={whereUsedDialog}
+          closeDialog = {closeWhereUsedDialog}
+        />
       }
     </div>
   );

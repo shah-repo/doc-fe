@@ -34,6 +34,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   schema,
   isFB,
   isSideBarHidden = false,
+  isSliderView,
 }) => {
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
@@ -125,7 +126,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       header= {
         <SummaryHeader
           canShowCreateVersionButton={true}
-          {...{ documentRevision, canChangeOwnerShip }}
+          {...{ documentRevision, canChangeOwnerShip, isSliderView }}
         />
       }
     >
@@ -138,7 +139,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           rightSidebar: (
             <Observer>
               {() => (
-                <DocumentRevisionSidebar />
+                <DocumentRevisionSidebar isSliderView={isSliderView} />
               )}
             </Observer>
           ),
@@ -152,7 +153,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
               contentBoxProps={{
                 overflow: _documentRevisionFormState?.expanded ? 'unset' : 'auto',
               }}
-              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
+              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} isSliderView={isSliderView} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
               <Observer>
@@ -171,7 +172,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                       return (
                         <AutoSizer onResize={handleResize}>
                           {({ width }) => (
-                            <SMBox width={width} pb={2} onScroll={onScroll} id="Presenter-FBWorkspace">
+                            <SMBox style={{ width }} pb={2} onScroll={onScroll} id="Presenter-FBWorkspace">
                               {tabType === TabTypeOptions.MIXED && <>
                                 <SummaryPresenter
                                   dataProp={documentRevision}

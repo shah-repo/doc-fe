@@ -7,7 +7,7 @@ import { TabTypeOptions } from '../../../state/ducks/documentRevisions/documentT
 import { withFBEditorOptions } from '../FBEditorOptions/FBEditorOptions.wrap';
 import { COMMON_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 import { withFBValidation } from '../FBValidation/FBValidation.wrap';
-import { Rules } from './constants';
+import { FIELDS_TO_OMIT, Rules } from './constants';
 
 export const withFBEditorActions = <T extends FBEditorActionsProps>(
   Component: React.FC<T>,
@@ -130,7 +130,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         index,
         type,
         name: `${kebabCase(label as string)}-${FB.uniqid}`,
-        ...omit(formValues, editorPropertiesFlags),
+        ...omit(formValues, [...editorPropertiesFlags, ...FIELDS_TO_OMIT]),
         ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
         deleteDisabled: deleteDisabled,
         applicableOn: ['ON_STATE_TO_IN_REVIEW'],

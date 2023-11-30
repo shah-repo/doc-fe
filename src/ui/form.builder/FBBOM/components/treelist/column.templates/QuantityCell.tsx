@@ -18,7 +18,7 @@ const QuantityCell: ComponentType<CustomTreeListCellProps> = ({
 }) => {
   const classes = styles({ hasChildren });
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableBOM>();
-  const isEditMode = isEditBOM(dataItem);
+  const isEditMode = isEditBOM(dataItem) && dataItem.enabledFieldsForEditing?.includes(field ?? '');
 
   const getFieldInfo = () =>
     field && (

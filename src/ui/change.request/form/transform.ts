@@ -54,16 +54,16 @@ export const templateOptionToChangeRequestCreateBody = (option: TemplateOption):
 };
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
+  const effectiveDate = getStartOfDayDateString(values.formInput?.effectiveDate);
+  const formInput = {
+    ...values.formInput,
+    ...(!isEmpty(values.formInput?.effectiveDate) ? { effectiveDate } : {}),
+  };
   let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     ...pick(values, ['formDocument']),
     title: values.title,
     description: values.description,
-    formInput: {
-      ...values.formInput,
-      effectiveDate: isEmpty(values.formInput?.effectiveDate)
-        ? undefined
-        : getStartOfDayDateString(values.formInput?.effectiveDate),
-    },
+    formInput,
   };
   if (!values.id) {
     changeRequestEditRequestBody = { ...changeRequestEditRequestBody, documentType: values.documentType };

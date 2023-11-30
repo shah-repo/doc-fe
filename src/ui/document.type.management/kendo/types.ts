@@ -45,6 +45,7 @@ export interface DTMRowItem {
   pageDetails: Nullable<PageDetails>
   privateNumberPool: boolean
   schema: FBSchemaProps[]
+  numOfDocDigits: number
   startingNumber: number
   updatedAt: string
   inEdit?: boolean
@@ -70,7 +71,7 @@ export interface DTMAddRow {
   needsSignature?: boolean
   startingNumber?: number
   category?: Nullable<string>
-  inEdit? : boolean
+  inEdit?: boolean
   expanded?: boolean
   isNewRecord?: boolean
 }

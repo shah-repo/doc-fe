@@ -38,7 +38,7 @@ const DropDownFilter: React.ComponentType<TreeListFilterCellProps> = (props) => 
     }
     if (!isEmpty(value)) {
       filter.push({
-        value: value.value,
+        value: value.text,
         field,
         operator: 'contains',
       });

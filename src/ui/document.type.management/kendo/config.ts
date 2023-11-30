@@ -1,6 +1,7 @@
 import { ActiveDropdown } from '../../components/common/kendo.column.templates/ActiveDropdown';
 import { CustomGridCellProps } from '../../components/common/kendo/types';
 import { CheckboxCell } from './column.templates/Checkbox';
+import { DocDigitsCell } from './column.templates/DocDigitsCell';
 import { FieldsConfig } from './column.templates/FieldsConfig';
 import { IntegerNumberCell } from './column.templates/IntegerNumberCell';
 import { Schema } from './column.templates/Schema';
@@ -14,6 +15,7 @@ export enum DTMCellTemplates {
   SCHEMA='Schema',
   FIELDS_CONFIG='FieldsConfig',
   INTEGER_NUMBER_CELL='IntegerNumberCell',
+  DOC_DIGITS_CELL='DocDigitsCell',
 }
 interface CellTemplateProps {
   ActiveDropdown: (props: CustomGridCellProps) => JSX.Element | null
@@ -22,6 +24,7 @@ interface CellTemplateProps {
   Schema: (props: CustomGridCellProps) => JSX.Element | null
   FieldsConfig: (props: CustomGridCellProps) => JSX.Element | null
   IntegerNumberCell: (props: CustomGridCellProps) => JSX.Element | null
+  DocDigitsCell: (props: CustomGridCellProps) => JSX.Element | null
 }
 export const DTMCellTemplateMapping: CellTemplateProps = {
   ActiveDropdown,
@@ -30,4 +33,5 @@ export const DTMCellTemplateMapping: CellTemplateProps = {
   Schema,
   FieldsConfig,
   IntegerNumberCell,
+  DocDigitsCell,
 };

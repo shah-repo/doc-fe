@@ -1,7 +1,8 @@
 import { createStyles } from '@material-ui/core';
 import Colors from '../../../../../layout/theme/utils/colors';
+import { NextTheme } from '../../../../../layout/theme-next/provider';
 
-export default () =>
+export default (theme: NextTheme) =>
   createStyles({
     form: {
       minWidth: 400,
@@ -86,5 +87,24 @@ export default () =>
     },
     ScheduleIcon: {
       margin: '0px 5px 0px 0px',
+    },
+    [theme.media.mobile]: {
+      pendingBox: {
+        width: '100%',
+        padding: 0,
+      },
+      form: {
+        minWidth: '100%',
+      },
+      closeLaterDiscription: {
+        display: 'flex',
+        flexWrap: 'nowrap',
+        textAlign: 'center',
+      },
+      closeLaterSubmitButton: {
+        width: '100%',
+        margin: `0 ${theme.spacing(2)}px`,
+        position: 'initial',
+      },
     },
   });

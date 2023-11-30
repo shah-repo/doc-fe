@@ -1,8 +1,9 @@
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
+import { AsyncState } from '../../types';
 import { GroupTag } from '../auth/types';
 import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from './constants';
+import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 
 export interface WhiteLabelingColors {
   defaultBackground: string
@@ -132,4 +133,30 @@ export interface RedlineState {
 export interface RedlineAction {
   type: typeof REDLINE_CONFIG
   payload: RedlineState
+}
+
+interface ZebraPrintSettings {
+  apiKey: string
+  tenantId: string
+  printers: Array<{
+    sn: string
+    isActive: boolean
+  }>
+}
+export interface GeneralSettings {
+  zebraPrint: ZebraPrintSettings
+  approvalRequestAdmin: boolean
+  shouldAutoUpdateLotStatus: boolean
+}
+
+export interface GeneralSettingsState extends GeneralSettings, AsyncState {
+  id?: string
+  companyId?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface GeneralSettingsAction {
+  type: typeof SET_GENERAL_SETTINGS
+  payload: GeneralSettings
 }

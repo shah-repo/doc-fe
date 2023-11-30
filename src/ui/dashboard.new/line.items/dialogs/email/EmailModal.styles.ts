@@ -1,7 +1,8 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../../../../layout/theme/utils/colors';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles((theme: NextTheme) =>
   createStyles({
     listrootpending: {
       overflow: 'auto',
@@ -32,7 +33,7 @@ export const styles = makeStyles((theme: Theme) =>
       background: Colors.sky_blue,
       borderRadius: '8px',
     },
-    modeltitle: {
+    modalTitle: {
       position: 'static',
       width: '194.98px',
       height: '18px',
@@ -110,19 +111,19 @@ export const styles = makeStyles((theme: Theme) =>
       alignItems: 'center',
     },
     emailbutton: {
-      'position': 'static',
-      'left': '0%',
-      'right': '0%',
-      'top': '0%',
-      'bottom': '0%',
-      'margin': 0,
-      'fontWeight': 'bold',
-      'fontSize': '11px',
-      'lineHeight': '14px',
+      position: 'static',
+      left: '0%',
+      right: '0%',
+      top: '0%',
+      bottom: '0%',
+      margin: 0,
+      fontWeight: 'bold',
+      fontSize: '11px',
+      lineHeight: '14px',
       /* identical to box height */
-      'letterSpacing': '0.5px',
+      letterSpacing: '0.5px',
       /* Enlil Navy */
-      'color': Colors.navy,
+      color: Colors.navy,
       '&:hover': {
         backgroundColor: Colors.white,
       },
@@ -218,6 +219,18 @@ export const styles = makeStyles((theme: Theme) =>
       width: '20px',
       right: '7px',
       top: '7px',
+    },
+    [theme.media.mobile]: {
+      paper: {
+        left: '2%',
+        width: '95%',
+      },
+      approvedBox: {
+        width: '100%',
+      },
+      pendingBox: {
+        width: '100%',
+      },
     },
   }),
 );

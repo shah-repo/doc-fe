@@ -19,24 +19,38 @@ export interface FBDocumentRevisionResponse {
   }
 }
 
+interface WhereUsed {
+  name: string
+  parentDocId: string
+  depth: number
+  revision: string
+  status: string
+}
+
 export interface FBDocumentRevisionsValue {
   id: string
+  autoUpdate: boolean
   proposedDocumentRevision: {
     id: string
   }
   justificationOfChange: string
   descriptionOfChange: string
+  revisionFormTo?: string
+  whereUsedView?: WhereUsed[]
 }
 
 export interface ApprovalRequestGridItem {
   id: string
   docRevId: string
   documentId: string
+  autoUpdate: boolean
   justificationOfChange: string
   descriptionOfChange: string
   titleText: string
   displayRevision: string
   isPart: boolean
+  revisionFormTo?: string
+  whereUsedView?: WhereUsed[]
 }
 
 export interface ItemsAndDetailsWrapperProps {

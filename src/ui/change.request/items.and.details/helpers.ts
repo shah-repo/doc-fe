@@ -15,6 +15,7 @@ export const storeDataToFormData = (approvalRequestItemsList: ApprovalRequestGri
       proposedDocumentRevision: {
         id: item.docRevId,
       },
+      autoUpdate: item.autoUpdate,
     }
   ))
 );
@@ -27,11 +28,14 @@ export const formDataToStoreData = (
       justificationOfChange: item.justificationOfChange,
       descriptionOfChange: item.descriptionOfChange,
       docRevId: item.proposedDocumentRevision.id,
+      autoUpdate: item.autoUpdate,
       documentId: '',
       id: item.id,
       titleText: '',
       displayRevision: '',
       isPart: false,
+      revisionFormTo: item.revisionFormTo,
+      whereUsedView: item.whereUsedView,
     };
 
     const docRevId = item.proposedDocumentRevision.id;

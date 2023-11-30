@@ -1,11 +1,13 @@
-import { Button } from '@material-ui/core';
+import { Button, Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import cx from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
+import { EMPTY_VALUE_PLACEHOLDER } from '../FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 import KendoTextEditor from './KendoTextEditor';
@@ -19,6 +21,9 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   titleText?: string
   handleRemove?: (docRevId: string) => void
   entry?: ApprovalRequestGridItem
+  isLineItemPartCanBeSubstituted?: boolean
+  documentRevision?: DocumentRevision
+  isDeletionDisabled?: boolean
 }> = ({
   disabledOptions,
   formState,
@@ -27,17 +32,38 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   showAutoComplete = true,
   titleText,
   handleRemove,
+  isLineItemPartCanBeSubstituted,
   entry,
+  documentRevision,
+  isDeletionDisabled,
 }) => {
   const classes = useStyles();
-
   const location = useLocation();
-  const showDeleteButton = !location.pathname.includes(entry?.docRevId);
+  const showDeleteButton = !location.pathname.includes(entry?.docRevId) && !isDeletionDisabled;
+
+  const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
 
   return (
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
         <div className={cx(classes.itemRow, classes.editItemRow)} data-cy="ar-item-edit-row">
+          {isLineItemPartCanBeSubstituted && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
+            <FormControlLabel
+              color="primary"
+              control={
+                <MuiCheckbox
+                  checked={autoUpdateChecked}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setAutoUpdateChecked(event.target.checked);
+                    formState.setFieldValue('autoUpdate', event.target.checked);
+                  }}
+                  name="autoUpdate"
+                  color="primary"
+                />
+              }
+              label=""
+            />
+          </div> }
           <div className={cx(classes.cellOne, classes.hiddenLegend)}>
             { showAutoComplete
               && <FBAutocompleteAsync
@@ -54,7 +80,11 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             }
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
-          <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
+          <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
+            {entry?.revisionFormTo ?? (documentRevision?.revision || EMPTY_VALUE_PLACEHOLDER)}
+          </div>
+          <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
+            classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
               name="descriptionOfChange"
               label="form.builder.description.of.change"
@@ -62,13 +92,17 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               rules="required"
             />
           </div>
-          <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
+          <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
+            classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
               name="justificationOfChange"
               label="form.builder.justification.of.change"
               placeholder="form.builder.enter"
               rules="required"
             />
+          </div>
+          <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)} data-cy="edit-where-used">
+            {EMPTY_VALUE_PLACEHOLDER}
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>

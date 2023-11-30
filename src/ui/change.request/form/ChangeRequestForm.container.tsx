@@ -21,9 +21,10 @@ interface OwnProps {
   asyncState: AsyncState
   changeRequest?: ChangeRequest
   doNotPrompt?: boolean
+  setDoNotPrompt?: (state: boolean) => void
   chosenForm?: FBDocumentRevisionProps
   hideSideBar?: boolean
-  currentDocRevId? : string
+  currentDocRevId?: string
   inDialog?: boolean
 }
 
@@ -31,10 +32,9 @@ export let changeRequestFormOnScreenContext = React.createContext<boolean>(false
 
 type ChangeRequestFormContainerProps = OwnProps & SMFormHOCProps;
 
-const ChangeRequestFormContainer: React.FunctionComponent<
-  ChangeRequestFormContainerProps
-> = ({
+const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
   onSubmit,
+  setDoNotPrompt,
   asyncState,
   initialValues,
   changeRequest,
@@ -52,7 +52,8 @@ const ChangeRequestFormContainer: React.FunctionComponent<
     const formInput = FBDataStore?.refreshData?.changeRequest?.formInput ?? initialValues.formInput;
 
     return {
-      ...initialValues, formInput,
+      ...initialValues,
+      formInput,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValues, FBDataStore?.refreshData]);
@@ -89,6 +90,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       asyncState={asyncState}
       changeRequest={changeRequest}
       doNotPrompt={doNotPrompt}
+      setDoNotPrompt={setDoNotPrompt}
       changeOpenStatus={changeOpenStatus}
       schema={schemaData}
       mode={FBWorkspaceModeOptions.FORM}

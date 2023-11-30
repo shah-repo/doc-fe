@@ -10,6 +10,7 @@ class FBDataStore {
   @observable public poApprovals: FBInlineApprovalBody[] | Approval[] = [];
   @observable public inlineApprovals: FBInlineApprovalBody[] | Approval[] = [];
   @observable public isDraftPartsAdded = false;
+  @observable public selectedSliderInfo;
 
   @computed public get revisionChangeType () {
     return this.refreshData?.revisionChangeType;
@@ -18,12 +19,15 @@ class FBDataStore {
   @action public setIsDraftPartsAdded = (value) => {
     set(this, 'isDraftPartsAdded', value);
   };
+
   @action public setRefreshData = (value) => {
     set(this, 'refreshData', value);
   };
+
   @action public clearPoApprovals = () => {
     set(this, FBDataStoreApprovalKeys.PO_APPROVALS, []);
   };
+
   @action public clearInlineApprovals = () => {
     set(this, FBDataStoreApprovalKeys.INLINE_APPROVALS, []);
   };

@@ -255,6 +255,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   redline?: boolean
   poStatus?: POStatusType
   relatedPartsStatus?: RELATED_PARTS_STATUS
+  previousRevRelatedPartsStatus?: RELATED_PARTS_STATUS
   relatedParentPartDetails?: RelatedParentPartDetails
   changeControlOptions?: ChangeControlOptions
   isBeingEditedAfterRelease?: boolean

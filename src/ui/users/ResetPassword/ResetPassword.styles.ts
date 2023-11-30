@@ -1,7 +1,8 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../../layout/theme/utils/colors';
+import { NextTheme } from '../../layout/theme-next/provider';
 
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles((theme: NextTheme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -46,7 +47,15 @@ export const styles = makeStyles((theme: Theme) =>
     },
     formStyle: {
       width: '500px',
-
+    },
+    [theme.media.mobile]: {
+      formStyle: {
+        width: '100%',
+        padding: theme.spacing(2),
+      },
+      logo: {
+        margin: theme.spacing(4),
+      },
     },
   }),
 );

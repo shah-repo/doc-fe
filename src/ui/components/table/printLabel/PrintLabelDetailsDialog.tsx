@@ -5,7 +5,6 @@ import React from 'react';
 import { FBLabel } from '../../../form.builder';
 import { Autocomplete, FormField, TextField } from '../../forms/fields-next';
 import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
-import { SelectOption } from '../../forms/fields/Select';
 import Text from '../../Text';
 import { labelPropsStyle, qtyLabelStyle, styles } from '../styles';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
@@ -14,7 +13,7 @@ import { withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
 const gridMaxWidth = 920;
 
 const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
-  setSelectedOption,
+  onActorChange,
   closeDialog,
   onQtyUnitsChange,
   onSerialChange,
@@ -115,11 +114,13 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           <Grid item xs={6}>
             <FormField label="print.label.dialog.field.by">
               <Autocomplete
+                freeSolo
                 value={selectedOption}
                 data-cy="by"
                 options={companyEmployees}
-                getOptionLabel={(option) => `${option.text} (${option.email})`}
-                onChange={(e, value: SelectOption) => setSelectedOption(value)}
+                getOptionLabel={(option) => option?.text ? `${option.text} (${option.email})` : option }
+                onChange={onActorChange}
+                onInputChange={onActorChange}
               />
             </FormField>
           </Grid>

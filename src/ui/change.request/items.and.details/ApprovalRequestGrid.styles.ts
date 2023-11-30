@@ -94,8 +94,16 @@ export default makeStyles((theme) =>
 
       borderRadius: theme.spacing(0.5, 0.5, 0, 0),
     },
+    cellautoUpdate: {
+      width: '8%',
+      display: 'flex',
+      alignItems: 'center',
+      '& > #field-autoUpdate': {
+        margin: 0,
+      },
+    },
     cellOne: {
-      width: '24%',
+      width: '18%',
       display: 'flex',
       alignItems: 'center',
       columnGap: theme.spacing(1.25),
@@ -104,16 +112,33 @@ export default makeStyles((theme) =>
         width: '100%',
       },
     },
-    cellOther: {
-      width: '38%',
+    smallCellOther: {
+      width: '25%',
       '& .MuiOutlinedInput-multiline': {
-        padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
+        padding: theme.spacing(1.28, 1.75),
       },
+    },
+    cellOther: {
+      width: '25%',
+      '& .MuiOutlinedInput-multiline': {
+        padding: theme.spacing(1.28, 1.75),
+      },
+    },
+    cellRev: {
+      width: '16%',
+    },
+    cellWhereUsed: {
+      width: '8%',
+      textAlign: 'center',
     },
     hiddenLegend: {
       '& legend': {
         display: 'none',
       },
+    },
+    dot: {
+      height: 10,
+      width: 10,
     },
     itemLeftPadding: {
       paddingLeft: `calc(${theme.spacing(1.25)}px + 1px)`,
@@ -294,6 +319,13 @@ export default makeStyles((theme) =>
       padding: theme.spacing(0.25),
       fontSize: 12,
       whiteSpace: 'pre-line',
+    },
+    customTooltip: {
+      backgroundColor: Colors.black,
+      whiteSpace: 'pre-wrap',
+    },
+    customArrow: {
+      color: Colors.black,
     },
   }),
 );

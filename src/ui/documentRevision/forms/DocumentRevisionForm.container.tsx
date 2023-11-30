@@ -64,6 +64,7 @@ interface OwnProps {
   canChangeOwnerShip?: boolean
   type?: DocumentCloneType
   isNewVersion?: boolean
+  isSliderView?: boolean
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
@@ -86,6 +87,7 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
+  isSliderView,
 }) => {
   const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
@@ -163,6 +165,10 @@ DocumentRevisionFormContainerProps
 
       if (isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema)) {
         documentRevision.approvals = FBDataStore.inlineApprovals as Approval[];
+      }
+
+      if (FBDataStore?.refreshData?.lotStatus) {
+        documentRevision.lotStatus = FBDataStore?.refreshData?.lotStatus;
       }
     }
   });
@@ -271,6 +277,7 @@ DocumentRevisionFormContainerProps
         documentTypesById,
         canChangeOwnerShip,
         isNewVersion,
+        isSliderView,
         showAdministrativeAndVoidChange,
         document,
         redlineActive,

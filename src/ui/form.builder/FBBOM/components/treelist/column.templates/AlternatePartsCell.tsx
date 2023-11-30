@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
-import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { getHasPermission } from '../../../../../../common/utils/selectors';
+import { Permission } from '../../../../../../state/ducks/auth/types';
 import AlternatePartsDrawer from '../../drawer/AlternateParts';
-import { ALTERNATE_PARTS_COUNT_KEY, SELECTED_PART_KEY_SEPARATOR } from '../constants';
+import { ALTERNATE_PARTS_COUNT_KEY, CELL_EMPTY_VALUE, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -20,29 +22,42 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
   const classes = styles();
   const alternatePartsCount = dataItem[ALTERNATE_PARTS_COUNT_KEY] ?? 0;
   const isAlteratePartsExists = alternatePartsCount > 0;
+  const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
+  const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
+
   const { _documentRevisionFormState } = SM.useStores();
+
+  const disabledInRestrictedMode = dataItem.inRestrictedEditMode
+    && ((!dataItem.isParentOwner && !hasPermisstionToEditRestrictedPart)
+      || !dataItem.enabledFieldsForEditing?.includes('alternatePart')
+    );
+
+  const alternatePartActionsDiabled = !hasPermissionToEditBOM
+    || disabledInRestrictedMode
+    || (!dataItem.inRestrictedEditMode && (!dataItem.isParentOwner || !dataItem.isEditEnabled));
+
   const handleToggle = () => {
-    if (!dataItem.isDisabled) {
+    if (!dataItem.parentNodeRevId) {
+      return;
+    }
+    if (!dataItem.isDisabled || !alternatePartActionsDiabled) {
     _documentRevisionFormState?.setRefreshBOMTree(false);
     }
     setIsDrawerOpened(true);
   };
   const [isDrawerOpened, setIsDrawerOpened] = React.useState(false);
 
-  const drawerActionsDisabled = dataItem.isDisabled || !dataItem.isOwner
-    || ![DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(dataItem.status);
-
   const closeDrawer = () => {
     setIsDrawerOpened(false);
-    if (!dataItem.isDisabled) {
+    if (!dataItem.isDisabled || !alternatePartActionsDiabled) {
       _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
     }
   };
 
-  const fetchDotIcon = () => <FontAwesomeIcon
+  const fetchDotIcon = () => dataItem.parentNodeRevId ? <FontAwesomeIcon
     icon={isAlteratePartsExists ? solid('circle') : regular('circle')}
     className={cx(classes.dot, { selectedDot: isAlteratePartsExists, deselectedDot: !isAlteratePartsExists })}
-  />;
+  /> : <span> {CELL_EMPTY_VALUE} </span>;
 
   return (
     <td
@@ -63,7 +78,16 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
         </Tooltip>
         {!isAlteratePartsExists && fetchDotIcon()}
       </div>
-      <AlternatePartsDrawer {...{ isDrawerOpened, closeDrawer, parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0], revision: dataItem.displayRevision, status: dataItem.displayStatus, docId: dataItem.docId, isDisabled: drawerActionsDisabled }} />
+      <AlternatePartsDrawer {...{
+        isDrawerOpened,
+        closeDrawer,
+        partRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0],
+        basePartRevId: dataItem.parentNodeRevId,
+        revision: dataItem.displayRevision,
+        status: dataItem.displayStatus,
+        docId: dataItem.docId,
+        isDisabled: alternatePartActionsDiabled,
+      }} />
     </td>
   );
 };

@@ -1,6 +1,5 @@
 import { isNil } from 'lodash';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
-import { FB } from '../../../helpers';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
 import { CustomTreeListColumnProps } from './interface';
@@ -33,12 +32,42 @@ export const hasSameParent = (arr1: number[], arr2: number[]): boolean => {
   return true;
 };
 
+const getARID = (dataItem: BOM) => {
+  const changeReqDetails = dataItem?.changeRequestDetails;
+  const arID = changeReqDetails?.crId;
+  if (
+    [
+      DocumentRevisionStatus.Approved,
+      DocumentRevisionStatus.PendingChange,
+      DocumentRevisionStatus.InReview,
+    ].includes(dataItem?.status)
+  ) {
+    return arID;
+  }
+};
+
+const getHasChanges = (dataItem: BOM) => {
+  const changeReqDetails = dataItem.availableRevisions?.changeRequestDetails;
+  const arID = changeReqDetails?.crId;
+  const isReleased = dataItem.availableRevisions?.isReleased;
+
+  if (!dataItem.availableRevisions || isReleased) {
+    return CELL_EMPTY_VALUE;
+  }
+  if (!changeReqDetails) {
+    return dataItem.availableRevisions?.displayRevision;
+  }
+  return arID;
+};
+
 export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): EditableBOM[] => {
   bomTreeRelations.unshift(parentRevDetails);
   const dataTree: EditableBOM[] = [];
 
   bomTreeRelations = bomTreeRelations.map(relation => ({
     ...relation,
+    arId: getARID(relation),
+    hasChanges: getHasChanges(relation),
     childNodes: [],
   }));
 
@@ -50,10 +79,13 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
         parentPartRelation.childNodes?.unshift(
           Object.assign({
             ...aData,
-            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}${SELECTED_PART_KEY_SEPARATOR}${FB.uniqid}`,
+            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}${SELECTED_PART_KEY_SEPARATOR}${aData.uniqid}`,
             parentNodeDocumentId: parentPartRelation.documentId,
             isParentOwner: parentPartRelation.isOwner,
+            parentDocId: parentPartRelation.docId,
             isEditEnabled: [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(parentPartRelation.status),
+            hasChanges: getHasChanges(aData),
+            arId: getARID(aData),
           }),
         );
       });

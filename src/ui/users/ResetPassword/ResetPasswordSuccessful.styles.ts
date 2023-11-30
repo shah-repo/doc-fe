@@ -1,7 +1,8 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../../layout/theme/utils/colors';
+import { NextTheme } from '../../layout/theme-next/provider';
 
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles((theme: NextTheme) =>
   createStyles({
     root: {
       marginTop: '10%',
@@ -43,6 +44,17 @@ export const styles = makeStyles((theme: Theme) =>
     lockedInfo: {
       width: '700px',
       color: Colors.dark_gray,
+    },
+    [theme.media.mobile]: {
+      passwordSuccessfulInfo: {
+        width: '100%',
+      },
+      logo: {
+        margin: theme.spacing(4),
+      },
+      submit: {
+        width: '80%',
+      },
     },
   }),
 );

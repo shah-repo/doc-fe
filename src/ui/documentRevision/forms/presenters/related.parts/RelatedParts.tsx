@@ -51,7 +51,8 @@ const ParentPartSelector: React.FunctionComponent<{
   const classes = useStyles();
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner?.user.email === email : true;
-  const disabled = documentRevision?.version > 1
+  const isDisabled = (documentRevision?.version > 1 && documentRevision.previousRevRelatedPartsStatus
+    && documentRevision.previousRevRelatedPartsStatus !== RELATED_PARTS_STATUS.PARENT_NO)
     || ![DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)
     || !isOwner
     || relatedPartsState.viewOnlyMode;
@@ -148,21 +149,21 @@ const ParentPartSelector: React.FunctionComponent<{
             control={<Radio color="primary" disableRipple={true} />}
             label={<Text translation="relatedParts.parentPart.answer.no" />}
             checked={isParentNoSelected}
-            disabled={disabled}
+            disabled={isDisabled}
           />
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_TOGETHER}
             control={<Radio color="primary" disableRipple={true} />}
             label={<Text translation="relatedParts.parentPart.answer.yes.together" />}
             checked={isParentTogetherSelected}
-            disabled={disabled}
+            disabled={isDisabled}
           />
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_SEPARATE}
             control={<Radio color="primary" disableRipple={true} />}
             label={<Text translation="relatedParts.parentPart.answer.yes.separate" />}
             checked={isParentSeparateSelected}
-            disabled={disabled}
+            disabled={isDisabled}
           />
         </RadioGroup>
       </FormControl>

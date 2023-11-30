@@ -94,7 +94,8 @@ export const getLatestRevisionId = (revisions: DocumentRevision[] = []): string 
 export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange];
 
 const ATTRIBUTE_CHANGES_KEY = 'attribute-changes';
-const BOM_LINE_CHANGES_KEY = 'bom-line-changes';
+export const BOM_LINE_CHANGES_KEY = 'bom-line-changes';
+export const BOM_FIELDS_CHANGES_KEY = 'bom-fields-edit';
 const APPROVED_SUPPLIER_LIST_KEY = 'approved-supplier-list';
 const CHANGES_TO_ATTACHMENTS_KEY = 'changes-to-attachments';
 const CHANGES_TO_REFERENCES_KEY = 'changes-to-references';
@@ -104,6 +105,7 @@ export const CHANGE_CONTROL_CONFIG_DOC_TYPE_NAME = 'Change Control Configuration
 export const CHANGE_CONTROL_OPTIONS_TOOLTIP_MAPPING = {
   [ATTRIBUTE_CHANGES_KEY]: translate('ccc.attribute.changes.tooltip'),
   [BOM_LINE_CHANGES_KEY]: translate('ccc.bom.line.changes.tooltip'),
+  [BOM_FIELDS_CHANGES_KEY]: translate('ccc.bom.selected.fields.changes.tooltip'),
   [APPROVED_SUPPLIER_LIST_KEY]: translate('ccc.approved.supplier.list.changes.tooltip'),
   [CHANGES_TO_ATTACHMENTS_KEY]: translate('ccc.changes.to.attachments.tooltip'),
   [CHANGES_TO_REFERENCES_KEY]: translate('ccc.changes.to.references.tooltip'),
@@ -115,6 +117,9 @@ export const CHANGE_CONTROL_OPTIONS_TOOLTIP_MAPPING = {
   const getFormInputHasTextField = fieldsWithNoResponse?.find((field) => has(dataToSubmit.formInput, field.name));
   return has(dataToSubmit, "description") || getFormInputHasTextField;
 }; */
+
+export const cccKeyNamesOrder = ['attribute-changes', 'bom-line-changes', 'bom-fields-edit', 'approved-supplier-list',
+  'changes-to-attachments', 'changes-to-references', 'substituting-superseded', 'auto-update-child-rev'];
 
 // Based on the controlOptions - if attribute-changes is set to yes,
 // then editing any of these will need a new revision
@@ -140,6 +145,20 @@ export const bomDisabledChangeControl = (documentRevision: DocumentRevision | un
 
 export const substitutingSupersededDisabledChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {
   return doesFieldChangeAffectRev(documentRevision, SUBSTITUTING_SUPERSEDED_KEY);
+};
+
+export const getEnabledFieldsForEditing = (documentRevision: DocumentRevision | undefined): string[] => {
+  let fieldNames: string[] = ['refDesignator', 'comment', 'quantity', 'unit', 'alternatePart'];
+  if (documentRevision?.isBeingEditedAfterRelease
+    && documentRevision?.changeControlOptions
+    && documentRevision?.changeControlOptions.formInput) {
+    if (documentRevision?.changeControlOptions.formInput[BOM_LINE_CHANGES_KEY] === 'Yes') {
+      fieldNames = [];
+    } else {
+      fieldNames = documentRevision?.changeControlOptions.formInput[BOM_FIELDS_CHANGES_KEY] ?? [];
+    }
+  }
+  return fieldNames;
 };
 
 export const disableOtherFieldsChangeControl = (documentRevision: DocumentRevision | undefined): boolean => {

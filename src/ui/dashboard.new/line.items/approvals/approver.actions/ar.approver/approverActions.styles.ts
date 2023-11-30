@@ -1,11 +1,28 @@
 import { makeStyles } from '@material-ui/core';
 import { grayDotStyles, lineItemStyles } from '../../../common/styles';
+import { NextTheme } from '../../../../../layout/theme-next/provider';
 
-export default makeStyles((theme) => ({
+export default makeStyles((theme: NextTheme) => ({
   ...lineItemStyles(theme),
   ...grayDotStyles(theme, {
     right: 4,
     marginLeft: 4,
     marginRight: 5,
   }),
+  innerWrap: {
+    display: 'inline-flex',
+  },
+  truncateMobile: {
+    overFlow: 'unset',
+  },
+  [theme.media.mobile]: {
+    innerWrap: {
+      display: 'block',
+    },
+    truncateMobile: {
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      wordBreak: 'break-all',
+    },
+  },
 }));

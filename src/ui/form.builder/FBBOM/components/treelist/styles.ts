@@ -126,7 +126,6 @@ export default makeStyles((theme) => ({
 
         '& .k-cell-inner': {
           margin: theme.spacing(-0.5, -1.5),
-
           '& > .k-link': {
             padding: theme.spacing(0.5, 1.5),
           },
@@ -461,6 +460,10 @@ export default makeStyles((theme) => ({
     height: 14,
     cursor: 'pointer',
   },
+  maximizeIconContainer: {
+    marginLeft: theme.spacing(1.25),
+    cursor: 'pointer',
+  },
   exportExcelIcon: {
     color: Colors.textBlack,
     paddingRight: theme.spacing(1.25),
@@ -545,9 +548,18 @@ export default makeStyles((theme) => ({
   toolbarContainer: {
     height: 24,
   },
-  treeList: ({ size }: { size?: Size }) => ({
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1.5),
+    top: theme.spacing(1),
+  },
+  customDialogTitle: {
+    minHeight: 20,
+    padding: theme.spacing(0),
+  },
+  treeList: ({ size, isMaximizeView }: { size?: Size, isMaximizeView?: boolean }) => ({
     width: '100%',
-    maxHeight: size ? size.height - 160 : 'auto',
+    maxHeight: size ? (isMaximizeView ? '100%' : size.height - 160) : 'auto',
     overflow: 'auto',
   }),
 }));

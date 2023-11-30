@@ -11,7 +11,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { FormHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
+import { AlternatePartsHeaderStatusClassMapping } from '../../../../components/common/header/Helpers';
 import Text from '../../../../components/Text';
 import FBBOMDrawerTable from '../drawerTable';
 import useStyles from './styles';
@@ -19,7 +19,8 @@ import useStyles from './styles';
 interface FBBOMDetailDrawerProps {
   isDrawerOpened: boolean
   closeDrawer: () => void
-  parentRevId?: string
+  partRevId?: string
+  basePartRevId?: string
   docId?: string
   status?: string
   revision?: string
@@ -29,7 +30,8 @@ interface FBBOMDetailDrawerProps {
 const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
   isDrawerOpened,
   closeDrawer,
-  parentRevId,
+  partRevId,
+  basePartRevId,
   docId,
   status,
   revision,
@@ -99,14 +101,14 @@ const FBBOMDetailDrawer: React.FunctionComponent<FBBOMDetailDrawerProps> = ({
             <Grid item className={classes.chipContainer}>
               <Chip
                 size="small"
-                className={cx(classes.chip, classes[FormHeaderStatusClassMapping[status ?? '']])}
+                className={cx(classes.chip, classes[AlternatePartsHeaderStatusClassMapping[status ?? '']])}
                 label={status}
                 data-cy="header-info-status"
               />
             </Grid>
           </Grid>
           <Divider className={classes.divider} />
-          <FBBOMDrawerTable parentRevId={parentRevId} isDisabled={isDisabled} />
+          <FBBOMDrawerTable partRevId={partRevId} basePartRevId={basePartRevId} isDisabled={isDisabled} />
         </Box>
       )}
     </Drawer>

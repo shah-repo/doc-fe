@@ -1,13 +1,19 @@
 import { FormControlLabel, Grid, Switch, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
 import React from 'react';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
 import { SearchBar } from '../../App/Enlil/Features/Search';
+import { ReactComponent as CompanyAvatar } from '../../assets/images/company_avatar.svg';
+import { ReactComponent as MobileLogo } from '../../assets/images/enlil_white_logo.svg';
+import Config from '../../config';
+import { WhiteLabelingEnv } from '../../state/ducks/company/types';
+import { store } from '../../state/store';
 import Text from '../components/Text';
-import styles from './Header.styles';
+import { ThemeEnv } from '../layout/theme/utils/types';
 import AutosaveToggle from './autosave/autosave';
+import styles from './Header.styles';
 
 export interface HeaderPresenterProps {
   name: string
@@ -25,40 +31,66 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   toggleCustomLabels,
   customLabelsValue,
   canToggleCustomLabels,
-}) => (
-  <AppBar className={classes.appBar}>
-    <Toolbar className={classes.toolbar}>
-      <Grid
-        container
-        alignItems="center"
-        justify="space-between"
-        wrap="nowrap"
-        spacing={2}
-      >
-        <Grid item xs>
-          {!fullHeight && (
-            <SearchBar />
-          )}
-        </Grid>
-        <Grid item>
-          {fullHeight && (
-            <Typography variant="caption" className={classes.welcomeText} component="div">
-              <Text translation="header.welcome.back" />,
-              {' '}
-              <b className={classes.welcomeTextName}>{name}!</b>
-            </Typography>
-          )}
-          {canToggleCustomLabels && (
-            <FormControlLabel
-              control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
-              label={<Text translation="form.builder.header.control.label" />}
+}) => {
+  const user = store.getState().auth.user;
+  const companyName = user.employee.company.name;
+  const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
+
+  return (
+    <AppBar className={classes.appBar}>
+      <div className={classes.mobileMake}>
+        <div>
+          <MobileLogo />
+          <Typography variant="caption" className={classes.mobileLogoText} component="div">
+            <Text translation="header.design.make" />
+          </Typography>
+        </div>
+        <div>
+          {whiteLabeling.avatar ? (
+            <img
+              id="logo"
+              className={classes.mobileAvatar}
+              src={whiteLabeling.avatar}
+              alt={companyName}
             />
+          ) : (
+            <CompanyAvatar className={classes.mobileAvatar} />
           )}
-          <AutosaveToggle />
-          <HelpCenter />
+        </div>
+      </div>
+      <Toolbar className={classes.toolbar}>
+        <Grid
+          container
+          alignItems="center"
+          justify="space-between"
+          wrap="nowrap"
+          spacing={2}
+        >
+          <Grid item xs className={classes.mobileGrwFlex}>
+            {!fullHeight && (
+              <SearchBar />
+            )}
+          </Grid>
+          <Grid item>
+            {fullHeight && (
+              <Typography variant="caption" className={classes.welcomeText} component="div">
+                <Text translation="header.welcome.back" />,
+                {' '}
+                <b className={classes.welcomeTextName}>{name}!</b>
+              </Typography>
+            )}
+            {canToggleCustomLabels && (
+              <FormControlLabel className={classes.mobileStyle}
+                control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
+                label={<Text translation="form.builder.header.control.label" />}
+              />
+            )}
+            <AutosaveToggle className={classes.mobileStyle} />
+            <HelpCenter className={classes.mobileStyle} />
+          </Grid>
         </Grid>
-      </Grid>
-    </Toolbar>
-  </AppBar>
-);
+      </Toolbar>
+    </AppBar>
+  );
+};
 export default withStyles(styles)(Header);

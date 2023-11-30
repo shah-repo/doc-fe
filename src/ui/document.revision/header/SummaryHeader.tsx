@@ -8,6 +8,7 @@ interface Props {
   canChangeOwnerShip?: boolean
   canShowCreateVersionButton?: boolean
   displayLastSaved?: boolean
+  isSliderView?: boolean
 }
 export interface FormHeaderSummaryContext {
   documentRevisionSummary: DocumentRevision
@@ -18,6 +19,7 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   documentRevision,
   canChangeOwnerShip,
   canShowCreateVersionButton,
+  isSliderView,
 }) => {
   FormHeaderSummaryContext = React.createContext<FormHeaderSummaryContext | undefined>({
     documentRevisionSummary: documentRevision,
@@ -31,6 +33,7 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
         canChangeOwnerShip,
         canShowCreateVersionButton,
         displayLastSaved,
+        isSliderView,
       }}
     />
   );

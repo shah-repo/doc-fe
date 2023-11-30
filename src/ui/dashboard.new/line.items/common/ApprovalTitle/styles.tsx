@@ -1,7 +1,8 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../../../../layout/theme/utils/colors';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 
-export const styles = makeStyles(() =>
+export const styles = makeStyles((theme: NextTheme) =>
   createStyles({
     typographyBold: {
       fontSize: '14px',
@@ -12,10 +13,15 @@ export const styles = makeStyles(() =>
       marginRight: '5px',
     },
     link: {
-      'color': Colors.black,
-      'textDecoration': 'none',
+      color: Colors.black,
+      textDecoration: 'none',
       '&:hover': {
         textDecoration: 'underline',
+      },
+    },
+    [theme.media.mobile]: {
+      link: {
+        pointerEvents: 'none',
       },
     },
   }),

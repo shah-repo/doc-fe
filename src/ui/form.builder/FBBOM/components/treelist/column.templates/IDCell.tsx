@@ -30,6 +30,7 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
+import FBDataStore from '../../../../FBStore/FBDataStore';
 import { EditableBOM } from '../../../interface';
 import DocumentRevisionDialog from '../../DocumentRevisionDialog';
 import FBBOMDetailDrawer from '../../drawer/AlternateParts';
@@ -46,7 +47,7 @@ interface MultipleFormInitialValues {
 const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
   const { _documentRevisionFormState } = SM.useStores();
   const { colSpan, id, style, dataItem, field, level } = props;
-  const isEditMode = isEditBOM(dataItem);
+  const isEditMode = isEditBOM(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, submitForm } = useFormikContext<EditableBOM>();
   const navigationAttributes = useTableKeyboardNavigation(props.id);
@@ -151,18 +152,15 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   };
 
   const openDrawer = () => {
-    if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(false);
-    }
-    setIsPartsDrawerOpened(true);
+      setIsPartsDrawerOpened(true);
   };
   const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const closeDrawer = () => {
-    if (!dataItem.isDisabled) {
       _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
-    }
-    setIsPartsDrawerOpened(false);
+      FBDataStore.selectedSliderInfo = undefined;
+      setIsPartsDrawerOpened(false);
   };
 
   useEffect(() => {
@@ -252,7 +250,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
 
   const getDrawer = () => (
     <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
-      <DocumentRevisionDrawer {...{ dataItem, closeDrawer }} />
+      <DocumentRevisionDrawer {...{ dataItem, closeDrawer, isSliderView: isPartsDrawerOpened }} />
     </FBBOMDetailDrawer>
   );
 
@@ -348,10 +346,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     }
   };
   const setChildInfo = (dataItem, level) => {
+    if ((!dataItem?.isMaximizedWindow && !_documentRevisionFormState?.isMaximizedView)
+    || (dataItem?.isMaximizedWindow && _documentRevisionFormState?.isMaximizedView)) {
     _documentRevisionFormState?.setDirty(true);
     if (!_documentRevisionFormState?.bomChangesInProgress) {
       _documentRevisionFormState?.setChildPartInfo({ dataItem: dataItem, level });
       _documentRevisionFormState?.setBOMChangesInProgress(true);
+    }
     }
   };
 

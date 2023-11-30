@@ -73,7 +73,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!optionId) {
         return;
       }
-      const slicedOptions = autocompleteAsyncState?.sliceData;
+      const slicedOptions = autocompleteAsyncState?.sliceData ?? autocompleteAsyncState?.data;
       loading = (
         loading
         || FBAutocompleteAsyncStore.loading.get(optionId)
