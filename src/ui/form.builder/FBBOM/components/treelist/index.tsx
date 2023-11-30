@@ -19,6 +19,7 @@ import {
   TreeListColumnReorderEvent,
   TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
+import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
@@ -1109,8 +1110,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                     style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
                     {...state.dataState}
                     tableProps={{ style: { tableLayout: 'fixed' } }}
-                    rowHeight={50}
-                    scrollable="virtual"
+                    rowHeight={TREELIST_CONFIG.rowHeight}
+                    scrollable={TREELIST_CONFIG.scrollable as ScrollMode}
                     editField={MODE_FIELD}
                     expandField={EXPAND_FIELD}
                     dataItemKey={DATA_ITEM_KEY}
