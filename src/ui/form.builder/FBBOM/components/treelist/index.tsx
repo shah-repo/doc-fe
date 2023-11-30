@@ -14,7 +14,6 @@ import {
   extendDataItem,
   filterBy,
   mapTree,
-  mapTreeItem,
   orderBy, TreeList,
   TreeListCellProps,
   TreeListColumnReorderEvent,
@@ -37,7 +36,7 @@ import {
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
@@ -99,27 +98,6 @@ import {
   updateDataAtLevels,
 } from './utils';
 import WhereUsedDialog from './WhereUsedDialog';
-
-const TimeoutRendering: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [rendered, setRendered] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(
-      () => {
-        setRendered(true);
-      },
-      100,
-    );
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!rendered) {
-    return null;
-  }
-
-  return children;
-};
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({
   documentRevision,
@@ -295,14 +273,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       ? state.expanded.filter((id) => id !== event.dataItem.id)
       : uniq([...state.expanded, event.dataItem.id]);
 
-    const tree: BOM[] = [...state.data];
-    mapTreeItem(tree, event.level, SUB_ITEMS_FIELD, (item) =>
-      extendDataItem(item, SUB_ITEMS_FIELD, { expanded: expanded }),
-    );
-
     updateState({
       ...state,
-      data: tree,
       expanded,
     });
   };
@@ -718,24 +690,24 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         DocumentRevisionStatus.Released,
       ].includes(item.status);
 
-    const actions = useMemo(() => <td className={classes.actionsCell}>
-      <ActionsCell
-        dataItem={item}
-        onConfirm={formik?.submitForm}
-        onDiscard={discardBOM}
-        onDelete={
-          isOwner || item.isParentOwner || (item?.childNodes || []).length > 0
-            ? removeBOM
-            : undefined
-        }
-        onRestore={onRestore}
-        onReorder={onReorder}
-        isAddPartEnabled={isAddPartEnabled}
-        onChildPartAdd={onChildPartAdd}
-        rootClassName={classes.popperHolder}
-      />
-    </td>
-    , [item]);
+    const actions = (
+      <td className={classes.actionsCell}>
+        <ActionsCell
+          dataItem={item}
+          onConfirm={formik?.submitForm}
+          onDiscard={discardBOM}
+          onDelete={
+            isOwner || item.isParentOwner || (item?.childNodes || []).length > 0
+              ? removeBOM
+              : undefined
+          }
+          onRestore={onRestore}
+          onReorder={onReorder}
+          isAddPartEnabled={isAddPartEnabled}
+          onChildPartAdd={onChildPartAdd}
+          rootClassName={classes.popperHolder}
+        />
+      </td>);
 
     return React.cloneElement(
       row,
@@ -1127,30 +1099,29 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
             }}
           >
             <Grid container>
-              <TimeoutRendering>
-                <Grid item xs={12} ref={treeListRef}>
-                  <ExcelExport
-                    ref={(exporter) => (_export = exporter)}
-                    hierarchy
-                    fileName={EXCEL_FILE_NAME}
-                  >
-                    <TreeList
-                      style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
-                      {...state.dataState}
-                      tableProps={{ style: { tableLayout: 'fixed' } }}
-                      rowHeight={50}
-                      scrollable="virtual"
-                      editField={MODE_FIELD}
-                      expandField={EXPAND_FIELD}
-                      dataItemKey={DATA_ITEM_KEY}
-                      subItemsField={SUB_ITEMS_FIELD}
-                      className={cx(classes.treeList, 'containing-box-scrollbar')}
-                      onExpandChange={onExpandChange}
-                      rowRender={rowRender}
-                      data={processData()}
-                      onDataStateChange={handleDataStateChange}
-                      columns={sortedColumnDefinitions}
-                      columnMenu={
+              <Grid item xs={12} ref={treeListRef}>
+                <ExcelExport
+                  ref={(exporter) => (_export = exporter)}
+                  hierarchy
+                  fileName={EXCEL_FILE_NAME}
+                >
+                  <TreeList
+                    style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
+                    {...state.dataState}
+                    tableProps={{ style: { tableLayout: 'fixed' } }}
+                    rowHeight={50}
+                    scrollable="virtual"
+                    editField={MODE_FIELD}
+                    expandField={EXPAND_FIELD}
+                    dataItemKey={DATA_ITEM_KEY}
+                    subItemsField={SUB_ITEMS_FIELD}
+                    className={cx(classes.treeList, 'containing-box-scrollbar')}
+                    onExpandChange={onExpandChange}
+                    rowRender={rowRender}
+                    data={processData()}
+                    onDataStateChange={handleDataStateChange}
+                    columns={sortedColumnDefinitions}
+                    columnMenu={
                       _documentRevisionFormState?.isMaximizedView
                         ? undefined
                         : (props) => (
@@ -1163,24 +1134,23 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                             }}
                           />
                         )
-                      }
-                      onRowClick={editBOM}
-                      onColumnReorder={onColumnReorder}
-                      onFilterChange={onFilterChange}
-                      resizable={TREELIST_CONFIG.resizable}
-                      reorderable={TREELIST_CONFIG.reorderable}
-                      sortable={TREELIST_CONFIG.sortable}
-                      toolbar={renderToolbar}
-                      cellRender={cellRender}
-                      onRowDrop={onRowDrop}
-                      row={TreeListDraggableRow}
-                    />
-                  </ExcelExport>
-                  {(treeListAsync.isLoading
+                    }
+                    onRowClick={editBOM}
+                    onColumnReorder={onColumnReorder}
+                    onFilterChange={onFilterChange}
+                    resizable={TREELIST_CONFIG.resizable}
+                    reorderable={TREELIST_CONFIG.reorderable}
+                    sortable={TREELIST_CONFIG.sortable}
+                    toolbar={renderToolbar}
+                    cellRender={cellRender}
+                    onRowDrop={onRowDrop}
+                    row={TreeListDraggableRow}
+                  />
+                </ExcelExport>
+                {(treeListAsync.isLoading
                   || partAsync.isLoading
                   || partChangeOrderAsync.isLoading) && <Loader />}
-                </Grid>
-              </TimeoutRendering>
+              </Grid>
               {confirmationDialog.isOpen && (
                 <AlertDialog
                   dialog={confirmationDialog}

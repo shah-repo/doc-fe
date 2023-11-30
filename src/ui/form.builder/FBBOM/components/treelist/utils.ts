@@ -93,7 +93,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
       dataTree.push({ ...aData, [MODE_FIELD]: false });
     }
   });
-  console.log(JSON.stringify(dataTree));
+
   return dataTree;
 };
 
@@ -143,8 +143,4 @@ export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTre
         return col;
     }
   });
-};
-
-export const getChildPartId = (part: EditableBOM): string => {
-  return part?.id?.split(SELECTED_PART_KEY_SEPARATOR)[0];
 };
