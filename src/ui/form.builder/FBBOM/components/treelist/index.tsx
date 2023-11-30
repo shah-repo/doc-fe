@@ -36,7 +36,7 @@ import {
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
@@ -339,12 +339,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
   const addExpandField = (dataTree: BOM[]) => {
     const { expanded, inEdit } = state;
-    return useMemo(() => mapTree(dataTree, SUB_ITEMS_FIELD, (item) =>
+    return mapTree(dataTree, SUB_ITEMS_FIELD, (item) =>
       extendDataItem(item, SUB_ITEMS_FIELD, {
         [EXPAND_FIELD]: expanded.includes(item.id),
         [MODE_FIELD]: Boolean(inEdit.find((i) => i.id === item.id)),
       }),
-    ), [dataTree, expanded, inEdit]);
+    );
   };
 
   const processData = () => {
