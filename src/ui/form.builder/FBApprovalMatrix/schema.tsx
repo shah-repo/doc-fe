@@ -112,6 +112,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterCell: InputFilter,
       template: InputCellTemplate,
       locked: true,
+      required: true,
       width: 100,
     },
     {
@@ -134,6 +135,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterCell: InputFilter,
       template: InputCellTemplate,
       locked: true,
+      required: true,
       width: 140,
     },
     {

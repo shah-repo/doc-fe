@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as RemoveReference } from '../../../../assets/images/trash.svg';
-import { translate } from '../../../../common/intl';
+import { intl } from '../../../../common/intl';
 import { TypographyProps } from '../../../../state/ducks/common/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DocRevQueryParam, DocumentGroupOptionsType } from '../../../../state/ducks/documentRevisions/documentType/types';
@@ -44,6 +44,8 @@ const getReferenceValues = (
   const canReferenceCreateInspection = checkCanTypeCreateInspection(docType?.groupOptions);
   return { highestRev, isReferencePart, canReferenceCreateInspection };
 };
+
+const MIN_SEARCH_TERM_LENGTH = 3;
 
 const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithFormik> = ({
   availableReferences,
@@ -149,7 +151,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   };
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
-    if (inputVal && inputVal.length > 2) {
+    if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
       setInputValue(inputVal);
       setOffset(0);
       queryApi(0, inputVal);
@@ -211,7 +213,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                placeholder={open ? undefined : translate('common.select.placeholder')}
+                placeholder={open ? undefined : intl.formatMessage({ id: 'search.min.char' }, { count: MIN_SEARCH_TERM_LENGTH })}
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: '0px 30px 0px 9px', height: value.length ? '100%' : '40px' },

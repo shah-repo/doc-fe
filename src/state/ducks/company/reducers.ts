@@ -39,15 +39,18 @@ const REDLINE_DEFAULT_STATE = {
 };
 
 const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
-  zebraPrint: {
+  zebraPrint: [{
     apiKey: '',
     tenantId: '',
-    printers: [{
+    printer: {
       sn: '',
       isActive: false,
-    }],
-  },
+      name: '',
+      labelTemplates: [],
+    },
+  }],
   approvalRequestAdmin: false,
+  shouldAutoUpdateLotStatus: false,
   status: AsyncStatus.Idle,
   message: '',
 };

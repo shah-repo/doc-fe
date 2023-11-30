@@ -10,16 +10,16 @@ export const LotIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem, field, onClick } = props;
 
-  const { lotDocId, lotDocRevId } = dataItem;
+  const { lotDocumentId, lotDocRevId } = dataItem;
   const fieldValue = dataItem[field];
 
   return (
     <OverflowingContent onClick={() => onClick?.({ dataItem })}>
-      {fieldValue && <Tooltip
+      {fieldValue && lotDocumentId && <Tooltip
         data={fieldValue}
         childrenElement={
           <Link
-            to={documentPreviewPath(lotDocRevId, lotDocId)}
+            to={documentPreviewPath(lotDocRevId, lotDocumentId)}
             target="_blank"
             className={classes.link}
           >
