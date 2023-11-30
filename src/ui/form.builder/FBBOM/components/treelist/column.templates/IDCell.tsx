@@ -22,7 +22,6 @@ import { OptionType } from '../../../../../components/forms/fields/Autocomplete/
 import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
 import Text from '../../../../../components/Text';
-import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import { isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
 import { useHandleCreateDoc } from '../../../../../documentType/list/CreateDocumentByType';
@@ -33,7 +32,7 @@ import { Colors } from '../../../../../layout/theme-next';
 import { EditableBOM } from '../../../interface';
 import DocumentRevisionDialog from '../../DocumentRevisionDialog';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
-import { getChildPartId, isEditBOM } from '../utils';
+import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -84,7 +83,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
         setFieldValue('docId', docId);
         setFieldValue('quantity', quantity ?? 1);
         if (dialog.isOpen) {
-          setFieldValue('childNodeRevId', dataItem?.id.split(SELECTED_PART_KEY_SEPARATOR)[0]);
+          setFieldValue('childNodeRevId', dataItem?.id?.split(SELECTED_PART_KEY_SEPARATOR)[0]);
           setFieldValue('newChildNodeRevId', id);
           setFieldValue('quantity', dataItem?.quantity ?? 1);
           setFieldValue('unit', dataItem?.unit);
@@ -154,7 +153,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
     }
     let fieldValue = '';
     if (!dataItem[ADD_FIELD]) {
-      fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem?.documentId}`;
+      fieldValue = `${dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem?.documentId}`;
     } else {
       const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
       if (!isEmpty(part) && showFormDialog.isOpen) {
@@ -407,8 +406,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId
           ? <Link onClick={e => { e.preventDefault(); openDetailDrawer?.(dataItem); }} className={classes.link}
-            to={documentVersionPath(getChildPartId(dataItem), dataItem?.documentId!)}
-            target="_blank"
+            to="#"
           >
             {dataItem.docId}
           </Link>

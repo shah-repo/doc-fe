@@ -39,7 +39,7 @@ const DocumentRevisionDrawer: React.FC<DocumentRevisionDrawerProps> = ({
   const documentRevisionId = FBDataStore.selectedSliderInfo?.documentRevision
     ?.id
     ? FBDataStore.selectedSliderInfo?.documentRevision?.id
-    : dataItem?.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
+    : dataItem?.id?.split(SELECTED_PART_KEY_SEPARATOR)[0];
   const [docRevId, seDocRevId] = useState(documentRevisionId);
   const loadDocumentRevisionAsyncState = useSelector(
     documentRevisionsSelectors.getLoadAsyncDrawerState,

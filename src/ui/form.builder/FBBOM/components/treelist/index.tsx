@@ -18,10 +18,7 @@ import {
   orderBy, TreeList,
   TreeListCellProps,
   TreeListColumnReorderEvent,
-  TreeListDataStateChangeEvent,
-  TreeListDraggableRow,
-  TreeListFilterChangeEvent,
-  TreeListRowDragEvent, treeToFlat,
+  TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -312,10 +309,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     });
   };
 
-  const onSelectionChange = (event) => {
-    console.log('event ::', event);
-  };
-
   const confirmationDialog = useDialog();
 
   const whereUsedDialog = useDialog();
@@ -493,6 +486,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       inEdit: [newBOM],
     });
   };
+
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
     if (dataItem.id === documentRevision.id) {
       return;
@@ -674,9 +668,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     item.isUpgradeDisabled = isUpgradeDisabled;
     item.enabledFieldsForEditing = enabledFieldsForEditing;
     item.inRestrictedEditMode = inRestrictedEditMode;
-    if (!item.id) {
-      return;
-    }
+
     if (item.isDeleted && !_documentRevisionFormState?.isDiffViewEnabled) {
       return;
     }
@@ -684,6 +676,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     if (isEmpty(item.refDesignator)) {
       item.refDesignator = '-';
     }
+
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
         [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
@@ -693,10 +686,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         [classes.inprogressBg]: item.inProgress && isDiffViewEnabled,
       }),
     };
+
     const showWithoutActions = !item[MODE_FIELD]
       || !item.isEditEnabled
       || (!inRestrictedEditMode && !item.isParentOwner)
       || disableEditInRestrictedEditMode(item);
+
     if (showWithoutActions) {
       return React.cloneElement(row, {
         ...modifiedProps,
@@ -704,6 +699,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         ['data-parent-rel' as string]: parentChildRelkey,
       });
     }
+
     const isOwner = item.isOwner;
     const isAddPartEnabled
       = isOwner
@@ -713,25 +709,25 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         DocumentRevisionStatus.Obsolete,
         DocumentRevisionStatus.Released,
       ].includes(item.status);
-    const actions = (
-      <td className={classes.actionsCell}>
-        <ActionsCell
-          dataItem={item}
-          onConfirm={formik?.submitForm}
-          onDiscard={discardBOM}
-          onDelete={
-            isOwner || item.isParentOwner || (item?.childNodes || []).length > 0
-              ? removeBOM
-              : undefined
-          }
-          onRestore={onRestore}
-          onReorder={onReorder}
-          isAddPartEnabled={isAddPartEnabled}
-          onChildPartAdd={onChildPartAdd}
-          rootClassName={classes.popperHolder}
-        />
-      </td>
-    );
+
+    const actions = useMemo(() => <td className={classes.actionsCell}>
+      <ActionsCell
+        dataItem={item}
+        onConfirm={formik?.submitForm}
+        onDiscard={discardBOM}
+        onDelete={
+          isOwner || item.isParentOwner || (item?.childNodes || []).length > 0
+            ? removeBOM
+            : undefined
+        }
+        onRestore={onRestore}
+        onReorder={onReorder}
+        isAddPartEnabled={isAddPartEnabled}
+        onChildPartAdd={onChildPartAdd}
+        rootClassName={classes.popperHolder}
+      />
+    </td>
+    , [item]);
 
     return React.cloneElement(
       row,
@@ -1146,7 +1142,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                       rowRender={rowRender}
                       data={processData()}
                       onDataStateChange={handleDataStateChange}
-                      onSelectionChange={onSelectionChange}
                       columns={sortedColumnDefinitions}
                       columnMenu={
                       _documentRevisionFormState?.isMaximizedView
