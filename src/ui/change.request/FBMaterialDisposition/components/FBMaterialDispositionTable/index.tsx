@@ -96,7 +96,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   });
 
   const fetchMaterialDispositionTableData = () => {
-    materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
+    changeRequest?.id && materialDispositionAsync.start(load, changeRequest.id, materialDispositionAsync);
   };
 
   useEffect(() => {
@@ -167,11 +167,11 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   }, [editedMDItem, setValues, resetForm]);
 
   useEffect(() => {
-    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(dataToSubmit)) {
+    if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(dataToSubmit)) {
       setDoNotPrompt?.(true);
       updateMaterialDispositionTableData(dataToSubmit);
     }
-  }, [parentFormik.isSubmitting]);
+  }, [parentFormik?.isSubmitting]);
 
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
