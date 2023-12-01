@@ -52,6 +52,7 @@ import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import WhereUsedDialog, { WhereUsedType } from '../../../../components/whereUsed/WhereUsedDialog';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { bomDisabledChangeControl, disableOtherFieldsChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -99,7 +100,6 @@ import {
   processBOMData,
   updateDataAtLevels,
 } from './utils';
-import WhereUsedDialog from './WhereUsedDialog';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({
   documentRevision,
@@ -1174,9 +1174,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       </Grid>
       {whereUsedDialog.isOpen && (
         <WhereUsedDialog
-          docRevId={documentRevision.id}
+          revId={documentRevision.id}
           whereUsedDialog={whereUsedDialog}
           closeDialog={closeWhereUsedDialog}
+          type={WhereUsedType.PART}
         />
       )}
       <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer: closeDetailDrawer, dataItem: selectedDataItem }} >

@@ -515,7 +515,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             classes={{ root: classes.dialogContent }}
             id="ApproveAndRelease-content"
           >
-            <FormContext.Provider value={{ submitOnChange: false, isEditing: false }}>
+            <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
                 initialValues={initialValues}
                 onSubmit={onSubmit}

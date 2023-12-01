@@ -1,12 +1,13 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { isEmptyArray } from 'formik';
-import { isEmpty, toUpper } from 'lodash';
+import { includes, isEmpty, toUpper } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM_APP_CONFIG } from '../../../../common/constants';
 import { companySelectors } from '../../../../state/ducks/company';
+import { LabelTemplatesProps, ZebraPrintSettings } from '../../../../state/ducks/company/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, Reference } from '../../../../state/ducks/documentRevisions/types';
 import { printLabelsActions } from '../../../../state/ducks/printLabels';
@@ -19,8 +20,8 @@ import { toastError, toastSuccess } from '../../notifications';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 
 const SELECTED_FIELD = 'print';
+const initialSelectedParams = ['partDocId', 'revision', 'description', 'lotNumber', 'serial', 'actor', 'printDate'];
 export const printColumnProps: KendoColumnProps = { field: SELECTED_FIELD, title: toUpper(SELECTED_FIELD), show: true, sortable: false, locked: true, width: 80 };
-
 export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogProps>(
   Component: React.FunctionComponent<T>,
 ) => {
@@ -48,18 +49,22 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const [serial, setSerial] = useState('');
     const [description, setDescription] = useState('');
     const [data, setData] = useState({});
+    const [selectedParams, setSelectedParams] = useState(initialSelectedParams);
+    const [labelTypeData, setLabelTypeData] = useState([]);
+    const [printerSerial, setPrinterSerial] = useState('');
+    const [labelTemplate, setLabelTemplate] = useState('');
     const executeDocumentRevisionAsyncTask = useActionCreator(documentRevisionsActions.loadWithCallback);
     const executePrintLotLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLotLabelAsyncTask);
 
     const async = useAsync({
-      onSuccess: ( data ) => {
+      onSuccess: (data) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
-          if(!isEmptyArray(referenceTo)) {
-            const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
-            const description = documentRevision.find(item => item.displayRevision === selectedItem?.precalc?.lot_part_revision)?.name;
-            setDescription(description);
-          }
-          setData(data);
+        if(!isEmptyArray(referenceTo)) {
+          const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
+          const description = documentRevision.find(item => item.displayRevision === selectedItem?.precalc?.lot_part_revision)?.name;
+          setDescription(description);
+        }
+        setData(data);
       },
     });
 
@@ -83,7 +88,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
 
     useEffect(() => {
       const activeEmployees = companyEmployees.map((employee) => {
-        if(employee.user?.name) {
+        if (employee.user?.name) {
           return ({
             value: employee.id as string,
             text: employee.user?.name || '',
@@ -96,7 +101,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       }
 
       const defaultEmployee = activeEmployees.find(item => item?.email === authUser.email);
-      if(defaultEmployee) {
+      if (defaultEmployee) {
         setSelectedOption(defaultEmployee);
       }
     }, [companyEmployees]);
@@ -105,8 +110,8 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setSelectedDate(new Date(date?.toISOString()));
     };
 
-    const onQtyUnitsChange = (event: React.ChangeEventHandler<HTMLInputElement>, index: Number) => {
-      if(event.target.value < 0) {
+    const onQtyUnitsChange = (event: React.ChangeEventHandler<HTMLInputElement>, index: number) => {
+      if(Number(event?.target?.value) < 0) {
         return;
       }
       const newQtyUnits = [...qtyUnits];
@@ -115,7 +120,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onSerialChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-      if(event.target.value.length > 14) {
+      if (event.target.value.length > 14) {
         return;
       }
       setSerial(event.target.value);
@@ -126,39 +131,61 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       setDescription(event.target.value);
     };
 
-    const onNumberOfLabelChange = (value: Number) => {
-      if(selectedNumberOfLabel < value) {
+    const onNumberOfLabelChange = (value: number) => {
+      if (selectedNumberOfLabel < value) {
         const newQtyUnits = [...qtyUnits];
         for (let index = 0; index < (value - selectedNumberOfLabel); index++) {
           newQtyUnits.push(initialValues?.qtyUnits);
         }
         setQtyUnits(newQtyUnits);
-      }
-      else {
+      } else {
         qtyUnits.splice(Number(value));
       }
       setSelectedNumberOfLabel(value);
     };
 
-    const onActorChange = ( event: React.ChangeEvent<{}>, value: SelectOption ) => {
+    const onActorChange = (event: React.ChangeEvent<{}>, value: SelectOption) => {
       setSelectedOption(value);
+    };
+
+    const onPrinterChange = (event: React.ChangeEvent<HTMLSelectElement>, value: ZebraPrintSettings) => {
+      setPrinterSerial(value.printer.sn);
+      setLabelTypeData(value?.printer?.labelTemplates);
+    };
+
+    const onLabelTypeChange = (event: React.ChangeEvent<HTMLSelectElement>, value: LabelTemplatesProps) => {
+      setLabelTemplate(value.id);
+    };
+
+    const onFieldCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name: fieldName } = event.target;
+      if (includes(selectedParams, fieldName)) {
+        setSelectedParams(oldValues => { return oldValues.filter(value => value !== fieldName); });
+      } else {
+        setSelectedParams([...selectedParams, fieldName]);
+      }
     };
 
     const onPrintClick = () => {
       const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));
       const params = {
-        status: getLotStatusLabel(selectedItem?.lotStatus),
-        description: description.slice(0, 90),
-        partDocId: initialValues.partId,
-        revision: initialValues.revision,
-        actor: selectedOption?.text ?? selectedOption,
-        lotNumber: initialValues?.lotId?.split('#')[1],
-        lotRevUrl: `${SM_APP_CONFIG.REACT_APP_FRONTEND_URL}/document_revision/${data?.documentId}/version/${data?.id}`,
-        serial: serial,
-        expireDate: selectedItem?.formInput?.lot_expiry_date ? moment(selectedItem?.formInput?.lot_expiry_date).format('MMM DD, YYYY') : selectedItem?.formInput?.lot_expiry_date,
-        printDate: moment(selectedDate).format('MMM DD, YYYY'),
-        labelsToPrint: Number(selectedNumberOfLabel),
-        quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: isEmpty(item.value) ? null : Number(item.value) }), {}),
+        printerSerial: printerSerial,
+        labelTemplate: labelTemplate,
+        labelData: {
+          status: getLotStatusLabel(selectedItem?.lotStatus),
+          description: selectedParams.includes('description') ? description.slice(0, 90) : '',
+          partDocId: selectedParams.includes('partDocId') ? initialValues.partId : '',
+          revision: selectedParams.includes('revision') ? initialValues.revision : '',
+          actor: selectedParams.includes('actor') ? selectedOption?.text ?? selectedOption : '',
+          lotNumber: selectedParams.includes('lotNumber') ? initialValues?.lotId?.split('#')[1] : '',
+          lotRevUrl: `${SM_APP_CONFIG.REACT_APP_FRONTEND_URL}/document_revision/${data?.documentId}/version/${data?.id}`,
+          serial: selectedParams.includes('serial') ? serial : '',
+          expireDate: selectedItem?.formInput?.lot_expiry_date ? moment(selectedItem?.formInput?.lot_expiry_date).format('MMM DD, YYYY') : selectedItem?.formInput?.lot_expiry_date,
+          printDate: selectedParams.includes('printDate') ? moment(selectedDate).format('MMM DD, YYYY') : null,
+          labelsToPrint: Number(selectedNumberOfLabel),
+          quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: isEmpty(item.value) ? null : Number(item.value) }), {}),
+          quantityUnits: selectedItem.formInput?.lot_usable_quantity_unit ?? '',
+        },
       };
       asyncPrintLabel.start(
         executePrintLotLabelAsyncTask,
@@ -186,6 +213,11 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       onNumberOfLabelChange,
       selectedNumberOfLabel,
       onActorChange,
+      onPrinterChange,
+      onLabelTypeChange,
+      onFieldCheck,
+      selectedParams,
+      labelTypeData,
     });
   };
 

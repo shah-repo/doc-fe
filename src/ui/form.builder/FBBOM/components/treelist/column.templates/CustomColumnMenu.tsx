@@ -55,12 +55,12 @@ export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) =>
         menuIconButtonClass={classes.iconButton}
         icon={<FontAwesomeIcon className={cx('k-icon', classes.icon)} icon={solid('ellipsis-vertical')} />}
       >
-        <ColumnMenuItem
+        {!column?.disableShowOrHideSelection && <ColumnMenuItem
           {...props}
           iconClass="k-i-preview k-i-eye k-grid-menu-icon"
           onClick={() => onColumnShowHide(column as CustomTreeListColumnProps)}
           title={translate(TranslatedText[DisplayText.HIDE_COLUMN])}
-        />
+        />}
         <ColumnMenuItem
           {...props}
           iconClass={`k-icon k-grid-menu-icon ${column?.locked ? 'k-i-unlock' : 'k-i-lock'}`}

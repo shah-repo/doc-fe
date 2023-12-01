@@ -1,7 +1,7 @@
 import { createStyles } from '@material-ui/core';
 import { CSSProperties } from 'react';
-import Colors from '../../../layout/theme/utils/colors';
 import { NextTheme } from '../../../layout/theme-next/provider';
+import Colors from '../../../layout/theme/utils/colors';
 
 export const lineItemStyles = (theme: NextTheme) => createStyles({
   inline: {
@@ -94,6 +94,9 @@ export const lineItemStyles = (theme: NextTheme) => createStyles({
     fontWeight: 400,
     '& > p': { margin: 0 },
     letterSpacing: 0,
+    [theme.media.mobile]: {
+      whiteSpace: 'unset',
+    },
   },
   typographyBold: {
     fontSize: 14,
@@ -129,6 +132,10 @@ export const lineItemStyles = (theme: NextTheme) => createStyles({
   },
   customTooltipWidth: {
     maxWidth: 500,
+    [theme.media.mobile]: {
+      maxWidth: '100%',
+      marginLeft: theme.spacing(1),
+    },
   },
   viewTooltipText: {
     fontWeight: 'bold',

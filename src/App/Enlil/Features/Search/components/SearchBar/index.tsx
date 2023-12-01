@@ -185,7 +185,7 @@ const SearchBar: React.FC = () => {
       options={options}
       filterOptions={(options: Option[]) => options}
       ref={fieldRef}
-      placeholder={translate(isFocused ? 'keyword.to.search' : 'search.min.char')}
+      placeholder={translate(isFocused ? 'keyword.to.search' : 'common.search')}
       className={cx(classes.root, { [classes.rootFocused]: isFocused })}
       onFocus={handleFocus}
       onBlur={handleBlur}

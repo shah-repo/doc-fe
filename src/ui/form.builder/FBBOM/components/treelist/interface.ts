@@ -65,10 +65,11 @@ export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEve
   dataItem: BOM
 }
 
-export interface WhereUsedTree {
+export interface IWhereUsedTree {
   depth: number
   name: string
   parentDocId: string
+  parentRevId: string
   revision: number
   status: string
 }

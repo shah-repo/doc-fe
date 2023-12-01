@@ -1,17 +1,17 @@
 import { Box } from '@material-ui/core';
-import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map, sortBy } from 'lodash';
+import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map, some, sortBy } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useMemo } from 'react';
 import { FB, FBApprover, FBApproversProps, FBApproversState, FBDocumentRevisionsValue, FBJoinedEmployee, FBOption, FBRequiredApprover } from '..';
+import { Approval } from '../../../state/ducks/common/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import { checkIsDocumentPO } from '../../documentRevision/helpers/checkDocumentGroup';
 import Colors from '../../layout/theme/utils/colors';
 
 export const withFBApprovers = <T extends FBApproversProps>(
-  Component: React.FunctionComponent<T>,
-) => {
-
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     renderOption,
     isIncluded,
@@ -26,25 +26,34 @@ export const withFBApprovers = <T extends FBApproversProps>(
     disabled,
     ...props
   }: T) => {
-
     const { formState, workspaceState } = FB.useStores();
     const { submitForm } = useFormContext();
     const schema = workspaceState?.getSchema();
-    const changeRequestApprovals = workspaceState?.changeRequest?.approvals;
-    const { name: docRevName } = useMemo(() => find(schema, { type: 'documentRevisions' }) || {}, [schema]);
+    const { name: docRevName } = useMemo(() => find(schema, { type: 'documentRevisions' }) ?? {}, [schema]);
     const docRevFormValue = formState?.getFieldValue(docRevName);
     const documentRevisions = useMemo(() => map(docRevFormValue, 'proposedDocumentRevision.id'), [docRevFormValue]);
-    const formValue = map(formState?.getFieldValue(name), 'id');
-    approversState = FB.useRef(FBApproversState, { documentRevisions, formValue });
-    const isARforPO = Boolean(find(workspaceState?.changeRequest?.documentRevisions,
-      (revision) => checkIsDocumentPO(revision.document?.documentType?.groupOptions)));
+    const isARforPO = some(
+      workspaceState?.changeRequest?.documentRevisions,
+      (revision) => checkIsDocumentPO(revision.document?.documentType?.groupOptions),
+    );
     // ENC-6598 - app.approver for new structure, app for old structure
     defaultValue = formState?.getFieldValue(name)?.map((app) => app.approver || app);
+    const formValue = map(defaultValue, 'id');
+    approversState = FB.useRef(FBApproversState, { documentRevisions, formValue });
+
     onBlur = () => submitForm();
+
+    const changeRequestApprovals = workspaceState?.changeRequest?.approvals.reduce<Approval[]>((list, approval) => {
+      const isExistsInApprovers = formValue.includes(approval.approver.id);
+      return isExistsInApprovers ? [
+        ...list,
+        approval,
+      ] : list;
+    }, []);
 
     React.useEffect(() => {
       reaction( // React on documentRevisions comp changes
-        () => formState?.inputState.get(docRevName || '')?.value,
+        () => formState?.inputState.get(docRevName ?? '')?.value,
         (value) => getRequiredApprovers(cloneDeep(value)),
       );
 
@@ -96,12 +105,12 @@ export const withFBApprovers = <T extends FBApproversProps>(
       approversState?.setCheckedGroups(initialGroupsDAM || []);
     };
 
-    function getRequiredApprovers(documentRevisions: FBDocumentRevisionsValue[]) {
+    function getRequiredApprovers (documentRevisions: FBDocumentRevisionsValue[]) {
       const ids: string[] = map(documentRevisions, 'proposedDocumentRevision.id');
       approversState?.fetchRequiredApprovers(ids);
     }
 
-    function includesApprover(group: FBRequiredApprover, approver: string): boolean {
+    function includesApprover (group: FBRequiredApprover, approver: string): boolean {
       return (group.joinedEmployees as string[]).includes(approver);
     }
 
@@ -164,7 +173,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       groups = approversState?.groups;
       loading = approversState?.loading;
       checkedGroups = approversState?.checkedGroups;
-      disabled =  !workspaceState?.changeRequest;
+      disabled = !workspaceState?.changeRequest;
     });
 
     return Component({

@@ -29,7 +29,7 @@ export const FBWorkspaceSkipValidationModes = [
 ];
 
 export type FBWorkspaceProps =
-& Pick<FBFormProps, 'initialValues' | 'children'>
+& Pick<FBFormProps, 'initialValues' | 'children' | 'formState'>
 & Pick<SMProviderProps, '_tabsState'>
 & {
   workspaceState?: FBWorkspaceState

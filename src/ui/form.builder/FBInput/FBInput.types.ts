@@ -236,7 +236,6 @@ export const OmitInputClones: FBInputType[] = [
   'lhrstep',
   'datepicker',
   'lhrbuild',
-  'radiogroup',
   'downloadsheet',
 ];
 

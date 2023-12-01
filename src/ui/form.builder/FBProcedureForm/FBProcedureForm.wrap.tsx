@@ -74,6 +74,12 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    React.useEffect(() => {
+      const id = formState?.inputState.get('title')?.value;
+      // Fetch lots only if id is present
+      id && procedureFormState?.fetchLotsToPart(id);
+    }, [formState?.inputState.get('title')?.value]);
+
     useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials),
       (data: DocumentRevision[]) => {
@@ -137,7 +143,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     ), []);
 
     // MARK: @helpers
-    function handleAdd() {
+    function handleAdd () {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
       const { quantity } = formValue;
       const isMaterial = type === FBProcedureItemType.materials;
@@ -162,7 +168,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       }
       if (isMaterial && quantity && isMoreDigitsAfterDecimal(quantity, 10)) {
         toastError(intl.formatMessage({ id: 'document.revision.quantity.decimals.error' },
-          { name: intl.formatMessage({ id: 'form.builder.quantity' } ) }));
+          { name: intl.formatMessage({ id: 'form.builder.quantity' }) }));
         return;
       }
       const allSteps = workspaceState?.schema?.filter((item) => item.type === 'mpiprocedure');
@@ -178,13 +184,13 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       }
     }
 
-    function handleCancel() {
+    function handleCancel () {
       if (parentFormState?.isBackdropOpen) { return; }
       handleUnlockField();
       dialogState?.closeDialog();
     }
 
-    function handleUnlockField() {
+    function handleUnlockField () {
       parentFormState?.unlockField(`${name}.${type}`);
     }
 
@@ -202,7 +208,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       return data;
     };
 
-    function handleFilter(
+    function handleFilter (
       data: DocumentRevision[],
       type: FBProcedureFormFilterType,
       inputValue: string,
