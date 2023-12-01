@@ -80,3 +80,8 @@ export interface CustomTreeListColumnProps extends TreeListColumnProps {
   disableShowOrHideSelection?: boolean
   filterable?: boolean
 }
+
+export interface BOMResponse {
+  bomTreeRelations: BOM[]
+  parentRevDetails: BOM
+}

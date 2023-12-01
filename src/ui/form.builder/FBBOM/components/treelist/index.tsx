@@ -84,6 +84,7 @@ import {
   TREELIST_CONFIG,
 } from './constants';
 import {
+  BOMResponse,
   BOMState,
   CustomTreeListColumnProps,
   CustomTreeListExpandChangeEvent,
@@ -142,18 +143,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
 
   const treeListAsync = useAsync({
-    onSuccess: ({
-      bomTreeRelations,
-      parentRevDetails,
-    }: {
-      bomTreeRelations: BOM[]
-      parentRevDetails: BOM
-    }) => {
-      formik.setValues({});
+    onSuccess: (response?: BOMResponse) => {
+      if (response) {
+        const bomTreeRelations = response.bomTreeRelations ?? [];
+        formik.setValues({});
       _documentRevisionFormState?.setIsBOMExists(bomTreeRelations.length > 0);
       const bomProccessedData = processBOMData(
         [...bomTreeRelations],
-        parentRevDetails,
+        response.parentRevDetails,
       );
       updateState({
         ...state,
@@ -161,6 +158,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         inEdit: [],
         expanded: uniq([...state.expanded, ...[bomProccessedData[0].id]]),
       });
+      }
     },
     onError: (err) => {
       toastError(err);
@@ -194,6 +192,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       toastError(response);
     },
   });
+
   const reloadBOM = () => {
     _documentRevisionFormState?.setBOMChangesInProgress(false);
     treeListAsync.start(
@@ -203,6 +202,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       treeListAsync,
     );
   };
+
   useEffect(() => {
     if (!documentRevision || isShowOnly) {
       return;
@@ -251,14 +251,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
     setSelectedDataItem(undefined);
-    _documentRevisionFormState?.setBOMChangesInProgress(false);
-    dispatch(documentRevisionsActions.reload(documentRevision?.id));
-    treeListAsync.start(
-      fetchBOMTreeList,
-      documentRevision.id,
-      documentRevision.documentId,
-      treeListAsync,
-    );
   };
 
   const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer });
@@ -293,9 +285,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const confirmationDialog = useDialog();
 
   const whereUsedDialog = useDialog();
+
   const openWhereUsedDialog = () => {
     whereUsedDialog.open();
   };
+
   const closeWhereUsedDialog = () => {
     whereUsedDialog.close();
   };
@@ -303,6 +297,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const fetchHasATreeAction = useActionCreator(
     documentRevisionsActions.fetchHasATree,
   );
+
   const fetchHasATreeAsync = useAsync({
     onSuccess: (statusObj: BOM | undefined) => {
       if (statusObj && statusObj[documentRevision?.id]) {
@@ -310,6 +305,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       }
     },
   });
+
   const fetchHasATree = (docRevId) => {
     fetchHasATreeAsync.start(
       fetchHasATreeAction,
@@ -572,12 +568,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     );
   };
 
-  const onReorder = () => {
-    // TODO
-  };
   const isExactBOMViewWindow = () => {
     return _documentRevisionFormState?.isMaximizedView === isMaxDialogOpen;
   };
+
   const onChildPartAdd = (dataItem: EditableBOM, updatedState?: BOMState) => {
     if (isDisabled || !isExactBOMViewWindow()) {
       return;
@@ -624,6 +618,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   useObserver(() => {
     isDiffViewEnabled = Boolean(_documentRevisionFormState?.isDiffViewEnabled);
   });
+
   const showDiffView = documentRevision.revision > 1;
   const showHideDiff = () => {
     _documentRevisionFormState?.toggleDiffView();
@@ -703,7 +698,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
               : undefined
           }
           onRestore={onRestore}
-          onReorder={onReorder}
           isAddPartEnabled={isAddPartEnabled}
           onChildPartAdd={onChildPartAdd}
           rootClassName={classes.popperHolder}
