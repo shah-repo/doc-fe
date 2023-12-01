@@ -26,10 +26,10 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
   const s3link = primaryAttachmentDeails?.s3link ?? '';
   const type = primaryAttachmentDeails?.type ?? '';
   const fileName = s3link.substring(s3link.lastIndexOf('/') + 1);
-
   const color = attachmentColorByType[type?.toUpperCase()] as string;
-
   const dialogHandler = useDialog();
+  const downloadAttachment = useActionCreator(attachmentsActions.download);
+
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
@@ -39,7 +39,7 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
       message && toastError(message);
     },
   });
-  const downloadAttachment = useActionCreator(attachmentsActions.download);
+
   const downloadOrViewFile = () => {
     if (checkIfFileIsViewable(dataItem?.primaryAttachmentDetails?.type)) {
       dialogHandler.open();
