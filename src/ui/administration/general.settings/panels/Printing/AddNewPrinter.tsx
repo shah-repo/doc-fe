@@ -9,13 +9,13 @@ import { FormikField, TextField } from '../../../../components/forms/fields-next
 
 interface AddNewPrinterProps {
   onCancel: () => void
-  isOpen: boolean
+  isOpened: boolean
   formik: FormikContextType<ZebraPrintSettings>
 }
 
 const AddNewPrinter: React.FunctionComponent<AddNewPrinterProps> = ({
   onCancel,
-  isOpen = false,
+  isOpened = false,
   formik,
 }) => {
   return (
@@ -23,7 +23,7 @@ const AddNewPrinter: React.FunctionComponent<AddNewPrinterProps> = ({
       title={`${isEmpty(formik?.getFieldProps('apiKey')) ? translate('common.add') : translate('common.edit')} Printer`}
       confirmLabel={isEmpty(formik?.getFieldProps('apiKey')) ? 'common.add.printer' : 'common.save.changes'}
       cancelLabel="common.cancel"
-      open={isOpen}
+      open={isOpened}
       onConfirm={formik?.handleSubmit}
       onCancel={onCancel}
       onClose={onCancel}>

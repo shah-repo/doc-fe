@@ -1,6 +1,7 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
+import { GridCellProps } from '@progress/kendo-react-grid';
 import { FormikContextType } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
@@ -22,17 +23,17 @@ const SELECTED_FIELD = 'printer.isActive';
 const DATA_ITEM_KEY = 'apiKey';
 
 interface PrintinfPanelProps extends SettingsPanelProps {
-  onEdit?: (editData: ZebraPrintSettings) => void
-  onDelete?: (data: ZebraPrintSettings) => void
-  onUpdate?: () => void
-  onCancel?: () => void
-  isOpen?: boolean
-  dataResult?: []
-  onSelectionChange?: () => void
-  formik?: FormikContextType<ZebraPrintSettings>
-  confirmationDialog?: DialogHandler
-  confirmDeletePrinter?: () => void
-  cancelDeletePrinter?: () => void
+  onEdit: (editData: ZebraPrintSettings, rowIndex: number) => void
+  onDelete: (data: ZebraPrintSettings) => void
+  onUpdate: () => void
+  onCancel: () => void
+  isOpened: boolean
+  dataResult: []
+  onSelectionChange: () => void
+  formik: FormikContextType<ZebraPrintSettings>
+  confirmationDialog: DialogHandler
+  confirmDeletePrinter: () => void
+  cancelDeletePrinter: () => void
 }
 
 interface SchemaBuilderProps {
@@ -77,7 +78,7 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
   onCancel,
   onSelectionChange,
   onDelete,
-  isOpen,
+  isOpened,
   dataResult,
   formik,
   confirmationDialog,
@@ -85,7 +86,7 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
   cancelDeletePrinter,
   ...props
 }) => {
-  const ActionCell = (props) => {
+  const ActionCell = (props: GridCellProps) => {
     const { dataItem, dataIndex } = props;
     const { cellStyle, deleteButton } = useStyles({ isActive: dataItem.printer?.isActive });
     return (<td className={`${cellStyle} k-command-cell`} >
@@ -115,7 +116,7 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
     </td>);
   };
 
-  const cellRender = (props) => {
+  const cellRender = (props: GridCellProps) => {
     const { dataItem, field } = props;
     const value = get(dataItem, field);
     return (<td className="k-command-cell"><OverflowTooltip title={value}>{value}</OverflowTooltip></td>);
@@ -136,7 +137,7 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
           mode: 'multiple',
         }}
         onSelectionChange={onSelectionChange} />
-      <AddNewPrinter {...{ isOpen, onCancel, formik }} />
+      <AddNewPrinter {...{ isOpened, onCancel, formik }} />
       {confirmationDialog?.isOpen && (
         <AlertDialog
           dialog={confirmationDialog}
