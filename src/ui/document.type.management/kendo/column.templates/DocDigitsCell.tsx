@@ -27,7 +27,7 @@ export const DocDigitsCell: React.FC<Props> = ({
   const isEdit = dataItem.inEdit;
   const value = dataItem[field] as number;
   const data: number[] = [];
-  for (let i = 1; i <= MAX_DIGITS; i++) {
+  for (let i = value; i <= MAX_DIGITS; i++) {
     data.push(i);
   }
 
