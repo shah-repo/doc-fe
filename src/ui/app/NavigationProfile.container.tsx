@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { RouteComponentProps, useLocation, withRouter } from 'react-router-dom';
 import { IotService } from '../../common/utils/iot/iotService';
 import { authActions, authSelectors } from '../../state/ducks/auth';
 import { tableSearchActions } from '../../state/ducks/tableSearch';
@@ -76,7 +76,7 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
     hasMultipleCompanies,
     handleSwitchCompany,
   });
-
+  const location = useLocation();
   return (
     <NavigationProfilePresenter
       {...{
@@ -88,6 +88,7 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
         initialColor,
         handleOpenMenu,
         handleCloseMenu,
+        location,
         anchorEl,
         open,
       }}

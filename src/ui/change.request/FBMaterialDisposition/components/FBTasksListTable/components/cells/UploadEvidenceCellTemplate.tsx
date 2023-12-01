@@ -31,6 +31,7 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
     );
     return () => {
       disposer();
+      fileUploadState?.clearAttachments();
     };
   }, [dataItem, employeeEvidenceUpdates]);
 

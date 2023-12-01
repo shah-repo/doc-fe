@@ -117,6 +117,7 @@ enum Colors {
   spanish_gray='#999999',
   gains_boro='#DDDDDD',
   white_smoke='#F9F9F9',
+  gradient_color= 'rgba(255, 255, 255, 0.1)',
 }
 
 export default Colors;

@@ -6,7 +6,7 @@ import { IWhereUsedRequest } from '../../../ui/components/whereUsed/WhereUsed.in
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
-import { WhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
+import { BOMResponse, WhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { BOM } from '../../../ui/form.builder/FBBOM/interface';
 import { Vendor } from '../../../ui/form.builder/FBPartVendors/types';
 import FBDataStore from '../../../ui/form.builder/FBStore/FBDataStore';
@@ -438,10 +438,7 @@ const fetchBOMTree = (
   docRevId,
   docId,
   handlers: Handlers,
-): ApiAction<{
-  bomTreeRelations: BOM[]
-  parentRevDetails: BOM
-}> =>
+): ApiAction<BOMResponse> =>
   apiActionWithCallbacks({
     url: `${FETCH_BOM_TREE}/${docId}/${docRevId}`,
     method: 'get',

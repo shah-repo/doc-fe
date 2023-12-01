@@ -11,9 +11,10 @@ interface Props {
   columnMenuItemClasses?: string
   menuIconButtonClass?: string
   icon?: React.ReactNode
+  dataCy?: string
 }
 
-const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemClasses, icon, menuIconButtonClass }) => {
+const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemClasses, icon, menuIconButtonClass, dataCy }) => {
   if (!children.length) {
     children = [children];
   }
@@ -67,11 +68,13 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemCl
           horizontal: 'center',
         }}
         className={classes.menu}
+        data-cy={dataCy}
       >
         {children.map((menuItem, index) => {
           if (!menuItem) {
             return null;
           }
+          const itemDataCy = menuItem.props?.['data-cy'] ?? `${dataCy}-item-${index}`;
           return (
             <MenuItem
               onClick={handleClose}
@@ -81,6 +84,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemCl
               }}
               className={columnMenuItemClasses ?? classes.menuItem}
               key={index}
+              data-cy={itemDataCy}
             >
               {menuItem}
             </MenuItem>

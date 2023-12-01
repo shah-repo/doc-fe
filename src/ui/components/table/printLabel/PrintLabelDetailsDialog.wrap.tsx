@@ -19,6 +19,7 @@ import { KendoColumn as KendoColumnProps } from '../../common/kendo/types';
 import { toastError, toastSuccess } from '../../notifications';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 
+const SERIAL_MAX_LENGTH = 14;
 const SELECTED_FIELD = 'print';
 const initialSelectedParams = ['partDocId', 'revision', 'description', 'lotNumber', 'serial', 'actor', 'printDate'];
 export const printColumnProps: KendoColumnProps = { field: SELECTED_FIELD, title: toUpper(SELECTED_FIELD), show: true, sortable: false, locked: true, width: 80 };
@@ -120,7 +121,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onSerialChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-      if (event.target.value.length > 14) {
+      if(event.target.value.length > SERIAL_MAX_LENGTH) {
         return;
       }
       setSerial(event.target.value);

@@ -16,7 +16,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
   }: T) => {
     const { getFieldProps, values: formValues } = useFormikContext();
     const PrintersData = getFieldProps('zebraPrint');
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpened, setIsOpened] = useState(false);
     const [dataResult, setDataResult] = React.useState(isArray(PrintersData?.value) ? PrintersData?.value : []);
     const [isEdit, setIsEdit] = React.useState({});
     const [deleteData, setDeleteData] = React.useState({});
@@ -44,7 +44,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
           formValues.zebraPrint = newData;
           dispatch(companyActions.updateGeneralSettings(formValues));
         }
-        setIsOpen(false);
+        setIsOpened(false);
       },
     });
 
@@ -52,13 +52,13 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     const onAddNew = () => {
       setIsEdit(false);
       resetForm();
-      setIsOpen(true);
+      setIsOpened(true);
     };
 
     const onEdit = (editData: ZebraPrintSettings, rowIndex: number) => {
       setIsEdit(true);
       setValues(editData);
-      setIsOpen(true);
+      setIsOpened(true);
       setRowIndex(rowIndex);
     };
 
@@ -81,7 +81,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
 
     const onCancel = () => {
       setIsEdit(false);
-      setIsOpen(false);
+      setIsOpened(false);
     };
 
     const onSelectionChange = (event: GridSelectionChangeEvent) => {
@@ -108,7 +108,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       onSelectionChange,
       onDelete,
       dataResult,
-      isOpen,
+      isOpened,
       formik,
       confirmationDialog,
       confirmDeletePrinter,

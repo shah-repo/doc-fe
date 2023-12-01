@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
-import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
+import { getStartOfDayDateString, TIME_ZONE } from '../../../../../common/utils/date';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Group, Permission } from '../../../../../state/ducks/auth/types';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
@@ -25,12 +25,12 @@ import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRe
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from '../../../../change.request/form/transform';
 import { ApproverPayload, InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
-import Text from '../../../../components/Text';
-import { FormContext } from '../../../../components/forms/FormContext';
 import { Button } from '../../../../components/forms/fields-next';
+import { FormContext } from '../../../../components/forms/FormContext';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { FB } from '../../../../form.builder';
-import { BOM } from '../../../../form.builder/FBBOM/interface';
+import { BOMResponse } from '../../../../form.builder/FBBOM/components/treelist/interface';
 import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import CustomLabelTooltip from '../../../../hooks/docCustomization/CustomLabelTooltip';
 import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCustomization';
@@ -213,18 +213,14 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       toastError(err as string);
     },
   });
+
   const [isBomRecord, setIsBomRecord] = useState<boolean>(isBOMExists);
   const bomInfoAsync = useAsync({
-    onSuccess: ({
-      bomTreeRelations,
-      parentRevDetails,
-    }: {
-      bomTreeRelations: BOM[]
-      parentRevDetails: BOM
-    }) => {
-      setIsBomRecord(bomTreeRelations.length > 0);
+    onSuccess: (response?: BOMResponse) => {
+      setIsBomRecord((response?.bomTreeRelations ?? [])?.length > 0);
     },
   });
+
   const fetchBOMTreeList = useActionCreator(
     documentRevisionsActions.fetchBOMTree,
   );

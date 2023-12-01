@@ -3,6 +3,7 @@ import { EditableBOM } from '../../../interface';
 
 export interface CustomTreeListCellProps extends TreeListCellProps {
   dataItem: EditableBOM
+  openDetailDrawer?: (dataItem: EditableBOM) => void
 }
 
 export interface BOMActionsProps<EditableBOM> {
