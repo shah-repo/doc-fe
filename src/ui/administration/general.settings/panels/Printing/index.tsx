@@ -57,7 +57,7 @@ type schemaBuilder = (options: SchemaBuilderProps) => Array<ColumnDefinition<T>>
       {
         id: 'name',
         field: 'printer.name',
-        title: 'administration.general.settings.printing.table.column.serial.number',
+        title: 'administration.general.settings.printing.table.column.name',
         cell: cellRender,
       },
       {
