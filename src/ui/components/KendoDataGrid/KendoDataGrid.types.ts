@@ -29,6 +29,7 @@ export interface GenericColumnDefinition<T = unknown> extends Omit<GridColumnPro
   hidden?: boolean
   fitContent?: boolean
   children?: Array<GenericColumnDefinition<T>>
+  required?: boolean
   cell?: CellComponent<T>
   headerCell?: HeaderCellComponent
   template?: CellTemplate<T>

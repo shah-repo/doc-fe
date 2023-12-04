@@ -48,24 +48,31 @@ export const CustomColumnMenu: ComponentType<CustomColumnMenuProps> = (props) =>
   const column: CustomTreeListColumnProps | undefined = columns.find(c => c.field === field);
   const isLocked = Boolean(column?.locked);
   const classes = styles();
+  const index = column?.orderIndex ?? column?.mainOrderIndex ?? 0;
+  const dataCy = `column-menu-${index}`;
   return (
     <>
       <HeaderMenu
         columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem)}
         menuIconButtonClass={classes.iconButton}
         icon={<FontAwesomeIcon className={cx('k-icon', classes.icon)} icon={solid('ellipsis-vertical')} />}
+        dataCy={dataCy}
       >
-        <ColumnMenuItem
-          {...props}
-          iconClass="k-i-preview k-i-eye k-grid-menu-icon"
-          onClick={() => onColumnShowHide(column as CustomTreeListColumnProps)}
-          title={translate(TranslatedText[DisplayText.HIDE_COLUMN])}
-        />
+        {!column?.disableShowOrHideSelection && (
+          <ColumnMenuItem
+            {...props}
+            iconClass="k-i-preview k-i-eye k-grid-menu-icon"
+            onClick={() => onColumnShowHide(column as CustomTreeListColumnProps)}
+            title={translate(TranslatedText[DisplayText.HIDE_COLUMN])}
+            data-cy={`column-menu-${index}-item-hide`}
+          />
+        )}
         <ColumnMenuItem
           {...props}
           iconClass={`k-icon k-grid-menu-icon ${column?.locked ? 'k-i-unlock' : 'k-i-lock'}`}
           onClick={() => onLock({ locked: isLocked, field })}
           title={translate(isLocked ? TranslatedText[DisplayText.UNLOCK_COLUMN] : TranslatedText[DisplayText.LOCK_COLUMN])}
+          data-cy={`column-menu-${index}-item-${column?.locked ? 'unfreeze' : 'freeze'}`}
         />
       </HeaderMenu>
     </>

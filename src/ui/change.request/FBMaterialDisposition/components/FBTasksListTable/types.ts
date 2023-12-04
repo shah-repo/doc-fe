@@ -1,3 +1,4 @@
+import { Attachment } from '../../../../../state/ducks/attachments/types';
 import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { User } from '../../../../../state/ducks/common/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
@@ -7,7 +8,7 @@ export interface EmployeeResponse extends User{
   employeeId: string
   comment: string
   status: string
-  attachmentId: string
+  attachments: Attachment[]
   updatedAt: string
 }
 export interface TasksListItem {
@@ -40,7 +41,7 @@ export interface SchemaOptions {
   currentState?: ChangeRequestStatus
   onRowClick?: (e: TLItemEditEvent) => void
   employeeStatusUpdates: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
-  employeeEvidenceUpdates: (dataItem: TasksListItem, employeeId: string, attachmentId: string) => void
+  employeeEvidenceUpdates: (dataItem: TasksListItem, employeeId: string, attachmentIds: Attachment[]) => void
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableTLItem> {
@@ -48,5 +49,5 @@ export interface CustomTemplateProps extends CellTemplateProps<EditableTLItem> {
   isDisabled?: boolean
   currentState?: ChangeRequestStatus
   employeeStatusUpdates?: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
-  employeeEvidenceUpdates?: (dataItem: TasksListItem, employeeId: string, attachmentId: string) => void
+  employeeEvidenceUpdates?: (dataItem: TasksListItem, employeeId: string, attachmentIds: Attachment[]) => void
 }

@@ -11,4 +11,4 @@ const FBBOM: React.FunctionComponent<FBBOMProps> = ({ documentRevision, isDisabl
   />;
 };
 
-export default FBBOM;
+export default React.memo(FBBOM);

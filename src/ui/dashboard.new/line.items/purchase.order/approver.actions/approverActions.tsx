@@ -315,7 +315,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     <Text translation="common.your" />
                   </Typography>
                 </Grid> */}
-                <Grid item={true}>
+                <Grid item={true} className={classes.truncateMobile}>
                   <DocId
                     url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#' }
                     docId={docId}

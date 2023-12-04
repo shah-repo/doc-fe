@@ -102,7 +102,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
 
         position++;
         return (
-          <FBFieldOutputWrapper position={position} inputProps={schemaItem}>
+          <FBFieldOutputWrapper position={position} inputProps={schemaItem} key={schemaItem.name}>
             {controlRenderer({
               autosave: isUnderWorkspace && workspaceState?.autosave,
               ...schemaItem,

@@ -81,7 +81,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
       <AlternatePartsDrawer {...{
         isDrawerOpened,
         closeDrawer,
-        partRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0],
+        partRevId: dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR)[0],
         basePartRevId: dataItem.parentNodeRevId,
         revision: dataItem.displayRevision,
         status: dataItem.displayStatus,

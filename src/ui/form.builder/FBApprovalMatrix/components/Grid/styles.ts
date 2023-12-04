@@ -17,6 +17,7 @@ export default makeStyles((theme) => {
         borderTop: `1px solid ${Colors.primaryLight} !important`,
         borderBottom: `1px solid ${Colors.primaryLight} !important`,
         paddingTop: `${cellVerticalPadding - 1}px !important`,
+        verticalAlign: 'top !important',
       },
     },
     inactive: {

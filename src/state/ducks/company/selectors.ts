@@ -76,6 +76,8 @@ const getGeneralSettings = (state: ApplicationState) => omit(
   ['id', 'companyId', 'createdAt', 'updatedAt', 'status', 'message'],
 );
 
+const getGeneralSettingsId = (state: ApplicationState) => state.company.generalSettings.id;
+
 const getZebraPrintSettings = (state: ApplicationState) => state.company.generalSettings.zebraPrint;
 
 const isAprovalRequestEditingEnabled = (state: ApplicationState) => state.company.generalSettings.approvalRequestAdmin;
@@ -109,6 +111,7 @@ export default {
   getActiveLocations,
   getAllLocations,
   getGeneralSettings,
+  getGeneralSettingsId,
   getGeneralSettingsAsyncState,
   getGeneralSettingsUpdatedAt,
   getZebraPrintSettings,

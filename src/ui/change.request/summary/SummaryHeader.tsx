@@ -38,13 +38,17 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
       label="document.save"
       errors={errors}
       showNewButton={isNewLayout}
-      onClick={() => formik.submitForm()}
+      onClick={formik.submitForm}
     />
   );
   return (
     <Header status={state as unknown as DocumentRevisionStatus}>
-      <HeaderInfo status={state} id={crId} name={title}
-        documentTypeAcronym={dataProp?.documentType?.documentTypeAcronym} />
+      <HeaderInfo
+        status={state}
+        id={crId}
+        name={title}
+        documentTypeAcronym={dataProp?.documentType?.documentTypeAcronym}
+      />
       <Grid item={true} xs={6} justify="center">
         <Grid container={true} alignItems="center" justify="flex-end">
           {displayLastSaved && dataProp?.updatedAt && (
@@ -57,6 +61,7 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
         </Grid>
       </Grid>
     </Header>
-  ); };
+  );
+};
 
 export default SummaryHeader;

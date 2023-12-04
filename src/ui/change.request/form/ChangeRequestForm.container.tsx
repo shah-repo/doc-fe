@@ -22,6 +22,7 @@ interface OwnProps {
   changeRequest?: ChangeRequest
   doNotPrompt?: boolean
   setDoNotPrompt?: (state: boolean) => void
+  setMDTab?: (state: boolean) => void
   chosenForm?: FBDocumentRevisionProps
   hideSideBar?: boolean
   currentDocRevId?: string
@@ -44,6 +45,7 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
   hideSideBar = false,
   currentDocRevId,
   inDialog = false,
+  setMDTab,
 }) => {
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
@@ -91,6 +93,7 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
       changeRequest={changeRequest}
       doNotPrompt={doNotPrompt}
       setDoNotPrompt={setDoNotPrompt}
+      setMDTab={setMDTab}
       changeOpenStatus={changeOpenStatus}
       schema={schemaData}
       mode={FBWorkspaceModeOptions.FORM}
@@ -112,7 +115,7 @@ const ChangeRequestFormContainer: React.FC<ChangeRequestFormContainerProps> = ({
           <Formik
             initialValues={calcInitialValues}
             onSubmit={onSubmit}
-            enableReinitialize={true}
+            enableReinitialize
           >
             {render}
           </Formik>

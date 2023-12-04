@@ -3,7 +3,7 @@ import { AttachFile } from '@material-ui/icons';
 import React from 'react';
 import { ReactComponent as CloseIcon } from '../../../../../../assets/images/trash.svg';
 import { attachmentsActions } from '../../../../../../state/ducks/attachments';
-import { AttachmentDownloadResponse } from '../../../../../../state/ducks/attachments/types';
+import { Attachment, AttachmentDownloadResponse } from '../../../../../../state/ducks/attachments/types';
 import ViewFile from '../../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../../components/common/view.file/utils/helpers';
 import { toastError } from '../../../../../components/notifications';
@@ -18,6 +18,7 @@ import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import OverflowingContent from '../../commonCells/OveflowContent';
 import { TasksListItem } from '../types';
+import { styles } from './cells/styles';
 
 interface Props extends FBFilesPresenterProps {
   employeeId: string
@@ -26,7 +27,7 @@ interface Props extends FBFilesPresenterProps {
   employeeEvidenceUpdates?: (
     dataItem: TasksListItem,
     employeeId: string,
-    attachmentId: string
+    attachmentIds: Attachment[]
   ) => void
 }
 
@@ -38,11 +39,13 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
   isDisabled,
   employeeEvidenceUpdates,
 }) => {
-  const removeAttachment = () => {
-    employeeEvidenceUpdates?.(dataItem, employeeId, '');
+  const removeAttachment = (attachmentId: string) => {
+    const updatedAttachmentList = attachments.filter(({ id }) => id !== attachmentId);
+    employeeEvidenceUpdates?.(dataItem, employeeId, updatedAttachmentList);
   };
 
   const dialogHandler = useDialog();
+  const classes = styles();
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -72,9 +75,9 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
     >
       <FBMapWrapper<FBAttachment[]> collection={attachments}>
         {(file: FBAttachment) => {
-          const { name, type } = file;
+          const { name, type, id } = file;
           return (
-            <>
+            <div className={classes.attachmentName}>
               <AttachFile />
               <Box
                 width={253}
@@ -95,9 +98,9 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {!isDisabled && (
-                <CloseIcon cursor="pointer" onClick={removeAttachment} />
+                <CloseIcon cursor="pointer" onClick={() => removeAttachment(id)} />
               )}
-            </>
+            </div>
           );
         }}
       </FBMapWrapper>
