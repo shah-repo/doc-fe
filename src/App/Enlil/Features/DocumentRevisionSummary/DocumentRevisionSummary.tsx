@@ -120,7 +120,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     [_tabsState],
   );
 
-  if (isARForm && tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
+  if (isARForm && !tabConfig?.find((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition')) {
     tabConfig.splice(2, 0, {
       labelId: 'tabId.materialDisposition',
       tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
