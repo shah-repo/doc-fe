@@ -72,6 +72,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
 
   const {
     handleSwitchCompany,
+    hasMultipleCompanies,
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   } = React.useContext(UserMenuContext)!;
 
@@ -94,16 +95,18 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
           </Grid>
         </ListItem>
         <Divider className={classes.hrLine} />
-        <ListItem className={classes.userSideProfile}>
-          <MenuItem onClick={handleSwitchCompany} className={classes.menu}>
-            <ListItemIcon className={classes.listItemIcon}>
-              <FontAwesomeIcon className={classes.icon} icon={light('arrow-up-arrow-down')} rotation={90} />
-            </ListItemIcon>
-            <ListItemText>
-              <SwitchCompanyButtonContainer location={location} />
-            </ListItemText>
-          </MenuItem>
-        </ListItem>
+        {hasMultipleCompanies
+          && <ListItem className={classes.userSideProfile}>
+            <MenuItem onClick={handleSwitchCompany} className={classes.menu}>
+              <ListItemIcon className={classes.listItemIcon}>
+                <FontAwesomeIcon className={classes.icon} icon={light('arrow-up-arrow-down')} rotation={90} />
+              </ListItemIcon>
+              <ListItemText>
+                <SwitchCompanyButtonContainer location={location} />
+              </ListItemText>
+            </MenuItem>
+          </ListItem>
+        }
         <ListItem className={classes.userSideProfile}>
           <MenuItem
             data-cy="header-logout"

@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
-import { grayDotStyles, lineItemStyles } from '../../common/styles';
 import { NextTheme } from '../../../../layout/theme-next/provider';
+import { grayDotStyles, lineItemStyles } from '../../common/styles';
 
 export default makeStyles((theme: NextTheme) => ({
   ...lineItemStyles(theme),
@@ -9,4 +9,14 @@ export default makeStyles((theme: NextTheme) => ({
     marginLeft: 4,
     marginRight: 5,
   }),
+  truncateMobile: {
+    overFlow: 'unset',
+  },
+  [theme.media.mobile]: {
+    truncateMobile: {
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      wordBreak: 'break-all',
+    },
+  },
 }));

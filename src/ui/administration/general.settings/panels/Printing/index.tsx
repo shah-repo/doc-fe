@@ -34,6 +34,8 @@ interface PrintinfPanelProps extends SettingsPanelProps {
   confirmationDialog: DialogHandler
   confirmDeletePrinter: () => void
   cancelDeletePrinter: () => void
+  isFormDirty: boolean
+  onFormikFieldChange: React.FormEventHandler<HTMLDivElement>
 }
 
 interface SchemaBuilderProps {
@@ -84,6 +86,8 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
   confirmationDialog,
   confirmDeletePrinter,
   cancelDeletePrinter,
+  isFormDirty,
+  onFormikFieldChange,
   ...props
 }) => {
   const ActionCell = (props: GridCellProps) => {
@@ -137,7 +141,7 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
           mode: 'multiple',
         }}
         onSelectionChange={onSelectionChange} />
-      <AddNewPrinter {...{ isOpened, onCancel, formik }} />
+      <AddNewPrinter {...{ isOpened, onCancel, formik, isFormDirty, onFormikFieldChange }} />
       {confirmationDialog?.isOpen && (
         <AlertDialog
           dialog={confirmationDialog}
