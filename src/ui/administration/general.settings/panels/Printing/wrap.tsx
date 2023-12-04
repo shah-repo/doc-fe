@@ -48,7 +48,8 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       },
     });
 
-    const { setValues, resetForm } = formik;
+    const { setValues, resetForm, dirty } = formik;
+    const [isFormDirty, setIsFormDirty] = useState(dirty);
     const onAddNew = () => {
       setIsEdit(false);
       resetForm();
@@ -60,6 +61,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       setValues(editData);
       setIsOpened(true);
       setRowIndex(rowIndex);
+      setIsFormDirty(false);
     };
 
     const onDelete = (data: ZebraPrintSettings) => {
@@ -100,6 +102,10 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       }
     };
 
+    const onFormikFieldChange = () => {
+      setIsFormDirty(true);
+    };
+
     return Component({
       ...(props),
       onAddNew,
@@ -110,9 +116,11 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       dataResult,
       isOpened,
       formik,
+      isFormDirty,
       confirmationDialog,
       confirmDeletePrinter,
       cancelDeletePrinter,
+      onFormikFieldChange,
     });
   };
 
