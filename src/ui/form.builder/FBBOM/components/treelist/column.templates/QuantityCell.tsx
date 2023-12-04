@@ -36,6 +36,7 @@ const QuantityCell: ComponentType<CustomTreeListCellProps> = ({
         />
       </FormikField>
     );
+
   return (
     <td
       colSpan={colSpan}

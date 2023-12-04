@@ -9,6 +9,7 @@ export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
 export const HEADER_GAP = 96;
 export const COLLAPSE_BAR_SPACE = 72;
+export const MOBILECOLLAPSE_BAR_SPACE = -5;
 
 export default (theme: NextTheme) =>
   createStyles({
@@ -101,5 +102,16 @@ export default (theme: NextTheme) =>
           display: 'none',
         },
       },
+      mobileSide: {
+        width: 15,
+        height: 15,
+        borderRadius: 4,
+        padding: theme.spacing(1),
+        background: Colors.gradient_color,
+      },
+      logoMobile: {
+        marginLeft: theme.spacing(1),
+      },
+
     },
   });
