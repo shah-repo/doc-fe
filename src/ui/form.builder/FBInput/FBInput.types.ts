@@ -81,7 +81,8 @@ export type FBInputType =
   | 'lotOnHandQuantity'
   | 'partVendors'
   | 'numeric'
-  | 'cycleCount';
+  | 'cycleCount'
+  | 'workOrderPartDetails';
 
 export type FBInputProps =
   & FBLabelProps
