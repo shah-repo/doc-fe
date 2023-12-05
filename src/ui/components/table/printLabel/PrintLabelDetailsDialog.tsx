@@ -68,9 +68,9 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   const classes = styles();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
   const printerValue: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY));
-  const isRecentPrinterExist = zebraPrint.findIndex(item => item.printer.name === printerValue?.printer?.name) >= 0;
+  const isRecentPrinterExist = zebraPrint.find(item => item.printer.name === printerValue?.printer?.name);
   const recentPrinterLabelType = localStorage.getItem(PRINTER_LABEL_TYPE_KEY);
-
+  const defaultLabelType = isRecentPrinterExist ? JSON.parse(recentPrinterLabelType) : '';
   const qtyUnitsRender = () => {
     const gridSize = selectedNumberOfLabel < 6 ? (gridMaxWidth / selectedNumberOfLabel) : (gridMaxWidth / 5);
     const qtyClasses = qtyLabelStyle(gridSize);
@@ -116,7 +116,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           <Grid item xs={6}>
             <FormField label="print.label.dialog.field.label.type">
               <Autocomplete
-                defaultValue={isRecentPrinterExist ? JSON.parse(recentPrinterLabelType) : ''}
+                defaultValue={defaultLabelType}
                 disableClearable
                 data-cy="label-type"
                 options={labelTypeData}
