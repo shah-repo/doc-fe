@@ -293,6 +293,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         loading={tasksAsync.isLoading || addTaskAsync.isLoading || deleteTaskAsync.isLoading || updateTaskAsync.isLoading}
         rowRender={rowRender}
         containerRef={containerRef}
+        resizable={true}
       />
       {!isShowOnly && !formContext.isEditing && <Button
         kind="add"
