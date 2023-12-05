@@ -564,7 +564,7 @@
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
   "dashboard.assigned.purchase.order": "Purchase order from {name} is pending your approval",
-  "dashboard.title.change.request": "Approval Request: {} - from {name}",
+  "dashboard.title.change.request": "Approval Request: {crId} - from {name}",
   "dashboard.title.approval.request": "Approval Request: {docId} - from {name}",
   "dashboard.title.purchase.order": "PURCHASE ORDER: {docId}, Rev {version}",
   "dashboard.title.task": "Approval Request: {crId}",
