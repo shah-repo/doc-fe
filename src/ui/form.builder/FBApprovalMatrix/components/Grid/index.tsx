@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
-import { cloneDeep, get, kebabCase, set } from 'lodash';
+import { cloneDeep, get, isEmpty, kebabCase, set } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { DEFAULT_DATA_STATE, MODE_FIELD, Mode } from '.';
 import { translate } from '../../../../../common/intl';
@@ -105,7 +105,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
     setData(newData);
 
-    if (validationErrors) {
+    if (!isEmpty(validationErrors)) {
       return;
     }
 
