@@ -35,6 +35,7 @@ enum Colors {
 
   // Destructive/Error
   error='#EC2B00',
+  errorII='#f44336',
   errorHighlight='#FEF4F2',
   errorLightShadow='#FAE1DD',
 
