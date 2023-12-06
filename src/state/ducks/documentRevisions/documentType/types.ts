@@ -408,6 +408,7 @@ export const GroupWithGroupOptions = {
     DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT,
     DOC_TYPE_GROUP_OPTION.WORK_ORDER,
     DOC_TYPE_GROUP_OPTION.EXPORTABLE,
+    DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL,
     DOC_TYPE_GROUP_OPTION.ONLY_ON_OUTPUTS_DROPDOWN,
     DOC_TYPE_GROUP_OPTION.TABS_WO,
   ],
@@ -602,4 +603,5 @@ export interface DocRevQueryParam {
 export enum tabIdByInternalType {
   PAPER_LHR = 'details',
   LOT = 'details',
+  WORK_ORDER = 'details',
 }

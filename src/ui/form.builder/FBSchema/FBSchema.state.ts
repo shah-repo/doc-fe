@@ -11,6 +11,7 @@ import {
   FBInputType,
   FBSchemaProps,
 } from '..';
+import FBTasksListTable from '../../change.request/FBMaterialDisposition/components/FBTasksListTable';
 import FBApprovalMatrixField from '../FBApprovalMatrixField/FBApprovalMatrixField';
 import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatrixFieldRoles';
 import FBApprovals from '../FBApprovals/FBApprovals';
@@ -148,6 +149,7 @@ class FBSchemaState {
     numeric: FBNumericField,
     cycleCount: FBCycleCount,
     workOrderPartDetails: FBWorkOrderPartDetails,
+    tasksListTable: FBTasksListTable,
   };
 
   @observable public schema?: FBSchemaProps[];

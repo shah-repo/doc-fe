@@ -4,12 +4,13 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { Attachment } from '../../../../../state/ducks/attachments/types';
-import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
+import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
 import { Button } from '../../../../components/forms/fields-next';
 import { useFormContext } from '../../../../components/forms/FormContext';
@@ -17,7 +18,7 @@ import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../../../components/notifications';
-import { FBSection } from '../../../../form.builder';
+import { FB, FBSection } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { changeRequestPreviewPath } from '../../../utils/paths';
@@ -27,14 +28,18 @@ import useStyles from './styles';
 import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './types';
 
 interface props {
-  changeRequest?: ChangeRequest
+  partOfId: string
+  state: ChangeRequestStatus | DocumentRevisionStatus
   isShowOnly?: boolean
   isAdditionalColumnsShown?: boolean
   setDoNotPrompt?: (state: boolean) => void
 }
 
-const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt }) => {
+const FBTasksListTable: React.FunctionComponent<props> = (
+  { partOfId, state, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt }) => {
   const classes = useStyles();
+
+  const [partOfIdToUse, setPartOfIdToUse] = useState(partOfId);
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
   const isEditMode = React.useRef<boolean>(false);
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
@@ -53,9 +58,10 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   const parentFormik = useFormikContext();
   const [dataToSubmit, setDataToSubmit] = React.useState<Partial<EditableTLItem>>({});
   const history = useHistory();
+  const { workspaceState } = FB.useStores();
 
   const loadTasksTableData = () => {
-    tasksAsync.start(fetchTasksList, changeRequest?.id, tasksAsync);
+    tasksAsync.start(fetchTasksList, partOfIdToUse, tasksAsync);
   };
 
   const tasksAsync = useAsync({
@@ -80,15 +86,23 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     onSuccess: () => {
       loadTasksTableData();
       if (formContext.isEditing) {
-        history.push(changeRequestPreviewPath(changeRequest?.id ?? ''));
+        history.push(changeRequestPreviewPath(partOfId ?? ''));
       }
     },
     onError: toastError,
   });
 
   useEffect(() => {
-    loadTasksTableData();
-  }, []);
+    if (workspaceState?.id && !partOfId) {
+      setPartOfIdToUse(workspaceState.id);
+    }
+  }, [workspaceState?.id, partOfId]);
+
+  useEffect(() => {
+    if (partOfIdToUse) {
+      loadTasksTableData();
+    }
+  }, [partOfIdToUse]);
 
   const formik = useFormik<Partial<EditableTLItem>>({
     initialValues: {},
@@ -97,7 +111,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         const payload = {
           instruction: values?.instruction,
           employeeIds: values?.employeeResponse?.map(data => data.employeeId),
-          partOfId: changeRequest?.id,
+          partOfId: partOfIdToUse,
         };
 
         addTaskAsync.start(addTask, payload, addTaskAsync);
@@ -132,11 +146,11 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   }, [editedTLItem, setValues, resetForm]);
 
   useEffect(() => {
-    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(dataToSubmit)) {
+    if (formContext.isEditing && parentFormik?.isSubmitting && !isEmpty(dataToSubmit)) {
       setDoNotPrompt?.(true);
       updateTaskItem(dataToSubmit);
     }
-  }, [parentFormik.isSubmitting]);
+  }, [parentFormik?.isSubmitting]);
 
   const createDraftTLItem = () => setEditedTLItem({
     taskId: uuidv4(),
@@ -148,13 +162,13 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     const payload = {
       instruction: values?.instruction,
       employeeIds: values?.employeeResponse?.map(data => data.employeeId),
-      partOfId: changeRequest?.id,
+      partOfId: partOfIdToUse,
       employeeUpdates: values?.employeeResponse?.map(data => ({
         employeeId: data.employeeId,
       })),
     };
 
-    updateTaskAsync.start(updateTask, changeRequest?.id, values.taskId, payload, updateTaskAsync);
+    updateTaskAsync.start(updateTask, partOfIdToUse, values.taskId, payload, updateTaskAsync);
   };
 
   const deleteTaskItem = () => {
@@ -184,7 +198,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         };
       }),
     };
-    updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);
+    updateTaskAsync.start(updateTask, partOfIdToUse, taskId, payload, updateTaskAsync);
   };
 
   const employeeEvidenceUpdates = (dataItem: TasksListItem, employeeId: string, attachments: Attachment[]) => {
@@ -205,7 +219,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         };
       }),
     };
-    updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);
+    updateTaskAsync.start(updateTask, partOfIdToUse, taskId, payload, updateTaskAsync);
   };
 
   const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
@@ -218,8 +232,8 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     onDelete: deleteTaskItem,
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: debounceEmployeeEvidenceUpdates,
-    isDisabled: ChangeRequestStatus.Closed === changeRequest?.state,
-    currentState: changeRequest?.state,
+    isDisabled: ChangeRequestStatus.Closed === state,
+    currentState: state,
   });
 
   const getColumns = () => {

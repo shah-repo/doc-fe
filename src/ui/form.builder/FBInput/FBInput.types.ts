@@ -82,7 +82,8 @@ export type FBInputType =
   | 'partVendors'
   | 'numeric'
   | 'cycleCount'
-  | 'workOrderPartDetails';
+  | 'workOrderPartDetails'
+  | 'tasksListTable';
 
 export type FBInputProps =
   & FBLabelProps

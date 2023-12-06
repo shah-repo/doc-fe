@@ -1345,6 +1345,7 @@
   "form.builder.part.vendors.lead.time.standard": "Standard Lead Time (days)",
   "form.builder.wo.part.selector": "Item Selection",
   "form.builder.wo.part.quantity": "Quantity",
+  "form.builder.wo.approvals": "Completed by",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",

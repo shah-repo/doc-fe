@@ -172,6 +172,7 @@ class FBEditorState {
     lotQuantity: FBEditorLabel,
     numeric: FBEditorLabel,
     workOrderPartDetails: FBEditorEmpty,
+    tasksListTable: FBEditorEmpty,
   };
 
   public static editorTypeIconMapping = {

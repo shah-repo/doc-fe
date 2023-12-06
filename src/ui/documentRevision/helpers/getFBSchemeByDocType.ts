@@ -1,6 +1,6 @@
 import { find, get, isEmpty, map, maxBy, some, union, unionBy } from 'lodash';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType, DocumentTypeByIdState, DOC_TYPE_GROUP, tabIdByInternalType, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBFormTemplateProps } from '../../../state/ducks/documentRevisions/types';
 import { store as appStore } from '../../../state/store';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
@@ -42,23 +42,22 @@ export const getFBSchemeByDocType = (
   const tplType = get(formValue, 'document.documentType.id') || '';
   const documentTypes = union([tplType], outputTypes);
 
-  const finalScheme: FBSchemaProps[] = documentTypes.reduce((scheme, typeId) => {
+  const finalScheme: FBSchemaProps[] = documentTypes.reduce<FBSchemaProps[]>((scheme, typeId) => {
     const rec = documentTypesById[typeId];
     // If type has scheme
     if (!rec?.schema) { return scheme; }
-    const typeScheme = map(rec.schema, ((schemaItem) => ({
+    const typeScheme = map(rec.schema, (schemaItem) => ({
       ...schemaItem,
       ...find(originScheme, { name: schemaItem.name }),
       deleteDisabled: schemaItem.deleteInFormDisabled,
-    })));
+    }));
 
     return unionBy(scheme, typeScheme, 'name');
-  }, [] as FBSchemaProps[]);
+  }, []);
   let indexLast;
   !isEmpty(finalScheme) ? indexLast = maxBy(finalScheme, 'index')?.index : indexLast = 0;
   if (hasDirectApproval(outputTypesWithGroups)) {
     if (hasPO(outputTypesWithGroups)) {
-
       const tabConfig: TabInfo[] = documentTypeSelectors.getTabConfiguration(
         appStore.getState(), outputTypesWithGroups[0].group);
       const tabId = get(tabConfig, '0.tabId', 'details');
@@ -74,7 +73,8 @@ export const getFBSchemeByDocType = (
       });
     } else {
       finalScheme.push({
-        label: 'form.builder.approvals',
+        label: outputTypesWithGroups[0].group === DOC_TYPE_GROUP.WORK_ORDER
+          ? 'form.builder.wo.approvals' : 'form.builder.approvals',
         type: 'approvals',
         deleteDisabled: true,
         name: `fb-approvals-${FB.uniqid}`,
