@@ -141,6 +141,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const enabledFieldsForEditing = getEnabledFieldsForEditing(documentRevision);
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const treeListAsync = useAsync({
     onSuccess: (response?: BOMResponse) => {
@@ -204,11 +205,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   };
 
   useEffect(() => {
-    if (!documentRevision || isShowOnly) {
+    if (!documentRevision || isShowOnly || isPartsDrawerOpened) {
       return;
     }
     reloadBOM();
-  }, [documentRevision?.id]);
+  }, [documentRevision?.id, isPartsDrawerOpened]);
 
   const fetchBOMTreeList = useActionCreator(
     documentRevisionsActions.fetchBOMTree,
@@ -240,7 +241,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     },
   );
 
-  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
   const [selectedDataItem, setSelectedDataItem] = React.useState(undefined);
 
   const openDetailDrawer = (dataItem) => {
