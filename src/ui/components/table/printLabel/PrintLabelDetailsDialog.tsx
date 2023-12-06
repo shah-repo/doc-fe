@@ -12,7 +12,7 @@ import Datepicker from '../../forms/fields-next/Datepicker/Datepicker';
 import Text from '../../Text';
 import { labelPropsStyle, qtyLabelStyle, styles } from '../styles';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
-import { withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
+import { PRINTER_LABEL_TYPE_KEY, PRINTER_NAME_KEY, withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
 
 const gridMaxWidth = 920;
 
@@ -67,6 +67,10 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
 }) => {
   const classes = styles();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
+  const printerValue: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY));
+  const isRecentPrinterExist = zebraPrint.find(item => item.printer.name === printerValue?.printer?.name);
+  const recentPrinterLabelType = localStorage.getItem(PRINTER_LABEL_TYPE_KEY);
+  const defaultLabelType = isRecentPrinterExist ? JSON.parse(recentPrinterLabelType) : '';
   const qtyUnitsRender = () => {
     const gridSize = selectedNumberOfLabel < 6 ? (gridMaxWidth / selectedNumberOfLabel) : (gridMaxWidth / 5);
     const qtyClasses = qtyLabelStyle(gridSize);
@@ -101,6 +105,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           <Grid item xs={6}>
             <FormField label="print.label.dialog.field.printer">
               <Autocomplete
+                defaultValue={isRecentPrinterExist ? printerValue : ''}
                 disableClearable
                 data-cy="printer-name"
                 options={zebraPrint.filter(item => item.printer.isActive)}
@@ -111,6 +116,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           <Grid item xs={6}>
             <FormField label="print.label.dialog.field.label.type">
               <Autocomplete
+                defaultValue={defaultLabelType}
                 disableClearable
                 data-cy="label-type"
                 options={labelTypeData}
