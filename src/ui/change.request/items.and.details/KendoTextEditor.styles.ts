@@ -7,7 +7,7 @@ export default makeStyles((theme: Theme) =>
       margin: 0,
       lineHeight: '1em',
       fontSize: '0.75rem',
-      color: Colors.errorII,
+      color: Colors.error,
     },
     textArea: {
       fontFamily: 'Sora',
