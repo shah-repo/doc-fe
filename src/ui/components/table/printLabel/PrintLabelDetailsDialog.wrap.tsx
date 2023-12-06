@@ -19,6 +19,8 @@ import { KendoColumn as KendoColumnProps } from '../../common/kendo/types';
 import { toastError, toastSuccess } from '../../notifications';
 import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 
+export const PRINTER_NAME_KEY = 'printerName';
+export const PRINTER_LABEL_TYPE_KEY = 'printerLabelType';
 const SERIAL_MAX_LENGTH = 14;
 const SELECTED_FIELD = 'print';
 const initialSelectedParams = ['partDocId', 'revision', 'description', 'lotNumber', 'serial', 'actor', 'printDate'];
@@ -32,6 +34,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     ...props
   }: T) => {
     const companyEmployees = useSelector(companySelectors.getActiveEmployees);
+    const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
     const authUser = store.getState().auth.user;
     const intl = useIntl();
     const initialValues = {
@@ -85,6 +88,14 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         selectedItem?.id,
         async,
       );
+      const recentPrinter: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY));
+      const isRecentPrinterExist = zebraPrint.find(item => item.printer.name === recentPrinter?.printer?.name && item.printer.isActive);
+      if (isRecentPrinterExist) {
+        setPrinterSerial(recentPrinter?.printer?.sn);
+        setLabelTypeData(recentPrinter?.printer?.labelTemplates);
+        const recentPrinterLabelType: LabelTemplatesProps = JSON.parse(localStorage.getItem(PRINTER_LABEL_TYPE_KEY));
+        setLabelTemplate(recentPrinterLabelType?.id);
+      }
     }, []);
 
     useEffect(() => {
@@ -152,10 +163,12 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const onPrinterChange = (event: React.ChangeEvent<HTMLSelectElement>, value: ZebraPrintSettings) => {
       setPrinterSerial(value.printer.sn);
       setLabelTypeData(value?.printer?.labelTemplates);
+      localStorage.setItem(PRINTER_NAME_KEY, JSON.stringify(value));
     };
 
     const onLabelTypeChange = (event: React.ChangeEvent<HTMLSelectElement>, value: LabelTemplatesProps) => {
       setLabelTemplate(value.id);
+      localStorage.setItem(PRINTER_LABEL_TYPE_KEY, JSON.stringify(value));
     };
 
     const onFieldCheck = (event: React.ChangeEvent<HTMLInputElement>) => {

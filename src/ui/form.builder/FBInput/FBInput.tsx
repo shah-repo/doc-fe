@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormControl, FormHelperText, Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import LockIcon from '@material-ui/icons/Lock';
+import cx from 'classnames';
 import { includes, isEmpty } from 'lodash';
 import { Observer } from 'mobx-react';
 import React from 'react';
@@ -92,7 +93,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
           </FormControl>
 
           {!isEmpty(helperText) && showErrorMsg && !disabled && (
-            <FormHelperText {...{ error }}>
+            <FormHelperText {...{ error }} className={cx({ [classes.formHelperTextError]: error })} >
               <Text message={helperText as string} />
             </FormHelperText>
           )}

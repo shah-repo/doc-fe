@@ -244,6 +244,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         onRowClick={editMDItem}
         rowRender={rowRender}
         loading={materialDispositionAsync.isLoading || partAsync.isLoading}
+        resizable={true}
       >
         <GridToolbar>
           <Grid container justify="flex-end"

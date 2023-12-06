@@ -3,13 +3,14 @@ import { AttachFile } from '@material-ui/icons';
 import React from 'react';
 import { ReactComponent as CloseIcon } from '../../../../../../assets/images/trash.svg';
 import { attachmentsActions } from '../../../../../../state/ducks/attachments';
-import { Attachment, AttachmentDownloadResponse } from '../../../../../../state/ducks/attachments/types';
+import { AttachmentDownloadResponse } from '../../../../../../state/ducks/attachments/types';
 import ViewFile from '../../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../../components/common/view.file/utils/helpers';
 import { toastError } from '../../../../../components/notifications';
 import {
   FBAttachment,
   FBFilesPresenterProps,
+  FBFileUploadState,
   FBMapWrapper,
 } from '../../../../../form.builder';
 import { withFBFilesPresenter } from '../../../../../form.builder/FBFilesPresenter/FBFilesPresenter.wrap';
@@ -17,31 +18,21 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import OverflowingContent from '../../commonCells/OveflowContent';
-import { TasksListItem } from '../types';
 import { styles } from './cells/styles';
 
 interface Props extends FBFilesPresenterProps {
-  employeeId: string
-  dataItem: TasksListItem
   isDisabled?: boolean
-  employeeEvidenceUpdates?: (
-    dataItem: TasksListItem,
-    employeeId: string,
-    attachmentIds: Attachment[]
-  ) => void
+  fileUploadState: FBFileUploadState
 }
 
 const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
   attachments = [],
   boxProps,
-  employeeId,
-  dataItem,
   isDisabled,
-  employeeEvidenceUpdates,
+  fileUploadState,
 }) => {
   const removeAttachment = (attachmentId: string) => {
-    const updatedAttachmentList = attachments.filter(({ id }) => id !== attachmentId);
-    employeeEvidenceUpdates?.(dataItem, employeeId, updatedAttachmentList);
+    fileUploadState?.removeAttachment(attachmentId);
   };
 
   const dialogHandler = useDialog();

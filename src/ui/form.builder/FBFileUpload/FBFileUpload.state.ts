@@ -50,8 +50,12 @@ class FBFileUploadState {
     set(this, 'files', filter(this.files, (f) => f.id !== file.id));
   };
 
-  @action public clearAttachments = () => {
-    set(this, 'attachments', []);
+  @action public removeAttachment = (id: string) => {
+    set(this, 'attachments', filter(this.attachments, (f) => f.id !== id));
+  };
+
+  @action public setAttachments = (files: Attachment[]) => {
+    set(this, 'attachments', files);
   };
 
   @action public setUnzipStatus = (status: string) => {
