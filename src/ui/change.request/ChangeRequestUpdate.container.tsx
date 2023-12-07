@@ -72,6 +72,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         formInput: initialValues.formInput,
       },
     });
+    formState.setValues({ ...initialValues?.formInput } as FBFormState);
   }, [initialValues.formInput]);
 
   useEffect(() => {
