@@ -1,4 +1,4 @@
-import { cloneDeep, debounce, isEmpty } from 'lodash';
+import { cloneDeep, debounce, Dictionary, isEmpty } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
@@ -72,7 +72,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         formInput: initialValues.formInput,
       },
     });
-    formState.setValues({ ...initialValues?.formInput } as FBFormState);
+    formState.setValues(initialValues?.formInput as Dictionary<ChangeRequestFormValues['formInput']>);
   }, [initialValues.formInput]);
 
   useEffect(() => {
