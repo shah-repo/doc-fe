@@ -1101,7 +1101,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                   fileName={EXCEL_FILE_NAME}
                 >
                   <TreeList
-                    style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
+                    style={{ overflow: 'auto', maxHeight: size?.height ? `${size?.height - 160}px` : '100px' }}
                     {...state.dataState}
                     tableProps={{ style: { tableLayout: 'fixed' } }}
                     rowHeight={TREELIST_CONFIG.rowHeight}
