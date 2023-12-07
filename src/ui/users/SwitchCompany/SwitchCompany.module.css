@@ -1,6 +1,6 @@
 .customRows {
-    overflow-y: scroll;
-    height: 500px;
+  overflow-y: scroll;
+  height: 500px;
 }
 
 .customRows::-webkit-scrollbar {
@@ -8,11 +8,18 @@
 }
 
 .customRows::-webkit-scrollbar-track {
-  background : #e8e9ed;
+  background: #e8e9ed;
   border-radius: 12px;
 }
 
 .customRows::-webkit-scrollbar-thumb {
-  background : #cccccc;
+  background: #cccccc;
   border-radius: 10px;
-} 
+}
+
+@media only screen and (orientation : landscape) {
+  .lessThentwo {
+    overflow: scroll;
+    max-height: 200px;
+  }
+}
