@@ -20,6 +20,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
   name = 'justificationOfChange',
   label,
   defaultValue,
+  placeholder,
 }) => {
   const { formState } = FB.useStores();
   const formik = useFormikContext();
@@ -47,6 +48,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
         data-cy={name}
         name={name}
         rowsMax={maxAutoRowExpandSize}
+        placeholder={translate(placeholder)}
       />
       {!value && <p className={classes.error}>
         <span>{intl.formatMessage({ id: 'change.request.name.required' }, { name: translate(label) })}</span>

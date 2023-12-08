@@ -130,7 +130,7 @@
   "change.request.select.template": "Select an Approval Request template to continue",
   "change.request.select.existing.title": "Select One",
   "change.request.select.existing.content": "Select an Existing Approval Request to continue",
-  "change.request.name.required": "{name} is a required field",
+  "change.request.name.required": "The {name} is a required field",
   "change.request.dependent.docs.dialog.title": "Dependent on Doc Revs",
   "changeRequest.transition.submitted": "Submit Approval Request",
   "changeRequest.transition.approve": "Approve submission",

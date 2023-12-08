@@ -13,24 +13,31 @@ import { styles } from './styles';
 interface Props extends CustomTemplateProps {
   employeeId: string
   name: string
+  previousAttachments: Attachment[]
 }
 
-const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, name, isDisabled }) => {
+const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, isDisabled, previousAttachments }) => {
   const classes = styles();
   const { fileUploadState } = FB.useStores();
+  const { taskId } = dataItem;
+
+  React.useEffect(() => {
+    if (!isEmpty(previousAttachments)) {
+      fileUploadState?.setAttachments(previousAttachments);
+    }
+  }, []);
 
   React.useEffect(() => {
     const disposer = reaction(
       () => fileUploadState?.attachments,
       (attachments) => {
-        if (!isEmpty(attachments)) {
+        if (attachments?.length !== previousAttachments.length) {
             employeeEvidenceUpdates?.(dataItem, employeeId, attachments as Attachment[]);
         }
       },
     );
     return () => {
       disposer();
-      fileUploadState?.clearAttachments();
     };
   }, [dataItem, employeeEvidenceUpdates]);
 
@@ -39,12 +46,12 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
       labelClassName={classes.uploadEvidenceFieldLabel}
       iconClassName={classes.uploadEvidenceFieldIcon}
       disabled={isDisabled}
-      name={name}
+      name={taskId}
     />);
 };
 
 export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem, employeeEvidenceUpdates, isClosed } = props;
+  const { dataItem, isClosed } = props;
   const classes = styles();
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   const currentUserId = useSelector(authSelectors.currentEmployeeId);
@@ -54,10 +61,12 @@ export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props)
     {assigneList?.map(({ employeeId, attachments, status, name }) => {
       const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
       return <div className={classes.employeeResponseFields}>
-        {(!attachments.length && showEditor(employeeId, status)) ? (<FBProvider {...{ fileUploadState }}>
-          <Editor {...props} {...{ employeeId, name } } />
-        </FBProvider>)
-          : (!attachments.length) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: attachments, dataItem, employeeEvidenceUpdates, employeeId, status, isDisabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentsContainer }} />}
+        <FBProvider {...{ fileUploadState }}>
+          {(showEditor(employeeId, status)) && (
+            <Editor {...props} {...{ employeeId, name, previousAttachments: attachments } } />
+          )}
+          { (!attachments.length) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: attachments, fileUploadState, isDisabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentsContainer }} />}
+        </FBProvider>
       </div>;
     })}
   </>);
