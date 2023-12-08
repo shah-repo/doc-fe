@@ -89,7 +89,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         async,
       );
       const recentPrinter: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY));
-      const isRecentPrinterExist = zebraPrint.find(item => item.printer.name === recentPrinter?.printer?.name && item.printer.isActive);
+      const isRecentPrinterExist = zebraPrint?.find(item => item.printer.name === recentPrinter?.printer?.name && item.printer.isActive);
       if (isRecentPrinterExist) {
         setPrinterSerial(recentPrinter?.printer?.sn);
         setLabelTypeData(recentPrinter?.printer?.labelTemplates);

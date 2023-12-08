@@ -68,7 +68,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   const classes = styles();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
   const printerValue: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY));
-  const isRecentPrinterExist = zebraPrint.find(item => item.printer.name === printerValue?.printer?.name && item.printer.isActive);
+  const isRecentPrinterExist = zebraPrint?.find(item => item.printer.name === printerValue?.printer?.name && item.printer.isActive);
   const recentPrinterLabelType = localStorage.getItem(PRINTER_LABEL_TYPE_KEY);
   const defaultLabelType = isRecentPrinterExist ? JSON.parse(recentPrinterLabelType) : '';
   const qtyUnitsRender = () => {
@@ -108,7 +108,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 defaultValue={isRecentPrinterExist ? printerValue : ''}
                 disableClearable
                 data-cy="printer-name"
-                options={zebraPrint.filter(item => item.printer.isActive)}
+                options={zebraPrint?.filter(item => item.printer.isActive)}
                 getOptionLabel={(option: ZebraPrintSettings) => option.printer?.name}
                 onChange={onPrinterChange} />
             </FormField>
