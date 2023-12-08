@@ -27,7 +27,7 @@ const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numb
         <div className={classes.subtitle}>
           <Text translation="company.switch.subtitle" />
         </div>
-        <div className={numberOfCompanies > 5 ? rowstyle.customRows : rowstyle.lessThentwo}>
+        <div className={numberOfCompanies > 5 ? rowstyle.customRows : classes.lessThentwo}>
           {children}
         </div>
       </div>
