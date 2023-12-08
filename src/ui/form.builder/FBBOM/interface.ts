@@ -59,6 +59,7 @@ export interface EditableBOM extends BOM {
   replacementStatus?: string
   isMaximizedWindow?: boolean
   parentDocId?: string
+  isWO?: boolean
 }
 
 export interface BOMEditEvent {

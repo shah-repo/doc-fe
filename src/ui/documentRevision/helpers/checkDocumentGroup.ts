@@ -1,5 +1,5 @@
 import { some } from 'lodash';
-import { DOC_TYPE_GROUP_OPTION, DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 
 /** Checks if document has a specific group option.
    * @param groupOption Option that is searched for.
@@ -45,6 +45,7 @@ export const checkIsDocumentReceivable = checkDocumentGroupOptions.bind(this, DO
 export const checkIsDocumentBulkCreate = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.BULK_CREATE);
 export const checkIsDocumentLot = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LOT);
 export const checkIsDocumentLHRT = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LHRT);
+export const checkIsDocumentWO = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.WORK_ORDER);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);

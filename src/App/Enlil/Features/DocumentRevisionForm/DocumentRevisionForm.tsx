@@ -23,7 +23,7 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
@@ -82,6 +82,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
       && schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+  const isWOFrom = group === DOC_TYPE_GROUP.WORK_ORDER;
+  const isWO = checkIsDocumentWO(groupOptions);
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   const documentTypeId = formValues.values.document?.documentType?.id || '';
   const docRevId = documentRevision?.id;
@@ -339,8 +341,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 />
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled} isShowOnly={isPartForm}
-                                  isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView}
+                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled ?? (isWO || isWOFrom)} isShowOnly={isPartForm}
+                                  isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView} isWO={isWO || isWOFrom}
                                 />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
