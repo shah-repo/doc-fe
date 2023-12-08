@@ -114,10 +114,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
+  const isMaximizeView = _documentRevisionFormState?.isMaximizedView;
 
   const classes = useStyles({
     size,
-    isMaximizeView: _documentRevisionFormState?.isMaximizedView,
+    isMaximizeView,
   });
   const [state, setState] = React.useState<BOMState>({
     data: [],
@@ -1101,7 +1102,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                   fileName={EXCEL_FILE_NAME}
                 >
                   <TreeList
-                    style={{ overflow: 'auto', maxHeight: size?.height ? `${size?.height - 160}px` : '100px' }}
+                    style={{ overflow: 'auto', maxHeight: size?.height ? (`${size.height - (isMaximizeView ? -85 : 160)}px`) : '100px' }}
                     {...state.dataState}
                     tableProps={{ style: { tableLayout: 'fixed' } }}
                     rowHeight={TREELIST_CONFIG.rowHeight}
