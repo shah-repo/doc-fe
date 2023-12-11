@@ -21,7 +21,7 @@ import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBW
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart } from '../../../../../helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentWO } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
 import RelatedPartsWrapper from '../../../related.parts/RelatedParts.wrap';
@@ -83,6 +83,8 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const outputTypeGroup = get(outputType, 'group');
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+  const isWOFrom = group === DOC_TYPE_GROUP.WORK_ORDER;
+  const isWO = checkIsDocumentWO(documentType?.groupOptions);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);
@@ -290,7 +292,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       )}
                       {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
                         <FBBOM documentRevision={documentRevision}
-                          isDisabled={true} isShowOnly={true} />
+                          isDisabled={true} isShowOnly={true} isWO={isWO || isWOFrom} />
                       )}
                     </SMBox>
                   );

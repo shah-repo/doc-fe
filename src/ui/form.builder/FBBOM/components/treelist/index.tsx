@@ -109,6 +109,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   isUpgradeDisabled = false,
   isMaxDialogOpen = false,
   isSliderView = false,
+  isWO,
 }) => {
   const { _tabsState } = SM.useStores();
   const dispatch = useDispatch();
@@ -465,6 +466,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
+    if (isWO) {
+      return;
+    }
+
     if (dataItem.id === documentRevision.id) {
       return;
     }
@@ -641,6 +646,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     const parentChildRelkey = item.parentDocId ? `bom-row-${item.parentDocId}-${item.docId}` : `bom-row-${item.docId}`;
     item.isDisabled = isDisabled;
     item.isMaximizedWindow = isMaxDialogOpen;
+    item.isWO = isWO;
     item.isUpgradeDisabled = isUpgradeDisabled;
     item.enabledFieldsForEditing = enabledFieldsForEditing;
     item.inRestrictedEditMode = inRestrictedEditMode;
@@ -799,10 +805,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     <GridToolbar>
       <Grid
         container
-        justify="space-between"
+        justify={isWO ? 'flex-end' : 'space-between'}
         className={classes.toolbarContainer}
       >
-        <Grid
+        {!isWO && <Grid
           item
           data-cy="collapse-expand-collapse"
           className={cx(classes.toggleExpandCollapse, {
@@ -817,10 +823,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           <span onClick={handleCollapseAll}>
             {translate('common.collapse.all')}
           </span>
-        </Grid>
+        </Grid>}
         <Grid item>
           <Grid container justify="flex-end">
-            {showDiffView && (
+            {!isWO && showDiffView && (
               <Grid
                 item
                 data-cy="show-hide-diff"
@@ -850,7 +856,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 </span>
               </Grid>
             )}
-            <Grid
+            {!isWO && <Grid
               item
               data-cy="excel-export"
               className={cx({ [classes.disabled]: isShowOnly })}
@@ -867,8 +873,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                   icon={solid('arrow-down-to-line')}
                 />
               </StyleTooltip>
-            </Grid>
-            {showTree && (
+            </Grid>}
+            {!isWO && showTree && (
               <Grid
                 item
                 data-cy="where-used-view"
@@ -897,7 +903,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 onChange={onColumnShowHide}
               />
             </Grid>
-            {!isMaxDialogOpen && (
+            {!isWO && !isMaxDialogOpen && (
               <Grid
                 item
                 data-cy="maximize"

@@ -86,7 +86,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
         revision: dataItem.displayRevision,
         status: dataItem.displayStatus,
         docId: dataItem.docId,
-        isDisabled: alternatePartActionsDiabled,
+        isDisabled: alternatePartActionsDiabled || dataItem.isWO,
       }} />
     </td>
   );
