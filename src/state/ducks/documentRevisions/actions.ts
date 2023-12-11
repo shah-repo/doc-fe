@@ -456,10 +456,11 @@ const fetchBOMBranch = (
 const fetchBOMTree = (
   docRevId,
   docId,
+  isFirstLevelOnly,
   handlers: Handlers,
 ): ApiAction<BOMResponse> =>
   apiActionWithCallbacks({
-    url: `${FETCH_BOM_TREE}/${docId}/${docRevId}`,
+    url: `${FETCH_BOM_TREE}/${docId}/${docRevId}?isFirstLevelOnly=${isFirstLevelOnly}`,
     method: 'get',
     handlers,
   });

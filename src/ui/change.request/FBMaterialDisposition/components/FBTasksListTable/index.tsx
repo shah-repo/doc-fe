@@ -31,14 +31,15 @@ interface props {
   partOfId: string
   state: ChangeRequestStatus | DocumentRevisionStatus
   isShowOnly?: boolean
+  disabled?: boolean
   isAdditionalColumnsShown?: boolean
   setDoNotPrompt?: (state: boolean) => void
 }
 
 const FBTasksListTable: React.FunctionComponent<props> = (
-  { partOfId, state, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt }) => {
+  { partOfId, state, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt, disabled }) => {
   const classes = useStyles();
-
+  isShowOnly = (isShowOnly || disabled) ?? false;
   const [partOfIdToUse, setPartOfIdToUse] = useState(partOfId);
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
   const isEditMode = React.useRef<boolean>(false);

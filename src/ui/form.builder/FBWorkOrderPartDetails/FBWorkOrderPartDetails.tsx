@@ -12,7 +12,6 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   ...props
 }) => {
   const { formState } = FB.useStores();
-  console.log('FBWorkOrderPartDetails :', name);
   // const { partToBeMade, kitQuantity, kitUnit } = useWorkOrderPartDetails();
 
   const isPreview = formState?.workspaceMode === FBWorkspaceModeOptions.PREVIEW;
@@ -28,6 +27,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           optionId={FBAutocompleteAsyncOption.availableParts}
           optionValueType="id"
           rules="required"
+          disabled={props.disabled}
           // {...{ disabledOptions }}
           shouldReloadOnInit
           // autoCompleteClasses={{ option: classes.option }}

@@ -180,6 +180,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         fetchBOMTreeList,
         documentRevision.id,
         documentRevision.documentId,
+        isWO,
         treeListAsync,
       );
       dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
@@ -201,6 +202,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       fetchBOMTreeList,
       documentRevision.id,
       documentRevision.documentId,
+      isWO,
       treeListAsync,
     );
   };
@@ -236,6 +238,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           fetchBOMTreeList,
           documentRevision.id,
           documentRevision.documentId,
+          isWO,
           treeListAsync,
         );
       }
@@ -1217,6 +1220,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
             isShowOnly={isShowOnly}
             isUpgradeDisabled={isUpgradeDisabled}
             isMaxDialogOpen={true}
+            isWO={isWO}
           />
         </DialogContent>
       </Dialog>
