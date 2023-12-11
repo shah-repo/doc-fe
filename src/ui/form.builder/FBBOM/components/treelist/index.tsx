@@ -1217,6 +1217,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
             isShowOnly={isShowOnly}
             isUpgradeDisabled={isUpgradeDisabled}
             isMaxDialogOpen={true}
+            isWO={isWO}
           />
         </DialogContent>
       </Dialog>

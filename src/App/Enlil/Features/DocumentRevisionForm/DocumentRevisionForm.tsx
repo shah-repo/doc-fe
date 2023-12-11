@@ -341,7 +341,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 />
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled ?? (isWO || isWOFrom)} isShowOnly={isPartForm}
+                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled || (isWO || isWOFrom)} isShowOnly={isPartForm}
                                   isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView} isWO={isWO || isWOFrom}
                                 />
                               )}
