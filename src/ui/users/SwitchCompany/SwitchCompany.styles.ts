@@ -93,7 +93,12 @@ export const styles = makeStyles((theme: NextTheme) =>
         marginLeft: theme.spacing(10),
         marginTop: theme.spacing(2),
         display: 'unset',
-
+      },
+      lessThentwo: {
+        [theme.breakpoints.between('sm', 'md')]: {
+          overflow: 'scroll',
+          height: 200,
+        },
       },
     },
   }),
