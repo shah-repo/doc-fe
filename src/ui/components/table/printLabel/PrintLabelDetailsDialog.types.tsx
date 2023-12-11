@@ -28,4 +28,7 @@ export interface PrintLabelDetailsDialogProps {
   description: string
   selectedParams: string[]
   labelTypeData: LabelTemplatesProps[]
+  printerSerial: string
+  labelTemplate: string
+  showError: boolean
 }

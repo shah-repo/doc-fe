@@ -4,13 +4,14 @@ import { Grid, IconButton } from '@material-ui/core';
 import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridCellProps, GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
-import { cloneDeep, find, findIndex, map, set } from 'lodash';
+import { cloneDeep, find, findIndex, isEmpty, isNull, map, set } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { companySelectors } from '../../../state/ducks/company';
 import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
 import { printLabelsActions } from '../../../state/ducks/printLabels';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
@@ -61,6 +62,7 @@ export function KendoGrid<T extends any> ({
   exportDataChanges,
 }: KendoGridProps<T>) {
   const didMount = useDidMount();
+  const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
   const classes = KendoGridStyles();
   const [columns, setColumns] = useState<KendoColumnProps[]>([]);
   const dispatch = useDispatch();
@@ -446,6 +448,9 @@ export function KendoGrid<T extends any> ({
   }
 
   const onPrintIconClick = (props: GridCellProps) => {
+    if(isNull(zebraPrint) || isEmpty(zebraPrint)) {
+      return toastError(translate('printer.not.configured'));
+    }
     if(documentTypeCategory === DocumentCategory.Equipment) {
       const param = { equipments: [ props?.dataItem?.document?.docId] };
       async.start(
