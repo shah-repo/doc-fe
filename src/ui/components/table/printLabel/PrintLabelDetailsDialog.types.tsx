@@ -30,4 +30,5 @@ export interface PrintLabelDetailsDialogProps {
   labelTypeData: LabelTemplatesProps[]
   printerSerial: string
   labelTemplate: string
+  showError: boolean
 }

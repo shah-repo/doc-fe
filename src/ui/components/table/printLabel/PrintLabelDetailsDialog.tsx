@@ -66,6 +66,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   labelTypeData,
   printerSerial,
   labelTemplate,
+  showError,
 }) => {
   const classes = styles();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
@@ -107,8 +108,8 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           <Grid item xs={6}>
             <FormField label="print.label.dialog.field.printer"
               required
-              error={isEmpty(printerSerial)}
-              helperText={isEmpty(printerSerial) ? translate('validators.required') : ''}>
+              error={isEmpty(printerSerial) && showError}
+              helperText={isEmpty(printerSerial) && showError ? translate('validators.required') : ''}>
               <Autocomplete
                 defaultValue={isRecentPrinterExist ? printerValue : ''}
                 disableClearable
@@ -121,8 +122,8 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           <Grid item xs={6}>
             <FormField label="print.label.dialog.field.label.type"
               required
-              error={isEmpty(labelTemplate)}
-              helperText={isEmpty(labelTemplate) ? translate('validators.required') : ''}>
+              error={isEmpty(labelTemplate) && showError}
+              helperText={isEmpty(labelTemplate) && showError ? translate('validators.required') : ''}>
               <Autocomplete
                 defaultValue={defaultLabelType}
                 disableClearable

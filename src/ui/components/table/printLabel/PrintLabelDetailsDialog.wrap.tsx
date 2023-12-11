@@ -59,7 +59,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const [labelTemplate, setLabelTemplate] = useState('');
     const executeDocumentRevisionAsyncTask = useActionCreator(documentRevisionsActions.loadWithCallback);
     const executePrintLotLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLotLabelAsyncTask);
-
+    const [showError, setShowError] = useState(false);
     const async = useAsync({
       onSuccess: (data) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
@@ -182,7 +182,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
 
     const onPrintClick = () => {
       if(isEmpty(printerSerial) || isEmpty(labelTemplate)) {
-        return;
+        return setShowError(true);
       }
       const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));
       const params = {
@@ -237,6 +237,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       labelTypeData,
       printerSerial,
       labelTemplate,
+      showError,
     });
   };
 
