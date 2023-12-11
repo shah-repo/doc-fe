@@ -181,6 +181,9 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onPrintClick = () => {
+      if(isEmpty(printerSerial) || isEmpty(labelTemplate)) {
+        return;
+      }
       const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));
       const params = {
         printerSerial: printerSerial,
@@ -232,6 +235,8 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       onFieldCheck,
       selectedParams,
       labelTypeData,
+      printerSerial,
+      labelTemplate,
     });
   };
 

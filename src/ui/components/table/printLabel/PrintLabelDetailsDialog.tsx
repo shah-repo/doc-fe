@@ -1,6 +1,6 @@
 import { Box, Button, createStyles, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { includes, range } from 'lodash';
+import { includes, isEmpty, range } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
@@ -64,6 +64,8 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   selectedNumberOfLabel,
   selectedParams,
   labelTypeData,
+  printerSerial,
+  labelTemplate,
 }) => {
   const classes = styles();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
@@ -103,7 +105,10 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           alignItems="center"
           spacing={2} >
           <Grid item xs={6}>
-            <FormField label="print.label.dialog.field.printer">
+            <FormField label="print.label.dialog.field.printer"
+              required
+              error={isEmpty(printerSerial)}
+              helperText={isEmpty(printerSerial) ? translate('validators.required') : ''}>
               <Autocomplete
                 defaultValue={isRecentPrinterExist ? printerValue : ''}
                 disableClearable
@@ -114,7 +119,10 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             </FormField>
           </Grid>
           <Grid item xs={6}>
-            <FormField label="print.label.dialog.field.label.type">
+            <FormField label="print.label.dialog.field.label.type"
+              required
+              error={isEmpty(labelTemplate)}
+              helperText={isEmpty(labelTemplate) ? translate('validators.required') : ''}>
               <Autocomplete
                 defaultValue={defaultLabelType}
                 disableClearable
