@@ -1,4 +1,5 @@
 import { DEFAULT_EMPLOYEE } from './ducks/auth/reducers';
+import { WhiteLabelingEnv } from './ducks/company/types';
 
 export default {
   0: (state: any) => ({
@@ -28,6 +29,34 @@ export default {
       user: {
         ...state.auth.user,
         employee: DEFAULT_EMPLOYEE,
+      },
+      groups: {
+        ...state.auth.groups,
+      },
+    },
+  }),
+  3: (state: any) => ({
+    ...state,
+    auth: {
+      ...state.auth,
+      user: {
+        ...state.auth.user,
+        employee: DEFAULT_EMPLOYEE,
+        employees: state.auth.user.employees.map(employee => ({
+          ...employee,
+          company: {
+            ...employee.company,
+            whiteLabeling: Object.entries(employee.company.whiteLabeling ?? {}).reduce((result, [key, config]) => ({
+              ...result,
+              [key]: {
+                ...(config as WhiteLabelingEnv),
+                colors: {},
+              },
+            }), {}),
+            addresses: [],
+            acctCodes: [],
+          },
+        })),
       },
       groups: {
         ...state.auth.groups,
