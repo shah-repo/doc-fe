@@ -501,7 +501,7 @@ export interface DocumentTypeByIdState {
   [key: string]: DocumentType
 }
 
-type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS' | 'MATERIAL_DISPOSITION';
+type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS' | 'MATERIAL_DISPOSITION' | 'ALLOCATION';
 
 export interface TabInfo {
   labelId: string
