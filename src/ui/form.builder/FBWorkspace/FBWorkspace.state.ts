@@ -6,6 +6,7 @@ import { GroupTag, UserState } from '../../../state/ducks/auth/types';
 import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { checkIsDocumentLHR } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 import FBDataStore from '../FBStore/FBDataStore';
@@ -166,9 +167,15 @@ class FBWorkspaceState extends FBSchemaState {
       document,
       externalState: { auth: { user: { employeeId = '' } = {} } = {} } = {},
     } = this || {};
-    const inputOwner = document?.inputOwners?.[name];
+    const isLHR = checkIsDocumentLHR(document?.document?.documentType.groupOptions);
 
-    return inputOwner === undefined || inputOwner === employeeId;
+    const inputOwner = document?.inputOwners?.[name];
+    const operators = document?.document?.operators;
+
+    const isOperator = operators?.some(optr => [employeeId, inputOwner].includes(optr.id));
+    const isOwner = inputOwner === employeeId;
+
+    return inputOwner === undefined || isOwner || (Boolean(isOperator) && isLHR);
   };
 
   @action public setDirty = (isDirty: boolean) => {
