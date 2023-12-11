@@ -41,7 +41,6 @@ export default {
       ...state.auth,
       user: {
         ...state.auth.user,
-        employee: DEFAULT_EMPLOYEE,
         employees: state.auth.user.employees.map(employee => ({
           ...employee,
           company: {
@@ -57,9 +56,6 @@ export default {
             acctCodes: [],
           },
         })),
-      },
-      groups: {
-        ...state.auth.groups,
       },
     },
   }),
