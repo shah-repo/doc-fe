@@ -37,26 +37,23 @@ export default {
   }),
   3: (state: any) => ({
     ...state,
-    auth: {
-      ...state.auth,
-      user: {
-        ...state.auth.user,
-        employees: state.auth.user.employees.map(employee => ({
-          ...employee,
-          company: {
-            ...employee.company,
-            whiteLabeling: Object.entries(employee.company.whiteLabeling ?? {}).reduce((result, [key, config]) => ({
-              ...result,
-              [key]: {
-                ...(config as WhiteLabelingEnv),
-                colors: {},
-              },
-            }), {}),
-            addresses: [],
-            acctCodes: [],
-          },
-        })),
-      },
+    user: {
+      ...state.user,
+      employees: state.user.employees.map(employee => ({
+        ...employee,
+        company: {
+          ...employee.company,
+          whiteLabeling: Object.entries(employee.company.whiteLabeling ?? {}).reduce((result, [key, config]) => ({
+            ...result,
+            [key]: {
+              ...(config as WhiteLabelingEnv),
+              colors: {},
+            },
+          }), {}),
+          addresses: [],
+          acctCodes: [],
+        },
+      })),
     },
   }),
 };
