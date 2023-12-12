@@ -20,6 +20,7 @@ interface Props {
   transition: ChangeRequestTransition
   buttonProps?: ButtonProps
   label: string
+  title?: string
   transitionDialog: any
   onSuccess?: () => void
   type?: string
@@ -43,12 +44,6 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         <div style={{ color: Colors.black }}>
           <div><span style={{ fontWeight: 'bold' }}>
             <Text translation={`approvalRequest.status.${response?.status}` as Translation} /></span></div>
-          {response?.status === 'IN_REVIEW'
-            ? <div><Text translation={'approvalRequest.status.message.IN_REVIEW_PENDING' as Translation}
-            /> </div>
-            : <div><Text translation={`approvalRequest.status.message.${response?.status}` as Translation}
-            />
-            </div>}
         </div>
       </div></>, {
         closeButton: true,
