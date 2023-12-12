@@ -29,6 +29,8 @@ interface Props {
   currentDocumentType?: DocumentType
   renderAsButton?: boolean
   hasBuildType?: boolean
+  isWO?: boolean
+  isWOForm?: boolean
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
@@ -40,6 +42,8 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   currentDocumentType,
   renderAsButton,
   hasBuildType,
+  isWO,
+  isWOForm,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const classes = styles();
@@ -49,7 +53,12 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
-  const label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
+  let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
+
+  if (isWO && !isWOForm) {
+    label = 'record.assign';
+  }
+
   const releaseAsync = useAsync({
     onError: (error) => {
       toastError(error as string);
@@ -58,7 +67,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   });
   const updateDocAsync = useAsync({
     onSuccess: () => {
-      if ( FBStore?.isHistoryTabSelected) {
+      if (FBStore?.isHistoryTabSelected) {
         dispatch(documentRevisionsActions.loadAudit(docRevId));
       }
       releaseRecord();

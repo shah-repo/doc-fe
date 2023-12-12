@@ -47,7 +47,7 @@ import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
@@ -77,7 +77,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 }) => {
   const isNewLayout = SM.isNewLayout;
   const handleCreateDocument = useHandleCreateDoc();
-  const {
+  let {
     isVisible: showRevise,
     label: reviseLabel,
     tooltipConfig,
@@ -107,6 +107,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isPart = checkIsDocumentPart(groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
   const isEB = checkIsDocumentEB(groupOptions);
+  const isWO = checkIsDocumentWO(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
@@ -116,6 +117,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     }
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
+
+  if (isWO && !documentRevision?.formTemplate) {
+    reviseLabel = 'record.revise';
+  }
 
   const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
   const isNotRelatedTogetherPart = documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;

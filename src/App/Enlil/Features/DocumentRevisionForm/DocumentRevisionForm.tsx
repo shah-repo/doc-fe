@@ -9,7 +9,7 @@ import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
@@ -151,6 +151,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       dirty = _documentRevisionFormState?.isDirty || false;
     }
   });
+
+  if (isWO && !documentRevision.formTemplate && formValues.values.formInput?.work_order_type === WorkOrderTypes.OTHER) {
+    // hide allocation & BOM Tabs on Work order Other case
+    tabConfig = tabConfig.filter(tab => ![TabTypeOptions?.BOM, TabTypeOptions?.ALLOCATION].includes(tab.type as TabTypeOptions));
+  }
 
   const handleResize: AutoSizerProps['onResize'] = useCallback(
     debounce(
