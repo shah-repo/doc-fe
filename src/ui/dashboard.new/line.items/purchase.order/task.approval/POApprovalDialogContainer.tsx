@@ -10,7 +10,7 @@ import Text from '../../../../components/Text';
 import { toastSuccess } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import Colors from '../../../../layout/theme-next/colors';
+import Colors from '../../../../layout/theme/utils/colors';
 import { Translation } from '../../../../translations/types';
 import ApproveDialog from '../../dialogs/transitionDialog/ApproveOrRejectDialog';
 import PoRejectDialog from '../../dialogs/transitionDialog/PoRejectDialog';
@@ -39,15 +39,23 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const async = useAsync({
     onSuccess: (response) => {
       transitionDialog.close();
-      toastSuccess(<><div style={{ display: 'flex' }}>
-        <div><SuccessIcon style={{ height: '30px' }} /></div>
-        <div style={{ color: Colors.black }}>
-          <div><span style={{ fontWeight: 'bold' }}>
-            <Text translation={`approvalRequest.status.${response?.status}` as Translation} /></span></div>
-        </div>
-      </div></>, {
-        closeButton: true,
-      });
+      toastSuccess(
+        <>
+          <div style={{ display: 'flex' }}>
+            <div>
+              <SuccessIcon style={{ height: '30px' }} />
+            </div>
+            <div style={{ color: Colors.black }}>
+              <div>
+                <span style={{ fontWeight: 'bold' }}>
+                  <Text translation={`approvalRequest.status.${response?.status}` as Translation} />
+                </span>
+              </div>
+            </div>
+          </div>
+        </>, {
+          closeButton: true,
+        });
       dispatch(dashboardTodoActions.loadMyFeedsList());
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
