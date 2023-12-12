@@ -368,9 +368,10 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
                     onClick={hasChildren ? onClick : undefined}
                     size="sm"
                     icon={
-                      expanded || !hasChildren
-                        ? regular('square-minus')
-                        : solid('square-plus')
+                      (dataItem.hasChildren && dataItem.isWO) ? solid('square-plus')
+                        : (expanded || !hasChildren)
+                          ? regular('square-minus')
+                          : solid('square-plus')
                     }
                   />
                 </span>

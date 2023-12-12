@@ -37,7 +37,7 @@ import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCust
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
-import { checkIsDocumentPO } from '../../../helpers/checkDocumentGroup';
+import { checkIsDocumentPO, checkIsDocumentWO } from '../../../helpers/checkDocumentGroup';
 import { ApproveAndReleaseFormValues } from '../../types';
 import useStyles from './ApproveAndRelease.styles';
 import ApproveAndReleaseForm from './ApproveAndReleaseForm';
@@ -102,6 +102,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const docId = documentRevision?.document?.docId || '';
   const title = documentRevision?.name;
   const isDocumentPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
+  const isWO = checkIsDocumentWO(documentRevision?.document?.documentType?.groupOptions);
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
   const classes = useStyles();
@@ -234,6 +235,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       fetchBOMTreeList,
       documentRevision.id,
       documentRevision.documentId,
+      isWO,
       bomInfoAsync,
     );
   }, []);
