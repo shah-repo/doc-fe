@@ -1,6 +1,6 @@
 import { Box, Button, createStyles, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { includes, range } from 'lodash';
+import { includes, isEmpty, range } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
@@ -64,11 +64,14 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   selectedNumberOfLabel,
   selectedParams,
   labelTypeData,
+  printerSerial,
+  labelTemplate,
+  showError,
 }) => {
   const classes = styles();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
   const printerValue: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY));
-  const isRecentPrinterExist = zebraPrint.find(item => item.printer.name === printerValue?.printer?.name && item.printer.isActive);
+  const isRecentPrinterExist = zebraPrint?.find(item => item.printer.name === printerValue?.printer?.name && item.printer.isActive);
   const recentPrinterLabelType = localStorage.getItem(PRINTER_LABEL_TYPE_KEY);
   const defaultLabelType = isRecentPrinterExist ? JSON.parse(recentPrinterLabelType) : '';
   const qtyUnitsRender = () => {
@@ -103,18 +106,24 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
           alignItems="center"
           spacing={2} >
           <Grid item xs={6}>
-            <FormField label="print.label.dialog.field.printer">
+            <FormField label="print.label.dialog.field.printer"
+              required
+              error={isEmpty(printerSerial) && showError}
+              helperText={isEmpty(printerSerial) && showError ? translate('validators.required') : ''}>
               <Autocomplete
                 defaultValue={isRecentPrinterExist ? printerValue : ''}
                 disableClearable
                 data-cy="printer-name"
-                options={zebraPrint.filter(item => item.printer.isActive)}
+                options={zebraPrint?.filter(item => item.printer.isActive)}
                 getOptionLabel={(option: ZebraPrintSettings) => option.printer?.name}
                 onChange={onPrinterChange} />
             </FormField>
           </Grid>
           <Grid item xs={6}>
-            <FormField label="print.label.dialog.field.label.type">
+            <FormField label="print.label.dialog.field.label.type"
+              required
+              error={isEmpty(labelTemplate) && showError}
+              helperText={isEmpty(labelTemplate) && showError ? translate('validators.required') : ''}>
               <Autocomplete
                 defaultValue={defaultLabelType}
                 disableClearable

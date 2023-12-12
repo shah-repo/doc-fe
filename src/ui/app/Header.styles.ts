@@ -34,7 +34,7 @@ export default (theme: NextTheme) =>
       background: `linear-gradient(225deg,${Colors.navy} 0%,${Colors.ultramarine_blue} 29.56%,${Colors.navy} 100%)`,
     },
     toolbar: (props: HeaderPresenterProps) => ({
-      marginLeft: props.open ? DRAWER_WIDTH : COLLAPSE_BAR_SPACE,
+      marginLeft: props.isOpened ? DRAWER_WIDTH : COLLAPSE_BAR_SPACE,
       minHeight: props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
       paddingBottom: props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
       paddingLeft: theme.spacing(props.fullHeight ? 8 : 3),

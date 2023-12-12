@@ -221,6 +221,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       ...list,
       {
         ...(isMDItemEdited ? editedMDItem : item),
+        lotDocId: item.lotDocId ?? EMPTY_DROPDOWN_PLACEHOLDER,
         [MODE_FIELD]: isMDItemEdited ? Mode.edit : Mode.show,
       },
     ];

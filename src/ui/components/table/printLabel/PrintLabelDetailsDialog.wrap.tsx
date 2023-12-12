@@ -59,7 +59,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const [labelTemplate, setLabelTemplate] = useState('');
     const executeDocumentRevisionAsyncTask = useActionCreator(documentRevisionsActions.loadWithCallback);
     const executePrintLotLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLotLabelAsyncTask);
-
+    const [showError, setShowError] = useState(false);
     const async = useAsync({
       onSuccess: (data) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
@@ -89,7 +89,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         async,
       );
       const recentPrinter: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY));
-      const isRecentPrinterExist = zebraPrint.find(item => item.printer.name === recentPrinter?.printer?.name && item.printer.isActive);
+      const isRecentPrinterExist = zebraPrint?.find(item => item.printer.name === recentPrinter?.printer?.name && item.printer.isActive);
       if (isRecentPrinterExist) {
         setPrinterSerial(recentPrinter?.printer?.sn);
         setLabelTypeData(recentPrinter?.printer?.labelTemplates);
@@ -181,6 +181,9 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onPrintClick = () => {
+      if(isEmpty(printerSerial) || isEmpty(labelTemplate)) {
+        return setShowError(true);
+      }
       const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));
       const params = {
         printerSerial: printerSerial,
@@ -232,6 +235,9 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       onFieldCheck,
       selectedParams,
       labelTypeData,
+      printerSerial,
+      labelTemplate,
+      showError,
     });
   };
 

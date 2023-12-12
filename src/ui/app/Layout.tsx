@@ -69,7 +69,7 @@ const Layout: React.FunctionComponent = () => {
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer className={classes.mobileLayout} open={isOpened} handleDrawerOpen={handleDrawerOpen} />
+      <HeaderContainer className={classes.mobileLayout} isOpened={isOpened} handleDrawerOpen={handleDrawerOpen} />
       <Navigation handleDrawerOpen={handleDrawerOpen} open={isOpened} />
       <SocketsContainer />
       <WatermarkFooterContainer />
