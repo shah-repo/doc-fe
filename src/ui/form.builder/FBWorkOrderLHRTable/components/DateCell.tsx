@@ -8,5 +8,5 @@ export const DateCell: React.FC<CustomTemplateProps> = ({ field, dataItem }) => 
   const isAddMode = [Mode.add].includes(dataItem[MODE_FIELD]);
   const dateValue = (isAddMode ? values[field] ?? dataItem[field] : dataItem[field]) as string;
 
-  return (<>{ dateValue }</>);
+  return (<>{ dateValue ?? '-'}</>);
 };

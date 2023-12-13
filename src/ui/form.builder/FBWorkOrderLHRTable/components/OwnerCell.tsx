@@ -13,7 +13,12 @@ export const OwnerCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onCl
   const classes = styles();
   const { values } = useFormikContext<EditableLHRTableItem>();
   const isAddMode = [Mode.add].includes(dataItem[MODE_FIELD]);
-  const { user } = (isAddMode ? values[field] ?? dataItem[field] : dataItem[field]) as Employee;
+  const ownerDetails = (isAddMode ? values[field] ?? dataItem[field] : dataItem[field]) as Employee;
+
+  let user;
+  if (ownerDetails) {
+    user = ownerDetails.user;
+  }
 
   const handleClick = () => {
     onClick?.({ dataItem });
@@ -26,6 +31,7 @@ export const OwnerCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onCl
       placement="top"
       interactive
       arrow
+      className={classes.owner}
     >
       { user && <Avatar
         className={classes.avatar}

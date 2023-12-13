@@ -66,6 +66,7 @@ import FBTextField from '../FBTextField/FBTextField';
 import FBTextFieldWithRange from '../FBTextFieldWithRange/FBTextFieldWithRange';
 import FBTimerField from '../FBTimerField/FBTimerField';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
+import FBWorkOrderLHRTable from '../FBWorkOrderLHRTable/FBWorkOrderLHRTable';
 import FBWorkOrderPartDetails from '../FBWorkOrderPartDetails/FBWorkOrderPartDetails';
 import FBZIPUpload from '../FBZIPUpload/FBZIPUpload';
 
@@ -150,6 +151,7 @@ class FBSchemaState {
     cycleCount: FBCycleCount,
     workOrderPartDetails: FBWorkOrderPartDetails,
     tasksListTable: FBTasksListTable,
+    workOrderLhrTable: FBWorkOrderLHRTable,
   };
 
   @observable public schema?: FBSchemaProps[];

@@ -42,7 +42,7 @@ export const buildSchema = (): SchemaItem[] => ([
     id: 'completionDate',
     field: 'completionDate',
     title: translate('form.builder.workOrder.lhr.completionDate'),
-    width: 90,
+    width: 150,
     template: DateCell,
   },
   {
@@ -70,7 +70,8 @@ export const buildSchema = (): SchemaItem[] => ([
     id: 'lhrDetails',
     field: 'lhrDetails',
     title: translate('form.builder.workOrder.lhr.lhrDetails'),
-    width: 180,
+    width: 240,
     template: LhrDetailsCell,
+    locked: true,
   },
 ]);

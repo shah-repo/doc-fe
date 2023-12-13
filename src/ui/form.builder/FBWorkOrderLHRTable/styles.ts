@@ -14,7 +14,7 @@ export default makeStyles(theme => ({
     },
 
     '& .k-column-title': {
-      fontSize: 12,
+      fontSize: 10,
       textTransform: 'uppercase',
       whiteSpace: 'normal',
     },
@@ -92,15 +92,21 @@ export default makeStyles(theme => ({
   addPartButton: {
     marginTop: -4,
   },
+  owner: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   avatar: {
-    width: 25,
-    height: 25,
+    width: 28,
+    height: 28,
     fontSize: 12,
     fontWeight: 600,
     color: Colors.white,
     fontFamily: 'Sora',
     textTransform: 'uppercase',
     marginRight: theme.spacing(0.875),
+    display: 'inline-block',
+    padding: theme.spacing(1, 0, 0, 0.6),
   },
   userName: {
     fontFamily: 'Sora',

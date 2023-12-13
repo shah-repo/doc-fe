@@ -21,7 +21,7 @@ export const QuantityCell: React.FC<CustomTemplateProps> = ({ dataItem, field, o
       interactive
       arrow
     >
-      {quantity}
+      {quantity ?? '-'}
     </OverflowTooltip>
   );
 };

@@ -3,36 +3,35 @@ import { useFormikContext } from 'formik';
 import React, { ChangeEvent, useEffect } from 'react';
 import { translate } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { Mode, MODE_FIELD } from '../constants';
-import { CustomTemplateProps, EditableLHRTableItem, ILHRTableItem } from '../types';
+import { CustomTemplateProps, EditableLHRTableItem, ILHRAutocompleteOption, ILHRTableItem } from '../types';
 
 export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   const isAddMode = [Mode.add].includes(dataItem[MODE_FIELD]);
   const { getFieldProps, setFieldValue } = useFormikContext<EditableLHRTableItem>();
 
-  const [lhrList, setLhrList] = React.useState<DocumentRevision[]>([]);
+  const [lhrList, setLhrList] = React.useState<ILHRAutocompleteOption[]>([]);
 
   const fetchAvailableLhrsAsync = useAsync({
-    onSuccess: (data: DocumentRevision[] = []) => {
+    onSuccess: (data: ILHRAutocompleteOption[] = []) => {
       setLhrList(data);
     },
   });
 
-  const fetchSelectedLhrAsync = useAsync<ILHRTableItem[]>({
+  const fetchSelectedLhrAsync = useAsync<ILHRTableItem>({
     onSuccess: (data) => {
-      if (!Array.isArray(data) || !data.length) {
-        return;
-      }
-
+      console.log(data);
       const {
         lotId, displayStatus, owner, partRev, completionDate, startQuantity,
         endQuantity, lhrTemplate, lhrDetails,
-      } = data[0];
+      } = data as ILHRTableItem;
+
+      console.log(lotId, displayStatus, owner, partRev, completionDate, startQuantity,
+        endQuantity, lhrTemplate, lhrDetails);
 
       setFieldValue('displayStatus', displayStatus);
       setFieldValue('owner', owner);
@@ -61,13 +60,13 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
 
   const renderOptions = () => {
     return lhrList.map((lhr) => ({
-      label: renderPartLabel(lhr),
+      label: renderLhrLabel(lhr),
       value: lhr.id,
     }));
   };
 
-  const renderPartLabel = (lhr: DocumentRevision) => {
-    return `${lhr?.document.docId} Rev ${lhr?.displayRevision} - ${lhr?.name}`;
+  const renderLhrLabel = (lhr: ILHRAutocompleteOption) => {
+    return `${lhr.docId} - Rev ${lhr.displayRevision} - ${lhr.lotId}`;
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {

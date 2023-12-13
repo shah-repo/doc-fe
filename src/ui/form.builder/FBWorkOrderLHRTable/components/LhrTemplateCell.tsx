@@ -7,7 +7,7 @@ import { CustomTemplateProps, EditableLHRTableItem } from '../types';
 export const LhrTemplateCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   const { values } = useFormikContext<EditableLHRTableItem>();
   const isAddMode = [Mode.add].includes(dataItem[MODE_FIELD]);
-  const { docId } = (isAddMode ? values[field] ?? dataItem[field] : dataItem[field]) as {id: string, docId: string};
+  const lhrTemplateId = (isAddMode ? values[field] ?? dataItem[field] : dataItem[field]) as string;
 
   const handleClick = () => {
     onClick?.({ dataItem });
@@ -15,13 +15,13 @@ export const LhrTemplateCell: React.FC<CustomTemplateProps> = ({ dataItem, field
 
   return (
     <OverflowTooltip
-      title={docId}
+      title={lhrTemplateId}
       onClick={handleClick}
       placement="top"
       interactive
       arrow
     >
-      { docId }
+      { lhrTemplateId }
     </OverflowTooltip>
   );
 };
