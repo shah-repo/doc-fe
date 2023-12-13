@@ -30,7 +30,7 @@ const Bookmarks: React.FC = () => {
   return (
     <Box m={1.875}>
       <FBMapWrapper<FBBookmarkItem[]>
-        collection={bookmarks?.sort((a, b) => ((a?.name || '') > (b?.name || '') ? 1 : -1)) || []}>
+        collection={bookmarks || []}>
         {(bookmark: FBBookmarkItem, index) => {
           const { name, label = '' } = bookmark;
           const link = window.location.href.split('#');
