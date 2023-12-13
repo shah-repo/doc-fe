@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
@@ -18,6 +18,7 @@ import SummaryPresenter from '../../../../ui/document.revision/summary/presenter
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
+import FBAllocation from '../../../../ui/form.builder/FBAllocation';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMForm } from '../../../Shifamed/Components/SMForm/SMForm.hoc';
@@ -82,6 +83,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       tabId: TabTypeOptions.BOM.toLowerCase(),
       type: TabTypeOptions.BOM,
     }];
+  }
+
+  if (isWO && !documentRevision.formTemplate && documentRevision.formInput?.work_order_type === WorkOrderTypes.OTHER) {
+    // hide allocation & BOM Tabs on Work order Other case
+    tabConfig = tabConfig.filter(tab => ![TabTypeOptions?.BOM, TabTypeOptions?.ALLOCATION].includes(tab.type as TabTypeOptions));
   }
 
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
@@ -241,6 +247,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 <FBBOM documentRevision={documentRevision} isDisabled={true} isShowOnly={isPartForm}
                                   isUpgradeDisabled={true} isWO={isWO || isWOFrom}
                                 />
+                              )}
+                              {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
+                                <FBAllocation />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper

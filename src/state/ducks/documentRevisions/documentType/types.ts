@@ -148,6 +148,13 @@ export enum TabTypeOptions {
 export enum CATEGORY {
   WORKORDER_CATEGORY = 'Work Order',
 }
+
+export enum WorkOrderTypes {
+  MAKE_KIT = 'make_kit',
+  MAKE_PRODUCT = 'make_product_or_part',
+  OTHER = 'other',
+}
+
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export const GroupWithGroupOptions = {
   FORM: [
@@ -501,7 +508,7 @@ export interface DocumentTypeByIdState {
   [key: string]: DocumentType
 }
 
-type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS' | 'MATERIAL_DISPOSITION';
+type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS' | 'MATERIAL_DISPOSITION' | 'ALLOCATION';
 
 export interface TabInfo {
   labelId: string

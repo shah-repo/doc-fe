@@ -36,7 +36,7 @@ import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustom
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
@@ -121,6 +121,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
+  const isWO = checkIsDocumentWO(documentRevision?.document?.documentType?.groupOptions);
   const isPart = checkIsDocumentPart(documentRevision?.document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(documentRevision?.document?.documentType?.groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
@@ -285,7 +286,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   ) {
     if (
       isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove
-      && !(isPO && isDocumentRevisionHasOutput(documentRevision))) {
+      && !(isPO && isDocumentRevisionHasOutput(documentRevision))
+      && !(isWO && isDocumentRevisionHasOutput(documentRevision))) {
       accessableButtons.push(PreviewControlButtons.ApproveAndReleaseButton);
     }
   }
@@ -417,6 +419,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
           renderAsButton={renderAsButton}
           hasBuildType={hasBuildType}
+          isWO={isWO}
+          isWOForm = {isWO && !isEmpty(documentRevision?.formTemplate)}
           {...{
             revisionChangeType,
             currentDocumentType,

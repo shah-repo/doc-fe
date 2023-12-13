@@ -13,7 +13,7 @@ import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/do
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
 import { store } from '../../../state/store';
-import { checkIsDocumentReceivable } from '../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentReceivable, checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
 import FBStore from '../FBStore/FBStore';
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from './FBApprovals.types';
@@ -29,6 +29,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     loading,
     disabled,
     documentStatus,
+    disabledOptions,
+    disableChipDelete,
     docId,
     approvalTransition,
     groups,
@@ -63,6 +65,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       id: owner.id,
     }));
     const isReceivable = checkIsDocumentReceivable(document?.document?.documentType?.groupOptions);
+    const isWO = checkIsDocumentWO(document?.document?.documentType?.groupOptions);
 
     const {
       owner: { user: { id: userId = '' } = {} } = {},
@@ -105,6 +108,16 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     React.useEffect(() => {
       const fieldValue = map(approvalsState?.getApprovals, 'approver.id');
       formState?.setFieldValue(`fb-approvals-${name}`, fieldValue, false);
+
+      const activeApprovals = filter(docApprovals, (a) => a.status !== 'ABANDONED');
+      if (isWO && authUser && document?.status === DocumentRevisionStatus.Draft
+        && document && !document?.formTemplate
+        && !activeApprovals?.length) {
+        // Add Default owner as approver on Work order case
+        addApprover([authUser?.employeeId]);
+        formState?.setFieldValue(`fb-approvals-${name}`, [authUser?.employeeId], false);
+      }
+
       formState?.inputState.get(`fb-approvals-${name}`)?.setRender();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -255,6 +268,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         || approvalsState?.approvalApi.loading
         || approvalsState?.transitionApi.loading
       );
+
+      if (isWO && authUser && document?.status === DocumentRevisionStatus.Draft
+        && document && !document?.formTemplate) {
+        disabledOptions = [authUser?.employeeId];
+        disableChipDelete = true;
+      }
     });
 
     // TODO: check what is going on with the types,
@@ -290,6 +309,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       onApproveClick,
       isAlphaReleased,
       owners,
+      disabledOptions,
+      disableChipDelete,
       showFieldOwnersWarning,
       isContributorIncluded,
     });
