@@ -115,6 +115,9 @@ export const styles = makeStyles((theme) => ({
   deleteIcon: {
     color: ThemeColors.error,
   },
+  viewIcon: {
+    color: ThemeColors.textGray,
+  },
   replaceIcon: {
     color: ThemeColors.error,
   },
@@ -137,14 +140,16 @@ export const styles = makeStyles((theme) => ({
     marginLeft: theme.spacing(-1),
     cursor: 'pointer',
   }),
-  ownerIcon: {
-    color: ThemeColors.primaryLight,
-    marginLeft: theme.spacing(1),
+  addChildLotIcon: {
+    color: ThemeColors.primary,
   },
-  childePartAddIcon: {
-    color: ThemeColors.primaryLight,
-    marginLeft: theme.spacing(0.5),
-    cursor: 'pointer',
+  lotInfoWrapper: {
+    '& button': {
+      marginLeft: theme.spacing(1.25),
+    },
+  },
+  lotInfoId: {
+    marginRight: theme.spacing(1.25),
   },
   replacedDocRevInfo: {
     color: Colors.darkPeach,
@@ -218,11 +223,5 @@ export const styles = makeStyles((theme) => ({
     '& .k-filtercell': {
       width: 66,
     },
-  },
-  unitCell: {
-    width: 125,
-  },
-  attachmentContainer: {
-    cursor: 'pointer',
   },
 }));
