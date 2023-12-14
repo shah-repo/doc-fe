@@ -3,10 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent, memo, useState } from 'react';
+import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
+import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import useActionCreator from '../../../../../hooks/useActionCreator';
+import useAsync from '../../../../../hooks/useAsync';
 import { EditableAllocationItem } from '../../../interface';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditAllocItem } from '../utils';
@@ -21,6 +25,36 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
 
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
+  };
+
+  const [parts, setParts] = React.useState<DocumentRevision[]>([]);
+  const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
+
+  const fetchAvailablePartsAsync = useAsync({
+    onSuccess: (data: DocumentRevision[] = []) => {
+      setParts(data);
+    },
+  });
+
+  useEffect(() => {
+    if (!isEditMode) {
+      return;
+    }
+    fetchAvailablePartsAsync.start(
+      fetchAvailablePartsAction,
+      fetchAvailablePartsAsync,
+    );
+  }, []);
+
+  const renderOptions = () => {
+    return parts.map((part) => ({
+      label: renderPartLabel(part),
+      value: `${part.id}${SELECTED_PART_KEY_SEPARATOR}${part.document.id}`,
+    }));
+  };
+
+  const renderPartLabel = (part: DocumentRevision) => {
+    return `${part?.document.docId} Rev ${part?.displayRevision} - ${part?.name}`;
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
@@ -57,7 +91,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
             </ul>
           </>);
         }}
-        options={[]}
+        options={renderOptions()}
         placeholder={translate('common.select')}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
