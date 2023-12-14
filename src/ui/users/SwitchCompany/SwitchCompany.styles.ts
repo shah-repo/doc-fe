@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core';
+import Colors from '../../layout/theme-next/colors';
 import { NextTheme } from '../../layout/theme-next/provider';
 
 export const styles = makeStyles((theme: NextTheme) =>
@@ -54,10 +55,17 @@ export const styles = makeStyles((theme: NextTheme) =>
     companyName: {
       margin: '18px 0 18px 16px',
     },
+    switchclosemobile: {
+      display: 'none',
+    },
+    selectedIcon: {
+      display: 'none',
+    },
     [theme.media.mobile]: {
       container: {
         width: '100%',
         padding: theme.spacing(3),
+        marginTop: theme.spacing(0.24),
       },
       title: {
         textAlign: 'center',
@@ -67,6 +75,30 @@ export const styles = makeStyles((theme: NextTheme) =>
       },
       companyButton: {
         width: '100%',
+      },
+      switchclosemobile: {
+        width: 30,
+        height: 30,
+        top: theme.spacing(1.3),
+        padding: theme.spacing(1),
+        borderRadius: 4,
+        backgroundColor: Colors.hover,
+        marginLeft: '90%',
+        display: 'unset',
+      },
+      selectedIcon: {
+        color: Colors.statusDraft,
+        fontSize: 18,
+        fontWeight: 900,
+        marginLeft: theme.spacing(10),
+        marginTop: theme.spacing(2),
+        display: 'unset',
+      },
+      lessThentwo: {
+        [theme.breakpoints.between('sm', 'md')]: {
+          overflow: 'scroll',
+          height: 200,
+        },
       },
     },
   }),

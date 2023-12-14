@@ -1,6 +1,5 @@
-import { action, observable, set } from 'mobx';
+import { action, observable } from 'mobx';
 import { Size } from 'react-virtualized';
-import { TabChangePrompt } from '../../..';
 
 export default class SMTabsState {
   @observable public activeTabId = '';
@@ -16,15 +15,5 @@ export default class SMTabsState {
 
   @action public setContentSize = (size: Size): void => {
     this.contentSize = size;
-  };
-
-  @observable public tabChangePrompt: TabChangePrompt = {
-    tabId: '',
-    event: undefined,
-    isOpen: false,
-  };
-
-  @action public setTabChangePrompt = (tabChangePrompt: TabChangePrompt): void => {
-    set(this, 'tabChangePrompt', tabChangePrompt);
   };
 }

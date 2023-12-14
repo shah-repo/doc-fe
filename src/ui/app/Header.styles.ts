@@ -1,14 +1,15 @@
 import { createStyles } from '@material-ui/core';
 import EnlilLogo from '../../assets/images/enlil_logo.svg';
+import { NextTheme } from '../layout/theme-next/provider';
 import Colors from '../layout/theme/utils/colors';
 import { HeaderPresenterProps } from './Header.presenter';
 import { DRAWER_WIDTH } from './Navigation.styles';
-import { NextTheme } from '../layout/theme-next/provider';
 
 export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
 export const HEADER_GAP = 96;
 export const COLLAPSE_BAR_SPACE = 72;
+export const MOBILECOLLAPSE_BAR_SPACE = -5;
 
 export default (theme: NextTheme) =>
   createStyles({
@@ -33,7 +34,7 @@ export default (theme: NextTheme) =>
       background: `linear-gradient(225deg,${Colors.navy} 0%,${Colors.ultramarine_blue} 29.56%,${Colors.navy} 100%)`,
     },
     toolbar: (props: HeaderPresenterProps) => ({
-      marginLeft: props.open ? DRAWER_WIDTH : COLLAPSE_BAR_SPACE,
+      marginLeft: props.isOpened ? DRAWER_WIDTH : COLLAPSE_BAR_SPACE,
       minHeight: props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
       paddingBottom: props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
       paddingLeft: theme.spacing(props.fullHeight ? 8 : 3),
@@ -55,6 +56,16 @@ export default (theme: NextTheme) =>
     mobileMake: {
       display: 'none',
     },
+    mobileLogoText: {
+      marginLeft: theme.spacing(2),
+      fontSize: 15,
+      fontWeight: 600,
+    },
+    mobileAvatar: {
+      width: 35,
+      height: 35,
+      borderRadius: '50%',
+    },
     [theme.media.mobile]: {
       welcomeText: {
         fontSize: '1.25rem',
@@ -65,19 +76,16 @@ export default (theme: NextTheme) =>
         display: 'none',
       },
       mobileMake: {
-        background: 'linear-gradient(166deg, #2f01bb, #2ea2dc 100%, #783bff 100%)',
-        paddingLeft: 24,
-        height: '52px',
-        paddingTop: 12,
-        paddingBottom: 11,
         display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
-      },
-      textMake: {
-        marginLeft: 16,
-        fontSize: 15,
-        fontWeight: 600,
-
+        height: 52,
+        padding: `${theme.spacing(1.5)}px`,
+        background: 'linear-gradient(166deg, #2f01bb, #2ea2dc 100%, #783bff 100%)',
+        '& > div': {
+          display: 'flex',
+          alignItems: 'center',
+        },
       },
       mobileGrwFlex: {
         display: 'none',
@@ -94,7 +102,16 @@ export default (theme: NextTheme) =>
           display: 'none',
         },
       },
+      mobileSide: {
+        width: 15,
+        height: 15,
+        borderRadius: 4,
+        padding: theme.spacing(1),
+        background: Colors.gradient_color,
+      },
+      logoMobile: {
+        marginLeft: theme.spacing(1),
+      },
 
     },
-
   });

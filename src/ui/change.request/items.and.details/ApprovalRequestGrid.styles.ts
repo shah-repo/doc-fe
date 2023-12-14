@@ -95,15 +95,15 @@ export default makeStyles((theme) =>
       borderRadius: theme.spacing(0.5, 0.5, 0, 0),
     },
     cellautoUpdate: {
-      width: '10%',
+      width: '8%',
       display: 'flex',
       alignItems: 'center',
       '& > #field-autoUpdate': {
-        margin: 0, // Need to be "10.5px 14px"
+        margin: 0,
       },
     },
     cellOne: {
-      width: '24%',
+      width: '18%',
       display: 'flex',
       alignItems: 'center',
       columnGap: theme.spacing(1.25),
@@ -113,21 +113,32 @@ export default makeStyles((theme) =>
       },
     },
     smallCellOther: {
-      width: '33%',
+      width: '25%',
       '& .MuiOutlinedInput-multiline': {
-        padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
+        padding: theme.spacing(1.28, 1.75),
       },
     },
     cellOther: {
-      width: '38%',
+      width: '25%',
       '& .MuiOutlinedInput-multiline': {
-        padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
+        padding: theme.spacing(1.28, 1.75),
       },
+    },
+    cellRev: {
+      width: '16%',
+    },
+    cellWhereUsed: {
+      width: '8%',
+      textAlign: 'center',
     },
     hiddenLegend: {
       '& legend': {
         display: 'none',
       },
+    },
+    dot: {
+      height: 10,
+      width: 10,
     },
     itemLeftPadding: {
       paddingLeft: `calc(${theme.spacing(1.25)}px + 1px)`,
@@ -244,7 +255,7 @@ export default makeStyles((theme) =>
       paddingBottom: theme.spacing(1.75),
     },
     docListItem: {
-      padding: theme.spacing(0.75, 0),
+      padding: theme.spacing(0.75, 3, 0.75, 0),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',

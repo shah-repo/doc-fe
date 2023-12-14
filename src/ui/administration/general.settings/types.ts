@@ -6,6 +6,7 @@ export enum GeneralSettingsTabs {
   Navigation = 'Navigation',
   APITokens = 'API Tokens',
   AR = 'Approval Requests',
+  MD = 'Material Disposition',
 }
 
 export interface GeneralSettingsProps {
@@ -13,6 +14,7 @@ export interface GeneralSettingsProps {
   updatedAt?: string
   onSave: () => void
 }
+
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
   onToggle: () => void

@@ -1,5 +1,5 @@
 import { flatten, unflatten } from 'flat';
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from 'lodash';
+import { Dictionary, cloneDeep, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, get as lodashGet, set as lodashSet, map, omit, omitBy, slice, toNumber, values } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
 import FBSchemaState from '../FBSchema/FBSchema.state';
@@ -233,11 +233,15 @@ class FBFormState extends FBSchemaState {
     if (!validator) {
       return;
     }
+    const { document: documentRevision } = this.workspaceState ?? {};
     this.validatorRules = validator.rules;
     validator = new this.Validator(values, this.parseRules(rules, values));
     this.registerValidator(validator);
     validator.setAttributeNames(this.validationAttributeNames);
     this.errors.clear();
+    validator.context = {
+      documentId: documentRevision?.id ?? null,
+    };
     validator.checkAsync(
       // passes
       () => callback && callback(true),

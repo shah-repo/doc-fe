@@ -73,7 +73,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!optionId) {
         return;
       }
-      const slicedOptions = autocompleteAsyncState?.sliceData;
+      const slicedOptions = autocompleteAsyncState?.sliceData ?? autocompleteAsyncState?.data;
       loading = (
         loading
         || FBAutocompleteAsyncStore.loading.get(optionId)
@@ -107,7 +107,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       () => autocompleteAsyncState?.autocompleteValueApi.data,
       (data) => {
         const { id } = data || {};
-        FBAutocompleteAsyncStore.add(optionId as string, id, data);
+        const preparedData = autocompleteAsyncState?.prepareData([data])?.at(0) ?? data;
+        FBAutocompleteAsyncStore.add(optionId as string, id, preparedData);
         formState?.getInputState(name || '')?.setRender();
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps

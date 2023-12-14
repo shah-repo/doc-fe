@@ -11,7 +11,7 @@ import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBA
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../form.builder/FBInput/FBInput.wrap';
 import { SubmitFormRelation } from './FormContext.types';
 
-export const FormContext = React.createContext({ submitOnChange: false, isEditing: false });
+export const FormContext = React.createContext<{ submitOnChange: boolean, isEditing?: boolean }>({ submitOnChange: false });
 
 export const useFormContext = () => {
   const context = useContext(FormContext);

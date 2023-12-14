@@ -1,4 +1,6 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
+import cx from 'classnames';
+import isMobile from 'is-mobile';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
@@ -21,7 +23,6 @@ import {
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
   DOCUMENT_TYPE_MANAGEMENT_URL,
-  EQUIPMENT_SPECIFICATION_LIST_URL,
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
   GROUP_MANAGEMENT_ROOT_URL,
@@ -40,7 +41,6 @@ import { DocumentTypeManagementContainer } from '../document.type.management/ken
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
-import EquipmentSpecificationListContainer from '../equipment.specification/grid/container';
 import GroupManagementListContainer from '../group.management/kendo/container';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
@@ -57,11 +57,11 @@ import SocketsContainer from './sockets/container';
 
 const Layout: React.FunctionComponent = () => {
   const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
-  const [open, setOpen] = React.useState(isExpanded);
-  const classes = useStyles({ isDashboard: SM.isHomeURL, open: open });
+  const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
+  const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
   const handleDrawerOpen = () => {
-    localStorage.setItem(IS_SIDEBAR_EXPANDED, !open ? '1' : '0');
-    setOpen(!open);
+    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
+    setOpen(!isOpened);
   };
 
   return (
@@ -69,11 +69,11 @@ const Layout: React.FunctionComponent = () => {
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer open={open} />
-      <Navigation handleDrawerOpen={handleDrawerOpen} open={open} />
+      <HeaderContainer className={classes.mobileLayout} isOpened={isOpened} handleDrawerOpen={handleDrawerOpen} />
+      <Navigation handleDrawerOpen={handleDrawerOpen} open={isOpened} />
       <SocketsContainer />
       <WatermarkFooterContainer />
-      <main className={classes.root}>
+      <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
         <Switch>
           <Route
@@ -99,11 +99,6 @@ const Layout: React.FunctionComponent = () => {
             path={HOME_URL}
             exact
             component={DashboardLayout}
-          />
-          <Route
-            path={EQUIPMENT_SPECIFICATION_LIST_URL}
-            exact
-            component={EquipmentSpecificationListContainer}
           />
           <Route
             path={CHANGE_REQUEST_CREATE_URL}

@@ -222,4 +222,7 @@ export const styles = makeStyles((theme) => ({
   unitCell: {
     width: 125,
   },
+  attachmentContainer: {
+    cursor: 'pointer',
+  },
 }));

@@ -1,11 +1,12 @@
 import { BoxProps } from '@material-ui/core';
 import { cloneDeep, map } from 'lodash';
 import { Observer } from 'mobx-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from '../../../App';
 import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
-import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
@@ -13,6 +14,7 @@ import { AsyncState } from '../../../state/types';
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
+import FBMaterialDisposition from '../FBMaterialDisposition';
 import ChangeRequestSidebar from '../form/ChangeRequest.sidebar';
 import { toChangeRequestFormValues } from '../form/transform';
 import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
@@ -59,7 +61,9 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const { _tabsState } = SM.useStores();
   _formState?.setMode(mode);
 
+  const location = useLocation();
   const [isDrawerOpen, setOpen] = React.useState(true);
+  const isAdditionalColumnsShown = [ChangeRequestStatus.Approved, ChangeRequestStatus.Closed].includes(changeRequest.state);
 
   const changeSidebarOpenStatus = (status) => {
     setOpen(status);
@@ -78,6 +82,22 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
+  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
+    tabConfig.splice(2, 0, {
+      labelId: 'tabId.materialDisposition',
+      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
+      type: TabTypeOptions.MATERIAL_DISPOSITION,
+    });
+  }
+
+  useEffect(() => {
+    const navigateToTabId = new URLSearchParams(location.search).get('tabId');
+    if (navigateToTabId) {
+      _tabsState?.setActiveTabId(navigateToTabId);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: '100%', width: '100%' }}
@@ -85,8 +105,12 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       values={toChangeRequestFormValues(changeRequest)}
       header= {
         <SummaryHeader {...{
-          dataProp: changeRequest, canChangeOwnership, asyncState,
-          errors, canEdit, displayLastSaved,
+          dataProp: changeRequest,
+          canChangeOwnership,
+          asyncState,
+          errors,
+          canEdit,
+          displayLastSaved,
         }} />
       }
     >
@@ -131,7 +155,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
-                        <SMBox key={index} pt={.25}>
+                        <SMBox key={index} pt={0.25}>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest
                             && <FBWorkspace
                               isPortal={false}
@@ -154,6 +178,10 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               asyncState={asyncState}
                             />
                           )}
+                          {tabType === TabTypeOptions.MATERIAL_DISPOSITION
+                            && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
+                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} isShowOnly={true} isAdditionalColumnsShown={isAdditionalColumnsShown} />
+                          }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
                               && <FBWorkspace

@@ -10,9 +10,5 @@ export type SMTabsProps = SMTabsHOCProps & {
   children: React.ReactNode
   boxProps?: SMBoxProps
   panelProps?: SMBoxProps
+  isCreateUrl?: boolean
 };
-export interface TabChangePrompt {
-  tabId: string
-  isOpen: boolean
-  event: React.ChangeEvent<{}> | undefined
-}

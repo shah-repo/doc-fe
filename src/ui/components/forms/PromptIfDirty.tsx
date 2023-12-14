@@ -15,6 +15,7 @@ export interface Props {
   doNotPrompt?: boolean
   isDialog?: boolean
   onConfirm?: () => Promise<void> | void
+  onCancel?: () => Promise<void> | void
   onDirtyFlagChange?: (dirty: boolean) => void
 }
 
@@ -25,6 +26,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   isDialog = false,
   onDirtyFlagChange,
   onConfirm,
+  onCancel,
 }) => {
   const history = useHistory();
   const dialog = useDialog();
@@ -59,6 +61,13 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     return false;
   };
 
+  const handleCancel = async () => {
+    if (onCancel) {
+      await onCancel();
+    }
+    dialog.close();
+  };
+
   const handleConfirm = async () => {
     setIsLoading(true);
     if (onConfirm) {
@@ -79,9 +88,9 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
         handler={dialog}
         cancelLabel="common.no.stay"
         confirmLabel="common.yes.proceed"
-        onCancel={dialog.close}
         loading={isLoading}
         onConfirm={handleConfirm}
+        onCancel={handleCancel}
         disableBackdropClick
       >
         {translate(message)}

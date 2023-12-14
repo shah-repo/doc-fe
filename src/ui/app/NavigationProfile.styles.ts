@@ -1,7 +1,8 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
+import { NextTheme } from '../layout/theme-next/provider';
 import Colors from '../layout/theme/utils/colors';
 
-export default (theme: Theme) =>
+export default (theme: NextTheme) =>
   createStyles({
     headerButton: {
       alignItems: 'baseline',
@@ -14,6 +15,7 @@ export default (theme: Theme) =>
         background: 'none',
         boxShadow: 'none',
       },
+      display: 'unset',
     },
     bottomPush: {
       padding: theme.spacing(0.625, 1.25, 2.5, 1.875),
@@ -52,5 +54,42 @@ export default (theme: Theme) =>
     },
     listItemAvatar: {
       minWidth: 38,
+    },
+    mobileUserProfile: {
+      display: 'none',
+    },
+    [theme.media.mobile]: {
+      mobileUserProfile: {
+        background: 'rgba(255, 255, 255, 0.07)',
+        borderRadius: 10,
+        display: 'block',
+        width: 225,
+      },
+      headerButton: {
+        display: 'none',
+      },
+      emailStyle: {
+        fontSize: 9,
+      },
+      listItemIcon: {
+        color: Colors.dark_gray2,
+        minWidth: 30,
+      },
+      text: {
+        color: Colors.dark_gray2,
+        fontSize: 14,
+        fontWeight: 400,
+      },
+      hrLine: {
+        backgroundColor: Colors.dark_gray2,
+        width: 200,
+        marginLeft: 12,
+        marginTop: 10,
+        marginBottom: 10,
+      },
+      userSideProfile: {
+        height: 40,
+        paddingLeft: theme.spacing(0.5),
+      },
     },
   });

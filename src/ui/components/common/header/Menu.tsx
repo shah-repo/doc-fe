@@ -8,9 +8,13 @@ import { styles } from './Menu.styles';
 
 interface Props {
   children: any
+  columnMenuItemClasses?: string
+  menuIconButtonClass?: string
+  icon?: React.ReactNode
+  dataCy?: string
 }
 
-const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
+const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemClasses, icon, menuIconButtonClass, dataCy }) => {
   if (!children.length) {
     children = [children];
   }
@@ -37,10 +41,10 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
           onClick={handleClick}
           data-cy="HeaderMenuButton"
           id="HeaderMenuButton"
-          className={classes.iconButton}
+          className={menuIconButtonClass ?? classes.iconButton}
           disableRipple
         >
-          <MoreVerticalIcon />
+          {icon ?? <MoreVerticalIcon />}
         </IconButton>
       ) : (
         <IconButton
@@ -64,11 +68,13 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
           horizontal: 'center',
         }}
         className={classes.menu}
+        data-cy={dataCy}
       >
         {children.map((menuItem, index) => {
           if (!menuItem) {
             return null;
           }
+          const itemDataCy = menuItem.props?.['data-cy'] ?? `${dataCy}-item-${index}`;
           return (
             <MenuItem
               onClick={handleClose}
@@ -76,8 +82,9 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
                 display:
                   menuItem.props.shouldDisplay === false ? 'none' : 'block',
               }}
-              className={classes.menuItem}
+              className={columnMenuItemClasses ?? classes.menuItem}
               key={index}
+              data-cy={itemDataCy}
             >
               {menuItem}
             </MenuItem>

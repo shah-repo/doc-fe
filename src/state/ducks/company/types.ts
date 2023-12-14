@@ -3,7 +3,7 @@ import { AsyncState } from '../../types';
 import { GroupTag } from '../auth/types';
 import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
+import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 
 export interface WhiteLabelingColors {
   defaultBackground: string
@@ -125,6 +125,12 @@ export interface AutosaveState {
 export interface AutosaveAction {
   type: typeof AUTOSAVE_CONFIG
 }
+export interface SetAutosaveAction {
+  type: typeof SET_AUTOSAVE_CONFIG
+  payload: {
+    active: boolean
+  }
+}
 
 export interface RedlineState {
   redlineActive: boolean
@@ -135,17 +141,24 @@ export interface RedlineAction {
   payload: RedlineState
 }
 
-interface ZebraPrintSettings {
+export interface LabelTemplatesProps {
+  id: string
+  name: string
+}
+export interface ZebraPrintSettings {
   apiKey: string
   tenantId: string
-  printers: Array<{
+  printer: {
     sn: string
     isActive: boolean
-  }>
+    name: string
+    labelTemplates: LabelTemplatesProps[]
+  }
 }
 export interface GeneralSettings {
-  zebraPrint: ZebraPrintSettings
+  zebraPrint: ZebraPrintSettings[]
   approvalRequestAdmin: boolean
+  shouldAutoUpdateLotStatus: boolean
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

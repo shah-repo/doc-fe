@@ -17,4 +17,6 @@ export const TREELIST_CONFIG = {
   sortable: false,
   reorderable: true,
   resizable: true,
+  scrollable: 'virtual',
+  rowHeight: 50,
 };

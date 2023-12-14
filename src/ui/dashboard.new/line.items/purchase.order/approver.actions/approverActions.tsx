@@ -17,8 +17,9 @@ import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachmen
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { ActionTypes, STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { Attachment } from '../../../../change.request/form/types';
-import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -32,8 +33,8 @@ import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
 import { HoverStyleChip as RejectedHoverStyleChip } from '../../common/HoverStyleChipApprovalRejected';
 import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
 import { NormalStyleChip as RejectedNormalStyleChip } from '../../common/NormalStyleChipApprovalRejected';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
 import useStyles from './approverActions.styles';
 
@@ -172,7 +173,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, '_blank');
+      downloadFile(downloadInfo?.url);
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {
@@ -314,7 +315,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     <Text translation="common.your" />
                   </Typography>
                 </Grid> */}
-                <Grid item={true}>
+                <Grid item={true} className={classes.truncateMobile}>
                   <DocId
                     url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#' }
                     docId={docId}

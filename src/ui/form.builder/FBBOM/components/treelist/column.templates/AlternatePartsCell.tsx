@@ -40,7 +40,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
     if (!dataItem.parentNodeRevId) {
       return;
     }
-    if (!dataItem.isDisabled) {
+    if (!dataItem.isDisabled || !alternatePartActionsDiabled) {
     _documentRevisionFormState?.setRefreshBOMTree(false);
     }
     setIsDrawerOpened(true);
@@ -49,7 +49,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
 
   const closeDrawer = () => {
     setIsDrawerOpened(false);
-    if (!dataItem.isDisabled) {
+    if (!dataItem.isDisabled || !alternatePartActionsDiabled) {
       _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
     }
   };
@@ -81,7 +81,7 @@ export const AlternatePartsCell: React.FC<CustomTreeListCellProps> | undefined =
       <AlternatePartsDrawer {...{
         isDrawerOpened,
         closeDrawer,
-        partRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0],
+        partRevId: dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR)[0],
         basePartRevId: dataItem.parentNodeRevId,
         revision: dataItem.displayRevision,
         status: dataItem.displayStatus,

@@ -49,10 +49,10 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
             }
           ))));
       if (options.length === 1) {
+        dialog.close();
         processCreatingRevision(options[0]);
       } else {
         setTemplateOptions(options);
-        dialog.open();
       }
     },
   });
@@ -76,6 +76,7 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
   const data = exportDialog.isOpen ? renderTableData() : [];
 
   const handleCreateButton = () => {
+    dialog.open();
     asyncGetDocTypeByGroup.start(
       getDocTypeByGroupAction,
       { docTypeGroupOption: 'CHANGE_REQUEST' },
@@ -89,8 +90,15 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData,
 
   return (
     <FormListPresenter {...{
-      templateOptions, dialog, handleCreateButton, headers, data, exportDialog,
-      handleTemplateSelection: processCreatingRevision, isGrouped,
+      templateOptions,
+      dialog,
+      handleCreateButton,
+      headers,
+      data,
+      exportDialog,
+      handleTemplateSelection: processCreatingRevision,
+      isGrouped,
+      isLoading: asyncGetDocTypeByGroup.isLoading,
     }} />
   );
 };

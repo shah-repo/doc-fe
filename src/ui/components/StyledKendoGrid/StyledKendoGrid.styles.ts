@@ -39,6 +39,12 @@ export default makeStyles((theme) => ({
       borderRadius: theme.shape.borderRadius,
       border: `1px solid ${Colors.tableStroke}`,
       color: Colors.textBlack,
+        '& tr': {
+          height: 46,
+          '&.k-state-selected > td': {
+            backgroundColor: 'transparent',
+          },
+      },
     },
     '.k-grid-toolbar': {
       padding: theme.spacing(1.25, 2, 0),
@@ -126,6 +132,7 @@ export default makeStyles((theme) => ({
 
           '& > .k-link': {
             padding: theme.spacing(0.5, 1.5),
+            cursor: 'default',
           },
         },
         '&:not(.k-grid-header-sticky) + .k-grid-header-sticky': {
@@ -400,7 +407,7 @@ export default makeStyles((theme) => ({
       },
     },
     '.k-dropdown': {
-      width: '100%',
+      width: 'auto',
 
       '& .k-dropdown-wrap': {
         ...baseInputStyles(theme),

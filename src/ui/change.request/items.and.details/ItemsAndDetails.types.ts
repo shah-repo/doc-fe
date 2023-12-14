@@ -1,7 +1,7 @@
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { AsyncActionPayload } from '../../../state/types';
-import { FBFormProps, FBWorkspaceMode } from '../../form.builder';
+import { FBWorkspaceMode } from '../../form.builder';
 
 export interface FBDocumentRevisionResponse {
   createdAt: string
@@ -19,6 +19,14 @@ export interface FBDocumentRevisionResponse {
   }
 }
 
+interface WhereUsed {
+  name: string
+  parentDocId: string
+  depth: number
+  revision: string
+  status: string
+}
+
 export interface FBDocumentRevisionsValue {
   id: string
   autoUpdate: boolean
@@ -27,6 +35,8 @@ export interface FBDocumentRevisionsValue {
   }
   justificationOfChange: string
   descriptionOfChange: string
+  revisionFormTo?: string
+  whereUsedView?: WhereUsed[]
 }
 
 export interface ApprovalRequestGridItem {
@@ -39,12 +49,13 @@ export interface ApprovalRequestGridItem {
   titleText: string
   displayRevision: string
   isPart: boolean
+  revisionFormTo?: string
+  whereUsedView?: WhereUsed[]
 }
 
 export interface ItemsAndDetailsWrapperProps {
   currentDocRevId?: string
   changeRequest?: ChangeRequest
-  initialValues: Pick<FBFormProps, 'initialValues'>
   autosave?: boolean
   mode: FBWorkspaceMode
   asyncState?: AsyncActionPayload

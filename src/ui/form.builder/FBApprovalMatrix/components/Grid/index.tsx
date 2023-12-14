@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
-import { cloneDeep, kebabCase, set } from 'lodash';
+import { cloneDeep, get, isEmpty, kebabCase, set } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { DEFAULT_DATA_STATE, MODE_FIELD, Mode } from '.';
 import { translate } from '../../../../../common/intl';
@@ -77,19 +77,39 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       setActiveItem(cloneDeep(dataItem));
     }
   };
+  const requiredSchemaFields = schema.filter(column => column.required).map(column => column.field as string);
 
   const handleItemSave = (): void => {
+    if (!activeItem) {
+      return;
+    }
+
+    const validationErrors = requiredSchemaFields.reduce((result, field) => {
+      const value = get(activeItem, field);
+      const error = !value ? 'validators.required' : undefined;
+      return {
+        ...result,
+        ...(error ? { [field]: error } : {}),
+      };
+    }, {});
+
     const newData = data.map((dataItem) => {
       if (activeItem && dataItem.id === activeItem.id) {
+        if (validationErrors) {
+          return set(activeItem, 'errors', validationErrors);
+        }
         return set(activeItem, MODE_FIELD, Mode.show);
       }
-
       return dataItem;
     });
 
     setData(newData);
-    onSave?.(newData);
 
+    if (!isEmpty(validationErrors)) {
+      return;
+    }
+
+    onSave?.(newData);
     setActiveItem(undefined);
   };
 
