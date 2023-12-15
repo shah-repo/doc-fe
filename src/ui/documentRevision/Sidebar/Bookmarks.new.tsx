@@ -14,7 +14,7 @@ const Bookmarks: React.FC = () => {
   const classes = styles();
   const { bookmarkState } = FB.useStores();
   const { _tabsState } = SM.useStores();
-  const bookmarks = useObserver(() => bookmarkState?.bookmarks);
+  let bookmarks = useObserver(() => bookmarkState?.bookmarks);
   const [selectedBookmarkName, setSelectedBookmarkName] = React.useState<string>();
 
   const handleBookmarkClick = ({ name, tabId }: FBBookmarkItem) => {
@@ -26,6 +26,8 @@ const Bookmarks: React.FC = () => {
 
     history.push(`#${name}`);
   };
+
+  bookmarks = bookmarks?.filter((bm) => bm.tabId === _tabsState?.activeTabId);
 
   return (
     <Box m={1.875}>
