@@ -4,7 +4,6 @@ import { translate } from '../../../../../common/intl';
 import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
 import ARIDCell from './column.templates/ARIDCell';
 import AttachmentCell from './column.templates/AttachmentCell';
-import { BooleanCell } from './column.templates/Boolean';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
 import CostRollupCell from './column.templates/CostRollupCell';
@@ -24,7 +23,6 @@ import { VendorsCell } from './column.templates/VendorsCell';
 import YesNoOptionsFilter from './column.templates/YesNoOptionsFilter';
 import { AlternatePartsList } from './header.templates/AlternatePartsList';
 import { Attachments } from './header.templates/Attachments';
-import { Issues } from './header.templates/Issues';
 import { LeadTime } from './header.templates/LeadTime';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
@@ -171,17 +169,6 @@ export const TreeListSchema = ({ openDetailDrawer }) => {
       mainOrderIndex: 14,
       headerCell: Attachments,
       cell: AttachmentCell,
-    },
-    {
-      field: 'issues',
-      locked: false,
-      title: translate('bom.treelist.treeColumns.field.issues.title'),
-      width: 100,
-      filterCell: YesNoOptionsFilter,
-      mainOrderIndex: 15,
-      cell: BooleanCell,
-      headerCell: Issues,
-      isHidden: true,
     },
     {
       field: 'vendorsCount',
