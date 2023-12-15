@@ -176,8 +176,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         {
           ...tableCriteria,
           queryDict: {
-            ...state.dataState,
-            dataState: stateInfo.dataState,
+            dataState: { ...state.dataState, ...stateInfo.dataState },
           },
         },
         BOM_TABLE_NAME,
