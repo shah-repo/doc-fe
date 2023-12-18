@@ -4,6 +4,7 @@ import { EditableAllocationItem } from '../../../interface';
 export interface CustomTreeListCellProps extends TreeListCellProps {
   dataItem: EditableAllocationItem
   openDetailDrawer?: (dataItem: EditableAllocationItem) => void
+  addLot?: (dataItem: EditableAllocationItem) => void
 }
 
 export interface AllocItemActionsProps<EditableAllocationItem> {

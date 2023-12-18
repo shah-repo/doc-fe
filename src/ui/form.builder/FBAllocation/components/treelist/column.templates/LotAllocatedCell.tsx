@@ -2,22 +2,106 @@ import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
-import React, { memo } from 'react';
+import { useFormikContext } from 'formik';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
-import { IconButton } from '../../../../../components/forms/fields-next';
+import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
+import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
+import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
+import useActionCreator from '../../../../../hooks/useActionCreator';
+import useAsync from '../../../../../hooks/useAsync';
 import useHover from '../../../../../hooks/useHover';
+import { EditableAllocationItem } from '../../../interface';
+import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, expanded, ariaColumnIndex, colIndex, className }) => {
+const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className }) => {
   const isEditMode = isEditAllocItem(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const navigationAttributes = useTableKeyboardNavigation(id);
   const [removeLotRef, isRemoveLotHovered] = useHover<HTMLButtonElement>();
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
+
+  // TODO: change below code as per LOT API
+  const [parts, setParts] = React.useState<DocumentRevision[]>([]);
+  const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
+  const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
+
+  const fetchAvailablePartsAsync = useAsync({
+    onSuccess: (data: DocumentRevision[] = []) => {
+      setParts(data);
+    },
+  });
+
+  useEffect(() => {
+    if (!isEditMode) {
+      return;
+    }
+    fetchAvailablePartsAsync.start(
+      fetchAvailablePartsAction,
+      fetchAvailablePartsAsync,
+    );
+  }, []);
+
+  const renderOptions = () => {
+    // change as per lot api
+    return parts.map((part) => ({
+      label: renderPartLabel(part),
+      value: `${part.id}${SELECTED_PART_KEY_SEPARATOR}${part.document.id}`,
+    }));
+  };
+
+  const renderPartLabel = (part: DocumentRevision) => {
+    return `${part?.document.docId} Rev ${part?.displayRevision} - ${part?.name}`;
+  };
+
+  const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
+    const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
+    setValue(option as OptionType);
+    if (dataItem[ADD_FIELD]) {
+      setFieldValue('childNodeRevId', docInfo[0]);
+      setFieldValue('childNodeDocumentId', docInfo[1]);
+    } else {
+      setFieldValue('newChildNodeRevId', docInfo[0]);
+    }
+    setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+  };
+
+  const [value, setValue] = useState<OptionType>({ label: '', value: '' });
+
+  const getFieldInfo = () => (
+    field && <FormikField
+      name={field}
+    >
+      <Autocomplete
+        {...getFieldProps(field)}
+        value={value}
+        disableOpenOnFocus={true}
+        blurOnSelect
+        ListboxComponent={({ children, ...otherProps }) => {
+          return (<>
+            <ul {...otherProps} >
+              {/* <li className={classes.createPartOption} onClick={handleAddButtonClick}>
+                <FontAwesomeIcon icon={regular('plus')} />&nbsp;
+                <span >{translate('form.builder.create.new.part')}</span>
+              </li> */}
+              {children}
+            </ul>
+          </>);
+        }}
+        options={renderOptions()}
+        placeholder={translate('common.select')}
+        getOptionLabel={(option: OptionType) => option.label}
+        onChange={handleChange}
+        size="small"
+      />
+    </FormikField>
+  );
 
   return (
     <td
@@ -52,6 +136,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
                 <FontAwesomeIcon
                   size="sm"
                   className={classes.addChildLotIcon}
+                  onClick={() => addLot?.(dataItem)}
                   icon={
                     !isAddLotHovered
                       ? regular('circle-plus')
@@ -64,7 +149,9 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
         </>
 
         : <span className={cx(classes.nameCell, classes.titleInfoCell)}>
-          {isEditMode && <div>-</div>}
+          {isEditMode && dataItem.isLotAddition && <div className={classes.idCellEditWrapper}>
+            { getFieldInfo()}
+          </div>}
           {!isEditMode && (<div className={classes.lotInfoWrapper}> <span className={classes.lotInfoId}>{dataItem.lotAllocated}</span>
             <span
               className={cx(
@@ -124,4 +211,4 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   );
 };
 
-export default memo(LotAllocatedCell);
+export default LotAllocatedCell;

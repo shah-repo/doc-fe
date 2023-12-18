@@ -135,7 +135,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
       </>
 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
-        {isEditMode && <div className={classes.idCellEditWrapper}>
+        {isEditMode && !dataItem.isLotAddition && <div className={classes.idCellEditWrapper}>
           { getFieldInfo()}
         </div>}
         {!isEditMode
