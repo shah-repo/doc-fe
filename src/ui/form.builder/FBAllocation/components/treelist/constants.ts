@@ -64,3 +64,4 @@ export const AllocationCheckboxOptions = [
     value: AllocationCheckBoxOptions.AUTO_TRANSACT,
   },
 ];
+export const ALLOCATION_TABLE_NAME = 'ALLOCATION_TABLE';
