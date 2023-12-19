@@ -22,6 +22,7 @@ import { OptionType } from '../../../../../components/forms/fields/Autocomplete/
 import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
 import Text from '../../../../../components/Text';
+import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import { isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
 import { useHandleCreateDoc } from '../../../../../documentType/list/CreateDocumentByType';
@@ -406,7 +407,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId
           ? <Link onClick={e => { e.preventDefault(); openDetailDrawer?.(dataItem); }} className={classes.link}
-            to="#"
+            to={dataItem?.documentId ? documentVersionPath(dataItem?.id?.split(SELECTED_PART_KEY_SEPARATOR)[0], dataItem?.documentId) : '#'}
+            target="_blank"
           >
             {dataItem.docId}
           </Link>
