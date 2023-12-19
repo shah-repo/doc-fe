@@ -433,7 +433,7 @@ const fetchLotsByPartId = (
     handlers,
   });
 
-const fetchAvailableLHRs = (
+const fetchAvailableLHRList = (
   handlers: Handlers,
 ): ApiAction<DocumentRevision[]> =>
   apiActionWithCallbacks({
@@ -443,11 +443,11 @@ const fetchAvailableLHRs = (
   });
 
 const fetchSelectedLHR = (
-  docRevId,
+  lhrRevIds: string[],
   handlers: Handlers,
 ): ApiAction<DocumentRevision[]> =>
   apiActionWithCallbacks({
-    url: `${DOCUMENT_REVISION_FETCH_LHR_URL}/${docRevId}`,
+    url: `${DOCUMENT_REVISION_FETCH_LHR_URL}?lhrRevIds=${lhrRevIds.join(',')}`,
     method: 'get',
     handlers,
   });
@@ -729,8 +729,8 @@ export default {
   updateForm,
   getFormMappingTemplate,
   fetchAvailableParts,
+  fetchAvailableLHRList,
   fetchLotsByPartId,
-  fetchAvailableLHRs,
   fetchSelectedLHR,
   fetchBOMBranch,
   fetchBOMTree,

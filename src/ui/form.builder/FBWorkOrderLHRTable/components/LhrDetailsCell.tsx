@@ -24,11 +24,14 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
 
   const fetchSelectedLhrAsync = useAsync<ILHRTableItem>({
     onSuccess: (data) => {
-      console.log(data);
+      if (!Array.isArray(data) || !data.length) {
+        return;
+      }
+
       const {
         lotId, displayStatus, owner, partRev, completionDate, startQuantity,
         endQuantity, lhrTemplate, lhrDetails,
-      } = data as ILHRTableItem;
+      } = data[0] as ILHRTableItem;
 
       console.log(lotId, displayStatus, owner, partRev, completionDate, startQuantity,
         endQuantity, lhrTemplate, lhrDetails);
@@ -55,7 +58,7 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
     );
   }, []);
 
-  const fetchAvailableLhrsAction = useActionCreator(documentRevisionsActions.fetchAvailableLHRs);
+  const fetchAvailableLhrsAction = useActionCreator(documentRevisionsActions.fetchAvailableLHRList);
   const fetchLhrsDetailsAction = useActionCreator(documentRevisionsActions.fetchSelectedLHR);
 
   const renderOptions = () => {
@@ -70,8 +73,8 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
-    const lhrsId = option?.value;
-    fetchSelectedLhrAsync.start(fetchLhrsDetailsAction, lhrsId, fetchSelectedLhrAsync);
+    const lhrRevId = option?.value;
+    fetchSelectedLhrAsync.start(fetchLhrsDetailsAction, [lhrRevId], fetchSelectedLhrAsync);
   };
 
   useEffect(() => {
@@ -109,7 +112,7 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
   return (
     <Box onClick={onRowClick}>
       {isAddMode && getFieldInfo()}
-      {!isAddMode && <span>{dataItem[field]}</span> }
+      {!isAddMode && <span>{dataItem[field]?.label}</span> }
     </Box>
   );
 };
