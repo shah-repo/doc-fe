@@ -1,9 +1,10 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
+import React from 'react';
 import { translate } from '../../../../../common/intl';
 import IDCell from './column.templates/IDCell';
 import LotAllocatedCell from './column.templates/LotAllocatedCell';
 
-export const TreeListSchema = () => {
+export const TreeListSchema = ({ addLot }) => {
   return [
     {
       field: 'itemId',
@@ -24,7 +25,7 @@ export const TreeListSchema = () => {
       width: 228,
       filter: TreeListTextFilter,
       mainOrderIndex: 2,
-      cell: LotAllocatedCell,
+      cell: (props) => <LotAllocatedCell {...props} addLot={addLot} />,
     },
     {
       field: 'qtyNeeded',

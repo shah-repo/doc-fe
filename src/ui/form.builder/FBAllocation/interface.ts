@@ -35,6 +35,7 @@ export interface EditableAllocationItem extends AllocationItem {
   isSliderView?: boolean
   isUpgradeDisabled?: boolean
   parentDocId?: string
+  isLotAddition?: boolean
 }
 
 export interface AllocationItemEditEvent {

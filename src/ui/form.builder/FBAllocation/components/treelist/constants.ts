@@ -49,3 +49,19 @@ export const AllocationData = {
     documentId: '7647e573-8869-445a-90bd-be85c4d1c3c9',
   },
 };
+export const CHECKBOX_GROUP = 'allocationCheckboxGroup';
+export enum AllocationCheckBoxOptions {
+  AUTO_ASSIGN = 'autoAssign',
+  AUTO_TRANSACT = 'autoTransact',
+}
+export const AllocationCheckboxOptions = [
+  {
+    text: 'allocation.checkbox.group.option.autoAssign.label',
+    value: AllocationCheckBoxOptions.AUTO_ASSIGN,
+  },
+  {
+    text: 'allocation.checkbox.group.option.autoTransact.label',
+    value: AllocationCheckBoxOptions.AUTO_TRANSACT,
+  },
+];
+export const ALLOCATION_TABLE_NAME = 'ALLOCATION_TABLE';

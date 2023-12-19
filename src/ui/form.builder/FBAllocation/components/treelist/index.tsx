@@ -21,17 +21,17 @@ import { FormikProvider, useFormik } from 'formik';
 import {
   chain, isEmpty, map, replace, uniq,
 } from 'lodash';
-import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
-import { getHasPermission } from '../../../../../common/utils/selectors';
+import { getHasPermission, getTableCriteria } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
@@ -48,6 +48,7 @@ import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
   AllocationData,
+  ALLOCATION_TABLE_NAME,
   CELL_EMPTY_VALUE,
   DATA_ITEM_KEY,
   DOC_ID_FIELD,
@@ -78,9 +79,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   isDisabled,
   isShowOnly = false,
   isUpgradeDisabled = false,
-  isSliderView = false,
+  isExpandAll = false,
 }) => {
   const { _tabsState } = SM.useStores();
+  const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
 
@@ -116,7 +118,62 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     setState(stateInfo);
   };
 
-  const schema: CustomTreeListColumnProps[] = TreeListSchema();
+  const createNewLotItem = () => {
+    return {
+      id: uuidv4(),
+      lotAllocated: '',
+      qtyNeeded: '',
+      variance: '',
+      issuedQty: '',
+      qtyOnHandBefore: '',
+      qtyOnHandAfter: '',
+      itemId: '',
+      [MODE_FIELD]: true,
+      [ADD_FIELD]: true,
+      isEditEnabled: true,
+      isParentOwner: true,
+      isLotAddition: true,
+    };
+  };
+
+  const addLot = (dataItem) => {
+    console.log('Add Lot', dataItem);
+      _documentRevisionFormState?.setDirty(true);
+      const newAllocItem: EditableAllocationItem = createNewLotItem();
+      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
+        (data) => !data[ADD_FIELD],
+      );
+      state.data[0][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
+      updateState({
+        ...state,
+        data: [...state.data],
+        expanded: [state.data[0].id],
+        inEdit: [newAllocItem],
+      });
+  };
+
+  const schema: CustomTreeListColumnProps[] = TreeListSchema({ addLot });
+
+  const tableCriteria = useSelector(getTableCriteria(ALLOCATION_TABLE_NAME));
+
+  React.useEffect(() => {
+    if (tableCriteria?.columnConfig) {
+      const savedColumns = JSON.parse(tableCriteria.columnConfig) as CustomTreeListColumnProps[];
+      const updatedColumns = schema.map(schemaItem => {
+        const savedColumn = savedColumns.find(column => schemaItem.field === column.field);
+        return {
+          ...schemaItem,
+          orderIndex: savedColumn?.orderIndex,
+          locked: savedColumn?.locked,
+          isHidden: savedColumn?.isHidden,
+        };
+      });
+      setColumns(updatedColumns);
+      setState({ ...state, dataState: tableCriteria.queryDict.dataState });
+    } else {
+      updateColumns(schema);
+    }
+  }, []);
 
   const [columns, setColumns]
     = React.useState<CustomTreeListColumnProps[]>(schema);
@@ -190,7 +247,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       }
       return column;
     });
-    setColumns(dataColumns);
+    updateColumns(dataColumns);
   };
 
   const formik = useFormik<Partial<EditableAllocationItem>>({
@@ -401,6 +458,14 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     });
   };
 
+  React.useEffect(() => {
+    if (isExpandAll) {
+      handleExpandAll();
+    } else {
+      handleCollapseAll();
+    }
+  }, [isExpandAll]);
+
   let _export;
 
   const exportToExcel = () => {
@@ -516,12 +581,25 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     return defaultRendering as React.ReactElement<HTMLTableCellElement>;
   };
 
+  const updateColumns = (columns: CustomTreeListColumnProps[]) => {
+    setColumns(columns);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(columns),
+        },
+        ALLOCATION_TABLE_NAME,
+      ),
+    );
+  };
+
   const getColumns = () => {
-    return columns.filter(({ isHidden }) => !isHidden);
+    return columns.filter(({ isHidden }) => !isHidden) ?? [];
   };
 
   const onColumnReorder = (event: TreeListColumnReorderEvent) => {
-    setColumns(event.columns as CustomTreeListColumnProps[]);
+    updateColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
   const onFilterChange = (event: TreeListFilterChangeEvent) => {
@@ -550,7 +628,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           reorderable: locked,
           orderIndex: !locked ? 0 : undefined,
         });
-        setColumns(newColumns);
+        updateColumns(newColumns);
       }
     },
     [columns],
@@ -563,32 +641,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       .orderBy(['locked'], ['desc'])
       .value();
   };
-
-  useEffect(
-    () =>
-      reaction(
-        () => _documentRevisionFormState?.childPartInfo,
-        (info) => {
-          if (info?.dataItem) {
-            const dataItem = toJS(info?.dataItem) as EditableAllocationItem;
-            const level = toJS(info?.level);
-            setSelectedPartLevel({ dataItem, level });
-          }
-        },
-      ),
-    [_documentRevisionFormState?.childPartInfo],
-  );
-
-  SM.reaction(
-    () => _documentRevisionFormState?.getRestorePartInfo,
-    (info) => {
-      if (info?.dataItem) {
-        const dataItem = toJS(info?.dataItem) as EditableAllocationItem;
-        const level = toJS(info?.level);
-        setSelectedPartLevel({ dataItem, level });
-      }
-    },
-  );
 
   const sortedColumnDefinitions = orderByLockedState(getColumns());
 

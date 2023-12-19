@@ -8,7 +8,7 @@ export interface FBAllocationProps {
   isDisabled: boolean
   isShowOnly?: boolean
   isUpgradeDisabled?: boolean
-  isSliderView?: boolean
+  isExpandAll?: boolean
 }
 
 export interface AllocationState {
