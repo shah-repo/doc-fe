@@ -11,9 +11,7 @@ import {
   filterBy,
   mapTree,
   orderBy, TreeList,
-  TreeListCellProps,
-  TreeListColumnReorderEvent,
-  TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, treeToFlat,
+  TreeListCellProps, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
@@ -28,14 +26,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
-import { getHasPermission, getTableCriteria } from '../../../../../common/utils/selectors';
-import { Permission } from '../../../../../state/ducks/auth/types';
-import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
-import { disableOtherFieldsChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
@@ -48,9 +43,7 @@ import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
   AllocationData,
-  ALLOCATION_TABLE_NAME,
-  CELL_EMPTY_VALUE,
-  DATA_ITEM_KEY,
+  ALLOCATION_TABLE_NAME, DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
@@ -78,7 +71,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   documentRevision,
   isDisabled,
   isShowOnly = false,
-  isUpgradeDisabled = false,
   isExpandAll = false,
 }) => {
   const { _tabsState } = SM.useStores();
@@ -109,11 +101,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   }>();
   const treeListRef = useRef(null);
 
-  isUpgradeDisabled = isUpgradeDisabled || substitutingSupersededDisabledChangeControl(documentRevision);
-  const enabledFieldsForEditing = getEnabledFieldsForEditing(documentRevision);
-  const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
-  const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
-
   const updateState = (stateInfo) => {
     setState(stateInfo);
   };
@@ -131,7 +118,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
       isEditEnabled: true,
-      isParentOwner: true,
       isLotAddition: true,
     };
   };
@@ -270,7 +256,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
       isEditEnabled: true,
-      isParentOwner: true,
     };
   };
 
@@ -298,13 +283,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       return;
     }
 
-    if (!inRestrictedEditMode) {
-      if (isDisabled || !dataItem.isParentOwner) {
-        return;
-      }
-    }
-
-    if (disableEditInRestrictedEditMode(dataItem)) {
+    if (isDisabled) {
       return;
     }
 
@@ -322,7 +301,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     const childRevId = editItemInfo.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
     editItemInfo.customDocId = `${childRevId}${SELECTED_PART_KEY_SEPARATOR}${editItemInfo.documentId}`;
     editItemInfo.childNodeRevId = childRevId;
-    formik?.setFieldValue('revision', editItemInfo?.revision);
+
     updateState({
       ...state,
       data: [...state.data],
@@ -368,17 +347,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     setSelectedPart(dataItem);
   };
 
-  const disableEditInRestrictedEditMode = (item) => {
-    return inRestrictedEditMode && ((!item.isParentOwner && !hasPermisstionToEditRestrictedPart));
-  };
-
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableAllocationItem;
     const parentChildRelkey = item.parentDocId ? `alloc-row-${item.parentDocId}-${item?.itemId}` : `alloc-row-${item?.itemId}`;
     item.isDisabled = isDisabled;
-    item.isUpgradeDisabled = isUpgradeDisabled;
-    item.enabledFieldsForEditing = enabledFieldsForEditing;
-    item.inRestrictedEditMode = inRestrictedEditMode;
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
@@ -388,9 +360,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
 
     const showWithoutActions = !item[MODE_FIELD]
-      || !item.isEditEnabled
-      || (!inRestrictedEditMode && !item.isParentOwner)
-      || disableEditInRestrictedEditMode(item);
+      || !item.isEditEnabled;
 
     if (showWithoutActions) {
       return React.cloneElement(row, {
@@ -409,7 +379,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           onConfirm={formik?.submitForm}
           onDiscard={discardAllocItem}
           onDelete={
-            isOwner || item.isParentOwner || (item?.childNodes || []).length > 0
+            isOwner || (item?.childNodes || []).length > 0
               ? removeAllocItem
               : undefined
           }
@@ -469,35 +439,11 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   let _export;
 
   const exportToExcel = () => {
-    const ArIdAllowedStatusList = [
-      DocumentRevisionStatus.Approved,
-      DocumentRevisionStatus.PendingChange,
-      DocumentRevisionStatus.InReview,
-    ];
     const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD).map(
       (part) => {
-        const availableRevisions = part?.availableRevisions;
-        const changeReqDetails = availableRevisions?.changeRequestDetails;
-        const isReleased = availableRevisions?.isReleased;
-        let cellValue;
-        if (!availableRevisions) {
-          cellValue = CELL_EMPTY_VALUE;
-        } else if (isReleased) {
-          cellValue = CELL_EMPTY_VALUE;
-        } else if (!changeReqDetails) {
-          cellValue = availableRevisions?.displayRevision;
-        } else {
-          cellValue = changeReqDetails?.crId;
-        }
+        // TODO: add logic to customize export data here if reqired
         return {
           ...part,
-          attachmentsCount: part?.attachmentNames?.length,
-          changeRequestDetails: {
-            crId: ArIdAllowedStatusList.includes(part?.status)
-              ? part?.changeRequestDetails?.crId
-              : '',
-          },
-          hasChanges: cellValue,
         };
       },
     );
@@ -598,10 +544,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     return columns.filter(({ isHidden }) => !isHidden) ?? [];
   };
 
-  const onColumnReorder = (event: TreeListColumnReorderEvent) => {
-    updateColumns(event.columns as CustomTreeListColumnProps[]);
-  };
-
   const onFilterChange = (event: TreeListFilterChangeEvent) => {
     const { dataState, data } = state;
     dataState.filter = event.filter;
@@ -691,7 +633,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
                       )
                     }
                     onRowClick={editAllocationItem}
-                    onColumnReorder={onColumnReorder}
                     onFilterChange={onFilterChange}
                     resizable={TREELIST_CONFIG.resizable}
                     reorderable={TREELIST_CONFIG.reorderable}

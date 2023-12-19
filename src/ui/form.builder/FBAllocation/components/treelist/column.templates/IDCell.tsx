@@ -37,7 +37,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   });
 
   useEffect(() => {
-    if (!isEditMode) {
+    if (!isEditMode && !dataItem.isLotAddition) {
       return;
     }
     fetchAvailablePartsAsync.start(
@@ -83,10 +83,6 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
         ListboxComponent={({ children, ...otherProps }) => {
           return (<>
             <ul {...otherProps} >
-              {/* <li className={classes.createPartOption} onClick={handleAddButtonClick}>
-                <FontAwesomeIcon icon={regular('plus')} />&nbsp;
-                <span >{translate('form.builder.create.new.part')}</span>
-              </li> */}
               {children}
             </ul>
           </>);
