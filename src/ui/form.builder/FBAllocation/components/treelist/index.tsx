@@ -77,7 +77,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   isDisabled,
   isShowOnly = false,
   isUpgradeDisabled = false,
-  isSliderView = false,
+  isExpandAll = false,
 }) => {
   const { _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
@@ -433,6 +433,14 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       expanded: [],
     });
   };
+
+  React.useEffect(() => {
+    if (isExpandAll) {
+      handleExpandAll();
+    } else {
+      handleCollapseAll();
+    }
+  }, [isExpandAll]);
 
   let _export;
 
