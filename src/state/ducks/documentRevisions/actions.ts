@@ -424,10 +424,11 @@ const fetchAvailableParts = (
   });
 
 const fetchAvailableLHRList = (
+  partRevIdSelected: string,
   handlers: Handlers,
 ): ApiAction<DocumentRevision[]> =>
   apiActionWithCallbacks({
-    url: DOCUMENT_REVISION_LHR_URL,
+    url: `${DOCUMENT_REVISION_LHR_URL}/${partRevIdSelected}`,
     method: 'get',
     handlers,
   });

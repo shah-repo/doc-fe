@@ -7,6 +7,7 @@ import { Autocomplete, FormikField } from '../../../components/forms/fields-next
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import { FB } from '../../helpers';
 import { Mode, MODE_FIELD } from '../constants';
 import { CustomTemplateProps, EditableLHRTableItem, ILHRAutocompleteOption, ILHRTableItem } from '../types';
 
@@ -15,6 +16,9 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
   const { getFieldProps, setFieldValue } = useFormikContext<EditableLHRTableItem>();
 
   const [lhrList, setLhrList] = React.useState<ILHRAutocompleteOption[]>([]);
+
+  const { workspaceState } = FB.useStores();
+  const partRevIdSelected = workspaceState?.formInputSync.get('wo_part')?.id ?? '';
 
   const fetchAvailableLhrsAsync = useAsync({
     onSuccess: (data: ILHRAutocompleteOption[] = []) => {
@@ -52,11 +56,14 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
     if (!isAddMode) {
       return;
     }
-    fetchAvailableLhrsAsync.start(
-      fetchAvailableLhrsAction,
-      fetchAvailableLhrsAsync,
-    );
-  }, []);
+    if (partRevIdSelected) {
+      fetchAvailableLhrsAsync.start(
+        fetchAvailableLhrsAction,
+        partRevIdSelected,
+        fetchAvailableLhrsAsync,
+      );
+    }
+  }, [partRevIdSelected]);
 
   const fetchAvailableLhrsAction = useActionCreator(documentRevisionsActions.fetchAvailableLHRList);
   const fetchLhrsDetailsAction = useActionCreator(documentRevisionsActions.fetchSelectedLHR);
