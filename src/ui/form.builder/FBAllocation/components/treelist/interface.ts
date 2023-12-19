@@ -7,7 +7,6 @@ export interface FBAllocationProps {
   documentRevision: DocumentRevision
   isDisabled: boolean
   isShowOnly?: boolean
-  isUpgradeDisabled?: boolean
   isExpandAll?: boolean
 }
 
