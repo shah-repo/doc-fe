@@ -1,8 +1,10 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
-import React from 'react';
 import { translate } from '../../../../../common/intl';
 import IDCell from './column.templates/IDCell';
+import React from 'react';
 import LotAllocatedCell from './column.templates/LotAllocatedCell';
+import QuantityCell from './column.templates/QuantityCell';
+import VarianceCell from './column.templates/VarianceCell';
 
 export const TreeListSchema = ({ addLot }) => {
   return [
@@ -34,6 +36,7 @@ export const TreeListSchema = ({ addLot }) => {
       width: 180,
       filter: TreeListTextFilter,
       mainOrderIndex: 3,
+      cell: QuantityCell,
     },
     {
       field: 'variance',
@@ -42,6 +45,7 @@ export const TreeListSchema = ({ addLot }) => {
       locked: false,
       filter: TreeListTextFilter,
       mainOrderIndex: 5,
+      cell: VarianceCell,
     },
     {
       field: 'issuedQty',
@@ -50,6 +54,7 @@ export const TreeListSchema = ({ addLot }) => {
       width: 180,
       filter: TreeListTextFilter,
       mainOrderIndex: 6,
+      cell: QuantityCell,
     },
     {
       field: 'qtyOnHandBefore',
@@ -58,6 +63,7 @@ export const TreeListSchema = ({ addLot }) => {
       width: 250,
       filter: TreeListTextFilter,
       mainOrderIndex: 7,
+      cell: QuantityCell,
     },
     {
       field: 'qtyOnHandAfter',
@@ -66,6 +72,7 @@ export const TreeListSchema = ({ addLot }) => {
       width: 250,
       filter: TreeListTextFilter,
       mainOrderIndex: 9,
+      cell: QuantityCell,
     },
   ];
 };

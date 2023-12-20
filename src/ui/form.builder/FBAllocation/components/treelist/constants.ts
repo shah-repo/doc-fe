@@ -41,6 +41,7 @@ export const AllocationData = {
     qtyOnHandBefore: 3,
     qtyOnHandAfter: 7,
     isOwner: true,
+    status: 'DRAFT',
     id: 'e6207db1-bd00-4ad1-9bb9-dee599ade44d',
     documentId: '7647e573-8869-445a-90bd-be85c4d1c3c9',
   },

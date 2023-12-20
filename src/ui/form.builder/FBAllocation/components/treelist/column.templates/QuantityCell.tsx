@@ -1,0 +1,59 @@
+import cx from 'classnames';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import { FormikField, TextField } from '../../../../../components/forms/fields-next';
+import { EditableAllocationItem } from '../../../interface';
+import { getCellValue, isEditAllocItem } from '../utils';
+import { styles } from './styles';
+import { CustomTreeListCellProps } from './types';
+
+const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
+  dataItem,
+  field,
+  colSpan,
+  style,
+  className,
+  hasChildren,
+  ...otherProps
+}) => {
+  const classes = styles({ hasChildren });
+  const { getFieldProps } = useFormikContext<EditableAllocationItem>();
+  const isEditMode = isEditAllocItem(dataItem);
+
+  const getFieldInfo = () =>
+    field && (
+      <FormikField name={field}>
+        <TextField
+          {...getFieldProps(field)}
+          type="number"
+          inputProps={{ min: 0 }}
+          readOnly
+          size="small"
+        />
+      </FormikField>
+    );
+
+  return (
+    <td
+      colSpan={colSpan}
+      style={style}
+      role="gridcell"
+      className={cx('k-table-td', className, classes.cellborderBottom)}
+      {...{
+        'aria-colindex': otherProps.ariaColumnIndex,
+        'data-grid-col-index': otherProps.colIndex,
+        'aria-expanded': otherProps.expanded,
+      }}
+      data-cy="cell-quantity"
+    >
+      {isEditMode && getFieldInfo()}
+      {!isEditMode && (
+        <span className={classes.Cell}>
+          {getCellValue(dataItem, field)}
+        </span>
+      )}
+    </td>
+  );
+};
+
+export default QuantityCell;
