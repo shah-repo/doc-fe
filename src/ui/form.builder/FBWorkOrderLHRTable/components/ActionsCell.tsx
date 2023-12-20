@@ -1,7 +1,8 @@
 import { Popper } from '@material-ui/core';
 import PopperJs from 'popper.js';
 import React, { useRef } from 'react';
-import Actions, { ActionsProps } from '../../FBApprovalMatrixRoles/components/Actions';
+import { ActionsProps } from '../../FBApprovalMatrixRoles/components/Actions';
+import Actions from './Actions';
 
 interface Props extends ActionsProps {
   rootClassName?: string

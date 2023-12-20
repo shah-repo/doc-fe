@@ -1,0 +1,110 @@
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@material-ui/core';
+import cx from 'classnames';
+import React, { useCallback } from 'react';
+import { translate } from '../../../../common/intl';
+import { IconButton } from '../../../components/forms/fields-next';
+import useHover from '../../../hooks/useHover';
+import { Mode, MODE_FIELD } from '../constants';
+import useStyles from '../styles';
+
+interface EditableItem {
+  [MODE_FIELD]: Mode
+}
+
+export interface ActionsProps {
+  dataItem: EditableItem
+  isDeleteDisabled?: boolean
+  deleteTooltipText?: string
+  scrollBehavior?: ScrollBehavior
+  onConfirm: () => void
+  onDiscard: () => void
+  onDelete?: () => void
+}
+
+const Actions: React.FC<ActionsProps> = ({
+  dataItem,
+  scrollBehavior = 'auto',
+  isDeleteDisabled,
+  deleteTooltipText,
+  onConfirm,
+  onDiscard,
+  onDelete,
+}) => {
+  const classes = useStyles();
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
+
+  const ref = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'nearest' }));
+    }
+  }, [scrollBehavior]);
+
+  if (!isEditMode) {
+    return null;
+  }
+
+  return (
+    <div
+      className={classes.actions}
+      id="row-actions"
+      ref={ref}
+    >
+      {onDelete && dataItem?.[MODE_FIELD] !== Mode.add && (
+        <Tooltip
+          title={deleteTooltipText ?? translate('common.delete')}
+          placement="top"
+          arrow
+        >
+          <div>
+            <IconButton
+              data-cy="action-delete"
+              kind="action"
+              size="small"
+              onClick={onDelete}
+              ref={deleteRef}
+              disabled={isDeleteDisabled}
+            >
+              <FontAwesomeIcon
+                className={cx({ [classes.deleteIcon]: !isDeleteDisabled })}
+                icon={isHovered ? solid('trash-can') : regular('trash-can')}
+              />
+            </IconButton>
+          </div>
+        </Tooltip>
+      )}
+      <Tooltip
+        title={translate('common.discard')}
+        placement="top"
+        arrow
+      >
+        <IconButton
+          data-cy="action-discard"
+          kind="action"
+          size="small"
+          onClick={onDiscard}
+        >
+          <FontAwesomeIcon icon={regular('xmark')} />
+        </IconButton>
+      </Tooltip>
+      <Tooltip
+        title={translate('common.save')}
+        placement="top"
+        arrow
+      >
+        <IconButton
+          data-cy="action-save"
+          kind="action"
+          size="small"
+          onClick={onConfirm}
+        >
+          <FontAwesomeIcon icon={regular('check')} />
+        </IconButton>
+      </Tooltip>
+    </div>
+  );
+};
+
+export default Actions;

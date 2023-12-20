@@ -28,8 +28,11 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           optionValueType="id"
           rules="required"
           disabled={props.disabled}
-          // {...{ disabledOptions }}
+          withState={true}
+          autosave={true}
           shouldReloadOnInit
+          // {...{ disabledOptions }}
+          {...props}
           // autoCompleteClasses={{ option: classes.option }}
         />
       </Grid>

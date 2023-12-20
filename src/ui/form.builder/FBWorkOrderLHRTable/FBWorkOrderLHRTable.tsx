@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { differenceBy } from 'lodash';
+import { differenceBy, isEmpty, uniqBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FBInputProps, FBSection, FBWorkspaceModeOptions } from '..';
@@ -17,7 +17,6 @@ import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumen
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import FBStore from '../FBStore/FBStore';
-
 import { FB } from '../helpers';
 import { ActionsCell } from './components/ActionsCell';
 import { Mode, MODE_FIELD } from './constants';
@@ -37,7 +36,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   const { formState, workspaceState } = FB.useStores();
 
   const isPreview = formState?.workspaceMode === FBWorkspaceModeOptions.PREVIEW;
-  const isActive = !isPreview;
+  const isActive = disabled ? !disabled : !isPreview;
   // const cyName = kebabCase(name);
 
   const [editedLHRItem, setEditedLHRItem] = useState<EditableLHRTableItem>();
@@ -90,7 +89,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
     if (!disabled || isEditable) {
       _formState?.setLoading(true);
       Promise.resolve(
-        workspaceState?.updateDocRevById({ formInput: { [name]: dataToPersist } }, workspaceState?.id),
+        workspaceState?.updateDocRevById({ formInput: { ...formState?.getValues(), [name]: dataToPersist } }, workspaceState?.id),
       ).then(() => {
         workspaceState?.setFormInputSync(name, dataToPersist);
         if (workspaceState?.id && FBStore?.isHistoryTabSelected) {
@@ -100,6 +99,9 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
         setLhrList(updatedLhrs.map(lhr => ({ ...lhr, [MODE_FIELD]: Mode.show })));
       }).finally(() => {
         _formState?.setLoading(false);
+        if (editedLHRItem) {
+          discardLhrItem();
+        }
       });
     }
   };
@@ -107,7 +109,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   const formik = useFormik<DraftLhrTableItem>({
     initialValues: {},
     onSubmit: (values) => {
-      const updatedLhrs = [...lhrList, values];
+      const updatedLhrs = uniqBy([...lhrList, values], 'lotId');
       updateState(updatedLhrs);
     },
   });
@@ -164,7 +166,9 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   useEffect(() => {
     const lhrRevIds = workspaceState?.formInputSync.get(name) ?? [];
     const lhrRevIdsToUse: string[] = lhrRevIds.filter(lhrRevId => lhrRevId !== null);
-    fetchSelectedLhrAsync.start(fetchLhrsDetailsAction, [lhrRevIdsToUse], fetchSelectedLhrAsync);
+    if (!isEmpty(lhrRevIdsToUse)) {
+      fetchSelectedLhrAsync.start(fetchLhrsDetailsAction, [lhrRevIdsToUse], fetchSelectedLhrAsync);
+    }
   }, []);
 
   return (
