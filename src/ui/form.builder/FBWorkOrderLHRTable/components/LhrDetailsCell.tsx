@@ -7,6 +7,7 @@ import { Autocomplete, FormikField } from '../../../components/forms/fields-next
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import { FB } from '../../helpers';
 import { Mode, MODE_FIELD } from '../constants';
 import { CustomTemplateProps, EditableLHRTableItem, ILHRAutocompleteOption, ILHRTableItem } from '../types';
 
@@ -16,6 +17,9 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
 
   const [lhrList, setLhrList] = React.useState<ILHRAutocompleteOption[]>([]);
 
+  const { workspaceState } = FB.useStores();
+  const partRevIdSelected = workspaceState?.formInputSync.get('wo_part')?.id ?? '';
+
   const fetchAvailableLhrsAsync = useAsync({
     onSuccess: (data: ILHRAutocompleteOption[] = []) => {
       setLhrList(data);
@@ -24,11 +28,14 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
 
   const fetchSelectedLhrAsync = useAsync<ILHRTableItem>({
     onSuccess: (data) => {
-      console.log(data);
+      if (!Array.isArray(data) || !data.length) {
+        return;
+      }
+
       const {
         lotId, displayStatus, owner, partRev, completionDate, startQuantity,
         endQuantity, lhrTemplate, lhrDetails,
-      } = data as ILHRTableItem;
+      } = data[0] as ILHRTableItem;
 
       console.log(lotId, displayStatus, owner, partRev, completionDate, startQuantity,
         endQuantity, lhrTemplate, lhrDetails);
@@ -49,13 +56,16 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
     if (!isAddMode) {
       return;
     }
-    fetchAvailableLhrsAsync.start(
-      fetchAvailableLhrsAction,
-      fetchAvailableLhrsAsync,
-    );
-  }, []);
+    if (partRevIdSelected) {
+      fetchAvailableLhrsAsync.start(
+        fetchAvailableLhrsAction,
+        partRevIdSelected,
+        fetchAvailableLhrsAsync,
+      );
+    }
+  }, [partRevIdSelected]);
 
-  const fetchAvailableLhrsAction = useActionCreator(documentRevisionsActions.fetchAvailableLHRs);
+  const fetchAvailableLhrsAction = useActionCreator(documentRevisionsActions.fetchAvailableLHRList);
   const fetchLhrsDetailsAction = useActionCreator(documentRevisionsActions.fetchSelectedLHR);
 
   const renderOptions = () => {
@@ -70,8 +80,8 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
-    const lhrsId = option?.value;
-    fetchSelectedLhrAsync.start(fetchLhrsDetailsAction, lhrsId, fetchSelectedLhrAsync);
+    const lhrRevId = option?.value;
+    fetchSelectedLhrAsync.start(fetchLhrsDetailsAction, [lhrRevId], fetchSelectedLhrAsync);
   };
 
   useEffect(() => {
@@ -109,7 +119,7 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
   return (
     <Box onClick={onRowClick}>
       {isAddMode && getFieldInfo()}
-      {!isAddMode && <span>{dataItem[field]}</span> }
+      {!isAddMode && <span>{dataItem[field]?.label}</span> }
     </Box>
   );
 };

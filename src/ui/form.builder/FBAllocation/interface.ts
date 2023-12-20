@@ -36,6 +36,7 @@ export interface EditableAllocationItem extends AllocationItem {
   isUpgradeDisabled?: boolean
   parentDocId?: string
   isLotAddition?: boolean
+  parentPartId?: string
 }
 
 export interface AllocationItemEditEvent {

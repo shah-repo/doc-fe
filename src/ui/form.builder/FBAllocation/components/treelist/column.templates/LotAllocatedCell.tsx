@@ -36,7 +36,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   // TODO: change below code as per LOT API
   const [parts, setParts] = React.useState<DocumentRevision[]>([]);
   const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
-  const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
+  const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
@@ -45,11 +45,12 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   });
 
   useEffect(() => {
-    if (!isEditMode) {
+    if (!isEditMode || !dataItem.isLotAddition) {
       return;
     }
     fetchAvailablePartsAsync.start(
       fetchAvailablePartsAction,
+      dataItem.parentPartId ?? '4a1493bc-bc0e-446d-beeb-741ab2ece1da', // TODO: remove hard coded string
       fetchAvailablePartsAsync,
     );
   }, []);
@@ -92,10 +93,6 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
         ListboxComponent={({ children, ...otherProps }) => {
           return (<>
             <ul {...otherProps} >
-              {/* <li className={classes.createPartOption} onClick={handleAddButtonClick}>
-                <FontAwesomeIcon icon={regular('plus')} />&nbsp;
-                <span >{translate('form.builder.create.new.part')}</span>
-              </li> */}
               {children}
             </ul>
           </>);
