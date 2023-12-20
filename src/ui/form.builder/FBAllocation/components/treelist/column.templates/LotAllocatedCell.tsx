@@ -1,5 +1,6 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
@@ -10,22 +11,27 @@ import { DocumentRevision } from '../../../../../../state/ducks/documentRevision
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
+import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
+import DocumentRevisionDialog from '../../../../FBBOM/components/DocumentRevisionDialog';
 import { EditableAllocationItem } from '../../../interface';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className }) => {
+const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, docRevId = '79670f2b-fc0d-4d0e-a84c-46fb48ca0e00' }) => {
   const isEditMode = isEditAllocItem(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const navigationAttributes = useTableKeyboardNavigation(id);
   const [removeLotRef, isRemoveLotHovered] = useHover<HTMLButtonElement>();
   const [addLotRef, isAddLotHovered] = useHover<HTMLButtonElement>();
   const [viewLotRef, isViewLotHovered] = useHover<HTMLButtonElement>();
+  const quickViewDialog = useDialog();
+  const openQuickViewDialog = () => quickViewDialog.open();
 
   // TODO: change below code as per LOT API
   const [parts, setParts] = React.useState<DocumentRevision[]>([]);
@@ -103,6 +109,12 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     </FormikField>
   );
 
+  const handleOpenNewTab = () => {
+    // TO DO to remove hard coded docRevId later
+    const path = documentVersionPath(docRevId, '75eb6d63-7e92-46ad-bbed-3dc236bf3129');
+    window.open(path);
+  };
+
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
@@ -152,7 +164,13 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           {isEditMode && dataItem.isLotAddition && <div className={classes.idCellEditWrapper}>
             { getFieldInfo()}
           </div>}
-          {!isEditMode && (<div className={classes.lotInfoWrapper}> <span className={classes.lotInfoId}>{dataItem.lotAllocated}</span>
+          {!isEditMode && (<div className={classes.lotInfoWrapper}>
+            <span className={classes.lotInfoId}>
+              <Link onClick={handleOpenNewTab} className={classes.link}
+              >
+                {dataItem.lotAllocated}
+              </Link>
+            </span>
             <span
               className={cx(
                 classes.defaultIcon,
@@ -177,6 +195,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
                         ? light('eye')
                         : solid('eye')
                     }
+                    onClick={openQuickViewDialog}
                   />
                 </IconButton>
               </StyleTooltip>
@@ -207,6 +226,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           }
         </span>
       }
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId }} />
     </td>
   );
 };
