@@ -84,7 +84,7 @@ export default makeStyles(theme => ({
     borderBottomRightRadius: 4,
     position: 'absolute',
     right: 0,
-    top: 18,
+    top: 0,
   },
   deleteIcon: {
     color: Colors.latest_red_varient,
