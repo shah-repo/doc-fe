@@ -1,4 +1,4 @@
-import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import { Box, Button, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -156,6 +156,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
+  const [downloadPdfMobile, setDownloadPdfMobile] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const { count, pending, approved, primaryText, secondaryText }
@@ -183,6 +184,12 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const onMouseHoverDownloadPdfIcon = () => {
     setPinHover(false);
     setDownloadPdfHover(true);
+  };
+  const handleDownloadClick = () => {
+    setDownloadPdfMobile(true);
+  };
+  const handleDownloadClose = () => {
+    setDownloadPdfMobile(false);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
@@ -373,7 +380,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={classes.actionIcons}
+            className={`${classes.actionIcons} ${classes.poActionIconsWidth}`}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
@@ -548,6 +555,24 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               </Grid>
             </StyledListItem>
           ))}
+          <Grid className={classes.gridPendingMobile}>
+            <Button
+              className={classes.downloadButton}
+              data-cy="transition-download-pdf"
+              onClick={handleDownloadClick}
+            >
+              <DownloadPdfIcon stroke={Colors.white_smoke} />
+              <Text translation="common.download.pdf" />
+            </Button>
+            {downloadPdfMobile && (
+              <DownloadHtmlPreview
+                id={docRevId}
+                dialogPDF={dialogPDF}
+                onClose={handleDownloadClose}
+                downloadImmediately
+              />
+            )}
+          </Grid>
         </List>
       </Collapse>
       <Modal
