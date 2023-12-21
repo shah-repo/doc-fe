@@ -1346,6 +1346,7 @@
   "form.builder.wo.part.selector": "Item Selection",
   "form.builder.wo.part.quantity": "Quantity",
   "form.builder.wo.approvals": "Completed by",
+  "form.builder.wo.type.switch.msg": "Are you sure you want to change work order selection?\n\nPrevious work order type related data will get deleted.\nThis action cannot be undone.",
   "form.builder.workOrder.lhr.section.heading": "LHR Table",
   "form.builder.workOrder.lhr.lotId": "Lot#",
   "form.builder.workOrder.lhr.status": "State",

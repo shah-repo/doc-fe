@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { differenceBy, isEmpty, uniqBy } from 'lodash';
+import { reaction } from 'mobx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FBInputProps, FBSection, FBWorkspaceModeOptions } from '..';
@@ -170,6 +171,16 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
       fetchSelectedLhrAsync.start(fetchLhrsDetailsAction, [lhrRevIdsToUse], fetchSelectedLhrAsync);
     }
   }, []);
+
+  reaction(
+    () => workspaceState?.formInputSync.get(name),
+    (value) => {
+      if (isEmpty(value)) {
+        setLhrList([]);
+      }
+    },
+    { fireImmediately: true },
+  );
 
   return (
     <Box position="relative">

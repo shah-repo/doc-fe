@@ -9,7 +9,7 @@ import {
   FBEditorState,
   FBInputProps,
   FBInputType,
-  FBSchemaProps,
+  FBSchemaProps
 } from '..';
 import FBTasksListTable from '../../change.request/FBMaterialDisposition/components/FBTasksListTable';
 import FBApprovalMatrixField from '../FBApprovalMatrixField/FBApprovalMatrixField';
@@ -68,6 +68,7 @@ import FBTimerField from '../FBTimerField/FBTimerField';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
 import FBWorkOrderLHRTable from '../FBWorkOrderLHRTable/FBWorkOrderLHRTable';
 import FBWorkOrderPartDetails from '../FBWorkOrderPartDetails/FBWorkOrderPartDetails';
+import FBWorkOrderType from '../FBWorkOrderType/FBWorkOrderType';
 import FBZIPUpload from '../FBZIPUpload/FBZIPUpload';
 
 class FBSchemaState {
@@ -151,6 +152,7 @@ class FBSchemaState {
     cycleCount: FBCycleCount,
     workOrderPartDetails: FBWorkOrderPartDetails,
     tasksListTable: FBTasksListTable,
+    workOrderType: FBWorkOrderType,
     workOrderLhrTable: FBWorkOrderLHRTable,
   };
 
@@ -163,7 +165,10 @@ class FBSchemaState {
 
   public static component = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
-    const schemaControl = FBSchemaState.control[type || ''];
+    // Remove this once type added from BE side
+    // Temp add type sclection component here
+    const schemaControl = name === 'work_order_type' ? FBSchemaState.control.workOrderType
+      : FBSchemaState.control[type || ''];
     if (!schemaControl) {
       return;
     }

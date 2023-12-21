@@ -155,6 +155,11 @@ export enum WorkOrderTypes {
   OTHER = 'other',
 }
 
+export const WO_LHR_TABLE_KEY_NAME = 'lhrIds';
+export const WO_PART_KEY_NAME = 'wo_part';
+export const WO_PART_QTY_KEY_NAME = 'wo_part_quantity';
+export const WO_PART_UNIT_KEY_NAME = 'wo_part_unit';
+
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export const GroupWithGroupOptions = {
   FORM: [
