@@ -7,7 +7,7 @@ import { ReactComponent as CheckedRadioIcon } from '../../../assets/images/radio
 import { ReactComponent as DisabledCheckedRadioIcon } from '../../../assets/images/radio_checked_disabled.svg';
 import { ReactComponent as UnCheckedRadioIcon } from '../../../assets/images/unchecked_radio.svg';
 import { ReactComponent as DisabledUnCheckedRadioIcon } from '../../../assets/images/unchecked_radio_disabled.svg';
-import { WorkOrderTypes, WO_LHR_TABLE_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
+import { WorkOrderTypes, WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import Text from '../../components/Text';
 import useDialog from '../../hooks/useDialog';
 import { isTranslation } from '../../translations/types';
@@ -70,11 +70,14 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
     const [prevOption, setPrevOption] = useState(defaultValue);
 
     const handleChange: FBWorkOrderTypeProps['onChange'] = (...args) => {
-      args[0].persist();
-      confirmationDialog?.open();
-      setEvent(args);
-      args[0].preventDefault();
-      args[0].stopPropagation();
+      if (prevOption) {
+        args[0].persist();
+        confirmationDialog?.open();
+        setEvent(args);
+      } else {
+        onChange?.(...args);
+        setPrevOption(args[1]);
+      }
     };
 
     const clearFieldByName = (name, value) => {
@@ -86,14 +89,21 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
     const confirmAlertDialog = () => {
       confirmationDialog?.close();
       const selectedOption = event[1];
-      if (prevOption === WorkOrderTypes.MAKE_PRODUCT) {
+
+      if (selectedOption === WorkOrderTypes.OTHER) {
         clearFieldByName(WO_LHR_TABLE_KEY_NAME, []);
         clearFieldByName(WO_PART_UNIT_KEY_NAME, '');
         clearFieldByName(WO_PART_QTY_KEY_NAME, 0);
         clearFieldByName(WO_PART_KEY_NAME, '');
+        clearFieldByName(WO_LOT_ID_KEY_NAME, '');
+      } else if (prevOption === WorkOrderTypes.MAKE_PRODUCT) {
+        clearFieldByName(WO_LHR_TABLE_KEY_NAME, []);
+      } else if (prevOption === WorkOrderTypes.MAKE_KIT) {
+        clearFieldByName(WO_LOT_ID_KEY_NAME, '');
       }
+
       onChange?.(event[0], selectedOption);
-      setPrevOption(event[1]);
+      setPrevOption(selectedOption);
     };
 
     const cancelAlertDialog = () => {
