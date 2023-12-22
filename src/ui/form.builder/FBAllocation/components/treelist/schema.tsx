@@ -1,12 +1,20 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
 import { translate } from '../../../../../common/intl';
+import { ActionsCell } from './column.templates/Actions';
 import IDCell from './column.templates/IDCell';
 import React from 'react';
 import LotAllocatedCell from './column.templates/LotAllocatedCell';
 import QuantityCell from './column.templates/QuantityCell';
 import VarianceCell from './column.templates/VarianceCell';
 
-export const TreeListSchema = ({ addLot }) => {
+export const TreeListSchema = ({
+  addLot,
+  actionsClass,
+  popperHolder,
+  onConfirm,
+  onDiscard,
+  onDelete,
+}) => {
   return [
     {
       field: 'itemId',
@@ -73,6 +81,23 @@ export const TreeListSchema = ({ addLot }) => {
       filter: TreeListTextFilter,
       mainOrderIndex: 9,
       cell: QuantityCell,
+    },
+    {
+      id: 'actions',
+      locked: false,
+      cell: (props) => (
+        <td className={actionsClass}>
+          <ActionsCell
+            {...props}
+            onConfirm={onConfirm}
+            onDiscard={onDiscard}
+            onDelete={onDelete}
+            onRestore={undefined}
+            rootClassName={popperHolder}
+          />
+        </td>
+      ),
+      width: 0,
     },
   ];
 };

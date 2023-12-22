@@ -34,7 +34,6 @@ import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleT
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
-import { ActionsCell } from './column.templates/Actions';
 import {
   ColumnMenuContext,
   CustomColumnMenu,
@@ -101,6 +100,13 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   }>();
   const treeListRef = useRef(null);
 
+  const formik = useFormik<Partial<EditableAllocationItem>>({
+    initialValues: {},
+    onSubmit: () => {
+      // TO DO
+    },
+  });
+
   const updateState = (stateInfo) => {
     setState(stateInfo);
   };
@@ -138,7 +144,51 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       });
   };
 
-  const schema: CustomTreeListColumnProps[] = TreeListSchema({ addLot });
+  const discardAllocItem = (dataItem?) => {
+    if (dataItem && dataItem[ADD_FIELD]) {
+      if (selectedPartLevel?.level) {
+        const updatedData = updateDataAtLevels(
+          [...state.data],
+          selectedPartLevel?.level,
+          dataItem,
+          false,
+        ) as AllocationItem[];
+        updateState({
+          ...state,
+          data: [...updatedData],
+          expanded: [...state.expanded],
+          inEdit: [],
+        });
+      }
+      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
+        (data) => !data[ADD_FIELD],
+      );
+    }
+    _documentRevisionFormState?.setDirty(false);
+    updateState({
+      ...state,
+      inEdit: [],
+    });
+
+    formik?.resetForm();
+  };
+
+  const removeAllocItem = (dataItem) => {
+    if (dataItem.isDisabled) {
+      return;
+    }
+    confirmationDialog.open();
+    setSelectedPart(dataItem);
+  };
+
+  const schema: CustomTreeListColumnProps[] = TreeListSchema({
+    addLot,
+    actionsClass: classes.actionsCell,
+    popperHolder: classes.popperHolder,
+    onConfirm: formik.submitForm,
+    onDiscard: discardAllocItem,
+    onDelete: removeAllocItem,
+  });
 
   const tableCriteria = useSelector(getTableCriteria(ALLOCATION_TABLE_NAME));
 
@@ -236,13 +286,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     updateColumns(dataColumns);
   };
 
-  const formik = useFormik<Partial<EditableAllocationItem>>({
-    initialValues: {},
-    onSubmit: () => {
-      // TO DO
-    },
-  });
-
   const createNewItem = () => {
     return {
       id: uuidv4(),
@@ -310,43 +353,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     formik.setValues(editItemInfo);
   };
 
-  const discardAllocItem = (dataItem?) => {
-    if (dataItem && dataItem[ADD_FIELD]) {
-      if (selectedPartLevel?.level) {
-        const updatedData = updateDataAtLevels(
-          [...state.data],
-          selectedPartLevel?.level,
-          dataItem,
-          false,
-        ) as AllocationItem[];
-        updateState({
-          ...state,
-          data: [...updatedData],
-          expanded: [...state.expanded],
-          inEdit: [],
-        });
-      }
-      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
-        (data) => !data[ADD_FIELD],
-      );
-    }
-    _documentRevisionFormState?.setDirty(false);
-    updateState({
-      ...state,
-      inEdit: [],
-    });
-
-    formik?.resetForm();
-  };
-
-  const removeAllocItem = (dataItem) => {
-    if (dataItem.isDisabled) {
-      return;
-    }
-    confirmationDialog.open();
-    setSelectedPart(dataItem);
-  };
-
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableAllocationItem;
     const parentChildRelkey = item.parentDocId ? `alloc-row-${item.parentDocId}-${item?.itemId}` : `alloc-row-${item?.itemId}`;
@@ -370,24 +376,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       });
     }
 
-    const isOwner = item.isOwner;
-
-    const actions = (
-      <td className={classes.actionsCell}>
-        <ActionsCell
-          dataItem={item}
-          onConfirm={formik?.submitForm}
-          onDiscard={discardAllocItem}
-          onDelete={
-            isOwner || (item?.childNodes || []).length > 0
-              ? removeAllocItem
-              : undefined
-          }
-          onRestore={undefined}
-          rootClassName={classes.popperHolder}
-        />
-      </td>);
-
     return React.cloneElement(
       row,
       {
@@ -396,7 +384,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         ['data-parent-rel' as string]: parentChildRelkey,
         className: cx(row.props.className, classes.updatingRow),
       },
-      [row.props.children, actions],
     );
   };
 
