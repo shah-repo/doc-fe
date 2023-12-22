@@ -1,5 +1,5 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
-import { TreeListColumnProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
+import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { AvailableRevisions, BOM } from '../../interface';
@@ -73,14 +73,6 @@ export interface IWhereUsedTree {
   parentRevId: string
   revision: number
   status: string
-}
-
-export interface CustomTreeListColumnProps extends TreeListColumnProps {
-  isHidden?: boolean
-  isShowedMenu?: boolean
-  mainOrderIndex?: number
-  disableShowOrHideSelection?: boolean
-  filterable?: boolean
 }
 
 export interface BOMResponse {

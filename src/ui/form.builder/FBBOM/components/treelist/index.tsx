@@ -49,6 +49,8 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
+import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
+import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
@@ -70,7 +72,6 @@ import {
   ColumnMenuContext,
   CustomColumnMenu,
 } from './column.templates/CustomColumnMenu';
-import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
   CELL_EMPTY_VALUE,
@@ -87,7 +88,6 @@ import {
 import {
   BOMResponse,
   BOMState,
-  CustomTreeListColumnProps,
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
   FBBOMProps,

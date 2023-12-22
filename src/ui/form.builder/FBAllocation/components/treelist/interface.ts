@@ -1,5 +1,5 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
-import { TreeListColumnProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
+import { TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { AllocationItem } from '../../interface';
 
@@ -28,14 +28,6 @@ export interface CustomTreeListRowProps extends TreeListRowProps {
 
 export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEvent {
   dataItem: AllocationItem
-}
-
-export interface CustomTreeListColumnProps extends TreeListColumnProps {
-  isHidden?: boolean
-  isShowedMenu?: boolean
-  mainOrderIndex?: number
-  disableShowOrHideSelection?: boolean
-  filterable?: boolean
 }
 
 export interface AllocationResponse {

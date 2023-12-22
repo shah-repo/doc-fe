@@ -29,6 +29,8 @@ import { translate } from '../../../../../common/intl';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
+import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import useDialog from '../../../../hooks/useDialog';
@@ -38,7 +40,6 @@ import {
   ColumnMenuContext,
   CustomColumnMenu,
 } from './column.templates/CustomColumnMenu';
-import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
   AllocationData,
@@ -54,7 +55,6 @@ import {
 } from './constants';
 import {
   AllocationState,
-  CustomTreeListColumnProps,
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
   FBAllocationProps,
