@@ -49,6 +49,10 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
+import {
+  ColumnMenuContext,
+  CustomColumnMenu,
+} from '../../../../components/common/treelist.column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
@@ -68,10 +72,6 @@ import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import FBBOMDetailDrawer from '../drawer/AlternateParts';
 import DocumentRevisionDrawer from '../drawer/DocumentRevisionDrawer';
 import { ActionsCell } from './column.templates/Actions';
-import {
-  ColumnMenuContext,
-  CustomColumnMenu,
-} from './column.templates/CustomColumnMenu';
 import {
   ADD_FIELD,
   CELL_EMPTY_VALUE,

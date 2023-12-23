@@ -4,11 +4,11 @@ import { Grid, Tooltip } from '@material-ui/core';
 import { TreeListHeaderCellProps } from '@progress/kendo-react-treelist';
 import React, { memo } from 'react';
 import { translate } from '../../../../../../common/intl';
-import useHover from '../../../../../hooks/useHover';
 import {
   ColumnMenuContext,
   CustomColumnMenu,
-} from '../column.templates/CustomColumnMenu';
+} from '../../../../../components/common/treelist.column.templates/CustomColumnMenu';
+import useHover from '../../../../../hooks/useHover';
 import { styles } from './styles';
 
 export const AlternatePartsList: React.FC<TreeListHeaderCellProps> = memo((
