@@ -3,7 +3,7 @@ import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevis
 import { AllocationItem, EditableAllocationItem } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
 
-export const isAddOnly = (dataItem: EditableAllocationItem): boolean => {
+export const isAddAllocationItem = (dataItem: EditableAllocationItem): boolean => {
   return dataItem[ADD_FIELD] ?? false;
 };
 
@@ -12,7 +12,7 @@ export const isEditAllocItem = (dataItem: EditableAllocationItem): boolean => {
 };
 
 export const enableFieldAfterPartSelection = (dataItem: EditableAllocationItem, docId: string): boolean => {
-  return isAddOnly(dataItem) ? !isNil(docId) : true;
+  return isAddAllocationItem(dataItem) ? !isNil(docId) : true;
 };
 
 export const getCellValue = (dataItem: EditableAllocationItem, field?: string): string => {

@@ -8,7 +8,7 @@ import { IconButton } from '../../../../../components/forms/fields-next';
 import useHover from '../../../../../hooks/useHover';
 import { EditableAllocationItem } from '../../../interface';
 import { DELETE_FIELD, MODE_FIELD } from '../constants';
-import { isAddOnly, isEditAllocItem } from '../utils';
+import { isAddAllocationItem, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { AllocItemActionsProps } from './types';
 
@@ -34,7 +34,7 @@ export default function ActionButtons (props: AllocItemActionsProps<EditableAllo
   }, [scrollBehavior]);
 
   const isPartDeleted = dataItem[DELETE_FIELD];
-  const isPartEdit = !isAddOnly(dataItem) && isEditAllocItem(dataItem);
+  const isPartEdit = !isAddAllocationItem(dataItem) && isEditAllocItem(dataItem);
 
   if (!dataItem[MODE_FIELD]) {
     return null;
