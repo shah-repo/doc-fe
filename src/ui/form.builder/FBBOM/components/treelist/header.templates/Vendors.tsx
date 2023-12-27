@@ -7,7 +7,7 @@ import { translate } from '../../../../../../common/intl';
 import {
   ColumnMenuContext,
   CustomColumnMenu,
-} from '../../../../../components/common/treelist.column.templates/CustomColumnMenu';
+} from '../../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import useHover from '../../../../../hooks/useHover';
 import { styles } from './styles';
 

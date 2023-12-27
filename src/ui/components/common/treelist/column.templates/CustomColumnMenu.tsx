@@ -4,11 +4,11 @@ import { createStyles, makeStyles } from '@material-ui/core';
 import { ColumnMenuItem, ColumnMenuProps } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import React, { ComponentType } from 'react';
-import { translate } from '../../../../common/intl';
-import Colors from '../../../layout/theme/utils/colors';
-import HeaderMenu from '../header/Menu';
-import { DisplayText, TranslatedText } from '../kendo/helpers';
-import { CustomTreeListColumnProps } from '../treelist/types';
+import { translate } from '../../../../../common/intl';
+import Colors from '../../../../layout/theme/utils/colors';
+import HeaderMenu from '../../header/Menu';
+import { DisplayText, TranslatedText } from '../../kendo/helpers';
+import { CustomTreeListColumnProps } from '../types';
 
 interface CustomColumnMenuProps extends ColumnMenuProps {
   columns: CustomTreeListColumnProps[]

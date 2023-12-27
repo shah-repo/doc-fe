@@ -52,7 +52,7 @@ import Loader from '../../../../components/common/kendo/Loader';
 import {
   ColumnMenuContext,
   CustomColumnMenu,
-} from '../../../../components/common/treelist.column.templates/CustomColumnMenu';
+} from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
