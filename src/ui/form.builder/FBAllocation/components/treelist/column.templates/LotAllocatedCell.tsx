@@ -8,6 +8,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
+import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField, IconButton } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
@@ -16,7 +17,6 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
-import DocumentRevisionDialog from '../../../../FBBOM/components/DocumentRevisionDialog';
 import { EditableAllocationItem } from '../../../interface';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditAllocItem } from '../utils';
@@ -163,8 +163,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           </div>}
           {!isEditMode && (<div className={classes.lotInfoWrapper}>
             <span className={classes.lotInfoId}>
-              <Link onClick={handleOpenNewTab} className={classes.link}
-              >
+              <Link onClick={handleOpenNewTab} className={classes.link}>
                 {dataItem.lotAllocated}
               </Link>
             </span>

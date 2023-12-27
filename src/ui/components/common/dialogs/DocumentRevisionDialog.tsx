@@ -17,7 +17,7 @@ import DocumentRevisionUpdateContainer from '../../../documentRevision/DocumentR
 import useActionCreator from '../../../hooks/useActionCreator';
 import { DialogHandler } from '../../../hooks/useDialog';
 import Theme from '../../../layout/theme/provider';
-import { styles } from './treelist/column.templates/styles';
+import { styles } from './DocumentRevisionDialog.styles';
 
 interface DocumentRevisionDialogProps {
   dialog: DialogHandler

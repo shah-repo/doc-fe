@@ -17,6 +17,7 @@ import { DocumentTypeById } from '../../../../../../state/ducks/documentRevision
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
 import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
+import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { FormContext } from '../../../../../components/forms/FormContext';
@@ -31,7 +32,6 @@ import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
 import { EditableBOM } from '../../../interface';
-import DocumentRevisionDialog from '../../DocumentRevisionDialog';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditBOM } from '../utils';
 import { styles } from './styles';
