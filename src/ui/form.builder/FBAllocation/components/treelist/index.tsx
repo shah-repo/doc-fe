@@ -29,7 +29,7 @@ import { translate } from '../../../../../common/intl';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
-import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist.column.templates/CustomColumnMenu';
+import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
 import ExportTreeListDialog from '../../../../components/common/treelist/ExportTreeListDialog/ExportTreeListDialog';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
