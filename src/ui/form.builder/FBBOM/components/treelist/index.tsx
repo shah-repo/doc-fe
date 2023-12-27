@@ -54,6 +54,7 @@ import {
   CustomColumnMenu,
 } from '../../../../components/common/treelist.column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
+import ExportTreeListDialog from '../../../../components/common/treelist/ExportTreeListDialog/ExportTreeListDialog';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
@@ -289,6 +290,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const confirmationDialog = useDialog();
 
   const whereUsedDialog = useDialog();
+
+  const exportTreelistDialog = useDialog();
+  const [exportFileName, setExportFileName] = useState(EXCEL_FILE_NAME);
+
+  const confirmExportTreelistDialog = (fileName) => {
+    exportTreelistDialog.close();
+    setExportFileName(fileName || EXCEL_FILE_NAME);
+    exportToExcel();
+  };
 
   const openWhereUsedDialog = () => {
     whereUsedDialog.open();
@@ -872,7 +882,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 <FontAwesomeIcon
                   data-cy="excel-download"
                   className={classes.exportExcelIcon}
-                  onClick={exportToExcel}
+                  onClick={() => exportTreelistDialog.open()}
                   icon={solid('arrow-down-to-line')}
                 />
               </StyleTooltip>
@@ -1107,7 +1117,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 <ExcelExport
                   ref={(exporter) => (_export = exporter)}
                   hierarchy
-                  fileName={EXCEL_FILE_NAME}
+                  fileName={exportFileName}
                 >
                   <TreeList
                     style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
@@ -1187,6 +1197,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           whereUsedDialog={whereUsedDialog}
           closeDialog={closeWhereUsedDialog}
           type={WhereUsedType.PART}
+        />
+      )}
+      {exportTreelistDialog.isOpen && (
+        <ExportTreeListDialog
+          confirmDialog={confirmExportTreelistDialog}
+          dialog={exportTreelistDialog}
         />
       )}
       <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer: closeDetailDrawer, dataItem: selectedDataItem }} >

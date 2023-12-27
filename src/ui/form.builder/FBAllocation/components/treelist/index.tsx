@@ -31,6 +31,7 @@ import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist.column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
+import ExportTreeListDialog from '../../../../components/common/treelist/ExportTreeListDialog/ExportTreeListDialog';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
@@ -422,6 +423,15 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   let _export;
 
+  const exportTreelistDialog = useDialog();
+  const [exportFileName, setExportFileName] = useState(EXCEL_FILE_NAME);
+
+  const confirmExportTreelistDialog = (fileName) => {
+    exportTreelistDialog.close();
+    setExportFileName(fileName || EXCEL_FILE_NAME);
+    exportToExcel();
+  };
+
   const exportToExcel = () => {
     const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD).map(
       (part) => {
@@ -475,7 +485,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
                 <FontAwesomeIcon
                   data-cy="excel-download"
                   className={classes.exportExcelIcon}
-                  onClick={exportToExcel}
+                  onClick={() => exportTreelistDialog.open()}
                   icon={solid('arrow-down-to-line')}
                 />
               </StyleTooltip>
@@ -586,10 +596,13 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
                 <ExcelExport
                   ref={(exporter) => (_export = exporter)}
                   hierarchy
-                  fileName={EXCEL_FILE_NAME}
+                  fileName={exportFileName}
                 >
                   <TreeList
-                    style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
+                    style={{
+                      overflow: 'auto',
+                      height: `${size?.height}px` ?? '100px',
+                    }}
                     {...state.dataState}
                     tableProps={{ style: { tableLayout: 'fixed' } }}
                     rowHeight={TREELIST_CONFIG.rowHeight}
@@ -604,18 +617,16 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
                     data={processData()}
                     onDataStateChange={handleDataStateChange}
                     columns={sortedColumnDefinitions}
-                    columnMenu={
-                      (props) => (
-                        <CustomColumnMenu
-                          {...props}
-                          columns={getColumns()}
-                          {...{
-                            onLock,
-                            onColumnShowHide,
-                          }}
-                        />
-                      )
-                    }
+                    columnMenu={(props) => (
+                      <CustomColumnMenu
+                        {...props}
+                        columns={getColumns()}
+                        {...{
+                          onLock,
+                          onColumnShowHide,
+                        }}
+                      />
+                    )}
                     onRowClick={editAllocationItem}
                     onFilterChange={onFilterChange}
                     resizable={TREELIST_CONFIG.resizable}
@@ -627,6 +638,12 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
                   />
                 </ExcelExport>
               </Grid>
+              {exportTreelistDialog.isOpen && (
+                <ExportTreeListDialog
+                  confirmDialog={confirmExportTreelistDialog}
+                  dialog={exportTreelistDialog}
+                />
+              )}
               {confirmationDialog.isOpen && (
                 <AlertDialog
                   dialog={confirmationDialog}
