@@ -34,3 +34,19 @@ export interface AllocationResponse {
   bomTreeRelations: AllocationItem[]
   parentRevDetails: AllocationItem
 }
+
+export interface AllocationPartBody {
+  workOrderId: string
+  workOrderPartRevId: string
+  partRevId: string
+  partQuantityNeeded: number
+  partVariance: number
+}
+
+export interface AllocationLOTBody {
+  workOrderId: string
+  partRevId: string
+  lotRevId: string
+  lotQuantityNeeded: number
+  lotVariance: number
+}

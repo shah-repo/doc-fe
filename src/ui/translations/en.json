@@ -1764,7 +1764,7 @@
   "settings.bom.change.references": "Changes to References - Affects Part Rev",
   "allocation.treelist.treeColumns.field.itemId.title": "Item ID",
   "allocation.treelist.treeColumns.field.lotAllocated.title": "Lot Allocated",
-  "allocation.treelist.treeColumns.field.qtyNeeded.title": "Qty Needed",
+  "allocation.treelist.treeColumns.field.quantityNeeded.title": "Qty Needed",
   "allocation.treelist.treeColumns.field.variance.title": "Variance",
   "allocation.treelist.treeColumns.field.issuedQty.title": "Issued Qty",
   "allocation.treelist.treeColumns.field.qtyOnHandBefore.title": "Qty On Hand (Before Kitting)",

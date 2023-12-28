@@ -4,8 +4,11 @@ import FBCheckboxGroup from '../FBCheckboxGroup/FBCheckboxGroup';
 import { FB } from '../helpers';
 import FBAllocationTreeList from './components/treelist';
 import { AllocationCheckBoxOptions, AllocationCheckboxOptions, CHECKBOX_GROUP } from './components/treelist/constants';
+interface Props{
+  documentRevision: DocumentRevision
+}
 
-const FBAllocation: React.FC = () => {
+const FBAllocation: React.FC<Props> = ({ documentRevision }) => {
   const { formState } = FB.useStores();
   const selectedOptions = formState?.getFieldValue(CHECKBOX_GROUP);
 
@@ -21,9 +24,10 @@ const FBAllocation: React.FC = () => {
 
   return <>
     <FBCheckboxGroup {...{ options: AllocationCheckboxOptions, name: CHECKBOX_GROUP }} />
-    <FBAllocationTreeList documentRevision={{} as DocumentRevision} isDisabled={false}
+    <FBAllocationTreeList
+      documentRevision={documentRevision}
+      isDisabled={false}
       isShowOnly={false}
-      isUpgradeDisabled={false}
       isExpandAll={selectedOptions?.includes(AllocationCheckBoxOptions.AUTO_ASSIGN)}
     />;
   </>;

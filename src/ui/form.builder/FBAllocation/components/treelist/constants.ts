@@ -1,7 +1,7 @@
-export const SUB_ITEMS_FIELD = 'childNodes';
+export const SUB_ITEMS_FIELD = 'lotEntries';
 export const ID_FIELD = 'customDocId';
 export const DOC_ID_FIELD = 'docId';
-export const EXCEL_FILE_NAME = 'bomTree.xlsx';
+export const EXCEL_FILE_NAME = 'allocationTree.xlsx';
 export const DATA_ITEM_KEY = 'id';
 export const EXPAND_FIELD = 'expanded';
 export const SELECTED_PART_KEY_SEPARATOR = '$$$';
@@ -20,8 +20,8 @@ export const TREELIST_CONFIG = {
 export const AllocationData = {
   allocTreeRelations: [
     {
-      lotAllocated: 'LOT #23072103',
-      qtyNeeded: 15,
+      lotDocId: 'LOT #23072103',
+      quantityNeeded: 15,
       variance: 5,
       issuedQty: 20,
       qtyOnHandBefore: 3,
@@ -35,7 +35,7 @@ export const AllocationData = {
   ],
   parentRevDetails: {
     itemId: 'FG-00944-11',
-    qtyNeeded: 15,
+    quantityNeeded: 15,
     variance: 5,
     issuedQty: 20,
     qtyOnHandBefore: 3,

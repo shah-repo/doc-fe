@@ -19,29 +19,35 @@ import { FormikProvider, useFormik } from 'formik';
 import {
   chain, isEmpty, map, replace, uniq,
 } from 'lodash';
+import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
+import { FB } from '../../..';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
+import { allocationActions } from '../../../../../state/ducks/Allocation';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import Loader from '../../../../components/common/kendo/Loader';
 import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
 import ExportTreeListDialog from '../../../../components/common/treelist/ExportTreeListDialog/ExportTreeListDialog';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
+import { toastError } from '../../../../components/notifications';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
+import { BOMState } from '../../../FBBOM/components/treelist/interface';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import {
-  ADD_FIELD,
-  AllocationData,
-  ALLOCATION_TABLE_NAME, DATA_ITEM_KEY,
+  ADD_FIELD, ALLOCATION_TABLE_NAME, DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
@@ -60,7 +66,6 @@ import {
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
 import {
-  processAllocationTableData,
   updateDataAtLevels,
 } from './utils';
 
@@ -74,24 +79,73 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
+  const { workspaceState } = FB.useStores();
+  const partRevIdSelected = workspaceState?.formInputSync?.get('wo_part')?.id ?? '';
 
   const classes = useStyles({ size });
-  const [state, setState] = React.useState<AllocationState>(() => {
-    const allocTreeRelations = AllocationData.allocTreeRelations ?? [];
-    const allocProccessedData = processAllocationTableData(
-      [...allocTreeRelations],
-      AllocationData.parentRevDetails,
-    );
-    return {
-      data: [...allocProccessedData],
-      dataState: {
-        sort: [],
-        filter: [],
-      },
-      expanded: [],
-      inEdit: [],
-    };
+
+  const treeListAsync = useAsync({
+    onSuccess: (response?: AllocationItem[]) => {
+      console.log('response :', response);
+      if (response) {
+        updateState({
+          ...state,
+          data: response,
+        });
+      }
+    },
+    onError: toastError,
   });
+
+  const partAsync = useAsync({
+    onSuccess: (response) => {
+      console.log('response :', response);
+      reloadAllocationList();
+    },
+    onError: toastError,
+  });
+
+  const fetchAllocationTreeList = useActionCreator(
+    allocationActions.loadAllocationList,
+  );
+
+  const createPart = useActionCreator(
+    allocationActions.addPart,
+  );
+
+  const createLot = useActionCreator(
+    allocationActions.addLot,
+  );
+
+  const [state, setState] = React.useState<AllocationState>({
+    data: [],
+    dataState: {
+      sort: [],
+      filter: [],
+    },
+    expanded: [],
+    inEdit: [],
+  });
+
+  const reloadAllocationList = () => {
+    treeListAsync.start(
+      fetchAllocationTreeList,
+      documentRevision.id,
+      partRevIdSelected,
+      treeListAsync,
+    );
+  };
+
+  useEffect(() => {
+    if (documentRevision?.id) {
+      reloadAllocationList();
+    }
+
+    return () => {
+      _documentRevisionFormState?.setAllocationInfo(undefined);
+    };
+  }, [documentRevision?.id]);
+
   const [selectedPartLevel, setSelectedPartLevel] = React.useState<{
     level: number[]
     dataItem: EditableAllocationItem
@@ -100,20 +154,43 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
-    onSubmit: () => {
-      // TO DO
+    onSubmit: (values) => {
+      console.log('values', values);
+      if (values.isLotAddition) {
+        // add lot here
+        const payload = {
+          workOrderId: documentRevision?.id,
+          lotRevId: values.lotRevId,
+          partRevId: values.partRevId,
+          partQuantityNeeded: values.quantityNeeded,
+          partVariance: values.variance,
+        };
+        partAsync.start(createLot, payload, partAsync);
+      } else {
+        // Add part here
+        const payload = {
+          workOrderId: documentRevision?.id,
+          workOrderPartRevId: partRevIdSelected,
+          partRevId: values.partRevId,
+          partQuantityNeeded: values.quantityNeeded,
+          partVariance: values.variance,
+        };
+        partAsync.start(createPart, payload, partAsync);
+      }
     },
   });
 
   const updateState = (stateInfo) => {
+    _documentRevisionFormState?.setAllocationInfo(stateInfo);
     setState(stateInfo);
   };
 
   const createNewLotItem = () => {
     return {
       id: uuidv4(),
-      lotAllocated: '',
-      qtyNeeded: '',
+      lotDocId: '',
+      docId: '',
+      quantityNeeded: '',
       variance: '',
       issuedQty: '',
       qtyOnHandBefore: '',
@@ -129,22 +206,29 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const addLot = (dataItem) => {
     console.log('Add Lot', dataItem);
       _documentRevisionFormState?.setDirty(true);
-      const newAllocItem: EditableAllocationItem = createNewLotItem();
-      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
-        (data) => !data[ADD_FIELD],
-      );
-      state.data[0][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
+      const state = toJS(_documentRevisionFormState?.getAllocationInfo) as BOMState;
+      const index = state?.data?.findIndex(data => { return data.documentId === dataItem.documentId; });
+      if (state.data.length && index !== -1) {
+        const newAllocItem: EditableAllocationItem = createNewLotItem();
+        newAllocItem.partRevId = dataItem.partRevId;
+        state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter(
+          (data) => !data[ADD_FIELD],
+        );
+      state.data[index][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
       updateState({
         ...state,
         data: [...state.data],
-        expanded: [state.data[0].id],
+        expanded: [state.data[index].id],
         inEdit: [newAllocItem],
       });
+      }
   };
-
+  console.log('state Data ::', state.data);
   const discardAllocItem = (dataItem?) => {
+    const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as AllocationState;
     if (dataItem && dataItem[ADD_FIELD]) {
       if (selectedPartLevel?.level) {
+        // check this logic
         const updatedData = updateDataAtLevels(
           [...state.data],
           selectedPartLevel?.level,
@@ -158,9 +242,18 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           inEdit: [],
         });
       }
-      state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
-        (data) => !data[ADD_FIELD],
-      );
+      if (dataItem.isLotAddition) {
+        const parentIndex = state?.data?.findIndex(data => { return data.partRevId === dataItem.partRevId; });
+        if (parentIndex !== -1) {
+          state.data[parentIndex][SUB_ITEMS_FIELD] = state.data[parentIndex][SUB_ITEMS_FIELD]?.filter(
+            (data) => !data[ADD_FIELD],
+          );
+        }
+      } else {
+        state.data = state.data?.filter(
+          (data) => !data[ADD_FIELD],
+        );
+      }
     }
     _documentRevisionFormState?.setDirty(false);
     updateState({
@@ -203,7 +296,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         };
       });
       setColumns(updatedColumns);
-      setState({ ...state, dataState: tableCriteria.queryDict.dataState });
+      updateState({ ...state, dataState: tableCriteria.queryDict.dataState });
     } else {
       updateColumns(schema);
     }
@@ -284,29 +377,29 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     updateColumns(dataColumns);
   };
 
-  const createNewItem = () => {
+  const createPartItem = () => {
     return {
       id: uuidv4(),
-      lotAllocated: '',
-      qtyNeeded: '',
+      lotDocId: '',
+      quantityNeeded: '',
       variance: '',
       issuedQty: '',
       qtyOnHandBefore: '',
       qtyOnHandAfter: '',
+      docId: '',
       itemId: '',
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
+      isLotAddition: false,
       isEditEnabled: true,
     };
   };
 
   const addAllocationItem = () => {
     _documentRevisionFormState?.setDirty(true);
-    const newAllocItem: EditableAllocationItem = createNewItem();
-    state.data[0][SUB_ITEMS_FIELD] = state.data[0][SUB_ITEMS_FIELD]?.filter(
-      (data) => !data[ADD_FIELD],
-    );
-    state.data[0][SUB_ITEMS_FIELD]?.push(newAllocItem);
+    const newAllocItem = createPartItem();
+    state.data.push(newAllocItem);
+
     updateState({
       ...state,
       data: [...state.data],
@@ -637,6 +730,8 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
                     row={TreeListDraggableRow}
                   />
                 </ExcelExport>
+                {(treeListAsync.isLoading
+                  || partAsync.isLoading) && <Loader />}
               </Grid>
               {exportTreelistDialog.isOpen && (
                 <ExportTreeListDialog

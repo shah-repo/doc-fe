@@ -1,10 +1,13 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
+import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { ActionsCell } from './column.templates/Actions';
 import IDCell from './column.templates/IDCell';
-import React from 'react';
+import IssuedQtyCell from './column.templates/IssuedQtyCell';
 import LotAllocatedCell from './column.templates/LotAllocatedCell';
 import QuantityCell from './column.templates/QuantityCell';
+import QuantityOnHandAfter from './column.templates/QuantityOnHandAfter';
+import QuantityOnHandBefore from './column.templates/QuantityOnHandBefore';
 import VarianceCell from './column.templates/VarianceCell';
 
 export const TreeListSchema = ({
@@ -23,13 +26,13 @@ export const TreeListSchema = ({
       filter: TreeListTextFilter,
       expandable: true,
       locked: false,
-      mainOrderIndex: 0,
+      mainOrderIndex: 1,
       disableShowOrHideSelection: true,
       cell: IDCell,
       sortable: false,
     },
     {
-      field: 'lotAllocated',
+      field: 'lotDocId',
       locked: false,
       title: translate('allocation.treelist.treeColumns.field.lotAllocated.title'),
       width: 228,
@@ -38,9 +41,9 @@ export const TreeListSchema = ({
       cell: (props) => <LotAllocatedCell {...props} addLot={addLot} />,
     },
     {
-      field: 'qtyNeeded',
+      field: 'quantityNeeded',
       locked: false,
-      title: translate('allocation.treelist.treeColumns.field.qtyNeeded.title'),
+      title: translate('allocation.treelist.treeColumns.field.quantityNeeded.title'),
       width: 180,
       filter: TreeListTextFilter,
       mainOrderIndex: 3,
@@ -52,7 +55,7 @@ export const TreeListSchema = ({
       width: 180,
       locked: false,
       filter: TreeListTextFilter,
-      mainOrderIndex: 5,
+      mainOrderIndex: 4,
       cell: VarianceCell,
     },
     {
@@ -61,8 +64,8 @@ export const TreeListSchema = ({
       title: translate('allocation.treelist.treeColumns.field.issuedQty.title'),
       width: 180,
       filter: TreeListTextFilter,
-      mainOrderIndex: 6,
-      cell: QuantityCell,
+      mainOrderIndex: 5,
+      cell: IssuedQtyCell,
     },
     {
       field: 'qtyOnHandBefore',
@@ -70,8 +73,8 @@ export const TreeListSchema = ({
       title: translate('allocation.treelist.treeColumns.field.qtyOnHandBefore.title'),
       width: 250,
       filter: TreeListTextFilter,
-      mainOrderIndex: 7,
-      cell: QuantityCell,
+      mainOrderIndex: 6,
+      cell: QuantityOnHandBefore,
     },
     {
       field: 'qtyOnHandAfter',
@@ -79,8 +82,8 @@ export const TreeListSchema = ({
       title: translate('allocation.treelist.treeColumns.field.qtyOnHandAfter.title'),
       width: 250,
       filter: TreeListTextFilter,
-      mainOrderIndex: 9,
-      cell: QuantityCell,
+      mainOrderIndex: 7,
+      cell: QuantityOnHandAfter,
     },
     {
       id: 'actions',

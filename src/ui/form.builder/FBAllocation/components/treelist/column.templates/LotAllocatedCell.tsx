@@ -50,7 +50,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     }
     fetchAvailablePartsAsync.start(
       fetchAvailablePartsAction,
-      dataItem.parentPartId ?? '4a1493bc-bc0e-446d-beeb-741ab2ece1da', // TODO: remove hard coded string
+      dataItem.partRevId,
       fetchAvailablePartsAsync,
     );
   }, []);
@@ -71,12 +71,13 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
     setValue(option as OptionType);
     if (dataItem[ADD_FIELD]) {
-      setFieldValue('childNodeRevId', docInfo[0]);
-      setFieldValue('childNodeDocumentId', docInfo[1]);
+      setFieldValue('lotRevId', docInfo[0]);
     } else {
       setFieldValue('newChildNodeRevId', docInfo[0]);
     }
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+    setFieldValue('partRevId', dataItem.partRevId);
+    setFieldValue('isLotAddition', dataItem.isLotAddition);
   };
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
@@ -124,7 +125,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
       {...{ colSpan, id, style }}
       data-cy="cell-lot-allocated"
     >
-      {hasChildren
+      {hasChildren || (!isEditMode && !dataItem.lotDocId)
         ? <>
           <span
             className={cx(
@@ -161,10 +162,10 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           {isEditMode && dataItem.isLotAddition && <div className={classes.idCellEditWrapper}>
             { getFieldInfo()}
           </div>}
-          {!isEditMode && (<div className={classes.lotInfoWrapper}>
+          {!isEditMode && dataItem.lotDocId && (<div className={classes.lotInfoWrapper}>
             <span className={classes.lotInfoId}>
               <Link onClick={handleOpenNewTab} className={classes.link}>
-                {dataItem.lotAllocated}
+                {dataItem.lotDocId}
               </Link>
             </span>
             <span

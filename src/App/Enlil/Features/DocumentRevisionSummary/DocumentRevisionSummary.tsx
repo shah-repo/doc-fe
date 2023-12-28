@@ -249,7 +249,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 />
                               )}
                               {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
-                                <FBAllocation />
+                                <FBAllocation documentRevision={documentRevision} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper

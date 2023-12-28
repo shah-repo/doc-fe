@@ -61,8 +61,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
     const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
     setValue(option as OptionType);
     if (dataItem[ADD_FIELD]) {
-      setFieldValue('childNodeRevId', docInfo[0]);
-      setFieldValue('childNodeDocumentId', docInfo[1]);
+      setFieldValue('partRevId', docInfo[0]);
     } else {
       setFieldValue('newChildNodeRevId', docInfo[0]);
     }
@@ -135,7 +134,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
           { getFieldInfo()}
         </div>}
         {!isEditMode
-        && (dataItem.itemId) }
+        && (dataItem.docId) }
       </span>
     </td>
   );
