@@ -17,6 +17,7 @@ export const TreeListSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  onDeleteLot,
 }) => {
   return [
     {
@@ -38,7 +39,7 @@ export const TreeListSchema = ({
       width: 228,
       filter: TreeListTextFilter,
       mainOrderIndex: 2,
-      cell: (props) => <LotAllocatedCell {...props} addLot={addLot} />,
+      cell: (props) => <LotAllocatedCell {...props} addLot={addLot} deleteLot={onDeleteLot} />,
     },
     {
       field: 'quantityNeeded',

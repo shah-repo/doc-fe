@@ -7,7 +7,7 @@ import { translate } from '../../../../../../common/intl';
 import { IconButton } from '../../../../../components/forms/fields-next';
 import useHover from '../../../../../hooks/useHover';
 import { EditableAllocationItem } from '../../../interface';
-import { DELETE_FIELD, MODE_FIELD } from '../constants';
+import { MODE_FIELD } from '../constants';
 import { isAddAllocationItem, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { AllocItemActionsProps } from './types';
@@ -17,12 +17,9 @@ export default function ActionButtons (props: AllocItemActionsProps<EditableAllo
     dataItem,
     scrollBehavior = 'auto',
     isDeleteDisabled,
-    isAddPartEnabled,
     onConfirm,
     onDiscard,
     onDelete,
-    onRestore,
-    onChildPartAdd,
   } = props;
   const classes = styles();
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
@@ -32,8 +29,6 @@ export default function ActionButtons (props: AllocItemActionsProps<EditableAllo
       requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'nearest' }));
     }
   }, [scrollBehavior]);
-
-  const isPartDeleted = dataItem[DELETE_FIELD];
   const isPartEdit = !isAddAllocationItem(dataItem) && isEditAllocItem(dataItem);
 
   if (!dataItem[MODE_FIELD]) {
@@ -46,45 +41,7 @@ export default function ActionButtons (props: AllocItemActionsProps<EditableAllo
       id="row-actions"
       ref={ref}
     >
-      {isAddPartEnabled && onChildPartAdd && (
-        <Tooltip
-          title={translate('bom.add.child.part')}
-          placement="top"
-          arrow
-        >
-          <div>
-            <IconButton
-              kind="action"
-              size="small"
-              data-cy="action-add-child-part"
-              onClick={() => onChildPartAdd(dataItem)}
-            >
-              <FontAwesomeIcon icon={solid('plus')} />
-            </IconButton>
-          </div>
-        </Tooltip>
-      )}
-      {isPartDeleted && onRestore && (
-        <Tooltip
-          title={translate('common.restore')}
-          placement="top"
-          arrow
-        >
-          <div>
-            <IconButton
-              kind="action"
-              size="small"
-              data-cy="action-restore"
-              onClick={() => onRestore(dataItem)}
-            >
-              <FontAwesomeIcon
-                className={cx({ [classes.deleteIcon]: !isDeleteDisabled })}
-                icon={solid('arrow-rotate-left')} />
-            </IconButton>
-          </div>
-        </Tooltip>
-      )}
-      {isPartEdit && onDelete && (
+      {isPartEdit && !dataItem.parentPartRevId && onDelete && (
         <Tooltip
           title={translate('common.delete')}
           placement="top"

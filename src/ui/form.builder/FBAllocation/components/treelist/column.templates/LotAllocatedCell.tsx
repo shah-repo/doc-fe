@@ -23,7 +23,7 @@ import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, docRevId = '79670f2b-fc0d-4d0e-a84c-46fb48ca0e00' }) => {
+const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot, docRevId = '79670f2b-fc0d-4d0e-a84c-46fb48ca0e00' }) => {
   const isEditMode = isEditAllocItem(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const navigationAttributes = useTableKeyboardNavigation(id);
@@ -33,7 +33,6 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   const quickViewDialog = useDialog();
   const openQuickViewDialog = () => quickViewDialog.open();
 
-  // TODO: change below code as per LOT API
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
@@ -80,6 +79,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     setValue(option as OptionType);
     setFieldValue('lotRevId', option?.value);
+    setFieldValue('parentPartRevId', dataItem.parentPartRevId);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
@@ -218,6 +218,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
                         ? regular('trash-can')
                         : solid('trash-can')
                     }
+                    onClick={() => deleteLot?.(dataItem)}
                   />
                 </IconButton>
               </StyleTooltip>

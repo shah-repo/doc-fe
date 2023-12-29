@@ -5,6 +5,8 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   dataItem: EditableAllocationItem
   openDetailDrawer?: (dataItem: EditableAllocationItem) => void
   addLot?: (dataItem: EditableAllocationItem) => void
+  deleteLot?: (dataItem: EditableAllocationItem) => void
+  deletePart?: (dataItem: EditableAllocationItem) => void
 }
 
 export interface AllocItemActionsProps<EditableAllocationItem> {

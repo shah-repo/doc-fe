@@ -50,9 +50,34 @@ const addLot = (
     handlers,
   });
 
+const deleteLot = (
+  woId: string,
+  partRevId: string,
+  lotRevId: string,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/${partRevId}/${lotRevId}`,
+    method: 'delete',
+    handlers,
+  });
+
+const deletePart = (
+  woId: string,
+  partRevId: string,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/${partRevId}`,
+    method: 'delete',
+    handlers,
+  });
+
 export default {
   loadAllocationList,
   addPart,
   addLot,
   updatePart,
+  deleteLot,
+  deletePart,
 };

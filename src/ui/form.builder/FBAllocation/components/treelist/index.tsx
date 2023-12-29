@@ -84,13 +84,13 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   const treeListAsync = useAsync({
     onSuccess: (response?: AllocationItem[]) => {
-      console.log('response :', response);
       if (response) {
         updateState({
           ...state,
           data: [...response],
         });
         selectedPart && discardAllocItem(selectedPart);
+        setSelectedPart(undefined);
       }
     },
     onError: toastError,
@@ -102,6 +102,15 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     },
     onError: toastError,
   });
+
+  const deleteLotAsync = useAsync({
+    onSuccess: () => {
+      setSelectedPart(undefined);
+      reloadAllocationList();
+    },
+    onError: toastError,
+  });
+  const alertDialog = useDialog();
 
   const fetchAllocationTreeList = useActionCreator(
     allocationActions.loadAllocationList,
@@ -118,6 +127,32 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const updatePart = useActionCreator(
     allocationActions.updatePart,
   );
+
+  const deletePart = useActionCreator(
+    allocationActions.deletePart,
+  );
+
+  const deleteLot = useActionCreator(
+    allocationActions.deleteLot,
+  );
+
+  const onDeleteLot = (dataItem) => {
+    alertDialog.open();
+    setSelectedPart(dataItem);
+  };
+
+  const onConfirmDelete = () => {
+    if (selectedPart) {
+      deleteLotAsync.start(
+        deleteLot,
+        documentRevision.id,
+      selectedPart?.parentPartRevId,
+      selectedPart?.lotRevId,
+      deleteLotAsync,
+      );
+      alertDialog.close();
+    }
+  };
 
   const [state, setState] = React.useState<AllocationState>({
     data: [],
@@ -157,15 +192,14 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
     onSubmit: (values) => {
-      console.log('values', values);
       if (values.lotRevId) {
         if (values[ADD_FIELD]) {
           const payload = {
             workOrderId: documentRevision?.id,
             lotRevId: values.lotRevId,
-            partRevId: values.partRevId,
-            partQuantityNeeded: values.quantityNeeded,
-            partVariance: values.variance,
+            partRevId: values.parentPartRevId,
+            lotQuantityNeeded: values.quantityNeeded,
+            lotVariance: values.variance,
           };
           partAsync.start(createLot, payload, partAsync);
         } else {
@@ -220,7 +254,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const addLot = (dataItem) => {
-    console.log('Add Lot', dataItem);
       _documentRevisionFormState?.setDirty(true);
       const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as BOMState;
       const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
@@ -295,6 +328,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onConfirm: formik.submitForm,
     onDiscard: discardAllocItem,
     onDelete: removeAllocItem,
+    onDeleteLot,
   });
 
   const tableCriteria = useSelector(getTableCriteria(ALLOCATION_TABLE_NAME));
@@ -344,8 +378,12 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const [selectedPart, setSelectedPart] = useState<EditableAllocationItem>();
 
   const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
-    // delete part API
-    discardAllocItem(selectedPart);
+    deleteLotAsync.start(
+      deletePart,
+      documentRevision.id,
+      selectedPart?.partRevId,
+      deleteLotAsync,
+    );
     confirmationDialog.close();
   };
 
@@ -459,8 +497,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableAllocationItem;
-    const parentChildRelkey = item.partRevId ? `alloc-row-${item.partRevId}-${item?.docId}` : `alloc-row-${item?.docId}`;
+    const parentChildRelkey = item.parentPartRevId ? `alloc-row-${item?.lotDocId}` : `alloc-row-${item.partRevId}-${item?.docId}`;
     item.isDisabled = isDisabled;
+    item.woId = documentRevision.id;
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
@@ -743,7 +782,8 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
                   />
                 </ExcelExport>
                 {(treeListAsync.isLoading
-                  || partAsync.isLoading) && <Loader />}
+                  || partAsync.isLoading
+                  || deleteLotAsync.isLoading) && <Loader />}
               </Grid>
               {exportTreelistDialog.isOpen && (
                 <ExportTreeListDialog
@@ -777,6 +817,14 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           </AddButton>
         )}
       </Grid>
+      <AlertDialog
+        confirmAction={onConfirmDelete}
+        cancelAction={alertDialog.close}
+        confirmLabel="common.yes.proceed"
+        cancelLabel="common.cancel"
+        message="allocation.lot.delete.confirmation"
+        dialog={alertDialog}
+      />
     </>
   );
 };
