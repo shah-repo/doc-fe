@@ -18,7 +18,7 @@ const loadAllocationList = (
 const addPart = (
   data: AllocationPartBody,
   handlers: Handlers,
-): ApiAction<any[]> =>
+): ApiAction<AllocationItem> =>
   apiActionWithCallbacks({
     url: `${ALLOCATION_LIST_ROOT_URL}`,
     method: 'post',
@@ -26,10 +26,23 @@ const addPart = (
     handlers,
   });
 
+const updatePart = (
+  woId: string,
+  partRevId: string,
+  data: AllocationPartBody,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/entry/${partRevId}`,
+    method: 'patch',
+    data: data,
+    handlers,
+  });
+
 const addLot = (
   data: AllocationLOTBody,
   handlers: Handlers,
-): ApiAction<any[]> =>
+): ApiAction<AllocationItem> =>
   apiActionWithCallbacks({
     url: `${ALLOCATION_LIST_ROOT_URL}`,
     method: 'post',
@@ -41,4 +54,5 @@ export default {
   loadAllocationList,
   addPart,
   addLot,
+  updatePart,
 };

@@ -22,6 +22,18 @@ export interface AllocationItem {
   itemId?: string
   partRevId?: string
   lotRevId?: string
+  lotEntries?: LOTEntries[]
+  parentPartRevId?: string
+}
+
+interface LOTEntries {
+  id: string
+  parentPartRevId: string
+  lotRevId: string
+  quantityNeeded: number
+  variance: number
+  quantityOnHand: number
+  lotDocId: string
 }
 
 export interface EditableAllocationItem extends AllocationItem {

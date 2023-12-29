@@ -12,7 +12,7 @@ import { OptionType } from '../../../../../components/forms/fields/Autocomplete/
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import { EditableAllocationItem } from '../../../interface';
-import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
+import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -37,19 +37,30 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   });
 
   useEffect(() => {
-    if (!isEditMode && !dataItem.isLotAddition) {
+    if (!isEditMode && !dataItem.isLotAddition && !dataItem.lotRevId) {
       return;
     }
     fetchAvailablePartsAsync.start(
       fetchAvailablePartsAction,
       fetchAvailablePartsAsync,
     );
-  }, []);
+  }, [dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
+
+  useEffect(() => {
+    if (!isEditMode) {
+      return;
+    }
+    const value = renderOptions().find((option) => option.value === dataItem.partRevId);
+    if (value && field) {
+      setFieldValue(field, value);
+      setValue(value);
+    }
+  }, [parts]);
 
   const renderOptions = () => {
     return parts.map((part) => ({
       label: renderPartLabel(part),
-      value: `${part.id}${SELECTED_PART_KEY_SEPARATOR}${part.document.id}`,
+      value: part.id,
     }));
   };
 
@@ -58,13 +69,8 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
-    const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
     setValue(option as OptionType);
-    if (dataItem[ADD_FIELD]) {
-      setFieldValue('partRevId', docInfo[0]);
-    } else {
-      setFieldValue('newChildNodeRevId', docInfo[0]);
-    }
+    setFieldValue('partRevId', option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
@@ -130,7 +136,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
       </>
 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
-        {isEditMode && !dataItem.isLotAddition && <div className={classes.idCellEditWrapper}>
+        {isEditMode && !dataItem.isLotAddition && !dataItem.lotRevId && <div className={classes.idCellEditWrapper}>
           { getFieldInfo()}
         </div>}
         {!isEditMode

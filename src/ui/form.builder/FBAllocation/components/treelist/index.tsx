@@ -17,7 +17,7 @@ import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, isEmpty, map, replace, uniq,
+  chain, get, isEmpty, map, replace, uniq,
 } from 'lodash';
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -52,9 +52,7 @@ import {
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
   ID_FIELD,
-  MODE_FIELD,
-  SELECTED_PART_KEY_SEPARATOR,
-  SUB_ITEMS_FIELD,
+  MODE_FIELD, SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
 } from './constants';
 import {
@@ -90,16 +88,16 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       if (response) {
         updateState({
           ...state,
-          data: response,
+          data: [...response],
         });
+        selectedPart && discardAllocItem(selectedPart);
       }
     },
     onError: toastError,
   });
 
   const partAsync = useAsync({
-    onSuccess: (response) => {
-      console.log('response :', response);
+    onSuccess: () => {
       reloadAllocationList();
     },
     onError: toastError,
@@ -115,6 +113,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   const createLot = useActionCreator(
     allocationActions.addLot,
+  );
+
+  const updatePart = useActionCreator(
+    allocationActions.updatePart,
   );
 
   const [state, setState] = React.useState<AllocationState>({
@@ -156,26 +158,41 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     initialValues: {},
     onSubmit: (values) => {
       console.log('values', values);
-      if (values.isLotAddition) {
-        // add lot here
-        const payload = {
-          workOrderId: documentRevision?.id,
-          lotRevId: values.lotRevId,
-          partRevId: values.partRevId,
-          partQuantityNeeded: values.quantityNeeded,
-          partVariance: values.variance,
-        };
-        partAsync.start(createLot, payload, partAsync);
+      if (values.lotRevId) {
+        if (values[ADD_FIELD]) {
+          const payload = {
+            workOrderId: documentRevision?.id,
+            lotRevId: values.lotRevId,
+            partRevId: values.partRevId,
+            partQuantityNeeded: values.quantityNeeded,
+            partVariance: values.variance,
+          };
+          partAsync.start(createLot, payload, partAsync);
+        } else {
+          const payload = {
+            lotQuantityNeeded: values.quantityNeeded,
+            lotVariance: values.variance,
+            lotRevId: values.lotRevId,
+          };
+          partAsync.start(updatePart, documentRevision?.id, values.parentPartRevId, payload, partAsync);
+        }
       } else {
-        // Add part here
-        const payload = {
-          workOrderId: documentRevision?.id,
-          workOrderPartRevId: partRevIdSelected,
-          partRevId: values.partRevId,
-          partQuantityNeeded: values.quantityNeeded,
-          partVariance: values.variance,
-        };
-        partAsync.start(createPart, payload, partAsync);
+        if (values[ADD_FIELD]) {
+          const payload = {
+            workOrderId: documentRevision?.id,
+            workOrderPartRevId: partRevIdSelected,
+            partRevId: values.partRevId,
+            partQuantityNeeded: values.quantityNeeded,
+            partVariance: values.variance,
+          };
+          partAsync.start(createPart, payload, partAsync);
+        } else {
+          const payload = {
+            partQuantityNeeded: values.quantityNeeded,
+            partVariance: values.variance,
+          };
+          partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'), payload, partAsync);
+        }
       }
     },
   });
@@ -198,7 +215,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       itemId: '',
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
-      isEditEnabled: true,
       isLotAddition: true,
     };
   };
@@ -206,11 +222,11 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const addLot = (dataItem) => {
     console.log('Add Lot', dataItem);
       _documentRevisionFormState?.setDirty(true);
-      const state = toJS(_documentRevisionFormState?.getAllocationInfo) as BOMState;
-      const index = state?.data?.findIndex(data => { return data.documentId === dataItem.documentId; });
+      const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as BOMState;
+      const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
       if (state.data.length && index !== -1) {
         const newAllocItem: EditableAllocationItem = createNewLotItem();
-        newAllocItem.partRevId = dataItem.partRevId;
+        newAllocItem.parentPartRevId = dataItem.partRevId;
         state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter(
           (data) => !data[ADD_FIELD],
         );
@@ -223,7 +239,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       });
       }
   };
-  console.log('state Data ::', state.data);
+
   const discardAllocItem = (dataItem?) => {
     const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as AllocationState;
     if (dataItem && dataItem[ADD_FIELD]) {
@@ -242,8 +258,8 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           inEdit: [],
         });
       }
-      if (dataItem.isLotAddition) {
-        const parentIndex = state?.data?.findIndex(data => { return data.partRevId === dataItem.partRevId; });
+      if (dataItem.parentPartRevId) {
+        const parentIndex = state?.data?.findIndex(data => { return data.partRevId === dataItem.parentPartRevId; });
         if (parentIndex !== -1) {
           state.data[parentIndex][SUB_ITEMS_FIELD] = state.data[parentIndex][SUB_ITEMS_FIELD]?.filter(
             (data) => !data[ADD_FIELD],
@@ -326,7 +342,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const confirmationDialog = useDialog();
 
   const [selectedPart, setSelectedPart] = useState<EditableAllocationItem>();
+
   const confirmDeletePart = (e: React.MouseEvent<HTMLElement>) => {
+    // delete part API
     discardAllocItem(selectedPart);
     confirmationDialog.close();
   };
@@ -390,8 +408,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       itemId: '',
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
-      isLotAddition: false,
-      isEditEnabled: true,
     };
   };
 
@@ -409,11 +425,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const editAllocationItem = ({ dataItem, level }: AllocationItemEditEvent) => {
-    if (dataItem.id === documentRevision.id) {
-      return;
-    }
-
-    if (dataItem.inEdit || !dataItem.isEditEnabled) {
+    if (dataItem.inEdit) {
       return;
     }
 
@@ -432,9 +444,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       ) as AllocationItem[];
     }
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
-    const childRevId = editItemInfo.id.split(SELECTED_PART_KEY_SEPARATOR)[0];
-    editItemInfo.customDocId = `${childRevId}${SELECTED_PART_KEY_SEPARATOR}${editItemInfo.documentId}`;
-    editItemInfo.childNodeRevId = childRevId;
+    if (editItemInfo.lotRevId) {
+      editItemInfo.isLotAddition = true;
+    }
 
     updateState({
       ...state,
@@ -442,11 +454,12 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       inEdit: [editItemInfo],
     });
     formik.setValues(editItemInfo);
+    setSelectedPart(editItemInfo);
   };
 
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableAllocationItem;
-    const parentChildRelkey = item.parentDocId ? `alloc-row-${item.parentDocId}-${item?.itemId}` : `alloc-row-${item?.itemId}`;
+    const parentChildRelkey = item.partRevId ? `alloc-row-${item.partRevId}-${item?.docId}` : `alloc-row-${item?.docId}`;
     item.isDisabled = isDisabled;
 
     const modifiedProps = {
@@ -456,8 +469,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       }),
     };
 
-    const showWithoutActions = !item[MODE_FIELD]
-      || !item.isEditEnabled;
+    const showWithoutActions = !item[MODE_FIELD];
 
     if (showWithoutActions) {
       return React.cloneElement(row, {

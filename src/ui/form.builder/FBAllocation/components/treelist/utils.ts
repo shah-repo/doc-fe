@@ -1,7 +1,6 @@
 import { isNil } from 'lodash';
-import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { AllocationItem, EditableAllocationItem } from '../../interface';
-import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
+import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SUB_ITEMS_FIELD } from './constants';
 
 export const isAddAllocationItem = (dataItem: EditableAllocationItem): boolean => {
   return dataItem[ADD_FIELD] ?? false;
@@ -17,37 +16,6 @@ export const enableFieldAfterPartSelection = (dataItem: EditableAllocationItem, 
 
 export const getCellValue = (dataItem: EditableAllocationItem, field?: string): string => {
   return ((field && dataItem[field]) ?? CELL_EMPTY_VALUE) as string;
-};
-
-export const processAllocationTableData = (allocTreeRelations: AllocationItem[], parentRevDetails: AllocationItem): EditableAllocationItem[] => {
-  allocTreeRelations.unshift(parentRevDetails);
-  const dataTree: EditableAllocationItem[] = [];
-
-  allocTreeRelations = allocTreeRelations.map(relation => ({
-    ...relation,
-    childNodes: [],
-  }));
-
-  allocTreeRelations.reverse();
-  allocTreeRelations.forEach((aData: AllocationItem) => {
-    if (aData.parentNodeRevId) {
-      const parentPartRelations = allocTreeRelations.filter(relation => relation.id === aData.parentNodeRevId);
-      parentPartRelations.forEach(parentPartRelation => {
-        parentPartRelation.childNodes?.unshift(
-          Object.assign({
-            ...aData,
-            id: `${aData.id}${SELECTED_PART_KEY_SEPARATOR}${aData.parentNodeRevId}${SELECTED_PART_KEY_SEPARATOR}${aData.depth}${SELECTED_PART_KEY_SEPARATOR}${aData.uniqid}`,
-            parentNodeDocumentId: parentPartRelation.documentId,
-            isParentOwner: parentPartRelation.isOwner,
-            isEditEnabled: [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(parentPartRelation.status),
-          }),
-        );
-      });
-    } else {
-      dataTree.push({ ...aData, [MODE_FIELD]: false });
-    }
-  });
-  return dataTree;
 };
 
 export const updateDataAtLevels = (data?: AllocationItem[], levels?: number[], newValue?: EditableAllocationItem, isUpdate?: boolean): AllocationItem[] | undefined => {

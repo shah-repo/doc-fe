@@ -18,7 +18,7 @@ import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
 import { EditableAllocationItem } from '../../../interface';
-import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
+import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -34,32 +34,42 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   const openQuickViewDialog = () => quickViewDialog.open();
 
   // TODO: change below code as per LOT API
-  const [parts, setParts] = React.useState<DocumentRevision[]>([]);
+  const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
-      setParts(data);
+      setLots(data);
     },
   });
 
   useEffect(() => {
-    if (!isEditMode || !dataItem.isLotAddition) {
+    if (!isEditMode && (!dataItem.isLotAddition || !dataItem.lotRevId)) {
       return;
     }
     fetchAvailablePartsAsync.start(
       fetchAvailablePartsAction,
-      dataItem.partRevId,
+      dataItem.parentPartRevId,
       fetchAvailablePartsAsync,
     );
-  }, []);
+  }, [dataItem[MODE_FIELD], dataItem[ADD_FIELD]]);
+
+  useEffect(() => {
+    if (!isEditMode) {
+      return;
+    }
+    const value = renderOptions().find((option) => option.value === dataItem.lotRevId);
+    if (value && field) {
+      setFieldValue(field, value);
+      setValue(value);
+    }
+  }, [lots]);
 
   const renderOptions = () => {
-    // change as per lot api
-    return parts.map((part) => ({
-      label: renderPartLabel(part),
-      value: `${part.id}${SELECTED_PART_KEY_SEPARATOR}${part.document.id}`,
+    return lots.map((lot) => ({
+      label: renderPartLabel(lot),
+      value: lot.id,
     }));
   };
 
@@ -68,16 +78,9 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
-    const docInfo = option?.value.split(SELECTED_PART_KEY_SEPARATOR) ?? [];
     setValue(option as OptionType);
-    if (dataItem[ADD_FIELD]) {
-      setFieldValue('lotRevId', docInfo[0]);
-    } else {
-      setFieldValue('newChildNodeRevId', docInfo[0]);
-    }
+    setFieldValue('lotRevId', option?.value);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
-    setFieldValue('partRevId', dataItem.partRevId);
-    setFieldValue('isLotAddition', dataItem.isLotAddition);
   };
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
@@ -125,7 +128,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
       {...{ colSpan, id, style }}
       data-cy="cell-lot-allocated"
     >
-      {hasChildren || (!isEditMode && !dataItem.lotDocId)
+      {hasChildren || (!isEditMode && !dataItem.isLotAddition && !dataItem.lotRevId)
         ? <>
           <span
             className={cx(
@@ -159,10 +162,10 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
         </>
 
         : <span className={cx(classes.nameCell, classes.titleInfoCell)}>
-          {isEditMode && dataItem.isLotAddition && <div className={classes.idCellEditWrapper}>
+          {isEditMode && (dataItem.isLotAddition || dataItem.lotRevId) && <div className={classes.idCellEditWrapper}>
             { getFieldInfo()}
           </div>}
-          {!isEditMode && dataItem.lotDocId && (<div className={classes.lotInfoWrapper}>
+          {!isEditMode && (dataItem.isLotAddition || dataItem.lotRevId) && (<div className={classes.lotInfoWrapper}>
             <span className={classes.lotInfoId}>
               <Link onClick={handleOpenNewTab} className={classes.link}>
                 {dataItem.lotDocId}

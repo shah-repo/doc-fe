@@ -20,7 +20,7 @@ export const TreeListSchema = ({
 }) => {
   return [
     {
-      field: 'itemId',
+      field: 'partRevId',
       title: translate('allocation.treelist.treeColumns.field.itemId.title'),
       width: 140,
       filter: TreeListTextFilter,
