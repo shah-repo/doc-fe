@@ -21,7 +21,7 @@ export const generateRevisionNumber = (
   revisionChangeType?: RevisionChangeType,
   revisionStatus?: DocumentRevisionStatus,
   isRecord = false,
-  displayRevision?: string | undefined,  
+  displayRevision?: string,  
 ) => {
   if (!revision || !revisionStage) {
     return '';
@@ -141,5 +141,5 @@ export const versionNumber = (
 
 const isDisplayRevisionAlphaNumeric = (displayRevision: string) => {
   const strRegex = new RegExp(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/);
-  return !!(strRegex.test(displayRevision));
+  return (strRegex.test(displayRevision));
 };
