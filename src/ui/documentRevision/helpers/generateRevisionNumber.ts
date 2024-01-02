@@ -21,6 +21,7 @@ export const generateRevisionNumber = (
   revisionChangeType?: RevisionChangeType,
   revisionStatus?: DocumentRevisionStatus,
   isRecord = false,
+  displayRevision?: string | undefined,  
 ) => {
   if (!revision || !revisionStage) {
     return '';
@@ -32,6 +33,9 @@ export const generateRevisionNumber = (
     return isRecord ? 'Void' : 'OBS';
   }
 
+  if (displayRevision !== undefined && isDisplayRevisionAlphaNumeric(displayRevision)) {
+    return displayRevision;
+  }
   /** Subrevision should only be displayed in the doc revision table if a document is in draft.
    * If revisionStatus parameter is not passed to this function, status condition will be ignored. */
   const isInDraft = isDocumentRevisionInDraft(revisionStatus);
@@ -133,4 +137,9 @@ export const versionNumber = (
       return '';
     }
   }
+};
+
+const isDisplayRevisionAlphaNumeric = (displayRevision: string) => {
+  const strRegex = new RegExp(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/);
+  return !!(strRegex.test(displayRevision));
 };
