@@ -4,6 +4,7 @@ import { Link } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
@@ -44,9 +45,16 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   });
 
   useEffect(() => {
-    if (!isEditMode && (!dataItem.isLotAddition || !dataItem.lotRevId)) {
+    if (!isEditMode) {
       return;
     }
+
+    if (isEditMode && isEmpty(dataItem.parentPartRevId)) {
+      if (!dataItem.isLotAddition) {
+        return;
+      }
+    }
+
     fetchAvailablePartsAsync.start(
       fetchAvailablePartsAction,
       dataItem.parentPartRevId,
