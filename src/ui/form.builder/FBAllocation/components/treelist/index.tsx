@@ -47,7 +47,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import { BOMState } from '../../../FBBOM/components/treelist/interface';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import {
-  ADD_FIELD, ALLOCATION_TABLE_NAME, DATA_ITEM_KEY,
+  ADD_FIELD, AllocationCheckBoxOptions, ALLOCATION_TABLE_NAME, CHECKBOX_GROUP, DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
@@ -77,8 +77,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
-  const { workspaceState } = FB.useStores();
+  const { workspaceState, formState } = FB.useStores();
   const partRevIdSelected = workspaceState?.formInputSync?.get('wo_part')?.id ?? '';
+  const lotSelectedOptions = formState?.getFieldValue(CHECKBOX_GROUP);
 
   const classes = useStyles({ size });
 
@@ -114,6 +115,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   const fetchAllocationTreeList = useActionCreator(
     allocationActions.loadAllocationList,
+  );
+
+  const autoAssignLOT = useActionCreator(
+    allocationActions.autoAssignLOT,
   );
 
   const createPart = useActionCreator(
@@ -171,6 +176,20 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       treeListAsync,
     );
   };
+
+  const handleAutoTransactAll = () => {
+    treeListAsync.start(
+      autoAssignLOT,
+      documentRevision.id,
+      treeListAsync,
+    );
+  };
+
+  React.useEffect(() => {
+    if (lotSelectedOptions?.includes(AllocationCheckBoxOptions.AUTO_ASSIGN)) {
+      handleAutoTransactAll();
+    }
+  }, [lotSelectedOptions]);
 
   useEffect(() => {
     if (documentRevision?.id) {
@@ -240,7 +259,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       id: uuidv4(),
       lotDocId: '',
       docId: '',
-      quantityNeeded: '',
       variance: '',
       issuedQty: '',
       itemId: '',

@@ -12,18 +12,19 @@ const FBAllocation: React.FC<Props> = ({ documentRevision }) => {
   const { formState } = FB.useStores();
   const selectedOptions = formState?.getFieldValue(CHECKBOX_GROUP);
 
-  const handleAutoTransactAll = () => {
-    // TO DO
-  };
-
-  React.useEffect(() => {
-    if (selectedOptions?.includes(AllocationCheckBoxOptions.AUTO_TRANSACT)) {
-      handleAutoTransactAll();
-    }
-  }, [selectedOptions]);
+  // React.useEffect(() => {
+  //   // TODO update auto save options
+  //   if (!selectedOptions?.includes(AllocationCheckBoxOptions.AUTO_ASSIGN)) {
+  //     // console.log(formState?.getValues());
+  //   // workspaceState?.saveDocRev({ autoAssign: true, autoTransact: true });
+  //   }
+  // }, [selectedOptions]);
 
   return <>
-    <FBCheckboxGroup {...{ options: AllocationCheckboxOptions, name: CHECKBOX_GROUP }} />
+    <FBCheckboxGroup
+      {...{ options: AllocationCheckboxOptions, name: CHECKBOX_GROUP }}
+      defaultValue={[AllocationCheckBoxOptions.AUTO_ASSIGN]}
+    />
     <FBAllocationTreeList
       documentRevision={documentRevision}
       isDisabled={false}

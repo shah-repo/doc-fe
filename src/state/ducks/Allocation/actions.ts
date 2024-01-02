@@ -2,7 +2,7 @@ import { AllocationLOTBody, AllocationPartBody } from '../../../ui/form.builder/
 import { AllocationItem } from '../../../ui/form.builder/FBAllocation/interface';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { ALLOCATION_LIST_ROOT_URL } from './constants';
+import { ALLOCATION_LIST_ROOT_URL, AUTO_ASSIGN_LOT } from './constants';
 
 const loadAllocationList = (
   woId: string,
@@ -10,6 +10,16 @@ const loadAllocationList = (
 ): ApiAction<AllocationItem[]> =>
   apiActionWithCallbacks({
     url: `${ALLOCATION_LIST_ROOT_URL}/${woId}`,
+    method: 'get',
+    handlers,
+  });
+
+const autoAssignLOT = (
+  woId: string,
+  handlers: Handlers,
+): ApiAction<AllocationItem[]> =>
+  apiActionWithCallbacks({
+    url: `${AUTO_ASSIGN_LOT}/${woId}`,
     method: 'get',
     handlers,
   });
@@ -74,6 +84,7 @@ const deletePart = (
 
 export default {
   loadAllocationList,
+  autoAssignLOT,
   addPart,
   addLot,
   updatePart,
