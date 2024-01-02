@@ -168,7 +168,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     treeListAsync.start(
       fetchAllocationTreeList,
       documentRevision.id,
-      partRevIdSelected,
       treeListAsync,
     );
   };

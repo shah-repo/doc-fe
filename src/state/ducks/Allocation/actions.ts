@@ -6,11 +6,10 @@ import { ALLOCATION_LIST_ROOT_URL } from './constants';
 
 const loadAllocationList = (
   woId: string,
-  woPartRevId: string,
   handlers: Handlers,
 ): ApiAction<AllocationItem[]> =>
   apiActionWithCallbacks({
-    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/workOrderPartRev/${woPartRevId}`,
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}`,
     method: 'get',
     handlers,
   });
