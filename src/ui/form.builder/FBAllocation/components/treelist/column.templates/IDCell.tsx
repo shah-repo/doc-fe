@@ -116,7 +116,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
       data-cy="cell-id"
     >
       <>
-        {hasChildren
+        {hasChildren && !isEditMode
         && <span
           className={cx(
             classes.defaultIcon,

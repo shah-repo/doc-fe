@@ -17,7 +17,7 @@ import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, get, isEmpty, map, replace, uniq,
+  chain, get, isEmpty, isNil, map, replace, uniq,
 } from 'lodash';
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -47,7 +47,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import { BOMState } from '../../../FBBOM/components/treelist/interface';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import {
-  ADD_FIELD, AllocationCheckBoxOptions, ALLOCATION_TABLE_NAME, CHECKBOX_GROUP, DATA_ITEM_KEY,
+  ADD_FIELD, AllocationCheckBoxOptions, ALLOCATION_TABLE_NAME, CELL_EMPTY_VALUE, CHECKBOX_GROUP, DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
@@ -63,9 +63,6 @@ import {
 } from './interface';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
-import {
-  updateDataAtLevels,
-} from './utils';
 
 const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   documentRevision,
@@ -75,6 +72,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 }) => {
   const { _tabsState } = SM.useStores();
   const dispatch = useDispatch();
+  const treeListRef = useRef(null);
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState, formState } = FB.useStores();
@@ -201,12 +199,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
   }, [documentRevision?.id]);
 
-  const [selectedPartLevel, setSelectedPartLevel] = React.useState<{
-    level: number[]
-    dataItem: EditableAllocationItem
-  }>();
-  const treeListRef = useRef(null);
-
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
     onSubmit: (values) => {
@@ -291,21 +283,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const discardAllocItem = (dataItem?) => {
     const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as AllocationState;
     if (dataItem && dataItem[ADD_FIELD]) {
-      if (selectedPartLevel?.level) {
-        // check this logic
-        const updatedData = updateDataAtLevels(
-          [...state.data],
-          selectedPartLevel?.level,
-          dataItem,
-          false,
-        ) as AllocationItem[];
-        updateState({
-          ...state,
-          data: [...updatedData],
-          expanded: [...state.expanded],
-          inEdit: [],
-        });
-      }
       if (dataItem.parentPartRevId) {
         const parentIndex = state?.data?.findIndex(data => { return data.partRevId === dataItem.parentPartRevId; });
         if (parentIndex !== -1) {
@@ -484,18 +461,14 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     }
 
     _documentRevisionFormState?.setDirty(true);
-    setSelectedPartLevel({ dataItem, level });
-    if (!dataItem[ADD_FIELD]) {
-      state.data = updateDataAtLevels(
-        [...state.data],
-        level,
-        dataItem,
-        false,
-      ) as AllocationItem[];
-    }
+    const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
+
     const editItemInfo = extendDataItem(dataItem, SUB_ITEMS_FIELD);
     if (editItemInfo.lotRevId) {
       editItemInfo.isLotAddition = true;
+    }
+    if (!dataItem[ADD_FIELD] && state.data.length && index !== -1) {
+      state.data[index] = editItemInfo;
     }
 
     updateState({
@@ -584,12 +557,27 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     exportToExcel();
   };
 
+  const getFieldValue = (value) => {
+    return isNil(value) ? CELL_EMPTY_VALUE : value;
+  };
+
   const exportToExcel = () => {
     const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD).map(
       (part) => {
-        // TODO: add logic to customize export data here if reqired
+        const qtyOnHandAfter = isNil(part.quantityOnHand) ? CELL_EMPTY_VALUE : (part.quantityNeeded ?? 0) - (part.quantityOnHand ?? 0);
+        const quantityOnHand = getFieldValue(part.quantityOnHand);
+        const issuedQty = getFieldValue(part.issuedQty);
+        const variance = getFieldValue(part.variance);
+        const quantityNeeded = getFieldValue(part.quantityNeeded);
+
         return {
           ...part,
+          quantityOnHand,
+          quantityNeeded,
+          variance,
+          issuedQty,
+          partRevId: part.docId,
+          qtyOnHandAfter,
         };
       },
     );
