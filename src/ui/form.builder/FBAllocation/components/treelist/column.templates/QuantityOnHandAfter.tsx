@@ -1,6 +1,7 @@
 import cx from 'classnames';
+import { isNil } from 'lodash';
 import React from 'react';
-import { getCellValue } from '../utils';
+import { CELL_EMPTY_VALUE } from '../constants';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -14,7 +15,6 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-
   return (
     <td
       colSpan={colSpan}
@@ -29,7 +29,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy="cell-quantity"
     >
       <span className={classes.Cell}>
-        {getCellValue(dataItem, field)}
+        {isNil(dataItem.quantityOnHand) ? CELL_EMPTY_VALUE : (dataItem.quantityNeeded ?? 0) - (dataItem.quantityOnHand ?? 0)}
       </span>
     </td>
   );

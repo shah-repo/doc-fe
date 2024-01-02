@@ -20,19 +20,23 @@ const VarianceCell: React.ComponentType<CustomTreeListCellProps> = ({
   const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const isEditMode = isEditAllocItem(dataItem);
 
+  const onVarianceChange = (e) => {
+    const val = e.target.value;
+    if (!isNaN(val) && Number(val) >= 0 && field) {
+      setFieldValue(field, val);
+    }
+  };
+
   const getFieldInfo = () =>
     field && (
       <FormikField name={field}>
         <TextField
           {...getFieldProps(field)}
           type="number"
-          onChange={(e) => {
-            const val = e.target.value;
-            if (!isNaN(val) && Number(val) >= 0) { setFieldValue(field, val); }
-          }}
+          onChange={onVarianceChange}
           inputProps={{ min: 0 }}
           // TO DO will uncomment while API Integration
-          // disabled={!enableFieldAfterPartSelection(dataItem, values.docId)}
+          // disabled={!`enableFieldAfterPartSelection`(dataItem, values.docId)}
           size="small"
         />
       </FormikField>

@@ -1,6 +1,8 @@
 import cx from 'classnames';
+import { useFormikContext } from 'formik';
 import React from 'react';
-import { getCellValue } from '../utils';
+import { EditableAllocationItem } from '../../../interface';
+import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -14,7 +16,9 @@ const QuantityOnHandBefore: React.ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-
+  const { values } = useFormikContext<EditableAllocationItem>();
+  const isEditMode = isEditAllocItem(dataItem);
+  const value = isEditMode ? values?.quantityOnHand : dataItem?.quantityOnHand;
   return (
     <td
       colSpan={colSpan}
@@ -29,7 +33,7 @@ const QuantityOnHandBefore: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy="cell-quantity"
     >
       <span className={classes.Cell}>
-        {getCellValue(dataItem, field)}
+        {value}
       </span>
     </td>
   );

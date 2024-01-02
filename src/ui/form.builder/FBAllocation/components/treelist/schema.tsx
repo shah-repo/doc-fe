@@ -69,7 +69,7 @@ export const TreeListSchema = ({
       cell: IssuedQtyCell,
     },
     {
-      field: 'qtyOnHandBefore',
+      field: 'quantityOnHand',
       locked: false,
       title: translate('allocation.treelist.treeColumns.field.qtyOnHandBefore.title'),
       width: 250,

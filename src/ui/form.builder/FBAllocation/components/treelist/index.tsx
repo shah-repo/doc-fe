@@ -243,8 +243,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       quantityNeeded: '',
       variance: '',
       issuedQty: '',
-      qtyOnHandBefore: '',
-      qtyOnHandAfter: '',
       itemId: '',
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
@@ -436,11 +434,8 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     return {
       id: uuidv4(),
       lotDocId: '',
-      quantityNeeded: '',
       variance: '',
       issuedQty: '',
-      qtyOnHandBefore: '',
-      qtyOnHandAfter: '',
       docId: '',
       itemId: '',
       [MODE_FIELD]: true,
@@ -498,7 +493,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     const item = props.dataItem as EditableAllocationItem;
     const parentChildRelkey = item.parentPartRevId ? `alloc-row-${item?.lotDocId}` : `alloc-row-${item.partRevId}-${item?.docId}`;
     item.isDisabled = isDisabled;
-    item.woId = documentRevision.id;
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
@@ -533,9 +527,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     const ids: string[] = [];
     items.forEach((item) => {
       ids.push(item.id);
-      if (item[SUB_ITEMS_FIELD] && !isEmpty(item[SUB_ITEMS_FIELD])) {
-        ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD] as AllocationItem[]));
-      }
     });
     return uniq(ids);
   };

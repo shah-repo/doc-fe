@@ -20,16 +20,20 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
   const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const isEditMode = isEditAllocItem(dataItem);
 
+  const onQuantityChange = (e) => {
+    const val = e.target.value;
+    if (!isNaN(val) && Number(val) >= 0 && field) {
+      setFieldValue(field, val);
+    }
+  };
+
   const getFieldInfo = () =>
     field && (
       <FormikField name={field}>
         <TextField
           {...getFieldProps(field)}
           type="number"
-          onChange={(e) => {
-            const val = e.target.value;
-            if (!isNaN(val) && Number(val) >= 0) { setFieldValue(field, val); }
-          }}
+          onChange={onQuantityChange}
           inputProps={{ min: 0 }}
           size="small"
         />

@@ -4,33 +4,27 @@ export interface AllocationItem {
   id: string
   docId: string
   documentId?: string
-  parentNodeRevId?: string
-  isOwner?: boolean
-  childNodes?: AllocationItem[]
   inEdit?: boolean
   isNew?: boolean
-  isEditEnabled?: boolean
   uniqid?: string
-  enabledFieldsForEditing?: string[]
-  inRestrictedEditMode?: boolean
   lotDocId: string
-  quantityNeeded: string
+  quantityNeeded?: number
   variance: string
   issuedQty: string
-  qtyOnHandBefore: string
-  qtyOnHandAfter: string
+  qtyOnHandAfter?: string
   itemId?: string
   partRevId?: string
   lotRevId?: string
   lotEntries?: LOTEntries[]
   parentPartRevId?: string
+  quantityOnHand?: number
 }
 
 interface LOTEntries {
   id: string
   parentPartRevId: string
   lotRevId: string
-  quantityNeeded: number
+  quantityNeeded?: number
   variance: number
   quantityOnHand: number
   lotDocId: string
@@ -39,11 +33,7 @@ interface LOTEntries {
 export interface EditableAllocationItem extends AllocationItem {
   [MODE_FIELD]: boolean
   isNew?: boolean
-  parentNodeRevId?: string
-  childNodeRevId?: string
-  isParentOwner?: boolean
   isDisabled?: boolean
-  isSliderView?: boolean
   isUpgradeDisabled?: boolean
   isLotAddition?: boolean
 }
