@@ -1,7 +1,8 @@
 import { Box, IconButton, Typography } from '@material-ui/core';
 import copy from 'copy-to-clipboard';
+import _debounce from 'lodash/debounce';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../App';
 import { ReactComponent as CopyIcon } from '../../../assets/images/copy_outlined.svg';
@@ -14,8 +15,19 @@ const Bookmarks: React.FC = () => {
   const classes = styles();
   const { bookmarkState } = FB.useStores();
   const { _tabsState } = SM.useStores();
+  const [selectedBookmarkName, setSelectedBookmarkName] = useState<string>();
+  const [debouncedBookmarks, setDebouncedBookmarks] = useState<any>(null);
+
   const bookmarks = useObserver(() => bookmarkState?.bookmarks);
-  const [selectedBookmarkName, setSelectedBookmarkName] = React.useState<string>();
+
+  useEffect(() => {
+    const debouncedUpdateBookmarks = _debounce(() => {
+      setDebouncedBookmarks(bookmarks);
+    }, 500);
+    debouncedUpdateBookmarks();
+
+    return () => debouncedUpdateBookmarks.cancel();
+  }, [bookmarkState?.bookmarks]);
 
   const handleBookmarkClick = ({ name, tabId }: FBBookmarkItem) => {
     setSelectedBookmarkName(name);
@@ -30,7 +42,7 @@ const Bookmarks: React.FC = () => {
   return (
     <Box m={1.875}>
       <FBMapWrapper<FBBookmarkItem[]>
-        collection={bookmarks?.filter((bm) => bm.tabId === _tabsState?.activeTabId) || []}>
+        collection={debouncedBookmarks?.filter((bm) => bm.tabId === _tabsState?.activeTabId) || []}>
         {(bookmark: FBBookmarkItem, index) => {
           const { name, label = '' } = bookmark;
           const link = window.location.href.split('#');
