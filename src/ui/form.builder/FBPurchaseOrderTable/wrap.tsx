@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { cloneDeep, compact, each, first, get, isNil, omit, template } from 'lodash';
+import { cloneDeep, compact, debounce, each, first, get, isNil, omit, template } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -142,7 +142,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
     }, [poApprovalsState, workspaceState]);
 
-    handleCurrencyChange = async (ev, currency) => {
+    handleCurrencyChange = debounce(async (ev, currency) => {
       const selectedCurrency = currency.props.value;
       if (isPOEditState && purchaseOrderState) {
         const urlTpl = template(FBEndpoint.Currency);
@@ -154,7 +154,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         }
       }
       purchaseOrderState?.setCurrency(selectedCurrency);
-    };
+    }, 500);
 
     const async = useAsync<DocumentRevision>({
       onSuccess: async (createdDocumentRevision?) => {

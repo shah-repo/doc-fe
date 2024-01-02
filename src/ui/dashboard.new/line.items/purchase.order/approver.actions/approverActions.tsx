@@ -1,4 +1,5 @@
 import { Avatar, Box, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
@@ -16,13 +17,15 @@ import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachmen
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { ActionTypes, STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { Attachment } from '../../../../change.request/form/types';
-import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { DialogHandler } from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
+import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
@@ -30,11 +33,10 @@ import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
 import { HoverStyleChip as RejectedHoverStyleChip } from '../../common/HoverStyleChipApprovalRejected';
 import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
 import { NormalStyleChip as RejectedNormalStyleChip } from '../../common/NormalStyleChipApprovalRejected';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
 import useStyles from './approverActions.styles';
-import DismissAction from '../../common/DismissAction';
 
 interface Props {
   id: string
@@ -49,11 +51,11 @@ interface Props {
   status: string
   timestamp: string
   purchaseOrderAttachments?:
-  | {
+  | Array<{
     name: string
     type: string
     id: string
-  }[]
+  }>
   purchaseOrdeLineItemCount?: number
   purchaseOrderDescription?: string
   purchaseOrderCurrency?: string
@@ -171,7 +173,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, '_blank');
+      downloadFile(downloadInfo?.url);
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {
@@ -190,12 +192,13 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         className={classes.listItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
+        {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }}
       >
         {type === ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED
         && open ? (
             <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
           ) : (
-            <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
+            <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
           )}
         <ListItemAvatar>
           {approverAvatar ? (
@@ -312,7 +315,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     <Text translation="common.your" />
                   </Typography>
                 </Grid> */}
-                <Grid item={true}>
+                <Grid item={true} className={classes.truncateMobile}>
                   <DocId
                     url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#' }
                     docId={docId}
@@ -373,23 +376,24 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
                   className={classes.cursorPointer}
+                  stroke={Colors.font_gray}
                 />
               </span>
             )}
             <StyleTooltip
-                title={<Text translation="common.download.pdf" />}
-                placement="top"
-                arrow
-              >
-                <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
-                  <DownloadHtmlPreview
-                    id={docRevId}
-                    data-cy="transition-download-pdf"
-                    downloadPdfHover={downloadPdfHover}
-                    dialogPDF={dialogPDF}
-                  />
-                </span>
-              </StyleTooltip>
+              title={<Text translation="common.download.pdf" />}
+              placement="top"
+              arrow
+            >
+              <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
+                <DownloadHtmlPreview
+                  id={docRevId}
+                  data-cy="transition-download-pdf"
+                  downloadPdfHover={downloadPdfHover}
+                  dialogPDF={dialogPDF}
+                />
+              </span>
+            </StyleTooltip>
             <span className={classes.actionIcon}>
               {!pinHover && isPinShown && (
                 <PinIcon

@@ -1,9 +1,12 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
+import { NextTheme } from '../layout/theme-next/provider';
 import Colors from '../layout/theme/utils/colors';
 
 export const DRAWER_WIDTH = 240;
 
-export default (theme: Theme) =>
+export const MOBILE_DRAWER_WIDTH = 235;
+
+export default (theme: NextTheme) =>
   createStyles({
     drawer: {
       width: DRAWER_WIDTH,
@@ -104,8 +107,23 @@ export default (theme: Theme) =>
     userInfo: {
       height: 55,
     },
-    [theme.breakpoints.down('xs')]: {
-      drawer: {
+    [theme.media.mobile]: {
+      drawerClose: {
+        transition: theme.transitions.create('width', {
+          easing: theme.transitions.easing.sharp,
+          duration: 0,
+        }),
+        overflowX: 'hidden',
+        width: theme.spacing(0),
+        display: 'none',
+      },
+      mobileSideMenu: {
+        display: 'none',
+      },
+      shiftIcon: {
+        display: 'none',
+      },
+      list: {
         display: 'none',
       },
     },

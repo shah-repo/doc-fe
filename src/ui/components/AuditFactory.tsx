@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -25,8 +25,8 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
-import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
+import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
@@ -74,6 +74,44 @@ const AuditFactory: React.FunctionComponent<Props> = ({
     }
 
     return partNumberText;
+  };
+
+  const generateAuditLogForDisplayStatus = (auditValue: any, dataCy: string | undefined): JSX.Element => {
+    try {
+      const { displayRevision, changeRequestId, status, isRestrictedEdit } = JSON.parse(auditValue) as IDisplayStatusAuditEntry;
+      if (isRestrictedEdit) {
+        const displayText = changeRequestId
+          ? intl.formatMessage({ id: 'documentRevision.audit.restrictedEdit.display.released.text' },
+            { status, name: audit.owner?.user.name, changeRequestId, displayRevision })
+          : intl.formatMessage({ id: 'documentRevision.audit.restrictedEdit.display.draft.text' },
+            { status, displayRevision });
+        return (<div data-cy={dataCy}>{displayText}</div>);
+      } else {
+        return (
+          <Text
+            dataCy={dataCy}
+            translation="changeRequest.audit.status.updated.by.withChangeRequest"
+            values={{
+              status,
+              name: audit.owner?.user.name,
+              changeRequestId,
+            }}
+          />
+        );
+      }
+    } catch (err) {
+      // Not valid JSON, so older data and is string
+      return (
+        <Text
+          dataCy={dataCy}
+          translation="changeRequest.audit.status.updated.by"
+          values={{
+            status: audit.nextValue,
+            name: audit.owner?.user.name,
+          }}
+        />
+      );
+    }
   };
 
   if (isFBField) {
@@ -156,9 +194,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'securityEmployees':
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
         break;
-      case 'documentRevisions':
-        returnValue = (audit.nextValue as DocumentRevision).name;
+      case 'documentRevisions': {
+        const { displayRevision, document, name } = audit.nextValue as DocumentRevision;
+        const displayName = name ? ` - ${name}` : '';
+        returnValue = (<div data-cy={dataCy}>{document?.docId} - Rev {displayRevision}{displayName}</div>);
         break;
+      }
       case 'tasks.dueDate':
       case 'effectiveDate':
         returnValue = getFormattedDateString(audit.nextValue as string, MomentFormats.MonthDateYear);
@@ -208,16 +249,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
-        returnValue = (
-          <Text
-            dataCy={dataCy}
-            translation="changeRequest.audit.status.updated.by"
-            values={{
-              status: audit.nextValue,
-              name: audit.owner?.user.name,
-            }}
-          />
-        );
+        return generateAuditLogForDisplayStatus(auditValue, dataCy);
         break;
       case 'poStatus':
         returnValue = (
@@ -247,7 +279,16 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         );
         break;
       case 'lotStatus':
-        returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
+        try {
+          const obj = JSON.parse(audit.nextValue as string);
+          returnValue = <Text
+            dataCy={dataCy}
+            translation={obj.comments ? 'changeRequest.audit.lotStatus.update.with.comments' : 'changeRequest.audit.lotStatus.update.with.out.comments'}
+            values={{ ...obj, ...{ ownerName: audit.ownerName } } }
+          />;
+        } catch (e) {
+          returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
+        }
         break;
       case 'EMAIL_SENT':
         returnValue = (
@@ -385,6 +426,26 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'bomAlternateParts':
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue ?? audit.previousValue)}</div>);
         break;
+      case 'bomItemUpgraded':
+        try {
+          const prevValue: string = audit.previousValue as string;
+          const { displayRevision: oldDisplayRevision, docId: oldDocId } = JSON.parse(prevValue);
+
+          const nextValue: string = audit.nextValue as string;
+          const { displayRevision: newDisplayRevision, docId: newDocId, arId } = JSON.parse(nextValue);
+
+          const values = {
+            oldDisplayRevision, oldDocId, newDisplayRevision, newDocId,
+          };
+
+          const text = arId
+            ? intl.formatMessage({ id: 'documentRevision.audit.bomItemUpgraded.lineItem.upgraded.arId' }, { ...values, arId })
+            : intl.formatMessage({ id: 'documentRevision.audit.bomItemUpgraded.lineItem.upgraded' }, { ...values });
+          returnValue = (<div data-cy={`${dataCy}-bom-item-upgraded`}>{text}</div>);
+        } catch (err) {
+          // do nothing
+        }
+        break;
       case 'relatedPartsStatus':
         if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
           returnValue = (
@@ -498,5 +559,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
     </Fragment>
   );
 };
+
+interface IDisplayStatusAuditEntry {
+  displayRevision: string
+  changeRequestId: string
+  status: string
+  isRestrictedEdit: boolean
+}
 
 export default AuditFactory;

@@ -5,7 +5,9 @@ import cx from 'classnames';
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
+import { EMPTY_VALUE_PLACEHOLDER } from '../FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 import KendoTextEditor from './KendoTextEditor';
@@ -19,7 +21,9 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   titleText?: string
   handleRemove?: (docRevId: string) => void
   entry?: ApprovalRequestGridItem
-  lineItemPartCanSubstitute?: boolean
+  isLineItemPartCanBeSubstituted?: boolean
+  documentRevision?: DocumentRevision
+  isDeletionDisabled?: boolean
 }> = ({
   disabledOptions,
   formState,
@@ -28,13 +32,14 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   showAutoComplete = true,
   titleText,
   handleRemove,
-  lineItemPartCanSubstitute,
+  isLineItemPartCanBeSubstituted,
   entry,
+  documentRevision,
+  isDeletionDisabled,
 }) => {
   const classes = useStyles();
-
   const location = useLocation();
-  const showDeleteButton = !location.pathname.includes(entry?.docRevId);
+  const showDeleteButton = !location.pathname.includes(entry?.docRevId) && !isDeletionDisabled;
 
   const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
 
@@ -42,7 +47,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
         <div className={cx(classes.itemRow, classes.editItemRow)} data-cy="ar-item-edit-row">
-          {lineItemPartCanSubstitute && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
+          {isLineItemPartCanBeSubstituted && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
             <FormControlLabel
               color="primary"
               control={
@@ -75,7 +80,10 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             }
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
-          <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther,
+          <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
+            {entry?.revisionFormTo ?? (documentRevision?.revision || EMPTY_VALUE_PLACEHOLDER)}
+          </div>
+          <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
               name="descriptionOfChange"
@@ -84,7 +92,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               rules="required"
             />
           </div>
-          <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther,
+          <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor
               name="justificationOfChange"
@@ -92,6 +100,9 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               placeholder="form.builder.enter"
               rules="required"
             />
+          </div>
+          <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)} data-cy="edit-where-used">
+            {EMPTY_VALUE_PLACEHOLDER}
           </div>
         </div>
         <div className={classes.actionButtonChildDiv}>

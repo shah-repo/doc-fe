@@ -12,6 +12,7 @@ import { documentRevisionsActions, documentRevisionsSelectors } from '../../../s
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
 import { getLatestRevisionId } from '../../document.revision/utils/helpers';
+import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import FBStore from '../FBStore/FBStore';
 import { DocumentRevisionOption, FBLotTransactionsProps, LotTransfer } from './types';
@@ -40,8 +41,9 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     );
     const [transfers, setTransfers] = useState<LotTransfer[]>(prepareTransfers(workspaceState?.formInputSync.get(name) ?? []));
 
-    const { id, version, status } = workspaceState?.document ?? { version: 0 };
+    const { id, version, status, document } = workspaceState?.document ?? { version: 0 };
 
+    const isForm = checkIsDocumentForm(document?.documentType?.groupOptions);
     const isLatestRevision = id === getLatestRevisionId(documentRevisions);
     const isReleased = status === DocumentRevisionStatus.Released;
     const isVoided = status === DocumentRevisionStatus.Voided;
@@ -52,7 +54,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const isInEditableState = (version > 1 && !isVoided) || isReleased;
     const canEditWithPermission = canEditLotTransfers && isInEditableState;
 
-    const isEditable = id && isLatestRevision && (canEditAsOwner || canEditWithPermission);
+    const isEditable = !isForm && isLatestRevision && (canEditAsOwner || canEditWithPermission);
 
     SM.reaction(
       () => workspaceState?.formInputSync.get(name) as LotTransfer[],

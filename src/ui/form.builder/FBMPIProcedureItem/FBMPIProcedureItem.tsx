@@ -13,10 +13,11 @@ import {
   FB,
   FBButton,
   FBDialog,
-  FBFilesPresenter, FBMapWrapper,
-  FBMediaAlbumField,
+  FBFilesPresenter,
   FBMPIProcedureItemProps,
   FBMPIProcedureSelectValue,
+  FBMapWrapper,
+  FBMediaAlbumField,
   FBPartItemStatusBg,
   FBProcedureItemConfig,
   FBProcedureItemLocale,
@@ -91,7 +92,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   onClick={() => onClick?.()}
                   {...{ disabled }}
                 />
-                :                <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
+                : <AddCircleOutlineOutlinedIcon style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
                   data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                   onClick={() => onClick?.()}
                   {...{ disabled }}
@@ -151,7 +152,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                       <>
                         {!isEmpty(mpiProcedureState?.partsSelected) && (
                           <Box mt={1} display="flex" flexWrap="wrap">
-                            <FBMapWrapper<Partial<FBMPIProcedureSelectValue>[]>
+                            <FBMapWrapper<Array<Partial<FBMPIProcedureSelectValue>>>
                               collection={mpiProcedureState?.partsSelected || []}
                             >
                               {(selection: FBMPIProcedureSelectValue, index) => {
@@ -184,6 +185,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               lotPart: selection.lotPart || '',
                                               quantity: selection.quantity || 0,
                                               unit: selection.unit || '',
+                                              lotPartRevision: selection.lotPartRevision || '',
                                             }}
                                             boxProps={{
                                               color: Colors.almost_black,
@@ -250,7 +252,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                       </>
                                     )}
                                   </Box>
-                                ); }}
+                                );
+                              }}
                             </FBMapWrapper>
                           </Box>
                         )}
@@ -262,8 +265,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   <Observer>
                     {() => {
                       const hasSelected = mpiProcedureState?.partsSelected && mpiProcedureState?.partsSelected.find(
-                      (selection)  =>
-                        selection.materialId === item.title || selection.equipmentId === item.title);
+                        (selection) =>
+                          selection.materialId === item.title || selection.equipmentId === item.title);
                       return (
                         <FBButton
                           label={hasSelected ? 'form.builder.change' : 'form.builder.select'}
@@ -274,7 +277,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                             title: getItem?.(item.title) || '',
                           })}
                         />
-                      ); }}
+                      );
+                    }}
                   </Observer>
                 )}
                 {!isPreview && (
@@ -317,6 +321,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
         </FBMapWrapper>
       )}
     </FBProvider>
-  ); };
+  );
+};
 
 export default withFBMPIProcedureItem(FBMPIProcedureItem);

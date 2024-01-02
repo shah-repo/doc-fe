@@ -1,8 +1,9 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
 import { CSSProperties } from 'react';
+import { NextTheme } from '../../../layout/theme-next/provider';
 import Colors from '../../../layout/theme/utils/colors';
 
-export const lineItemStyles = (theme: Theme) => createStyles({
+export const lineItemStyles = (theme: NextTheme) => createStyles({
   inline: {
     display: 'inline',
   },
@@ -69,8 +70,8 @@ export const lineItemStyles = (theme: Theme) => createStyles({
   },
   closeIconMobile: {
     paddingTop: 0,
-    [theme.breakpoints.down('xs')]: {
-      paddingTop: 25,
+    [theme.media.mobile]: {
+      paddingTop: theme.spacing(3),
     },
   },
   attachmentIcon: {
@@ -93,6 +94,9 @@ export const lineItemStyles = (theme: Theme) => createStyles({
     fontWeight: 400,
     '& > p': { margin: 0 },
     letterSpacing: 0,
+    [theme.media.mobile]: {
+      whiteSpace: 'unset',
+    },
   },
   typographyBold: {
     fontSize: 14,
@@ -128,6 +132,10 @@ export const lineItemStyles = (theme: Theme) => createStyles({
   },
   customTooltipWidth: {
     maxWidth: 500,
+    [theme.media.mobile]: {
+      maxWidth: '100%',
+      marginLeft: theme.spacing(1),
+    },
   },
   viewTooltipText: {
     fontWeight: 'bold',
@@ -142,7 +150,7 @@ export const lineItemStyles = (theme: Theme) => createStyles({
   },
 });
 
-export const grayDotStyles = (theme: Theme, additional?: CSSProperties) => createStyles({
+export const grayDotStyles = (theme: NextTheme, additional?: CSSProperties) => createStyles({
   grayDot: {
     width: 4,
     height: 4,

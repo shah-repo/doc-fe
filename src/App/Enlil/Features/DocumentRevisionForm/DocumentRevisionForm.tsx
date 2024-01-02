@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { getHasPermission } from '../../../../common/utils/selectors';
+import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
@@ -26,6 +27,7 @@ import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, chec
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
+import FBDataStore from '../../../../ui/form.builder/FBStore/FBDataStore';
 import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMTabs } from '../../../Shifamed/Components/SMTabs/SMTabs.hoc';
@@ -174,9 +176,23 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       <PromptIfDirty
         dirty={dirty}
         doNotPrompt={doNotPrompt}
-        setDoNotPrompt={setDoNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
-        {...{ isPOEditState }}
+        onConfirm={async () => {
+          setDoNotPrompt?.(true);
+          if (isPOEditState) {
+            const prevPODoc = await getPOSavedInfo();
+
+            if (!prevPODoc.length) {
+              return;
+            }
+
+            await workspaceState?.undoPO(prevPODoc[0]);
+            await clearPOSavedInfo();
+            FBDataStore.setRefreshData(undefined);
+          }
+        }}
+        isDialog={isPOEditState}
+        message={isPOEditState ? 'common.navigate.away.po.prompt' : undefined}
       />
       <SMTemplate
         boxProps={{ className: 'hide-scroll' }}
@@ -226,6 +242,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                     tabs={tabConfig}
                     boxProps={{ px: 3.75, stretchY: '100%', display: 'flex', flexDirection: 'column' }}
                     panelProps={{ flex: 1 }}
+                    isCreateUrl={isCreateUrl}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
@@ -234,7 +251,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       return (
                         <AutoSizer onResize={handleResize}>
                           {({ width }) => (
-                            <SMBox key={index} width={width} pb={2}>
+                            <SMBox key={index} style={{ width }} pb={2}>
                               {tabType === 'MIXED' && (
                                 <>
                                   <DocumentRevisionFormPresenter

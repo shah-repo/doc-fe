@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { Formik, FormikProps, useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import { Observer } from 'mobx-react';
-import React, { ChangeEvent, ComponentType, useEffect, useState } from 'react';
+import React, { ChangeEvent, ComponentType, memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { SM } from '../../../../../../App';
@@ -30,13 +30,10 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
-import FBDataStore from '../../../../FBStore/FBDataStore';
 import { EditableBOM } from '../../../interface';
 import DocumentRevisionDialog from '../../DocumentRevisionDialog';
-import FBBOMDetailDrawer from '../../drawer/AlternateParts';
-import DocumentRevisionDrawer from '../../drawer/DocumentRevisionDrawer';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
-import { getChildPartId, isEditBOM } from '../utils';
+import { isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -44,13 +41,12 @@ interface MultipleFormInitialValues {
   selectType: OptionType[]
 }
 
-const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props }) => {
+const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, openDetailDrawer, onExpandChange, expanded, ariaColumnIndex, colIndex, className }) => {
   const { _documentRevisionFormState } = SM.useStores();
-  const { colSpan, id, style, dataItem, field, level } = props;
   const isEditMode = isEditBOM(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue, submitForm } = useFormikContext<EditableBOM>();
-  const navigationAttributes = useTableKeyboardNavigation(props.id);
+  const navigationAttributes = useTableKeyboardNavigation(id);
 
   const isAllowedToUpgrade = (isDocumentRevisionInDraft(_documentRevisionFormState?.documentRevision?.status)
     || isDocumentRevisionPendingChange(_documentRevisionFormState?.documentRevision?.status))
@@ -58,7 +54,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     && !isDocumentRevisionObsolete(dataItem.availableRevisions?.status);
 
   const onClick = (ev) => {
-    props.onExpandChange(ev, dataItem, props.level);
+    onExpandChange(ev, dataItem, level);
   };
 
   const [parts, setParts] = React.useState<DocumentRevision[]>([]);
@@ -87,7 +83,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         setFieldValue('docId', docId);
         setFieldValue('quantity', quantity ?? 1);
         if (dialog.isOpen) {
-          setFieldValue('childNodeRevId', dataItem?.id.split(SELECTED_PART_KEY_SEPARATOR)[0]);
+          setFieldValue('childNodeRevId', dataItem?.id?.split(SELECTED_PART_KEY_SEPARATOR)[0]);
           setFieldValue('newChildNodeRevId', id);
           setFieldValue('quantity', dataItem?.quantity ?? 1);
           setFieldValue('unit', dataItem?.unit);
@@ -151,29 +147,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
-  const openDrawer = () => {
-    if (!dataItem.isDisabled) {
-      _documentRevisionFormState?.setRefreshBOMTree(false);
-    }
-    setIsPartsDrawerOpened(true);
-  };
-  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
-
-  const closeDrawer = () => {
-    if (!dataItem.isDisabled) {
-      _documentRevisionFormState?.setRefreshBOMTree(!_documentRevisionFormState?.refreshBOMTree);
-    }
-    FBDataStore.selectedSliderInfo = undefined;
-    setIsPartsDrawerOpened(false);
-  };
-
   useEffect(() => {
     if (!isEditMode) {
       return;
     }
     let fieldValue = '';
     if (!dataItem[ADD_FIELD]) {
-      fieldValue = `${dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem.documentId}`;
+      fieldValue = `${dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem?.documentId}`;
     } else {
       const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
       if (!isEmpty(part) && showFormDialog.isOpen) {
@@ -250,12 +230,6 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         <FontAwesomeIcon data-cy="new-revision-available" color={Colors.primaryLight} className={cx(classes.defaultIcon)} icon={solid('circle-exclamation')} />
       </Tooltip>
     </span>
-  );
-
-  const getDrawer = () => (
-    <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer, dataItem }} >
-      <DocumentRevisionDrawer {...{ dataItem, closeDrawer, isSliderView: isPartsDrawerOpened }} />
-    </FBBOMDetailDrawer>
   );
 
   const [initialValues, setInitialValues] = React.useState<MultipleFormInitialValues>({ selectType: [] });
@@ -360,23 +334,23 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
     }
   };
 
-  const isFinalLevel = (i: number) => i === props.level.length - 1;
-  const isPrevLevel = (i: number) => i === props.level.length - 2;
+  const isFinalLevel = (i: number) => i === level.length - 1;
+  const isPrevLevel = (i: number) => i === level.length - 2;
 
   return (
     <td
-      className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, props.className)}
-      aria-colindex={props.ariaColumnIndex}
-      data-grid-col-index={props.colIndex}
+      className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
+      aria-colindex={ariaColumnIndex}
+      data-grid-col-index={colIndex}
       role="gridcell"
       {...navigationAttributes}
-      aria-expanded={props.expanded}
+      aria-expanded={expanded}
       aria-selected="false"
       {...{ colSpan, id, style }}
       data-cy="cell-id"
     >
       {!isEditMode
-        && [...(Array(props.level.length) as number[])].map((e, i) => {
+        && [...(Array(level.length) as number[])].map((e, i) => {
           const availableRevs = dataItem?.availableRevisions;
           const isPrevLevelOfAvailableRevsExistsRow = isPrevLevel(i) && availableRevs?.isReleased;
           if (isFinalLevel(i)) {
@@ -395,7 +369,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
                     onClick={hasChildren ? onClick : undefined}
                     size="sm"
                     icon={
-                      props.expanded || !hasChildren
+                      expanded || !hasChildren
                         ? regular('square-minus')
                         : solid('square-plus')
                     }
@@ -431,8 +405,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
         </div>}
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId
-          ? <Link onClick={e => { e.preventDefault(); openDrawer(); }} className={classes.link}
-            to={documentVersionPath(getChildPartId(dataItem), dataItem.documentId!)}
+          ? <Link onClick={e => { e.preventDefault(); openDetailDrawer?.(dataItem); }} className={classes.link}
+            to={dataItem?.documentId ? documentVersionPath(dataItem?.id?.split(SELECTED_PART_KEY_SEPARATOR)[0], dataItem?.documentId) : '#'}
             target="_blank"
           >
             {dataItem.docId}
@@ -488,7 +462,6 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
           </>
         )}
       </Observer>
-      {getDrawer()}
       <AlertDialog
         confirmAction={onRevChange}
         cancelAction={dialog.close}
@@ -507,4 +480,4 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, ...props 
   );
 };
 
-export default IDCell;
+export default memo(IDCell);

@@ -10,4 +10,5 @@ export type SMTabsProps = SMTabsHOCProps & {
   children: React.ReactNode
   boxProps?: SMBoxProps
   panelProps?: SMBoxProps
+  isCreateUrl?: boolean
 };

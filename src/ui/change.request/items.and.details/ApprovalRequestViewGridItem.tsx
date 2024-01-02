@@ -1,47 +1,61 @@
-import { FormControlLabel, Checkbox as MuiCheckbox } from '@material-ui/core';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { MouseEvent, MouseEventHandler, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_ROOT_URL } from '../../../state/ducks/relatedParts/constants';
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import Tooltip from '../../components/common/kendo/Tooltip';
+import WhereUsedDialog, { WhereUsedType } from '../../components/whereUsed/WhereUsedDialog';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../form.builder';
 import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
 import FBRequest from '../../form.builder/FBApi/FBApi.request';
+import useDialog from '../../hooks/useDialog';
 import useStyles from './ApprovalRequestGrid.styles';
 import { generateDocTitleText } from './helpers';
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
+
+interface IDocRelatedPart {
+  revId: string
+  titleText: string
+  documentId: string
+  revisionChangeType?: RevisionChangeType
+  whereUsedCount: number
+}
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem
   editItem: () => void
   handleRemove: (docRevId: string) => void
   viewItemActionsVisible: boolean
-  lineItemPartCanSubstitute?: boolean
+  isLineItemPartCanBeSubstituted?: boolean
 }> = ({
   entry,
   editItem,
   handleRemove,
   viewItemActionsVisible,
-  lineItemPartCanSubstitute,
+  isLineItemPartCanBeSubstituted,
 }) => {
   const classes = useStyles();
 
   const {
-    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate,
+    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate, revisionFormTo, whereUsedView,
   } = entry;
 
+  const isWhereUsedTreeExist = (whereUsedView ?? []).length > 1;
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
-  const [docRelatedParts, setDocRelatedParts]
-    = useState<Array<{revId: string, titleText: string, documentId: string, revisionChangeType?: RevisionChangeType}>>([]);
+  const [docRelatedParts, setDocRelatedParts] = useState<IDocRelatedPart[]>([]);
   const [isExpanded, setExpanded] = useState(false);
+
+  const [whereUsedDocRevId, setWhereUsedDocRevId] = useState(docRevId);
 
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
   documentDetailsApi.setUrl({
@@ -51,7 +65,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
 
   const getRelatedParts = async (documentRevisionId, displayRevision) => {
     // get the related parts for this document.
-    documentDetailsApi.setUrl(`${RELATED_PARTS_ROOT_URL}/${documentRevisionId}`);
+    documentDetailsApi.setUrl(`${RELATED_PARTS_ROOT_URL}/${documentRevisionId}?isGetWhereUsedStatus=true`);
     const relatedPartsResponse: RelatedPartsListItem[] = await documentDetailsApi.fetch();
     if (relatedPartsResponse.length > 0) {
       const childrenDetails = relatedPartsResponse
@@ -64,6 +78,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
             documentId: part.documentId,
             titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
             revisionChangeType: part.revisionChangeType,
+            whereUsedCount: part.whereUsedCount,
           }
         ));
       setDocRelatedParts(childrenDetails);
@@ -106,6 +121,19 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     return <span data-cy="document">{docTitle.replace(/(Rev [0-9A-Z.]*)(.*)/, '$1')}</span>;
   };
 
+  const whereUsedDialog = useDialog();
+  const openWhereUsedDialog = (e: MouseEvent, docRevId?: string) => {
+    e.stopPropagation();
+    if (docRevId) {
+      setWhereUsedDocRevId(docRevId);
+    }
+    whereUsedDialog.open();
+  };
+  const closeWhereUsedDialog: MouseEventHandler = (e) => {
+    whereUsedDialog.close();
+    e.stopPropagation();
+  };
+
   return (
     <div onClick={() => viewItemActionsVisible && editItem()}
       className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
@@ -113,12 +141,12 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       })}
       data-cy="enclosing-div-view-item">
       <div className={classes.itemRow} data-cy="ar-item-view-row">
-        {lineItemPartCanSubstitute && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
+        {isLineItemPartCanBeSubstituted && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
           <FormControlLabel
             color="primary"
             control={
               <MuiCheckbox
-                checked={autoUpdate}
+                checked={Boolean(autoUpdate)}
                 name="autoUpdate"
                 color="primary"
                 disabled={true}
@@ -146,11 +174,18 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           </Link>
           }
         </div>
-        <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
+        <div className={cx(classes.cellRev, classes.itemLeftPadding)}>
+          <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={revisionFormTo as string} childrenElement={getTableElementData(revisionFormTo, 'rev-from-to')} />
+        </div>
+        <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />
         </div>
-        <div className={cx(lineItemPartCanSubstitute ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
+        <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={justificationOfChange} childrenElement={getTableElementData(justificationOfChange, 'justification-of-change')} />
+        </div>
+        <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding)}>
+          <FontAwesomeIcon icon={isWhereUsedTreeExist ? solid('circle') : regular('circle')} data-cy="view-where-used"
+            onClick={e => isWhereUsedTreeExist && openWhereUsedDialog(e)} className={classes.dot} />
         </div>
       </div>
       {
@@ -169,18 +204,28 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
                     onClick={(event) => {
                       event.stopPropagation();
                     }}
-                  >
-                    {part.titleText}
+                  > {part.titleText}
                   </Link>
                   {
                     part.revisionChangeType === RevisionChangeType.Obsolete
                      && <InfoIcon color="secondary" />
                   }
+                  <FontAwesomeIcon icon={part.whereUsedCount ? solid('circle') : regular('circle')} data-cy="view-where-used"
+                    onClick={e => part.whereUsedCount > 0 && openWhereUsedDialog(e, part.revId)} className={classes.dot} />
                 </li>
               ))
             }
           </ul>
         </div>
+      }
+      {
+        whereUsedDialog.isOpen
+        && <WhereUsedDialog
+          revId={whereUsedDocRevId}
+          whereUsedDialog={whereUsedDialog}
+          closeDialog = {closeWhereUsedDialog}
+          type={WhereUsedType.PART}
+        />
       }
     </div>
   );

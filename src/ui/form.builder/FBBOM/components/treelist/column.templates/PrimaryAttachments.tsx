@@ -3,6 +3,7 @@ import cx from 'classnames';
 import React from 'react';
 import { attachmentsActions } from '../../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../../state/ducks/attachments/types';
+import { downloadFile } from '../../../../../common/utils/helpers';
 import { attachmentColorByType } from '../../../../../components/common/attachment.icon/attachmentColorByType';
 import { renderPrimaryAttachment } from '../../../../../components/common/attachment.icon/attachmentIcons';
 import ViewFile from '../../../../../components/common/view.file/container';
@@ -25,20 +26,20 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
   const s3link = primaryAttachmentDeails?.s3link ?? '';
   const type = primaryAttachmentDeails?.type ?? '';
   const fileName = s3link.substring(s3link.lastIndexOf('/') + 1);
-
   const color = attachmentColorByType[type?.toUpperCase()] as string;
-
   const dialogHandler = useDialog();
+  const downloadAttachment = useActionCreator(attachmentsActions.download);
+
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, '_parent');
+      downloadFile(downloadInfo?.url);
     },
     onError: (message) => {
       message && toastError(message);
     },
   });
-  const downloadAttachment = useActionCreator(attachmentsActions.download);
+
   const downloadOrViewFile = () => {
     if (checkIfFileIsViewable(dataItem?.primaryAttachmentDetails?.type)) {
       dialogHandler.open();
@@ -57,7 +58,7 @@ export const PrimaryAttachmentsCell: React.FC<CustomTreeListCellProps> = ({
     >
       {type && (
         <Tooltip title={fileName} placement="top" arrow>
-          <span onClick={downloadOrViewFile}>
+          <span onClick={downloadOrViewFile} className={classes.attachmentContainer}>
             {async.isLoading && (
               <CircularProgress className={classes.progress} />
             )}

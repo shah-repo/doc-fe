@@ -13,6 +13,8 @@ enum Colors {
   // gray
   hint_gray = '#b4c0ca',
   light_gray = '#F2F4F6',
+  light_gray_II= '#4d4d4d',
+  light_gray_III= '#424242',
   medium_gray = '#D4DBE1',
   gray = '#8A9DAD',
   dark_gray = '#474747',
@@ -95,6 +97,7 @@ enum Colors {
   latest_yellow_varient = '#FEAA2C',
   pink_red = '#f50057',
   school_bus_yellow = '#EFA20B',
+  light_yellow_warning = '#EFA10B',
   // orange
   basket_ball_orange = '#F88961',
   old_lace='#FEF8EE',
@@ -114,6 +117,7 @@ enum Colors {
   spanish_gray='#999999',
   gains_boro='#DDDDDD',
   white_smoke='#F9F9F9',
+  gradient_color= 'rgba(255, 255, 255, 0.1)',
 }
 
 export default Colors;

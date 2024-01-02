@@ -15,7 +15,8 @@ const ApprovalRequestItem: React.FunctionComponent<{
   handleUpdate: () => void
   viewItemActionsVisible: boolean
   itemsAndDetailsState: ItemsAndDetailsState
-  lineItemPartCanSubstitute?: boolean
+  isLineItemPartCanBeSubstituted?: boolean
+  isDeletionDisabled?: boolean
 }> = ({
   entry,
   formState,
@@ -24,7 +25,8 @@ const ApprovalRequestItem: React.FunctionComponent<{
   handleUpdate,
   viewItemActionsVisible,
   itemsAndDetailsState,
-  lineItemPartCanSubstitute,
+  isLineItemPartCanBeSubstituted,
+  isDeletionDisabled,
 }) => {
   const [isEditMode, setEditMode] = useState(false);
 
@@ -71,7 +73,8 @@ const ApprovalRequestItem: React.FunctionComponent<{
             titleText={entry.titleText}
             handleRemove={handleRemove}
             entry={entry}
-            lineItemPartCanSubstitute={lineItemPartCanSubstitute}
+            isLineItemPartCanBeSubstituted={isLineItemPartCanBeSubstituted}
+            isDeletionDisabled={isDeletionDisabled}
           />
       }
       { !isEditMode
@@ -80,7 +83,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
           editItem={editItem}
           handleRemove={handleRemove}
           viewItemActionsVisible={viewItemActionsVisible}
-          lineItemPartCanSubstitute={lineItemPartCanSubstitute}
+          isLineItemPartCanBeSubstituted={isLineItemPartCanBeSubstituted}
         /> }
     </>
   ));

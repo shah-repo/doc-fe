@@ -1,35 +1,39 @@
-import React, { useEffect } from 'react';
+import { noop } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { PromptProps } from 'react-router';
 import { Prompt, useHistory } from 'react-router-dom';
 import { translate } from '../../../common/intl';
-import { clearPOSavedInfo, getPOSavedInfo } from '../../../indexDb';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import AlertDialog from '../../app/alert.dialog/AlertDialog';
-import { FB } from '../../form.builder';
-import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useDialog from '../../hooks/useDialog';
+import { AlertDialog } from '../dialogs';
+
+const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
+const cancelBeforeUnload = () => { window.onbeforeunload = noop; };
 
 export interface Props {
   dirty: boolean
+  message?: string
   doNotPrompt?: boolean
-  isPOEditState?: boolean
+  isDialog?: boolean
+  onConfirm?: () => Promise<void> | void
+  onCancel?: () => Promise<void> | void
   onDirtyFlagChange?: (dirty: boolean) => void
-  setDoNotPrompt?: (value: boolean) => void
-  setDocumentRevision?: (documentRevision?: DocumentRevision) => void
 }
 
 const PromptIfDirty: React.FunctionComponent<Props> = ({
-  dirty, doNotPrompt, isPOEditState, onDirtyFlagChange, setDoNotPrompt, setDocumentRevision,
+  dirty,
+  message = 'common.navigate.away.prompt',
+  doNotPrompt,
+  isDialog = false,
+  onDirtyFlagChange,
+  onConfirm,
+  onCancel,
 }) => {
   const history = useHistory();
   const dialog = useDialog();
-  const [lastLocation, setLastLocation] = React.useState<Location | null | undefined>(null);
-  const { workspaceState } = FB.useStores();
+  const [lastLocation, setLastLocation] = useState<Location | null | undefined>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const cancelBeforeUnload = () => window.onbeforeunload = () => {};
-
     if (onDirtyFlagChange) {
       onDirtyFlagChange(dirty);
     }
@@ -50,28 +54,27 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     };
   }, [dirty, doNotPrompt, onDirtyFlagChange]);
 
-  const handleBlockedNavigation = (nextLocation) => {
+  const handleBlockedNavigation: PromptProps['message'] = (nextLocation) => {
     dialog.open();
-    setLastLocation(nextLocation);
+    // TODO check types after upgarading react-router
+    setLastLocation(nextLocation as unknown as Location);
     return false;
   };
 
-  const handleConfirmNavigationClick = async () => {
-    dialog.close();
-    setDoNotPrompt?.(true);
-    let prevPODoc;
-    try {
-      prevPODoc = await getPOSavedInfo();
-    } catch (e) {}
-
-    if (!prevPODoc.length) {
-      history.push(lastLocation?.pathname);
-      return;
+  const handleCancel = async () => {
+    if (onCancel) {
+      await onCancel();
     }
+    dialog.close();
+  };
 
-    await workspaceState?.undoPO(prevPODoc[0]);
-    await clearPOSavedInfo();
-    FBDataStore.setRefreshData(undefined);
+  const handleConfirm = async () => {
+    setIsLoading(true);
+    if (onConfirm) {
+      await onConfirm();
+    }
+    setIsLoading(false);
+    dialog.close();
     history.push(lastLocation?.pathname);
   };
 
@@ -79,16 +82,19 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     <>
       <Prompt
         when={dirty && !doNotPrompt}
-        message={isPOEditState ? handleBlockedNavigation : translate('common.navigate.away.prompt') }
+        message={isDialog ? handleBlockedNavigation : translate(message)}
       />
       <AlertDialog
-        confirmAction={handleConfirmNavigationClick}
-        cancelAction={dialog.close}
-        confirmLabel="common.yes.proceed"
+        handler={dialog}
         cancelLabel="common.no.stay"
-        message="common.navigate.away.po.prompt"
-        {...{ dialog }}
-      />
+        confirmLabel="common.yes.proceed"
+        loading={isLoading}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        disableBackdropClick
+      >
+        {translate(message)}
+      </AlertDialog>
     </>
   );
 };

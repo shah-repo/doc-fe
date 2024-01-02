@@ -16,12 +16,14 @@ import supplierSurvey from './ducks/supplierSurvey';
 import tableSearch from './ducks/tableSearch';
 import userManagement from './ducks/userManagement';
 import migrations from './migrations';
+import { authTransform } from './transforms';
 
 const authPersistConfig = {
   key: 'auth',
   storage,
-  version: 2,
+  version: 3,
   whitelist: ['user', 'groups'],
+  transforms: [authTransform],
   migrate: createMigrate(migrations),
 };
 

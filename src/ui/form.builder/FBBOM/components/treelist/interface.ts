@@ -2,7 +2,7 @@ import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { TreeListColumnProps, TreeListExpandChangeEvent, TreeListRowProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { BOM } from '../../interface';
+import { AvailableRevisions, BOM } from '../../interface';
 import { ALTERNATE_PART_KEY } from './constants';
 
 export interface FBBOMProps {
@@ -51,6 +51,9 @@ export interface AlternatePart {
   cost?: string
   docId?: string
   leadTime?: string
+  availableRevisions?: AvailableRevisions
+  basePartRevId?: string
+  partRevId?: string
   [ALTERNATE_PART_KEY]?: boolean
 }
 
@@ -62,10 +65,11 @@ export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEve
   dataItem: BOM
 }
 
-export interface WhereUsedTree {
+export interface IWhereUsedTree {
   depth: number
   name: string
   parentDocId: string
+  parentRevId: string
   revision: number
   status: string
 }
@@ -76,4 +80,9 @@ export interface CustomTreeListColumnProps extends TreeListColumnProps {
   mainOrderIndex?: number
   disableShowOrHideSelection?: boolean
   filterable?: boolean
+}
+
+export interface BOMResponse {
+  bomTreeRelations: BOM[]
+  parentRevDetails: BOM
 }

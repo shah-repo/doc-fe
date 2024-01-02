@@ -1,4 +1,5 @@
 import { Tab, Tabs } from '@material-ui/core';
+import cx from 'classnames';
 import { Observer } from 'mobx-react';
 import React, { ReactNode } from 'react';
 import { SMBox, SMMap, SMTabPanel, SMTabsProps, SMText } from '../../..';
@@ -12,6 +13,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   children,
   boxProps,
   panelProps,
+  isCreateUrl,
 }) => {
   const classes = useStyles();
 
@@ -24,7 +26,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           {...boxProps}
         >
           <Tabs
-            className={classes.tabs}
+            className={cx(classes.tabs, { [classes.hide]: isCreateUrl })}
             value={_tabsState?.activeTabId}
             onChange={onChange}
             TabIndicatorProps={{ className: classes.indicator }}
@@ -48,6 +50,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
                 tabId={tabs?.[index]?.tabId}
                 tabIndex={index}
                 panelProps={panelProps}
+                isCreateUrl={isCreateUrl}
               >
                 {child}
               </SMTabPanel>

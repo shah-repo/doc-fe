@@ -18,6 +18,7 @@ const LeadTimeCell: ComponentType<CustomTreeListCellProps> = ({
   const classes = styles({ hasChildren });
   const { values } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem);
+
   return (
     <td
       colSpan={colSpan}

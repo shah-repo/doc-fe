@@ -10,11 +10,13 @@ import { ApprovalStatus } from '../../../../state/ducks/common/types';
 import HeaderMenu from '../../../components/common/header/Menu';
 import OwnerChangerContainer from '../../../components/common/owner.changer/container';
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
+import { useFormContext } from '../../../components/forms/FormContext';
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import ChangeRequestTransitionDialogContainer from '../../dialogs/ChangeRequestTransitionDialog.container';
 import ChangeRequestWithdrawDialog from '../../dialogs/ChangeRequestWithdrawDialog';
 import ExportARToEmail from '../../export.email/ExportAREmail';
 import { canChangeCROwner } from '../../utils/helpers';
+import { EditButtons } from './EditButtons';
 import TransitionButton from './TransitionButton';
 import AssessmentFormVoidContainer from './Void';
 
@@ -33,6 +35,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const hasOwnershipTag = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
+  const formContext = useFormContext();
 
   const canChangeOwnerShip = React.useMemo(() => {
     if (!changeRequest) {
@@ -90,7 +93,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
   const formHasErrors = !isEmpty(errors);
   const isCurrentUserOwner = changeRequest.owner.user.email === currentUserEmail;
   const canWithdraw
-    = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
+    = !formContext.isEditing && isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
   const canSendToReview
     = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
   const canClose
@@ -105,17 +108,18 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
   const approverHasPendingStatus = find(currentUserApproval, (approval) => approval.status === ApprovalStatus.Pending);
   const isCurrentUserApprover = !!currentUserApproval;
   const canApproveOrReject
-    = isCurrentUserApprover
+    = !formContext.isEditing && isCurrentUserApprover
     && changeRequest.state === ChangeRequestStatus.InReview
     && Boolean(approverHasPendingStatus);
 
   return (
     <>
+      <EditButtons changeRequest={changeRequest} />
       {renderTransitionButton(canSendToReview, 'in_review')}
       {renderDialogButton(canApproveOrReject, 'reject', { disabled: formHasErrors })}
       {renderDialogButton(canApproveOrReject, 'approve', { disabled: formHasErrors })}
-      {renderDialogButton(canClose, 'closed')}
       {renderAlertDialogButton(canWithdraw, 'withdrawn')}
+      {renderDialogButton(canClose, 'closed')}
       <HeaderMenu>
         {canSendToReview && <AssessmentFormVoidContainer changeRequest={changeRequest} />}
         {

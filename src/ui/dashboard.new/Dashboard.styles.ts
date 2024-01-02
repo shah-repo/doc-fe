@@ -1,11 +1,12 @@
-import { makeStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import Colors from '../layout/theme/utils/colors';
+import { NextTheme } from '../layout/theme-next/provider';
 
-export const loadMoreStyles = (theme: Theme) => ({
+export const loadMoreStyles = (theme: NextTheme) => ({
   margin: theme.spacing(5, 1, 0.5),
 });
 
-export default makeStyles((theme) => ({
+export default makeStyles((theme: NextTheme) => ({
   box: {
     height: '100%',
     boxShadow: '0 0 25px rgba(41, 41, 41, 0.2)',
@@ -37,12 +38,15 @@ export default makeStyles((theme) => ({
     maxWidth: 500,
     marginTop: -78,
   },
-  [theme.breakpoints.down('xs')]: {
+  [theme.media.mobile]: {
     searchContainer: {
       display: 'none',
     },
     box: {
       margin: theme.spacing(0, 1.25),
+    },
+    stats: {
+      display: 'none',
     },
   },
 }));

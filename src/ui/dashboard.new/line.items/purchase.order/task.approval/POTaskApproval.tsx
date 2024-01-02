@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
@@ -16,8 +17,9 @@ import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachmen
 import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { Attachment } from '../../../../change.request/form/types';
-import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -27,8 +29,8 @@ import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
@@ -99,6 +101,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
+  const [downloadPdfMobile, setDownloadPdfMobile] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
@@ -184,6 +187,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     setRejectHover(false);
     setDownloadPdfHover(true);
   };
+
+  const handleDownloadClick = () => {
+    setDownloadPdfMobile(true);
+  };
+  const handleDownloadClose = () => {
+    setDownloadPdfMobile(false);
+  };
+
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -193,7 +204,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     onSuccess: () => {
       transitionDialog.close();
     },
-    onError: (error) => {
+    onError: () => {
       transitionDialog.close();
     },
   });
@@ -212,7 +223,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const downloadAsync = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, '_blank');
+      downloadFile(downloadInfo?.url);
     },
   });
   const downloadAttachment = (attachment: Attachment) => () => {
@@ -231,6 +242,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         className={classes.listItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
+        {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }}
       >
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
@@ -334,6 +346,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
                   className={classes.cursorPointer}
+                  stroke={Colors.font_gray}
                 />
               </span>
             )}
@@ -546,48 +559,40 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               </Grid>
             </StyledListItem>
           ))}
-          <Grid className={classes.gridWeb}>
-            <Button className={classes.rejectButton} onClick={handleRejectClick}>
-              <span className={classes.actionIcon}>
-                {!rejectHover && (
-                  <RejectIcon fill={Colors.white_smoke} stroke={Colors.white_smoke}
-                    data-cy="transition-reject"
-                    onMouseEnter={onMouseHoverRejectIcon}
-                    className={classes.cursorPointer}
-                  />
-                )}
-                {rejectHover && (
-                  <RejectIcon fill={Colors.white_smoke}
-                    data-cy="transition-reject"
-                    onClick={handleRejectClick}
-                    onMouseLeave={onMouseLeaveActionIcons}
-                    className={classes.cursorPointer}
-                  />
-                )}
-              </span>  <Text message="common.reject" />
+          <Grid className={classes.gridMobile}>
+            <Button
+              className={classes.rejectButton}
+              data-cy="transition-reject"
+              onClick={handleRejectClick}
+            >
+              <RejectIcon fill={Colors.white} stroke={Colors.white} />
+              <Text message="common.reject" />
             </Button>
-            <Button className={classes.approvalButton} onClick={handleApproveClick}>
-              <span className={classes.actionIcon}>
-                {!approveHover && (
-                  <ApproveIcon fill={Colors.white_smoke}
-                    data-cy="transition-approve"
-                    onMouseEnter={onMouseHoverApproveIcon}
-                    className={classes.cursorPointer}
-                  />
-                )}
-                {approveHover && (
-
-                  <ApproveIcon fill={Colors.white_smoke}
-                    data-cy="transition-approve"
-                    onClick={handleApproveClick}
-                    onMouseLeave={onMouseLeaveActionIcons}
-                    className={classes.cursorPointer}
-                  />
-
-                )}
-              </span>
+            <Button
+              className={classes.approvalButton}
+              data-cy="transition-approve"
+              onClick={handleApproveClick}
+            >
+              <ApproveIcon fill={Colors.white} />
               <Text message="common.approve" />
-            </Button></Grid>
+            </Button>
+            <Button
+              className={classes.downloadButton}
+              data-cy="transition-download-pdf"
+              onClick={handleDownloadClick}
+            >
+              <DownloadPdfIcon stroke={Colors.white_smoke} />
+              <Text translation="common.download.pdf" />
+            </Button>
+            {downloadPdfMobile && (
+              <DownloadHtmlPreview
+                id={docRevId}
+                dialogPDF={dialogPDF}
+                onClose={handleDownloadClose}
+                downloadImmediately
+              />
+            )}
+          </Grid>
         </List>
       </Collapse>
       <ApproveDialogueContainer

@@ -1,23 +1,27 @@
 import { BoxProps } from '@material-ui/core';
 import { FormikProps } from 'formik';
-import { cloneDeep, map } from 'lodash';
-import { Observer } from 'mobx-react';
+import { cloneDeep, isEqual, map } from 'lodash';
+import { Observer, useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from '../../../App';
 import { withSMTabs } from '../../../App/Shifamed/Components/SMTabs/SMTabs.hoc';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { companyActions } from '../../../state/ducks/company';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { TabInfo, TabTypeOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApplicationState } from '../../../state/reducers';
 import { AsyncState } from '../../../state/types';
-import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
+import { useFormContext } from '../../components/forms/FormContext';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { FB, FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBWorkspaceMode } from '../../form.builder/types/workspace';
 import Colors from '../../layout/theme/utils/colors';
+import FBMaterialDisposition from '../FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../items.and.details/ItemsAndDetails.wrap';
-import FormHeader from './assessmentForm/FormHeader';
 import ChangeRequestSidebar from './ChangeRequest.sidebar';
 import ChangeRequestFormHeader from './ChangeRequestFormHeader';
+import FormHeader from './assessmentForm/FormHeader';
 import { ChangeRequestFormValues } from './types';
 
 type ChangeRequestFormProps =
@@ -29,12 +33,14 @@ type ChangeRequestFormProps =
   asyncState: AsyncState
   changeRequest?: ChangeRequest
   doNotPrompt?: boolean
+  setDoNotPrompt?: (state: boolean) => void
+  setMDTab?: (state: boolean) => void
   changeOpenStatus: (status: boolean) => void
   schema?: FBSchemaProps[]
   mode: FBWorkspaceMode
   withoutBottomBar: boolean
   autosave: boolean
-  formInput?: Record<string, any>
+  formInput?: Record<string, unknown>
   hideSideBar: boolean
   currentDocRevId?: string
   inDialog: boolean
@@ -45,6 +51,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   asyncState,
   changeRequest,
   doNotPrompt,
+  setDoNotPrompt,
   changeOpenStatus,
   schema,
   mode,
@@ -56,17 +63,44 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   hideSideBar = false,
   currentDocRevId,
   inDialog = false,
+  setMDTab,
 }) => {
   const { _tabsState } = SM.useStores();
+  const { formState } = FB.useStores();
+  const { isEditing } = useFormContext();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    formState?.setSchema(schema);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schema]);
+
+  useEffect(() => {
+    if (formState) {
+      formState.workspaceMode = mode;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   _formState?.setMode(mode);
   _formState?.setAutosave(autosave);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
 
-  const changeSidebarOpenStatus = (status) => {
+  const changeSidebarOpenStatus = (status: boolean) => {
     setOpen(status);
     changeOpenStatus(status);
+  };
+
+  const handlePromptConfirm = () => {
+    setDoNotPrompt?.(true);
+    dispatch(companyActions.setAutosaveConfig(true));
+  };
+
+  const handlePromptCancel = () => {
+    if (isEditing) {
+      dispatch(companyActions.setAutosaveConfig(false));
+    }
   };
 
   const docTypeGroup = changeRequest?.documentType.group ?? 'OTHER';
@@ -81,12 +115,35 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     });
   }
 
+  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition') === -1) {
+    tabConfig.splice(2, 0, {
+      labelId: 'tabId.materialDisposition',
+      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
+      type: TabTypeOptions.MATERIAL_DISPOSITION,
+    });
+  }
+
+  const values = useObserver(() => ({
+    ...formValues.values,
+    formInput: formState?.getValues(),
+  }));
+
+  const isDirty = useObserver(() => _formState?.isDirty ?? false);
+
   useEffect(() => {
     if (inDialog) {
       _tabsState?.setActiveTabId(TabTypeOptions.ITEMS.toLowerCase());
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    _formState?.setDirty(!isEqual(values, formValues.initialValues));
+  }, [_formState, formState, formValues.initialValues, values]);
+
+  if (_tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)) {
+    setMDTab?.(true);
+  }
 
   return (
     <SMForm
@@ -97,19 +154,26 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         <FormHeader {...{ changeRequest, asyncState }} />
       }
     >
+      <PromptIfDirty
+        isDialog
+        dirty={isDirty}
+        doNotPrompt={doNotPrompt}
+        onConfirm={handlePromptConfirm}
+        onCancel={handlePromptCancel}
+      />
       <SMTemplate
         boxProps={{ className: 'hide-scroll' }}
         templateBoxProps={{ stretchY: '100%' }}
         contentBoxProps={{ stretchY: '100%' }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {...changeRequest && changeRequest.crId && !hideSideBar && {
+        {...(changeRequest?.crId && !hideSideBar && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
                 setOpen={changeSidebarOpenStatus} fromEdit={true} />}
             </Observer>
           ),
-        }}
+        })}
       >
         <Observer>
           {() => (
@@ -136,11 +200,12 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
-                        <SMBox key={index} pt={.25}>
+                        <SMBox key={index} pt={0.25}>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest
                               && <FBWorkspace
                                 isPortal={false}
                                 initialValues={formInput}
+                                formState={formState}
                                 changeRequest={cloneDeep(changeRequest)}
                                 autosave={autosave}
                                 withoutBottomBar={withoutBottomBar}
@@ -154,17 +219,21 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                             <ItemsAndDetailsWrapper
                               currentDocRevId={currentDocRevId}
                               changeRequest={cloneDeep(changeRequest)}
-                              initialValues={formInput ?? {}}
                               autosave={autosave}
                               mode={mode}
                               asyncState={asyncState}
                             />
                           )}
+                          {tabType === TabTypeOptions.MATERIAL_DISPOSITION
+                            && _tabsState?.isTabActive(TabTypeOptions.MATERIAL_DISPOSITION)
+                            && <FBMaterialDisposition changeRequest={cloneDeep(changeRequest)} {...{ setDoNotPrompt }} />
+                          }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent
                             && _formState?.mode !== FBWorkspaceModeOptions.NONE
                             && <FBWorkspace
                               isPortal={false}
                               initialValues={formInput}
+                              formState={formState}
                               changeRequest={cloneDeep(changeRequest)}
                               autosave={autosave}
                               withoutBottomBar={withoutBottomBar}

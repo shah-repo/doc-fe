@@ -7,6 +7,7 @@ import FBRequest from '../FBApi/FBApi.request';
 
 class FBFileUploadState {
   @observable public files: Id[] = [];
+  @observable public attachments: Attachment[] = [];
   @observable public unzipStatus = '';
 
   public attachmentApi: FBRequest<Attachment, null> = new FBRequest();
@@ -14,7 +15,7 @@ class FBFileUploadState {
   public startAttachmentUnzippingApi: FBRequest<any, any> = new FBRequest();
   public getZIPStatusApi: FBRequest<any, any> = new FBRequest();
 
-  public constructor(files?: Attachment[]) {
+  public constructor (files?: Attachment[]) {
     this.files = files || [];
   }
 
@@ -26,7 +27,7 @@ class FBFileUploadState {
     });
   };
 
-  public getZIPStatus = ( attachmentId: string) => {
+  public getZIPStatus = (attachmentId: string) => {
     this.getZIPStatusApi.set({
       url: FBEndpoint.ZIPStatus,
       urlValues: { attachmentId },
@@ -41,11 +42,20 @@ class FBFileUploadState {
     // Not sure why we are checking s3link, it is always different
     // const includes = find(this.files, (f) => f.s3link === file.s3link);
     // isUndefined(includes) &&
+    set(this, 'attachments', union(this.attachments, [file]));
     set(this, 'files', union(this.files, [{ id: file.id }]));
   };
 
   @action public removeFile = (file: Attachment) => {
     set(this, 'files', filter(this.files, (f) => f.id !== file.id));
+  };
+
+  @action public removeAttachment = (id: string) => {
+    set(this, 'attachments', filter(this.attachments, (f) => f.id !== id));
+  };
+
+  @action public setAttachments = (files: Attachment[]) => {
+    set(this, 'attachments', files);
   };
 
   @action public setUnzipStatus = (status: string) => {

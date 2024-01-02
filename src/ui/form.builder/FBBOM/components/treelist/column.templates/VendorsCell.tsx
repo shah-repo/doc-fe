@@ -55,7 +55,7 @@ export const VendorsCell: React.FC<CustomTreeListCellProps> | undefined = ({
       <VendorDrawer {...{
         isDrawerOpened: isPartsDrawerOpened,
         closeDrawer,
-        parentRevId: dataItem.id.split(SELECTED_PART_KEY_SEPARATOR)[0],
+        parentRevId: dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR)[0],
         revision: dataItem.revision,
         status: dataItem.status,
         docId: dataItem.docId,

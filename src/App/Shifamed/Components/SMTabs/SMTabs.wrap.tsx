@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
 import { isEmpty } from 'lodash';
+import React, { useCallback, useEffect } from 'react';
 import { SM, SMTabsProps } from '../../..';
 
 export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) => {

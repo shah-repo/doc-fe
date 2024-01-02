@@ -13,7 +13,7 @@ import { companySelectors } from '../../../state/ducks/company';
 import styles from '../../common/style/styles';
 import { FormContext } from '../../components/forms/FormContext';
 import { compareValuesToSubmit } from '../../components/forms/helpers';
-import { FB, FBBookmarkState, FBProvider, FBWorkspaceModeOptions } from '../../form.builder';
+import { FB, FBBookmarkState, FBFormState, FBProvider, FBWorkspaceModeOptions } from '../../form.builder';
 import { FBFormStateContext } from '../../form.builder/FBForm/FBForm.wrap';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -21,7 +21,8 @@ import useDocumentTitle from '../../hooks/useDocumentTitle';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from '../form/transform';
 import { ChangeRequestFormValues } from '../form/types';
-import { canChangeCROwner, canEditApprovers, canEditChangeRequest, statesWithLastSavedEnabled } from '../utils/helpers';
+import { canEditChangeRequest } from '../helpers';
+import { canChangeCROwner, canEditApprovers, statesWithLastSavedEnabled } from '../utils/helpers';
 import { changeRequestEditPath } from '../utils/paths';
 import ChangeSummaryForm from './ChangeSummaryForm';
 
@@ -61,13 +62,15 @@ const Container: React.FunctionComponent<Props> = ({
     changeRequest.owner.id,
     isCompanyAdmin,
     hasOwnershipTag);
-  const canEdit = canEditApprovers({ dataProp: changeRequest, currentUserEmail });
+  const canEdit = canEditApprovers(changeRequest, currentEmployeeId);
   const save = useActionCreator(changeRequestsActions.save);
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
-  const schema = changeRequest.formDocument?.formTemplate?.schema || [];
+  const schema = changeRequest.formDocument?.formTemplate?.schema ?? [];
+
+  const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
 
   const async = useAsync<ChangeRequest>();
-  if (canEditChangeRequest({ dataProp: changeRequest, currentUserEmail })) {
+  if (canEditChangeRequest(changeRequest, currentEmployeeId)) {
     return <Redirect to={changeRequestEditPath(changeRequest.id)} />;
   }
 
@@ -114,7 +117,7 @@ const Container: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <FBProvider {...{ bookmarkState }}>
+    <FBProvider {...{ bookmarkState, formState }}>
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <FormContext.Provider value={{ submitOnChange: false }}>

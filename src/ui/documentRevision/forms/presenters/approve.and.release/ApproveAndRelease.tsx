@@ -30,7 +30,7 @@ import { FormContext } from '../../../../components/forms/FormContext';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { FB } from '../../../../form.builder';
-import { BOM } from '../../../../form.builder/FBBOM/interface';
+import { BOMResponse } from '../../../../form.builder/FBBOM/components/treelist/interface';
 import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
 import CustomLabelTooltip from '../../../../hooks/docCustomization/CustomLabelTooltip';
 import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCustomization';
@@ -213,18 +213,14 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       toastError(err as string);
     },
   });
+
   const [isBomRecord, setIsBomRecord] = useState<boolean>(isBOMExists);
   const bomInfoAsync = useAsync({
-    onSuccess: ({
-      bomTreeRelations,
-      parentRevDetails,
-    }: {
-      bomTreeRelations: BOM[]
-      parentRevDetails: BOM
-    }) => {
-      setIsBomRecord(bomTreeRelations.length > 0);
+    onSuccess: (response?: BOMResponse) => {
+      setIsBomRecord((response?.bomTreeRelations ?? [])?.length > 0);
     },
   });
+
   const fetchBOMTreeList = useActionCreator(
     documentRevisionsActions.fetchBOMTree,
   );
@@ -295,7 +291,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       approvers: values.approvals
         .map((approval) => approval.value)
         .concat(owner?.id).filter((id) => id)
-        .map((id) => ({ id })),
+        .map((id) => ({ approver: { id } })),
       documentRevisions: [{
         descriptionOfChange: intl.formatMessage({ id: 'common.numeric.release' }),
         id: FB.uniqid,
@@ -394,8 +390,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   };
 
   const getApproverPayload = (approverId?: string): ApproverPayload => ({
-    approver: { id: approverId || null },
-    signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approverId)?.id || null },
+    approver: { id: approverId ?? null },
+    signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approverId)?.id ?? null },
   });
 
   const onSubmit = (values: any) => {
