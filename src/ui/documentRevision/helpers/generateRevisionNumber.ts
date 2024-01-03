@@ -21,7 +21,7 @@ export const generateRevisionNumber = (
   revisionChangeType?: RevisionChangeType,
   revisionStatus?: DocumentRevisionStatus,
   isRecord = false,
-  displayRevision?: string,  
+  displayRevision?: string,
 ) => {
   if (!revision || !revisionStage) {
     return '';
