@@ -46,8 +46,9 @@ import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { BOMState } from '../../../FBBOM/components/treelist/interface';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
+import AutoOptions from './AutoOptions';
 import {
-  ADD_FIELD, AllocationCheckBoxOptions, ALLOCATION_TABLE_NAME, CELL_EMPTY_VALUE, CHECKBOX_GROUP, DATA_ITEM_KEY,
+  ADD_FIELD, ALLOCATION_TABLE_NAME, CELL_EMPTY_VALUE, DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
@@ -68,29 +69,25 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   documentRevision,
   isDisabled,
   isShowOnly = false,
-  isExpandAll = false,
 }) => {
   const { _tabsState } = SM.useStores();
   const dispatch = useDispatch();
   const treeListRef = useRef(null);
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
-  const { workspaceState, formState } = FB.useStores();
+  const { workspaceState } = FB.useStores();
   const partRevIdSelected = workspaceState?.formInputSync?.get('wo_part')?.id ?? '';
-  const lotSelectedOptions = formState?.getFieldValue(CHECKBOX_GROUP);
 
   const classes = useStyles({ size });
 
   const treeListAsync = useAsync({
     onSuccess: (response?: AllocationItem[]) => {
-      if (response) {
-        updateState({
-          ...state,
-          data: [...response],
-        });
-        selectedPart && discardAllocItem(selectedPart);
-        setSelectedPart(undefined);
-      }
+      updateState({
+        ...state,
+        data: [...(response ?? [])],
+      });
+      selectedPart && discardAllocItem(selectedPart);
+      setSelectedPart(undefined);
     },
     onError: toastError,
   });
@@ -175,19 +172,20 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     );
   };
 
-  const handleAutoTransactAll = () => {
-    treeListAsync.start(
-      autoAssignLOT,
-      documentRevision.id,
-      treeListAsync,
-    );
+  const handleAutoAssignLot = (isAutoAssign) => {
+    if (partRevIdSelected && isAutoAssign) {
+      treeListAsync.start(
+        autoAssignLOT,
+        documentRevision.id,
+        treeListAsync,
+      );
+      handleExpandAll();
+    }
   };
 
-  React.useEffect(() => {
-    if (lotSelectedOptions?.includes(AllocationCheckBoxOptions.AUTO_ASSIGN) && partRevIdSelected) {
-      handleAutoTransactAll();
-    }
-  }, [lotSelectedOptions]);
+  const handleAutoTransactLot = (isAutoTransact) => {
+    // TODO
+  };
 
   useEffect(() => {
     if (documentRevision?.id && partRevIdSelected) {
@@ -396,6 +394,13 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   const processData = () => {
     const { data, dataState } = state;
+    if (!dataState) {
+      state.dataState = {
+        sort: [],
+        filter: [],
+      };
+      return [];
+    }
     const filter = [...(dataState.filter as FilterDescriptor[])];
     const docIDField = filter?.find((val) => val.field === ID_FIELD);
     const docIDFieldIndex = filter?.findIndex((val) => val.field === ID_FIELD);
@@ -411,7 +416,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     const sortedData
       = dataState.sort
       && filteredData
-      && orderBy(filteredData, dataState.sort, SUB_ITEMS_FIELD);
+      && orderBy(filteredData, dataState?.sort, SUB_ITEMS_FIELD);
     return addExpandField(sortedData as AllocationItem[]);
   };
 
@@ -537,14 +542,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       expanded: [],
     });
   };
-
-  React.useEffect(() => {
-    if (isExpandAll) {
-      handleExpandAll();
-    } else {
-      handleCollapseAll();
-    }
-  }, [isExpandAll]);
 
   let _export;
 
@@ -722,6 +719,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   return (
     <>
+      <AutoOptions onAutoAssign={handleAutoAssignLot} onAutoTransact={handleAutoTransactLot} />
       <Grid item>
         <FormikProvider value={formik}>
           <ColumnMenuContext.Provider
