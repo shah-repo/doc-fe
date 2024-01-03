@@ -184,13 +184,13 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   React.useEffect(() => {
-    if (lotSelectedOptions?.includes(AllocationCheckBoxOptions.AUTO_ASSIGN)) {
+    if (lotSelectedOptions?.includes(AllocationCheckBoxOptions.AUTO_ASSIGN) && partRevIdSelected) {
       handleAutoTransactAll();
     }
   }, [lotSelectedOptions]);
 
   useEffect(() => {
-    if (documentRevision?.id) {
+    if (documentRevision?.id && partRevIdSelected) {
       reloadAllocationList();
     }
 

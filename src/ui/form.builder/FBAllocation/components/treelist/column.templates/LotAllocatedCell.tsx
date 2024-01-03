@@ -24,7 +24,7 @@ import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot, docRevId = '79670f2b-fc0d-4d0e-a84c-46fb48ca0e00' }) => {
+const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot }) => {
   const isEditMode = isEditAllocItem(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const navigationAttributes = useTableKeyboardNavigation(id);
@@ -121,9 +121,10 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   );
 
   const handleOpenNewTab = () => {
-    // TO DO to remove hard coded docRevId later
-    const path = documentVersionPath(docRevId, '75eb6d63-7e92-46ad-bbed-3dc236bf3129');
-    window.open(path);
+    if (dataItem.lotRevId && dataItem.lotDocumentId) {
+      const path = documentVersionPath(dataItem.lotRevId, dataItem.lotDocumentId);
+      window.open(path);
+    }
   };
 
   return (
@@ -237,7 +238,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           }
         </span>
       }
-      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId }} />
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: dataItem.lotRevId }} />
     </td>
   );
 };
