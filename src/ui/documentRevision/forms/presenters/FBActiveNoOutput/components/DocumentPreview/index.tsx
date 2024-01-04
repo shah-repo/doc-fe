@@ -12,12 +12,13 @@ import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
 import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../../../document.revision/form/attachments';
 import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
+import FBAllocationTreeList from '../../../../../../form.builder/FBAllocation/components/treelist';
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
@@ -173,6 +174,11 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     _formState?.setMode(mode);
     workspaceState?.setMode(mode);
 
+    if (isWO && !documentRevision.formTemplate && initialValues?.formInput?.work_order_type === WorkOrderTypes.OTHER) {
+      // hide allocation & BOM Tabs on Work order Other case
+      tabConfig = tabConfig.filter(tab => ![TabTypeOptions?.BOM, TabTypeOptions?.ALLOCATION].includes(tab.type as TabTypeOptions));
+    }
+
     return () => {
       if (prevMode.current) {
         workspaceState?.setMode(prevMode.current);
@@ -289,6 +295,9 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           documentRevisionId={documentRevision?.id}
                           docRevStatus={documentRevision?.status}
                         />
+                      )}
+                      {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
+                        <FBAllocationTreeList documentRevision={documentRevision} isDisabled={true} />
                       )}
                       {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
                         <FBBOM documentRevision={documentRevision}

@@ -30,6 +30,8 @@ const styles = makeStyles((theme) => ({
     color: Colors.almost_black,
   },
   icon: {
+    height: 17,
+    width: 17,
     marginLeft: theme.spacing(0.88),
   },
 }));
@@ -37,11 +39,13 @@ const styles = makeStyles((theme) => ({
 interface AutoOptionsProps {
   onAutoAssign: (flag: boolean) => void
   onAutoTransact: (flag: boolean) => void
+  isDisabled: boolean
 }
 
 const AutoOptions: React.FC<AutoOptionsProps> = ({
   onAutoAssign,
   onAutoTransact,
+  isDisabled,
 }) => {
   const { formState, workspaceState } = FB.useStores();
   const classes = styles();
@@ -84,6 +88,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
               root: classes.checkbox,
               checked: classes.checked,
             }}
+            disabled={isDisabled}
             disableRipple
             onChange={onAutoAssignChange}
             name="autoAssign"
@@ -103,6 +108,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
               root: classes.checkbox,
               checked: classes.checked,
             }}
+            disabled={isDisabled}
             disableRipple
             onChange={onautoTransactChange}
             name="autoTransact"

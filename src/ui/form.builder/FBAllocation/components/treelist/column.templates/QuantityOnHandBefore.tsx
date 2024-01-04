@@ -1,7 +1,9 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { isNil } from 'lodash';
 import React from 'react';
 import { EditableAllocationItem } from '../../../interface';
+import { CELL_EMPTY_VALUE } from '../constants';
 import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -33,7 +35,7 @@ const QuantityOnHandBefore: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy="cell-quantity"
     >
       <span className={classes.Cell}>
-        {value}
+        {isNil(value) ? CELL_EMPTY_VALUE : value}
       </span>
     </td>
   );
