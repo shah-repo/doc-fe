@@ -18,7 +18,7 @@ import SummaryPresenter from '../../../../ui/document.revision/summary/presenter
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
-import FBAllocation from '../../../../ui/form.builder/FBAllocation';
+import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMForm } from '../../../Shifamed/Components/SMForm/SMForm.hoc';
@@ -249,7 +249,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 />
                               )}
                               {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
-                                <FBAllocation documentRevision={documentRevision} />
+                                <FBAllocationTreeList documentRevision={documentRevision} isDisabled={true} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper

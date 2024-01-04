@@ -1771,6 +1771,7 @@
   "allocation.treelist.treeColumns.field.qtyOnHandAfter.title": "Qty On Hand (After Kitting)",
   "allocation.checkbox.group.option.autoAssign.label": "Auto-assign LOTs",
   "allocation.checkbox.group.option.autoTransact.label": "Auto-transact all LOTs",
+  "allocation.checkbox.group.option.autoTransact.title.message": "Auto-transaction of all lots will be done once the work order is assigned.",
   "allocation.lot.delete.confirmation": "Are you sure you want to delete LOT?",
   "bom.add.child.part": "Add Child Part",
   "bom.owner": "Owner",

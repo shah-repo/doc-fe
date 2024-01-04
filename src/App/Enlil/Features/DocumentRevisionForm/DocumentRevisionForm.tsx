@@ -26,7 +26,7 @@ import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/pres
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
-import FBAllocation from '../../../../ui/form.builder/FBAllocation';
+import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import FBDataStore from '../../../../ui/form.builder/FBStore/FBDataStore';
 import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
@@ -352,7 +352,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 />
                               )}
                               {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
-                                <FBAllocation documentRevision={documentRevision} />
+                                <FBAllocationTreeList documentRevision={documentRevision} isDisabled={false} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
@@ -37,9 +38,10 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   });
 
   useEffect(() => {
-    if (!isEditMode && !dataItem.isLotAddition && !dataItem.lotRevId) {
+    if (!isEditMode || (isEditMode && dataItem.isLotAddition) || (isEditMode && !isEmpty(dataItem.lotRevId))) {
       return;
     }
+
     fetchAvailablePartsAsync.start(
       fetchAvailablePartsAction,
       fetchAvailablePartsAsync,
@@ -114,7 +116,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
       data-cy="cell-id"
     >
       <>
-        {hasChildren
+        {hasChildren && !isEditMode
         && <span
           className={cx(
             classes.defaultIcon,
