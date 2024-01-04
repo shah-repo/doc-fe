@@ -29,3 +29,7 @@ export enum DocTypeGroups {
 export enum DocCategories {
   LHR = 'Lhr',
 }
+
+export enum DocumentTypeAcronym {
+  LOT = 'LOT-',
+}
