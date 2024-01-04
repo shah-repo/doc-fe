@@ -160,6 +160,7 @@ export const WO_PART_KEY_NAME = 'wo_part';
 export const WO_PART_QTY_KEY_NAME = 'wo_part_quantity';
 export const WO_PART_UNIT_KEY_NAME = 'wo_part_unit';
 export const WO_LOT_ID_KEY_NAME = 'generated_lot_id';
+export const WO_TYPE_KEY = 'work_order_type';
 
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export const GroupWithGroupOptions = {

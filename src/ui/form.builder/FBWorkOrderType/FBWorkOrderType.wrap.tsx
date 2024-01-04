@@ -117,11 +117,11 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
       const selectedOption = event[1];
 
       if (selectedOption === WorkOrderTypes.OTHER) {
+        clearFieldByName(WO_LOT_ID_KEY_NAME, '');
         clearFieldByName(WO_LHR_TABLE_KEY_NAME, []);
         clearFieldByName(WO_PART_UNIT_KEY_NAME, '');
         clearFieldByName(WO_PART_QTY_KEY_NAME, 0);
         clearFieldByName(WO_PART_KEY_NAME, '');
-        clearFieldByName(WO_LOT_ID_KEY_NAME, '');
       } else if (prevOption === WorkOrderTypes.MAKE_PRODUCT) {
         clearFieldByName(WO_LHR_TABLE_KEY_NAME, []);
       } else if (prevOption === WorkOrderTypes.MAKE_KIT) {
