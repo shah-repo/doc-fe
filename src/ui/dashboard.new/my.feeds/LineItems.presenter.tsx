@@ -581,24 +581,53 @@ const LineItemsPresenter: React.FC<Props> = ({
                   key={pendingAction.id}
                   id={pendingAction.id}
                   type={pendingAction.type}
-                  arOwnerName={pendingAction.arOwnerName}
-                  arOwnerAvatar={pendingAction.arOwnerAvatar}
-                  arOwnerInitialColor={pendingAction.arOwnerInitialColor}
+                  ownerName={pendingAction.arOwnerName}
+                  ownerAvatar={pendingAction.arOwnerAvatar}
+                  ownerInitialColor={pendingAction.arOwnerInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime,
                   )}
                   status={pendingAction.taskStatus}
                   instruction={pendingAction.taskInstruction}
-                  arTitle={pendingAction.arTitle}
-                  arId={pendingAction.arId}
-                  arChangeRequestId={pendingAction.arChangeRequestId}
+                  title={pendingAction.arTitle}
+                  docId={pendingAction.arId}
+                  revId={pendingAction.arChangeRequestId}
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
                   dismissLineItem={dismissLineItem}
                   isPinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
+                  isChangeRequest={true}
+                />
+              );
+            case ActionTypes.WORK_ORDER_TASKS_ASSIGNED:
+              return (
+                <TaskAssignedItemPresenter
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  type={pendingAction.type}
+                  ownerName={pendingAction.docRevOwnerName}
+                  ownerAvatar={pendingAction.docRevOwnerAvatar}
+                  ownerInitialColor={pendingAction.docRevOwnerInitialColor}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime,
+                  )}
+                  status={pendingAction.taskStatus}
+                  instruction={pendingAction.taskInstruction}
+                  docId={pendingAction.docId}
+                  revId={pendingAction.docRevId}
+                  documentId={pendingAction.documentId}
+                  displayRevision={pendingAction.displayRevision}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
+                  isPinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                  isDocumentRevision={true}
                 />
               );
               // falls through
