@@ -1,5 +1,6 @@
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { find, get, isEmpty } from 'lodash';
@@ -16,6 +17,7 @@ import {
   MODE_FIELD,
 } from '../../../../../../components/KendoDataGrid/constants';
 import useDialog from '../../../../../../hooks/useDialog';
+import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
 import {
   EMPTY_DROPDOWN_PLACEHOLDER,
@@ -65,6 +67,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   }
 
   const dialog = useDialog();
+  const [copyIconRef, isHovered] = useHover<HTMLButtonElement>();
 
   const { partDocId, openedPO } = dataItem;
   const isOnOrderPOActionColumn = field === ON_ORDER_PO_ACTION_COLUMN;
@@ -80,6 +83,10 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     e.stopPropagation();
   };
 
+  const handleCopy = (e) => {
+    console.log('Copy selected');
+  };
+
   const handleClosePOs = (e) => {
     dialog.close();
     e.stopPropagation();
@@ -91,14 +98,35 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
 
   return (
     <OverflowingContent onClick={handleClick}>
-      {translate(displayValue?.label)}
-      {isOnOrderPOActionColumn && openedPOsAvailable && (
-        <FontAwesomeIcon
-          icon={solid('circle')}
-          onClick={handleClickPOs}
-          className={cx(classes.dot, classes.poPreviewDot)}
-        />
-      )}
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <div>
+          {translate(displayValue?.label)}
+          {isOnOrderPOActionColumn && openedPOsAvailable && (
+            <FontAwesomeIcon
+              icon={solid('circle')}
+              onClick={handleClickPOs}
+              className={cx(classes.dot, classes.poPreviewDot)}
+            />
+          )}
+        </div>
+        {dataItem[field] && dataItem[field] !== EMPTY_DROPDOWN_PLACEHOLDER && (
+          <span ref={copyIconRef}>
+            <Tooltip
+              title={translate('common.copy.value')}
+              placement="top"
+              arrow
+            >
+              <FontAwesomeIcon
+                icon={ isHovered ? solid('copy') : regular('copy')}
+                onClick={handleCopy}
+                className={classes.copyIcon}
+              /></Tooltip>
+          </span>)}
+      </Box>
       <Dialog
         title={translate(
           'approvalRequest.material.disposition.po.preview.title',

@@ -44,6 +44,14 @@ export const buildSchema = ({
       width: 201,
     },
     {
+      id: 'location',
+      field: 'location',
+      title: 'approvalRequest.grid.heading.location',
+      show: true,
+      sortable: false,
+      width: 201,
+    },
+    {
       id: 'whereUsedView',
       field: 'whereUsedView',
       headerCell: () => <CustomHeaderTooltipCell
