@@ -15,6 +15,7 @@ export const buildSchema = ({
   onRowClick,
   onConfirm,
   onDiscard,
+  onSelectCell,
 }: SchemaOptions): Array<ColumnDefinition<EditableMDItem>> => {
   return [
     {
@@ -23,6 +24,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.partId',
       template: (props) => <PartIdCellTemplate {...props} onClick={onRowClick} />,
       show: true,
+      selectable: false,
       width: 201,
     },
     {
@@ -31,6 +33,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.rev',
       show: true,
       width: 201,
+      selectable: false,
       sortable: false,
     },
     {
@@ -41,6 +44,7 @@ export const buildSchema = ({
         title="approvalRequest.grid.heading.tooltip.lot" />,
       template: (props) => <LotIdCellTemplate {...props} onClick={onRowClick} />,
       show: true,
+      selectable: false,
       width: 201,
     },
     {
@@ -49,6 +53,7 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.location',
       show: true,
       sortable: false,
+      selectable: false,
       width: 201,
     },
     {
@@ -59,36 +64,40 @@ export const buildSchema = ({
         title="approvalRequest.grid.heading.tooltip.whereUsedView" />,
       template: (props) => <WhereUsedCellTemplate {...props} onClick={onRowClick} />,
       show: true,
+      selectable: false,
       width: 120,
     },
     {
       id: 'onOrderPOAction',
       field: 'onOrderPOAction',
       show: true,
+      selectable: true,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.onOrder"
         title="approvalRequest.grid.heading.tooltip.onOrder" />,
-      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
+      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
       width: 380,
     },
     {
       id: 'inInspectionAction',
       field: 'inInspectionAction',
       show: true,
+      selectable: true,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.Inspection"
         title="approvalRequest.grid.heading.tooltip.Inspection" />,
-      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
+      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
       width: 380,
     },
     {
       id: 'inInventoryAction',
       field: 'inInventoryAction',
       show: true,
+      selectable: true,
       headerCell: () => <CustomHeaderTooltipCell
         title ="approvalRequest.grid.heading.tooltip.Inventory"
         content="approvalRequest.grid.heading.Inventory" />,
-      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
+      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
       width: 380,
     },
     {
@@ -96,10 +105,11 @@ export const buildSchema = ({
       field: 'inWipAction',
       title: 'approvalRequest.grid.heading.wip',
       show: true,
+      selectable: true,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.wip"
         title="approvalRequest.grid.heading.tooltip.wip" />,
-      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
+      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
       width: 380,
     },
     {
@@ -107,21 +117,23 @@ export const buildSchema = ({
       field: 'asFinishedGoodsAction',
       title: 'approvalRequest.grid.heading.finishedGoods',
       show: true,
+      selectable: true,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.finishedGoods"
         title="approvalRequest.grid.heading.tooltip.finishedGoods" />,
-      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
+      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
       width: 380,
     },
     {
       field: 'usedLocation',
       id: 'usedLocation',
+      selectable: true,
       title: 'approvalRequest.grid.heading.field',
       show: true,
       headerCell: () => <CustomHeaderTooltipCell
         title ="approvalRequest.grid.heading.tooltip.field"
         content="approvalRequest.grid.heading.field" />,
-      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} />,
+      template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
       width: 380,
     },
     {

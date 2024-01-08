@@ -2,10 +2,10 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Typography } from '@material-ui/core';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
-import { GridToolbar } from '@progress/kendo-react-grid';
+import { getSelectedState, getSelectedStateFromKeyDown, GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { isEmpty, map, omit, pick } from 'lodash';
+import { each, intersection, isEmpty, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -27,7 +27,7 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { changeRequestPreviewPath } from '../../../utils/paths';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
-import { DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK } from './constants';
+import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './types';
@@ -48,7 +48,8 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const settings = useSelector(companySelectors.getGeneralSettings);
 
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
-    if (isShowOnly || formik.dirty || isEditMode.current) {
+    console.log('selectedState :', selectedState, dataItem);
+    if (isShowOnly || formik.dirty || isEditMode.current || dataItem.isSelected) {
       return;
     }
     const updatedDataItem = omit(dataItem, DROPDOWN_FIELDS);
@@ -63,7 +64,10 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     };
     setEditedMDItem(prepareDataItem as EditableMDItem);
   };
-  const discardMDItem = () => setEditedMDItem(undefined);
+  const discardMDItem = () => {
+    setCopiedItems([]);
+    setEditedMDItem(undefined);
+  };
   const getColumns = () => {
     return columns.filter(({ show }) => show);
   };
@@ -162,6 +166,14 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     dialog.open();
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [copiedItems, setCopiedItems] = React.useState<string[]>([]);
+
+  const onSelectCell = (dataItem: EditableMDItem, field: string) => {
+    console.log('Event clicked :', dataItem, field);
+    setCopiedItems([dataItem?.id]);
+  };
+
   useEffect(() => {
     resetForm({ values: editedMDItem ?? {} });
   }, [editedMDItem, setValues, resetForm]);
@@ -178,6 +190,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     onRowClick: editMDItem,
     onConfirm: submitForm,
     onDiscard: discardMDItem,
+    onSelectCell: onSelectCell,
   });
 
   const [columns, setColumns] = React.useState<Array<ColumnDefinition<EditableMDItem>>>(schema);
@@ -214,6 +227,10 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     );
   };
 
+  const [selectedState, setSelectedState] = React.useState<{
+    [id: string]: boolean | number[]
+  }>({});
+
   const MDItemList = data?.reduce<EditableMDItem[]>((list, item) => {
     const isMDItemEdited = editedMDItem && editedMDItem.id === item.id;
 
@@ -223,6 +240,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         ...(isMDItemEdited ? editedMDItem : item),
         lotDocId: item.lotDocId ?? EMPTY_DROPDOWN_PLACEHOLDER,
         [MODE_FIELD]: isMDItemEdited ? Mode.edit : Mode.show,
+        [SELECTED_FIELD]: selectedState?.[item.id],
       },
     ];
   }, []);
@@ -234,6 +252,31 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     }
   };
 
+  const onSelectionChange = (event: GridSelectionChangeEvent) => {
+    const newSelectedState = getSelectedState({
+      event,
+      selectedState: selectedState,
+      dataItemKey: DATA_ITEM_KEY,
+    });
+    let skipIfOtherColumnSelected = false;
+    each(newSelectedState, (columnIndexes) => {
+      const selectedFieldIndex = columnIndexes as number[];
+      skipIfOtherColumnSelected = selectedFieldIndex?.length === 1 && intersection([0, 1, 2, 3, 4, 11], columnIndexes as number[])?.length === 0;
+    });
+    if (skipIfOtherColumnSelected) {
+      setSelectedState(newSelectedState);
+    }
+  };
+
+  const onKeyDown = (event: GridKeyDownEvent) => {
+    const newSelectedState = getSelectedStateFromKeyDown({
+      event,
+      selectedState: selectedState,
+      dataItemKey: DATA_ITEM_KEY,
+    });
+    setSelectedState(newSelectedState);
+  };
+
   return (<>
     <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
       <KendoDataGrid<EditableMDItem>
@@ -243,7 +286,18 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         className={classes.rootMDTable}
         hasBoxScrollbars
         onRowClick={editMDItem}
+        selectedField={SELECTED_FIELD}
+        dataItemKey={DATA_ITEM_KEY}
+        selectable={{
+          enabled: true,
+          drag: true,
+          cell: true,
+          mode: 'multiple',
+        }}
+        navigatable={true}
         rowRender={rowRender}
+        onSelectionChange={onSelectionChange}
+        onKeyDown={onKeyDown}
         loading={materialDispositionAsync.isLoading || partAsync.isLoading}
         resizable={true}
       >

@@ -21,6 +21,7 @@ export interface MaterialDispositionItem {
   usedLocation: string
   comment: string
   openedPO: DocumentRevision[]
+  isSelected?: boolean
 }
 
 export interface MDItemEditRequestBody{
@@ -47,6 +48,7 @@ export interface SchemaOptions {
   onDiscard: () => void
   onDelete?: () => void
   onRowClick?: (e: MDItemEditEvent) => void
+  onSelectCell?: (dataItem: EditableMDItem, field: string) => void
 }
 
 export interface PendingMDInfoResponse{
@@ -56,4 +58,5 @@ export interface PendingMDInfoResponse{
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableMDItem> {
   onClick?: (e: MDItemEditEvent) => void
+  onSelectCell?: (dataItem: EditableMDItem, field: string) => void
 }

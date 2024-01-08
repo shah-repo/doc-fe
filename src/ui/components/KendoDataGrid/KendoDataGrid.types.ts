@@ -41,6 +41,7 @@ export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'f
   children?: Array<ColumnDefinition<T>> | Array<ReactElement<ColumnDefinition<T>>>
   show?: boolean
   disabled?: boolean
+  selectable?: boolean
 }
 
 export interface DataGridProps<T> extends StyledKendoGridProps {

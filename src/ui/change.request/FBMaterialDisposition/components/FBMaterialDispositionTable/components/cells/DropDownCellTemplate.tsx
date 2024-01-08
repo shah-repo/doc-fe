@@ -4,7 +4,7 @@ import { Box, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { find, get, isEmpty } from 'lodash';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
 import { Dialog } from '../../../../../../components/dialogs';
 import {
@@ -59,12 +59,12 @@ const Editor: React.FC<Props> = ({ field, options }) => {
 
 export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const classes = styles();
-  const { dataItem, field, onClick, options } = props;
+  const { dataItem, field, onClick, options, onSelectCell } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  if (isEditMode) {
-    return <Editor {...props} />;
-  }
+  // if (isEditMode) {
+  //   return <Editor {...props} />;
+  // }
 
   const dialog = useDialog();
   const [copyIconRef, isHovered] = useHover<HTMLButtonElement>();
@@ -76,15 +76,27 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     docId: po?.document?.docId,
     displayRevision: po.displayRevision,
   }));
+  const [copiedItem, setCopiedItem] = useState<string>('');
 
-  const handleClick = () => onClick?.({ dataItem });
+  const handleClick = () => {
+    if (copiedItem === dataItem.id) {
+      // setCopiedItem('');
+      return;
+    }
+    console.log('handle click', dataItem, field);
+    onClick?.({ dataItem });
+  };
   const handleClickPOs = (e) => {
     dialog.open();
     e.stopPropagation();
   };
 
   const handleCopy = (e) => {
-    console.log('Copy selected');
+    console.log('Copy click', dataItem, field);
+    dataItem.isSelected = true;
+    setCopiedItem(dataItem.id);
+    onSelectCell?.(dataItem, field);
+    e.preventDefault();
   };
 
   const handleClosePOs = (e) => {
@@ -96,8 +108,8 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     value: get(dataItem, field, EMPTY_DROPDOWN_PLACEHOLDER) as string,
   });
 
-  return (
-    <OverflowingContent onClick={handleClick}>
+  return (<>{(isEditMode || dataItem.isSelected) && (<Editor {...props} />)}
+    {(!isEditMode && !dataItem.isSelected) && <OverflowingContent onClick={handleClick}>
       <Box
         display="flex"
         alignItems="center"
@@ -145,6 +157,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
           ))}
         </div>
       </Dialog>
-    </OverflowingContent>
+    </OverflowingContent>}
+  </>
   );
 };

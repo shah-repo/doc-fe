@@ -1,5 +1,7 @@
 export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const EMPTY_DROPDOWN_PLACEHOLDER = 'N/A';
+export const SELECTED_FIELD = 'selected';
+export const DATA_ITEM_KEY = 'id';
 export const EXCEL_FILE_NAME = 'materialDisposition.xlsx';
 export const OPTIONS = [
   { label: 'approvalRequest.material.disposition.options.mustConform', value: 'MUST_CONFORM' },
