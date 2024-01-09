@@ -1,6 +1,7 @@
 export enum FormHeaderStatusClassMapping {
   'Pending Approval'='PENDING_STATUS',
   'In Review'='PENDING_STATUS',
+  'In Progress'='PENDING_STATUS',
   'IN REVIEW' = 'PENDING_STATUS',
   'Pending Change'='WIP_STATUS',
   'PENDING CHANGE'='WIP_STATUS',

@@ -129,6 +129,7 @@ class FBSchemaState {
     task: FBTask,
     approvers: FBApprovers,
     approvals: FBApprovals,
+    woapprovals: FBApprovals,
     procedure: FBProcedure,
     mpiprocedure: FBMPIProcedure,
     parts: FBParts,
