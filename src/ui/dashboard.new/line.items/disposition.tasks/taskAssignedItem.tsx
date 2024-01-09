@@ -97,8 +97,6 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
   const isPinShown = pinLineItem && !isPinned;
   const isUnpinShown = unPinLineItem && isPinned;
 
-  console.log(isDocumentRevision, documentId);
-
   return (
     <>
       <StyledListItem

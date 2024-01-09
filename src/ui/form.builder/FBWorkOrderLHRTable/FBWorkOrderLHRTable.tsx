@@ -17,6 +17,7 @@ import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.type
 import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { withFBInput } from '../FBInput/FBInput.wrap';
 import FBStore from '../FBStore/FBStore';
 import { FB } from '../helpers';
 import { ActionsCell } from './components/ActionsCell';
@@ -29,6 +30,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   name = '',
   label,
   disabled,
+  hidden,
   ...props
 }) => {
   const classes = useStyles();
@@ -172,43 +174,49 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
     }
   }, []);
 
-  reaction(
-    () => workspaceState?.formInputSync.get(name),
-    (value) => {
-      if (isEmpty(value)) {
-        setLhrList([]);
-      }
-    },
-    { fireImmediately: true },
-  );
+  useEffect(() => {
+    reaction(
+      () => workspaceState?.formInputSync.get(name),
+      (value) => {
+        if (isEmpty(value)) {
+          setLhrList([]);
+        }
+      },
+      { fireImmediately: true },
+    );
+  }, []);
 
   return (
-    <Box position="relative">
-      <FBSection label={translate('form.builder.workOrder.lhr.section.heading')} />
-      <FormikProvider value={formik}>
-        <KendoDataGrid<EditableLHRTableItem>
-          filterable={false}
-          fullWidth
-          hasBoxScrollbars
-          data={lhrListToUse}
-          schema={schema}
-          rowRender={rowRender}
-          className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-          onRowClick={handleRowClick}
-          // loading= {_formState?.loading}
-          fallback={<NoDataFound />}
-        />
-      </FormikProvider>
-      {isActive && <Button
-        kind="add"
-        fullWidth
-        onClick={handleAddLHR}
-        data-cy="add-button"
-      >
-        {translate('form.builder.workOrder.lhr.add')}
-      </Button> }
-    </Box>
+    <>
+      {!hidden && (
+        <Box position="relative">
+          <FBSection label={translate('form.builder.workOrder.lhr.section.heading')} />
+          <FormikProvider value={formik}>
+            <KendoDataGrid<EditableLHRTableItem>
+              filterable={false}
+              fullWidth
+              hasBoxScrollbars
+              data={lhrListToUse}
+              schema={schema}
+              rowRender={rowRender}
+              className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+              onRowClick={handleRowClick}
+              // loading= {_formState?.loading}
+              fallback={<NoDataFound />}
+            />
+          </FormikProvider>
+          {isActive && <Button
+            kind="add"
+            fullWidth
+            onClick={handleAddLHR}
+            data-cy="add-button"
+          >
+            {translate('form.builder.workOrder.lhr.add')}
+          </Button> }
+        </Box>
+      )}
+    </>
   );
 };
 
-export default FBWorkOrderLHRTable;
+export default withFBInput(FBWorkOrderLHRTable);

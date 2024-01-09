@@ -202,6 +202,8 @@ export const withFBInput = <T extends FBInputProps>(
             showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue)
               : String(formStateFieldValue) === String(fieldValue);
           }
+        } else if (Array.isArray(convertedFieldValue)) {
+          showValidationField = convertedFieldValue.includes(formStateFieldValue);
         } else if (typeof convertedFieldValue === 'object') {
           let intermediateFlag;
           for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
