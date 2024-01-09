@@ -66,6 +66,7 @@ import FBTextField from '../FBTextField/FBTextField';
 import FBTextFieldWithRange from '../FBTextFieldWithRange/FBTextFieldWithRange';
 import FBTimerField from '../FBTimerField/FBTimerField';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
+import FBWOApprovals from '../FBWOApprovals/FBWOApprovals';
 import FBWorkOrderLHRTable from '../FBWorkOrderLHRTable/FBWorkOrderLHRTable';
 import FBWorkOrderPartDetails from '../FBWorkOrderPartDetails/FBWorkOrderPartDetails';
 import FBWorkOrderType from '../FBWorkOrderType/FBWorkOrderType';
@@ -129,7 +130,7 @@ class FBSchemaState {
     task: FBTask,
     approvers: FBApprovers,
     approvals: FBApprovals,
-    woapprovals: FBApprovals,
+    woapprovals: FBWOApprovals,
     procedure: FBProcedure,
     mpiprocedure: FBMPIProcedure,
     parts: FBParts,
@@ -166,7 +167,8 @@ class FBSchemaState {
 
   public static component = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
-    const schemaControl = FBSchemaState.control[type || ''];
+    // TODO remove this later
+    const schemaControl = name === 'fb-approvals-lpw5pjyl' && type === 'approvals' ? FBSchemaState.control.woapprovals : FBSchemaState.control[type || ''];
     if (!schemaControl) {
       return;
     }
