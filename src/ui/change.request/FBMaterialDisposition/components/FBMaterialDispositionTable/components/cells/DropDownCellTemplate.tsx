@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { find, get, isEmpty } from 'lodash';
+import { find, get, has, isEmpty } from 'lodash';
 import React, { ChangeEvent, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
 import { Dialog } from '../../../../../../components/dialogs';
@@ -76,26 +76,25 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     docId: po?.document?.docId,
     displayRevision: po.displayRevision,
   }));
-  const [copiedItem, setCopiedItem] = useState<string>('');
+  const [copiedItem, setCopiedItem] = useState<{
+    [id: string]: string
+  }>({});
 
   const handleClick = () => {
-    if (copiedItem === dataItem.id) {
-      // setCopiedItem('');
+    if (has(copiedItem, dataItem.id) && copiedItem[dataItem.id] === field) {
       return;
     }
-    console.log('handle click', dataItem, field);
     onClick?.({ dataItem });
   };
   const handleClickPOs = (e) => {
     dialog.open();
     e.stopPropagation();
   };
-
+  dataItem.isSelected = false;
   const handleCopy = (e) => {
-    console.log('Copy click', dataItem, field);
     dataItem.isSelected = true;
-    setCopiedItem(dataItem.id);
-    onSelectCell?.(dataItem, field);
+    setCopiedItem({ [dataItem.id]: field });
+    onSelectCell?.(dataItem, props.columnIndex ?? -1);
     e.preventDefault();
   };
 

@@ -46,10 +46,18 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const [data, setData] = React.useState<EditableMDItem[]>([]);
   const [lastRefreshedAt, setLastRefreshedAt] = React.useState<Date>();
   const settings = useSelector(companySelectors.getGeneralSettings);
+  const [copiedItems, setCopiedItems] = React.useState<{
+    [id: string]: number[]
+  }>({});
+  const [selectedState, setSelectedState] = React.useState<{
+    [id: string]: boolean | number[]
+  }>({});
 
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
-    console.log('selectedState :', selectedState, dataItem);
-    if (isShowOnly || formik.dirty || isEditMode.current || dataItem.isSelected) {
+    if (!isEmpty(dataItem?.[SELECTED_FIELD]) && !dataItem.isSelected) {
+      setCopiedItems({});
+    }
+    if (isShowOnly || formik.dirty || isEditMode.current) {
       return;
     }
     const updatedDataItem = omit(dataItem, DROPDOWN_FIELDS);
@@ -65,8 +73,9 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     setEditedMDItem(prepareDataItem as EditableMDItem);
   };
   const discardMDItem = () => {
-    setCopiedItems([]);
+    setCopiedItems({});
     setEditedMDItem(undefined);
+    setSelectedState({});
   };
   const getColumns = () => {
     return columns.filter(({ show }) => show);
@@ -103,8 +112,17 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
   };
 
+  const [nonSelectableColumnIndexes, setNonSelectableColumnIndexes] = React.useState<number[]>([]);
+
   useEffect(() => {
     fetchMaterialDispositionTableData();
+    const columnIndexes: number[] = [];
+    each(columns, (column, index) => {
+      if (!column.selectable) {
+        columnIndexes.push(index);
+      }
+    });
+    setNonSelectableColumnIndexes(columnIndexes);
   }, []);
 
   const updateUnsavedData = (values: Partial<EditableMDItem>) => {
@@ -166,12 +184,10 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     dialog.open();
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [copiedItems, setCopiedItems] = React.useState<string[]>([]);
-
-  const onSelectCell = (dataItem: EditableMDItem, field: string) => {
-    console.log('Event clicked :', dataItem, field);
-    setCopiedItems([dataItem?.id]);
+  const onSelectCell = (dataItem: EditableMDItem, colIndex: number) => {
+    if (dataItem?.id) {
+      setCopiedItems({ [dataItem.id]: [colIndex] });
+    }
   };
 
   useEffect(() => {
@@ -227,12 +243,8 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     );
   };
 
-  const [selectedState, setSelectedState] = React.useState<{
-    [id: string]: boolean | number[]
-  }>({});
-
   const MDItemList = data?.reduce<EditableMDItem[]>((list, item) => {
-    const isMDItemEdited = editedMDItem && editedMDItem.id === item.id;
+    const isMDItemEdited = editedMDItem && isEmpty(copiedItems) && editedMDItem?.id === item.id;
 
     return [
       ...list,
@@ -240,7 +252,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         ...(isMDItemEdited ? editedMDItem : item),
         lotDocId: item.lotDocId ?? EMPTY_DROPDOWN_PLACEHOLDER,
         [MODE_FIELD]: isMDItemEdited ? Mode.edit : Mode.show,
-        [SELECTED_FIELD]: selectedState?.[item.id],
+        [SELECTED_FIELD]: isEmpty(copiedItems) ? undefined : selectedState?.[item.id],
       },
     ];
   }, []);
@@ -261,7 +273,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     let skipIfOtherColumnSelected = false;
     each(newSelectedState, (columnIndexes) => {
       const selectedFieldIndex = columnIndexes as number[];
-      skipIfOtherColumnSelected = selectedFieldIndex?.length === 1 && intersection([0, 1, 2, 3, 4, 11], columnIndexes as number[])?.length === 0;
+      skipIfOtherColumnSelected = selectedFieldIndex?.length === 1 && intersection(nonSelectableColumnIndexes, columnIndexes as number[])?.length === 0;
     });
     if (skipIfOtherColumnSelected) {
       setSelectedState(newSelectedState);
