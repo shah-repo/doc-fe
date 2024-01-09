@@ -72,16 +72,17 @@ export const getFBSchemeByDocType = (
         index: indexLast + 1,
       });
     } else {
-      finalScheme.push({
-        label: outputTypesWithGroups[0].group === DOC_TYPE_GROUP.WORK_ORDER
-          ? 'form.builder.wo.approvals' : 'form.builder.approvals',
-        type: 'approvals',
-        deleteDisabled: true,
-        name: `fb-approvals-${FB.uniqid}`,
-        uniqueSchemaItem: true,
-        tabId: tabIdByInternalType[outputTypesWithGroups[0].group] || tabId,
-        index: indexLast + 1,
-      });
+      if (outputTypesWithGroups[0].group !== DOC_TYPE_GROUP.WORK_ORDER) {
+        finalScheme.push({
+          label: 'form.builder.approvals',
+          type: 'approvals',
+          deleteDisabled: true,
+          name: `fb-approvals-${FB.uniqid}`,
+          uniqueSchemaItem: true,
+          tabId: tabIdByInternalType[outputTypesWithGroups[0].group] || tabId,
+          index: indexLast + 1,
+        });
+      }
     }
   }
   return finalScheme;

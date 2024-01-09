@@ -22,7 +22,6 @@ export enum DocumentRevisionStatus {
   Obsolete = 'OBSOLETE',
   Canceled = 'CANCELED',
   Voided = 'VOIDED',
-  InProgress = 'In Progress',
 }
 
 export enum DocumentRevisionStatusDisplay {
