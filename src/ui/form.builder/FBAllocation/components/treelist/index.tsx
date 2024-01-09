@@ -30,6 +30,7 @@ import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
+import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
@@ -76,7 +77,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
-  const partRevIdSelected = workspaceState?.formInputSync?.get('wo_part')?.id ?? '';
+  const partRevIdSelected = isDisabled
+    ? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
+    : workspaceState?.formInputSync?.get('wo_part')?.id ?? '';
 
   const classes = useStyles({ size });
 
@@ -444,6 +447,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const addAllocationItem = () => {
+    if (!partRevIdSelected) {
+      toastError(translate('allocation.part.selection.error'));
+      return;
+    }
     _documentRevisionFormState?.setDirty(true);
     const newAllocItem = createPartItem();
     state.data.push(newAllocItem);
@@ -457,11 +464,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const editAllocationItem = ({ dataItem, level }: AllocationItemEditEvent) => {
-    if (dataItem.inEdit) {
-      return;
-    }
-
-    if (isDisabled) {
+    if (dataItem.inEdit || isDisabled) {
       return;
     }
 

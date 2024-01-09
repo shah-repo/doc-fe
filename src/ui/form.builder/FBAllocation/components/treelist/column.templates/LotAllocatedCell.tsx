@@ -155,6 +155,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
                 kind="simple"
                 size="small"
                 ref={addLotRef}
+                disabled={dataItem.isDisabled}
                 data-cy="add-lot-button"
               >
                 <FontAwesomeIcon
@@ -219,6 +220,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
                   kind="simple"
                   size="small"
                   ref={removeLotRef}
+                  disabled={dataItem.isDisabled}
                   data-cy="remove-lot-button"
                 >
                   <FontAwesomeIcon
