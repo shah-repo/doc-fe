@@ -91,7 +91,7 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
 
     React.useEffect(() => {
       const fieldValue = map(woApprovalsState?.getApprovals, 'approver.id');
-      formState?.setFieldValue(`fb-approvals-${name}`, fieldValue, false);
+      formState?.setFieldValue(name, fieldValue, false);
 
       const activeApprovals = filter(docApprovals, (a) => a.status !== 'ABANDONED');
       if (authUser && document?.status === DocumentRevisionStatus.Draft
@@ -99,10 +99,10 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
         && !activeApprovals?.length) {
         // Add Default owner as approver on Work order case
         addApprover([authUser?.employeeId]);
-        formState?.setFieldValue(`fb-approvals-${name}`, [authUser?.employeeId], false);
+        formState?.setFieldValue(name, [authUser?.employeeId], false);
       }
 
-      formState?.inputState.get(`fb-approvals-${name}`)?.setRender();
+      formState?.inputState.get(name)?.setRender();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -149,9 +149,9 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
     }
 
     React.useEffect(() => reaction(
-      () => formState?.newValues.get(`fb-approvals-${name}`),
+      () => formState?.newValues.get(name),
       (fieldValue: string[]) => {
-        const formValue: string[] = get(formState?.oldValues, `fb-approvals-${name}`);
+        const formValue: string[] = get(formState?.oldValues, name);
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
       },

@@ -78,12 +78,12 @@ const FBWOApprovals: React.FunctionComponent<FBWOApprovalsProps> = ({
     <FBProvider {...{ dialogState }}>
       <FBDialog />
       <FBInput {...props} {...{ name, autosave }} type="approvals">
-        <FBSection name={`fb-approvals-section-${name}`} {...{ label }} />
+        <FBSection name={name} {...{ label }} />
         {documentStatus !== DocumentRevisionStatus.Approved && (
           <FBAutocompleteAsync
             placeholder="form.builder.start.typing.list"
             label="form.builder.wo.users"
-            name={`fb-approvals-${name}`}
+            name={name}
             optionId={FBAutocompleteAsyncOption.availableApprovers}
             withState
             gutter={false}

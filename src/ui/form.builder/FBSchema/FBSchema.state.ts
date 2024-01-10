@@ -130,7 +130,7 @@ class FBSchemaState {
     task: FBTask,
     approvers: FBApprovers,
     approvals: FBApprovals,
-    woapprovals: FBWOApprovals,
+    woApprovals: FBWOApprovals,
     procedure: FBProcedure,
     mpiprocedure: FBMPIProcedure,
     parts: FBParts,
@@ -167,8 +167,7 @@ class FBSchemaState {
 
   public static component = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
-    // TODO remove this later
-    const schemaControl = name === 'fb-approvals-lpw5pjyl' && type === 'approvals' ? FBSchemaState.control.woapprovals : FBSchemaState.control[type || ''];
+    const schemaControl = FBSchemaState.control[type || ''];
     if (!schemaControl) {
       return;
     }
