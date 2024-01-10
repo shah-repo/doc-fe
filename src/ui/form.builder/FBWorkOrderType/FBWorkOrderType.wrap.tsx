@@ -9,7 +9,7 @@ import { ReactComponent as DisabledCheckedRadioIcon } from '../../../assets/imag
 import { ReactComponent as UnCheckedRadioIcon } from '../../../assets/images/unchecked_radio.svg';
 import { ReactComponent as DisabledUnCheckedRadioIcon } from '../../../assets/images/unchecked_radio_disabled.svg';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { WorkOrderTypes, WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
+import { WorkOrderTypes, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { documentsActions } from '../../../state/ducks/documents';
 import { ApplicationState } from '../../../state/reducers';
 import Text from '../../components/Text';
@@ -106,34 +106,20 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
       }
     };
 
-    const clearFieldByName = (name, value) => {
-      formState?.setFieldValue(name, value);
-        workspaceState?.formInputSync.set(name, value);
-        formState?.getInputState(name)?.setRender();
-    };
-
-    const confirmAlertDialog = () => {
+    const confirmAlertDialog = async () => {
       confirmationDialog?.close();
       const selectedOption = event[1];
 
-      if (selectedOption === WorkOrderTypes.OTHER) {
-        clearFieldByName(WO_LOT_ID_KEY_NAME, '');
-        clearFieldByName(WO_LHR_TABLE_KEY_NAME, []);
-        clearFieldByName(WO_PART_UNIT_KEY_NAME, '');
-        clearFieldByName(WO_PART_QTY_KEY_NAME, 0);
-        clearFieldByName(WO_PART_KEY_NAME, '');
-      } else if (prevOption === WorkOrderTypes.MAKE_PRODUCT) {
-        clearFieldByName(WO_LHR_TABLE_KEY_NAME, []);
-      } else if (prevOption === WorkOrderTypes.MAKE_KIT) {
-        clearFieldByName(WO_LOT_ID_KEY_NAME, '');
-      }
-
       if (selectedOption === WorkOrderTypes.MAKE_KIT) {
-        loadProposedLotId(lotDocumentType?.id as string);
+        await asyncProposedLotId.start(loadProposedLotIdAction, lotDocumentType?.id, asyncProposedLotId);
       }
-
-      onChange?.(event[0], selectedOption);
-      setPrevOption(selectedOption);
+      if (selectedOption !== WorkOrderTypes.OTHER) {
+      formState?.getInputState(WO_PART_KEY_NAME)?.setRender();
+      }
+      setTimeout(() => {
+        onChange?.(event[0], selectedOption);
+        setPrevOption(selectedOption);
+      });
     };
 
     const cancelAlertDialog = () => {

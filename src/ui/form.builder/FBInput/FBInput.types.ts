@@ -263,6 +263,7 @@ export const FBAutosave: FBInputType[] = [
   'partVendors',
   'numeric',
   'cycleCount',
+  'workOrderType',
 ];
 
 export const SectionTypeField: FBInputType[] = [

@@ -1,4 +1,4 @@
-import { includes, isArray, isEmpty, isUndefined, map, omit, size } from 'lodash';
+import { cloneDeep, includes, isArray, isEmpty, isUndefined, map, omit, size } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { appGlobals } from '../../../appGlobals';
@@ -197,21 +197,22 @@ class FBWorkspaceState extends FBSchemaState {
       case 'form':
       case 'formDesign':
         if (values) {
-          if (!isEmpty(values) && values[WO_TYPE_KEY] !== '') {
-            if (values[WO_TYPE_KEY] === WorkOrderTypes.OTHER) {
-              values[WO_LOT_ID_KEY_NAME] = '';
-              values[WO_LHR_TABLE_KEY_NAME] = [];
-              values[WO_PART_UNIT_KEY_NAME] = '';
-              values[WO_PART_QTY_KEY_NAME] = 0;
-              values[WO_PART_KEY_NAME] = '';
-            } else if (values[WO_TYPE_KEY] === WorkOrderTypes.MAKE_PRODUCT) {
-              values[WO_LOT_ID_KEY_NAME] = '';
-            } else if (values[WO_TYPE_KEY] === WorkOrderTypes.MAKE_KIT) {
-              values[WO_LHR_TABLE_KEY_NAME] = [];
+          const payload = cloneDeep(values);
+          if (!isEmpty(payload) && payload[WO_TYPE_KEY] !== '') {
+            if (payload[WO_TYPE_KEY] === WorkOrderTypes.OTHER) {
+              payload[WO_LOT_ID_KEY_NAME] = '';
+              payload[WO_LHR_TABLE_KEY_NAME] = [];
+              payload[WO_PART_UNIT_KEY_NAME] = '';
+              payload[WO_PART_QTY_KEY_NAME] = 0;
+              payload[WO_PART_KEY_NAME] = '';
+            } else if (payload[WO_TYPE_KEY] === WorkOrderTypes.MAKE_PRODUCT) {
+              payload[WO_LOT_ID_KEY_NAME] = '';
+            } else if (payload[WO_TYPE_KEY] === WorkOrderTypes.MAKE_KIT) {
+              payload[WO_LHR_TABLE_KEY_NAME] = [];
             }
           }
           body = {
-            formInput: omit(values,
+            formInput: omit(payload,
               Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
             ...mode === 'formDesign' && this.isOutputSchema && { schema },
           };

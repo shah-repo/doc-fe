@@ -12,7 +12,6 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   ...props
 }) => {
   const { formState } = FB.useStores();
-  // const { partToBeMade, kitQuantity, kitUnit } = useWorkOrderPartDetails();
 
   const isPreview = formState?.workspaceMode === FBWorkspaceModeOptions.PREVIEW;
   const cyName = kebabCase(name);
@@ -31,9 +30,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           withState={true}
           autosave={true}
           shouldReloadOnInit
-          // {...{ disabledOptions }}
           {...props}
-          // autoCompleteClasses={{ option: classes.option }}
         />
       </Grid>
       <Grid item md={3} xs={6}>
