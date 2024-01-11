@@ -24,6 +24,9 @@ const styles = makeStyles((theme) => ({
   checked: {
     color: Colors.navy,
   },
+  disabled: {
+    opacity: 0.5,
+  },
   label: {
     fontWeight: 400,
     fontSize: 14,
@@ -87,6 +90,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
             classes={{
               root: classes.checkbox,
               checked: classes.checked,
+              disabled: classes.disabled,
             }}
             disabled={isDisabled}
             disableRipple
@@ -107,6 +111,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
             classes={{
               root: classes.checkbox,
               checked: classes.checked,
+              disabled: classes.disabled,
             }}
             disabled={isDisabled}
             disableRipple

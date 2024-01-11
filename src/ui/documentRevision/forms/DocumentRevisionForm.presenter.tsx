@@ -22,7 +22,7 @@ import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from '../../h
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
 import { DocumentCloneType, DocumentCloneTypeOptions } from '../Clone.container';
 import { isOperator } from '../DocumentRevisionDisplay.container';
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../helpers/documentRevisionStatus';
 import { getRevisionStageNumber, isDocumentAlphaReleased } from '../helpers/revisionStage';
 import DocIdInput from './presenters/DocIdInput';
@@ -100,6 +100,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocRevStatusInPendingChange = isDocumentRevisionPendingChange(documentRevision?.status);
   const isEB = checkIsDocumentEB(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
+  const isWO = checkIsDocumentWO(groupOptions);
   const isDocumentPOAM = checkIsDocumentPOAM(groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
@@ -317,7 +318,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               </FBEBPart>
             </Grid>
           )}
-          {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft
+          {!isDCO && !(isWO && !hasOutput) && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft
             && <Grid item xs={12}>
               <RevisionTypeChange
                 isDisabled={isDisabledInput || inRestrictedEditMode}
