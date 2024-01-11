@@ -42,6 +42,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           type="number"
           inputProps={{ min: '1' }}
           gutter={false}
+          showErrorMsg={false}
           placeholder="1"
         />
       </Grid>

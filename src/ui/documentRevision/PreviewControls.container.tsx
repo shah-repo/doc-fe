@@ -20,6 +20,7 @@ import { documentRevisionsActions, documentRevisionsSelectors } from '../../stat
 import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../state/ducks/documents';
+import { ApprovalStatus } from '../../state/ducks/documents/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
@@ -564,6 +565,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     </>
   );
 
+  const isWORecord = isWO && !hasOutput;
+  const isWOCloseEnabled = isWORecord && documentRevision?.approvals?.some((approval) => approval.status === ApprovalStatus.Pending);
+
   return (
     <>
       <PDFSocket {...{ documentRevision }} />
@@ -576,7 +580,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isWO && !hasOutput && isStatusInReview && <WOClose woId={documentRevision.id} label="Close" />}
+      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label="Close" disabled={isWOCloseEnabled} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id

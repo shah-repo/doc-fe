@@ -1,25 +1,18 @@
-import { ButtonProps } from '@material-ui/core/Button';
+import Button, { ButtonProps } from '@material-ui/core/Button';
 import React from 'react';
-import { changeRequestsActions } from '../../../../state/ducks/changeRequest';
-import { ChangeRequestTransitionResponse } from '../../../../state/ducks/changeRequest/types';
 import { taskActions } from '../../../../state/ducks/tasks';
-import TasksInfoDialog, {
-  DialogTypes,
-} from '../../../change.request/dialogs/TasksInfoDialog';
+import TasksInfoDialog, { DialogTypes } from '../../../change.request/dialogs/TasksInfoDialog';
 import { PendingMDInfoResponse } from '../../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
-import {
-  EffectiveDateFormValues,
-  PasswordFormValues,
-} from '../../../change.request/form/types';
-import TransitionDialog from '../../../components/transitionDialog/TransitionDialog';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
+import styles from './close.styles';
 
 interface Props {
   woId: string
   buttonProps?: ButtonProps
   label: string
+  disabled?: boolean
   onSuccess?: () => void
 }
 
@@ -27,65 +20,54 @@ const WOClose: React.FunctionComponent<Props> = ({
   woId,
   buttonProps,
   label,
+  disabled,
   onSuccess,
 }) => {
-  const transitionDialog = useDialog();
+  const classes = styles();
   const tasksDialog = useDialog();
-  const effectiveDateDialog = useDialog();
-  const applyTransitionAction = useActionCreator(
-    changeRequestsActions.applyTransition,
-  );
   const fetchPendingTasksCount = useActionCreator(
     taskActions.getPendingTasksCount,
   );
-
-  const async = useAsync<ChangeRequestTransitionResponse>({
-    onSuccess: () => {
-      onSuccess?.();
-      effectiveDateDialog.close();
-    },
-    onError: transitionDialog.close,
-  });
 
   const tasksAsync = useAsync({
     onSuccess: (response?: PendingMDInfoResponse) => {
       if (response && response?.pendingTasksCount > 0) {
         tasksDialog.open();
       } else {
-        effectiveDateDialog.open();
+        closeWO();
       }
     },
-    onError: transitionDialog.close,
+    onError: tasksDialog.close,
   });
 
   const onConfirm = () => {
     tasksDialog.close();
-    effectiveDateDialog.open();
   };
 
   const openDialog = () => {
-    async.reset();
     tasksAsync.start(fetchPendingTasksCount, woId, tasksAsync);
   };
 
-  const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
-    async.start(applyTransitionAction, woId, values, 'closed', async);
+  const closeWO = () => {
+    // add new close api here
   };
 
   return (
     <>
-      <TransitionDialog
-        openDialog={openDialog}
-        onSubmit={onSubmit}
-        asyncState={async.asyncState}
-        buttonProps={buttonProps}
-        transition="closed"
-        label={label}
-        {...{
-          transitionDialog,
-          effectiveDateDialog,
+      <Button
+        classes={{
+          root: classes.root,
+          label: classes.label,
         }}
-      />
+        color="primary"
+        aria-label="closed"
+        onClick={openDialog}
+        data-cy="transition-closed"
+        disabled={disabled}
+        {...buttonProps}
+      >
+        {label}
+      </Button>
       <TasksInfoDialog
         dialog={tasksDialog}
         message="approvalRequest.tasks.incomplete.message"
