@@ -1,7 +1,11 @@
 import Button, { ButtonProps } from '@material-ui/core/Button';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { taskActions } from '../../../../state/ducks/tasks';
-import TasksInfoDialog, { DialogTypes } from '../../../change.request/dialogs/TasksInfoDialog';
+import TasksInfoDialog, {
+  DialogTypes,
+} from '../../../change.request/dialogs/TasksInfoDialog';
 import { PendingMDInfoResponse } from '../../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -25,9 +29,11 @@ const WOClose: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const tasksDialog = useDialog();
+  const dispatch = useDispatch();
   const fetchPendingTasksCount = useActionCreator(
     taskActions.getPendingTasksCount,
   );
+  const closeWorkOrder = useActionCreator(taskActions.closeWO);
 
   const tasksAsync = useAsync({
     onSuccess: (response?: PendingMDInfoResponse) => {
@@ -39,9 +45,16 @@ const WOClose: React.FunctionComponent<Props> = ({
     },
     onError: tasksDialog.close,
   });
+  const closeWOAsync = useAsync({
+    onSuccess: () => {
+      dispatch(documentRevisionsActions.load(woId));
+    },
+    onError: tasksDialog.close,
+  });
 
   const onConfirm = () => {
     tasksDialog.close();
+    closeWO();
   };
 
   const openDialog = () => {
@@ -49,7 +62,7 @@ const WOClose: React.FunctionComponent<Props> = ({
   };
 
   const closeWO = () => {
-    // add new close api here
+    closeWOAsync.start(closeWorkOrder, woId, closeWOAsync);
   };
 
   return (
