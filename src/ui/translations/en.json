@@ -1349,7 +1349,7 @@
   "form.builder.wo.approvals": "Completed by",
   "form.builder.wo.users": "Users",
   "form.builder.wo.complete": "Complete",
-  "form.builder.wo.type.switch.msg": "Are you sure you want to change work order selection?\n\nPrevious selected work order type related data will get deleted.\nThis action cannot be undone.",
+  "form.builder.wo.type.switch.msg": "Are you sure you want to change work order type?\n\nPreviously selected work order type data will be lost.\nThis action cannot be undone.",
   "form.builder.workOrder.lhr.section.heading": "LHR Table",
   "form.builder.workOrder.lhr.lotId": "Lot#",
   "form.builder.workOrder.lhr.status": "State",

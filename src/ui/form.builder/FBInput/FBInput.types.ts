@@ -85,7 +85,7 @@ export type FBInputType =
   | 'workOrderPartDetails'
   | 'tasksListTable'
   | 'workOrderLhrTable'
-  | 'woapprovals'
+  | 'woApprovals'
   | 'workOrderType'
   ;
 
