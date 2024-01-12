@@ -62,9 +62,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const history = useHistory();
   const { workspaceState } = FB.useStores();
   const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
-  const isWO = checkIsDocumentWO(groupOptions);
-  const hasOutput = checkIsTypeHaveOutput(groupOptions);
-  const enbleTasksAdditionalColumns = isWO && !hasOutput && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
+  const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
+  const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
 
   if (enbleTasksAdditionalColumns) {
     isAdditionalColumnsShown = true;
@@ -233,7 +232,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   };
 
   const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
-
+  const isWOReleased = isWORecord && DocumentRevisionStatus.Released === workspaceState?.document?.status;
+  const isClosed = isWORecord ? isWOReleased : (state === ChangeRequestStatus.Closed || state === DocumentRevisionStatus.Released);
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
     onRowClick: editTLItem,
@@ -242,8 +242,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     onDelete: deleteTaskItem,
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: debounceEmployeeEvidenceUpdates,
-    isDisabled: ChangeRequestStatus.Closed === state,
-    currentState: state,
+    isDisabled: isWORecord ? isWOReleased : ChangeRequestStatus.Closed === state,
+    isClosed,
   });
 
   const getColumns = () => {

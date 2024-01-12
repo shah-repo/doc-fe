@@ -1,6 +1,4 @@
 import React from 'react';
-import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
-import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { AssignedTOCellTemplate } from './components/cells/AssignedTOCellTemplate';
@@ -17,11 +15,10 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
   isDisabled,
-  currentState,
+  isClosed,
   employeeStatusUpdates,
   employeeEvidenceUpdates,
 }: SchemaOptions): Array<ColumnDefinition<EditableTLItem>> => {
-  const isClosed = currentState === ChangeRequestStatus.Closed || currentState === DocumentRevisionStatus.Released;
   return [
     {
       id: 'number',
