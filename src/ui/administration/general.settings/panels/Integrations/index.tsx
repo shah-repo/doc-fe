@@ -3,8 +3,8 @@ import React from 'react';
 import { translate } from '../../../../../common/intl';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
-import HelloSignIntergrationItem from './hellosign';
-import SlackIntergrationItem from './slack';
+import HelloSignIntergrationItem from './HelloSignIntegration';
+import SlackIntergrationItem from './SlackIntegration';
 
 const INTEGRATIONS = [
   SlackIntergrationItem,
