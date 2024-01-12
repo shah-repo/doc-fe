@@ -1,5 +1,3 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ListItemSecondaryAction, ListItemText } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -11,6 +9,7 @@ import { companyActions, companySelectors } from '../../../../../state/ducks/com
 import { Button } from '../../../../components/forms/fields-next';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import EnabledLabel from './EnabledLabel';
 
 const HelloSignIntergrationItem: React.FC = () => {
   const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
@@ -30,19 +29,15 @@ const HelloSignIntergrationItem: React.FC = () => {
     <>
       <ListItemText><HelloSignLogo height={20} /></ListItemText>
       <ListItemSecondaryAction>
-        {isActive ? (
-          <>
-            <FontAwesomeIcon icon={regular('circle-check')} style={{ fontSize: '20px', color: '#0DB78D', marginRight: '4px', verticalAlign: 'text-bottom' }} />
-            <span style={{ marginRight: '8px', verticalAlign: 'middle' }}>{translate('integrations.enabled')}</span>
-            <Button size="small" kind="outlined" onClick={toggleIntegration(false)} style={{ verticalAlign: 'middle' }}>
-              {translate('integrations.disable')}
-            </Button>
-          </>
-        ) : (
-          <Button size="small" kind="outlined" onClick={toggleIntegration(true)}>
-            {translate('integrations.enable')}
-          </Button>
-        )}
+        <EnabledLabel isActive={isActive} />
+        <Button
+          size="small"
+          kind="outlined"
+          onClick={toggleIntegration(!isActive)}
+          disabled={async.isLoading}
+        >
+          {translate(isActive ? 'integrations.disable' : 'integrations.enable')}
+        </Button>
       </ListItemSecondaryAction>
     </>
   );
