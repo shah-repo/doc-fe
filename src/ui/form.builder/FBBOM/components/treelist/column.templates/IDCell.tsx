@@ -413,21 +413,21 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
             {dataItem.docId}
           </Link>
           : dataItem.docId) }
-        {dataItem.isOwner && !isEditMode && <Tooltip
+        {dataItem.isOwner && !isEditMode && !dataItem.isWO && <Tooltip
           title={translate('bom.owner')}
           placement="top"
           arrow
         >
           <FontAwesomeIcon data-cy="owner" className={cx(classes.defaultIcon, classes.ownerIcon)} icon={solid('user-pen')} />
         </Tooltip>}
-        {canAddChildren(dataItem) && <Tooltip
+        {canAddChildren(dataItem) && !dataItem.isWO && <Tooltip
           title={translate('bom.add.child.part')}
           placement="top"
           arrow
         >
           <FontAwesomeIcon data-cy="add-child-part-button" className={cx(classes.defaultIcon, classes.childePartAddIcon)} onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} />
         </Tooltip>}
-        {dataItem.isDeleted && !dataItem.isDisabled && <Tooltip
+        {dataItem.isDeleted && !dataItem.isDisabled && !dataItem.isWO && <Tooltip
           title={translate('common.restore')}
           placement="top"
           arrow

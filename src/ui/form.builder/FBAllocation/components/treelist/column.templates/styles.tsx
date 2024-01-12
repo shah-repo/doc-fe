@@ -28,7 +28,7 @@ export const styles = makeStyles((theme) => ({
     width: 14,
   },
   disabled: {
-    color: Colors.gray,
+    color: `${Colors.gray} !important`,
     pointerEvents: 'none',
   },
   title: {

@@ -5,6 +5,7 @@ import { useLocalStore } from 'mobx-react';
 import React, { cloneElement, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from '..';
+import { WO_PART_UNIT_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import { CHANGE_CONTROL_CONFIG_DOC_TYPE_NAME } from '../../document.revision/utils/helpers';
 import { checkIsDocumentLHR, checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -88,6 +89,9 @@ export const withFBInput = <T extends FBInputProps>(
     let showValidationField;
     let isFieldUnderValidation;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
+    if (name === WO_PART_UNIT_KEY_NAME) {
+      showErrorMsg = false;
+    }
 
     const feedbackDetails = useLocalStore(() => ({
       error, helperText,

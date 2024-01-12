@@ -160,7 +160,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
               >
                 <FontAwesomeIcon
                   size="sm"
-                  className={classes.addChildLotIcon}
+                  className={cx(classes.addChildLotIcon, { [classes.disabled]: dataItem.isDisabled })}
                   onClick={() => addLot?.(dataItem)}
                   icon={
                     !isAddLotHovered
@@ -225,7 +225,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
                 >
                   <FontAwesomeIcon
                     size="sm"
-                    className={classes.deleteIcon}
+                    className={cx(classes.deleteIcon, { [classes.disabled]: dataItem.isDisabled })}
                     icon={
                       !isRemoveLotHovered
                         ? regular('trash-can')
