@@ -85,7 +85,9 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
 
     const asyncProposedLotId = useAsync({
       onSuccess: (response) => {
+        if (workspaceState?.document && response?.docId) {
         formState?.setFieldValue(WO_LOT_ID_KEY_NAME, response.docId);
+        }
       },
     });
 
@@ -97,14 +99,14 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
     const [prevOption, setPrevOption] = useState(defaultValue);
 
     const handleChange: FBWorkOrderTypeProps['onChange'] = (...args) => {
-      if (prevOption) {
+      if (prevOption && workspaceState?.document) {
         args[0].persist();
         confirmationDialog?.open();
         setEvent(args);
       } else {
         onChange?.(...args);
         setPrevOption(args[1]);
-        if (args[1] === WorkOrderTypes.MAKE_KIT) {
+        if (workspaceState?.document && args[1] === WorkOrderTypes.MAKE_KIT) {
           loadProposedLotId(lotDocumentType?.id as string);
         }
       }

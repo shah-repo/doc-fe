@@ -65,7 +65,7 @@ export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props)
           {(showEditor(employeeId, status)) && (
             <Editor {...props} {...{ employeeId, name, previousAttachments: attachments } } />
           )}
-          { (!attachments.length) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: attachments, fileUploadState, isDisabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentsContainer }} />}
+          { (!attachments.length) ? !showEditor(employeeId, status) && EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: attachments, fileUploadState, isDisabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentsContainer }} />}
         </FBProvider>
       </div>;
     })}

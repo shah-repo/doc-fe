@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import { debounce, filter, get, includes, map, size } from 'lodash';
+import { debounce, filter, get, includes, isEmpty, map, size } from 'lodash';
 import { Observer, useObserver } from 'mobx-react';
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
@@ -352,7 +352,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 />
                               )}
                               {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
-                                <FBAllocationTreeList documentRevision={documentRevision} isDisabled={false} />
+                                <FBAllocationTreeList documentRevision={documentRevision} isDisabled={isWO && !isEmpty(documentRevision?.formTemplate)} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper
