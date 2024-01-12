@@ -6,6 +6,10 @@ import { SettingsPanelProps } from '../../types';
 import HelloSignIntergrationItem from './HelloSignIntegration';
 import SlackIntergrationItem from './SlackIntegration';
 
+interface RenderedComponent {
+  type: () => null | unknown
+}
+
 const INTEGRATIONS = [
   SlackIntergrationItem,
   HelloSignIntergrationItem,
@@ -15,7 +19,10 @@ const IntegrationsSettingsPanel: React.FC<SettingsPanelProps> = ({
   onToggle,
   ...props
 }) => {
-  const availibleIntergrations = INTEGRATIONS.map(Integration => <Integration />).filter(el => el.type() !== null);
+  const availibleIntergrations
+    = INTEGRATIONS
+      .map<RenderedComponent>(Integration => <Integration />)
+      .filter(el => el.type() !== null);
 
   const isIntegrationsAvailable = availibleIntergrations.length > 0;
 
