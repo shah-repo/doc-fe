@@ -49,6 +49,10 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
+    const revision = workspaceState?.document?.revision;
+    if (revision) {
+      disabled = disabled || (revision > 1);
+    }
     defaultValue = formState?.getFieldValue(name) || defaultValue;
 
     confirmationDialog = useDialog();

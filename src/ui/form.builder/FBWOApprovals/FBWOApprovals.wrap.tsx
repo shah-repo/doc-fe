@@ -4,13 +4,16 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FB, FBApprovalPasswordForm, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover, FBWOApprovalsState } from '..';
+import { FB, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover, FBWOApprovalsState } from '..';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { Approval } from '../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApprovalStatus, DocumentStatus } from '../../../state/ducks/documents/types';
+import { taskActions } from '../../../state/ducks/tasks';
 import { store } from '../../../state/store';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import FBStore from '../FBStore/FBStore';
 import { FBWOApprovalsProps, FBWOApprovalsStatusEndpoint } from './FBWOApprovals.types';
 
@@ -105,13 +108,16 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
       formState?.inputState.get(name)?.setRender();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    const completeWO = useActionCreator(taskActions.completeWO);
+
+    const closeWOAsync = useAsync({
+      onSuccess: () => {
+        workspaceState?.document?.id && dispatch(documentRevisionsActions.load(workspaceState?.document?.id));
+      },
+    });
 
     onApproveClick = (approvalId: string) => {
-      dialogState?.config({
-        title: 'form.builder.password.prompt',
-        open: true,
-        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
-      });
+      closeWOAsync.start(completeWO, approvalId, closeWOAsync);
     };
 
     // On add approver

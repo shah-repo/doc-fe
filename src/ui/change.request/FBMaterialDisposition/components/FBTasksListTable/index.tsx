@@ -18,6 +18,7 @@ import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../../../components/notifications';
+import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBSection } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -60,6 +61,14 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const [dataToSubmit, setDataToSubmit] = React.useState<Partial<EditableTLItem>>({});
   const history = useHistory();
   const { workspaceState } = FB.useStores();
+  const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
+  const isWO = checkIsDocumentWO(groupOptions);
+  const hasOutput = checkIsTypeHaveOutput(groupOptions);
+  const enbleTasksAdditionalColumns = isWO && !hasOutput && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
+
+  if (enbleTasksAdditionalColumns) {
+    isAdditionalColumnsShown = true;
+  }
 
   const loadTasksTableData = () => {
     tasksAsync.start(fetchTasksList, partOfIdToUse, tasksAsync);
