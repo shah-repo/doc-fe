@@ -11,11 +11,12 @@ import IntegrationItem from './IntegrationItem';
 const HelloSignIntergrationItem: React.FC = () => {
   const hasPermission = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
   const isActive = useSelector(companySelectors.getCompanyMine).helloSignIntegrationEnabled;
+  const isAvailable = false;
 
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
   const async = useAsync();
 
-  if (!hasPermission) {
+  if (!hasPermission || !isAvailable) {
     return null;
   }
 
