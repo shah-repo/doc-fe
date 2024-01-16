@@ -19,7 +19,7 @@ export const getCellValue = (dataItem: EditableAllocationItem, field?: string): 
 };
 
 export const getParsedFieldValue = (field) => {
-  if (field === '') {
+  if (field === '' || isNil(field)) {
     return 0;
   }
   return isNumber(field) ? field ?? 0 : parseInt(field) ?? 0;
