@@ -1,11 +1,8 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Button, List, ListItem, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
+import { Box, Button, List, ListItem, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ReactComponent as SlackLogo } from '../../../../assets/images/slack_full_logo.svg';
-import { translate } from '../../../../common/intl';
 import { getTableCriteria } from '../../../../common/utils/selectors';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { EmployeeEditRequestBody } from '../../../../state/ducks/auth/types';
@@ -14,8 +11,8 @@ import { tableSearchActions } from '../../../../state/ducks/tableSearch';
 import { userManagementActions } from '../../../../state/ducks/userManagement';
 import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
 import { AsyncState, AsyncStatus } from '../../../../state/types';
+import IntegrationItem from '../../../administration/general.settings/panels/Integrations/IntegrationItem';
 import Text from '../../../components/Text';
-import { Button as ButtonNext } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import useAsync from '../../../hooks/useAsync';
 import { Translation } from '../../../translations/types';
@@ -257,22 +254,13 @@ const DialogContent: React.FunctionComponent<Props> = ({
             </Typography>
             <List>
               <ListItem disableGutters divider alignItems="center">
-                <ListItemText><SlackLogo height={20} /></ListItemText>
-                <ListItemSecondaryAction>
-                  {slackUserId ? (
-                    <>
-                      <FontAwesomeIcon icon={regular('circle-check')} style={{ fontSize: '20px', color: '#0DB78D', marginRight: '4px', verticalAlign: 'text-bottom' }} />
-                      <span style={{ marginRight: '8px', verticalAlign: 'middle' }}>{translate('integrations.enabled')}</span>
-                      <ButtonNext kind="outlined" size="small" disabled style={{ verticalAlign: 'middle' }}>
-                        {translate('integrations.disable')}
-                      </ButtonNext>
-                    </>
-                  ) : (
-                    <ButtonNext kind="outlined" size="small" onClick={getUrl} disabled={asyncState.status === AsyncStatus.Active}>
-                      {translate('integrations.enable')}
-                    </ButtonNext>
-                  )}
-                </ListItemSecondaryAction>
+                <IntegrationItem
+                  isActive={Boolean(slackUserId)}
+                  isDisabled={asyncState.status === AsyncStatus.Active || Boolean(slackUserId)}
+                  onToggle={getUrl}
+                >
+                  <SlackLogo height={20} />
+                </IntegrationItem>
               </ListItem>
             </List>
           </Box>
