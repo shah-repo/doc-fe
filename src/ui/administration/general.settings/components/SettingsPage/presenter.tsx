@@ -35,7 +35,6 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
           >
             {translate('administration.general.settings.title')}
           </Typography>
-
           <Typography
             variant="subtitle1"
             className={classes.subtitle}
