@@ -35,12 +35,14 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
           >
             {translate('administration.general.settings.title')}
           </Typography>
+
           <Typography
             variant="subtitle1"
             className={classes.subtitle}
           >
             {translate('administration.general.settings.subtitle')}
           </Typography>
+          <br className={classes.spaceTitle} />
         </Box>
         <Box className={classes.actions}>
           {updatedAt && (
