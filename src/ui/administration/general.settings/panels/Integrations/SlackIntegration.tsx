@@ -36,7 +36,7 @@ const SlackIntergrationItem: React.FC = () => {
     );
   };
 
-  if (!hasPermission) {
+  if (!hasPermission || !isEnabled) {
     return null;
   }
 
