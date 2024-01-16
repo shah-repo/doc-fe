@@ -80,7 +80,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const isDocument = !isEmpty(documentRevision?.formTemplate);
   const partRevIdSelected = isDisabled
     ? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
-    : workspaceState?.formInputSync?.get('wo_part')?.id ?? '';
+    : workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id ?? '';
 
   const classes = useStyles({ size });
 
@@ -256,6 +256,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       variance: '',
       issuedQty: '',
       itemId: '',
+      isNewAddition: true,
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
       isLotAddition: true,
@@ -442,6 +443,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       issuedQty: '',
       docId: '',
       itemId: '',
+      isNewAddition: true,
       [MODE_FIELD]: true,
       [ADD_FIELD]: true,
     };

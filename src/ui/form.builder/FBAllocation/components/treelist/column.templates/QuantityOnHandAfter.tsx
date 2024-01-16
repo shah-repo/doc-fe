@@ -1,7 +1,10 @@
 import cx from 'classnames';
+import { useFormikContext } from 'formik';
 import { isNil } from 'lodash';
 import React from 'react';
+import { EditableAllocationItem } from '../../../interface';
 import { CELL_EMPTY_VALUE } from '../constants';
+import { getParsedFieldValue, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -15,6 +18,18 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
+  const { values } = useFormikContext<EditableAllocationItem>();
+  const isEditMode = isEditAllocItem(dataItem);
+
+  let quantityNeeded = dataItem.quantityNeeded ?? 0;
+  if (isEditMode) {
+    if (values.isLotAddition) {
+      quantityNeeded = getParsedFieldValue(values.quantityNeeded);
+    } else {
+      quantityNeeded = dataItem?.isNewAddition ? getParsedFieldValue(values.quantityNeeded) : (dataItem.quantityNeeded ?? 0);
+    }
+  }
+
   return (
     <td
       colSpan={colSpan}
@@ -29,7 +44,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy="cell-quantity"
     >
       <span className={classes.Cell}>
-        {isNil(dataItem.quantityOnHand) ? CELL_EMPTY_VALUE : (dataItem.quantityNeeded ?? 0) - (dataItem.quantityOnHand ?? 0)}
+        {isNil(dataItem.quantityOnHand) ? CELL_EMPTY_VALUE : (quantityNeeded ?? 0) - (dataItem.quantityOnHand ?? 0)}
       </span>
     </td>
   );

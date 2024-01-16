@@ -27,6 +27,7 @@ export interface EditableAllocationItem extends AllocationItem {
   isDisabled?: boolean
   isUpgradeDisabled?: boolean
   isLotAddition?: boolean
+  isNewAddition?: boolean
 }
 
 export interface AllocationItemEditEvent {

@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { isNil, isNumber } from 'lodash';
 import { EditableAllocationItem } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD } from './constants';
 
@@ -16,4 +16,11 @@ export const enableFieldAfterPartSelection = (dataItem: EditableAllocationItem, 
 
 export const getCellValue = (dataItem: EditableAllocationItem, field?: string): string => {
   return ((field && dataItem[field]) ?? CELL_EMPTY_VALUE) as string;
+};
+
+export const getParsedFieldValue = (field) => {
+  if (field === '') {
+    return 0;
+  }
+  return isNumber(field) ? field ?? 0 : parseInt(field) ?? 0;
 };
