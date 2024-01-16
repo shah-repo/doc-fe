@@ -77,6 +77,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
+  const isDocument = !isEmpty(documentRevision?.formTemplate);
   const partRevIdSelected = isDisabled
     ? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
     : workspaceState?.formInputSync?.get('wo_part')?.id ?? '';
@@ -307,7 +308,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const removeAllocItem = (dataItem) => {
-    if (dataItem.isDisabled) {
+    if (dataItem.isDisabled || isDocument) {
       return;
     }
     confirmationDialog.open();
@@ -464,7 +465,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const editAllocationItem = ({ dataItem, level }: AllocationItemEditEvent) => {
-    if (dataItem.inEdit || isDisabled) {
+    if (dataItem.inEdit || isDisabled || isDocument) {
       return;
     }
 
@@ -491,7 +492,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const rowRender = (row, props: CustomTreeListRowProps) => {
     const item = props.dataItem as EditableAllocationItem;
     const parentChildRelkey = item.parentPartRevId ? `alloc-row-${item?.lotDocId}` : `alloc-row-${item.partRevId}-${item?.docId}`;
-    item.isDisabled = isDisabled;
+    item.isDisabled = isDisabled || isDocument;
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
@@ -722,7 +723,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   return (
     <>
-      <AutoOptions onAutoAssign={handleAutoAssignLot} onAutoTransact={handleAutoTransactLot} isDisabled={isDisabled} />
+      <AutoOptions onAutoAssign={handleAutoAssignLot} onAutoTransact={handleAutoTransactLot} isDisabled={isDisabled || isDocument} />
       <Grid item>
         <FormikProvider value={formik}>
           <ColumnMenuContext.Provider
@@ -801,7 +802,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         </FormikProvider>
       </Grid>
       <Grid item>
-        {!isDisabled && (
+        {!isDisabled && !isDocument && (
           <AddButton
             fullWidth
             attached

@@ -245,6 +245,7 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
       loading,
       disabled,
       documentStatus,
+      isRecord: isEmpty(document?.formTemplate),
       docId: id,
       approvalTransition,
       groups,

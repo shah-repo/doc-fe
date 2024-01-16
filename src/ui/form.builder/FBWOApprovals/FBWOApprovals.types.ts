@@ -19,6 +19,7 @@ export type FBWOApprovalsProps =
   docId?: string
   documentStatus?: DocumentRevisionStatus
   formState?: FBFormState
+  isRecord?: boolean
   groups?: Record<string, FBRequiredApprover>
   ownerId?: string
   currentUser?: string

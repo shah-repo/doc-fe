@@ -40,6 +40,7 @@ const FBWOApprovals: React.FunctionComponent<FBWOApprovalsProps> = ({
   currentUser,
   disabled,
   documentStatus,
+  isRecord,
   label,
   name,
   renderOption,
@@ -79,7 +80,7 @@ const FBWOApprovals: React.FunctionComponent<FBWOApprovalsProps> = ({
       <FBDialog />
       <FBInput {...props} {...{ name, autosave }} type="approvals">
         <FBSection name={name} {...{ label }} />
-        {documentStatus !== DocumentRevisionStatus.Released && (
+        {((documentStatus !== DocumentRevisionStatus.Released && isRecord) || !isRecord) && (
           <FBAutocompleteAsync
             placeholder="form.builder.start.typing.list"
             label="form.builder.wo.users"
