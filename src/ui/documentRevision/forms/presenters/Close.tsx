@@ -30,10 +30,10 @@ const WOClose: React.FunctionComponent<Props> = ({
   const classes = styles();
   const tasksDialog = useDialog();
   const dispatch = useDispatch();
+  const closeWorkOrder = useActionCreator(taskActions.closeWO);
   const fetchPendingTasksCount = useActionCreator(
     taskActions.getPendingTasksCount,
   );
-  const closeWorkOrder = useActionCreator(taskActions.closeWO);
 
   const tasksAsync = useAsync({
     onSuccess: (response?: PendingMDInfoResponse) => {
@@ -45,6 +45,7 @@ const WOClose: React.FunctionComponent<Props> = ({
     },
     onError: tasksDialog.close,
   });
+
   const closeWOAsync = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.load(woId));

@@ -12,6 +12,7 @@ import { translate } from '../../../../../common/intl';
 import useHover from '../../../../hooks/useHover';
 import Colors from '../../../../layout/theme/utils/colors';
 import { FB } from '../../../helpers';
+import { AllocationCheckBoxOptions } from './constants';
 
 const styles = makeStyles((theme) => ({
   checkbox: {
@@ -62,7 +63,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
 
   const onAutoAssignChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAutoAssign(event.target.checked);
-    formState?.setFieldValue('autoAssign', event.target.checked);
+    formState?.setFieldValue(AllocationCheckBoxOptions.AUTO_ASSIGN, event.target.checked);
     onAutoAssign?.(event.target.checked);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
@@ -72,7 +73,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
 
   const onautoTransactChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAutoTransact(event.target.checked);
-    formState?.setFieldValue('autoTransact', event.target.checked);
+    formState?.setFieldValue(AllocationCheckBoxOptions.AUTO_TRANSACT, event.target.checked);
     onAutoTransact?.(event.target.checked);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,

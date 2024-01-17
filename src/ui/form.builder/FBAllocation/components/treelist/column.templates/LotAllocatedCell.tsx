@@ -203,9 +203,9 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
                     size="sm"
                     className={classes.viewIcon}
                     icon={
-                      !isViewLotHovered
-                        ? light('eye')
-                        : solid('eye')
+                      isViewLotHovered
+                        ? solid('eye')
+                        : light('eye')
                     }
                     onClick={openQuickViewDialog}
                   />
@@ -227,9 +227,9 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
                     size="sm"
                     className={cx(classes.deleteIcon, { [classes.disabled]: dataItem.isDisabled })}
                     icon={
-                      !isRemoveLotHovered
-                        ? regular('trash-can')
-                        : solid('trash-can')
+                      isRemoveLotHovered
+                        ? solid('trash-can')
+                        : regular('trash-can')
                     }
                     onClick={() => deleteLot?.(dataItem)}
                   />

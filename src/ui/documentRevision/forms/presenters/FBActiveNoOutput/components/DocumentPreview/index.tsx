@@ -84,7 +84,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const outputTypeGroup = get(outputType, 'group');
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-  const isWOFrom = group === DOC_TYPE_GROUP.WORK_ORDER;
   const isWO = checkIsDocumentWO(documentType?.groupOptions);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
@@ -301,7 +300,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       )}
                       {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
                         <FBBOM documentRevision={documentRevision}
-                          isDisabled={true} isShowOnly={true} isWO={isWO || isWOFrom} />
+                          isDisabled={true} isShowOnly={true} isWO={isWO} />
                       )}
                     </SMBox>
                   );

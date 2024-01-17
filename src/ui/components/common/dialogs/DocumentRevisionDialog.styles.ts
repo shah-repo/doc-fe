@@ -16,15 +16,15 @@ export const styles = makeStyles((theme) => ({
   },
   heading: {
     fontWeight: 600,
-    fontSize: '14px',
+    fontSize: 14,
     flex: 1,
     color: Colors.almost_black,
   },
   close: {
-    height: '24px',
-    width: '24px',
+    height: 24,
+    width: 24,
     backgroundColor: Colors.athens_gray,
-    borderRadius: '6px',
+    borderRadius: 6,
     margin: theme.spacing(0, 1.25),
   },
 }));

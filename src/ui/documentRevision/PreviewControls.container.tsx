@@ -12,6 +12,7 @@ import SM from '../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as WarningIcon } from '../../assets/images/warning.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../assets/images/warning_white.svg';
 import { ReactComponent as WithDrawSubmissionIcon } from '../../assets/images/withdraw_submission.svg';
+import { translate } from '../../common/intl';
 import { getHasPermission } from '../../common/utils/selectors';
 import { getPOIndexDbInstance } from '../../indexDb';
 import { authSelectors } from '../../state/ducks/auth';
@@ -580,7 +581,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label="Close" disabled={isWOCloseEnabled} />}
+      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} disabled={isWOCloseEnabled} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id
