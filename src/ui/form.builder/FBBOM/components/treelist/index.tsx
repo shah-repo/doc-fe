@@ -47,8 +47,7 @@ import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
-import { taskActions } from '../../../../../state/ducks/tasks';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import {
@@ -124,7 +123,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     size,
     isMaximizeView: _documentRevisionFormState?.isMaximizedView,
   });
-  const [workOrderSelectedDocRev, setWorkOrderSelectedDocRev] = React.useState<DocumentRevision>();
   const [state, setState] = React.useState<BOMState>({
     data: [],
     dataState: {
@@ -184,7 +182,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       treeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
-        documentRevision.documentId,
         isWO,
         treeListAsync,
       );
@@ -202,39 +199,19 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   });
 
   const reloadBOM = () => {
-    if (isWO && documentRevision?.id && !workOrderSelectedDocRev) {
-      const partRevIdSelected = isDisabled
-        ? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
-        : workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id ?? '';
-      docByIdAsync.start(getDocumentById, partRevIdSelected, docByIdAsync);
-      return;
+    let selectedWOPart = '';
+    if (isWO && documentRevision?.id) {
+      selectedWOPart = documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
+      ?? workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id ?? '';
     }
     _documentRevisionFormState?.setBOMChangesInProgress(false);
     treeListAsync.start(
       fetchBOMTreeList,
-      isWO ? workOrderSelectedDocRev?.id : documentRevision.id,
-      isWO ? workOrderSelectedDocRev?.documentId : documentRevision.documentId,
+      isWO ? selectedWOPart : documentRevision.id,
       isWO,
       treeListAsync,
     );
   };
-
-  const getDocumentById = useActionCreator(taskActions.getDocById);
-  const docByIdAsync = useAsync({
-    onSuccess: (data?: DocumentRevision) => {
-      if (data) {
-        setWorkOrderSelectedDocRev(data);
-        _documentRevisionFormState?.setBOMChangesInProgress(false);
-        treeListAsync.start(
-          fetchBOMTreeList,
-          data?.id,
-          data?.documentId,
-          isWO,
-          treeListAsync,
-        );
-      }
-    },
-  });
 
   useEffect(() => {
     if (!documentRevision || isShowOnly || isPartsDrawerOpened) {
@@ -266,7 +243,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         treeListAsync.start(
           fetchBOMTreeList,
           documentRevision.id,
-          documentRevision.documentId,
           isWO,
           treeListAsync,
         );
@@ -1191,7 +1167,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 </ExcelExport>
                 {(treeListAsync.isLoading
                   || partAsync.isLoading
-                  || docByIdAsync.isLoading
                   || partChangeOrderAsync.isLoading) && <Loader />}
               </Grid>
               {confirmationDialog.isOpen && (

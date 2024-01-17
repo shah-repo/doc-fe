@@ -234,7 +234,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     bomInfoAsync.start(
       fetchBOMTreeList,
       documentRevision.id,
-      documentRevision.documentId,
       isWO,
       bomInfoAsync,
     );

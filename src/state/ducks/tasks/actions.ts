@@ -1,7 +1,6 @@
 import { TasksListEditRequestBody, TasksListItem } from '../../../ui/change.request/FBMaterialDisposition/components/FBTasksListTable/types';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { DOCUMENT_REVISION_ROOT_URL } from '../documentRevisions/constants';
 import { CLOSE_WO, COMPLETE_WO, FETCH_ALL_TASKS_LIST, FETCH_PENDING_TASKS_COUNT, TASKS_LIST } from './constants';
 
 const fetchTasksList = (arId: string, handlers: Handlers): ApiAction =>
@@ -87,16 +86,6 @@ const completeWO = (
     handlers,
   });
 
-const getDocById = (
-  DocRevId: string,
-  handlers: Handlers,
-): ApiAction =>
-  apiActionWithCallbacks({
-    url: `${DOCUMENT_REVISION_ROOT_URL}/${DocRevId}`,
-    method: 'get',
-    handlers,
-  });
-
 export default {
   fetchTasksList,
   fetchTask,
@@ -107,5 +96,4 @@ export default {
   deleteTask,
   closeWO,
   completeWO,
-  getDocById,
 };
