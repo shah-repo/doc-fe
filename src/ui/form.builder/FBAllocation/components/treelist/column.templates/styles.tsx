@@ -162,10 +162,10 @@ export const styles = makeStyles((theme) => ({
     fontWeight: 600,
   },
   whiteDot: {
-    width: '4px',
-    height: '4px',
-    marginLeft: '5px',
-    marginRight: '5px',
+    width: 4,
+    height: 4,
+    marginLeft: theme.spacing(0.625),
+    marginRight: theme.spacing(0.625),
     position: 'relative',
     background: Colors.darkPeach,
   },
@@ -201,10 +201,10 @@ export const styles = makeStyles((theme) => ({
     color: Colors.almost_black,
   },
   close: {
-    height: '24px',
-    width: '24px',
+    height: 24,
+    width: 24,
     backgroundColor: Colors.athens_gray,
-    borderRadius: '6px',
+    borderRadius: 6,
     margin: theme.spacing(0, 1.25),
   },
   idCellEditWrapper: {

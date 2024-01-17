@@ -187,10 +187,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     }
   };
 
-  const handleAutoTransactLot = (isAutoTransact) => {
-    // TODO
-  };
-
   useEffect(() => {
     if (documentRevision?.id && partRevIdSelected) {
       reloadAllocationList();
@@ -725,7 +721,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   return (
     <>
-      <AutoOptions onAutoAssign={handleAutoAssignLot} onAutoTransact={handleAutoTransactLot} isDisabled={isDisabled || isDocument} />
+      <AutoOptions onAutoAssign={handleAutoAssignLot} isDisabled={isDisabled || isDocument} />
       <Grid item>
         <FormikProvider value={formik}>
           <ColumnMenuContext.Provider

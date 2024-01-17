@@ -29,11 +29,6 @@ export interface CustomTreeListExpandChangeEvent extends TreeListExpandChangeEve
   dataItem: AllocationItem
 }
 
-export interface AllocationResponse {
-  bomTreeRelations: AllocationItem[]
-  parentRevDetails: AllocationItem
-}
-
 export interface AllocationPartBody {
   workOrderId: string
   workOrderPartRevId: string

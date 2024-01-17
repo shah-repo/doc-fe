@@ -2,15 +2,6 @@ import { Employee } from '../../../state/ducks/company/types';
 import { CellTemplateProps, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { Mode, MODE_FIELD } from './constants';
 
-export interface SchemaOptions {
-  actionsClass: string
-  onConfirm?: () => void
-  onDiscard?: () => void
-  onRefresh?: () => void
-  onDelete?: (dataItem) => void
-  isDisabled?: boolean
-}
-
 export interface IPrecalcEntry {
   label: string
   docRevId?: string

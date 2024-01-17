@@ -35,8 +35,6 @@ const VarianceCell: React.ComponentType<CustomTreeListCellProps> = ({
           type="number"
           onChange={onVarianceChange}
           inputProps={{ min: 0 }}
-          // TO DO will uncomment while API Integration
-          // disabled={!`enableFieldAfterPartSelection`(dataItem, values.docId)}
           size="small"
         />
       </FormikField>

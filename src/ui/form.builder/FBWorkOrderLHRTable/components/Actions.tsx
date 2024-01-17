@@ -13,7 +13,7 @@ interface EditableItem {
   [MODE_FIELD]: Mode
 }
 
-export interface ActionsProps {
+interface ActionsProps {
   dataItem: EditableItem
   isDeleteDisabled?: boolean
   deleteTooltipText?: string

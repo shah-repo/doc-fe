@@ -42,13 +42,11 @@ const styles = makeStyles((theme) => ({
 
 interface AutoOptionsProps {
   onAutoAssign: (flag: boolean) => void
-  onAutoTransact: (flag: boolean) => void
   isDisabled: boolean
 }
 
 const AutoOptions: React.FC<AutoOptionsProps> = ({
   onAutoAssign,
-  onAutoTransact,
   isDisabled,
 }) => {
   const { formState, workspaceState } = FB.useStores();
@@ -74,7 +72,6 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
   const onautoTransactChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAutoTransact(event.target.checked);
     formState?.setFieldValue(AllocationCheckBoxOptions.AUTO_TRANSACT, event.target.checked);
-    onAutoTransact?.(event.target.checked);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
       autoAssign: event.target.checked,
