@@ -1,4 +1,5 @@
 import ApprovalRequestsSettingsPanel from './panels/ApprovalRequest';
+import IntegrationsSettings from './panels/Integrations';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import PrintingSettingsPanel from './panels/Printing';
 import { GeneralSettingsTabs } from './types';
@@ -21,5 +22,10 @@ export const panels = [
     key: GeneralSettingsTabs.MD,
     title: 'administration.general.settings.md',
     component: MaterialDispositionSettings,
+  },
+  {
+    key: GeneralSettingsTabs.Integrations,
+    title: 'administration.general.settings.integrations',
+    component: IntegrationsSettings,
   },
 ];
