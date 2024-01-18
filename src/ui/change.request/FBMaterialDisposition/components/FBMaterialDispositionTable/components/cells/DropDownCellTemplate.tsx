@@ -3,19 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { find, get, has, isEmpty } from 'lodash';
-import React, { ChangeEvent, useState } from 'react';
+import { find, first, get, has, isEmpty, keys, last, values } from 'lodash';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../../../components/KendoDataGrid/constants';
 import { Dialog } from '../../../../../../components/dialogs';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../../../components/KendoDataGrid/constants';
 import useDialog from '../../../../../../hooks/useDialog';
 import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
@@ -25,13 +25,16 @@ import {
 } from '../../constants';
 import { CustomTemplateProps, EditableMDItem } from '../../types';
 import { generateDocTitleText } from '../../utils';
+import { PopupClipboardMenu, PopupClipboardMenuContext } from '../PopupClipboardMenu';
+import { Selector } from '../Selector';
 import { styles } from './styles';
 
 interface Props extends CustomTemplateProps {
   options: OptionType[]
+  isColumnEditMode?: boolean
 }
 
-const Editor: React.FC<Props> = ({ field, options }) => {
+const Editor: React.FC<Props> = ({ field, options, dataItem, isColumnEditMode }) => {
   const { values, setFieldValue, getFieldProps }
     = useFormikContext<EditableMDItem>();
 
@@ -39,7 +42,7 @@ const Editor: React.FC<Props> = ({ field, options }) => {
     setFieldValue(field, value?.value);
   };
 
-  const value = find(options, { value: values[field] });
+  const value = find(options, { value: isColumnEditMode ? dataItem[field] : values[field] });
 
   return (
     <FormikField name={field}>
@@ -52,6 +55,7 @@ const Editor: React.FC<Props> = ({ field, options }) => {
         getOptionLabel={(option: OptionType) => translate(option.label)}
         value={value}
         size="small"
+        disabled={isColumnEditMode}
       />
     </FormikField>
   );
@@ -60,11 +64,10 @@ const Editor: React.FC<Props> = ({ field, options }) => {
 export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const classes = styles();
   const { dataItem, field, onClick, options, onSelectCell } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-
-  // if (isEditMode) {
-  //   return <Editor {...props} />;
-  // }
+  const { copyClipboardPopupMenu, selectedState, copiedItems, populateCopiedValue, clearContent } = useContext(PopupClipboardMenuContext);
+  const isColumnEditMode = !isEmpty(copiedItems) && (first(values(copiedItems)) ?? [] as string[]).includes(field);
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]) || isColumnEditMode;
+  const showPopup = has(selectedState, dataItem.id) && isColumnEditMode && last(keys(selectedState)) === dataItem.id;
 
   const dialog = useDialog();
   const [copyIconRef, isHovered] = useHover<HTMLButtonElement>();
@@ -81,7 +84,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   }>({});
 
   const handleClick = () => {
-    if (has(copiedItem, dataItem.id) && copiedItem[dataItem.id] === field) {
+    if ((has(copiedItem, dataItem.id) && copiedItem[dataItem.id] === field) || isColumnEditMode) {
       return;
     }
     onClick?.({ dataItem });
@@ -94,8 +97,9 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const handleCopy = (e) => {
     dataItem.isSelected = true;
     setCopiedItem({ [dataItem.id]: field });
-    onSelectCell?.(dataItem, props.columnIndex ?? -1);
-    e.preventDefault();
+    onSelectCell?.(dataItem, field);
+    e.stopPropagation();
+    e?.preventDefault();
   };
 
   const handleClosePOs = (e) => {
@@ -107,7 +111,15 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     value: get(dataItem, field, EMPTY_DROPDOWN_PLACEHOLDER) as string,
   });
 
-  return (<>{(isEditMode || dataItem.isSelected) && (<Editor {...props} />)}
+  useEffect(() => {
+    if (isEmpty(copiedItems) && has(copiedItem, dataItem.id)) {
+      setCopiedItem({});
+    }
+  }, [copiedItems]);
+
+  return (<>
+    {!isEmpty(copiedItems) && !isEmpty(copiedItem) && <Selector />}
+    {(isEditMode || dataItem.isSelected) && (<Editor {...props} {...{ isColumnEditMode }} />)}
     {(!isEditMode && !dataItem.isSelected) && <OverflowingContent onClick={handleClick}>
       <Box
         display="flex"
@@ -157,6 +169,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
         </div>
       </Dialog>
     </OverflowingContent>}
+    {showPopup && <PopupClipboardMenu {...{ copyClipboardPopupMenu, populateCopiedValue, clearContent }} />}
   </>
   );
 };

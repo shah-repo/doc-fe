@@ -22,7 +22,6 @@ export default makeStyles((theme) => ({
       backgroundColor: Colors.white,
     },
     '& td.k-state-selected': {
-      border: `3px dotted ${Colors.primary}`,
       backgroundColor: Colors.white,
     },
   },

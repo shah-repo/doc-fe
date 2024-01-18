@@ -2,35 +2,36 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Typography } from '@material-ui/core';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
-import { getSelectedState, getSelectedStateFromKeyDown, GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
+import { GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar, getSelectedState, getSelectedStateFromKeyDown } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { each, intersection, isEmpty, map, omit, pick } from 'lodash';
+import { each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../../../common/utils/date';
 import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
-import { useFormContext } from '../../../../components/forms/FormContext';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { toastError } from '../../../../components/notifications';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import Text from '../../../../components/Text';
+import { useFormContext } from '../../../../components/forms/FormContext';
+import { toastError } from '../../../../components/notifications';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { changeRequestPreviewPath } from '../../../utils/paths';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
+import { PopupClipboardMenuContext } from './components/PopupClipboardMenu';
 import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './types';
+import { EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
 import { getExcelColumns } from './utils';
 
 interface props {
@@ -47,7 +48,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const [lastRefreshedAt, setLastRefreshedAt] = React.useState<Date>();
   const settings = useSelector(companySelectors.getGeneralSettings);
   const [copiedItems, setCopiedItems] = React.useState<{
-    [id: string]: number[]
+    [id: string]: string
   }>({});
   const [selectedState, setSelectedState] = React.useState<{
     [id: string]: boolean | number[]
@@ -97,12 +98,10 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   });
 
   const partAsync = useAsync({
-    onSuccess: (response) => {
-      if (response?.affected > 0) {
-        materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
-        if (formContext.isEditing) {
-          history.push(changeRequestPreviewPath(changeRequest?.id ?? ''));
-        }
+    onSuccess: () => {
+      materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
+      if (formContext.isEditing) {
+        history.push(changeRequestPreviewPath(changeRequest?.id ?? ''));
       }
     },
     onError: toastError,
@@ -156,7 +155,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         if (formContext.isEditing) {
           updateUnsavedData(values);
         } else {
-          updateMaterialDispositionTableData(values);
+          updateMaterialDispositionTableData(values, data);
         }
         discardMDItem();
       }
@@ -165,16 +164,52 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const { submitForm, resetForm, setValues } = formik;
 
-  const updateMaterialDispositionTableData = (values: Partial<EditableMDItem>) => {
-    const partToSave = pick(values, FIELDS_TO_PICK);
-    partAsync.start(updateItem, changeRequest?.id, values.id, partToSave, partAsync);
+  const updateMaterialDispositionTableData = (values: Partial<EditableMDItem> | null, data: EditableMDItem[]) => {
+    const partToSave = {
+      materialDispositionEntryUpdates: data.map(dataItem => {
+        const updatedValues = values?.id === dataItem.id ? pick(values, FIELDS_TO_PICK) : pick(dataItem, FIELDS_TO_PICK);
+        return {
+          materialDispositionId: dataItem.id,
+          ...updatedValues,
+        };
+      }),
+    };
+    partAsync.start(updateItem, changeRequest?.id, partToSave, partAsync);
+  };
+
+  const clearContent = () => {
+    const copiedDataItem = find(data, { id: first(keys(copiedItems)) });
+    const copiedDataItemField = copiedItems[copiedDataItem?.id ?? ''];
+    const updatedData = data.map(dataItem => {
+      if (has(selectedState, dataItem.id) && !isEmpty(copiedDataItem)) {
+        dataItem[copiedDataItemField] = EMPTY_DROPDOWN_PLACEHOLDER;
+      }
+      return dataItem;
+    });
+    updateMaterialDispositionTableData(null, updatedData);
+    copyClipboardPopupMenu.close();
+  };
+
+  const populateCopiedValue = () => {
+    if (!isEmpty(copiedItems)) {
+      const copiedDataItem = find(data, { id: first(keys(copiedItems)) });
+      const copiedDataItemField = copiedItems[copiedDataItem?.id ?? ''];
+      const updatedData = data.map(dataItem => {
+        if (has(selectedState, dataItem.id) && !isEmpty(copiedDataItem)) {
+          dataItem[copiedDataItemField] = get(copiedDataItem, copiedDataItemField);
+        }
+        return dataItem;
+      });
+      updateMaterialDispositionTableData(null, updatedData);
+    }
+    copyClipboardPopupMenu.close();
   };
 
   const onConfirm = () => {
     if (formContext.isEditing) {
       updateUnsavedData(formik.values);
     } else {
-      updateMaterialDispositionTableData(formik.values);
+      updateMaterialDispositionTableData(formik.values, data);
     }
     dialog.close();
     discardMDItem();
@@ -184,9 +219,9 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     dialog.open();
   };
 
-  const onSelectCell = (dataItem: EditableMDItem, colIndex: number) => {
+  const onSelectCell = (dataItem: EditableMDItem, field: string) => {
     if (dataItem?.id) {
-      setCopiedItems({ [dataItem.id]: [colIndex] });
+      setCopiedItems({ [dataItem.id]: field });
     }
   };
 
@@ -197,9 +232,11 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   useEffect(() => {
     if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(dataToSubmit)) {
       setDoNotPrompt?.(true);
-      updateMaterialDispositionTableData(dataToSubmit);
+      updateMaterialDispositionTableData(dataToSubmit, data);
     }
   }, [parentFormik.isSubmitting]);
+
+  const copyClipboardPopupMenu = useDialog();
 
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
@@ -264,6 +301,19 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     }
   };
 
+  useEffect(() => {
+    if (!isEmpty(selectedState) && keys(selectedState).length > 1) {
+      copyClipboardPopupMenu.open();
+    }
+  }, [selectedState]);
+
+  useEffect(() => {
+    if (!copyClipboardPopupMenu.isOpen) {
+      setSelectedState({});
+      setCopiedItems({});
+    }
+  }, [copyClipboardPopupMenu.isOpen]);
+
   const onSelectionChange = (event: GridSelectionChangeEvent) => {
     const newSelectedState = getSelectedState({
       event,
@@ -290,82 +340,84 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   };
 
   return (<>
-    <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
-      <KendoDataGrid<EditableMDItem>
-        data={MDItemList}
-        schema={getColumns()}
-        fullWidth
-        className={classes.rootMDTable}
-        hasBoxScrollbars
-        onRowClick={editMDItem}
-        selectedField={SELECTED_FIELD}
-        dataItemKey={DATA_ITEM_KEY}
-        selectable={{
-          enabled: true,
-          drag: true,
-          cell: true,
-          mode: 'multiple',
-        }}
-        navigatable={true}
-        rowRender={rowRender}
-        onSelectionChange={onSelectionChange}
-        onKeyDown={onKeyDown}
-        loading={materialDispositionAsync.isLoading || partAsync.isLoading}
-        resizable={true}
-      >
-        <GridToolbar>
-          <Grid container justify="flex-end"
-            className={classes.toolbarContainer}
-          >
-            <Grid item>
-              <Grid container justify="flex-end">
-                <Grid className={classes.refreshContainer}
-                >
-                  <Grid container>
-                    { changeRequest?.state === ChangeRequestStatus.Draft && <StyleTooltip
-                      title={translate('approvalRequest.material.disposition.refresh')}
+    <PopupClipboardMenuContext.Provider value={{ copyClipboardPopupMenu, selectedState, copiedItems, populateCopiedValue, clearContent }}>
+      <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
+        <KendoDataGrid<EditableMDItem>
+          data={MDItemList}
+          schema={getColumns()}
+          fullWidth
+          className={classes.rootMDTable}
+          hasBoxScrollbars
+          onRowClick={editMDItem}
+          selectedField={SELECTED_FIELD}
+          dataItemKey={DATA_ITEM_KEY}
+          selectable={{
+            enabled: true,
+            drag: true,
+            cell: true,
+            mode: 'multiple',
+          }}
+          navigatable={true}
+          rowRender={rowRender}
+          onSelectionChange={onSelectionChange}
+          onKeyDown={onKeyDown}
+          loading={materialDispositionAsync.isLoading || partAsync.isLoading}
+          resizable={true}
+        >
+          <GridToolbar>
+            <Grid container justify="flex-end"
+              className={classes.toolbarContainer}
+            >
+              <Grid item>
+                <Grid container justify="flex-end">
+                  <Grid className={classes.refreshContainer}
+                  >
+                    <Grid container>
+                      { changeRequest?.state === ChangeRequestStatus.Draft && <StyleTooltip
+                        title={translate('approvalRequest.material.disposition.refresh')}
+                        placement="top"
+                        arrow
+                      >
+                        <FontAwesomeIcon icon={regular('arrows-rotate')} onClick={fetchMaterialDispositionTableData} className={classes.icon} />
+                      </StyleTooltip> }
+                      { lastRefreshedAt && <Typography
+                        variant="h6"
+                        component="h6"
+                        className={classes.refreshText}
+                      >
+                        <Text translation="approvalRequest.material.disposition.refresh.date"
+                          values={{ date: getFormattedDateString(lastRefreshedAt, MomentFormats.BriefDate) }}
+                        />
+                      </Typography> }
+                    </Grid>
+                  </Grid>
+                  <Grid item >
+                    <StyleTooltip
+                      title={translate('common.download')}
                       placement="top"
                       arrow
                     >
-                      <FontAwesomeIcon icon={regular('arrows-rotate')} onClick={fetchMaterialDispositionTableData} className={classes.icon} />
-                    </StyleTooltip> }
-                    { lastRefreshedAt && <Typography
-                      variant="h6"
-                      component="h6"
-                      className={classes.refreshText}
-                    >
-                      <Text translation="approvalRequest.material.disposition.refresh.date"
-                        values={{ date: getFormattedDateString(lastRefreshedAt, MomentFormats.BriefDate) }}
-                      />
-                    </Typography> }
+                      <FontAwesomeIcon data-cy="excel-download"
+                        className={classes.icon}
+                        onClick={exportToExcel}
+                        icon={solid('arrow-down-to-line')} />
+                    </StyleTooltip>
                   </Grid>
-                </Grid>
-                <Grid item >
-                  <StyleTooltip
-                    title={translate('common.download')}
-                    placement="top"
-                    arrow
+                  <Grid item
+                    data-cy="show-hide-columns"
                   >
-                    <FontAwesomeIcon data-cy="excel-download"
-                      className={classes.icon}
-                      onClick={exportToExcel}
-                      icon={solid('arrow-down-to-line')} />
-                  </StyleTooltip>
-                </Grid>
-                <Grid item
-                  data-cy="show-hide-columns"
-                >
-                  <ColumnShowHideMDMenu
-                    columnDefinition={columns}
-                    onChange={onColumnShowHide}
-                  />
+                    <ColumnShowHideMDMenu
+                      columnDefinition={columns}
+                      onChange={onColumnShowHide}
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </GridToolbar>
-      </KendoDataGrid>
-    </ExcelExport>
+          </GridToolbar>
+        </KendoDataGrid>
+      </ExcelExport>
+    </PopupClipboardMenuContext.Provider>
     <AlertDialog dialog={dialog}
       message="approvalRequest.material.disposition.warning.alert"
       confirmAction={onConfirm} />
