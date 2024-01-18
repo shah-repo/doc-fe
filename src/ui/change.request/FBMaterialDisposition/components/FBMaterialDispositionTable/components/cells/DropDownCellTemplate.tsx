@@ -55,7 +55,6 @@ const Editor: React.FC<Props> = ({ field, options, dataItem, isColumnEditMode })
         getOptionLabel={(option: OptionType) => translate(option.label)}
         value={value}
         size="small"
-        disabled={isColumnEditMode}
       />
     </FormikField>
   );
@@ -68,6 +67,10 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const isColumnEditMode = !isEmpty(copiedItems) && (first(values(copiedItems)) ?? [] as string[]).includes(field);
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]) || isColumnEditMode;
   const showPopup = has(selectedState, dataItem.id) && isColumnEditMode && last(keys(selectedState)) === dataItem.id;
+
+  // if (isEditMode) {
+  //   return <Editor {...props} />;
+  // }
 
   const dialog = useDialog();
   const [copyIconRef, isHovered] = useHover<HTMLButtonElement>();
