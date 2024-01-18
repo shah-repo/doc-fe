@@ -9,10 +9,8 @@ import { LotIdCellTemplate } from './components/cells/LotIdCellTemplate';
 import { PartIdCellTemplate } from './components/cells/PartIdCellTemplate';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { WhereUsedCellTemplate } from './components/cells/WhereUsedCellTemplate';
-import { OPTIONS } from './constants';
+import { LOCATION_COLUMN_FILTER_OPTIONS, OPTIONS } from './constants';
 import { EditableMDItem, SchemaOptions } from './types';
-
-const labelOptions = OPTIONS.map(data => translate(data.label));
 
 export const buildSchema = ({
   actionsClass,
@@ -59,7 +57,7 @@ export const buildSchema = ({
       sortable: false,
       filterCell: (props) => <DropDownOptionsFilterCell
         {...props}
-        data={labelOptions}
+        data={LOCATION_COLUMN_FILTER_OPTIONS.map(data => translate(data))}
         defaultItem=""
       />,
       selectable: false,
@@ -81,11 +79,6 @@ export const buildSchema = ({
       field: 'onOrderPOAction',
       show: true,
       selectable: true,
-      filterCell: (props) => <DropDownOptionsFilterCell
-        {...props}
-        data={labelOptions}
-        defaultItem=""
-      />,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.onOrder"
         title="approvalRequest.grid.heading.tooltip.onOrder" />,
@@ -97,11 +90,6 @@ export const buildSchema = ({
       field: 'inInspectionAction',
       show: true,
       selectable: true,
-      filterCell: (props) => <DropDownOptionsFilterCell
-        {...props}
-        data={labelOptions}
-        defaultItem=""
-      />,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.Inspection"
         title="approvalRequest.grid.heading.tooltip.Inspection" />,
@@ -113,11 +101,6 @@ export const buildSchema = ({
       field: 'inInventoryAction',
       show: true,
       selectable: true,
-      filterCell: (props) => <DropDownOptionsFilterCell
-        {...props}
-        data={labelOptions}
-        defaultItem=""
-      />,
       headerCell: () => <CustomHeaderTooltipCell
         title ="approvalRequest.grid.heading.tooltip.Inventory"
         content="approvalRequest.grid.heading.Inventory" />,
@@ -130,11 +113,6 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.wip',
       show: true,
       selectable: true,
-      filterCell: (props) => <DropDownOptionsFilterCell
-        {...props}
-        data={labelOptions}
-        defaultItem=""
-      />,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.wip"
         title="approvalRequest.grid.heading.tooltip.wip" />,
@@ -147,11 +125,6 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.finishedGoods',
       show: true,
       selectable: true,
-      filterCell: (props) => <DropDownOptionsFilterCell
-        {...props}
-        data={labelOptions}
-        defaultItem=""
-      />,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.finishedGoods"
         title="approvalRequest.grid.heading.tooltip.finishedGoods" />,
@@ -162,11 +135,6 @@ export const buildSchema = ({
       field: 'usedLocation',
       id: 'usedLocation',
       selectable: true,
-      filterCell: (props) => <DropDownOptionsFilterCell
-        {...props}
-        data={labelOptions}
-        defaultItem=""
-      />,
       title: 'approvalRequest.grid.heading.field',
       show: true,
       headerCell: () => <CustomHeaderTooltipCell

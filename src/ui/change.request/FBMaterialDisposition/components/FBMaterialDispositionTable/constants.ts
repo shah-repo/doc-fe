@@ -12,6 +12,14 @@ export const OPTIONS = [
   { label: 'approvalRequest.material.disposition.options.scrap', value: 'SCRAP' },
   { label: 'common.not.applicable', value: 'N/A' },
 ];
+export const LOCATION_COLUMN_FILTER_OPTIONS = [
+  'approvalRequest.grid.heading.onOrder',
+  'approvalRequest.grid.heading.Inspection',
+  'approvalRequest.grid.heading.Inventory',
+  'approvalRequest.grid.heading.wip',
+  'approvalRequest.grid.heading.finishedGoods',
+  'approvalRequest.grid.heading.field',
+];
 export const DROPDOWN_FIELDS = ['onOrderPOAction', 'inInspectionAction', 'inInventoryAction', 'inWipAction', 'asFinishedGoodsAction', 'usedLocation'];
 export const ON_ORDER_PO_ACTION_COLUMN = 'onOrderPOAction';
 export const FIELDS_TO_PICK = [...DROPDOWN_FIELDS, 'comment'];
