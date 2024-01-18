@@ -1,7 +1,9 @@
 import React from 'react';
+import { translate } from '../../../../../common/intl';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { DropDownCellTemplate } from './components/cells/DropDownCellTemplate';
+import { DropDownOptionsFilterCell } from './components/cells/DropDownOptionsFilterCell';
 import { CustomHeaderTooltipCell } from './components/cells/HeaderCell';
 import { LotIdCellTemplate } from './components/cells/LotIdCellTemplate';
 import { PartIdCellTemplate } from './components/cells/PartIdCellTemplate';
@@ -9,6 +11,8 @@ import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate'
 import { WhereUsedCellTemplate } from './components/cells/WhereUsedCellTemplate';
 import { OPTIONS } from './constants';
 import { EditableMDItem, SchemaOptions } from './types';
+
+const labelOptions = OPTIONS.map(data => translate(data.label));
 
 export const buildSchema = ({
   actionsClass,
@@ -53,6 +57,11 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.location',
       show: true,
       sortable: false,
+      filterCell: (props) => <DropDownOptionsFilterCell
+        {...props}
+        data={labelOptions}
+        defaultItem=""
+      />,
       selectable: false,
       width: 201,
     },
@@ -72,6 +81,11 @@ export const buildSchema = ({
       field: 'onOrderPOAction',
       show: true,
       selectable: true,
+      filterCell: (props) => <DropDownOptionsFilterCell
+        {...props}
+        data={labelOptions}
+        defaultItem=""
+      />,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.onOrder"
         title="approvalRequest.grid.heading.tooltip.onOrder" />,
@@ -83,6 +97,11 @@ export const buildSchema = ({
       field: 'inInspectionAction',
       show: true,
       selectable: true,
+      filterCell: (props) => <DropDownOptionsFilterCell
+        {...props}
+        data={labelOptions}
+        defaultItem=""
+      />,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.Inspection"
         title="approvalRequest.grid.heading.tooltip.Inspection" />,
@@ -94,6 +113,11 @@ export const buildSchema = ({
       field: 'inInventoryAction',
       show: true,
       selectable: true,
+      filterCell: (props) => <DropDownOptionsFilterCell
+        {...props}
+        data={labelOptions}
+        defaultItem=""
+      />,
       headerCell: () => <CustomHeaderTooltipCell
         title ="approvalRequest.grid.heading.tooltip.Inventory"
         content="approvalRequest.grid.heading.Inventory" />,
@@ -106,6 +130,11 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.wip',
       show: true,
       selectable: true,
+      filterCell: (props) => <DropDownOptionsFilterCell
+        {...props}
+        data={labelOptions}
+        defaultItem=""
+      />,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.wip"
         title="approvalRequest.grid.heading.tooltip.wip" />,
@@ -118,6 +147,11 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.finishedGoods',
       show: true,
       selectable: true,
+      filterCell: (props) => <DropDownOptionsFilterCell
+        {...props}
+        data={labelOptions}
+        defaultItem=""
+      />,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.finishedGoods"
         title="approvalRequest.grid.heading.tooltip.finishedGoods" />,
@@ -128,6 +162,11 @@ export const buildSchema = ({
       field: 'usedLocation',
       id: 'usedLocation',
       selectable: true,
+      filterCell: (props) => <DropDownOptionsFilterCell
+        {...props}
+        data={labelOptions}
+        defaultItem=""
+      />,
       title: 'approvalRequest.grid.heading.field',
       show: true,
       headerCell: () => <CustomHeaderTooltipCell
