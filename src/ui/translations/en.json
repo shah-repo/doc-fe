@@ -1729,6 +1729,7 @@
   "approvalRequest.grid.heading.tooltip.wip": "Parts/Lots that are being built that might need to be dispositioned. Void Lots will not be displayed here.",
   "approvalRequest.grid.heading.tooltip.finishedGoods": "Parts/Lots that have already been built may need to be dispositioned. Void Lots will not be displayed here.",
   "approvalRequest.grid.heading.tooltip.field": "Parts/Lots that have been shipped to a third party might need to be dispositioned.",
+  "approvalRequest.grid.heading.tooltip.location": "This column will display what the system has determined where the LOT is located such as Inventory, WIP, Finished, Goods, etc.",
   "approvalRequest.status.APPROVED": "You successfully approved a document",
   "approvalRequest.status.message.APPROVED": "{crId} {title} has been approved.",
   "approvalRequest.status.DRAFT": "You successfully rejected a document",

@@ -55,6 +55,9 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.location',
       show: true,
       sortable: false,
+      headerCell: () => <CustomHeaderTooltipCell
+        content ="approvalRequest.grid.heading.location"
+        title="approvalRequest.grid.heading.tooltip.location" />,
       filterCell: (props) => <DropDownOptionsFilterCell
         {...props}
         data={LOCATION_COLUMN_FILTER_OPTIONS.map(data => translate(data))}
