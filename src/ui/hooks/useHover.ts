@@ -11,6 +11,9 @@ const useHover = <T extends HTMLElement>(): UseHoverType<T> => {
   useEffect(
     () => {
       const element = elementRef.current;
+      if (value && !element) {
+        handleMouseOut();
+      }
       if (!element) {
         return;
       }
@@ -22,7 +25,7 @@ const useHover = <T extends HTMLElement>(): UseHoverType<T> => {
         element.removeEventListener('mouseout', handleMouseOut);
       };
     },
-    [],
+    [elementRef.current],
   );
 
   return [elementRef, value];

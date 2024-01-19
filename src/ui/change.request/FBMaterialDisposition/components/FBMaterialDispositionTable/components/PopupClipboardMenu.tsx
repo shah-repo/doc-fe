@@ -18,9 +18,13 @@ interface PopupClipboardMenuProps extends ColumnMenuProps {
 interface PopupClipboardMenuContextProps {
   copyClipboardPopupMenu: Dialog
   selectedState: {[id: string]: boolean | number[]}
-  copiedItems: {[id: string]: string}
+  copiedItems: {
+    [id: string]: string
+    value: string
+  } | undefined
   populateCopiedValue: () => void
   clearContent: () => void
+  onUpdateSelectedCell: (value: string) => void
 }
 
 export const PopupClipboardMenuContext = React.createContext<PopupClipboardMenuContextProps>({} as PopupClipboardMenuContextProps);

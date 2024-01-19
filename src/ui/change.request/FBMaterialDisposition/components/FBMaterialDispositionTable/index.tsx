@@ -32,7 +32,7 @@ import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
-import { getExcelColumns } from './utils';
+import { getExcelColumns, hasConflictingSelections } from './utils';
 
 interface props {
   changeRequest?: ChangeRequest
@@ -49,14 +49,15 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const settings = useSelector(companySelectors.getGeneralSettings);
   const [copiedItems, setCopiedItems] = React.useState<{
     [id: string]: string
-  }>({});
+    value: string
+  }>();
   const [selectedState, setSelectedState] = React.useState<{
     [id: string]: boolean | number[]
   }>({});
 
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
     if (!isEmpty(dataItem?.[SELECTED_FIELD]) && !dataItem.isSelected) {
-      setCopiedItems({});
+      setCopiedItems(undefined);
     }
     if (isShowOnly || formik.dirty || isEditMode.current) {
       return;
@@ -74,7 +75,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     setEditedMDItem(prepareDataItem as EditableMDItem);
   };
   const discardMDItem = () => {
-    setCopiedItems({});
+    setCopiedItems(undefined);
     setEditedMDItem(undefined);
     setSelectedState({});
   };
@@ -85,6 +86,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const formContext = useFormContext();
   const parentFormik = useFormikContext();
   const [dataToSubmit, setDataToSubmit] = React.useState<Partial<EditableMDItem>>({});
+  const [bulkDataToSubmit, seBulkDataToSubmit] = React.useState<EditableMDItem[]>([]);
   const history = useHistory();
 
   const load = useActionCreator(materialDispositionActions.loadMaterialDispositionList);
@@ -142,14 +144,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const formik = useFormik<Partial<EditableMDItem>>({
     initialValues: {},
     onSubmit: (values) => {
-      const count = DROPDOWN_FIELDS.reduce((count, fieldName) => {
-        if (values[fieldName] !== EMPTY_DROPDOWN_PLACEHOLDER) {
-          return count + 1;
-        }
-        return count;
-      }, 0);
-
-      if (count > 1 && settings?.shouldAutoUpdateLotStatus) {
+      if (hasConflictingSelections(values) && settings?.shouldAutoUpdateLotStatus) {
         onOpen();
       } else {
         if (formContext.isEditing) {
@@ -179,7 +174,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const clearContent = () => {
     const copiedDataItem = find(data, { id: first(keys(copiedItems)) });
-    const copiedDataItemField = copiedItems[copiedDataItem?.id ?? ''];
+    const copiedDataItemField = copiedItems?.[copiedDataItem?.id ?? ''] ?? '';
     const updatedData = data.map(dataItem => {
       if (has(selectedState, dataItem.id) && !isEmpty(copiedDataItem)) {
         dataItem[copiedDataItemField] = EMPTY_DROPDOWN_PLACEHOLDER;
@@ -193,13 +188,21 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const populateCopiedValue = () => {
     if (!isEmpty(copiedItems)) {
       const copiedDataItem = find(data, { id: first(keys(copiedItems)) });
-      const copiedDataItemField = copiedItems[copiedDataItem?.id ?? ''];
+      const copiedDataItemField = copiedItems?.[copiedDataItem?.id ?? ''] ?? '';
+      const copiedDataItemValue = copiedItems?.value;
+      let isConflictingSelections = false;
       const updatedData = data.map(dataItem => {
         if (has(selectedState, dataItem.id) && !isEmpty(copiedDataItem)) {
-          dataItem[copiedDataItemField] = get(copiedDataItem, copiedDataItemField);
+          dataItem[copiedDataItemField] = copiedDataItemValue;
         }
+        !isConflictingSelections && (isConflictingSelections = hasConflictingSelections(dataItem));
         return dataItem;
       });
+      if (isConflictingSelections) {
+        onOpen();
+        seBulkDataToSubmit(updatedData);
+        return;
+      }
       updateMaterialDispositionTableData(null, updatedData);
     }
     copyClipboardPopupMenu.close();
@@ -208,6 +211,8 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const onConfirm = () => {
     if (formContext.isEditing) {
       updateUnsavedData(formik.values);
+    } else if (!isEmpty(copiedItems) && !isEmpty(bulkDataToSubmit)) {
+      updateMaterialDispositionTableData(null, bulkDataToSubmit);
     } else {
       updateMaterialDispositionTableData(formik.values, data);
     }
@@ -221,8 +226,12 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const onSelectCell = (dataItem: EditableMDItem, field: string) => {
     if (dataItem?.id) {
-      setCopiedItems({ [dataItem.id]: field });
+      setCopiedItems({ [dataItem.id]: field, value: get(dataItem, field, EMPTY_DROPDOWN_PLACEHOLDER) as string });
     }
+  };
+
+  const onUpdateSelectedCell = (value: string) => {
+    setCopiedItems(prevVal => ({ ...prevVal, value }));
   };
 
   useEffect(() => {
@@ -310,7 +319,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   useEffect(() => {
     if (!copyClipboardPopupMenu.isOpen) {
       setSelectedState({});
-      setCopiedItems({});
+      setCopiedItems(undefined);
     }
   }, [copyClipboardPopupMenu.isOpen]);
 
@@ -325,7 +334,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       const selectedFieldIndex = columnIndexes as number[];
       skipIfOtherColumnSelected = selectedFieldIndex?.length === 1 && intersection(nonSelectableColumnIndexes, columnIndexes as number[])?.length === 0;
     });
-    if (skipIfOtherColumnSelected) {
+    if (skipIfOtherColumnSelected && !copyClipboardPopupMenu.isOpen) {
       setSelectedState(newSelectedState);
     }
   };
@@ -340,7 +349,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   };
 
   return (<>
-    <PopupClipboardMenuContext.Provider value={{ copyClipboardPopupMenu, selectedState, copiedItems, populateCopiedValue, clearContent }}>
+    <PopupClipboardMenuContext.Provider value={{ copyClipboardPopupMenu, selectedState, copiedItems, onUpdateSelectedCell, populateCopiedValue, clearContent }}>
       <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
         <KendoDataGrid<EditableMDItem>
           data={MDItemList}

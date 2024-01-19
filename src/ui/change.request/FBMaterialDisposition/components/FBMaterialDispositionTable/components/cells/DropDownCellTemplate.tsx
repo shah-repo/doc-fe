@@ -32,14 +32,16 @@ import { styles } from './styles';
 interface Props extends CustomTemplateProps {
   options: OptionType[]
   isColumnEditMode?: boolean
+  copiedItem: {[id: string]: string}
 }
 
-const Editor: React.FC<Props> = ({ field, options, dataItem, isColumnEditMode }) => {
+const Editor: React.FC<Props> = ({ field, options, dataItem, isColumnEditMode, copiedItem }) => {
   const { values, setFieldValue, getFieldProps }
     = useFormikContext<EditableMDItem>();
+  const { onUpdateSelectedCell } = useContext(PopupClipboardMenuContext);
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    setFieldValue(field, value?.value);
+    isColumnEditMode ? onUpdateSelectedCell(value?.value as string) : setFieldValue(field, value?.value);
   };
 
   const value = find(options, { value: isColumnEditMode ? dataItem[field] : values[field] });
@@ -55,6 +57,7 @@ const Editor: React.FC<Props> = ({ field, options, dataItem, isColumnEditMode })
         getOptionLabel={(option: OptionType) => translate(option.label)}
         value={value}
         size="small"
+        disabled={isColumnEditMode && isEmpty(copiedItem)}
       />
     </FormikField>
   );
@@ -122,7 +125,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
 
   return (<>
     {!isEmpty(copiedItems) && !isEmpty(copiedItem) && <Selector />}
-    {(isEditMode || dataItem.isSelected) && (<Editor {...props} {...{ isColumnEditMode }} />)}
+    {(isEditMode || dataItem.isSelected) && (<Editor {...props} {...{ isColumnEditMode, copiedItem }} />)}
     {(!isEditMode && !dataItem.isSelected) && <OverflowingContent onClick={handleClick}>
       <Box
         display="flex"
@@ -139,7 +142,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
             />
           )}
         </div>
-        {dataItem[field] && dataItem[field] !== EMPTY_DROPDOWN_PLACEHOLDER && (
+        {isEmpty(copiedItems) && dataItem[field] && dataItem[field] !== EMPTY_DROPDOWN_PLACEHOLDER && (
           <span ref={copyIconRef}>
             <Tooltip
               title={translate('common.copy.value')}
