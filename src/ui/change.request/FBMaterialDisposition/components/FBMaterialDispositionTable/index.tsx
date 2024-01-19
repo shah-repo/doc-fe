@@ -2,25 +2,25 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Typography } from '@material-ui/core';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
-import { GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar, getSelectedState, getSelectedStateFromKeyDown } from '@progress/kendo-react-grid';
+import { getSelectedState, getSelectedStateFromKeyDown, GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
+import { cloneDeep, each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import { useFormContext } from '../../../../components/forms/FormContext';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import Text from '../../../../components/Text';
-import { useFormContext } from '../../../../components/forms/FormContext';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -31,7 +31,7 @@ import { PopupClipboardMenuContext } from './components/PopupClipboardMenu';
 import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
+import { EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './types';
 import { getExcelColumns, hasConflictingSelections } from './utils';
 
 interface props {
@@ -44,6 +44,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const classes = useStyles();
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
   const isEditMode = React.useRef<boolean>(false);
+  const [isCopyConflictedSelections, setIsCopyConflictedSelections] = React.useState<boolean>(false);
   const [data, setData] = React.useState<EditableMDItem[]>([]);
   const [lastRefreshedAt, setLastRefreshedAt] = React.useState<Date>();
   const settings = useSelector(companySelectors.getGeneralSettings);
@@ -185,24 +186,34 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     copyClipboardPopupMenu.close();
   };
 
+  const onClose = () => {
+    dialog.close();
+    setIsCopyConflictedSelections(false);
+  };
+
   const populateCopiedValue = () => {
     if (!isEmpty(copiedItems)) {
       const copiedDataItem = find(data, { id: first(keys(copiedItems)) });
       const copiedDataItemField = copiedItems?.[copiedDataItem?.id ?? ''] ?? '';
       const copiedDataItemValue = copiedItems?.value;
       let isConflictingSelections = false;
-      const updatedData = data.map(dataItem => {
+
+      const updatedData = cloneDeep(data).map(dataItem => {
         if (has(selectedState, dataItem.id) && !isEmpty(copiedDataItem)) {
           dataItem[copiedDataItemField] = copiedDataItemValue;
         }
         !isConflictingSelections && (isConflictingSelections = hasConflictingSelections(dataItem));
         return dataItem;
       });
+
       if (isConflictingSelections) {
         onOpen();
+        setIsCopyConflictedSelections(isConflictingSelections);
         seBulkDataToSubmit(updatedData);
         return;
       }
+
+      setData(updatedData);
       updateMaterialDispositionTableData(null, updatedData);
     }
     copyClipboardPopupMenu.close();
@@ -211,12 +222,13 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const onConfirm = () => {
     if (formContext.isEditing) {
       updateUnsavedData(formik.values);
-    } else if (!isEmpty(copiedItems) && !isEmpty(bulkDataToSubmit)) {
+    } else if ((!isEmpty(copiedItems) || isCopyConflictedSelections) && !isEmpty(bulkDataToSubmit)) {
       updateMaterialDispositionTableData(null, bulkDataToSubmit);
     } else {
       updateMaterialDispositionTableData(formik.values, data);
     }
     dialog.close();
+    setIsCopyConflictedSelections(false);
     discardMDItem();
   };
 
@@ -428,8 +440,10 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         </KendoDataGrid>
       </ExcelExport>
     </PopupClipboardMenuContext.Provider>
-    <AlertDialog dialog={dialog}
+    <AlertDialog
+      dialog={dialog}
       message="approvalRequest.material.disposition.warning.alert"
+      cancelAction={onClose}
       confirmAction={onConfirm} />
   </>);
 };
