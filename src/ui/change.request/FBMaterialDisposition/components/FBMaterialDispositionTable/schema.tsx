@@ -74,6 +74,7 @@ export const buildSchema = ({
         title="approvalRequest.grid.heading.tooltip.whereUsedView" />,
       template: (props) => <WhereUsedCellTemplate {...props} onClick={onRowClick} />,
       show: true,
+      filterable: false,
       selectable: false,
       width: 120,
     },

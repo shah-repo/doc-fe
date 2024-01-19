@@ -6,16 +6,15 @@ import { useFormikContext } from 'formik';
 import { find, first, get, has, isEmpty, keys, last, values } from 'lodash';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
-import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../../../components/KendoDataGrid/constants';
 import { Dialog } from '../../../../../../components/dialogs';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
+import {
+  Mode, MODE_FIELD,
+} from '../../../../../../components/KendoDataGrid/constants';
 import useDialog from '../../../../../../hooks/useDialog';
 import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
@@ -32,7 +31,7 @@ import { styles } from './styles';
 interface Props extends CustomTemplateProps {
   options: OptionType[]
   isColumnEditMode?: boolean
-  copiedItem: {[id: string]: string}
+  copiedItem?: {[id: string]: string}
 }
 
 const Editor: React.FC<Props> = ({ field, options, dataItem, isColumnEditMode, copiedItem }) => {
@@ -70,10 +69,6 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const isColumnEditMode = !isEmpty(copiedItems) && (first(values(copiedItems)) ?? [] as string[]).includes(field);
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]) || isColumnEditMode;
   const showPopup = has(selectedState, dataItem.id) && isColumnEditMode && last(keys(selectedState)) === dataItem.id;
-
-  // if (isEditMode) {
-  //   return <Editor {...props} />;
-  // }
 
   const dialog = useDialog();
   const [copyIconRef, isHovered] = useHover<HTMLButtonElement>();
