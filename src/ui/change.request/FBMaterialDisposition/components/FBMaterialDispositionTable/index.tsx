@@ -366,6 +366,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
             cell: true,
             mode: 'multiple',
           }}
+          filterable={true}
           navigatable={true}
           rowRender={rowRender}
           onSelectionChange={onSelectionChange}

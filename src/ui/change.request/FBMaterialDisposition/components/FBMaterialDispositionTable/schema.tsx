@@ -1,13 +1,15 @@
 import React from 'react';
+import { translate } from '../../../../../common/intl';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { DropDownCellTemplate } from './components/cells/DropDownCellTemplate';
+import { DropDownOptionsFilterCell } from './components/cells/DropDownOptionsFilterCell';
 import { CustomHeaderTooltipCell } from './components/cells/HeaderCell';
 import { LotIdCellTemplate } from './components/cells/LotIdCellTemplate';
 import { PartIdCellTemplate } from './components/cells/PartIdCellTemplate';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { WhereUsedCellTemplate } from './components/cells/WhereUsedCellTemplate';
-import { OPTIONS } from './constants';
+import { LOCATION_COLUMN_FILTER_OPTIONS, OPTIONS } from './constants';
 import { EditableMDItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -53,6 +55,14 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.location',
       show: true,
       sortable: false,
+      headerCell: () => <CustomHeaderTooltipCell
+        content ="approvalRequest.grid.heading.location"
+        title="approvalRequest.grid.heading.tooltip.location" />,
+      filterCell: (props) => <DropDownOptionsFilterCell
+        {...props}
+        data={LOCATION_COLUMN_FILTER_OPTIONS.map(data => translate(data))}
+        defaultItem=""
+      />,
       selectable: false,
       width: 201,
     },
