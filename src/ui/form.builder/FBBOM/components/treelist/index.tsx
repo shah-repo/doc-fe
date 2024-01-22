@@ -178,7 +178,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       treeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
-        documentRevision.documentId,
+        false,
         treeListAsync,
       );
       dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
@@ -199,7 +199,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     treeListAsync.start(
       fetchBOMTreeList,
       documentRevision.id,
-      documentRevision.documentId,
+      false,
       treeListAsync,
     );
   };
@@ -234,7 +234,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         treeListAsync.start(
           fetchBOMTreeList,
           documentRevision.id,
-          documentRevision.documentId,
+          false,
           treeListAsync,
         );
       }
