@@ -1,3 +1,4 @@
+import { values } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -5,12 +6,15 @@ import { ActionsCellTemplate } from '../commonCells/ActionsCellTemplate';
 import { DropDownCellTemplate } from './components/cells/DropDownCellTemplate';
 import { DropDownOptionsFilterCell } from './components/cells/DropDownOptionsFilterCell';
 import { CustomHeaderTooltipCell } from './components/cells/HeaderCell';
+import { LocationCellTemplate } from './components/cells/LocationCellTemplate';
 import { LotIdCellTemplate } from './components/cells/LotIdCellTemplate';
 import { PartIdCellTemplate } from './components/cells/PartIdCellTemplate';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { WhereUsedCellTemplate } from './components/cells/WhereUsedCellTemplate';
-import { LOCATION_COLUMN_FILTER_OPTIONS, OPTIONS } from './constants';
+import { MD_LOCATION_KEYS_MAPPING, OPTIONS } from './constants';
 import { EditableMDItem, SchemaOptions } from './types';
+
+const LOCATION_DATA = values(MD_LOCATION_KEYS_MAPPING).map(data => translate(data));
 
 export const buildSchema = ({
   actionsClass,
@@ -60,11 +64,12 @@ export const buildSchema = ({
         title="approvalRequest.grid.heading.tooltip.location" />,
       filterCell: (props) => <DropDownOptionsFilterCell
         {...props}
-        data={LOCATION_COLUMN_FILTER_OPTIONS.map(data => translate(data))}
+        data={LOCATION_DATA}
         defaultItem=""
       />,
+      template: (props) => <LocationCellTemplate {...props} onClick={onRowClick} />,
       selectable: false,
-      width: 201,
+      width: 250,
     },
     {
       id: 'whereUsedView',
