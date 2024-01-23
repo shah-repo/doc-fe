@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { translate } from '../../../../../common/intl';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER } from './constants';
@@ -19,4 +20,13 @@ export const hasConflictingSelections = (values: Partial<EditableMDItem>): boole
     return count;
   }, 0);
   return count > 1;
+};
+
+export const preparePayload = (values: Partial<EditableMDItem>, data: EditableMDItem[]): EditableMDItem[] => {
+  return cloneDeep(data).map(dataItem => {
+    if (values.id === dataItem.id) {
+      return values as EditableMDItem;
+    }
+    return dataItem;
+  });
 };
