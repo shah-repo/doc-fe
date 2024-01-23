@@ -56,7 +56,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   );
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-  const isWO = checkIsDocumentWO(groupOptions);
+  const isWO = group === DOC_TYPE_GROUP.WORK_ORDER || checkIsDocumentWO(groupOptions);
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
@@ -243,7 +243,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 />
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision} isDisabled={true} isShowOnly={isPartForm}
+                                <FBBOM documentRevision={documentRevision} isDisabled={true} isShowOnly={isPartForm || (isWO && !isEmpty(documentRevision?.formTemplate))}
                                   isUpgradeDisabled={true} isWO={isWO}
                                 />
                               )}

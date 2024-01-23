@@ -99,7 +99,7 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
     const [prevOption, setPrevOption] = useState(defaultValue);
 
     const handleChange: FBWorkOrderTypeProps['onChange'] = (...args) => {
-      if (prevOption && prevOption !== WorkOrderTypes.OTHER && workspaceState?.document) {
+      if (prevOption && prevOption !== WorkOrderTypes.OTHER && workspaceState?.document && !workspaceState?.isPreview) {
         args[0].persist();
         confirmationDialog?.open();
         setEvent(args);

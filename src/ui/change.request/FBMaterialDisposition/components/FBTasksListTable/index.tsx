@@ -116,6 +116,27 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const formik = useFormik<Partial<EditableTLItem>>({
     initialValues: {},
     onSubmit: (values) => {
+      if (workspaceState?.isPreview) {
+        if (values[MODE_FIELD] === Mode.add) {
+          setData(prev => [...prev, values as EditableTLItem]);
+        } else {
+          setData(prev => {
+            return prev.map(item => {
+              if (item.taskId === values.taskId) {
+                return {
+                  ...item,
+                  instruction: values.instruction ?? item.instruction,
+                  employeeResponse: values?.employeeResponse ?? item.employeeResponse,
+                };
+              }
+              return item;
+            });
+          });
+        }
+        setEditedTLItem(undefined);
+        return;
+      }
+
       if (values[MODE_FIELD] === Mode.add) {
         const payload = {
           instruction: values?.instruction,

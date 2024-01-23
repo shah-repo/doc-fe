@@ -84,7 +84,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const outputTypeGroup = get(outputType, 'group');
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-  const isWO = checkIsDocumentWO(documentType?.groupOptions);
+  const isWO = group === DOC_TYPE_GROUP.WORK_ORDER || checkIsDocumentWO(documentType?.groupOptions);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);

@@ -83,7 +83,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
       && schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-  const isWO = checkIsDocumentWO(groupOptions);
+  const isWO = group === DOC_TYPE_GROUP.WORK_ORDER || checkIsDocumentWO(groupOptions);
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   const documentTypeId = formValues.values.document?.documentType?.id || '';
   const docRevId = documentRevision?.id;
@@ -346,7 +346,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 />
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled || isWO} isShowOnly={isPartForm}
+                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled || isWO} isShowOnly={isPartForm || (isWO && !isEmpty(documentRevision?.formTemplate))}
                                   isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView} isWO={isWO}
                                 />
                               )}

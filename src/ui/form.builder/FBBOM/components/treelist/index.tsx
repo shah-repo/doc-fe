@@ -203,6 +203,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     if (isWO && documentRevision?.id) {
       selectedWOPart = documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
       ?? workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id ?? '';
+      if (!selectedWOPart) {
+        return;
+      }
     }
     _documentRevisionFormState?.setBOMChangesInProgress(false);
     treeListAsync.start(
