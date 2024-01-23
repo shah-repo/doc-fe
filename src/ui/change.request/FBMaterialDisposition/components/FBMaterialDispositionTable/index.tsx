@@ -94,7 +94,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
   const materialDispositionAsync = useAsync({
     onSuccess: (data: {records: EditableMDItem[], lastRefreshedAt: Date}) => {
-      setData([...data?.records, ...data?.records] ?? []);
+      setData(data?.records ?? []);
       setLastRefreshedAt(data?.lastRefreshedAt);
     },
     onError: toastError,
@@ -134,7 +134,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const updateUnsavedData = (values: Partial<EditableMDItem>) => {
     const dataToSubmit = !isEmpty(values) ? preparePayload(values, data) : bulkDataToSubmit;
-    // formState?.setFieldValue(MATERIAL_DISPOSITION_TABLE_NAME, [...dataToSubmit]);
+    formState?.setFieldValue(MATERIAL_DISPOSITION_TABLE_NAME, [...dataToSubmit]);
     setData(dataToSubmit);
   };
 
@@ -210,7 +210,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       }
 
       if (formContext.isEditing) {
-        // formState?.setFieldValue(MATERIAL_DISPOSITION_TABLE_NAME, [...updatedData]);
+        formState?.setFieldValue(MATERIAL_DISPOSITION_TABLE_NAME, [...updatedData]);
         setData(updatedData);
         return;
       }
