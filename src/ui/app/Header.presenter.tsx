@@ -42,6 +42,8 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   const user = store.getState().auth.user;
   const companyName = user.employee.company.name;
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
+  const hideComponent = `${window.location.origin}/` === window.location.href;
+  console.log(hideComponent);
   const {
     handleSwitchCompany,
   } = React.useContext(UserMenuContext)! ?? {};
@@ -93,7 +95,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
         </div>
       </div>
 
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className={cx(classes.toolbar, { [classes.welcomeHide]: !hideComponent })}>
         <Grid
           container
           alignItems="center"
