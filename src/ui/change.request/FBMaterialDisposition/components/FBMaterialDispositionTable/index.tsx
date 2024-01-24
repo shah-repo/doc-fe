@@ -7,7 +7,7 @@ import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { cloneDeep, each, find, first, get, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
++import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../../../../common/utils/date';
@@ -34,6 +34,7 @@ import { buildSchema } from './schema';
 import useStyles from './styles';
 import { CopiedItems, EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
 import { getExcelColumns, hasConflictingSelections, updateData, updateDataWithCopiedValue } from './utils';
+import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
 
 interface props {
   changeRequest?: ChangeRequest
@@ -43,6 +44,7 @@ interface props {
 
 const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly, setDoNotPrompt }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
   const [isCopyConflictedSelections, setIsCopyConflictedSelections] = React.useState<boolean>(false);
   const [data, setData] = React.useState<EditableMDItem[]>([]);
@@ -99,6 +101,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const partAsync = useAsync({
     onSuccess: () => {
+      changeRequest?.id && dispatch(changeRequestsActions.loadAudit(changeRequest?.id));
       materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
       if (formContext.isEditing) {
         history.push(changeRequestPreviewPath(changeRequest?.id ?? ''));
