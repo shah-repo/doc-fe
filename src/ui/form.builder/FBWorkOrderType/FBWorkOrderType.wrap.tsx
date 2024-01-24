@@ -13,7 +13,7 @@ import { WorkOrderTypes, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME } from '../../../s
 import { documentsActions } from '../../../state/ducks/documents';
 import { ApplicationState } from '../../../state/reducers';
 import Text from '../../components/Text';
-import { DocumentTypeAcronym } from '../../dashboard.new/line.items/common/types';
+import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
@@ -44,7 +44,7 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
     const { formState, workspaceState } = FB.useStores();
 
     const lotDocumentType = useSelector((state: ApplicationState) => {
-      return documentTypeSelectors.getDocumentTypeByAcronym(state, DocumentTypeAcronym.LOT);
+      return documentTypeSelectors.getDocumentTypeByGroup(state, DocTypeGroups.LOT);
     });
 
     isInputOwner = workspaceState?.getIsInputOwner(name);

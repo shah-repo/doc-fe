@@ -7,6 +7,7 @@ import { AsyncState } from '../../../types';
 import { DocumentGroupType, DocumentType, DOC_TYPE_GROUP_OPTION, TabInfo } from './types';
 import { companySelectors } from '../../company';
 import { DocumentCategory } from '../types';
+import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -88,6 +89,16 @@ const getDocumentTypeByAcronym = createSelector(
       .values(docTypesById)
       .find((docType) => docType.documentTypeAcronym.toLowerCase() === acronym.toLowerCase()),
 );
+
+const getDocumentTypeByGroup = createSelector(
+  byId,
+  (state, group: DocTypeGroups) => group,
+  (docTypesById, group) =>
+    Object
+      .values(docTypesById)
+      .find((docType) => docType.group === group),
+);
+
 const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0]
   ? state.documentType.docRevTypeId.forms[0].id : '';
 
@@ -141,6 +152,7 @@ export default {
   getDocumentTypeById,
   getDocumentTypesWithPageDetails,
   getDocumentTypeByAcronym,
+  getDocumentTypeByGroup,
   docRevTypeById,
   getDocTypeName,
   getDocTypeCategory,
