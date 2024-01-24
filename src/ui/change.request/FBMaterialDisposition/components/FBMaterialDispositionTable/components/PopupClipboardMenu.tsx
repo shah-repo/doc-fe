@@ -10,7 +10,7 @@ import Text from '../../../../../components/Text';
 import { Dialog } from '../../../../../hooks/useDialog';
 
 interface PopupClipboardMenuProps extends ColumnMenuProps {
-  copyClipboardPopupMenu?: Dialog
+  copyClipboardPopupMenu: Dialog
   populateCopiedValue: () => void
   clearContent: () => void
 }
@@ -39,12 +39,13 @@ export const PopupClipboardMenu: React.ComponentType<PopupClipboardMenuProps> = 
   const { copyClipboardPopupMenu, populateCopiedValue, clearContent } = props;
   const ref = useRef<HTMLDivElement>(null);
   const classes = useStyles();
+
   return (
     <>
       <div ref={ref} className={classes.popperHolder} />
       {ref.current && (
         <Popper
-          open={Boolean(copyClipboardPopupMenu?.isOpen)}
+          open={copyClipboardPopupMenu?.isOpen}
           anchorEl={ref.current}
           placement="bottom-start"
           transition

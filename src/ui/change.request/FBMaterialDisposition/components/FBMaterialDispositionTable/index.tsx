@@ -7,10 +7,11 @@ import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { cloneDeep, each, find, first, get, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
-+import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../../../../common/utils/date';
+import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
@@ -34,7 +35,6 @@ import { buildSchema } from './schema';
 import useStyles from './styles';
 import { CopiedItems, EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
 import { getExcelColumns, hasConflictingSelections, updateData, updateDataWithCopiedValue } from './utils';
-import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
 
 interface props {
   changeRequest?: ChangeRequest
@@ -123,12 +123,15 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     } else if (!isEmpty(data)) {
       setData(data as EditableMDItem[]);
     }
+
     const columnIndexes: number[] = [];
+
     each(columns, (column, index) => {
       if (!column.selectable) {
         columnIndexes.push(index);
       }
     });
+
     setNonSelectableColumnIndexes(columnIndexes);
   }, []);
 
@@ -152,14 +155,16 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     onSubmit: (values) => {
       if (hasConflictingSelections(values) && settings?.shouldAutoUpdateLotStatus) {
         onOpen();
-      } else {
-        if (formContext.isEditing) {
-          updateUnsavedData(values);
-        } else {
-          updateMaterialDispositionTableData([values] as EditableMDItem[]);
-        }
-        discardMDItem();
+        return;
       }
+
+      if (formContext.isEditing) {
+        updateUnsavedData(values);
+      } else {
+        updateMaterialDispositionTableData([values] as EditableMDItem[]);
+      }
+
+      discardMDItem();
     },
   });
 

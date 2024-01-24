@@ -17,8 +17,10 @@ export const hasConflictingSelections = (values: Partial<EditableMDItem>): boole
     if (values[fieldName] !== EMPTY_DROPDOWN_PLACEHOLDER) {
       return count + 1;
     }
+
     return count;
   }, 0);
+
   return count > 1;
 };
 
@@ -27,6 +29,7 @@ export const updateData = (values: Partial<EditableMDItem>, data: EditableMDItem
     if (values.id === dataItem.id) {
       return values as EditableMDItem;
     }
+
     return dataItem;
   });
 };
@@ -37,10 +40,12 @@ export const updateDataWithCopiedValue = (selectedRowIds: string[],
   const copiedDataItem = find(data, { id: first(keys(copiedItems)) });
   const copiedDataItemField = copiedItems?.[copiedDataItem?.id ?? ''] ?? '';
   const copiedDataItemValue = copiedItems?.value;
+
   return data.map(dataItem => {
     if (selectedRowIds.includes(dataItem.id) && !isEmpty(copiedDataItemValue)) {
       dataItem[copiedDataItemField] = copiedDataItemValue;
     }
+
     return dataItem;
   });
 };

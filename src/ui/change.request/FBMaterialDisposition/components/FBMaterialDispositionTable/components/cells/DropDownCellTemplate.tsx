@@ -6,15 +6,16 @@ import { useFormikContext } from 'formik';
 import { find, first, get, has, isEmpty, keys, last, values } from 'lodash';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../../../components/KendoDataGrid/constants';
 import { Dialog } from '../../../../../../components/dialogs';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode, MODE_FIELD,
-} from '../../../../../../components/KendoDataGrid/constants';
 import useDialog from '../../../../../../hooks/useDialog';
 import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
@@ -69,6 +70,10 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const isColumnEditMode = !isEmpty(copiedItems) && (first(values(copiedItems)) ?? [] as string[]).includes(field);
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]) || isColumnEditMode;
   const showPopup = has(selectedState, dataItem.id) && isColumnEditMode && last(keys(selectedState)) === dataItem.id;
+  const showCopyButton = isEmpty(copiedItems) && dataItem[field] && dataItem[field] !== EMPTY_DROPDOWN_PLACEHOLDER;
+  dataItem.isSelected = false;
+  const showEditor = isEditMode || dataItem.isSelected;
+  const showContent = !isEditMode && !dataItem.isSelected;
 
   const dialog = useDialog();
   const [copyIconRef, isHovered] = useHover<HTMLButtonElement>();
@@ -83,6 +88,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const [copiedItem, setCopiedItem] = useState<{
     [id: string]: string
   }>({});
+  const showSelector = !isEmpty(copiedItems) && !isEmpty(copiedItem);
 
   const handleClick = () => {
     if ((has(copiedItem, dataItem.id) && copiedItem[dataItem.id] === field) || isColumnEditMode) {
@@ -90,17 +96,18 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     }
     onClick?.({ dataItem });
   };
+
   const handleClickPOs = (e) => {
     dialog.open();
     e.stopPropagation();
   };
-  dataItem.isSelected = false;
-  const handleCopy = (e) => {
+
+  const handleCopy = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
     dataItem.isSelected = true;
     setCopiedItem({ [dataItem.id]: field });
     onSelectCell?.(dataItem, field);
-    e.stopPropagation();
-    e?.preventDefault();
   };
 
   const handleClosePOs = (e) => {
@@ -119,9 +126,9 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   }, [copiedItems]);
 
   return (<>
-    {!isEmpty(copiedItems) && !isEmpty(copiedItem) && <Selector />}
-    {(isEditMode || dataItem.isSelected) && (<Editor {...props} {...{ isColumnEditMode, copiedItem }} />)}
-    {(!isEditMode && !dataItem.isSelected) && <OverflowingContent onClick={handleClick}>
+    {showSelector && <Selector />}
+    {showEditor && (<Editor {...props} {...{ isColumnEditMode, copiedItem }} />)}
+    {showContent && <OverflowingContent onClick={handleClick}>
       <Box
         display="flex"
         alignItems="center"
@@ -137,8 +144,8 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
             />
           )}
         </div>
-        {isEmpty(copiedItems) && dataItem[field] && dataItem[field] !== EMPTY_DROPDOWN_PLACEHOLDER && (
-          <span ref={copyIconRef}>
+        {showCopyButton && (
+          <span ref={copyIconRef} onClick={handleCopy}>
             <Tooltip
               title={translate('common.copy.value')}
               placement="top"
@@ -146,7 +153,6 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
             >
               <FontAwesomeIcon
                 icon={ isHovered ? solid('copy') : regular('copy')}
-                onClick={handleCopy}
                 className={classes.copyIcon}
               /></Tooltip>
           </span>)}
