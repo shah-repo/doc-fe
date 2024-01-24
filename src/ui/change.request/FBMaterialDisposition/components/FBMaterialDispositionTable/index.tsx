@@ -5,7 +5,7 @@ import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel
 import { GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar, getSelectedState, getSelectedStateFromKeyDown } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { cloneDeep, each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
+import { cloneDeep, each, find, first, get, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -32,8 +32,8 @@ import { PopupClipboardMenuContext } from './components/PopupClipboardMenu';
 import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
-import { getExcelColumns, hasConflictingSelections, preparePayload } from './utils';
+import { CopiedItems, EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
+import { getExcelColumns, hasConflictingSelections, updateData, updateDataWithCopiedValue } from './utils';
 
 interface props {
   changeRequest?: ChangeRequest
@@ -48,10 +48,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const [data, setData] = React.useState<EditableMDItem[]>([]);
   const [lastRefreshedAt, setLastRefreshedAt] = React.useState<Date>();
   const settings = useSelector(companySelectors.getGeneralSettings);
-  const [copiedItems, setCopiedItems] = React.useState<{
-    [id: string]: string
-    value: string
-  }>();
+  const [copiedItems, setCopiedItems] = React.useState<CopiedItems>();
   const [selectedState, setSelectedState] = React.useState<{
     [id: string]: boolean | number[]
   }>({});
@@ -133,9 +130,18 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   }, []);
 
   const updateUnsavedData = (values: Partial<EditableMDItem>) => {
-    const dataToSubmit = !isEmpty(values) ? preparePayload(values, data) : bulkDataToSubmit;
-    workspaceState?.setMDTableData(dataToSubmit);
-    setData(dataToSubmit);
+    const updatedData = updateData(values, data);
+    workspaceState?.setMDTableData(updatedData);
+    workspaceState?.addMDUpdatedDataId(values.id as string);
+    setData(updatedData);
+  };
+
+  const updateUnsavedCopiedData = () => {
+    const selectedRowIds = keys(selectedState);
+    const updatedData = updateDataWithCopiedValue(selectedRowIds, copiedItems as CopiedItems, data);
+        workspaceState?.setMDTableData(updatedData);
+        selectedRowIds.forEach(id => workspaceState?.addMDUpdatedDataId(id));
+        setData(updatedData);
   };
 
   const formik = useFormik<Partial<EditableMDItem>>({
@@ -147,7 +153,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         if (formContext.isEditing) {
           updateUnsavedData(values);
         } else {
-          updateMaterialDispositionTableData(values, data);
+          updateMaterialDispositionTableData([values] as EditableMDItem[]);
         }
         discardMDItem();
       }
@@ -156,36 +162,25 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const { submitForm, resetForm, setValues } = formik;
 
-  const updateMaterialDispositionTableData = (values: Partial<EditableMDItem> | null, data: EditableMDItem[]) => {
+  const updateMaterialDispositionTableData = (data: EditableMDItem[]) => {
     const partToSave = {
-      materialDispositionEntryUpdates: data.map(dataItem => {
-        const updatedValues = values?.id === dataItem.id ? pick(values, FIELDS_TO_PICK) : pick(dataItem, FIELDS_TO_PICK);
-        return {
-          materialDispositionId: dataItem.id,
-          ...updatedValues,
-        };
-      }),
+      materialDispositionEntryUpdates: data.map(dataItem => ({
+        materialDispositionId: dataItem.id,
+        ...pick(dataItem, FIELDS_TO_PICK),
+      })),
     };
     partAsync.start(updateItem, changeRequest?.id, partToSave, partAsync);
   };
 
   const clearContent = () => {
-    const copiedDataItem = find(data, { id: first(keys(copiedItems)) });
-    const copiedDataItemField = copiedItems?.[copiedDataItem?.id ?? ''] ?? '';
-    const updatedData = data.map(dataItem => {
-      if (has(selectedState, dataItem.id) && !isEmpty(copiedDataItem)) {
-        dataItem[copiedDataItemField] = EMPTY_DROPDOWN_PLACEHOLDER;
-      }
-      return dataItem;
-    });
-    copyClipboardPopupMenu.close();
-    if (formContext.isEditing) {
-        workspaceState?.setMDTableData(updatedData);
-        setData(updatedData);
-        return;
-    }
-    updateMaterialDispositionTableData(null, updatedData);
+    onUpdateSelectedCell(EMPTY_DROPDOWN_PLACEHOLDER);
   };
+
+  useEffect(() => {
+    if (copiedItems?.value === EMPTY_DROPDOWN_PLACEHOLDER) {
+      populateCopiedValue();
+    }
+  }, [copiedItems]);
 
   const onClose = () => {
     dialog.close();
@@ -198,9 +193,11 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       const copiedDataItemField = copiedItems?.[copiedDataItem?.id ?? ''] ?? '';
       const copiedDataItemValue = copiedItems?.value;
       let isConflictingSelections = false;
+      const selectedRowIds = keys(selectedState);
+      const selectedDataItemList = data.filter(dataItem => selectedRowIds.includes(dataItem.id));
 
-      const updatedData = cloneDeep(data).map(dataItem => {
-        if (has(selectedState, dataItem.id) && !isEmpty(copiedDataItem)) {
+      const payload = cloneDeep(selectedDataItemList).map(dataItem => {
+        if (!isEmpty(copiedDataItem)) {
           dataItem[copiedDataItemField] = copiedDataItemValue;
         }
         !isConflictingSelections && (isConflictingSelections = hasConflictingSelections(dataItem));
@@ -210,28 +207,35 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       if (isConflictingSelections) {
         onOpen();
         setIsCopyConflictedSelections(isConflictingSelections);
-        seBulkDataToSubmit(updatedData);
+        if (!formContext.isEditing) {
+          seBulkDataToSubmit(payload);
+        }
         return;
       }
 
       if (formContext.isEditing) {
-        workspaceState?.setMDTableData(updatedData);
-        setData(updatedData);
+        updateUnsavedCopiedData();
+        copyClipboardPopupMenu.close();
         return;
       }
-      updateMaterialDispositionTableData(null, updatedData);
+      updateMaterialDispositionTableData(payload);
     }
     copyClipboardPopupMenu.close();
   };
 
   const onConfirm = () => {
     if (formContext.isEditing) {
-      updateUnsavedData(formik.values);
+      if (!copyClipboardPopupMenu.isOpen) {
+        updateUnsavedData(formik.values);
+      } else {
+        updateUnsavedCopiedData();
+      }
     } else if ((!isEmpty(copiedItems) || isCopyConflictedSelections) && !isEmpty(bulkDataToSubmit)) {
-      updateMaterialDispositionTableData(null, bulkDataToSubmit);
+      updateMaterialDispositionTableData(bulkDataToSubmit);
     } else {
-      updateMaterialDispositionTableData(formik.values, data);
+      updateMaterialDispositionTableData([formik.values] as EditableMDItem[]);
     }
+    copyClipboardPopupMenu.close();
     dialog.close();
     setIsCopyConflictedSelections(false);
     discardMDItem();
@@ -256,10 +260,12 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   }, [editedMDItem, setValues, resetForm]);
 
   useEffect(() => {
-    const dataToSubmit = workspaceState?.getMDTableData ?? [];
-    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(dataToSubmit)) {
+    const data = workspaceState?.getMDTableData ?? [];
+    const updatedDataItemIds = workspaceState?.getMDUpdatedDataIds ?? [];
+    const updatedData = data.filter(dataItem => updatedDataItemIds.includes(dataItem.id));
+    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(updatedData)) {
       setDoNotPrompt?.(true);
-      updateMaterialDispositionTableData(null, dataToSubmit);
+      updateMaterialDispositionTableData(updatedData);
       workspaceState?.setMDTableData([]);
     }
   }, [parentFormik.isSubmitting]);

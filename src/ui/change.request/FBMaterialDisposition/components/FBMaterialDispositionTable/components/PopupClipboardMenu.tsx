@@ -63,10 +63,7 @@ export const PopupClipboardMenu: React.ComponentType<PopupClipboardMenuProps> = 
                   id="composition-menu"
                   aria-labelledby="composition-button"
                 >
-                  <StyledMenuListItem button alignItems="flex-start" onClick={() => {
-                    populateCopiedValue();
-                    copyClipboardPopupMenu?.close();
-                  }}>
+                  <StyledMenuListItem button alignItems="flex-start" onClick={populateCopiedValue}>
                     <ListItemIcon><CloneIcon /></ListItemIcon>
                     <StyledMenuListItemText
                       data-cy="copy-value"

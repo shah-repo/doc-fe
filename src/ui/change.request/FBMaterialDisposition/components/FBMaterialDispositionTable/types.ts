@@ -60,3 +60,8 @@ export interface CustomTemplateProps extends CellTemplateProps<EditableMDItem> {
   onClick?: (e: MDItemEditEvent) => void
   onSelectCell?: (dataItem: EditableMDItem, field: string) => void
 }
+
+export interface CopiedItems {
+  [id: string]: string
+  value: string
+}

@@ -1,4 +1,4 @@
-import { includes, isArray, isEmpty, isUndefined, map, omit, size } from 'lodash';
+import { includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { appGlobals } from '../../../appGlobals';
@@ -40,6 +40,7 @@ class FBWorkspaceState extends FBSchemaState {
   public omitAutosave = false;
 
   public mdTableData: EditableMDItem[] = [];
+  public mdUpdatedDataIds: string[] = [];
 
   public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
@@ -107,6 +108,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   public get getMDTableData (): EditableMDItem[] {
     return this.mdTableData;
+  }
+
+  public get getMDUpdatedDataIds (): string[] {
+    return this.mdUpdatedDataIds;
   }
 
   public get isChangeRequest (): boolean {
@@ -184,6 +189,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   public setMDTableData = (mdTableData: EditableMDItem[]) => {
     set(this, 'mdTableData', mdTableData);
+  };
+
+  public addMDUpdatedDataId = (mdUpdatedDataId: string) => {
+    set(this, 'mdUpdatedDataIds', union(this.mdUpdatedDataIds, [mdUpdatedDataId]));
   };
 
   @action public setFormInputSync = (name: string, value: any) => {
