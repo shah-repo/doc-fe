@@ -29,11 +29,11 @@ interface PopupClipboardMenuContextProps {
 
 export const PopupClipboardMenuContext = React.createContext<PopupClipboardMenuContextProps>({} as PopupClipboardMenuContextProps);
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   popperHolder: {
-    marginLeft: '370px',
+    marginLeft: theme.spacing(46.25),
   },
-});
+}));
 
 export const PopupClipboardMenu: React.ComponentType<PopupClipboardMenuProps> = (props) => {
   const { copyClipboardPopupMenu, populateCopiedValue, clearContent } = props;

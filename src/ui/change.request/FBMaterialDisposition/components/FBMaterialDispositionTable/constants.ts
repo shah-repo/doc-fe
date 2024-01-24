@@ -3,7 +3,6 @@ export const EMPTY_DROPDOWN_PLACEHOLDER = 'N/A';
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
 export const EXCEL_FILE_NAME = 'materialDisposition.xlsx';
-export const MATERIAL_DISPOSITION_TABLE_NAME = 'materialDispositionTable';
 export const OPTIONS = [
   { label: 'approvalRequest.material.disposition.options.mustConform', value: 'MUST_CONFORM' },
   { label: 'approvalRequest.material.disposition.options.rework', value: 'REWORK' },

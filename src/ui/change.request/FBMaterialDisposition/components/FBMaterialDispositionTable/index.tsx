@@ -5,7 +5,7 @@ import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel
 import { GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar, getSelectedState, getSelectedStateFromKeyDown } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { cloneDeep, each, find, first, get, has, intersection, isEmpty, isUndefined, keys, map, omit, pick } from 'lodash';
+import { cloneDeep, each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -29,7 +29,7 @@ import useDialog from '../../../../hooks/useDialog';
 import { changeRequestPreviewPath } from '../../../utils/paths';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
 import { PopupClipboardMenuContext } from './components/PopupClipboardMenu';
-import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK, MATERIAL_DISPOSITION_TABLE_NAME, SELECTED_FIELD } from './constants';
+import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
@@ -86,9 +86,10 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const dialog = useDialog();
   const formContext = useFormContext();
   const parentFormik = useFormikContext();
-  const { formState } = FB.useStores();
+  const { workspaceState } = FB.useStores();
   const [bulkDataToSubmit, seBulkDataToSubmit] = React.useState<EditableMDItem[]>([]);
   const history = useHistory();
+  console.log({ workspaceState });
 
   const load = useActionCreator(materialDispositionActions.loadMaterialDispositionList);
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
@@ -117,11 +118,11 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const [nonSelectableColumnIndexes, setNonSelectableColumnIndexes] = React.useState<number[]>([]);
 
   useEffect(() => {
-    const data = formState?.getFieldValue(MATERIAL_DISPOSITION_TABLE_NAME);
-    if ((isUndefined(data) && formContext.isEditing) || !formContext.isEditing) {
+    const data = workspaceState?.getMDTableData;
+    if ((isEmpty(data) && formContext.isEditing) || !formContext.isEditing) {
       fetchMaterialDispositionTableData();
-    } else {
-      setData(data);
+    } else if (!isEmpty(data)) {
+      setData(data as EditableMDItem[]);
     }
     const columnIndexes: number[] = [];
     each(columns, (column, index) => {
@@ -134,7 +135,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const updateUnsavedData = (values: Partial<EditableMDItem>) => {
     const dataToSubmit = !isEmpty(values) ? preparePayload(values, data) : bulkDataToSubmit;
-    formState?.setFieldValue(MATERIAL_DISPOSITION_TABLE_NAME, [...dataToSubmit]);
+    workspaceState?.setMDTableData(dataToSubmit);
     setData(dataToSubmit);
   };
 
@@ -178,8 +179,13 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       }
       return dataItem;
     });
-    updateMaterialDispositionTableData(null, updatedData);
     copyClipboardPopupMenu.close();
+    if (formContext.isEditing) {
+        workspaceState?.setMDTableData(updatedData);
+        setData(updatedData);
+        return;
+    }
+    updateMaterialDispositionTableData(null, updatedData);
   };
 
   const onClose = () => {
@@ -210,7 +216,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       }
 
       if (formContext.isEditing) {
-        formState?.setFieldValue(MATERIAL_DISPOSITION_TABLE_NAME, [...updatedData]);
+        workspaceState?.setMDTableData(updatedData);
         setData(updatedData);
         return;
       }
@@ -251,11 +257,11 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   }, [editedMDItem, setValues, resetForm]);
 
   useEffect(() => {
-    const dataToSubmit = formState?.getFieldValue(MATERIAL_DISPOSITION_TABLE_NAME);
+    const dataToSubmit = workspaceState?.getMDTableData ?? [];
     if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(dataToSubmit)) {
       setDoNotPrompt?.(true);
-      formState?.omitFieldValue(MATERIAL_DISPOSITION_TABLE_NAME);
-      updateMaterialDispositionTableData(dataToSubmit, data);
+      updateMaterialDispositionTableData(null, dataToSubmit);
+      workspaceState?.setMDTableData([]);
     }
   }, [parentFormik.isSubmitting]);
 

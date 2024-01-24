@@ -1,25 +1,26 @@
 import { makeStyles } from '@material-ui/core';
 import React, { useRef } from 'react';
+import { Colors } from '../../../../../layout/theme-next';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    marginLeft: '-3px',
-    height: '3px',
+    marginLeft: theme.spacing(-0.375),
+    height: 3,
   },
   selecterBox: {
-    minHeight: '32px',
-    height: '32px',
-    width: '354px',
-    border: '2px dashed #4d88ff',
+    minHeight: 32,
+    height: 32,
+    width: 354,
+    border: `2px dashed ${Colors.primaryLight}`,
     pointerEvents: 'none',
   },
   selecterHandler: {
-    height: '12px',
-    width: '12px',
-    backgroundColor: '#4d88ff',
+    height: 12,
+    width: 12,
+    backgroundColor: Colors.primaryLight,
     position: 'absolute',
-    right: '-4px',
-    bottom: '-4px',
+    right: -4,
+    bottom: -4,
     pointerEvents: 'all',
   },
   wrap: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles({
   pointerEventsNone: {
     pointerEvents: 'none',
   },
-});
+}));
 
 export const Selector: React.FC = () => {
   const classes = useStyles();
