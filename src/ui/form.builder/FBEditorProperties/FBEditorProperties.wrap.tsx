@@ -63,6 +63,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     // Refactoring will require predefined schemes migration as well
     // This is a hack for default checked props
     const defaultChecked = FBEditorPropertiesDefaultValue(type as FBInputType, docGroupOptions)[type ?? ''];
+    
     useEffect(() => {
       map(defaultChecked, (key) => {
         formState?.setFieldValue(key, true);
