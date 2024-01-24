@@ -89,7 +89,6 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const { workspaceState } = FB.useStores();
   const [bulkDataToSubmit, seBulkDataToSubmit] = React.useState<EditableMDItem[]>([]);
   const history = useHistory();
-  console.log({ workspaceState });
 
   const load = useActionCreator(materialDispositionActions.loadMaterialDispositionList);
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
