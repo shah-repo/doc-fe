@@ -144,45 +144,57 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
   const downloadAction = useActionCreator(attachmentsActions.download);
   const [downloadPdfMobile, setDownloadPdfMobile] = React.useState(false);
   const hoverItem = hoverItemId === id;
+
   const handleClick = () => {
     setOpen(!open);
   };
+
   const handleDismiss = () => {
     dismissLineItem?.(id);
   };
+
   const handlePinClick = () => {
     pinLineItem?.(id);
   };
+
   const handleUnPinClick = () => {
     unPinLineItem?.(id);
   };
+
   const onMouseHoverPinIcon = () => {
     setDownloadPdfHover(false);
     setPinHover(true);
   };
+
   const onMouseLeaveActionIcons = () => {
     setPinHover(false);
     setDownloadPdfHover(false);
   };
+
   const onMouseHoverDownloadPdfIcon = () => {
     setPinHover(false);
     setDownloadPdfHover(true);
   };
+
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
+
   const handleDownloadClick = () => {
     setDownloadPdfMobile(true);
   };
+
   const handleDownloadClose = () => {
     setDownloadPdfMobile(false);
   };
+
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
       downloadFile(downloadInfo?.url);
     },
   });
+
   const downloadAttachment = (attachment: Attachment) => () => {
     async.start(downloadAction, attachment, async);
   };

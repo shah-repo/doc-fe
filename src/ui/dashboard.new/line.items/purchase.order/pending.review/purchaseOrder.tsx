@@ -164,44 +164,56 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const handleClick = () => {
     setOpen(!open);
   };
+
   const handleDismiss = () => {
     dismissLineItem?.(id);
   };
+
   const handlePinClick = () => {
     pinLineItem?.(id);
   };
+
   const handleUnPinClick = () => {
     unPinLineItem?.(id);
   };
+
   const onMouseHoverPinIcon = () => {
     setDownloadPdfHover(false);
     setPinHover(true);
   };
+
   const onMouseLeaveActionIcons = () => {
     setPinHover(false);
     setDownloadPdfHover(false);
   };
+
   const onMouseHoverDownloadPdfIcon = () => {
     setPinHover(false);
     setDownloadPdfHover(true);
   };
+
   const handleDownloadClick = () => {
     setDownloadPdfMobile(true);
   };
+
   const handleDownloadClose = () => {
     setDownloadPdfMobile(false);
   };
+
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
+
   const openApproversModel = (e) => {
     e.stopPropagation();
     setLastEmailSent(false);
     setEmailModelopen(true);
   };
+
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
   };
+
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
@@ -214,6 +226,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
       downloadFile(downloadInfo?.url);
     },
   });
+
   const downloadAttachment = (attachment: Attachment) => () => {
     async.start(downloadAction, attachment, async);
   };

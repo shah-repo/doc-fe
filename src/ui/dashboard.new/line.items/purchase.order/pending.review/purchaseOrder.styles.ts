@@ -21,7 +21,7 @@ export default makeStyles((theme: NextTheme) => ({
     '& > button': {
       borderRadius: 25,
       color: Colors.white,
-      padding: `${theme.spacing(1.5)}px ${theme.spacing(3)}px`,
+      padding: theme.spacing(1.5, 3),
       '& svg': {
         marginRight: theme.spacing(0.5),
       },
