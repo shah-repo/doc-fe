@@ -40,12 +40,16 @@ export const Selector: React.FC = () => {
   const selecterRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e) => {
-    if (selecterRef && selecterHandlerRef.current) {
+    if (!(selecterRef && selecterHandlerRef.current)) {
+      return;
+    }
+
       selecterHandlerRef.current?.classList.add(classes.pointerEventsNone);
 
       const mousemove = (e: MouseEvent) => {
         const selecter = selecterRef.current?.getBoundingClientRect();
         const top = selecter?.top ?? 0;
+
         if (e.clientY > top && selecterRef.current) {
           const newHeight = e.clientY - top;
           selecterRef.current.style.height = `${newHeight}px`;
@@ -54,12 +58,13 @@ export const Selector: React.FC = () => {
 
       const mouseup = (e: MouseEvent) => {
         selecterHandlerRef.current?.classList.remove(classes.pointerEventsNone);
+
         window.removeEventListener('mousemove', mousemove);
         window.removeEventListener('mouseup', mouseup);
       };
+
       window.addEventListener('mousemove', mousemove);
       window.addEventListener('mouseup', mouseup);
-    }
   };
 
   return (
