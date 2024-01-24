@@ -20,6 +20,7 @@ import AttachmentsField from '../../../../../../document.revision/form/attachmen
 import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
 import FBAllocationTreeList from '../../../../../../form.builder/FBAllocation/components/treelist';
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
+import FBDataStore from '../../../../../../form.builder/FBStore/FBDataStore';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentWO } from '../../../../../helpers/checkDocumentGroup';
@@ -79,6 +80,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   // By default the documentType points to being a Form, but while previewing, it needs to
   // behave as if it is the documentType that was selected as an output.
   if (documentRevision && outputType) {
+    FBDataStore.documentTypes = documentRevision.document.documentType;
     documentRevision.document.documentType = outputType;
   }
   const outputTypeGroup = get(outputType, 'group');

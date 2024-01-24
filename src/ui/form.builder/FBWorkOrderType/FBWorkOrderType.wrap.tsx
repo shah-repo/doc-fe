@@ -106,7 +106,7 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
       } else {
         onChange?.(...args);
         setPrevOption(args[1]);
-        if (workspaceState?.document && args[1] === WorkOrderTypes.MAKE_KIT) {
+        if (workspaceState?.document && args[1] === WorkOrderTypes.MAKE_KIT && !workspaceState?.isPreview) {
           loadProposedLotId(lotDocumentType?.id as string);
         }
       }
