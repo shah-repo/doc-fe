@@ -9,7 +9,6 @@ import { FBEditorPropertiesDefaultValue } from './FBEditorProperties.helper';
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     onChange,
     options,
@@ -17,7 +16,6 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     inputProps,
     ...props
   }: T) => {
-
     const { formState, workspaceState } = FB.useStores();
     type && (options = FBData.editorPropertiesByType(type));
 
@@ -63,11 +61,12 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     // Refactoring will require predefined schemes migration as well
     // This is a hack for default checked props
     const defaultChecked = FBEditorPropertiesDefaultValue(type as FBInputType, docGroupOptions)[type ?? ''];
-    
+
     useEffect(() => {
       map(defaultChecked, (key) => {
         formState?.setFieldValue(key, true);
       });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return Component({
