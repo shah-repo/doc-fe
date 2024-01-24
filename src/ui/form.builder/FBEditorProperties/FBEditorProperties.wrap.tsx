@@ -1,4 +1,5 @@
 import { at, filter, get, map, some } from 'lodash';
+import { useEffect } from 'react';
 import { FB, FBData, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from '..';
 import { DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { checkDocumentGroupOptions, checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -62,9 +63,11 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     // Refactoring will require predefined schemes migration as well
     // This is a hack for default checked props
     const defaultChecked = FBEditorPropertiesDefaultValue(type as FBInputType, docGroupOptions)[type ?? ''];
-    map(defaultChecked, (key) => {
-      formState?.setFieldValue(key, true);
-    });
+    useEffect(() => {
+      map(defaultChecked, (key) => {
+        formState?.setFieldValue(key, true);
+      });
+    }, []);
 
     return Component({
       ...(props as T),
