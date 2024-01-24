@@ -1,6 +1,6 @@
+import { Tooltip } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Tooltip from '../../../../../../components/common/kendo/Tooltip';
 import { documentPreviewPath } from '../../../../../../document.revision/utils/paths';
 import OverflowingContent from '../../../commonCells/OveflowContent';
 import { EMPTY_DROPDOWN_PLACEHOLDER } from '../../constants';
@@ -16,18 +16,15 @@ export const LotIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
 
   return (
     <OverflowingContent onClick={() => onClick?.({ dataItem })}>
-      {fieldValue && lotDocumentId ? <Tooltip
-        data={fieldValue}
-        childrenElement={
-          <Link
-            to={documentPreviewPath(lotDocRevId, lotDocumentId)}
-            target="_blank"
-            className={classes.link}
-          >
-            {fieldValue}
-          </Link>
-        }
-      /> : EMPTY_DROPDOWN_PLACEHOLDER}
+      {fieldValue && lotDocumentId ? <Tooltip title={fieldValue} placement="top-start" arrow>
+        <Link
+          to={documentPreviewPath(lotDocRevId, lotDocumentId)}
+          target="_blank"
+          className={classes.link}
+        >
+          {fieldValue}
+        </Link>
+      </Tooltip> : EMPTY_DROPDOWN_PLACEHOLDER}
     </OverflowingContent>
   );
 };
