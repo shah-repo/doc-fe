@@ -158,6 +158,7 @@ class FBEditorState {
     poApprovalMatrix: FBEditorLabel,
     task: FBEditorLabel,
     approvals: FBEditorApprovals,
+    woApprovals: FBEditorApprovals,
     procedure: FBEditorEmpty,
     mpiprocedure: FBEditorEmpty,
     parts: FBEditorEmpty,
@@ -171,8 +172,10 @@ class FBEditorState {
     lotOnHandQuantity: FBEditorEmpty,
     lotQuantity: FBEditorLabel,
     numeric: FBEditorLabel,
-    workOrderPartDetails: FBEditorEmpty,
-    tasksListTable: FBEditorEmpty,
+    workOrderPartDetails: FBEditorLabel,
+    tasksListTable: FBEditorLabel,
+    workOrderType: FBEditorLabel,
+    workOrderLhrTable: FBEditorLabel,
   };
 
   public static editorTypeIconMapping = {

@@ -27,7 +27,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
         <FBAutocompleteAsync
           {...props}
           name={PART_TO_BE_MADE}
-          label="form.builder.wo.part.selector"
+          label={label ?? 'form.builder.wo.part.selector'}
           placeholder="form.builder.select"
           optionId={FBAutocompleteAsyncOption.availableParts}
           optionValueType="id"

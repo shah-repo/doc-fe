@@ -190,7 +190,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
     <>
       {!hidden && (
         <Box position="relative">
-          <FBSection label={translate('form.builder.workOrder.lhr.section.heading')} />
+          <FBSection label={label ?? translate('form.builder.workOrder.lhr.section.heading')} />
           <FormikProvider value={formik}>
             <KendoDataGrid<EditableLHRTableItem>
               filterable={false}

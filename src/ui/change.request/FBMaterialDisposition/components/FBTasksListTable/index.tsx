@@ -33,12 +33,13 @@ interface props {
   state: ChangeRequestStatus | DocumentRevisionStatus
   isShowOnly?: boolean
   disabled?: boolean
+  label?: string
   isAdditionalColumnsShown?: boolean
   setDoNotPrompt?: (state: boolean) => void
 }
 
 const FBTasksListTable: React.FunctionComponent<props> = (
-  { partOfId, state, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt, disabled }) => {
+  { partOfId, label, state, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt, disabled }) => {
   const classes = useStyles();
   isShowOnly = (isShowOnly || disabled) ?? false;
   const [partOfIdToUse, setPartOfIdToUse] = useState(partOfId);
@@ -315,7 +316,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
 
   return (
     <Box ref={containerRef} className={classes.root} data-cy="tasks-list-table">
-      <FBSection label={translate('approvalRequest.tasks.list.section.heading')}>
+      <FBSection label={label ?? translate('approvalRequest.tasks.list.section.heading')}>
         <Button
           kind="ghost"
           size="small"
