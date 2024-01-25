@@ -20,21 +20,21 @@ interface EmailModalProps {
   id: string
   handleEmailModelClose: () => void
   setLastEmailSent: (flag: boolean) => void
-  pendingApprovers: {
+  pendingApprovers: Array<{
     userName: string
     employeeId: string
     userAvatar: Nullable<string>
     userInitialColor: string
     approvalStatus: string
-  }[]
+  }>
   pendingEmailSentAt?: Nullable<string>
-  approvedApprovers: {
+  approvedApprovers: Array<{
     userName: string
     employeeId: string
     userAvatar: Nullable<string>
     userInitialColor: string
     approvalStatus: string
-  }[]
+  }>
 }
 
 const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({

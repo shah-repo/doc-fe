@@ -16,7 +16,7 @@ interface TrainingInfoContainerProps {
 let call: CancelTokenSource;
 
 const FBTrainingInfoContainer: React.FunctionComponent<
-  TrainingInfoContainerProps
+TrainingInfoContainerProps
 > = ({ documentRevisionId, docRevStatus }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [trainingData, setTrainingData] = useState<GroupByStateProps>({});
@@ -86,7 +86,7 @@ const FBTrainingInfoContainer: React.FunctionComponent<
       .catch((exception) => {
         setIsLoading(false);
         if (axios.isCancel(exception)) {
-          return;
+
         }
       });
   }, [documentRevisionId]);

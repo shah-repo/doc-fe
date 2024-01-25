@@ -70,7 +70,7 @@ type DatePickerStaticFieldProps = FieldOwnProps & FieldConfig &
 Partial<TypographyProps>;
 
 const DatePickerStaticField: React.FunctionComponent<
-  DatePickerStaticFieldProps
+DatePickerStaticFieldProps
 > = (props) => <FormikField component={DatePicker} {...props} />;
 
 export default DatePickerStaticField;

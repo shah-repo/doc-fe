@@ -103,7 +103,8 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
         return [item.label,
           item.inputValue,
         ];
-      })); });
+      }));
+  });
 
   // by passing only empty array, library will return the error
   const data = isEmpty(items) ? [''] : items;

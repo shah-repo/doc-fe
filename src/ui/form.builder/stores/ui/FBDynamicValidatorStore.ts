@@ -5,9 +5,10 @@ import FBStore from './FBStore';
 import FBValidatorStore from './FBValidatorStore';
 
 class FormBuilderDynamicValidatorStore {
-  @computed get Validator(): any {
+  @computed get Validator (): any {
     return get(window, 'EnlilRemoteValidators.validator');
   }
+
   public validatorName?: string;
   @observable public errorMessage = '';
   @observable public helperText: Dictionary<string> = {};
@@ -42,8 +43,8 @@ class FormBuilderDynamicValidatorStore {
     });
     const validator = new this.Validator(values, rules);
 
-    function passes() { return null; }
-    function fails() {
+    function passes () { return null; }
+    function fails () {
       const errors = validator.errors.all();
       FBDynamicValidatorStore.setHelperText(errors);
     }

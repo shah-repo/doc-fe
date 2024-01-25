@@ -12,11 +12,11 @@ import { documentsActions } from '../../../state/ducks/documents';
 import { RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../state/reducers';
 import SummaryField from '../../common/summary/base';
-import { FormContext } from '../../components/forms/FormContext';
 import Text from '../../components/Text';
+import { FormContext } from '../../components/forms/FormContext';
 import RelatedPartsWrapper from '../../documentRevision/forms/presenters/related.parts/RelatedParts.wrap';
 import { getHighestRevision } from '../../documentRevision/forms/transform';
-import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentEB, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInStatus } from '../../documentRevision/helpers/documentRevisionStatus';
 import { styles as AutoCompleteStyles } from '../../form.builder/styles/FBAutocomplete.styles';
 import { useTraining } from '../../hooks/docCustomization/useCustomization';
@@ -64,7 +64,7 @@ const Presenter: React.FunctionComponent<Props> = ({
   canShowCreateVersionButton,
 }) => {
   useScrollIntoView();
-  const onSubmit = () => void 0;
+  const onSubmit = () => undefined;
   const { formInput } = dataProp || {};
   const docTypeId = dataProp?.document?.documentType?.id;
   const docDetails: Partial<DocumentRevision> = {

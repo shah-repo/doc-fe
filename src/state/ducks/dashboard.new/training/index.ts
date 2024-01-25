@@ -1,4 +1,4 @@
-import { default as trainingReducer } from './reducers';
+import trainingReducer from './reducers';
 
 export { default as trainingActions } from './actions';
 export { default as trainingSelectors } from './selectors';

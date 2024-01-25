@@ -15,20 +15,20 @@ export const styles = makeStyles(() =>
         },
       },
       '& .MuiButtonBase-root': {
-        'color': Colors.font_gray,
+        color: Colors.font_gray,
         '&:hover': {
           backgroundColor: Colors.sky_blue,
         },
       },
     },
     textfield: {
-      'height': 40,
-      'width': 270,
-      'borderRadius': 3,
+      height: 40,
+      width: 270,
+      borderRadius: 3,
       '& .MuiOutlinedInput-root': {
-        'height': 40,
-        'fontWeight': 400,
-        'fontSize': 14,
+        height: 40,
+        fontWeight: 400,
+        fontSize: 14,
         '&.MuiInputBase-multiline': {
           height: '122px',
         },

@@ -12,7 +12,7 @@ export const styles = makeStyles((theme) =>
       color: Colors.red,
     },
     selectedAll: {
-      'backgroundColor': fade(Colors.black, 0.08),
+      backgroundColor: fade(Colors.black, 0.08),
       '&:hover': {
         backgroundColor: fade(Colors.black, 0.08),
       },

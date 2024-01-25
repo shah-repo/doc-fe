@@ -8,7 +8,6 @@ import { FBEditorPropertiesDefaultValue } from './FBEditorProperties.helper';
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     onChange,
     options,
@@ -16,7 +15,6 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     inputProps,
     ...props
   }: T) => {
-
     const { formState, workspaceState } = FB.useStores();
     type && (options = FBData.editorPropertiesByType(type));
 

@@ -15,7 +15,6 @@ interface Props {
 const POAttachments: React.FunctionComponent<Props> = ({
   docRevAttachments,
 }) => {
-
   const downloadAction = useActionCreator(attachmentsActions.download);
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {

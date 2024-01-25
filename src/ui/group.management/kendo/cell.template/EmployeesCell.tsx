@@ -69,7 +69,7 @@ export const EmployeesCell = ({
           dataItemKey="value"
           textField="label"
         />
-        : <ExpandableTemplate items={employeesList}  dataId={`${dataItem.id}-${columnIndex}`} />
+        : <ExpandableTemplate items={employeesList} dataId={`${dataItem.id}-${columnIndex}`} />
       }
     </td>
   );

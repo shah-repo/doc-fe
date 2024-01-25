@@ -63,7 +63,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const async = useAsync({
       onSuccess: (data) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
-        if(!isEmptyArray(referenceTo)) {
+        if (!isEmptyArray(referenceTo)) {
           const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
           const description = documentRevision.find(item => item.displayRevision === selectedItem?.precalc?.lot_part_revision)?.name;
           setDescription(description);
@@ -123,7 +123,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onQtyUnitsChange = (event: React.ChangeEventHandler<HTMLInputElement>, index: number) => {
-      if(Number(event?.target?.value) < 0) {
+      if (Number(event?.target?.value) < 0) {
         return;
       }
       const newQtyUnits = [...qtyUnits];
@@ -132,7 +132,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onSerialChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-      if(event.target.value.length > SERIAL_MAX_LENGTH) {
+      if (event.target.value.length > SERIAL_MAX_LENGTH) {
         return;
       }
       setSerial(event.target.value);
@@ -181,7 +181,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     };
 
     const onPrintClick = () => {
-      if(isEmpty(printerSerial) || isEmpty(labelTemplate)) {
+      if (isEmpty(printerSerial) || isEmpty(labelTemplate)) {
         return setShowError(true);
       }
       const quantity = qtyUnits.map((item, i) => ({ key: i + 1, value: item }));

@@ -53,8 +53,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const onChange = (value: ValueType<OptionType>, action: ActionMeta) => {
     if (action.action === 'clear') {
       setInputValue('');
-    }
-    else {
+    } else {
       setInputValue((value as any)?.value);
     }
     setFieldValue(name, (value as any)?.value);
@@ -174,7 +173,7 @@ FieldConfig &
 Partial<TypographyProps>;
 
 const CreatableField: React.FunctionComponent<
-  AutocompleteFieldProps
+AutocompleteFieldProps
 > = (props) => <FormikField component={Creatable} {...props} />;
 
 export default CreatableField;

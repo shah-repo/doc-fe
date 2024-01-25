@@ -10,7 +10,6 @@ export const withFBMediaQR = <T extends FBMediaQRProps>(
     mode = 'qr',
     ...props
   }: T) => {
-
     const { workspaceState } = FB.useStores();
     const { mode: workspaceMode, documentId, isOutput } = workspaceState || {};
 

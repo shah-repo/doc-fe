@@ -29,17 +29,19 @@ class FBInlineApprovalState {
   public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+
   public requestApprovalApi =
   new FBRequest<FBInlineApprovalBody[], FBRequestApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+
   public documentApi: FBRequest<Document, null> = new FBRequest(FBEndpoint.Document);
 
   // MARK: @constructor
-  public constructor(props: FBInlineApprovalConstructor) {
+  public constructor (props: FBInlineApprovalConstructor) {
     this.initialApprovals(props);
   }
 
   // MARK: @computed
-  @computed public get getApprovals(): FBInlineApprovalBody[] {
+  @computed public get getApprovals (): FBInlineApprovalBody[] {
     const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED');
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
@@ -47,7 +49,7 @@ class FBInlineApprovalState {
     }));
   }
 
-  @computed public get getOptions(): FBInlineApprovalOptions[] {
+  @computed public get getOptions (): FBInlineApprovalOptions[] {
     return uniqBy(this.options, 'user.id');
   }
 

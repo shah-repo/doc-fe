@@ -4,7 +4,6 @@ import { MemoryRouter, Prompt } from 'react-router-dom';
 import PromptIfDirty, { Props } from './PromptIfDirty';
 
 describe('Prompt if Dirty component unit tests', () => {
-
   const defaultProps: Props = {
     dirty: true,
   };

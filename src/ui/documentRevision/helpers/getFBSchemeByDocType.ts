@@ -42,23 +42,22 @@ export const getFBSchemeByDocType = (
   const tplType = get(formValue, 'document.documentType.id') || '';
   const documentTypes = union([tplType], outputTypes);
 
-  const finalScheme: FBSchemaProps[] = documentTypes.reduce((scheme, typeId) => {
+  const finalScheme: FBSchemaProps[] = documentTypes.reduce<FBSchemaProps[]>((scheme, typeId) => {
     const rec = documentTypesById[typeId];
     // If type has scheme
     if (!rec?.schema) { return scheme; }
-    const typeScheme = map(rec.schema, ((schemaItem) => ({
+    const typeScheme = map(rec.schema, (schemaItem) => ({
       ...schemaItem,
       ...find(originScheme, { name: schemaItem.name }),
       deleteDisabled: schemaItem.deleteInFormDisabled,
-    })));
+    }));
 
     return unionBy(scheme, typeScheme, 'name');
-  }, [] as FBSchemaProps[]);
+  }, []);
   let indexLast;
   !isEmpty(finalScheme) ? indexLast = maxBy(finalScheme, 'index')?.index : indexLast = 0;
   if (hasDirectApproval(outputTypesWithGroups)) {
     if (hasPO(outputTypesWithGroups)) {
-
       const tabConfig: TabInfo[] = documentTypeSelectors.getTabConfiguration(
         appStore.getState(), outputTypesWithGroups[0].group);
       const tabId = get(tabConfig, '0.tabId', 'details');

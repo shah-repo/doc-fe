@@ -10,7 +10,7 @@ class FBLHRBuildState {
     value: key,
   }));
 
-  constructor({ value, disabled }: FBLHRBuildConstructor) {
+  constructor ({ value, disabled }: FBLHRBuildConstructor) {
     this.setDisabled(disabled);
     this.setValue(value);
   }

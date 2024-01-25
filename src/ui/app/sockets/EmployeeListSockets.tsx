@@ -8,7 +8,6 @@ import useAsync from '../../hooks/useAsync';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 const EmployeeListSockets: React.FunctionComponent = () => {
-
   const loadAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);

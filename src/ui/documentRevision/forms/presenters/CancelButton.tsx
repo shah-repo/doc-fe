@@ -55,7 +55,7 @@ const CancelButton: React.FunctionComponent<Props> = ({
       }
       {
         (isNewLayout && canShowCancelButton && !renderAsButton)
-       && ( <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
+       && (<StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
          <StyledMenuListIcon>
            <CancelDraftIcon />
          </StyledMenuListIcon>

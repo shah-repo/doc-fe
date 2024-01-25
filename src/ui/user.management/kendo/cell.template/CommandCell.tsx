@@ -75,7 +75,7 @@ export const CommandCell = ({
     if (!email) {
       set(dataItem, email, userEmail);
     }
-    asyncName.start(getEmployeeAction, { email: userEmail }, asyncName );
+    asyncName.start(getEmployeeAction, { email: userEmail }, asyncName);
   };
 
   if (rowType === 'groupHeader') {

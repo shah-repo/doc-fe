@@ -79,4 +79,4 @@ export const toEditRequestBody = (
   parentGroups: OptionType[],
 ) => isGroupNameChanged
   ? toRequestBody(values, members, parentGroups)
-  : omit(toRequestBody(values, members, parentGroups), ['name'] );
+  : omit(toRequestBody(values, members, parentGroups), ['name']);

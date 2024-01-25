@@ -15,7 +15,7 @@ export interface DialogPresenterProps {
   newText: string
   dialogHandler: DialogHandler
   async: Async
-  loadChanges(): void
+  loadChanges: () => void
 }
 
 export interface DiffContainerProps {

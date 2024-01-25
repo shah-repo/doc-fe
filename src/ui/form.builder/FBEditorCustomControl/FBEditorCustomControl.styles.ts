@@ -13,12 +13,12 @@ export default makeStyles(() =>
       cursor: 'pointer',
     },
     listItemStyle: {
-      'height': '48px',
-      'width': '269px',
-      'background': Colors.white,
-      'border': `1px solid ${Colors.lightest_grey1}`,
-      'borderRadius': '3px',
-      'marginBottom': '10px',
+      height: '48px',
+      width: '269px',
+      background: Colors.white,
+      border: `1px solid ${Colors.lightest_grey1}`,
+      borderRadius: '3px',
+      marginBottom: '10px',
       '& $lastItem': {
         marginBottom: 0,
       },

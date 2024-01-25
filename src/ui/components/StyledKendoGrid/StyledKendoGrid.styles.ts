@@ -39,11 +39,11 @@ export default makeStyles((theme) => ({
       borderRadius: theme.shape.borderRadius,
       border: `1px solid ${Colors.tableStroke}`,
       color: Colors.textBlack,
-        '& tr': {
-          height: 46,
-          '&.k-state-selected > td': {
-            backgroundColor: 'transparent',
-          },
+      '& tr': {
+        height: 46,
+        '&.k-state-selected > td': {
+          backgroundColor: 'transparent',
+        },
       },
     },
     '.k-grid-toolbar': {

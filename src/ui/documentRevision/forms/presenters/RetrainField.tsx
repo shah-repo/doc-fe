@@ -18,7 +18,6 @@ const RetrainField: React.FunctionComponent<Props> = ({
   isDisabled = false,
   isRecord,
 }) => {
-
   const { isVisible } = useTraining(documentTypeId);
   const formik = useFormikContext();
   useEffect(() => {

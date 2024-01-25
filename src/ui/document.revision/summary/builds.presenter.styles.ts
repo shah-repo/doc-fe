@@ -4,17 +4,17 @@ import Colors from '../../layout/theme/utils/colors';
 export const styles = makeStyles((theme) =>
   createStyles({
     chip: {
-      'border': `1px solid ${Colors.medium_blue}`,
-      'borderRadius': '3px',
-      'background': Colors.light_blue,
+      border: `1px solid ${Colors.medium_blue}`,
+      borderRadius: '3px',
+      background: Colors.light_blue,
       '&:hover': {
         cursor: 'pointer',
       },
-      'marginTop': theme.spacing(2),
+      marginTop: theme.spacing(2),
     },
     link: {
-      'textDecoration': 'none',
-      'marginRight': '8px',
+      textDecoration: 'none',
+      marginRight: '8px',
       '&:hover': {
         cursor: 'pointer',
         textDecoration: 'underline',

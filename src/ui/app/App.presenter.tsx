@@ -36,7 +36,6 @@ const AppPresenter: React.FunctionComponent = () => {
     );
   }
   return <Routes />;
-
 };
 
 export default AppPresenter;

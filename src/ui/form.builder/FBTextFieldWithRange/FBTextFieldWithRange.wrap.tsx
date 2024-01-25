@@ -21,7 +21,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       if (passRange.type === 'value') { return passRange.value; }
       if (!passRange.percentage) { return; }
       const { decrease, increase, value } = passRange.percentage;
-      if (!decrease || !increase || !value ) { return; }
+      if (!decrease || !increase || !value) { return; }
       const from = Number(value) * (1 - decrease / 100);
       const to = Number(value) * (1 + increase / 100);
       return { from, to };

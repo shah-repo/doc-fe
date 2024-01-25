@@ -44,14 +44,13 @@ const Text: React.FunctionComponent<TextProps> = ({
   useMemo(() => {
     map(values, (value, key) => {
       if (!isTranslation(value as string)) { return; }
-      values[key] =  intl.formatMessage({ id: value as string });
+      values[key] = intl.formatMessage({ id: value as string });
     });
   }, [values, intl]);
 
   if (hasTranslation && dataCy !== '') {
     return <div data-cy={dataCy}><FormattedMessage id={text} {...props} {...{ values }} /></div>;
-  }
-  else if (hasTranslation) {
+  } else if (hasTranslation) {
     return <FormattedMessage id={text} {...props} {...{ values }} />;
   }
 
