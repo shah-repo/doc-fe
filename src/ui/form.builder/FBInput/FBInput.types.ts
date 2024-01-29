@@ -234,7 +234,6 @@ export const OmitInputClones: FBInputType[] = [
   'evidencemediaupload',
   'mediaalbum',
   'lhrstep',
-  'datepicker',
   'lhrbuild',
   'downloadsheet',
 ];
