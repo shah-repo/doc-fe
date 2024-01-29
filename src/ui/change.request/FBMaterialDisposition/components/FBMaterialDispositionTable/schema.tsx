@@ -36,6 +36,7 @@ export const buildSchema = ({
     {
       id: 'lotDocId',
       field: 'lotDocId',
+      title: 'approvalRequest.grid.heading.lot',
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.lot"
         title="approvalRequest.grid.heading.tooltip.lot" />,
@@ -46,6 +47,7 @@ export const buildSchema = ({
     {
       id: 'whereUsedView',
       field: 'whereUsedView',
+      title: 'approvalRequest.grid.heading.whereUsedView',
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.whereUsedView"
         title="approvalRequest.grid.heading.tooltip.whereUsedView" />,
@@ -56,6 +58,7 @@ export const buildSchema = ({
     {
       id: 'onOrderPOAction',
       field: 'onOrderPOAction',
+      title: 'approvalRequest.grid.heading.onOrder',
       show: true,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.onOrder"
@@ -66,6 +69,7 @@ export const buildSchema = ({
     {
       id: 'inInspectionAction',
       field: 'inInspectionAction',
+      title: 'approvalRequest.grid.heading.Inspection',
       show: true,
       headerCell: () => <CustomHeaderTooltipCell
         content ="approvalRequest.grid.heading.Inspection"
@@ -76,6 +80,7 @@ export const buildSchema = ({
     {
       id: 'inInventoryAction',
       field: 'inInventoryAction',
+      title: 'approvalRequest.grid.heading.Inventory',
       show: true,
       headerCell: () => <CustomHeaderTooltipCell
         title ="approvalRequest.grid.heading.tooltip.Inventory"
