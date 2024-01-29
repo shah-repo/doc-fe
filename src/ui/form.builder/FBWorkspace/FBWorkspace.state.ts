@@ -1,4 +1,4 @@
-import { includes, isArray, isEmpty, isUndefined, map, omit, size } from 'lodash';
+import { includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { appGlobals } from '../../../appGlobals';
@@ -6,6 +6,7 @@ import { GroupTag, UserState } from '../../../state/ducks/auth/types';
 import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { EditableMDItem } from '../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 import FBDataStore from '../FBStore/FBDataStore';
@@ -37,6 +38,9 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public hiddenFieldsByRules = new Set<string>();
 
   public omitAutosave = false;
+
+  public mdTableData: EditableMDItem[] = [];
+  public mdUpdatedDataIds: string[] = [];
 
   public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
@@ -100,6 +104,14 @@ class FBWorkspaceState extends FBSchemaState {
   public get isLHRProductionBuild (): boolean {
     return this.document?.smartReferencesTo?.filter(
       (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.toDocRev?.formInput?.['lhr-build-type'] === FBLHRBuildOptions.Production;
+  }
+
+  public get getMDTableData (): EditableMDItem[] {
+    return this.mdTableData;
+  }
+
+  public get getMDUpdatedDataIds (): string[] {
+    return this.mdUpdatedDataIds;
   }
 
   public get isChangeRequest (): boolean {
@@ -175,6 +187,14 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setDirty = (isDirty: boolean) => {
     set(this, 'isDirty', isDirty);
+  };
+
+  public setMDTableData = (mdTableData: EditableMDItem[]) => {
+    set(this, 'mdTableData', mdTableData);
+  };
+
+  public addMDUpdatedDataId = (mdUpdatedDataId: string) => {
+    set(this, 'mdUpdatedDataIds', union(this.mdUpdatedDataIds, [mdUpdatedDataId]));
   };
 
   @action public setFormInputSync = (name: string, value: any) => {
