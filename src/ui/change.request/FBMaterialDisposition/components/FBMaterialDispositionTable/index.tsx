@@ -111,7 +111,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   });
 
   const fetchMaterialDispositionTableData = () => {
-    materialDispositionAsync.start(load, changeRequest?.id, materialDispositionAsync);
+    changeRequest?.id && materialDispositionAsync.start(load, changeRequest.id, materialDispositionAsync);
   };
 
   const [nonSelectableColumnIndexes, setNonSelectableColumnIndexes] = React.useState<number[]>([]);
@@ -276,7 +276,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       updateMaterialDispositionTableData(updatedData);
       workspaceState?.setMDTableData([]);
     }
-  }, [parentFormik.isSubmitting]);
+  }, [parentFormik?.isSubmitting]);
 
   const copyClipboardPopupMenu = useDialog();
 

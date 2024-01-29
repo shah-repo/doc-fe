@@ -178,9 +178,11 @@ class FBWorkspaceState extends FBSchemaState {
       document,
       externalState: { auth: { user: { employeeId = '' } = {} } = {} } = {},
     } = this || {};
-    const inputOwner = document?.inputOwners?.[name];
 
-    return inputOwner === undefined || inputOwner === employeeId;
+    const inputOwner = document?.inputOwners?.[name];
+    const isDocRevOwner = document?.owner.id === employeeId;
+
+    return inputOwner === undefined || inputOwner === employeeId || isDocRevOwner;
   };
 
   @action public setDirty = (isDirty: boolean) => {
