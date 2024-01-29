@@ -18,6 +18,12 @@ export default makeStyles((theme) => ({
       textTransform: 'uppercase',
       color: Colors.textBlack,
     },
+    '& .k-grid-content tr:hover td': {
+      backgroundColor: Colors.white,
+    },
+    '& td.k-state-selected': {
+      backgroundColor: Colors.white,
+    },
   },
   toolbarContainer: {
     height: 44,
