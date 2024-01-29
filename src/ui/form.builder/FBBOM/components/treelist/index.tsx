@@ -274,10 +274,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     if (isSliderView) {
       return;
     }
+
     if (tableCriteria?.columnConfig) {
       const savedColumns = JSON.parse(tableCriteria.columnConfig) as CustomTreeListColumnProps[];
       const updatedColumns = schema.map(schemaItem => {
         const savedColumn = savedColumns.find(column => schemaItem.field === column.field);
+
         return {
           ...schemaItem,
           orderIndex: savedColumn?.orderIndex,
