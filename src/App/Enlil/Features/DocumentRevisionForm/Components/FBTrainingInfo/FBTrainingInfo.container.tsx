@@ -85,9 +85,6 @@ TrainingInfoContainerProps
       })
       .catch((exception) => {
         setIsLoading(false);
-        if (axios.isCancel(exception)) {
-
-        }
       });
   }, [documentRevisionId]);
 
