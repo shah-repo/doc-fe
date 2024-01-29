@@ -18,8 +18,10 @@ import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/chan
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
-import Text from '../../../../components/Text';
+import ViewFile from '../../../../components/common/view.file/container';
+import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -29,8 +31,8 @@ import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
-import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
 import { formatCurrency } from '../../common/Utils';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
@@ -226,8 +228,22 @@ const TaskApprovalPresenter: React.FC<Props> = ({
       downloadFile(downloadInfo?.url);
     },
   });
+
+  const dialogHandler = useDialog();
+  const [selectedAttachment, setSelectedAttachment] = React.useState<Attachment | undefined>(undefined);
+
   const downloadAttachment = (attachment: Attachment) => () => {
-    downloadAsync.start(downloadAction, attachment, downloadAsync);
+    if (checkIfFileIsViewable(attachment?.type)) {
+      setSelectedAttachment(attachment);
+      dialogHandler.open();
+    } else {
+      downloadAsync.start(downloadAction, attachment, downloadAsync);
+    }
+  };
+
+  const closeDialog = () => {
+    setSelectedAttachment(undefined);
+    dialogHandler.close();
   };
 
   const isPinShown = pinLineItem && !pinned;
@@ -608,6 +624,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         transitionDialog={transitionDialog}
         label="transition.action.approve"
       />
+      {selectedAttachment && (
+        <ViewFile
+          isOpen={dialogHandler.isOpen}
+          handleClose={closeDialog}
+          attachments={[selectedAttachment]}
+          attachment={selectedAttachment}
+        />
+      )}
     </>
   );
 };
