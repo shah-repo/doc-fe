@@ -44,27 +44,27 @@ export const Selector: React.FC = () => {
       return;
     }
 
-      selecterHandlerRef.current?.classList.add(classes.pointerEventsNone);
+    selecterHandlerRef.current?.classList.add(classes.pointerEventsNone);
 
-      const mousemove = (e: MouseEvent) => {
-        const selecter = selecterRef.current?.getBoundingClientRect();
-        const top = selecter?.top ?? 0;
+    const mousemove = (e: MouseEvent) => {
+      const selecter = selecterRef.current?.getBoundingClientRect();
+      const top = selecter?.top ?? 0;
 
-        if (e.clientY > top && selecterRef.current) {
-          const newHeight = e.clientY - top;
-          selecterRef.current.style.height = `${newHeight}px`;
-        }
-      };
+      if (e.clientY > top && selecterRef.current) {
+        const newHeight = e.clientY - top;
+        selecterRef.current.style.height = `${newHeight}px`;
+      }
+    };
 
-      const mouseup = (e: MouseEvent) => {
-        selecterHandlerRef.current?.classList.remove(classes.pointerEventsNone);
+    const mouseup = (e: MouseEvent) => {
+      selecterHandlerRef.current?.classList.remove(classes.pointerEventsNone);
 
-        window.removeEventListener('mousemove', mousemove);
-        window.removeEventListener('mouseup', mouseup);
-      };
+      window.removeEventListener('mousemove', mousemove);
+      window.removeEventListener('mouseup', mouseup);
+    };
 
-      window.addEventListener('mousemove', mousemove);
-      window.addEventListener('mouseup', mouseup);
+    window.addEventListener('mousemove', mousemove);
+    window.addEventListener('mouseup', mouseup);
   };
 
   return (
