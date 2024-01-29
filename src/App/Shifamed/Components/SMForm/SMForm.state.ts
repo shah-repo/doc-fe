@@ -69,11 +69,11 @@ class SMFormState implements SMFormStateProps {
   // MARK: @constructor
 
   // MARK: @computed
-  @computed public get active(): boolean {
+  @computed public get active (): boolean {
     return this.mode !== 'none';
   }
 
-  @computed public get Validator(): any {
+  @computed public get Validator (): any {
     return get(window, 'EnlilRemoteValidators.validator') || Validator;
   }
 
@@ -99,11 +99,11 @@ class SMFormState implements SMFormStateProps {
   };
 
   // MARK: @helpers
-  public get isLHRProductionBuild(): boolean {
+  public get isLHRProductionBuild (): boolean {
     const refs = this.getValue('smartReferencesTo');
     return refs?.filter(
-      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.
-      toDocRev?.formInput?.['lhr-build-type'] === FBLHRBuildOptions.Production;
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]
+      .toDocRev?.formInput?.['lhr-build-type'] === FBLHRBuildOptions.Production;
   }
 
   public setValue = (
@@ -138,10 +138,14 @@ class SMFormState implements SMFormStateProps {
 
     const rules = this.getRules();
     const values = omitBy(this.values, (v) => isString(v) && isEmpty(v));
+    const document = this.values.get('document');
 
     const validator = new this.Validator(values, rules);
     validator.setAttributeNames(this.validationAttributeNames);
     this.errors.clear();
+    validator.context = {
+      documentId: document?.id ?? null,
+    };
     validator.checkAsync(
       () => callback && callback(true), // passes
       () => { // failed

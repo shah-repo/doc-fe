@@ -13,6 +13,7 @@ import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTy
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
+import FBMaterialDisposition from '../../../../ui/change.request/FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
 import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
@@ -23,7 +24,7 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -78,6 +79,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = checkIsDocumentPart(
     (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
+  const isARForm = checkIsDocumentChangeRequest(
+      (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
@@ -143,6 +146,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       tabId: TabTypeOptions.BOM.toLowerCase(),
       type: TabTypeOptions.BOM,
     }];
+  }
+
+  if (isARForm && !tabConfig?.find((tab: TabInfo) => tab.labelId === 'tabId.materialDisposition')) {
+    tabConfig.splice(2, 0, {
+      labelId: 'tabId.materialDisposition',
+      tabId: TabTypeOptions.MATERIAL_DISPOSITION.toLowerCase(),
+      type: TabTypeOptions.MATERIAL_DISPOSITION,
+    });
   }
 
   useObserver(() => {
@@ -360,6 +371,13 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                   autosave={autosaveEnabled}
                                   mode={FBWorkspaceModeOptions.PREVIEW}
                                 />
+                              )}
+                              {tabType
+                                === TabTypeOptions.MATERIAL_DISPOSITION
+                                && _tabsState?.isTabActive(
+                                  TabTypeOptions.MATERIAL_DISPOSITION,
+                                ) && (
+                                <FBMaterialDisposition isShowOnly={true} />
                               )}
                             </SMBox>
                           )}

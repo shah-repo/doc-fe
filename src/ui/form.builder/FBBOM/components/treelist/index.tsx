@@ -49,6 +49,7 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import {
   ColumnMenuContext,
@@ -253,19 +254,32 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     },
   );
 
-  const [selectedDataItem, setSelectedDataItem] = React.useState(undefined);
+  const [selectedDataItem, setSelectedDataItem] = React.useState<EditableBOM | undefined>(undefined);
+  const [selectedARId, setSelectedARId] = React.useState('');
+  const approvalRequestDialog = useDialog();
 
   const openDetailDrawer = (dataItem) => {
     setIsPartsDrawerOpened(true);
     setSelectedDataItem(dataItem);
   };
+
+  const openARIDQuickView = (arId) => {
+    setSelectedARId(arId);
+    approvalRequestDialog.open();
+  };
+
+  const closeCRDialog = () => {
+    approvalRequestDialog.close();
+    setSelectedARId('');
+  };
+
   const closeDetailDrawer = () => {
     FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
     setSelectedDataItem(undefined);
   };
 
-  const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer });
+  const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer, openARIDQuickView });
 
   const [columns, setColumns]
     = React.useState<CustomTreeListColumnProps[]>(schema);
@@ -1247,6 +1261,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           />
         </DialogContent>
       </Dialog>
+      {
+        approvalRequestDialog.isOpen
+        && <ChangeRequestEditDialog
+          changeRequestId={selectedARId}
+          approvalRequestDialog={approvalRequestDialog}
+          closeDialog = {closeCRDialog}
+        />
+      }
     </>
   );
 };

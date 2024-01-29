@@ -177,7 +177,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   }, [editedTLItem, setValues, resetForm]);
 
   useEffect(() => {
-    if (formContext.isEditing && parentFormik?.isSubmitting && !isEmpty(dataToSubmit)) {
+    if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(dataToSubmit)) {
       setDoNotPrompt?.(true);
       updateTaskItem(dataToSubmit);
     }
