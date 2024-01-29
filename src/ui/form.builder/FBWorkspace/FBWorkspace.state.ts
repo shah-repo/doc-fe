@@ -170,7 +170,7 @@ class FBWorkspaceState extends FBSchemaState {
     const inputOwner = document?.inputOwners?.[name];
     const isDocRevOwner = document?.owner.id === employeeId;
 
-    return inputOwner === undefined || inputOwner === employeeId || !!isDocRevOwner;
+    return inputOwner === undefined || inputOwner === employeeId || isDocRevOwner;
   };
 
   @action public setDirty = (isDirty: boolean) => {
