@@ -13,7 +13,7 @@ import { ChangeRequestFormValues } from '../change.request/form/types';
 import { changeRequestPreviewPath } from '../change.request/utils/paths';
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
-import { FB, FBFormState, FBProvider } from '../form.builder';
+import { FB, FBFormState, FBProvider, FBWorkspaceState } from '../form.builder';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import useAsync from '../hooks/useAsync';
 import { useCanUpdateChangeRequest } from './helpers';
@@ -62,6 +62,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const [isMDTab, setMDTab] = React.useState(false);
   const canEditChangeRequest = useCanUpdateChangeRequest(changeRequest, isEditing);
   const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: initialValues.formInput });
+  const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {});
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
 
   useEffect(() => {
@@ -148,7 +149,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
 
   return (
     <FormContext.Provider value={{ submitOnChange: true, isEditing }}>
-      <FBProvider formState={formState}>
+      <FBProvider formState={formState} workspaceState={workspaceState}>
         <ChangeRequestFormContainer
           asyncState={async.asyncState}
           onSubmit={debouncedSubmit}

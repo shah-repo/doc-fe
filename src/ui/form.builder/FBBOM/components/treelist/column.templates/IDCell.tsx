@@ -319,7 +319,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
   };
 
   const getRevInfoIcon = (i, hasChildren, availableRevs) => {
-    if (availableRevs?.isReleased && !dataItem.isDeleted) {
+    if (availableRevs?.isReleased && !dataItem.isDeleted && !dataItem.isWO) {
       return getInfoIcon();
     }
   };

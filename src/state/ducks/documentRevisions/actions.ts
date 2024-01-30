@@ -466,7 +466,7 @@ const fetchBOMBranch = (
 
 const fetchBOMTree = (
   docRevId,
-  isFirstLevelOnly,
+  isFirstLevelOnly = false,
   handlers: Handlers,
 ): ApiAction<BOMResponse> =>
   apiActionWithCallbacks({

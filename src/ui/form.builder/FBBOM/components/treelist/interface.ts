@@ -56,6 +56,7 @@ export interface AlternatePart {
   basePartRevId?: string
   partRevId?: string
   [ALTERNATE_PART_KEY]?: boolean
+  isWO?: boolean
 }
 
 export interface CustomTreeListRowProps extends TreeListRowProps {
