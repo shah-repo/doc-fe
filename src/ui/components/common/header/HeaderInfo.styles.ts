@@ -107,7 +107,6 @@ export const styles = makeStyles((theme: Theme) =>
     chip: {
       display: 'flex',
       flexDirection: 'row',
-      padding: '0px !important',
       borderRadius: 3,
       marginLeft: '12px',
       background: Colors.white,

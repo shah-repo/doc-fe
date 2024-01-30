@@ -138,10 +138,14 @@ class SMFormState implements SMFormStateProps {
 
     const rules = this.getRules();
     const values = omitBy(this.values, (v) => isString(v) && isEmpty(v));
+    const document = this.values.get('document');
 
     const validator = new this.Validator(values, rules);
     validator.setAttributeNames(this.validationAttributeNames);
     this.errors.clear();
+    validator.context = {
+      documentId: document?.id ?? null,
+    };
     validator.checkAsync(
       () => callback && callback(true), // passes
       () => { // failed

@@ -1,7 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import Colors from '../../layout/theme/utils/colors';
 
-export const styles = makeStyles(() =>
+export const styles = makeStyles((theme) =>
   createStyles({
     checkbox: {
       '& .MuiFormControlLabel-root': {
@@ -9,6 +9,9 @@ export const styles = makeStyles(() =>
           fontWeight: 400,
           fontSize: 14,
           color: Colors.almost_black,
+          '&.Mui-disabled': {
+            color: theme.palette.text.disabled,
+          },
         },
         '& .MuiCheckbox-colorSecondary.Mui-checked': {
           color: Colors.navy,

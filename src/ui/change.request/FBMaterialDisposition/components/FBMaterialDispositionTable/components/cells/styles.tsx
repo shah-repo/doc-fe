@@ -11,6 +11,12 @@ export const styles = makeStyles((theme) => ({
     height: 10,
     width: 10,
   },
+  copyIcon: {
+    width: 15,
+    height: 15,
+    verticalAlign: 'baseline',
+    cursor: 'pointer',
+  },
   selectedDot: {
     color: Colors.almost_black,
   },

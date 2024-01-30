@@ -149,6 +149,10 @@ export default function themeOverrides (appTheme: Theme, customColors: WhiteLabe
           border: 'none',
         },
       },
+      input: {
+        padding: 13,
+        fontSize: 14,
+      },
       notchedOutline: {
         borderRadius: 4,
       },
@@ -176,6 +180,15 @@ export default function themeOverrides (appTheme: Theme, customColors: WhiteLabe
         },
         '&:not($checked):not($disabled):hover circle': {
           fill: Colors.background_white,
+        },
+      },
+    },
+    MuiCheckbox: {
+      root: {
+        '&$disabled': {
+          '& .MuiSvgIcon-root': {
+            color: appTheme.palette.action.disabled,
+          },
         },
       },
     },
