@@ -2,7 +2,7 @@ import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Ra
 import cx from 'classnames';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
-import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
+import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../../../../state/ducks/relatedParts/types';
 import { FBButton, FBTooltip } from '../../../../form.builder';
 
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
@@ -32,17 +32,21 @@ import useStyles from './RelatedPart.styles';
 import RelatedPartsState from './RelatedParts.state';
 import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
 import RelatedPartsTableHeader from './RelatedPartsTableHeader';
+import { checkIsDocumentOTHER, checkIsDocumentPart } from '../../../helpers/checkDocumentGroup';
+import { getDynamicTextValue } from './helper';
 
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_PARTS_STATUS
   parentStatusChanged: (value: string, oldSelection?: string) => void
   relatedPartsState: RelatedPartsState
   documentRevision: DocumentRevision
+  relatedType: RELATED_TYPE
 }> = ({
   status,
   parentStatusChanged,
   relatedPartsState,
   documentRevision,
+  relatedType,
 }) => {
   const [selectedOption, setSelectedOption] = useState(status);
   const [previousOption, setPreviousOption] = useState(status);
@@ -129,7 +133,8 @@ const ParentPartSelector: React.FunctionComponent<{
           variant="body1"
           id="tableTitle"
         >
-          <Text translation="relatedParts.parentPart.question" />
+          <Text translation="relatedParts.parentPart.question"
+            values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
         </Typography>
         <Tooltip title="Parent part info" placement="right"
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
@@ -154,14 +159,18 @@ const ParentPartSelector: React.FunctionComponent<{
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_TOGETHER}
             control={<Radio color="primary" disableRipple={true} />}
-            label={<Text translation="relatedParts.parentPart.answer.yes.together" />}
+            label={<Text translation="relatedParts.parentPart.answer.yes.together"
+              values = {{ relatedType: getDynamicTextValue(relatedType, 'sub-part', 'related documents') }} />
+            }
             checked={isParentTogetherSelected}
             disabled={isDisabled}
           />
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_SEPARATE}
             control={<Radio color="primary" disableRipple={true} />}
-            label={<Text translation="relatedParts.parentPart.answer.yes.separate" />}
+            label={<Text translation="relatedParts.parentPart.answer.yes.separate"
+              values = {{ relatedType: getDynamicTextValue(relatedType, 'sub-part', 'related documents') }} />
+            }
             checked={isParentSeparateSelected}
             disabled={isDisabled}
           />
@@ -183,6 +192,7 @@ const ParentPartSelector: React.FunctionComponent<{
           values={{
             currentOption: confirmMessages[selectedOption],
             previous: confirmMessages[previousOption],
+            relatedType: getDynamicTextValue(relatedType, 'sub-part', 'sub-document'),
           }}
         />
       </Dialog>
@@ -199,6 +209,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   fetchRelatedParts
   voidRelatedPart
   relatedPartsState: RelatedPartsState
+  relatedType: RELATED_TYPE
 }> = ({
   documentRevision,
   createNewDocument,
@@ -208,6 +219,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   fetchRelatedParts,
   voidRelatedPart,
   relatedPartsState,
+  relatedType,
 }) => {
   const classes = useStyles();
 
@@ -252,7 +264,8 @@ const RelatedPartGrid: React.FunctionComponent<{
         <Grid className={classes.gridCenterAlign} container>
           <Grid item>
             <Typography variant="h6" id="tableTitle" component="div">
-              <Text translation="relatedParts.grid.title" />
+              <Text translation="relatedParts.grid.title"
+                values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
             </Typography>
           </Grid>
 
@@ -267,7 +280,8 @@ const RelatedPartGrid: React.FunctionComponent<{
                     disabled={isReleased}
                     data-cy="add-related-part-btn"
                   >
-                    <Text translation="relatedParts.button.addText" />
+                    <Text translation="relatedParts.button.addText"
+                      values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
                   </Button>
                 </Typography>
                 <div className={classes.filterOptions}>
@@ -324,7 +338,8 @@ const RelatedPartGrid: React.FunctionComponent<{
             data-cy="add-related-part-btn"
             disabled={isReleased}
           >
-            <Text translation="relatedParts.button.addText" />
+            <Text translation="relatedParts.button.addText"
+              values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
           </Button>
         }
       </div>
@@ -735,17 +750,25 @@ const RelatedParts: React.FunctionComponent<{
   const isRelatedPartsParent = ![RELATED_PARTS_STATUS.RELATED_SEPARATE,
     RELATED_PARTS_STATUS.RELATED_TOGETHER].includes(parentStatus);
 
+  const groupOptions = documentRevision?.document.documentType.groupOptions;
+  const isPart = checkIsDocumentPart(groupOptions);
+  const isOther = checkIsDocumentOTHER(groupOptions);
+  const relatedType = isPart ? RELATED_TYPE.PART_RELATED : (isOther ? RELATED_TYPE.OTHER_RELATED : RELATED_TYPE.PART_RELATED);
+
   return (
     <>
       {isRelatedPartsParent
       && <div className={classes.mainDiv}>
         <ParentPartSelector status={parentStatus} parentStatusChanged={parentStatusChanged}
-          relatedPartsState={relatedPartsState} documentRevision={documentRevision} />
+          relatedPartsState={relatedPartsState} documentRevision={documentRevision} relatedType={relatedType} />
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && !relatedPartsState.viewOnlyMode && (
           <Grid item xs={12}>
-            <FBButton label="relatedParts.button.addText"
+            <FBButton
               dataCy="parent-separate-add-related-parts-btn"
-              onClick = {createNewDocument} />
+              onClick = {createNewDocument}>
+              <Text translation="relatedParts.button.addText"
+                values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
+            </FBButton>
           </Grid>
         )}
         {parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER && (
@@ -758,6 +781,7 @@ const RelatedParts: React.FunctionComponent<{
             fetchRelatedParts = {fetchRelatedParts}
             voidRelatedPart = {voidRelatedPart}
             relatedPartsState = {relatedPartsState}
+            relatedType = {relatedType}
           />
         )}
       </div>}

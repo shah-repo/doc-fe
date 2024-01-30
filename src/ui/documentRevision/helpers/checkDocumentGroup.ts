@@ -45,6 +45,7 @@ export const checkIsDocumentReceivable = checkDocumentGroupOptions.bind(this, DO
 export const checkIsDocumentBulkCreate = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.BULK_CREATE);
 export const checkIsDocumentLot = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LOT);
 export const checkIsDocumentLHRT = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LHRT);
+export const checkIsDocumentOTHER = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.OTHER);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);
