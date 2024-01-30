@@ -87,6 +87,9 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
       onSuccess: (response) => {
         if (workspaceState?.document && response?.docId) {
         formState?.setFieldValue(WO_LOT_ID_KEY_NAME, response.docId);
+        if (workspaceState?.document && !workspaceState?.isPreview) {
+          workspaceState?.saveDocRev(formState?.getValues());
+        }
         }
       },
     });
@@ -112,20 +115,22 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
       }
     };
 
-    const confirmAlertDialog = async () => {
+    const confirmAlertDialog = () => {
       confirmationDialog?.close();
       const selectedOption = event[1];
 
-      if (selectedOption === WorkOrderTypes.MAKE_KIT) {
-        await asyncProposedLotId.start(loadProposedLotIdAction, lotDocumentType?.id, asyncProposedLotId);
-      }
       if (selectedOption !== WorkOrderTypes.OTHER) {
       formState?.getInputState(WO_PART_KEY_NAME)?.setRender();
       }
+
+      onChange?.(event[0], selectedOption);
+      setPrevOption(selectedOption);
+
       setTimeout(() => {
-        onChange?.(event[0], selectedOption);
-        setPrevOption(selectedOption);
-      });
+        if (selectedOption === WorkOrderTypes.MAKE_KIT && workspaceState?.document && !workspaceState?.isPreview) {
+          asyncProposedLotId.start(loadProposedLotIdAction, lotDocumentType?.id, asyncProposedLotId);
+        }
+      }, 2000);
     };
 
     const cancelAlertDialog = () => {
