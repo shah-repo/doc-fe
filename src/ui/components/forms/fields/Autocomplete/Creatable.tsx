@@ -1,11 +1,10 @@
 import { Box, BoxProps, ClickAwayListener } from '@material-ui/core';
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
-import * as React from 'react';
-import { useState } from 'react';
+import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createFilter } from 'react-select';
-import { SelectComponentsProps } from 'react-select/base';
 import AsyncCreatableSelect, { Props as AsyncCreatableSelectProps } from 'react-select/async-creatable';
+import { SelectComponentsProps } from 'react-select/base';
 import { ActionMeta, ValueType } from 'react-select/src/types';
 import { SM } from '../../../../../App';
 import { TypographyProps } from '../../../../../state/ducks/common/types';

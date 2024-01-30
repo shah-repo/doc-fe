@@ -1,10 +1,9 @@
 import MomentUtils from '@date-io/moment';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
 import moment from 'moment';
-import * as React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { TypographyProps } from '../../../../state/ducks/common/types';
 import { useFormContext } from '../FormContext';
 import Field, { FieldOwnProps } from './Field';

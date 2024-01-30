@@ -1,6 +1,5 @@
 import { Box, CircularProgress } from '@material-ui/core';
-import * as React from 'react';
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions, authSelectors } from '../../state/ducks/auth';
 import { ApplicationState } from '../../state/reducers';
