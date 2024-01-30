@@ -1,9 +1,8 @@
 import { map } from 'lodash';
-import * as React from 'react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Props } from 'react-intl/lib/components/message';
-import { isTranslation, Translation } from '../translations/types';
+import { Translation, isTranslation } from '../translations/types';
 
 export interface TextProps extends Props {
   /** id of the translation */
