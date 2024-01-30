@@ -1,5 +1,7 @@
 export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const EMPTY_DROPDOWN_PLACEHOLDER = 'N/A';
+export const SELECTED_FIELD = 'selected';
+export const DATA_ITEM_KEY = 'id';
 export const EXCEL_FILE_NAME = 'materialDisposition.xlsx';
 export const OPTIONS = [
   { label: 'approvalRequest.material.disposition.options.mustConform', value: 'MUST_CONFORM' },
@@ -10,6 +12,14 @@ export const OPTIONS = [
   { label: 'approvalRequest.material.disposition.options.scrap', value: 'SCRAP' },
   { label: 'common.not.applicable', value: 'N/A' },
 ];
+export const MD_LOCATION_KEYS_MAPPING = {
+  onOrderPOAction: 'approvalRequest.grid.heading.onOrder',
+  inInspectionAction: 'approvalRequest.grid.heading.Inspection',
+  inInventoryAction: 'approvalRequest.grid.heading.Inventory',
+  inWipAction: 'approvalRequest.grid.heading.wip',
+  asFinishedGoodsAction: 'approvalRequest.grid.heading.finishedGoods',
+  usedLocation: 'approvalRequest.grid.heading.field',
+};
 export const DROPDOWN_FIELDS = ['onOrderPOAction', 'inInspectionAction', 'inInventoryAction', 'inWipAction', 'asFinishedGoodsAction', 'usedLocation'];
 export const ON_ORDER_PO_ACTION_COLUMN = 'onOrderPOAction';
 export const FIELDS_TO_PICK = [...DROPDOWN_FIELDS, 'comment'];
