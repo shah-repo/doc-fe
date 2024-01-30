@@ -574,16 +574,16 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         />
       )}
       {PreviewControlButtons.PrintLabelButton && (
-      <>
-        <IconButton className={classes.printIconContainer} onClick={printDialog.open}>
-          <FontAwesomeIcon className={classes.printIcon} icon={regular('print')} />
-        </IconButton>
-        <PrintLabelDetailsDialog
-          isOpen={printDialog.isOpen}
-          closeDialog={printDialog.close}
-          selectedItem={documentRevision}
-        />
-      </>)
+        <>
+          <IconButton className={classes.printIconContainer} onClick={printDialog.open}>
+            <FontAwesomeIcon className={classes.printIcon} icon={regular('print')} />
+          </IconButton>
+          <PrintLabelDetailsDialog
+            isOpen={printDialog.isOpen}
+            closeDialog={printDialog.close}
+            selectedItem={documentRevision}
+          />
+        </>)
       }
     </>
   );
