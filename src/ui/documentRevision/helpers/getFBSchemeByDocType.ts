@@ -1,4 +1,4 @@
-import { find, get, isEmpty, map, maxBy, some, union, unionBy } from 'lodash';
+import { find, get, map, maxBy, some, union, unionBy } from 'lodash';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBFormTemplateProps } from '../../../state/ducks/documentRevisions/types';
@@ -54,14 +54,18 @@ export const getFBSchemeByDocType = (
 
     return unionBy(scheme, typeScheme, 'name');
   }, [] as FBSchemaProps[]);
-  let indexLast;
-  !isEmpty(finalScheme) ? indexLast = maxBy(finalScheme, 'index')?.index : indexLast = 0;
-  if (hasDirectApproval(outputTypesWithGroups)) {
-    if (hasPO(outputTypesWithGroups)) {
 
+  const hasApprovalField = Boolean(finalScheme.find(item => item.type === 'approvals'));
+
+  if (!hasApprovalField && hasDirectApproval(outputTypesWithGroups)) {
+    const indexLast = maxBy(finalScheme, 'index')?.index ?? 0;
+
+    if (hasPO(outputTypesWithGroups)) {
       const tabConfig: TabInfo[] = documentTypeSelectors.getTabConfiguration(
-        appStore.getState(), outputTypesWithGroups[0].group);
-      const tabId = get(tabConfig, '0.tabId', 'details');
+        appStore.getState(),
+        outputTypesWithGroups[0].group,
+      );
+      const tabId = get(tabConfig, '0.tabId', 'details') as string;
 
       finalScheme.push({
         label: 'form.builder.approvals',
@@ -84,5 +88,6 @@ export const getFBSchemeByDocType = (
       });
     }
   }
+
   return finalScheme;
 };

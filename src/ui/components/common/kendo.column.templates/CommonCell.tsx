@@ -19,16 +19,24 @@ export const CommonCell = ({
   let formattedValue = toCheckIfDate
     ? getFormattedDateString(value, MomentFormats.MonthDateYear)
     : value;
+
   if (field === 'precalc.lhr_end_accepted_quantity' && value === -1) {
     formattedValue = 'N/A';
   }
+
+  if (Array.isArray(value)) {
+    formattedValue = value.join(', ');
+  }
+
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
   };
+
   if (rowType === 'groupHeader') {
     return null;
   }
+
   return (
     <td
       colSpan={colSpan}

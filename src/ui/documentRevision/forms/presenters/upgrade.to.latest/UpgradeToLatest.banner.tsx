@@ -8,23 +8,30 @@ import Colors from '../../../../layout/theme/utils/colors';
 import { UpgradeToLatestDialog } from './UpgradeToLatestDialog';
 
 interface Props {
-  shouldShowUpgrade: boolean
+  shouldShowUpgrade?: boolean
+  shouldShowSyncForRelatedEquipment?: boolean
   onUpgradeClick: () => void
 }
 
 const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
-  shouldShowUpgrade,
+  shouldShowUpgrade = false,
+  shouldShowSyncForRelatedEquipment = false,
   onUpgradeClick,
 }) => {
   const [showBanner, setShowBanner] = React.useState(true);
   const hideBanner = () => setShowBanner(false);
   const dialog = useDialog();
 
+  const handleClickHere = shouldShowSyncForRelatedEquipment
+    ? onUpgradeClick
+    : dialog.open;
+
+  const shouldShow = shouldShowUpgrade || shouldShowSyncForRelatedEquipment;
+
   return (
     <>
-      {
-        shouldShowUpgrade && showBanner
-        && <>
+      {shouldShow && showBanner && (
+        <>
           <Box
             bgcolor={Colors.blue}
             color={Colors.white}
@@ -40,11 +47,15 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
             <WarningOutlinedIcon color="inherit" />
             <Box component="span" ml={1.5}>
               <Text
-                translation="document.revision.upgrade.form.banner"
+                translation={
+                  shouldShowSyncForRelatedEquipment
+                    ? 'document.revision.sync.related.equipment.banner'
+                    : 'document.revision.upgrade.form.banner'
+                }
                 values={{
                   clickHere: (
                     <Link
-                      onClick={dialog.open}
+                      onClick={handleClickHere}
                       data-cy="formUpgradeButton"
                       component="button"
                       color="inherit"
@@ -66,7 +77,7 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
           </Box>
           <UpgradeToLatestDialog {...{ dialog, onUpgradeClick }} />
         </>
-      }
+      )}
     </>
   );
 };
