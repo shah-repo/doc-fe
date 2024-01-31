@@ -1,9 +1,7 @@
 import { Link } from '@material-ui/core';
 import cx from 'classnames';
 import React, { ComponentType } from 'react';
-import { useHistory } from 'react-router-dom';
 import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
-import { changeRequestEditPath } from '../../../../../change.request/utils/paths';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
 import { CELL_EMPTY_VALUE } from '../constants';
 import { styles } from './styles';
@@ -16,16 +14,12 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
   style,
   className,
   hasChildren,
+  openARIDQuickView,
   ...otherProps
 }) => {
-  const history = useHistory();
   const classes = styles({ hasChildren });
   const changeReqDetails = dataItem?.changeRequestDetails;
   const arID = changeReqDetails?.crId;
-  const openARDetailsPage = () => {
-    const id = changeReqDetails?.id;
-    id && history.push(changeRequestEditPath(id));
-  };
   const ArIdAllowedStatusList = [DocumentRevisionStatus.Approved, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview];
   const isArIdVisible = ArIdAllowedStatusList.includes(dataItem?.status);
 
@@ -49,7 +43,7 @@ const ARIDCell: ComponentType<CustomTreeListCellProps> = ({
             childrenElement={
               <Link
                 underline="hover"
-                onClick={openARDetailsPage}
+                onClick={() => openARIDQuickView?.(changeReqDetails?.id)}
                 className={classes.link}
               >
                 {arID}

@@ -2,7 +2,6 @@ import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Typography
 import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
@@ -11,16 +10,19 @@ import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
+import ViewFile from '../../../../components/common/view.file/container';
+import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { DialogHandler } from '../../../../hooks/useDialog';
+import useDialog, { DialogHandler } from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
 import DismissAction from '../../common/DismissAction';
 import { getStatusLabel } from '../../common/DocIcon';
@@ -29,10 +31,10 @@ import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
 import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
 import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
-import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
-import { formatCurrency } from '../../common/Utils';
+import { StyleTooltip } from '../../common/StyleTooltip';
 import { DocTypeGroups } from '../../common/types';
+import { formatCurrency } from '../../common/Utils';
 import useStyles from './purchaseOrder.styles';
 
 interface Props {
@@ -167,8 +169,22 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
       downloadFile(downloadInfo?.url);
     },
   });
+
+  const dialogHandler = useDialog();
+  const [selectedAttachment, setSelectedAttachment] = React.useState<Attachment | undefined>(undefined);
+
   const downloadAttachment = (attachment: Attachment) => () => {
-    async.start(downloadAction, attachment, async);
+    if (checkIfFileIsViewable(attachment?.type)) {
+      setSelectedAttachment(attachment);
+      dialogHandler.open();
+    } else {
+      async.start(downloadAction, attachment, async);
+    }
+  };
+
+  const closeDialog = () => {
+    setSelectedAttachment(undefined);
+    dialogHandler.close();
   };
 
   const isPinShown = pinLineItem && !pinned;
@@ -467,6 +483,14 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
           ))}
         </List>
       </Collapse>
+      {selectedAttachment && (
+        <ViewFile
+          isOpen={dialogHandler.isOpen}
+          handleClose={closeDialog}
+          attachments={[selectedAttachment]}
+          attachment={selectedAttachment}
+        />
+      )}
     </>
   );
 };

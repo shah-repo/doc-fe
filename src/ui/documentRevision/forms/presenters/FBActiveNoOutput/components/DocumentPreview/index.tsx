@@ -15,6 +15,7 @@ import { documentTypeSelectors } from '../../../../../../../state/ducks/document
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
+import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';
 import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../../../document.revision/form/attachments';
 import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
@@ -292,6 +293,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                         <FBBOM documentRevision={documentRevision}
                           isDisabled={true} isShowOnly={true} />
                       )}
+                      {tabType === TabTypeOptions.MATERIAL_DISPOSITION
+                        && _tabsState?.isTabActive(
+                          TabTypeOptions.MATERIAL_DISPOSITION,
+                        ) && <FBMaterialDisposition isShowOnly />}
                     </SMBox>
                   );
                 })}

@@ -55,7 +55,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   const history = useHistory();
 
   const loadTasksTableData = () => {
-    tasksAsync.start(fetchTasksList, changeRequest?.id, tasksAsync);
+    changeRequest?.id && tasksAsync.start(fetchTasksList, changeRequest.id, tasksAsync);
   };
 
   const tasksAsync = useAsync({
@@ -132,11 +132,11 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   }, [editedTLItem, setValues, resetForm]);
 
   useEffect(() => {
-    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(dataToSubmit)) {
+    if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(dataToSubmit)) {
       setDoNotPrompt?.(true);
       updateTaskItem(dataToSubmit);
     }
-  }, [parentFormik.isSubmitting]);
+  }, [parentFormik?.isSubmitting]);
 
   const createDraftTLItem = () => setEditedTLItem({
     taskId: uuidv4(),
