@@ -12,4 +12,7 @@ export default (theme: Theme) =>
       marginTop: theme.spacing(5),
       paddingLeft: theme.spacing(3),
     },
+    bottomSpace: {
+      marginBottom: theme.spacing(2),
+    },
   });

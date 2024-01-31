@@ -34,6 +34,8 @@ import RetrainField from './presenters/RetrainField';
 import RevisionStage from './presenters/RevisionStage';
 import RevisionTypeChange from './presenters/RevisionTypeChange';
 import { DocumentRevisionFormValues } from './types';
+import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from './presenters/related.equipments';
+import EquipmentSpecification from './presenters/EquipmentSpecification';
 
 interface Props extends FormikProps<DocumentRevisionFormValues> {
   documentRevision: DocumentRevision
@@ -100,6 +102,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocRevStatusInPendingChange = isDocumentRevisionPendingChange(documentRevision?.status);
   const isEB = checkIsDocumentEB(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
+  const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(documentRevision);
   const isDocumentPOAM = checkIsDocumentPOAM(groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
@@ -129,6 +132,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
    || (!isRevisionVisible && defaultRevisionStage));
   const isDCO = (documentRevision?.document?.documentType?.documentTypeName === 'Document Change Order');
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
+  const shownEquipmentSpecificationLink = Boolean(documentRevision?.formInput?.equipmentSpecification);
 
   useEffect(() => {
     if (!redlineActive) {
@@ -284,6 +288,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             </Observer>
           </Grid>
           }
+          {shownEquipmentSpecificationLink && (
+            <Grid item xs={6}>
+              <EquipmentSpecification
+                relatedDocumentRevision={documentRevision}
+              />
+            </Grid>
+          )}
           <Grid item xs={6}>
             <RetrainField
               revisionChangeType={values.revisionChangeType}
@@ -342,14 +353,20 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          {(isPart || isPartForm)
-            && <Grid item xs={12}>
+          {(isPart || isPartForm) && (
+            <Grid item xs={12}>
               <RelatedPartsWrapper
                 viewOnly={isDisabledInputInPreview || hasOutput || !isOwner || inRestrictedEditMode}
                 documentRevision={documentRevision}
-                relatedPartsStatus= {documentRevision?.relatedPartsStatus} />
+                relatedPartsStatus= {documentRevision?.relatedPartsStatus}
+              />
             </Grid>
-          }
+          )}
+          {isRelatedEquipmentsShowing && (
+            <Grid item xs={12}>
+              <RelatedEquipments parentDocumentRevision={documentRevision} />
+            </Grid>
+          )}
           {showOutputSection ? (
             <>
               {!isDCO && (isPO || outputIsPO

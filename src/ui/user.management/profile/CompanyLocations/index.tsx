@@ -1,27 +1,24 @@
 import { Box, Typography } from '@material-ui/core';
-import cx from 'classnames';
-import { FormikProvider, useFormik } from 'formik';
-import { kebabCase, omit, unionBy } from 'lodash';
+import { useFormik } from 'formik';
+import { omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { companyActions } from '../../../../state/ducks/company';
 import { CompanyLocation } from '../../../../state/ducks/company/types';
-import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
-import { DataGridProps, DataGridRowClickEvent } from '../../../components/KendoDataGrid/KendoDataGrid.types';
+import { DataGridRowClickEvent } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import Text from '../../../components/Text';
-import { Button } from '../../../components/forms/fields-next';
 import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { MODE_FIELD, Mode } from './constants';
-import { buildSchema } from './schema';
-import useStyles from './styles';
+import { buildSchema } from '../../../components/LocationsSetting/schema';
 import { EditableCompanyLocation, Props } from './types';
+import LocationsSetting from '../../../components/LocationsSetting';
+import useStyles from '../../../components/LocationsSetting/styles';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 
 export const CompanyLocations: React.FC<Props> = ({
   locations = [],
   isActive = false,
-  ...props
 }) => {
   const editLocation = ({ dataItem }: DataGridRowClickEvent<EditableCompanyLocation>) => setEditedLocation(dataItem);
   const discardLocation = () => setEditedLocation(undefined);
@@ -83,19 +80,7 @@ export const CompanyLocations: React.FC<Props> = ({
       ? [...mappedLocations, editedLocation]
       : mappedLocations;
 
-  const rowRender: DataGridProps<EditableCompanyLocation>['rowRender'] = (row, { dataItem }) => {
-    const item = dataItem as EditableCompanyLocation;
-    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
-    const dataCy = `row-${kebabCase(item.name)}`;
-
-    return React.cloneElement(
-      row,
-      {
-        ['data-cy' as string]: dataCy,
-        className: cx(row.props.className, { [classes.updatingRow]: isUpdating }),
-      },
-    );
-  };
+  const onRowClick = isActive ? editLocation : undefined;
 
   const schema = buildSchema({
     isActive,
@@ -109,27 +94,7 @@ export const CompanyLocations: React.FC<Props> = ({
       <Typography variant="h6">
         <Text message="settings.locations" />
       </Typography>
-      <FormikProvider value={formik}>
-        <KendoDataGrid
-          data={locationsList}
-          schema={schema}
-          onRowClick={isActive ? editLocation : undefined}
-          rowRender={rowRender}
-          className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-        />
-        {isActive && (
-          <Button
-            attached
-            fullWidth
-            kind="add"
-            data-cy="form-builder-add-another-location"
-            disabled={editedLocation !== undefined}
-            onClick={addLocation}
-          >
-            <Text message="settings.locations.add" />
-          </Button>
-        )}
-      </FormikProvider>
+      <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation, onRowClick }} />
     </Box>
   );
 };

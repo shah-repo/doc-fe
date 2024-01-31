@@ -572,6 +572,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
         }
         break;
+      case 'relatedEquipment':
+        returnValue = (
+          <div data-cy={dataCy}>
+            {getAuditDefaultValue(audit.type === 'OBJECT_DELETED' ? previousValue : nextValue)}
+          </div>
+        );
+        break;
       case 'formInput.lineItems':
         try {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

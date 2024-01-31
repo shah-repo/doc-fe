@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
-import { getStartOfDayDateString, TIME_ZONE } from '../../../../../common/utils/date';
+import { TIME_ZONE, getStartOfDayDateString } from '../../../../../common/utils/date';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Group, Permission } from '../../../../../state/ducks/auth/types';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
@@ -18,29 +18,30 @@ import { Owner } from '../../../../../state/ducks/common/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 import { documentTypeActions } from '../../../../../state/ducks/documentRevisions/documentType';
 import { DocumentTypeById } from '../../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../state/reducers';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from '../../../../change.request/form/transform';
 import { ApproverPayload, InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
-import { Button } from '../../../../components/forms/fields-next';
-import { FormContext } from '../../../../components/forms/FormContext';
-import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
-import { FB } from '../../../../form.builder';
+import { FormContext } from '../../../../components/forms/FormContext';
+import { Button } from '../../../../components/forms/fields-next';
+import { toastError } from '../../../../components/notifications';
 import { BOMResponse } from '../../../../form.builder/FBBOM/components/treelist/interface';
 import FBDataStore from '../../../../form.builder/FBStore/FBDataStore';
+import { FB } from '../../../../form.builder/index';
 import CustomLabelTooltip from '../../../../hooks/docCustomization/CustomLabelTooltip';
 import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
-import { checkIsDocumentPO } from '../../../helpers/checkDocumentGroup';
+import { checkIsDocumentES, checkIsDocumentPO } from '../../../helpers/checkDocumentGroup';
 import { ApproveAndReleaseFormValues } from '../../types';
 import useStyles from './ApproveAndRelease.styles';
 import ApproveAndReleaseForm from './ApproveAndReleaseForm';
+import ObsoleteRelatedEQDialog from './ObsoleteRelatedEQDialog';
 import SelectionForm from './SelectionForm';
 import SplitReleaseButton, { ARActions } from './SplitReleaseButton';
 
@@ -62,6 +63,8 @@ interface Props {
   isSliderView?: boolean
 }
 
+const OBSOLETE_RELATED_EQ_KEY = 'fb-is-obsolete-related-eq';
+
 const ApproveAndRelease: React.FunctionComponent<Props> = ({
   id,
   status,
@@ -81,6 +84,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 }) => {
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
+
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, docRevId),
   );
@@ -95,6 +99,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
   const [changeRequestId, setChangeRequestId] = useState<string>('');
   const [optionChosen, setOptionChosen] = useState<string>();
+  const [isObsoleteRelatedEQAnswered, setIsObsoleteRelatedEQAnswered] = useState<boolean>(false);
 
   // MARK: @config
   const isNewLayout = SM.isNewLayout;
@@ -105,10 +110,12 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
   const classes = useStyles();
+  const { formState, workspaceState } = FB.useStores();
 
   const expressApprovalDialog = useDialog();
   const templateSelectionDialog = useDialog();
   const existingDraftARSelectionDialog = useDialog();
+  const obsoleteRelatedEQDialog = useDialog();
   const approvalRequestDialog = useDialog();
 
   const alertDialog = useDialog();
@@ -239,6 +246,13 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   }, []);
 
   useEffect(() => {
+    if (isObsoleteRelatedEQAnswered) {
+      openDialog(optionChosen as ARActions);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isObsoleteRelatedEQAnswered]);
+
+  useEffect(() => {
     if (templateOptions.length === 1 && optionChosen === ARActions.NEW) {
       templateSelectionDialog.close();
       processCreatingRevision(templateOptions[0]);
@@ -335,6 +349,17 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     async.reset();
     setOptionChosen(option);
 
+    if (
+      !isObsoleteRelatedEQAnswered
+      && checkIsDocumentES(documentRevision?.document?.documentType?.groupOptions)
+      && documentRevision?.revisionChangeType === RevisionChangeType.Obsolete
+    ) {
+      obsoleteRelatedEQDialog.open();
+      return;
+    }
+
+    setIsObsoleteRelatedEQAnswered(false);
+
     if (!option && docRevId) {
       expressApprovalDialog.open();
 
@@ -351,9 +376,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         { docTypeGroupOption: 'CHANGE_REQUEST' },
         asyncGetDocTypeByGroup,
       );
-    }
-
-    if (option === ARActions.NEW) {
+    } else if (option === ARActions.NEW) {
       templateSelectionDialog.open();
 
       asyncGetDocTypeByGroup.start(
@@ -361,9 +384,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         { docTypeGroupOption: 'CHANGE_REQUEST' },
         asyncGetDocTypeByGroup,
       );
-    }
-
-    if (option === ARActions.EXISTING) {
+    } else if (option === ARActions.EXISTING) {
       existingDraftARSelectionDialog.open();
 
       asyncGetDraftApprovalRequests.start(
@@ -459,6 +480,13 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     return null;
   }
 
+  const handleObsoletingESAnswer = (shouldObsolete: boolean) => {
+    const oldValues = formState?.getValues() ?? {};
+    oldValues[OBSOLETE_RELATED_EQ_KEY] = shouldObsolete;
+    workspaceState?.saveDocRev(oldValues);
+    setIsObsoleteRelatedEQAnswered(true);
+  };
+
   return (
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
@@ -542,6 +570,13 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         confirmLabel="common.open"
         onConfirm={(option: InDraftAROption) => processChosenApprovalRequest(option)}
       />
+      {obsoleteRelatedEQDialog.isOpen && (
+        <ObsoleteRelatedEQDialog
+          documentRevision={documentRevision}
+          handler={obsoleteRelatedEQDialog}
+          onAnswer={handleObsoletingESAnswer}
+        />
+      )}
       {approvalRequestDialog.isOpen && (
         <ChangeRequestEditDialog
           changeRequestId={changeRequestId}

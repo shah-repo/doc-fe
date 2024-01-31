@@ -3,10 +3,12 @@ import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/typ
 import { ApplicationState } from '../../reducers';
 import { AsyncState } from '../../types';
 import { Nullable } from '../common/types';
-import { Group, GroupTag, IotCredentials, Permission } from './types';
+import { User, Group, GroupTag, IotCredentials, Permission } from './types';
 
 const isAuthenticated = (state: ApplicationState): boolean =>
   Boolean(state.auth.user.sessionId);
+
+const currentUser = (state: ApplicationState): User => state.auth.user;
 
 const currentUserEmail = (state: ApplicationState): string =>
   state.auth.user.email;
@@ -106,6 +108,7 @@ const getHasPermission = createSelector(
 
 export default {
   isAuthenticated,
+  currentUser,
   currentUserEmail,
   currentUserName,
   currentUserId,
