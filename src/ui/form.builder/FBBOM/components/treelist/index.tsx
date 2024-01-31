@@ -11,13 +11,15 @@ import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
+  TreeList,
+  TreeListCellProps,
+  TreeListColumnReorderEvent,
+  TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent,
   extendDataItem,
   filterBy,
   mapTree,
-  orderBy, TreeList,
-  TreeListCellProps,
-  TreeListColumnReorderEvent,
-  TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat,
+  orderBy,
+  treeToFlat,
 } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
@@ -49,10 +51,10 @@ import { documentRevisionsActions } from '../../../../../state/ducks/documentRev
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
+import Text from '../../../../components/Text';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
-import Text from '../../../../components/Text';
 import WhereUsedDialog, { WhereUsedType } from '../../../../components/whereUsed/WhereUsedDialog';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { bomDisabledChangeControl, disableOtherFieldsChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
@@ -706,6 +708,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           dataItem={item}
           onConfirm={formik?.submitForm}
           onDiscard={discardBOM}
+          isDeleteDisabled={disableEditInRestrictedEditMode(item)}
           onDelete={
             isOwner || item.isParentOwner || (item?.childNodes || []).length > 0
               ? removeBOM
