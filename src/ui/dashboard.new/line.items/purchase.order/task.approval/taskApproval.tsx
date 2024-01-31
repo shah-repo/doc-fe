@@ -10,12 +10,14 @@ import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg'
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
 import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject.svg';
 import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_solid.svg';
+import { ReactComponent as SuccessIcon } from '../../../../../assets/images/success_iconn.svg';
 import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
-import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import Text from '../../../../components/Text';
+import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import { toastSuccess } from '../../../../components/notifications';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -24,11 +26,10 @@ import Colors from '../../../../layout/theme/utils/colors';
 import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
-
 interface Props {
   id: string
   docDocumentId: string
@@ -124,7 +125,24 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   };
 
   const rejectDialogAsync = useAsync({
-    onSuccess: () => {
+    onSuccess: (response) => {
+      toastSuccess(
+        <>
+          <div style={{ display: 'flex' }}>
+            <div>
+              <SuccessIcon style={{ height: '30px' }} />
+            </div>
+            <div style={{ color: Colors.black }}>
+              <div>
+                <span style={{ fontWeight: 'bold' }}>
+                  <Text translation={`approvalRequest.status.${response?.status}` as Translation} />
+                </span>
+              </div>
+            </div>
+          </div>
+        </>, {
+          closeButton: true,
+        });
       dispatch(dashboardTodoActions.loadMyFeedsList());
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },

@@ -22,4 +22,5 @@ export enum PreviewControlButtons {
   ExportToEmail='exportToEmail',
   EditPartButton='restrictedEditPart',
   CancelEditPartButton='cancelEditPart',
+  PrintLabelButton='printLabelButton',
 }
