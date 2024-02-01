@@ -20,7 +20,7 @@ class FBLHRStepState {
   @observable public editedParameters: any;
   @observable public approvals: any;
 
-  public constructor(lhrs?: DocumentRevision) {
+  public constructor (lhrs?: DocumentRevision) {
     this.stepLHRs = lhrs;
   }
 
@@ -51,7 +51,7 @@ class FBLHRStepState {
       ...this.editedParameters,
       item: omit(item, [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })]),
     };
-    set(this, 'editedParameters', keyBy(paramsToSet, 'paramsId') );
+    set(this, 'editedParameters', keyBy(paramsToSet, 'paramsId'));
     set(this, type, items);
   };
 
@@ -66,11 +66,11 @@ class FBLHRStepState {
     });
   };
 
-  public get materialsId(): string {
+  public get materialsId (): string {
     return FBAutocompleteAsyncOption.materials;
   }
 
-  public get equipmentId(): string {
+  public get equipmentId (): string {
     return FBAutocompleteAsyncOption.equipment;
   }
 
@@ -97,6 +97,7 @@ class FBLHRStepState {
       },
     });
   };
+
   protected findRevision = (id: string, type: FBProcedureItemType): DocumentRevision | undefined => {
     const itemId = type === FBProcedureItemType.materials
       ? this.materialsId

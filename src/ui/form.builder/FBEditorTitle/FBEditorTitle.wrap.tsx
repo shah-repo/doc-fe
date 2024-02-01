@@ -9,7 +9,6 @@ export const withFBEditorTitle = <T extends FBEditorTitleProps>(
     mode,
     ...props
   }: T) => {
-
     const { editorState, formState } = FB.useStores();
 
     const handleMode = () => {

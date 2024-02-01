@@ -17,7 +17,6 @@ type Props = OwnProps;
 const AuditAutocomplete: React.FunctionComponent<Props> = ({
   audit, loading,
 }) => {
-
   const autocompleteState = FB.useRef(FBAutocompleteAsyncState);
   const { nextValue, previousValue } = audit;
   let label = '';

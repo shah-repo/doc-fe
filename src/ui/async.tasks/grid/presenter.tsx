@@ -20,7 +20,7 @@ import { dropDownOptions } from './helper';
 import { KendoPresenterProps } from './interfaces';
 import { styles } from './presenter.styles';
 
-export function AsyncTasksPresenter({
+export function AsyncTasksPresenter ({
   tableName,
   tableCriteria,
   schema,

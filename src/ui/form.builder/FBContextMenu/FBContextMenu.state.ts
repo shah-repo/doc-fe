@@ -5,7 +5,7 @@ class FBContextMenuState {
   @observable public mouseX: number | undefined;
   @observable public mouseY: number | undefined;
 
-  @computed public get anchorPosition(): PopoverPosition {
+  @computed public get anchorPosition (): PopoverPosition {
     return { top: this.mouseY || 0, left: this.mouseX || 0 };
   }
 

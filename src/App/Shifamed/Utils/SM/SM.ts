@@ -7,20 +7,19 @@ import { SMProviderProps } from '../../..';
 import { HOME_URL } from '../../../../ui/constants/urls';
 
 export default class SM {
-
-  public static useRef<T>(store: (new(props: any) => T), props: any = undefined): T {
+  public static useRef<T>(Store: (new(props: any) => T), props: any = undefined): T {
     const stateRef = React.useRef<T | undefined>(undefined);
     if (isUndefined(stateRef.current)) {
-      stateRef.current = new store(props);
+      stateRef.current = new Store(props);
     }
     return stateRef.current;
   }
 
-  public static useStores() {
+  public static useStores () {
     return React.useContext(MobXProviderContext) as SMProviderProps;
   }
 
-  public static isValue(value: any): boolean {
+  public static isValue (value: any): boolean {
     switch (true) {
       case isString(value):
       case isObject(value):
@@ -44,25 +43,26 @@ export default class SM {
     }, []);
   }
 
-  public static get pathname(): string {
+  public static get pathname (): string {
     return useLocation().pathname;
   }
 
   // For the new tabpanel layout
   // This can be removed once all is refactored to new layout
-  public static get isNewLayout(): boolean {
+  public static get isNewLayout (): boolean {
     return SM.pathname.includes('document_revision/');
   }
 
   // For the Update PO cases
-  public static get isNewVersion(): boolean {
+  public static get isNewVersion (): boolean {
     return SM.pathname.includes('new-version/');
   }
 
-  public static get isNewCRLayout(): boolean {
+  public static get isNewCRLayout (): boolean {
     return SM.pathname.includes('change_request/');
   }
-  public static get isHomeURL(): boolean {
+
+  public static get isHomeURL (): boolean {
     return SM.pathname === HOME_URL;
   }
 }

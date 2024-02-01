@@ -23,7 +23,6 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
   edit,
   remove,
 }) => {
-
   const classes = CellStyles();
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });

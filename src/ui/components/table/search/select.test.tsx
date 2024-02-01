@@ -6,7 +6,6 @@ import { TableSearchSelectField } from './select';
 import { TableSearchFieldProps } from './types';
 
 describe('Table search select field tests', () => {
-
   const options: SelectOption[] = [{
     value: 1,
     text: 'One',

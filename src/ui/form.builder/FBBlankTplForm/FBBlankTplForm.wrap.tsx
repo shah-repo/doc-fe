@@ -13,7 +13,6 @@ export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
     name,
     ...props
   }: T) => {
-
     const { workspaceState, formState } = FB.useStores();
     const redlineActive = useSelector(companySelectors.getRedlineActive);
     disabled = ![FBWorkspaceModeOptions.DESIGN, workspaceState?.isPreview && FBWorkspaceModeOptions.FORM]

@@ -35,20 +35,20 @@ const CellStyles = makeStyles((theme) => ({
     textTransform: 'uppercase',
   },
   schemaAddBtn: {
-    'fontWeight': 600,
-    'margin': 0,
-    'boxShadow': 'none',
-    'borderRadius': 200,
-    'background': Colors.navy,
-    'color': Colors.white,
-    'paddingRight': theme.spacing(2.5),
-    'paddingLeft': theme.spacing(2.5),
-    'textTransform': 'uppercase',
+    fontWeight: 600,
+    margin: 0,
+    boxShadow: 'none',
+    borderRadius: 200,
+    background: Colors.navy,
+    color: Colors.white,
+    paddingRight: theme.spacing(2.5),
+    paddingLeft: theme.spacing(2.5),
+    textTransform: 'uppercase',
     '&:hover': {
       background: Colors.navy,
     },
     '&:disabled': {
-      opacity: .6,
+      opacity: 0.6,
       backgroundColor: Colors.navy,
     },
   },
@@ -71,7 +71,7 @@ const CellStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'transparent',
     },
-    'padding': theme.spacing(0.625),
+    padding: theme.spacing(0.625),
   },
 }));
 export default CellStyles;

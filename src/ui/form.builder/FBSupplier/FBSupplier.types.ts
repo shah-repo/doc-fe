@@ -4,7 +4,7 @@ export type FBSupplierProps =
 & Pick<FBProviderProps, 'dialogState' | 'supplierState'>
 & Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'loading' | 'isInputOwner'>
 & {
-  handleAdd(): void
+  handleAdd: () => void
   isPreview?: boolean
 };
 

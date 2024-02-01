@@ -9,7 +9,6 @@ export const withSMTabs = <T extends SMTabsHOCProps>(
     _documentRevisionFormState,
     ...props
   }: T) => {
-
     _tabsState = SM.useRef(SMTabsState);
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
 

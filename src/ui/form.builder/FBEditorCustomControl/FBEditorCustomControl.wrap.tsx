@@ -15,7 +15,6 @@ export const withFBEditorCustomControl = <T extends FBEditorCustomControlProps>(
     index = 0,
     ...props
   }: T) => {
-
     const { workspaceState, dialogState } = FB.useStores();
     customControlState = FB.useRef<FBEditorCustomControlState>(FBEditorCustomControlState);
 

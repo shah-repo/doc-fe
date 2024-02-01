@@ -1,6 +1,5 @@
 import { Box, Button, Paper, Typography } from '@material-ui/core';
-import * as React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { logo } from '../../../common/utils/helpers';
 import Text from '../../components/Text';

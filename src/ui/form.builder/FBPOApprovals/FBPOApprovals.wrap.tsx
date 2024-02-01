@@ -55,7 +55,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     isIncluded = (group: FBRequiredApprover) => some(poApprovalsState?.checkedGroups, { id: group.id });
 
-    function includesApprover(group: FBRequiredApprover, approver: string) {
+    function includesApprover (group: FBRequiredApprover, approver: string) {
       return (group.joinedEmployees as string[]).includes(approver);
     }
 

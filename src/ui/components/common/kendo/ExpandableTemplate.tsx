@@ -10,7 +10,7 @@ interface Props {
   dataId: string
   noOfItems?: number
 }
-const ExpandableTemplate = ({ items, dataId, noOfItems = 15  }: Props) => {
+const ExpandableTemplate = ({ items, dataId, noOfItems = 15 }: Props) => {
   const classes = styles();
   const groupId = dataId;
   const [expandedGroupId, setExpandedGroupId] = useState<string | null>(null);
