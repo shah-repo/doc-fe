@@ -21,6 +21,7 @@ import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
 import { filterSecurityGroupsForQms } from '../../documentType/list/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>,
@@ -42,7 +43,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
 
     const { workspaceState, formState } = FB.useStores();
-    const { id: docRevId, document: { status = '' } = {} } = workspaceState || {};
+    const { id: docRevId, document: { status = '', document = null } = {} } = workspaceState || {};
     const isEqStatusReleased = status === DocumentRevisionStatus.Released;
     const isTypePM = editorConfig.type?.includes('preventativeMaintenance');
     const complianceStatus = formState?.getFieldValue(`${name}.status`);
@@ -79,10 +80,12 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     ), []);
 
     function newPMDisabled (): boolean {
-      return !(
-        formState?.getFieldValue(`${name}.preventativeForm`)
-        && formState?.getFieldValue(`${name}.frequency`)
-      ) || !isEqStatusReleased || !pmFormId || !lastReleasedMaintenanceForm
+      return !formState?.getFieldValue(`${name}.preventativeForm`)
+        || !formState?.getFieldValue(`${name}.frequency`)
+        || !isEqStatusReleased
+        || !pmFormId
+        || !lastReleasedMaintenanceForm
+        || !checkIsDocumentEquipment(document?.documentType?.groupOptions)
         || Boolean(eqMaintenanceState?.newPMLoading);
     }
 

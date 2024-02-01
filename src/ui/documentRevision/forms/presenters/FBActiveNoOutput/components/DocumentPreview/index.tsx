@@ -25,6 +25,7 @@ import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
+import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../../related.equipments';
 import RelatedPartsWrapper from '../../../related.parts/RelatedParts.wrap';
 import styles from './styles';
 
@@ -104,7 +105,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
     && schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
-
+  const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(documentRevision);
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   useEffect(() => {
     if (isLHR) {
@@ -253,6 +254,11 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           workspaceMode={mode}
                         />
                         }
+                        {formPreview && isRelatedEquipmentsShowing && (
+                          <Grid item xs={12}>
+                            <RelatedEquipments parentDocumentRevision={documentRevision} />
+                          </Grid>
+                        )}
                       </>}
                       {tabType === TabTypeOptions.DYNAMIC && showTabContent
                         && _formState?.mode !== FBWorkspaceModeOptions.NONE && (
