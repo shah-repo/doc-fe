@@ -14,6 +14,7 @@ import { documentTypeSelectors } from '../../../../../../../state/ducks/document
 import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
+import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';
 import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../../../document.revision/form/attachments';
 import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
@@ -23,6 +24,7 @@ import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
+import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../../related.equipments';
 import RelatedPartsWrapper from '../../../related.parts/RelatedParts.wrap';
 import styles from './styles';
 
@@ -102,7 +104,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
     && schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
-
+  const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(documentRevision);
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   useEffect(() => {
     if (isLHR) {
@@ -251,6 +253,11 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           workspaceMode={mode}
                         />
                         }
+                        {formPreview && isRelatedEquipmentsShowing && (
+                          <Grid item xs={12}>
+                            <RelatedEquipments parentDocumentRevision={documentRevision} />
+                          </Grid>
+                        )}
                       </>}
                       {tabType === TabTypeOptions.DYNAMIC && showTabContent
                         && _formState?.mode !== FBWorkspaceModeOptions.NONE && (
@@ -291,6 +298,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                         <FBBOM documentRevision={documentRevision}
                           isDisabled={true} isShowOnly={true} />
                       )}
+                      {tabType === TabTypeOptions.MATERIAL_DISPOSITION
+                        && _tabsState?.isTabActive(
+                          TabTypeOptions.MATERIAL_DISPOSITION,
+                        ) && <FBMaterialDisposition isShowOnly />}
                     </SMBox>
                   );
                 })}

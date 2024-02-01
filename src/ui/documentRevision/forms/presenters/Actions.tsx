@@ -202,9 +202,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue('formDocument', undefined);
     }
   }
-  const {
-    label: undoChangesLabel,
-  } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
+  const { label: undoChangesLabel } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
 
   const onUndoChangesClick = async () => {
     setDoNotPrompt(true);
@@ -224,6 +222,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
     dispatch(documentRevisionsActions.load(documentRevision.id));
   };
+
   const onFormClick = async () => {
     if (redlineActive) {
       formik.setFieldValue('redline', true);

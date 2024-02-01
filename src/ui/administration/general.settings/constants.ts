@@ -1,5 +1,6 @@
 import ApprovalRequestsSettingsPanel from './panels/ApprovalRequest';
 import IntegrationsSettings from './panels/Integrations';
+import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import PrintingSettingsPanel from './panels/Printing';
 import { GeneralSettingsTabs } from './types';
@@ -27,5 +28,10 @@ export const panels = [
     key: GeneralSettingsTabs.Integrations,
     title: 'administration.general.settings.integrations',
     component: IntegrationsSettings,
+  },
+  {
+    key: GeneralSettingsTabs.EF,
+    title: 'administration.general.settings.equipmentFamily.tab',
+    component: EquipmentFamilySettingsPanel,
   },
 ];
