@@ -14,6 +14,6 @@ export type SplitButtonProps = Omit<ButtonGroupProps, 'onClick'> & {
 
 export type SplitButtonMenuProps = Omit<MenuProps, 'open' | 'onClose'> & {
   onClose?: {
-    bivarianceHack(event: {}, reason: 'backdropClick' | 'escapeKeyDown' | 'itemClick'): void
+    bivarianceHack: (event: {}, reason: 'backdropClick' | 'escapeKeyDown' | 'itemClick') => void
   }['bivarianceHack']
 };

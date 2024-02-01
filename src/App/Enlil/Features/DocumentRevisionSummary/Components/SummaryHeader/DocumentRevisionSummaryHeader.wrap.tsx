@@ -10,7 +10,6 @@ export const withDocumentRevisionSummaryHeader = <T extends DocumentRevisionSumm
     documentRevision,
     ...props
   }: T) => {
-
     // MARK: @config
     const { _documentRevisionFormState } = SM.useStores();
     const { document, name, description } = documentRevision || {};

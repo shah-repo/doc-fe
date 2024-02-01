@@ -19,7 +19,7 @@ const DiffContainer: React.FunctionComponent<Props> = ({
     if (!oldText || !newText) {
       return;
     }
-    if (oldText === 'undefined' && refMain.current ) {
+    if (oldText === 'undefined' && refMain.current) {
       const contents = refMain.current.getEditor().clipboard.convert(newText);
       refNew.current && refNew.current.getEditor().setContents(contents);
       return;

@@ -80,8 +80,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       setModifiedOptions(options);
     }, [options]);
 
-    function getDefault() {
-      function  sliceValue(value: any) {
+    function getDefault () {
+      function sliceValue (value: any) {
         return multiple
           ? filter(options, (o) => (value || formValue).includes(o[optionValueKey]))
           : find(options, { [optionValueKey]: value || formValue });
@@ -98,7 +98,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
           return slicedValue;
         },
-        id: (value?: any) =>  {
+        id: (value?: any) => {
           const slicedValue = multiple
             ? map(value || formValue, optionValueKey)
             : get(value || formValue, optionValueKey);

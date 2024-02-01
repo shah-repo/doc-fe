@@ -20,16 +20,16 @@ export default makeStyles((theme) => ({
     fontWeight: 600,
     fontSize: 12,
     color: Colors.almost_black,
-    margin: theme.spacing(0, .25),
+    margin: theme.spacing(0, 0.25),
   },
   iconContainer: {
     display: 'flex',
     height: 24,
     flex: 'none',
-    margin: theme.spacing(0, .25),
+    margin: theme.spacing(0, 0.25),
   },
   externalContainer: {
-    padding: theme.spacing(1.25, .5, 1.25, 2.5),
+    padding: theme.spacing(1.25, 0.5, 1.25, 2.5),
     boxShadow: `0 1px 0 ${Colors.link_water}`,
     margin: '1px 0px',
   },
@@ -41,6 +41,6 @@ export default makeStyles((theme) => ({
   },
   loadMore: {
     alignSelf: 'flex-start',
-    margin: theme.spacing(.75, 1.5),
+    margin: theme.spacing(0.75, 1.5),
   },
 }));

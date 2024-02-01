@@ -79,8 +79,7 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
         lastSuccess.current = pending.current;
         pending.current = '';
         if (odString === lastSuccess.current) {
-          onDataReceived.call(
-            undefined,
+          onDataReceived(
             {
               data: data.results,
               total: data.total,

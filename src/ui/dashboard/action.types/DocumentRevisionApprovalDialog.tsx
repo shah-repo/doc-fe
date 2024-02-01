@@ -11,7 +11,7 @@ import { DialogHandler } from '../../hooks/useDialog';
 interface Props {
   asyncState: AsyncActionPayload
   approvalId: string
-  changeApprovalStatus(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void
+  changeApprovalStatus: (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => void
   passwordDialog: DialogHandler
 }
 
@@ -21,7 +21,6 @@ export const DocumentRevisionApprovalDialog: React.FunctionComponent<Props> = ({
   approvalId,
   passwordDialog,
 }) => {
-
   const renderPasswordForm = (props: FormikProps<any>) => (
     <PasswordForm {...props} asyncState={asyncState} cancel={passwordDialog.close} />
   );

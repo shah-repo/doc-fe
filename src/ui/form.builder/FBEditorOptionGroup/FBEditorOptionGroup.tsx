@@ -29,6 +29,7 @@ const FBEditorOptionGroup: React.FunctionComponent<FBEditorProps> = ({
       <FBEditorOptions key={`fb-editor-options-${type}-${index}`} className={editorOptionClasses.textfield} />
       {children}
     </FBEditor>
-  ); };
+  );
+};
 
 export default FBEditorOptionGroup;

@@ -15,7 +15,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptio
   }: T) => {
     const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
     const { _documentRevisionFormState, _tabsState } = SM.useStores();
-    function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
+    function defaultProps (props: Partial<FBInputProps>): Partial<FBInputProps> {
       const { type, stepIndex, options } = props;
       if (includes(FBEditorState.pickStepIndex, type)) {
         const stepSections = filter(workspaceState?.getSchema(), (schemaItem) =>
@@ -34,12 +34,12 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptio
       return props;
     }
 
-    function addTestStep() {
+    function addTestStep () {
       workspaceState?.setSchema(union(workspaceState.schema, FBData.testStepSchema));
       dialogState?.closeDialog();
     }
 
-    function customHandler(type: FBInputType) {
+    function customHandler (type: FBInputType) {
       const handler: Partial<Record<FBInputType, () => any>> = {
         teststep: () => addTestStep(),
       };
@@ -49,7 +49,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptio
       leftPanelState?.closeDialog();
     };
     openEditor = (props?: Partial<FBInputProps>) => () => {
-      const { type, index,  isAddAction } = props || {};
+      const { type, index, isAddAction } = props || {};
       delete props?.isAddAction;
       if (!type) {
         return;
@@ -100,7 +100,6 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptio
               {...{ type, index }} />
           ),
         });
-
       }
     };
 

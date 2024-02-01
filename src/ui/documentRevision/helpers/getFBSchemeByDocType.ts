@@ -1,6 +1,6 @@
 import { find, get, map, maxBy, some, union, unionBy } from 'lodash';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType, DocumentTypeByIdState, TabInfo, tabIdByInternalType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBFormTemplateProps } from '../../../state/ducks/documentRevisions/types';
 import { store as appStore } from '../../../state/store';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
@@ -42,18 +42,18 @@ export const getFBSchemeByDocType = (
   const tplType = get(formValue, 'document.documentType.id') || '';
   const documentTypes = union([tplType], outputTypes);
 
-  const finalScheme: FBSchemaProps[] = documentTypes.reduce((scheme, typeId) => {
+  const finalScheme: FBSchemaProps[] = documentTypes.reduce<FBSchemaProps[]>((scheme, typeId) => {
     const rec = documentTypesById[typeId];
     // If type has scheme
     if (!rec?.schema) { return scheme; }
-    const typeScheme = map(rec.schema, ((schemaItem) => ({
+    const typeScheme = map(rec.schema, (schemaItem) => ({
       ...schemaItem,
       ...find(originScheme, { name: schemaItem.name }),
       deleteDisabled: schemaItem.deleteInFormDisabled,
-    })));
+    }));
 
     return unionBy(scheme, typeScheme, 'name');
-  }, [] as FBSchemaProps[]);
+  }, []);
 
   const hasApprovalField = Boolean(finalScheme.find(item => item.type === 'approvals'));
 

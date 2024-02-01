@@ -19,7 +19,6 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     gutter,
     ...props
   }: T) => {
-
     const { formState, workspaceState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);

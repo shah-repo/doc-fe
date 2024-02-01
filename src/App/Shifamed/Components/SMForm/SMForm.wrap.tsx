@@ -9,7 +9,6 @@ export const withSMFormWrap = <T extends SMFormProps>(
     values,
     ...props
   }: T) => {
-
     // MARK: @config
     const { _formState } = SM.useStores();
 

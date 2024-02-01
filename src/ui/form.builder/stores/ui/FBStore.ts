@@ -1,8 +1,8 @@
-import { Dictionary, filter, first, get, isUndefined, map, set as lodashSet, uniqBy } from 'lodash';
+import { Dictionary, filter, first, get, isUndefined, set as lodashSet, map, uniqBy } from 'lodash';
 import { action, computed, observable, set } from 'mobx';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
-import { FBFormValues } from '../../defaults/formik';
 import FBAutocompleteAsyncStore from '../../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FBFormValues } from '../../defaults/formik';
 import { FBInputProps } from '../../types/common';
 import { FBTemplateSchema } from '../../types/store';
 import { FBWorkspaceMode } from '../../types/workspace';
@@ -11,16 +11,15 @@ import editorStore from './FBEditorStore';
 import FBValidatorStore from './FBValidatorStore';
 
 class FormBuilderStore {
-
-  @computed public get active(): boolean {
+  @computed public get active (): boolean {
     return this.mode !== 'none';
   }
 
-  @computed public get isStarter(): boolean {
+  @computed public get isStarter (): boolean {
     return (this.mode === 'design') && (this.schema.length === 0);
   }
 
-  @computed public get fieldMode(): Pick<FBInputProps, 'disabled'> {
+  @computed public get fieldMode (): Pick<FBInputProps, 'disabled'> {
     return {
       disabled: this.isDisabled(),
       // readOnly: this.isReadonly(),
@@ -41,7 +40,7 @@ class FormBuilderStore {
     FBAutocompleteAsyncStore.data.clear();
   };
 
-  public get isRevised(): boolean | undefined {
+  public get isRevised (): boolean | undefined {
     const { version = 0, revision = 0, outputRevision } = this.document;
     return ((version > 1) && (revision > 1)) || outputRevision;
   }
@@ -137,7 +136,7 @@ class FormBuilderStore {
 
   @action public setFormSchema = (newSchema: FBTemplateSchema[]) => {
     const filtered = filter(newSchema, (schemaItem) => schemaItem.type !== 'action');
-    filtered.map((o, i) => o.index = i);
+    filtered.map((o, i) => (o.index = i));
     this.schema = filtered;
   };
 
@@ -177,7 +176,7 @@ class FormBuilderStore {
     this.setValues(lodashSet(this.values, name, value));
   };
 
-  @action private setModeConfig = () => {
+  @action private readonly setModeConfig = () => {
     switch (this.mode) {
       case 'none':
       case 'design':
@@ -185,11 +184,10 @@ class FormBuilderStore {
         this.values = {};
         break;
       default:
-        return;
     }
   };
 
-  @action private isDisabled = (): boolean => this.mode !== 'form';
+  @action private readonly isDisabled = (): boolean => this.mode !== 'form';
 }
 
 const FBStore = new FormBuilderStore();

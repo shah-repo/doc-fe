@@ -66,6 +66,7 @@ const Attachments: React.FunctionComponent<Props> = ({
       <AttachmentField name="attachments" component="field" disabled={isDisabled} />
       <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }} />
     </Box>
-  ); };
+  );
+};
 
 export default React.memo(Attachments);

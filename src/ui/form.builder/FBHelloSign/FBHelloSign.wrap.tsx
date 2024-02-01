@@ -23,7 +23,6 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     name,
     ...props
   }: T) => {
-
     helloSignState = FB.useRef<FBHelloSignState>(FBHelloSignState);
 
     const { workspaceState, formState } = FB.useStores();
@@ -40,7 +39,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       });
     }
 
-    function getButtonLabel() {
+    function getButtonLabel () {
       if (workspaceState?.mode !== 'form') {
         return 'form.builder.create.template';
       }
@@ -51,7 +50,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       return 'form.builder.cancel.signature';
     }
 
-    function helloSignIframe(data: any) {
+    function helloSignIframe (data: any) {
       // using previouslyFinished with 'close' because 'cancel' event doesn't work for some reason
       let previouslyFinished = false;
       const clientId = '24a113b7a770ee49ed3fe30fa6ada0f3';
@@ -74,7 +73,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       });
     }
 
-    async function handleForm() {
+    async function handleForm () {
       const items = formState?.getValues();
       const filteredItems = pick(items, keys(items).filter((x) => !includes(x, 'Generated_From_Template')));
       if (values(filteredItems).some((x) => x === '') || filteredItems === null) {
@@ -105,7 +104,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       }
     }
 
-    async function handleDesign() {
+    async function handleDesign () {
       const { attachments, formTemplate: { helloSignTemplateId = null } = {} } = workspaceState?.document || {};
       let msg: string | undefined;
       if (isEmpty(attachments)) {

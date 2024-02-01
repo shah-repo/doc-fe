@@ -7,7 +7,7 @@ export interface ViewFileContainerProps {
   attachment?: Attachment
   isOpen: boolean
   password?: Password
-  handleClose(): void
+  handleClose: () => void
 }
 
 export interface ViewFilePresenterProps {
@@ -16,14 +16,14 @@ export interface ViewFilePresenterProps {
   url: string
   attachment?: Attachment
   attachments: Attachment[]
-  handleClose(): void
+  handleClose: () => void
 }
 
 export interface ViewFileContentProps {
   asyncState: AsyncState
   url: string
   type: string
-  handleClose(): void
+  handleClose: () => void
 }
 
 export interface ViewFileTitleProps {

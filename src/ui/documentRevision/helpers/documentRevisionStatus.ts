@@ -2,7 +2,7 @@ import { isEmpty, some } from 'lodash';
 import { Document, DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 
 export const getIsLastVersionObsolete = (formDocuments: Document) =>
-  some(formDocuments.documentRevisions, ['status', DocumentRevisionStatus.Obsolete ]);
+  some(formDocuments.documentRevisions, ['status', DocumentRevisionStatus.Obsolete]);
 
 export const isDocumentRevisionInDraft = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.Draft], documentRevisionStatus);
 export const isDocumentRevisionApproved = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.Approved], documentRevisionStatus);

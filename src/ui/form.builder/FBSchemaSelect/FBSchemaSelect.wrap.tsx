@@ -24,7 +24,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
     schemaSelectState = FB.useRef<FBSchemaSelectState>(FBSchemaSelectState);
     defaultValue = formState?.getFieldValue(name);
 
-    function getOptions(): FBSchemaProps[] {
+    function getOptions (): FBSchemaProps[] {
       const scheme: FBSchemaProps[] = workspaceState?.getSchema() || workspaceState?.getValidationSchema();
       const fieldName = formState?.getFieldValue('name');
       const options = scheme.reduce((reduced: FBSchemaProps[], item) => {
@@ -60,7 +60,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       return options;
     }
 
-    function setIncludedSchemaItem(value?: FBSchemaProps) {
+    function setIncludedSchemaItem (value?: FBSchemaProps) {
       if (!value) {
         return;
       }
@@ -74,7 +74,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       }, index + 1);
     }
 
-    function initialIncludedSchemaItem() {
+    function initialIncludedSchemaItem () {
       if (!includeSelectedSchema) {
         return;
       }

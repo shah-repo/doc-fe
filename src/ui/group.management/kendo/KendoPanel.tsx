@@ -66,7 +66,7 @@ interface GroupManagementProps {
 
 let call: CancelTokenSource;
 
-export function KendoPanel({
+export function KendoPanel ({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
   gridData,
@@ -100,7 +100,7 @@ export function KendoPanel({
       ),
     );
   };
-  const processWithGroups = (data: Partial<LoadCompanyGroup>[], dataState: State) => {
+  const processWithGroups = (data: Array<Partial<LoadCompanyGroup>>, dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
@@ -158,7 +158,7 @@ export function KendoPanel({
 
   if (kendoConfig) {
     initialDataState = JSON.parse(kendoConfig);
-  } else  {
+  } else {
     initialDataState = {
       filter:
         {
@@ -446,12 +446,12 @@ export function KendoPanel({
   };
 
   const fieldToCellMapping = {
-    'memberNames': employeeCell,
-    'name': nameCell,
-    'groupType': groupCell,
-    'formattedPermissions': permissionCell,
-    'parentName': parentCell,
-    'formattedTags': tagCell,
+    memberNames: employeeCell,
+    name: nameCell,
+    groupType: groupCell,
+    formattedPermissions: permissionCell,
+    parentName: parentCell,
+    formattedTags: tagCell,
     '': commandCell,
   };
 

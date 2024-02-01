@@ -2,8 +2,7 @@ import { Grid } from '@material-ui/core';
 import { Formik, FormikProps, useFormikContext } from 'formik';
 import { filter, get, includes, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
-import * as React from 'react';
-import { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from '../../../../../../../App';
 import FBTrainingInfoContainer from '../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container';
@@ -12,7 +11,7 @@ import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
 import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';

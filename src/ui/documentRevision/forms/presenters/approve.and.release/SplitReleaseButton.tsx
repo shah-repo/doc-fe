@@ -45,8 +45,8 @@ const SplitReleaseButton: React.FunctionComponent<{
       onToggle={releaseMenu.open}
       kind="white"
       buttonProps={{
-        'disabled': disableExpessAR,
-        'id': 'ApproveAndRelease-button',
+        disabled: disableExpessAR,
+        id: 'ApproveAndRelease-button',
         'data-cy': 'ApproveAndRelease-button',
       }}
       toggleProps={{

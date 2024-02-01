@@ -45,7 +45,7 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
   return (
     <>
       {isNewLayout ? (renderAsButton ? <StyledButton
-        color="primary"  data-cy="change.request.withdraw.alert"
+        color="primary" data-cy="change.request.withdraw.alert"
         id="OwnerChangerPresenter-changeOwner" onClick={dialog.open}>
         <Text message={label} />
       </StyledButton>

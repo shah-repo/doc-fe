@@ -12,7 +12,7 @@ const FBEditorHyperlink: React.FunctionComponent<FBEditorProps> = ({
   const classes = styles();
   return (
     <FBEditor {...props} {...{ inputProps }}>
-      <FBTextField label="form.builder.label" name="label" rules="required"  className={classes.textfield}
+      <FBTextField label="form.builder.label" name="label" rules="required" className={classes.textfield}
         boxProps={{ mb: 3.125, className: classes.error }}
         labelProps={AutoCompleteStyles.labelProps}
         isFbEditorField />

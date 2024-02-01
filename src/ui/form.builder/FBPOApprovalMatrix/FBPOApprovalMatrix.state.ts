@@ -19,9 +19,9 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrixLevel[], null> {
   public groupsApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.officialGroups });
   public employeesApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.employees });
   public url = FBEndpoint.ApprovalLevels;
-  private formState?: FBFormState;
+  private readonly formState?: FBFormState;
 
-  public constructor({ formState, approvalLevels, isOutput, outputRevision }: FBPOApprovalMatrixConstructor) {
+  public constructor ({ formState, approvalLevels, isOutput, outputRevision }: FBPOApprovalMatrixConstructor) {
     super();
     this.formState = formState;
     if (!isOutput) {
@@ -42,7 +42,7 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrixLevel[], null> {
   @action public addItem = (approvalLevel: POApprovalMatrixLevel) => {
     const appLevelIndex = findIndex(this.approvalLevels, { id: approvalLevel.id });
     const checkDuplicate = this.approvalLevels.filter(
-      (item) => item.name === approvalLevel.name || item.limit === approvalLevel.limit );
+      (item) => item.name === approvalLevel.name || item.limit === approvalLevel.limit);
     if ((appLevelIndex === -1 && checkDuplicate?.length > 0) || (appLevelIndex >= 0 && checkDuplicate?.length === 2)) {
       toastError(intl.formatMessage({ id: 'documentRevision.form.PO.matrix.duplicate' }));
       return;
@@ -99,7 +99,7 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrixLevel[], null> {
 
   @action public initialize = () => {
     if (!this.name) {
-      return;
+
     }
     // const value: POApprovalMatrix = this.formState?.getFieldValue(this.name, DEFAULT_POAM);
     // const { approvalLevels } = value || {};
@@ -117,14 +117,14 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrixLevel[], null> {
     // this.formState?.setFieldValue(`${this.name}-formValues`, undefined);
   };
 
-  public onSuccess() {
+  public onSuccess () {
     if (!this.data) { return; }
     this.setItems(this.data);
   }
 
-  private updateFBStore = () => {
+  private readonly updateFBStore = () => {
     if (!this.name || this.formState?.workspaceState?.mode === 'design') {
-      return;
+
     }
     // this.formState?.setFieldValue(this.name, this.poam);
     // this.formState?.workspaceState?.resetSchema();

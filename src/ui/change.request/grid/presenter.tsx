@@ -9,7 +9,7 @@ import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import FormListContainer from '../form.list/FormList.container';
 import { KendoPresenterProps } from './interfaces';
 
-export function DocumentListPresenter({
+export function DocumentListPresenter ({
   statuses,
   tableName,
   tableCriteria,

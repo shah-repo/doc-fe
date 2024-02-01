@@ -2,9 +2,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import Colors from '../../layout/theme/utils/colors';
 
 const commonButtonStyles = {
-  'margin': 0,
-  'boxShadow': 'none',
-  'borderRadius': 100,
+  margin: 0,
+  boxShadow: 'none',
+  borderRadius: 100,
   'text-transform': 'capitalize',
 };
 export const styles = makeStyles((theme: Theme) =>
@@ -30,10 +30,10 @@ export const styles = makeStyles((theme: Theme) =>
     },
     createButton: {
       ...commonButtonStyles,
-      'paddingRight': theme.spacing(2.5),
-      'paddingLeft': theme.spacing(2.5),
-      'background': Colors.navy,
-      'color': Colors.white,
+      paddingRight: theme.spacing(2.5),
+      paddingLeft: theme.spacing(2.5),
+      background: Colors.navy,
+      color: Colors.white,
       '&:hover': {
         background: Colors.navy,
       },

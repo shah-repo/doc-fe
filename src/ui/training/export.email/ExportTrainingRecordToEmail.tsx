@@ -2,8 +2,8 @@ import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { trainingActions } from '../../../state/ducks/training';
-import { toastError, toastSuccess } from '../../components/notifications';
 import Text from '../../components/Text';
+import { toastError, toastSuccess } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 
@@ -22,7 +22,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
       toastSuccess(intl.formatMessage({ id: 'common.send.to.email.success' }));
     },
     onError: () => {
-      toastError(intl.formatMessage({ id: 'common.send.to.email.error'  }));
+      toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
     },
   });
 
