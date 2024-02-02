@@ -8,7 +8,6 @@ export const withSMForm = <T extends SMFormHOCProps>(
     _formState,
     ...props
   }: T) => {
-
     _formState = SM.useRef(SMFormState);
 
     return (

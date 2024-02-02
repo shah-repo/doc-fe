@@ -1,23 +1,23 @@
 export type CallbackHandlerFn<T> = (arg: T) => any;
 
 class CallbackHandler<T = any> {
-  constructor(
+  constructor (
     private callback?: CallbackHandlerFn<T>,
   ) {
     this.callback = callback;
   }
 
-  public execute(arg: T) {
+  public execute (arg: T) {
     if (this.callback) {
       this.callback(arg);
     }
   }
 
-  public connect(callback: CallbackHandlerFn<T>) {
+  public connect (callback: CallbackHandlerFn<T>) {
     this.callback = callback;
   }
 
-  public disconnect() {
+  public disconnect () {
     this.callback = undefined;
   }
 }

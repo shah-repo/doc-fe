@@ -42,7 +42,8 @@ const isSectionApproved = (fieldName: string, documentRevision: DocumentRevision
     return some(fieldApprovals, (approval) => approval.status === ApprovalStatus.Approved)
     || !fieldApprovals?.length;
   }
-  return find(fieldApprovals, { status: ApprovalStatus.Approved }) !== undefined; };
+  return find(fieldApprovals, { status: ApprovalStatus.Approved }) !== undefined;
+};
 
 /** Filter approvals by field.
   * @param fieldName Unique name of the form field.

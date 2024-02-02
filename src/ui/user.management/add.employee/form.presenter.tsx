@@ -61,7 +61,7 @@ const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
       setFieldValue('id', null);
       return;
     }
-    asyncName.start(getEmployeeAction, { email: value }, asyncName );
+    asyncName.start(getEmployeeAction, { email: value }, asyncName);
   };
   const [debouncedEmail] = useDebounce(values.email, 300);
 

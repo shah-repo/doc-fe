@@ -22,10 +22,10 @@ export const editorStyles = {
 export const SMEditorStyles = makeStyles((theme) =>
   createStyles({
     descriptionEditorClass: {
-      'display': '-webkit-box',
+      display: '-webkit-box',
       '-webkit-line-clamp': 2,
       '-webkit-box-orient': 'vertical',
-      'overflow': 'hidden !important',
+      overflow: 'hidden !important',
       '& .public-DraftStyleDefault-block': {
         margin: '0px !important',
       },
@@ -50,11 +50,11 @@ export const SMEditorStyles = makeStyles((theme) =>
       },
     },
     moreOrLess: {
-      'color': Colors.dodger_blue,
-      'padding': theme.spacing(0, .25),
-      'margin': theme.spacing(0, .5),
-      'fontSize': 14,
-      'textTransform': 'lowercase',
+      color: Colors.dodger_blue,
+      padding: theme.spacing(0, 0.25),
+      margin: theme.spacing(0, 0.5),
+      fontSize: 14,
+      textTransform: 'lowercase',
       '&:hover': {
         background: 'unset',
       },

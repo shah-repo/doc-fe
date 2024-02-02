@@ -28,7 +28,7 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
           return (
             <Box pb={lastNote ? 7 : 3}>
               <Box display="flex" pb={1}>
-                <img className={classes.avatar} src={logo}  alt="UserProfile" />
+                <img className={classes.avatar} src={logo} alt="UserProfile" />
                 <Box>
                   <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                     <Text message={note?.senderName} />
@@ -50,7 +50,8 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
                 </Box>
               </Box>
             </Box>
-          ); }}
+          );
+        }}
       </FBMapWrapper>
       {isDraft
       && <Box

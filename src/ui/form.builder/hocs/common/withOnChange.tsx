@@ -26,9 +26,8 @@ export const withOnChange = <T extends FBInputProps>(
   approved,
   ...props
 }: T) => {
-
   const { dialogState } = FB.useStores();
-  function contextState(): boolean {
+  function contextState (): boolean {
     const fieldName = field?.name || '';
     const fieldValue = FBStore.getValue(fieldName);
 
@@ -48,7 +47,7 @@ export const withOnChange = <T extends FBInputProps>(
     return isContextActive || false;
   }
 
-  function storeValue(fieldName: string, value: any) {
+  function storeValue (fieldName: string, value: any) {
     if (!field) {
       return;
     }
@@ -126,15 +125,15 @@ export const withOnChange = <T extends FBInputProps>(
       value = get(ev, 'target.value', '');
     }
 
-    function isChecked() {
+    function isChecked () {
       return get(ev.target, 'checked');
     }
 
-    function isString() {
+    function isString () {
       return toString(ev);
     }
 
-    function isDate() {
+    function isDate () {
       if (isEmpty(ev)) {
         return ev;
       }
@@ -142,7 +141,7 @@ export const withOnChange = <T extends FBInputProps>(
     }
 
     let fieldValue = {
-      checkboxgroup() {
+      checkboxgroup () {
         const checked = get(ev.target, 'checked');
         storeValue(value as string, checked);
         let groupValue: string[] = get(form, `values.${name}`) || [];
@@ -159,7 +158,7 @@ export const withOnChange = <T extends FBInputProps>(
       radio: isChecked,
       texteditor: isString,
       datepicker: isDate,
-      autocomplete() {
+      autocomplete () {
         const { optionValueKey = 'id', optionValueType = 'key', optionObjectKeys } = props;
         if (isArray(value)) {
           if (optionValueType === 'object') {
@@ -171,7 +170,7 @@ export const withOnChange = <T extends FBInputProps>(
         }
         return get(value, optionValueKey);
       },
-      default() {
+      default () {
         return get(ev.target, 'value');
       },
     };

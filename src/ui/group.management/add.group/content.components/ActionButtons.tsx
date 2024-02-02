@@ -17,7 +17,6 @@ const ActionButtons: React.FunctionComponent<Props> = ({
   isCreateMode,
   group,
 }) => {
-
   const resetButtonRenderer = () => (
     <Button variant="outlined" onClick={handleReset} id="Group-reset">
       <Text translation="common.reset" />

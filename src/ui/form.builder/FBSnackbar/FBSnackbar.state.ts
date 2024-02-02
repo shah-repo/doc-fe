@@ -20,7 +20,6 @@ class FBSnackbarState {
     this.setAnchorOrigin(anchorOrigin || this.anchorOrigin);
     this.setAction(action || this.action);
   };
-
 }
 
 export default FBSnackbarState;

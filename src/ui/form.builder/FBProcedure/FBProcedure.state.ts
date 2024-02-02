@@ -17,16 +17,16 @@ class FBProcedureState {
   @observable public diffValue?: FBProcedureValue;
 
   // MARK: @constructor
-  public constructor(value?: FBProcedureValue) {
+  public constructor (value?: FBProcedureValue) {
     this.value = value;
   }
 
   // MARK: @computed
-  @computed public get materials(): FBProcedureItemConfig[] | undefined {
+  @computed public get materials (): FBProcedureItemConfig[] | undefined {
     return this.isDiffPreview ? this.diffValue?.materials : this.value?.materials;
   }
 
-  @computed public get equipment(): FBProcedureItemConfig[] | undefined {
+  @computed public get equipment (): FBProcedureItemConfig[] | undefined {
     return this.isDiffPreview ? this.diffValue?.equipment : this.value?.equipment;
   }
 
@@ -47,7 +47,7 @@ class FBProcedureState {
         const highestId = ids.sort().pop();
         nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
       }
-      item = { title: item.title, id: String.fromCharCode(nextId),  type: 'params', LHRTparameter: item.LHRTparameter };
+      item = { title: item.title, id: String.fromCharCode(nextId), type: 'params', LHRTparameter: item.LHRTparameter };
     }
 
     const items = unionBy([item], get(this, `value.${type}`), 'id');
@@ -74,15 +74,15 @@ class FBProcedureState {
   @action setDiffValue = (value?: FBProcedureValue) => set(this, 'diffValue', value);
 
   // MARK: @helpers
-  public get materialsId(): string {
+  public get materialsId (): string {
     return FBAutocompleteAsyncOption.materials;
   }
 
-  public get equipmentId(): string {
+  public get equipmentId (): string {
     return FBAutocompleteAsyncOption.equipment;
   }
 
-  public get lotsId(): string {
+  public get lotsId (): string {
     return FBAutocompleteAsyncOption.ebLots;
   }
 

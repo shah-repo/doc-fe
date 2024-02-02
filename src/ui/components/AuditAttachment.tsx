@@ -16,7 +16,6 @@ type Props = OwnProps;
 const AuditAttachment: React.FunctionComponent<Props> = ({
   audit, loading,
 }) => {
-
   const attachmentState = FB.useRef(FBFilesPresenterState);
   const { nextValue, previousValue } = audit;
   let auditValue: any = nextValue;

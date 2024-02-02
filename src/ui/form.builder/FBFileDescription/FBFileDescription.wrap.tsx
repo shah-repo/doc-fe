@@ -25,13 +25,13 @@ export const withFBFileDescription = <T extends FBFileDescriptionProps>(
     // MARK: @reactions
 
     // MARK: @helpers
-    function handleAdd() {
+    function handleAdd () {
       const formValues = formState?.getValues() as Partial<FBAttachment>;
       filePresenterState?.patchFile(formValues);
       handleCancel?.();
     }
 
-    function handleCancel() {
+    function handleCancel () {
       dialogState?.closeDialog();
     }
 

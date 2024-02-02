@@ -47,7 +47,7 @@ class SMStore implements SMStoreProps {
     callback?: (data?: Data, error?: SMStoreError) => any,
   ) => this.start<Data, Body>('patch', set, callback);
 
-  private start = <Data, Body>(
+  private readonly start = <Data, Body>(
     method: SMStoreRequestMethod,
     set: SMStoreRequestSet<Body>,
     callback?: (data?: Data, error?: SMStoreError) => any,
@@ -85,10 +85,10 @@ class SMStore implements SMStoreProps {
     const api = apiClient();
 
     const request: Record<SMStoreRequestMethod, () => Promise<any>> = {
-      get: () => api.get(url, body).promise,
-      post: () => api.post(url, body).promise,
-      patch: () => api.patch(url, body).promise,
-      delete: () => api.del(url, body).promise,
+      get: async () => await api.get(url, body).promise,
+      post: async () => await api.post(url, body).promise,
+      patch: async () => await api.patch(url, body).promise,
+      delete: async () => await api.del(url, body).promise,
     };
 
     const promise = request[method]();

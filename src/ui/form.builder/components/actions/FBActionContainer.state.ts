@@ -5,7 +5,7 @@ import { RemoteValidatorHelper } from '../../../remoteValidators/remoteValidator
 import FBRequest from '../../FBApi/FBApi.request';
 
 class FBActionContainerState extends FBRequest<any, any> {
-  constructor() {
+  constructor () {
     super();
     this.data = get(window, 'EnlilRemoteValidators.avaliableActions');
     if (!isEmpty(this.data) && !isUndefined(this.data)) {

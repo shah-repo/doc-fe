@@ -17,7 +17,6 @@ const ResetPasswordContainer: React.FunctionComponent<Props> = ({
   asyncState,
   onSubmit,
 }) => {
-
   const initialValues: ResetPasswordValues = {
     email: '',
     currentPassword: '',
@@ -42,14 +41,14 @@ const ResetPasswordContainer: React.FunctionComponent<Props> = ({
   return (
     <div>
       <FormContext.Provider value={{ submitOnChange: false }}>
-          <Formik
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            validationSchema={validationSchema}
-          >
-            {render}
-          </Formik>
-        </FormContext.Provider>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+        >
+          {render}
+        </Formik>
+      </FormContext.Provider>
     </div>
   );
 };

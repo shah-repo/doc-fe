@@ -54,6 +54,7 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
         />
       }
     </Box>
-  ); };
+  );
+};
 
 export default AddGroupPresenter;

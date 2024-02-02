@@ -1,8 +1,6 @@
 import { Link } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { changeRequestEditPath } from '../../../../../change.request/utils/paths';
 import Tooltip from '../../../../../components/common/kendo/Tooltip';
 import { CELL_EMPTY_VALUE } from '../constants';
 import { styles } from './styles';
@@ -15,15 +13,11 @@ const HasChangesCell: React.ComponentType<CustomTreeListCellProps> = ({
   style,
   className,
   hasChildren,
+  openARIDQuickView,
   ...otherProps
 }) => {
-  const history = useHistory();
   const classes = styles({ hasChildren });
   const changeReqDetails = dataItem.availableRevisions?.changeRequestDetails;
-  const openARDetailsPage = () => {
-    const id = changeReqDetails?.id;
-    id && history.push(changeRequestEditPath(id));
-  };
 
   function render () {
     const arID = changeReqDetails?.crId;
@@ -46,7 +40,7 @@ const HasChangesCell: React.ComponentType<CustomTreeListCellProps> = ({
       childrenElement={
         <Link
           underline="hover"
-          onClick={openARDetailsPage}
+          onClick={() => openARIDQuickView?.(changeReqDetails?.id)}
           className={classes.link}
         >
           {arID}

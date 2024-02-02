@@ -1,9 +1,10 @@
+import { makeStyles } from '@material-ui/core';
 import { DropDownList, DropDownListProps } from '@progress/kendo-react-dropdowns';
 import { get } from 'lodash';
 import React from 'react';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
-import { DATA_ITEM_KEY, Mode, MODE_FIELD, TEXT_FIELD } from '../Grid';
+import { DATA_ITEM_KEY, MODE_FIELD, Mode, TEXT_FIELD } from '../Grid';
 
 interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
   data: any[]
@@ -11,10 +12,16 @@ interface ExtendedCellTemplateProps<T> extends CellTemplateProps<T> {
   emptyLabel?: string
 }
 
+const Styles = makeStyles(() => ({
+  dropDownContainer: {
+    width: '100%',
+  },
+}));
+
 const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) => {
   const { data, dataItem, defaultItem, emptyLabel = '-', field, dataIndex, column, onChange } = props;
   const { editable } = column;
-
+  const classes = Styles();
   const mode = dataItem[MODE_FIELD];
   const path = field ?? '';
   const value = get(dataItem, path);
@@ -48,6 +55,7 @@ const DropdownCellTemplate: React.FC<ExtendedCellTemplateProps<any>> = (props) =
 
   return (
     <DropDownList
+      className={classes.dropDownContainer}
       data={data}
       textField={TEXT_FIELD}
       dataItemKey={DATA_ITEM_KEY}

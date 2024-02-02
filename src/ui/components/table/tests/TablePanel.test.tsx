@@ -25,7 +25,7 @@ describe('TablePanel component tests', () => {
     // do nothing
   };
 
-  const columns: TableColumnProps<Document>[] = [
+  const columns: Array<TableColumnProps<Document>> = [
     {
       key: 'name',
       label: 'header.title',

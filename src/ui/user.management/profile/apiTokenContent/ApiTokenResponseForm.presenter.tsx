@@ -27,7 +27,7 @@ const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
           className={classes.copyKeyButton}
           color="primary"
           id="ApiTokenDialog-copyKey"
-          onClick={() => navigator.clipboard?.writeText(apiTokenKey)}>
+          onClick={async () => await navigator.clipboard?.writeText(apiTokenKey)}>
           <CopyIcon className={classes.icon} />
           <Text translation="api.token.copy.key" />
         </Button>
@@ -42,7 +42,7 @@ const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
           className={classes.copySecretButton}
           color="primary"
           id="ApiTokenDialog-copySecret"
-          onClick={() => navigator.clipboard?.writeText(apiTokenSecret)}>
+          onClick={async () => await navigator.clipboard?.writeText(apiTokenSecret)}>
           <CopyIcon className={classes.icon} />
           <Text translation="api.token.copy.secret" />
         </Button>

@@ -21,7 +21,6 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
   requestType,
   renderAsButton,
 }) => {
-
   const dialog = useDialog();
   const companyEmployes = useSelector(companySelectors.getActiveEmployees);
   const openDialog = () => {

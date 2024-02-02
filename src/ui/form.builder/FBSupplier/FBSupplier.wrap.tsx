@@ -16,7 +16,6 @@ export const withFBSupplier = <T extends FBSupplierProps>(
     isInputOwner,
     ...props
   }: T) => {
-
     // MARK: @config
     const dialogState = FB.useRef(FBDialogState);
     const supplierState = FB.useRef(FBSupplierState);

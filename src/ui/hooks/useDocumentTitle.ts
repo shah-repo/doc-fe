@@ -6,6 +6,7 @@ const useDocumentTitle = (title) => {
     return () => {
       document.title = 'Enlil';
     };
-  }); };
+  });
+};
 
 export default useDocumentTitle;

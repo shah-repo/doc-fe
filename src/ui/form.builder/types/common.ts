@@ -52,7 +52,7 @@ export type FBOptionProps =
     includeNone?: boolean
     value?: any
     optionObjectKeys?: string[]
-    optionValueType?:  'object' | 'key'
+    optionValueType?: 'object' | 'key'
   };
 
 export type FBInputProps = Omit<FBFormikFieldProps, 'name'>
@@ -68,7 +68,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, 'name'>
 | 'optionLabelKey'
 | 'optionObjectKeys'
 | 'optionValueType'
- >
+>
 & Pick<BaseTextFieldProps,
 | 'children'
 | 'value'
@@ -101,7 +101,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, 'name'>
   multiple?: boolean
   gutter?: boolean
   tooltip?: string
-  validationMode?: ('ValidationHidden' | 'ValidationDisabled')[]
+  validationMode?: Array<'ValidationHidden' | 'ValidationDisabled'>
   formValuesRules?: Dictionary<any>
   templateId?: string
   isTemplate?: boolean

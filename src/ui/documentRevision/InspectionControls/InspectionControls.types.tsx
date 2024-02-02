@@ -3,7 +3,7 @@ import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { DialogHandler } from '../../hooks/useDialog';
 
 export interface InspectionControlsPresenterProps extends InspectionDialogProps {
-  onButtonClick(): void
+  onButtonClick: () => void
   canCreateInspection: boolean
   isDocumentDraft: boolean
   disabled: boolean
@@ -22,8 +22,8 @@ export interface InspectionDialogProps {
   formOptions: FormOptionType[]
   inspectionDialog: DialogHandler
   isDocTypeInputDisabled: boolean
-  onFormSelect(formId: string, outputDocumentTypes: OutputDocumentTypes): void
-  onDocTypeSelect(typeId: string, formId: string): void
+  onFormSelect: (formId: string, outputDocumentTypes: OutputDocumentTypes) => void
+  onDocTypeSelect: (typeId: string, formId: string) => void
 }
 
 export interface CreateInspectionBody {

@@ -20,7 +20,6 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     formAutocompleteDisabled,
     ...props
   }: T) => {
-
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     // MARK: @config
     const { dialogState, supplierState } = FB.useStores();

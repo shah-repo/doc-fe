@@ -4,10 +4,10 @@ import Colors from '../../layout/theme/utils/colors';
 export default makeStyles((theme: Theme) =>
   createStyles({
     iconButton: {
-      'padding': theme.spacing(1),
+      padding: theme.spacing(1),
       '&:hover': {
-        'background': Colors.background_blue,
-        'borderRadius': theme.spacing(0.5),
+        background: Colors.background_blue,
+        borderRadius: theme.spacing(0.5),
         '& svg': {
           stroke: Colors.medium_blue,
           color: Colors.medium_blue,

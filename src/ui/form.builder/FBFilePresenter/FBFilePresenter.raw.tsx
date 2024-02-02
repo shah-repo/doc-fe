@@ -10,7 +10,7 @@ const FBFilePresenterRaw: React.FunctionComponent<FBFilePresenterModeProps> = ({
   handleIconClick,
   fileName,
   menuItems,
-}) =>  useObserver(() => (
+}) => useObserver(() => (
   <FBContextMenu
     {...{ menuItems }}
     boxProps={{

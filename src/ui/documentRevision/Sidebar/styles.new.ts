@@ -14,7 +14,7 @@ export default makeStyles((theme) =>
       padding: theme.spacing(1.875),
     },
     listItem: {
-      'padding': 0,
+      padding: 0,
       '& .MuiListItemAvatar-root': {
         maxWidth: '35px',
         minWidth: '35px',
@@ -60,21 +60,21 @@ export default makeStyles((theme) =>
       minWidth: '100%',
     },
     menuIcon: {
-      'margin': '8px 13px 13px 11px',
-      'paddingTop': 5,
-      'paddingBottom': 5,
-      'justifyContent': 'unset',
+      margin: '8px 13px 13px 11px',
+      paddingTop: 5,
+      paddingBottom: 5,
+      justifyContent: 'unset',
       '&:hover': {
         background: 'none',
       },
     },
     iconButton: {
-      'margin': '8px 13px 13px 11px',
-      'paddingTop': 5,
-      'paddingBottom': 5,
+      margin: '8px 13px 13px 11px',
+      paddingTop: 5,
+      paddingBottom: 5,
       '&:hover, &:focus, li.active > a': {
-        'background': Colors.light_blue,
-        'borderRadius': 5,
+        background: Colors.light_blue,
+        borderRadius: 5,
         '& svg': {
           stroke: Colors.medium_blue,
         },
@@ -84,13 +84,13 @@ export default makeStyles((theme) =>
       },
     },
     iconButtonNew: {
-      'width': 36,
-      'height': 30,
-      'padding': 0,
-      'margin': '9px 6px 0px 6px',
+      width: 36,
+      height: 30,
+      padding: 0,
+      margin: '9px 6px 0px 6px',
       '&:hover, &:focus, li.active > a': {
-        'background': Colors.light_blue,
-        'borderRadius': 5,
+        background: Colors.light_blue,
+        borderRadius: 5,
         '& svg': {
           stroke: Colors.medium_blue,
         },
@@ -133,8 +133,8 @@ export default makeStyles((theme) =>
       flexGrow: 1,
     },
     bgIsActiveTab: {
-      'background': Colors.light_blue,
-      'borderRadius': 5,
+      background: Colors.light_blue,
+      borderRadius: 5,
       '& svg': {
         stroke: Colors.medium_blue,
       },

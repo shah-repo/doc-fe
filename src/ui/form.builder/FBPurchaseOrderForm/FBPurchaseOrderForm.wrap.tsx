@@ -17,7 +17,6 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     initialValues,
     ...props
   }: T) => {
-
     const { purchaseOrderState } = FB.useStores();
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
 
@@ -63,8 +62,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
           formState?.setFieldRules('supplierPartNumber', 'required_without:partNumber');
           formState?.setFieldFinalValidationRules('partNumber', 'required_without:supplierPartNumber');
           formState?.setFieldFinalValidationRules('supplierPartNumber', 'required_without:partNumber');
-        }
-        else {
+        } else {
           purchaseOrderState?.setPartNumber(undefined);
           formState?.removeFieldRules('partNumber');
           formState?.removeFieldRules('supplierPartNumber');

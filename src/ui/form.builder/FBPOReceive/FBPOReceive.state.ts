@@ -8,33 +8,33 @@ import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { FBEditorElementType } from '../types/editor';
 
-class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
+class FBPOReceiveState extends FBRequest<DocumentRevision, any> {
   public receivedItems: FBRequest<any, Dictionary<number>> = new FBRequest();
   public receiveQuantityAPI = new FBRequest<null, ReceiveQuantityBody>(FBEndpoint.PatchDocumentRevision);
 
-  public constructor(id: string) {
+  public constructor (id: string) {
     super();
     this.setPOId(id);
   }
 
-  @computed public get poDocumentId(): string | undefined {
+  @computed public get poDocumentId (): string | undefined {
     return this.data?.document.id;
   }
 
-  @computed public get schema(): FBSchemaProps[] | undefined {
+  @computed public get schema (): FBSchemaProps[] | undefined {
     return this.data?.formDocument?.formTemplate?.schema as FBSchemaProps[];
   }
 
-  @computed public get docValues(): Dictionary<any>| undefined {
+  @computed public get docValues (): Dictionary<any>| undefined {
     return this.data?.formInput;
   }
 
-  @computed public get items(): FBPurchaseOrderItem[] | undefined {
+  @computed public get items (): FBPurchaseOrderItem[] | undefined {
     if (!this.schema) {
       return;
     }
     const poFieldName = this.schema
-      .find((schemaItem) => schemaItem.type as FBEditorElementType  === 'purchaseorder')
+      .find((schemaItem) => schemaItem.type as FBEditorElementType === 'purchaseorder')
       ?.name;
 
     if (!poFieldName) {
@@ -67,7 +67,7 @@ class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
     if (body) {
       this.receiveQuantityAPI.setBody(body);
     }
-    return this.receiveQuantityAPI.patch();
+    return await this.receiveQuantityAPI.patch();
   };
 }
 
