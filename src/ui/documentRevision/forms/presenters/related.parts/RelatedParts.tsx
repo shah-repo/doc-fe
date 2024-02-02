@@ -2,7 +2,7 @@ import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Ra
 import cx from 'classnames';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
-import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../../../../state/ducks/relatedParts/types';
+import { COLOR_TYPES, ListItemEdited, RELATED_PARTS_STATUS, RELATED_TYPE, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import { FBButton, FBTooltip } from '../../../../form.builder';
 
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
@@ -20,9 +20,9 @@ import { Link } from 'react-router-dom';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import Text from '../../../../components/Text';
 import Dialog from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -30,10 +30,9 @@ import useDialog from '../../../../hooks/useDialog';
 import { isDocumentRevisionReleased } from '../../../helpers/documentRevisionStatus';
 import useStyles from './RelatedPart.styles';
 import RelatedPartsState from './RelatedParts.state';
-import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
 import RelatedPartsTableHeader from './RelatedPartsTableHeader';
-import { checkIsDocumentOTHER, checkIsDocumentPart } from '../../../helpers/checkDocumentGroup';
-import { getDynamicTextValue } from './helper';
+import { getDynamicTextValue, getReplacedMessage } from './helper';
+import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
 
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_PARTS_STATUS
@@ -190,8 +189,10 @@ const ParentPartSelector: React.FunctionComponent<{
         <Text
           translation="relatedParts.confirm.message"
           values={{
-            currentOption: confirmMessages[selectedOption],
-            previous: confirmMessages[previousOption],
+            currentOption: getReplacedMessage(
+              confirmMessages[selectedOption], '{relatedType}', getDynamicTextValue(relatedType, 'sub-part', 'related documents')),
+            previous: getReplacedMessage(
+              confirmMessages[previousOption], '{relatedType}', getDynamicTextValue(relatedType, 'sub-part', 'related documents')),
             relatedType: getDynamicTextValue(relatedType, 'sub-part', 'sub-document'),
           }}
         />
@@ -734,6 +735,7 @@ const RelatedParts: React.FunctionComponent<{
   fetchRelatedParts: (documentId: any) => void
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void
   relatedPartsState: RelatedPartsState
+  relatedType: RELATED_TYPE
 }> = ({
   documentRevision,
   parentStatus = RELATED_PARTS_STATUS.PARENT_NO,
@@ -745,15 +747,11 @@ const RelatedParts: React.FunctionComponent<{
   fetchRelatedParts,
   voidRelatedPart,
   relatedPartsState,
+  relatedType,
 }) => {
   const classes = useStyles();
   const isRelatedPartsParent = ![RELATED_PARTS_STATUS.RELATED_SEPARATE,
     RELATED_PARTS_STATUS.RELATED_TOGETHER].includes(parentStatus);
-
-  const groupOptions = documentRevision?.document.documentType.groupOptions;
-  const isPart = checkIsDocumentPart(groupOptions);
-  const isOther = checkIsDocumentOTHER(groupOptions);
-  const relatedType = isPart ? RELATED_TYPE.PART_RELATED : (isOther ? RELATED_TYPE.OTHER_RELATED : RELATED_TYPE.PART_RELATED);
 
   return (
     <>
@@ -764,11 +762,10 @@ const RelatedParts: React.FunctionComponent<{
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && !relatedPartsState.viewOnlyMode && (
           <Grid item xs={12}>
             <FBButton
+              label={getReplacedMessage(
+                'relatedParts.button.addText', '{relatedType}', getDynamicTextValue(relatedType, 'part', 'document'))}
               dataCy="parent-separate-add-related-parts-btn"
-              onClick = {createNewDocument}>
-              <Text translation="relatedParts.button.addText"
-                values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
-            </FBButton>
+              onClick = {createNewDocument} />
           </Grid>
         )}
         {parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER && (
