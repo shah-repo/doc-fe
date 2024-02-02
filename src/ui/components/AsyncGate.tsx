@@ -5,7 +5,7 @@ import useDidMount from '../hooks/useDidMount';
 import styles from './AsyncGate.styles';
 import Text from './Text';
 
-export interface AsyncGateProps  {
+export interface AsyncGateProps {
   asyncState: AsyncState
   asyncAction?: (...args: any[]) => any
   startActionOnMount?: boolean

@@ -13,7 +13,6 @@ interface Props {
 const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
   formDocument = {},
 }) => {
-
   const {
     revision,
     subRevision,
@@ -36,7 +35,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
         <SMText label="common.revision" />
         <>{version}</>,&nbsp;
         <>
-          {getFormattedDateString( effectiveDate, MomentFormats.MonthDateYearTwoDigit )}
+          {getFormattedDateString(effectiveDate, MomentFormats.MonthDateYearTwoDigit)}
         </>
       </Typography>
     </Box>

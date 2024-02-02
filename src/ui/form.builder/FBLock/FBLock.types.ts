@@ -3,13 +3,13 @@ import { FBFormProps } from '..';
 export type FBLockProps =
 & Pick<FBFormProps, 'children'>
 & {
-  fields?: Record<string, boolean>[]
+  fields?: Array<Record<string, boolean>>
 };
 
 export interface FBLockBody {
-  fields?: {
-    formInput: Record<string, boolean>[]
-  }[]
+  fields?: Array<{
+    formInput: Array<Record<string, boolean>>
+  }>
   documentRevisionId?: string
   ownerId: string
   ownerName: string

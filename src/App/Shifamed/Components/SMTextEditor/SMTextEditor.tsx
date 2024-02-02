@@ -56,7 +56,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     toggleEditMode();
   };
 
-  return  (
+  return (
     <Box
       {...boxProps}
       data-cy={dataCy || name || label}

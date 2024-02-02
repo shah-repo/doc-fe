@@ -32,7 +32,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const { id, isOutput } = workspaceState || {};
     const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
 
-    function save(date?: string) {
+    function save (date?: string) {
       if (!date) { return; }
       formState?.setFieldValue(name, date);
       formState?.validate();

@@ -115,7 +115,7 @@ const UserGroups: React.FunctionComponent<Props> = ({
           closeEditGroups();
         }}
         id="UserGroups-done"
-       />
+      />
       <Button
         className={classes.outlinedButton}
         variant="outlined"

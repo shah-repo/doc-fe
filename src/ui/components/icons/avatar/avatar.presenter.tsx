@@ -32,7 +32,7 @@ const AvatarPresenter: React.FunctionComponent<Props> = ({
     <Box zIndex="modal" position="absolute" alignSelf="baseline">
       {avatar
         ? <img src={previewAvatar || avatar } className={classes.image} alt="Profile" />
-        : <Avatar style={{ backgroundColor: `${ bgColor }` }} className={classes.image} data-cy="header-userInitials">
+        : <Avatar style={{ backgroundColor: `${bgColor}` }} className={classes.image} data-cy="header-userInitials">
           {userInitials}
         </Avatar>
       }

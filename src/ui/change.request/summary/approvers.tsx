@@ -10,7 +10,6 @@ import { isDocumentRevisionApproved } from '../../documentRevision/helpers/docum
 type Props = DataProps<Approval[]>;
 
 const Approvers: React.FunctionComponent<Props> = ({ dataProp }) => {
-
   if (isEmpty(dataProp)) {
     return null;
   }

@@ -17,7 +17,6 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     item,
     ...props
   }: T) => {
-
     const dispatch = useDispatch();
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     const { dialogState, formState, poReceiveState, workspaceState } = FB.useStores();

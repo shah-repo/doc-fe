@@ -33,28 +33,28 @@ export default makeStyles((theme) => ({
   panel: {
     marginBottom: theme.spacing(1),
     border: `1px solid ${Colors.gray_goose}`,
-    borderRadius: theme.spacing(.5),
+    borderRadius: theme.spacing(0.5),
   },
   panelSummary: {
-    'flexDirection': 'row-reverse',
-    'alignItems': 'center',
-    'padding': 0,
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    padding: 0,
     '&.Mui-expanded': {
       minHeight: 0,
       color: Colors.navy,
     },
   },
   panelSummaryIcon: {
-    'color': Colors.almost_black,
+    color: Colors.almost_black,
     '&.Mui-expanded': {
       color: Colors.navy,
       transform: 'rotate(90deg)',
     },
   },
   panelSummaryContent: {
-    'justifyContent': 'space-between',
-    'alignItems': 'center',
-    'padding': theme.spacing(0, 2, 0, 1.25),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: theme.spacing(0, 2, 0, 1.25),
     '&.Mui-expanded': {
       margin: 0,
     },
@@ -68,21 +68,21 @@ export default makeStyles((theme) => ({
     fontSize: 13,
   },
   panelDetails: {
-    padding: theme.spacing(0, 2, .5, 5),
+    padding: theme.spacing(0, 2, 0.5, 5),
     margin: theme.spacing(-2, 0, 0),
   },
   panelDetailsList: {
     width: '100%',
   },
   chip: {
-    borderRadius: theme.spacing(.5),
+    borderRadius: theme.spacing(0.5),
     backgroundColor: Colors.whitest_grey,
     marginRight: 5,
     fontSize: 12,
     lineHeight: 1.25,
   },
   panelDetailsListItem: {
-    padding: theme.spacing(.75, 1),
+    padding: theme.spacing(0.75, 1),
     display: 'block',
   },
   diffSwitch: {
@@ -100,10 +100,10 @@ export default makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   switchBase: {
-    'padding': 1,
+    padding: 1,
     '&.Mui-checked': {
-      'transform': `translateX(${theme.spacing(1)}px)`,
-      'color': Colors.white,
+      transform: `translateX(${theme.spacing(1)}px)`,
+      color: Colors.white,
       '& + .MuiSwitch-track': {
         opacity: 1,
         backgroundColor: Colors.navy,
@@ -124,10 +124,10 @@ export default makeStyles((theme) => ({
   },
   switchChecked: {},
   expandButton: {
-    'color': Colors.navy,
-    'fontWeight': 400,
-    'padding': 0,
-    'margin': 0,
+    color: Colors.navy,
+    fontWeight: 400,
+    padding: 0,
+    margin: 0,
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -135,16 +135,16 @@ export default makeStyles((theme) => ({
   navTitle: {
     fontSize: 12,
     fontWeight: 600,
-    margin: theme.spacing(.25, 0),
+    margin: theme.spacing(0.25, 0),
   },
   navItem: {
-    'borderRadius': theme.spacing(.5),
-    'padding': theme.spacing(1, 1.25),
-    'marginBottom': theme.spacing(.5),
-    'color': Colors.navy,
-    'fontSize': 12,
+    borderRadius: theme.spacing(0.5),
+    padding: theme.spacing(1, 1.25),
+    marginBottom: theme.spacing(0.5),
+    color: Colors.navy,
+    fontSize: 12,
     '&.Mui-selected': {
-      'backgroundColor': Colors.light_cream_blue,
+      backgroundColor: Colors.light_cream_blue,
       '&:hover': {
         backgroundColor: Colors.light_cream_blue,
       },

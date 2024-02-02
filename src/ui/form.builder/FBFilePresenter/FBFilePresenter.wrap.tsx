@@ -29,7 +29,6 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     file,
     ...props
   }: T) => {
-
     const intl = useIntl();
     filePresenterState = FB.useRef<FBFilePresenterState>(FBFilePresenterState, file);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
@@ -40,7 +39,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     fileSize = useMemo(() => {
       const size = filePresenterState?.fileSize;
       if (!size) { return; }
-      const i = Math.floor( Math.log(size) / Math.log(1024) );
+      const i = Math.floor(Math.log(size) / Math.log(1024));
       return `${(size / Math.pow(1024, i)).toFixed(2)} ${['B', 'kB', 'MB', 'GB', 'TB'][i]}`;
     }, [filePresenterState]);
 
@@ -76,7 +75,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    function handleLoaded() {
+    function handleLoaded () {
       switch (filePresenterState?.downloadType) {
         case 'view':
           dialogState?.config({
@@ -112,7 +111,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     onMouseOver = () => filePresenterState?.setToolsVisible(true);
     onMouseLeave = () => filePresenterState?.setToolsVisible(false);
 
-    function handleDescription() {
+    function handleDescription () {
       dialogState?.config({
         open: true,
         maxWidth: 'sm',

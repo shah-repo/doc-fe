@@ -26,7 +26,6 @@ const ConfirmPasswordContainer: React.FunctionComponent<Props> = ({
   onSubmit,
   title,
 }) => {
-
   const initialValues: PasswordValues = {
     email: clientEmail,
     confirmPass: '',

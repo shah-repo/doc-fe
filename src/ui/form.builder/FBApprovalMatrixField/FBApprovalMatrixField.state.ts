@@ -65,14 +65,14 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
     return this.extractData(this.data, type);
   };
 
-  @action public prepareData = (data: FBApprovalMatrixFieldData): FBApprovalMatrixFieldData | undefined => this.data = {
+  @action public prepareData = (data: FBApprovalMatrixFieldData): FBApprovalMatrixFieldData | undefined => (this.data = {
     approvalRoles: data?.approvalRoles.map((x) => ({
       ...x,
       groups: x.groups.map((y) => ({ id: y.id })),
       employees: x.employees.map((y) => ({ id: y.id })),
     })) || [],
     approvalMatrix: sortBy(data?.approvalMatrix, (row) => row.docType.name.toLowerCase()) || [],
-  };
+  });
 
   @action public setMode = (mode: FBApprovalMatrixFieldMode) => {
     set(this, 'mode', mode);

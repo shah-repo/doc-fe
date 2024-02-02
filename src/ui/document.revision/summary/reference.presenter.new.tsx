@@ -38,13 +38,13 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
               color="textPrimary"
             >
               <Link
-                  className={classes.link}
-                  to={reference.url}
-                  target="_blank"
-                  id="ReferencePresenter-link"
-                >
-                  {`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
-                </Link>
+                className={classes.link}
+                to={reference.url}
+                target="_blank"
+                id="ReferencePresenter-link"
+              >
+                {`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
+              </Link>
             </Typography>
           </Grid>
         </Grid>

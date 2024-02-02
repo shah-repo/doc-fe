@@ -1,7 +1,6 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { Props } from './FBButton';
-import FBButton from './FBButton';
+import FBButton, { Props } from './FBButton';
 
 jest.mock('../../../components/Text');
 

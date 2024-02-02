@@ -24,10 +24,10 @@ interface DropdownFilterCellProps extends GridFilterCellProps {
     text: string
     value: string
   }
-  data: {
+  data: Array<{
     text: string
     value: string | boolean
-  }[]
+  }>
   customOperator?: string
   onStateChange?: (data: StateChangeProps) => void
 }

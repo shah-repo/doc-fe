@@ -20,20 +20,19 @@ interface StatusState {
 interface StatusProps {}
 
 class StatusPresenter extends React.Component<StatusProps, StatusState> {
-
   // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-  constructor(props) {
+  constructor (props) {
     super(props);
-    this.state =  { backend: {}, remoteJS: {}, bgWorker: {}, docExport: {} };
+    this.state = { backend: {}, remoteJS: {}, bgWorker: {}, docExport: {} };
   }
 
-  toSnakeCase(str) {
+  toSnakeCase (str) {
     return str.trim().toLowerCase().split(/[ ]+/).join('-');
   }
 
-  public componentDidMount() {
+  public componentDidMount () {
     fetch(API + STATUS_QUERY)
-      .then((res) => res.text())
+      .then(async (res) => await res.text())
       .then(
         (result) => {
           const dict = JSON.parse(result);
@@ -45,7 +44,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
         },
       );
     fetch((WORKER_API || API) + MICRO_STATUS_QUERY)
-      .then((res) => res.text())
+      .then(async (res) => await res.text())
       .then(
         (result) => {
           const dict = JSON.parse(result);
@@ -65,7 +64,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
         },
       );
     fetch(API + DOC_EXPORT_QUERY)
-      .then((res) => res.text())
+      .then(async (res) => await res.text())
       .then(
         (result) => {
           const dict = JSON.parse(result);
@@ -77,7 +76,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
       );
   }
 
-  buildElements(nameRaw, dict) {
+  buildElements (nameRaw, dict) {
     const name = this.toSnakeCase(nameRaw);
     return Object.keys(dict).map((key, index) =>
 
@@ -93,7 +92,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
     );
   }
 
-  renderTable(title, dict = {}) {
+  renderTable (title, dict = {}) {
     return (
       <table style={{
         fontSize: '14px',
@@ -117,7 +116,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
     );
   }
 
-  public render() {
+  public render () {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const feStatusJson = require('../../data/buildInfo.json');
     // if the line above is failing when you want to run `yarn start`,

@@ -75,15 +75,15 @@ export default makeStyles((theme) => ({
   successIcon: {
     width: 14,
     height: 14,
-    marginRight: theme.spacing(.5),
+    marginRight: theme.spacing(0.5),
   },
   poButton: {
     fontSize: 12,
     margin: theme.spacing(0, 0, 0, 1),
   },
   poRejectButton: {
-    'color': Colors.navy,
-    'backgroundColor': 'transparent',
+    color: Colors.navy,
+    backgroundColor: 'transparent',
     '&:hover': {
       backgroundColor: Colors.sky_blue,
     },

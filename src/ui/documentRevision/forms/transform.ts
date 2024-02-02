@@ -10,7 +10,7 @@ import { getIsAdministrativeDefault } from '../helpers/revisionStage';
 import { DocumentRevisionFormValues } from './types';
 
 export const getLatesReferenceVersion = (reference: SmartReference[] | undefined) => {
-  const removedCancelledReference = reference?.filter( (ref) =>
+  const removedCancelledReference = reference?.filter((ref) =>
     !isDocumentRevisionCanceled(ref.fromDocRev?.status));
   const highestReference = maxBy(removedCancelledReference, (ref) => ref?.fromDocRev?.version);
   return highestReference;

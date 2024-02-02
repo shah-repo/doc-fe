@@ -31,7 +31,7 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
           <Box data-cy="maintenanceHistory" display="flex" flexDirection="row" key={`fb-eq-${index}`}>
             <Box color={Colors.medium_blue} mr={0.5}>
               <Link
-                to={documentVersionPath(item.id, item.document?.id )}
+                to={documentVersionPath(item.id, item.document?.id)}
                 target="_blank"
               >
                 {item.document?.docId} - {item.name}
@@ -46,7 +46,8 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
               && `| ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
             </Box>
           </Box>
-        ); }
+        );
+      }
       }
     </FBMapWrapper>
   </Box>

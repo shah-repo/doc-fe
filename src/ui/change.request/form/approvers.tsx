@@ -27,7 +27,7 @@ interface Props {
   isDocumentPO: boolean
   checkedGroups: Group[]
   initialGroups: Group[]
-  setCheckedGroups(groups: Group[]): void
+  setCheckedGroups: (groups: Group[]) => void
 }
 
 const Approvers: React.FunctionComponent<Props> = ({

@@ -95,7 +95,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
                     }}
                   />
                 </Box>
-                {(!isPreview || isPendingChange ) && (item.type || item.paramsId) && (
+                {(!isPreview || isPendingChange) && (item.type || item.paramsId) && (
                   <>
                     <Box>
                       <IconButton

@@ -24,9 +24,9 @@ export const styles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   row: (props: TableStyleProps) => ({
-    'paddingRight': '0!important',
-    'cursor': (props.isSelectable) ? 'pointer' : 'default',
-    'borderBottom': `1px solid ${theme.palette.text.hint}`,
+    paddingRight: '0!important',
+    cursor: (props.isSelectable) ? 'pointer' : 'default',
+    borderBottom: `1px solid ${theme.palette.text.hint}`,
     '&:hover': {
       background: '#F8F9FF',
     },
@@ -64,7 +64,7 @@ export const styles = makeStyles((theme) => ({
 }));
 
 export const qtyLabelStyle = makeStyles({
-  qtyLabel: (gridSize : Number) => ({
+  qtyLabel: (gridSize: number) => ({
     width: `${gridSize}px`,
   }),
 });

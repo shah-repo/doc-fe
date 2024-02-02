@@ -27,12 +27,12 @@ export default makeStyles(() =>
       borderRight: `1px solid ${Colors.light_gray_border}`,
     },
     iconButtonNew: {
-      'width': 36,
-      'height': 30,
-      'padding': 0,
+      width: 36,
+      height: 30,
+      padding: 0,
       '&:hover, &:focus, li.active > a': {
-        'background': Colors.light_blue,
-        'borderRadius': 5,
+        background: Colors.light_blue,
+        borderRadius: 5,
         '& svg': {
           stroke: Colors.medium_blue,
         },
