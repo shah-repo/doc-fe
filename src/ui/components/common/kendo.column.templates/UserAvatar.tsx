@@ -29,7 +29,7 @@ export const AvatarComponent: React.FC<AvatarComponentProps> = (props) => {
         placement="top"
         title={name ?? ''}
       >
-        {name || '-'}
+        {name ?? '-'}
       </OverflowTooltip>
     </Box>
   );
