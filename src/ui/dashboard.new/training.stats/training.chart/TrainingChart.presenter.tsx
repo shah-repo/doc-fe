@@ -129,7 +129,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         document.getElementById('training-chart') as HTMLInputElement,
       );
       myChart.setOption(DoughnutChartOptions);
-      window.onresize = function() {
+      window.onresize = function () {
         myChart.resize();
       };
       myChart.on('mouseover', (evt: any) => {
@@ -138,12 +138,12 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
             DoughnutChartOptions.series.data[index].itemStyle.color
               = Colors.platinum_grey;
           }
-          if (index === evt?.dataIndex && index === 0 ) {
+          if (index === evt?.dataIndex && index === 0) {
             DoughnutChartOptions.series.data[index].itemStyle.color
               = Colors.latest_red_varient;
             DoughnutChartOptions.title.text = overdue.toString();
           }
-          if (index === evt?.dataIndex && index === 1 ) {
+          if (index === evt?.dataIndex && index === 1) {
             DoughnutChartOptions.series.data[index].itemStyle.color
               = Colors.latest_yellow_varient;
             DoughnutChartOptions.title.text = dueInSeven.toString();
@@ -179,9 +179,9 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       setValue(newValue);
       infoChangeTab(newValue);
     };
-    function tabCustomClasses(index: any) {
+    function tabCustomClasses (index: any) {
       return {
-        'id': `full-width-tab-${index}`,
+        id: `full-width-tab-${index}`,
         'aria-controls': `full-width-tabpanel-${index}`,
       };
     }

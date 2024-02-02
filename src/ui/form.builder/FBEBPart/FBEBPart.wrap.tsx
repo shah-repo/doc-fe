@@ -69,7 +69,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     handleAdd = () => dialogState?.config({
       open: true,
       title: 'form.builder.create.new.part',
-      content: <FBEBPartForm { ...{ ebId }}  />,
+      content: <FBEBPartForm { ...{ ebId }} />,
     });
 
     // MARK: @reactions

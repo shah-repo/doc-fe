@@ -27,5 +27,4 @@ export const DataDog: React.FunctionComponent<any> = () => {
   }, [companyId, companyName, employeeId, userName]);
 
   return null;
-
 };

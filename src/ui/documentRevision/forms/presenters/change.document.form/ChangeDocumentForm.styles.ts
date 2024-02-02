@@ -7,8 +7,8 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'visible',
     },
     contentRoot: {
-      'padding': theme.spacing(2),
-      'overflow': 'visible',
+      padding: theme.spacing(2),
+      overflow: 'visible',
       '& .MuiFormControl-root:last-child': {
         marginBottom: theme.spacing(1),
       },

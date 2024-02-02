@@ -16,7 +16,6 @@ export interface Props {
 }
 
 export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label, isDownloadAllVisible }) => {
-
   const classes = {
     buttonsContainer: {
       display: 'flex',
@@ -49,7 +48,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
   );
   return (
     <Box pl={0} width="100%">
-      <Box  display="flex">
+      <Box display="flex">
         <Typography variant="h6" style = {classes.buttonLeft}>
           <Text message={label || 'common.attachments' } />
         </Typography>
@@ -62,6 +61,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
       <AttachmentField name="attachments" disabled={true} docRevId={docRevId} />
       {emptyAttachmentsRenderer}
     </Box>
-  ); };
+  );
+};
 
 export default Attachment;

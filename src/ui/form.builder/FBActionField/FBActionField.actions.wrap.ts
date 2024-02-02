@@ -4,7 +4,6 @@ import { FB, FBActionFieldActionsProps, FBActionFieldState } from '..';
 export const withFBActionFieldActions = <T extends FBActionFieldActionsProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     handleRequest,
     handleCancel,
@@ -12,7 +11,6 @@ export const withFBActionFieldActions = <T extends FBActionFieldActionsProps>(
     requestUrl,
     ...props
   }: T) => {
-
     const { dialogState, formState } = FB.useStores();
     actionFieldState = FB.useRef<FBActionFieldState>(FBActionFieldState, requestUrl);
 

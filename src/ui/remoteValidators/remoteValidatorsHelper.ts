@@ -30,8 +30,8 @@ const doApiRequest = async (name: string, args: any[]) => {
 export const RemoteValidatorHelper = new Proxy(
   {},
   {
-    get(_obj, name) {
-      return (...args: any[]) => doApiRequest(name as string, args);
+    get (_obj, name) {
+      return async (...args: any[]) => await doApiRequest(name as string, args);
     },
   },
 ) as IRemoteValidatorsHelper;

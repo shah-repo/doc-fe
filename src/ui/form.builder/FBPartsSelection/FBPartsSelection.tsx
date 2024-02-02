@@ -36,6 +36,7 @@ const FBPartsSelection: React.FunctionComponent<FBPartsSelectionProps> = ({
       {...{ defaultValue }}
       withState
     />
-  ); };
+  );
+};
 
 export default withFBPartsSelection(FBPartsSelection);

@@ -63,7 +63,7 @@ const styles = makeStyles((theme: Theme) =>
   }),
 );
 
-function Row(props: { row: PageDetails }) {
+function Row (props: { row: PageDetails }) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const classes = styles();

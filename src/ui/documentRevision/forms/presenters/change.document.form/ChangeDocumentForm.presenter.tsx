@@ -25,7 +25,7 @@ interface Props {
   closeDialog: () => void
 }
 
-function renderFields(availableFields: FBSchemaProps[], sourceSchema: FBSchemaProps[]) {
+function renderFields (availableFields: FBSchemaProps[], sourceSchema: FBSchemaProps[]) {
   return availableFields.map((field) => {
     // Hack: added default value for paragraph because it doesn't have a label
     const label = determineLabel(field);

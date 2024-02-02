@@ -18,8 +18,8 @@ export interface ActionsProps {
   isDeleteDisabled?: boolean
   deleteTooltipText?: string
   scrollBehavior?: ScrollBehavior
-  onConfirm: () => void
-  onDiscard: () => void
+  onConfirm?: () => void
+  onDiscard?: () => void
   onDelete?: () => void
 }
 
@@ -75,34 +75,38 @@ const Actions: React.FC<ActionsProps> = ({
           </div>
         </Tooltip>
       )}
-      <Tooltip
-        title={translate('common.discard')}
-        placement="top"
-        arrow
-      >
-        <IconButton
-          data-cy="action-discard"
-          kind="action"
-          size="small"
-          onClick={onDiscard}
+      {onDiscard && (
+        <Tooltip
+          title={translate('common.discard')}
+          placement="top"
+          arrow
         >
-          <FontAwesomeIcon icon={regular('xmark')} />
-        </IconButton>
-      </Tooltip>
-      <Tooltip
-        title={translate('common.save')}
-        placement="top"
-        arrow
-      >
-        <IconButton
-          data-cy="action-save"
-          kind="action"
-          size="small"
-          onClick={onConfirm}
+          <IconButton
+            data-cy="action-discard"
+            kind="action"
+            size="small"
+            onClick={onDiscard}
+          >
+            <FontAwesomeIcon icon={regular('xmark')} />
+          </IconButton>
+        </Tooltip>
+      )}
+      {onConfirm && (
+        <Tooltip
+          title={translate('common.save')}
+          placement="top"
+          arrow
         >
-          <FontAwesomeIcon icon={regular('check')} />
-        </IconButton>
-      </Tooltip>
+          <IconButton
+            data-cy="action-save"
+            kind="action"
+            size="small"
+            onClick={onConfirm}
+          >
+            <FontAwesomeIcon icon={regular('check')} />
+          </IconButton>
+        </Tooltip>
+      )}
     </div>
   );
 };

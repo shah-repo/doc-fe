@@ -1,7 +1,6 @@
 import { Action, Middleware } from 'redux';
 
 const middlewareMockStore = (middlewareFn: Middleware, defaultState: any = {}) => {
-
   const store = {
     getState: jest.fn(() => defaultState),
     dispatch: jest.fn(),

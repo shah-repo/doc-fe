@@ -124,7 +124,7 @@ export const updateDataAtLevels = (data?: BOM[], levels?: number[], newValue?: E
 };
 
 export const getExcelColumns = (columns: CustomTreeListColumnProps[]): CustomTreeListColumnProps[] => {
-  return [...columns].map(col => {
+  return [...columns].filter(col => !col.isHidden).map(col => {
     switch (col.field) {
       case 'arId':
         return { ...col, field: 'changeRequestDetails.crId' };

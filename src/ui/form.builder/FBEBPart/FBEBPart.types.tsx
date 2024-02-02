@@ -37,9 +37,9 @@ export interface EBPartPostBody {
   }
   name: string
   revisionStage: number
-  parentParts: {
+  parentParts: Array<{
     id: string
-  }[]
+  }>
 }
 
 export interface ProposedDocIdBody {

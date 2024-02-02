@@ -1,4 +1,6 @@
-import { Box, Button, Grid } from '@material-ui/core';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Button, Grid, IconButton, makeStyles } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -32,6 +34,7 @@ import { RequestType } from '../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
+import PrintLabelDetailsDialog from '../components/table/printLabel/PrintLabelDetailsDialog';
 import Text from '../components/Text';
 import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
@@ -47,7 +50,7 @@ import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLot, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
@@ -72,6 +75,16 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
   disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
 });
 
+const styles = makeStyles(() => ({
+  printIconContainer: {
+    backgroundColor: Colors.white,
+  },
+  printIcon: {
+    height: 15,
+    width: 15,
+  },
+}));
+
 const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, canChangeOwnerShip, isSliderView,
 }) => {
@@ -87,10 +100,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     label: updateLabel,
     tooltipConfig: updateRecordtooltipConfig,
   } = useUpdateDocument(documentRevision.document?.documentType?.id);
-
+  const classes = styles();
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
+  const printDialog = useDialog();
 
   const formDocumentId = documentRevision.formDocument?.document?.id || '';
   const groupOptions = documentRevision.document?.documentType?.groupOptions;
@@ -110,6 +124,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
+  const isLOT = checkIsDocumentLot(groupOptions);
   const isLastVersionObsolete = () => {
     if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
       return;
@@ -456,6 +471,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
     accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
+  if (isLOT) {
+    accessableButtons.push(PreviewControlButtons.PrintLabelButton);
+  }
 
   const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
@@ -555,6 +573,18 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           renderAsButton={renderAsButton}
         />
       )}
+      {buttons.includes(PreviewControlButtons.PrintLabelButton) && (
+        <>
+          <IconButton className={classes.printIconContainer} onClick={printDialog.open}>
+            <FontAwesomeIcon className={classes.printIcon} icon={regular('print')} />
+          </IconButton>
+          <PrintLabelDetailsDialog
+            isOpen={printDialog.isOpen}
+            closeDialog={printDialog.close}
+            selectedItem={documentRevision}
+          />
+        </>)
+      }
     </>
   );
 

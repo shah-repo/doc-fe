@@ -32,7 +32,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    function setPreviewType() {
+    function setPreviewType () {
       previewType = mediaAlbumState?.previewType(collection[activeStep || 0]);
     }
 

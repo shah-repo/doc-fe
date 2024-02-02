@@ -185,6 +185,7 @@ interface Precalc {
   lot_on_hand_quantity?: string
   lot_part?: string
   lot_part_revision?: string
+  related_equipment?: string[]
 }
 
 interface DocumentsInLHRS {
@@ -262,6 +263,8 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   lotStatus: LotStatus
   hasAttachments?: boolean
   hasPrimaryAttachment?: boolean
+  needSync?: boolean
+  needSyncedSuccessNotify?: boolean
 }
 
 export interface SmartReference {
@@ -311,7 +314,7 @@ export interface ReferenceToEditRequest {
   id: string
 }
 
-interface SecurityListRequest {
+export interface SecurityListRequest {
   securityEmployees: Id[]
   securityGroups: Id[]
   operators: Id[]

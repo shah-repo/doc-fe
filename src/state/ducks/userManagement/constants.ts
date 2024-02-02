@@ -1,5 +1,6 @@
 export const COMPANY_GROUPS_LIST = 'userManagement/COMPANY_GROUPS_LIST';
 export const COMPANY_GROUPS_GET_ASYNC = 'userManagement/COMPANY_GROUPS_GET_ASYNC';
+export const COMPANY_SLACK_URL = '/slack/company_oauth_url';
 export const GROUPS_ME_GET_ASYNC = 'userManagement/GROUPS_ME_GET_ASYNC';
 export const GROUP_GET_BY_ID = 'userManagement/GROUPS_GET_BY_ID';
 export const ADD_EMPLOYEE_POST_ASYNC = 'userManagement/ADD_EMPLOYEE_POST_ASYNC';

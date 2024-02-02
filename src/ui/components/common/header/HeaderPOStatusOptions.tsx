@@ -1,8 +1,8 @@
 import { Button, ButtonGroup, withStyles } from '@material-ui/core';
 import Menu, { MenuProps } from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { default as classNames, default as cx } from 'classnames';
-import { default as React } from 'react';
+import cx from 'classnames';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { ReactComponent as CaretIcon } from '../../../../assets/images/po_status_dropdown.svg';
 import { GroupTag } from '../../../../state/ducks/auth/types';
@@ -106,7 +106,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
 
   const getPOStatusMenuItem = (status) => <>
     <div
-      className={classNames(classes.statusIcon, classes[status])}
+      className={cx(classes.statusIcon, classes[status])}
     />
     <Text message={getPOStatusMenuItemLabel(POStatusType[status])} />
   </>;
@@ -155,7 +155,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
           disableRipple
           onClick={handleClick}
         >
-          <div className={classNames(classes.statusIcon, classes[poStatus])} />
+          <div className={cx(classes.statusIcon, classes[poStatus])} />
           <Text message={POStatusLabelMapping[poStatus]} />
         </Button>
         <Button

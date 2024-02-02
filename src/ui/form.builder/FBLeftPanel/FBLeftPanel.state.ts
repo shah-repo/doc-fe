@@ -20,7 +20,8 @@ class FBLeftPanelState {
   @action public setIndex = (index: number) => {
     set(this, 'index', index);
   };
-  @computed public get getIndex(): number {
+
+  @computed public get getIndex (): number {
     return this.index;
   }
 
@@ -35,6 +36,7 @@ class FBLeftPanelState {
   @action public closeDialog = () => {
     this.HideLeftPanel();
   };
+
   @action public HideLeftPanel = () => {
     this.reset();
     this.setDialog(false);
@@ -69,7 +71,7 @@ class FBLeftPanelState {
     set(this, 'actions', actions);
   };
 
-  private reset = () => {
+  private readonly reset = () => {
     this.setTitle(undefined);
     this.setContent(undefined);
     this.setActions(undefined);

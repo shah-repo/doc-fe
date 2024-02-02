@@ -70,5 +70,11 @@ export default (theme: NextTheme) =>
       formStyle: {
         width: '100%',
       },
+      paper: {
+        [theme.breakpoints.between('sm', 'md')]: {
+          overflow: 'scroll',
+          height: 300,
+        },
+      },
     },
   });

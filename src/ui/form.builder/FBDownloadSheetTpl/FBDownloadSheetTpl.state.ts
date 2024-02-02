@@ -5,7 +5,6 @@ import { store } from '../../../state/store';
 import { toastSuccess } from '../../components/notifications';
 
 class FBDownloadSheetTplState {
-
   public getBulkCreateTemplateId = (documentRevisionId: string, intl: IntlShape) => {
     axios({
       url: `${Config.ApiEndpoint}/mass_create/generate_template/${documentRevisionId}`,

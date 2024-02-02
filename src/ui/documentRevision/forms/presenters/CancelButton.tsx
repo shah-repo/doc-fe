@@ -1,10 +1,9 @@
 import { Button } from '@material-ui/core';
-import * as React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
-import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as CancelDraftIcon } from '../../../../assets/images/cancel_draft.svg';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
@@ -55,7 +54,7 @@ const CancelButton: React.FunctionComponent<Props> = ({
       }
       {
         (isNewLayout && canShowCancelButton && !renderAsButton)
-       && ( <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
+       && (<StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
          <StyledMenuListIcon>
            <CancelDraftIcon />
          </StyledMenuListIcon>

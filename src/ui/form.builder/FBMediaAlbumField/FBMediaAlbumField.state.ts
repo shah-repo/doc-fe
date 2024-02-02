@@ -23,11 +23,11 @@ class FBMediaAlbumFieldState {
   public filesApi: FBRequest<FBAttachment[], null> = new FBRequest();
   public previewOnlyIds: string[] = [];
 
-  constructor(files: Id[] | undefined = []) {
+  constructor (files: Id[] | undefined = []) {
     this.files = files;
   }
 
-  @computed public get loading(): boolean {
+  @computed public get loading (): boolean {
     return (
       this.attachmentApi.loading
       || this.attachmentsApi.loading
@@ -95,7 +95,7 @@ class FBMediaAlbumFieldState {
     this.uploadFile(files);
   };
 
-  private uploadFile = (files: File[] | undefined) => {
+  private readonly uploadFile = (files: File[] | undefined) => {
     if (isUndefined(files) || files.length === 0) {
       return;
     }
@@ -155,7 +155,7 @@ class FBMediaAlbumFieldState {
     set(this, 'files', union(this.files, [{ id }]));
   };
 
-  private attachmentType = (file: Attachment): AttachmentType | undefined => {
+  private readonly attachmentType = (file: Attachment): AttachmentType | undefined => {
     if (isUndefined(file)) { return; }
     return !file.s3linkCleanCopy
       ? AttachmentType.Attached

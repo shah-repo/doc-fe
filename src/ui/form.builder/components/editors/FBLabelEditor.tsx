@@ -14,7 +14,7 @@ const FBLabelEditor: React.FunctionComponent<FBLabelEditorProps> = ({
   ...props
 }) => (
   <>
-    <FBTextField label="form.builder.label" {...props} name="label"  />
+    <FBTextField label="form.builder.label" {...props} name="label" />
     {standalone && !omitReviseDisabledOption.includes(type) && (
       <FBAdditionsEditor type="label" />
     )}

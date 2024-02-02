@@ -11,7 +11,7 @@ import styles from './styles';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 
 interface OperatorsListProps {
-  operators: { stepId: string, user: User }[]
+  operators: Array<{ stepId: string, user: User }>
   stepLHRs?: Nullable<DocumentRevision>
   lhrStepState?: FBLHRStepState
   stepIndex?: number

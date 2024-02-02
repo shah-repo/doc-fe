@@ -110,7 +110,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             className={classes.docIdAndTitle}
             color="textPrimary"
             dangerouslySetInnerHTML={{ __html: title }}
-           />
+          />
         </Grid>
       </Grid>
       <Grid

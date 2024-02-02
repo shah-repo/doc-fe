@@ -37,8 +37,8 @@ export const selectStyles: StylesConfig = {
   }),
   control: (base, state) => ({
     ...base,
-    'minHeight': '40px',
-    'boxShadow': 'none',
+    minHeight: '40px',
+    boxShadow: 'none',
     '&:hover': {
       background: !state.isFocused ? Colors.primaryHighlight : Colors.white,
     },
@@ -136,7 +136,7 @@ FieldConfig &
 Partial<TypographyProps>;
 
 const AutocompleteField: React.FunctionComponent<
-  AutocompleteFieldProps
+AutocompleteFieldProps
 > = (props) => <FormikField component={Autocomplete} {...props} />;
 
 export default AutocompleteField;

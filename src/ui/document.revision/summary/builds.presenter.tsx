@@ -45,7 +45,7 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
       >
         <Link
           className={classes.link}
-          to={documentVersionPath(docRev.id, docRev.document?.id )}
+          to={documentVersionPath(docRev.id, docRev.document?.id)}
           target="_blank"
           data-cy={`BuildsPresenter-link-${label}`}
         >
