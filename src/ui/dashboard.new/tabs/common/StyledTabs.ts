@@ -4,10 +4,10 @@ import Colors from '../../../layout/theme/utils/colors';
 
 const styles = () => ({
   indicator: {
-    'display': 'flex',
-    'justifyContent': 'center',
-    'backgroundColor': Colors.navy,
-    'height': 3,
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: Colors.navy,
+    height: 3,
     '& > span': {
       width: '100%',
       backgroundColor: Colors.white,

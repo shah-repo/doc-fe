@@ -5,5 +5,5 @@ import { ApplicationState } from '../../state/reducers';
 
 export const getTableCriteria = (tableName: string) => (reduxState: ApplicationState) => tableSearchSelectors.getTableCriteria(reduxState, tableName);
 export const getTableData = (tableName: string) => (reduxState: ApplicationState) => tableSearchSelectors.getTableData(reduxState, tableName);
-export const getHasPermission = (permission: Permission) => (reduxState: ApplicationState) => authSelectors.getHasPermission(reduxState, permission);
+export const getHasPermission = (permission: Permission) => (reduxState: ApplicationState): boolean => authSelectors.getHasPermission(reduxState, permission);
 export const getCurrentUserTags = () => (reduxState: ApplicationState) => authSelectors.currentEmployeeTags(reduxState);

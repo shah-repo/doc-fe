@@ -163,7 +163,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 labelProps={labelPropsStyle} />
             </Box>
             <TextField
-              value={description.slice(0, 90)}
+              value={description?.slice(0, 90)}
               data-cy="description"
               onChange={onDescriptionChange} />
           </Grid>

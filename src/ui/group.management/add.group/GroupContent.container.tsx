@@ -106,7 +106,7 @@ const GroupContentContainer: React.FunctionComponent<Props> = ({
   };
 
   const handleSubmit = () => {
-    isCreateMode ?  handleCreateGroup(group) : (selectedGroup && handleEditGroup(selectedGroup.id, group));
+    isCreateMode ? handleCreateGroup(group) : (selectedGroup && handleEditGroup(selectedGroup.id, group));
   };
 
   return (

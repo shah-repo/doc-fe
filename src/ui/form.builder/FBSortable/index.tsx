@@ -9,7 +9,7 @@ import { SortablePlaceholder } from './components/SortablePlaceholder';
 import { FBSortableProps } from './types';
 import { withFBSortable } from './wrap';
 
-const SortableItemLazy = lazy(() => import('./components/SortableItem'));
+const SortableItemLazy = lazy(async () => await import('./components/SortableItem'));
 
 const FBSortable: React.FC<FBSortableProps> = ({
   items = [],
@@ -66,13 +66,13 @@ const FBSortable: React.FC<FBSortableProps> = ({
       >
         {localItems.map((item, position) => (
           <Suspense fallback={<Loader />}>
-          <SortableItemLazy
-            key={item.name}
-            item={item}
-            isFirst={position === 0}
-            isDesignMode={isDesignMode}
-            isAutosaveEnabled={isAutosaveEnabled}
-          />
+            <SortableItemLazy
+              key={item.name}
+              item={item}
+              isFirst={position === 0}
+              isDesignMode={isDesignMode}
+              isAutosaveEnabled={isAutosaveEnabled}
+            />
           </Suspense>
         ))}
       </SortableContext>

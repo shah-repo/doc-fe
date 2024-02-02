@@ -44,35 +44,35 @@ interface SchemaBuilderProps {
 }
 
 type schemaBuilder = (options: SchemaBuilderProps) => Array<ColumnDefinition<T>>;
-  const buildSchema: schemaBuilder = ({ ActionCell, cellRender }) => {
-    return [
-      {
-        id: 'isActive',
-        field: 'printer.isActive',
-        title: 'administration.general.settings.printing.table.column.active',
-        width: 80,
-      },
-      {
-        id: 'sn',
-        field: 'printer.sn',
-        title: 'administration.general.settings.printing.table.column.serial.number',
-      },
-      {
-        id: 'name',
-        field: 'printer.name',
-        title: 'administration.general.settings.printing.table.column.name',
-        cell: cellRender,
-      },
-      {
-        id: 'actions',
-        field: 'actions',
-        filterable: false,
-        title: 'administration.general.settings.printing.table.column.actions',
-        cell: ActionCell,
-        width: 80,
-      },
-    ];
-  };
+const buildSchema: schemaBuilder = ({ ActionCell, cellRender }) => {
+  return [
+    {
+      id: 'isActive',
+      field: 'printer.isActive',
+      title: 'administration.general.settings.printing.table.column.active',
+      width: 80,
+    },
+    {
+      id: 'sn',
+      field: 'printer.sn',
+      title: 'administration.general.settings.printing.table.column.serial.number',
+    },
+    {
+      id: 'name',
+      field: 'printer.name',
+      title: 'administration.general.settings.printing.table.column.name',
+      cell: cellRender,
+    },
+    {
+      id: 'actions',
+      field: 'actions',
+      filterable: false,
+      title: 'administration.general.settings.printing.table.column.actions',
+      cell: ActionCell,
+      width: 80,
+    },
+  ];
+};
 
 const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
   onAddNew,

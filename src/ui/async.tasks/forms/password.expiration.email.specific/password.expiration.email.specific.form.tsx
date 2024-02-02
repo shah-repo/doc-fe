@@ -6,7 +6,7 @@ import Text from '../../../components/Text';
 import { styles } from './password.expiration.email.specific.form.styles';
 
 interface Props {
-  handlePasswordExpirationEmailSpecificFormSubmit: ( { processedAtTimestamp, userEmails } ) => void
+  handlePasswordExpirationEmailSpecificFormSubmit: ({ processedAtTimestamp, userEmails }) => void
 }
 const PasswordExpirationEmailSpecificAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   handlePasswordExpirationEmailSpecificFormSubmit,

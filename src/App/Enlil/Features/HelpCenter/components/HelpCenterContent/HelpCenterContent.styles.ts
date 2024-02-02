@@ -13,7 +13,7 @@ export default makeStyles((theme) => ({
     maxWidth: theme.spacing(40),
   },
   close: {
-    margin: theme.spacing(-.5),
+    margin: theme.spacing(-0.5),
   },
   content: {
     padding: 0,

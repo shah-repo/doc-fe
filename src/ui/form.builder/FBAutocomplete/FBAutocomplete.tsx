@@ -79,9 +79,11 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         }}
         inputProps={{
           ...params.inputProps,
-          'style': {
-            padding: '10.5px 0', ...inputStyle, marginRight: customStyles
-              ? '10px' : disabled  ? '28px' : '0px',
+          style: {
+            padding: '10.5px 0',
+            ...inputStyle,
+            marginRight: customStyles
+              ? '10px' : disabled ? '28px' : '0px',
             fontSize: 14,
           },
           'data-cy': props.name,
@@ -95,8 +97,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
 
   const renderAutoCompleteTags = (value, getTagProps) => <FBMapWrapper<any[]> collection={value}>
     {(option, index) => {
-      const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
-        (e.approver.id === get(option, 'id')) && e.status === ApprovalStatus.Approved ) ? true : false;
+      const isAlreadyApproved = !!workspaceState?.changeRequest?.approvals.find((e) =>
+        (e.approver.id === get(option, 'id')) && e.status === ApprovalStatus.Approved);
       const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
 
       return (
@@ -108,17 +110,19 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           {...getTagProps({ index })}
           disabled={props.name === 'approvers' ? isAlreadyApproved : isOptionDisabled || disabled}
         />
-      ); }}
+      );
+    }}
   </FBMapWrapper>;
 
   const isShowErrorMsg = () => {
-    const outputDocumentType = get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], 'label')
-    || get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], 'group');
+    const outputDocumentType = get(workspaceState?.document?.formTemplate?.outputDocumentTypes[0], 'label')
+    || get(workspaceState?.document?.formTemplate?.outputDocumentTypes[0], 'group');
     const documentType = workspaceState?.document?.document?.documentType?.group;
     if (dialogState?.open && documentType === DOC_TYPE_GROUP.LHRT
       && (outputDocumentType === DOC_TYPE_GROUP.LHR || outputDocumentType === 'Lot History Record')
     && (props.name === 'lhr-selected-part' || props.name === 'lhrstep-built-in')) {
-      return false; }
+      return false;
+    }
 
     if (documentType === DOC_TYPE_GROUP.PART && !props.showErrorMsg) {
       return props.showErrorMsg;
@@ -126,7 +130,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     return true;
   };
 
-  disabled = includes([ 'fb-approvers-approvers', 'form.builder.approvers'], props.name)
+  disabled = includes(['fb-approvers-approvers', 'form.builder.approvers'], props.name)
     && includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
     ? true : disabled;
 

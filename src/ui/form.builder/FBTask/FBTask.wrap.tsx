@@ -18,7 +18,6 @@ export const withFBTask = <T extends FBTaskProps>(
     disabled,
     ...props
   }: T) => {
-
     const { workspaceState } = FB.useStores();
     const {
       id: crId,

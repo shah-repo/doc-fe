@@ -13,7 +13,7 @@ import { InnerTableColumnProps, TableCellProps, TableColumnProps } from './types
 type Props<T> = TableColumnProps<T>;
 type InnerProps = InnerTableColumnProps;
 
-export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
+export function TableColumn<T> (props: Props<T>, innerProps: InnerProps) {
   const {
     key,
     dataKey,

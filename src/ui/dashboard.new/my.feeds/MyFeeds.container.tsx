@@ -83,9 +83,17 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   return (
     <LineItemsPresenter
       {...{
-        loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
-        pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
-        dialogPDF, dismissLineItem,
+        loadMyFeeds,
+        loadMyFeedsListAsyncState,
+        feedItems,
+        unPinLineItem,
+        pinLineItem,
+        hoverItemId,
+        onMouseHoverItem,
+        onMouseLeaveItem,
+        overallLimit,
+        dialogPDF,
+        dismissLineItem,
       }}
       onLoadMoreData={onLoadMoreData}
     />

@@ -6,7 +6,6 @@ import useAsync from "../../hooks/useAsync";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
 
 const DocumentTypeSockets: React.FunctionComponent = () => {
-
   const loadAction = useActionCreator(documentTypeActions.loadList);
   const async = useAsync();
 

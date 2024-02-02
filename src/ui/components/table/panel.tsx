@@ -24,7 +24,7 @@ type Props<T> = TablePanelProps<T>;
 
 let call;
 
-export function TablePanel<T extends any>({
+export function TablePanel<T extends any> ({
   columns,
   noRowsTranslation = 'table.no.results.found',
   cellMeasure = false,
@@ -64,7 +64,7 @@ export function TablePanel<T extends any>({
     let sortedData = lodashSortBy(
       data,
       (document: DocumentRevision) => {
-        const value = get(document,  sortBy === 'docId' ? `document.${sortBy}` : sortBy) || '';
+        const value = get(document, sortBy === 'docId' ? `document.${sortBy}` : sortBy) || '';
         if (value === 'N/A') { return sortDirection === 'DESC' ? '' : null; }
         if (sortBy === 'precalc.po_amount') {
           // remove curreny string and comma
@@ -239,14 +239,13 @@ export function TablePanel<T extends any>({
           ),
         );
       });
-
   };
 
   const noRowsRenderer = () => isLoading
     ? <Box textAlign="center" marginTop="50px">
       <CircularProgress />
     </Box>
-    :    <Box className={classes.emptyMsg} data-cy="no.results.found">
+    : <Box className={classes.emptyMsg} data-cy="no.results.found">
       <Text translation={noRowsTranslation} />
     </Box>;
 
@@ -310,7 +309,7 @@ export function TablePanel<T extends any>({
   const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
-    <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
+    <Box className={rootCustomStyle || classes.root}>
       <div style={{ color: 'red' }}>{tableCriteria.apiError}</div>
       {bodyRenderer()}
     </Box>

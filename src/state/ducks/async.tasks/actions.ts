@@ -11,7 +11,8 @@ const executeAsyncTask = (payload: PasswordType, handlers: Handlers): ApiAction 
     password,
     data: restPayload,
     handlers,
-  }); };
+  });
+};
 
 const executeSessionTimeTravelAsyncTask = (payload: PasswordType, handlers: Handlers): ApiAction => {
   const { password, ...restPayload } = payload;
@@ -21,7 +22,8 @@ const executeSessionTimeTravelAsyncTask = (payload: PasswordType, handlers: Hand
     password,
     data: restPayload,
     handlers,
-  }); };
+  });
+};
 
 export default {
   executeAsyncTask,

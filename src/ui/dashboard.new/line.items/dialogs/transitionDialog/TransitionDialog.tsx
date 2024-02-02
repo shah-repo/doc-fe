@@ -61,7 +61,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
   );
 
   const isClosedTransition
-    = transition === TransitionTypes.TRANSITION_CLOSED ? true : false;
+    = transition === TransitionTypes.TRANSITION_CLOSED;
 
   const renderCloseForm = (props: FormikProps<any>) => (
     <ClosedActionForm

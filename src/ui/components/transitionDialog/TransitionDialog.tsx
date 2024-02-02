@@ -50,7 +50,7 @@ const TransitionDialog: React.FunctionComponent<Props>
       <EffectiveDateForm {...props} asyncState={asyncState} cancel={transitionDialog.close} />
     );
 
-    const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
+    const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
     return (
       <div className={classes.container}>
         {isNewLayout ? (

@@ -5,15 +5,15 @@ import Colors from '../../../layout/theme/utils/colors';
 const styles = () => ({
   root: {
     'text-transform': 'capitalize',
-    'minWidth': '125px',
-    'color': Colors.font_gray,
+    minWidth: '125px',
+    color: Colors.font_gray,
     'font-weight': 'normal',
-    'fontSize': '18px',
-    'lineHeight': '23px',
+    fontSize: '18px',
+    lineHeight: '23px',
     /* identical to box height */
-    'display': 'flex',
-    'alignItems': 'center',
-    'letterSpacing': '0.25px',
+    display: 'flex',
+    alignItems: 'center',
+    letterSpacing: '0.25px',
     'padding-right': 0,
     'padding-left': 0,
     'margin-right': 12,

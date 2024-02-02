@@ -21,8 +21,7 @@ fi
 tar -zxvf "compiled.tar.gz"
 
 aws s3 sync "compiled/build/" \
-	"s3://${DEPLOYMENT_BUCKET_NAME}" \
- 	--acl public-read
+	"s3://${DEPLOYMENT_BUCKET_NAME}"
 
 aws cloudfront create-invalidation \
     --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
