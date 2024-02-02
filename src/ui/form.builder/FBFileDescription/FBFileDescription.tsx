@@ -6,7 +6,7 @@ const FBFileDescription: React.FunctionComponent<FBFileDescriptionProps> = ({
   formState,
   children,
   ...props
-}) =>  (
+}) => (
   <FBForm {...{ formState }}>
     <FBFilePresenterIcon {...props} />
     <FBTextField

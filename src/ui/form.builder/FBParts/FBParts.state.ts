@@ -10,12 +10,12 @@ class FBPartsState extends FBProcedureState {
   @observable public parts = new Map<string, FBProcedureValue>();
   @observable public diffParts = new Map<string, FBProcedureValue>();
 
-  getNumberOfDigits(number: number): number {
+  getNumberOfDigits (number: number): number {
     return (number.toString().split('.')[1] || '').length;
   }
 
   // MARK: @computed
-  @computed public get materials(): FBProcedureItemConfig[] | undefined {
+  @computed public get materials (): FBProcedureItemConfig[] | undefined {
     let materials: FBProcedureItemConfig[] = [];
     const valueParts = !this.diffParts.size ? this.parts : this.diffParts;
     valueParts.forEach((value) => {
@@ -41,7 +41,7 @@ class FBPartsState extends FBProcedureState {
     return values(materialValues);
   }
 
-  @computed public get equipment(): FBProcedureItemConfig[] | undefined {
+  @computed public get equipment (): FBProcedureItemConfig[] | undefined {
     let equipment: FBProcedureItemConfig[] = [];
     const valueParts = !this.diffParts.size ? this.parts : this.diffParts;
     valueParts.forEach((value) => {

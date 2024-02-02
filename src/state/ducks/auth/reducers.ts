@@ -64,7 +64,6 @@ const user = (
 ): UserState => {
   switch (action.type) {
     case AUTH_USER: {
-
       const { passwordExpiresAt } = action.payload;
       const currentDate = moment.utc().format(MomentFormats.MonthDateYear);
 

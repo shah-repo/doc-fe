@@ -5,7 +5,7 @@ import FBRequest from '../FBApi/FBApi.request';
 class FBEditorCustomControlState extends FBRequest<DocumentRevision[], any> {
   public url = FBEndpoint.DynamicControl;
 
-  public constructor() {
+  public constructor () {
     super();
     this.fetch();
   }

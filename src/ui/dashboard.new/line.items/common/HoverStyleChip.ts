@@ -18,8 +18,8 @@ const styles = () => ({
     width: '13px',
   },
   labelSmall: {
-    'fontSize': '12px',
-    'fontWeight': 700,
+    fontSize: '12px',
+    fontWeight: 700,
     'text-transform': 'uppercase',
   },
 });

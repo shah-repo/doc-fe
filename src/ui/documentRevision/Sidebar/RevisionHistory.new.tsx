@@ -116,8 +116,8 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ docum
                 </Box>
                 <Box color={Colors.almost_black} fontSize={14}>
                   {changeRequest.formInput?.documentRevisions.map(
-                      (e) => e.justificationOfChange,
-                    )}
+                    (e) => e.justificationOfChange,
+                  )}
                 </Box>
               </Box>
             </Box>

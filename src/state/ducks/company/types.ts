@@ -155,8 +155,21 @@ export interface ZebraPrintSettings {
     labelTemplates: LabelTemplatesProps[]
   }
 }
+
+export interface EquipmentLocation {
+  id: string
+  name: string
+  active: boolean
+}
+
+interface EquipmentFamilySettings {
+  autoSyncEnabled: boolean
+  locations: EquipmentLocation[]
+}
+
 export interface GeneralSettings {
   zebraPrint: ZebraPrintSettings[]
+  equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
 }

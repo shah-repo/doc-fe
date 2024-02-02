@@ -6,7 +6,6 @@ export const withActionButton = <T extends any>(
   const Comp = ({
     ...props
   }: T) => {
-
     const [cancelButtonDisplay, setCancelButtonDisplay] = useState(false);
     const [upgradeToLastestDisplay, setUpgradeToLastestDisplay] = useState(false);
 

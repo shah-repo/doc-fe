@@ -66,4 +66,5 @@ export enum FBEndpoint {
   TrainingRecord = '/training_record',
   PrintLotLabels ='/zebra/labels/lot',
   PrintEquipmentLabels ='/zebra/labels/equipment',
+  RelatedEquipment ='/related_equipment',
 }

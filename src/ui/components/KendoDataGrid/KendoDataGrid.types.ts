@@ -16,6 +16,7 @@ export interface CellTemplateProps<T> extends GridCellProps {
   dataItem: T
   field: string
   column: Omit<GenericColumnDefinition<T>, 'cell' | 'template' | 'children'>
+  onClick?: (e: { dataItem: T }) => void
 }
 
 export type CellComponent<T = unknown, R = Record<string, unknown>> = ComponentType<CellTemplateProps<T> & R>;

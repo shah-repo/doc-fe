@@ -82,4 +82,5 @@ export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
       </FormWrapper>
     </Grid>
 
-  ); };
+  );
+};

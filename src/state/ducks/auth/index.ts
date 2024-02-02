@@ -1,4 +1,4 @@
-import { default as authReducer } from './reducers';
+import authReducer from './reducers';
 
 export { default as authActions } from './actions';
 export { default as authSelectors } from './selectors';

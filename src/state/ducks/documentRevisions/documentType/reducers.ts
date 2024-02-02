@@ -4,7 +4,7 @@ import asyncReducer from '../../../reducers/asyncReducer';
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST } from './constants';
 import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByCategoryAction, DocumentTypeByCategoryState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction, TabConfigurationListAction, TabConfigurationState } from './types';
 
-type DocumentTypeActions =  DocumentTypeListAction;
+type DocumentTypeActions = DocumentTypeListAction;
 
 const byId = (state: DocumentTypeByIdState = {}, action: DocumentTypeActions): DocumentTypeByIdState => {
   switch (action.type) {

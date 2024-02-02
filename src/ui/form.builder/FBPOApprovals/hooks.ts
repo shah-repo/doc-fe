@@ -29,9 +29,9 @@ export const usePoApprovals = (
   const dispatch = useDispatch();
   const { workspaceState, poApprovalsState } = FB.useStores();
 
-  const { document: documentRevision }  = workspaceState || {};
+  const { document: documentRevision } = workspaceState || {};
   const authUser = store.getState().auth.user;
-  const isCurrentUserOperator = some(documentRevision?.document.operators, ['user.email', authUser.email ]);
+  const isCurrentUserOperator = some(documentRevision?.document.operators, ['user.email', authUser.email]);
   const canEditDocRev = documentRevision
   && canEditDocumentRevision(documentRevision, authUser.email, isCurrentUserOperator);
 
@@ -57,7 +57,7 @@ export const usePoApprovals = (
     const updatedSignatureGroupName = getSignatureGroupName(approval.approverId);
 
     if (updatedSignatureGroupName) {
-      return poApprovalsState?.updateSignatureGroupName(
+      return await poApprovalsState?.updateSignatureGroupName(
         approval.id,
         updatedSignatureGroupName,
       );
@@ -85,7 +85,7 @@ export const usePoApprovals = (
       return;
     }
 
-    return updateSignaturesQueue(
+    return await updateSignaturesQueue(
       sortBy(poApprovalsState?.activeApprovals, 'signatureGroupName').map((approval) => approval.id),
     );
   };
@@ -118,11 +118,11 @@ export const usePoApprovals = (
     const shouldRemovePrevRequester = requester !== prevRequester && hasPrevRequesterInAutoApprovers;
 
     if (requester && shouldRemoveRequester) {
-      return removeApprover([requester]);
+      return await removeApprover([requester]);
     }
 
     if (prevRequester && shouldRemovePrevRequester) {
-      return removeApprover([prevRequester]).then(() => {
+      return await removeApprover([prevRequester]).then(() => {
         if (requester) {
           addApprover([requester], { manually: false });
         }
@@ -130,13 +130,13 @@ export const usePoApprovals = (
     }
 
     if (requester && shouldAddRequester) {
-      return addApprover([requester], { manually: false });
+      return await addApprover([requester], { manually: false });
     }
   };
 
   const addApprover = async (ids: string[], { manually = true } = {}) => {
     if (!id || !ids) {
-      return Promise.reject();
+      return await Promise.reject();
     }
 
     await when(() => Boolean(poApprovalsState?.isMounted) && !poApprovalsState?.busy);
@@ -155,8 +155,8 @@ export const usePoApprovals = (
         });
       });
 
-    return Promise.all(addActions).then(() => {
-      const id  = workspaceState?.id;
+    return await Promise.all(addActions).then(() => {
+      const id = workspaceState?.id;
       if (id) {
         dispatch(documentRevisionsActions.loadAudit(id));
       }
@@ -165,7 +165,7 @@ export const usePoApprovals = (
 
   const removeApprover = async (ids?: string[]) => {
     if (!ids || !id) {
-      return Promise.reject();
+      return await Promise.reject();
     }
 
     await when(() => Boolean(poApprovalsState?.isMounted) && !poApprovalsState?.busy);
@@ -178,7 +178,7 @@ export const usePoApprovals = (
       return poApprovalsState?.applyTransition('abandon', approval?.id, undefined);
     });
 
-    return Promise.all(removeActions).then(() => {
+    return await Promise.all(removeActions).then(() => {
       const id = workspaceState?.id;
       if (id) {
         dispatch(documentRevisionsActions.loadAudit(id));

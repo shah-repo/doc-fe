@@ -61,7 +61,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
       ? isUserAdminEnforce
       : disabled;
 
-  return  (
+  return (
     <FBProvider {...{ dialogState }}>
       <FBDialog />
       <FBInput {...props} {...{ name }} type="poapprovals">
@@ -100,7 +100,6 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
               collection={approvalsByStatus as Record<string, FBInlineApprovalBody[]>}
             >
               {(approvals, status) => {
-
                 const poStatusText = pendingStates.includes(status)
                   ? 'common.pending.approval'
                   : 'APPROVED';

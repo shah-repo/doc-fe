@@ -19,7 +19,7 @@ const getItemStatus = (
 
 const normalizeItem = (item: GenericItem) => omit(item, ['quantity', 'unit']);
 
-const calculateSectionDiff = <K extends (GenericItem)[]>(childItems: K, parentItems: K): K => {
+const calculateSectionDiff = <K extends GenericItem[]>(childItems: K, parentItems: K): K => {
   const allItems = unionWith(
     childItems,
     parentItems,

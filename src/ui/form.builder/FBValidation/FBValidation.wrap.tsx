@@ -9,8 +9,7 @@ export const withFBValidation = <T extends FBValidationProps>(
     toStringRules,
     ...props
   }: T) => {
-
-    function valueByType(value: any, key: string, validator: string): any {
+    function valueByType (value: any, key: string, validator: string): any {
       switch (true) {
         case isArray(value): return validator === 'required_if_in' ? JSON.stringify({ ...value }) : value;
         case isDate(value): return (value as string);
@@ -19,7 +18,7 @@ export const withFBValidation = <T extends FBValidationProps>(
       }
     }
 
-    function valueSplit(key: string, value: any): string {
+    function valueSplit (key: string, value: any): string {
       const ruleDelimiter = [':', ','];
       let rules = value ? key : '';
       if (isObject(value)) {

@@ -14,7 +14,7 @@ import { AsyncActionErrorResponse } from './types';
 
 export const CALL_API = 'middlewares/CALL_API';
 
-function isApiAction(action: Action): action is ApiAction {
+function isApiAction (action: Action): action is ApiAction {
   return action.type === CALL_API;
 }
 

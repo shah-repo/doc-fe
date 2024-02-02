@@ -10,13 +10,13 @@ class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approva
   @observable approvals?: FBInlineApprovalBody[];
 
   // MARK: @config
-  private isOwner?: boolean;
+  private readonly isOwner?: boolean;
 
   public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
 
-  public constructor({ id, approvals, isOwner }: FBApprovalsConstructor) {
+  public constructor ({ id, approvals, isOwner }: FBApprovalsConstructor) {
     super();
     this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
     this.isOwner = isOwner;
@@ -27,7 +27,7 @@ class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approva
   }
 
   // MARK: @computed
-  @computed public get getApprovals(): FBInlineApprovalBody[] {
+  @computed public get getApprovals (): FBInlineApprovalBody[] {
     const filtered = filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'MASTER');
     return map(filtered, (a: FBInlineApprovalBody) => ({
       ...a,
@@ -45,12 +45,12 @@ class FBApprovalsState extends FBRequest<Approval, {'ids[]': string[]} | Approva
     this.fetch();
   };
 
-  public onSuccess() {
+  public onSuccess () {
     this.setGroups(this.data);
     super.onSuccess();
   }
 
-  private setGroups = (data) => {
+  private readonly setGroups = (data) => {
     this.groups = (data || []).reduce((group, item) => {
       group[item.id] = {
         ...item,

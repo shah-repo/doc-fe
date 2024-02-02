@@ -17,7 +17,6 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     formAutocompleteDisabled,
     ...props
   }: T) => {
-
     // MARK: @config
     const { dialogState, ebPartState } = FB.useStores();
     const formState = FB.useRef<FBFormState>(FBFormState, {});

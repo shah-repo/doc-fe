@@ -23,7 +23,6 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     type,
     ...props
   }: T) => {
-
     const { workspaceState, formState } = FB.useStores();
     const {
       id: documentId,
@@ -36,13 +35,13 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     });
     const intl = useIntl();
 
-    function underApproval(): string[] | undefined {
+    function underApproval (): string[] | undefined {
       if (!name) { return; }
       const { schema } = workspaceState || {};
       const underApprovalField: string[] = [name];
       range(0, index).reverse().some((current) => {
         if (!schema) { return false; }
-        const { type, name = '' } =  schema[current];
+        const { type, name = '' } = schema[current];
         if (type === 'requestapproval' || type === 'inlineapproval') { return true; }
         underApprovalField.push(name);
         return false;
@@ -50,7 +49,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       return underApprovalField;
     }
 
-    function formInputAudit(audits?: FBAuditData[]): FBAuditData[] | undefined {
+    function formInputAudit (audits?: FBAuditData[]): FBAuditData[] | undefined {
       if (!audits || !isApproved()) { return; }
       const underApprovalFields = underApproval();
       const grouped = groupBy(audits, (audit) => {
@@ -80,7 +79,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         const type = k.split('.')[2];
         const label = k.split('.')[3] || '';
 
-        function isSimple() {
+        function isSimple () {
           let prevValue = v[0].previousValue;
           let nextValue = v[0].nextValue;
 
@@ -118,11 +117,11 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           return (<span>Changed {label} {prevValue} to <b>{FB.stripTags(nextValue)}</b></span>);
         }
 
-        function isCheck() {
+        function isCheck () {
           return (<span> Changed {label} value to  <b>{v[0].nextValue}</b> </span>);
         }
 
-        function isPurchaseorder(): string {
+        function isPurchaseorder (): string {
           let desc = 'Changed ' + label + ': ';
           let calculation = '';
           let item = '';
@@ -162,7 +161,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           return desc;
         }
 
-        function isCheckGroup() {
+        function isCheckGroup () {
           let { previousValue, nextValue } = v[0];
           if (previousValue === 'undefined' && nextValue === '[]') { return; }
           if (nextValue === 'undefined' || nextValue === 'false') {
@@ -177,7 +176,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           return (<span>Checked in {label}: <b>{nextValue}</b></span>);
         }
 
-        function isFileupload() {
+        function isFileupload () {
           const fields = ['name', 'type'];
           const r = v.reduce((merged, clearValue, index) => {
             const { type: auditType = '' } = clearValue;
@@ -199,7 +198,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           return r;
         }
 
-        function isAutocomplete() {
+        function isAutocomplete () {
           const { optionId } = workspaceState?.getSchemaItem(fieldName) || {};
           if (!optionId) { return; }
           approvalAuditState?.setAutocompleteOptionId(optionId);
@@ -272,7 +271,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       });
 
       const compactMapped = sortBy(compact(mapped), 'timestamp');
-      const approvals = filter(compactMapped,  ({ type, timestamp }) =>
+      const approvals = filter(compactMapped, ({ type, timestamp }) =>
         type === 'inlineapproval' || type === 'requestapproval',
       );
 
@@ -293,7 +292,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       return filteredMapped as FBAuditData[];
     }
 
-    function isApproved(): boolean {
+    function isApproved (): boolean {
       let hasValue = type === 'inlineapproval'
         ? formState?.getFieldValue(name)
         : formState?.getFieldValue(FBFieldName.RequestApproval + name);

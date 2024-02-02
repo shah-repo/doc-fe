@@ -22,7 +22,7 @@ const ChangeRequestSockets: React.FunctionComponent<Props> = ({
     async.start(loadAction, id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const topic = useMemo(() =>  `+/change_requests/${crId}/updated`, [crId]);
+  const topic = useMemo(() => `+/change_requests/${crId}/updated`, [crId]);
 
   useMqttSubscription(topic, loadData);
 

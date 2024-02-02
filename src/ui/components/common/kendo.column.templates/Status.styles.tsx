@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../../layout/theme/utils/colors';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   wrapper: {
     display: 'flex',
     alignItems: 'center',
@@ -20,6 +20,7 @@ export default makeStyles({
     justifyContent: 'center',
     color: Colors.lochmara,
     cursor: 'pointer',
+    marginRight: theme.spacing(0.5),
   },
   GREEN_STATUS: {
     background: Colors.snow_flurry,
@@ -41,4 +42,4 @@ export default makeStyles({
     color: Colors.latest_red_varient,
     border: `1px solid ${Colors.latest_red_varient}`,
   },
-});
+}));

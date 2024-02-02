@@ -9,7 +9,7 @@ const FBRadio: React.FunctionComponent<FBInputProps> = ({
   disabled,
   defaultChecked,
   ...props
-}) =>  (
+}) => (
   <FBInput {...props} {...{ disabled, label }} type="radio">
     <FormControlLabel
       control={<Radio {...{ disabled, defaultChecked }} />}
