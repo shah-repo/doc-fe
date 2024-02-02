@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import isMobile from 'is-mobile';
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
 import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images/approve_solid.svg';
@@ -19,7 +19,7 @@ import { Nullable } from '../../../../../state/ducks/common/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
-import { AttachmentSliderContext } from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
@@ -232,11 +232,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
 
   const dialogHandler = useDialog();
   const [selectedAttachment, setSelectedAttachment] = React.useState<Attachment | undefined>(undefined);
-  const { setAttachmentSlider } = useContext(AttachmentSliderContext);
-
-  useEffect(() => {
-    setAttachmentSlider(setSelectedAttachment);
-  }, []);
 
   const downloadAttachment = (attachment: Attachment) => () => {
     if (checkIfFileIsViewable(attachment?.type)) {
@@ -631,12 +626,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         label="transition.action.approve"
       />
       {selectedAttachment && (
-        <ViewFile
-          isOpen={dialogHandler.isOpen}
-          handleClose={closeDialog}
-          attachments={[...purchaseOrderAttachments] as Attachment[]}
-          attachment={selectedAttachment}
-        />
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...purchaseOrderAttachments] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
       )}
     </>
   );

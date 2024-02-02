@@ -1,25 +1,23 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Attachment } from '../../../../state/ducks/attachments/types';
 
 type AttachmentSliderMethod = React.Dispatch<React.SetStateAction<Attachment | undefined>>;
 
 interface AttachmentSliderContextProps {
   setFile: AttachmentSliderMethod | undefined
-  setAttachmentSlider: (sliderMethod: AttachmentSliderMethod) => void
+}
+
+interface Props {
+  setSelectedAttachment: AttachmentSliderMethod
 }
 
 export const AttachmentSliderContext = React.createContext<AttachmentSliderContextProps>({} as AttachmentSliderContextProps);
 
-const AttachmentSlideProvider: React.FC = ({ children }) => {
-  const attachmentSliderMethod = useRef <AttachmentSliderMethod>();
-  const setAttachmentSlider = (sliderMethod: AttachmentSliderMethod) => {
-    attachmentSliderMethod.current = sliderMethod;
-  };
-  return (
-    <AttachmentSliderContext.Provider value={{ setFile: attachmentSliderMethod.current, setAttachmentSlider }}>
+const AttachmentSlideProvider: React.FC<Props> = ({ children, setSelectedAttachment }) =>
+  (
+    <AttachmentSliderContext.Provider value={{ setFile: setSelectedAttachment }}>
       {children}
     </AttachmentSliderContext.Provider>
   );
-};
 
 export default AttachmentSlideProvider;

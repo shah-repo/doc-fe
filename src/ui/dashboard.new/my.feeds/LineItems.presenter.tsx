@@ -12,7 +12,6 @@ import {
 } from '../../../state/ducks/dashboard.new/my.feeds/types';
 import { AsyncState } from '../../../state/types';
 import AsyncGate from '../../components/AsyncGate';
-import AttachmentSlideProvider from '../../components/common/attachment.icon/AttachmentSlideProvider';
 import LoadMoreButton from '../../components/common/load.more.button/LoadMoreButton';
 import { DialogHandler } from '../../hooks/useDialog';
 import useStyles from '../Dashboard.styles';
@@ -105,53 +104,51 @@ const LineItemsPresenter: React.FC<Props> = ({
               );
             case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
               return (
-                <AttachmentSlideProvider>
-                  <POTaskApproval
-                    key={pendingAction.id}
-                    id={pendingAction.id}
-                    docDocumentId={pendingAction.docDocumentId}
-                    approvalId={pendingAction.approvalId}
-                    type={pendingAction.type}
-                    timestamp={getFormattedDateString(
-                      pendingAction.timestamp,
-                      MomentFormats.BriefDateTime,
-                    )}
-                    purchaseOrderSupplierDocRevId={
-                      pendingAction.purchaseOrderSupplierDocRevId
-                    }
-                    purchaseOrderSupplierDocId={
-                      pendingAction.purchaseOrderSupplierDocId
-                    }
-                    purchaseOrderTotalAmount={
-                      pendingAction.purchaseOrderTotalAmount
-                    }
-                    purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
-                    purchaseOrderDescription={
-                      pendingAction.purchaseOrderDescription
-                    }
-                    purchaseOrdeLineItemCount={
-                      pendingAction.purchaseOrdeLineItemCount
-                    }
-                    purchaseOrderAttachments={
-                      pendingAction.purchaseOrderAttachments
-                    }
-                    purchaseSupplierName={pendingAction.purchaseSupplierName}
-                    docId={pendingAction.docId}
-                    docRevId={pendingAction.docRevId}
-                    docRevOwnerName={pendingAction.docRevOwnerName}
-                    docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
-                    docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
-                    docRevName={pendingAction.docRevName}
-                    docRevVersion={pendingAction?.docRevVersion}
-                    onMouseHoverItem={onMouseHoverItem}
-                    pinLineItem={pinLineItem}
-                    unPinLineItem={unPinLineItem}
-                    dismissLineItem={dismissLineItem}
-                    pinned={pendingAction.pinned}
-                    hoverItemId={hoverItemId}
-                    dialogPDF={dialogPDF}
-                  />
-                </AttachmentSlideProvider>
+                <POTaskApproval
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  docDocumentId={pendingAction.docDocumentId}
+                  approvalId={pendingAction.approvalId}
+                  type={pendingAction.type}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime,
+                  )}
+                  purchaseOrderSupplierDocRevId={
+                    pendingAction.purchaseOrderSupplierDocRevId
+                  }
+                  purchaseOrderSupplierDocId={
+                    pendingAction.purchaseOrderSupplierDocId
+                  }
+                  purchaseOrderTotalAmount={
+                    pendingAction.purchaseOrderTotalAmount
+                  }
+                  purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
+                  purchaseOrderDescription={
+                    pendingAction.purchaseOrderDescription
+                  }
+                  purchaseOrdeLineItemCount={
+                    pendingAction.purchaseOrdeLineItemCount
+                  }
+                  purchaseOrderAttachments={
+                    pendingAction.purchaseOrderAttachments
+                  }
+                  purchaseSupplierName={pendingAction.purchaseSupplierName}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  docRevOwnerName={pendingAction.docRevOwnerName}
+                  docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
+                  docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction?.docRevVersion}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
+                  pinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                  dialogPDF={dialogPDF}
+                />
               );
             case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
             case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:

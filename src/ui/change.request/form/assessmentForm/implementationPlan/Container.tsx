@@ -2,7 +2,6 @@ import { createStyles, makeStyles } from '@material-ui/core';
 import { ErrorMessage, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik';
 import React from 'react';
 import AttachmentField from '../../../../components/common/attachment.field/container';
-import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import AttachmentIconField from '../../../../components/common/attachment.icon/container';
 import HeaderField from '../../../../components/common/header.field/field';
 import { ChangeRequestFormValues } from '../../types';
@@ -38,9 +37,7 @@ const Container: React.FunctionComponent<Props> = () => {
       <FieldArray name="implementationPlan.tasks">
         {renderTasks}
       </FieldArray>
-      <AttachmentSlideProvider>
-        <AttachmentIconField name="implementationPlan.attachments" />
-      </AttachmentSlideProvider>
+      <AttachmentIconField name="implementationPlan.attachments" />
     </React.Fragment>
   );
 };

@@ -1,5 +1,5 @@
 import { isEmpty, omit } from 'lodash';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
@@ -30,7 +30,7 @@ import { Password } from '../../password/types';
 import { AttachmentRedLineWarningDialog } from '../attachment.redline.warning/dialog';
 import ViewFile from '../view.file/container';
 import { checkIfFileIsViewable } from '../view.file/utils/helpers';
-import { AttachmentSliderContext } from './AttachmentSlideProvider';
+import AttachmentSlideProvider from './AttachmentSlideProvider';
 import Menu from './menu';
 import PresenterFactory from './presenter.factory';
 import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from './utils/types';
@@ -106,12 +106,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       setPassword(undefined);
     },
   });
-
-  const { setAttachmentSlider } = useContext(AttachmentSliderContext);
-
-  useEffect(() => {
-    setAttachmentSlider(setSelectedAttachment);
-  }, []);
 
   const redLineRequiresPassword = (attachment: Attachment, type?: AttachmentType) => {
     const isRedLine = attachment.lineType === LINE_TYPES.RED_LINE;
@@ -391,13 +385,15 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
         closeDialog={passwordDialogHandler.close}
         asyncState={passwordState}
       />
-      <ViewFile
-        isOpen={dialogHandler.isOpen}
-        handleClose={dialogHandler.close}
-        password={password}
-        attachments={attachments}
-        attachment={selectedAttachment}
-      />
+      <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+        <ViewFile
+          isOpen={dialogHandler.isOpen}
+          handleClose={dialogHandler.close}
+          password={password}
+          attachments={attachments}
+          attachment={selectedAttachment}
+        />
+      </AttachmentSlideProvider>
       <WatermarkContainer
         newWatermarkRequest={newWatermarkRequest}
         newWatermarkError={newWatermakrError}
