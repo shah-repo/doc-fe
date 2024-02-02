@@ -33,10 +33,10 @@ const AddNewPrinter: React.FunctionComponent<AddNewPrinterProps> = ({
         confirmLabel={isEmpty(formik?.getFieldProps('apiKey')) ? 'common.add.printer' : 'common.save.changes'}
         cancelLabel="common.cancel"
         confirmProps={{
-          'data-cy': 'labelPrintSaveChangesButton',
+          'data-cy': 'label-print-save-changes-button',
         }}
         cancelProps={{
-          'data-cy': 'labelPrintCancelButton',
+          'data-cy': 'label-print-cancel-button',
         }}
         open={isOpened}
         onConfirm={formik?.handleSubmit}
