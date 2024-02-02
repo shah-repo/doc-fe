@@ -8,9 +8,8 @@ interface DocumentRevisionSocketProps {
 }
 
 const DocumentRevSocket: React.FunctionComponent<
-  DocumentRevisionSocketProps
+DocumentRevisionSocketProps
 > = ({ docRevId, eqMaintenanceState }) => {
-
   const loadData = useCallback(() => {
     eqMaintenanceState?.getAvailableMaintenanceForms();
     eqMaintenanceState?.getMaintenanceHistory(docRevId);

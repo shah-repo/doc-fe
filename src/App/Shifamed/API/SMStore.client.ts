@@ -7,7 +7,7 @@ let currentAdapter: any;
 /**
  * Sets or gets the api client instance
  */
-export function apiClient(
+export function apiClient (
   adapter?: SMStoreAdapter,
   options: { [key: string]: any } = {},
 ): SMStoreAdapter {

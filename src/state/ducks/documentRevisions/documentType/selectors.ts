@@ -58,7 +58,7 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
     orderBy(
-      ids.filter((id) =>  documentTypes[id].active
+      ids.filter((id) => documentTypes[id].active
         && !checkIfDocumentHasOptions(
           [
             DOC_TYPE_GROUP_OPTION.RECORD,

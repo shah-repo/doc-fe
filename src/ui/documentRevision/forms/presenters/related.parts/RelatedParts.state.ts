@@ -5,8 +5,7 @@ import { ListItemEdited, ListItemUpdateData, RelatedPartsListItem } from '../../
 import { Translation } from '../../../../translations/types';
 
 class RelatedPartsState {
-
-  constructor() {
+  constructor () {
     this.setViewOnlyMode(true);
     this.setLoadingState(false);
   }
@@ -21,11 +20,11 @@ class RelatedPartsState {
 
   @observable showOnlyActiveSubParts = false;
 
-  @action setRelatedPartsList(list: RelatedPartsListItem[]) {
+  @action setRelatedPartsList (list: RelatedPartsListItem[]) {
     this.relatedPartsList = list;
   }
 
-  @action updateRelatedPartsList(docRevId: string, data: ListItemUpdateData) {
+  @action updateRelatedPartsList (docRevId: string, data: ListItemUpdateData) {
     this.relatedPartsList = this.relatedPartsList.map(
       (item) => {
         if (item.documentRevisionId === docRevId) {
@@ -37,15 +36,15 @@ class RelatedPartsState {
     this.clearListItemBeingEdited();
   }
 
-  @action filterRelatedPartsList(docRevId: string) {
+  @action filterRelatedPartsList (docRevId: string) {
     this.relatedPartsList = this.relatedPartsList.filter((item) => item.documentRevisionId !== docRevId);
   }
 
-  @action setShowOnlyActiveSubParts(showOnlyActiveSubParts: boolean) {
+  @action setShowOnlyActiveSubParts (showOnlyActiveSubParts: boolean) {
     this.showOnlyActiveSubParts = showOnlyActiveSubParts;
   }
 
-  @computed get relatedSubParts() {
+  @computed get relatedSubParts () {
     if (this.showOnlyActiveSubParts) {
       return this.relatedPartsList.filter((part) =>
         ![DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(part.status),
@@ -54,22 +53,19 @@ class RelatedPartsState {
     return this.relatedPartsList;
   }
 
-  @action addNewRelatedPart(createdRelatedPart: RelatedPartsListItem) {
+  @action addNewRelatedPart (createdRelatedPart: RelatedPartsListItem) {
     this.relatedPartsList.push(createdRelatedPart);
   }
 
-  @action validateDocId(parentPartDocId, userEnteredDocIdPortion, skipId = '') {
+  @action validateDocId (parentPartDocId, userEnteredDocIdPortion, skipId = '') {
     this.docIdErrorMsg = '';
 
     if (!userEnteredDocIdPortion) {
       this.docIdErrorMsg = 'relatedParts.docId.required.msg';
-
     } else if (userEnteredDocIdPortion.length === 1) {
       this.docIdErrorMsg = 'relatedParts.docId.length.msg';
-
     } else if (/\D/.test(userEnteredDocIdPortion)) {
       this.docIdErrorMsg = 'relatedParts.docId.onlyNumbers.msg';
-
     } else {
       const filteredList = this.relatedPartsList.filter(
         (listItem: RelatedPartsListItem) =>
@@ -83,19 +79,19 @@ class RelatedPartsState {
     return !this.docIdErrorMsg;
   }
 
-  @action resetDocIdErrorMsg() {
+  @action resetDocIdErrorMsg () {
     set(this, 'docIdErrorMsg', '');
   }
 
-  @action setViewOnlyMode(viewOnly) {
+  @action setViewOnlyMode (viewOnly) {
     set(this, 'viewOnlyMode', viewOnly);
   }
 
-  @action setLoadingState(isVisible = false) {
+  @action setLoadingState (isVisible = false) {
     set(this, 'loadingState', isVisible);
   }
 
-  @action setListItemBeingEdited(listItem: RelatedPartsListItem) {
+  @action setListItemBeingEdited (listItem: RelatedPartsListItem) {
     this.listItemBeingEdited = {
       docRevId: listItem.documentRevisionId,
       docId: listItem.suffixNumber as unknown as string,
@@ -104,7 +100,7 @@ class RelatedPartsState {
     };
   }
 
-  @action clearListItemBeingEdited() {
+  @action clearListItemBeingEdited () {
     this.listItemBeingEdited = {
       docRevId: '',
     };

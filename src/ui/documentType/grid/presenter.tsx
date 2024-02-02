@@ -12,7 +12,7 @@ import { isTranslation } from '../../translations/types';
 import CreateDocumentByType from '../list/CreateDocumentByType';
 import { KendoPresenterProps } from './interfaces';
 
-export function DocumentTypePresenter({
+export function DocumentTypePresenter ({
   statuses,
   tableName,
   tableCriteria,

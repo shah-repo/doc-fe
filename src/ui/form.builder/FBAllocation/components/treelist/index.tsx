@@ -22,7 +22,6 @@ import {
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { FB } from '../../..';
@@ -72,6 +71,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   isShowOnly = false,
 }) => {
   const { _tabsState } = SM.useStores();
+  const { useEffect, useRef, useState } = React;
   const dispatch = useDispatch();
   const treeListRef = useRef(null);
   const size = useObserver(() => _tabsState?.contentSize);

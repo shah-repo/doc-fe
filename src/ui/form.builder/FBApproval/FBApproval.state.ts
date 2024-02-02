@@ -24,7 +24,7 @@ class FBApprovalState {
   public approvalRolesApi = new FBAutocompleteAsyncState({ optionId: this.approvalRolesId });
   public auditApi = new FBRequest<Audit[], null>();
 
-  public constructor({
+  public constructor ({
     documentId,
     value = [],
     approversValue = [],
@@ -39,15 +39,15 @@ class FBApprovalState {
     this.postApi.set({ urlValues: { documentId }, url: FBEndpoint.PostInlineApprove });
   }
 
-  public get approversId(): string {
+  public get approversId (): string {
     return FBAutocompleteAsyncOption.availableApprovers;
   }
 
-  public get groupsId(): string {
+  public get groupsId (): string {
     return FBAutocompleteAsyncOption.groups;
   }
 
-  public get approvalRolesId(): string {
+  public get approvalRolesId (): string {
     return FBAutocompleteAsyncOption.approvalRoles;
   }
 
@@ -60,32 +60,32 @@ class FBApprovalState {
     });
   };
 
-  @computed public get isApproved(): boolean {
+  @computed public get isApproved (): boolean {
     return !isEmpty(this.hasApproved);
   }
 
-  @computed public get approvers(): Employee[] | undefined {
+  @computed public get approvers (): Employee[] | undefined {
     return FBAutocompleteAsyncStore.getValues<Employee>(
       this.approversId,
       this.approversValue,
     );
   }
 
-  @computed public get groups(): GroupRequestBody[] | undefined {
+  @computed public get groups (): GroupRequestBody[] | undefined {
     return FBAutocompleteAsyncStore.getValues<GroupRequestBody>(
       this.groupsId,
       this.groupsValue,
     );
   }
 
-  @computed public get approvalRoles(): FBInlineApprovalRole[] | undefined {
+  @computed public get approvalRoles (): FBInlineApprovalRole[] | undefined {
     return FBAutocompleteAsyncStore.getValues<FBInlineApprovalRole>(
       this.approvalRolesId,
       this.approvalRolesValue,
     );
   }
 
-  @action public setAuditData(data: Audit[]) {
+  @action public setAuditData (data: Audit[]) {
     set(this, 'auditData', data);
   }
 

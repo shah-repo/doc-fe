@@ -1,8 +1,8 @@
-import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGrid.types';
+import { ColumnDefinition } from '../KendoDataGrid/KendoDataGrid.types';
 import ActionsCellTemplate from './components/ActionsCellTemplate';
 import { ActiveCellTemplate } from './components/ActiveCellTemplate';
 import { TextCellTemplate } from './components/TextCellTemplate';
-import { EditableCompanyLocation } from './types';
+import { EditableCompanyLocation } from '../../user.management/profile/CompanyLocations/types';
 import React from 'react';
 
 interface SchemaOptions {

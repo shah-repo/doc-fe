@@ -40,7 +40,7 @@ const ROUTES: RouteChecker[] = [
   },
 ];
 
-export default function useHelpModule(): HelpModule {
+export default function useHelpModule (): HelpModule {
   const pathname = SM.pathname;
   const cachedModule = useRef(HelpModule.General);
   const categoriesList = useSelector(pageDetailsSelectors.byCategory);

@@ -10,7 +10,6 @@ export const withFBParts = <T extends FBPartsProps>(
     partsState,
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     partsState = FB.useRef(FBPartsState);
@@ -36,7 +35,7 @@ export const withFBParts = <T extends FBPartsProps>(
 
     // MARK: @helpers
     // Register reaction on procedure value change
-    function registerProcedureReaction(name: string) {
+    function registerProcedureReaction (name: string) {
       reaction(
         () => formState?.newValues.get(name),
         (data) => {
@@ -59,7 +58,7 @@ export const withFBParts = <T extends FBPartsProps>(
 
     // MARK: @observer
 
-    return  Component({
+    return Component({
       ...(props as T),
       partsState,
     });

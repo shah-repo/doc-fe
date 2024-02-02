@@ -581,7 +581,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           renderAsButton={renderAsButton}
         />
       )}
-      {PreviewControlButtons.PrintLabelButton && (
+      {buttons.includes(PreviewControlButtons.PrintLabelButton) && (
         <>
           <IconButton className={classes.printIconContainer} onClick={printDialog.open}>
             <FontAwesomeIcon className={classes.printIcon} icon={regular('print')} />

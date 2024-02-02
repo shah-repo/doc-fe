@@ -40,7 +40,7 @@ const DashboardToastr: React.FC = () => {
   );
 };
 
-export const openDashboardToastr = ( options = {}) =>
+export const openDashboardToastr = (options = {}) =>
   toast(<DashboardToastr />, {
     ...{
       toastId: 'dashboardStatusToast',

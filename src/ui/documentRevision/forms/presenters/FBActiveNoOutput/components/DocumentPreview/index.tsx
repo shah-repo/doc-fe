@@ -2,8 +2,7 @@ import { Grid } from '@material-ui/core';
 import { Formik, FormikProps, useFormikContext } from 'formik';
 import { filter, get, includes, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
-import * as React from 'react';
-import { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from '../../../../../../../App';
 import FBTrainingInfoContainer from '../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container';
@@ -27,6 +26,7 @@ import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentWO } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
+import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../../related.equipments';
 import RelatedPartsWrapper from '../../../related.parts/RelatedParts.wrap';
 import styles from './styles';
 
@@ -108,7 +108,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
     && schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
-
+  const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(documentRevision);
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   useEffect(() => {
     if (isLHR) {
@@ -262,6 +262,11 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           workspaceMode={mode}
                         />
                         }
+                        {formPreview && isRelatedEquipmentsShowing && (
+                          <Grid item xs={12}>
+                            <RelatedEquipments parentDocumentRevision={documentRevision} />
+                          </Grid>
+                        )}
                       </>}
                       {tabType === TabTypeOptions.DYNAMIC && showTabContent
                         && _formState?.mode !== FBWorkspaceModeOptions.NONE && (

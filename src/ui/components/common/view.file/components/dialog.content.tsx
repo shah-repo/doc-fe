@@ -28,7 +28,6 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
     }
     if (type === PDF) {
       setFileType(PDF);
-      return;
     }
   }, [url, type]);
 

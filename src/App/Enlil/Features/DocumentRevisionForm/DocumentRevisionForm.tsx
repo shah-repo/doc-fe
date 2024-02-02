@@ -46,6 +46,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   documentRevision,
   bannerPortal,
   shouldShowUpgrade,
+  shouldShowSyncForRelatedEquipment,
   type,
   isDisabled,
   formValues,
@@ -235,8 +236,10 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           type="banner"
           docRevId={documentRevision?.id}
           {...{
+            documentRevision,
             bannerPortal,
             shouldShowUpgrade,
+            shouldShowSyncForRelatedEquipment,
           }}
         />
         {documentRevision && <LHRBanner documentRevision={documentRevision} />}

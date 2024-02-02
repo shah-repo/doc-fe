@@ -94,7 +94,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
                 alignItems="center"
               >
                 <Box fontWeight="bold">{
-                  isApproved ? approval.approverName :  approval.approver?.user.name
+                  isApproved ? approval.approverName : approval.approver?.user.name
                 }</Box>
                 {approval.status && approval.approverGroup && (
                   <Box>&nbsp;| {approval.approverGroup?.join(', ')}</Box>
@@ -143,7 +143,8 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
                 { isApproved ? approval.approverEmail : approval.approver?.user.email }
               </Box>
             </Box>
-          ); }
+          );
+        }
         }
       </FBMapWrapper>
     </FBInput>

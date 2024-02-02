@@ -94,7 +94,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const isDownloadAllVisible = (documentRevision?.attachments?.length > 1);
-  const onSubmit = () => void 0;
+  const onSubmit = () => undefined;
 
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({

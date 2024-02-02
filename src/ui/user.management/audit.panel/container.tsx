@@ -2,7 +2,7 @@ import { each, groupBy, map, pick, sortBy } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { User } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { Employee } from '../../../state/ducks/company/types';
@@ -155,7 +155,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           sortedIndex: 4,
         };
       }
-    }  else if (auditRecord.fieldPath === 'avatar') {
+    } else if (auditRecord.fieldPath === 'avatar') {
       if (auditRecord.type === 'STRING_EDITED') {
         actionInfo = {
           primaryText: '',
@@ -280,7 +280,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         const items = secondaryText[0].split(UM_AUDIT_CONCAT_KEYS.AvatarUpdated);
         secondaryTextHtml = (
           <>
-            <span style={{ fontSize: '12px',  color: Colors.font_gray }}>{items[0]}</span>
+            <span style={{ fontSize: '12px', color: Colors.font_gray }}>{items[0]}</span>
             <span style={{
               color: Colors.almost_black,
               padding: '0 2px',

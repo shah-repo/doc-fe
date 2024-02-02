@@ -13,7 +13,6 @@ export const withFBLeftPanel = <T extends FBDialogProps>(
     open,
     ...props
   }: T) => {
-
     const { leftPanelState } = FB.useStores();
     const handleClose = () => {
       if (leftPanelState?.props?.onClose) {

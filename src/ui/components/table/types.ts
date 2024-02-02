@@ -21,7 +21,7 @@ export interface TableSortProps {
 }
 
 export interface TablePanelProps<T> {
-  columns: TableColumnProps<T>[]
+  columns: Array<TableColumnProps<T>>
   noRowsTranslation?: Translation
   cellMeasure?: boolean
   onSelect?: TableSelectionRenderer<T>

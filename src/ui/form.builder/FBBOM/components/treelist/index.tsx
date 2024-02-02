@@ -36,8 +36,7 @@ import {
 } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
-import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
@@ -119,10 +118,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
+  const isMaximizeView = _documentRevisionFormState?.isMaximizedView;
 
   const classes = useStyles({
     size,
-    isMaximizeView: _documentRevisionFormState?.isMaximizedView,
+    isMaximizeView,
   });
   const [state, setState] = React.useState<BOMState>({
     data: [],
@@ -1141,7 +1141,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                   fileName={exportFileName}
                 >
                   <TreeList
-                    style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
+                    style={{ overflow: 'auto', maxHeight: size?.height ? (`${size.height - (isMaximizeView ? -85 : 160)}px`) : '100px' }}
                     {...state.dataState}
                     tableProps={{ style: { tableLayout: 'fixed' } }}
                     rowHeight={TREELIST_CONFIG.rowHeight}

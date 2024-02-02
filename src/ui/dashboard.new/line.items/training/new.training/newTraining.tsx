@@ -340,7 +340,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <Grid
                   item={true}
                   className={`${classes.grayDot} ${classes.margin7}`}
-                 />
+                />
                 <Grid item={true}>
                   <Typography
                     component="span"

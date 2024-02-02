@@ -11,7 +11,6 @@ export const withFBCheckbox = <T extends FBInputProps>(
     defaultChecked,
     ...props
   }: T) => {
-
     const { formState } = FB.useStores();
     isUndefined(defaultChecked) && (defaultChecked = formState?.getFieldValue(name));
 

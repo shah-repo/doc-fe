@@ -13,9 +13,9 @@ const createGroup = (
     url: GROUPS_URL,
     method: 'post',
     data: body,
-    onSuccess: ((res, dispatch) => {
+    onSuccess: (res, dispatch) => {
       dispatch(userManagementActions.loadCompanyGroups());
-    } ),
+    },
     handlers,
   });
 
@@ -28,10 +28,10 @@ const editGroup = (
     url: `${GROUPS_URL}/${groupId}`,
     method: 'patch',
     data: body,
-    onSuccess: ((res, dispatch) => {
+    onSuccess: (res, dispatch) => {
       dispatch(userManagementActions.loadCompanyGroups());
       dispatch(authActions.loadUserGroups());
-    } ),
+    },
     handlers,
   });
 

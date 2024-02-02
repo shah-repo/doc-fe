@@ -36,16 +36,16 @@ export default makeStyles((theme) => ({
       backgroundColor: `${Colors.gray_goose} !important`,
       color: `${Colors.gray} !important`,
     },
-    'borderTopLeftRadius': '100px',
-    'borderBottomLeftRadius': '100px',
+    borderTopLeftRadius: '100px',
+    borderBottomLeftRadius: '100px',
   },
   hoverArrow: {
     '&:hover': {
       backgroundColor: `${Colors.light_gray} !important`,
       borderTopRightRadius: '100px',
     },
-    'borderTopRightRadius': '100px',
-    'borderBottomRightRadius': '100px',
+    borderTopRightRadius: '100px',
+    borderBottomRightRadius: '100px',
   },
   button: {
     margin: theme.spacing(0, 1),
@@ -78,10 +78,10 @@ export default makeStyles((theme) => ({
     borderBottomRightRadius: theme.shape.borderRadius,
   },
   releaseButton: {
-    'border': `1px solid ${Colors.white}`,
-    'backgroundColor': Colors.white,
-    'color': Colors.navy,
-    'borderRadius': '100px',
+    border: `1px solid ${Colors.white}`,
+    backgroundColor: Colors.white,
+    color: Colors.navy,
+    borderRadius: '100px',
     '&:hover': {
       backgroundColor: Colors.white,
       borderColor: Colors.white,

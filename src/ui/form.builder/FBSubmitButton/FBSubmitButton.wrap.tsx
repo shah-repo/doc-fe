@@ -4,11 +4,9 @@ import { FB, FBButtonProps } from '..';
 export const withFBSubmitButton = <T extends FBButtonProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     ...props
   }: T) => {
-
     const { formState } = FB.useStores();
 
     const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

@@ -130,6 +130,7 @@ export type FBInputProps =
     tabId?: string
     removeBorder?: boolean
     isFbEditorField?: boolean
+    moveable?: boolean
 
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.

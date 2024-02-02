@@ -27,10 +27,10 @@ const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
       )}
     >
       {isRedLine && renderRedLineAttachment(color, name)}
-      {isTransferred && isPrimary && !isRedLine  && renderCOAPrimaryAttachment(color, name)}
+      {isTransferred && isPrimary && !isRedLine && renderCOAPrimaryAttachment(color, name)}
       {isPrimary && !isTransferred && !isRedLine && renderPrimaryAttachment(color, name)}
       {isTransferred && !isPrimary && !isRedLine && renderCOADefaultAttachment(color, name)}
-      {!isPrimary && !isRedLine && !isTransferred &&  renderDefaultAttachment(color, name)}
+      {!isPrimary && !isRedLine && !isTransferred && renderDefaultAttachment(color, name)}
     </Box>
   );
 };

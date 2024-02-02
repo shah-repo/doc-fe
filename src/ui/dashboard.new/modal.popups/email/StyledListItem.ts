@@ -3,7 +3,7 @@ import Colors from '../../../layout/theme/utils/colors';
 
 const styles = () => ({
   root: {
-    'backgroundColor': Colors.white,
+    backgroundColor: Colors.white,
     '&:hover': {
       backgroundColor: 'transparent',
     },

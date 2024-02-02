@@ -49,7 +49,6 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   containsRedline,
   docRevStatus,
 }) => {
-
   const passwordState = {
     status: AsyncStatus.Idle,
     message: '',
@@ -86,7 +85,6 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   };
 
   const warningPasswordText = (): Translation => {
-
     if (isDocumentRevisionObsolete(docRevStatus)) {
       return 'common.attachment.redline.warning.download.obsoletedAll';
     }
