@@ -3,7 +3,6 @@ import React from 'react';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
 import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
-import AttachmentSlideProvider from '../../components/common/attachment.icon/AttachmentSlideProvider';
 import AttachmentField from '../../components/common/attachment.icon/container';
 import Colors from '../../layout/theme/utils/colors';
 
@@ -59,9 +58,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
           containsRedline = {containsRedline}
           docRevStatus = {docRevStatus} />
       </Box>
-      <AttachmentSlideProvider>
-        <AttachmentField name="attachments" disabled={true} docRevId={docRevId} />
-      </AttachmentSlideProvider>
+      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} />
       {emptyAttachmentsRenderer}
     </Box>
   );

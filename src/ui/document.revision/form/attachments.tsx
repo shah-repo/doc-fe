@@ -4,7 +4,6 @@ import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/d
 import Text from '../../components/Text';
 import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
 import AttachmentField from '../../components/common/attachment.field/container';
-import AttachmentSlideProvider from '../../components/common/attachment.icon/AttachmentSlideProvider';
 import AttachmentIconField from '../../components/common/attachment.icon/container';
 import { useAttachments } from '../../hooks/docCustomization/useCustomization';
 import Colors from '../../layout/theme/utils/colors';
@@ -65,9 +64,7 @@ const Attachments: React.FunctionComponent<Props> = ({
           docRevStatus = {docRevStatus} />
       </Box>
       <AttachmentField name="attachments" component="field" disabled={isDisabled} />
-      <AttachmentSlideProvider>
-        <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }} />
-      </AttachmentSlideProvider>
+      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }} />
     </Box>
   );
 };
