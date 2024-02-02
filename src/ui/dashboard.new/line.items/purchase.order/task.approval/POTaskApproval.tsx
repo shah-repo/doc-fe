@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import isMobile from 'is-mobile';
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ReactComponent as ApproveIcon } from '../../../../../assets/images/approve.svg';
 import { ReactComponent as ApproveSolidIcon } from '../../../../../assets/images/approve_solid.svg';
@@ -18,10 +18,11 @@ import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/chan
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
+import Text from '../../../../components/Text';
+import { AttachmentSliderContext } from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -31,8 +32,8 @@ import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
@@ -231,6 +232,11 @@ const TaskApprovalPresenter: React.FC<Props> = ({
 
   const dialogHandler = useDialog();
   const [selectedAttachment, setSelectedAttachment] = React.useState<Attachment | undefined>(undefined);
+  const { setAttachmentSlider } = useContext(AttachmentSliderContext);
+
+  useEffect(() => {
+    setAttachmentSlider(setSelectedAttachment);
+  }, []);
 
   const downloadAttachment = (attachment: Attachment) => () => {
     if (checkIfFileIsViewable(attachment?.type)) {
@@ -628,7 +634,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         <ViewFile
           isOpen={dialogHandler.isOpen}
           handleClose={closeDialog}
-          attachments={[selectedAttachment]}
+          attachments={[...purchaseOrderAttachments] as Attachment[]}
           attachment={selectedAttachment}
         />
       )}

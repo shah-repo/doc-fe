@@ -1,5 +1,5 @@
 import { isEmpty, omit } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
@@ -30,14 +30,13 @@ import { Password } from '../../password/types';
 import { AttachmentRedLineWarningDialog } from '../attachment.redline.warning/dialog';
 import ViewFile from '../view.file/container';
 import { checkIfFileIsViewable } from '../view.file/utils/helpers';
+import { AttachmentSliderContext } from './AttachmentSlideProvider';
 import Menu from './menu';
 import PresenterFactory from './presenter.factory';
 import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from './utils/types';
 import WatermarkContainer from './watermark/container';
 
 type DispatchProps = AttachmentIconDispatchProps;
-
-export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment | undefined>>>;
 
 const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name = '',
@@ -108,7 +107,11 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
     },
   });
 
-  SetFile = React.createContext(setSelectedAttachment);
+  const { setAttachmentSlider } = useContext(AttachmentSliderContext);
+
+  useEffect(() => {
+    setAttachmentSlider(setSelectedAttachment);
+  }, []);
 
   const redLineRequiresPassword = (attachment: Attachment, type?: AttachmentType) => {
     const isRedLine = attachment.lineType === LINE_TYPES.RED_LINE;
