@@ -5,8 +5,8 @@ import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import Dialog from '../../../../components/dialogs';
-import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import PromptIfDirty from '../../../../components/forms/PromptIfDirty';
+import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import useStyles from './styles';
 
 interface AddNewPrinterProps {
@@ -32,6 +32,12 @@ const AddNewPrinter: React.FunctionComponent<AddNewPrinterProps> = ({
         title={`${isEmpty(formik?.getFieldProps('apiKey')) ? translate('common.add') : translate('common.edit')} Printer`}
         confirmLabel={isEmpty(formik?.getFieldProps('apiKey')) ? 'common.add.printer' : 'common.save.changes'}
         cancelLabel="common.cancel"
+        confirmProps={{
+          'data-cy': 'label-print-save-changes-button',
+        }}
+        cancelProps={{
+          'data-cy': 'label-print-cancel-button',
+        }}
         open={isOpened}
         onConfirm={formik?.handleSubmit}
         onCancel={onCancel}

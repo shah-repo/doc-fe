@@ -89,5 +89,8 @@ export default makeStyles((theme: NextTheme) => ({
     textOverlapMobile: {
       flexWrap: 'wrap',
     },
+    link: {
+      pointerEvents: 'none',
+    },
   },
 }));
