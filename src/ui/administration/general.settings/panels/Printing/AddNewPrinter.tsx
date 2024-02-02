@@ -36,7 +36,7 @@ const AddNewPrinter: React.FunctionComponent<AddNewPrinterProps> = ({
           'data-cy': 'labelPrintSaveChangesButton',
         }}
         cancelProps={{
-          'data-cy': 'labelPrintcancelButton',
+          'data-cy': 'labelPrintCancelButton',
         }}
         open={isOpened}
         onConfirm={formik?.handleSubmit}
