@@ -107,11 +107,11 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
 const FBZIPUpload: React.FunctionComponent<FBFZIPUploadProps> = ({
   fileUploadState,
   ...props
-}) =>  (
+}) => (
   <FBProvider {...{ fileUploadState }}>
     <FBZIPFileSocket docRevisionId={props.docRevisionId} />
     <FBInput labelProps={FBFontStyle.labelProps} {...props} type="zipattachment">
-      <ZIPUploadChild  {...props} {...{ fileUploadState }} />
+      <ZIPUploadChild {...props} {...{ fileUploadState }} />
     </FBInput>
   </FBProvider>
 );

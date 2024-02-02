@@ -11,7 +11,7 @@ export default makeStyles((theme: Theme) =>
       maxWidth: '100%',
       margin: '0px',
     },
-    appFrame: ({ isDrawerOpen }) => ( {
+    appFrame: ({ isDrawerOpen }) => ({
       flexGrow: 1,
       transition: theme.transitions.create('paddingRight', {
         easing: theme.transitions.easing.sharp,

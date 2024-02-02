@@ -33,12 +33,12 @@ interface Props {
 
 const styles = makeStyles((theme) => {
   const linkStyle = {
-    'padding': 0,
-    'fontSize': theme.typography.fontSize,
-    'color': Colors.navy,
-    'textTransform': 'capitalize' as const,
-    'fontWeight': 400,
-    'cursor': 'pointer',
+    padding: 0,
+    fontSize: theme.typography.fontSize,
+    color: Colors.navy,
+    textTransform: 'capitalize' as const,
+    fontWeight: 400,
+    cursor: 'pointer',
     '&:hover': {
       backgroundColor: 'transparent',
       textDecoration: 'none' as const,

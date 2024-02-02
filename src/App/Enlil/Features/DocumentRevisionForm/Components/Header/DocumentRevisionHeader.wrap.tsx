@@ -7,7 +7,6 @@ export const withDocumentRevisionHeaderWrap = <T extends DocumentRevisionHeaderP
   const Comp = ({
     ...props
   }: T) => {
-
     // MARK: @config
     const { _documentRevisionFormState } = SM.useStores();
 

@@ -3,7 +3,7 @@ import { action, observable, set } from 'mobx';
 class FBDatePickerState {
   @observable public date?: string;
 
-  constructor(date?: string) {
+  constructor (date?: string) {
     if (!date) { return; }
     set(this, 'date', date);
   }

@@ -11,7 +11,7 @@ export const toFormOptions = (forms: DocumentTypeByIdForm[]): OptionType[] => fo
 }),
 );
 
-export const toFieldInitialValues = (fields: UpdateFormFieldMapping[], sourceSchema: FBSchemaProps[] ): any => {
+export const toFieldInitialValues = (fields: UpdateFormFieldMapping[], sourceSchema: FBSchemaProps[]): any => {
   const transformed = map(fields, (field) => {
     const label = find(sourceSchema, (x) => x.name === field.sourceId)?.label;
     return {
@@ -32,8 +32,8 @@ const checkSpecialFields = (item, targetField) => {
     case MigrationSpecialFields.CHECKBOX_GROUP:
     case MigrationSpecialFields.RADIO_GROUP: {
       // Target options must be a superset of source options
-      const sourceValues = map(item.options as {value: string}[], ({ value }) => value);
-      const targetValues = map(targetField.options as {value: string}[], ({ value }) => value);
+      const sourceValues = map(item.options as Array<{value: string}>, ({ value }) => value);
+      const targetValues = map(targetField.options as Array<{value: string}>, ({ value }) => value);
       return sourceValues.every((val) => targetValues.includes(val));
     }
     default:
@@ -41,7 +41,7 @@ const checkSpecialFields = (item, targetField) => {
   }
 };
 
-export const toFieldsOptions = (targetField: FBSchemaProps, sourceSchema: FBSchemaProps[] ): any => {
+export const toFieldsOptions = (targetField: FBSchemaProps, sourceSchema: FBSchemaProps[]): any => {
   const fieldsFilteredByType = filter(sourceSchema, (item) => {
     if (item.type !== targetField.type) {
       return false;
@@ -83,4 +83,5 @@ export const toUpdateFormRequestBody = (values: any): UpdateFormRequestBody => {
     formToBeUsed: {
       id: values.changeDocumentForm.value,
     },
-  }); };
+  });
+};

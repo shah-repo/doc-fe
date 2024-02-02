@@ -19,7 +19,6 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   <FBInput {...props} {...{ type }}>
     <FormGroup row={row}>
       {map(options, (option, index) => {
-
         const valueKey = get(option, optionValueKey);
         const checked = form?.values[valueKey] || FBStore.getValue(valueKey);
 

@@ -76,6 +76,7 @@ const DashboardCRBase: React.FunctionComponent<Props> = ({
         />
       </Grid>
     </Grid>
-  ); };
+  );
+};
 
 export default DashboardCRBase;

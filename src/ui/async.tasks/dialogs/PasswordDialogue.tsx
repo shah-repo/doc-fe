@@ -18,7 +18,7 @@ interface Props {
   title?: string
   label: string
   transitionDialog: DialogHandler
-  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues ) => void
+  onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void
   onSuccess?: () => void
 }
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({

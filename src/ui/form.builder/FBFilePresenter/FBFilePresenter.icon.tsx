@@ -24,7 +24,7 @@ const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = (
   boxProps,
   fileDescription,
   omitDescription,
-}) =>  useObserver(() => (
+}) => useObserver(() => (
   <FBContextMenu
     menuId={file?.id}
     {...{ menuItems }}

@@ -28,7 +28,6 @@ const ChangeSummaryFormHeader: React.FunctionComponent<ChangeSummaryFormHeaderPr
   canEdit,
   asyncState,
 }) => {
-
   const { isVisible: isDescriptionVisible, label: descriptionLabel } = useDescription(documentTypeId);
   const { isVisible: isTitleVisible, label: titleLabel, tooltipConfig } = useTitle(documentTypeId);
 

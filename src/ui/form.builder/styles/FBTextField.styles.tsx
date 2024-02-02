@@ -4,11 +4,11 @@ import Colors from '../../layout/theme/utils/colors';
 export const FBTextFieldStyles = makeStyles(() =>
   createStyles({
     textfield: (params?) => ({
-      'borderRadius': 3,
+      borderRadius: 3,
       '& .MuiOutlinedInput-root': {
-        'height': params.customHeight || 40,
-        'fontWeight': 400,
-        'fontSize': 14,
+        height: params.customHeight || 40,
+        fontWeight: 400,
+        fontSize: 14,
         '&.MuiInputBase-multiline': {
           height: 'auto',
           padding: 0,

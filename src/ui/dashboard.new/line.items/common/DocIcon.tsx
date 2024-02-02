@@ -10,7 +10,7 @@ import {
   DocTypeGroups,
 } from './types';
 
-export const getDocIcon = (docTypeGroup: DocTypeGroups, height = 30, width = 30 ) => {
+export const getDocIcon = (docTypeGroup: DocTypeGroups, height = 30, width = 30) => {
   switch (docTypeGroup) {
     case DocTypeGroups.CHANGE_REQUEST:
       return <ApprovalIcon height={height} width={width} />;

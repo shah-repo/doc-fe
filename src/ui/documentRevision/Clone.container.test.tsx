@@ -21,7 +21,7 @@ describe('Clone container redirect test', () => {
     const wrapper = getWrapper();
     const docRev = defaultProps.documentRevision;
 
-    const redirect =  wrapper.find('Redirect').first();
+    const redirect = wrapper.find('Redirect').first();
     expect(redirect).toBeDefined();
     expect(redirect.prop('to')).toEqual(documentVersionPath(docRev.id, docRev.document.id));
   });

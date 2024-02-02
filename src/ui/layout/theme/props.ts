@@ -1,6 +1,6 @@
 import { ComponentsProps } from '@material-ui/core/styles/props';
 
-export default function themeProps(): ComponentsProps {
+export default function themeProps (): ComponentsProps {
   return {
     MuiSelect: {
       MenuProps: {

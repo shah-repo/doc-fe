@@ -5,7 +5,6 @@ import { withFBEditorHelper } from '../FBEditor/FBEditor.helper';
 export const withFBRequestApproval = <T extends FBRequestApprovalProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     handleAddEdit,
     openEditor,
@@ -14,7 +13,6 @@ export const withFBRequestApproval = <T extends FBRequestApprovalProps>(
     type,
     ...props
   }: T) => {
-
     const { workspaceState } = FB.useStores();
     const { isOutput } = workspaceState || {};
 

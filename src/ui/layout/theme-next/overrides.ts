@@ -187,6 +187,17 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
         borderRightColor: Colors.primary,
       },
     },
+    groupedOutlinedSecondary: {
+      '&:hover': {
+        borderColor: Colors.primaryLight,
+      },
+      '&:not(:last-child)': {
+        borderRightColor: Colors.primaryLight,
+        '&$disabled': {
+          borderRightColor: Colors.buttonDisabled,
+        },
+      },
+    },
   },
   MuiMenu: {
     paper: {

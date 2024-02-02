@@ -9,7 +9,6 @@ export const withSMDialogWrap = <T extends SMDialogProps>(
     toggle,
     ...props
   }: T) => {
-
     // MARK: @config
     const { dialogState } = useContext(SMDialogContext) || {};
 
@@ -18,7 +17,7 @@ export const withSMDialogWrap = <T extends SMDialogProps>(
     // MARK: @reactions
 
     // MARK: @helpers
-    function onDialogActionClick(action: SMDialogAction) {
+    function onDialogActionClick (action: SMDialogAction) {
       props.onDialogActionClick?.(action);
       dialogState?.setOpen?.(false);
     }

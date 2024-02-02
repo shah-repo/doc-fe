@@ -16,12 +16,12 @@ export type FBApprovalsProps =
   requestApproval?: (id?: string) => any
   approvals?: FBInlineApprovalBody[]
   approvalsState?: FBApprovalsState
-  approvalTransition(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void
+  approvalTransition: (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => void
   docId?: string
   documentStatus: DocumentStatus
   formState?: FBFormState
   groups?: Record<string, FBRequiredApprover>
-  isIncluded?(group: FBRequiredApprover): void
+  isIncluded?: (group: FBRequiredApprover) => void
   ownerId?: string
   currentUser?: string
   inlineApprovalExists?: boolean
@@ -29,7 +29,7 @@ export type FBApprovalsProps =
   isAlphaReleased?: boolean
   owners?: Owner[]
   showFieldOwnersWarning?: boolean
-  isContributorIncluded?(id: string): void
+  isContributorIncluded?: (id: string) => void
 };
 
 export interface Owner {

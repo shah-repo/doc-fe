@@ -4,12 +4,12 @@ import Colors from '../../../../../../../ui/layout/theme/utils/colors';
 export default makeStyles((theme: Theme) =>
   createStyles({
     searchBox: {
-      'display': 'flex',
-      'height': '36px',
-      'alignItems': 'center',
-      'width': 270,
-      'borderRadius': '100px',
-      'border': `1px solid ${Colors.lightest_grey1}`,
+      display: 'flex',
+      height: '36px',
+      alignItems: 'center',
+      width: 270,
+      borderRadius: '100px',
+      border: `1px solid ${Colors.lightest_grey1}`,
       '& .MuiInputBase-root': {
         width: '220px',
       },

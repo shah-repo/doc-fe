@@ -11,8 +11,8 @@ import {
   EffectiveDateFormValues, PasswordFormValues,
 } from '../../change.request/form/types';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
-import { KendoColumn } from '../../components/common/kendo/types';
 import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import { KendoColumn } from '../../components/common/kendo/types';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -22,7 +22,7 @@ import gridConfiguration from './column.definition';
 import { AsyncTasksPresenter } from './presenter';
 
 const AsyncTasksContainer: React.FunctionComponent<
-  RouteComponentProps
+RouteComponentProps
 > = () => {
   const TABLE_NAME = 'asyncType';
   const intl = useIntl();
@@ -75,7 +75,7 @@ const AsyncTasksContainer: React.FunctionComponent<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.queryDict, loadTable]);
 
-  const onRowClick = () => void 0;
+  const onRowClick = () => undefined;
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setType(event.target.value as string);
   };
@@ -109,14 +109,12 @@ const AsyncTasksContainer: React.FunctionComponent<
         taskType: type,
         currentDate: selectedDate,
       }));
-    }
-    else if ([SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS].includes(SQS_TYPES[type])) {
+    } else if ([SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS].includes(SQS_TYPES[type])) {
       setPayload(JSON.stringify({
         taskType: type,
         processedAtTimestamp: selectedDate,
       }));
-    }
-    else {
+    } else {
       setPayload(JSON.stringify({
         taskType: type,
         timestamp: selectedDate,
@@ -142,7 +140,7 @@ const AsyncTasksContainer: React.FunctionComponent<
     openApproveDialog();
   };
   const handleuuidFormSubmit = (uuid: string) => {
-    setPayload(JSON.stringify( [SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE].includes(SQS_TYPES[type]) ? {
+    setPayload(JSON.stringify([SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE].includes(SQS_TYPES[type]) ? {
       taskType: type,
       docRevId: uuid,
     } : {
@@ -152,7 +150,7 @@ const AsyncTasksContainer: React.FunctionComponent<
     openApproveDialog();
   };
   const handleEmailFormSubmit = (email: string) => {
-    setPayload(JSON.stringify( {
+    setPayload(JSON.stringify({
       taskType: type,
       email,
     }));

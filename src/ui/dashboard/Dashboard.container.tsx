@@ -22,6 +22,7 @@ const DashboardContainer: React.FunctionComponent<{}> = () => {
 
       />
     </>
-  ); };
+  );
+};
 
 export default DashboardContainer;

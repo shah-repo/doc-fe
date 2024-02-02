@@ -10,7 +10,7 @@ import { documentRevisionQueryStatus } from '../utils/helpers';
 import CreateButton from './CreateButton/presenter';
 import ExportButton from './ExportButton/presenter';
 
-export function DocumentListPresenter({
+export function DocumentListPresenter ({
   statuses,
   tableName,
   tableCriteria,

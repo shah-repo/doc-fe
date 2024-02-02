@@ -36,11 +36,11 @@ export const styles = makeStyles((theme: Theme) =>
       borderRadius: 2,
     },
     accessButton: {
-      'padding': 0,
-      'margin': 0,
-      'border': 0,
-      'backgroundColor': 'transparent',
-      'cursor': 'pointer',
+      padding: 0,
+      margin: 0,
+      border: 0,
+      backgroundColor: 'transparent',
+      cursor: 'pointer',
       'li.active > a': {
         borderBottom: `1px solid ${theme.palette.common.white}`,
         transition: 'none',
@@ -63,12 +63,12 @@ export const styles = makeStyles((theme: Theme) =>
       marginLeft: '7px',
     },
     userName: {
-      'fontFamily': 'Sora',
-      'fontStyle': 'normal',
-      'fontWeight': 'normal',
-      'fontSize': '14px',
-      'lineHeight': '18px',
-      'color': Colors.almost_black,
+      fontFamily: 'Sora',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      fontSize: '14px',
+      lineHeight: '18px',
+      color: Colors.almost_black,
       '&.marginLeft7': {
         marginLeft: '7px',
       },
@@ -103,12 +103,12 @@ export const styles = makeStyles((theme: Theme) =>
       padding: '0px 15px 0px 15px',
     },
     selectedUsersGrid: {
-      'marginTop': '10px',
-      'padding': '5px 5px 5px 10px',
-      'width': '203px',
+      marginTop: '10px',
+      padding: '5px 5px 5px 10px',
+      width: '203px',
       '&:hover': {
-        'background': Colors.bright_gray,
-        'borderRadius': '4px',
+        background: Colors.bright_gray,
+        borderRadius: '4px',
         '& $deleteIcon': {
           visibility: 'visible',
         },

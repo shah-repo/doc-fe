@@ -48,7 +48,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                       {...{ disabled }}
                       style={{ marginLeft: '15px', cursor: 'pointer' }}
                     />
-                    :                    <OutlinedCloneIcon
+                    : <OutlinedCloneIcon
                       data-cy="form.builder.clone.step"
                       onClick={() => handleAdd?.(true)}
                       {...{ disabled }}
@@ -66,7 +66,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                       onClick={() => handleAdd?.()}
                       {...{ disabled }}
                     />
-                    :                    <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
+                    : <AddCircleOutlineOutlinedIcon style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
                       data-cy="form.builder.add.step"
                       onClick={() => handleAdd?.()}
                       {...{ disabled }}
@@ -160,6 +160,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
         </FBProvider>
       </Box>
     </FBInput>
-  ); };
+  );
+};
 
 export default withFBMPIProcedure(FBMPIProcedure);

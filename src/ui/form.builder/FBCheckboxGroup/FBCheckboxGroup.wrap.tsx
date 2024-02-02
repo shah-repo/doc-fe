@@ -22,7 +22,6 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
     isInputOwner,
     ...props
   }: T) => {
-
     const { formState, workspaceState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();

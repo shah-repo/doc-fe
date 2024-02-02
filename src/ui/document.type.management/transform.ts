@@ -9,9 +9,10 @@ export const enumToOptions = (values): any => {
     label: value,
     value,
   }),
-  ); };
+  );
+};
 
-export const translatedOptions = (intl: IntlShape, enumOptions) =>  Object.values(enumOptions).map((value) => {
+export const translatedOptions = (intl: IntlShape, enumOptions) => Object.values(enumOptions).map((value) => {
   const translatedValue = intl.formatMessage({
     id: value as string,
   });
@@ -42,6 +43,6 @@ export const toDocumentTypeBody = (values) => ({
   group: values.group,
   hiddenForCreationForUsersWithoutTags: !isEmpty(values.hiddenForCreationForUsersWithoutTags)
     ? castArray(values.hiddenForCreationForUsersWithoutTags) : [],
-  schema: typeof values.schema == 'string' ? parseJSON(values.schema) : values.schema,
+  schema: typeof values.schema === 'string' ? parseJSON(values.schema) : values.schema,
   fieldsConfig: typeof values.fieldsConfig === 'string' ? parseJSON(values.fieldsConfig) : values.fieldsConfig,
 });
