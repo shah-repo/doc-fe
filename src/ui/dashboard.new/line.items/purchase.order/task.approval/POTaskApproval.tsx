@@ -18,10 +18,11 @@ import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/chan
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
+import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -31,8 +32,8 @@ import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
@@ -625,12 +626,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         label="transition.action.approve"
       />
       {selectedAttachment && (
-        <ViewFile
-          isOpen={dialogHandler.isOpen}
-          handleClose={closeDialog}
-          attachments={[selectedAttachment]}
-          attachment={selectedAttachment}
-        />
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...purchaseOrderAttachments] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
       )}
     </>
   );

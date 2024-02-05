@@ -3,6 +3,7 @@ import isMobile from 'is-mobile';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
+import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/download_pdf.svg';
@@ -11,16 +12,16 @@ import { ReactComponent as InReviewIcon } from '../../../../../assets/images/in_
 import { ReactComponent as InReviewWhiteIcon } from '../../../../../assets/images/in_review_status_white.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
-import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
+import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -33,8 +34,8 @@ import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
 import { HoverStyleChip } from '../../common/HoverStyleChipPendingReview';
 import { NormalStyleChip } from '../../common/NormalStyleChipPendingReview';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency, getPendingTooltipText } from '../../common/Utils';
 import EmailModal from '../../dialogs/email/EmailDialog';
 import useStyles from './purchaseOrder.styles';
@@ -582,12 +583,14 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         />
       </Modal>
       {selectedAttachment && (
-        <ViewFile
-          isOpen={dialogHandler.isOpen}
-          handleClose={closeDialog}
-          attachments={[selectedAttachment]}
-          attachment={selectedAttachment}
-        />
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...purchaseOrderAttachments] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
       )}
     </>
   );
