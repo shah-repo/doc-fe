@@ -46,6 +46,7 @@ interface Props {
   docRevId: string
   approvalId: string
   timestamp: string
+  isRenderHTMLDefined: boolean
   docRevOwnerAvatar: Nullable<string>
   docRevOwnerInitialColor: string
   docRevOwnerName: string
@@ -81,6 +82,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   timestamp,
   docRevName,
   docRevVersion,
+  isRenderHTMLDefined,
   docRevOwnerAvatar,
   docRevOwnerInitialColor,
   purchaseOrderCurrency,
@@ -357,7 +359,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             className={`${classes.actionIcons} ${classes.poActionIconsWidth}`}
             onMouseLeave={onMouseLeaveActionIcons}
           >
-            {!downloadPdfHover && (
+            {!downloadPdfHover && isRenderHTMLDefined && (
               <span>
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
