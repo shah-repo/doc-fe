@@ -8,7 +8,7 @@ import { authSelectors } from '../../../state/ducks/auth';
 import { Permission } from '../../../state/ducks/auth/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
-import { DocumentRevision, DocumentRevisionStatus, LotStatus } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
 import { getLatestRevisionId } from '../../document.revision/utils/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -65,7 +65,7 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
 
     const isLatestRevision = id === getLatestRevisionId(documentRevisions);
     const isReleased = status === DocumentRevisionStatus.Released;
-    const isVoided = status === DocumentRevisionStatus.Voided || LotStatus.VOIDED;
+    const isVoided = status === DocumentRevisionStatus.Voided || DocumentRevisionStatus.Obsolete;
     const isQuarantined = status === DocumentRevisionStatus.InReview;
 
     const isOwner = workspaceState?.document?.owner?.user?.id === currentUserId;

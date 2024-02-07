@@ -9,7 +9,7 @@ import { authSelectors } from '../../../state/ducks/auth';
 import { Permission } from '../../../state/ducks/auth/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
-import { DocumentRevisionStatus, LotStatus } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
 import { getLatestRevisionId } from '../../document.revision/utils/helpers';
 import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -46,7 +46,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const isForm = checkIsDocumentForm(document?.documentType?.groupOptions);
     const isLatestRevision = id === getLatestRevisionId(documentRevisions);
     const isReleased = status === DocumentRevisionStatus.Released;
-    const isVoided = status === DocumentRevisionStatus.Voided || LotStatus.VOIDED;
+    const isVoided = status === DocumentRevisionStatus.Voided || DocumentRevisionStatus.Obsolete;
     const isQuarantined = status === DocumentRevisionStatus.InReview;
 
     const isOwner = workspaceState?.document?.owner?.user?.id === currentUserId;
