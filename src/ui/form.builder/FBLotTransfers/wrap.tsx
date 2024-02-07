@@ -41,12 +41,12 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     );
     const [transfers, setTransfers] = useState<LotTransfer[]>(prepareTransfers(workspaceState?.formInputSync.get(name) ?? []));
 
-    const { id, version, status, document } = workspaceState?.document ?? { version: 0 };
+    const { id, version, status, document } = workspaceState?.document ?? { version: 0, status: DocumentRevisionStatus.Voided };
 
     const isForm = checkIsDocumentForm(document?.documentType?.groupOptions);
     const isLatestRevision = id === getLatestRevisionId(documentRevisions);
     const isReleased = status === DocumentRevisionStatus.Released;
-    const isVoided = status === DocumentRevisionStatus.Voided || DocumentRevisionStatus.Obsolete;
+    const isVoided = [DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(status);
     const isQuarantined = status === DocumentRevisionStatus.InReview;
 
     const isOwner = workspaceState?.document?.owner?.user?.id === currentUserId;

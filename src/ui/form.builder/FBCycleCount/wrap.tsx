@@ -61,11 +61,11 @@ export const withFBCycleCount = <T extends FBCycleCountProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lotPartRevisionId]);
 
-    const { id, version, status } = workspaceState?.document ?? { version: 0 };
+    const { id, version, status } = workspaceState?.document ?? { version: 0, status: DocumentRevisionStatus.Voided };
 
     const isLatestRevision = id === getLatestRevisionId(documentRevisions);
     const isReleased = status === DocumentRevisionStatus.Released;
-    const isVoided = status === DocumentRevisionStatus.Voided || DocumentRevisionStatus.Obsolete;
+    const isVoided = [DocumentRevisionStatus.Voided, DocumentRevisionStatus.Obsolete].includes(status);
     const isQuarantined = status === DocumentRevisionStatus.InReview;
 
     const isOwner = workspaceState?.document?.owner?.user?.id === currentUserId;
