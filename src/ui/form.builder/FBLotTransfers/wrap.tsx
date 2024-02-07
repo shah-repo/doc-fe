@@ -46,7 +46,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const isForm = checkIsDocumentForm(document?.documentType?.groupOptions);
     const isLatestRevision = id === getLatestRevisionId(documentRevisions);
     const isReleased = status === DocumentRevisionStatus.Released;
-    const isVoided = status === DocumentRevisionStatus.Voided;
+    const isVoided = status === DocumentRevisionStatus.Voided || DocumentRevisionStatus.Obsolete;
     const isQuarantined = status === DocumentRevisionStatus.InReview;
 
     const isOwner = workspaceState?.document?.owner?.user?.id === currentUserId;
