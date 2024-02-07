@@ -595,14 +595,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               <ApproveIcon fill={Colors.white} />
               <Text message="common.approve" />
             </Button>
-            <Button
+            {isRenderHTMLDefined && <Button
               className={classes.downloadButton}
               data-cy="transition-download-pdf"
               onClick={handleDownloadClick}
             >
               <DownloadPdfIcon stroke={Colors.white_smoke} />
               <Text translation="common.download.pdf" />
-            </Button>
+            </Button>}
             {downloadPdfMobile && (
               <DownloadHtmlPreview
                 id={docRevId}
