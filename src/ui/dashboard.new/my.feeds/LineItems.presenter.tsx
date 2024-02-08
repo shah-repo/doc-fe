@@ -152,6 +152,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   pinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                   dialogPDF={dialogPDF}
+                  isRenderHTMLDefined = {pendingAction?.renderHTMLDefined }
                 />
               );
             case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:

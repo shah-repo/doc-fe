@@ -354,6 +354,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       !isObsoleteRelatedEQAnswered
       && checkIsDocumentES(documentRevision?.document?.documentType?.groupOptions)
       && documentRevision?.revisionChangeType === RevisionChangeType.Obsolete
+      && documentRevision?.schema?.find(item => item.name === OBSOLETE_RELATED_EQ_KEY)
     ) {
       obsoleteRelatedEQDialog.open();
       return;
