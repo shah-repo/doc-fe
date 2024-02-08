@@ -18,7 +18,7 @@ import { checkIsDocumentOTHER, checkIsDocumentPart } from '../../../helpers/chec
 import useStyles from './RelatedPart.styles';
 import RelatedParts from './RelatedParts';
 import RelatedPartsState from './RelatedParts.state';
-import { getDynamicTextValue } from './helper';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from './helper';
 interface Props {
   viewOnly: boolean
   documentRevision: DocumentRevision
@@ -46,13 +46,18 @@ const SuccessMsg: React.FunctionComponent<{
     <>
       <Typography variant="body1">
         <Text translation="relatedParts.created.modal.success.msg"
-          values = {{ relatedType: getDynamicTextValue(relatedType, 'Part', 'Document') }}
-        />
+          values = {{
+            relatedType: getDynamicTextValue(
+              relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+          }} />
       </Typography>
       <div className={classes.successMessage}>
         <Typography variant="subtitle1">
           <Text translation="relatedParts.created.modal.msg.part.before"
-            values = {{ relatedType: getDynamicTextValue(relatedType, 'Part', 'Document') }} /> <b>{docId}</b> &nbsp;
+            values = {{
+              relatedType: getDynamicTextValue(
+                relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+            }} /> <b>{docId}</b> &nbsp;
           <Text translation="relatedParts.created.modal.msg.part.after" />
         </Typography>
         <Link onClick={viewFromModal}

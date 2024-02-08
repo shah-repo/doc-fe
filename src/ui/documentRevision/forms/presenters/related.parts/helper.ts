@@ -9,3 +9,11 @@ export function getDynamicTextValue (
 export function getReplacedMessage (msg: string, replaceWord: string, replacedText: string): string {
   return (translations[msg] as string)?.replace(replaceWord, replacedText);
 }
+
+export enum RELATED_TYPE_VALUES_ENUM {
+  PART= 'part',
+  DOCUMENT= 'document',
+  SUB_PART= 'sub-part',
+  RELATED_DOCUMENTS= 'related documents',
+  SUB_DOCUMENT= 'sub-document',
+}

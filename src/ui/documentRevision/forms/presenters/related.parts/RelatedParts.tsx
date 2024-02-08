@@ -31,7 +31,7 @@ import { isDocumentRevisionReleased } from '../../../helpers/documentRevisionSta
 import useStyles from './RelatedPart.styles';
 import RelatedPartsState from './RelatedParts.state';
 import RelatedPartsTableHeader from './RelatedPartsTableHeader';
-import { getDynamicTextValue, getReplacedMessage } from './helper';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue, getReplacedMessage } from './helper';
 import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
 
 const ParentPartSelector: React.FunctionComponent<{
@@ -133,7 +133,10 @@ const ParentPartSelector: React.FunctionComponent<{
           id="tableTitle"
         >
           <Text translation="relatedParts.parentPart.question"
-            values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
+            values = {{
+              relatedType: getDynamicTextValue(
+                relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+            }} />
         </Typography>
         <Tooltip title="Parent part info" placement="right"
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
@@ -159,7 +162,10 @@ const ParentPartSelector: React.FunctionComponent<{
             value={RELATED_PARTS_STATUS.PARENT_TOGETHER}
             control={<Radio color="primary" disableRipple={true} />}
             label={<Text translation="relatedParts.parentPart.answer.yes.together"
-              values = {{ relatedType: getDynamicTextValue(relatedType, 'sub-part', 'related documents') }} />
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }} />
             }
             checked={isParentTogetherSelected}
             disabled={isDisabled}
@@ -168,7 +174,10 @@ const ParentPartSelector: React.FunctionComponent<{
             value={RELATED_PARTS_STATUS.PARENT_SEPARATE}
             control={<Radio color="primary" disableRipple={true} />}
             label={<Text translation="relatedParts.parentPart.answer.yes.separate"
-              values = {{ relatedType: getDynamicTextValue(relatedType, 'sub-part', 'related documents') }} />
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }} />
             }
             checked={isParentSeparateSelected}
             disabled={isDisabled}
@@ -190,10 +199,13 @@ const ParentPartSelector: React.FunctionComponent<{
           translation="relatedParts.confirm.message"
           values={{
             currentOption: getReplacedMessage(
-              confirmMessages[selectedOption], '{relatedType}', getDynamicTextValue(relatedType, 'sub-part', 'related documents')),
+              confirmMessages[selectedOption], '{relatedType}', getDynamicTextValue(
+                relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS)),
             previous: getReplacedMessage(
-              confirmMessages[previousOption], '{relatedType}', getDynamicTextValue(relatedType, 'sub-part', 'related documents')),
-            relatedType: getDynamicTextValue(relatedType, 'sub-part', 'sub-document'),
+              confirmMessages[previousOption], '{relatedType}', getDynamicTextValue(
+                relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS)),
+            relatedType: getDynamicTextValue(
+              relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT),
           }}
         />
       </Dialog>
@@ -266,7 +278,10 @@ const RelatedPartGrid: React.FunctionComponent<{
           <Grid item>
             <Typography variant="h6" id="tableTitle" component="div">
               <Text translation="relatedParts.grid.title"
-                values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
+                values = {{
+                  relatedType: getDynamicTextValue(
+                    relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+                }} />
             </Typography>
           </Grid>
 
@@ -282,7 +297,10 @@ const RelatedPartGrid: React.FunctionComponent<{
                     data-cy="add-related-part-btn"
                   >
                     <Text translation="relatedParts.button.addText"
-                      values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
+                      values = {{
+                        relatedType: getDynamicTextValue(
+                          relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+                      }} />
                   </Button>
                 </Typography>
                 <div className={classes.filterOptions}>
@@ -340,7 +358,10 @@ const RelatedPartGrid: React.FunctionComponent<{
             disabled={isReleased}
           >
             <Text translation="relatedParts.button.addText"
-              values = {{ relatedType: getDynamicTextValue(relatedType, 'part', 'document') }} />
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+              }} />
           </Button>
         }
       </div>
@@ -763,7 +784,8 @@ const RelatedParts: React.FunctionComponent<{
           <Grid item xs={12}>
             <FBButton
               label={getReplacedMessage(
-                'relatedParts.button.addText', '{relatedType}', getDynamicTextValue(relatedType, 'part', 'document'))}
+                'relatedParts.button.addText', '{relatedType}',
+                getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT))}
               dataCy="parent-separate-add-related-parts-btn"
               onClick = {createNewDocument} />
           </Grid>
