@@ -138,9 +138,12 @@ const ParentPartSelector: React.FunctionComponent<{
                 relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
             }} />
         </Typography>
-        <Tooltip title="Parent part info" placement="right"
-          classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
-          arrow>
+        <Tooltip title={getReplacedMessage(
+          'relatedParts.parentPart.tooltip', '{relatedType}',
+          getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT))}
+        placement="right"
+        classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+        arrow>
           <InfoIcon color="primary" />
         </Tooltip>
       </div>
