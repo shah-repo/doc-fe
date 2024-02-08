@@ -183,6 +183,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               freeSolo,
               filterOptions,
               disableClearable,
+              value,
             }}
             classes={autoCompleteClasses}
             options={modifiedOptions}
