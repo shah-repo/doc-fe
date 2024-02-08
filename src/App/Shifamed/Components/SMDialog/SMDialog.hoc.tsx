@@ -10,7 +10,6 @@ export const withSMDialog = <T extends SMDialogHOCProps>(
     dialogState,
     ...props
   }: T) => {
-
     dialogState = new SMDialogState();
 
     return (

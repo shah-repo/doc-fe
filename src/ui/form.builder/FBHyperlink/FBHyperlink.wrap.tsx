@@ -9,7 +9,6 @@ export const withFBHyperlink = <T extends FBHyperlinkProps>(
     onClick,
     ...props
   }: T) => {
-
     onClick = () =>
       window.open(linkUrl.includes('http') ? linkUrl : `https://${linkUrl}`);
 

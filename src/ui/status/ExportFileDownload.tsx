@@ -69,7 +69,7 @@ const ExportFileDownload: React.FunctionComponent = () => {
     const date = urlParams.get('X-Amz-Date')?.replace(
       /^(.{4})(.{2})(.{2})T(.{2})(.{2})(.{2})Z$/,
       (match, year, month, day, hour, minute, second) => `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`,
-      );
+    );
     const duration = parseInt(urlParams.get('X-Amz-Expires') || '', 10);
 
     if (!date || isNaN(duration)) {

@@ -12,13 +12,12 @@ const GroupType: React.FunctionComponent<Props> = ({
   group,
   setGroup,
 }) => {
-
   const handleGroupTypeChange = (event: any) => {
     const isOfficial = event.target.value === 'official';
 
     setGroup({
       ...group,
-      isOfficial: isOfficial ? true : false,
+      isOfficial: !!isOfficial,
       permissions: isOfficial ? group.permissions : [],
       tags: isOfficial ? group.tags : [],
       parents: isOfficial ? group.parents : [],

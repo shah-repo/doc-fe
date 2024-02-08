@@ -34,7 +34,6 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     shouldNotAutosaveOnBlur = false,
     ...props
   }: T) => {
-
     // MARK: @config
     const intl = useIntl();
     // let timeout;
@@ -119,14 +118,14 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
 
     // MARK: @helpers
     // Creates editor state with initial value
-    function htmlToEditorState(value?: string): EditorState {
+    function htmlToEditorState (value?: string): EditorState {
       if (!value) { return EditorState.createEmpty(); }
       const contentBlock = htmlToDraft(value);
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       return EditorState.createWithContent(contentState);
     }
 
-    function handleLockFocus() {
+    function handleLockFocus () {
       if (formState?.isBackdropOpen) { return; }
       if (!name) { return; }
       if (!id) { return; }
@@ -140,7 +139,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       }, name);
     }
 
-    function handleLockBlur() {
+    function handleLockBlur () {
       formState?.unlockField(name);
     }
 

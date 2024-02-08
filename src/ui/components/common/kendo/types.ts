@@ -54,7 +54,7 @@ export interface KendoGridConfiguration {
   groupableFields?: string[]
   columns: KendoColumn[]
   pagerSettings: GridPagerSettings
-  initialDataState? : PageState
+  initialDataState?: PageState
 }
 
 interface KendoGridCriteria {

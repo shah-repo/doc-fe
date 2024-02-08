@@ -15,13 +15,15 @@ export const withSMText = <T extends SMTextProps>(
     useMemo(
       () => {
         const intlValues = (label as SMTextLocaleProps).values;
-        map(intlValues, (value, key) => intlValues[key] = intl.formatMessage({ id: value }));
+        map(intlValues, (value, key) => {
+          intlValues[key] = intl.formatMessage({ id: value });
+        });
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
     );
 
-    return  Component({
+    return Component({
       ...(props as T),
       label,
     });

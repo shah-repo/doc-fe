@@ -3,7 +3,7 @@ import Colors from '../../../../../ui/layout/theme/utils/colors';
 
 const styles = () => ({
   root: {
-    'margin': 0,
+    margin: 0,
     '&:hover': {
       backgroundColor: 'unset',
     },

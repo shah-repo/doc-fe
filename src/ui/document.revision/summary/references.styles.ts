@@ -4,17 +4,17 @@ import Colors from '../../layout/theme/utils/colors';
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     chip: {
-      'borderRadius': '4px',
-      'display': 'flex',
-      'flexDirection': 'row',
-      'alignItems': 'center',
-      'padding': '11px 0px 11px 10px',
-      'background': Colors.sky_blue,
+      borderRadius: '4px',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: '11px 0px 11px 10px',
+      background: Colors.sky_blue,
       '&:hover': {
         cursor: 'pointer',
       },
-      'height': '100%',
-      'marginBottom': '10px',
+      height: '100%',
+      marginBottom: '10px',
       '& .MuiChip-label': {
         padding: '0px',
       },
@@ -52,16 +52,16 @@ export const styles = makeStyles((theme: Theme) =>
       marginRight: '10px',
     },
     selectedUsersGrid: {
-      'borderRadius': '4px',
-      'background': Colors.sky_blue,
-      'marginTop': '5px',
-      'marginBottom': '10px',
-      'padding': '5px 5px 5px 10px',
-      'flexWrap': 'nowrap',
-      'width': '203px',
+      borderRadius: '4px',
+      background: Colors.sky_blue,
+      marginTop: '5px',
+      marginBottom: '10px',
+      padding: '5px 5px 5px 10px',
+      flexWrap: 'nowrap',
+      width: '203px',
       '&:hover': {
-        'background': Colors.bright_gray,
-        'borderRadius': '4px',
+        background: Colors.bright_gray,
+        borderRadius: '4px',
         '& $deleteIcon': {
           visibility: 'visible',
         },

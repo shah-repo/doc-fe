@@ -12,7 +12,6 @@ export const withFBFilesPresenter = <T extends FBFilesPresenterProps>(
     files,
     ...props
   }: T) => {
-
     filesPresenterState = FB.useRef(FBFilesPresenterState);
     attachments = [];
 

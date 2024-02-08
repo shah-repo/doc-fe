@@ -20,7 +20,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     isInputOwner,
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const { mode } = workspaceState || {};
@@ -120,10 +119,10 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     ), []);
 
     // MARK: @helpers
-    function getDiffValue(): FBProcedureValue {
+    function getDiffValue (): FBProcedureValue {
       const { document: { parent: { formInput = {} } = {} } = {} } = workspaceState || {};
       const parentValue = (formInput[name || ''] || {}) as FBProcedureValue;
-      const childValue =  procedureState?.value || {};
+      const childValue = procedureState?.value || {};
       const valueKeys = union(keys(parentValue), keys(childValue));
       let diffValue = {};
 

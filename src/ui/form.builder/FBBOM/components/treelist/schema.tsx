@@ -27,7 +27,7 @@ import { LeadTime } from './header.templates/LeadTime';
 import { PrimaryAttachments } from './header.templates/PrimaryAttachments';
 import { Vendors } from './header.templates/Vendors';
 
-export const TreeListSchema = ({ openDetailDrawer }) => {
+export const TreeListSchema = ({ openDetailDrawer, openARIDQuickView }) => {
   return [
     {
       field: 'customDocId',
@@ -66,7 +66,7 @@ export const TreeListSchema = ({ openDetailDrawer }) => {
       width: 172,
       filter: TreeListTextFilter,
       mainOrderIndex: 3,
-      cell: ARIDCell,
+      cell: (props) => <ARIDCell {...props} openARIDQuickView={openARIDQuickView} />,
     },
     {
       field: 'displayStatus',
@@ -130,7 +130,7 @@ export const TreeListSchema = ({ openDetailDrawer }) => {
       width: 171,
       filter: TreeListTextFilter,
       mainOrderIndex: 10,
-      cell: HasChangesCell,
+      cell: (props) => <HasChangesCell {...props} openARIDQuickView={openARIDQuickView} />,
     },
     {
       field: 'refDesignator',

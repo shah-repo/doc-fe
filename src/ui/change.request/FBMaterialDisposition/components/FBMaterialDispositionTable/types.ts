@@ -35,6 +35,7 @@ export interface MDItemEditRequestBody{
 
 export interface EditableMDItem extends MaterialDispositionItem {
   [MODE_FIELD]: Mode
+  isSelected?: boolean
 }
 
 export interface MDItemEditEvent {
@@ -47,6 +48,7 @@ export interface SchemaOptions {
   onDiscard: () => void
   onDelete?: () => void
   onRowClick?: (e: MDItemEditEvent) => void
+  onSelectCell?: (dataItem: EditableMDItem, field: string) => void
 }
 
 export interface PendingMDInfoResponse{
@@ -56,4 +58,10 @@ export interface PendingMDInfoResponse{
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableMDItem> {
   onClick?: (e: MDItemEditEvent) => void
+  onSelectCell?: (dataItem: EditableMDItem, field: string) => void
+}
+
+export interface CopiedItems {
+  [id: string]: string
+  value: string
 }

@@ -5,7 +5,6 @@ import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 
 class FBMPIProcedureSelectState {
-
   // MARK: @config
 
   // MARK: @api
@@ -16,7 +15,7 @@ class FBMPIProcedureSelectState {
   @observable public partsAdded?: FBMPIProcedureSelectValue;
 
   // MARK: @constructor
-  public constructor(id?: string) {
+  public constructor (id?: string) {
     if (!id) { return; }
     this.fetchLotsToPart(id);
   }

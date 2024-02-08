@@ -14,7 +14,6 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
     type,
     ...props
   }: T) => {
-
     const { formState, approvalMatrixFieldState, workspaceState } = FB.useStores();
     const { document: { outputRevision = false } = {}, formInput, isOutput } = workspaceState || {};
 

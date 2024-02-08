@@ -11,9 +11,9 @@ interface Props {
 const styles = makeStyles((theme) =>
   createStyles({
     link: {
-      'color': theme.palette.primary.main,
-      'marginRight': 15,
-      'cursor': 'pointer',
+      color: theme.palette.primary.main,
+      marginRight: 15,
+      cursor: 'pointer',
       '&:hover': {
         textDecoration: 'underline',
       },

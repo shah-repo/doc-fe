@@ -11,7 +11,6 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
     autosave,
     ...props
   }: T) => {
-
     const { mediaAlbumState, workspaceState, formState } = FB.useStores();
 
     handleDelete = (id: string) => {

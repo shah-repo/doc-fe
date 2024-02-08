@@ -10,7 +10,6 @@ export const withFBWorkspaceTplActions = <T extends FBWorkspaceTplActionsProps>(
     handleTplName,
     ...props
   }: T) => {
-
     const { dialogState, workspaceState, formState } = FB.useStores();
 
     handleTplName = () => {

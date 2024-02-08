@@ -60,7 +60,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isDraft = isDocumentRevisionInDraft(status);
   const isReleased = isDocumentRevisionReleased(status);
   const isDeprecated = isDocumentRevisionDeprecated(status);
-  const isAlphaReleased =  isDocumentAlphaReleased(documentRevision.revisionStage);
+  const isAlphaReleased = isDocumentAlphaReleased(documentRevision.revisionStage);
   const isVoided = isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided], status);
 
   if (isRecord) {

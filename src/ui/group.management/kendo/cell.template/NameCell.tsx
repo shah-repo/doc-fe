@@ -61,4 +61,5 @@ export const NameCell = ({
         </td>
       )}
     </>
-  ); };
+  );
+};

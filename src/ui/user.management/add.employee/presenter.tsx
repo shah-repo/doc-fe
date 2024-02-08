@@ -49,6 +49,7 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
         <AddEmployeeFormContainer />
       </AddEmployeeDialogPresenter>
     </Box>
-  ); };
+  );
+};
 
 export default AddEmployeePresenter;

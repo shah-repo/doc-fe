@@ -19,6 +19,9 @@ import { Nullable } from '../../../../../state/ducks/common/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
+import ViewFile from '../../../../components/common/view.file/container';
+import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -43,6 +46,7 @@ interface Props {
   docRevId: string
   approvalId: string
   timestamp: string
+  isRenderHTMLDefined: boolean
   docRevOwnerAvatar: Nullable<string>
   docRevOwnerInitialColor: string
   docRevOwnerName: string
@@ -78,6 +82,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   timestamp,
   docRevName,
   docRevVersion,
+  isRenderHTMLDefined,
   docRevOwnerAvatar,
   docRevOwnerInitialColor,
   purchaseOrderCurrency,
@@ -226,8 +231,22 @@ const TaskApprovalPresenter: React.FC<Props> = ({
       downloadFile(downloadInfo?.url);
     },
   });
+
+  const dialogHandler = useDialog();
+  const [selectedAttachment, setSelectedAttachment] = React.useState<Attachment | undefined>(undefined);
+
   const downloadAttachment = (attachment: Attachment) => () => {
-    downloadAsync.start(downloadAction, attachment, downloadAsync);
+    if (checkIfFileIsViewable(attachment?.type)) {
+      setSelectedAttachment(attachment);
+      dialogHandler.open();
+    } else {
+      downloadAsync.start(downloadAction, attachment, downloadAsync);
+    }
+  };
+
+  const closeDialog = () => {
+    setSelectedAttachment(undefined);
+    dialogHandler.close();
   };
 
   const isPinShown = pinLineItem && !pinned;
@@ -340,7 +359,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             className={`${classes.actionIcons} ${classes.poActionIconsWidth}`}
             onMouseLeave={onMouseLeaveActionIcons}
           >
-            {!downloadPdfHover && (
+            {!downloadPdfHover && isRenderHTMLDefined && (
               <span>
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
@@ -576,14 +595,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               <ApproveIcon fill={Colors.white} />
               <Text message="common.approve" />
             </Button>
-            <Button
+            {isRenderHTMLDefined && <Button
               className={classes.downloadButton}
               data-cy="transition-download-pdf"
               onClick={handleDownloadClick}
             >
               <DownloadPdfIcon stroke={Colors.white_smoke} />
               <Text translation="common.download.pdf" />
-            </Button>
+            </Button>}
             {downloadPdfMobile && (
               <DownloadHtmlPreview
                 id={docRevId}
@@ -608,6 +627,16 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         transitionDialog={transitionDialog}
         label="transition.action.approve"
       />
+      {selectedAttachment && (
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...purchaseOrderAttachments] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
+      )}
     </>
   );
 };
