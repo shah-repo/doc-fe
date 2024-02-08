@@ -38,9 +38,9 @@ export default makeStyles((theme: Theme) => ({
     padding: 0,
   },
   defaultGroupButton: {
-    'margin': 0,
-    'padding': 0,
-    'backgroundColor': Colors.white,
+    margin: 0,
+    padding: 0,
+    backgroundColor: Colors.white,
     '&:hover': {
       background: Colors.white,
     },

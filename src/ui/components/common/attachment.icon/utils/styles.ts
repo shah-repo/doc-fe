@@ -9,20 +9,20 @@ export const styles = makeStyles((theme) => ({
     height: size === 'lg' ? '90px' : size === 'md' ? '70px' : '50px',
   }),
   progress: ({ size }: AttachmentIconStyleProp) => ({
-    'color': theme.palette.secondary.main,
-    'width':
+    color: theme.palette.secondary.main,
+    width:
       (size === 'lg' ? '90px' : size === 'md' ? '70px' : '50px') + '!important',
-    'height':
+    height:
       (size === 'lg' ? '90px' : size === 'md' ? '70px' : '50px') + '!important',
     '& .MuiCircularProgress-svg': {
       margin: theme.spacing(2.5),
     },
   }),
   attachmentContainer: {
-    'display': 'flex',
-    'width': '50%',
-    'alignItems': 'center',
-    'marginBottom': '1rem',
+    display: 'flex',
+    width: '50%',
+    alignItems: 'center',
+    marginBottom: '1rem',
     '&:hover': {
       backgroundColor: 'white',
       borderRadius: '8px',
@@ -33,9 +33,9 @@ export const styles = makeStyles((theme) => ({
     margin: '0.8rem',
   },
   removeButton: {
-    'margin': 0,
-    'minWidth': 40,
-    'borderRadius': 'inherit',
+    margin: 0,
+    minWidth: 40,
+    borderRadius: 'inherit',
     'min-width': 'auto',
     '&:hover': {
       backgroundColor: Colors.light_red,
@@ -105,14 +105,14 @@ export const styles = makeStyles((theme) => ({
           : '3px 4px 0 0',
   }),
   ribbonEdgeTopright: {
-    'top': '50%',
-    'borderWidth': '5px 0 0 10px',
-    'right': '0',
-    'borderColor': 'transparent transparent transparent #99c',
-    'position': 'absolute',
+    top: '50%',
+    borderWidth: '5px 0 0 10px',
+    right: '0',
+    borderColor: 'transparent transparent transparent #99c',
+    position: 'absolute',
     'border-style': 'solid',
-    'height': '0px',
-    'width': '0px',
+    height: '0px',
+    width: '0px',
   },
   ribbonEdgeToprightBorder: (props: AttachmentIconStyleProp) => ({
     borderWidth:

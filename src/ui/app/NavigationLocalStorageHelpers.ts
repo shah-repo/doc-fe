@@ -32,7 +32,7 @@ export const setNavigation = (id: string, data: any) => {
   localStorage.setItem('navigationMenu', JSON.stringify(navigationMenu));
 };
 
-export const updateNavigationItem = ( id: string, data: NavigationMenuItem) => {
+export const updateNavigationItem = (id: string, data: NavigationMenuItem) => {
   navigationMenu = getEmployeeNavigation(id);
 
   if (navigationMenu) {

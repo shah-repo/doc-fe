@@ -40,7 +40,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
-  const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
+  const isFileViewable = useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
   const canWatermark = useMemo(() => WATERMARK_FILES.includes(file.type), [file.type]);
   const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
   const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
@@ -89,7 +89,6 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     } else {
       download(attachment, type);
     }
-
   };
 
   const renderDownloadFile

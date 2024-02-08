@@ -18,7 +18,6 @@ const styles = makeStyles(() =>
   ));
 
 const Container: React.FunctionComponent<Props> = () => {
-
   const renderTasks = (props: FieldArrayRenderProps) => <Tasks {...props} />;
   const classes = styles();
 

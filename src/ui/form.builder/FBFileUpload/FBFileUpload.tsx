@@ -24,10 +24,10 @@ const FileUploadChild: React.FunctionComponent<FBFileUploadProps> = ({
 const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
   fileUploadState,
   ...props
-}) =>  (
+}) => (
   <FBProvider {...{ fileUploadState }}>
     <FBInput {...props} type="fileupload" labelProps={FBFontStyle.labelProps}>
-      <FileUploadChild  {...props}  />
+      <FileUploadChild {...props} />
     </FBInput>
   </FBProvider>
 );

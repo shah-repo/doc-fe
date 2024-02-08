@@ -10,7 +10,6 @@ import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync
 export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     handleForm,
     handleAdd,
@@ -25,7 +24,6 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     index = 0,
     ...props
   }: T) => {
-
     const { formState: parentFormState, bookmarkState, workspaceState } = FB.useStores();
     const { isOutput } = workspaceState || {};
     const parentFormValue = parentFormState?.getFieldValue(name);
@@ -67,7 +65,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    function mapCollection() {
+    function mapCollection () {
       const docList = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.documentRevisions);
       // This is related to debounce mapCoolection from above
       // if (!docList) {
@@ -83,7 +81,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       bookmarkState?.setLoading(false);
     }
 
-    function setBookmark(documentRevision?: DocumentRevision, at?: number) {
+    function setBookmark (documentRevision?: DocumentRevision, at?: number) {
       if (!documentRevision) { return; }
       const { document: { docId }, name: docName } = documentRevision;
       at = (at || 0) + index;
@@ -94,11 +92,11 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       }, at);
     }
 
-    function disabledOptions(): string[] | undefined {
+    function disabledOptions (): string[] | undefined {
       return map(docRevState?.value, 'proposedDocumentRevision.id');
     }
 
-    function getIdBy(index: number): string {
+    function getIdBy (index: number): string {
       return parentFormState?.getFieldValue(`${name}.${index}.proposedDocumentRevision.id`);
     }
 

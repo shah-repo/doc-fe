@@ -4,11 +4,10 @@ import { TableSearchTextField } from './text';
 import { TableSearchFieldProps } from './types';
 
 describe('Table search text field tests', () => {
-
   type Props = Partial<TableSearchFieldProps>;
 
   const getWrapper = (props: Props) => shallow(
-    <TableSearchTextField key="test"  {...props} />,
+    <TableSearchTextField key="test" {...props} />,
   );
 
   it('renders', () => {

@@ -6,7 +6,7 @@ import Text from '../../../components/Text';
 import { styles } from './password.expiration.form.styles';
 
 interface Props {
-  handlePasswordExpirationFormSubmit: ( { passwordUpdatedAt, userEmails, passwordLastEmailSentAt } ) => void
+  handlePasswordExpirationFormSubmit: ({ passwordUpdatedAt, userEmails, passwordLastEmailSentAt }) => void
 }
 const RecentsPresenter: React.FunctionComponent<Props> = ({
   handlePasswordExpirationFormSubmit,

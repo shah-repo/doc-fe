@@ -57,9 +57,9 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
     const similarGroups = groupBy(groupedItems, 'primaryText');
     let sameGroup = map(similarGroups, (items, key) => {
       const auditType = items[0].auditType;
-      const sortedIndex =  map(items, 'sortedIndex')[0] || 0;
+      const sortedIndex = map(items, 'sortedIndex')[0] || 0;
       let primaryText = key;
-      const secondaryText =  uniq(map(items, 'secondaryText'));
+      const secondaryText = uniq(map(items, 'secondaryText'));
       if (auditType === ACTION_TITLE_MAPPING.AddedToGroups && secondaryText.length <= 1) {
         primaryText = getTranslatedText(ACTION_TITLE_MAPPING.AddedToGroup, {});
       }
@@ -194,8 +194,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           auditType: ACTION_TITLE_MAPPING.AddedMembers,
           sortedIndex: 3,
         };
-      }
-      else if (auditRecord.type === 'ARRAY_DELETED') {
+      } else if (auditRecord.type === 'ARRAY_DELETED') {
         const removedMember = getUserDetails(auditRecord.previousValue) || { user: { name: '', email: '' } };
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedMembers, {}),
@@ -213,8 +212,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           auditType: ACTION_TITLE_MAPPING.AddedPermissions,
           sortedIndex: 4,
         };
-      }
-      else if (auditRecord.type === 'ARRAY_DELETED') {
+      } else if (auditRecord.type === 'ARRAY_DELETED') {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedPermissions, {}),
           secondaryText: auditRecord.previousValue,
@@ -231,8 +229,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           auditType: ACTION_TITLE_MAPPING.AddedTags,
           sortedIndex: 5,
         };
-      }
-      else if (auditRecord.type === 'ARRAY_DELETED') {
+      } else if (auditRecord.type === 'ARRAY_DELETED') {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedTags, {}),
           secondaryText: auditRecord.previousValue,
@@ -249,8 +246,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           auditType: ACTION_TITLE_MAPPING.AddedParentGroups,
           sortedIndex: 6,
         };
-      }
-      else if (auditRecord.type === 'ARRAY_DELETED') {
+      } else if (auditRecord.type === 'ARRAY_DELETED') {
         actionInfo = {
           primaryText: getTranslatedText(ACTION_TITLE_MAPPING.RemovedParentGroups, {}),
           secondaryText: getGroupName([auditRecord.previousValue]),

@@ -13,7 +13,6 @@ export const withFBSnackbar = <T extends FBSnackbarProps>(
     open,
     ...props
   }: T) => {
-
     const { snackbarState } = FB.useStores();
 
     useObserver(() => {

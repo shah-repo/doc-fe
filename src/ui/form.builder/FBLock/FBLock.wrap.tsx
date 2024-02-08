@@ -10,7 +10,6 @@ export const withFBLock = <T extends FBLockProps>(
   const Comp = ({
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const { id } = workspaceState || {};
@@ -31,7 +30,7 @@ export const withFBLock = <T extends FBLockProps>(
     );
 
     // MARK: @helpers
-    function setLockedData(data: FBLockBody[]) {
+    function setLockedData (data: FBLockBody[]) {
       if (!formState) { return; }
       formState.expireLocks = {};
       formState.locked.forEach((lockedField) => {
@@ -67,7 +66,7 @@ export const withFBLock = <T extends FBLockProps>(
       });
     }
 
-    function setExpired(fieldName?: string, expiresAt?: string) {
+    function setExpired (fieldName?: string, expiresAt?: string) {
       if (!fieldName) { return; }
       if (!expiresAt) { return; }
       const expireTime = new Date(expiresAt).getTime();

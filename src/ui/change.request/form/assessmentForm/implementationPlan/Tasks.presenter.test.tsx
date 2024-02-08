@@ -5,7 +5,6 @@ import TaskFormDialog from './TaskFormDialog';
 import TasksPresenter, { Props } from './Tasks.presenter';
 
 describe('Tasks presenter test without tasks', () => {
-
   const defaultProps: Props = {
     tasks: [],
     openDialog: jest.fn(),
@@ -31,7 +30,6 @@ describe('Tasks presenter test without tasks', () => {
 });
 
 describe('Tasks presenter test with tasks', () => {
-
   const defaultProps: Props = {
     tasks: [{
       title: 'Task 1',
@@ -59,7 +57,6 @@ describe('Tasks presenter test with tasks', () => {
   );
 
   it('Match number of task presenters to number of tasks', () => {
-
     const wrapper = getWrapper({ ...defaultProps });
 
     expect(wrapper.find(TaskPresenter)).toHaveLength(2);

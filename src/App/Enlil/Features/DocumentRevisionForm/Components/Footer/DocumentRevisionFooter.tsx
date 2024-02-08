@@ -8,7 +8,7 @@ import { withDocumentRevisionFooterWrap } from './DocumentRevisionFooter.wrap';
 
 const DocumentRevisionFooter: React.FunctionComponent<DocumentRevisionFooterProps> = ({
   _documentRevisionFooterState,
-}) =>  (
+}) => (
   <Observer>
     {() => (
       <Box

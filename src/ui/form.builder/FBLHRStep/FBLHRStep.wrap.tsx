@@ -29,10 +29,9 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     label,
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter( (ref) => ref.active
+    const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter((ref) => ref.active
       && ref.type === SmartReferenceType.HiddenPiInstance
       && ref.metadata.fieldId === name);
 
@@ -137,7 +136,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         const editorMaterials = editorCfg.filter((item) => item.editorConfig?.materials).map(
           (item) => item.editorConfig.materials);
         const editorEquipment = editorCfg.filter((item) => item.editorConfig?.equipment).map(
-          (item) => item.editorConfig.equipment );
+          (item) => item.editorConfig.equipment);
 
         if (parameters) {
           const newMaterials = flattenDeep([editorMaterials]).map((material) => {
@@ -189,14 +188,14 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       }
     };
 
-    const filterOutOption = (docRev: DocumentRevision, inputValue: string ) => {
+    const filterOutOption = (docRev: DocumentRevision, inputValue: string) => {
       const filterValue = lowerCase(inputValue);
 
       return lowerCase(docRev.name).includes(filterValue)
         || lowerCase(docRev.document.docId).includes(filterValue);
     };
 
-    function handleFilter(
+    function handleFilter (
       data: DocumentRevision[],
       state: FilterOptionsState,
     ) {
@@ -241,7 +240,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       isDocumentLHRT,
       stepIndex,
       lhrBuildTypeExist,
-    }); };
+    });
+  };
 
   Comp.displayName = 'withFBLHRStep';
   return Comp;

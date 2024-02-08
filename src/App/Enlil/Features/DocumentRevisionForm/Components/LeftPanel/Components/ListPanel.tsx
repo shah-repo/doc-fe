@@ -67,7 +67,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
               handleClick(section);
             }}
             data-cy={intl.formatMessage({ id: `form.builder.${section}` }) + '-btn'}
-            className={`${classes.listItemBtn} ${ section === 'section' ? 'firstItem' : ''}`}
+            className={`${classes.listItemBtn} ${section === 'section' ? 'firstItem' : ''}`}
           >
             <ListItemText key={section}>
               <Typography className={classes.listItemText}

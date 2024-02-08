@@ -46,7 +46,7 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
         transitionDialog.close();
       }
     },
-    onError: (error) => {
+    onError: () => {
       transitionDialog.close();
     },
   });

@@ -36,7 +36,7 @@ const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
   }
 
   const isNewDocument = isDocumentPage && !documentRevision?.id;
-  const canSetAsPrimary =  isDocumentRevisionInStatus(
+  const canSetAsPrimary = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
     documentRevision?.status,
   ) && documentRevision?.document?.canAccess && attachment.lineType !== LINE_TYPES.RED_LINE;

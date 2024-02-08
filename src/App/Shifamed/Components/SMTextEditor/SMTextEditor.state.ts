@@ -3,7 +3,6 @@ import { action, observable, set } from 'mobx';
 import { SMTextEditorStateProps } from '../../..';
 
 export default class SMTextEditorState implements SMTextEditorStateProps {
-
   // MARK: @config
   public editorReference?: any;
 

@@ -90,11 +90,10 @@ export function KendoGrid<T extends any> ({
         setColumns(JSON.parse(tableCriteria.columnConfig));
         if (isPrintColumnAvailable) {
           const dataColumns = JSON.parse(tableCriteria.columnConfig);
-          if(dataColumns.findIndex(item => item.field === SELECTED_FIELD) === -1) {
+          if (dataColumns.findIndex(item => item.field === SELECTED_FIELD) === -1) {
             dataColumns.splice(JSON.parse(tableCriteria.columnConfig), 0, printColumnProps);
             setColumns(dataColumns);
-          }
-          else {
+          } else {
             const printColumn = dataColumns.find(item => item.field === SELECTED_FIELD);
             setIsPrintColumnVisible(printColumn?.show);
           }
@@ -383,7 +382,7 @@ export function KendoGrid<T extends any> ({
       toastError(getTranslatedText('common.no.hide'));
       return;
     }
-    if(field === SELECTED_FIELD && isPrintColumnAvailable) {
+    if (field === SELECTED_FIELD && isPrintColumnAvailable) {
       setIsPrintColumnVisible(!isPrintColumnVisible);
     }
     const dataColumns = map(columns, (column) => {
@@ -448,16 +447,16 @@ export function KendoGrid<T extends any> ({
   }
 
   const onPrintIconClick = (props: GridCellProps) => {
-    if(isNull(zebraPrint) || isEmpty(zebraPrint)) {
+    if (isNull(zebraPrint) || isEmpty(zebraPrint)) {
       return toastError(translate('printer.not.configured'));
     }
-    if(documentTypeCategory === DocumentCategory.Equipment) {
-      const param = { equipments: [ props?.dataItem?.document?.docId] };
+    if (documentTypeCategory === DocumentCategory.Equipment) {
+      const param = { equipments: [props?.dataItem?.document?.docId] };
       async.start(
         executePrintEquimentLabelAsyncTask,
         param,
         async,
-        );
+      );
       return;
     }
     setSelectedItem(props?.dataItem);

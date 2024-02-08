@@ -39,7 +39,7 @@ type NotifType = (...args: any) => void;
 const REINITIALIZE_TIMEOUT = 5000;
 
 export class IotService {
-  public static getInstance(): IotService {
+  public static getInstance (): IotService {
     if (!IotService.instance) {
       IotService.instance = new IotService(AWSMqttClient);
     }
@@ -48,31 +48,31 @@ export class IotService {
   }
 
   private static instance: IotService;
-  private emitter = new EventEmitter();
+  private readonly emitter = new EventEmitter();
   private connectedSubscriptionsTopics: string[] = [];
-  private connectedSubscriptions: {topic: string, notif: NotifType}[] = [];
+  private connectedSubscriptions: Array<{topic: string, notif: NotifType}> = [];
   private credentialsMqtt!: IotCredentials;
-  private constructor(
+  private constructor (
     public mqttClientInstance: AwsMqttClient,
   ) {
     this.mqttClientInstance = mqttClientInstance;
     this.emitter.setMaxListeners(100);
   }
 
-  public end() {
+  public end () {
     if (this.mqttClientInstance) {
       this.mqttClientInstance.end();
     }
   }
 
-  public reinitialize() {
+  public async reinitialize () {
     loggerDebug('(createMqttClient) reinitialize connection');
 
     if (!this.mqttClientInstance) {
-      return this.updateMqttClient(this.credentialsMqtt);
+      return await this.updateMqttClient(this.credentialsMqtt);
     }
 
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       this.mqttClientInstance.end(true, () => {
         this.updateMqttClient(this.credentialsMqtt)
           .then(resolve)
@@ -81,7 +81,7 @@ export class IotService {
     });
   }
 
-  public async subscribeToTopic(topic: string, notif: NotifType): Promise<any> {
+  public async subscribeToTopic (topic: string, notif: NotifType): Promise<any> {
     this.emitter.addListener(topic, notif);
     this.connectedSubscriptionsTopics.push(topic);
     this.connectedSubscriptions.push({ notif, topic });
@@ -89,7 +89,7 @@ export class IotService {
     await this.subscribeToTopicMqttClientInstance(topic);
   }
 
-  public async unsubscribeFromTopic(topic: string, notif: NotifType) {
+  public async unsubscribeFromTopic (topic: string, notif: NotifType) {
     const connectedTopicIndexToPop = this.connectedSubscriptionsTopics
       .findIndex((s) => s === topic);
     if (connectedTopicIndexToPop > -1) {
@@ -115,7 +115,7 @@ export class IotService {
     }
   }
 
-  public async unsubscribeAll() {
+  public async unsubscribeAll () {
     for (const topic of this.connectedSubscriptionsTopics) {
       await this.unsubscribeFromTopicMqttClientInstance(topic);
     }
@@ -125,11 +125,11 @@ export class IotService {
     this.emitter.removeAllListeners();
   }
 
-  public isConnected() {
+  public isConnected () {
     return this.mqttClientInstance && this.mqttClientInstance.connected;
   }
 
-  public async updateMqttClient(endpointRedux: any): Promise<any> {
+  public async updateMqttClient (endpointRedux: any): Promise<any> {
     this.credentialsMqtt = endpointRedux;
     loggerDebug('(updateMqttClient) Updating credentials');
 
@@ -190,7 +190,6 @@ export class IotService {
     });
 
     this.mqttClientInstance.on('message', (fullTopic: string, message: ArrayBufferView) => {
-
       const topicsToNotify = uniq(this.connectedSubscriptionsTopics
         .filter((pattern: string) => {
           const fullPattern = this.generateFullTopic(pattern);
@@ -210,7 +209,7 @@ export class IotService {
     });
   }
 
-  private async subscribeToTopicMqttClientInstance(topic: string) {
+  private async subscribeToTopicMqttClientInstance (topic: string) {
     if (!this.isConnected()) {
       loggerDebug('(subscribeToTopicMqttClientInstance) Client not connected. Could not subscribe.', topic);
       return;
@@ -233,7 +232,7 @@ export class IotService {
     }
   }
 
-  private async unsubscribeFromTopicMqttClientInstance(topic: string) {
+  private async unsubscribeFromTopicMqttClientInstance (topic: string) {
     if (!this.isConnected()) {
       loggerDebug('(unsubscribeFromTopicMqttClientInstance) Could not unsubscribe. Client not connected', topic);
       return;
@@ -250,7 +249,7 @@ export class IotService {
     }
   }
 
-  private generateFullTopic(topic: string) {
+  private generateFullTopic (topic: string) {
     return `${this.credentialsMqtt.environment}/${this.credentialsMqtt.companyId}/${topic}`;
   }
 }
@@ -268,7 +267,7 @@ export const areValidCredentials = (credentials: IotCredentials, currenEmployeeI
       msg: 'different credentials',
       credentialsEmployeeId: credentials.employeeId,
       currenEmployeeId,
-    } );
+    });
 
     return false;
   }

@@ -19,11 +19,14 @@ import { ActionTypes, STATUS_TYPES_LABEL } from '../../../../../state/ducks/dash
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
+import ViewFile from '../../../../components/common/view.file/container';
+import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { DialogHandler } from '../../../../hooks/useDialog';
+import useDialog, { DialogHandler } from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
 import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
@@ -176,8 +179,22 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
       downloadFile(downloadInfo?.url);
     },
   });
+
+  const dialogHandler = useDialog();
+  const [selectedAttachment, setSelectedAttachment] = React.useState<Attachment | undefined>(undefined);
+
   const downloadAttachment = (attachment: Attachment) => () => {
-    async.start(downloadAction, attachment, async);
+    if (checkIfFileIsViewable(attachment?.type)) {
+      setSelectedAttachment(attachment);
+      dialogHandler.open();
+    } else {
+      async.start(downloadAction, attachment, async);
+    }
+  };
+
+  const closeDialog = () => {
+    setSelectedAttachment(undefined);
+    dialogHandler.close();
   };
 
   const isPinShown = pinLineItem && !pinned;
@@ -544,6 +561,16 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
           ))}
         </List>
       </Collapse>
+      {selectedAttachment && (
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...(purchaseOrderAttachments ?? [])] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
+      )}
     </>
   );
 };

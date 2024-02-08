@@ -9,7 +9,7 @@ import useStyles from '../../styles';
 import { MODE_FIELD, Mode } from '../Grid';
 
 const InputCellTemplate: CellTemplate = (props) => {
-  const { dataItem, field, dataIndex, column, onChange } = props;
+  const { dataItem, field, dataIndex, column, onChange, onClick } = props;
   const { title, editable, required } = column;
   const mode = get(dataItem, MODE_FIELD);
   const path = field ?? '';
@@ -47,12 +47,17 @@ const InputCellTemplate: CellTemplate = (props) => {
     setError('');
   };
 
+  const handleClick = () => {
+    onClick?.({ dataItem });
+  };
+
   if (!canBeModified) {
     return (
       <OverflowTooltip
         arrow
         placement="top"
         title={value ?? ''}
+        onClick={handleClick}
       >
         {value || '-'}
       </OverflowTooltip>);

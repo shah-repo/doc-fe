@@ -16,7 +16,6 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
   queryGetter,
   defaultValue,
 }) => {
-
   const classes = selectStyles();
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {

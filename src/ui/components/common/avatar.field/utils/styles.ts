@@ -14,16 +14,16 @@ export default makeStyles((theme: Theme) =>
       cursor: 'pointer',
     },
     buttonEnabled: {
-      'display': 'flex',
-      'justifyContent': 'center',
+      display: 'flex',
+      justifyContent: 'center',
       'align-items': 'center',
     },
     link: {
-      'color': '#fff',
-      'fontSize': '15px',
-      'fontWeight': 'bold',
-      'textTransform': 'uppercase',
-      'cursor': 'pointer',
+      color: '#fff',
+      fontSize: '15px',
+      fontWeight: 'bold',
+      textTransform: 'uppercase',
+      cursor: 'pointer',
       '&.MuiLink-underlineHover': {
         textDecoration: 'none',
       },

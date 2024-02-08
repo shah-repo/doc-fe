@@ -64,6 +64,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.revisionChangeType,
     undefined,
     isRecord,
+    documentRevision.displayRevision,
   );
   const isRecordOrPO = isRecord || isDocumentPO;
 

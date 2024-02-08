@@ -307,9 +307,15 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
                 return {
                   [column.key]: getFormattedDateString(columnValue, MomentFormats.MonthDateYear),
                 };
-              } else {
-                return { [column.key]: isNull(columnValue) ? '' : columnValue };
               }
+
+              if (Array.isArray(columnValue)) {
+                return {
+                  [column.key]: columnValue.join(', '),
+                };
+              }
+
+              return { [column.key]: isNull(columnValue) ? '' : columnValue };
           }
         });
         const rows = h.reduce(function (result, current) {

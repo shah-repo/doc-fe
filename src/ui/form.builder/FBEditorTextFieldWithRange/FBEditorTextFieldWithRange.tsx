@@ -87,6 +87,5 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
       {children}
     </FBEditor>
   );
-
 };
 export default withFBEditorTextFieldWithRange(FBEditorTextFieldWithRange);
