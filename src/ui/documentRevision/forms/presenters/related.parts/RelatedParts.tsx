@@ -342,6 +342,7 @@ const RelatedPartGrid: React.FunctionComponent<{
               handleUpdate,
               relatedPartsState,
               isReleased,
+              relatedType,
             }
           } />
         {isEditRowVisible
@@ -382,6 +383,7 @@ const RelatedPartList: React.FunctionComponent<{
   relatedPartsState: RelatedPartsState
   documentRevision: DocumentRevision
   isReleased: boolean
+  relatedType: RELATED_TYPE
 }> = ({
   voidRelatedPart,
   viewRelatedPart,
@@ -392,6 +394,7 @@ const RelatedPartList: React.FunctionComponent<{
   relatedPartsState,
   documentRevision,
   isReleased,
+  relatedType,
 }) => {
   const classes = useStyles();
 
@@ -434,6 +437,7 @@ const RelatedPartList: React.FunctionComponent<{
                         rootRevisionChangeType,
                         relatedPartsState,
                         isReleased,
+                        relatedType,
                       }
                     }
                   />
@@ -455,6 +459,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   rootRevisionChangeType: RevisionChangeType
   relatedPartsState: RelatedPartsState
   isReleased: boolean
+  relatedType: RELATED_TYPE
 }> = ({
   listItem,
   voidRelatedPart,
@@ -464,6 +469,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   rootRevisionChangeType,
   relatedPartsState,
   isReleased,
+  relatedType,
 }) => {
   const classes = useStyles();
   const [isHover, setIsHover] = useState(false);
@@ -575,9 +581,11 @@ const RelatedPartViewRow: React.FunctionComponent<{
               )}
             </>
             : !isVoided
-          && <FBTooltip title="relatedParts.checkbox.hover.msg"
-            placement="top" arrow
-            classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+          && <FBTooltip title={getReplacedMessage(
+            'relatedParts.checkbox.hover.msg', '{relatedType}',
+            getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT))}
+          placement="top" arrow
+          classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
             <Box
               onClick={(e) => e.stopPropagation()}

@@ -14,10 +14,11 @@ import { ApplicationState } from '../../../state/reducers';
 import SummaryField from '../../common/summary/base';
 import Text from '../../components/Text';
 import { FormContext } from '../../components/forms/FormContext';
-import RelatedPartsWrapper from '../../documentRevision/forms/presenters/related.parts/RelatedParts.wrap';
+import EquipmentSpecification from '../../documentRevision/forms/presenters/EquipmentSpecification';
 import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../documentRevision/forms/presenters/related.equipments';
+import RelatedPartsWrapper from '../../documentRevision/forms/presenters/related.parts/RelatedParts.wrap';
 import { getHighestRevision } from '../../documentRevision/forms/transform';
-import { checkIsDocumentEB, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentEB, checkIsDocumentOTHER, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInStatus } from '../../documentRevision/helpers/documentRevisionStatus';
 import { styles as AutoCompleteStyles } from '../../form.builder/styles/FBAutocomplete.styles';
 import { useTraining } from '../../hooks/docCustomization/useCustomization';
@@ -30,7 +31,6 @@ import BuildsContainer from './builds.container';
 import styles from './styles';
 import CompleteTraining from './training/complete.training';
 import TrainingControl from './training/training.control';
-import EquipmentSpecification from '../../documentRevision/forms/presenters/EquipmentSpecification';
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean
@@ -77,12 +77,13 @@ const Presenter: React.FunctionComponent<Props> = ({
 
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
   const isDownloadAllVisible = attachments?.length > 1;
-  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
-  const isEB = checkIsDocumentEB(document.documentType.groupOptions);
-  const isPO = checkIsDocumentPO(document.documentType.groupOptions);
+
+  const groupOptions = document?.documentType?.groupOptions;
+  const isRecord = checkIsDocumentRecord(groupOptions);
+  const isEB = checkIsDocumentEB(groupOptions);
+  const isPO = checkIsDocumentPO(groupOptions);
   const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(dataProp);
   const { _tabsState } = SM.useStores();
-  const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
   const shouldRenderTrainingButton = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
@@ -90,8 +91,13 @@ const Presenter: React.FunctionComponent<Props> = ({
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(', ') : []);
+
+  const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = useSelector((state: ApplicationState) => formTemplate
     ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
+  const isOther = checkIsDocumentOTHER(groupOptions);
+  const isOtherForm = useSelector((state: ApplicationState) => formTemplate
+    ? checkIsDocumentOTHER((formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
 
   const relatedPartsViewOnly
         = !dataProp?.relatedPartsStatus
@@ -178,7 +184,7 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
-        {(isPart || isPartForm) && (
+        {(isPart || isPartForm || isOther || isOtherForm) && (
           <Grid item xs={12}>
             <RelatedPartsWrapper
               viewOnly={relatedPartsViewOnly}
