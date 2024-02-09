@@ -42,6 +42,7 @@
     "babel-plugin-macros": "^3.1.0",
     "classnames": "2.2.6",
     "copy-to-clipboard": "^3.3.1",
+    "d3": "^7.8.5",
     "debug": "^4.3.4",
     "dexie": "^3.2.3",
     "dompurify": "2.0.7",
@@ -125,6 +126,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "4.2.4",
     "@types/classnames": "2.2.9",
+    "@types/d3": "^7.4.0",
     "@types/dompurify": "2.0.1",
     "@types/enzyme": "3.10.4",
     "@types/faker": "4.1.8",
