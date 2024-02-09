@@ -16,10 +16,15 @@ import {
 import { toastError } from '../../components/notifications';
 import { FBSection } from '../../form.builder';
 import useAsync from '../../hooks/useAsync';
+import {
+  ColumnMenuContext,
+  CustomColumnMenu,
+} from './components/cells/CustomColumnMenu';
 import { DATA_ITEM_KEY, SampleLHRSummaryData, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import {
+  CustomTreeListColumnProps,
   EditableLHRSummaryItem,
   EditableLHRSummaryItemEditEvent,
   LHRSummaryItem,
@@ -27,31 +32,19 @@ import {
 
 interface props {
   isShowOnly?: boolean
-  setDoNotPrompt?: (state: boolean) => void
 }
 
 const FBLHRSummary: React.FunctionComponent<props> = ({
   isShowOnly,
-  setDoNotPrompt,
 }) => {
   const classes = useStyles();
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>(SampleLHRSummaryData);
 
-  const materialDispositionAsync = useAsync({
-    onSuccess: (data: {
-      records: EditableLHRSummaryItem[]
-      lastRefreshedAt: Date
-    }) => {
-      setData(data?.records ?? []);
-    },
-    onError: toastError,
-  });
-
-  const partAsync = useAsync({
-    onSuccess: () => {
-      // TODO
+  const LHRSummaryAsync = useAsync({
+    onSuccess: (data) => {
+      data && setData(data?.records ?? []);
     },
     onError: toastError,
   });
@@ -85,10 +78,10 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   }, [editedLHRSummaryItem, setValues, resetForm]);
 
   useEffect(() => {
-    fetchMaterialDispositionTableData();
+    fetchLHRSummaryData();
   }, []);
 
-  const fetchMaterialDispositionTableData = () => {
+  const fetchLHRSummaryData = () => {
     // TODO later
   };
 
@@ -110,6 +103,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   };
 
   const onAddItem = () => {
+    // TODO update as per edit fields
     const newLHRSummaryItem: EditableLHRSummaryItem = {
       id: uuidv4(),
       step: '',
@@ -132,7 +126,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       createdAt: '',
       [MODE_FIELD]: Mode.add,
     };
-    console.log('newLHRSummaryItem :', newLHRSummaryItem);
     setEditedLHRSummaryItem(newLHRSummaryItem);
   };
 
@@ -178,8 +171,29 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     onDiscard: ondiscardLHRSummaryItem,
   });
 
-  const [columns]
+  const [columns, setColumns]
     = React.useState<Array<ColumnDefinition<EditableLHRSummaryItem>>>(schema);
+
+  const onLock = React.useCallback(
+    ({
+      field,
+      locked,
+    }: CustomTreeListColumnProps) => {
+      const index = columns.findIndex((c) => c.field === field);
+      const column = columns[index];
+      if (column) {
+        const newColumns = [...columns];
+        newColumns.splice(index, 1, {
+          ...column,
+          locked: !locked,
+          reorderable: locked,
+          orderIndex: !locked ? 0 : undefined,
+        });
+        setColumns(newColumns);
+      }
+    },
+    [columns],
+  );
 
   return (
     <>
@@ -198,26 +212,43 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           {translate('lhr.summary.add.item')}
         </Button>
       </FBSection>
-      <KendoDataGrid<EditableLHRSummaryItem>
-        data={LHRSummaryItemList}
-        schema={getColumns()}
-        fullWidth
-        className={classes.rootLHRSummaryTable}
-        hasBoxScrollbars
-        onRowClick={onEditLHRSummaryItem}
-        selectedField={SELECTED_FIELD}
-        dataItemKey={DATA_ITEM_KEY}
-        filterable={true}
-        navigatable={true}
-        rowRender={rowRender}
-        fallback={
-          <Typography className={classes.font}>
-            {translate('lhr.summary.table.empty.records')}
-          </Typography>
-        }
-        loading={materialDispositionAsync.isLoading || partAsync.isLoading}
-        resizable={true}
-      />
+      <ColumnMenuContext.Provider
+        value={{
+          columns: getColumns(),
+          onLock,
+        }}
+      >
+        <KendoDataGrid<EditableLHRSummaryItem>
+          data={LHRSummaryItemList}
+          schema={getColumns()}
+          fullWidth
+          className={classes.rootLHRSummaryTable}
+          hasBoxScrollbars
+          onRowClick={onEditLHRSummaryItem}
+          columnMenu={(props) => (
+            <CustomColumnMenu
+              {...props}
+              columns={getColumns()}
+              {...{
+                onLock,
+              }}
+            />
+          )
+          }
+          selectedField={SELECTED_FIELD}
+          dataItemKey={DATA_ITEM_KEY}
+          filterable={true}
+          navigatable={true}
+          rowRender={rowRender}
+          fallback={
+            <Typography className={classes.font}>
+              {translate('lhr.summary.table.empty.records')}
+            </Typography>
+          }
+          loading={LHRSummaryAsync.isLoading}
+          resizable={true}
+        />
+      </ColumnMenuContext.Provider>
       {!isShowOnly && (
         <Button
           kind="add"

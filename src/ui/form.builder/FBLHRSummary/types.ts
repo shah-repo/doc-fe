@@ -1,3 +1,4 @@
+import { TreeListColumnProps } from '@progress/kendo-react-treelist';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 
@@ -21,6 +22,16 @@ export interface LHRSummaryItem {
   comments: string
   createdBy: string
   createdAt: string
+}
+
+export interface CustomTreeListColumnProps extends TreeListColumnProps {
+  isHidden?: boolean
+  isShowedMenu?: boolean
+  mainOrderIndex?: number
+  disableShowOrHideSelection?: boolean
+  filterable?: boolean
+  show?: boolean
+  selectable?: boolean
 }
 
 export interface EditableLHRSummaryItem extends LHRSummaryItem {
