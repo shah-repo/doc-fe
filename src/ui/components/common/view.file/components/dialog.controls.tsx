@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core';
 import React, { useContext, useMemo } from 'react';
 import Text from '../../../Text';
-import { SetFile } from '../../attachment.icon/container';
+import { AttachmentSliderContext } from '../../attachment.icon/AttachmentSlideProvider';
 import { checkIfFileIsViewable } from '../utils/helpers';
 import { styles } from '../utils/styles';
 import { ViewFileTitleControlsProps } from '../utils/types';
@@ -10,7 +10,7 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
   attachment = {},
   attachments,
 }) => {
-  const setFile = useContext(SetFile ?? {});
+  const { setFile } = useContext(AttachmentSliderContext);
   const { setPreviousAttachment, setNextAttachment } = useMemo(() => {
     const viewableFiles = attachments.filter((item) => checkIfFileIsViewable(item.type));
     if (viewableFiles.length === 1) {
@@ -20,10 +20,10 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
 
     const setPrevious = currentIndex === 0
       ? undefined
-      : () => setFile(viewableFiles[currentIndex - 1]);
+      : () => setFile?.(viewableFiles[currentIndex - 1]);
     const setNext = (currentIndex + 1) >= viewableFiles.length
       ? undefined
-      : () => setFile(viewableFiles[currentIndex + 1]);
+      : () => setFile?.(viewableFiles[currentIndex + 1]);
 
     return { setPreviousAttachment: setPrevious, setNextAttachment: setNext };
   }, [attachment, attachments, setFile]);

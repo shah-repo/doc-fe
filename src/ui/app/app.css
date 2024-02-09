@@ -75,7 +75,10 @@
 .Toastify__close-button {
   font-family: "Sora";
 }
-
+.containing-box-scrollbar {
+  -ms-overflow-style: scrollbar !important;
+  scrollbar-width: auto !important;
+}
 .containing-box-scrollbar::-webkit-scrollbar {
   background-color: transparent;
   width: 9px !important;

@@ -152,6 +152,9 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     }
 
     const onFilterInputChange = (event, inputValue) => {
+      if(isUndefined(options)) {
+        return setModifiedOptions([]);
+      }
       if (inputValue && inputValue.length > 2) {
         const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || '';
         const filterOptions = createFilterOptions({ ignoreAccents: false, stringify });

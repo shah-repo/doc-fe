@@ -30,14 +30,13 @@ import { Password } from '../../password/types';
 import { AttachmentRedLineWarningDialog } from '../attachment.redline.warning/dialog';
 import ViewFile from '../view.file/container';
 import { checkIfFileIsViewable } from '../view.file/utils/helpers';
+import AttachmentSlideProvider from './AttachmentSlideProvider';
 import Menu from './menu';
 import PresenterFactory from './presenter.factory';
 import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from './utils/types';
 import WatermarkContainer from './watermark/container';
 
 type DispatchProps = AttachmentIconDispatchProps;
-
-export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment | undefined>>>;
 
 const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name = '',
@@ -107,8 +106,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       setPassword(undefined);
     },
   });
-
-  SetFile = React.createContext(setSelectedAttachment);
 
   const redLineRequiresPassword = (attachment: Attachment, type?: AttachmentType) => {
     const isRedLine = attachment.lineType === LINE_TYPES.RED_LINE;
@@ -388,13 +385,15 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
         closeDialog={passwordDialogHandler.close}
         asyncState={passwordState}
       />
-      <ViewFile
-        isOpen={dialogHandler.isOpen}
-        handleClose={dialogHandler.close}
-        password={password}
-        attachments={attachments}
-        attachment={selectedAttachment}
-      />
+      <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+        <ViewFile
+          isOpen={dialogHandler.isOpen}
+          handleClose={dialogHandler.close}
+          password={password}
+          attachments={attachments}
+          attachment={selectedAttachment}
+        />
+      </AttachmentSlideProvider>
       <WatermarkContainer
         newWatermarkRequest={newWatermarkRequest}
         newWatermarkError={newWatermakrError}

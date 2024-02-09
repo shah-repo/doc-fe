@@ -93,32 +93,6 @@
     "@typescript-eslint/triple-slash-reference": ["warn"],
     "@typescript-eslint/type-annotation-spacing": ["warn"],
     "@typescript-eslint/unbound-method": ["warn"],
-    "array-bracket-spacing": ["warn", "never"],
-    "array-callback-return": ["warn"],
-    "dot-location": ["warn", "property"],
-    "eqeqeq": [
-      "warn",
-      "always",
-      {
-        "null": "ignore"
-      }
-    ],
-    "handle-callback-err": ["warn", "^(err|error)$"],
-    "object-property-newline": [
-      "warn",
-      {
-        "allowMultiplePropertiesPerLine": true,
-        "allowAllPropertiesOnSameLine": false
-      }
-    ],
-    "padded-blocks": [
-      "warn",
-      {
-        "blocks": "never",
-        "switches": "never",
-        "classes": "never"
-      }
-    ],
     "prefer-promise-reject-errors": ["warn"],
     "quote-props": ["warn", "as-needed"],
     "react-hooks/exhaustive-deps": ["warn"],
