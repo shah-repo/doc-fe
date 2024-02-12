@@ -1,7 +1,7 @@
 import { Box, IconButton, Popper, TextField, Typography } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
 import { RenderInputParams } from '@material-ui/lab/Autocomplete';
-import { get, includes } from 'lodash';
+import { get, includes, isEmpty } from 'lodash';
 import { Observer } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from '..';
@@ -134,6 +134,10 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     && includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
     ? true : disabled;
 
+  if (multiple && isEmpty(value)) {
+    value = [];
+  }
+
   return (
     <>
       {includeQRScan && (
@@ -183,6 +187,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               freeSolo,
               filterOptions,
               disableClearable,
+              value,
             }}
             classes={autoCompleteClasses}
             options={modifiedOptions}
