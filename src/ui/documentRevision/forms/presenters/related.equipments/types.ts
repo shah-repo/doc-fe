@@ -26,7 +26,7 @@ export interface SchemaOptions {
 export interface RelatedEquipment extends DocumentRevision {
   docId: string
   documentRevisionId: string
-  location?: string
+  location?: EquipmentLocation
   primaryOwner?: Employee
   needSync: boolean
   createdBy: User

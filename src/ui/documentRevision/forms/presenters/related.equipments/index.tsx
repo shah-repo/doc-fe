@@ -95,7 +95,6 @@ const RelatedEquipments: React.FC<RelatedEquipmentsProps> = (props) => {
 
     setNewRelatedEquipment({
       name: '',
-      location: '',
       displayRevision: '',
       createdBy: currentUser,
       status: DocumentRevisionStatus.Draft,
