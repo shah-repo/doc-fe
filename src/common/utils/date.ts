@@ -8,6 +8,9 @@ type DateTypes = MomentInput | Date | string | number | undefined;
 export const getStartOfDayDateString = (date: DateTypes, format = '') =>
   moment(date).tz(TIME_ZONE).startOf('day').format(format);
 
+export const getSortedLineItems = (data) =>
+  data?.sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp))).reverse();
+
 export const toStartOfDay = (date: DateTypes) =>
   new Date(
     ...(moment.utc(date).toArray().slice(0, 3) as [number, number, number]),
