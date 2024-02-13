@@ -123,7 +123,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
-  const isLOT = documentRevision.document?.lot;
 
   const isLastVersionObsolete = () => {
     if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
@@ -471,7 +470,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
     accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
-  if (isLOT) {
+  if (isLot) {
     accessableButtons.push(PreviewControlButtons.PrintLabelButton);
   }
 
