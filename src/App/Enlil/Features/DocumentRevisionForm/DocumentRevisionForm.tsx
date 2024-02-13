@@ -231,18 +231,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           ),
         }}
       >
-        <RedlineBanner />
-        <UpgradeToLatestContainer
-          type="banner"
-          docRevId={documentRevision?.id}
-          {...{
-            documentRevision,
-            bannerPortal,
-            shouldShowUpgrade,
-            shouldShowSyncForRelatedEquipment,
-          }}
-        />
-        {documentRevision && <LHRBanner documentRevision={documentRevision} />}
         <Observer>
           {() => (
             <SMTemplate
@@ -250,6 +238,22 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               contentBoxProps={{
                 overflow: _documentRevisionFormState?.expanded ? 'unset' : 'auto',
               }}
+              banner={
+                <>
+                  <RedlineBanner />
+                  <UpgradeToLatestContainer
+                    type="banner"
+                    docRevId={documentRevision?.id}
+                    {...{
+                      documentRevision,
+                      bannerPortal,
+                      shouldShowUpgrade,
+                      shouldShowSyncForRelatedEquipment,
+                    }}
+                  />
+                  {documentRevision && <LHRBanner documentRevision={documentRevision} />}
+                </>
+              }
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
                 type={type}
                 inRestrictedEditMode={inRestrictedEditMode}
