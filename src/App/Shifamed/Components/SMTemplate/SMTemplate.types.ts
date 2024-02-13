@@ -10,6 +10,10 @@ export interface SMTemplateProps {
    */
   header?: React.ReactNode
   /**
+   * @cfg {Element} Top panel.
+   */
+  banner?: React.ReactNode
+  /**
    * @cfg {Element} LHR step panel.
    */
   lhrSteps?: React.ReactNode

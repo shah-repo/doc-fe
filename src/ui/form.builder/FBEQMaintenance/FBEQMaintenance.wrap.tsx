@@ -18,10 +18,10 @@ import { toastError } from '../../components/notifications';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
 import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
+import { checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
 import { filterSecurityGroupsForQms } from '../../documentType/list/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
-import { checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>,
@@ -186,7 +186,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         const title = option?.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Obsolete)?.name;
         return `${option.docId} - OBS - ${title}`;
       }
-      return `${option.docId} - rev ${option.displayRevision} - ${option.name}`;
+      return option.docId ? `${option.docId} - rev ${option.displayRevision} - ${option.name}` : '';
     };
 
     useObserver(() => {
