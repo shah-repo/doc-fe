@@ -1,4 +1,5 @@
 import { Box, Button, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -39,7 +40,6 @@ import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency, getPendingTooltipText } from '../../common/Utils';
 import EmailModal from '../../dialogs/email/EmailDialog';
 import useStyles from './purchaseOrder.styles';
-
 interface Props {
   id: string
   docDocumentId: string
@@ -409,7 +409,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={`${classes.actionIcons} ${classes.poActionIconsWidth}`}
+            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (

@@ -1,4 +1,5 @@
 import { Box, Button, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -325,7 +326,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={`${classes.actionIcons} ${classes.poActionIconsWidth}`}
+            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
