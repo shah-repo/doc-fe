@@ -37,7 +37,7 @@ export const buildSchema = ({
   );
 
   const locationFieldOptions = locations.filter(location => location.active);
-  const existingLocationIds = uniq(relatedEquipments.map(item => item.location));
+  const existingLocationIds = uniq(relatedEquipments.map(item => item.location?.id));
   const locationFilterOptions = locations
     .filter(location => existingLocationIds.includes(location.id))
     .map(location => createOption(location.id, location.name));
@@ -108,10 +108,10 @@ export const buildSchema = ({
     },
     {
       id: 'location',
-      field: 'location',
+      field: 'location.id', // deep field name for correct filter working
       title: 'common.location',
       filterCell: LocationFilter,
-      template: (props) => <LocationCellTemplate {...props} options={locationFieldOptions} />,
+      template: (props) => <LocationCellTemplate {...props} field="location" options={locationFieldOptions} />,
       editable: false,
       width: 200,
     },

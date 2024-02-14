@@ -22,7 +22,7 @@ export const PrimaryOwnerCellTemplate: React.FC<Props> = (props) => {
     }
 
     return (
-        <AvatarComponent {...owner.user} />
+      <AvatarComponent {...owner.user} />
     );
   };
 
