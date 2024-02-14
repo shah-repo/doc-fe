@@ -53,7 +53,7 @@ import Colors from '../layout/theme/utils/colors';
 import WOClose from './forms/presenters/Close';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLot, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
@@ -108,7 +108,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
   const printDialog = useDialog();
-
   const formDocumentId = documentRevision.formDocument?.document?.id || '';
   const groupOptions = documentRevision.document?.documentType?.groupOptions;
   const formDocuments: Document = useSelector((state: ApplicationState) =>
@@ -128,7 +127,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
-  const isLOT = checkIsDocumentLot(groupOptions);
+
   const isLastVersionObsolete = () => {
     if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
       return;
@@ -479,7 +478,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (isDirectApproval && isStatusInReview && isUserDocumentOwner && !isWO) {
     accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
-  if (isLOT) {
+  if (isLot) {
     accessableButtons.push(PreviewControlButtons.PrintLabelButton);
   }
 

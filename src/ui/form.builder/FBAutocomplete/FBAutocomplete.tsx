@@ -134,8 +134,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     && includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
     ? true : disabled;
 
-  if (multiple && isEmpty(value)) {
-    value = [];
+  if (multiple && isEmpty(value) && workspaceState.isPreview) {
+    multiple = false;
   }
 
   return (
@@ -187,7 +187,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               freeSolo,
               filterOptions,
               disableClearable,
-              value,
             }}
             classes={autoCompleteClasses}
             options={modifiedOptions}

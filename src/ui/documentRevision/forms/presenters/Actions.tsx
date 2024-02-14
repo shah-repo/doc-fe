@@ -413,6 +413,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {buttons.includes(PreviewControlButtons.SubmitApprovalButton) && (
         <SubmitForApproval
           docRevId={values.id as string}
+          description={values.description}
           status={values.status}
           docRevOwner={owner?.user.name}
           updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}

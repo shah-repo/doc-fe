@@ -8,7 +8,7 @@ import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/pr
 import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType, DOC_TYPE_GROUP } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
@@ -22,6 +22,7 @@ import { styles } from './FinalizeAndRelease.styles';
 
 interface Props {
   docRevId: string
+  description?: string
   status?: DocumentRevisionStatus
   revisionChangeType: string
   docRevOwner: string
@@ -35,10 +36,11 @@ interface Props {
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
   docRevId,
+  description,
   status,
   revisionChangeType,
   docRevOwner,
-  updatedAt,
+  updatedAt = '',
   currentDocumentType,
   renderAsButton,
   hasBuildType,
@@ -53,6 +55,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
+  const isLot = currentDocumentType?.group === DOC_TYPE_GROUP.LOT;
   let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
 
   if (isWO && !isWOForm) {
@@ -80,7 +83,8 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
 
   const releaseRecord = () => {
     if (!hasBuildType && isLhrDoc) {
-      return toastError(intl.formatMessage({ id: 'form.builder.lhr.build.type.error.message' }));
+      toastError(intl.formatMessage({ id: 'form.builder.lhr.build.type.error.message' }));
+      return;
     }
     releaseAsync.start(
       applyTransition,
@@ -92,14 +96,15 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
 
   /** Adds reason for voiding a record to description and sends the record to review. */
   const voidRecord = () => {
+    const reason = String(formState?.getValues().voidDescription);
+    const voidDescription = `<p>Void</p><p>${reason}</p><p data-source="void">${docRevOwner}, ${updatedAt}</p>`;
+    const updatedDescription = isLot && description
+      ? `${voidDescription}${description}`
+      : voidDescription;
     updateDocAsync.start(
       save,
       docRevId,
-      {
-        description: `<p>Void</p>
-        <p>${formState?.getValues().voidDescription}</p>
-        <p>${docRevOwner}, ${updatedAt}</p>`,
-      },
+      { description: updatedDescription },
       updateDocAsync,
     );
   };
