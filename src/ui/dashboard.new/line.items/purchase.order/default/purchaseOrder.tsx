@@ -17,6 +17,7 @@ import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
@@ -521,12 +522,14 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         </List>
       </Collapse>
       {selectedAttachment && (
-        <ViewFile
-          isOpen={dialogHandler.isOpen}
-          handleClose={closeDialog}
-          attachments={[selectedAttachment]}
-          attachment={selectedAttachment}
-        />
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...purchaseOrderAttachments] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
       )}
     </>
   );

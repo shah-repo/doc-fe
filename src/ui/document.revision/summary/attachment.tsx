@@ -1,9 +1,9 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import Text from '../../components/Text';
 import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
 import AttachmentField from '../../components/common/attachment.icon/container';
-import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
 
 export interface Props {

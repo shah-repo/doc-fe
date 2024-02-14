@@ -1,10 +1,9 @@
 import React from 'react';
-import { CustomTemplateProps } from '../types';
 import { Employee } from '../../../../../../state/ducks/company/types';
-import { AutocompleteCellTemplate } from './AutocompleteCellTemplate';
-import OverflowContent from '../../../../../components/OverflowContent';
 import { AvatarComponent } from '../../../../../components/common/kendo.column.templates/UserAvatar';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
+import { CustomTemplateProps } from '../types';
+import { AutocompleteCellTemplate } from './AutocompleteCellTemplate';
 
 interface Props extends CustomTemplateProps {
   options: Employee[]
@@ -22,12 +21,8 @@ export const PrimaryOwnerCellTemplate: React.FC<Props> = (props) => {
       return EMPTY_VALUE_PLACEHOLDER;
     }
 
-    const displayValue = getOptionLabel(owner);
-
     return (
-      <OverflowContent title={displayValue}>
-        <AvatarComponent {...owner.user} />
-      </OverflowContent>
+      <AvatarComponent {...owner.user} />
     );
   };
 

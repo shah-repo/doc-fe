@@ -1,4 +1,5 @@
 import React from 'react';
+import { get } from 'lodash';
 import { CustomTemplateProps } from '../types';
 import { EquipmentLocation } from '../../../../../../state/ducks/company/types';
 import { AutocompleteCellTemplate } from './AutocompleteCellTemplate';
@@ -12,20 +13,18 @@ interface Props extends CustomTemplateProps {
 const getOptionLabel = (option: EquipmentLocation) => option.name;
 
 export const LocationCellTemplate: React.FC<Props> = (props) => {
-  const { options, dataItem, field } = props;
+  const { dataItem, field } = props;
 
   const renderStoredValue = () => {
-    const value = options?.find(item => item.id === dataItem[field]);
+    const name = get(dataItem, `${field}.name`) as string;
 
-    if (!value) {
+    if (!name) {
       return EMPTY_VALUE_PLACEHOLDER;
     }
 
-    const displayValue = getOptionLabel(value);
-
     return (
-      <OverflowContent title={displayValue}>
-        {displayValue}
+      <OverflowContent title={name}>
+        {name}
       </OverflowContent>
     );
   };

@@ -17,6 +17,7 @@ export default makeStyles((theme: NextTheme) => createStyles({
     mobileLayout: {
       left: ({ isOpened }) => isOpened ? MOBILE_DRAWER_WIDTH : MOBILECOLLAPSE_BAR_SPACE,
       marginLeft: 5,
+      minWidth: 370,
     },
   },
 }));
