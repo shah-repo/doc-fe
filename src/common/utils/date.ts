@@ -38,6 +38,7 @@ export enum MomentFormats {
   DateTimeSeconds = 'M/D/YYYY hh:mm:ss A z',
   Time = 'hh:mm:ss A z',
   AsyncTasksDefaultDateTimeFormatter = 'YYYY-MM-DDTHH:mm:ss z',
+  LHRSummaryDefaultDateTimeFormatter = 'YYYY-MM-DDTHH:mm:ss z',
   YearMonthDateDotNotation = 'YYYY.MM.DD',
   YearMonthDate= 'YYYY-MM-DD',
 }
