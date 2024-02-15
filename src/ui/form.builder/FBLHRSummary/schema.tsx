@@ -1,7 +1,16 @@
 import React from 'react';
 import { ActionsCellTemplate } from '../../change.request/FBMaterialDisposition/components/commonCells/ActionsCellTemplate';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { ActualIDCell } from './components/cells/ActualIDCell';
+import { ByCell } from './components/cells/ByCell';
+import { DateCell } from './components/cells/DateCell';
+import { LotIDCell } from './components/cells/LotIDCell';
+import { PlannedIDCell } from './components/cells/PlannedIDCell';
+import { QuantityCell } from './components/cells/QuantityCell';
+import { StatusCell } from './components/cells/StatusCell';
+import { StepCell } from './components/cells/StepCell';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
+import { TypeCell } from './components/cells/TypeCell';
 import { EditableLHRSummaryItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -15,7 +24,7 @@ export const buildSchema = ({
       id: 'type',
       field: 'type',
       title: 'lhr.summary.grid.heading.type',
-      // template: (props) => <PartIdCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <TypeCell {...props} onClick={onRowClick} />,
       show: true,
       width: 201,
     },
@@ -24,17 +33,15 @@ export const buildSchema = ({
       field: 'step',
       title: 'lhr.summary.grid.heading.step',
       show: true,
-      width: 201,
+      template: (props) => <StepCell {...props} onClick={onRowClick} />,
+      width: 401,
       sortable: false,
     },
     {
       id: 'plannedId',
       field: 'plannedId',
       title: 'lhr.summary.grid.heading.planned.id',
-      // headerCell: () => <CustomHeaderTooltipCell
-      //   content ="approvalRequest.grid.heading.lot"
-      //   title="approvalRequest.grid.heading.tooltip.lot" />,
-      // template: (props) => <LotIdCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <PlannedIDCell {...props} onClick={onRowClick} />,
       show: true,
       width: 201,
     },
@@ -42,17 +49,9 @@ export const buildSchema = ({
       id: 'actualId',
       field: 'actualId',
       title: 'lhr.summary.grid.heading.actual.id',
+      template: (props) => <ActualIDCell {...props} onClick={onRowClick} />,
       show: true,
       sortable: false,
-      // headerCell: () => <CustomHeaderTooltipCell
-      //   content ="approvalRequest.grid.heading.location"
-      //   title="approvalRequest.grid.heading.tooltip.location" />,
-      // filterCell: (props) => <DropDownOptionsFilterCell
-      //   {...props}
-      //   data={LOCATION_DATA}
-      //   defaultItem=""
-      // />,
-      // template: (props) => <LocationCellTemplate {...props} onClick={onRowClick} />,
       selectable: false,
       width: 201,
     },
@@ -60,10 +59,7 @@ export const buildSchema = ({
       id: 'title',
       field: 'title',
       title: 'lhr.summary.grid.heading.title',
-      // headerCell: () => <CustomHeaderTooltipCell
-      //   content ="approvalRequest.grid.heading.whereUsedView"
-      //   title="approvalRequest.grid.heading.tooltip.whereUsedView" />,
-      // template: (props) => <WhereUsedCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
       show: true,
       selectable: false,
       width: 201,
@@ -74,10 +70,7 @@ export const buildSchema = ({
       title: 'lhr.summary.grid.heading.lot',
       show: true,
       selectable: false,
-      // headerCell: () => <CustomHeaderTooltipCell
-      //   content ="approvalRequest.grid.heading.onOrder"
-      //   title="approvalRequest.grid.heading.tooltip.onOrder" />,
-      // template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
+      template: (props) => <LotIDCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -86,10 +79,7 @@ export const buildSchema = ({
       title: 'lhr.summary.grid.heading.expiry.date',
       show: true,
       selectable: false,
-      // headerCell: () => <CustomHeaderTooltipCell
-      //   content ="approvalRequest.grid.heading.Inspection"
-      //   title="approvalRequest.grid.heading.tooltip.Inspection" />,
-      // template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
+      template: (props) => <DateCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -98,10 +88,7 @@ export const buildSchema = ({
       title: 'lhr.summary.grid.heading.start.qty',
       show: true,
       selectable: false,
-      // headerCell: () => <CustomHeaderTooltipCell
-      //   title ="approvalRequest.grid.heading.tooltip.Inventory"
-      //   content="approvalRequest.grid.heading.Inventory" />,
-      // template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
+      template: (props) => <QuantityCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -110,10 +97,7 @@ export const buildSchema = ({
       title: 'lhr.summary.grid.heading.end.qty',
       show: true,
       selectable: false,
-      // headerCell: () => <CustomHeaderTooltipCell
-      //   content ="approvalRequest.grid.heading.wip"
-      //   title="approvalRequest.grid.heading.tooltip.wip" />,
-      // template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
+      template: (props) => <QuantityCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -121,11 +105,8 @@ export const buildSchema = ({
       field: 'status',
       title: 'lhr.summary.grid.heading.status',
       show: true,
+      template: (props) => <StatusCell {...props} onClick={onRowClick} />,
       selectable: false,
-      // headerCell: () => <CustomHeaderTooltipCell
-      //   content ="approvalRequest.grid.heading.finishedGoods"
-      //   title="approvalRequest.grid.heading.tooltip.finishedGoods" />,
-      // template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
       width: 201,
     },
     {
@@ -134,10 +115,7 @@ export const buildSchema = ({
       selectable: false,
       title: 'lhr.summary.grid.heading.cal.due.date',
       show: true,
-      // headerCell: () => <CustomHeaderTooltipCell
-      //   title ="approvalRequest.grid.heading.tooltip.field"
-      //   content="approvalRequest.grid.heading.field" />,
-      // template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
+      template: (props) => <DateCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -145,7 +123,7 @@ export const buildSchema = ({
       field: 'pmDueDate',
       title: 'lhr.summary.grid.heading.pm.due.date',
       show: true,
-      template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <DateCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -153,7 +131,7 @@ export const buildSchema = ({
       field: 'ncmr',
       title: 'lhr.summary.grid.heading.ncmr',
       show: true,
-      // template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -169,7 +147,7 @@ export const buildSchema = ({
       field: 'createdBy',
       title: 'lhr.summary.grid.heading.entered.by',
       show: true,
-      // template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <ByCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -177,7 +155,7 @@ export const buildSchema = ({
       field: 'createdAt',
       title: 'lhr.summary.grid.heading.date',
       show: true,
-      // template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <DateCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {

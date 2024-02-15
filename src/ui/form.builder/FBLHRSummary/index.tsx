@@ -52,6 +52,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const formik = useFormik<Partial<EditableLHRSummaryItem>>({
     initialValues: {},
     onSubmit: (values) => {
+      console.log('confirm data :', values);
       // TODO save & update cases
       updateMaterialDispositionTableData([values] as EditableLHRSummaryItem[]);
       ondiscardLHRSummaryItem();
@@ -134,7 +135,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     { dataItem },
   ) => {
     const item = dataItem as LHRSummaryItem;
-    const isUpdating = [Mode.edit].includes(item[MODE_FIELD]);
+    const isUpdating = [Mode.edit, Mode.add].includes(item[MODE_FIELD]);
 
     if (!isUpdating) {
       return row;

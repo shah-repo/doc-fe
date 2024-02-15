@@ -1,6 +1,7 @@
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
+import { translate } from '../../../../../common/intl';
 import OverflowingContent from '../../../../change.request/FBMaterialDisposition/components/commonCells/OveflowContent';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
@@ -18,6 +19,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
         {...getFieldProps(field)}
         defaultValue={undefined}
         type="text"
+        placeholder={translate('lhr.summary.placeholder.enter')}
         size="small"
       />
     </FormikField>
@@ -32,7 +34,7 @@ export const TextInputCellTemplate: React.FC<CustomTemplateProps> = (props) => {
     return <Editor {...props} />;
   }
 
-  const handleClick = () => onClick?.({ dataItem });
+  const handleClick = () => onClick?.(dataItem);
 
   const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
 

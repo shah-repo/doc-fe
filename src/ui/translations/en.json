@@ -1861,6 +1861,8 @@
   "lhr.summary.grid.heading.entered.by": "Entered By",
   "lhr.summary.grid.heading.date": "Date",
   "lhr.summary.table.empty.records": "Add item to display here",
+  "lhr.summary.placeholder.select.enter": "Select or Enter",
+  "lhr.summary.placeholder.enter": "Enter",
   "controlConfig.editPart.button.text": "Restricted Edit",
   "print.label.dialog.field.quantity.units": "Quantity Units",
   "print.label.dialog.field.partId": "Part ID",

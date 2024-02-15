@@ -4,11 +4,12 @@ export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const EMPTY_DROPDOWN_PLACEHOLDER = 'N/A';
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
+export const LHR_SUMMARY_TYPE_OPTIONS = [{ label: 'Equipment', value: 'equipment' }];
 export const SampleLHRSummaryData = [
   {
     id: '123',
     step: '#1',
-    type: 'Equipment',
+    type: 'equipment',
     plannedId: 'PL-1289',
     actualId: 'AL-1289',
     title: 'Sample LHR Summary',
