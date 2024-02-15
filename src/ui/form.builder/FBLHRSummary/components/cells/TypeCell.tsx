@@ -5,7 +5,7 @@ import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { LHR_SUMMARY_TYPE_OPTIONS } from '../../constants';
+import { TYPE_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
 export const TypeCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
@@ -18,7 +18,7 @@ export const TypeCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => 
   };
 
   const defaultValue = isEditMode ? values.type : dataItem.type;
-  const value = LHR_SUMMARY_TYPE_OPTIONS.find((option) => option.value === defaultValue);
+  const value = TYPE_OPTIONS.find((option) => option.value === defaultValue);
 
   if (isEditMode && !isEmpty(values)) {
     return (
@@ -30,7 +30,7 @@ export const TypeCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => 
           blurOnSelect
           disableClearable
           placeholder={translate('lhr.summary.placeholder.enter')}
-          options={LHR_SUMMARY_TYPE_OPTIONS}
+          options={TYPE_OPTIONS}
           value={value}
           getOptionLabel={(option: OptionType) => option.label}
           onChange={handleChange}

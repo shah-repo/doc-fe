@@ -4,6 +4,7 @@ import React from 'react';
 import { MomentFormats } from '../../../../../common/utils/date';
 import { DatePicker, FormikField } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import { NA_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 
 export const DateCell: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
@@ -31,5 +32,5 @@ export const DateCell: React.FC<CustomTemplateProps> = ({ field, dataItem }) => 
     );
   }
 
-  return value;
+  return value ?? NA_PLACEHOLDER;
 };

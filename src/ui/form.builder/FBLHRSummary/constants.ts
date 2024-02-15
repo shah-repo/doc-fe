@@ -4,7 +4,25 @@ export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const EMPTY_DROPDOWN_PLACEHOLDER = 'N/A';
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
-export const LHR_SUMMARY_TYPE_OPTIONS = [{ label: 'Equipment', value: 'equipment' }];
+export const TYPE_OPTIONS = [
+  { label: 'Equipment', value: 'equipment' },
+  { label: 'Process', value: 'process' },
+  { label: 'Material', value: 'material' },
+];
+export const LHR_SUMMARY_TYPE_OPTIONS = [
+  { label: 'Equipment', value: 'equipment' },
+];
+export const STATUS_OPTIONS = [
+  { label: 'Draft', value: 'draft' },
+  { label: 'In Review', value: 'In Review' },
+  { label: 'Released', value: 'Released' },
+  { label: 'Accepted', value: 'accepted' },
+  { label: 'Active', value: 'active' },
+  { label: 'Quarantine', value: 'quarantine' },
+  { label: 'Approved', value: 'Approved' },
+];
+export const EMPTY_PLACEHOLDER = '-';
+export const NA_PLACEHOLDER = 'NA';
 export const SampleLHRSummaryData = [
   {
     id: '123',

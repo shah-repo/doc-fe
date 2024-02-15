@@ -5,7 +5,7 @@ import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { LHR_SUMMARY_TYPE_OPTIONS } from '../../constants';
+import { EMPTY_PLACEHOLDER, LHR_SUMMARY_TYPE_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
 export const PlannedIDCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
@@ -43,5 +43,5 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({ dataItem, field }
     );
   }
 
-  return <>{value?.label ?? defaultValue}</>;
+  return <>{value?.label ?? defaultValue ?? EMPTY_PLACEHOLDER}</>;
 };

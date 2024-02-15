@@ -4,7 +4,7 @@ import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.t
 import { ActualIDCell } from './components/cells/ActualIDCell';
 import { ByCell } from './components/cells/ByCell';
 import { DateCell } from './components/cells/DateCell';
-import { DateTimePickerCell } from './components/cells/DateTimePickerCell';
+import { DueDateCell } from './components/cells/DueDateCell';
 import { LotIDCell } from './components/cells/LotIDCell';
 import { PlannedIDCell } from './components/cells/PlannedIDCell';
 import { QuantityCell } from './components/cells/QuantityCell';
@@ -80,7 +80,7 @@ export const buildSchema = ({
       title: 'lhr.summary.grid.heading.expiry.date',
       show: true,
       selectable: false,
-      template: (props) => <DateTimePickerCell {...props} onClick={onRowClick} />,
+      template: (props) => <DateCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -116,7 +116,7 @@ export const buildSchema = ({
       selectable: false,
       title: 'lhr.summary.grid.heading.cal.due.date',
       show: true,
-      template: (props) => <DateCell {...props} onClick={onRowClick} />,
+      template: (props) => <DueDateCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -124,7 +124,7 @@ export const buildSchema = ({
       field: 'pmDueDate',
       title: 'lhr.summary.grid.heading.pm.due.date',
       show: true,
-      template: (props) => <DateCell {...props} onClick={onRowClick} />,
+      template: (props) => <DueDateCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
