@@ -5,7 +5,7 @@ import { useObserver } from 'mobx-react';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
-import { DocumentRevision, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, FBOutputDocumentType, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
 import { RELATED_PARTS_STATUS, RELATED_TYPE, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import Text from '../../../../components/Text';
@@ -23,6 +23,7 @@ interface Props {
   viewOnly: boolean
   documentRevision: DocumentRevision
   relatedPartsStatus?: RELATED_PARTS_STATUS
+  hasOutput?: boolean
 }
 
 const SuccessMsg: React.FunctionComponent<{
@@ -56,7 +57,7 @@ const SuccessMsg: React.FunctionComponent<{
           <Text translation="relatedParts.created.modal.msg.part.before"
             values = {{
               relatedType: getDynamicTextValue(
-                relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+                relatedType, RELATED_TYPE_VALUES_ENUM.PART_CAPS, RELATED_TYPE_VALUES_ENUM.DOCUMENT_CAPS),
             }} /> <b>{docId}</b> &nbsp;
           <Text translation="relatedParts.created.modal.msg.part.after" />
         </Typography>
@@ -74,6 +75,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   documentRevision,
   relatedPartsStatus,
   viewOnly,
+  hasOutput,
 }) => {
   const dispatch = useDispatch();
   const { workspaceState } = FB.useStores();
@@ -81,8 +83,14 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isPart = checkIsDocumentPart(groupOptions);
+
   const isOther = checkIsDocumentOTHER(groupOptions);
-  const relatedType = isPart ? RELATED_TYPE.PART_RELATED : (isOther ? RELATED_TYPE.OTHER_RELATED : RELATED_TYPE.PART_RELATED);
+  const isOtherForm = hasOutput
+    ? checkIsDocumentOTHER((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+    : false;
+
+  const relatedType = isPart ? RELATED_TYPE.PART_RELATED
+    : ((isOther || isOtherForm) ? RELATED_TYPE.OTHER_RELATED : RELATED_TYPE.PART_RELATED);
 
   const relatedPartsState = FB.useRef<RelatedPartsState>(RelatedPartsState);
   relatedPartsState.setViewOnlyMode(viewOnly);
@@ -278,11 +286,13 @@ const RelatedPartsWrapper: React.FunctionComponent<Props> = ({
   documentRevision,
   relatedPartsStatus,
   viewOnly,
+  hasOutput,
 }) => (
   <RelatedPartsContainer
     viewOnly = {viewOnly}
     documentRevision={documentRevision}
     relatedPartsStatus = {relatedPartsStatus}
+    hasOutput={hasOutput}
   />
 );
 

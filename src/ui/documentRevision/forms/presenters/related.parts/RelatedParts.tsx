@@ -583,7 +583,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
             : !isVoided
           && <FBTooltip title={getReplacedMessage(
             'relatedParts.checkbox.hover.msg', '{relatedType}',
-            getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT))}
+            getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS))}
           placement="top" arrow
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >

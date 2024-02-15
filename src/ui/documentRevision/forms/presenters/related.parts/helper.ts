@@ -12,8 +12,12 @@ export function getReplacedMessage (msg: string, replaceWord: string, replacedTe
 
 export enum RELATED_TYPE_VALUES_ENUM {
   PART= 'part',
+  PART_CAPS= 'Part',
   DOCUMENT= 'document',
+  DOCUMENT_CAPS= 'Document',
   SUB_PART= 'sub-part',
+  SUB_PART_CAPS= 'Sub-part',
   RELATED_DOCUMENTS= 'related documents',
   SUB_DOCUMENT= 'sub-document',
+  SUB_DOCUMENT_CAPS= 'Sub-document',
 }
