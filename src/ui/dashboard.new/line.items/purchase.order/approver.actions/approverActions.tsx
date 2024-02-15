@@ -1,4 +1,5 @@
-import { Avatar, Box, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import { Avatar, Box, Button, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -145,34 +146,52 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
   const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
+  const [downloadPdfMobile, setDownloadPdfMobile] = React.useState(false);
   const hoverItem = hoverItemId === id;
+
   const handleClick = () => {
     setOpen(!open);
   };
+
   const handleDismiss = () => {
     dismissLineItem?.(id);
   };
+
   const handlePinClick = () => {
     pinLineItem?.(id);
   };
+
   const handleUnPinClick = () => {
     unPinLineItem?.(id);
   };
+
   const onMouseHoverPinIcon = () => {
     setDownloadPdfHover(false);
     setPinHover(true);
   };
+
   const onMouseLeaveActionIcons = () => {
     setPinHover(false);
     setDownloadPdfHover(false);
   };
+
   const onMouseHoverDownloadPdfIcon = () => {
     setPinHover(false);
     setDownloadPdfHover(true);
   };
+
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
+
+  const handleDownloadClick = () => {
+    setDownloadPdfMobile(true);
+  };
+
+  const handleDownloadClose = () => {
+    setDownloadPdfMobile(false);
+  };
+
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
@@ -384,7 +403,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={classes.actionIcons}
+            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
@@ -559,6 +578,24 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
               </Grid>
             </StyledListItem>
           ))}
+          <Grid className={classes.gridApproveMobile}>
+            <Button
+              className={classes.downloadButton}
+              data-cy="transition-download-pdf"
+              onClick={handleDownloadClick}
+            >
+              <DownloadPdfIcon stroke={Colors.white_smoke} />
+              <Text translation="common.download.pdf" />
+            </Button>
+            {downloadPdfMobile && (
+              <DownloadHtmlPreview
+                id={docRevId}
+                dialogPDF={dialogPDF}
+                onClose={handleDownloadClose}
+                downloadImmediately
+              />
+            )}
+          </Grid>
         </List>
       </Collapse>
       {selectedAttachment && (
