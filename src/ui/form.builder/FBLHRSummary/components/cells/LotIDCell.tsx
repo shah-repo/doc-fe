@@ -5,7 +5,7 @@ import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { EMPTY_PLACEHOLDER, LHR_SUMMARY_TYPE_OPTIONS } from '../../constants';
+import { EMPTY_PLACEHOLDER, LOT_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
 export const LotIDCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
@@ -18,7 +18,7 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) =>
   };
 
   const defaultValue = isEditMode ? values[field] : dataItem[field];
-  const value = LHR_SUMMARY_TYPE_OPTIONS.find((option) => option.value === defaultValue);
+  const value = LOT_OPTIONS.find((option) => option.value === defaultValue);
 
   if (isEditMode && !isEmpty(values)) {
     return (
@@ -31,7 +31,7 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) =>
           disableClearable
           freeSolo
           forcePopupIcon
-          options={LHR_SUMMARY_TYPE_OPTIONS}
+          options={LOT_OPTIONS}
           value={value}
           getOptionLabel={(option: OptionType) => option.label}
           onChange={handleChange}

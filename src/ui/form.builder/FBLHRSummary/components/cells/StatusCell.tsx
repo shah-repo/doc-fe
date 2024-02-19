@@ -8,12 +8,12 @@ import { statusClassMapping } from '../../../../components/common/kendo/helpers'
 import Tooltip from '../../../../components/common/kendo/Tooltip';
 import {
   Autocomplete,
-  FormikField
+  FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import {
   Mode,
-  MODE_FIELD
+  MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import { EMPTY_PLACEHOLDER, STATUS_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';

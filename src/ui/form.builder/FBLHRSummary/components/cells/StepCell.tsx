@@ -6,7 +6,7 @@ import { translate } from '../../../../../common/intl';
 import { Autocomplete, FormikField, TextField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { LHR_SUMMARY_TYPE_OPTIONS } from '../../constants';
+import { MPI_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
 export const StepCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
@@ -19,7 +19,7 @@ export const StepCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => 
   };
 
   const defaultValue = isEditMode ? values.type : dataItem.type;
-  const value = LHR_SUMMARY_TYPE_OPTIONS.find((option) => option.value === defaultValue);
+  const value = MPI_OPTIONS.find((option) => option.value === defaultValue);
 
   if (isEditMode && !isEmpty(values)) {
     const stepField = 'step';
@@ -50,7 +50,7 @@ export const StepCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => 
               freeSolo
               forcePopupIcon
               disableClearable
-              options={LHR_SUMMARY_TYPE_OPTIONS}
+              options={MPI_OPTIONS}
               value={value}
               getOptionLabel={(option: OptionType) => option.label}
               onChange={handleChange}

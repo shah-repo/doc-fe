@@ -12,6 +12,16 @@ export const TYPE_OPTIONS = [
 export const LHR_SUMMARY_TYPE_OPTIONS = [
   { label: 'Equipment', value: 'equipment' },
 ];
+export const LOT_OPTIONS = [
+  { label: 'LOT #24567889', value: 'LOT #24567889' },
+  { label: 'LOT #24567890', value: 'LOT #24567890' },
+  { label: 'LOT #24567891', value: 'LOT #24567891' }];
+
+export const MPI_OPTIONS = [
+  { label: 'MPI-67889', value: 'MPI-67889' },
+  { label: 'MPI-67890', value: 'MPI-67890' },
+  { label: 'MPI-67891', value: 'MPI-67891' }];
+
 export const STATUS_OPTIONS = [
   { label: 'Draft', value: 'draft' },
   { label: 'In Review', value: 'In Review' },
