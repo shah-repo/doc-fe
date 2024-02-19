@@ -9,6 +9,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { translate } from '../../../../../common/intl';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import useHover from '../../../../hooks/useHover';
 import Colors from '../../../../layout/theme/utils/colors';
 import { FB } from '../../../helpers';
@@ -43,20 +44,22 @@ const styles = makeStyles((theme) => ({
 interface AutoOptionsProps {
   onAutoAssign: (flag: boolean) => void
   isDisabled: boolean
+  documentRevision: DocumentRevision
 }
 
 const AutoOptions: React.FC<AutoOptionsProps> = ({
   onAutoAssign,
   isDisabled,
+  documentRevision,
 }) => {
   const { formState, workspaceState } = FB.useStores();
   const classes = styles();
   const [autoAssign, setAutoAssign] = useState<boolean>(
-    workspaceState?.formInput?.autoAssign ?? false,
+    workspaceState?.formInput?.autoAssign ?? documentRevision?.formInput?.autoAssign ?? false,
   );
   const [tansactIconRef, isHovered] = useHover<HTMLButtonElement>();
   const [autoTransact, setAutoTransact] = useState<boolean>(
-    workspaceState?.formInput?.autoTransact ?? false,
+    workspaceState?.formInput?.autoTransact ?? documentRevision?.formInput?.autoTransact ?? false,
   );
 
   const onAutoAssignChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +77,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
     formState?.setFieldValue(AllocationCheckBoxOptions.AUTO_TRANSACT, event.target.checked);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
-      autoAssign: event.target.checked,
+      autoTransact: event.target.checked,
     });
   };
 

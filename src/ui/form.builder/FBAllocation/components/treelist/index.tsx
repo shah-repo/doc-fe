@@ -721,7 +721,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   return (
     <>
-      <AutoOptions onAutoAssign={handleAutoAssignLot} isDisabled={isDisabled || isDocument} />
+      <AutoOptions documentRevision={documentRevision} onAutoAssign={handleAutoAssignLot} isDisabled={isDisabled || isDocument} />
       <Grid item>
         <FormikProvider value={formik}>
           <ColumnMenuContext.Provider
