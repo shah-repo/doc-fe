@@ -14,7 +14,7 @@ import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/typ
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
-import { getAuditDefaultValue } from '../common/utils/audit';
+import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
@@ -637,6 +637,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           // Not valid JSON, so older data and is string
           returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
         }
+        break;
+      case 'formInput.work_order_type':
+      case 'formInput.wo_part_unit':
+      case 'formInput.wo_part_quantity':
+      case 'formInput.wo_part.id':
+        returnValue = (<div data-cy={dataCy}>{getWOAuditDefaultValue(audit)}</div>);
         break;
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
