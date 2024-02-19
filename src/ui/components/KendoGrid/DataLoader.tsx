@@ -107,13 +107,14 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
         const isUnauthorizedRequest = exception.response?.status === 401;
         const isUserLocked = exception?.response?.status === 423;
 
-        if (isUnauthorizedRequest) {
-          dispatch(authActions.logoutUser());
+        if (isUserLocked) {
+          redirectTo(USER_LOCKED)();
           return;
         }
 
-        if (isUserLocked) {
-          redirectTo(USER_LOCKED)();
+        if (isUnauthorizedRequest || isUserLocked) {
+          dispatch(authActions.logoutUser());
+          return;
         }
 
         if (exception.response) {
