@@ -1,5 +1,11 @@
-import { isString } from 'lodash';
+import { get, isString } from 'lodash';
+import { useObserver } from 'mobx-react';
+import { Audit } from '../../../state/ducks/audit/types';
+import { WorkOrderTypesValues } from '../../../state/ducks/documentRevisions/documentType/types';
+import { FB, FBAutocompleteAsyncState } from '../../form.builder';
+import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 
+const workOrderOptionId = '21';
 /**
  * Return nextValue only if string, otherwise it will crash FE
  * @param {any} nextValue Any audit type
@@ -11,4 +17,33 @@ export const getAuditDefaultValue = (nextValue: any): string => {
   }
 
   return 'N/A';
+};
+
+export const getWOAuditDefaultValue = (audit: Audit): string => {
+  const { nextValue, previousValue } = audit;
+  let auditValue: any = nextValue;
+  if (!auditValue || auditValue === 'undefined') {
+    auditValue = previousValue;
+  }
+  if (audit.field === 'formInput.wo_part.id') {
+    const autocompleteState = FB.useRef(FBAutocompleteAsyncState);
+    autocompleteState?.setOptionId(workOrderOptionId);
+    const { labelKey = 'text', labelPrefixRoot = '' } = autocompleteState?.optionConfig || {};
+    useObserver(() => {
+      FBAutocompleteAsyncStore.loading.get(workOrderOptionId);
+    });
+
+    const data = FBAutocompleteAsyncStore.data.get(workOrderOptionId);
+    let label = '';
+    if (data) {
+        const record = data.get(auditValue);
+        label = get(record, labelPrefixRoot, '') + ' ' + FB.stripTags(get(record, labelKey, ''));
+    }
+
+    return label;
+  } else if (audit.field === 'formInput.work_order_type') {
+    return WorkOrderTypesValues[auditValue];
+  } else {
+    return auditValue;
+  }
 };
