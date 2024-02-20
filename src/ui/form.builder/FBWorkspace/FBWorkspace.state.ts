@@ -7,6 +7,7 @@ import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeR
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { EditableMDItem } from '../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
+import { EditableTLItem } from '../../change.request/FBMaterialDisposition/components/FBTasksListTable/types';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 import FBDataStore from '../FBStore/FBDataStore';
@@ -40,6 +41,8 @@ class FBWorkspaceState extends FBSchemaState {
   public omitAutosave = false;
 
   public mdTableData: EditableMDItem[] = [];
+  public tlTableData: EditableTLItem[] = [];
+  public tlUpdatedDataIds: string[] = [];
   public mdUpdatedDataIds: string[] = [];
 
   public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
@@ -108,6 +111,14 @@ class FBWorkspaceState extends FBSchemaState {
 
   public get getMDTableData (): EditableMDItem[] {
     return this.mdTableData;
+  }
+
+  public get getTLTableData (): EditableTLItem[] {
+    return this.tlTableData;
+  }
+
+  public get getTLUpdatedDataIds (): string[] {
+    return this.tlUpdatedDataIds;
   }
 
   public get getMDUpdatedDataIds (): string[] {
@@ -191,6 +202,14 @@ class FBWorkspaceState extends FBSchemaState {
 
   public setMDTableData = (mdTableData: EditableMDItem[]) => {
     set(this, 'mdTableData', mdTableData);
+  };
+
+  public setTLTableData = (tlTableData: EditableTLItem[]) => {
+    set(this, 'tlTableData', tlTableData);
+  };
+
+  public addTLUpdatedDataId = (tlUpdatedDataId: string) => {
+    set(this, 'tlUpdatedDataIds', union(this.tlUpdatedDataIds, [tlUpdatedDataId]));
   };
 
   public addMDUpdatedDataId = (mdUpdatedDataId: string) => {
