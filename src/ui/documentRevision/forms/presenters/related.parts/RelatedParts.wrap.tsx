@@ -5,7 +5,7 @@ import { useObserver } from 'mobx-react';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
-import { DocumentRevision, FBOutputDocumentType, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
 import { RELATED_PARTS_STATUS, RELATED_TYPE, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import Text from '../../../../components/Text';
@@ -14,7 +14,7 @@ import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { FB } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { checkIsDocumentOTHER, checkIsDocumentPart } from '../../../helpers/checkDocumentGroup';
+import { getRelatedType } from '../../../helpers/checkDocumentGroup';
 import useStyles from './RelatedPart.styles';
 import RelatedParts from './RelatedParts';
 import RelatedPartsState from './RelatedParts.state';
@@ -81,16 +81,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
 
-  const groupOptions = documentRevision?.document.documentType.groupOptions;
-  const isPart = checkIsDocumentPart(groupOptions);
-
-  const isOther = checkIsDocumentOTHER(groupOptions);
-  const isOtherForm = hasOutput
-    ? checkIsDocumentOTHER((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
-    : false;
-
-  const relatedType = isPart ? RELATED_TYPE.PART_RELATED
-    : ((isOther || isOtherForm) ? RELATED_TYPE.OTHER_RELATED : RELATED_TYPE.PART_RELATED);
+  const relatedType = getRelatedType(documentRevision, hasOutput);
 
   const relatedPartsState = FB.useRef<RelatedPartsState>(RelatedPartsState);
   relatedPartsState.setViewOnlyMode(viewOnly);
