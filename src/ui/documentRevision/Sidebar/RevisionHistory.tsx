@@ -53,7 +53,8 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ chang
                   <Box mr={7}>{changeRequest.formInput?.documentRevisions.map((e) => e.justificationOfChange)}</Box>
                 </Box>
               </Box>
-            </Box>); }}
+            </Box>);
+        }}
       </FBMapWrapper>
     </Box>
   );

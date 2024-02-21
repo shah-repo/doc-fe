@@ -51,6 +51,7 @@ const PODetailsContainer: React.FunctionComponent<Props> = ({
       />
       <POActions documentRevision={documentRevision} />
     </Box>
-  ); };
+  );
+};
 
 export default PODetailsContainer;

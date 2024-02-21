@@ -45,7 +45,7 @@ export const FieldsConfig: React.FunctionComponent<GridCellProps> = ({
     }
   };
   const formattedValue = get(dataItem, field || '');
-  const isEdit =  dataItem.inEdit;
+  const isEdit = dataItem.inEdit;
 
   if (rowType === 'groupHeader') {
     return null;

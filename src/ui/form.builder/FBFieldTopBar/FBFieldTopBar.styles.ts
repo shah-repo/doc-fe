@@ -37,4 +37,8 @@ export default makeStyles((theme) => ({
       cursor: 'grabbing !important',
     },
   },
+  disabledAction: {
+    cursor: 'default !important',
+    fill: Colors.hint_gray,
+  },
 }));

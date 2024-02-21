@@ -21,7 +21,6 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     buildValidationRules,
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, document } = workspaceState || {};
@@ -46,7 +45,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     }, []);
 
     // MARK: @helpers
-    function save() {
+    function save () {
       formContext.submitForm();
     }
 

@@ -10,6 +10,4 @@ const SettingsPanelSection: React.FC = ({ children }) => {
   );
 };
 
-// TODO remove next line or whole component after UX requirements refinement
-// ts-unused-exports:disable-next-line
 export default SettingsPanelSection;

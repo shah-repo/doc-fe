@@ -11,6 +11,7 @@ export const CATEGORY_OPTIONS = [
   createOption('Approval Request'),
   createOption('Record'),
   createOption('Equipment'),
+  createOption('Equipment Specification'),
   createOption('Supplier'),
   createOption('Purchase Order'),
   createOption('Receive'),

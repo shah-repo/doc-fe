@@ -5,7 +5,7 @@ import { WhiteLabelingColors } from '../../../state/ducks/company/types';
 import { FBClasses } from '../../form.builder/defaults/layout';
 import Colors from './utils/colors';
 
-export default function themeOverrides(appTheme: Theme, customColors: WhiteLabelingColors): Overrides {
+export default function themeOverrides (appTheme: Theme, customColors: WhiteLabelingColors): Overrides {
   const outlinedInputBorder = `1px solid ${Colors.mild_wind_blue}`;
   const popoverPaper: CSSProperties = {
     border: 'none !important',
@@ -73,12 +73,12 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
     },
     MuiButton: {
       root: {
-        'fontSize': '0.75rem',
-        'borderRadius': 3,
-        'margin': appTheme.spacing(1),
-        'fontFamily': 'Sora, sans-serif;',
-        'textTransform': 'capitalize',
-        'fontWeight': 600,
+        fontSize: '0.75rem',
+        borderRadius: 3,
+        margin: appTheme.spacing(1),
+        fontFamily: 'Sora, sans-serif;',
+        textTransform: 'capitalize',
+        fontWeight: 600,
         '&$disabled': {
           backgroundColor: Colors.dawn,
           color: Colors.white,
@@ -134,8 +134,8 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
     },
     MuiOutlinedInput: {
       root: {
-        'backgroundColor': Colors.white,
-        'border': outlinedInputBorder,
+        backgroundColor: Colors.white,
+        border: outlinedInputBorder,
         '&:not($focused):not($disabled):hover': {
           backgroundColor: Colors.background_white,
         },
@@ -148,6 +148,10 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
         '& fieldset': {
           border: 'none',
         },
+      },
+      input: {
+        padding: 13,
+        fontSize: 14,
       },
       notchedOutline: {
         borderRadius: 4,
@@ -176,6 +180,15 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
         },
         '&:not($checked):not($disabled):hover circle': {
           fill: Colors.background_white,
+        },
+      },
+    },
+    MuiCheckbox: {
+      root: {
+        '&$disabled': {
+          '& .MuiSvgIcon-root': {
+            color: appTheme.palette.action.disabled,
+          },
         },
       },
     },
@@ -259,12 +272,12 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
     },
     MuiTab: {
       root: {
-        'fontFamily': 'Sora, sans-serif;',
-        'lineHeight': '15px',
-        'paddingLeft': '0px',
-        'paddingTop': '5px',
-        'fontStyle': 'normal',
-        'fontWeight': 600,
+        fontFamily: 'Sora, sans-serif;',
+        lineHeight: '15px',
+        paddingLeft: '0px',
+        paddingTop: '5px',
+        fontStyle: 'normal',
+        fontWeight: 600,
         '&.Mui-selected': {
           color: Colors.navy,
         },

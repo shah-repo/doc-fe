@@ -7,11 +7,11 @@ import Text from '../../Text';
 
 const useStyles = makeStyles({
   root: {
-    'fontSize': 10,
-    'color': Colors.navy,
-    'fontWeight': 600,
-    'letterSpacing': 0.5,
-    'textTransform': 'uppercase',
+    fontSize: 10,
+    color: Colors.navy,
+    fontWeight: 600,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
     '&:hover': {
       color: Colors.latest_blue_varient,
       backgroundColor: 'transparent',

@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Chip, CircularProgress, TextField, Typography } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
 import { debounce, isArray, map, some } from 'lodash';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
@@ -13,11 +12,11 @@ import { intl } from '../../../../common/intl';
 import { TypographyProps } from '../../../../state/ducks/common/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DocRevQueryParam, DocumentGroupOptionsType } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus, DocumentRevisionsByIdState, Reference } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
-import Field, { FieldOwnProps } from '../../../components/forms/fields/Field';
-import { useFormContext } from '../../../components/forms/FormContext';
 import Text from '../../../components/Text';
+import { useFormContext } from '../../../components/forms/FormContext';
+import Field, { FieldOwnProps } from '../../../components/forms/fields/Field';
 import { FBTooltip } from '../../../form.builder';
 import useActionCreator from '../../../hooks/useActionCreator';
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from '../../helpers/checkDocumentGroup';

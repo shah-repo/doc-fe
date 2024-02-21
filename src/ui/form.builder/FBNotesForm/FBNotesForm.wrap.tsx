@@ -20,7 +20,6 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
     notesState,
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState } = FB.useStores();
     const {
@@ -86,7 +85,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
     useObserver(() => {
       files = notesFormState?.files;
       notes = map(notesFormState?.notes, (note) => {
-        const sender = employees?.find((employee) => employee.id === note.sender?.id )?.user;
+        const sender = employees?.find((employee) => employee.id === note.sender?.id)?.user;
         if (note.formBuilderFieldName !== name) {
           return;
         }
@@ -98,7 +97,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
       }).filter(Boolean) as FBNoteItem[];
     });
 
-    return  Component({
+    return Component({
       ...(props as T),
       handleNote,
       formState,

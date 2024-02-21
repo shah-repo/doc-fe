@@ -5,13 +5,12 @@ import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 
 class FBApproversState extends FBRequest<FBRequiredApprover[], FBApproversBody> {
-
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable public value?: string[];
   @observable public checkedGroups?: FBRequiredApprover[];
   public url = FBEndpoint.RequiredApprovers;
 
-  public constructor({ documentRevisions, formValue }: FBApproversConstructor) {
+  public constructor ({ documentRevisions, formValue }: FBApproversConstructor) {
     super();
     this.value = formValue;
     this.fetchRequiredApprovers(documentRevisions);

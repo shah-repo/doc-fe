@@ -6,7 +6,7 @@ import { SortableFieldProps } from '../types';
 export const Field = React.memo<SortableFieldProps>(({
   item, autosave, disabled, isFirst, isDragging,
 }) => {
-  const { name = '' } = item;
+  const { name = '', disabled: itemDisabled = false } = item;
 
   // To avoid UI-freezes on rendering huge list of fields.
   const [rendered, setRendered] = useState(isFirst);
@@ -20,7 +20,7 @@ export const Field = React.memo<SortableFieldProps>(({
   const schemaField = rendered && FBSchemaState.component({
     ...item,
     autosave,
-    disabled,
+    disabled: itemDisabled || disabled,
     gutter: false,
   });
 

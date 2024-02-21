@@ -11,17 +11,17 @@ interface SMInputValidationProps {
 
 export type SMInputProps =
 & Pick<BaseTextFieldProps,
-  | 'children'
-  | 'error'
-  | 'value'
-  | 'disabled'
-  | 'name'
-  | 'helperText'
-  | 'rows'
-  | 'placeholder'
-  | 'defaultChecked'
-  | 'fullWidth'
-  | 'hidden'
+| 'children'
+| 'error'
+| 'value'
+| 'disabled'
+| 'name'
+| 'helperText'
+| 'rows'
+| 'placeholder'
+| 'defaultChecked'
+| 'fullWidth'
+| 'hidden'
 >
 & {
   label?: SMTextProps['label']

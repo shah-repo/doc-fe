@@ -21,7 +21,6 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     locked,
     ...props
   }: T) => {
-
     // MARK: @config
     const { procedureState, workspaceState, formState } = FB.useStores();
     dialogState = FB.useRef(FBDialogState);
@@ -30,7 +29,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     // MARK: @reactions
 
     // MARK: @helpers
-    function handleLockField() {
+    function handleLockField () {
       if (!id) { return; }
       if (!name) { return; }
       const namePart = `${name}.${type}`;
@@ -44,7 +43,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       }, namePart);
     }
 
-    function onClose() {
+    function onClose () {
       if (formState?.isBackdropOpen) { return; }
       formState?.unlockField(`${name}.${type}`);
       dialogState?.closeDialog();

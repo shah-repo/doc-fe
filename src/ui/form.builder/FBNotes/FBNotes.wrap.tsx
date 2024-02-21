@@ -14,7 +14,6 @@ export const withFBNotes = <T extends FBNotesProps>(
     notesNumber,
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState } = FB.useStores();
     const {
@@ -44,7 +43,7 @@ export const withFBNotes = <T extends FBNotesProps>(
       notesNumber = notesState?.noteNumber;
     });
 
-    return  Component({
+    return Component({
       ...(props as T),
       onClick,
       dialogState,

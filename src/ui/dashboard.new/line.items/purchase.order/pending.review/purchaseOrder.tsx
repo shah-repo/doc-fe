@@ -1,4 +1,5 @@
-import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import { Box, Button, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -19,10 +20,13 @@ import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.ne
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
 import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
+import ViewFile from '../../../../components/common/view.file/container';
+import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { DialogHandler } from '../../../../hooks/useDialog';
+import useDialog, { DialogHandler } from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
 import DismissAction from '../../common/DismissAction';
 import { getStatusLabel } from '../../common/DocIcon';
@@ -36,7 +40,6 @@ import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency, getPendingTooltipText } from '../../common/Utils';
 import EmailModal from '../../dialogs/email/EmailDialog';
 import useStyles from './purchaseOrder.styles';
-
 interface Props {
   id: string
   docDocumentId: string
@@ -156,6 +159,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
+  const [downloadPdfMobile, setDownloadPdfMobile] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const { count, pending, approved, primaryText, secondaryText }
@@ -163,38 +167,56 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const handleClick = () => {
     setOpen(!open);
   };
+
   const handleDismiss = () => {
     dismissLineItem?.(id);
   };
+
   const handlePinClick = () => {
     pinLineItem?.(id);
   };
+
   const handleUnPinClick = () => {
     unPinLineItem?.(id);
   };
+
   const onMouseHoverPinIcon = () => {
     setDownloadPdfHover(false);
     setPinHover(true);
   };
+
   const onMouseLeaveActionIcons = () => {
     setPinHover(false);
     setDownloadPdfHover(false);
   };
+
   const onMouseHoverDownloadPdfIcon = () => {
     setPinHover(false);
     setDownloadPdfHover(true);
   };
+
+  const handleDownloadClick = () => {
+    setDownloadPdfMobile(true);
+  };
+
+  const handleDownloadClose = () => {
+    setDownloadPdfMobile(false);
+  };
+
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
+
   const openApproversModel = (e) => {
     e.stopPropagation();
     setLastEmailSent(false);
     setEmailModelopen(true);
   };
+
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
   };
+
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
@@ -207,8 +229,22 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
       downloadFile(downloadInfo?.url);
     },
   });
+
+  const dialogHandler = useDialog();
+  const [selectedAttachment, setSelectedAttachment] = React.useState<Attachment | undefined>(undefined);
+
   const downloadAttachment = (attachment: Attachment) => () => {
-    async.start(downloadAction, attachment, async);
+    if (checkIfFileIsViewable(attachment?.type)) {
+      setSelectedAttachment(attachment);
+      dialogHandler.open();
+    } else {
+      async.start(downloadAction, attachment, async);
+    }
+  };
+
+  const closeDialog = () => {
+    setSelectedAttachment(undefined);
+    dialogHandler.close();
   };
 
   const isPinShown = pinLineItem && !pinned;
@@ -373,7 +409,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={classes.actionIcons}
+            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
@@ -548,6 +584,24 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               </Grid>
             </StyledListItem>
           ))}
+          <Grid className={classes.gridPendingMobile}>
+            <Button
+              className={classes.downloadButton}
+              data-cy="transition-download-pdf"
+              onClick={handleDownloadClick}
+            >
+              <DownloadPdfIcon stroke={Colors.white_smoke} />
+              <Text translation="common.download.pdf" />
+            </Button>
+            {downloadPdfMobile && (
+              <DownloadHtmlPreview
+                id={docRevId}
+                dialogPDF={dialogPDF}
+                onClose={handleDownloadClose}
+                downloadImmediately
+              />
+            )}
+          </Grid>
         </List>
       </Collapse>
       <Modal
@@ -565,6 +619,16 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
           pendingEmailSentAt={pendingEmailSentAt}
         />
       </Modal>
+      {selectedAttachment && (
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...purchaseOrderAttachments] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
+      )}
     </>
   );
 };

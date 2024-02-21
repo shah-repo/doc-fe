@@ -6,8 +6,8 @@ import { map } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { SM, SMTextEditorProps, SMTextEditorState, SMTextLocaleProps } from '../../..';
-import { FB } from '../../../../ui/form.builder';
 import { useFormContext } from '../../../../ui/components/forms/FormContext';
+import { FB } from '../../../../ui/form.builder';
 
 export const withSMTextEditor = <T extends SMTextEditorProps>(
   Component: React.FunctionComponent<T>,
@@ -66,7 +66,9 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     useMemo(
       () => {
         const intlValues = (label as SMTextLocaleProps).values;
-        map(intlValues, (value, key) => intlValues[key] = intl.formatMessage({ id: value }));
+        map(intlValues, (value, key) => {
+          intlValues[key] = intl.formatMessage({ id: value });
+        });
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
@@ -92,7 +94,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     );
     // MARK: @helpers
     // Creates editor state with initial value
-    function htmlToEditorState(value?: string): EditorState {
+    function htmlToEditorState (value?: string): EditorState {
       if (!value) { return EditorState.createEmpty(); }
       const contentBlock = htmlToDraft(value);
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -125,7 +127,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     editorRef = (ref) =>
       _textEditorState && (_textEditorState.editorReference = ref);
 
-    return  Component({
+    return Component({
       ...(props as T),
       onEditorStateChange,
       handleMask,

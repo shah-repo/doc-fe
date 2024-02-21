@@ -26,6 +26,7 @@ const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
         />
       )}
     </>
-  ); };
+  );
+};
 
 export default FBSelectDocument;

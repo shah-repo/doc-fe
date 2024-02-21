@@ -12,7 +12,7 @@ const FBContextMenu: React.FunctionComponent<FBContextMenuProps> = ({
   children,
   menuEls,
   boxProps,
-}) =>  (
+}) => (
   <Box {...{ onContextMenu, onBlur }} style={{ cursor: 'context-menu' }} {...boxProps}>
     {children}
     <Menu

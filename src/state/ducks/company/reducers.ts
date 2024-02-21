@@ -40,6 +40,10 @@ const REDLINE_DEFAULT_STATE = {
 
 const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   zebraPrint: [],
+  equipmentFamily: {
+    autoSyncEnabled: false,
+    locations: [],
+  },
   approvalRequestAdmin: false,
   shouldAutoUpdateLotStatus: false,
   status: AsyncStatus.Idle,

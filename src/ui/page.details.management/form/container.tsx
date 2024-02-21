@@ -25,7 +25,7 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
   });
   const { id } = pageDetails;
   const initialValues = toPageDetailsInitialValues(pageDetails);
-  const transitionLabel =  'common.delete';
+  const transitionLabel = 'common.delete';
 
   const updatePageDetailsAction = useActionCreator(pageDetailsActions.updatePageDetails);
 

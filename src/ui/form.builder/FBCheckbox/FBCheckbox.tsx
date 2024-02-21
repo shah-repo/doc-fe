@@ -22,7 +22,7 @@ const FBCheckbox: React.FunctionComponent<FBInputProps> = ({
         className={classes.checkbox}
         control={(
           <Checkbox
-            data-cy={dataCy ? dataCy : `fb-control-${label}`}
+            data-cy={dataCy || `fb-control-${label}`}
             icon={<CheckBoxOutlineBlankIcon fontSize={fontSize as SvgIconProps['fontSize']} />}
             checkedIcon={<CheckBoxIcon fontSize={fontSize as SvgIconProps['fontSize']} />}
             {...{ disabled, defaultChecked }} />

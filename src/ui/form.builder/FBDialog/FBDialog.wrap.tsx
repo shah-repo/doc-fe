@@ -14,7 +14,6 @@ export const withFBDialog = <T extends FBDialogProps>(
     classes,
     ...props
   }: T) => {
-
     const { dialogState } = FB.useStores();
     const { workspaceState } = FB.useStores();
     const handleClose = () => {

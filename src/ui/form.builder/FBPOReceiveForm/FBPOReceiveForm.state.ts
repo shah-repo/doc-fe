@@ -18,9 +18,9 @@ class FBPOReceiveFormState {
   public lotDocType?: DocumentType;
   public groupOptions: any[] = [];
   public item?: FBPurchaseOrderItem;
-  private documentId: string | undefined;
+  private readonly documentId: string | undefined;
 
-  public constructor({ lfpoDocType, lotDocType, groupOptions, item, documentId }: FBPOReceiveFormConstructor) {
+  public constructor ({ lfpoDocType, lotDocType, groupOptions, item, documentId }: FBPOReceiveFormConstructor) {
     this.createLotAPI.setUrl(FBEndpoint.DocumentRevisionsUrl);
     this.lfpoDocType = lfpoDocType;
     this.lotDocType = lotDocType;
@@ -33,7 +33,7 @@ class FBPOReceiveFormState {
     this.fetchLfpoDocs();
   }
 
-  @action public async submit(values: any, poDocumentId?: string) {
+  @action public async submit (values: any, poDocumentId?: string) {
     if (!this.releasedLfpoAPI.data || this.releasedLfpoAPI.data?.length === 0) {
       throw new Error('form.builder.missing.lfpo');
     }
@@ -44,7 +44,7 @@ class FBPOReceiveFormState {
     await this.createLot(data.docId, values, poDocumentId);
   }
 
-  public async createLot(docId: string, values: any, poDocumentId?: string) {
+  public async createLot (docId: string, values: any, poDocumentId?: string) {
     if (!this.documentId) {
       return;
     }
@@ -85,7 +85,7 @@ class FBPOReceiveFormState {
     window.open(path, '_blank');
   }
 
-  private fetchLfpoDocs() {
+  private fetchLfpoDocs () {
     const urlTpl = template(FBEndpoint.FetchDocumentRevisionByAcronym);
     const url = urlTpl({ documentTypeAcronym: this.lfpoDocType?.documentTypeAcronym });
     this.releasedLfpoAPI.setUrl(url);
