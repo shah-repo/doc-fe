@@ -256,8 +256,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center">
-                <Grid item={true}>
+              <Grid container={true} wrap="nowrap" alignItems="center" lg={12} className={classes.innerWrap}>
+                <Grid item={true} >
                   <Typography
                     component="span"
                     variant="caption"
@@ -267,9 +267,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                   >
                     {approverName}
                   </Typography>
-                </Grid>
-                {STATUS_TYPES_LABEL.REJECTED === status && (
-                  <Grid item={true}>
+                  {STATUS_TYPES_LABEL.REJECTED === status && (
+
                     <Typography
                       component="span"
                       variant="caption"
@@ -294,10 +293,10 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                         />
                       )}
                     </Typography>
-                  </Grid>
-                )}
-                {STATUS_TYPES_LABEL.APPROVED === status && (
-                  <Grid item={true}>
+
+                  )}
+                  {STATUS_TYPES_LABEL.APPROVED === status && (
+
                     <Typography
                       component="span"
                       variant="caption"
@@ -324,8 +323,9 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                         />
                       )}
                     </Typography>
-                  </Grid>
-                )}
+                  )}
+                </Grid>
+
                 {STATUS_TYPES_LABEL.APPROVED !== status
                   && STATUS_TYPES_LABEL.REJECTED !== status && (
                   <Grid item={true}>
@@ -351,12 +351,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     <Text translation="common.your" />
                   </Typography>
                 </Grid> */}
-                <Grid item={true} className={classes.truncateMobile}>
-                  <DocId
-                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#' }
-                    docId={docId}
-                  />
-                </Grid>
+
                 {/* {docRevName && (
                   <Grid item={true}>
                     <Typography
@@ -370,7 +365,14 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     </Typography>
                   </Grid>
                 )} */}
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                {/* <Grid zeroMinWidth item={true} className={classes.truncateText}>
+
+                </Grid> */}
+                <Grid item={true}>
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#' }
+                    docId={docId}
+                  />
                   <DocTitle
                     url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docRevVersion={docRevVersion}
@@ -592,7 +594,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 id={docRevId}
                 dialogPDF={dialogPDF}
                 onClose={handleDownloadClose}
-                downloadImmediately
+                downloadPdfHover
               />
             )}
           </Grid>
