@@ -149,6 +149,8 @@ pipelines:
           name: Building
           script:
             - ./aws/bash_scripts/build.sh "$Environment"
+          artifacts:
+            - compiled.tar.gz
       - step:
           <<: *COMMON_DEPLOY
           name: Deploying
