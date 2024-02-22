@@ -22,7 +22,7 @@ import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from '../../h
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
 import { DocumentCloneType, DocumentCloneTypeOptions } from '../Clone.container';
 import { isOperator } from '../DocumentRevisionDisplay.container';
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentOTHER, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../helpers/documentRevisionStatus';
 import { getRevisionStageNumber, isDocumentAlphaReleased } from '../helpers/revisionStage';
 import DocIdInput from './presenters/DocIdInput';
@@ -106,10 +106,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocumentPOAM = checkIsDocumentPOAM(groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
+
   const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = hasOutput
     ? checkIsDocumentPart((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
     : false;
+  const isOther = checkIsDocumentOTHER(groupOptions);
+  const isOtherForm = hasOutput
+    ? checkIsDocumentOTHER((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+    : false;
+
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
   const isSubrevision = Boolean(documentRevision?.subRevision);
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
@@ -353,15 +359,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          {(isPart || isPartForm) && (
-            <Grid item xs={12}>
+          {(isPart || isPartForm || isOther || isOtherForm)
+            && <Grid item xs={12}>
               <RelatedPartsWrapper
                 viewOnly={isDisabledInputInPreview || hasOutput || !isOwner || inRestrictedEditMode}
                 documentRevision={documentRevision}
                 relatedPartsStatus= {documentRevision?.relatedPartsStatus}
               />
             </Grid>
-          )}
+          }
           {isRelatedEquipmentsShowing && (
             <Grid item xs={12}>
               <RelatedEquipments parentDocumentRevision={documentRevision} />

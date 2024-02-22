@@ -7,16 +7,18 @@ import { useDispatch } from 'react-redux';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
-import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
-import { toastError, toastSuccess } from '../../../../components/notifications';
+import { RELATED_PARTS_STATUS, RELATED_TYPE, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import Text from '../../../../components/Text';
+import { toastError, toastSuccess } from '../../../../components/notifications';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { FB } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import { checkIsDocumentOTHER, checkIsDocumentPart } from '../../../helpers/checkDocumentGroup';
 import useStyles from './RelatedPart.styles';
 import RelatedParts from './RelatedParts';
 import RelatedPartsState from './RelatedParts.state';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from './helper';
 interface Props {
   viewOnly: boolean
   documentRevision: DocumentRevision
@@ -28,11 +30,13 @@ const SuccessMsg: React.FunctionComponent<{
   documentRevisionId: string
   documentId: string
   viewRelatedPart: (docRevId: string, documentId: string) => void
+  relatedType: RELATED_TYPE
 }> = ({
   docId,
   documentRevisionId,
   documentId,
   viewRelatedPart,
+  relatedType,
 }) => {
   const classes = useStyles();
 
@@ -41,11 +45,19 @@ const SuccessMsg: React.FunctionComponent<{
   return (
     <>
       <Typography variant="body1">
-        <Text translation="relatedParts.created.modal.success.msg" />
+        <Text translation="relatedParts.created.modal.success.msg"
+          values = {{
+            relatedType: getDynamicTextValue(
+              relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+          }} />
       </Typography>
       <div className={classes.successMessage}>
         <Typography variant="subtitle1">
-          <Text translation="relatedParts.created.modal.msg.part.before" /> <b>{docId}</b> &nbsp;
+          <Text translation="relatedParts.created.modal.msg.part.before"
+            values = {{
+              relatedType: getDynamicTextValue(
+                relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+            }} /> <b>{docId}</b> &nbsp;
           <Text translation="relatedParts.created.modal.msg.part.after" />
         </Typography>
         <Link onClick={viewFromModal}
@@ -66,6 +78,11 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
+
+  const groupOptions = documentRevision?.document.documentType.groupOptions;
+  const isPart = checkIsDocumentPart(groupOptions);
+  const isOther = checkIsDocumentOTHER(groupOptions);
+  const relatedType = isPart ? RELATED_TYPE.PART_RELATED : (isOther ? RELATED_TYPE.OTHER_RELATED : RELATED_TYPE.PART_RELATED);
 
   const relatedPartsState = FB.useRef<RelatedPartsState>(RelatedPartsState);
   relatedPartsState.setViewOnlyMode(viewOnly);
@@ -101,7 +118,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     if (relatedPartAdded) {
       toastSuccess(<SuccessMsg docId={`${relatedPartAdded.rootDocId}-${relatedPartAdded.suffixNumber}`}
         viewRelatedPart={viewRelatedPart} documentRevisionId={relatedPartAdded.documentRevisionId}
-        documentId={relatedPartAdded.documentId} />, {
+        relatedType={relatedType} documentId={relatedPartAdded.documentId} />, {
         closeButton: false,
       });
     }
@@ -250,6 +267,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
           fetchRelatedParts,
           voidRelatedPart,
           relatedPartsState,
+          relatedType,
         }}
       />
     </>
