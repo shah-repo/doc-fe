@@ -35,7 +35,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   const openQuickViewDialog = () => quickViewDialog.open();
 
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
-  const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
+  const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableAllocationItem>();
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({
@@ -88,6 +88,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     setValue(option as OptionType);
     const selectedLOT = lots.find((lot) => lot.id === option?.value);
     setFieldValue('lotRevId', option?.value);
+    field && setFieldValue(field, option?.value);
     setFieldValue('quantityOnHand', selectedLOT?.precalc.lot_on_hand_quantity);
     setFieldValue('parentPartRevId', dataItem.parentPartRevId);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
@@ -98,6 +99,8 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   const getFieldInfo = () => (
     field && <FormikField
       name={field}
+      required
+      error={Boolean(errors[field])}
     >
       <Autocomplete
         {...getFieldProps(field)}
