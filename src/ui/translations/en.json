@@ -1405,7 +1405,7 @@
   "form.builder.workOrder.lhr.endQuantity": "End Qty",
   "form.builder.workOrder.lhr.lhrTemplate": "Template",
   "form.builder.workOrder.lhr.lhrDetails": "ID",
-  "form.builder.workOrder.lhr.add": "Add",
+  "form.builder.workOrder.lhr.add": "Add Item",
   "form.builder.tasksListTable": "Tasks List",
   "form.builder.workOrderType": "Work Order Type",
   "form.builder.woApprovals": "Work Order Approvals",
