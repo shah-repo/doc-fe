@@ -29,7 +29,7 @@ import FBStore from '../FBStore/FBStore';
 import { FB } from '../helpers';
 import { ActionsCell } from './components/ActionsCell';
 import { CustomColumnMenu, LHRTableColumnMenuContext } from './components/CustomColumnMenu';
-import { EXCEL_FILE_NAME, Mode, MODE_FIELD } from './constants';
+import { EMPTY_PLACEHOLDER, EXCEL_FILE_NAME, Mode, MODE_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { DraftLhrTableItem, EditableLHRTableItem, ILHRTableItem, LHRTableItemEditEvent } from './types';
@@ -275,7 +275,18 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
 
   const exportToExcel = () => {
     if (_export.current !== null) {
-      _export.current.save(lhrListToUse, getColumns() as ExcelExportColumnProps[]);
+      const updatedDate = lhrListToUse.map((lhr) => {
+        return {
+          ...lhr,
+          owner: lhr.owner?.user?.name,
+          partRev: lhr.partRev?.documentId ? lhr.partRev?.label : EMPTY_PLACEHOLDER,
+          completionDate: lhr.completionDate ?? EMPTY_PLACEHOLDER,
+          startQuantity: lhr.startQuantity ?? EMPTY_PLACEHOLDER,
+          endQuantity: lhr.endQuantity ?? EMPTY_PLACEHOLDER,
+          lhrDetails: lhr.lhrDetails?.label,
+        };
+      });
+      _export.current.save(updatedDate, getColumns() as ExcelExportColumnProps[]);
     }
   };
 
