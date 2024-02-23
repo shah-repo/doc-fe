@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -13,9 +13,10 @@ import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
-import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
+import { BOMTreeData, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -25,19 +26,20 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
-import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
+import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
   audit: Audit
   dataCy?: string
+  revIdRelatedTypeObj: {[key: string]: RELATED_TYPE}
 }
 
 type Props = OwnProps;
 
 const AuditFactory: React.FunctionComponent<Props> = ({
-  audit, dataCy,
+  audit, dataCy, revIdRelatedTypeObj,
 }) => {
   let returnValue;
   const intl = useIntl();
@@ -45,6 +47,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { nextValue, previousValue } = audit;
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
+
+  const relatedType = revIdRelatedTypeObj[audit.documentRevisionId];
 
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;
@@ -535,6 +539,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             <Text
               dataCy={`${dataCy}-basepart-status`}
               translation="relatedParts.parentPart.answer.yes.together"
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }}
             />
           );
         } else if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
@@ -542,6 +550,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             <Text
               dataCy={`${dataCy}-basepart-status`}
               translation="relatedParts.parentPart.answer.yes.separate"
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }}
             />
           );
         } else if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_NO) {

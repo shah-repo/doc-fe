@@ -23,7 +23,7 @@ import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterial
 import FBDataStore from '../../../../../../form.builder/FBStore/FBDataStore';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentWO } from '../../../../../helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentOTHER, checkIsDocumentPart, checkIsDocumentWO } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
 import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../../related.equipments';
@@ -91,7 +91,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);
-  const isPart = checkIsDocumentPart(documentType.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(documentType.groupOptions);
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const isCurrentUserOperator = useContext(isOperator);
@@ -100,11 +99,19 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const showAdministrativeAndVoidChange = false;
   const type = DocumentCloneTypeOptions.none;
   const mode = FBWorkspaceModeOptions.FORM;
+
+  const isPart = checkIsDocumentPart(documentType.groupOptions);
   const isPartForm = useSelector(
     (state: ApplicationState) => documentRevision?.formTemplate
       ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
       : false,
   );
+  const isOther = checkIsDocumentOTHER(documentType.groupOptions);
+  const isOtherForm = useSelector(
+    (state: ApplicationState) => documentRevision?.formTemplate
+      ? checkIsDocumentOTHER((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+      : false);
+
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
     && schema?.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
@@ -246,7 +253,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
-                        {((isPart || isPartForm) && formPreview) && (
+                        {((isPart || isPartForm || isOther || isOtherForm) && formPreview) && (
                           <Grid item xs={12}>
                             <RelatedPartsWrapper
                               viewOnly={true}

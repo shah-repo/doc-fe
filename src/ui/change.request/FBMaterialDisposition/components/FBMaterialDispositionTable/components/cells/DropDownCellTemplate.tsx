@@ -6,16 +6,15 @@ import { useFormikContext } from 'formik';
 import { find, first, get, has, isEmpty, keys, last, values } from 'lodash';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
-import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../../../components/KendoDataGrid/constants';
 import { Dialog } from '../../../../../../components/dialogs';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
+import {
+  Mode, MODE_FIELD,
+} from '../../../../../../components/KendoDataGrid/constants';
 import useDialog from '../../../../../../hooks/useDialog';
 import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
@@ -128,14 +127,16 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   return (<>
     {showSelector && <Selector />}
     {showEditor && (<Editor {...props} {...{ isColumnEditMode, copiedItem }} />)}
-    {showContent && <OverflowingContent onClick={handleClick}>
+    {showContent && <div onClick={handleClick}>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="space-between"
       >
+        <div className={classes.actionLabel}>
+          <OverflowingContent>{translate(displayValue?.label)}</OverflowingContent>
+        </div>
         <div>
-          {translate(displayValue?.label)}
           {isOnOrderPOActionColumn && openedPOsAvailable && (
             <FontAwesomeIcon
               icon={solid('circle')}
@@ -143,19 +144,19 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
               className={cx(classes.dot, classes.poPreviewDot)}
             />
           )}
+          {showCopyButton && (
+            <span ref={copyIconRef} onClick={handleCopy}>
+              <Tooltip
+                title={translate('common.copy.value')}
+                placement="top"
+                arrow
+              >
+                <FontAwesomeIcon
+                  icon={ isHovered ? solid('copy') : regular('copy')}
+                  className={classes.copyIcon}
+                /></Tooltip>
+            </span>)}
         </div>
-        {showCopyButton && (
-          <span ref={copyIconRef} onClick={handleCopy}>
-            <Tooltip
-              title={translate('common.copy.value')}
-              placement="top"
-              arrow
-            >
-              <FontAwesomeIcon
-                icon={ isHovered ? solid('copy') : regular('copy')}
-                className={classes.copyIcon}
-              /></Tooltip>
-          </span>)}
       </Box>
       <Dialog
         title={translate(
@@ -175,7 +176,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
           ))}
         </div>
       </Dialog>
-    </OverflowingContent>}
+    </div>}
     {showPopup && <PopupClipboardMenu {...{ copyClipboardPopupMenu, populateCopiedValue, clearContent }} />}
   </>
   );

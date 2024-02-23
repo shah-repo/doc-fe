@@ -1,5 +1,7 @@
 import { some } from 'lodash';
 import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
+import { RELATED_TYPE } from '../../../state/ducks/relatedParts/types';
 
 /** Checks if document has a specific group option.
    * @param groupOption Option that is searched for.
@@ -46,6 +48,7 @@ export const checkIsDocumentBulkCreate = checkDocumentGroupOptions.bind(this, DO
 export const checkIsDocumentLot = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LOT);
 export const checkIsDocumentLHRT = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LHRT);
 export const checkIsDocumentWO = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.WORK_ORDER);
+export const checkIsDocumentOTHER = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.OTHER);
 export const checkIsDocumentES = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT_SPECIFICATION);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
@@ -61,3 +64,26 @@ export const hasDefaultNote = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROU
 
 export const checkCanTypeCreateInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_CREATE_INSPECTION);
 export const checkCanBeCopied = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
+
+export const revIdRelatedTypeMapper = (documentRevisions: DocumentRevision[]): {[key: string]: RELATED_TYPE} => {
+  const revIdRelatedTypeObj = {};
+  documentRevisions.forEach((docRev) => {
+    const relatedType = getRelatedType(docRev);
+    revIdRelatedTypeObj[docRev.id] = relatedType;
+  });
+  return revIdRelatedTypeObj;
+};
+
+export const getRelatedType = (documentRevision: DocumentRevision, hasOutput = false): RELATED_TYPE => {
+  const groupOptions = documentRevision?.document.documentType.groupOptions;
+  const isPart = checkIsDocumentPart(groupOptions);
+
+  const isOther = checkIsDocumentOTHER(groupOptions);
+  const isOtherForm = hasOutput
+    ? checkIsDocumentOTHER((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+    : false;
+
+  const relatedType = isPart ? RELATED_TYPE.PART_RELATED
+    : ((isOther || isOtherForm) ? RELATED_TYPE.OTHER_RELATED : RELATED_TYPE.PART_RELATED);
+  return relatedType;
+};
