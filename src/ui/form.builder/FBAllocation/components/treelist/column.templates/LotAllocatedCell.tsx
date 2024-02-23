@@ -173,7 +173,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           </span>
         </>
 
-        : <span className={cx(classes.nameCell, classes.titleInfoCell)}>
+        : <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
           {isEditMode && (dataItem.isLotAddition || dataItem.lotRevId) && <div className={classes.idCellEditWrapper}>
             { getFieldInfo()}
           </div>}

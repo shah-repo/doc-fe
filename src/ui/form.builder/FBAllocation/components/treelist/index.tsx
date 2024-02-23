@@ -263,6 +263,13 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       _documentRevisionFormState?.setDirty(true);
       const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as BOMState;
       const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
+      state.data = state.data?.filter((data) => {
+        const isAlocationItemAddExist = !data[ADD_FIELD];
+        if (data[SUB_ITEMS_FIELD]?.length) {
+          data[SUB_ITEMS_FIELD] = data[SUB_ITEMS_FIELD].filter((lot) => !lot[ADD_FIELD]);
+        }
+        return isAlocationItemAddExist;
+      });
       if (state.data.length && index !== -1) {
         const newAllocItem: EditableAllocationItem = createNewLotItem();
         newAllocItem.parentPartRevId = dataItem.partRevId;
@@ -452,14 +459,23 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     }
     _documentRevisionFormState?.setDirty(true);
     const newAllocItem = createPartItem();
-    state.data.push(newAllocItem);
-
-    updateState({
-      ...state,
-      data: [...state.data],
-      expanded: [state.data[0].id],
-      inEdit: [newAllocItem],
-    });
+    const isAddAllocationItemExists = state.data?.findIndex((data) => data[ADD_FIELD]);
+    if (isAddAllocationItemExists === -1) {
+      state.data = state.data?.filter((data) => {
+        const isAlocationItemAddExist = !data[ADD_FIELD];
+        if (data && data[SUB_ITEMS_FIELD]) {
+          data[SUB_ITEMS_FIELD] = data[SUB_ITEMS_FIELD]?.filter((lot) => !lot[ADD_FIELD]);
+        }
+        return isAlocationItemAddExist;
+      });
+      state.data.push(newAllocItem);
+      updateState({
+        ...state,
+        data: [...state.data],
+        expanded: [state.data[0].id],
+        inEdit: [newAllocItem],
+      });
+    }
   };
 
   const editAllocationItem = ({ dataItem, level }: AllocationItemEditEvent) => {
@@ -474,6 +490,14 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     if (editItemInfo.lotRevId) {
       editItemInfo.isLotAddition = true;
     }
+    state.data = state.data?.filter((data) => {
+      const isAlocationItemAddExist = !data[ADD_FIELD];
+      if (data && data[SUB_ITEMS_FIELD]) {
+        data[SUB_ITEMS_FIELD] = data[SUB_ITEMS_FIELD]?.filter((lot) => !lot[ADD_FIELD]);
+      }
+      return isAlocationItemAddExist;
+    });
+
     if (!dataItem[ADD_FIELD] && state.data.length && index !== -1) {
       state.data[index] = editItemInfo;
     }
