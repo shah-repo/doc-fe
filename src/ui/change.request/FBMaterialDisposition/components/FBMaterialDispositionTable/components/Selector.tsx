@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import React, { useRef } from 'react';
 import { Colors } from '../../../../../layout/theme-next';
+import { SELECTER_MARGIN_BOTTOM, SELECTER_MARGIN_TOP } from '../constants';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -10,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   selecterBox: {
     minHeight: 32,
     height: 32,
-    width: 354,
+    width: 180,
     border: `2px dashed ${Colors.primaryLight}`,
     pointerEvents: 'none',
   },
@@ -34,25 +35,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Selector: React.FC = () => {
+interface Props {
+  containerRef: HTMLDivElement|null
+}
+
+export const Selector: React.FC<Props> = ({ containerRef }) => {
   const classes = useStyles();
   const selecterHandlerRef = useRef<HTMLDivElement>(null);
   const selecterRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e) => {
-    if (!(selecterRef && selecterHandlerRef.current)) {
+    if (!(selecterRef && selecterHandlerRef.current && rootRef.current && wrapperRef)) {
       return;
     }
 
     selecterHandlerRef.current?.classList.add(classes.pointerEventsNone);
+    const rowsContainer = containerRef?.querySelector('tbody');
+    const rowsContainerClientRect = rowsContainer?.getBoundingClientRect();
+    const rowsContainerBottom = rowsContainerClientRect?.bottom ?? 0;
+    const rowsContainerTop = rowsContainerClientRect?.top ?? 0;
+    const rootElemRect = rootRef.current?.getBoundingClientRect();
+    const rootTop = rootElemRect?.top ?? 0;
+    const selecter = selecterRef.current?.getBoundingClientRect();
+    const selecterTop = selecter?.top ?? 0;
+    const selecterBottom = selecter?.bottom ?? 0;
 
     const mousemove = (e: MouseEvent) => {
-      const selecter = selecterRef.current?.getBoundingClientRect();
-      const top = selecter?.top ?? 0;
-
-      if (e.clientY > top && selecterRef.current) {
-        const newHeight = e.clientY - top;
+      if (e.clientY > rootTop && e.clientY < (rowsContainerBottom - SELECTER_MARGIN_BOTTOM) && selecterRef.current && selecterHandlerRef.current && wrapperRef.current) {
+        const newHeight = e.clientY - rootTop;
         selecterRef.current.style.height = `${newHeight}px`;
+        selecterHandlerRef.current.style.top = `${e.clientY - rootTop}px`;
+        wrapperRef.current.style.top = `${selecterTop - rowsContainerTop}px`;
+        wrapperRef.current.style.bottom = `${e.clientY - rootTop + 96}px`;
+      } else if (e.clientY < rootTop && e.clientY > (rowsContainerTop + SELECTER_MARGIN_TOP) && wrapperRef.current && selecterRef.current) {
+        const difference = e.clientY - rowsContainerTop;
+        wrapperRef.current.style.top = `${difference}px`;
+        selecterRef.current.style.height = `${100}%`;
+        wrapperRef.current.style.bottom = `${rowsContainerBottom - selecterBottom}px`;
       }
     };
 
@@ -69,8 +90,8 @@ export const Selector: React.FC = () => {
 
   return (
     <div>
-      <div className={classes.root}>
-        <div className={classes.wrap}>
+      <div className={classes.root} ref={rootRef}>
+        <div className={classes.wrap} ref={wrapperRef}>
           <div
             className={classes.selecterBox}
             ref={selecterRef}

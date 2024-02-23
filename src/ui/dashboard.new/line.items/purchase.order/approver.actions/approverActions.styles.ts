@@ -35,12 +35,19 @@ export default makeStyles((theme: NextTheme) => ({
     '&:hover': {
       background: Colors.textGray,
     },
+    innerWrap: {
+      display: 'flex',
+    },
   },
   [theme.media.mobile]: {
     truncateMobile: {
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       wordBreak: 'break-all',
+      background: Colors.error,
+    },
+    innerWrap: {
+      display: 'block',
     },
     link: {
       pointerEvents: 'none',
