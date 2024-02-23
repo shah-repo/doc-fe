@@ -208,7 +208,7 @@ const ParentPartSelector: React.FunctionComponent<{
               confirmMessages[previousOption], '{relatedType}', getDynamicTextValue(
                 relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS)),
             relatedType: getDynamicTextValue(
-              relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT),
+              relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_PLURALIZED, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_PLURALIZED),
           }}
         />
       </Dialog>
@@ -583,7 +583,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
             : !isVoided
           && <FBTooltip title={getReplacedMessage(
             'relatedParts.checkbox.hover.msg', '{relatedType}',
-            getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT))}
+            getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS))}
           placement="top" arrow
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
