@@ -1,10 +1,10 @@
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grow, ListItemIcon, MenuList, Paper, Popper, makeStyles } from '@material-ui/core';
+import { Grow, ListItemIcon, makeStyles, MenuList, Paper, Popper } from '@material-ui/core';
 import { ColumnMenuProps } from '@progress/kendo-react-data-tools';
 import React, { useRef } from 'react';
-import { StyledMenuListItemText } from '../../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListItem } from '../../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { ReactComponent as CloneIcon } from '../../../../../../assets/images/clone.svg';
 import Text from '../../../../../components/Text';
 import { Dialog } from '../../../../../hooks/useDialog';
@@ -31,7 +31,7 @@ export const PopupClipboardMenuContext = React.createContext<PopupClipboardMenuC
 
 const useStyles = makeStyles((theme) => ({
   popperHolder: {
-    marginLeft: theme.spacing(46.25),
+    marginLeft: theme.spacing(24),
   },
 }));
 

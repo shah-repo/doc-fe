@@ -1,5 +1,5 @@
-import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { checkIsDocumentOTHER, checkIsDocumentPart } from '../../documentRevision/helpers/checkDocumentGroup';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
 export const generateDocTitleText = (docId: string, displayRevision: string, name: string) => (
@@ -44,7 +44,8 @@ export const formDataToStoreData = (
         = documentRevisionsData?.find((docRev: DocumentRevision) => docRev.id === docRevId) ?? {};
     if (document) {
       entryInfo.titleText = generateDocTitleText(document.docId, displayRevision, name);
-      entryInfo.isPart = document.documentType.group === DOC_TYPE_GROUP.PART;
+      entryInfo.isPart
+        = checkIsDocumentPart(document.documentType.group) || checkIsDocumentOTHER(document.documentType.group);
       entryInfo.documentId = document.id;
       entryInfo.displayRevision = displayRevision;
     }

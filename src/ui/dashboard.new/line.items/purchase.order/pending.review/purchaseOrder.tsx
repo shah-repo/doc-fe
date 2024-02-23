@@ -598,7 +598,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 id={docRevId}
                 dialogPDF={dialogPDF}
                 onClose={handleDownloadClose}
-                downloadImmediately
+                downloadPdfHover
               />
             )}
           </Grid>
