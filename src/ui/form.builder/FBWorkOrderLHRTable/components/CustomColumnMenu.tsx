@@ -31,8 +31,7 @@ export const CustomColumnMenu: React.ComponentType<CustomColumnMenuProps> = (
   const { columns } = React.useContext(LHRTableColumnMenuContext)!;
   const selectedColumn = columns.find((c) => c.field === column.field);
   const isLocked = Boolean(selectedColumn?.locked);
-  const index
-    = selectedColumn?.orderIndex ?? selectedColumn?.mainOrderIndex ?? 0;
+  const index = selectedColumn?.orderIndex ?? 0;
 
   return (<>
     {!selectedColumn?.disableShowOrHideSelection && (

@@ -43,7 +43,6 @@ export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'f
   show?: boolean
   disabled?: boolean
   selectable?: boolean
-  mainOrderIndex?: number
   isHidden?: boolean
   disableShowOrHideSelection?: boolean
 }
