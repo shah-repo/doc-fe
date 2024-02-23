@@ -70,7 +70,7 @@ export const buildSchema = ({
       />,
       template: (props) => <LocationCellTemplate {...props} onClick={onRowClick} />,
       selectable: false,
-      width: 250,
+      width: 140,
     },
     {
       id: 'whereUsedView',
@@ -83,7 +83,7 @@ export const buildSchema = ({
       show: true,
       filterable: false,
       selectable: false,
-      width: 120,
+      width: 110,
     },
     {
       id: 'onOrderPOAction',
@@ -95,7 +95,7 @@ export const buildSchema = ({
         content ="approvalRequest.grid.heading.onOrder"
         title="approvalRequest.grid.heading.tooltip.onOrder" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
-      width: 380,
+      width: 201,
     },
     {
       id: 'inInspectionAction',
@@ -107,7 +107,7 @@ export const buildSchema = ({
         content ="approvalRequest.grid.heading.Inspection"
         title="approvalRequest.grid.heading.tooltip.Inspection" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
-      width: 380,
+      width: 201,
     },
     {
       id: 'inInventoryAction',
@@ -119,7 +119,7 @@ export const buildSchema = ({
         title ="approvalRequest.grid.heading.tooltip.Inventory"
         content="approvalRequest.grid.heading.Inventory" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
-      width: 380,
+      width: 201,
     },
     {
       id: 'inWipAction',
@@ -131,7 +131,7 @@ export const buildSchema = ({
         content ="approvalRequest.grid.heading.wip"
         title="approvalRequest.grid.heading.tooltip.wip" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
-      width: 380,
+      width: 201,
     },
     {
       id: 'asFinishedGoodsAction',
@@ -143,7 +143,7 @@ export const buildSchema = ({
         content ="approvalRequest.grid.heading.finishedGoods"
         title="approvalRequest.grid.heading.tooltip.finishedGoods" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
-      width: 380,
+      width: 201,
     },
     {
       field: 'usedLocation',
@@ -155,7 +155,7 @@ export const buildSchema = ({
         title ="approvalRequest.grid.heading.tooltip.field"
         content="approvalRequest.grid.heading.field" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
-      width: 380,
+      width: 201,
     },
     {
       id: 'comment',

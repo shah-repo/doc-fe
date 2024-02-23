@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   selecterBox: {
     minHeight: 32,
     height: 32,
-    width: 354,
+    width: 180,
     border: `2px dashed ${Colors.primaryLight}`,
     pointerEvents: 'none',
   },

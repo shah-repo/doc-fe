@@ -5,12 +5,13 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { RELATED_TYPE } from '../../../state/ducks/relatedParts/types';
 import { AsyncStatus } from '../../../state/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
@@ -18,6 +19,8 @@ import Text from '../../components/Text';
 import { FBApprovalAuditState, FBSchemaProps, FBText } from '../../form.builder';
 import { isTranslation } from '../../translations/types';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
+import { revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import { styles } from './Audit.presenter.styles.new';
 
 interface OwnProps {
@@ -46,6 +49,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+
+  const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
 
   // Added to exclude few PO line items unwanted audit recrods
   const excludeFewPOAuditRecords = (change: Audit) => (change.field.includes(PO_ITEMS_COMPONENT_NAME)
@@ -450,7 +455,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   <Text
                     dataCy={`change-key-${groupKey}-docId-${key}`}
                     message={`documentRevision.audit.${change.field}.${change.type}`}
-                    values={{ nextStatus: change.nextValue }}
+                    values={{
+                      nextStatus: change.nextValue,
+                      relatedType: getDynamicTextValue(
+                        revIdRelatedTypeObj[change.documentRevisionId], RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+                    }}
                   />
                 </Typography>
               )}
@@ -459,10 +468,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   variant="subtitle1"
                   className={classes.auditKey}
                 >
-                  <Text
-                    dataCy={`change-key-${groupKey}-${key}`}
-                    message={`documentRevision.audit.${change.field}.${change.type}`}
-                  />
+                  {labelToShow(change, groupKey, key, revIdRelatedTypeObj)}
                 </Typography>
               )}
               {(isFBField || isSmartRef) && (
@@ -481,6 +487,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 <AuditFactory
                   audit={change}
                   dataCy={`change-value-${groupKey}-${key}`}
+                  revIdRelatedTypeObj={revIdRelatedTypeObj}
                 />
               </div>
             )}
@@ -538,7 +545,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             key={change.groupId + `-${index}`}
             className={classes.auditValue}
           >
-            <AuditFactory audit={change} dataCy={`change-value-${change.groupKey}-${change.index}`} />
+            <AuditFactory
+              audit={change}
+              dataCy={`change-value-${change.groupKey}-${change.index}`}
+              revIdRelatedTypeObj={revIdRelatedTypeObj}
+            />
           </div>
         ))}
       </Box>
@@ -563,6 +574,32 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       </Box>}
       <List disablePadding>{audit && renderAuditGroup()}</List>
     </div>
+  );
+};
+
+const labelToShow = (change: Audit,
+  groupKey: number | undefined,
+  key: number | undefined,
+  revIdRelatedTypeObj: {[key: string]: RELATED_TYPE}) => {
+  return (
+    <>
+      {change.field === 'relatedPartsStatus' && <Text
+        dataCy={`change-key-${groupKey}-${key}`}
+        message={`documentRevision.audit.${change.field}.${change.type}`}
+        values={{
+          relatedType: getDynamicTextValue(
+            revIdRelatedTypeObj[change.documentRevisionId], RELATED_TYPE_VALUES_ENUM.BASE_PART, RELATED_TYPE_VALUES_ENUM.BASE_DOCUMENT),
+        }}
+      />}
+      {change.field !== 'relatedPartsStatus' && <Text
+        dataCy={`change-key-${groupKey}-${key}`}
+        message={`documentRevision.audit.${change.field}.${change.type}`}
+        values={{
+          relatedType: getDynamicTextValue(
+            revIdRelatedTypeObj[change.documentRevisionId], RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+        }}
+      />}
+    </>
   );
 };
 

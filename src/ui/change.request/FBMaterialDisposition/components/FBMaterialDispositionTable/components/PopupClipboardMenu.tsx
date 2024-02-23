@@ -32,7 +32,7 @@ export const PopupClipboardMenuContext = React.createContext<PopupClipboardMenuC
 
 const useStyles = makeStyles((theme) => ({
   popperHolder: {
-    marginLeft: theme.spacing(46.25),
+    marginLeft: theme.spacing(24),
   },
 }));
 
