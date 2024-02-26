@@ -17,7 +17,7 @@ import {
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
-import { documentPreviewPath } from "../../../../../../document.revision/utils/paths";
+import { documentPreviewPath } from '../../../../../../document.revision/utils/paths';
 import useDialog from '../../../../../../hooks/useDialog';
 import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
