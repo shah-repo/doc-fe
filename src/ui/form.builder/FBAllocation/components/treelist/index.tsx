@@ -44,7 +44,6 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
-import { BOMState } from '../../../FBBOM/components/treelist/interface';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import AutoOptions from './AutoOptions';
 import {
@@ -261,8 +260,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   const addLot = (dataItem) => {
       _documentRevisionFormState?.setDirty(true);
-      const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as BOMState;
+      const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as AllocationState;
       const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
+      state.data = ignorePreviouslyAddedItems(state.data);
       if (state.data.length && index !== -1) {
         const newAllocItem: EditableAllocationItem = createNewLotItem();
         newAllocItem.parentPartRevId = dataItem.partRevId;
@@ -445,6 +445,16 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
   };
 
+  const ignorePreviouslyAddedItems = (data: AllocationItem[]) => {
+    return data?.filter((data) => {
+      const isAlocationItemAddExist = !data[ADD_FIELD];
+      if (data[SUB_ITEMS_FIELD]) {
+        data[SUB_ITEMS_FIELD] = data[SUB_ITEMS_FIELD]?.filter((lot) => !lot[ADD_FIELD]);
+      }
+      return isAlocationItemAddExist;
+    });
+  };
+
   const addAllocationItem = () => {
     if (!partRevIdSelected) {
       toastError(translate('allocation.part.selection.error'));
@@ -452,14 +462,17 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     }
     _documentRevisionFormState?.setDirty(true);
     const newAllocItem = createPartItem();
-    state.data.push(newAllocItem);
-
-    updateState({
-      ...state,
-      data: [...state.data],
-      expanded: [state.data[0].id],
-      inEdit: [newAllocItem],
-    });
+    const isAddAllocationItemExists = state.data?.findIndex((data) => data[ADD_FIELD]);
+    if (isAddAllocationItemExists === -1) {
+      state.data = ignorePreviouslyAddedItems(state.data);
+      state.data.push(newAllocItem);
+      updateState({
+        ...state,
+        data: [...state.data],
+        expanded: [state.data[0].id],
+        inEdit: [newAllocItem],
+      });
+    }
   };
 
   const editAllocationItem = ({ dataItem, level }: AllocationItemEditEvent) => {
@@ -474,6 +487,8 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     if (editItemInfo.lotRevId) {
       editItemInfo.isLotAddition = true;
     }
+    state.data = ignorePreviouslyAddedItems(state.data);
+
     if (!dataItem[ADD_FIELD] && state.data.length && index !== -1) {
       state.data[index] = editItemInfo;
     }
