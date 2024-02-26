@@ -6,15 +6,15 @@ import { authSelectors } from '../../state/ducks/auth';
 import { GroupTag } from '../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../state/ducks/company';
 import { documentRevisionsActions } from '../../state/ducks/documentRevisions';
-import { WorkOrderTypes, WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY } from '../../state/ducks/documentRevisions/documentType/types';
+import { WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY, WorkOrderTypes } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from '../../state/ducks/documentRevisions/types';
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
 import { FBDAMFields } from '../form.builder';
-import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
+import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -134,8 +134,8 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       if (formInput[WO_TYPE_KEY] === WorkOrderTypes.OTHER) {
         updatedFormInput[WO_LOT_ID_KEY_NAME] = '';
         updatedFormInput[WO_LHR_TABLE_KEY_NAME] = [];
-        updatedFormInput[WO_PART_UNIT_KEY_NAME] = '';
-        updatedFormInput[WO_PART_QTY_KEY_NAME] = 0;
+        delete updatedFormInput[WO_PART_UNIT_KEY_NAME];
+        delete updatedFormInput[WO_PART_QTY_KEY_NAME];
         updatedFormInput[WO_PART_KEY_NAME] = '';
       } else if (formInput[WO_TYPE_KEY] === WorkOrderTypes.MAKE_PRODUCT) {
         updatedFormInput[WO_LOT_ID_KEY_NAME] = '';
