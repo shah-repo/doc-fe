@@ -10,6 +10,7 @@ import { ReactComponent as UnCheckedRadioIcon } from '../../../assets/images/unc
 import { ReactComponent as DisabledUnCheckedRadioIcon } from '../../../assets/images/unchecked_radio_disabled.svg';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { WorkOrderTypes, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
 import { ApplicationState } from '../../../state/reducers';
 import Text from '../../components/Text';
@@ -51,7 +52,11 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
     disabled = !isInputOwner || disabled;
     const revision = workspaceState?.document?.revision;
     if (revision) {
-      disabled = disabled || (revision > 1);
+      disabled
+        = disabled
+        || revision > 1
+        || workspaceState?.document?.displayStatus?.toUpperCase()
+          === DocumentRevisionStatus.Released;
     }
     defaultValue = formState?.getFieldValue(name) || defaultValue;
 
