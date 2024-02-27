@@ -49,9 +49,6 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const increasedBy = isTasksListAdded ? 2 : 1;
   const [data, setData] = React.useState<Array<Partial<EditableTLItem>>>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const editTLItem = ({ dataItem }: TLItemEditEvent) => {
-    !isShowOnly && !isEditMode.current && !formik.dirty && setEditedTLItem(dataItem);
-  };
   const discardTLItem = () => setEditedTLItem(undefined);
   const fetchTasksList = useActionCreator(taskActions.fetchTasksList);
   const addTask = useActionCreator(taskActions.addTask);
@@ -69,6 +66,13 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   if (enbleTasksAdditionalColumns) {
     isAdditionalColumnsShown = true;
   }
+
+  const editTLItem = ({ dataItem }: TLItemEditEvent) => {
+    if (isWORecord) {
+      return !isShowOnly && !isEditMode.current && setEditedTLItem(dataItem);
+    }
+    !isShowOnly && !isEditMode.current && !formik.dirty && setEditedTLItem(dataItem);
+  };
 
   const loadTasksTableData = () => {
     tasksAsync.start(fetchTasksList, partOfIdToUse, tasksAsync);

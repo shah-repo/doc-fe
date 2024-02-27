@@ -88,6 +88,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
           options={availableApprovers}
           onChange={handleChange}
           getOptionLabel={(option: OptionType) => option.label}
+          getOptionDisabled={(option) => !isEmpty(selectedUsers.find(data => data.employeeId === option.value))}
           value={{ label: 'Add user' }}
           size="small"
         />
