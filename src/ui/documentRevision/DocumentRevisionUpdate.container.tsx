@@ -2,11 +2,11 @@ import { debounce, get, has, isEmpty, map, pick, set } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DocumentRevisionSummary, SM } from '../../App';
+import { getPayloadBasedOnWorkOrderType } from '../../common/utils/helpers';
 import { authSelectors } from '../../state/ducks/auth';
 import { GroupTag } from '../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../state/ducks/company';
 import { documentRevisionsActions } from '../../state/ducks/documentRevisions';
-import { WorkOrderTypes, WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from '../../state/ducks/documentRevisions/types';
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
@@ -130,18 +130,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     const formInput = get(dataToSubmit, 'formInput');
 
     if (!isEmpty(formInput) && formInput.WO_TYPE_KEY !== '') {
-      const updatedFormInput = {};
-      if (formInput[WO_TYPE_KEY] === WorkOrderTypes.OTHER) {
-        updatedFormInput[WO_LOT_ID_KEY_NAME] = '';
-        updatedFormInput[WO_LHR_TABLE_KEY_NAME] = [];
-        updatedFormInput[WO_PART_UNIT_KEY_NAME] = '';
-        updatedFormInput[WO_PART_QTY_KEY_NAME] = 0;
-        updatedFormInput[WO_PART_KEY_NAME] = '';
-      } else if (formInput[WO_TYPE_KEY] === WorkOrderTypes.MAKE_PRODUCT) {
-        updatedFormInput[WO_LOT_ID_KEY_NAME] = '';
-      } else if (formInput[WO_TYPE_KEY] === WorkOrderTypes.MAKE_KIT) {
-        updatedFormInput[WO_LHR_TABLE_KEY_NAME] = [];
-      }
+      const updatedFormInput = getPayloadBasedOnWorkOrderType(formInput);
       set(dataToSubmit, 'formInput', {
         ...formInput,
         ...updatedFormInput,

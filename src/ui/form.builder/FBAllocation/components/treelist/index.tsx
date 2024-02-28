@@ -733,6 +733,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const sortedColumnDefinitions = orderByLockedState(getColumns());
+  const isLoading = treeListAsync.isLoading || partAsync.isLoading || deleteLotAsync.isLoading;
 
   return (
     <>
@@ -792,9 +793,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
                     row={TreeListDraggableRow}
                   />
                 </ExcelExport>
-                {(treeListAsync.isLoading
-                  || partAsync.isLoading
-                  || deleteLotAsync.isLoading) && <Loader />}
+                {isLoading && <Loader />}
               </Grid>
               {exportTreelistDialog.isOpen && (
                 <ExportTreeListDialog

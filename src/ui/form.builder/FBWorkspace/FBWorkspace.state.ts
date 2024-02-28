@@ -2,9 +2,10 @@ import { cloneDeep, includes, isArray, isEmpty, isUndefined, map, omit, size, un
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { appGlobals } from '../../../appGlobals';
+import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
 import { GroupTag, UserState } from '../../../state/ducks/auth/types';
 import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
-import { DOC_TYPE_GROUP_OPTION, WorkOrderTypes, WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { EditableMDItem } from '../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
@@ -219,20 +220,7 @@ class FBWorkspaceState extends FBSchemaState {
       case 'form':
       case 'formDesign':
         if (values) {
-          const payload = cloneDeep(values);
-          if (!isEmpty(payload) && payload[WO_TYPE_KEY] !== '') {
-            if (payload[WO_TYPE_KEY] === WorkOrderTypes.OTHER) {
-              payload[WO_LOT_ID_KEY_NAME] = '';
-              payload[WO_LHR_TABLE_KEY_NAME] = [];
-              payload[WO_PART_UNIT_KEY_NAME] = '';
-              payload[WO_PART_QTY_KEY_NAME] = 0;
-              payload[WO_PART_KEY_NAME] = '';
-            } else if (payload[WO_TYPE_KEY] === WorkOrderTypes.MAKE_PRODUCT) {
-              payload[WO_LOT_ID_KEY_NAME] = '';
-            } else if (payload[WO_TYPE_KEY] === WorkOrderTypes.MAKE_KIT) {
-              payload[WO_LHR_TABLE_KEY_NAME] = [];
-            }
-          }
+          const payload = getPayloadBasedOnWorkOrderType(cloneDeep(values));
           body = {
             formInput: omit(payload,
               Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),

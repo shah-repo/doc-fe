@@ -122,6 +122,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const isWO = checkIsDocumentWO(documentRevision?.document?.documentType?.groupOptions);
+  const isDocHasOutput = isDocumentRevisionHasOutput(documentRevision);
   const isPart = checkIsDocumentPart(documentRevision?.document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(documentRevision?.document?.documentType?.groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
@@ -131,7 +132,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild = _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild || false;
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
-  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
+  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocHasOutput;
   const shouldShowUpgrade
    = ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isLHR && !isMPIOutput;
@@ -285,8 +286,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   ) {
     if (
       isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove
-      && !(isPO && isDocumentRevisionHasOutput(documentRevision))
-      && !(isWO && isDocumentRevisionHasOutput(documentRevision))) {
+      && !(isPO && isDocHasOutput)
+      && !(isWO && isDocHasOutput)) {
       accessableButtons.push(PreviewControlButtons.ApproveAndReleaseButton);
     }
   }

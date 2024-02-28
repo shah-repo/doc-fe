@@ -61,13 +61,9 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
 
   const renderOptions = () => {
     return parts.map((part) => ({
-      label: renderPartLabel(part),
+      label: translate('wo.displayRevision', { docId: part.document.docId, displayRevision: part?.displayRevision, name: part?.name }),
       value: part.id,
     }));
-  };
-
-  const renderPartLabel = (part: DocumentRevision) => {
-    return `${part?.document.docId} Rev ${part?.displayRevision} - ${part?.name}`;
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
@@ -115,8 +111,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
       {...{ colSpan, id, style }}
       data-cy="cell-id"
     >
-      <>
-        {hasChildren && !isEditMode
+      {hasChildren && !isEditMode
         && <span
           className={cx(
             classes.defaultIcon,
@@ -135,8 +130,6 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
             }
           />
         </span>}
-      </>
-
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && !dataItem.isLotAddition && !dataItem.lotRevId && <div className={classes.idCellEditWrapper}>
           { getFieldInfo()}

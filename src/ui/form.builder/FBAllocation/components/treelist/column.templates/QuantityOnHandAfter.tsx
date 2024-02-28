@@ -26,7 +26,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
     if (values.isLotAddition) {
       quantityNeeded = getParsedFieldValue(values.quantityNeeded);
     } else {
-      quantityNeeded = dataItem?.isNewAddition ? getParsedFieldValue(values.quantityNeeded) : (dataItem.quantityNeeded ?? 0);
+      quantityNeeded = dataItem?.isNewAddition ? getParsedFieldValue(values.quantityNeeded) : quantityNeeded;
     }
   }
 
