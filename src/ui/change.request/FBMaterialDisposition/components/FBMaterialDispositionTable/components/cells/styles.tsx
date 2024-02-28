@@ -49,4 +49,10 @@ export const styles = makeStyles((theme) => ({
       textDecoration: 'underline !important',
     },
   },
+  wrapper: {
+    maxWidth: '95%',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+  },
 }));
