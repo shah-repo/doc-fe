@@ -12,7 +12,7 @@ export const styles = makeStyles((theme) => ({
     width: 10,
   },
   actionLabel: {
-    width: '75%',
+    width: '90%',
   },
   copyIcon: {
     width: 15,
@@ -48,11 +48,5 @@ export const styles = makeStyles((theme) => ({
     '&:hover': {
       textDecoration: 'underline !important',
     },
-  },
-  wrapper: {
-    maxWidth: '95%',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
   },
 }));

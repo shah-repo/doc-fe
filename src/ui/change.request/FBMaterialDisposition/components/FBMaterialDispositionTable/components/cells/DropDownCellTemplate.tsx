@@ -10,7 +10,6 @@ import {
   MODE_FIELD,
   Mode,
 } from '../../../../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../../../../components/OverflowTooltip';
 import { Dialog } from '../../../../../../components/dialogs';
 import {
   Autocomplete,
@@ -138,15 +137,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
         <div className={classes.actionLabel}>
           <OverflowingContent>{translate(displayValue?.label)}</OverflowingContent>
         </div>
-          <Box className={classes.wrapper}>
-            <OverflowTooltip
-              title={translate(displayValue?.label)}
-              placement="top"
-              interactive
-              arrow
-            >
-            {translate(displayValue?.label)}
-            </OverflowTooltip>
+          <Box>
             {isOnOrderPOActionColumn && openedPOsAvailable && (
               <FontAwesomeIcon
                 icon={solid('circle')}
@@ -154,7 +145,6 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
                 className={cx(classes.dot, classes.poPreviewDot)}
               />
             )}
-          </Box>
           {showCopyButton && (
             <span ref={copyIconRef} onClick={handleCopy}>
               <Tooltip
@@ -167,6 +157,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
                   className={classes.copyIcon}
                 /></Tooltip>
             </span>)}
+          </Box>
         </Box>
       <Dialog
         title={translate(
