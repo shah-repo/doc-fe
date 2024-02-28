@@ -15,8 +15,8 @@ import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { ApplicationState } from '../../../state/reducers';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
-import { DataStateProps, KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { KendoCellTemplates, KendoColumn } from '../../components/common/kendo/types';
+import { DataStateProps, KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { TableColumnProps } from '../../components/table/column/types';
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from '../../constants/urls';
 import { canEditDocumentRevision, documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
@@ -157,6 +157,8 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       upDateField = 'displayStatus';
     } else if (upDateField === 'precalc.po_amount') {
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT;
+    } else if (upDateField === 'precalc.partNumberTitle') {
+      dynamicCellTemplate = KendoCellTemplates.OVERFLOW_CELL;
     } else {
       dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
     }
