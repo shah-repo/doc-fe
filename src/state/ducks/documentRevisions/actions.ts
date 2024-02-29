@@ -329,6 +329,9 @@ const voidDocument = (id: string): ApiAction<DocumentRevision> => apiAction({
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },
+  onFailure: (error) => {
+    toastError(error);
+  },
 });
 
 const updatePO = (id: string, body: {poStatus: POStatusType}): ApiAction<DocumentRevision> => apiAction({
