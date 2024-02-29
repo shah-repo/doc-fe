@@ -2,20 +2,20 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, ButtonProps, ListItemText, MenuItem } from '@material-ui/core';
 import React from 'react';
-import { LotStatus } from '../../../../state/ducks/documentRevisions/types';
+import { EquipmentStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
 import useMenu from '../../../hooks/useMenu';
 import { Button, SplitButtonMenu } from '../../forms/fields-next';
 import useStyles from './HeaderStatusButton.styles';
 
 interface StatusOption {
-  value: LotStatus
+  value: LotStatus | EquipmentStatus
   label: string
 }
 
 interface HeaderStatusButtonProps extends ButtonProps {
   label: string
   options: StatusOption[]
-  onItemSelect: (value: LotStatus) => void
+  onItemSelect: (value: LotStatus | EquipmentStatus) => void
 }
 
 const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({

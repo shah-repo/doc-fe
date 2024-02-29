@@ -6,7 +6,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../../App';
-import { MomentFormats, getFormattedDateString } from '../../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
@@ -17,6 +17,7 @@ import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/d
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
+import HeaderEquipmentStatus from '../../../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
 import HeaderMenu from '../../../components/common/header/Menu';
@@ -24,8 +25,8 @@ import OwnerChangerContainer from '../../../components/common/owner.changer/cont
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../../../components/forms/ClonePOButton';
 import CloneEBButton from '../../../components/forms/CopyEBButton';
-import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
+import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { FB } from '../../../form.builder';
@@ -36,24 +37,24 @@ import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustom
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from '../../PreviewControls.container.types';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
+import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
 import { withActionButton } from './ActionButton.wrap';
+import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
 import CancelButton from './CancelButton';
 import CancelEditPartButton from './CancelEditPartButton';
-import GenerateHtmlPreview from './GenerateHtmlPreview';
-import { SubmitForApproval } from './SubmitForApproval';
-import VoidButton from './VoidButton';
-import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
 import ExportToCSVButton from './export.to.csv/ExportToCSV.button';
 import ExportToEmail from './export.to.email/ExportToEmail';
+import GenerateHtmlPreview from './GenerateHtmlPreview';
 import RedlineButton from './redline/Redline.button';
+import { SubmitForApproval } from './SubmitForApproval';
 import UpgradeToLatestContainer from './upgrade.to.latest/UpgradeToLatest.container';
+import VoidButton from './VoidButton';
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isNewLayout = SM.isNewLayout;
@@ -137,6 +138,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
+  const isEquipment = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.EQUIPMENT;
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -473,6 +475,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isEquipment && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased && (
         <StyledSubmitButton
           showNewButton={true}
