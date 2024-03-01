@@ -134,6 +134,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const ownerFieldsMapping = {
     'owner.user.name': ['owner.user.avatar', 'owner.user.initialColor'],
   };
+  const overflowCellFields = ['precalc.partNumberTitle', 'precalc.partNumberDescription'];
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: string | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
@@ -157,7 +158,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       upDateField = 'displayStatus';
     } else if (upDateField === 'precalc.po_amount') {
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT;
-    } else if (upDateField === 'precalc.partNumberTitle') {
+    } else if (overflowCellFields.includes(upDateField)) {
       dynamicCellTemplate = KendoCellTemplates.OVERFLOW_CELL;
     } else {
       dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
