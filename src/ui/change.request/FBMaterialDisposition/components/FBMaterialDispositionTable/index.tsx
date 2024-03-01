@@ -99,6 +99,8 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     onError: toastError,
   });
 
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
   const partAsync = useAsync({
     onSuccess: () => {
       changeRequest?.id && dispatch(changeRequestsActions.loadAudit(changeRequest?.id));
@@ -382,13 +384,14 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   };
 
   return (<>
-    <PopupClipboardMenuContext.Provider value={{ copyClipboardPopupMenu, selectedState, copiedItems, onUpdateSelectedCell, populateCopiedValue, clearContent }}>
+    <PopupClipboardMenuContext.Provider value={{ copyClipboardPopupMenu, selectedState, copiedItems, containerRef: containerRef.current, onUpdateSelectedCell, populateCopiedValue, clearContent }}>
       <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
         <KendoDataGrid<EditableMDItem>
           data={MDItemList}
           schema={getColumns()}
           fullWidth
           className={classes.rootMDTable}
+          containerRef={containerRef}
           hasBoxScrollbars
           onRowClick={editMDItem}
           selectedField={SELECTED_FIELD}

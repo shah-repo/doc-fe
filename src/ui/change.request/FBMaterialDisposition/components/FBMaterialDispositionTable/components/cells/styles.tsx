@@ -11,6 +11,9 @@ export const styles = makeStyles((theme) => ({
     height: 10,
     width: 10,
   },
+  actionLabel: {
+    width: '75%',
+  },
   copyIcon: {
     width: 15,
     height: 15,
@@ -25,6 +28,7 @@ export const styles = makeStyles((theme) => ({
   },
   poPreviewDot: {
     marginLeft: theme.spacing(1.875),
+    marginRight: theme.spacing(0.625),
     verticalAlign: 'baseline',
     cursor: 'pointer',
   },

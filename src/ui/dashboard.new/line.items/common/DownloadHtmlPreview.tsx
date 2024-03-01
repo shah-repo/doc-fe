@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
 import { Backdrop, Dialog, DialogContent, DialogTitle, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import isMobile from 'is-mobile';
+import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { ReactComponent as DownloadPdfSolidIcon } from '../../../../assets/images/download_pdf_solid.svg';
@@ -86,9 +87,11 @@ const DownloadHtmlPreview: React.FC<Props> = ({
       handleClose();
     },
   });
-
   useEffect(() => {
     if (downloadImmediately) {
+      handleClick();
+    }
+    if (downloadPdfHover) {
       handleClick();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,7 +129,7 @@ const DownloadHtmlPreview: React.FC<Props> = ({
           </DialogContent>
         </Dialog>}
       </Backdrop>
-      {downloadPdfHover && (
+      {downloadPdfHover && !isMobile() && (
         <DownloadPdfSolidIcon
           data-cy="download-pdf"
           onClick={handleClick}
