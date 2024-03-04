@@ -42,7 +42,7 @@ const updatePart = (
   handlers: Handlers,
 ): ApiAction<AllocationItem> =>
   apiActionWithCallbacks({
-    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/entry/${partRevId}`,
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/parts/${partRevId}`,
     method: 'patch',
     data: data,
     handlers,
