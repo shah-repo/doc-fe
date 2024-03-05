@@ -18,7 +18,7 @@ import EquipmentSpecification from '../../documentRevision/forms/presenters/Equi
 import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../documentRevision/forms/presenters/related.equipments';
 import RelatedPartsWrapper from '../../documentRevision/forms/presenters/related.parts/RelatedParts.wrap';
 import { getHighestRevision } from '../../documentRevision/forms/transform';
-import { checkIsDocumentEB, checkIsDocumentOTHER, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentEB, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInStatus } from '../../documentRevision/helpers/documentRevisionStatus';
 import { styles as AutoCompleteStyles } from '../../form.builder/styles/FBAutocomplete.styles';
 import { useTraining } from '../../hooks/docCustomization/useCustomization';
@@ -95,9 +95,6 @@ const Presenter: React.FunctionComponent<Props> = ({
   const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = useSelector((state: ApplicationState) => formTemplate
     ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
-  const isOther = checkIsDocumentOTHER(groupOptions);
-  const isOtherForm = useSelector((state: ApplicationState) => formTemplate
-    ? checkIsDocumentOTHER((formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
 
   const relatedPartsViewOnly
         = !dataProp?.relatedPartsStatus
@@ -184,7 +181,7 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
-        {(isPart || isPartForm || isOther || isOtherForm) && (
+        {(isPart || isPartForm) && (
           <Grid item xs={12}>
             <RelatedPartsWrapper
               viewOnly={relatedPartsViewOnly}
