@@ -233,6 +233,7 @@
   "changeRequest.audit.owner.STRING_NEW": "New owner",
   "changeRequest.audit.formInput.effectiveDate.STRING_EDITED": "Effective Date Updated",
   "changeRequest.audit.formInput.effectiveDate.STRING_NEW": "Effective Date Added",
+  "changeRequest.audit.crId.STRING_NEW": "AR ID NEW",
   "changeRequest.audit.crId.STRING_EDITED": "AR ID Updated",
   "changeRequest.audit.formInput.documentRevisions.whereUsedView.name.STRING_NEW": "Where Used Added",
   "changeRequest.audit.formInput.documentRevisions.revisionFormTo.STRING_NEW": "Rev (From-To) Added",
