@@ -308,6 +308,7 @@
   "common.token.key": "Token key",
   "common.token.action": "Action",
   "common.description": "Description",
+  "common.justification": "Justification",
   "common.description.SUP": "Supplier Address/Phone",
   "common.state": "State",
   "common.save": "Save",

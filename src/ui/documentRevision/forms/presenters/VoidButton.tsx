@@ -1,18 +1,19 @@
 import { Box, Button } from '@material-ui/core';
 import React, { useMemo } from 'react';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
-import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as VoidDocumentIcon } from '../../../../assets/images/void_document.svg';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
 import AlertDialog from '../../../app/alert.dialog/AlertDialog';
+import VoidedAlertDialog from '../../../app/alert.dialog/VoidedAlertDialog';
+import Text from '../../../components/Text';
 import FormMessage from '../../../components/forms/FormMessage';
 import FormProgress from '../../../components/forms/FormProgress';
-import Text from '../../../components/Text';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
@@ -82,11 +83,17 @@ const VoidButton: React.FunctionComponent<Props> = ({
           <Text translation="common.void" />
         </Button>
       )}
-      <AlertDialog
+      {isRecord ? <VoidedAlertDialog
+        message="record.void.alert"
+        docRevId={documentRevision?.id as string}
+        docRevOwner={documentRevision?.owner?.user?.name as string}
+        {...{ dialog }}
+      />
+      : <AlertDialog
         confirmAction={voidDocument}
         message={isRecord ? 'documentRevision.record.void.alert' : 'documentRevision.void.alert'}
         {...{ dialog }}
-      />
+      />}
     </>
   );
 };
