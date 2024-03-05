@@ -85,7 +85,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     const selectedLOT = lots.find((lot) => lot.id === option?.value);
     setFieldValue('lotRevId', option?.value);
     field && setFieldValue(field, option?.value);
-    setFieldValue('quantityOnHand', selectedLOT?.precalc.lot_on_hand_quantity);
+    setFieldValue('quantityOnHand', selectedLOT?.precalc?.lot_on_hand_quantity);
     setFieldValue('parentPartRevId', dataItem.parentPartRevId);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
