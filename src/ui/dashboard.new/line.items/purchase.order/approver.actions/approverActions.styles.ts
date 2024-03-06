@@ -59,5 +59,9 @@ export default makeStyles((theme: NextTheme) => ({
     poActionIconsWidth: {
       display: 'none',
     },
+    typographyChildrenBold: {
+      marginLeft: theme.spacing(-2),
+      paddingRight: 18,
+    },
   },
 }));

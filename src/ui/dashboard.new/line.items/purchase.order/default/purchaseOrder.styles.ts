@@ -48,6 +48,10 @@ export default makeStyles((theme: NextTheme) => ({
       display: 'flex',
       marginLeft: theme.spacing(2),
     },
+    typographyChildrenBold: {
+      marginLeft: theme.spacing(-2),
+      paddingRight: 18,
+    },
 
   },
 }));

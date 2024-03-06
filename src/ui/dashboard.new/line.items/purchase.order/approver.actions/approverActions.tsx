@@ -138,7 +138,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
     {
       id: 'id5',
       isAttachments: true,
-      ltext: 'Attachments',
+      ltext: 'Attachments:',
       rtext: purchaseOrderAttachments || [],
     },
   ];

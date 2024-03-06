@@ -148,6 +148,7 @@ export const lineItemStyles = (theme: NextTheme) => createStyles({
     position: 'relative',
     background: Colors.font_gray,
   },
+
 });
 
 export const grayDotStyles = (theme: NextTheme, additional?: CSSProperties) => createStyles({
