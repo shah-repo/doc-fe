@@ -2,7 +2,7 @@ import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Ra
 import cx from 'classnames';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
-import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../../../state/ducks/relatedParts/types';
+import { COLOR_TYPES, ListItemEdited, RELATED_PARTS_STATUS, RELATED_TYPE, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
 import { FBButton, FBTooltip } from '../../../../form.builder';
 
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
@@ -20,9 +20,9 @@ import { Link } from 'react-router-dom';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import Text from '../../../../components/Text';
 import Dialog from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -30,19 +30,22 @@ import useDialog from '../../../../hooks/useDialog';
 import { isDocumentRevisionReleased } from '../../../helpers/documentRevisionStatus';
 import useStyles from './RelatedPart.styles';
 import RelatedPartsState from './RelatedParts.state';
-import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
 import RelatedPartsTableHeader from './RelatedPartsTableHeader';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue, getReplacedMessage } from './helper';
+import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
 
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_PARTS_STATUS
   parentStatusChanged: (value: string, oldSelection?: string) => void
   relatedPartsState: RelatedPartsState
   documentRevision: DocumentRevision
+  relatedType: RELATED_TYPE
 }> = ({
   status,
   parentStatusChanged,
   relatedPartsState,
   documentRevision,
+  relatedType,
 }) => {
   const [selectedOption, setSelectedOption] = useState(status);
   const [previousOption, setPreviousOption] = useState(status);
@@ -129,11 +132,18 @@ const ParentPartSelector: React.FunctionComponent<{
           variant="body1"
           id="tableTitle"
         >
-          <Text translation="relatedParts.parentPart.question" />
+          <Text translation="relatedParts.parentPart.question"
+            values = {{
+              relatedType: getDynamicTextValue(
+                relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+            }} />
         </Typography>
-        <Tooltip title="Parent part info" placement="right"
-          classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
-          arrow>
+        <Tooltip title={getReplacedMessage(
+          'relatedParts.parentPart.tooltip', '{relatedType}',
+          getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT))}
+        placement="right"
+        classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+        arrow>
           <InfoIcon color="primary" />
         </Tooltip>
       </div>
@@ -154,14 +164,24 @@ const ParentPartSelector: React.FunctionComponent<{
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_TOGETHER}
             control={<Radio color="primary" disableRipple={true} />}
-            label={<Text translation="relatedParts.parentPart.answer.yes.together" />}
+            label={<Text translation="relatedParts.parentPart.answer.yes.together"
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }} />
+            }
             checked={isParentTogetherSelected}
             disabled={isDisabled}
           />
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_SEPARATE}
             control={<Radio color="primary" disableRipple={true} />}
-            label={<Text translation="relatedParts.parentPart.answer.yes.separate" />}
+            label={<Text translation="relatedParts.parentPart.answer.yes.separate"
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }} />
+            }
             checked={isParentSeparateSelected}
             disabled={isDisabled}
           />
@@ -181,8 +201,14 @@ const ParentPartSelector: React.FunctionComponent<{
         <Text
           translation="relatedParts.confirm.message"
           values={{
-            currentOption: confirmMessages[selectedOption],
-            previous: confirmMessages[previousOption],
+            currentOption: getReplacedMessage(
+              confirmMessages[selectedOption], '{relatedType}', getDynamicTextValue(
+                relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS)),
+            previous: getReplacedMessage(
+              confirmMessages[previousOption], '{relatedType}', getDynamicTextValue(
+                relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS)),
+            relatedType: getDynamicTextValue(
+              relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_PLURALIZED, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_PLURALIZED),
           }}
         />
       </Dialog>
@@ -199,6 +225,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   fetchRelatedParts
   voidRelatedPart
   relatedPartsState: RelatedPartsState
+  relatedType: RELATED_TYPE
 }> = ({
   documentRevision,
   createNewDocument,
@@ -208,6 +235,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   fetchRelatedParts,
   voidRelatedPart,
   relatedPartsState,
+  relatedType,
 }) => {
   const classes = useStyles();
 
@@ -252,13 +280,17 @@ const RelatedPartGrid: React.FunctionComponent<{
         <Grid className={classes.gridCenterAlign} container>
           <Grid item>
             <Typography variant="h6" id="tableTitle" component="div">
-              <Text translation="relatedParts.grid.title" />
+              <Text translation="relatedParts.grid.title"
+                values = {{
+                  relatedType: getDynamicTextValue(
+                    relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+                }} />
             </Typography>
           </Grid>
 
           { (showButton || isReleased)
               && <Grid item className={classes.buttonGroup}>
-                <Typography>
+                { !isReleased && <Typography>
                   <Button
                     className={classes.btnMargin}
                     color="primary"
@@ -267,9 +299,13 @@ const RelatedPartGrid: React.FunctionComponent<{
                     disabled={isReleased}
                     data-cy="add-related-part-btn"
                   >
-                    <Text translation="relatedParts.button.addText" />
+                    <Text translation="relatedParts.button.addText"
+                      values = {{
+                        relatedType: getDynamicTextValue(
+                          relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+                      }} />
                   </Button>
-                </Typography>
+                </Typography> }
                 <div className={classes.filterOptions}>
                   <span>
                     <Text translation="relatedParts.text.show" />:&nbsp;
@@ -306,6 +342,7 @@ const RelatedPartGrid: React.FunctionComponent<{
               handleUpdate,
               relatedPartsState,
               isReleased,
+              relatedType,
             }
           } />
         {isEditRowVisible
@@ -316,7 +353,7 @@ const RelatedPartGrid: React.FunctionComponent<{
           />
         }
         {
-          (showButton || isReleased) && <Button
+          (showButton && !isReleased) && <Button
             className={classes.fullLengthButton}
             variant="outlined"
             startIcon={<AddCircleIcon color={isReleased ? COLOR_TYPES.DISABLED : COLOR_TYPES.PRIMARY} />}
@@ -324,7 +361,11 @@ const RelatedPartGrid: React.FunctionComponent<{
             data-cy="add-related-part-btn"
             disabled={isReleased}
           >
-            <Text translation="relatedParts.button.addText" />
+            <Text translation="relatedParts.button.addText"
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+              }} />
           </Button>
         }
       </div>
@@ -342,6 +383,7 @@ const RelatedPartList: React.FunctionComponent<{
   relatedPartsState: RelatedPartsState
   documentRevision: DocumentRevision
   isReleased: boolean
+  relatedType: RELATED_TYPE
 }> = ({
   voidRelatedPart,
   viewRelatedPart,
@@ -352,6 +394,7 @@ const RelatedPartList: React.FunctionComponent<{
   relatedPartsState,
   documentRevision,
   isReleased,
+  relatedType,
 }) => {
   const classes = useStyles();
 
@@ -394,6 +437,7 @@ const RelatedPartList: React.FunctionComponent<{
                         rootRevisionChangeType,
                         relatedPartsState,
                         isReleased,
+                        relatedType,
                       }
                     }
                   />
@@ -415,6 +459,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   rootRevisionChangeType: RevisionChangeType
   relatedPartsState: RelatedPartsState
   isReleased: boolean
+  relatedType: RELATED_TYPE
 }> = ({
   listItem,
   voidRelatedPart,
@@ -424,6 +469,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   rootRevisionChangeType,
   relatedPartsState,
   isReleased,
+  relatedType,
 }) => {
   const classes = useStyles();
   const [isHover, setIsHover] = useState(false);
@@ -535,9 +581,11 @@ const RelatedPartViewRow: React.FunctionComponent<{
               )}
             </>
             : !isVoided
-          && <FBTooltip title="relatedParts.checkbox.hover.msg"
-            placement="top" arrow
-            classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
+          && <FBTooltip title={getReplacedMessage(
+            'relatedParts.checkbox.hover.msg', '{relatedType}',
+            getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS))}
+          placement="top" arrow
+          classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
           >
             <Box
               onClick={(e) => e.stopPropagation()}
@@ -719,6 +767,7 @@ const RelatedParts: React.FunctionComponent<{
   fetchRelatedParts: (documentId: any) => void
   voidRelatedPart: (listItem: RelatedPartsListItem, revisionChangeType: RevisionChangeType) => void
   relatedPartsState: RelatedPartsState
+  relatedType: RELATED_TYPE
 }> = ({
   documentRevision,
   parentStatus = RELATED_PARTS_STATUS.PARENT_NO,
@@ -730,6 +779,7 @@ const RelatedParts: React.FunctionComponent<{
   fetchRelatedParts,
   voidRelatedPart,
   relatedPartsState,
+  relatedType,
 }) => {
   const classes = useStyles();
   const isRelatedPartsParent = ![RELATED_PARTS_STATUS.RELATED_SEPARATE,
@@ -740,10 +790,13 @@ const RelatedParts: React.FunctionComponent<{
       {isRelatedPartsParent
       && <div className={classes.mainDiv}>
         <ParentPartSelector status={parentStatus} parentStatusChanged={parentStatusChanged}
-          relatedPartsState={relatedPartsState} documentRevision={documentRevision} />
+          relatedPartsState={relatedPartsState} documentRevision={documentRevision} relatedType={relatedType} />
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && !relatedPartsState.viewOnlyMode && (
           <Grid item xs={12}>
-            <FBButton label="relatedParts.button.addText"
+            <FBButton
+              label={getReplacedMessage(
+                'relatedParts.button.addText', '{relatedType}',
+                getDynamicTextValue(relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT))}
               dataCy="parent-separate-add-related-parts-btn"
               onClick = {createNewDocument} />
           </Grid>
@@ -758,6 +811,7 @@ const RelatedParts: React.FunctionComponent<{
             fetchRelatedParts = {fetchRelatedParts}
             voidRelatedPart = {voidRelatedPart}
             relatedPartsState = {relatedPartsState}
+            relatedType = {relatedType}
           />
         )}
       </div>}

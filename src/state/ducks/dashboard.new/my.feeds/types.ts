@@ -73,7 +73,7 @@ export enum STATUS_TYPES_LABEL {
   EDIT = 'EDIT',
 }
 
-interface MyFeedsItems {
+export interface MyFeedsItems {
   accessedAt: string
   itemType: string
   itemId: string
@@ -81,6 +81,7 @@ interface MyFeedsItems {
   docTitle: string
   docType: string
   docRevId?: string
+  timestamp: string
 }
 
 export interface MyFeedsListAction {
