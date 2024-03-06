@@ -97,25 +97,25 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = ({
                   rows={3}
                 />
               </Box>
+              <Box className={classes.dialogAction}>
+                <Button
+                  variant="contained"
+                  data-cy="void-cancel-btn"
+                  className={`${classes.cancelButton} ${classes.buttonLabel}`}
+                  onClick={cancelAction}
+                >
+                  <Text translation={cancelLabel} />
+                </Button>
+                <FBSubmitButton
+                  variant="contained"
+                  data-cy="void-submit-btn"
+                  className={`${classes.submitButton} ${classes.buttonLabel}`}
+                  label={confirmLabel}
+                  onClick={confirmAction !== undefined ? confirmAction : voidRecord}
+                />
+              </Box>
             </FBProvider>
           </DialogContent>
-          <Box className={classes.dialogAction}>
-            <Button
-              variant="contained"
-              data-cy="void-cancel-btn"
-              className={`${classes.cancelButton} ${classes.buttonLabel}`}
-              onClick={cancelAction}
-            >
-              <Text translation={cancelLabel} />
-            </Button>
-            <FBSubmitButton
-              variant="contained"
-              data-cy="void-submit-btn"
-              className={`${classes.submitButton} ${classes.buttonLabel}`}
-              label={confirmLabel}
-              onClick={confirmAction !== undefined ? confirmAction : voidRecord}
-            />
-          </Box>
         </Dialog>
       }
     </>
