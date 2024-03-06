@@ -2,16 +2,22 @@ import { Box, CircularProgress } from '@material-ui/core';
 import { filter, includes, isEmpty, map, range, size } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from '..';
+import { FB, FBEditorState, FBFieldName, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from '..';
 import SM from '../../../App/Shifamed/Utils/SM/SM';
 import { intl } from '../../../common/intl';
 import { formFieldsDisabledChangeControl, suppliersDisabledChangeControl } from '../../document.revision/utils/helpers';
 import { isTranslation } from '../../translations/types';
 import FBFieldOutputWrapper from '../FBFieldOutputWrapper/FBFieldOutputWrapper';
 
+const loader = () => (
+  <Box display="flex" justifyContent="center">
+    <CircularProgress size={40} disableShrink />
+  </Box>
+);
+
 export const withFBSchema = <T extends FBSchemaComponentProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     workspaceMode,
     schemaState,
@@ -25,20 +31,12 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
 
     // To avoid UI-freezes on rendering huge list in schema.
     const [rendered, setRendered] = useState(false);
-    useEffect(
-      () => {
-        setTimeout(() => setRendered(true));
-      },
-      [],
-    );
-
-    function controlRenderer (schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
-      return FBSchemaState.component({ ...schemaItem, gutter: false });
-    }
+    useEffect(() => {
+      setTimeout(() => setRendered(true));
+    }, []);
 
     function isApproved (schemaItem: FBSchemaProps): boolean {
       const { index = 0 } = schemaItem;
-      const { formState } = FB.useStores();
       let disabled = false;
 
       range(0, index).reverse().some((current) => {
@@ -103,7 +101,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         position++;
         return (
           <FBFieldOutputWrapper position={position} inputProps={schemaItem} key={schemaItem.name}>
-            {controlRenderer({
+            {FBSchemaState.component({
               autosave: isUnderWorkspace && workspaceState?.autosave,
               ...schemaItem,
               ...(includes(FBEditorState.pickStepIndex, schemaItem.type)) && {
@@ -118,6 +116,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
                 || (reviseDisabled && outputRevision)
                 || (outputDisabled && isOutput && !isEmpty(id))
               ),
+              gutter: false,
               index,
             })}
           </FBFieldOutputWrapper>
@@ -140,9 +139,3 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
 
   return (props: T) => Comp(props);
 };
-
-function loader (): React.ReactNode {
-  return (<Box display="flex" justifyContent="center">
-    <CircularProgress size={40} disableShrink />
-  </Box>);
-}
