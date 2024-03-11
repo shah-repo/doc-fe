@@ -35,7 +35,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   const openQuickViewDialog = () => quickViewDialog.open();
 
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
-  const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
+  const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableAllocationItem>();
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchLotsByPartId);
 
   const fetchAvailablePartsAsync = useAsync({
@@ -75,20 +75,17 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
 
   const renderOptions = () => {
     return lots.map((lot) => ({
-      label: renderPartLabel(lot),
+      label: translate('wo.displayRevision', { docId: lot.document.docId, displayRevision: lot?.displayRevision, name: lot?.name }),
       value: lot.id,
     }));
-  };
-
-  const renderPartLabel = (part: DocumentRevision) => {
-    return `${part?.document.docId} Rev ${part?.displayRevision} - ${part?.name}`;
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
     setValue(option as OptionType);
     const selectedLOT = lots.find((lot) => lot.id === option?.value);
     setFieldValue('lotRevId', option?.value);
-    setFieldValue('quantityOnHand', selectedLOT?.precalc.lot_on_hand_quantity);
+    field && setFieldValue(field, option?.value);
+    setFieldValue('quantityOnHand', selectedLOT?.precalc?.lot_on_hand_quantity);
     setFieldValue('parentPartRevId', dataItem.parentPartRevId);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
@@ -98,6 +95,8 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   const getFieldInfo = () => (
     field && <FormikField
       name={field}
+      required
+      error={Boolean(errors[field])}
     >
       <Autocomplete
         {...getFieldProps(field)}
@@ -105,11 +104,9 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
         disableOpenOnFocus={true}
         blurOnSelect
         ListboxComponent={({ children, ...otherProps }) => {
-          return (<>
-            <ul {...otherProps} >
-              {children}
-            </ul>
-          </>);
+          return (<ul {...otherProps} >
+            {children}
+          </ul>);
         }}
         options={renderOptions()}
         placeholder={translate('common.select')}
@@ -140,40 +137,37 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
       data-cy="cell-lot-allocated"
     >
       {hasChildren || (!isEditMode && !dataItem.isLotAddition && !dataItem.lotRevId)
-        ? <>
-          <span
-            className={cx(
-              classes.defaultIcon,
-            )}
+        ? <span
+          className={cx(
+            classes.defaultIcon,
+          )}
+        >
+          <StyleTooltip
+            title={translate('common.add')}
+            placement="top"
+            arrow
           >
-            <StyleTooltip
-              title={translate('common.add')}
-              placement="top"
-              arrow
+            <IconButton
+              kind="simple"
+              size="small"
+              ref={addLotRef}
+              disabled={dataItem.isDisabled}
+              data-cy="add-lot-button"
             >
-              <IconButton
-                kind="simple"
-                size="small"
-                ref={addLotRef}
-                disabled={dataItem.isDisabled}
-                data-cy="add-lot-button"
-              >
-                <FontAwesomeIcon
-                  size="sm"
-                  className={cx(classes.addChildLotIcon, { [classes.disabled]: dataItem.isDisabled })}
-                  onClick={() => addLot?.(dataItem)}
-                  icon={
-                    !isAddLotHovered
-                      ? regular('circle-plus')
-                      : solid('circle-plus')
-                  }
-                />
-              </IconButton>
-            </StyleTooltip>
-          </span>
-        </>
-
-        : <span className={cx(classes.nameCell, classes.titleInfoCell)}>
+              <FontAwesomeIcon
+                size="sm"
+                className={cx(classes.addChildLotIcon, { [classes.disabled]: dataItem.isDisabled })}
+                onClick={() => addLot?.(dataItem)}
+                icon={
+                  !isAddLotHovered
+                    ? regular('circle-plus')
+                    : solid('circle-plus')
+                }
+              />
+            </IconButton>
+          </StyleTooltip>
+        </span>
+        : <span className={cx(classes.lotNameCell, classes.titleInfoCell)}>
           {isEditMode && (dataItem.isLotAddition || dataItem.lotRevId) && <div className={classes.idCellEditWrapper}>
             { getFieldInfo()}
           </div>}

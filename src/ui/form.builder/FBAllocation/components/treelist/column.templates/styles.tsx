@@ -34,6 +34,10 @@ export const styles = makeStyles((theme) => ({
   title: {
     display: 'flex',
   },
+  lotNameCell: {
+    verticalAlign: 'middle',
+    marginLeft: 0,
+  },
   GREEN_STATUS: {
     background: Colors.snow_flurry,
     color: Colors.light_forest_green,
