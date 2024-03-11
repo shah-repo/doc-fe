@@ -10,10 +10,10 @@ import { authSelectors } from '../../../state/ducks/auth';
 import { DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
-import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import FormWrapper from '../../components/forms/FormWrapper';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import ScrollToError from '../../components/forms/ScrollToError';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import AttachmentsField from '../../document.revision/form/attachments';
 import BuildsContainer from '../../document.revision/summary/builds.container';
 import { attachmentsDisabledChangeControl, disableOtherFieldsChangeControl } from '../../document.revision/utils/helpers';
@@ -22,20 +22,20 @@ import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from '../../h
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
 import { DocumentCloneType, DocumentCloneTypeOptions } from '../Clone.container';
 import { isOperator } from '../DocumentRevisionDisplay.container';
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentPart, checkIsDocumentRecord, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../helpers/documentRevisionStatus';
 import { getRevisionStageNumber, isDocumentAlphaReleased } from '../helpers/revisionStage';
 import DocIdInput from './presenters/DocIdInput';
 import DocumentSecurity from './presenters/DocumentSecurity';
 import DocumentTypeSelect from './presenters/DocumentTypeSelect';
+import EquipmentSpecification from './presenters/EquipmentSpecification';
 import FBActiveNoOutput from './presenters/FBActiveNoOutput';
-import RelatedPartsWrapper from './presenters/related.parts/RelatedParts.wrap';
 import RetrainField from './presenters/RetrainField';
 import RevisionStage from './presenters/RevisionStage';
 import RevisionTypeChange from './presenters/RevisionTypeChange';
-import { DocumentRevisionFormValues } from './types';
 import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from './presenters/related.equipments';
-import EquipmentSpecification from './presenters/EquipmentSpecification';
+import RelatedPartsWrapper from './presenters/related.parts/RelatedParts.wrap';
+import { DocumentRevisionFormValues } from './types';
 
 interface Props extends FormikProps<DocumentRevisionFormValues> {
   documentRevision: DocumentRevision
@@ -106,10 +106,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocumentPOAM = checkIsDocumentPOAM(groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
+
   const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = hasOutput
     ? checkIsDocumentPart((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
     : false;
+
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
   const isSubrevision = Boolean(documentRevision?.subRevision);
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
@@ -353,15 +355,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          {(isPart || isPartForm) && (
-            <Grid item xs={12}>
+          {(isPart || isPartForm)
+            && <Grid item xs={12}>
               <RelatedPartsWrapper
                 viewOnly={isDisabledInputInPreview || hasOutput || !isOwner || inRestrictedEditMode}
                 documentRevision={documentRevision}
                 relatedPartsStatus= {documentRevision?.relatedPartsStatus}
+                hasOutput={hasOutput}
               />
             </Grid>
-          )}
+          }
           {isRelatedEquipmentsShowing && (
             <Grid item xs={12}>
               <RelatedEquipments parentDocumentRevision={documentRevision} />

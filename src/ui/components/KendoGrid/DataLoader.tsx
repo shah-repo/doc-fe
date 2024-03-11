@@ -3,11 +3,13 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
+import { redirectTo } from '../../../common/redirectHandler';
 import apiClient from '../../../state/apiClient';
 import { authActions } from '../../../state/ducks/auth';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
 import { store } from '../../../state/store';
+import { USER_LOCKED } from '../../constants/urls';
 import Loader from '../common/kendo/Loader';
 import { getDynamicPayloadItems, updateDataState } from './DataLoader.util';
 import { DataLoaderProps } from './interfaces';
@@ -103,8 +105,14 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
         lastSuccess.current = pending.current;
         pending.current = '';
         const isUnauthorizedRequest = exception.response?.status === 401;
+        const isUserLocked = exception?.response?.status === 423;
 
-        if (isUnauthorizedRequest) {
+        if (isUserLocked) {
+          redirectTo(USER_LOCKED)();
+          return;
+        }
+
+        if (isUnauthorizedRequest || isUserLocked) {
           dispatch(authActions.logoutUser());
           return;
         }
