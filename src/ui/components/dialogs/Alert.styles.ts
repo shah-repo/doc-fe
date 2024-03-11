@@ -6,6 +6,7 @@ export default makeStyles(theme => ({
     width: 520,
   },
   contentWrapper: {
+    width: '100%',
     paddingTop: theme.spacing(0.75),
   },
   content: {

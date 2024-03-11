@@ -1,16 +1,17 @@
-import { Box } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import moment from 'moment';
 import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import { translate } from '../../../common/intl';
 import { MomentFormats, TIME_ZONE } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import AlertDialog from '../../components/dialogs/Alert';
 import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBFormState, FBProvider, FBTextField } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync, { Async } from '../../hooks/useAsync';
 import { DialogHandler } from '../../hooks/useDialog';
-import AlertDialog from './AlertDialog';
 import { styles } from './AlertDialog.styles';
 
 interface Props {
@@ -71,22 +72,24 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
   return (
     <FBProvider {...{ formState }}>
       <AlertDialog
-        {...props}
-        message={isRecordBehaviour ? 'documentRevision.record.void.alert' : 'documentRevision.void.alert'}
-        cancelAction={dialog.close}
-        confirmAction={confirmAction ?? voidRecord}
-        isLoading={async.isLoading}
+        handler={dialog}
+        loading={async.isLoading}
+        onConfirm={confirmAction ?? voidRecord}
       >
+        <Typography data-cy="dialog-message" className={classes.contentText}>
+          {translate(isRecordBehaviour ? 'documentRevision.record.void.alert' : 'documentRevision.void.alert')}
+        </Typography>
         {isRecordBehaviour && (
-          <Box className={classes.descriptionBox}>
-            <FBTextField
-              name={VOID_DESCRIPTION_FIELD}
-              label="common.justification"
-              dataCy="void.record.description"
-              rules="required"
-              rows={3}
-            />
-          </Box>
+          <FBTextField
+            boxProps={{
+              className: classes.descriptionField,
+            }}
+            name={VOID_DESCRIPTION_FIELD}
+            label="common.justification"
+            dataCy="void.record.description"
+            rules="required"
+            rows={3}
+          />
         )}
       </AlertDialog>
     </FBProvider>
