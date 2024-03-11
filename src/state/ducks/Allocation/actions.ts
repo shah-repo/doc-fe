@@ -2,7 +2,7 @@ import { AllocationLOTBody, AllocationPartBody } from '../../../ui/form.builder/
 import { AllocationItem } from '../../../ui/form.builder/FBAllocation/interface';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { ALLOCATION_LIST_ROOT_URL, AUTO_ASSIGN_LOT } from './constants';
+import { ALLOCATION_LIST_ROOT_URL } from './constants';
 
 const loadAllocationList = (
   woId: string,
@@ -19,7 +19,7 @@ const autoAssignLOT = (
   handlers: Handlers,
 ): ApiAction<AllocationItem[]> =>
   apiActionWithCallbacks({
-    url: `${AUTO_ASSIGN_LOT}/${woId}`,
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/autoAssign`,
     method: 'get',
     handlers,
   });
@@ -42,7 +42,7 @@ const updatePart = (
   handlers: Handlers,
 ): ApiAction<AllocationItem> =>
   apiActionWithCallbacks({
-    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/entry/${partRevId}`,
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/parts/${partRevId}`,
     method: 'patch',
     data: data,
     handlers,
@@ -66,7 +66,7 @@ const deleteLot = (
   handlers: Handlers,
 ): ApiAction<AllocationItem> =>
   apiActionWithCallbacks({
-    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/${partRevId}/${lotRevId}`,
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/parts/${partRevId}/lots/${lotRevId}`,
     method: 'delete',
     handlers,
   });
@@ -77,7 +77,7 @@ const deletePart = (
   handlers: Handlers,
 ): ApiAction<AllocationItem> =>
   apiActionWithCallbacks({
-    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/${partRevId}`,
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/parts/${partRevId}`,
     method: 'delete',
     handlers,
   });

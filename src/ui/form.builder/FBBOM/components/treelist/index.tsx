@@ -202,8 +202,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const reloadBOM = () => {
     let selectedWOPart = '';
     if (isWO && documentRevision?.id) {
-      selectedWOPart = documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
-      ?? workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id ?? '';
+      selectedWOPart
+        = workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id
+        ?? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
+        ?? '';
       if (!selectedWOPart) {
         return;
       }
