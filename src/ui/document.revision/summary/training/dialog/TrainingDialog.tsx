@@ -57,7 +57,7 @@ const TrainingDialog: React.FunctionComponent<Props>
     trId,
   }) => {
     const classes = styles();
-    const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
+    const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
 
     const renderForm = (props: FormikProps<any>) => (
       <TrainingForm

@@ -5,7 +5,7 @@ import { FBDocumentRevisionsValue } from '..';
 class FBDocumentRevisionsState {
   @observable public value?: FBDocumentRevisionsValue[];
 
-  public constructor(formValue?: FBDocumentRevisionsValue[]) {
+  public constructor (formValue?: FBDocumentRevisionsValue[]) {
     this.value = formValue;
   }
 

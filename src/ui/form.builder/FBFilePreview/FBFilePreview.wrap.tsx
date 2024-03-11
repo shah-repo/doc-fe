@@ -10,7 +10,6 @@ export const withFBFilePreview = <T extends FBFilePreviewProps>(
     previewType,
     ...props
   }: T) => {
-
     const { type } = file;
 
     switch (true) {

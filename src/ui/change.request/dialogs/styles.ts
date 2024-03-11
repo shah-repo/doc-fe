@@ -3,6 +3,16 @@ import Colors from '../../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
+    loading: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'start',
+      flexDirection: 'row',
+      gap: `${theme.spacing(1)}px`,
+      paddingTop: theme.spacing(1.5),
+      fontWeight: 400,
+      color: Colors.almost_black,
+    },
     submitButton: {
       height: 36,
       borderRadius: '100px',

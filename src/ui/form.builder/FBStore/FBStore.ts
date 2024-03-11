@@ -15,19 +15,22 @@ class FBStore {
     approvalRoles: [],
     approvalMatrix: [],
   };
+
   public selectedApprover: Approval[] =[] ;
 
-  @computed public get isHistoryTabSelected() {
+  @computed public get isHistoryTabSelected () {
     return this.selectedTab === 'history';
   }
+
   @action public setSelectedTab = (tab) => {
     set(this, 'selectedTab', tab);
   };
+
   @action public setPurchaseOrderValue = (value) => {
     set(this, 'purchaseOrderValue', value);
   };
 
-  @computed public get getSelectedTab() { return this.selectedTab; }
+  @computed public get getSelectedTab () { return this.selectedTab; }
 }
 
 export default new FBStore();

@@ -19,7 +19,7 @@ const ApiTokenTablePresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
 
-  const columns: TableColumnProps<GetApiTokenList>[] = [
+  const columns: Array<TableColumnProps<GetApiTokenList>> = [
     {
       key: 'name',
       id: 'ApiTokenContent-name',

@@ -9,7 +9,6 @@ export const withFBRange = <T extends FBInputProps>(
     name,
     ...props
   }) => {
-
     // MARK: @config
     const { formState } = FB.useStores();
 

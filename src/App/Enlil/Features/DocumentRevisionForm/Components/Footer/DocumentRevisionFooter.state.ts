@@ -2,7 +2,6 @@ import { action, computed, observable, set } from 'mobx';
 import { DocumentRevisionFooterInfo, DocumentRevisionFooterStateProps } from '../../../../..';
 
 export default class DocumentRevisionFooterState implements DocumentRevisionFooterStateProps {
-
   // MARK: @config
 
   // MARK: @observables
@@ -14,15 +13,15 @@ export default class DocumentRevisionFooterState implements DocumentRevisionFoot
   // MARK: @constructor
 
   // MARK: @computed
-  @computed public get version(): string | undefined {
+  @computed public get version (): string | undefined {
     return this.info?.version;
   }
 
-  @computed public get docId(): string | undefined {
+  @computed public get docId (): string | undefined {
     return this.info?.docId;
   }
 
-  @computed public get releasedAt(): string | undefined {
+  @computed public get releasedAt (): string | undefined {
     return this.info?.releasedAt;
   }
 

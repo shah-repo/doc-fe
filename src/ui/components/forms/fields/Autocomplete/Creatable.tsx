@@ -1,11 +1,10 @@
 import { Box, BoxProps, ClickAwayListener } from '@material-ui/core';
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
-import * as React from 'react';
-import { useState } from 'react';
+import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createFilter } from 'react-select';
-import { SelectComponentsProps } from 'react-select/base';
 import AsyncCreatableSelect, { Props as AsyncCreatableSelectProps } from 'react-select/async-creatable';
+import { SelectComponentsProps } from 'react-select/base';
 import { ActionMeta, ValueType } from 'react-select/src/types';
 import { SM } from '../../../../../App';
 import { TypographyProps } from '../../../../../state/ducks/common/types';
@@ -53,11 +52,9 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const onChange = (value: ValueType<OptionType>, action: ActionMeta) => {
     if (action.action === 'clear') {
       setInputValue('');
-    }
-    else {
+    } else {
       setInputValue((value as any)?.value);
     }
-    setFieldValue(name, (value as any)?.value);
   };
   const onInputChange = (value) => {
     if (!touched[name]) {
@@ -70,7 +67,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     if (!value && inputValue?.length === 1) {
       setInputValue(value);
     }
-    setFieldValue(name, value);
   };
 
   const onBlur = async () => {
@@ -174,7 +170,7 @@ FieldConfig &
 Partial<TypographyProps>;
 
 const CreatableField: React.FunctionComponent<
-  AutocompleteFieldProps
+AutocompleteFieldProps
 > = (props) => <FormikField component={Creatable} {...props} />;
 
 export default CreatableField;

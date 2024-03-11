@@ -4,11 +4,11 @@ import Colors from '../../../layout/theme/utils/colors';
 
 const styles = () => ({
   root: {
-    'backgroundColor': Colors.white,
-    'borderRadius': '3px',
+    backgroundColor: Colors.white,
+    borderRadius: '3px',
     'font-weight': 'bold',
-    'fontSize': '12px',
-    'lineHeight': '15px',
+    fontSize: '12px',
+    lineHeight: '15px',
   },
   colorPrimary: {
     color: (props) =>
@@ -21,8 +21,8 @@ const styles = () => ({
     width: '13px',
   },
   labelSmall: {
-    'fontSize': '12px',
-    'fontWeight': 700,
+    fontSize: '12px',
+    fontWeight: 700,
     'text-transform': 'uppercase',
   },
 });

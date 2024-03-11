@@ -5,7 +5,6 @@ import { FB, FBActionFieldActions, FBActionFieldProps, FBActionOptionProps, FBDa
 export const withFBActionField = <T extends FBActionFieldProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     handleAction,
     dialogState,
@@ -14,7 +13,6 @@ export const withFBActionField = <T extends FBActionFieldProps>(
     disabled,
     ...props
   }: T) => {
-
     const { workspaceState } = FB.useStores();
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

@@ -26,6 +26,7 @@ export type DocumentRevisionFormProps =
   documentRevision: DocumentRevision
   bannerPortal: React.MutableRefObject<null>
   shouldShowUpgrade: boolean
+  shouldShowSyncForRelatedEquipment?: boolean
   type?: DocumentCloneType
   isDisabled: boolean
   formValues: FormikProps<DocumentRevisionFormValues>

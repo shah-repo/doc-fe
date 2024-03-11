@@ -111,6 +111,7 @@ const TrainingForm: React.FunctionComponent<Props> = ({
         </Grid>
       </Grid>
     </Form>
-  ); };
+  );
+};
 
 export default TrainingForm;

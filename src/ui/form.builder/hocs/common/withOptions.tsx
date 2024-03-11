@@ -6,7 +6,6 @@ import { withFormik } from './withFormik';
 export const withOptions = <T extends FBOptionProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     includeNone = false,
     optionLabelKey = 'text',
@@ -16,7 +15,7 @@ export const withOptions = <T extends FBOptionProps>(
     type,
     ...props
   }: T) => {
-    function mapStringOption(): T['options'] {
+    function mapStringOption (): T['options'] {
       const splitArray = split(props.options as string, '\n');
       const isValueVar = type === 'radiogroup' || type === 'select';
       const valueVar = isValueVar ? '-<-val->' : '';
@@ -26,14 +25,14 @@ export const withOptions = <T extends FBOptionProps>(
       }));
     }
 
-    function unionNoneOption(options: any[]): T['options'] {
+    function unionNoneOption (options: any[]): T['options'] {
       return union([{
         [optionValueKey]: '',
         [optionLabelKey]: 'fields.select.none',
       }], options);
     }
 
-    function unionContextOption(options: any[]): T['options'] {
+    function unionContextOption (options: any[]): T['options'] {
       return union(options, [{
         [optionValueKey]: `context-${name}`,
         [optionLabelKey]: 'form.builder.other',
@@ -61,5 +60,4 @@ export const withOptions = <T extends FBOptionProps>(
   };
 
   return withFormik((props: T) => Comp(props));
-
 };

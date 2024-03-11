@@ -11,12 +11,11 @@ const loadMaterialDispositionList = (id: string, handlers: Handlers): ApiAction<
 
 const updateMDItem = (
   id: string,
-  materialDispositionId: string,
   data: MDItemEditRequestBody,
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `${MATERIAL_DISPOSITION_ROOT_URL}/${id}/${materialDispositionId}`,
+    url: `${MATERIAL_DISPOSITION_ROOT_URL}/${id}`,
     method: 'patch',
     data,
     handlers,

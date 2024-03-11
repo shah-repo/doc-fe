@@ -85,6 +85,7 @@ const GroupContentPresenter: React.FunctionComponent<Props> = ({
         />
       </Grid>
     </Grid>
-  ); };
+  );
+};
 
 export default GroupContentPresenter;

@@ -5,7 +5,7 @@ import { FormProgressProps } from './FormProgress';
 
 type Props = FormProgressProps;
 
-const CircularFormProgress: React.FunctionComponent<Props> = ({ asyncState  }) => {
+const CircularFormProgress: React.FunctionComponent<Props> = ({ asyncState }) => {
   if (asyncState.status !== AsyncStatus.Active) {
     return null;
   }

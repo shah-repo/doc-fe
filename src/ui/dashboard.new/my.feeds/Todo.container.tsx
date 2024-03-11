@@ -67,9 +67,15 @@ const TodoContainer: React.FunctionComponent = () => {
   return (
     <LineItemsPresenter
       {...{
-        loadMyFeeds, loadMyFeedsListAsyncState, feedItems,
-        hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
-        dialogPDF, dismissLineItem,
+        loadMyFeeds,
+        loadMyFeedsListAsyncState,
+        feedItems,
+        hoverItemId,
+        onMouseHoverItem,
+        onMouseLeaveItem,
+        overallLimit,
+        dialogPDF,
+        dismissLineItem,
       }}
       onLoadMoreData={onLoadMoreData}
     />

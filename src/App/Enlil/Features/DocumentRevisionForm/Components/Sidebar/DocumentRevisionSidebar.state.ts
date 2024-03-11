@@ -2,7 +2,6 @@ import { action, computed, observable, set } from 'mobx';
 import { DocumentRevisionSidebarStateProps } from '../../../../..';
 
 export default class DocumentRevisionSidebarState implements DocumentRevisionSidebarStateProps {
-
   // MARK: @config
 
   // MARK: @observables
@@ -14,7 +13,7 @@ export default class DocumentRevisionSidebarState implements DocumentRevisionSid
   // MARK: @constructor
 
   // MARK: @computed
-  @computed public get leftPanelState(): boolean {
+  @computed public get leftPanelState (): boolean {
     return this.open;
   }
 
@@ -23,5 +22,4 @@ export default class DocumentRevisionSidebarState implements DocumentRevisionSid
   @action setTitle = (title: string) => set(this, 'title', title);
 
   // MARK: @helpers
-
 }

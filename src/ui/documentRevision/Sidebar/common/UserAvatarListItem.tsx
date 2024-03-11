@@ -64,7 +64,7 @@ const UserAvatarListItem: React.FunctionComponent<Props> = ({
               className={classes.avatar}
               style={{ background: user?.initialColor }}
             >
-              {getInitalsFromName(user?.name ?? defaultName )}
+              {getInitalsFromName(user?.name ?? defaultName)}
             </Avatar>
           )}
         </ListItemAvatar>

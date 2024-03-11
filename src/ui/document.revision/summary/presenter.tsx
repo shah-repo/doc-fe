@@ -12,11 +12,13 @@ import { documentsActions } from '../../../state/ducks/documents';
 import { RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../state/reducers';
 import SummaryField from '../../common/summary/base';
-import { FormContext } from '../../components/forms/FormContext';
 import Text from '../../components/Text';
+import { FormContext } from '../../components/forms/FormContext';
+import EquipmentSpecification from '../../documentRevision/forms/presenters/EquipmentSpecification';
+import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../documentRevision/forms/presenters/related.equipments';
 import RelatedPartsWrapper from '../../documentRevision/forms/presenters/related.parts/RelatedParts.wrap';
 import { getHighestRevision } from '../../documentRevision/forms/transform';
-import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentEB, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInStatus } from '../../documentRevision/helpers/documentRevisionStatus';
 import { styles as AutoCompleteStyles } from '../../form.builder/styles/FBAutocomplete.styles';
 import { useTraining } from '../../hooks/docCustomization/useCustomization';
@@ -64,7 +66,7 @@ const Presenter: React.FunctionComponent<Props> = ({
   canShowCreateVersionButton,
 }) => {
   useScrollIntoView();
-  const onSubmit = () => void 0;
+  const onSubmit = () => undefined;
   const { formInput } = dataProp || {};
   const docTypeId = dataProp?.document?.documentType?.id;
   const docDetails: Partial<DocumentRevision> = {
@@ -75,11 +77,13 @@ const Presenter: React.FunctionComponent<Props> = ({
 
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
   const isDownloadAllVisible = attachments?.length > 1;
-  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
-  const isEB = checkIsDocumentEB(document.documentType.groupOptions);
-  const isPO = checkIsDocumentPO(document.documentType.groupOptions);
+
+  const groupOptions = document?.documentType?.groupOptions;
+  const isRecord = checkIsDocumentRecord(groupOptions);
+  const isEB = checkIsDocumentEB(groupOptions);
+  const isPO = checkIsDocumentPO(groupOptions);
+  const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(dataProp);
   const { _tabsState } = SM.useStores();
-  const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
   const shouldRenderTrainingButton = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
@@ -87,6 +91,8 @@ const Presenter: React.FunctionComponent<Props> = ({
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(', ') : []);
+
+  const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = useSelector((state: ApplicationState) => formTemplate
     ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
 
@@ -128,6 +134,8 @@ const Presenter: React.FunctionComponent<Props> = ({
       setDisplayChildrenParts([childPart]);
     },
   });
+
+  const shownEquipmentSpecificationLink = Boolean(dataProp?.formInput?.equipmentSpecification);
 
   useEffect(() => {
     const childrenPartsForRevise = formInput?.childrenPartsForRevise;
@@ -173,14 +181,27 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
-        {(isPart || isPartForm)
-            && <Grid item xs={12}>
-              <RelatedPartsWrapper
-                viewOnly={relatedPartsViewOnly}
-                documentRevision={dataProp}
-                relatedPartsStatus= {dataProp?.relatedPartsStatus} />
-            </Grid>
-        }
+        {(isPart || isPartForm) && (
+          <Grid item xs={12}>
+            <RelatedPartsWrapper
+              viewOnly={relatedPartsViewOnly}
+              documentRevision={dataProp}
+              relatedPartsStatus= {dataProp?.relatedPartsStatus}
+            />
+          </Grid>
+        )}
+        {shownEquipmentSpecificationLink && (
+          <Grid item xs={6} className={classes.bottomSpace}>
+            <EquipmentSpecification
+              relatedDocumentRevision={dataProp}
+            />
+          </Grid>
+        )}
+        {isRelatedEquipmentsShowing && (
+          <Grid item xs={12}>
+            <RelatedEquipments parentDocumentRevision={dataProp} />
+          </Grid>
+        )}
         {isEB && displayChildrenParts && (
           <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />

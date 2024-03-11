@@ -3,7 +3,7 @@ import faker from 'faker';
 import React from 'react';
 import { DocumentInfo, Props } from '../DocumentInfo';
 
-describe( 'DocumentInfo tests', () => {
+describe('DocumentInfo tests', () => {
   const defaultProps: Props = {
     numberOfRecords: faker.random.number(),
   };

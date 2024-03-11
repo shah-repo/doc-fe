@@ -93,56 +93,6 @@
     "@typescript-eslint/triple-slash-reference": ["warn"],
     "@typescript-eslint/type-annotation-spacing": ["warn"],
     "@typescript-eslint/unbound-method": ["warn"],
-    "array-bracket-spacing": ["warn", "never"],
-    "array-callback-return": ["warn"],
-    "dot-location": ["warn", "property"],
-    "eqeqeq": [
-      "warn",
-      "always",
-      {
-        "null": "ignore"
-      }
-    ],
-    "handle-callback-err": ["warn", "^(err|error)$"],
-    "import/no-duplicates": ["warn"],
-    "import/no-named-default": ["warn"],
-    "new-cap": [
-      "warn",
-      {
-        "newIsCap": true,
-        "capIsNew": false,
-        "properties": true
-      }
-    ],
-    "no-extra-parens": ["warn", "functions"],
-    "no-floating-decimal": ["warn"],
-    "no-multi-spaces": ["warn"],
-    "no-return-assign": ["warn", "except-parens"],
-    "no-unexpected-multiline": ["warn"],
-    "no-unneeded-ternary": [
-      "warn",
-      {
-        "defaultAssignment": false
-      }
-    ],
-    "no-useless-call": ["warn"],
-    "no-useless-return": ["warn"],
-    "no-void": ["warn"],
-    "object-property-newline": [
-      "warn",
-      {
-        "allowMultiplePropertiesPerLine": true,
-        "allowAllPropertiesOnSameLine": false
-      }
-    ],
-    "padded-blocks": [
-      "warn",
-      {
-        "blocks": "never",
-        "switches": "never",
-        "classes": "never"
-      }
-    ],
     "prefer-promise-reject-errors": ["warn"],
     "quote-props": ["warn", "as-needed"],
     "react-hooks/exhaustive-deps": ["warn"],

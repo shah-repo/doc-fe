@@ -13,7 +13,7 @@ class FBDocumentRevisionStore {
   @observable public mode: FBDocumentRevisionMode = 'none';
   public docSchema: FBInputProps[] = [];
 
-  @computed public get isOutput(): boolean {
+  @computed public get isOutput (): boolean {
     return this.mode === 'outputCreate' || this.mode === 'outputPreview' || this.mode === 'outputUpdate';
   }
 
@@ -60,7 +60,7 @@ class FBDocumentRevisionStore {
     }
   };
 
-  @action private outputConfig = (values: DocumentRevision | DocumentRevisionFormValues) => {
+  @action private readonly outputConfig = (values: DocumentRevision | DocumentRevisionFormValues) => {
     const schema = get(values, 'formDocument.formTemplate.schema') || [];
     const isRevised = (values as DocumentRevisionFormValues).outputRevision;
     const { formInput } = values;
@@ -69,7 +69,7 @@ class FBDocumentRevisionStore {
       DocumentRevisionStatus.Draft,
       DocumentRevisionStatus.PendingChange,
     ];
-    const canEditOutput = isRevised ||  editableIn.includes((values as DocumentRevision).status);
+    const canEditOutput = isRevised || editableIn.includes((values as DocumentRevision).status);
     let docRevMode: FBDocumentRevisionMode = canEditOutput ? 'outputCreate' : 'outputPreview';
     if (docRevMode === 'outputCreate' && !isEmpty(values.id)) {
       docRevMode = 'outputUpdate';
@@ -78,7 +78,7 @@ class FBDocumentRevisionStore {
     this.setGroupConfig({ docRevMode, schema, formInput });
   };
 
-  @action private fmConfig = (values: DocumentRevision | DocumentRevisionFormValues) => {
+  @action private readonly fmConfig = (values: DocumentRevision | DocumentRevisionFormValues) => {
     const schema = get(values, 'formTemplate.schema') || [];
     const { formTemplate, formInput } = values;
     let docRevMode: FBDocumentRevisionMode = formTemplate ? 'update' : 'create';
@@ -91,7 +91,7 @@ class FBDocumentRevisionStore {
     this.setGroupConfig({ docRevMode, schema, formInput });
   };
 
-  @action private setGroupConfig = ({
+  @action private readonly setGroupConfig = ({
     docRevMode,
     schema,
     formInput,

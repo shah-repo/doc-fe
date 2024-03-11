@@ -329,6 +329,9 @@ const voidDocument = (id: string): ApiAction<DocumentRevision> => apiAction({
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },
+  onFailure: (error) => {
+    toastError(error);
+  },
 });
 
 const updatePO = (id: string, body: {poStatus: POStatusType}): ApiAction<DocumentRevision> => apiAction({
@@ -436,11 +439,11 @@ const fetchBOMBranch = (
 
 const fetchBOMTree = (
   docRevId,
-  docId,
+  isFirstLevelOnly = false,
   handlers: Handlers,
 ): ApiAction<BOMResponse> =>
   apiActionWithCallbacks({
-    url: `${FETCH_BOM_TREE}/${docId}/${docRevId}`,
+    url: `${FETCH_BOM_TREE}/${docRevId}?isFirstLevelOnly=${isFirstLevelOnly}`,
     method: 'get',
     handlers,
   });

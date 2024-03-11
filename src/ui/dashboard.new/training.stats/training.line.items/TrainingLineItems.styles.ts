@@ -10,7 +10,7 @@ export default makeStyles((theme) => ({
   },
   listRoot: {
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(0, .5),
+    padding: theme.spacing(0, 0.5),
   },
   loadMore: loadMoreStyles(theme),
 }));

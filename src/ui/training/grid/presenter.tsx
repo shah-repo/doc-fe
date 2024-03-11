@@ -7,7 +7,7 @@ import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import ExportButton from './ExportButton';
 import { KendoPresenterProps } from './interfaces';
 
-export function TrainingListPresenter({
+export function TrainingListPresenter ({
   statuses,
   tableName,
   tableCriteria,

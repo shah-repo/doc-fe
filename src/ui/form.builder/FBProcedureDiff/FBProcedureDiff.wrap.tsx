@@ -14,7 +14,6 @@ export const withFBProcedureDiff = <T extends FBProcedureDiffProps>(
     name,
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const initialMode = workspaceState?.mode || 'none';

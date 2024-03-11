@@ -10,11 +10,11 @@ export default makeStyles((theme) =>
       flex: '0 0 auto',
     },
     previewButton: {
-      'height': 40,
-      'padding': '10px 20px',
-      'margin': '0 0 20px 0',
-      'borderRadius': 100,
-      'color': Colors.white,
+      height: 40,
+      padding: '10px 20px',
+      margin: '0 0 20px 0',
+      borderRadius: 100,
+      color: Colors.white,
       '&, &:hover': {
         backgroundColor: Colors.navy,
       },
