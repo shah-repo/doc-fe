@@ -1,10 +1,11 @@
 import { Box } from '@material-ui/core';
 import moment from 'moment';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { MomentFormats, TIME_ZONE } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBFormState, FBProvider, FBTextField } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync, { Async } from '../../hooks/useAsync';
@@ -38,11 +39,10 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
   });
   const async = props.async ?? dialogAsync;
 
-  // @todo
-  const isRecordBehaviour = true;
-
-  // const isRecord = useMemo(() =>
-  //   checkIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions || []), [documentRevision]);
+  const isRecordBehaviour = useMemo(
+    () => checkIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions ?? []),
+    [documentRevision],
+  );
 
   const voidRecord = () => {
     formState?.validate((valid) => {
@@ -58,7 +58,7 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
       async.start(
         voidDocument,
         docRevId,
-        { description },
+        isRecordBehaviour ? { description } : undefined,
         async,
       );
     }, true);
