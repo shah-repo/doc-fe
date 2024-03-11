@@ -66,7 +66,7 @@ const Editor: React.FC<Props> = ({ field, options, dataItem, isColumnEditMode, c
 export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const classes = styles();
   const { dataItem, field, onClick, options, onSelectCell } = props;
-  const { copyClipboardPopupMenu, selectedState, copiedItems, populateCopiedValue, clearContent } = useContext(PopupClipboardMenuContext);
+  const { copyClipboardPopupMenu, selectedState, copiedItems, containerRef, populateCopiedValue, clearContent } = useContext(PopupClipboardMenuContext);
   const isColumnEditMode = !isEmpty(copiedItems) && (first(values(copiedItems)) ?? [] as string[]).includes(field);
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]) || isColumnEditMode;
   const showPopup = has(selectedState, dataItem.id) && isColumnEditMode && last(keys(selectedState)) === dataItem.id;
@@ -126,37 +126,39 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   }, [copiedItems]);
 
   return (<>
-    {showSelector && <Selector />}
+    {showSelector && <Selector {...{ containerRef }} />}
     {showEditor && (<Editor {...props} {...{ isColumnEditMode, copiedItem }} />)}
-    {showContent && <OverflowingContent onClick={handleClick}>
+    {showContent && <div onClick={handleClick}>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="space-between"
       >
-        <div>
-          {translate(displayValue?.label)}
-          {isOnOrderPOActionColumn && openedPOsAvailable && (
-            <FontAwesomeIcon
-              icon={solid('circle')}
-              onClick={handleClickPOs}
-              className={cx(classes.dot, classes.poPreviewDot)}
-            />
-          )}
+        <div className={classes.actionLabel}>
+          <OverflowingContent>{translate(displayValue?.label)}</OverflowingContent>
         </div>
-        {showCopyButton && (
-          <span ref={copyIconRef} onClick={handleCopy}>
-            <Tooltip
-              title={translate('common.copy.value')}
-              placement="top"
-              arrow
-            >
+          <Box>
+            {isOnOrderPOActionColumn && openedPOsAvailable && (
               <FontAwesomeIcon
-                icon={ isHovered ? solid('copy') : regular('copy')}
-                className={classes.copyIcon}
-              /></Tooltip>
-          </span>)}
-      </Box>
+                icon={solid('circle')}
+                onClick={handleClickPOs}
+                className={cx(classes.dot, classes.poPreviewDot)}
+              />
+            )}
+          {showCopyButton && (
+            <span ref={copyIconRef} onClick={handleCopy}>
+              <Tooltip
+                title={translate('common.copy.value')}
+                placement="top"
+                arrow
+              >
+                <FontAwesomeIcon
+                  icon={ isHovered ? solid('copy') : regular('copy')}
+                  className={classes.copyIcon}
+                /></Tooltip>
+            </span>)}
+          </Box>
+        </Box>
       <Dialog
         title={translate(
           'approvalRequest.material.disposition.po.preview.title',
@@ -175,7 +177,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
           ))}
         </div>
       </Dialog>
-    </OverflowingContent>}
+    </div>}
     {showPopup && <PopupClipboardMenu {...{ copyClipboardPopupMenu, populateCopiedValue, clearContent }} />}
   </>
   );
