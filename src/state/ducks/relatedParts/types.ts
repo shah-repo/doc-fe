@@ -8,6 +8,11 @@ export enum RELATED_PARTS_STATUS {
   PARENT_TOGETHER = 'parent_together',
 }
 
+export enum RELATED_TYPE {
+  PART_RELATED = 'part',
+  OTHER_RELATED = 'other',
+}
+
 export enum COLOR_TYPES {
   PRIMARY = 'primary',
   SECONDARY = 'secondary',
