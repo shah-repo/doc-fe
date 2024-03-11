@@ -12,7 +12,7 @@ export default makeStyles(theme => ({
   content: {
     display: 'flex',
     alignItems: 'flex-start',
-    padding: theme.spacing(3),
+    padding: theme.spacing(3, 3, 0),
     whiteSpace: 'pre-line',
   },
   title: {
