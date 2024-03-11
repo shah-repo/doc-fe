@@ -73,29 +73,29 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Dialog
-      open={dialog.isOpen}
-      onClose={dialog.close}
-      maxWidth="sm"
-      PaperProps={{ id: 'alertDialog' }}
-    >
-      <DialogContent>
-        <DialogContentText>
-          <Grid container className={classes.contentContainer}>
-            <Grid item className={classes.alertIcon}>
-              <AlertIcon />
+    <FBProvider {...{ formState }}>
+      <Dialog
+        open={dialog.isOpen}
+        onClose={dialog.close}
+        maxWidth="sm"
+        PaperProps={{ id: 'alertDialog' }}
+      >
+        <DialogContent>
+          <DialogContentText>
+            <Grid container className={classes.contentContainer}>
+              <Grid item className={classes.alertIcon}>
+                <AlertIcon />
+              </Grid>
+              <Grid item >
+                <Typography data-cy="dialog-header" className={classes.alertTitle}>
+                  <Text translation="common.alert" />!
+                </Typography>
+                <Typography data-cy="dialog-message" className={classes.contentText}>
+                  <Text translation={message} />
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item >
-              <Typography data-cy="dialog-header" className={classes.alertTitle}>
-                <Text translation="common.alert" />!
-              </Typography>
-              <Typography data-cy="dialog-message" className={classes.contentText}>
-                <Text translation={message} />
-              </Typography>
-            </Grid>
-          </Grid>
-        </DialogContentText>
-        <FBProvider {...{ formState }} >
+          </DialogContentText>
           <Box className={classes.descriptionBox}>
             <FBTextField
               name={VOID_DESCRIPTION_FIELD}
@@ -105,26 +105,26 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = ({
               rows={3}
             />
           </Box>
-          <Box className={classes.dialogAction}>
-            <Button
-              variant="contained"
-              data-cy="void-cancel-btn"
-              className={`${classes.cancelButton} ${classes.buttonLabel}`}
-              onClick={cancelAction}
-            >
-              <Text translation={cancelLabel} />
-            </Button>
-            <FBSubmitButton
-              variant="contained"
-              data-cy="void-submit-btn"
-              className={`${classes.submitButton} ${classes.buttonLabel}`}
-              label={confirmLabel}
-              onClick={confirmAction !== undefined ? confirmAction : voidRecord}
-            />
-          </Box>
-        </FBProvider>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+        <Box className={classes.dialogAction}>
+          <Button
+            variant="contained"
+            data-cy="void-cancel-btn"
+            className={`${classes.cancelButton} ${classes.buttonLabel}`}
+            onClick={cancelAction}
+          >
+            <Text translation={cancelLabel} />
+          </Button>
+          <FBSubmitButton
+            variant="contained"
+            data-cy="void-submit-btn"
+            className={`${classes.submitButton} ${classes.buttonLabel}`}
+            label={confirmLabel}
+            onClick={confirmAction !== undefined ? confirmAction : voidRecord}
+          />
+        </Box>
+      </Dialog>
+    </FBProvider>
   );
 };
 
