@@ -31,8 +31,8 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
   const classes = styles();
   const dispatch = useDispatch();
   const formState = FB.useRef(FBFormState, {});
-  const applyTransition = useActionCreator(documentRevisionsActions.voidDocument);
-  const releaseAsync = useAsync({
+  const voidDocument = useActionCreator(documentRevisionsActions.voidDocument);
+  const async = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.loadAudit(docRevId));
     },
@@ -49,11 +49,11 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
       <p>${voidDescriptoin}</p>
       <p>${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
 
-      releaseAsync.start(
-        applyTransition,
+      async.start(
+        voidDocument,
         docRevId,
         { description },
-        releaseAsync,
+        async,
       );
     }, true);
   };
@@ -68,6 +68,7 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
         {...props}
         cancelAction={dialog.close}
         confirmAction={voidRecord}
+        isLoading={async.isLoading}
       >
         <Box className={classes.descriptionBox}>
           <FBTextField
