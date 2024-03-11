@@ -62,5 +62,8 @@ export const styles = makeStyles((theme: Theme) =>
       paddingTop: theme.spacing(1.25),
       'white-space': 'break-spaces',
     },
+    descriptionBox: {
+      padding: theme.spacing(0, 3),
+    },
   }),
 );
