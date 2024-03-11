@@ -4,39 +4,45 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { MomentFormats, TIME_ZONE } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FB, FBFormState, FBProvider, FBTextField } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
-import useAsync from '../../hooks/useAsync';
+import useAsync, { Async } from '../../hooks/useAsync';
 import { DialogHandler } from '../../hooks/useDialog';
-import { Translation } from '../../translations/types';
 import AlertDialog from './AlertDialog';
 import { styles } from './AlertDialog.styles';
 
 interface Props {
-  message: Translation
   dialog: DialogHandler
-  docRevId: string
-  docRevOwner: string
+  async?: Async
+  documentRevision?: DocumentRevision
+  confirmAction?: () => void
 }
 
 const VOID_DESCRIPTION_FIELD = 'void-description';
 
 const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
-  const {
-    dialog,
-    docRevId,
-    docRevOwner,
-  } = props;
+  const { dialog, documentRevision, confirmAction } = props;
+
+  const docRevId = documentRevision?.id as string;
+  const docRevOwner = documentRevision?.owner?.user?.name as string;
 
   const classes = styles();
   const dispatch = useDispatch();
   const formState = FB.useRef(FBFormState, {});
   const voidDocument = useActionCreator(documentRevisionsActions.voidDocument);
-  const async = useAsync({
+  const dialogAsync = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.loadAudit(docRevId));
     },
   });
+  const async = props.async ?? dialogAsync;
+
+  // @todo
+  const isRecordBehaviour = true;
+
+  // const isRecord = useMemo(() =>
+  //   checkIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions || []), [documentRevision]);
 
   const voidRecord = () => {
     formState?.validate((valid) => {
@@ -66,19 +72,22 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
     <FBProvider {...{ formState }}>
       <AlertDialog
         {...props}
+        message={isRecordBehaviour ? 'documentRevision.record.void.alert' : 'documentRevision.void.alert'}
         cancelAction={dialog.close}
-        confirmAction={voidRecord}
+        confirmAction={confirmAction ?? voidRecord}
         isLoading={async.isLoading}
       >
-        <Box className={classes.descriptionBox}>
-          <FBTextField
-            name={VOID_DESCRIPTION_FIELD}
-            label="common.justification"
-            dataCy="void.record.description"
-            rules="required"
-            rows={3}
-          />
-        </Box>
+        {isRecordBehaviour && (
+          <Box className={classes.descriptionBox}>
+            <FBTextField
+              name={VOID_DESCRIPTION_FIELD}
+              label="common.justification"
+              dataCy="void.record.description"
+              rules="required"
+              rows={3}
+            />
+          </Box>
+        )}
       </AlertDialog>
     </FBProvider>
   );

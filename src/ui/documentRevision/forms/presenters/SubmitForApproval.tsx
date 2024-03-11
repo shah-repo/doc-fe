@@ -8,8 +8,8 @@ import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/pr
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP, DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
-import VoidedAlertDialog from '../../../app/alert.dialog/VoidedAlertDialog';
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import Text from '../../../components/Text';
 import { toastError } from '../../../components/notifications';
 import { FB, FBFormState } from '../../../form.builder';
@@ -20,6 +20,7 @@ import useDialog from '../../../hooks/useDialog';
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../helpers/checkDocumentGroup';
 
 interface Props {
+  documentRevision: DocumentRevision
   docRevId: string
   description?: string
   status?: DocumentRevisionStatus
@@ -32,6 +33,7 @@ interface Props {
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
+  documentRevision,
   docRevId,
   description,
   status,
@@ -131,12 +133,10 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           <Text message={isObsolete ? 'common.void' : label} />
         </Button>
       )}
-      <VoidedAlertDialog
-        message="record.void.alert"
-        docRevId={docRevId}
+      <VoidAlertDialog
+        dialog={dialog}
+        documentRevision={documentRevision}
         confirmAction={voidRecord}
-        docRevOwner={docRevOwner}
-        {...{ dialog }}
       />
     </>
   );
