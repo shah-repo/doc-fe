@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Dialog, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { ReactComponent as AlertIcon } from '../../../assets/images/alert.svg';
@@ -14,8 +14,6 @@ interface Props {
   dialog: DialogHandler
   confirmLabel?: Translation
   cancelLabel?: Translation
-  isLoading?: boolean
-  children?: React.ReactNode
 }
 
 /** Dialog with Confirm and Cancel buttons.
@@ -33,8 +31,6 @@ const AlertDialog: React.FunctionComponent<Props> = ({
   cancelAction = dialog.close,
   confirmLabel = 'common.yes.im.sure',
   cancelLabel = 'common.cancel',
-  isLoading = false,
-  children,
 }) => {
   const classes = styles();
   return (
@@ -64,7 +60,6 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               </Grid>
             </DialogContentText>
           </DialogContent>
-          {children}
           <Box className={classes.dialogAction}>
             <Button
               variant="contained"
@@ -86,11 +81,6 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               <Text translation={confirmLabel} />
             </Button>
           </Box>
-          {isLoading && (
-            <Box className={classes.loading}>
-              <CircularProgress size={25} />
-            </Box>
-          )}
         </Dialog>
       }
     </>
