@@ -22,8 +22,8 @@ import {
 } from '..';
 import { ReactComponent as EmailSuccessIcon } from '../../../assets/images/email_success.svg';
 import {
-  getFormattedDateString,
   MomentFormats,
+  getFormattedDateString,
 } from '../../../common/utils/date';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../../ui/components/Text';
@@ -90,6 +90,8 @@ const FBWOApprovals: React.FunctionComponent<FBWOApprovalsProps> = ({
             gutter={false}
             multiple={true}
             autosave={false}
+            disableBackspace={Boolean(disabledOptions?.length)}
+            disableClearable={Boolean(disabledOptions?.length)}
             {...{
               disabled,
               renderOption,
