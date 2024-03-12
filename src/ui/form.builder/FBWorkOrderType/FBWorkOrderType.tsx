@@ -53,7 +53,7 @@ const FBWorkOrderType: React.FC<FBWorkOrderTypeProps> = ({
 }) => {
   const [forceRender, setForceRender] = useState(false);
   return (
-    <FBInput {...props} type={type} labelProps={FBFontStyle.labelProps}>
+    <FBInput {...{ ...props, rules: 'required', validators: { required: true } }} type={type} labelProps={FBFontStyle.labelProps}>
       {forceRender && (
         <FBWorkOrderTypeChildWithWrap
           {...props}
