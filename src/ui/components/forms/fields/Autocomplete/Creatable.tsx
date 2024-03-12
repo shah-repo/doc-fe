@@ -55,7 +55,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     } else {
       setInputValue((value as any)?.value);
     }
-    setFieldValue(name, (value as any)?.value);
   };
   const onInputChange = (value) => {
     if (!touched[name]) {
@@ -68,7 +67,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     if (!value && inputValue?.length === 1) {
       setInputValue(value);
     }
-    setFieldValue(name, value);
   };
 
   const onBlur = async () => {
