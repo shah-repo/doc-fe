@@ -6,11 +6,12 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../App';
 import { ReactComponent as CopyIcon } from '../../../assets/images/copy_outlined.svg';
+import { TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
 import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from '../../form.builder';
 import Colors from '../../layout/theme/utils/colors';
 import { styles } from './Bookmarks.new.styles';
 
-const Bookmarks: React.FC = () => {
+const Bookmarks: React.FC<{ tabConfig: TabInfo[] }> = ({ tabConfig }) => {
   const history = useHistory();
   const classes = styles();
   const { bookmarkState } = FB.useStores();

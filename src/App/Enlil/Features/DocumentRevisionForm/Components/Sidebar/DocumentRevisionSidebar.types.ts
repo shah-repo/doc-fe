@@ -1,6 +1,7 @@
 import { IntlShape } from 'react-intl';
 import { RouteComponentProps } from 'react-router-dom';
 import { DocumentRevisionFormProps, DocumentRevisionFormStateProps, SMProviderProps } from '../../../../..';
+import { TabInfo } from '../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBDocumentRevisionProps } from '../../../../../../state/ducks/documentRevisions/types';
 
 export type DocumentRevisionSidebarProps =
@@ -18,6 +19,7 @@ export type DocumentRevisionSidebarProps =
   canAccess?: boolean
   showFormMigration?: boolean
   formDocument?: FBDocumentRevisionProps
+  tabConfig: TabInfo[]
   isNewOutput?: boolean
   title?: string
   canEdit?: boolean
