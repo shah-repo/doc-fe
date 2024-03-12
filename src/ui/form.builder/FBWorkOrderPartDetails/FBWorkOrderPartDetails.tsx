@@ -41,7 +41,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           withState={true}
           autosave={true}
         />
-        {!props.disabled && !partsDefaultValue && ![WorkOrderTypes.OTHER].includes(workOrderType) && (
+        {!props.disabled && !partsDefaultValue && [WorkOrderTypes.MAKE_KIT, WorkOrderTypes.MAKE_PRODUCT].includes(workOrderType) && (
           <ErrorBlock label={partSelectionLabel} />
         )}
       </Grid>
