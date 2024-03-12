@@ -37,7 +37,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
     </video>
   );
   const renderPDF = fileType === PDF && (
-    <iframe width="100%" height="100%" src={url} >
+    <iframe width="100%" height="100%" src={url}>
       <Text translation="common.file.not.loaded" />
     </iframe>
   );
