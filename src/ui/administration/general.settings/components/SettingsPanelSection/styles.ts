@@ -4,8 +4,12 @@ import { Colors } from '../../../../layout/theme-next';
 export default makeStyles(theme => ({
   root: {
     fontSize: 16,
+    marginTop: theme.spacing(4),
     marginBottom: theme.spacing(2.5),
     paddingBottom: theme.spacing(1),
     borderBottom: `1px solid ${Colors.stroke}`,
+    '&:first-child': {
+      marginTop: 0,
+    },
   },
 }));

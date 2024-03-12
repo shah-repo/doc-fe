@@ -12,7 +12,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
-  private documentStatus?: string = '';
+  private readonly documentStatus?: string = '';
 
   public constructor ({ optionId, urlValues, documentStatus }: FBAutocompleteAsyncConstructor = {}) {
     super();
@@ -153,7 +153,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
 
-    if(id === FBAutocompleteAsyncOption.POList && this.documentStatus?.toUpperCase() === DocumentRevisionStatus.Released) {
+    if (id === FBAutocompleteAsyncOption.POList && this.documentStatus?.toUpperCase() === DocumentRevisionStatus.Released) {
       return;
     }
 

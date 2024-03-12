@@ -1,8 +1,8 @@
 import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
-import React, { Fragment } from 'react';
+import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -13,9 +13,10 @@ import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
-import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
+import { BOMTreeData, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../state/ducks/relatedParts/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -25,19 +26,20 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
-import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DateTime from './DateTime';
+import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
   audit: Audit
   dataCy?: string
+  revIdRelatedTypeObj?: {[key: string]: RELATED_TYPE}
 }
 
 type Props = OwnProps;
 
 const AuditFactory: React.FunctionComponent<Props> = ({
-  audit, dataCy,
+  audit, dataCy, revIdRelatedTypeObj,
 }) => {
   let returnValue;
   const intl = useIntl();
@@ -45,6 +47,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { nextValue, previousValue } = audit;
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
+
+  const relatedType = revIdRelatedTypeObj?.[audit.documentRevisionId];
 
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;
@@ -446,12 +450,99 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           // do nothing
         }
         break;
+      case 'inventoryTask':
+        if (audit.type.includes('ARRAY_ADDED')) {
+          const nextVal: string = audit.nextValue as string;
+          try {
+            const { instruction, assignedTo } = JSON.parse(nextVal);
+            returnValue = (
+              <>
+                { instruction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.instruction.added', { instruction }) }
+                { assignedTo && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.to', { assignedTo }) }
+              </>
+            );
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } else if (audit.type.includes('ARRAY_EDITED')) {
+          const nextVal: string = audit.nextValue as string;
+          try {
+            const { instruction, assignedAdded, assigneeDeleted, status, completedAt, assignedTo } = JSON.parse(nextVal);
+            returnValue = (
+              <>
+                { instruction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.instruction.updated', { instruction }) }
+                { assignedAdded && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.added', { assignedAdded }) }
+                { (status === FBInvTaskState.DONE && completedAt)
+                && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.completed', { assignedTo }) }
+                { (status === FBInvTaskState.DRAFT) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.draft', { assignedTo }) }
+                { assigneeDeleted && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.deleted', { assigneeDeleted }) }
+              </>
+            );
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } else {
+          const prevVal: string = audit.previousValue as string;
+          try {
+            const { instruction } = JSON.parse(prevVal);
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(instruction)}</div>);
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
+          }
+        }
+        break;
+      case 'materialDisposition':
+        if (audit.type.includes('ARRAY_ADDED')) {
+          const nextVal: string = audit.nextValue as string;
+          try {
+            const { partDocId, lotDocId } = JSON.parse(nextVal);
+            returnValue = (
+              <>
+                { (partDocId && !lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId }) }
+                { (partDocId && lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.partLot.added', { partDocId, lotDocId }) }
+              </>
+            );
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } else if (audit.type.includes('ARRAY_EDITED')) {
+          const nextVal: string = audit.nextValue as string;
+          try {
+            const { onOrderPOAction, inInspectionAction, inInventoryAction, inWipAction, asFinishedGoodsAction, usedLocation, comment } = JSON.parse(nextVal);
+            returnValue = (
+              <>
+                { onOrderPOAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.onOrderPOAction.updated', { onOrderPOAction }) }
+                { inInspectionAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInspectionAction.updated', { inInspectionAction }) }
+                { inInventoryAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInventoryAction.updated', { inInventoryAction }) }
+                { inWipAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inWipAction.updated', { inWipAction }) }
+                { asFinishedGoodsAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.asFinishedGoodsAction.updated', { asFinishedGoodsAction }) }
+                { usedLocation && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.usedLocation.updated', { usedLocation }) }
+                { comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.comment.updated', { comment }) }
+              </>
+            );
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } else {
+          const prevVal: string = audit.previousValue as string;
+          try {
+            const { partDocId } = JSON.parse(prevVal);
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(partDocId)}</div>);
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
+          }
+        }
+        break;
       case 'relatedPartsStatus':
         if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
           returnValue = (
             <Text
               dataCy={`${dataCy}-basepart-status`}
               translation="relatedParts.parentPart.answer.yes.together"
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }}
             />
           );
         } else if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
@@ -459,6 +550,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             <Text
               dataCy={`${dataCy}-basepart-status`}
               translation="relatedParts.parentPart.answer.yes.separate"
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }}
             />
           );
         } else if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_NO) {
@@ -488,6 +583,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           // Not valid JSON, so older data and is string
           returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
         }
+        break;
+      case 'relatedEquipment':
+        returnValue = (
+          <div data-cy={dataCy}>
+            {getAuditDefaultValue(audit.type === 'OBJECT_DELETED' ? previousValue : nextValue)}
+          </div>
+        );
         break;
       case 'formInput.lineItems':
         try {
@@ -559,7 +661,24 @@ const AuditFactory: React.FunctionComponent<Props> = ({
     </Fragment>
   );
 };
-
+const FBInvTaskState = {
+  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
+  DONE: 'DONE',
+  ABANDONED: 'ABANDONED',
+};
+const getNewLineItemAuditValue = (
+  dataCy: string | undefined,
+  translation: Translation,
+  values: Record<string, ReactNode>,
+) => {
+  return (
+    <>
+      <Text dataCy={dataCy} translation={translation} values={values} />
+      <br />
+    </>
+  );
+};
 interface IDisplayStatusAuditEntry {
   displayRevision: string
   changeRequestId: string

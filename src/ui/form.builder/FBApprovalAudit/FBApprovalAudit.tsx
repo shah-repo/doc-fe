@@ -8,7 +8,7 @@ const FBApprovalAudit: React.FunctionComponent<FBApprovalAuditProps> = ({
   audits,
   loading,
   ...props
-}) =>  (
+}) => (
   <>
     {loading && (
       <Box display="flex" alignContent="center">

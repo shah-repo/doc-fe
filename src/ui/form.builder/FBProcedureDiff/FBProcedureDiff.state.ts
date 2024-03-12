@@ -9,7 +9,7 @@ class FBProcedureDiffState {
   @observable checked?: boolean = false;
 
   // MARK: @constructor
-  public constructor(initialMode: FBWorkspaceMode) {
+  public constructor (initialMode: FBWorkspaceMode) {
     this.initialMode = initialMode;
   }
 

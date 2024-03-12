@@ -43,7 +43,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
           <CheckCircleIcon style={{ color: Colors.light_green }} />
           <FBText locale="form.builder.approved" />
         </>)
-        :        (<>
+        : (<>
           <ErrorIcon style={{ color: Colors.latest_red_varient }} />
           <Box ml={1} width="100%" display="flex" mt={0.3}>
             <FBText
@@ -95,7 +95,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                   alignItems="center"
                 >
                   <Box fontWeight="bold">{
-                    isApproved ? approval.approverName :  approval.approver?.user.name
+                    isApproved ? approval.approverName : approval.approver?.user.name
                   }</Box>
                   {approval.status && approval.approverGroup && (
                     <Box>&nbsp;| {approval.approverGroup?.join(', ')}</Box>
@@ -144,12 +144,12 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   rules,
   ...props
 }) => {
-  const  { workspaceState } = FB.useStores();
+  const { workspaceState } = FB.useStores();
   const { document } = workspaceState || {};
   const EQname = document?.formInput?.['fb-requipment-maintenance-section'];
   const isPMform = Boolean(document?.['parentEquipment']?.['formInput']?.[EQname]?.preventativeForm);
 
-  props.disabled =  props.disabled && !isPMform;
+  props.disabled = props.disabled && !isPMform;
   return (
     <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
       <FBDialog />

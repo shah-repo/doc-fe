@@ -15,7 +15,7 @@ export interface ApiAction<Response = any, Body = any> extends Action {
   contentType?: string
   password?: string
   onSuccess: (data: Response, dispatch: Dispatch) => void
-  onFailure: (error: any,  dispatch: Dispatch) => void
+  onFailure: (error: any, dispatch: Dispatch) => void
   onCompleted: (dispatch: Dispatch) => void
   cancelToken?: CancelTokenSource
   sendNoResponseHeader?: boolean

@@ -12,7 +12,7 @@ import { styles } from '../../documentType/list/styles';
 import useDialog from '../../hooks/useDialog';
 
 interface Props {
-  gridData: Partial<UMExportDataProp>[]
+  gridData: Array<Partial<UMExportDataProp>>
   columns: KendoColumn[]
   isGrouped: boolean
 }

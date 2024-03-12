@@ -17,12 +17,13 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
   public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+
   public updateApi = new FBRequest<FBInlineApprovalBody, FBPOInlineApprovalUpdateBody>(FBEndpoint.ApprovalsUpdate);
 
   public approvalLevelsAPI = new FBRequest<POApprovalMatrixLevel[], null>();
   public approvalLevels?: POApprovalMatrixLevel[];
 
-  public constructor({ id, approvals }: FBPOApprovalsConstructor) {
+  public constructor ({ id, approvals }: FBPOApprovalsConstructor) {
     super();
     this.approvals = filter(approvals, (a) => a.status !== 'ABANDONED');
     if (!id) {
@@ -33,23 +34,23 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
     });
   }
 
-  @computed public get busy() {
+  @computed public get busy () {
     return this.loading || this.approvalApi.loading || this.transitionApi.loading;
   }
 
-  @computed public get activeApprovals(): FBInlineApprovalBody[] {
+  @computed public get activeApprovals (): FBInlineApprovalBody[] {
     return filter(this.approvals, (a) => a.status !== 'ABANDONED' && a.type === 'MASTER');
   }
 
-  @computed public get requireAdditionalApprovers() {
+  @computed public get requireAdditionalApprovers () {
     return values(this.groups).length > 0 && values(this.groups).length !== this.checkedGroups?.length;
   }
 
-  @computed public get haveAllApprovals() {
+  @computed public get haveAllApprovals () {
     return every(this.activeApprovals, { status: ApprovalStatus.Approved });
   }
 
-  @computed public get checkedGroups() {
+  @computed public get checkedGroups () {
     return this.activeApprovals?.reduce<FBRequiredApprover[]>((groups, approval) => {
       const signedGroup = values(this.groups).find(
         (group) => {
@@ -74,12 +75,12 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
     return this.fetch();
   };
 
-  public onSuccess() {
+  public onSuccess () {
     this.setGroups(this.data);
     super.onSuccess();
   }
 
-  private setGroups = (data?: FBRequiredApprover[]) => {
+  private readonly setGroups = (data?: FBRequiredApprover[]) => {
     this.groups = (data || []).reduce((group, item) => {
       group[item.id] = {
         ...item,

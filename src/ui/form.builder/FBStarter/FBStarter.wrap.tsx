@@ -9,7 +9,6 @@ export const withFBStarter = <T extends FBStarterProps>(
     onClick,
     ...props
   }: T) => {
-
     const { dialogState, leftPanelState } = FB.useStores();
     const { _documentRevisionFormState, _tabsState } = SM.useStores();
     const isNewLayout = SM.isNewLayout;
@@ -39,7 +38,6 @@ export const withFBStarter = <T extends FBStarterProps>(
       isNewLayout,
       onClick,
     });
-
   };
 
   return (props: T) => Comp(props);

@@ -1,21 +1,23 @@
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { find, get, isEmpty } from 'lodash';
-import React, { ChangeEvent } from 'react';
+import { find, first, get, has, isEmpty, keys, last, values } from 'lodash';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../../../components/KendoDataGrid/constants';
 import { Dialog } from '../../../../../../components/dialogs';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../../../components/KendoDataGrid/constants';
 import useDialog from '../../../../../../hooks/useDialog';
+import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
 import {
   EMPTY_DROPDOWN_PLACEHOLDER,
@@ -23,21 +25,26 @@ import {
 } from '../../constants';
 import { CustomTemplateProps, EditableMDItem } from '../../types';
 import { generateDocTitleText } from '../../utils';
+import { PopupClipboardMenu, PopupClipboardMenuContext } from '../PopupClipboardMenu';
+import { Selector } from '../Selector';
 import { styles } from './styles';
 
 interface Props extends CustomTemplateProps {
   options: OptionType[]
+  isColumnEditMode?: boolean
+  copiedItem?: {[id: string]: string}
 }
 
-const Editor: React.FC<Props> = ({ field, options }) => {
+const Editor: React.FC<Props> = ({ field, options, dataItem, isColumnEditMode, copiedItem }) => {
   const { values, setFieldValue, getFieldProps }
     = useFormikContext<EditableMDItem>();
+  const { onUpdateSelectedCell } = useContext(PopupClipboardMenuContext);
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    setFieldValue(field, value?.value);
+    isColumnEditMode ? onUpdateSelectedCell(value?.value as string) : setFieldValue(field, value?.value);
   };
 
-  const value = find(options, { value: values[field] });
+  const value = find(options, { value: isColumnEditMode ? dataItem[field] : values[field] });
 
   return (
     <FormikField name={field}>
@@ -50,6 +57,7 @@ const Editor: React.FC<Props> = ({ field, options }) => {
         getOptionLabel={(option: OptionType) => translate(option.label)}
         value={value}
         size="small"
+        disabled={isColumnEditMode && isEmpty(copiedItem)}
       />
     </FormikField>
   );
@@ -57,14 +65,18 @@ const Editor: React.FC<Props> = ({ field, options }) => {
 
 export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const classes = styles();
-  const { dataItem, field, onClick, options } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-
-  if (isEditMode) {
-    return <Editor {...props} />;
-  }
+  const { dataItem, field, onClick, options, onSelectCell } = props;
+  const { copyClipboardPopupMenu, selectedState, copiedItems, containerRef, populateCopiedValue, clearContent } = useContext(PopupClipboardMenuContext);
+  const isColumnEditMode = !isEmpty(copiedItems) && (first(values(copiedItems)) ?? [] as string[]).includes(field);
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]) || isColumnEditMode;
+  const showPopup = has(selectedState, dataItem.id) && isColumnEditMode && last(keys(selectedState)) === dataItem.id;
+  const showCopyButton = isEmpty(copiedItems) && dataItem[field] && dataItem[field] !== EMPTY_DROPDOWN_PLACEHOLDER;
+  dataItem.isSelected = false;
+  const showEditor = isEditMode || dataItem.isSelected;
+  const showContent = !isEditMode && !dataItem.isSelected;
 
   const dialog = useDialog();
+  const [copyIconRef, isHovered] = useHover<HTMLButtonElement>();
 
   const { partDocId, openedPO } = dataItem;
   const isOnOrderPOActionColumn = field === ON_ORDER_PO_ACTION_COLUMN;
@@ -73,11 +85,29 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     docId: po?.document?.docId,
     displayRevision: po.displayRevision,
   }));
+  const [copiedItem, setCopiedItem] = useState<{
+    [id: string]: string
+  }>({});
+  const showSelector = !isEmpty(copiedItems) && !isEmpty(copiedItem);
 
-  const handleClick = () => onClick?.({ dataItem });
+  const handleClick = () => {
+    if ((has(copiedItem, dataItem.id) && copiedItem[dataItem.id] === field) || isColumnEditMode) {
+      return;
+    }
+    onClick?.({ dataItem });
+  };
+
   const handleClickPOs = (e) => {
     dialog.open();
     e.stopPropagation();
+  };
+
+  const handleCopy = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    dataItem.isSelected = true;
+    setCopiedItem({ [dataItem.id]: field });
+    onSelectCell?.(dataItem, field);
   };
 
   const handleClosePOs = (e) => {
@@ -89,16 +119,46 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
     value: get(dataItem, field, EMPTY_DROPDOWN_PLACEHOLDER) as string,
   });
 
-  return (
-    <OverflowingContent onClick={handleClick}>
-      {translate(displayValue?.label)}
-      {isOnOrderPOActionColumn && openedPOsAvailable && (
-        <FontAwesomeIcon
-          icon={solid('circle')}
-          onClick={handleClickPOs}
-          className={cx(classes.dot, classes.poPreviewDot)}
-        />
-      )}
+  useEffect(() => {
+    if (isEmpty(copiedItems) && has(copiedItem, dataItem.id)) {
+      setCopiedItem({});
+    }
+  }, [copiedItems]);
+
+  return (<>
+    {showSelector && <Selector {...{ containerRef }} />}
+    {showEditor && (<Editor {...props} {...{ isColumnEditMode, copiedItem }} />)}
+    {showContent && <div onClick={handleClick}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <div className={classes.actionLabel}>
+          <OverflowingContent>{translate(displayValue?.label)}</OverflowingContent>
+        </div>
+          <Box>
+            {isOnOrderPOActionColumn && openedPOsAvailable && (
+              <FontAwesomeIcon
+                icon={solid('circle')}
+                onClick={handleClickPOs}
+                className={cx(classes.dot, classes.poPreviewDot)}
+              />
+            )}
+          {showCopyButton && (
+            <span ref={copyIconRef} onClick={handleCopy}>
+              <Tooltip
+                title={translate('common.copy.value')}
+                placement="top"
+                arrow
+              >
+                <FontAwesomeIcon
+                  icon={ isHovered ? solid('copy') : regular('copy')}
+                  className={classes.copyIcon}
+                /></Tooltip>
+            </span>)}
+          </Box>
+        </Box>
       <Dialog
         title={translate(
           'approvalRequest.material.disposition.po.preview.title',
@@ -117,6 +177,8 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
           ))}
         </div>
       </Dialog>
-    </OverflowingContent>
+    </div>}
+    {showPopup && <PopupClipboardMenu {...{ copyClipboardPopupMenu, populateCopiedValue, clearContent }} />}
+  </>
   );
 };

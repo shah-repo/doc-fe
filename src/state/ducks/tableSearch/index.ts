@@ -1,4 +1,4 @@
-import { default as tableSearchReducer } from './reducers';
+import tableSearchReducer from './reducers';
 
 export { default as tableSearchActions } from './actions';
 export { default as tableSearchSelectors } from './selectors';

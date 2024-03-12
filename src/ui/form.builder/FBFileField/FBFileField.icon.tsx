@@ -10,7 +10,7 @@ const FBFileFieldIcon: React.FunctionComponent<FBFileFieldProps> = ({
   loading = false,
   onChange,
   disabled,
-}) =>  (
+}) => (
   <>
     <input
       accept="*"

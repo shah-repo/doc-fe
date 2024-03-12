@@ -5,13 +5,11 @@ import { FBPOApprovalMatrixFormActionsProps, POApprovalMatrixLevel } from '../FB
 export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormActionsProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     handleAdd,
     handleCancel,
     ...props
   }: T) => {
-
     const { dialogState, formState, poamState } = FB.useStores();
 
     handleAdd = () => {

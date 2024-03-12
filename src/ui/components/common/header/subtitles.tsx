@@ -43,10 +43,9 @@ const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
       concat(documentRevision?.smartReferencesTo, documentRevision?.document.smartReferencesTo),
       'id',
     )
-    ?.find((ref) => ref?.active && ref?.type === SmartReferenceType.HiddenPiInstance)
-    ?.toDocRev
-    ?.precalc
-    ?.[LHR_SUBTITLE_PRECALC_KEY];
+      ?.find((ref) => ref?.active && ref?.type === SmartReferenceType.HiddenPiInstance)
+      ?.toDocRev
+      ?.precalc?.[LHR_SUBTITLE_PRECALC_KEY];
 
   const lhrLink = subtitle?.lhr?.docRevId && subtitle?.lhr?.documentId && generateDocRevUrl(subtitle.lhr);
 

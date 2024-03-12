@@ -98,7 +98,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       approvalsState?.applyTransition(transition, approvalId, { password });
     };
 
-    function includesApprover(group: FBRequiredApprover, approver: string): boolean {
+    function includesApprover (group: FBRequiredApprover, approver: string): boolean {
       return (group.joinedEmployees as string[]).includes(approver);
     }
 
@@ -147,7 +147,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    function concatApprovals(approval?: FBInlineApprovalBody) {
+    function concatApprovals (approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
       if (approval.status === 'REJECTED' || approval.status === 'APPROVED') {
         window.location.reload();
@@ -172,7 +172,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    function addApprover(ids?: string[]) {
+    function addApprover (ids?: string[]) {
       if (!id) { return; }
       map(ids, (approver) => approvalsState?.addApproval({
         assigned: { id: approver },
@@ -188,7 +188,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       }));
     }
 
-    function removeApprover(ids?: string[]) {
+    function removeApprover (ids?: string[]) {
       if (!ids) { return; }
       map(ids, (approver) => {
         const deletedApproverIndex = findIndex(document?.approvals, (a) =>
@@ -203,7 +203,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
           document.approvals[deletedApproverIndex].status = ApprovalStatus.Abandoned;
         }
         approvalsState?.applyTransition('abandon', (approval as FBInlineApprovalBody)?.id, undefined, () => {
-          const id  = workspaceState?.id;
+          const id = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
           if (!workspaceState?.autosave) { return; }
           workspaceState?.saveDocRev(formState?.getValues());
@@ -239,7 +239,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // MARK: @observer
     useObserver(() => {
       inlineApprovalExists = Boolean(_documentRevisionFormState?.documentRevision?.formDocument?.formTemplate?.schema
-      .some((e) => (!e.deleted && e.type === 'inlineapproval' as string)));
+        .some((e) => (!e.deleted && e.type === 'inlineapproval' as string)));
 
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;
@@ -262,8 +262,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     documentStatus = document?.status as any;
 
     showFieldOwnersWarning = document?.document
-    .documentType
-    .groupOptions?.includes(DOC_TYPE_GROUP_OPTION.INPUT_OWNERS_APPROVERS)
+      .documentType
+      .groupOptions?.includes(DOC_TYPE_GROUP_OPTION.INPUT_OWNERS_APPROVERS)
      && !isEmpty(owners) && documentStatus !== DocumentStatus.Released;
 
     if (!isComponentVisible) {

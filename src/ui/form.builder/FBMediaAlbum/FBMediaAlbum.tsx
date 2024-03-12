@@ -76,7 +76,7 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
                 {!loading && (
                   <label htmlFor={`fb-mediaalbum-upload-${name}`} >
                     <Tooltip title={<Text message="form.builder.upload" />}>
-                      <CloudUploadIcon  onClick={onClick} />
+                      <CloudUploadIcon onClick={onClick} />
                     </Tooltip>
                   </label>
                 )}

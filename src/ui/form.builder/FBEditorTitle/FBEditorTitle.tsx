@@ -34,7 +34,7 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitlePropsIncludesType> = (
   }) || '';
   return (
     <>
-      {!underValidation &&  <Box
+      {!underValidation && <Box
         pl={1}
         display="flex"
         height={45}
@@ -47,7 +47,7 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitlePropsIncludesType> = (
       </Box>
       }
 
-      {underValidation &&  <Box className={classes.rootContainer}>
+      {underValidation && <Box className={classes.rootContainer}>
         <ToggleButtonGroup
           color="primary"
           exclusive

@@ -57,7 +57,7 @@ class FBDialogState {
     set(this, 'actions', actions);
   };
 
-  private reset = () => {
+  private readonly reset = () => {
     this.setTitle(undefined);
     this.setContent(undefined);
     this.setActions(undefined);

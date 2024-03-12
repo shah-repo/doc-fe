@@ -18,8 +18,8 @@ import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/chan
 import { companySelectors } from '../../../../../state/ducks/company';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
-import TasksInfoDialog, { DialogTypes } from '../../../../change.request/dialogs/TasksInfoDialog';
 import { PendingMDInfoResponse } from '../../../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
+import TasksInfoDialog, { DialogTypes } from '../../../../change.request/dialogs/TasksInfoDialog';
 import { changeRequestEditPath } from '../../../../change.request/utils/paths';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -32,8 +32,8 @@ import { getDocIcon } from '../../common/DocIcon';
 import DocId from '../../common/DocId/presenter';
 import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
 import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { DocTypeGroups } from '../../common/types';
 import ApproveDialogueContainer from '../../dialogs/approveDialogueContainer';
 import useStyles from './approvalApproved.styles';
@@ -157,7 +157,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
     onSuccess: () => {
       transitionDialog.close();
     },
-    onError: (error) => {
+    onError: () => {
       transitionDialog.close();
     },
   });

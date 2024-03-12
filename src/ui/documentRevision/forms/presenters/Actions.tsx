@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconButton, makeStyles } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from 'lodash';
 import { Observer } from 'mobx-react';
@@ -20,12 +23,13 @@ import { ApplicationState } from '../../../../state/reducers';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
 import HeaderMenu from '../../../components/common/header/Menu';
-import { default as OwnerChangerContainer } from '../../../components/common/owner.changer/container';
+import OwnerChangerContainer from '../../../components/common/owner.changer/container';
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../../../components/forms/ClonePOButton';
 import CloneEBButton from '../../../components/forms/CopyEBButton';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
+import PrintLabelDetailsDialog from '../../../components/table/printLabel/PrintLabelDetailsDialog';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { FB } from '../../../form.builder';
@@ -33,8 +37,10 @@ import { FBFormStateContext } from '../../../form.builder/FBForm/FBForm.wrap';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../../form.builder/FBInput/FBInput.wrap';
 import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
 import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustomization/useCustomization';
+import useDialog from '../../../hooks/useDialog';
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
+import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
@@ -55,6 +61,17 @@ import { SubmitForApproval } from './SubmitForApproval';
 import UpgradeToLatestContainer from './upgrade.to.latest/UpgradeToLatest.container';
 import VoidButton from './VoidButton';
 
+const styles = makeStyles(() => ({
+  printIconContainer: {
+    backgroundColor: `${Colors.white} !important`,
+  },
+  printIcon: {
+    height: 15,
+    width: 15,
+    color: Colors.navy,
+  },
+}));
+
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isNewLayout = SM.isNewLayout;
   const formik = useFormikContext();
@@ -64,7 +81,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { isCreateDocumentDisabled, setDoNotPrompt, isSliderView } = props;
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
-
+  const printDialog = useDialog();
+  const classes = styles();
   const {
     documentRevision,
     values,
@@ -202,9 +220,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue('formDocument', undefined);
     }
   }
-  const {
-    label: undoChangesLabel,
-  } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
+  const { label: undoChangesLabel } = useUndoPOChanges(documentRevision?.document?.documentType?.id);
 
   const onUndoChangesClick = async () => {
     setDoNotPrompt(true);
@@ -224,6 +240,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     history.push(documentVersionPath(documentRevision?.id, documentRevision?.document.id));
     dispatch(documentRevisionsActions.load(documentRevision.id));
   };
+
   const onFormClick = async () => {
     if (redlineActive) {
       formik.setFieldValue('redline', true);
@@ -412,6 +429,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {buttons.includes(PreviewControlButtons.SubmitApprovalButton) && (
         <SubmitForApproval
           docRevId={values.id as string}
+          description={values.description}
           status={values.status}
           docRevOwner={owner?.user.name}
           updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
@@ -473,6 +491,18 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isLot && (
+        <>
+          <IconButton className={classes.printIconContainer} onClick={printDialog.open}>
+            <FontAwesomeIcon className={classes.printIcon} icon={regular('print')} />
+          </IconButton>
+          <PrintLabelDetailsDialog
+            isOpen={printDialog.isOpen}
+            closeDialog={printDialog.close}
+            selectedItem={documentRevision}
+          />
+        </>)
+      }
       {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased && (
         <StyledSubmitButton
           showNewButton={true}

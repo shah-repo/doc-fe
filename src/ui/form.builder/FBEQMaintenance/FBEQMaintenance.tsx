@@ -105,5 +105,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       </Box>
       }
     </FBInput>
-  ); };
+  );
+};
 export default withFBEQMaintenance(FBEQMaintenance);

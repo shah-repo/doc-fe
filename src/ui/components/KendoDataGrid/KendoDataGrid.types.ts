@@ -16,6 +16,7 @@ export interface CellTemplateProps<T> extends GridCellProps {
   dataItem: T
   field: string
   column: Omit<GenericColumnDefinition<T>, 'cell' | 'template' | 'children'>
+  onClick?: (e: { dataItem: T }) => void
 }
 
 export type CellComponent<T = unknown, R = Record<string, unknown>> = ComponentType<CellTemplateProps<T> & R>;
@@ -41,6 +42,7 @@ export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'f
   children?: Array<ColumnDefinition<T>> | Array<ReactElement<ColumnDefinition<T>>>
   show?: boolean
   disabled?: boolean
+  selectable?: boolean
 }
 
 export interface DataGridProps<T> extends StyledKendoGridProps {

@@ -14,6 +14,7 @@ import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBA
 import FBDataStore from '../../form.builder/FBStore/FBDataStore';
 import useActionCreator from '../../hooks/useActionCreator';
 import { DialogHandler } from '../../hooks/useDialog';
+import Theme from '../../layout/theme/provider';
 import ChangeRequestUpdateContainer from '../ChangeRequestUpdate.container';
 import { changeRequestPreviewPath } from '../utils/paths';
 import useStyles from './ChangeRequestEditDialog.styles';
@@ -50,70 +51,72 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   }, [changeRequestDetails]);
 
   return (
-    <AsyncGate
-      asyncAction={loadAction}
-      asyncState={loadAsyncState}
-      startActionOnMount={true}
-    >
-      <Dialog
-        disableBackdropClick={true}
-        disableEnforceFocus
-        classes={{
-          root: classes.root,
-          paper: classes.paper,
-        }}
-        scroll="paper"
-        disableEscapeKeyDown={true}
-        maxWidth={false}
-        open={approvalRequestDialog.isOpen}
-        onSubmit={(event: React.FormEvent) => event.stopPropagation()}
-        id="ApprovalRequest-dialog"
+    <Theme>
+      <AsyncGate
+        asyncAction={loadAction}
+        asyncState={loadAsyncState}
+        startActionOnMount={true}
       >
-        <DialogTitle style={{ display: 'flex' }} disableTypography>
-          <Typography className={classes.heading}>
-            <Text translation="approvalRequest.dialog.title" />
-          </Typography>
-          <IconButton
-            className={classes.close}
-            size="small"
-            onClick={handleOpenNewTab}
-          >
-            <NewTabIcon />
-          </IconButton>
-          <IconButton
-            className={classes.close}
-            size="small"
-            onClick={closeDialog}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent dividers id="ApprovalRequest-content">
-          <Observer>
-            {() => (
-              <>
-                {FBDataStore.isDraftPartsAdded && (
-                  <ChangeRequestUpdateContainer
-                    changeRequest={changeRequestDetails}
-                    hideSideBar
-                    currentDocRevId={currentDocRevId}
-                    inDialog={true}
-                  />
-                )}
-                {!FBDataStore.isDraftPartsAdded && (
-                  <ChangeRequestUpdateContainer
-                    changeRequest={changeRequestDetails}
-                    hideSideBar
-                    currentDocRevId={currentDocRevId}
-                    inDialog={true}
-                  />
-                )}
-              </>
-            )}
-          </Observer>
-        </DialogContent>
-      </Dialog>
-    </AsyncGate>
+        <Dialog
+          disableBackdropClick={true}
+          disableEnforceFocus
+          classes={{
+            root: classes.root,
+            paper: classes.paper,
+          }}
+          scroll="paper"
+          disableEscapeKeyDown={true}
+          maxWidth={false}
+          open={approvalRequestDialog.isOpen}
+          onSubmit={(event: React.FormEvent) => event.stopPropagation()}
+          id="ApprovalRequest-dialog"
+        >
+          <DialogTitle style={{ display: 'flex' }} disableTypography>
+            <Typography className={classes.heading}>
+              <Text translation="approvalRequest.dialog.title" />
+            </Typography>
+            <IconButton
+              className={classes.close}
+              size="small"
+              onClick={handleOpenNewTab}
+            >
+              <NewTabIcon />
+            </IconButton>
+            <IconButton
+              className={classes.close}
+              size="small"
+              onClick={closeDialog}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent dividers id="ApprovalRequest-content">
+            <Observer>
+              {() => (
+                <>
+                  {FBDataStore.isDraftPartsAdded && (
+                    <ChangeRequestUpdateContainer
+                      changeRequest={changeRequestDetails}
+                      hideSideBar
+                      currentDocRevId={currentDocRevId}
+                      inDialog={true}
+                    />
+                  )}
+                  {!FBDataStore.isDraftPartsAdded && (
+                    <ChangeRequestUpdateContainer
+                      changeRequest={changeRequestDetails}
+                      hideSideBar
+                      currentDocRevId={currentDocRevId}
+                      inDialog={true}
+                    />
+                  )}
+                </>
+              )}
+            </Observer>
+          </DialogContent>
+        </Dialog>
+      </AsyncGate>
+    </Theme>
   );
 };
 

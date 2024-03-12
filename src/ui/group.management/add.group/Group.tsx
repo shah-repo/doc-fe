@@ -73,7 +73,7 @@ const AddGroup: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Dialog fullScreen={false} open={isOpen}  fullWidth
+    <Dialog fullScreen={false} open={isOpen} fullWidth
       maxWidth="xl"
     >
       <DialogTitle

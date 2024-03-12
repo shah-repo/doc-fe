@@ -11,7 +11,7 @@ class FBTextEditorState {
   public preserveFocus = false;
 
   // MARK: @constructor
-  public constructor(editorState: EditorState) {
+  public constructor (editorState: EditorState) {
     this.editorState = editorState;
   }
 

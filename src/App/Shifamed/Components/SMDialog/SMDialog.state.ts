@@ -2,7 +2,6 @@ import { action, observable, set } from 'mobx';
 import { SMDialogStateProps } from '../../..';
 
 export default class SMDialogState implements SMDialogStateProps {
-
   // MARK: @config
 
   // MARK: @observables

@@ -5,18 +5,18 @@ export type FBTextFieldProps =
   & FBInputProps
   & Pick<FBWorkspaceProps, 'mode'>
   & Pick<TextFieldProps,
-    | 'multiline'
-    | 'type'
-    | 'defaultValue'
-    | 'id'
-    | 'inputProps'
-    | 'InputProps'
-    | 'style'
-    | 'size'
-    | 'onBlur'
-    | 'variant'
-    | 'className'
-    | 'onFocus'
+  | 'multiline'
+  | 'type'
+  | 'defaultValue'
+  | 'id'
+  | 'inputProps'
+  | 'InputProps'
+  | 'style'
+  | 'size'
+  | 'onBlur'
+  | 'variant'
+  | 'className'
+  | 'onFocus'
   >
   & {
     dataCy?: string

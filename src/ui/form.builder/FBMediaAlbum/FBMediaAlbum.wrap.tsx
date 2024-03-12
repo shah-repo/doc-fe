@@ -19,7 +19,6 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
     uploadDisabled,
     ...props
   }: T) => {
-
     mediaAlbumState = FB.useRef<FBMediaAlbumState>(FBMediaAlbumState);
     const { formState, workspaceState } = FB.useStores();
     const { mode: workspaceMode, id } = workspaceState || {};
@@ -62,11 +61,11 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
       fileUploadEl.onclick = registerCancel;
     }
 
-    function registerCancel() {
+    function registerCancel () {
       document.body.onfocus = removeLock;
     }
 
-    function removeLock() {
+    function removeLock () {
       if (fileUploadEl?.nodeValue?.length) { return; }
       formState?.unlockField(name);
     }

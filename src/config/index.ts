@@ -28,21 +28,21 @@ const DEFAULTS = {
 type ConfigKey = keyof typeof DEFAULTS;
 
 class Config {
-  private static PREFIX = 'REACT_APP';
+  private static readonly PREFIX = 'REACT_APP';
 
-  private static get(name: ConfigKey): string {
+  private static get (name: ConfigKey): string {
     return SM_APP_CONFIG[`${this.PREFIX}_${name}`] || DEFAULTS[name];
   }
 
-  private static getNumber(name: ConfigKey): number {
+  private static getNumber (name: ConfigKey): number {
     return parseInt(this.get(name), 10);
   }
 
-  public static get ApiEndpoint() {
+  public static get ApiEndpoint () {
     return `${this.get('API_ENDPOINT')}/v1`;
   }
 
-  public static get WorkerApiEndpoint() {
+  public static get WorkerApiEndpoint () {
     const apiEndpoint = this.get('WORKER_API_ENDPOINT');
     if (!apiEndpoint) {
       return null;
@@ -50,28 +50,28 @@ class Config {
     return `${this.get('WORKER_API_ENDPOINT')}/v1`;
   }
 
-  public static get RefreshTokenValidityInDays() {
+  public static get RefreshTokenValidityInDays () {
     return this.getNumber('REFRESH_TOKEN_VALIDITY_DAYS');
   }
 
-  public static get SignUpDomainUrl(): string {
+  public static get SignUpDomainUrl (): string {
     return this.get('SIGNUP_DOMAIN_URL');
   }
 
-  public static get FrontendUrl() {
+  public static get FrontendUrl () {
     return this.get('FRONTEND_URL');
   }
 
-  public static get PublicUrl() {
+  public static get PublicUrl () {
     const url = this.get('API_ENDPOINT');
     return url.substring(0, url.length - 4);
   }
 
-  public static get AwsCognitoClientId() {
+  public static get AwsCognitoClientId () {
     return this.get('AWS_COGNITO_CLIENT_ID');
   }
 
-  public static get SignUpUrl(): string {
+  public static get SignUpUrl (): string {
     const params = queryString.stringify({
       response_type: 'code',
       client_id: this.AwsCognitoClientId,
@@ -81,67 +81,67 @@ class Config {
     return `${this.SignUpDomainUrl}/signup?${params}`;
   }
 
-  public static get Theme() {
+  public static get Theme () {
     return this.get('THEME');
   }
 
-  public static get SlackCompanyUri(): string {
+  public static get SlackCompanyUri (): string {
     return `${this.FrontendUrl}/slack/company`;
   }
 
-  public static get SlackUserUri(): string {
+  public static get SlackUserUri (): string {
     return `${this.FrontendUrl}/slack/user`;
   }
 
-  public static get HelloSignTestMode(): string {
+  public static get HelloSignTestMode (): string {
     return this.get('HELLOSIGN_TEST_MODE');
   }
 
-  public static get HelloSignClientId(): string {
+  public static get HelloSignClientId (): string {
     return this.get('HELLOSIGN_CLIENT_ID');
   }
 
-  public static get DatadogApplicationId(): string {
+  public static get DatadogApplicationId (): string {
     return this.get('DATADOG_APPLICATION_ID');
   }
 
-  public static get DatadogClientToken(): string {
+  public static get DatadogClientToken (): string {
     return this.get('DATADOG_CLIENT_TOKEN');
   }
 
-  public static get DatadogEnabled(): boolean {
+  public static get DatadogEnabled (): boolean {
     return this.get('DATADOG_ENABLED') === 'true';
   }
 
-  public static get DatadogSampleRate() {
+  public static get DatadogSampleRate () {
     return this.getNumber('DATADOG_SAMPLE_RATE');
   }
 
-  public static get EnvironmentName(): string {
+  public static get EnvironmentName (): string {
     return this.get('ENV_NAME');
   }
 
-  public static get isSandbox(): boolean {
+  public static get isSandbox (): boolean {
     return this.get('ENV_NAME') === 'SANDBOX';
   }
 
-  public static get isProduction(): boolean {
+  public static get isProduction (): boolean {
     return this.get('ENV_NAME') === 'PRODUCTION';
   }
 
-  public static get isDemo(): boolean {
+  public static get isDemo (): boolean {
     return this.get('ENV_NAME') === 'DEMO';
   }
 
-  public static get isDev(): boolean {
+  public static get isDev (): boolean {
     return this.get('ENV_NAME') === 'DEVELOP';
   }
 
-  public static get consoleToastsEnabled(): boolean {
+  public static get consoleToastsEnabled (): boolean {
     return this.get('CONSOLE_TOAST') === 'true';
   }
 
-  public static get docTypeManagementEditDisabled(): boolean {
+  public static get docTypeManagementEditDisabled (): boolean {
     return this.get('PREVENT_DOC_TYPE_MANAGEMENT_EDIT') === 'true';
   }
 }

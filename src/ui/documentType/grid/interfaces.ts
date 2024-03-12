@@ -10,7 +10,7 @@ export interface KendoPresenterProps {
   tableCriteria: TablePanelStateProps
   schema: object
   columns: KendoColumn[]
-  headerColumns: TableColumnProps<DocumentRevision>[]
+  headerColumns: Array<TableColumnProps<DocumentRevision>>
   onRowClick: ((dataItem: any) => void)
   title?: string
   queryUrl: string

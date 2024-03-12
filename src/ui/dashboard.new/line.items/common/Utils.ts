@@ -1,7 +1,7 @@
 import { size, toNumber } from 'lodash';
 import { Translation } from '../../../translations/types';
 
-export const formatCurrency = (data: string) =>  {
+export const formatCurrency = (data: string) => {
   const language = 'en';
   if (data && !isNaN(+data)) {
     return (+data).toLocaleString(language, {
@@ -11,7 +11,7 @@ export const formatCurrency = (data: string) =>  {
   return '';
 };
 
-export const formatNumberToCurrency = (data: number) =>  {
+export const formatNumberToCurrency = (data: number) => {
   if (!isNaN(data)) {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -27,8 +27,7 @@ export const toFixed = (value: string | number) => {
   }
   if (!Number.isInteger(toNumber(value)) && isMoreDigitsAfterDecimal(value, 10)) {
     return toNumber(toFixedDecimals(value));
-  }
-  else { return toNumber(value); }
+  } else { return toNumber(value); }
 };
 export const toFixedDecimals = (value: string | number) => {
   if (Number.isNaN(toNumber(value))) {
@@ -46,9 +45,7 @@ export const linearScale = (domain: number[], range: number[]) => {
     const ratio = (maxScale - minScale) / (maxValue - minValue);
     const result = minScale + ratio * (value - minValue);
 
-    if (result === Infinity) { return maxScale; }
-    else if (result === -Infinity) { return minScale; }
-    else if (isNaN(result)) { return minScale; }
+    if (result === Infinity) { return maxScale; } else if (result === -Infinity) { return minScale; } else if (isNaN(result)) { return minScale; }
     return result;
   };
   return scale;

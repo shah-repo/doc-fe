@@ -14,10 +14,10 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
     customcontrol: FBEditorCustomControl,
   };
 
-  private workspaceState?: FBWorkspaceState;
+  private readonly workspaceState?: FBWorkspaceState;
   public url: FBEndpoint;
 
-  public constructor(workspaceState?: FBWorkspaceState) {
+  public constructor (workspaceState?: FBWorkspaceState) {
     super();
     this.workspaceState = workspaceState;
     this.url = FBEndpoint.Favourites;
@@ -32,7 +32,7 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
     return React.createElement(customPicker, { index });
   };
 
-  public get pickers(): FBControlPickerDataProps {
+  public get pickers (): FBControlPickerDataProps {
     const isEQ = checkIsDocumentEquipment(this.workspaceState?.document?.document?.documentType?.groupOptions);
     if (isEQ) {
       return {
@@ -82,33 +82,34 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
     };
   }
 
-  private get hasHelloSign(): boolean | undefined {
+  private get hasHelloSign (): boolean | undefined {
     const { company } = (store.getState() || {}) as FBWorkspaceExternalState;
     return company?.companyMine.helloSignIntegrationEnabled;
   }
 
-  private get isOutputBulkCreate(): boolean | undefined {
+  private get isOutputBulkCreate (): boolean | undefined {
     const BLCdoc = find(this.workspaceState?.externalState?.documentType?.byId, (doc) =>
       checkIsDocumentBulkCreate(doc.groupOptions));
     const isBLCOutput = this.workspaceState?.document?.outputDocumentTypes?.find((doc) => doc.value === BLCdoc?.id);
     return Boolean(isBLCOutput);
   }
 
-  private get hasPurchaseOrder(): boolean | undefined {
+  private get hasPurchaseOrder (): boolean | undefined {
     return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_PURCHASE_ORDER);
   }
 
-  private get hasRecPurchaseOrder(): boolean | undefined {
+  private get hasRecPurchaseOrder (): boolean | undefined {
     return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_RECEIVE_PURCHASE_ORDER);
   }
 
-  private get hasApproval(): boolean | undefined {
+  private get hasApproval (): boolean | undefined {
     return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_INLINE_APPROVAL);
   }
 
-  private get hasRequestApproval(): boolean | undefined {
+  private get hasRequestApproval (): boolean | undefined {
     return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_REQUEST_APPROVAL);
   }
+
   public addFavourite = (
     type: FBInputType,
   ) => {
@@ -126,6 +127,7 @@ class FBControlPickerState extends FBRequest<FBFavouritesResponse, Partial<FBFav
       }
     });
   };
+
   public removeFavourite = (
     id,
   ) => {
