@@ -17,7 +17,6 @@ export const withFBInputBaseField = <T extends FBInputBaseFieldProps>(
     name,
     ...props
   }: T) => {
-
     const { formState } = FB.useStores();
     const { workspaceMode: mode } = formState || {};
     defaultValue = defaultValue || formState?.getFieldValue(name);

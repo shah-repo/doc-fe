@@ -2,9 +2,9 @@ import { makeStyles } from '@material-ui/core';
 import Colors from '../../../layout/theme/utils/colors';
 
 const commonButtonStyles = {
-  'margin': 0,
-  'boxShadow': 'none',
-  'borderRadius': 100,
+  margin: 0,
+  boxShadow: 'none',
+  borderRadius: 100,
   'text-transform': 'capitalize',
 };
 const styles = makeStyles((theme) => ({

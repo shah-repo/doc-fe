@@ -8,7 +8,7 @@ const FBFilePresenter: React.FunctionComponent<FBFilePresenterProps> = ({
   mode = 'icon',
   disabled,
   ...props
-}) =>  (
+}) => (
   <FBProvider {...{ dialogState, filePresenterState }}>
     <FBDialog />
     {mode === 'icon' && <FBFilePresenterIcon {...props} {...{ filePresenterState, disabled }} />}

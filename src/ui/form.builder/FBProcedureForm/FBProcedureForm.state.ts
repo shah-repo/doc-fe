@@ -3,7 +3,6 @@ import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 
 class FBProcedureFormState {
-
   // MARK: @config
   public parts?: string[];
   public lots?: string[];

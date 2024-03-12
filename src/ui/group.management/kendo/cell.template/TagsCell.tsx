@@ -36,8 +36,8 @@ export const TagsCell = ({
   ).map((e) => e.tags).flat().sort()));
 
   if (!allGroups.includes(GroupTag.PO_ADMIN)) {
-      allGroups.push(GroupTag.PO_ADMIN);
-    }
+    allGroups.push(GroupTag.PO_ADMIN);
+  }
 
   const [data, setData] = React.useState(allGroups);
 
@@ -73,7 +73,7 @@ export const TagsCell = ({
           onChange={updateTagField}
         />
       ) : (
-        <ExpandableTemplate items={tagsList}  dataId={`${dataItem.id}-${columnIndex}`} />
+        <ExpandableTemplate items={tagsList} dataId={`${dataItem.id}-${columnIndex}`} />
       )}
     </td>
   );

@@ -3,25 +3,25 @@ import { CreateLotBody, FBPOReceiveCreateLotConstructor, FBPurchaseOrderItem } f
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 
-class FBPOReceiveCreateLotState  {
+class FBPOReceiveCreateLotState {
   public createLotAPI = new FBRequest<null, CreateLotBody>(FBEndpoint.PatchDocumentRevision);
   public item?: FBPurchaseOrderItem;
   public receivableId: string;
 
-  public constructor({ receivableId, item }: FBPOReceiveCreateLotConstructor) {
+  public constructor ({ receivableId, item }: FBPOReceiveCreateLotConstructor) {
     this.createLotAPI.setUrl(FBEndpoint.CreateLot);
     this.receivableId = receivableId;
     this.item = item;
   }
 
-  @action public async submit(values?: any) {
+  @action public async submit (values?: any) {
     if (!this.receivableId) {
       return;
     }
     await this.createLot(this.receivableId, values);
   }
 
-  public async createLot(receivableId: string, values: any) {
+  public async createLot (receivableId: string, values: any) {
     const partId = this.item?.partNumber;
     const lotTypeId = values?.lotType;
     const lotFormId = values?.lotForm;
@@ -44,8 +44,7 @@ class FBPOReceiveCreateLotState  {
     });
     try {
       await this.createLotAPI.post();
-    }
-    catch (error) {}
+    } catch (error) {}
   }
 }
 

@@ -62,7 +62,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                     onClick={() => onClick?.()}
                     {...{ disabled }}
                   />
-                  :                  <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
+                  : <AddCircleOutlineOutlinedIcon style={{ color: Colors.font_gray, width: '17px', height: '17px' }}
                     data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                     onClick={() => onClick?.()}
                     {...{ disabled }}
@@ -154,6 +154,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
         )}
       </Box>
     </FBProvider>
-  ); };
+  );
+};
 
 export default withFBProcedureItem(FBProcedureItem);

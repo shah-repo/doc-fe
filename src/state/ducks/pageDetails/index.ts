@@ -1,4 +1,4 @@
-import { default as pageDetailsReducer } from './reducers';
+import pageDetailsReducer from './reducers';
 
 export { default as pageDetailsActions } from './actions';
 export { default as pageDetailsSelectors } from './selectors';

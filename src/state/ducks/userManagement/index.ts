@@ -1,4 +1,4 @@
-import { default as userManagementReducer } from './reducers';
+import userManagementReducer from './reducers';
 
 export { default as userManagementActions } from './actions';
 export { default as userManagementSelectors } from './selectors';

@@ -11,6 +11,7 @@ class FBEQMaintenanceState {
   public availableMaintenanceFormsApi = new FBRequest<AvailableMaintenanceForm[], null>(
     FBEndpoint.FecthAvailableMaintenanceForms,
   );
+
   public proposedIdApi = new FBRequest<ProposedDocIdBody, null>(FBEndpoint.FetchDocId);
   public maintenanceHistoryApi = new FBRequest<Record<string, DocumentRevision[]>, null>(FBEndpoint.HistoryMaintenance);
 

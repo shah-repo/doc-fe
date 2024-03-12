@@ -2,18 +2,18 @@ import { makeStyles } from '@material-ui/core';
 
 export default makeStyles((theme) => ({
   '@keyframes arrowOut': {
-    '0': { transform: 'translate(0, 0)' },
+    0: { transform: 'translate(0, 0)' },
     '30%': { transform: 'translate(-12.5%, 12.5%)' },
     '70%': { transform: 'translate(12.5%, -12.5%)' },
     '100%': { transform: 'translate(0, 0)' },
   },
-  'root': {
+  root: {
     ...theme.typography.body2,
-    'display': 'flex',
-    'alignItems': 'center',
-    'color': theme.palette.primary.light,
-    'marginTop': theme.spacing(.5),
-    'textDecoration': 'none',
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.palette.primary.light,
+    marginTop: theme.spacing(0.5),
+    textDecoration: 'none',
     '&:hover': {
       color: theme.palette.primary.main,
     },
@@ -21,17 +21,17 @@ export default makeStyles((theme) => ({
       animationName: '$arrowOut',
     },
   },
-  'icon': {
-    marginLeft: theme.spacing(.5),
+  icon: {
+    marginLeft: theme.spacing(0.5),
     position: 'relative',
   },
-  'arrow': {
+  arrow: {
     position: 'absolute',
     animationDuration: '1s',
     animationTimingFunction: 'linear',
     animationIterationCount: 'infinite',
   },
-  'outer': {
+  outer: {
     display: 'block',
   },
 }));

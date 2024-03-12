@@ -10,8 +10,7 @@ const checkIfJSONObject = (value: string, title: string) => {
     if (o && typeof o === 'object') {
       return o;
     }
-  }
-  catch (e) {
+  } catch (e) {
     toastError(`Please Enter Valid ${title}`);
     return false;
   }

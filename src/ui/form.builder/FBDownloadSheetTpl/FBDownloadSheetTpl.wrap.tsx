@@ -6,13 +6,11 @@ import { FBDownloadSheetTplProps } from './FBDownloadSheetTpl.types';
 export const withFBDownloadSheetTpl = <T extends FBDownloadSheetTplProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     handleAction,
     downloadSheetTplState,
     ...props
   }: T) => {
-
     const intl = useIntl();
 
     downloadSheetTplState = FB.useRef<FBDownloadSheetTplState>(FBDownloadSheetTplState);

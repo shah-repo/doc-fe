@@ -43,7 +43,6 @@ class FBEditorStore {
     initialValues?: FBTemplateSchema,
     title?: string,
   ) => () => {
-
     FBValidatorStore.formValues = get(initialValues, 'formValuesRules') || {};
 
     this.content = (

@@ -27,7 +27,6 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     name,
     ...props
   }: T) => {
-
     const dispatch = useDispatch();
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const headerContext = React.useContext(FormHeaderContext)!;
@@ -63,7 +62,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       });
     });
 
-    async function handleReceiveAll() {
+    async function handleReceiveAll () {
       if (!workspaceState?.documentId) {
         return;
       }

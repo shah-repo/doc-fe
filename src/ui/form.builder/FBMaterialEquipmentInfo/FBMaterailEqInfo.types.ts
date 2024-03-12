@@ -69,7 +69,7 @@ export interface ItemProps<T> {
 
 export interface PanelProps {
   panel: PanelData
-  data?: (Material & Equipment)[]
+  data?: Array<Material & Equipment>
   expanded: boolean
   loading?: boolean
   classes: MaterialEqClasses

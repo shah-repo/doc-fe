@@ -1,8 +1,10 @@
-import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import { Box, Button, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
+import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
 import { ReactComponent as CollapseIcon } from '../../../../../assets/images/collapse.svg';
 import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/download_pdf.svg';
@@ -11,16 +13,16 @@ import { ReactComponent as InReviewIcon } from '../../../../../assets/images/in_
 import { ReactComponent as InReviewWhiteIcon } from '../../../../../assets/images/in_review_status_white.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
-import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
+import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -33,12 +35,11 @@ import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
 import { HoverStyleChip } from '../../common/HoverStyleChipPendingReview';
 import { NormalStyleChip } from '../../common/NormalStyleChipPendingReview';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency, getPendingTooltipText } from '../../common/Utils';
 import EmailModal from '../../dialogs/email/EmailDialog';
 import useStyles from './purchaseOrder.styles';
-
 interface Props {
   id: string
   docDocumentId: string
@@ -158,6 +159,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const [lastEmailSent, setLastEmailSent] = React.useState(false);
+  const [downloadPdfMobile, setDownloadPdfMobile] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const { count, pending, approved, primaryText, secondaryText }
@@ -165,38 +167,56 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const handleClick = () => {
     setOpen(!open);
   };
+
   const handleDismiss = () => {
     dismissLineItem?.(id);
   };
+
   const handlePinClick = () => {
     pinLineItem?.(id);
   };
+
   const handleUnPinClick = () => {
     unPinLineItem?.(id);
   };
+
   const onMouseHoverPinIcon = () => {
     setDownloadPdfHover(false);
     setPinHover(true);
   };
+
   const onMouseLeaveActionIcons = () => {
     setPinHover(false);
     setDownloadPdfHover(false);
   };
+
   const onMouseHoverDownloadPdfIcon = () => {
     setPinHover(false);
     setDownloadPdfHover(true);
   };
+
+  const handleDownloadClick = () => {
+    setDownloadPdfMobile(true);
+  };
+
+  const handleDownloadClose = () => {
+    setDownloadPdfMobile(false);
+  };
+
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
+
   const openApproversModel = (e) => {
     e.stopPropagation();
     setLastEmailSent(false);
     setEmailModelopen(true);
   };
+
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
   };
+
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
@@ -389,7 +409,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={classes.actionIcons}
+            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
@@ -564,6 +584,24 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               </Grid>
             </StyledListItem>
           ))}
+          <Grid className={classes.gridPendingMobile}>
+            <Button
+              className={classes.downloadButton}
+              data-cy="transition-download-pdf"
+              onClick={handleDownloadClick}
+            >
+              <DownloadPdfIcon stroke={Colors.white_smoke} />
+              <Text translation="common.download.pdf" />
+            </Button>
+            {downloadPdfMobile && (
+              <DownloadHtmlPreview
+                id={docRevId}
+                dialogPDF={dialogPDF}
+                onClose={handleDownloadClose}
+                downloadPdfHover
+              />
+            )}
+          </Grid>
         </List>
       </Collapse>
       <Modal
@@ -582,12 +620,14 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         />
       </Modal>
       {selectedAttachment && (
-        <ViewFile
-          isOpen={dialogHandler.isOpen}
-          handleClose={closeDialog}
-          attachments={[selectedAttachment]}
-          attachment={selectedAttachment}
-        />
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...purchaseOrderAttachments] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
       )}
     </>
   );

@@ -73,7 +73,7 @@ export default (theme: NextTheme) =>
       paper: {
         [theme.breakpoints.between('sm', 'md')]: {
           overflow: 'scroll',
-          height: 400,
+          height: 300,
         },
       },
     },

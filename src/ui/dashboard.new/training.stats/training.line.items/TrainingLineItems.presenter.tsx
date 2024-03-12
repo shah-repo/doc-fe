@@ -13,14 +13,14 @@ interface TabPanelProps {
   children?: React.ReactNode
   index: number
   value: number
-  panelData: {
+  panelData: Array<{
     id: string
     docTitle: string
     user: { avatar: Nullable<string>, name: string, initialColor: string }
     docId: string
     status: string
     dueOn: string
-  }[]
+  }>
   overallLimit: number
   onLoadMoreData: () => void
 }

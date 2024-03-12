@@ -20,7 +20,6 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
     menuId,
     ...props
   }: T) => {
-
     contextMenuState = FB.useRef<FBContextMenuState>(FBContextMenuState);
 
     menuItems = filter(menuItems, (menuItem) => !menuItem.hidden);

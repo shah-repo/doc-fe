@@ -23,7 +23,7 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckboxGroupProps> = ({
   row = true,
   ...props
 }) => (
-  <FBInput {...props}  type="checkboxgroup" labelProps={FBFontStyle.labelProps}>
+  <FBInput {...props} type="checkboxgroup" labelProps={FBFontStyle.labelProps}>
     <FBCheckboxGroupChild {...props} {...{ row, controls }} />
   </FBInput>
 );

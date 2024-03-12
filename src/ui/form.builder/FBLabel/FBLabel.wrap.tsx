@@ -9,7 +9,6 @@ export const withFBLabel = <T extends FBLabelProps>(
     fontSize = 'md',
     ...props
   }: T) => {
-
     !isUndefined(get(FBLabelFontSize, fontSize)) && (
       fontSize = `${get(FBLabelFontSize, fontSize)}.fontSize`
     );

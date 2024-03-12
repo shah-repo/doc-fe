@@ -27,7 +27,6 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     po,
     ...props
   }: T) => {
-
     const { workspaceState, formState } = FB.useStores();
     const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
@@ -70,10 +69,9 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
           actions: <FBPOReceiveCreateLotActions {...{ item }} />,
         });
       }
-
     };
 
-    function setSchemaItem(item: FBSchemaProps): FBPOReceiveItemProps {
+    function setSchemaItem (item: FBSchemaProps): FBPOReceiveItemProps {
       return {
         ...item,
         disabled: true,
@@ -86,7 +84,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       };
     }
 
-    function setSchemaProps(schema?: FBSchemaProps[]): FBSchemaProps[] | undefined {
+    function setSchemaProps (schema?: FBSchemaProps[]): FBSchemaProps[] | undefined {
       const id = workspaceState?.schema?.find((item) => item.type === 'poreceive')?.tabId;
 
       remove(schema || [], (item) => item?.type === 'poapprovals');

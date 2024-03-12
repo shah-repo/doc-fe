@@ -44,21 +44,21 @@ export default makeStyles((theme: Theme) =>
       minWidth: '100%',
     },
     menuIcon: {
-      'margin': '8px 13px 13px 11px',
-      'paddingTop': '5px',
-      'paddingBottom': '5px',
-      'justifyContent': 'unset',
+      margin: '8px 13px 13px 11px',
+      paddingTop: '5px',
+      paddingBottom: '5px',
+      justifyContent: 'unset',
       '&:hover': {
         background: 'none',
       },
     },
     iconButton: {
-      'margin': '8px 13px 13px 11px',
-      'paddingTop': '5px',
-      'paddingBottom': '5px',
+      margin: '8px 13px 13px 11px',
+      paddingTop: '5px',
+      paddingBottom: '5px',
       '&:hover, &:focus, li.active > a': {
-        'background': Colors.light_blue,
-        'borderRadius': '5px',
+        background: Colors.light_blue,
+        borderRadius: '5px',
         '& svg': {
           stroke: Colors.medium_blue,
         },
@@ -69,8 +69,8 @@ export default makeStyles((theme: Theme) =>
     },
     iconButtonNew: {
       '&:hover, &:focus, li.active > a': {
-        'background': Colors.light_blue,
-        'borderRadius': '5px',
+        background: Colors.light_blue,
+        borderRadius: '5px',
         '& svg': {
           stroke: Colors.medium_blue,
         },

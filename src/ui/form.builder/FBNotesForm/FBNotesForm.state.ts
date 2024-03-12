@@ -8,7 +8,7 @@ class FBNotesFormState extends FBRequest<FBNoteItem[] | FBNoteItem, FBNote | FBN
   @observable public notes?: FBNoteItem[];
   @observable public files?: any[];
 
-  public constructor(notes?: FBNoteItem[]) {
+  public constructor (notes?: FBNoteItem[]) {
     super();
     this.notes = notes;
   }
@@ -21,12 +21,12 @@ class FBNotesFormState extends FBRequest<FBNoteItem[] | FBNoteItem, FBNote | FBN
     set(this, 'files', files);
   };
 
-  public onSuccess() {
+  public onSuccess () {
     if (!this.data) { return; }
     switch (this.method) {
       case 'get': {
         const fetchedData = this.data as FBNoteItem[];
-        const data = fetchedData?.sort(function(a, b) {
+        const data = fetchedData?.sort(function (a, b) {
           return (a.createdAt < b.createdAt) ? -1 : ((a.createdAt > b.createdAt) ? 1 : 0);
         }) || [];
         this.setNotes(data);
@@ -46,7 +46,7 @@ class FBNotesFormState extends FBRequest<FBNoteItem[] | FBNoteItem, FBNote | FBN
     this.addNote(note);
   };
 
-  private addNote = (note: FBNote) => {
+  private readonly addNote = (note: FBNote) => {
     this.setUrl(FBEndpoint.Notes);
     this.setBody(note);
     this.post();

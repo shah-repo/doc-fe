@@ -9,7 +9,6 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     inputProps,
     ...props
   }: T) => {
-
     // MARK: @config
     const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: inputProps });
 
@@ -43,14 +42,14 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     ), []);
 
     // MARK: @helpers
-    function setRange(value?: boolean) {
+    function setRange (value?: boolean) {
       formState.getInputState('editorConfig.range')?.setHidden(!value);
       if (!value) {
         formState.omitFieldValue('editorConfig.range');
       }
     }
 
-    function setPassValue(value?: boolean) {
+    function setPassValue (value?: boolean) {
       formState.getInputState('editorConfig.pass.type')?.setHidden(!value);
       const typeValue = value
         ? inputProps?.editorConfig?.pass.type || FBPassType.value
@@ -58,13 +57,13 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
       formState.setFieldValue('editorConfig.pass.type', typeValue, true);
     }
 
-    function setInspection(value?: boolean) {
+    function setInspection (value?: boolean) {
       formState.getInputState('editorConfig.passValue')?.setHidden(!value);
       formState.getInputState('editorConfig.aql')?.setHidden(!value);
       formState.getInputState('editorConfig.fai')?.setHidden(!value);
     }
 
-    function setPassType(value?: string) {
+    function setPassType (value?: string) {
       if (!value) {
         formState.getInputState('editorConfig.pass.percentage')?.setHidden(true);
         formState.getInputState('editorConfig.pass.value')?.setHidden(true);

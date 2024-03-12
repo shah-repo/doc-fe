@@ -14,7 +14,6 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
   collection = [],
   actionsDisabled,
 }) => {
-
   const useStyles = makeStyles((_theme: Theme) =>
     createStyles({
       noMaxWidth: {

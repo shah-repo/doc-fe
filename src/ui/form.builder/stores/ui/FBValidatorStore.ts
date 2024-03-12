@@ -14,7 +14,7 @@ class FormBuilderValidatorStored {
   public formValues: Dictionary<any> = {};
   public selectedFieldIndex: number | null = null;
 
-  @computed get schemaItemOptions(): SelectOption[] {
+  @computed get schemaItemOptions (): SelectOption[] {
     const schema = isNull(this.selectedFieldIndex)
       ? FBStore.getSchema()
       : (FBStore.getSchema()).filter((item) => item.index !== this.selectedFieldIndex);

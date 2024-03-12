@@ -9,8 +9,9 @@ const FBEditorRequestApproval: React.FunctionComponent<FBEditorApprovalFieldProp
   return (
     <>
       {isOutput && <FBEditorApprovalField {...props} includeLabel={false} />}
-      {!isOutput && <FBEditorLabel {...props}  />}
+      {!isOutput && <FBEditorLabel {...props} />}
     </>
-  ); };
+  );
+};
 
 export default FBEditorRequestApproval;

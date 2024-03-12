@@ -8,7 +8,7 @@ const FBParagraph: React.FunctionComponent<FBParagraphProps> = ({
   paragraph = '',
   gutter = true,
 }) => (
-  <Box  mb={gutter ? 4 : 1} fontSize={12} fontWeight= {400} lineHeight="20px" color={Colors.almost_black}>
+  <Box mb={gutter ? 4 : 1} fontSize={12} fontWeight= {400} lineHeight="20px" color={Colors.almost_black}>
     {parse(paragraph)}
   </Box>
 );

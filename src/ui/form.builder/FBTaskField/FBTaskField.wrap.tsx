@@ -17,7 +17,6 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
     task,
     ...props
   }: T) => {
-
     const { taskState, dialogState, workspaceState } = FB.useStores();
     const { currentUser } = workspaceState || {};
     taskFieldState = FB.useRef(FBTaskFieldState);
