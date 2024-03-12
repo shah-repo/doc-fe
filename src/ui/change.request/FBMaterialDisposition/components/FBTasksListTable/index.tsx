@@ -11,20 +11,21 @@ import { translate } from '../../../../../common/intl';
 import { Attachment } from '../../../../../state/ducks/attachments/types';
 import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
-import { Button } from '../../../../components/forms/fields-next';
-import { useFormContext } from '../../../../components/forms/FormContext';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { useFormContext } from '../../../../components/forms/FormContext';
+import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
-import { FBSection } from '../../../../form.builder';
+import { FB, FBSection } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { changeRequestPreviewPath } from '../../../utils/paths';
 import { COMMENTS_FIELD, EmployeeStatus } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './types';
+import { EditableTLItem, EmployeeResponse, TLItemEditEvent, TasksListItem } from './types';
+import { updateData } from './utils';
 
 interface props {
   changeRequest?: ChangeRequest
@@ -35,14 +36,14 @@ interface props {
 
 const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt }) => {
   const classes = useStyles();
+  const { workspaceState } = FB.useStores();
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
-  const isEditMode = React.useRef<boolean>(false);
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
   const increasedBy = isTasksListAdded ? 2 : 1;
-  const [data, setData] = React.useState<Array<Partial<EditableTLItem>>>([]);
+  const [data, setData] = React.useState<EditableTLItem[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const editTLItem = ({ dataItem }: TLItemEditEvent) => {
-    !isShowOnly && !isEditMode.current && !formik.dirty && setEditedTLItem(dataItem);
+    !isShowOnly && !formik.dirty && setEditedTLItem(dataItem);
   };
   const discardTLItem = () => setEditedTLItem(undefined);
   const fetchTasksList = useActionCreator(taskActions.fetchTasksList);
@@ -51,7 +52,6 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   const deleteTask = useActionCreator(taskActions.deleteTask);
   const formContext = useFormContext();
   const parentFormik = useFormikContext();
-  const [dataToSubmit, setDataToSubmit] = React.useState<Partial<EditableTLItem>>({});
   const history = useHistory();
 
   const loadTasksTableData = () => {
@@ -87,8 +87,20 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   });
 
   useEffect(() => {
-    loadTasksTableData();
+    const data = workspaceState?.getTLTableData;
+    if ((isEmpty(data) && formContext.isEditing) || !formContext.isEditing) {
+      loadTasksTableData();
+    } else if (!isEmpty(data)) {
+      setData(data as EditableTLItem[]);
+    }
   }, []);
+
+  const updateUnsavedData = (values: Partial<EditableTLItem>) => {
+    const updatedData = updateData(values, data);
+    workspaceState?.setTLTableData(updatedData);
+    workspaceState?.addTLUpdatedDataId(values.taskId as string);
+    setData(updatedData);
+  };
 
   const formik = useFormik<Partial<EditableTLItem>>({
     initialValues: {},
@@ -103,20 +115,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         addTaskAsync.start(addTask, payload, addTaskAsync);
       } else {
         if (formContext.isEditing) {
-          isEditMode.current = true;
-          setDataToSubmit(values);
-          setData(prev => {
-            return prev.map(item => {
-              if (item.taskId === values.taskId) {
-                return {
-                  ...item,
-                  instruction: values.instruction ?? item.instruction,
-                  employeeResponse: values?.employeeResponse ?? item.employeeResponse,
-                };
-              }
-              return item;
-            });
-          });
+          updateUnsavedData(values);
         } else {
           updateTaskItem(values);
         }
@@ -132,11 +131,17 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   }, [editedTLItem, setValues, resetForm]);
 
   useEffect(() => {
-    if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(dataToSubmit)) {
+    const data = workspaceState?.getTLTableData ?? [];
+    const updatedDataItemIds = workspaceState?.getTLUpdatedDataIds ?? [];
+    const updatedData = data.filter(dataItem => updatedDataItemIds.includes(dataItem.taskId));
+    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(updatedData)) {
       setDoNotPrompt?.(true);
-      updateTaskItem(dataToSubmit);
+      updatedData.forEach((item) => {
+        updateTaskItem(item);
+      });
+      workspaceState?.setTLTableData([]);
     }
-  }, [parentFormik?.isSubmitting]);
+  }, [formContext.isEditing, parentFormik.isSubmitting, setDoNotPrompt, workspaceState]);
 
   const createDraftTLItem = () => setEditedTLItem({
     taskId: uuidv4(),

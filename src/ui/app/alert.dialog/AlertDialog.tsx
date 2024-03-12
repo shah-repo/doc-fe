@@ -1,4 +1,5 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
 import { ReactComponent as AlertIcon } from '../../../assets/images/alert.svg';
 import Text from '../../components/Text';
@@ -62,7 +63,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
           <Box className={classes.dialogAction}>
             <Button
               variant="contained"
-              className={`${classes.cancelButton} ${classes.buttonLabel}`}
+              className={cx(classes.cancelButton, classes.buttonLabel)}
               onClick={cancelAction}
               id="AlertDialog-cancelButton"
               data-cy="AlertDialog-cancelButton"
@@ -72,7 +73,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
             <Button
               type="submit"
               variant="contained"
-              className={`${classes.submitButton} ${classes.buttonLabel}`}
+              className={cx(classes.submitButton, classes.buttonLabel)}
               id="AlertDialog-continueButton"
               data-cy="AlertDialog-continueButton"
               onClick={confirmAction}
