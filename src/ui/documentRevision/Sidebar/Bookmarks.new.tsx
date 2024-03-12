@@ -1,8 +1,7 @@
 import { Box, IconButton, Typography } from '@material-ui/core';
 import copy from 'copy-to-clipboard';
 import _debounce from 'lodash/debounce';
-import { useObserver } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../App';
 import { ReactComponent as CopyIcon } from '../../../assets/images/copy_outlined.svg';
@@ -17,20 +16,15 @@ const Bookmarks: React.FC<{ tabConfig: TabInfo[] }> = ({ tabConfig }) => {
   const { bookmarkState } = FB.useStores();
   const { _tabsState } = SM.useStores();
   const [selectedBookmarkName, setSelectedBookmarkName] = useState<string>();
-  const [debouncedBookmarks, setDebouncedBookmarks] = useState<FBBookmarkItem[]>();
+  const [bookmarks, setBookmarks] = useState<FBBookmarkItem[]>([]);
+  const updateBookmarks = _debounce(setBookmarks, 500);
 
-  const bookmarks = useObserver(() => bookmarkState?.bookmarks);
+  SM.reaction(
+    () => bookmarkState?.bookmarks ?? [],
+    updateBookmarks,
+  );
 
-  useEffect(() => {
-    const debouncedUpdateBookmarks = _debounce(() => {
-      setDebouncedBookmarks(bookmarks);
-    }, 500);
-    debouncedUpdateBookmarks();
-
-    return () => debouncedUpdateBookmarks.cancel();
-  }, [bookmarkState?.bookmarks]);
-
-  const handleBookmarkClick = ({ name, tabId }: FBBookmarkItem) => {
+  const handleBookmarkClick = ({ name = '', tabId }: FBBookmarkItem) => {
     setSelectedBookmarkName(name);
 
     if (tabId) {
@@ -43,9 +37,10 @@ const Bookmarks: React.FC<{ tabConfig: TabInfo[] }> = ({ tabConfig }) => {
   return (
     <Box m={1.875}>
       <FBMapWrapper<FBBookmarkItem[]>
-        collection={debouncedBookmarks?.filter((bm) => bm.tabId === _tabsState?.activeTabId) || []}>
-        {(bookmark: FBBookmarkItem, index) => {
-          const { name, label = '' } = bookmark;
+        collection={bookmarks.sort(
+          (a, b) => tabConfig.findIndex(tab => tab.tabId === a.tabId) - tabConfig.findIndex(tab => tab.tabId === b.tabId))}>
+        {(bookmark: FBBookmarkItem, index: number) => {
+          const { name = '', label = '' } = bookmark;
           const link = window.location.href.split('#');
           return (
             <Box
