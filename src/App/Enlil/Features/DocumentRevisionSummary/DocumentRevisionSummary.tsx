@@ -17,7 +17,7 @@ import SummaryHeader from '../../../../ui/document.revision/header/SummaryHeader
 import Attachment from '../../../../ui/document.revision/summary/attachment';
 import SummaryPresenter from '../../../../ui/document.revision/summary/presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
-import { checkIsDocumentChangeRequest, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
@@ -59,7 +59,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   );
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-  const isWO = group === DOC_TYPE_GROUP.WORK_ORDER || checkIsDocumentWO(groupOptions);
+  const isWO = checkIsDocumentWOByGroupOrOptions(group, groupOptions);
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
@@ -89,7 +89,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
   if (isWO && !documentRevision.formTemplate && documentRevision.formInput?.work_order_type === WorkOrderTypes.OTHER) {
     // hide allocation & BOM Tabs on Work order Other case
-    tabConfig = tabConfig.filter(tab => ![TabTypeOptions?.BOM, TabTypeOptions?.ALLOCATION].includes(tab.type as TabTypeOptions));
+    tabConfig = tabConfig.filter(tab => ![TabTypeOptions.BOM, TabTypeOptions.ALLOCATION].includes(tab.type as TabTypeOptions));
   }
 
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);

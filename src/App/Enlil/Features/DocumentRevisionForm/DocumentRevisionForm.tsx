@@ -24,7 +24,7 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -87,7 +87,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
       && schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-  const isWO = group === DOC_TYPE_GROUP.WORK_ORDER || checkIsDocumentWO(groupOptions);
+  const isWO = checkIsDocumentWOByGroupOrOptions(group, groupOptions);
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   const documentTypeId = formValues.values.document?.documentType?.id || '';
   const docRevId = documentRevision?.id;
@@ -165,7 +165,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 
   if (isWO && !documentRevision.formTemplate && formValues.values.formInput?.work_order_type === WorkOrderTypes.OTHER) {
     // hide allocation & BOM Tabs on Work order Other case
-    tabConfig = tabConfig.filter(tab => ![TabTypeOptions?.BOM, TabTypeOptions?.ALLOCATION].includes(tab.type as TabTypeOptions));
+    tabConfig = tabConfig.filter(tab => ![TabTypeOptions.BOM, TabTypeOptions.ALLOCATION].includes(tab.type as TabTypeOptions));
   }
 
   const handleResize: AutoSizerProps['onResize'] = useCallback(

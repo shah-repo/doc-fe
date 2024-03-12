@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
 import OverflowTooltip from '../../../components/OverflowTooltip';
-import { Mode, MODE_FIELD } from '../constants';
+import { EMPTY_PLACEHOLDER, Mode, MODE_FIELD } from '../constants';
 import { CustomTemplateProps, EditableLHRTableItem, IPrecalcEntry } from '../types';
 
 export const PartRevCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
@@ -18,7 +18,7 @@ export const PartRevCell: React.FC<CustomTemplateProps> = ({ dataItem, field, on
     if (documentId) {
       return label;
     }
-    return '-';
+    return EMPTY_PLACEHOLDER;
   };
 
   return (
