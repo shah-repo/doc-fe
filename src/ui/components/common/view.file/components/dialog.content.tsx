@@ -6,6 +6,7 @@ import Text from '../../../Text';
 import { IMAGE, PDF, SUPPORTED_IMAGE_FILES, SUPPORTED_VIDEO_FILES, VIDEO } from '../utils/constants';
 import { styles } from '../utils/styles';
 import { ViewFileContentProps } from '../utils/types';
+
 const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   asyncState,
   url,
