@@ -37,20 +37,15 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   const dispatch = useDispatch();
   const { _formState } = SM.useStores();
   const { formState, workspaceState } = FB.useStores();
-
   const isPreview = formState?.workspaceMode === FBWorkspaceModeOptions.PREVIEW;
   const isActive = disabled ? !disabled : !isPreview;
-  // const cyName = kebabCase(name);
-
   const [editedLHRItem, setEditedLHRItem] = useState<EditableLHRTableItem>();
   const [lhrList, setLhrList] = useState<EditableLHRTableItem[]>([]);
-
   const { document } = workspaceState?.document ?? { version: 0 };
   const isForm = checkIsDocumentForm(document?.documentType?.groupOptions);
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = workspaceState?.document?.owner?.user?.id === currentUserId;
   const canEditAsOwner = !disabled && isOwner;
-
   const isEditable = !isForm && canEditAsOwner;
 
   const editLhrItem = ({ dataItem }: LHRTableItemEditEvent) => setEditedLHRItem(dataItem);
@@ -138,7 +133,6 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   const rowRender: DataGridProps<EditableLHRTableItem>['rowRender'] = (row, { dataItem }) => {
     const item = (dataItem ?? {}) as EditableLHRTableItem;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
-    console.log(isUpdating);
 
     if (!isUpdating) {
       return row;

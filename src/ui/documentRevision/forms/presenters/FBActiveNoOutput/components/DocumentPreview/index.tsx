@@ -23,7 +23,7 @@ import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterial
 import FBDataStore from '../../../../../../form.builder/FBStore/FBDataStore';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentOTHER, checkIsDocumentPart, checkIsDocumentWO } from '../../../../../helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentWO } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
 import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../../related.equipments';
@@ -106,11 +106,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
       : false,
   );
-  const isOther = checkIsDocumentOTHER(documentType.groupOptions);
-  const isOtherForm = useSelector(
-    (state: ApplicationState) => documentRevision?.formTemplate
-      ? checkIsDocumentOTHER((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
-      : false);
 
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
@@ -253,7 +248,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
-                        {((isPart || isPartForm || isOther || isOtherForm) && formPreview) && (
+                        {((isPart || isPartForm) && formPreview) && (
                           <Grid item xs={12}>
                             <RelatedPartsWrapper
                               viewOnly={true}

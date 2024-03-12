@@ -2,7 +2,7 @@ import { RELATED_TYPE } from '../../../../../state/ducks/relatedParts/types';
 import translations from '../../../../translations/en.json';
 
 export function getDynamicTextValue (
-  relatedType: RELATED_TYPE, partText: string, otherText: string): string {
+  relatedType: RELATED_TYPE | undefined, partText: string, otherText: string): string {
   return relatedType === RELATED_TYPE.PART_RELATED ? partText : relatedType === RELATED_TYPE.OTHER_RELATED ? otherText : '';
 }
 

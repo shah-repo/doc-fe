@@ -37,9 +37,6 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
         endQuantity, lhrTemplate, lhrDetails,
       } = data[0] as ILHRTableItem;
 
-      console.log(lotId, displayStatus, owner, partRev, completionDate, startQuantity,
-        endQuantity, lhrTemplate, lhrDetails);
-
       setFieldValue('displayStatus', displayStatus);
       setFieldValue('owner', owner);
       setFieldValue('partRev', partRev);
@@ -70,13 +67,9 @@ export const LhrDetailsCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
 
   const renderOptions = () => {
     return lhrList.map((lhr) => ({
-      label: renderLhrLabel(lhr),
+      label: translate('wo.displayRevision', { docId: lhr.docId, displayRevision: lhr?.displayRevision, name: lhr.lotId }),
       value: lhr.id,
     }));
-  };
-
-  const renderLhrLabel = (lhr: ILHRAutocompleteOption) => {
-    return `${lhr.docId} - Rev ${lhr.displayRevision} - ${lhr.lotId}`;
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
