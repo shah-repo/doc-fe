@@ -37,7 +37,7 @@ const renderUsers = (selectedUsers, removeUser?) => {
         >
           <Grid
             item
-            data-cy={`${user.name} - ${active ? 'active' : 'deactive'}`}
+            data-cy={`${user.name}-${active ? 'active' : 'inactive'}`}
             className={cx(classes.avatarSection, {
               [classes.disabled]: !active,
             })}
