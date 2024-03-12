@@ -12,7 +12,7 @@ export const styles = makeStyles((theme) => ({
     width: 10,
   },
   actionLabel: {
-    width: '75%',
+    width: '90%',
   },
   copyIcon: {
     width: 15,
