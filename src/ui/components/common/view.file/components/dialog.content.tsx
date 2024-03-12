@@ -1,5 +1,4 @@
 import MuiDialogContent from '@material-ui/core/DialogContent';
-import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import PrismaZoom from 'react-prismazoom';
 import AsyncGate from '../../../AsyncGate';
@@ -58,10 +57,9 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
 
   return (
     <MuiDialogContent
-      className={cx(classes.content, 'pdfMobile')}
+      className={classes.content}
       classes={{ root: classes.contentRoot }}
       onClick={handleClick}
-      id="shri"
     >
       <AsyncGate asyncState={asyncState}>
         {renderVideo}
