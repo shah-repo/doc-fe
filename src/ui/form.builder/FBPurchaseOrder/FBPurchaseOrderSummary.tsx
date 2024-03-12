@@ -38,7 +38,7 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
     shippingCost: 'common.summary.shipping.cost',
   };
 
-  if (workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.RECEIVABLE)  {
+  if (workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.RECEIVABLE) {
     return null;
   }
 
@@ -86,6 +86,7 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
         </Box>
       </Box>
     </Box>
-  ); };
+  );
+};
 
 export default FBPurchaseOrderSummary;

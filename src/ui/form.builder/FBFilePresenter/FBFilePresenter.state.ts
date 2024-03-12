@@ -14,7 +14,7 @@ class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, Attachm
 
   public attachmentApi: FBRequest<FBAttachment, Partial<FBAttachment>> = new FBRequest();
 
-  constructor(file?: FBAttachment) {
+  constructor (file?: FBAttachment) {
     super();
     this.file = file;
 
@@ -28,38 +28,38 @@ class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, Attachm
     set(this, 'toolsVisible', state);
   };
 
-  public get fileId(): string | undefined {
+  public get fileId (): string | undefined {
     return this.file?.id;
   }
 
-  public get fileType(): string | undefined {
+  public get fileType (): string | undefined {
     return this.file?.type;
   }
 
-  public get fileName(): string {
+  public get fileName (): string {
     return `${this.file?.name}.${this.fileType}`;
   }
 
-  public get fileShortName(): string {
+  public get fileShortName (): string {
     return truncate(this.fileName, {
       length: 50,
       omission: ' ...',
     });
   }
 
-  public get fileSize(): number | undefined {
+  public get fileSize (): number | undefined {
     return this.file?.fileSizeS3Link;
   }
 
-  public get isCleanCopy(): boolean {
+  public get isCleanCopy (): boolean {
     return Boolean(this.file?.s3linkCleanCopy);
   }
 
-  public get isFileViewable(): boolean {
+  public get isFileViewable (): boolean {
     return includes(VIEWABLE_FILES, this.fileType?.toLowerCase());
   }
 
-  public get canWatermark(): boolean {
+  public get canWatermark (): boolean {
     return includes(WATERMARK_FILES, this.fileType);
   }
 
@@ -87,7 +87,7 @@ class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, Attachm
     });
   };
 
-  private attachmentType = (file: Attachment): AttachmentType | undefined => {
+  private readonly attachmentType = (file: Attachment): AttachmentType | undefined => {
     if (isUndefined(file)) { return; }
     return !file.s3linkCleanCopy
       ? AttachmentType.Attached

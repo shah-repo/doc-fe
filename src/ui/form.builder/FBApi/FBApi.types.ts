@@ -6,11 +6,11 @@ interface Response {
 }
 
 export interface Adapter {
-  get(path: string, data?: {}, options?: {}): Response
-  patch(path: string, data?: {}, options?: {}): Response
-  post(path: string, data?: {}, options?: {}): Response
-  put(path: string, data?: {}, options?: {}): Response
-  del(path: string, data?: {}, options?: {}): Response
+  get: (path: string, data?: {}, options?: {}) => Response
+  patch: (path: string, data?: {}, options?: {}) => Response
+  post: (path: string, data?: {}, options?: {}) => Response
+  put: (path: string, data?: {}, options?: {}) => Response
+  del: (path: string, data?: {}, options?: {}) => Response
 }
 
 export interface FBRequestTemplateUrl {

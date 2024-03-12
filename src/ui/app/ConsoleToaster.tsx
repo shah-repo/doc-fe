@@ -6,10 +6,10 @@ import './consoleToaster.css';
 
 const recentlySeenMessages = new Set<string>();
 
-function wrapConsoleCall(callback, options: {class: string, title: string}) {
+function wrapConsoleCall (callback, options: {class: string, title: string}) {
   // const x = callback;
 
-  return function(...args) {
+  return function (...args) {
     const message: string = (args && args.length && args[0].toString()) || 'Unknown warning in console!!';
 
     if (!recentlySeenMessages.has(message)) {

@@ -16,7 +16,6 @@ export const withFBTextEditorOptions = <T extends FBTextEditorOptionsProps>(
     menuVisible,
     ...props
   }: T) => {
-
     // MARK: @config
     const { textEditorState } = FB.useStores();
     textEditorOptionsState = FB.useRef(FBTextEditorOptionsState);

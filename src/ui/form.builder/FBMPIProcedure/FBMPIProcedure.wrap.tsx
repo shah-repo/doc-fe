@@ -21,7 +21,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     index = 0,
     ...props
   }: T) => {
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const schemeItem = workspaceState?.getSchemaItemAt(index);

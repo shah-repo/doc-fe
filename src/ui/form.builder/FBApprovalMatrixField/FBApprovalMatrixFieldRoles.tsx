@@ -10,7 +10,7 @@ const FBApprovalMatrixFieldRoles: React.FunctionComponent<FBApprovalMatrixFieldP
   name = 'dar-built-in',
   mode,
   workspaceMode,
-}) =>  (
+}) => (
   <FBProvider {...{ approvalMatrixFieldState }}>
     <FBInput {...{ name, disabled, autosave }} type="approvalRoles">
       <FBApprovalMatrixRoles {...{ disabled, name }} />

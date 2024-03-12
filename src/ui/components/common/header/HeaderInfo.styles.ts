@@ -60,10 +60,10 @@ export const styles = makeStyles((theme: Theme) =>
       marginRight: '11px',
     },
     icon: ({ iconLink }) => ({
-      'width': 18,
-      'height': 18,
-      'backgroundColor': Colors.white,
-      'mask':
+      width: 18,
+      height: 18,
+      backgroundColor: Colors.white,
+      mask:
         `url(${iconLink}) no-repeat center / contain`,
       '-webkit-mask':
         `url(${iconLink}) no-repeat center / contain`,
@@ -88,10 +88,10 @@ export const styles = makeStyles((theme: Theme) =>
       minWidth: '50px',
     },
     subTitleLink: {
-      'fontWeight': 600,
-      'fontSize': '14px',
-      'color': Colors.white,
-      'textDecoration': 'none',
+      fontWeight: 600,
+      fontSize: '14px',
+      color: Colors.white,
+      textDecoration: 'none',
       '& a': {
         color: Colors.white,
       },
@@ -107,7 +107,6 @@ export const styles = makeStyles((theme: Theme) =>
     chip: {
       display: 'flex',
       flexDirection: 'row',
-      padding: '0px !important',
       borderRadius: 3,
       marginLeft: '12px',
       background: Colors.white,

@@ -48,17 +48,21 @@ export const StatusFilterTemplate = ({
         onChange={onDropdownChange}
         value={value || defaultItem}
         defaultItem={defaultItem}
-        itemRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory
+        itemRender={(li, itemProps) => {
+          const itemChildren = <span>{(documentTypeCategory
           === DocumentCategory.PurchaseOrder
-           && itemProps?.dataItem === DocumentRevisionStatusDisplay.Released )
-          ? DocumentRevisionStatusDisplay.Approved
-          : li.props.children}</span>;
-        return React.cloneElement(li, li.props, itemChildren); }}
-        valueRender={(li, itemProps) => { const itemChildren = <span>{(documentTypeCategory
+           && itemProps?.dataItem === DocumentRevisionStatusDisplay.Released)
+            ? DocumentRevisionStatusDisplay.Approved
+            : li.props.children}</span>;
+          return React.cloneElement(li, li.props, itemChildren);
+        }}
+        valueRender={(li, itemProps) => {
+          const itemChildren = <span>{(documentTypeCategory
           === DocumentCategory.PurchaseOrder && itemProps
-          === DocumentRevisionStatusDisplay.Released )
-          ? DocumentRevisionStatusDisplay.Approved : li.props.children}</span>;
-        return React.cloneElement(li, li.props, itemChildren); }}
+          === DocumentRevisionStatusDisplay.Released)
+            ? DocumentRevisionStatusDisplay.Approved : li.props.children}</span>;
+          return React.cloneElement(li, li.props, itemChildren);
+        }}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"

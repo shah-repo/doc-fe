@@ -12,7 +12,7 @@ const SMDialog: React.FunctionComponent<SMDialogProps> = ({
   maxWidth = 'sm',
   title,
   children,
-}) =>  (
+}) => (
   <Observer>
     {() => (
       <Dialog

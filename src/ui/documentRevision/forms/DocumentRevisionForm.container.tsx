@@ -30,6 +30,7 @@ import { checkIsDocumentDAM, checkIsDocumentEditableSchema, checkIsDocumentLHR, 
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval } from '../helpers/records';
 import { isDocumentAlphaReleased } from '../helpers/revisionStage';
 import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from './types';
+import { shouldShowSyncForRelatedEquipment } from './presenters/related.equipments';
 
 export interface FormHeaderContext {
   documentRevision: DocumentRevision
@@ -255,6 +256,7 @@ DocumentRevisionFormContainerProps
   const shouldShowUpgrade
     = ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isMPIOutput && !isLHR;
+
   const isDAM = checkIsDocumentDAM(formGroupOptions);
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
@@ -264,6 +266,7 @@ DocumentRevisionFormContainerProps
       {...{
         documentRevision,
         shouldShowUpgrade,
+        shouldShowSyncForRelatedEquipment: shouldShowSyncForRelatedEquipment(documentRevision),
         bannerPortal,
         type,
         isDisabled,

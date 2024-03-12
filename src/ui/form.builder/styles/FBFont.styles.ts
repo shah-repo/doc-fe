@@ -1,6 +1,6 @@
 import Colors from '../../layout/theme/utils/colors';
 
-export const FBFontStyle =  {
+export const FBFontStyle = {
   font: {
   },
   labelProps: {

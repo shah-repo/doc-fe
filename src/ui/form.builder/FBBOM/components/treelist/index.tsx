@@ -11,13 +11,15 @@ import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
+  TreeList,
+  TreeListCellProps,
+  TreeListColumnReorderEvent,
+  TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent,
   extendDataItem,
   filterBy,
   mapTree,
-  orderBy, TreeList,
-  TreeListCellProps,
-  TreeListColumnReorderEvent,
-  TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat,
+  orderBy,
+  treeToFlat,
 } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
@@ -36,8 +38,7 @@ import {
 } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
-import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
@@ -48,10 +49,11 @@ import { Permission } from '../../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
+import Text from '../../../../components/Text';
 import Loader from '../../../../components/common/kendo/Loader';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
-import Text from '../../../../components/Text';
 import WhereUsedDialog, { WhereUsedType } from '../../../../components/whereUsed/WhereUsedDialog';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { bomDisabledChangeControl, disableOtherFieldsChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
@@ -114,10 +116,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
   const { _documentRevisionFormState } = SM.useStores();
+  const isMaximizeView = _documentRevisionFormState?.isMaximizedView;
 
   const classes = useStyles({
     size,
-    isMaximizeView: _documentRevisionFormState?.isMaximizedView,
+    isMaximizeView,
   });
   const [state, setState] = React.useState<BOMState>({
     data: [],
@@ -178,7 +181,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       treeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
-        documentRevision.documentId,
+        false,
         treeListAsync,
       );
       dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
@@ -199,7 +202,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     treeListAsync.start(
       fetchBOMTreeList,
       documentRevision.id,
-      documentRevision.documentId,
+      false,
       treeListAsync,
     );
   };
@@ -234,26 +237,39 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         treeListAsync.start(
           fetchBOMTreeList,
           documentRevision.id,
-          documentRevision.documentId,
+          false,
           treeListAsync,
         );
       }
     },
   );
 
-  const [selectedDataItem, setSelectedDataItem] = React.useState(undefined);
+  const [selectedDataItem, setSelectedDataItem] = React.useState<EditableBOM | undefined>(undefined);
+  const [selectedARId, setSelectedARId] = React.useState('');
+  const approvalRequestDialog = useDialog();
 
   const openDetailDrawer = (dataItem) => {
     setIsPartsDrawerOpened(true);
     setSelectedDataItem(dataItem);
   };
+
+  const openARIDQuickView = (arId) => {
+    setSelectedARId(arId);
+    approvalRequestDialog.open();
+  };
+
+  const closeCRDialog = () => {
+    approvalRequestDialog.close();
+    setSelectedARId('');
+  };
+
   const closeDetailDrawer = () => {
     FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
     setSelectedDataItem(undefined);
   };
 
-  const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer });
+  const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer, openARIDQuickView });
 
   const [columns, setColumns]
     = React.useState<CustomTreeListColumnProps[]>(schema);
@@ -1101,7 +1117,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                   fileName={EXCEL_FILE_NAME}
                 >
                   <TreeList
-                    style={{ overflow: 'auto', height: `${size?.height}px` ?? '100px' }}
+                    style={{ overflow: 'auto', maxHeight: size?.height ? (`${size.height - (isMaximizeView ? -85 : 160)}px`) : '100px' }}
                     {...state.dataState}
                     tableProps={{ style: { tableLayout: 'fixed' } }}
                     rowHeight={TREELIST_CONFIG.rowHeight}
@@ -1214,6 +1230,14 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           />
         </DialogContent>
       </Dialog>
+      {
+        approvalRequestDialog.isOpen
+        && <ChangeRequestEditDialog
+          changeRequestId={selectedARId}
+          approvalRequestDialog={approvalRequestDialog}
+          closeDialog = {closeCRDialog}
+        />
+      }
     </>
   );
 };

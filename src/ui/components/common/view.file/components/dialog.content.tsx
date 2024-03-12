@@ -28,7 +28,6 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
     }
     if (type === PDF) {
       setFileType(PDF);
-      return;
     }
   }, [url, type]);
 
@@ -38,9 +37,9 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
     </video>
   );
   const renderPDF = fileType === PDF && (
-    <object width="100%" height="100%" type="application/pdf" data={url}>
+    <iframe width="100%" height="100%" src={url}>
       <Text translation="common.file.not.loaded" />
-    </object>
+    </iframe>
   );
   const renderImage = fileType === IMAGE && (
     <PrismaZoom

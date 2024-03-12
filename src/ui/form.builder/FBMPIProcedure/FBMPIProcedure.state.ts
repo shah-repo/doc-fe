@@ -13,10 +13,10 @@ export default class FBMPIProcedureState extends FBProcedureState {
   public deleteLotApi: FBRequest<DocumentRevision, null> = new FBRequest();
 
   // MARK: @observables
-  @observable public partsSelected: Partial<FBMPIProcedureSelectValue>[] = [];
+  @observable public partsSelected: Array<Partial<FBMPIProcedureSelectValue>> = [];
 
   // MARK: @constructor
-  public constructor(value?: FBProcedureValue) {
+  public constructor (value?: FBProcedureValue) {
     super();
     this.value = value;
   }

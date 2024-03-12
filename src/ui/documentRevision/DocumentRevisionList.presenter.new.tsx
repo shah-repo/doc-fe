@@ -64,6 +64,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.revisionChangeType,
     undefined,
     isRecord,
+    documentRevision.displayRevision,
   );
   const isRecordOrPO = isRecord || isDocumentPO;
 
@@ -100,7 +101,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         return documentRevision.releasedAt;
       }
       if (isVoided) {
-        return documentRevision.voidedAt;
+        return documentRevision.voidedAt ?? documentRevision.obsoletedAt;
       }
       if (isDeprecated) {
         return documentRevision.deprecatedAt;

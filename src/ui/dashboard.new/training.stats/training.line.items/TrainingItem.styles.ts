@@ -43,10 +43,10 @@ export const styles = makeStyles((theme: Theme) =>
       marginTop: '7px',
     },
     docIdAndTitle: {
-      'fontWeight': 600,
-      'fontSize': '14px',
-      'lineHeight': '22px',
-      'color': Colors.almost_black,
+      fontWeight: 600,
+      fontSize: '14px',
+      lineHeight: '22px',
+      color: Colors.almost_black,
       '& > p': {
         margin: '0px',
       },

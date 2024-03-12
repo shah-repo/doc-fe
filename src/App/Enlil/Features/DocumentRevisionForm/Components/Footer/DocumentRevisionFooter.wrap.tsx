@@ -7,12 +7,10 @@ import { DocumentRevisionFooterProps } from './DocumentRevisionFooter.types';
 export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     _documentRevisionFooterState,
     ...props
   }: T) => {
-
     // MARK: @config
     _documentRevisionFooterState = SM.useRef(DocumentRevisionFooterState);
     const { _formState } = SM.useStores();
@@ -28,7 +26,7 @@ export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterP
     );
 
     // MARK: @helpers
-    function setFormDocument(formDocument?: FBDocumentRevisionProps) {
+    function setFormDocument (formDocument?: FBDocumentRevisionProps) {
       if (!formDocument) {
         _documentRevisionFooterState?.setHidden(true);
         return;

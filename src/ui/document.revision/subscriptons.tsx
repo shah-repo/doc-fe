@@ -15,7 +15,6 @@ const DocumentRevisionUpdatedSubscriptions: React.FunctionComponent<Props> = ({
     id,
   },
 }) => {
-
   const loadAction = useActionCreator(documentRevisionsActions.load);
   const async = useAsync();
 

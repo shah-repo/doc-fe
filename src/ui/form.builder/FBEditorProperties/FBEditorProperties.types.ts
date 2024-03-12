@@ -40,7 +40,7 @@ export type FBEditorPropertiesProps = Pick<FBInputProps, 'type' | 'options' | 'o
 };
 
 export const FBEditorPropertiesOmitByGroup = {
-  [DOC_TYPE_GROUP_OPTION.PART]: ['includeInInspection', 'includeInFaiInspection' ],
+  [DOC_TYPE_GROUP_OPTION.PART]: ['includeInInspection', 'includeInFaiInspection'],
 };
 
 export type FBEditorPropertiesOption =

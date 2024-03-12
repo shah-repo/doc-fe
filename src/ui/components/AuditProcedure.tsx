@@ -30,36 +30,36 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
   }
 
   const el = {
-    description() {
+    description () {
       return (
         <div style={{ width: '100%', height: '100%' }} dangerouslySetInnerHTML={{ __html: auditValue as string }} />
       );
     },
-    partLot() {
+    partLot () {
       auditValue = procedureState.getLot(auditValue ?? '');
       if (FB.isUUID(auditValue ?? '')) {
         return <CircularProgress size={12} />;
       }
       return (<div data-cy={dataCy}>{auditValue}</div>);
     },
-    materials() {
+    materials () {
       auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.materials);
       if (FB.isUUID(auditValue ?? '')) {
         return <CircularProgress size={12} />;
       }
       return (<div data-cy={dataCy}>{auditValue}</div>);
     },
-    equipment() {
+    equipment () {
       auditValue = procedureState.getItem(auditValue ?? '', FBProcedureItemType.equipment);
       if (FB.isUUID(auditValue ?? '')) {
         return <CircularProgress size={12} />;
       }
       return (<div data-cy={dataCy}>{auditValue}</div>);
     },
-    attachments() {
+    attachments () {
       return <AuditAttachment {...{ audit }} />;
     },
-    default() { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
+    default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
   };
 
   return (

@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Colors from '../../layout/theme/utils/colors';
 
 export default makeStyles((theme: Theme) =>
   createStyles({
@@ -11,15 +12,14 @@ export default makeStyles((theme: Theme) =>
     },
     iconButton: {
       color: 'white',
-
     },
     userProfile: {
       color: 'white',
-      fontsize: '1.3rem',
+      fontSize: '1.3rem',
     },
     userName: {
       color: 'white',
-      fontsize: '1.9rem',
+      fontSize: '1.9rem',
       marginTop: theme.spacing(1),
     },
     userNameEdit: {
@@ -51,18 +51,13 @@ export default makeStyles((theme: Theme) =>
       color: '#6E09EA',
       borderColor: '#6E09EA',
     },
-    integrations: {
-      marginTop: '50px',
-      fontSize: '1.1rem',
-      fontWeight: 'normal',
+    title: {
+      fontSize: '1rem',
       lineHeight: '1.6',
       letterSpacing: '0.0075em',
-    },
-    slack: {
-      height: '40px',
-      width: '139px',
-      marginTop: '15px',
-      marginBottom: '15px',
+      fontWeight: 'bold',
+      color: Colors.dark_gray,
+      margin: theme.spacing(3, 0, 1),
     },
     addButton: {
       display: 'flex',

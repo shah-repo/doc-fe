@@ -14,8 +14,8 @@ export const styles = makeStyles(() =>
       color: Colors.almost_black,
     },
     headerMenuItem: {
-      'background': Colors.water,
-      'cursor': 'default',
+      background: Colors.water,
+      cursor: 'default',
       '&:hover': {
         background: Colors.water,
       },

@@ -20,7 +20,7 @@ export const withFBControlPicker = <T extends FBControlPickerProps>(
     const translatedPickers = {};
     const statePickers = controlPickerState?.pickers;
     useObserver(() => {
-      const favouritePickers =  cloneDeep(toJS(controlPickerState?.data)?.results) || [];
+      const favouritePickers = cloneDeep(toJS(controlPickerState?.data)?.results) || [];
       const favouriteKeyMapping = {};
       each(favouritePickers, (favouritePicker) => {
         favouriteKeyMapping[favouritePicker.fbComponent] = favouritePicker.id;
@@ -32,7 +32,7 @@ export const withFBControlPicker = <T extends FBControlPickerProps>(
         translatedPickers[pickerSection] = map(pickersList, (pickerItem) => ({
           label: intl.formatMessage({ id: `form.builder.${pickerItem}` }),
           key: pickerItem,
-          isFavorite: favouriteKeyMapping[pickerItem] ? true : false,
+          isFavorite: !!favouriteKeyMapping[pickerItem],
           id: favouriteKeyMapping[pickerItem],
         }));
       });

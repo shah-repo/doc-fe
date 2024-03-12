@@ -15,7 +15,6 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
     type,
     ...props
   }: T) => {
-
     // MARK: @config
     const { partsState } = FB.useStores();
 

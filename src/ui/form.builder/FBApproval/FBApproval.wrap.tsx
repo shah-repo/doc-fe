@@ -12,7 +12,6 @@ import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync
 export const withFBApproval = <T extends FBApprovalProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     onApprove,
     approvalConfig,
@@ -33,7 +32,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
     loading,
     ...props
   }: T) => {
-
     const { workspaceState, formState } = FB.useStores();
     approvalNonVersioned = includes(editorProperties, 'approvalNonVersioned');
     autosave = approvalNonVersioned;
@@ -74,35 +72,35 @@ export const withFBApproval = <T extends FBApprovalProps>(
       );
     }
 
-    function getGroup(id: string): GroupRequestBody | undefined {
+    function getGroup (id: string): GroupRequestBody | undefined {
       return FBAutocompleteAsyncStore.getValue<GroupRequestBody>(approvalState?.groupsId, id);
     }
 
-    function getRole(id: string): FBInlineApprovalRole | undefined {
+    function getRole (id: string): FBInlineApprovalRole | undefined {
       return FBAutocompleteAsyncStore.getValue<FBInlineApprovalRole>(approvalState?.approvalRolesId, id);
     }
 
-    function isGroup(id?: string): boolean {
+    function isGroup (id?: string): boolean {
       if (!id) { return false; }
       return !isUndefined(getGroup(id));
     }
 
-    function isApprovalRole(id?: string): boolean {
+    function isApprovalRole (id?: string): boolean {
       if (!id) { return false; }
       return !isUndefined(getRole(id));
     }
 
-    function groupCheck(id: string): boolean {
+    function groupCheck (id: string): boolean {
       const filteredGroup = filter(currentUser?.groups, { id });
       return !isEmpty(filteredGroup);
     }
 
-    function roleCheck(id: string): boolean {
+    function roleCheck (id: string): boolean {
       const roles = groupBy(getRole(id)?.joinedEmployees || [], 'id');
       return !isUndefined(roles[currentUser?.employeeId || '']);
     }
 
-    function approverStatus(id: string): string {
+    function approverStatus (id: string): string {
       const approverValue = findApprover(id);
       if (isEmpty(approverValue)) {
         return FBApprovalStatus.Pending;
@@ -110,7 +108,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       return FBApprovalStatus.Approved;
     }
 
-    function findApprover(id: string): FBApprovalValue | undefined {
+    function findApprover (id: string): FBApprovalValue | undefined {
       return (
         findLast(hasApproved, { userId: id })
         || findLast(hasApproved, { groupId: id })
@@ -118,14 +116,14 @@ export const withFBApproval = <T extends FBApprovalProps>(
       );
     }
 
-    function approverIsVisible(id: string): boolean {
+    function approverIsVisible (id: string): boolean {
       return (
         !isApproved
         || (isApproved && !isEmpty(findApprover(id)))
       );
     }
 
-    function approverName(approver?: FBInlineApproverType): string {
+    function approverName (approver?: FBInlineApproverType): string {
       return (
         (approver as Employee)?.user?.email
         || (approver as GroupRequestBody)?.name
@@ -134,7 +132,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       );
     }
 
-    function approverStatusInfo(id: string): string {
+    function approverStatusInfo (id: string): string {
       const status = approverStatus(id);
       if (status === FBApprovalStatus.Approved) {
         const { userId, groupId, approvalRoleId, approvedAt } = findApprover(id) || {};
@@ -151,7 +149,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       return status;
     }
 
-    function canApprove(id: string): boolean {
+    function canApprove (id: string): boolean {
       return id === currentUser?.employeeId || groupCheck(id) || roleCheck(id);
     }
 

@@ -17,11 +17,11 @@ export default class FBRequest<Data, Body> {
   public includeAuthorization = true;
   public publicApi = false;
 
-  public constructor(url = '') {
+  public constructor (url = '') {
     this.url = url;
   }
 
-  private setTemplateUrl = (config: Record<string, any> | FBRequestTemplateUrl) => {
+  private readonly setTemplateUrl = (config: Record<string, any> | FBRequestTemplateUrl) => {
     let url = this.url;
     let values = config;
     if (has(config, 'values')) {
@@ -77,11 +77,11 @@ export default class FBRequest<Data, Body> {
     }
   };
 
-  public onSuccess() {
+  public onSuccess () {
     this.setLoading(false);
   }
 
-  public onError(error) {
+  public onError (error) {
     this.setLoading(false);
     let { message } = error;
     if (isArray(message) && has(first(message), 'message')) {
@@ -92,7 +92,7 @@ export default class FBRequest<Data, Body> {
     toastError(message);
   }
 
-  @action private start = (method: ApiActionMethod, callback?: (data?: Data, error?: any) => any) => {
+  @action private readonly start = (method: ApiActionMethod, callback?: (data?: Data, error?: any) => any) => {
     this.setLoading(true);
     let promise: Promise<any> | undefined;
 

@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, List, ListItem, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -10,9 +10,9 @@ import { companySelectors } from '../../../../state/ducks/company';
 import { tableSearchActions } from '../../../../state/ducks/tableSearch';
 import { userManagementActions } from '../../../../state/ducks/userManagement';
 import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
-import { AsyncState } from '../../../../state/types';
+import { AsyncState, AsyncStatus } from '../../../../state/types';
+import IntegrationItem from '../../../administration/general.settings/panels/Integrations/IntegrationItem';
 import Text from '../../../components/Text';
-import SubmitButton from '../../../components/forms/SubmitButton';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import useAsync from '../../../hooks/useAsync';
 import { Translation } from '../../../translations/types';
@@ -21,7 +21,6 @@ import { toEmployeeActiveStatusEditRequestBody } from '../../utils/transform';
 import AcctCodes from '../AddressesAndCodes/AcctCodes';
 import Addresses from '../AddressesAndCodes/Addresses';
 import { CompanyLocations } from '../CompanyLocations';
-import HelloSignAccess from '../HelloSignAccess';
 import ApiTokenContent from '../apiTokenContent/ApiTokenContent';
 import CompanyStageManagementContainer from '../company.stage.management/CompanyStageManagement.container';
 import UserGroups from '../groups/UserGroups';
@@ -98,7 +97,6 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const [avatarURL, setAvatarURL] = useState<string>('');
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const companyMine = useSelector(companySelectors.getCompanyMine);
-  const { helloSignIntegrationEnabled } = companyMine;
 
   // this is a hack for back button to redirect to user management table
   useEffect(() => () => {
@@ -249,24 +247,24 @@ const DialogContent: React.FunctionComponent<Props> = ({
           callbackUpdateGroups={callbackUpdateGroups}
           fromUserProfile={true}
         />
-        <Box display="flex" alignItems="flex-end" mt={2}>
-          {canUpdateCompany && <HelloSignAccess helloSignStatus={helloSignIntegrationEnabled} />}
-          {slackIntegrationEnabled && slackTeamId && !slackUserId && (
-            <div>
-              <Typography variant="h4" className={classes.integrations}>
-                <Text translation="integrations.title" />
-              </Typography>
-              <SlackLogo className={classes.slack} />
-              <SubmitButton
-                onClick={getUrl}
-                asyncState={asyncState}
-                label="integrations.add"
-                className={classes.addButton}
-                id="DialogContent-addEmployee"
-              />
-            </div>
-          )}
-        </Box>
+        {slackIntegrationEnabled && slackTeamId && (
+          <Box>
+            <Typography variant="h4" className={classes.title}>
+              <Text translation="integrations.title" />
+            </Typography>
+            <List>
+              <ListItem disableGutters divider alignItems="center">
+                <IntegrationItem
+                  isActive={Boolean(slackUserId)}
+                  isDisabled={asyncState.status === AsyncStatus.Active || Boolean(slackUserId)}
+                  onToggle={getUrl}
+                >
+                  <SlackLogo height={20} />
+                </IntegrationItem>
+              </ListItem>
+            </List>
+          </Box>
+        )}
         <NavigationManagementContainer />
         <CompanyStageManagementContainer />
         <WhiteLabelingManagementContainer />

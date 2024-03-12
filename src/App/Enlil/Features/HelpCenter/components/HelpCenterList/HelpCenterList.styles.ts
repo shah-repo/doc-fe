@@ -23,6 +23,6 @@ export const itemStyles = (theme: Theme) => createStyles({
   },
   icon: {
     alignSelf: 'flex-start',
-    marginTop: theme.spacing(.25),
+    marginTop: theme.spacing(0.25),
   },
 });

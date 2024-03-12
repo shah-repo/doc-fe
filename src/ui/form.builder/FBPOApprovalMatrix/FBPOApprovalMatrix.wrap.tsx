@@ -9,7 +9,6 @@ import FBPOApprovalMatrixFormActions from './form/FBPOApprovalMatrixForm.actions
 export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
   const Comp = ({
     handleAdd,
     poamState,
@@ -20,7 +19,6 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     isInputOwner,
     ...props
   }: T) => {
-
     const { workspaceState, formState } = FB.useStores();
     const { document } = workspaceState || {};
     const { outputRevision } = document || {};

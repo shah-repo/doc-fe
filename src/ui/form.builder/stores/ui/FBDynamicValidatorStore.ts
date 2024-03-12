@@ -1,16 +1,19 @@
 import { Dictionary, get, isUndefined, join, map, toString } from 'lodash';
 import { action, computed, observable, set } from 'mobx';
 import Validator from 'validatorjs';
+import FBWorkspaceState from '../../FBWorkspace/FBWorkspace.state';
 import FBStore from './FBStore';
 import FBValidatorStore from './FBValidatorStore';
 
 class FormBuilderDynamicValidatorStore {
-  @computed get Validator(): any {
+  @computed get Validator (): any {
     return get(window, 'EnlilRemoteValidators.validator');
   }
+
   public validatorName?: string;
   @observable public errorMessage = '';
   @observable public helperText: Dictionary<string> = {};
+  public workspaceState?: FBWorkspaceState;
 
   @action public setValidatorName = (name: string) => {
     this.reset();
@@ -42,12 +45,16 @@ class FormBuilderDynamicValidatorStore {
     });
     const validator = new this.Validator(values, rules);
 
-    function passes() { return null; }
-    function fails() {
+    function passes () { return null; }
+    function fails () {
       const errors = validator.errors.all();
       FBDynamicValidatorStore.setHelperText(errors);
     }
     validator.setAttributeNames(FBStore.getValidationAttribute());
+    const { document } = this.workspaceState ?? {};
+    validator.context = {
+      documentId: document?.id ?? null,
+    };
     validator.checkAsync(passes, fails);
   };
 
