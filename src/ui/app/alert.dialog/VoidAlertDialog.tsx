@@ -8,7 +8,8 @@ import { documentRevisionsActions } from '../../../state/ducks/documentRevisions
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../components/dialogs/Alert';
 import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
-import { FB, FBFormState, FBProvider, FBTextField } from '../../form.builder';
+import { useFormik, FormikProvider } from 'formik';
+import { FormikField, TextField } from '../../components/forms/fields-next';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync, { Async } from '../../hooks/useAsync';
 import { DialogHandler } from '../../hooks/useDialog';
@@ -31,7 +32,6 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
 
   const classes = styles();
   const dispatch = useDispatch();
-  const formState = FB.useRef(FBFormState, {});
   const voidDocument = useActionCreator(documentRevisionsActions.voidDocument);
   const dialogAsync = useAsync({
     onSuccess: () => {
@@ -45,15 +45,17 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
     [documentRevision],
   );
 
-  const voidRecord = () => {
-    formState?.validate((valid) => {
-      if (!valid) {
-        return;
+  const formik = useFormik({
+    initialValues: {
+      [VOID_DESCRIPTION_FIELD]: '',
+    },
+    onSubmit: (values) => {
+      if (confirmAction) {
+        return confirmAction();
       }
 
-      const voidDescriptoin = String(formState?.getFieldValue(VOID_DESCRIPTION_FIELD));
       const description = `<p>Void</p>
-      <p>${voidDescriptoin}</p>
+      <p>${values[VOID_DESCRIPTION_FIELD]}</p>
       <p>${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
 
       async.start(
@@ -62,37 +64,39 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
         isRecordBehaviour ? { description } : undefined,
         async,
       );
-    }, true);
-  };
+    },
+  });
 
   if (!dialog.isOpen) {
     return null;
   }
 
   return (
-    <FBProvider {...{ formState }}>
+    <FormikProvider value={formik}>
       <AlertDialog
         handler={dialog}
         loading={async.isLoading}
-        onConfirm={confirmAction ?? voidRecord}
+        onConfirm={formik.submitForm}
       >
         <Typography data-cy="dialog-message" className={classes.contentText}>
           {translate(isRecordBehaviour ? 'documentRevision.record.void.alert' : 'documentRevision.void.alert')}
         </Typography>
         {isRecordBehaviour && (
-          <FBTextField
-            boxProps={{
-              className: classes.descriptionField,
-            }}
+          <FormikField
+            className={classes.descriptionField}
             name={VOID_DESCRIPTION_FIELD}
-            label="common.justification"
-            dataCy="void.record.description"
-            rules="required"
-            rows={3}
-          />
+            label={translate('common.justification')}
+            required
+          >
+            <TextField
+              {...formik.getFieldProps(VOID_DESCRIPTION_FIELD)}
+              multiline
+              rows={3}
+            />
+          </FormikField>
         )}
       </AlertDialog>
-    </FBProvider>
+    </FormikProvider>
   );
 };
 
