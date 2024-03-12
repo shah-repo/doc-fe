@@ -6,15 +6,16 @@ import { useFormikContext } from 'formik';
 import { find, first, get, has, isEmpty, keys, last, values } from 'lodash';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../../../components/KendoDataGrid/constants';
 import { Dialog } from '../../../../../../components/dialogs';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode, MODE_FIELD,
-} from '../../../../../../components/KendoDataGrid/constants';
 import useDialog from '../../../../../../hooks/useDialog';
 import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
@@ -136,14 +137,14 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
         <div className={classes.actionLabel}>
           <OverflowingContent>{translate(displayValue?.label)}</OverflowingContent>
         </div>
-        <div>
-          {isOnOrderPOActionColumn && openedPOsAvailable && (
-            <FontAwesomeIcon
-              icon={solid('circle')}
-              onClick={handleClickPOs}
-              className={cx(classes.dot, classes.poPreviewDot)}
-            />
-          )}
+          <Box>
+            {isOnOrderPOActionColumn && openedPOsAvailable && (
+              <FontAwesomeIcon
+                icon={solid('circle')}
+                onClick={handleClickPOs}
+                className={cx(classes.dot, classes.poPreviewDot)}
+              />
+            )}
           {showCopyButton && (
             <span ref={copyIconRef} onClick={handleCopy}>
               <Tooltip
@@ -156,8 +157,8 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
                   className={classes.copyIcon}
                 /></Tooltip>
             </span>)}
-        </div>
-      </Box>
+          </Box>
+        </Box>
       <Dialog
         title={translate(
           'approvalRequest.material.disposition.po.preview.title',

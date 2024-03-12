@@ -80,11 +80,12 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 
 const styles = makeStyles(() => ({
   printIconContainer: {
-    backgroundColor: Colors.white,
+    backgroundColor: `${Colors.white} !important`,
   },
   printIcon: {
     height: 15,
     width: 15,
+    color: Colors.navy,
   },
 }));
 
