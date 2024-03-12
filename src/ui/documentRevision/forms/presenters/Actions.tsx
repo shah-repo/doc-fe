@@ -428,6 +428,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       )}
       {buttons.includes(PreviewControlButtons.SubmitApprovalButton) && (
         <SubmitForApproval
+          documentRevision={documentRevision}
           docRevId={values.id as string}
           description={values.description}
           status={values.status}
