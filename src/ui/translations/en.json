@@ -350,6 +350,7 @@
   "common.justifications": "Justifications",
   "common.attachments": "Attachments",
   "common.attachment": "Attachment",
+  "common.attachments.poLine": "Attachments:",
   "common.attachment.exceeds.size.error": "File {name} size ({size}) exceeds the limit of {limit}",
   "common.attachment.form.DOCERROR": ".doc files are not accepted. Please use .docx",
   "common.attachment.form.Create.Clean.Copy.Error": "Cannot create a clean copy from a non docx file",
