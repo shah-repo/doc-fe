@@ -748,7 +748,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           dataItem={item}
           onConfirm={formik?.submitForm}
           onDiscard={discardBOM}
-          isDeleteDisabled={disableEditInRestrictedEditMode(item)}
+          isDeleteDisabled={inRestrictedEditMode}
           onDelete={
             isOwner || item.isParentOwner || (item?.childNodes || []).length > 0
               ? removeBOM
