@@ -11,10 +11,11 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
 import { FBDAMFields } from '../form.builder';
+import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
+import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
-import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -134,6 +135,8 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       set(dataToSubmit, 'formInput', {
         ...formInput,
         ...updatedFormInput,
+        [AllocationCheckBoxOptions.AUTO_TRANSACT]: FBDataStore?.refreshData?.formInput?.autoTransact,
+        [AllocationCheckBoxOptions.AUTO_ASSIGN]: FBDataStore?.refreshData?.formInput?.autoAssign,
       });
     }
 
