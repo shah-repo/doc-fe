@@ -6,6 +6,7 @@ import { FB, FBInputProps, FBTextField, FBWorkspaceModeOptions } from '..';
 import { WorkOrderTypes, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
 import ErrorBlock from '../../components/forms/fields/ErrorBlock';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from '../../form.builder';
+import { Translation } from '../../translations/types';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
 import { PART_TO_BE_MADE } from './constants';
 
@@ -41,9 +42,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           withState={true}
           autosave={true}
         />
-        {!props.disabled && !partsDefaultValue && [WorkOrderTypes.MAKE_KIT, WorkOrderTypes.MAKE_PRODUCT].includes(workOrderType) && (
-          <ErrorBlock label={partSelectionLabel} />
-        )}
+        <ErrorBlock label={partSelectionLabel as Translation} isErrored={!props.disabled && !partsDefaultValue && [WorkOrderTypes.MAKE_KIT, WorkOrderTypes.MAKE_PRODUCT].includes(workOrderType)} />
       </Grid>
       <Grid item md={3} xs={6}>
         <FBTextField

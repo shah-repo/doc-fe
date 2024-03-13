@@ -18,6 +18,7 @@ import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.type
 import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { Translation } from '../../translations/types';
 import { withFBInput } from '../FBInput/FBInput.wrap';
 import FBStore from '../FBStore/FBStore';
 import { FB } from '../helpers';
@@ -208,9 +209,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
           >
             {translate('form.builder.workOrder.lhr.add')}
           </Button> }
-          {isEmpty(lhrListToUse) && !hidden && isActive && (
-            <ErrorBlock label={sectionLabel} />
-          )}
+          <ErrorBlock label={sectionLabel as Translation} isErrored={isEmpty(lhrListToUse) && !hidden && isActive} />
         </Box>
       )}
     </>
