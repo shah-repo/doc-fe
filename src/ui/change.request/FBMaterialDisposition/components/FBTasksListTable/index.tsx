@@ -27,6 +27,7 @@ import { COMMENTS_FIELD, EmployeeStatus } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './types';
+import { updateData } from './utils';
 
 interface props {
   partOfId: string
@@ -43,14 +44,14 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const classes = useStyles();
   isShowOnly = (isShowOnly || disabled) ?? false;
   const [partOfIdToUse, setPartOfIdToUse] = useState(partOfId);
+  const { workspaceState } = FB.useStores();
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
-  const isEditMode = React.useRef<boolean>(false);
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
   const increasedBy = isTasksListAdded ? 2 : 1;
-  const [data, setData] = React.useState<Array<Partial<EditableTLItem>>>([]);
+  const [data, setData] = React.useState<EditableTLItem[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const editTLItem = ({ dataItem }: TLItemEditEvent) => {
-    !isShowOnly && !isEditMode.current && !formik.dirty && setEditedTLItem(dataItem);
+    !isShowOnly && !formik.dirty && setEditedTLItem(dataItem);
   };
   const discardTLItem = () => setEditedTLItem(undefined);
   const fetchTasksList = useActionCreator(taskActions.fetchTasksList);
@@ -59,9 +60,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const deleteTask = useActionCreator(taskActions.deleteTask);
   const formContext = useFormContext();
   const parentFormik = useFormikContext();
-  const [dataToSubmit, setDataToSubmit] = React.useState<Partial<EditableTLItem>>({});
   const history = useHistory();
-  const { workspaceState } = FB.useStores();
   const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
   const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
   const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
@@ -95,7 +94,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const updateTaskAsync = useAsync({
     onSuccess: () => {
       loadTasksTableData();
-      if (formContext.isEditing) {
+      if (formContext?.isEditing) {
         history.push(changeRequestPreviewPath(partOfId ?? ''));
       }
     },
@@ -110,9 +109,25 @@ const FBTasksListTable: React.FunctionComponent<props> = (
 
   useEffect(() => {
     if (partOfIdToUse) {
-      loadTasksTableData();
+      if (isWORecord) {
+        loadTasksTableData();
+      } else {
+        const data = workspaceState?.getTLTableData;
+        if ((isEmpty(data) && formContext?.isEditing) || !formContext?.isEditing) {
+          loadTasksTableData();
+        } else if (!isEmpty(data)) {
+          setData(data as EditableTLItem[]);
+        }
+      }
     }
   }, [partOfIdToUse]);
+
+  const updateUnsavedData = (values: Partial<EditableTLItem>) => {
+    const updatedData = updateData(values, data);
+    workspaceState?.setTLTableData(updatedData);
+    workspaceState?.addTLUpdatedDataId(values.taskId as string);
+    setData(updatedData);
+  };
 
   const formik = useFormik<Partial<EditableTLItem>>({
     initialValues: {},
@@ -147,21 +162,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
 
         addTaskAsync.start(addTask, payload, addTaskAsync);
       } else {
-        if (formContext.isEditing) {
-          isEditMode.current = true;
-          setDataToSubmit(values);
-          setData(prev => {
-            return prev.map(item => {
-              if (item.taskId === values.taskId) {
-                return {
-                  ...item,
-                  instruction: values.instruction ?? item.instruction,
-                  employeeResponse: values?.employeeResponse ?? item.employeeResponse,
-                };
-              }
-              return item;
-            });
-          });
+        if (formContext?.isEditing) {
+          updateUnsavedData(values);
         } else {
           updateTaskItem(values);
         }
@@ -177,11 +179,17 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   }, [editedTLItem, setValues, resetForm]);
 
   useEffect(() => {
-    if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(dataToSubmit)) {
+    const data = workspaceState?.getTLTableData ?? [];
+    const updatedDataItemIds = workspaceState?.getTLUpdatedDataIds ?? [];
+    const updatedData = data.filter(dataItem => updatedDataItemIds.includes(dataItem.taskId));
+    if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(updatedData)) {
       setDoNotPrompt?.(true);
-      updateTaskItem(dataToSubmit);
+      updatedData.forEach((item) => {
+        updateTaskItem(item);
+      });
+      workspaceState?.setTLTableData([]);
     }
-  }, [parentFormik?.isSubmitting]);
+  }, [formContext?.isEditing, parentFormik?.isSubmitting, setDoNotPrompt, workspaceState]);
 
   const createDraftTLItem = () => setEditedTLItem({
     taskId: uuidv4(),
@@ -324,7 +332,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
           startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
           onClick={createDraftTLItem}
           data-cy="add-task-small-btn"
-          disabled={isShowOnly || formContext.isEditing}
+          disabled={isShowOnly || formContext?.isEditing}
         >
           {translate('approvalRequest.tasks.list.add')}
         </Button>
@@ -341,7 +349,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
         containerRef={containerRef}
         resizable={true}
       />
-      {!isShowOnly && !formContext.isEditing && <Button
+      {!isShowOnly && !formContext?.isEditing && <Button
         kind="add"
         fullWidth
         attached

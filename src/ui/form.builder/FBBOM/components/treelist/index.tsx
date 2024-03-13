@@ -42,11 +42,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../../../App';
 import { ReactComponent as CloseIcon } from '../../../../../assets/images/leftPanel/close.svg';
 import { translate } from '../../../../../common/intl';
-import { getHasPermission } from '../../../../../common/utils/selectors';
+import { getHasPermission, getTableCriteria } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
 import Loader from '../../../../components/common/kendo/Loader';
@@ -76,6 +77,7 @@ import DocumentRevisionDrawer from '../drawer/DocumentRevisionDrawer';
 import { ActionsCell } from './column.templates/Actions';
 import {
   ADD_FIELD,
+  BOM_TABLE_NAME,
   CELL_EMPTY_VALUE,
   DATA_ITEM_KEY,
   DOC_ID_FIELD,
@@ -174,6 +176,17 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const updateState = (stateInfo) => {
     _documentRevisionFormState?.setBOMInfo(stateInfo);
     setState(stateInfo);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          queryDict: {
+            dataState: { ...state.dataState, ...stateInfo.dataState },
+          },
+        },
+        BOM_TABLE_NAME,
+      ),
+    );
   };
 
   const partAsync = useAsync({
@@ -282,6 +295,33 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   };
 
   const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer, openARIDQuickView });
+
+  const tableCriteria = useSelector(getTableCriteria(BOM_TABLE_NAME));
+
+  useEffect(() => {
+    if (isSliderView) {
+      return;
+    }
+
+    if (tableCriteria?.columnConfig) {
+      const savedColumns = JSON.parse(tableCriteria.columnConfig) as CustomTreeListColumnProps[];
+      const updatedColumns = schema.map(schemaItem => {
+        const savedColumn = savedColumns.find(column => schemaItem.field === column.field);
+
+        return {
+          ...schemaItem,
+          orderIndex: savedColumn?.orderIndex,
+          locked: savedColumn?.locked,
+          isHidden: savedColumn?.isHidden,
+        };
+      });
+
+      setColumns(updatedColumns);
+      setState({ ...state, dataState: tableCriteria.queryDict.dataState });
+    } else {
+      updateColumns(schema);
+    }
+  }, []);
 
   const [columns, setColumns]
     = React.useState<CustomTreeListColumnProps[]>(schema);
@@ -409,7 +449,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       }
       return column;
     });
-    setColumns(dataColumns);
+    updateColumns(dataColumns);
   };
 
   const formik = useFormik<Partial<EditableBOM>>({
@@ -734,6 +774,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           dataItem={item}
           onConfirm={formik?.submitForm}
           onDiscard={discardBOM}
+          isDeleteDisabled={disableEditInRestrictedEditMode(item)}
           onDelete={
             isOwner || item.isParentOwner || (item?.childNodes || []).length > 0
               ? removeBOM
@@ -983,15 +1024,28 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     return defaultRendering as React.ReactElement<HTMLTableCellElement>;
   };
 
+  const updateColumns = (columns: CustomTreeListColumnProps[]) => {
+    setColumns(columns);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(columns),
+        },
+        BOM_TABLE_NAME,
+      ),
+    );
+  };
+
   const getColumns = () => {
-    return columns.filter(({ isHidden }) => !isHidden);
+    return columns?.filter(({ isHidden }) => !isHidden) ?? [];
   };
 
   const onColumnReorder = (event: TreeListColumnReorderEvent) => {
     if (!isExactBOMViewWindow()) {
       return;
     }
-    setColumns(event.columns as CustomTreeListColumnProps[]);
+    updateColumns(event.columns as CustomTreeListColumnProps[]);
   };
 
   const onFilterChange = (event: TreeListFilterChangeEvent) => {
@@ -1023,7 +1077,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           reorderable: locked,
           orderIndex: !locked ? 0 : undefined,
         });
-        setColumns(newColumns);
+        updateColumns(newColumns);
       }
     },
     [columns],

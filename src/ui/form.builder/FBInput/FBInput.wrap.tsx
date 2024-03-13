@@ -233,6 +233,7 @@ export const withFBInput = <T extends FBInputProps>(
         !feedbackDetails.helperText && (
           isUndefined(validationValue)
           || validationValue === ''
+          || validationValue === null
           || (isArray(validationValue) && size(validationValue) === 0)
         )
       );

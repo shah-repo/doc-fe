@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core';
-import Colors from '../../layout/theme/utils/colors';
 import { NextTheme } from '../../layout/theme-next/provider';
+import Colors from '../../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme: NextTheme) =>
   createStyles({
@@ -42,7 +42,6 @@ export const styles = makeStyles((theme: NextTheme) =>
       fontSize: '1rem',
     },
     lockedInfo: {
-      width: '700px',
       color: Colors.dark_gray,
     },
     [theme.media.mobile]: {
