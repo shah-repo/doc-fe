@@ -13,6 +13,7 @@ import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg'
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
 import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_status.svg';
 import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject_status_solid.svg';
+import { translate } from '../../../../../common/intl';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
@@ -138,7 +139,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
     {
       id: 'id5',
       isAttachments: true,
-      ltext: 'Attachments:',
+      ltext: translate('common.attachments.poLine'),
       rtext: purchaseOrderAttachments || [],
     },
   ];

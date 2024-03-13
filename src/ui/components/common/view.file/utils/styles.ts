@@ -50,8 +50,8 @@ export const styles = makeStyles((theme: NextTheme) => ({
   [theme.media.mobile]: {
     '@global': {
       '.MuiDialogContent-root': {
-        padding: '0px 0px !important',
-        marginTop: 11,
+        padding: '0 !important',
+        marginTop: theme.spacing(1.5),
       },
     },
   },
