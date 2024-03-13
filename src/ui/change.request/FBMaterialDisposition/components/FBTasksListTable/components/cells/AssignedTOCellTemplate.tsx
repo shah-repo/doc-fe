@@ -20,9 +20,7 @@ const renderUsers = (selectedUsers, removeUser?) => {
   const classes = styles();
   const approvers = useSelector((state: ApplicationState) => changeRequestsSelectors.usersById(state));
   const users = selectedUsers?.map((seluser) => {
-    return approvers[seluser.employeeId]
-      ? approvers[seluser.employeeId]
-      : { id: seluser.employeeId, active: false, user: seluser };
+    return approvers[seluser.employeeId] ?? { id: seluser.employeeId, active: false, user: seluser };
   });
 
   return (
