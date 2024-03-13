@@ -1,5 +1,6 @@
 import { get } from 'lodash';
 import React from 'react';
+import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import OverflowContent from '../../OverflowContent';
 import { CustomGridCellProps } from '../kendo/types';
 
@@ -13,8 +14,7 @@ export const OverflowCell: React.FunctionComponent<CustomGridCellProps> = ({
   columnIndex,
   cellRowClick,
 }) => {
-  const dataItemValue = get(dataItem, field ?? '');
-
+  const dataItemValue = convertHtmlEntities(get(dataItem, field ?? ''));
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
