@@ -31,17 +31,16 @@ export const buildSchema = ({
   currentState,
   employeeEvidenceUpdates,
 }: SchemaOptions): Array<ColumnDefinition<EditableTrainee>> => {
-console.log(React);
 
-const primaryOwnerFieldOptions = primaryOwners.filter(item => item.active);
-const trainingTypeOptions = TRAINING_TYPE_OPTIONS.map((option) => createOption(option.value, option.label));
-const TrainingTypeFilter: React.FC<GridFilterCellProps> = (props) => (
-  <DropdownFilter
-    {...props}
-    data={trainingTypeOptions}
-    defaultItem={createOption(undefined, translate('common.all'))}
-  />
-);
+  const primaryOwnerFieldOptions = primaryOwners.filter(item => item.active);
+  const trainingTypeOptions = TRAINING_TYPE_OPTIONS.map((option) => createOption(option.value, option.label));
+  const TrainingTypeFilter: React.FC<GridFilterCellProps> = (props) => (
+    <DropdownFilter
+      {...props}
+      data={trainingTypeOptions}
+      defaultItem={createOption(undefined, translate('common.all'))}
+    />
+  );
 
   return [
     {

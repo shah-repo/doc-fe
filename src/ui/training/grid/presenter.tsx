@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TrainingListData } from '../../../state/ducks/training/types';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
@@ -21,7 +21,6 @@ export function TrainingListPresenter ({
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState<TrainingListData[]>([]);
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
-  console.log(React);
 
   return (
     <Grid container>
