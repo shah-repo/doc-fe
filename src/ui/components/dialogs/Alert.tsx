@@ -31,6 +31,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       cancelLabel={cancelLabel}
       confirmLabel={confirmLabel}
       confirmProps={{
+        ...props.confirmProps,
         disabled: loading,
       }}
       onClose={onClose}
