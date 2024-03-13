@@ -222,7 +222,7 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    if (isChangeRequest || isOutput || formState?.shouldValidate) {
+    if (isChangeRequest || isOutput || formState?.shouldValidate || workspaceState?.isPreview) {
       let isUnderMode = (
         !feedbackDetails.helperText && (
           isUndefined(validationValue)
