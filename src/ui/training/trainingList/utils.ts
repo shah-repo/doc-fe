@@ -1,5 +1,4 @@
 import { reaction } from 'mobx';
-import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
@@ -10,7 +9,7 @@ import { FBAutocompleteAsyncOption } from '../../form.builder/FBAutocompleteAsyn
 import { FB } from '../../form.builder/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
-import { DocumentRevisionOption, TraineeOption, UseOptionsHook } from './types';
+import { DocumentRevisionOption, UseOptionsHook } from './types';
 
 export const getOptionLabel = (option: DocumentRevisionOption): string => {
   const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
@@ -35,22 +34,15 @@ export const useOptions: UseOptionsHook = (trainees) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const suppliers = useObserver(
-    () => {
-      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.trainingDocuments) as Map<string, TraineeOption>;
-      return asyncData ? Array.from(asyncData.values()) : [];
-    },
-  );
-
   useEffect(() => {
     if (trainingAsync.loading) {
       return;
     }
     const missedTrainees = trainees.filter(
-      trainee => !trainee.displayStatus && !suppliers.some(option => option.id === trainee.id),
+      trainee => !trainee.status && !trainees.some(option => option.id === trainee.id),
     );
     missedTrainees.forEach(trainee => trainingAsync.fetchAutocompleteOption(trainee.id, FBAutocompleteAsyncOption.trainingDocuments));
-  }, [suppliers, trainees]);
+  }, [trainees]);
 
   useEffect(() => reaction(
     () => trainingAsync.autocompleteValueApi.data,
@@ -66,7 +58,6 @@ export const useOptions: UseOptionsHook = (trainees) => {
   ), []);
 
   return {
-    suppliers,
     statuses,
   };
 };

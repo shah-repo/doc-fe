@@ -20,7 +20,7 @@ interface Props extends CustomTemplateProps {
 const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, isDisabled, previousAttachments }) => {
   const classes = styles();
   const { fileUploadState } = FB.useStores();
-  const { taskId } = dataItem;
+  const { id: taskId } = dataItem;
 
   React.useEffect(() => {
     if (!isEmpty(previousAttachments)) {

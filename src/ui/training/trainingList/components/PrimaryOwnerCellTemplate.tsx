@@ -1,9 +1,9 @@
 import React from 'react';
 import { Employee } from '../../../../state/ducks/company/types';
 import { AvatarComponent } from '../../../components/common/kendo.column.templates/UserAvatar';
-import { AutocompleteCellTemplate } from '../../../documentRevision/forms/presenters/related.equipments/components/AutocompleteCellTemplate';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
+import { AutocompleteCellTemplate } from './AutocompleteCellTemplate';
 
 interface Props extends CustomTemplateProps {
   options: Employee[]

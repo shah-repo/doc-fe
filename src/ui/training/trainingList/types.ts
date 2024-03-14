@@ -61,6 +61,7 @@ export type UseOptionsHook = (trainingList: Trainee[]) => {
 
 export interface Trainee {
   id: string
+  name: string
   trainee: Trainee
   trainingType: TrainingType
   status?: string

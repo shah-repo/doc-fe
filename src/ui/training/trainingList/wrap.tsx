@@ -1,8 +1,10 @@
-import { differenceBy, isNumber, orderBy, unionBy } from 'lodash';
-import { useState } from 'react';
+import { differenceBy, orderBy, unionBy } from 'lodash';
+import { useObserver } from 'mobx-react';
+import { useEffect, useState } from 'react';
+import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '../../form.builder';
+import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FB } from '../../form.builder/helpers';
-import { DEFAULT_CURRENCY } from './constants';
-import { Trainee, TrainingListTableProps } from './types';
+import { DocumentRevisionOption, Trainee, TrainingListTableProps } from './types';
 import { useOptions } from './utils';
 
 const prepareData = (list: Trainee[] = []) => orderBy(list, 'primary', 'desc');
@@ -27,15 +29,9 @@ export const withTrainingListTable = <T extends TrainingListTableProps>(
 
     const prepareTrainee = (trainee: Trainee): Trainee => ({
       ...trainee,
-      cost: trainee.cost?.value ? {
-        ...trainee.cost,
-        currency: DEFAULT_CURRENCY,
-      } : undefined,
-      leadTime: isNumber(trainee.leadTime) ? trainee.leadTime : undefined,
-      conversion: isNumber(trainee.conversion) ? trainee.conversion : undefined,
       trainee: {
-        name: trainee.trainee.name,
-        id: trainee.trainee.id,
+        name: trainee.name,
+        id: trainee.id,
       },
     });
 
@@ -46,7 +42,7 @@ export const withTrainingListTable = <T extends TrainingListTableProps>(
 
     const updateTrainee = (item: Trainee) => {
       const newTrainees = unionBy([prepareTrainee(item)], trainees, 'id');
-      const updatedTrainees = item.primary ? updatePrimaryTrainee(item.id, newTrainees) : newTrainees;
+      const updatedTrainees = item.name ? updatePrimaryTrainee(item.id, newTrainees) : newTrainees;
       updateState(updatedTrainees);
     };
 
@@ -60,12 +56,28 @@ export const withTrainingListTable = <T extends TrainingListTableProps>(
       updateState(updatedTrainees);
     };
 
+    const recordsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+      optionId: FBAutocompleteAsyncOption.records,
+    });
+
+    useEffect(() => {
+      recordsAsync.load();
+    }, [recordsAsync]);
+
+    const records = useObserver(
+      () => {
+        const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.records) as Map<string, DocumentRevisionOption[]>;
+        return asyncData ? Array.from(asyncData.values()) : [];
+      },
+    );
+
     return Component({
       ...props as T,
       name,
       disabled: disabled ?? workspaceState?.isPreview,
       trainees,
       statuses,
+      records,
       updateTrainee,
       deleteTrainee,
       setPrimaryTrainee,
