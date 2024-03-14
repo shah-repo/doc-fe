@@ -2,17 +2,13 @@ import { FormControlLabel, Radio } from '@material-ui/core';
 import { at, map } from 'lodash';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { FB, FBOption } from '..';
 import { ReactComponent as CheckedRadioIcon } from '../../../assets/images/radio.svg';
 import { ReactComponent as DisabledCheckedRadioIcon } from '../../../assets/images/radio_checked_disabled.svg';
 import { ReactComponent as UnCheckedRadioIcon } from '../../../assets/images/unchecked_radio.svg';
 import { ReactComponent as DisabledUnCheckedRadioIcon } from '../../../assets/images/unchecked_radio_disabled.svg';
-import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { WO_PART_KEY_NAME, WorkOrderTypes } from '../../../state/ducks/documentRevisions/documentType/types';
-import { ApplicationState } from '../../../state/reducers';
 import Text from '../../components/Text';
-import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
 import useDialog from '../../hooks/useDialog';
 import { isTranslation } from '../../translations/types';
 import { withFBOption } from '../FBOption/FBOption.wrap';
@@ -39,10 +35,6 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
   }: T) => {
     const intl = useIntl();
     const { formState, workspaceState } = FB.useStores();
-
-    const lotDocumentType = useSelector((state: ApplicationState) => {
-      return documentTypeSelectors.getDocumentTypeByGroup(state, DocTypeGroups.LOT);
-    });
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
