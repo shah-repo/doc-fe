@@ -12,7 +12,7 @@ import { RevisionCellTemplate } from './components/RevisionCellTemplate';
 import { TrainingDocID } from './components/TrainingDocID';
 import { TrainingTypeCellTemplate } from './components/TrainingTypeCellTemplate';
 import { UploadEvidenceCellTemplate } from './components/UploadEvidenceCellTemplate';
-import { DATE_FIELD, REFERENCE_FIELD, SUPPLIER_FIELD, TRAINING_TYPE_OPTIONS } from './constants';
+import { DATE_FIELD, REFERENCE_FIELD, TRAINING_TYPE_OPTIONS } from './constants';
 import { EditableTrainee, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -53,7 +53,7 @@ export const buildSchema = ({
     },
     {
       id: 'trDocId',
-      field: SUPPLIER_FIELD,
+      field: 'trDocId',
       title: 'Training Doc ID',
       filterCell: InputFilter,
       template: TrainingDocID,
@@ -69,7 +69,7 @@ export const buildSchema = ({
     },
     {
       id: 'trId',
-      field: SUPPLIER_FIELD,
+      field: 'trId',
       title: 'training.trn.id',
       filterCell: InputFilter,
       template: (props) => (
