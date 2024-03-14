@@ -13,11 +13,7 @@ export const FIELDS_TO_OMIT = [MODE_FIELD, EMPLOYEE_FIELD, BUILD_FIELD, REFERENC
 
 export const EMPTY_VALUE_PLACEHOLDER = '-';
 
-export const SUPPLIER_FIELD = 'supplierName';
-export const SUPPLIER_STATUS_FIELD = 'supplierStatus';
-
 export const EMPLOYEE_RESPONSE_FIELD = 'employeeResponse';
-export const COMMENTS_FIELD = 'comments';
 export enum EmployeeStatus {
   Done = 'DONE',
 }

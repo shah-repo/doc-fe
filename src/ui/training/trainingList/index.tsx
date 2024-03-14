@@ -111,16 +111,11 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
 
   const traineesList = trainees.reduce((list, item) => {
     const isTraineeEdited = editedTrainee && editedTrainee.id === item.id;
-    // const supplier = suppliers.find((trainee) => trainee.id === item.trainee.id);
-    // const supplierName = supplier?.name ?? item.trainee?.name;
-    // const supplierStatus = supplier?.displayStatus ?? '';
 
     return [
       ...list,
       {
         ...(isTraineeEdited ? editedTrainee : item),
-        // [SUPPLIER_FIELD]: supplierName,
-        // [SUPPLIER_STATUS_FIELD]: supplierStatus,
         [MODE_FIELD]: isTraineeEdited ? Mode.edit : Mode.show,
       },
     ];
