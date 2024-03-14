@@ -16,10 +16,11 @@ import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
 import FBInput from '../../form.builder/FBInput/FBInput';
 import FBSection from '../../form.builder/FBSection/FBSection';
-import { FIELDS_TO_OMIT } from './constants';
+import { EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableTrainee, Trainee, TraineeEditEvent, TrainingListTableProps } from './types';
+import { getOptionLabel } from './utils';
 import { withTrainingListTable } from './wrap';
 
 const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
@@ -31,8 +32,8 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
     updateTrainee,
     // setPrimaryVendor,
     trainees = [],
-    statuses = [],
-  } = props;
+    records = [],
+} = props;
   const classes = useStyles();
   const isActive = !disabled;
   const [editedTrainee, setEditedTrainee] = React.useState<Partial<EditableTrainee>>();
@@ -97,10 +98,10 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
   };
 
   const schema = buildSchema({
-    statuses,
     primaryOwners: companyMine.employees ?? [],
     isActive,
     isInEditMode,
+    records,
     actionsClass: classes.actionsCell,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
@@ -111,11 +112,13 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
 
   const traineesList = trainees.reduce((list, item) => {
     const isTraineeEdited = editedTrainee && editedTrainee.id === item.id;
-
+    const reference = records?.find(record => record.id === item.reference?.id);
+    const referenceName = reference ? getOptionLabel(reference) : EMPTY_VALUE_PLACEHOLDER;
     return [
       ...list,
       {
         ...(isTraineeEdited ? editedTrainee : item),
+        [REFERENCE_FIELD]: referenceName,
         [MODE_FIELD]: isTraineeEdited ? Mode.edit : Mode.show,
       },
     ];

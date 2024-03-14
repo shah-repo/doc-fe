@@ -5,6 +5,7 @@ import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.t
 import DropdownFilter from '../../form.builder/FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
 import InputFilter from '../../form.builder/FBApprovalMatrix/components/InputFilter';
+import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { CommentsCellTemplate } from './components/CommentsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
 import { PrimaryOwnerCellTemplate } from './components/PrimaryOwnerCellTemplate';
@@ -16,7 +17,6 @@ import { DATE_FIELD, REFERENCE_FIELD, TRAINING_TYPE_OPTIONS } from './constants'
 import { EditableTrainee, SchemaOptions } from './types';
 
 export const buildSchema = ({
-  statuses,
   primaryOwners,
   isActive,
   isInEditMode,
@@ -108,6 +108,20 @@ export const buildSchema = ({
       filterCell: InputFilter,
       template: (props) => <CommentsCellTemplate {...props} onClick={onRowClick} />,
       width: 250,
+    },
+    {
+      id: 'actions',
+      title: 'actions',
+      className: actionsClass,
+      template: (props) => (
+        <ActionsCellTemplate
+          {...props}
+          onConfirm={onConfirm}
+          onDiscard={onDiscard}
+          onDelete={onDelete}
+        />
+      ),
+      width: 1,
     },
   ];
 };
