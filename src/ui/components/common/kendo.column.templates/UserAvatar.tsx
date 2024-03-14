@@ -1,8 +1,8 @@
 import { Avatar, Box } from '@material-ui/core';
 import { get } from 'lodash';
 import React from 'react';
+import OverflowTooltip from '../../OverflowTooltip';
 import { getInitalsFromName } from '../../icons/avatar/helpers';
-import Tooltip from '../kendo/Tooltip';
 import { CustomGridCellProps } from '../kendo/types';
 import { styles } from './UserAvatar.style';
 
@@ -24,7 +24,13 @@ export const AvatarComponent: React.FC<AvatarComponentProps> = (props) => {
           {getInitalsFromName(name)}
         </Avatar>
       )}
-      <Tooltip data={name} />
+     <OverflowTooltip
+        arrow
+        placement="top"
+        title={name ?? ''}
+      >
+        {name ?? '-'}
+      </OverflowTooltip>
     </Box>
   );
 };

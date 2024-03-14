@@ -1,4 +1,5 @@
-import { Avatar, Box, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import { Avatar, Box, Button, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -12,16 +13,18 @@ import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg'
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
 import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_status.svg';
 import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject_status_solid.svg';
+import { translate } from '../../../../../common/intl';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { ActionTypes, STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
+import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -35,8 +38,8 @@ import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
 import { HoverStyleChip as RejectedHoverStyleChip } from '../../common/HoverStyleChipApprovalRejected';
 import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
 import { NormalStyleChip as RejectedNormalStyleChip } from '../../common/NormalStyleChipApprovalRejected';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
 import useStyles from './approverActions.styles';
 
@@ -136,7 +139,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
     {
       id: 'id5',
       isAttachments: true,
-      ltext: 'Attachments',
+      ltext: translate('common.attachments.poLine'),
       rtext: purchaseOrderAttachments || [],
     },
   ];
@@ -144,34 +147,52 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
   const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
+  const [downloadPdfMobile, setDownloadPdfMobile] = React.useState(false);
   const hoverItem = hoverItemId === id;
+
   const handleClick = () => {
     setOpen(!open);
   };
+
   const handleDismiss = () => {
     dismissLineItem?.(id);
   };
+
   const handlePinClick = () => {
     pinLineItem?.(id);
   };
+
   const handleUnPinClick = () => {
     unPinLineItem?.(id);
   };
+
   const onMouseHoverPinIcon = () => {
     setDownloadPdfHover(false);
     setPinHover(true);
   };
+
   const onMouseLeaveActionIcons = () => {
     setPinHover(false);
     setDownloadPdfHover(false);
   };
+
   const onMouseHoverDownloadPdfIcon = () => {
     setPinHover(false);
     setDownloadPdfHover(true);
   };
+
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
+
+  const handleDownloadClick = () => {
+    setDownloadPdfMobile(true);
+  };
+
+  const handleDownloadClose = () => {
+    setDownloadPdfMobile(false);
+  };
+
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
@@ -236,8 +257,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center">
-                <Grid item={true}>
+              <Grid container={true} wrap="nowrap" alignItems="center" lg={12} className={classes.innerWrap}>
+                <Grid item={true} >
                   <Typography
                     component="span"
                     variant="caption"
@@ -247,9 +268,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                   >
                     {approverName}
                   </Typography>
-                </Grid>
-                {STATUS_TYPES_LABEL.REJECTED === status && (
-                  <Grid item={true}>
+                  {STATUS_TYPES_LABEL.REJECTED === status && (
+
                     <Typography
                       component="span"
                       variant="caption"
@@ -274,10 +294,10 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                         />
                       )}
                     </Typography>
-                  </Grid>
-                )}
-                {STATUS_TYPES_LABEL.APPROVED === status && (
-                  <Grid item={true}>
+
+                  )}
+                  {STATUS_TYPES_LABEL.APPROVED === status && (
+
                     <Typography
                       component="span"
                       variant="caption"
@@ -304,8 +324,9 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                         />
                       )}
                     </Typography>
-                  </Grid>
-                )}
+                  )}
+                </Grid>
+
                 {STATUS_TYPES_LABEL.APPROVED !== status
                   && STATUS_TYPES_LABEL.REJECTED !== status && (
                   <Grid item={true}>
@@ -331,12 +352,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     <Text translation="common.your" />
                   </Typography>
                 </Grid> */}
-                <Grid item={true} className={classes.truncateMobile}>
-                  <DocId
-                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#' }
-                    docId={docId}
-                  />
-                </Grid>
+
                 {/* {docRevName && (
                   <Grid item={true}>
                     <Typography
@@ -350,7 +366,14 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     </Typography>
                   </Grid>
                 )} */}
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                {/* <Grid zeroMinWidth item={true} className={classes.truncateText}>
+
+                </Grid> */}
+                <Grid item={true}>
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#' }
+                    docId={docId}
+                  />
                   <DocTitle
                     url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docRevVersion={docRevVersion}
@@ -383,7 +406,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={classes.actionIcons}
+            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
@@ -558,15 +581,35 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
               </Grid>
             </StyledListItem>
           ))}
+          <Grid className={classes.gridApproveMobile}>
+            <Button
+              className={classes.downloadButton}
+              data-cy="transition-download-pdf"
+              onClick={handleDownloadClick}
+            >
+              <DownloadPdfIcon stroke={Colors.white_smoke} />
+              <Text translation="common.download.pdf" />
+            </Button>
+            {downloadPdfMobile && (
+              <DownloadHtmlPreview
+                id={docRevId}
+                dialogPDF={dialogPDF}
+                onClose={handleDownloadClose}
+                downloadPdfHover
+              />
+            )}
+          </Grid>
         </List>
       </Collapse>
       {selectedAttachment && (
-        <ViewFile
-          isOpen={dialogHandler.isOpen}
-          handleClose={closeDialog}
-          attachments={[selectedAttachment]}
-          attachment={selectedAttachment}
-        />
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...(purchaseOrderAttachments ?? [])] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
       )}
     </>
   );

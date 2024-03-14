@@ -13,9 +13,11 @@ import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
-import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
+import { BOMTreeData, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../state/ducks/relatedParts/types';
+import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -32,12 +34,13 @@ import DialogOpener from './textDiff/DialogOpener';
 interface OwnProps {
   audit: Audit
   dataCy?: string
+  revIdRelatedTypeObj?: {[key: string]: RELATED_TYPE}
 }
 
 type Props = OwnProps;
 
 const AuditFactory: React.FunctionComponent<Props> = ({
-  audit, dataCy,
+  audit, dataCy, revIdRelatedTypeObj,
 }) => {
   let returnValue;
   const intl = useIntl();
@@ -45,6 +48,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { nextValue, previousValue } = audit;
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
+
+  const relatedType = revIdRelatedTypeObj?.[audit.documentRevisionId];
 
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;
@@ -463,15 +468,16 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } else if (audit.type.includes('ARRAY_EDITED')) {
           const nextVal: string = audit.nextValue as string;
           try {
-            const { instruction, assignedAdded, assigneeDeleted, status, completedAt, assignedTo } = JSON.parse(nextVal);
+            const { instruction, assignedAdded, assigneeDeleted, status, assignedTo, comment } = JSON.parse(nextVal);
             returnValue = (
               <>
                 { instruction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.instruction.updated', { instruction }) }
                 { assignedAdded && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.added', { assignedAdded }) }
-                { (status === FBInvTaskState.DONE && completedAt)
+                { (status === FBInvTaskState.DONE)
                 && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.completed', { assignedTo }) }
                 { (status === FBInvTaskState.DRAFT) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.draft', { assignedTo }) }
                 { assigneeDeleted && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.deleted', { assigneeDeleted }) }
+                { comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.comment', { comment }) }
               </>
             );
           } catch (error) {
@@ -504,16 +510,17 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } else if (audit.type.includes('ARRAY_EDITED')) {
           const nextVal: string = audit.nextValue as string;
           try {
-            const { onOrderPOAction, inInspectionAction, inInventoryAction, inWipAction, asFinishedGoodsAction, usedLocation, comment } = JSON.parse(nextVal);
+            const { onOrderPOAction, inInspectionAction, inInventoryAction, inWipAction, asFinishedGoodsAction, usedLocation, comment, lotDocId, partDocId } = JSON.parse(nextVal);
+            const mdDocRow = lotDocId || partDocId;
             returnValue = (
               <>
-                { onOrderPOAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.onOrderPOAction.updated', { onOrderPOAction }) }
-                { inInspectionAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInspectionAction.updated', { inInspectionAction }) }
-                { inInventoryAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInventoryAction.updated', { inInventoryAction }) }
-                { inWipAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inWipAction.updated', { inWipAction }) }
-                { asFinishedGoodsAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.asFinishedGoodsAction.updated', { asFinishedGoodsAction }) }
-                { usedLocation && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.usedLocation.updated', { usedLocation }) }
-                { comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.comment.updated', { comment }) }
+                { onOrderPOAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.onOrderPOAction.updated', { mdDocRow, onOrderPOAction: getMDOptionLabels(onOrderPOAction) }) }
+                { inInspectionAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInspectionAction.updated', { mdDocRow, inInspectionAction: getMDOptionLabels(inInspectionAction) }) }
+                { inInventoryAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInventoryAction.updated', { mdDocRow, inInventoryAction: getMDOptionLabels(inInventoryAction) }) }
+                { inWipAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inWipAction.updated', { mdDocRow, inWipAction: getMDOptionLabels(inWipAction) }) }
+                { asFinishedGoodsAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.asFinishedGoodsAction.updated', { mdDocRow, asFinishedGoodsAction: getMDOptionLabels(asFinishedGoodsAction) }) }
+                { usedLocation && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.usedLocation.updated', { mdDocRow, usedLocation: getMDOptionLabels(usedLocation) }) }
+                { comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.comment.updated', { mdDocRow, comment }) }
               </>
             );
           } catch (error) {
@@ -522,8 +529,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } else {
           const prevVal: string = audit.previousValue as string;
           try {
-            const { partDocId } = JSON.parse(prevVal);
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(partDocId)}</div>);
+            const { partDocId, lotDocId } = JSON.parse(prevVal);
+            if (lotDocId) {
+              returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(lotDocId)}</div>);
+            } else {
+              returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(partDocId)}</div>);
+            }
           } catch (error) {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
           }
@@ -535,6 +546,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             <Text
               dataCy={`${dataCy}-basepart-status`}
               translation="relatedParts.parentPart.answer.yes.together"
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }}
             />
           );
         } else if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
@@ -542,6 +557,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             <Text
               dataCy={`${dataCy}-basepart-status`}
               translation="relatedParts.parentPart.answer.yes.separate"
+              values = {{
+                relatedType: getDynamicTextValue(
+                  relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
+              }}
             />
           );
         } else if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_NO) {

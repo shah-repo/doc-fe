@@ -12,16 +12,18 @@ import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg'
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
 import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject.svg';
 import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_solid.svg';
+import { translate } from '../../../../../common/intl';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
+import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -31,8 +33,8 @@ import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
@@ -45,6 +47,7 @@ interface Props {
   docRevId: string
   approvalId: string
   timestamp: string
+  isRenderHTMLDefined: boolean
   docRevOwnerAvatar: Nullable<string>
   docRevOwnerInitialColor: string
   docRevOwnerName: string
@@ -80,6 +83,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   timestamp,
   docRevName,
   docRevVersion,
+  isRenderHTMLDefined,
   docRevOwnerAvatar,
   docRevOwnerInitialColor,
   purchaseOrderCurrency,
@@ -138,7 +142,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     {
       id: 'id5',
       isAttachments: true,
-      ltext: 'Attachments',
+      ltext: translate('common.attachments.poLine'),
       rtext: purchaseOrderAttachments || [],
     },
   ];
@@ -303,8 +307,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     >
                       {docRevOwnerName}
                     </Typography>
-                  </Grid>
-                  <Grid item={true}>
                     <Typography
                       component="span"
                       variant="body2"
@@ -314,13 +316,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     >
                       <Text translation="require.approval" />
                     </Typography>
-                    <DocId
-                      url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
-                      docId={docId}
-                    />
                   </Grid>
                 </Grid>
                 <Grid item={true}>
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                    docId={docId}
+                  />
                   <DocTitle
                     url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docRevVersion={docRevVersion}
@@ -356,7 +358,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             className={`${classes.actionIcons} ${classes.poActionIconsWidth}`}
             onMouseLeave={onMouseLeaveActionIcons}
           >
-            {!downloadPdfHover && (
+            {!downloadPdfHover && isRenderHTMLDefined && (
               <span>
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
@@ -463,7 +465,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            {dismissLineItem && (
+            {!dismissLineItem && (
               <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
             )}
           </Box>
@@ -592,20 +594,20 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               <ApproveIcon fill={Colors.white} />
               <Text message="common.approve" />
             </Button>
-            <Button
+            {isRenderHTMLDefined && <Button
               className={classes.downloadButton}
               data-cy="transition-download-pdf"
               onClick={handleDownloadClick}
             >
               <DownloadPdfIcon stroke={Colors.white_smoke} />
               <Text translation="common.download.pdf" />
-            </Button>
+            </Button>}
             {downloadPdfMobile && (
               <DownloadHtmlPreview
                 id={docRevId}
                 dialogPDF={dialogPDF}
                 onClose={handleDownloadClose}
-                downloadImmediately
+                downloadPdfHover
               />
             )}
           </Grid>
@@ -625,12 +627,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         label="transition.action.approve"
       />
       {selectedAttachment && (
-        <ViewFile
-          isOpen={dialogHandler.isOpen}
-          handleClose={closeDialog}
-          attachments={[selectedAttachment]}
-          attachment={selectedAttachment}
-        />
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...purchaseOrderAttachments] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
       )}
     </>
   );

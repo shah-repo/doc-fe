@@ -1,22 +1,22 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import Colors from '../../layout/theme/utils/colors';
+import Colors from '../../layout/theme-next/colors';
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     submitButton: {
       height: 36,
       borderRadius: '100px',
-      backgroundColor: Colors.navy,
+      backgroundColor: Colors.primary,
       color: Colors.white,
       '&:hover': {
-        background: Colors.navy,
+        background: Colors.primary,
       },
     },
     cancelButton: {
       height: 36,
       borderRadius: '100px',
       backgroundColor: Colors.white,
-      color: Colors.navy,
+      color: Colors.primary,
       '&:hover': {
         background: Colors.white,
         boxShadow:
@@ -37,7 +37,7 @@ export const styles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       padding: theme.spacing(2.5, 2.5, 2.5, 0),
       height: 76,
-      background: Colors.white_smoke,
+      background: Colors.gray,
     },
     contentContainer: {
       flexWrap: 'nowrap',
@@ -51,16 +51,19 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       fontSize: '18px',
       lineHeight: '23px',
-      color: Colors.almost_black,
+      color: Colors.textBlack,
       width: 378,
     },
     contentText: {
       fontWeight: 400,
       fontSize: '14px',
       lineHeight: '21px',
-      color: Colors.almost_black,
+      color: Colors.textBlack,
       paddingTop: theme.spacing(1.25),
       'white-space': 'break-spaces',
+    },
+    descriptionField: {
+      paddingTop: theme.spacing(2),
     },
   }),
 );

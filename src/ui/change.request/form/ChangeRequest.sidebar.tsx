@@ -9,6 +9,7 @@ import { ReactComponent as CollapseIcon } from '../../../assets/images/collapse_
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-icon-references.svg';
 import { ReactComponent as TimelineIcon } from '../../../assets/images/history.svg';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
+import { TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
 import ChangeRequestAuditContainer from '../../change.request/audit/Audit.container';
 import CRReferences from '../../change.request/references/Reference';
 import Bookmarks from '../../documentRevision/Sidebar/Bookmarks.new';
@@ -19,6 +20,7 @@ import Colors from '../../layout/theme/utils/colors';
 
 interface Props {
   changeRequest: ChangeRequest
+  tabConfig: TabInfo[]
   setOpen: (value: boolean) => void
   isDrawerOpen: boolean
   fromEdit?: boolean
@@ -26,6 +28,7 @@ interface Props {
 
 const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
   changeRequest,
+  tabConfig,
   isDrawerOpen,
   setOpen,
   fromEdit,
@@ -74,7 +77,7 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
         title: intl.formatMessage({
           id: 'document.revision.bookmarks',
         }),
-        component: <Bookmarks />,
+        component: <Bookmarks tabConfig={tabConfig} />,
       },
     },
   ];

@@ -1,7 +1,9 @@
-import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { Box, Button, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as AttachmentIcon } from '../../../../../assets/images/attachment.svg';
@@ -10,15 +12,16 @@ import { ReactComponent as DownloadPdfIcon } from '../../../../../assets/images/
 import { ReactComponent as ExpandIcon } from '../../../../../assets/images/expand.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
-import { ReactComponent as POIcon } from '../../../../../assets/images/PO.svg';
+import { translate } from '../../../../../common/intl';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
+import Text from '../../../../components/Text';
+import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
-import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -31,10 +34,10 @@ import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
 import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
 import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
-import { DocTypeGroups } from '../../common/types';
+import { StyledListItem } from '../../common/StyledListItem';
 import { formatCurrency } from '../../common/Utils';
+import { DocTypeGroups } from '../../common/types';
 import useStyles from './purchaseOrder.styles';
 
 interface Props {
@@ -127,7 +130,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
     {
       id: 'id5',
       isAttachments: true,
-      ltext: 'Attachments',
+      ltext: translate('common.attachments.poLine'),
       rtext: purchaseOrderAttachments || [],
     },
   ];
@@ -135,34 +138,52 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
+  const [downloadPdfMobile, setDownloadPdfMobile] = React.useState(false);
   const hoverItem = hoverItemId === id;
+
   const handleClick = () => {
     setOpen(!open);
   };
+
   const handleDismiss = () => {
     dismissLineItem?.(id);
   };
+
   const handlePinClick = () => {
     pinLineItem?.(id);
   };
+
   const handleUnPinClick = () => {
     unPinLineItem?.(id);
   };
+
   const onMouseHoverPinIcon = () => {
     setDownloadPdfHover(false);
     setPinHover(true);
   };
+
   const onMouseLeaveActionIcons = () => {
     setPinHover(false);
     setDownloadPdfHover(false);
   };
+
   const onMouseHoverDownloadPdfIcon = () => {
     setPinHover(false);
     setDownloadPdfHover(true);
   };
+
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
+
+  const handleDownloadClick = () => {
+    setDownloadPdfMobile(true);
+  };
+
+  const handleDownloadClose = () => {
+    setDownloadPdfMobile(false);
+  };
+
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
@@ -306,7 +327,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={classes.actionIcons}
+            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
@@ -479,17 +500,38 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   )}
                 </Grid>
               </Grid>
+
             </StyledListItem>
           ))}
+          <Grid className={classes.gridMobile}>
+            <Button
+              className={classes.downloadButton}
+              data-cy="transition-download-pdf"
+              onClick={handleDownloadClick}
+            >
+              <DownloadPdfIcon stroke={Colors.white_smoke} />
+              <Text translation="common.download.pdf" />
+            </Button>
+            {downloadPdfMobile && (
+              <DownloadHtmlPreview
+                id={docRevId}
+                dialogPDF={dialogPDF}
+                onClose={handleDownloadClose}
+                downloadPdfHover
+              />
+            )}
+          </Grid>
         </List>
       </Collapse>
       {selectedAttachment && (
-        <ViewFile
-          isOpen={dialogHandler.isOpen}
-          handleClose={closeDialog}
-          attachments={[selectedAttachment]}
-          attachment={selectedAttachment}
-        />
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={closeDialog}
+            attachments={[...purchaseOrderAttachments] as Attachment[]}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
       )}
     </>
   );

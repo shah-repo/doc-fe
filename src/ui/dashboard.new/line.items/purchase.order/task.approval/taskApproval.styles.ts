@@ -89,5 +89,11 @@ export default makeStyles((theme: NextTheme) => ({
     textOverlapMobile: {
       flexWrap: 'wrap',
     },
+    link: {
+      pointerEvents: 'none',
+    },
+    typographyChildrenBold: {
+      marginLeft: theme.spacing(-2),
+    },
   },
 }));
