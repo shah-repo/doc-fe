@@ -283,7 +283,7 @@ const RelatedPartGrid: React.FunctionComponent<{
               <Text translation="relatedParts.grid.title"
                 values = {{
                   relatedType: getDynamicTextValue(
-                    relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+                    relatedType, RELATED_TYPE_VALUES_ENUM.PART_CAPS, RELATED_TYPE_VALUES_ENUM.DOCUMENT_CAPS),
                 }} />
             </Typography>
           </Grid>
