@@ -12,6 +12,7 @@ import { ReactComponent as MobileLogo } from '../../assets/images/enlil_white_lo
 import Config from '../../config';
 import { WhiteLabelingEnv } from '../../state/ducks/company/types';
 import { store } from '../../state/store';
+import { isCurrentUrl } from '../common/utils/helpers';
 import Text from '../components/Text';
 import { ThemeEnv } from '../layout/theme/utils/types';
 import styles from './Header.styles';
@@ -42,13 +43,36 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   const user = store.getState().auth.user;
   const companyName = user.employee.company.name;
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
+  const hideComponent = isCurrentUrl();
   const {
     handleSwitchCompany,
   } = React.useContext(UserMenuContext)! ?? {};
 
   return (
     <AppBar className={cx(classes.appBar, className)}>
+      <Grid container spacing={2} className={classes.webViewHeader}>
+        <Grid xs={6} md={4}>
+          <div className={cx(classes.weViewtoolbar, classes.webMakeview)}>
+            <Typography variant="caption">
+              <Text translation="header.design.make" />
+            </Typography>
+          </div>
+        </Grid>
+        <Grid xs={6} md={4} >
+          <div>
+            <SearchBar />
+          </div>
+        </Grid>
+        <Grid xs={6} md={4}>
+          <div className={classes.helpCenter}>
+            <HelpCenter />
+            <AutosaveToggle />
+          </div>
+        </Grid>
+
+      </Grid>
       <div className={classes.mobileMake}>
+
         <div>
           <FontAwesomeIcon icon={solid('bars-sort')} className={classes.mobileSide} onClick={handleDrawerOpen} />
           <MobileLogo className={classes.logoMobile} />
@@ -70,19 +94,16 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
           )}
         </div>
       </div>
-      <Toolbar className={classes.toolbar}>
+
+      <Toolbar className={cx(classes.toolbar, { [classes.welcomeHide]: !hideComponent })}>
         <Grid
           container
           alignItems="center"
           justify="space-between"
           wrap="nowrap"
-          spacing={2}
+          spacing={1}
         >
-          <Grid item xs className={classes.mobileGrwFlex}>
-            {!fullHeight && (
-              <SearchBar />
-            )}
-          </Grid>
+
           <Grid item>
             {fullHeight && (
               <Typography variant="caption" className={classes.welcomeText} component="div">
@@ -97,8 +118,6 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
                 label={<Text translation="form.builder.header.control.label" />}
               />
             )}
-            <AutosaveToggle className={classes.mobileStyle} />
-            <HelpCenter className={classes.mobileStyle} />
           </Grid>
         </Grid>
       </Toolbar>
