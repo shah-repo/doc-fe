@@ -11,6 +11,7 @@ import {
   FBInputType,
   FBSchemaProps,
 } from '..';
+import TrainingListTable from '../../training/trainingList';
 import FBApprovalMatrixField from '../FBApprovalMatrixField/FBApprovalMatrixField';
 import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatrixFieldRoles';
 import FBApprovals from '../FBApprovals/FBApprovals';
@@ -144,6 +145,7 @@ class FBSchemaState {
     lotQuantity: FBLotQuantityField,
     lotOnHandQuantity: FBLotOnHandQuantityField,
     partVendors: FBPartVendors,
+    trainingList: TrainingListTable,
     numeric: FBNumericField,
     cycleCount: FBCycleCount,
   };
