@@ -1325,6 +1325,7 @@
   "form.builder.audit.STRING_EDITED": "{label} Updated",
   "form.builder.audit.STRING_DELETED": "{label} Deleted",
   "form.builder.audit.ARRAY_NEW": "{label} added",
+  "form.builder.audit.ARRAY_ADDED": "{label} added",
   "form.builder.audit.ARRAY_EDITED": "{label} updated",
   "form.builder.audit.ARRAY_DELETED": "{label} deleted",
   "form.builder.audit.NUMBER_NEW": "{label} added",
