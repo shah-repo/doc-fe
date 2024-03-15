@@ -3,8 +3,9 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBFileFieldProps, FBFileFieldState } from '..';
-import { FILE_UPLOAD_LIMIT, calculateTotalFileSize, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
+import { calculateTotalFileSize, FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
 import { toastError } from '../../components/notifications';
+import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -20,6 +21,8 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     const { fileUploadState, workspaceState, formState } = FB.useStores();
     const { id } = workspaceState || {};
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
+    const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
+    const isWORecord = checkIsDocumentWO(groupOptions) && isEmpty(workspaceState?.document?.formTemplate);
 
     const fileUploadEl = document.getElementById(`fb-attachment-field-${name}`);
 
@@ -77,7 +80,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       if (!isEmpty(invalidFiles)) {
         toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ', ')}`);
       }
-      if (workspaceState?.mode !== 'preview') {
+      if (workspaceState?.mode !== 'preview' || isWORecord) {
         fileFieldState?.upload(validFiles);
       }
     };
@@ -91,7 +94,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       reaction(
         () => fileFieldState?.data,
         (data) => {
-          if (workspaceState?.mode !== 'preview') {
+          if (workspaceState?.mode !== 'preview' || isWORecord) {
             fileUploadState?.addFile(data);
           }
         },

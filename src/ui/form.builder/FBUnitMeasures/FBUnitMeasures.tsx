@@ -1,21 +1,28 @@
 import React from 'react';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBUnitMeasuresProps } from '..';
+import { withFBInput } from '../FBInput/FBInput.wrap';
 
 const FBUnitMeasures: React.FunctionComponent<FBUnitMeasuresProps> = ({
   name,
   disabled,
   label,
   gutter,
+  hidden,
   defaultValue,
 }) => (
-  <FBAutocompleteAsync
-    type="unitMeasures"
-    optionId={FBAutocompleteAsyncOption.unitMeasures}
-    autosave
-    withState
-    defaultValue={defaultValue}
-    {...{ disabled, name, label, gutter }}
-  />
+  <>
+    {!hidden
+      && <FBAutocompleteAsync
+        type="unitMeasures"
+        optionId={FBAutocompleteAsyncOption.unitMeasures}
+        autosave
+        withState
+        defaultValue={defaultValue}
+        {...{ disabled, name, label, gutter }}
+      />
+    }
+  </>
+
 );
 
-export default FBUnitMeasures;
+export default withFBInput(FBUnitMeasures);

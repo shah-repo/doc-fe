@@ -11,15 +11,13 @@ import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import {
-  TreeList,
-  TreeListCellProps,
-  TreeListColumnReorderEvent,
-  TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent,
   extendDataItem,
   filterBy,
   mapTree,
-  orderBy,
-  treeToFlat,
+  orderBy, TreeList,
+  TreeListCellProps,
+  TreeListColumnReorderEvent,
+  TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
@@ -47,14 +45,22 @@ import { translate } from '../../../../../common/intl';
 import { getHasPermission, getTableCriteria } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
-import Text from '../../../../components/Text';
 import Loader from '../../../../components/common/kendo/Loader';
+import {
+  ColumnMenuContext,
+  CustomColumnMenu,
+} from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
+import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
+import ExportTreeListDialog from '../../../../components/common/treelist/ExportTreeListDialog/ExportTreeListDialog';
+import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import WhereUsedDialog, { WhereUsedType } from '../../../../components/whereUsed/WhereUsedDialog';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { bomDisabledChangeControl, disableOtherFieldsChangeControl, getEnabledFieldsForEditing, substitutingSupersededDisabledChangeControl } from '../../../../document.revision/utils/helpers';
@@ -64,16 +70,11 @@ import useDialog from '../../../../hooks/useDialog';
 import useHover from '../../../../hooks/useHover';
 import { withThemeNext } from '../../../../layout/theme-next';
 import FBDataStore from '../../../FBStore/FBDataStore';
-import { FBBOM } from '../../../index';
+import { FB, FBBOM } from '../../../index';
 import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import FBBOMDetailDrawer from '../drawer/AlternateParts';
 import DocumentRevisionDrawer from '../drawer/DocumentRevisionDrawer';
 import { ActionsCell } from './column.templates/Actions';
-import {
-  ColumnMenuContext,
-  CustomColumnMenu,
-} from './column.templates/CustomColumnMenu';
-import ColumnShowHideTreeMenu from './common/ColumnShowHideTreeMenu';
 import {
   ADD_FIELD,
   BOM_TABLE_NAME,
@@ -91,7 +92,6 @@ import {
 import {
   BOMResponse,
   BOMState,
-  CustomTreeListColumnProps,
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
   FBBOMProps,
@@ -113,11 +113,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   isUpgradeDisabled = false,
   isMaxDialogOpen = false,
   isSliderView = false,
+  isWO,
 }) => {
-  const { _tabsState } = SM.useStores();
+  const { _tabsState, _documentRevisionFormState } = SM.useStores();
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
-  const { _documentRevisionFormState } = SM.useStores();
+  const { workspaceState } = FB.useStores();
   const isMaximizeView = _documentRevisionFormState?.isMaximizedView;
 
   const classes = useStyles({
@@ -194,7 +195,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       treeListAsync.start(
         fetchBOMTreeList,
         documentRevision.id,
-        false,
+        isWO,
         treeListAsync,
       );
       dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
@@ -211,11 +212,21 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   });
 
   const reloadBOM = () => {
+    let selectedWOPart = '';
+    if (isWO && documentRevision?.id) {
+      selectedWOPart
+        = workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id
+        ?? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
+        ?? '';
+      if (!selectedWOPart) {
+        return;
+      }
+    }
     _documentRevisionFormState?.setBOMChangesInProgress(false);
     treeListAsync.start(
       fetchBOMTreeList,
-      documentRevision.id,
-      false,
+      isWO ? selectedWOPart : documentRevision.id,
+      isWO,
       treeListAsync,
     );
   };
@@ -250,7 +261,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         treeListAsync.start(
           fetchBOMTreeList,
           documentRevision.id,
-          false,
+          isWO,
           treeListAsync,
         );
       }
@@ -341,6 +352,15 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const confirmationDialog = useDialog();
 
   const whereUsedDialog = useDialog();
+
+  const exportTreelistDialog = useDialog();
+  const [exportFileName, setExportFileName] = useState(EXCEL_FILE_NAME);
+
+  const confirmExportTreelistDialog = (fileName) => {
+    exportTreelistDialog.close();
+    setExportFileName(fileName || EXCEL_FILE_NAME);
+    exportToExcel();
+  };
 
   const openWhereUsedDialog = () => {
     whereUsedDialog.open();
@@ -521,6 +541,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   };
 
   const editBOM = ({ dataItem, level }: BOMEditEvent) => {
+    if (isWO) {
+      return;
+    }
+
     if (dataItem.id === documentRevision.id) {
       return;
     }
@@ -697,6 +721,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     const parentChildRelkey = item.parentDocId ? `bom-row-${item.parentDocId}-${item.docId}` : `bom-row-${item.docId}`;
     item.isDisabled = isDisabled;
     item.isMaximizedWindow = isMaxDialogOpen;
+    item.isWO = isWO;
     item.isUpgradeDisabled = isUpgradeDisabled;
     item.enabledFieldsForEditing = enabledFieldsForEditing;
     item.inRestrictedEditMode = inRestrictedEditMode;
@@ -856,10 +881,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     <GridToolbar>
       <Grid
         container
-        justify="space-between"
+        justify={isWO ? 'flex-end' : 'space-between'}
         className={classes.toolbarContainer}
       >
-        <Grid
+        {!isWO && <Grid
           item
           data-cy="collapse-expand-collapse"
           className={cx(classes.toggleExpandCollapse, {
@@ -874,10 +899,10 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           <span onClick={handleCollapseAll}>
             {translate('common.collapse.all')}
           </span>
-        </Grid>
+        </Grid>}
         <Grid item>
           <Grid container justify="flex-end">
-            {showDiffView && (
+            {!isWO && showDiffView && (
               <Grid
                 item
                 data-cy="show-hide-diff"
@@ -907,7 +932,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 </span>
               </Grid>
             )}
-            <Grid
+            {!isWO && <Grid
               item
               data-cy="excel-export"
               className={cx({ [classes.disabled]: isShowOnly })}
@@ -920,12 +945,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 <FontAwesomeIcon
                   data-cy="excel-download"
                   className={classes.exportExcelIcon}
-                  onClick={exportToExcel}
+                  onClick={() => exportTreelistDialog.open()}
                   icon={solid('arrow-down-to-line')}
                 />
               </StyleTooltip>
-            </Grid>
-            {showTree && (
+            </Grid>}
+            {!isWO && showTree && (
               <Grid
                 item
                 data-cy="where-used-view"
@@ -954,7 +979,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 onChange={onColumnShowHide}
               />
             </Grid>
-            {!isMaxDialogOpen && (
+            {!isWO && !isMaxDialogOpen && (
               <Grid
                 item
                 data-cy="maximize"
@@ -1168,7 +1193,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 <ExcelExport
                   ref={(exporter) => (_export = exporter)}
                   hierarchy
-                  fileName={EXCEL_FILE_NAME}
+                  fileName={exportFileName}
                 >
                   <TreeList
                     style={{ overflow: 'auto', maxHeight: size?.height ? (`${size.height - (isMaximizeView ? -85 : 160)}px`) : '100px' }}
@@ -1250,6 +1275,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
           type={WhereUsedType.PART}
         />
       )}
+      {exportTreelistDialog.isOpen && (
+        <ExportTreeListDialog
+          confirmDialog={confirmExportTreelistDialog}
+          dialog={exportTreelistDialog}
+        />
+      )}
       <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer: closeDetailDrawer, dataItem: selectedDataItem }} >
         <DocumentRevisionDrawer {...{ dataItem: selectedDataItem, closeDrawer: closeDetailDrawer, isSliderView: isPartsDrawerOpened }} />
       </FBBOMDetailDrawer>
@@ -1281,6 +1312,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
             isShowOnly={isShowOnly}
             isUpgradeDisabled={isUpgradeDisabled}
             isMaxDialogOpen={true}
+            isWO={isWO}
           />
         </DialogContent>
       </Dialog>

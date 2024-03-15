@@ -4,19 +4,21 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { Attachment } from '../../../../../state/ducks/attachments/types';
-import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
+import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
+import { Button } from '../../../../components/forms/fields-next';
+import { useFormContext } from '../../../../components/forms/FormContext';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import { useFormContext } from '../../../../components/forms/FormContext';
-import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
+import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBSection } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -24,18 +26,24 @@ import { changeRequestPreviewPath } from '../../../utils/paths';
 import { COMMENTS_FIELD, EmployeeStatus } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableTLItem, EmployeeResponse, TLItemEditEvent, TasksListItem } from './types';
+import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './types';
 import { updateData } from './utils';
 
 interface props {
-  changeRequest?: ChangeRequest
+  partOfId: string
+  state: ChangeRequestStatus | DocumentRevisionStatus
   isShowOnly?: boolean
+  disabled?: boolean
+  label?: string
   isAdditionalColumnsShown?: boolean
   setDoNotPrompt?: (state: boolean) => void
 }
 
-const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt }) => {
+const FBTasksListTable: React.FunctionComponent<props> = (
+  { partOfId, label, state, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt, disabled }) => {
   const classes = useStyles();
+  isShowOnly = (isShowOnly || disabled) ?? false;
+  const [partOfIdToUse, setPartOfIdToUse] = useState(partOfId);
   const { workspaceState } = FB.useStores();
   const [editedTLItem, setEditedTLItem] = React.useState<Partial<EditableTLItem>>();
   const isTasksListAdded = editedTLItem?.[MODE_FIELD] === Mode.add;
@@ -53,9 +61,16 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   const formContext = useFormContext();
   const parentFormik = useFormikContext();
   const history = useHistory();
+  const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
+  const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
+  const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
+
+  if (enbleTasksAdditionalColumns) {
+    isAdditionalColumnsShown = true;
+  }
 
   const loadTasksTableData = () => {
-    changeRequest?.id && tasksAsync.start(fetchTasksList, changeRequest.id, tasksAsync);
+    tasksAsync.start(fetchTasksList, partOfIdToUse, tasksAsync);
   };
 
   const tasksAsync = useAsync({
@@ -79,21 +94,35 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
   const updateTaskAsync = useAsync({
     onSuccess: () => {
       loadTasksTableData();
-      if (formContext.isEditing) {
-        history.push(changeRequestPreviewPath(changeRequest?.id ?? ''));
+      if (formContext?.isEditing) {
+        history.push(changeRequestPreviewPath(partOfId ?? ''));
       }
     },
     onError: toastError,
   });
 
   useEffect(() => {
-    const data = workspaceState?.getTLTableData;
-    if ((isEmpty(data) && formContext.isEditing) || !formContext.isEditing) {
-      loadTasksTableData();
-    } else if (!isEmpty(data)) {
-      setData(data as EditableTLItem[]);
+    if (workspaceState?.id && !partOfId) {
+      setPartOfIdToUse(workspaceState.id);
     }
-  }, []);
+  }, [workspaceState?.id, partOfId]);
+
+  useEffect(() => {
+    if (!partOfIdToUse) {
+      return;
+    }
+
+    if (isWORecord) {
+      loadTasksTableData();
+    } else {
+      const data = workspaceState?.getTLTableData;
+      if ((isEmpty(data) && formContext?.isEditing) || !formContext?.isEditing) {
+        loadTasksTableData();
+      } else if (!isEmpty(data)) {
+        setData(data as EditableTLItem[]);
+      }
+    }
+  }, [partOfIdToUse]);
 
   const updateUnsavedData = (values: Partial<EditableTLItem>) => {
     const updatedData = updateData(values, data);
@@ -102,19 +131,44 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     setData(updatedData);
   };
 
+  const setDataOnPreviewCase = (values) => {
+    if (values[MODE_FIELD] === Mode.add) {
+      setData(prev => [...prev, values as EditableTLItem]);
+    } else {
+      setData(prev => {
+        return prev.map(item => {
+          if (item.taskId === values.taskId) {
+            return {
+              ...item,
+              instruction: values.instruction ?? item.instruction,
+              employeeResponse: values?.employeeResponse ?? item.employeeResponse,
+            };
+          }
+          return item;
+        });
+      });
+    }
+    setEditedTLItem(undefined);
+  };
+
   const formik = useFormik<Partial<EditableTLItem>>({
     initialValues: {},
     onSubmit: (values) => {
+      if (workspaceState?.isPreview) {
+        setDataOnPreviewCase(values);
+        return;
+      }
+
       if (values[MODE_FIELD] === Mode.add) {
         const payload = {
           instruction: values?.instruction,
           employeeIds: values?.employeeResponse?.map(data => data.employeeId),
-          partOfId: changeRequest?.id,
+          partOfId: partOfIdToUse,
         };
 
         addTaskAsync.start(addTask, payload, addTaskAsync);
       } else {
-        if (formContext.isEditing) {
+        if (formContext?.isEditing) {
           updateUnsavedData(values);
         } else {
           updateTaskItem(values);
@@ -134,14 +188,14 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     const data = workspaceState?.getTLTableData ?? [];
     const updatedDataItemIds = workspaceState?.getTLUpdatedDataIds ?? [];
     const updatedData = data.filter(dataItem => updatedDataItemIds.includes(dataItem.taskId));
-    if (formContext.isEditing && parentFormik.isSubmitting && !isEmpty(updatedData)) {
+    if (formContext?.isEditing && parentFormik?.isSubmitting && !isEmpty(updatedData)) {
       setDoNotPrompt?.(true);
       updatedData.forEach((item) => {
         updateTaskItem(item);
       });
       workspaceState?.setTLTableData([]);
     }
-  }, [formContext.isEditing, parentFormik.isSubmitting, setDoNotPrompt, workspaceState]);
+  }, [formContext?.isEditing, parentFormik?.isSubmitting, setDoNotPrompt, workspaceState]);
 
   const createDraftTLItem = () => setEditedTLItem({
     taskId: uuidv4(),
@@ -153,13 +207,13 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     const payload = {
       instruction: values?.instruction,
       employeeIds: values?.employeeResponse?.map(data => data.employeeId),
-      partOfId: changeRequest?.id,
+      partOfId: partOfIdToUse,
       employeeUpdates: values?.employeeResponse?.map(data => ({
         employeeId: data.employeeId,
       })),
     };
 
-    updateTaskAsync.start(updateTask, changeRequest?.id, values.taskId, payload, updateTaskAsync);
+    updateTaskAsync.start(updateTask, partOfIdToUse, values.taskId, payload, updateTaskAsync);
   };
 
   const deleteTaskItem = () => {
@@ -189,7 +243,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         };
       }),
     };
-    updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);
+    updateTaskAsync.start(updateTask, partOfIdToUse, taskId, payload, updateTaskAsync);
   };
 
   const employeeEvidenceUpdates = (dataItem: TasksListItem, employeeId: string, attachments: Attachment[]) => {
@@ -210,11 +264,12 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         };
       }),
     };
-    updateTaskAsync.start(updateTask, changeRequest?.id, taskId, payload, updateTaskAsync);
+    updateTaskAsync.start(updateTask, partOfIdToUse, taskId, payload, updateTaskAsync);
   };
 
   const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
-
+  const isWOReleased = isWORecord && DocumentRevisionStatus.Released === workspaceState?.document?.status;
+  const isClosed = isWORecord ? isWOReleased : [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state);
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
     onRowClick: editTLItem,
@@ -223,8 +278,8 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
     onDelete: deleteTaskItem,
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: debounceEmployeeEvidenceUpdates,
-    isDisabled: ChangeRequestStatus.Closed === changeRequest?.state,
-    currentState: changeRequest?.state,
+    isDisabled: isWORecord ? isWOReleased : ChangeRequestStatus.Closed === state,
+    isClosed,
   });
 
   const getColumns = () => {
@@ -275,7 +330,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
 
   return (
     <Box ref={containerRef} className={classes.root} data-cy="tasks-list-table">
-      <FBSection label={translate('approvalRequest.tasks.list.section.heading')}>
+      <FBSection label={label ?? translate('approvalRequest.tasks.list.section.heading')}>
         <Button
           kind="ghost"
           size="small"
@@ -283,7 +338,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
           startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
           onClick={createDraftTLItem}
           data-cy="add-task-small-btn"
-          disabled={isShowOnly || formContext.isEditing}
+          disabled={isShowOnly || formContext?.isEditing}
         >
           {translate('approvalRequest.tasks.list.add')}
         </Button>
@@ -300,7 +355,7 @@ const FBTasksListTable: React.FunctionComponent<props> = ({ changeRequest, isSho
         containerRef={containerRef}
         resizable={true}
       />
-      {!isShowOnly && !formContext.isEditing && <Button
+      {!isShowOnly && !formContext?.isEditing && <Button
         kind="add"
         fullWidth
         attached

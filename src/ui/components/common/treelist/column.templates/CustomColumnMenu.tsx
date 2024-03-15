@@ -4,11 +4,11 @@ import { createStyles, makeStyles } from '@material-ui/core';
 import { ColumnMenuItem, ColumnMenuProps } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import React, { ComponentType } from 'react';
-import { translate } from '../../../../../../common/intl';
-import HeaderMenu from '../../../../../components/common/header/Menu';
-import { DisplayText, TranslatedText } from '../../../../../components/common/kendo/helpers';
-import Colors from '../../../../../layout/theme/utils/colors';
-import { CustomTreeListColumnProps } from '../interface';
+import { translate } from '../../../../../common/intl';
+import Colors from '../../../../layout/theme/utils/colors';
+import HeaderMenu from '../../header/Menu';
+import { DisplayText, TranslatedText } from '../../kendo/helpers';
+import { CustomTreeListColumnProps } from '../types';
 
 interface CustomColumnMenuProps extends ColumnMenuProps {
   columns: CustomTreeListColumnProps[]
@@ -20,7 +20,7 @@ interface ColumnMenuContextProps {
   columns: CustomTreeListColumnProps[]
   onColumnShowHide: (params) => void
   onLock: (params) => void
-  isMaximizedView: boolean
+  isMaximizedView?: boolean
 }
 
 export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} as ColumnMenuContextProps);

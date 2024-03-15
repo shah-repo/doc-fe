@@ -6,6 +6,7 @@ import { DocumentRevision, DocumentRevisionDocument, DocumentRevisionStatus, Rev
 import { toastError } from '../../../../ui/components/notifications';
 import { FBInputType, FBSchemaProps, FBWorkspaceMode } from '../../../../ui/form.builder';
 import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
+import { AllocationState } from '../../../../ui/form.builder/FBAllocation/components/treelist/interface';
 import { BOMState } from '../../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { EditableBOM } from '../../../../ui/form.builder/FBBOM/interface';
 
@@ -36,6 +37,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public bomChangesInProgress = false;
   @observable public restorePartInfo = { dataItem: {}, level: [] };
   public bomInfo?: BOMState;
+  public allocationInfo?: AllocationState;
   @observable public refreshBOMTree = false;
   @observable public loading = false;
   @observable public formSchema: FBSchemaProps[] = [];
@@ -113,6 +115,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @computed public get getBOMInfo (): BOMState| undefined {
     return this.bomInfo;
+  }
+
+  public get getAllocationInfo (): AllocationState| undefined {
+    return this.allocationInfo;
   }
 
   @computed public get getChildPartInfo () {
@@ -226,6 +232,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action public setBOMInfo = (data) => {
     set(this, 'bomInfo', data);
+  };
+
+  @action public setAllocationInfo = (data?: AllocationState) => {
+    set(this, 'allocationInfo', data);
   };
 
   @action public setRefreshBOMTree = (data) => {
