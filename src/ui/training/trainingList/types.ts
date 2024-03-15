@@ -83,7 +83,7 @@ export interface TraineeEditEvent {
 
 type TraineeOptionDocument = Pick<DocumentRevisionDocument, 'id' | 'docId' >;
 
-export type TraineeOption =
+type TraineeOption =
 & Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayStatus' | 'displayRevision'>
 & {
   document: TraineeOptionDocument
