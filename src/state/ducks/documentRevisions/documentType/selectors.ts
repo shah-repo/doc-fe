@@ -1,13 +1,13 @@
 import { get, orderBy } from 'lodash';
 import { createSelector } from 'reselect';
 import { removeLastCharacterIfNotAlphaNumeric } from '../../../../ui/common/utils/helpers';
+import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
 import { checkIfDocumentHasOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { ApplicationState } from '../../../reducers';
 import { AsyncState } from '../../../types';
-import { DocumentGroupType, DocumentType, DOC_TYPE_GROUP_OPTION, TabInfo } from './types';
 import { companySelectors } from '../../company';
 import { DocumentCategory } from '../types';
-import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
+import { DocumentGroupType, DocumentType, DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION, TabInfo } from './types';
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -92,8 +92,8 @@ const getDocumentTypeByAcronym = createSelector(
 
 const getDocumentTypeByGroup = createSelector(
   byId,
-  (state, group: DocTypeGroups) => group,
-  (docTypesById, group) =>
+  (state: ApplicationState, group: DocTypeGroups) => group,
+  (docTypesById: DocumentTypeByIdState, group: DocTypeGroups) =>
     Object
       .values(docTypesById)
       .find((docType) => docType.group === group),

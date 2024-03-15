@@ -129,27 +129,31 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     setData(updatedData);
   };
 
+  const setDataOnPreviewCase = (values) => {
+    if (values[MODE_FIELD] === Mode.add) {
+      setData(prev => [...prev, values as EditableTLItem]);
+    } else {
+      setData(prev => {
+        return prev.map(item => {
+          if (item.taskId === values.taskId) {
+            return {
+              ...item,
+              instruction: values.instruction ?? item.instruction,
+              employeeResponse: values?.employeeResponse ?? item.employeeResponse,
+            };
+          }
+          return item;
+        });
+      });
+    }
+    setEditedTLItem(undefined);
+  };
+
   const formik = useFormik<Partial<EditableTLItem>>({
     initialValues: {},
     onSubmit: (values) => {
       if (workspaceState?.isPreview) {
-        if (values[MODE_FIELD] === Mode.add) {
-          setData(prev => [...prev, values as EditableTLItem]);
-        } else {
-          setData(prev => {
-            return prev.map(item => {
-              if (item.taskId === values.taskId) {
-                return {
-                  ...item,
-                  instruction: values.instruction ?? item.instruction,
-                  employeeResponse: values?.employeeResponse ?? item.employeeResponse,
-                };
-              }
-              return item;
-            });
-          });
-        }
-        setEditedTLItem(undefined);
+        setDataOnPreviewCase(values);
         return;
       }
 
@@ -263,7 +267,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
 
   const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
   const isWOReleased = isWORecord && DocumentRevisionStatus.Released === workspaceState?.document?.status;
-  const isClosed = isWORecord ? isWOReleased : (state === ChangeRequestStatus.Closed || state === DocumentRevisionStatus.Released);
+  const isClosed = isWORecord ? isWOReleased : [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state);
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
     onRowClick: editTLItem,

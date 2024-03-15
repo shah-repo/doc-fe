@@ -22,9 +22,11 @@ export const getWOAuditDefaultValue = (audit: Audit): string => {
   const { nextValue, previousValue } = audit;
   const workOrderOptionId = FBAutocompleteAsyncOption.availableParts;
   let auditValue: any = nextValue;
+
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;
   }
+
   if (audit.field === 'formInput.wo_part.id') {
     const autocompleteState = FB.useRef(FBAutocompleteAsyncState);
     autocompleteState?.setOptionId(workOrderOptionId);
@@ -35,6 +37,7 @@ export const getWOAuditDefaultValue = (audit: Audit): string => {
 
     const data = FBAutocompleteAsyncStore.data.get(workOrderOptionId);
     let label = '';
+
     if (data) {
       const record = data.get(auditValue);
       label = get(record, labelPrefixRoot, '') + ' ' + FB.stripTags(get(record, labelKey, ''));

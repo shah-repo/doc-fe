@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import striptags from 'striptags';
 import Config from '../../config';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
-import { WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY, WorkOrderTypes } from '../../state/ducks/documentRevisions/documentType/types';
+import { WorkOrderTypes, WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
 
 export const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
@@ -90,8 +90,12 @@ export function asyncDebounce (func: (...args: any) => any, wait?: number, optio
   });
 }
 
-export const getPayloadBasedOnWorkOrderType = (payload) => {
-  if (!isEmpty(payload) && payload[WO_TYPE_KEY] !== '') {
+export const getPayloadBasedOnWorkOrderType = (payload: Record<string, unknown>): Record<string, unknown> => {
+  if (isEmpty(payload)) {
+    return payload;
+  }
+
+  if (payload[WO_TYPE_KEY] !== '') {
     if (payload[WO_TYPE_KEY] === WorkOrderTypes.OTHER) {
       payload[WO_LOT_ID_KEY_NAME] = '';
       payload[WO_LHR_TABLE_KEY_NAME] = [];
@@ -104,5 +108,6 @@ export const getPayloadBasedOnWorkOrderType = (payload) => {
       payload[WO_LHR_TABLE_KEY_NAME] = [];
     }
   }
+
   return payload;
 };

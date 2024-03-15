@@ -234,7 +234,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, 'bomInfo', data);
   };
 
-  @action public setAllocationInfo = (data) => {
+  @action public setAllocationInfo = (data?: AllocationState) => {
     set(this, 'allocationInfo', data);
   };
 
