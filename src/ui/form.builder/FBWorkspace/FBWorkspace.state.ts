@@ -1,7 +1,8 @@
-import { includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
+import { cloneDeep, includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { appGlobals } from '../../../appGlobals';
+import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
 import { GroupTag, UserState } from '../../../state/ducks/auth/types';
 import { ChangeRequest, ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -238,8 +239,9 @@ class FBWorkspaceState extends FBSchemaState {
       case 'form':
       case 'formDesign':
         if (values) {
+          const payload = getPayloadBasedOnWorkOrderType(cloneDeep(values));
           body = {
-            formInput: omit(values,
+            formInput: omit(payload,
               Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
             ...mode === 'formDesign' && this.isOutputSchema && { schema },
           };

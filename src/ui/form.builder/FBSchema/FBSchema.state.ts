@@ -11,6 +11,7 @@ import {
   FBInputType,
   FBSchemaProps,
 } from '..';
+import FBTasksListTable from '../../change.request/FBMaterialDisposition/components/FBTasksListTable';
 import FBApprovalMatrixField from '../FBApprovalMatrixField/FBApprovalMatrixField';
 import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatrixFieldRoles';
 import FBApprovals from '../FBApprovals/FBApprovals';
@@ -65,6 +66,10 @@ import FBTextField from '../FBTextField/FBTextField';
 import FBTextFieldWithRange from '../FBTextFieldWithRange/FBTextFieldWithRange';
 import FBTimerField from '../FBTimerField/FBTimerField';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
+import FBWOApprovals from '../FBWOApprovals/FBWOApprovals';
+import FBWorkOrderLHRTable from '../FBWorkOrderLHRTable/FBWorkOrderLHRTable';
+import FBWorkOrderPartDetails from '../FBWorkOrderPartDetails/FBWorkOrderPartDetails';
+import FBWorkOrderType from '../FBWorkOrderType/FBWorkOrderType';
 import FBZIPUpload from '../FBZIPUpload/FBZIPUpload';
 
 class FBSchemaState {
@@ -125,6 +130,7 @@ class FBSchemaState {
     task: FBTask,
     approvers: FBApprovers,
     approvals: FBApprovals,
+    woApprovals: FBWOApprovals,
     procedure: FBProcedure,
     mpiprocedure: FBMPIProcedure,
     parts: FBParts,
@@ -146,6 +152,10 @@ class FBSchemaState {
     partVendors: FBPartVendors,
     numeric: FBNumericField,
     cycleCount: FBCycleCount,
+    workOrderPartDetails: FBWorkOrderPartDetails,
+    tasksListTable: FBTasksListTable,
+    workOrderType: FBWorkOrderType,
+    workOrderLhrTable: FBWorkOrderLHRTable,
   };
 
   @observable public schema?: FBSchemaProps[];

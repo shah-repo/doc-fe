@@ -17,6 +17,7 @@ import { DocumentTypeById } from '../../../../../../state/ducks/documentRevision
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
 import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
+import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { FormContext } from '../../../../../components/forms/FormContext';
@@ -31,7 +32,6 @@ import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
 import { EditableBOM } from '../../../interface';
-import DocumentRevisionDialog from '../../DocumentRevisionDialog';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isEditBOM } from '../utils';
 import { styles } from './styles';
@@ -319,7 +319,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
   };
 
   const getRevInfoIcon = (i, hasChildren, availableRevs) => {
-    if (availableRevs?.isReleased && !dataItem.isDeleted) {
+    if (availableRevs?.isReleased && !dataItem.isDeleted && !dataItem.isWO) {
       return getInfoIcon();
     }
   };
@@ -369,9 +369,10 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
                     onClick={hasChildren ? onClick : undefined}
                     size="sm"
                     icon={
-                      expanded || !hasChildren
-                        ? regular('square-minus')
-                        : solid('square-plus')
+                      (dataItem.hasChildren && dataItem.isWO) ? solid('square-plus')
+                        : (expanded || !hasChildren)
+                          ? regular('square-minus')
+                          : solid('square-plus')
                     }
                   />
                 </span>
@@ -412,21 +413,21 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
             {dataItem.docId}
           </Link>
           : dataItem.docId) }
-        {dataItem.isOwner && !isEditMode && <Tooltip
+        {dataItem.isOwner && !isEditMode && !dataItem.isWO && <Tooltip
           title={translate('bom.owner')}
           placement="top"
           arrow
         >
           <FontAwesomeIcon data-cy="owner" className={cx(classes.defaultIcon, classes.ownerIcon)} icon={solid('user-pen')} />
         </Tooltip>}
-        {canAddChildren(dataItem) && <Tooltip
+        {canAddChildren(dataItem) && !dataItem.isWO && <Tooltip
           title={translate('bom.add.child.part')}
           placement="top"
           arrow
         >
           <FontAwesomeIcon data-cy="add-child-part-button" className={cx(classes.defaultIcon, classes.childePartAddIcon)} onClick={() => setChildInfo(dataItem, level)} color={Colors.primaryLight } icon={solid('octagon-plus')} />
         </Tooltip>}
-        {dataItem.isDeleted && !dataItem.isDisabled && <Tooltip
+        {dataItem.isDeleted && !dataItem.isDisabled && !dataItem.isWO && <Tooltip
           title={translate('common.restore')}
           placement="top"
           arrow

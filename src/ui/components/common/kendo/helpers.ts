@@ -160,6 +160,7 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
 export enum statusClassMapping {
   'Pending Approval'='PENDING_STATUS',
   'In Review'='PENDING_STATUS',
+  'In Progress'='PENDING_STATUS',
   'Pending Change'='PENDING_STATUS',
   'PENDING_CHANGE'='PENDING_STATUS',
   'IN_REVIEW' = 'PENDING_STATUS',

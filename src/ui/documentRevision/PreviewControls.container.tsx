@@ -7,13 +7,14 @@ import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { StyledButton } from '../../App/Shifamed/Components/forms/presenters/StyledListButton';
-import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as WarningIcon } from '../../assets/images/warning.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../assets/images/warning_white.svg';
 import { ReactComponent as WithDrawSubmissionIcon } from '../../assets/images/withdraw_submission.svg';
+import { translate } from '../../common/intl';
 import { getHasPermission } from '../../common/utils/selectors';
 import { getPOIndexDbInstance } from '../../indexDb';
 import { authSelectors } from '../../state/ducks/auth';
@@ -22,10 +23,10 @@ import { documentRevisionsActions, documentRevisionsSelectors } from '../../stat
 import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../state/ducks/documents';
+import { ApprovalStatus } from '../../state/ducks/documents/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
-import Text from '../components/Text';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
@@ -36,6 +37,7 @@ import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
 import PrintLabelDetailsDialog from '../components/table/printLabel/PrintLabelDetailsDialog';
+import Text from '../components/Text';
 import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
@@ -48,13 +50,14 @@ import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
-import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from './PreviewControls.container.types';
-import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
+import WOClose from './forms/presenters/Close';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
+import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from './PreviewControls.container.types';
 
 interface OwnProps {
   documentRevision: DocumentRevision
@@ -91,7 +94,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 }) => {
   const isNewLayout = SM.isNewLayout;
   const handleCreateDocument = useHandleCreateDoc();
-  const {
+  let {
     isVisible: showRevise,
     label: reviseLabel,
     tooltipConfig,
@@ -121,6 +124,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isPart = checkIsDocumentPart(groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
   const isEB = checkIsDocumentEB(groupOptions);
+  const isWO = checkIsDocumentWO(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
@@ -131,6 +135,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     }
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
+
+  if (isWO && !documentRevision?.formTemplate) {
+    reviseLabel = 'record.revise';
+  }
 
   const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
   const isNotRelatedTogetherPart = documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;
@@ -468,7 +476,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (!isEmailSent && !hasAccess) {
     accessableButtons.push(PreviewControlButtons.RequestAccess);
   }
-  if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && !isWO) {
     accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
   if (isLot) {
@@ -588,6 +596,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     </>
   );
 
+  const isWORecord = isWO && !hasOutput;
+  const isWOCloseEnabled = isWORecord && documentRevision?.approvals?.some((approval) => approval.status === ApprovalStatus.Pending);
+
   return (
     <>
       <PDFSocket {...{ documentRevision }} />
@@ -600,6 +611,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id

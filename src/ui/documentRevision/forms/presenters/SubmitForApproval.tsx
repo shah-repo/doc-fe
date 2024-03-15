@@ -3,15 +3,15 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
-import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DOC_TYPE_GROUP, DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType, DOC_TYPE_GROUP } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
-import Text from '../../../components/Text';
 import { toastError } from '../../../components/notifications';
+import Text from '../../../components/Text';
 import { FB, FBFormState } from '../../../form.builder';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -30,6 +30,8 @@ interface Props {
   currentDocumentType?: DocumentType
   renderAsButton?: boolean
   hasBuildType?: boolean
+  isWO?: boolean
+  isWOForm?: boolean
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
@@ -43,6 +45,8 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   currentDocumentType,
   renderAsButton,
   hasBuildType,
+  isWO,
+  isWOForm,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const dispatch = useDispatch();
@@ -52,7 +56,12 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
   const isLot = currentDocumentType?.group === DOC_TYPE_GROUP.LOT;
-  const label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
+  let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
+
+  if (isWO && !isWOForm) {
+    label = 'record.assign';
+  }
+
   const releaseAsync = useAsync({
     onError: (error) => {
       toastError(error as string);

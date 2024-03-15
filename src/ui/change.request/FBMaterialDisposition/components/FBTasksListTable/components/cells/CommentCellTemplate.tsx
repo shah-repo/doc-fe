@@ -3,7 +3,6 @@ import { get } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
-import { ChangeRequestStatus } from '../../../../../../../state/ducks/changeRequest/types';
 import { FormikField, TextField } from '../../../../../../components/forms/fields-next';
 import OverflowingContent from '../../../commonCells/OveflowContent';
 import { COMMENTS_FIELD, EmployeeStatus, EMPLOYEE_RESPONSE_FIELD, EMPTY_VALUE_PLACEHOLDER } from '../../constants';
@@ -40,7 +39,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, employeeId, isDisabled }) =>
 
 export const CommentCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
-  const { dataItem, currentState } = props;
+  const { dataItem, isClosed } = props;
   const { taskId } = dataItem;
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   const assigneeComments = dataItem.employeeResponse?.reduce((empObj, emp) => ({
@@ -48,8 +47,7 @@ export const CommentCellTemplate: React.FC<CustomTemplateProps> = (props) => {
     [emp.employeeId]: emp.comment,
   }), {});
   const currentUserId = useSelector(authSelectors.currentEmployeeId);
-  const isClosedAR = currentState === ChangeRequestStatus.Closed;
-  const showEditor = (employeeId, status) => currentUserId === employeeId && !isClosedAR && status !== EmployeeStatus.Done;
+  const showEditor = (employeeId, status) => currentUserId === employeeId && !isClosed && status !== EmployeeStatus.Done;
 
   return (<>
     <OverflowingContent>
