@@ -1,6 +1,6 @@
 import { AllocationLOTBody, AllocationPartBody } from '../../../ui/form.builder/FBAllocation/components/treelist/interface';
 import { AllocationItem } from '../../../ui/form.builder/FBAllocation/interface';
-import { apiActionWithCallbacks } from '../../factories';
+import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { ALLOCATION_LIST_ROOT_URL } from './constants';
 
@@ -38,14 +38,21 @@ const addPart = (
 const updatePart = (
   woId: string,
   partRevId: string,
+  isAutoAssigned: boolean,
   data: AllocationPartBody,
   handlers: Handlers,
 ): ApiAction<AllocationItem> =>
-  apiActionWithCallbacks({
+  apiAction({
     url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/parts/${partRevId}`,
     method: 'patch',
     data: data,
-    handlers,
+    onSuccess: (unknown, dispatch) => {
+      if (isAutoAssigned) {
+        dispatch(autoAssignLOT(woId, handlers));
+      } else {
+        handlers.successHandler.execute(null);
+      }
+    },
   });
 
 const addLot = (

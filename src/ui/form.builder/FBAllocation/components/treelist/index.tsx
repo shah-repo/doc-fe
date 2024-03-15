@@ -212,7 +212,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         lotRevId: values.lotRevId,
       };
 
-      partAsync.start(updatePart, documentRevision?.id, values.parentPartRevId, payload, partAsync);
+      partAsync.start(updatePart, documentRevision?.id,
+        values.parentPartRevId,
+        false,
+        payload, partAsync);
     }
   };
 
@@ -233,7 +236,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         partVariance: values.variance,
       };
 
-      partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'), payload, partAsync);
+      partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'),
+        documentRevision?.formInput?.autoAssign,
+        payload, partAsync);
     }
   };
 
