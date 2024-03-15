@@ -36,6 +36,7 @@ DocumentRevisionDialogProps
   const loadDocumentRevisionAsyncState = useSelector(
     documentRevisionsSelectors.getLoadAsyncDrawerState,
   );
+
   const documentRevision = useSelector((state: ApplicationState) => {
     return (
       docRevId

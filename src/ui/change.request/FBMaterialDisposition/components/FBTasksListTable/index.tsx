@@ -108,16 +108,17 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   }, [workspaceState?.id, partOfId]);
 
   useEffect(() => {
-    if (partOfIdToUse) {
-      if (isWORecord) {
+    if (!partOfIdToUse) {
+      return;
+    }
+    if (isWORecord) {
+      loadTasksTableData();
+    } else {
+      const data = workspaceState?.getTLTableData;
+      if ((isEmpty(data) && formContext?.isEditing) || !formContext?.isEditing) {
         loadTasksTableData();
-      } else {
-        const data = workspaceState?.getTLTableData;
-        if ((isEmpty(data) && formContext?.isEditing) || !formContext?.isEditing) {
-          loadTasksTableData();
-        } else if (!isEmpty(data)) {
-          setData(data as EditableTLItem[]);
-        }
+      } else if (!isEmpty(data)) {
+        setData(data as EditableTLItem[]);
       }
     }
   }, [partOfIdToUse]);

@@ -611,7 +611,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} disabled={isWOCloseEnabled} />}
+      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id
