@@ -1,8 +1,6 @@
 import { translate } from '../../../common/intl';
 import { MODE_FIELD } from '../../components/KendoDataGrid/constants';
-import { Currency, TrainingType } from './types';
-
-export const DEFAULT_CURRENCY = Currency.USD;
+import { TrainingType } from './types';
 
 export const EMPLOYEE_FIELD = 'employeeName';
 export const BUILD_FIELD = 'buildName';

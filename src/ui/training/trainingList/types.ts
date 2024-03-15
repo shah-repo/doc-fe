@@ -11,6 +11,7 @@ import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD } from './cons
 export interface SchemaOptions {
   statuses: string[]
   primaryOwners: Employee[]
+  trainees: TraineeOption[]
   isActive: boolean
   isInEditMode: boolean
   actionsClass: string
@@ -31,10 +32,6 @@ export enum TrainingType {
   Job='job',
 }
 
-export enum Currency {
-  USD = 'USD',
-}
-
 type Document = Pick<DocumentRevisionDocument, 'id' | 'docId'>;
 
 export type DocumentRevisionOption =
@@ -47,7 +44,7 @@ export type TrainingListTableProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>
 & {
   parentDocumentRevision: DocumentRevision
-  trainees: Trainee[]
+  trainees: TraineeOption[]
   statuses: string[]
   records: DocumentRevisionOption[]
   updateTrainee: (item: Trainee) => void
@@ -62,6 +59,8 @@ export type UseOptionsHook = (trainingList: Trainee[]) => {
 export interface Trainee {
   id: string
   name: string
+  docId: string
+  trId: string
   trainee: Trainee
   trainingType: TrainingType
   status?: string
