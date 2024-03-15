@@ -1,7 +1,7 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Grid
+  Grid,
 } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
@@ -11,13 +11,13 @@ import {
   filterBy,
   mapTree,
   orderBy, TreeList,
-  TreeListCellProps, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, treeToFlat
+  TreeListCellProps, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, treeToFlat,
 } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, get, isEmpty, isNil, map, replace, uniq
+  chain, get, isEmpty, isNil, map, replace, uniq,
 } from 'lodash';
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -53,13 +53,13 @@ import {
   EXPAND_FIELD,
   ID_FIELD,
   MODE_FIELD, SUB_ITEMS_FIELD,
-  TREELIST_CONFIG
+  TREELIST_CONFIG,
 } from './constants';
 import {
   AllocationState,
   CustomTreeListExpandChangeEvent,
   CustomTreeListRowProps,
-  FBAllocationProps
+  FBAllocationProps,
 } from './interface';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';

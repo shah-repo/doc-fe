@@ -5,5 +5,4 @@ export interface CustomTreeListColumnProps extends TreeListColumnProps {
   isShowedMenu?: boolean
   mainOrderIndex?: number
   disableShowOrHideSelection?: boolean
-  filterable?: boolean
 }
