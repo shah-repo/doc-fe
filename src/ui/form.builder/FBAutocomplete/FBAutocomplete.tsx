@@ -1,7 +1,7 @@
 import { Box, IconButton, Popper, TextField, Typography } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
 import { RenderInputParams } from '@material-ui/lab/Autocomplete';
-import { get, includes, isEmpty } from 'lodash';
+import { get, includes } from 'lodash';
 import { Observer } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from '..';
@@ -133,10 +133,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   disabled = includes(['fb-approvers-approvers', 'form.builder.approvers'], props.name)
     && includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
     ? true : disabled;
-
-  if (multiple && isEmpty(value) && workspaceState.isPreview) {
-    multiple = false;
-  }
 
   return (
     <>
