@@ -680,7 +680,6 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 { isNewAddition && partDocId && !partQuantityNeeded && !partVariance && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.part.added', { partDocId }) }
               </>
             );
-
           } catch (error) {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
           }
@@ -696,7 +695,6 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 { !lotDocId && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.part_info.updated', { partDocId, partQuantityNeeded, partVariance }) }
               </>
             );
-
           } catch (error) {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
           }
@@ -711,7 +709,6 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             } else {
               returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(partDocId)}</div>);
             }
-
           } catch (error) {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
           }
