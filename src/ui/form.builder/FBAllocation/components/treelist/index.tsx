@@ -47,7 +47,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import AutoOptions from './AutoOptions';
 import {
-  ADD_FIELD, ALLOCATION_TABLE_NAME, CELL_EMPTY_VALUE, DATA_ITEM_KEY,
+  ADD_FIELD, ALLOCATION_TABLE_NAME, AllocationCheckBoxOptions, CELL_EMPTY_VALUE, DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
@@ -237,7 +237,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       };
 
       partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'),
-        documentRevision?.formInput?.autoAssign,
+        workspaceState?.formInputSync?.get(AllocationCheckBoxOptions.AUTO_ASSIGN),
         payload, partAsync);
     }
   };
