@@ -1,20 +1,16 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
-import { State } from '@progress/kendo-data-query';
-import { GridDataStateChangeEvent } from '@progress/kendo-react-grid';
 import { isEmpty } from 'lodash';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { v4 as generateUuid } from 'uuid';
 import { FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
 import { translate } from '../../../common/intl';
-import { getTableCriteria } from '../../../common/utils/selectors';
-import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { Dialog } from '../../components/dialogs';
 import { IconButton } from '../../components/forms/fields-next';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 import useDialog from '../../hooks/useDialog';
+import useTableCriteria from '../FBApprovalMatrixRoles/utils';
 import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
 import { APPROVAL_MATRIX_TABLE_NAME, DEFAULT_CATEGORY_LABEL } from './constants';
@@ -57,11 +53,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const classes = useStyles();
   const dialog = useDialog();
 
-  const dispatch = useDispatch();
-  const tableCriteria = useSelector(getTableCriteria(APPROVAL_MATRIX_TABLE_NAME));
-  const [dataState, setDataState] = React.useState<State>(
-    tableCriteria?.queryDict?.dataState,
-  );
+  const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
 
   const schema = createSchema({
     data,
@@ -94,23 +86,6 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   approvalMatrix?.forEach((am) => {
     am.docType.updatedCategory = isEmpty(am.docType.category) ? DEFAULT_CATEGORY_LABEL : am.docType.category;
   });
-
-  const dataStateChange = (e: GridDataStateChangeEvent) => {
-    const updatedDataState = { ...e.dataState };
-    setDataState(updatedDataState);
-    dispatch(
-      tableSearchActions.setSearchCriteria(
-        {
-          ...tableCriteria,
-          queryDict: {
-            dataState: updatedDataState,
-          },
-        },
-        APPROVAL_MATRIX_TABLE_NAME,
-      ),
-    );
-    return updatedDataState;
-  };
 
   return (
     <Box
