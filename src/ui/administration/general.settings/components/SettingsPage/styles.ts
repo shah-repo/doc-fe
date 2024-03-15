@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 import { SIDEBAR_WIDTH } from '../../constants';
 
-export default makeStyles(theme => ({
+export default makeStyles((theme: NextTheme) => ({
   root: {
     width: '100%',
     height: '100%',
@@ -78,5 +79,29 @@ export default makeStyles(theme => ({
   },
   toggler: {
     gridArea: '2 / 2 / 3 / 3',
+  },
+  spaceTitle: {
+    display: 'none',
+  },
+  [theme.media.mobile]: {
+    header: {
+      flexWrap: 'wrap',
+      space: 'nowrap',
+    },
+    actions: {
+      flexDirection: 'row-reverse',
+    },
+    sidebar: {
+      display: 'none',
+    },
+    toggler: {
+      display: 'none',
+    },
+    root: {
+      display: 'flow-root',
+    },
+    spaceTitle: {
+      display: 'block',
+    },
   },
 }));

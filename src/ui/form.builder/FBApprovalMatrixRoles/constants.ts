@@ -1,6 +1,7 @@
 export const ERROR_FIELD = '_error';
 export const MODE_FIELD = '_mode';
 export const SEARCHABLE_GROUPS_FIELD = 'groupsList';
+export const APPROVAL_MATRIX_ROLE_TABLE_NAME = 'APPROVAL_MATRIX_ROLE_TABLE';
 
 export enum Mode {
   show = 'show',

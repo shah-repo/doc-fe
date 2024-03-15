@@ -51,9 +51,10 @@ const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> =
       <FBTextField
         inputProps={{ type: 'number', min: '0' }}
         defaultValue={item?.received}
+        isFbEditorField
         label="form.builder.quantity.received"
         name="received"
-        rules="required|min:1"
+        rules="required|min:0"
       />
       <FBDatePicker
         label="form.builder.field.expiration.date"

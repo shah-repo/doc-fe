@@ -10,9 +10,10 @@ import { Dialog } from '../../components/dialogs';
 import { IconButton } from '../../components/forms/fields-next';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 import useDialog from '../../hooks/useDialog';
+import useTableCriteria from '../FBApprovalMatrixRoles/utils';
 import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
-import { DEFAULT_CATEGORY_LABEL } from './constants';
+import { APPROVAL_MATRIX_TABLE_NAME, DEFAULT_CATEGORY_LABEL } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
 import { withFBApprovalMatrix } from './wrap';
@@ -51,6 +52,8 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
   const dialog = useDialog();
+
+  const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
 
   const schema = createSchema({
     data,
@@ -115,6 +118,8 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           generateNewItem={generateNewItem}
           onSave={handleSave}
           withoutStatus={withoutStatus}
+          {...dataState}
+          onDataStateChange={dataStateChange}
         />
       </FBGridTableContainer>
     </Box>

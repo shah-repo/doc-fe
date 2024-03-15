@@ -283,14 +283,14 @@ const RelatedPartGrid: React.FunctionComponent<{
               <Text translation="relatedParts.grid.title"
                 values = {{
                   relatedType: getDynamicTextValue(
-                    relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+                    relatedType, RELATED_TYPE_VALUES_ENUM.PART_CAPS, RELATED_TYPE_VALUES_ENUM.DOCUMENT_CAPS),
                 }} />
             </Typography>
           </Grid>
 
           { (showButton || isReleased)
               && <Grid item className={classes.buttonGroup}>
-                <Typography>
+                { !isReleased && <Typography>
                   <Button
                     className={classes.btnMargin}
                     color="primary"
@@ -305,7 +305,7 @@ const RelatedPartGrid: React.FunctionComponent<{
                           relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
                       }} />
                   </Button>
-                </Typography>
+                </Typography> }
                 <div className={classes.filterOptions}>
                   <span>
                     <Text translation="relatedParts.text.show" />:&nbsp;
@@ -353,7 +353,7 @@ const RelatedPartGrid: React.FunctionComponent<{
           />
         }
         {
-          (showButton || isReleased) && <Button
+          (showButton && !isReleased) && <Button
             className={classes.fullLengthButton}
             variant="outlined"
             startIcon={<AddCircleIcon color={isReleased ? COLOR_TYPES.DISABLED : COLOR_TYPES.PRIMARY} />}
