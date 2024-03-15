@@ -111,6 +111,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     if (!partOfIdToUse) {
       return;
     }
+
     if (isWORecord) {
       loadTasksTableData();
     } else {

@@ -115,10 +115,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   isSliderView = false,
   isWO,
 }) => {
-  const { _tabsState } = SM.useStores();
+  const { _tabsState, _documentRevisionFormState } = SM.useStores();
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
-  const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   const isMaximizeView = _documentRevisionFormState?.isMaximizedView;
 

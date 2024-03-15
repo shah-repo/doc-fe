@@ -3,10 +3,10 @@ import { EditableAllocationItem } from '../../../interface';
 
 export interface CustomTreeListCellProps extends TreeListCellProps {
   dataItem: EditableAllocationItem
-  openDetailDrawer?: (dataItem: EditableAllocationItem) => void
-  addLot?: (dataItem: EditableAllocationItem) => void
-  deleteLot?: (dataItem: EditableAllocationItem) => void
-  deletePart?: (dataItem: EditableAllocationItem) => void
+  openDetailDrawer?: IAllocationCallback
+  addLot?: IAllocationCallback
+  deleteLot?: IAllocationCallback
+  deletePart?: IAllocationCallback
 }
 
 export interface AllocItemActionsProps<EditableAllocationItem> {
@@ -16,9 +16,11 @@ export interface AllocItemActionsProps<EditableAllocationItem> {
   scrollBehavior?: ScrollBehavior
   isAddPartEnabled?: boolean
   onConfirm: () => void
-  onDiscard?: (dataItem: EditableAllocationItem) => void
-  onDelete?: (dataItem: EditableAllocationItem) => void
-  onChildPartAdd?: (dataItem: EditableAllocationItem) => void
-  onRestore?: (dataItem: EditableAllocationItem) => void
+  onDiscard?: IAllocationCallback
+  onDelete?: IAllocationCallback
+  onChildPartAdd?: IAllocationCallback
+  onRestore?: IAllocationCallback
   onReorder?: () => void
 }
+
+type IAllocationCallback = (dataItem: EditableAllocationItem) => void;

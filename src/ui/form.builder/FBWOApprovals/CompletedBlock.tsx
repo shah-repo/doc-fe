@@ -1,8 +1,8 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Collapse, List, ListItem, ListItemText } from '@material-ui/core';
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import { ReactComponent as ListCollapseIcon } from '../../../assets/images/list_collapse.svg';
-import { ReactComponent as ListExpandIcon } from '../../../assets/images/list_expand.svg';
 import Text from '../../components/Text';
 import useStyles from './FBWOApprovals.styles';
 
@@ -24,7 +24,9 @@ const CompletedBlock: React.FC<{
         className={classes.stateListItem}
         onClick={toggleOpened}
       >
-        {isOpened ? <ListExpandIcon /> : <ListCollapseIcon />}
+        <FontAwesomeIcon className={classNames(classes.icon, {
+          [classes.rotateIcon]: isOpened,
+        })} icon={solid('circle-chevron-right')} />
         <ListItemText>
           <Box display="flex" alignItems="center">
             <Box

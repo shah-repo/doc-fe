@@ -9,6 +9,13 @@ export default makeStyles((theme) => ({
     borderRadius: 4,
     marginTop: theme.spacing(1.25),
   },
+  icon: {
+    height: 19,
+    width: 19,
+  },
+  rotateIcon: {
+    transform: 'rotate(90deg)',
+  },
   approvalsList: {
     margin: theme.spacing(0, 2, 0, 6.25),
   },
@@ -38,7 +45,7 @@ export default makeStyles((theme) => ({
   avatar: {
     width: 45,
     height: 45,
-    margin: theme.spacing(0),
+    margin: 0,
     fontSize: 18,
     color: Colors.white,
     background: Colors.aqua_blue,
