@@ -1,4 +1,5 @@
 import { Typography } from '@material-ui/core';
+import { FormikProvider, useFormik } from 'formik';
 import moment from 'moment';
 import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -7,9 +8,8 @@ import { MomentFormats, TIME_ZONE } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../components/dialogs/Alert';
-import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
-import { useFormik, FormikProvider } from 'formik';
 import { FormikField, TextField } from '../../components/forms/fields-next';
+import { checkIsDocumentDirectApproved } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync, { Async } from '../../hooks/useAsync';
 import { DialogHandler } from '../../hooks/useDialog';
@@ -41,7 +41,7 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
   const async = props.async ?? dialogAsync;
 
   const isRecordBehaviour = useMemo(
-    () => checkIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions ?? []),
+    () => checkIsDocumentDirectApproved(documentRevision?.document?.documentType?.groupOptions ?? []),
     [documentRevision],
   );
 
