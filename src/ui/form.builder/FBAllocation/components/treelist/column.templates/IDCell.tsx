@@ -52,7 +52,9 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
     if (!isEditMode) {
       return;
     }
+
     const value = renderOptions().find((option) => option.value === dataItem.partRevId);
+
     if (value && field) {
       setFieldValue(field, value);
       setValue(value);
