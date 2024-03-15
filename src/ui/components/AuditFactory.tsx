@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -17,7 +17,7 @@ import { BOMTreeData, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../state/duc
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
-import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -27,8 +27,8 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
-import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DateTime from './DateTime';
+import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
@@ -661,7 +661,52 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'formInput.wo_part_unit':
       case 'formInput.wo_part_quantity':
       case 'formInput.wo_part.id':
-        returnValue = (<div data-cy={dataCy}>{getWOAuditDefaultValue(audit)}</div>);
+      case 'formInput.autoTransact':
+      case 'formInput.autoAssign':
+          returnValue = (<div data-cy={dataCy}>{getWOAuditDefaultValue(audit)}</div>);
+          break;
+      case 'workOrder':
+        if (audit.type.includes('ARRAY_ADDED')) {
+          const nextVal: string = audit.nextValue as string;
+          try {
+            const { partDocId, partQuantityNeeded, partVariance, lotDocId, lotQuantityNeeded, lotVariance, isNewAddition } = JSON.parse(nextVal);
+            returnValue = (
+              <>
+                { lotDocId && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.lot_info.added', { lotDocId, lotQuantityNeeded, lotVariance }) }
+                { isNewAddition && lotDocId && !lotQuantityNeeded && !lotVariance && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.lot.added', { lotDocId }) }
+                { !lotDocId && partQuantityNeeded && partVariance && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.part_info.added', { partDocId, partQuantityNeeded, partVariance }) }
+                { isNewAddition && partDocId && !partQuantityNeeded && !partVariance && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.part.added', { partDocId }) }
+              </>
+            );
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } else if (audit.type.includes('ARRAY_EDITED')) {
+          const nextVal: string = audit.nextValue as string;
+          try {
+            const { partDocId, partQuantityNeeded, partVariance, lotDocId, lotQuantityNeeded, lotVariance } = JSON.parse(nextVal);
+            returnValue = (
+              <>
+                { lotDocId && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.lot_info.updated', { lotDocId, lotQuantityNeeded, lotVariance }) }
+                { !lotDocId && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.part_info.updated', { partDocId, partQuantityNeeded, partVariance }) }
+              </>
+            );
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        } else {
+          const prevVal: string = audit.previousValue as string;
+          try {
+            const { lotDocId, partDocId } = JSON.parse(prevVal);
+            if (lotDocId) {
+              returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(lotDocId)}</div>);
+            } else {
+              returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(partDocId)}</div>);
+            }
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
+          }
+        }
         break;
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
