@@ -2,12 +2,15 @@ import { Typography } from '@material-ui/core';
 import { FormikProvider, useFormik } from 'formik';
 import moment from 'moment';
 import React, { useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ActionCreator } from 'redux';
 import { translate } from '../../../common/intl';
 import { MomentFormats, TIME_ZONE } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../state/reducers';
 import AlertDialog from '../../components/dialogs/Alert';
 import { FormikField, TextField } from '../../components/forms/fields-next';
 import { checkIsDocumentDirectApproved } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -21,13 +24,12 @@ interface Props {
   async?: Async
   documentRevision?: DocumentRevision
   voidAction?: ActionCreator<unknown>
-  confirmAction?: () => void
 }
 
 const VOID_DESCRIPTION_FIELD = 'void-description';
 
 const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
-  const { dialog, documentRevision, confirmAction } = props;
+  const { dialog, documentRevision } = props;
 
   const docRevId = documentRevision?.id as string;
   const docRevOwner = documentRevision?.owner?.user?.name as string;
@@ -41,7 +43,13 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
     },
   });
   const async = props.async ?? dialogAsync;
+  const currentDocumentType = useSelector(
+    (state: ApplicationState) => (
+      documentTypeSelectors.getDocumentTypeById(state, documentRevision?.document?.documentType?.id ?? '')
+    ),
+  );
 
+  const isLot = currentDocumentType?.group === DOC_TYPE_GROUP.LOT;
   const isRecordBehaviour = useMemo(
     () => checkIsDocumentDirectApproved(documentRevision?.document?.documentType?.groupOptions ?? []),
     [documentRevision],
@@ -52,13 +60,13 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
       [VOID_DESCRIPTION_FIELD]: '',
     },
     onSubmit: (values) => {
-      if (confirmAction) {
-        return confirmAction();
-      }
-
-      const description = `<p>Void</p>
+      let description = `<p>Void</p>
       <p>${values[VOID_DESCRIPTION_FIELD]}</p>
-      <p>${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
+      <p data-source="void">${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
+
+      if (isLot) {
+        description += documentRevision?.description ?? '';
+      }
 
       async.start(
         voidAction,
