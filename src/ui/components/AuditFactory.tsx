@@ -730,7 +730,6 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             lotDocId,
             lotQuantityNeeded,
             lotVariance,
-            isNewAddition,
           } = JSON.parse(nextVal);
 
           try {
