@@ -127,9 +127,11 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     if (documentType === DOC_TYPE_GROUP.PART && !props.showErrorMsg) {
       return props.showErrorMsg;
     }
+
     if (props.name === WO_PART_KEY_NAME) {
       return false;
     }
+
     return true;
   };
 
