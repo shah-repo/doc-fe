@@ -1,7 +1,11 @@
-import { Box } from '@material-ui/core';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Grid } from '@material-ui/core';
+import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
+import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { differenceBy, isEmpty, uniqBy } from 'lodash';
+import { differenceBy, isEmpty, map, uniqBy } from 'lodash';
 import { reaction } from 'mobx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,10 +15,13 @@ import { translate } from '../../../common/intl';
 import { authSelectors } from '../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import NoDataFound from '../../components/common/kendo/NoDataFound';
+import ColumnShowHideTreeMenu from '../../components/common/treelist/ColumnShowHideTreeMenu';
+import { CustomTreeListColumnProps } from '../../components/common/treelist/types';
 import { Button } from '../../components/forms/fields-next';
 import ErrorBlock from '../../components/forms/fields/ErrorBlock';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
-import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { ColumnDefinition, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -23,7 +30,8 @@ import { withFBInput } from '../FBInput/FBInput.wrap';
 import FBStore from '../FBStore/FBStore';
 import { FB } from '../helpers';
 import { ActionsCell } from './components/ActionsCell';
-import { Mode, MODE_FIELD } from './constants';
+import { CustomColumnMenu, LHRTableColumnMenuContext } from './components/CustomColumnMenu';
+import { EMPTY_PLACEHOLDER, EXCEL_FILE_NAME, Mode, MODE_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { DraftLhrTableItem, EditableLHRTableItem, ILHRTableItem, LHRTableItemEditEvent } from './types';
@@ -183,24 +191,155 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
     );
   }, []);
 
+  const [columns, setColumns]
+  = React.useState<Array<ColumnDefinition<EditableLHRTableItem>>>(schema);
+
+  const getColumns = (): Array<ColumnDefinition<EditableLHRTableItem>> => {
+    return columns.filter(({ isHidden }) => !isHidden);
+  };
+
+  const onLock = React.useCallback(
+    ({
+      field,
+      locked,
+    }: CustomTreeListColumnProps) => {
+      const index = columns.findIndex((c) => c.field === field);
+      const column = columns[index];
+
+      if (column) {
+        const newColumns = [...columns];
+        newColumns.splice(index, 1, {
+          ...column,
+          locked: !locked,
+          reorderable: locked,
+          orderIndex: !locked ? 0 : undefined,
+        });
+
+        setColumns(newColumns);
+      }
+    },
+    [columns],
+  );
+
+  const onColumnShowHide = ({ field }: CustomTreeListColumnProps) => {
+    const dataColumns = map(columns, (column: CustomTreeListColumnProps) => {
+      if (column.field === field) {
+        column.isHidden = !column.isHidden;
+      }
+
+      return column;
+    }) as unknown as Array<ColumnDefinition<EditableLHRTableItem>>;
+
+    setColumns(dataColumns);
+  };
+
+  const exportToExcel = () => {
+    if (_export.current !== null) {
+      const updatedDate = lhrListToUse.map((lhr) => {
+        return {
+          ...lhr,
+          owner: lhr.owner?.user?.name,
+          partRev: lhr.partRev?.documentId ? lhr.partRev?.label : EMPTY_PLACEHOLDER,
+          completionDate: lhr.completionDate ?? EMPTY_PLACEHOLDER,
+          startQuantity: lhr.startQuantity ?? EMPTY_PLACEHOLDER,
+          endQuantity: lhr.endQuantity ?? EMPTY_PLACEHOLDER,
+          lhrDetails: lhr.lhrDetails?.label,
+        };
+      });
+
+      _export.current.save(updatedDate, getColumns() as ExcelExportColumnProps[]);
+    }
+  };
+
+  const renderToolbar = (
+    <GridToolbar>
+      <Grid
+        container
+        justify="flex-end"
+        className={classes.toolbarContainer}
+      >
+        <Grid
+          item
+          data-cy="excel-export"
+          className={cx({ [classes.disabled]: !isActive })}
+        >
+          <StyleTooltip
+            title={translate('common.download')}
+            placement="top"
+            arrow
+          >
+            <FontAwesomeIcon
+              data-cy="excel-download"
+              className={classes.exportExcelIcon}
+              onClick={exportToExcel}
+              icon={solid('arrow-down-to-line')}
+            />
+          </StyleTooltip>
+        </Grid>
+        <Grid
+          item
+          data-cy="show-hide-columns"
+          className={cx({ [classes.disabled]: !isActive })}
+        >
+          <ColumnShowHideTreeMenu
+            columnDefinition={columns as CustomTreeListColumnProps[] }
+            onChange={onColumnShowHide}
+          />
+        </Grid>
+      </Grid>
+    </GridToolbar>
+  );
+
+  const _export = React.useRef<ExcelExport | null>(null);
+
   return (
     <>
       {!hidden && (
         <Box position="relative">
-          <FBSection label={sectionLabel} />
-          <FormikProvider value={formik}>
-            <KendoDataGrid<EditableLHRTableItem>
-              filterable={false}
-              fullWidth
-              hasBoxScrollbars
-              data={lhrListToUse}
-              schema={schema}
-              rowRender={rowRender}
-              className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-              onRowClick={handleRowClick}
-              fallback={<NoDataFound />}
-            />
-          </FormikProvider>
+          <FBSection label={label ?? translate('form.builder.workOrder.lhr.section.heading')} />
+          <LHRTableColumnMenuContext.Provider
+            value={{
+              columns,
+              onLock,
+              onColumnShowHide,
+            }}
+          >
+            <FormikProvider value={formik}>
+              <ExcelExport
+                ref={(exporter) => {
+                  if (exporter) {
+                    _export.current = exporter;
+                  }
+                }}
+                fileName={EXCEL_FILE_NAME}
+              >
+                <KendoDataGrid<EditableLHRTableItem>
+                  filterable={false}
+                  fullWidth
+                  hasBoxScrollbars
+                  data={lhrListToUse}
+                  schema={getColumns()}
+                  columnMenu={(props) => (
+                    <CustomColumnMenu
+                      {...props}
+                      columns={getColumns()}
+                      onColumnShowHide={onColumnShowHide}
+                      {...{
+                        onLock,
+                      }}
+                    />
+                  )
+                  }
+                  rowRender={rowRender}
+                  className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+                  onRowClick={handleRowClick}
+                  fallback={<NoDataFound />}
+                >
+                  {renderToolbar}
+                </KendoDataGrid>
+              </ExcelExport>
+            </FormikProvider>
+          </LHRTableColumnMenuContext.Provider>
           {isActive && <Button
             kind="add"
             fullWidth
