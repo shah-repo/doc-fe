@@ -666,33 +666,76 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (<div data-cy={dataCy}>{getWOAuditDefaultValue(audit)}</div>);
         break;
       case 'workOrder':
+        const nextVal: string = audit.nextValue as string;
+        const {
+          partDocId,
+          partQuantityNeeded,
+          partVariance,
+          lotDocId,
+          lotQuantityNeeded,
+          lotVariance,
+          isNewAddition,
+        } = JSON.parse(nextVal);
+
         if (audit.type.includes('ARRAY_ADDED')) {
-          const nextVal: string = audit.nextValue as string;
 
           try {
-            const { partDocId, partQuantityNeeded, partVariance, lotDocId, lotQuantityNeeded, lotVariance, isNewAddition } = JSON.parse(nextVal);
-
             returnValue = (
               <>
-                { lotDocId && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.lot_info.added', { lotDocId, lotQuantityNeeded, lotVariance }) }
-                { isNewAddition && lotDocId && !lotQuantityNeeded && !lotVariance && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.lot.added', { lotDocId }) }
-                { !lotDocId && partQuantityNeeded && partVariance && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.part_info.added', { partDocId, partQuantityNeeded, partVariance }) }
-                { isNewAddition && partDocId && !partQuantityNeeded && !partVariance && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.part.added', { partDocId }) }
+                {lotDocId &&
+                  getNewLineItemAuditValue(
+                    dataCy,
+                    "documentRevision.audit.workOrder.lot_info.added",
+                    { lotDocId, lotQuantityNeeded, lotVariance }
+                  )}
+                {isNewAddition &&
+                  lotDocId &&
+                  !lotQuantityNeeded &&
+                  !lotVariance &&
+                  getNewLineItemAuditValue(
+                    dataCy,
+                    "documentRevision.audit.workOrder.lot.added",
+                    { lotDocId }
+                  )}
+                {!lotDocId &&
+                  partQuantityNeeded &&
+                  partVariance &&
+                  getNewLineItemAuditValue(
+                    dataCy,
+                    "documentRevision.audit.workOrder.part_info.added",
+                    { partDocId, partQuantityNeeded, partVariance }
+                  )}
+                {isNewAddition &&
+                  partDocId &&
+                  !partQuantityNeeded &&
+                  !partVariance &&
+                  getNewLineItemAuditValue(
+                    dataCy,
+                    "documentRevision.audit.workOrder.part.added",
+                    { partDocId }
+                  )}
               </>
             );
           } catch (error) {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
           }
         } else if (audit.type.includes('ARRAY_EDITED')) {
-          const nextVal: string = audit.nextValue as string;
 
           try {
-            const { partDocId, partQuantityNeeded, partVariance, lotDocId, lotQuantityNeeded, lotVariance } = JSON.parse(nextVal);
-
             returnValue = (
               <>
-                { lotDocId && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.lot_info.updated', { lotDocId, lotQuantityNeeded, lotVariance }) }
-                { !lotDocId && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.workOrder.part_info.updated', { partDocId, partQuantityNeeded, partVariance }) }
+                {lotDocId &&
+                  getNewLineItemAuditValue(
+                    dataCy,
+                    "documentRevision.audit.workOrder.lot_info.updated",
+                    { lotDocId, lotQuantityNeeded, lotVariance }
+                  )}
+                {!lotDocId &&
+                  getNewLineItemAuditValue(
+                    dataCy,
+                    "documentRevision.audit.workOrder.part_info.updated",
+                    { partDocId, partQuantityNeeded, partVariance }
+                  )}
               </>
             );
           } catch (error) {
@@ -703,14 +746,17 @@ const AuditFactory: React.FunctionComponent<Props> = ({
 
           try {
             const { lotDocId, partDocId } = JSON.parse(prevVal);
-
-            if (lotDocId) {
-              returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(lotDocId)}</div>);
-            } else {
-              returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(partDocId)}</div>);
-            }
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(lotDocId || partDocId)}
+              </div>
+            );            
           } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(audit.previousValue)}
+              </div>
+            );
           }
         }
         break;
