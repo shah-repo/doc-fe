@@ -3,6 +3,7 @@ import { FormikProvider, useFormik } from 'formik';
 import moment from 'moment';
 import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import { ActionCreator } from 'redux';
 import { translate } from '../../../common/intl';
 import { MomentFormats, TIME_ZONE } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -19,6 +20,7 @@ interface Props {
   dialog: DialogHandler
   async?: Async
   documentRevision?: DocumentRevision
+  voidAction?: ActionCreator<unknown>
   confirmAction?: () => void
 }
 
@@ -32,7 +34,7 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
 
   const classes = styles();
   const dispatch = useDispatch();
-  const voidDocument = useActionCreator(documentRevisionsActions.voidDocument);
+  const voidAction = useActionCreator(props.voidAction ?? documentRevisionsActions.voidDocument);
   const dialogAsync = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.loadAudit(docRevId));
@@ -59,7 +61,7 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
       <p>${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
 
       async.start(
-        voidDocument,
+        voidAction,
         docRevId,
         isRecordBehaviour ? { description } : undefined,
         async,

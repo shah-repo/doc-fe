@@ -7,28 +7,26 @@ import { useIntl } from 'react-intl';
 import { ReactComponent as CaretIcon } from '../../../../assets/images/po_status_dropdown.svg';
 import { GroupTag } from '../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
 import Text from '../../../../ui/components/Text';
 import AlertDialog from '../../../app/alert.dialog/AlertDialog';
+import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import { toastError } from '../../notifications';
 import useStyles from './HeaderPOStatus.styles';
-import { VoidPOStatusDialog } from './VoidDialog';
 
 interface Props {
-  poStatus: POStatusType
-  docId: string
-  docRevOwner: string
-  updatedAt: string
+  documentRevision: DocumentRevision
   isOwner: boolean
 }
 
-const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
-  poStatus, docId, docRevOwner, updatedAt, isOwner,
-}) => {
+const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({ documentRevision, isOwner }) => {
+  const docId = documentRevision.id;
+  const poStatus = documentRevision.poStatus as POStatusType;
+
   const classes = useStyles();
   const dialog = useDialog();
   const intl = useIntl();
@@ -191,10 +189,10 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         />
       )}
       {isVoidedAction && (
-        <VoidPOStatusDialog
-          docRevId={docId}
-          docRevOwner={docRevOwner}
-          {...{ dialog }}
+        <VoidAlertDialog
+          dialog={dialog}
+          documentRevision={documentRevision}
+          voidAction={documentRevisionsActions.obsoletePO}
         />
       )}
     </>
