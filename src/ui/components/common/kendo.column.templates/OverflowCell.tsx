@@ -1,4 +1,3 @@
-import { get } from 'lodash';
 import React from 'react';
 import { convertHtmlEntities } from '../../../../common/utils/helpers';
 import OverflowContent from '../../OverflowContent';
@@ -14,11 +13,13 @@ export const OverflowCell: React.FunctionComponent<CustomGridCellProps> = ({
   columnIndex,
   cellRowClick,
 }) => {
-  const dataItemValue = convertHtmlEntities(get(dataItem, field ?? ''));
+  const dataItemValue = (field && convertHtmlEntities(dataItem[field])) ?? '';
+
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
   };
+
   if (rowType === 'groupHeader') {
     return null;
   }
