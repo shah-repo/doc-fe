@@ -14,22 +14,17 @@ export const PartRevCell: React.FC<CustomTemplateProps> = ({ dataItem, field, on
     onClick?.({ dataItem });
   };
 
-  const textToDisplay = () => {
-    if (documentId) {
-      return label;
-    }
-    return EMPTY_PLACEHOLDER;
-  };
+  const labelValue = documentId ? label : EMPTY_PLACEHOLDER;
 
   return (
     <OverflowTooltip
-      title={textToDisplay()}
+      title={labelValue}
       onClick={handleClick}
       placement="top"
       interactive
       arrow
     >
-      { textToDisplay() }
+      { labelValue }
     </OverflowTooltip>
   );
 };

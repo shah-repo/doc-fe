@@ -20,8 +20,8 @@ const VarianceCell: React.ComponentType<CustomTreeListCellProps> = ({
   const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const isEditMode = isEditAllocItem(dataItem);
 
-  const onVarianceChange = (e) => {
-    const val = e.target.value;
+  const onVarianceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const val = event.target.value;
     if (!isNaN(val) && Number(val) >= 0 && field) {
       setFieldValue(field, val);
     }

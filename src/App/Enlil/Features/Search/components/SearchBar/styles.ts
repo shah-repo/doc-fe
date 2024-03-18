@@ -5,6 +5,7 @@ import { Colors } from '../../../../../../ui/layout/theme-next';
 export default makeStyles((theme) => ({
   root: {
     width: 350,
+    marginTop: theme.spacing(1.5),
   },
   rootFocused: {
     width: '100%',

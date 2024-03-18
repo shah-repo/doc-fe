@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useFormikContext } from 'formik';
 import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isNull, isString, isUndefined, last, map, size, union, uniqWith } from 'lodash';
 import { autorun, reaction } from 'mobx';
 import { useLocalStore } from 'mobx-react';
@@ -10,9 +11,9 @@ import { useFormContext } from '../../components/forms/FormContext';
 import { CHANGE_CONTROL_CONFIG_DOC_TYPE_NAME } from '../../document.revision/utils/helpers';
 import { checkIsDocumentLHR, checkIsDocumentLHRT } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
-import { FBClasses } from '../defaults/layout';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { withFBEditorOptions } from '../FBEditorOptions/FBEditorOptions.wrap';
+import { FBClasses } from '../defaults/layout';
 import { withFBOnChange } from './FBInput.onchange';
 
 // Initial values only some of the fields have
@@ -228,11 +229,12 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    if (isChangeRequest || isOutput || formState?.shouldValidate) {
+    if (isChangeRequest || isOutput || formState?.shouldValidate || workspaceState?.isPreview) {
       let isUnderMode = (
         !feedbackDetails.helperText && (
           isUndefined(validationValue)
           || validationValue === ''
+          || validationValue === null
           || (isArray(validationValue) && size(validationValue) === 0)
         )
       );
@@ -348,11 +350,16 @@ export const withFBInput = <T extends FBInputProps>(
        }
     }, [rules]);
 
+    const formik = useFormikContext();
+
     useEffect(() => {
       reaction(
         () => inputState?.autosaveNextValue,
         (value) => {
           if (!workspaceState?.autosave) {
+            if (workspaceState?.isPreview) {
+              formik.submitForm();
+            }
             return;
           }
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {

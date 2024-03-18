@@ -42,7 +42,7 @@ const styles = makeStyles((theme) => ({
 }));
 
 interface AutoOptionsProps {
-  onAutoAssign: (flag: boolean) => void
+  onAutoAssign: (isAutoAssign: boolean) => void
   isDisabled: boolean
   documentRevision: DocumentRevision
 }
@@ -72,7 +72,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
     });
   };
 
-  const onautoTransactChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onAutoTransactChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAutoTransact(event.target.checked);
     formState?.setFieldValue(AllocationCheckBoxOptions.AUTO_TRANSACT, event.target.checked);
     workspaceState?.saveDocRev({
@@ -116,7 +116,7 @@ const AutoOptions: React.FC<AutoOptionsProps> = ({
             }}
             disabled={isDisabled}
             disableRipple
-            onChange={onautoTransactChange}
+            onChange={onAutoTransactChange}
             name="autoTransact"
           />
         }
