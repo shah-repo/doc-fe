@@ -11,6 +11,7 @@ import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/do
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
+import { ApiAction } from '../../../state/types';
 import AlertDialog from '../../components/dialogs/Alert';
 import { FormikField, TextField } from '../../components/forms/fields-next';
 import { checkIsDocumentDirectApproved } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -22,8 +23,8 @@ import { styles } from './AlertDialog.styles';
 interface Props {
   dialog: DialogHandler
   async?: Async
-  documentRevision?: DocumentRevision
-  voidAction?: ActionCreator<unknown>
+  documentRevision: DocumentRevision
+  voidAction?: ActionCreator<ApiAction<DocumentRevision>>
 }
 
 const VOID_DESCRIPTION_FIELD = 'void-description';
@@ -31,8 +32,8 @@ const VOID_DESCRIPTION_FIELD = 'void-description';
 const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
   const { dialog, documentRevision } = props;
 
-  const docRevId = documentRevision?.id as string;
-  const docRevOwner = documentRevision?.owner?.user?.name as string;
+  const docRevId = documentRevision.id;
+  const docRevOwner = documentRevision.owner.user.name;
 
   const classes = styles();
   const dispatch = useDispatch();
@@ -45,13 +46,13 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
   const async = props.async ?? dialogAsync;
   const currentDocumentType = useSelector(
     (state: ApplicationState) => (
-      documentTypeSelectors.getDocumentTypeById(state, documentRevision?.document?.documentType?.id ?? '')
+      documentTypeSelectors.getDocumentTypeById(state, documentRevision.document.documentType.id ?? '')
     ),
   );
 
   const isLot = currentDocumentType?.group === DOC_TYPE_GROUP.LOT;
   const isRecordBehaviour = useMemo(
-    () => checkIsDocumentDirectApproved(documentRevision?.document?.documentType?.groupOptions ?? []),
+    () => checkIsDocumentDirectApproved(documentRevision.document.documentType.groupOptions ?? []),
     [documentRevision],
   );
 
@@ -65,7 +66,7 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
       <p data-source="void">${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
 
       if (isLot) {
-        description += documentRevision?.description ?? '';
+        description += documentRevision.description ?? '';
       }
 
       async.start(

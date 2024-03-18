@@ -66,11 +66,13 @@ const VoidButton: React.FunctionComponent<Props> = ({
           <Text translation="common.void" />
         </Button>
       )}
-      <VoidAlertDialog
-        async={async}
-        dialog={dialog}
-        documentRevision={documentRevision}
-      />
+      {documentRevision && (
+        <VoidAlertDialog
+          async={async}
+          dialog={dialog}
+          documentRevision={documentRevision}
+        />
+      )}
     </>
   );
 };

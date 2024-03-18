@@ -188,7 +188,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({ documentRevisio
           {...{ dialog }}
         />
       )}
-      {isVoidedAction && (
+      {documentRevision && isVoidedAction && (
         <VoidAlertDialog
           dialog={dialog}
           documentRevision={documentRevision}

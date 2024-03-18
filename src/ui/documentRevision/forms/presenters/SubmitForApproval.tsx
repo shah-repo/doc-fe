@@ -115,12 +115,14 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           <Text message={isObsolete ? 'common.void' : label} />
         </Button>
       )}
-      <VoidAlertDialog
-        dialog={dialog}
-        documentRevision={documentRevision}
-        async={updateDocAsync}
-        voidAction={documentRevisionsActions.save}
-      />
+      {documentRevision && (
+        <VoidAlertDialog
+          dialog={dialog}
+          documentRevision={documentRevision}
+          async={updateDocAsync}
+          voidAction={documentRevisionsActions.save}
+        />
+      )}
     </>
   );
 };
