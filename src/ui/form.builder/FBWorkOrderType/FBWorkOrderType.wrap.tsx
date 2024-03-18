@@ -7,7 +7,8 @@ import { ReactComponent as CheckedRadioIcon } from '../../../assets/images/radio
 import { ReactComponent as DisabledCheckedRadioIcon } from '../../../assets/images/radio_checked_disabled.svg';
 import { ReactComponent as UnCheckedRadioIcon } from '../../../assets/images/unchecked_radio.svg';
 import { ReactComponent as DisabledUnCheckedRadioIcon } from '../../../assets/images/unchecked_radio_disabled.svg';
-import { WO_PART_KEY_NAME, WorkOrderTypes } from '../../../state/ducks/documentRevisions/documentType/types';
+import { WorkOrderTypes, WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
 import useDialog from '../../hooks/useDialog';
 import { isTranslation } from '../../translations/types';
@@ -40,7 +41,11 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
     disabled = !isInputOwner || disabled;
     const revision = workspaceState?.document?.revision;
     if (revision) {
-      disabled = disabled || (revision > 1);
+      disabled
+        = disabled
+        || revision > 1
+        || workspaceState?.document?.status
+          === DocumentRevisionStatus.Released;
     }
     defaultValue = formState?.getFieldValue(name) || defaultValue;
 
