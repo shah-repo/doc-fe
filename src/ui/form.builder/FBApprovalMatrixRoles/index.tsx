@@ -8,10 +8,11 @@ import { DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDa
 import Text from '../../components/Text';
 import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
-import { ERROR_FIELD, ErrorField, MODE_FIELD, Mode, SEARCHABLE_GROUPS_FIELD } from './constants';
+import { APPROVAL_MATRIX_ROLE_TABLE_NAME, ERROR_FIELD, ErrorField, MODE_FIELD, Mode, SEARCHABLE_GROUPS_FIELD } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
 import { EditableRole, FBApprovalMatrixRolesProps, RoleEditEvent } from './types';
+import useTableCriteria from './utils';
 import { withFBApprovalMatrixRoles } from './wrap';
 
 const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
@@ -96,6 +97,8 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   });
   const roles = isNewRoleAdded ? [...existingRoles, editedRole] : existingRoles;
 
+  const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_ROLE_TABLE_NAME);
+
   const schema = createSchema({
     groups,
     actionsClass: classes.actionsCell,
@@ -123,6 +126,8 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
       <KendoDataGrid<EditableRole>
         schema={schema}
         data={roles}
+        {...dataState}
+        onDataStateChange={dataStateChange}
         rowRender={rowRender}
         onItemChange={updateEditedRole}
         className={cx(classes.grid, { [classes.gridWithButton]: isActive })}

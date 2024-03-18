@@ -80,11 +80,12 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 
 const styles = makeStyles(() => ({
   printIconContainer: {
-    backgroundColor: Colors.white,
+    backgroundColor: `${Colors.white} !important`,
   },
   printIcon: {
     height: 15,
     width: 15,
+    color: Colors.navy,
   },
 }));
 
@@ -610,7 +611,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} disabled={isWOCloseEnabled} />}
+      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id

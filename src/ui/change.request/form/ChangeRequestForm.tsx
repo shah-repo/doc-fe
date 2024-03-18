@@ -170,7 +170,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
-                setOpen={changeSidebarOpenStatus} fromEdit={true} />}
+                setOpen={changeSidebarOpenStatus} fromEdit tabConfig={tabConfig} />}
             </Observer>
           ),
         })}

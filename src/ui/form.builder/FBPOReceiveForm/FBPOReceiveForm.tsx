@@ -43,7 +43,7 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
             defaultValue={item?.received}
             label="form.builder.quantity.received"
             name="received"
-            rules="required|min:1"
+            rules="required|min:0"
           />
         </Box>
         <Box width="100%" marginLeft="10px">

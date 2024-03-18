@@ -1,4 +1,5 @@
 import { Avatar, Grid, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
@@ -18,11 +19,13 @@ import { styles } from './styles';
 const renderUsers = (selectedUsers, removeUser?) => {
   const classes = styles();
   const approvers = useSelector((state: ApplicationState) => changeRequestsSelectors.usersById(state));
-  const users = selectedUsers?.map(({ employeeId }) => approvers[employeeId]);
+  const users = selectedUsers?.map((seluser) => {
+    return approvers[seluser.employeeId] ?? { id: seluser.employeeId, active: false, user: seluser };
+  });
 
   return (
     <>
-      {!isEmpty(users) && users.map(({ id, user }, index) => (
+      {!isEmpty(users) && users.map(({ id, active, user }, index) => (
         <Grid
           key={index}
           justify="space-between"
@@ -30,7 +33,13 @@ const renderUsers = (selectedUsers, removeUser?) => {
           className={`${classes.selectedUsersGrid} groupsGrid`}
           container
         >
-          <Grid item className={classes.avatarSection}>
+          <Grid
+            item
+            data-cy={`${user.name}-${active ? 'active' : 'inactive'}`}
+            className={cx(classes.avatarSection, {
+              [classes.disabled]: !active,
+            })}
+          >
             <Avatar
               className={classes.avatar}
               alt={user.name}

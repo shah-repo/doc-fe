@@ -90,13 +90,17 @@ export function asyncDebounce (func: (...args: any) => any, wait?: number, optio
   });
 }
 
-export const getPayloadBasedOnWorkOrderType = (payload) => {
-  if (!isEmpty(payload) && payload[WO_TYPE_KEY] !== '') {
+export const getPayloadBasedOnWorkOrderType = (payload: Record<string, unknown>): Record<string, unknown> => {
+  if (isEmpty(payload)) {
+    return payload;
+  }
+
+  if (payload[WO_TYPE_KEY] !== '') {
     if (payload[WO_TYPE_KEY] === WorkOrderTypes.OTHER) {
       payload[WO_LOT_ID_KEY_NAME] = '';
       payload[WO_LHR_TABLE_KEY_NAME] = [];
-      payload[WO_PART_UNIT_KEY_NAME] = '';
-      payload[WO_PART_QTY_KEY_NAME] = 0;
+      delete payload[WO_PART_UNIT_KEY_NAME];
+      delete payload[WO_PART_QTY_KEY_NAME];
       payload[WO_PART_KEY_NAME] = '';
     } else if (payload[WO_TYPE_KEY] === WorkOrderTypes.MAKE_PRODUCT) {
       payload[WO_LOT_ID_KEY_NAME] = '';
@@ -104,5 +108,6 @@ export const getPayloadBasedOnWorkOrderType = (payload) => {
       payload[WO_LHR_TABLE_KEY_NAME] = [];
     }
   }
+
   return payload;
 };

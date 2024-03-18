@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 
-export const styles = makeStyles((theme) => ({
+export const styles = makeStyles((theme: NextTheme) => ({
   paper: ({ isPDF }: { isPDF: boolean } = { isPDF: false }) => ({
     height: isPDF ? '100%' : undefined,
     marginTop: 100,
@@ -45,5 +46,13 @@ export const styles = makeStyles((theme) => ({
   icon: {
     height: 17,
     width: 17,
+  },
+  [theme.media.mobile]: {
+    '@global': {
+      '.MuiDialogContent-root': {
+        padding: '0 !important',
+        marginTop: theme.spacing(1.5),
+      },
+    },
   },
 }));

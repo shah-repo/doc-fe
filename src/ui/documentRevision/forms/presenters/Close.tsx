@@ -16,7 +16,7 @@ interface Props {
   woId: string
   buttonProps?: ButtonProps
   label: string
-  disabled?: boolean
+  isDisabled?: boolean
   onSuccess?: () => void
 }
 
@@ -24,7 +24,7 @@ const WOClose: React.FunctionComponent<Props> = ({
   woId,
   buttonProps,
   label,
-  disabled,
+  isDisabled,
   onSuccess,
 }) => {
   const classes = styles();
@@ -77,7 +77,7 @@ const WOClose: React.FunctionComponent<Props> = ({
         aria-label="closed"
         onClick={openDialog}
         data-cy="transition-closed"
-        disabled={disabled}
+        disabled={isDisabled}
         {...buttonProps}
       >
         {label}

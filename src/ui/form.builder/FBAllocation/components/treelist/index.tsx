@@ -95,10 +95,16 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onError: toastError,
   });
 
+  const reloadAllocationList = () => {
+    treeListAsync.start(
+      fetchAllocationTreeList,
+      documentRevision.id,
+      treeListAsync,
+    );
+  };
+
   const partAsync = useAsync({
-    onSuccess: () => {
-      reloadAllocationList();
-    },
+    onSuccess: reloadAllocationList,
     onError: toastError,
   });
 
@@ -167,14 +173,6 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     inEdit: [],
   });
 
-  const reloadAllocationList = () => {
-    treeListAsync.start(
-      fetchAllocationTreeList,
-      documentRevision.id,
-      treeListAsync,
-    );
-  };
-
   const handleAutoAssignLot = (isAutoAssign) => {
     if (partRevIdSelected && isAutoAssign) {
       treeListAsync.start(
@@ -196,44 +194,56 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
   }, [documentRevision?.id]);
 
+  const createOrUpdateLOT = (values) => {
+    if (values[ADD_FIELD]) {
+      const payload = {
+        workOrderId: documentRevision?.id,
+        lotRevId: values.lotRevId,
+        partRevId: values.parentPartRevId,
+        lotQuantityNeeded: values.quantityNeeded,
+        lotVariance: values.variance,
+      };
+
+      partAsync.start(createLot, payload, partAsync);
+    } else {
+      const payload = {
+        lotQuantityNeeded: values.quantityNeeded,
+        lotVariance: values.variance,
+        lotRevId: values.lotRevId,
+      };
+
+      partAsync.start(updatePart, documentRevision?.id, values.parentPartRevId, payload, partAsync);
+    }
+  };
+
+  const createOrUpdatePart = (values) => {
+    if (values[ADD_FIELD]) {
+      const payload = {
+        workOrderId: documentRevision?.id,
+        workOrderPartRevId: partRevIdSelected,
+        partRevId: values.partRevId,
+        partQuantityNeeded: values.quantityNeeded,
+        partVariance: values.variance,
+      };
+
+      partAsync.start(createPart, payload, partAsync);
+    } else {
+      const payload = {
+        partQuantityNeeded: values.quantityNeeded,
+        partVariance: values.variance,
+      };
+
+      partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'), payload, partAsync);
+    }
+  };
+
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
     onSubmit: (values) => {
       if (values.lotRevId) {
-        if (values[ADD_FIELD]) {
-          const payload = {
-            workOrderId: documentRevision?.id,
-            lotRevId: values.lotRevId,
-            partRevId: values.parentPartRevId,
-            lotQuantityNeeded: values.quantityNeeded,
-            lotVariance: values.variance,
-          };
-          partAsync.start(createLot, payload, partAsync);
-        } else {
-          const payload = {
-            lotQuantityNeeded: values.quantityNeeded,
-            lotVariance: values.variance,
-            lotRevId: values.lotRevId,
-          };
-          partAsync.start(updatePart, documentRevision?.id, values.parentPartRevId, payload, partAsync);
-        }
+        createOrUpdateLOT(values);
       } else {
-        if (values[ADD_FIELD]) {
-          const payload = {
-            workOrderId: documentRevision?.id,
-            workOrderPartRevId: partRevIdSelected,
-            partRevId: values.partRevId,
-            partQuantityNeeded: values.quantityNeeded,
-            partVariance: values.variance,
-          };
-          partAsync.start(createPart, payload, partAsync);
-        } else {
-          const payload = {
-            partQuantityNeeded: values.quantityNeeded,
-            partVariance: values.variance,
-          };
-          partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'), payload, partAsync);
-        }
+        createOrUpdatePart(values);
       }
     },
   });
@@ -258,18 +268,21 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
   };
 
-  const addLot = (dataItem) => {
+  const addLot = (dataItem: EditableAllocationItem) => {
       _documentRevisionFormState?.setDirty(true);
       const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as AllocationState;
       const index = state?.data?.findIndex(data => { return data.id === dataItem.id; });
       state.data = ignorePreviouslyAddedItems(state.data);
+
       if (state.data.length && index !== -1) {
         const newAllocItem: EditableAllocationItem = createNewLotItem();
         newAllocItem.parentPartRevId = dataItem.partRevId;
         state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter(
           (data) => !data[ADD_FIELD],
         );
+
       state.data[index][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
+
       updateState({
         ...state,
         data: [...state.data],
@@ -279,9 +292,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       }
   };
 
-  const discardAllocItem = (dataItem?) => {
+  const discardAllocItem = (dataItem?: EditableAllocationItem) => {
     const state = toJS(_documentRevisionFormState?.getAllocationInfo) as unknown as AllocationState;
-    if (dataItem && dataItem[ADD_FIELD]) {
+
+    if (dataItem?.[ADD_FIELD]) {
       if (dataItem.parentPartRevId) {
         const parentIndex = state?.data?.findIndex(data => { return data.partRevId === dataItem.parentPartRevId; });
         if (parentIndex !== -1) {
@@ -295,6 +309,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         );
       }
     }
+
     _documentRevisionFormState?.setDirty(false);
     updateState({
       ...state,
@@ -304,7 +319,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     formik?.resetForm();
   };
 
-  const removeAllocItem = (dataItem) => {
+  const removeAllocItem = (dataItem: EditableAllocationItem) => {
     if (dataItem.isDisabled || isDocument) {
       return;
     }
@@ -336,6 +351,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           isHidden: savedColumn?.isHidden,
         };
       });
+
       setColumns(updatedColumns);
       updateState({ ...state, dataState: tableCriteria.queryDict.dataState });
     } else {
