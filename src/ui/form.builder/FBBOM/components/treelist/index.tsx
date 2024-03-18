@@ -932,7 +932,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 </span>
               </Grid>
             )}
-            {!isWO && <Grid
+            <Grid
               item
               data-cy="excel-export"
               className={cx({ [classes.disabled]: isShowOnly })}
@@ -949,7 +949,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                   icon={solid('arrow-down-to-line')}
                 />
               </StyleTooltip>
-            </Grid>}
+            </Grid>
             {!isWO && showTree && (
               <Grid
                 item
