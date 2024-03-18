@@ -94,7 +94,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 }) => {
   const isNewLayout = SM.isNewLayout;
   const handleCreateDocument = useHandleCreateDoc();
-  let {
+  const {
     isVisible: showRevise,
     label: reviseLabel,
     tooltipConfig,
@@ -126,6 +126,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isEB = checkIsDocumentEB(groupOptions);
   const isWO = checkIsDocumentWO(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
+  const isWORecord = isWO && !hasOutput;
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
 
@@ -135,10 +136,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     }
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
-
-  if (isWO && !documentRevision?.formTemplate) {
-    reviseLabel = 'record.revise';
-  }
 
   const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
   const isNotRelatedTogetherPart = documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;
@@ -456,7 +453,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (showEditButton) {
     accessableButtons.push(PreviewControlButtons.EditPartButton);
   }
-  if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise) {
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise && !isWORecord) {
     accessableButtons.push(PreviewControlButtons.CloneButton);
   }
   if (!isLastVersionObsolete() && hasAccess && canCreate() && isPO && showUpdate
@@ -595,8 +592,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       }
     </>
   );
-
-  const isWORecord = isWO && !hasOutput;
   const isWOCloseEnabled = isWORecord && documentRevision?.approvals?.some((approval) => approval.status === ApprovalStatus.Pending);
 
   return (
