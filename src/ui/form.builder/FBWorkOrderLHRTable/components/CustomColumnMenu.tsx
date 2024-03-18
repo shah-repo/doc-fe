@@ -6,19 +6,20 @@ import {
   DisplayText,
   TranslatedText,
 } from '../../../components/common/kendo/helpers';
+import { CustomTreeListColumnProps } from '../../../components/common/treelist/types';
 import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { EditableLHRTableItem } from '../types';
 
 interface CustomColumnMenuProps extends GridColumnMenuProps {
   columns: Array<ColumnDefinition<EditableLHRTableItem>>
-  onColumnShowHide: (params) => void
-  onLock: ({ field, locked }) => void
+  onColumnShowHide: (params: CustomTreeListColumnProps) => void
+  onLock: (params: CustomTreeListColumnProps) => void
 }
 
 interface ColumnMenuContextProps {
   columns: Array<ColumnDefinition<EditableLHRTableItem>>
-  onColumnShowHide: (params) => void
-  onLock: (params) => void
+  onColumnShowHide: (params: CustomTreeListColumnProps) => void
+  onLock: (params: CustomTreeListColumnProps) => void
 }
 
 export const LHRTableColumnMenuContext
@@ -38,7 +39,7 @@ export const CustomColumnMenu: React.ComponentType<CustomColumnMenuProps> = (
       <ColumnMenuItem
         {...props}
         iconClass="k-i-preview k-i-eye k-grid-menu-icon"
-        onClick={() => onColumnShowHide(column)}
+        onClick={() => onColumnShowHide(column as CustomTreeListColumnProps)}
         title={translate(TranslatedText[DisplayText.HIDE_COLUMN])}
         data-cy={`column-menu-${index}-item-hide`}
       />

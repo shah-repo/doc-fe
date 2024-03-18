@@ -191,7 +191,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   const [columns, setColumns]
   = React.useState<Array<ColumnDefinition<EditableLHRTableItem>>>(schema);
 
-  const getColumns = () => {
+  const getColumns = (): Array<ColumnDefinition<EditableLHRTableItem>> => {
     return columns.filter(({ isHidden }) => !isHidden);
   };
 
@@ -202,6 +202,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
     }: CustomTreeListColumnProps) => {
       const index = columns.findIndex((c) => c.field === field);
       const column = columns[index];
+
       if (column) {
         const newColumns = [...columns];
         newColumns.splice(index, 1, {
@@ -210,6 +211,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
           reorderable: locked,
           orderIndex: !locked ? 0 : undefined,
         });
+
         setColumns(newColumns);
       }
     },
@@ -221,9 +223,11 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
       if (column.field === field) {
         column.isHidden = !column.isHidden;
       }
+
       return column;
-    });
-    setColumns(dataColumns as unknown as Array<ColumnDefinition<EditableLHRTableItem>>);
+    }) as unknown as Array<ColumnDefinition<EditableLHRTableItem>>;
+
+    setColumns(dataColumns);
   };
 
   const renderToolbar = (
