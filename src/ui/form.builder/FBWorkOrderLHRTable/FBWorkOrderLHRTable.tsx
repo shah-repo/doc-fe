@@ -12,11 +12,13 @@ import { authSelectors } from '../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import NoDataFound from '../../components/common/kendo/NoDataFound';
 import { Button } from '../../components/forms/fields-next';
+import ErrorBlock from '../../components/forms/fields/ErrorBlock';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { Translation } from '../../translations/types';
 import { withFBInput } from '../FBInput/FBInput.wrap';
 import FBStore from '../FBStore/FBStore';
 import { FB } from '../helpers';
@@ -47,6 +49,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   const isOwner = workspaceState?.document?.owner?.user?.id === currentUserId;
   const canEditAsOwner = !disabled && isOwner;
   const isEditable = !isForm && canEditAsOwner;
+  const sectionLabel = label ?? translate('form.builder.workOrder.lhr.section.heading');
 
   const editLhrItem = ({ dataItem }: LHRTableItemEditEvent) => setEditedLHRItem(dataItem);
   const handleRowClick = isActive && !editedLHRItem ? editLhrItem : undefined;
@@ -184,7 +187,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
     <>
       {!hidden && (
         <Box position="relative">
-          <FBSection label={label ?? translate('form.builder.workOrder.lhr.section.heading')} />
+          <FBSection label={sectionLabel} />
           <FormikProvider value={formik}>
             <KendoDataGrid<EditableLHRTableItem>
               filterable={false}
@@ -195,7 +198,6 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
               rowRender={rowRender}
               className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
               onRowClick={handleRowClick}
-              // loading= {_formState?.loading}
               fallback={<NoDataFound />}
             />
           </FormikProvider>
@@ -207,6 +209,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
           >
             {translate('form.builder.workOrder.lhr.add')}
           </Button> }
+          <ErrorBlock label={sectionLabel as Translation} isErrored={isEmpty(lhrListToUse) && !hidden && isActive} />
         </Box>
       )}
     </>
