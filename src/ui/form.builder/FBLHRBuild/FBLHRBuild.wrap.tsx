@@ -54,6 +54,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
       () => lhrBuildState?.value,
       (value) => {
         formState?.setFieldValue(name, value);
+        formState?.validate();
         workspaceState?.formInputSync.set(name, value);
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
