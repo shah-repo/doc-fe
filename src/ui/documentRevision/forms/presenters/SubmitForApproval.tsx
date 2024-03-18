@@ -1,18 +1,17 @@
 import { Button } from '@material-ui/core';
 import React from 'react';
-import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
-import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
+import { translate } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DocumentType, DOC_TYPE_GROUP } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
-import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
-import { FB, FBFormState } from '../../../form.builder';
+import { toastError } from '../../../components/notifications';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -22,11 +21,8 @@ import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../helpers/chec
 interface Props {
   documentRevision: DocumentRevision
   docRevId: string
-  description?: string
   status?: DocumentRevisionStatus
   revisionChangeType: string
-  docRevOwner: string
-  updatedAt?: string
   currentDocumentType?: DocumentType
   renderAsButton?: boolean
   hasBuildType?: boolean
@@ -37,11 +33,8 @@ interface Props {
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
   documentRevision,
   docRevId,
-  description,
   status,
   revisionChangeType,
-  docRevOwner,
-  updatedAt = '',
   currentDocumentType,
   renderAsButton,
   hasBuildType,
@@ -55,7 +48,6 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
-  const isLot = currentDocumentType?.group === DOC_TYPE_GROUP.LOT;
   let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
 
   if (isWO && !isWOForm) {
@@ -77,13 +69,9 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
     },
   });
 
-  const intl = useIntl();
-  const formState = FB.useRef(FBFormState, {});
-  const save = useActionCreator(documentRevisionsActions.save);
-
   const releaseRecord = () => {
     if (!hasBuildType && isLhrDoc) {
-      toastError(intl.formatMessage({ id: 'form.builder.lhr.build.type.error.message' }));
+      toastError(translate('form.builder.lhr.build.type.error.message'));
       return;
     }
     releaseAsync.start(
@@ -91,21 +79,6 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
       docRevId,
       'in_review',
       releaseAsync,
-    );
-  };
-
-  /** Adds reason for voiding a record to description and sends the record to review. */
-  const voidRecord = () => {
-    const reason = String(formState?.getValues().voidDescription);
-    const voidDescription = `<p>Void</p><p>${reason}</p><p data-source="void">${docRevOwner}, ${updatedAt}</p>`;
-    const updatedDescription = isLot && description
-      ? `${voidDescription}${description}`
-      : voidDescription;
-    updateDocAsync.start(
-      save,
-      docRevId,
-      { description: updatedDescription },
-      updateDocAsync,
     );
   };
 
@@ -142,11 +115,14 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           <Text message={isObsolete ? 'common.void' : label} />
         </Button>
       )}
-      <VoidAlertDialog
-        dialog={dialog}
-        documentRevision={documentRevision}
-        confirmAction={voidRecord}
-      />
+      {documentRevision && (
+        <VoidAlertDialog
+          dialog={dialog}
+          documentRevision={documentRevision}
+          async={updateDocAsync}
+          voidAction={documentRevisionsActions.save}
+        />
+      )}
     </>
   );
 };

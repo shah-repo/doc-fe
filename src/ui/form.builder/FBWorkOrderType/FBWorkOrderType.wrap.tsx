@@ -2,20 +2,14 @@ import { FormControlLabel, Radio } from '@material-ui/core';
 import { at, map } from 'lodash';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { FB, FBOption } from '..';
 import { ReactComponent as CheckedRadioIcon } from '../../../assets/images/radio.svg';
 import { ReactComponent as DisabledCheckedRadioIcon } from '../../../assets/images/radio_checked_disabled.svg';
 import { ReactComponent as UnCheckedRadioIcon } from '../../../assets/images/unchecked_radio.svg';
 import { ReactComponent as DisabledUnCheckedRadioIcon } from '../../../assets/images/unchecked_radio_disabled.svg';
-import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { WorkOrderTypes, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
-import { documentsActions } from '../../../state/ducks/documents';
-import { ApplicationState } from '../../../state/reducers';
+import { WorkOrderTypes, WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../components/Text';
-import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
-import useActionCreator from '../../hooks/useActionCreator';
-import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import { isTranslation } from '../../translations/types';
 import { withFBOption } from '../FBOption/FBOption.wrap';
@@ -43,15 +37,15 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
     const intl = useIntl();
     const { formState, workspaceState } = FB.useStores();
 
-    const lotDocumentType = useSelector((state: ApplicationState) => {
-      return documentTypeSelectors.getDocumentTypeByGroup(state, DocTypeGroups.LOT);
-    });
-
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
     const revision = workspaceState?.document?.revision;
     if (revision) {
-      disabled = disabled || (revision > 1);
+      disabled
+        = disabled
+        || revision > 1
+        || workspaceState?.document?.status
+          === DocumentRevisionStatus.Released;
     }
     defaultValue = formState?.getFieldValue(name) || defaultValue;
 
@@ -81,23 +75,6 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
       );
     });
 
-    const loadProposedLotIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
-
-    const asyncProposedLotId = useAsync({
-      onSuccess: (response) => {
-        if (workspaceState?.document && response?.docId) {
-        formState?.setFieldValue(WO_LOT_ID_KEY_NAME, response.docId);
-        if (workspaceState?.document && !workspaceState?.isPreview) {
-          workspaceState?.saveDocRev(formState?.getValues());
-        }
-        }
-      },
-    });
-
-    const loadProposedLotId = (id: string) => {
-      asyncProposedLotId.start(loadProposedLotIdAction, id, asyncProposedLotId);
-    };
-
     const [event, setEvent] = useState<any>();
     const [prevOption, setPrevOption] = useState(defaultValue);
 
@@ -109,9 +86,6 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
       } else {
         onChange?.(...args);
         setPrevOption(args[1]);
-        if (workspaceState?.document && args[1] === WorkOrderTypes.MAKE_KIT && !workspaceState?.isPreview) {
-          loadProposedLotId(lotDocumentType?.id as string);
-        }
       }
     };
 
@@ -125,12 +99,6 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
 
       onChange?.(event[0], selectedOption);
       setPrevOption(selectedOption);
-
-      setTimeout(() => {
-        if (selectedOption === WorkOrderTypes.MAKE_KIT && workspaceState?.document && !workspaceState?.isPreview) {
-          asyncProposedLotId.start(loadProposedLotIdAction, lotDocumentType?.id, asyncProposedLotId);
-        }
-      }, 2000);
     };
 
     const cancelAlertDialog = () => {

@@ -356,7 +356,7 @@ export const withFBInput = <T extends FBInputProps>(
       reaction(
         () => inputState?.autosaveNextValue,
         (value) => {
-          if (!workspaceState?.autosave) {
+          if (!workspaceState?.autosave || workspaceState?.isPreview) {
             if (workspaceState?.isPreview) {
               formik.submitForm();
             }
