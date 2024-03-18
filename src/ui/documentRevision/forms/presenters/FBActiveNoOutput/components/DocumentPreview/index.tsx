@@ -50,7 +50,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 }) => {
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
-  const { workspaceState, formState } = FB.useStores();
+  const { workspaceState } = FB.useStores();
   const previewWorkspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
     schema: workspaceState?.schema ?? _documentRevisionFormState?.schema,
     mode: FBWorkspaceModeOptions.FORM,
@@ -192,9 +192,8 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       if (prevMode.current) {
         workspaceState?.setMode(prevMode.current);
       }
-      schema?.map((item) => formState?.setFieldValue(item.name, null));
     };
-  }, [_formState, initialValues, workspaceState, mode, formState, schema]);
+  }, [_formState, initialValues, workspaceState, mode]);
 
   useEffect(() => () => {
     documentRevision.document.documentType = documentType;
