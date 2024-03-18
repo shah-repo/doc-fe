@@ -423,9 +423,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
   const processData = () => {
     const { data, dataState } = state;
+
     if (!dataState) {
       return [];
     }
+
     const filter = [...(dataState.filter as FilterDescriptor[])];
     const docIDField = filter?.find((val) => val.field === ID_FIELD);
     const docIDFieldIndex = filter?.findIndex((val) => val.field === ID_FIELD);
