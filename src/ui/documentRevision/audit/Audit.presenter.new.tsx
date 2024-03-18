@@ -602,6 +602,8 @@ const labelToShow = (change: Audit,
         values={{
           nextStatus: change.nextValue,
           approverText: isWorkOrder ? 'User' : 'Approver',
+          relatedType: getDynamicTextValue(
+            relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
         }}
       />}
     </>
