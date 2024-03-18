@@ -598,6 +598,7 @@
   "common.print": "Print Label",
   "common.send.to.print.success": "Print Sent Successfully!",
   "common.logout": "Logout",
+  "common.field.required": "The {label} is a required field",
   "search.recent": "Recent Searches",
   "search.facets.header": "Refine By",
   "search.result": "Search Result",
