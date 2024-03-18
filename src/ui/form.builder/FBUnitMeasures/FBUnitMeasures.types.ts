@@ -1,4 +1,4 @@
 import { FBInputProps } from '..';
 
 export type FBUnitMeasuresProps =
-& Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'index' | 'defaultValue' | 'gutter'>;
+& Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'index' | 'defaultValue' | 'gutter' | 'hidden'>;

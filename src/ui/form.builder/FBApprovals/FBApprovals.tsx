@@ -28,6 +28,8 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   loading,
   inlineApprovalExists,
   isAlphaReleased,
+  disabledOptions,
+  disableChipDelete,
   owners,
   showFieldOwnersWarning,
   isContributorIncluded,
@@ -50,7 +52,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         gutter={false}
         multiple={true}
         autosave={false}
-        {...{ disabled, renderOption, loading }}
+        {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
       />
       <Box display="flex" flexWrap="wrap" my={2}>
         <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>

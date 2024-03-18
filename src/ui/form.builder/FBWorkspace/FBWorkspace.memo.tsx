@@ -1,18 +1,18 @@
 import { Box, Button, Typography } from '@material-ui/core';
-import { get, isEqual, kebabCase, size } from 'lodash';
+import { get, isEmpty, isEqual, kebabCase, size } from 'lodash';
 import { Observer } from 'mobx-react';
 import React from 'react';
-import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps, FBWorkspaceSocket } from '..';
+import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceModeOptions, FBWorkspaceProps, FBWorkspaceSocket } from '..';
 import { ReactComponent as AddIcon } from '../../../assets/images/formBuilder/add_icon.svg';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import {
-  DocumentGroupType, DOC_TYPE_GROUP,
+  DocumentGroupType, DOC_TYPE_GROUP, WO_TYPE_KEY,
 } from '../../../state/ducks/documentRevisions/documentType/types';
 import SummaryInfo from '../../common/summary/SummaryInfo';
 import Text from '../../components/Text';
 import { DocTypeGroups } from '../../dashboard.new/line.items/common/types';
 import { disableOtherFieldsChangeControl } from '../../document.revision/utils/helpers';
-import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentForm, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
 import { isFormWithInlineApproval } from '../../documentRevision/helpers/records';
 import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
@@ -77,6 +77,26 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
       />
     </Box>
   );
+
+  const groupOptions
+    = workspaceState?.document?.document?.documentType?.groupOptions;
+  const isFormDesign = [
+    FBWorkspaceModeOptions.DESIGN,
+    FBWorkspaceModeOptions.FORMPREVIEW,
+  ].includes(workspaceState?.mode as FBWorkspaceModeOptions);
+
+  const isWOForm = workspaceState?.document?.formTemplate?.schema?.find(data => {
+    return data.name === WO_TYPE_KEY;
+  });
+
+  if (!isEmpty(isWOForm) && isFormDesign) {
+    withoutBottomBar
+      = ![
+        FBWorkspaceModeOptions.DESIGN,
+        FBWorkspaceModeOptions.FORMPREVIEW,
+      ].includes(workspaceState?.mode as FBWorkspaceModeOptions)
+      && !checkIsDocumentForm(groupOptions);
+  }
 
   return (
     <Observer>

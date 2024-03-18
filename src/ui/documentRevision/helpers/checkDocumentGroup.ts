@@ -1,5 +1,5 @@
 import { some } from 'lodash';
-import { DOC_TYPE_GROUP_OPTION, DocumentGroupOptionsType } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupOptionsType, DocumentGroupType, DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { RELATED_TYPE } from '../../../state/ducks/relatedParts/types';
 
@@ -47,6 +47,7 @@ export const checkIsDocumentReceivable = checkDocumentGroupOptions.bind(this, DO
 export const checkIsDocumentBulkCreate = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.BULK_CREATE);
 export const checkIsDocumentLot = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LOT);
 export const checkIsDocumentLHRT = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LHRT);
+export const checkIsDocumentWO = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.WORK_ORDER);
 export const checkIsDocumentOTHER = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.OTHER);
 export const checkIsDocumentES = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT_SPECIFICATION);
 
@@ -86,3 +87,9 @@ export const getRelatedType = (documentRevision: DocumentRevision, hasOutput = f
     : ((isOther || isOtherForm) ? RELATED_TYPE.OTHER_RELATED : RELATED_TYPE.PART_RELATED);
   return relatedType;
 };
+
+export const checkIsDocumentWOByGroupOrOptions = (
+  group: DocumentGroupType,
+  groupOptions?: DocumentGroupOptionsType[],
+): boolean =>
+  group === DOC_TYPE_GROUP.WORK_ORDER || checkIsDocumentWO(groupOptions);

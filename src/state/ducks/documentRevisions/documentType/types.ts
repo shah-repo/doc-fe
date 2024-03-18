@@ -143,11 +143,32 @@ export enum TabTypeOptions {
   ITEMS = 'ITEMS',
   MATERIAL_DISPOSITION='MATERIAL_DISPOSITION',
   SUMMARY='SUMMARY',
+  ALLOCATION = 'ALLOCATION',
 }
 
 export enum CATEGORY {
   WORKORDER_CATEGORY = 'Work Order',
 }
+
+export enum WorkOrderTypes {
+  MAKE_KIT = 'make_kit',
+  MAKE_PRODUCT = 'make_product_or_part',
+  OTHER = 'other',
+}
+
+export enum WorkOrderTypesValues {
+  make_kit = 'Make Kit',
+  make_product_or_part = 'Make Product or Part',
+  other = 'Other',
+}
+
+export const WO_LHR_TABLE_KEY_NAME = 'lhrIds';
+export const WO_PART_KEY_NAME = 'wo_part';
+export const WO_PART_QTY_KEY_NAME = 'wo_part_quantity';
+export const WO_PART_UNIT_KEY_NAME = 'wo_part_unit';
+export const WO_LOT_ID_KEY_NAME = 'generated_lot_id';
+export const WO_TYPE_KEY = 'work_order_type';
+
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export const GroupWithGroupOptions = {
   FORM: [
@@ -503,7 +524,7 @@ export interface DocumentTypeByIdState {
   [key: string]: DocumentType
 }
 
-type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS' | 'MATERIAL_DISPOSITION' | 'SUMMARY';
+type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS' | 'MATERIAL_DISPOSITION' | 'ALLOCATION' | 'SUMMARY';
 
 export interface TabInfo {
   labelId: string
@@ -605,4 +626,5 @@ export interface DocRevQueryParam {
 export enum tabIdByInternalType {
   PAPER_LHR = 'details',
   LOT = 'details',
+  WORK_ORDER = 'details',
 }

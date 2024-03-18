@@ -11,6 +11,7 @@ import { changeRequestPreviewPath } from '../../../change.request/utils/paths';
 import Tooltip from '../../../components/common/kendo/Tooltip';
 import { getInitalsFromName } from '../../../components/icons/avatar/helpers';
 import Text from '../../../components/Text';
+import { documentPreviewPath } from '../../../document.revision/utils/paths';
 import Colors from '../../../layout/theme/utils/colors';
 import ApprovalTitle from '../common/ApprovalTitle/presenter';
 import DismissAction from '../common/DismissAction';
@@ -22,16 +23,20 @@ import useStyles from './taskAssignedItem.styles';
 interface Props {
   id: string
   type: string
-  arOwnerName: string
-  arOwnerAvatar: Nullable<string>
-  arOwnerInitialColor: string
+  ownerName: string
+  ownerAvatar: Nullable<string>
+  ownerInitialColor: string
   timestamp: string
   status: string
   instruction: string
-  arTitle: string
-  arId: string
-  arChangeRequestId: string
+  title?: string
+  docId: string
+  revId: string
+  documentId?: string
+  displayRevision?: string
   hoverItemId: string
+  isChangeRequest?: boolean
+  isDocumentRevision?: boolean
   onMouseHoverItem: (id: string) => void
   isPinned: boolean
   pinLineItem?: (id: string) => void
@@ -41,16 +46,20 @@ interface Props {
 const TaskAssignedItemPresenter: React.FC<Props> = ({
   id,
   type,
-  arOwnerName,
-  arOwnerAvatar,
-  arOwnerInitialColor,
+  ownerName,
+  ownerAvatar,
+  ownerInitialColor,
   timestamp,
   status,
   instruction,
-  arTitle,
-  arId,
-  arChangeRequestId,
+  title,
+  docId,
+  revId,
+  documentId,
+  displayRevision,
   hoverItemId,
+  isChangeRequest,
+  isDocumentRevision,
   onMouseHoverItem,
   unPinLineItem,
   pinLineItem,
@@ -105,19 +114,19 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
           <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemAvatar>
-          {arOwnerAvatar ? (
+          {ownerAvatar ? (
             <Avatar
-              style={{ backgroundColor: `${arOwnerInitialColor}` }}
+              style={{ backgroundColor: `${ownerInitialColor}` }}
               className={classes.avatar}
-              alt={arOwnerName}
-              src={arOwnerAvatar}
+              alt={ownerName}
+              src={ownerAvatar}
             />
           ) : (
             <Avatar
-              style={{ backgroundColor: `${arOwnerInitialColor}` }}
+              style={{ backgroundColor: `${ownerInitialColor}` }}
               className={classes.avatar}
             >
-              {getInitalsFromName(arOwnerName)}
+              {getInitalsFromName(ownerName)}
             </Avatar>
           )}
         </ListItemAvatar>
@@ -139,7 +148,7 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
                       color="textSecondary"
                       noWrap
                     >
-                      {arOwnerName}
+                      {ownerName}
                     </Typography>
                   </Grid>
                   <Grid item={true}>
@@ -152,10 +161,13 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
                     >
                       <Text translation="dashboard.task.assignment" />
                     </Typography>
-                    <DocId url={changeRequestPreviewPath(arChangeRequestId)} docId = {arId} />
+                    {isChangeRequest && <DocId url={changeRequestPreviewPath(revId)} docId = {docId} />}
                   </Grid>
                   <Grid item={true}>
-                    <ApprovalTitle url={changeRequestPreviewPath(arChangeRequestId)} title={arTitle || ''} />
+                    { title && <ApprovalTitle url={changeRequestPreviewPath(revId)} title={title ?? ''} /> }
+                    { !title && isDocumentRevision && documentId
+                        && <ApprovalTitle url={documentPreviewPath(revId, documentId)}
+                          title={`${docId} - Rev ${displayRevision}` ?? ''} />}
                   </Grid>
                 </Grid>
               </Grid>
@@ -188,12 +200,15 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
             onMouseLeave={onMouseLeaveActionIcons}
           >
             <span className={classes.actionIcon}>
-              <Link
-                to={`${changeRequestPreviewPath(arChangeRequestId)}?tabId=material_disposition`}
-                className={classes.link}
+              { isChangeRequest && <Link
+                to={`${changeRequestPreviewPath(revId)}?tabId=material_disposition`} className={classes.link} >
+                {translate('dashboard.task.view')}
+              </Link> }
+              { isDocumentRevision && documentId && <Link
+                to={`${documentPreviewPath(revId, documentId)}`} className={classes.link}
               >
                 {translate('dashboard.task.view')}
-              </Link>
+              </Link> }
             </span>
             <span className={classes.actionIcon}>
               {!isPinHover && isPinShown && (
