@@ -28,7 +28,7 @@ interface Props {
 
 const VOID_DESCRIPTION_FIELD = 'void-description';
 
-const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
+const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
   const { dialog, documentRevision } = props;
 
   const docRevId = documentRevision?.id as string;
@@ -122,4 +122,4 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
   );
 };
 
-export default VoidedAlertDialog;
+export default VoidAlertDialog;
