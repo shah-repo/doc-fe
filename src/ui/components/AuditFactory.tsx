@@ -13,11 +13,12 @@ import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
-import { BOMTreeData, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../state/ducks/relatedParts/types';
+import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
+import { IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -34,7 +35,7 @@ import DialogOpener from './textDiff/DialogOpener';
 interface OwnProps {
   audit: Audit
   dataCy?: string
-  revIdRelatedTypeObj?: {[key: string]: RELATED_TYPE}
+  revIdRelatedTypeObj: {[key: string]: IRevIdMapper}
 }
 
 type Props = OwnProps;
@@ -49,7 +50,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
 
-  const relatedType = revIdRelatedTypeObj?.[audit.documentRevisionId];
+  const relatedType = revIdRelatedTypeObj?.[audit.documentRevisionId]?.relatedType;
 
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;

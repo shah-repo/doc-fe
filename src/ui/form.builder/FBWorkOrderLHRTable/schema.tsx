@@ -72,6 +72,7 @@ export const buildSchema = ({
   {
     id: 'lhrDetails',
     field: 'lhrDetails',
+    disableShowOrHideSelection: true,
     title: translate('form.builder.workOrder.lhr.lhrDetails'),
     width: 240,
     template: (props) => <LhrDetailsCell {...props} onClick={onRowClick} />,

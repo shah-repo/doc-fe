@@ -60,8 +60,8 @@ const TaskCompletedItemPresenter: React.FC<Props> = ({
   dismissLineItem,
 }) => {
   const classes = useStyles();
-  const [isPinHover, setIsPinHover] = React.useState(false);
-  const isHoverItem = hoverItemId === id;
+  const [isPinHovered, setIsPinHovered] = React.useState(false);
+  const isHoveredItem = hoverItemId === id;
 
   const handleDismiss = () => {
     dismissLineItem?.(id);
@@ -73,14 +73,14 @@ const TaskCompletedItemPresenter: React.FC<Props> = ({
     unPinLineItem?.(id);
   };
   const onMouseHoverPinIcon = () => {
-    setIsPinHover(true);
+    setIsPinHovered(true);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
 
   const onMouseLeaveActionIcons = () => {
-    setIsPinHover(false);
+    setIsPinHovered(false);
   };
 
   const isPinShown = pinLineItem && !isPinned;
@@ -106,7 +106,7 @@ const TaskCompletedItemPresenter: React.FC<Props> = ({
         divider
         disableRipple
         className={classes.listItem}
-        style={isHoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        style={isHoveredItem ? { backgroundColor: Colors.sky_blue } : {}}
         onMouseEnter={onMouseHoverListItem}
       >
         <ListItemAvatar>
@@ -184,7 +184,7 @@ const TaskCompletedItemPresenter: React.FC<Props> = ({
             </>
           }
         />
-        {isHoverItem && (
+        {isHoveredItem && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -200,14 +200,14 @@ const TaskCompletedItemPresenter: React.FC<Props> = ({
               </Link> }
             </span>
             <span className={classes.actionIcon}>
-              {!isPinHover && isPinShown && (
+              {!isPinHovered && isPinShown && (
                 <PinIcon
                   data-cy="pin-icon"
                   onMouseEnter={onMouseHoverPinIcon}
                   className={classes.cursorPointer}
                 />
               )}
-              {isPinHover && isPinShown && (
+              {isPinHovered && isPinShown && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
@@ -256,7 +256,7 @@ const TaskCompletedItemPresenter: React.FC<Props> = ({
             </StyleTooltip>
           </span>
         )}
-        {isHoverItem && dismissLineItem && (
+        {isHoveredItem && dismissLineItem && (
           <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>

@@ -49,10 +49,8 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
       return;
     }
 
-    if (isEditMode && isEmpty(dataItem.parentPartRevId)) {
-      if (!dataItem.isLotAddition) {
-        return;
-      }
+    if (isEditMode && isEmpty(dataItem.parentPartRevId) && !dataItem.isLotAddition) {
+      return;
     }
 
     fetchAvailablePartsAsync.start(
@@ -66,7 +64,9 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     if (!isEditMode) {
       return;
     }
+
     const value = renderOptions().find((option) => option.value === dataItem.lotRevId);
+
     if (value && field) {
       setFieldValue(field, value);
       setValue(value);

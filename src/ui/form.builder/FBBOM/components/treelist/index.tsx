@@ -115,10 +115,9 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   isSliderView = false,
   isWO,
 }) => {
-  const { _tabsState } = SM.useStores();
+  const { _tabsState, _documentRevisionFormState } = SM.useStores();
   const dispatch = useDispatch();
   const size = useObserver(() => _tabsState?.contentSize);
-  const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   const isMaximizeView = _documentRevisionFormState?.isMaximizedView;
 
@@ -423,6 +422,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
   const processData = () => {
     const { data, dataState } = state;
+
+    if (!dataState) {
+      return [];
+    }
+
     const filter = [...(dataState.filter as FilterDescriptor[])];
     const docIDField = filter?.find((val) => val.field === ID_FIELD);
     const docIDFieldIndex = filter?.findIndex((val) => val.field === ID_FIELD);
@@ -933,7 +937,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                 </span>
               </Grid>
             )}
-            {!isWO && <Grid
+            <Grid
               item
               data-cy="excel-export"
               className={cx({ [classes.disabled]: isShowOnly })}
@@ -950,7 +954,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
                   icon={solid('arrow-down-to-line')}
                 />
               </StyleTooltip>
-            </Grid>}
+            </Grid>
             {!isWO && showTree && (
               <Grid
                 item

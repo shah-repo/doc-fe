@@ -44,7 +44,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy="cell-quantity"
     >
       <span className={classes.Cell}>
-        {isNil(dataItem.quantityOnHand) ? CELL_EMPTY_VALUE : (quantityNeeded ?? 0) - (dataItem.quantityOnHand ?? 0)}
+        {isNil(dataItem.quantityOnHand) ? CELL_EMPTY_VALUE : (dataItem.quantityOnHand ?? 0) - (quantityNeeded ?? 0)}
       </span>
     </td>
   );

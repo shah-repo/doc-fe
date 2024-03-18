@@ -117,7 +117,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     return this.bomInfo;
   }
 
-  @computed public get getAllocationInfo (): AllocationState| undefined {
+  public get getAllocationInfo (): AllocationState| undefined {
     return this.allocationInfo;
   }
 

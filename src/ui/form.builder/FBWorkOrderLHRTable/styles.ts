@@ -7,6 +7,19 @@ export default makeStyles(theme => ({
   root: {
     margin: theme.spacing(3, 0),
   },
+  toolbarContainer: {
+    height: 24,
+  },
+  disabled: {
+    pointerEvents: 'none',
+  },
+  exportExcelIcon: {
+    color: Colors.almost_black,
+    paddingRight: theme.spacing(1.25),
+    width: 14,
+    height: 14,
+    cursor: 'pointer',
+  },
   grid: {
     '& .k-grid-container': {
       borderBottomLeftRadius: '0 !important',

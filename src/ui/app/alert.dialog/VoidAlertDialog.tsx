@@ -1,15 +1,20 @@
 import { Typography } from '@material-ui/core';
+import { FormikProvider, useFormik } from 'formik';
 import moment from 'moment';
 import React, { useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { ActionCreator } from 'redux';
 import { translate } from '../../../common/intl';
 import { MomentFormats, TIME_ZONE } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
+import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { ApplicationState } from '../../../state/reducers';
+import { ApiAction } from '../../../state/types';
 import AlertDialog from '../../components/dialogs/Alert';
-import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
-import { useFormik, FormikProvider } from 'formik';
 import { FormikField, TextField } from '../../components/forms/fields-next';
+import { checkIsDocumentDirectApproved } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync, { Async } from '../../hooks/useAsync';
 import { DialogHandler } from '../../hooks/useDialog';
@@ -18,30 +23,36 @@ import { styles } from './AlertDialog.styles';
 interface Props {
   dialog: DialogHandler
   async?: Async
-  documentRevision?: DocumentRevision
-  confirmAction?: () => void
+  documentRevision: DocumentRevision
+  voidAction?: ActionCreator<ApiAction<DocumentRevision>>
 }
 
 const VOID_DESCRIPTION_FIELD = 'void-description';
 
-const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
-  const { dialog, documentRevision, confirmAction } = props;
+const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
+  const { dialog, documentRevision } = props;
 
-  const docRevId = documentRevision?.id as string;
-  const docRevOwner = documentRevision?.owner?.user?.name as string;
+  const docRevId = documentRevision.id;
+  const docRevOwner = documentRevision.owner.user.name;
 
   const classes = styles();
   const dispatch = useDispatch();
-  const voidDocument = useActionCreator(documentRevisionsActions.voidDocument);
+  const voidAction = useActionCreator(props.voidAction ?? documentRevisionsActions.voidDocument);
   const dialogAsync = useAsync({
     onSuccess: () => {
       dispatch(documentRevisionsActions.loadAudit(docRevId));
     },
   });
   const async = props.async ?? dialogAsync;
+  const currentDocumentType = useSelector(
+    (state: ApplicationState) => (
+      documentTypeSelectors.getDocumentTypeById(state, documentRevision.document.documentType.id ?? '')
+    ),
+  );
 
+  const isLot = currentDocumentType?.group === DOC_TYPE_GROUP.LOT;
   const isRecordBehaviour = useMemo(
-    () => checkIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions ?? []),
+    () => checkIsDocumentDirectApproved(documentRevision.document.documentType.groupOptions ?? []),
     [documentRevision],
   );
 
@@ -50,16 +61,16 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
       [VOID_DESCRIPTION_FIELD]: '',
     },
     onSubmit: (values) => {
-      if (confirmAction) {
-        return confirmAction();
+      let description = `<p>Void</p>
+      <p>${values[VOID_DESCRIPTION_FIELD]}</p>
+      <p data-source="void">${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
+
+      if (isLot) {
+        description += documentRevision.description ?? '';
       }
 
-      const description = `<p>Void</p>
-      <p>${values[VOID_DESCRIPTION_FIELD]}</p>
-      <p>${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
-
       async.start(
-        voidDocument,
+        voidAction,
         docRevId,
         isRecordBehaviour ? { description } : undefined,
         async,
@@ -112,4 +123,4 @@ const VoidedAlertDialog: React.FunctionComponent<Props> = (props) => {
   );
 };
 
-export default VoidedAlertDialog;
+export default VoidAlertDialog;
