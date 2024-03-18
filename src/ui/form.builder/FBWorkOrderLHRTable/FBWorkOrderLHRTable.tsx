@@ -230,6 +230,24 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
     setColumns(dataColumns);
   };
 
+  const exportToExcel = () => {
+    if (_export.current !== null) {
+      const updatedDate = lhrListToUse.map((lhr) => {
+        return {
+          ...lhr,
+          owner: lhr.owner?.user?.name,
+          partRev: lhr.partRev?.documentId ? lhr.partRev?.label : EMPTY_PLACEHOLDER,
+          completionDate: lhr.completionDate ?? EMPTY_PLACEHOLDER,
+          startQuantity: lhr.startQuantity ?? EMPTY_PLACEHOLDER,
+          endQuantity: lhr.endQuantity ?? EMPTY_PLACEHOLDER,
+          lhrDetails: lhr.lhrDetails?.label,
+        };
+      });
+
+      _export.current.save(updatedDate, getColumns() as ExcelExportColumnProps[]);
+    }
+  };
+
   const renderToolbar = (
     <GridToolbar>
       <Grid
@@ -250,7 +268,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
             <FontAwesomeIcon
               data-cy="excel-download"
               className={classes.exportExcelIcon}
-              onClick={() => exportToExcel()}
+              onClick={exportToExcel}
               icon={solid('arrow-down-to-line')}
             />
           </StyleTooltip>
@@ -270,23 +288,6 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   );
 
   const _export = React.useRef<ExcelExport | null>(null);
-
-  const exportToExcel = () => {
-    if (_export.current !== null) {
-      const updatedDate = lhrListToUse.map((lhr) => {
-        return {
-          ...lhr,
-          owner: lhr.owner?.user?.name,
-          partRev: lhr.partRev?.documentId ? lhr.partRev?.label : EMPTY_PLACEHOLDER,
-          completionDate: lhr.completionDate ?? EMPTY_PLACEHOLDER,
-          startQuantity: lhr.startQuantity ?? EMPTY_PLACEHOLDER,
-          endQuantity: lhr.endQuantity ?? EMPTY_PLACEHOLDER,
-          lhrDetails: lhr.lhrDetails?.label,
-        };
-      });
-      _export.current.save(updatedDate, getColumns() as ExcelExportColumnProps[]);
-    }
-  };
 
   return (
     <>
@@ -329,7 +330,6 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
                   rowRender={rowRender}
                   className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
                   onRowClick={handleRowClick}
-                  // loading= {_formState?.loading}
                   fallback={<NoDataFound />}
                 >
                   {renderToolbar}
