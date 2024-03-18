@@ -4,6 +4,7 @@ import moment from 'moment';
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActionCreator } from 'redux';
+import * as Yup from 'yup';
 import { translate } from '../../../common/intl';
 import { MomentFormats, TIME_ZONE } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -60,6 +61,9 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
     initialValues: {
       [VOID_DESCRIPTION_FIELD]: '',
     },
+    validationSchema: Yup.object().shape({
+      [VOID_DESCRIPTION_FIELD]: Yup.string().trim().required('Justification is required'),
+    }),
     onSubmit: (values) => {
       let description = `<p>Void</p>
       <p>${values[VOID_DESCRIPTION_FIELD]}</p>
