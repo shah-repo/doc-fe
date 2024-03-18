@@ -44,7 +44,7 @@ export const withFBWorkOrderType = <T extends FBWorkOrderTypeProps>(
       disabled
         = disabled
         || revision > 1
-        || workspaceState?.document?.displayStatus?.toUpperCase()
+        || workspaceState?.document?.status
           === DocumentRevisionStatus.Released;
     }
     defaultValue = formState?.getFieldValue(name) || defaultValue;

@@ -67,7 +67,10 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   }
 
   const editTLItem = ({ dataItem }: TLItemEditEvent) => {
-    !isShowOnly && !formik.dirty && setEditedTLItem(dataItem);
+    if (isShowOnly || formik.dirty) {
+      return;
+    }
+    setEditedTLItem(dataItem);
   };
 
   const loadTasksTableData = () => {
