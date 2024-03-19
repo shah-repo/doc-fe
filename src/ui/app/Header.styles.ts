@@ -43,28 +43,17 @@ export default (theme: NextTheme) =>
         whiteSpace: 'nowrap',
       },
     }),
-    weViewtoolbar: (props: HeaderPresenterProps) => ({
-      marginLeft: props.isOpened ? 255 : 90,
-
-    }),
     welcomeText: {
       fontSize: '1.75rem',
       lineHeight: 1.2,
       fontWeight: 300,
       flexGrow: 1,
       marginRight: theme.spacing(4),
-      marginBottom: theme.spacing(3),
     },
     welcomeTextName: {
       fontWeight: 700,
     },
-    welcomeHide: {
-      display: 'none',
-    },
     mobileMake: {
-      display: 'none',
-    },
-    mobileGrwFlex: {
       display: 'none',
     },
     mobileLogoText: {
@@ -77,23 +66,6 @@ export default (theme: NextTheme) =>
       height: 35,
       borderRadius: '50%',
     },
-    mobileStyle: {
-      display: 'none',
-    },
-    helpCenter: {
-      float: 'right',
-      marginRight: theme.spacing(2.6),
-      marginTop: theme.spacing(2),
-    },
-    webViewHeader: {
-      height: 58,
-      background: 'linear-gradient(166deg, #2f01bb, #2ea2dc 100%, #783bff 100%)',
-    },
-    webMakeview: {
-      fontSize: 15,
-      fontWeight: 600,
-      marginTop: theme.spacing(2),
-    },
     [theme.media.mobile]: {
       welcomeText: {
         fontSize: '1.25rem',
@@ -101,9 +73,6 @@ export default (theme: NextTheme) =>
         whiteSpace: 'nowrap',
       },
       mobileStyle: {
-        display: 'none',
-      },
-      helpCenter: {
         display: 'none',
       },
       mobileMake: {
@@ -143,8 +112,6 @@ export default (theme: NextTheme) =>
       logoMobile: {
         marginLeft: theme.spacing(1),
       },
-      webViewHeader: {
-        display: 'none',
-      },
+
     },
   });
