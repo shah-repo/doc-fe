@@ -129,7 +129,9 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         document.getElementById('training-chart') as HTMLInputElement,
       );
       myChart.setOption(DoughnutChartOptions);
-
+      window.onresize = function () {
+        myChart.resize();
+      };
       myChart.on('mouseover', (evt: any) => {
         DoughnutChartOptions.series.data.forEach((data, index) => {
           if (index !== evt?.dataIndex) {

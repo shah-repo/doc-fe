@@ -51,19 +51,19 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   return (
     <AppBar className={cx(classes.appBar, className)}>
       <Grid container spacing={2} className={classes.webViewHeader}>
-        <Grid xs={4} md={4}>
+        <Grid xs={6} md={4}>
           <div className={cx(classes.weViewtoolbar, classes.webMakeview)}>
             <Typography variant="caption">
               <Text translation="header.design.make" />
             </Typography>
           </div>
         </Grid>
-        <Grid xs={4} md={4} >
+        <Grid xs={6} md={4} >
           <div>
             <SearchBar />
           </div>
         </Grid>
-        <Grid xs={4} md={4}>
+        <Grid xs={6} md={4}>
           <div className={classes.helpCenter}>
             <HelpCenter />
             <AutosaveToggle />
