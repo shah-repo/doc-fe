@@ -62,7 +62,7 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
       [VOID_DESCRIPTION_FIELD]: '',
     },
     validationSchema: Yup.object().shape({
-      [VOID_DESCRIPTION_FIELD]: Yup.string().trim().required('Justification is required'),
+      [VOID_DESCRIPTION_FIELD]: Yup.string().trim().required('common.justification.required'),
     }),
     onSubmit: (values) => {
       let description = `<p>Void</p>
