@@ -83,13 +83,13 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
       setTimeout(() => {
         if (asyncState?.status === initialAsyncStatus.current) {
           itemsAndDetailsState.setLoadingState(false);
-          itemsAndDetailsState.setViewItemActionsVisibility(true);
         }
       }, 2000);
     } else {
       // Edit the itemsAndDetailsState & set the approvalRequestItemsList to dataToSend
       const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions);
       itemsAndDetailsState.setApprovalRequestItemsList(entries);
+      itemsAndDetailsState.setViewItemActionsVisibility(true);
     }
   };
 
