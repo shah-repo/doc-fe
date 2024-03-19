@@ -320,7 +320,7 @@
   "common.token.action": "Action",
   "common.description": "Description",
   "common.justification": "Justification",
-  "validator.common.justification": "Justification is required",
+  "validator.justification": "Justification is required",
   "common.description.SUP": "Supplier Address/Phone",
   "common.state": "State",
   "common.save": "Save",
