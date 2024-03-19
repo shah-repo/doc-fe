@@ -17,8 +17,9 @@ const VarianceCell: React.ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-  const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
+  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const isEditMode = isEditAllocItem(dataItem);
+  const isLotAddition = values.isLotAddition ?? dataItem.isLotAddition;
 
   const onVarianceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
@@ -53,8 +54,8 @@ const VarianceCell: React.ComponentType<CustomTreeListCellProps> = ({
       }}
       data-cy="cell-quantity"
     >
-      {isEditMode && getFieldInfo()}
-      {!isEditMode && (
+      {isEditMode && !isLotAddition && getFieldInfo()}
+      {(!isEditMode || isLotAddition) && (
         <span className={classes.Cell}>
           {getCellValue(dataItem, field)}
         </span>
