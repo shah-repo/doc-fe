@@ -9,7 +9,6 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../../App';
-import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
@@ -27,8 +26,8 @@ import OwnerChangerContainer from '../../../components/common/owner.changer/cont
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../../../components/forms/ClonePOButton';
 import CloneEBButton from '../../../components/forms/CopyEBButton';
-import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
+import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import PrintLabelDetailsDialog from '../../../components/table/printLabel/PrintLabelDetailsDialog';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
@@ -42,24 +41,24 @@ import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from '../../PreviewControls.container.types';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
-import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
 import { withActionButton } from './ActionButton.wrap';
-import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
 import CancelButton from './CancelButton';
 import CancelEditPartButton from './CancelEditPartButton';
+import GenerateHtmlPreview from './GenerateHtmlPreview';
+import { SubmitForApproval } from './SubmitForApproval';
+import VoidButton from './VoidButton';
+import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
 import ExportToCSVButton from './export.to.csv/ExportToCSV.button';
 import ExportToEmail from './export.to.email/ExportToEmail';
-import GenerateHtmlPreview from './GenerateHtmlPreview';
 import RedlineButton from './redline/Redline.button';
-import { SubmitForApproval } from './SubmitForApproval';
 import UpgradeToLatestContainer from './upgrade.to.latest/UpgradeToLatest.container';
-import VoidButton from './VoidButton';
 
 const styles = makeStyles(() => ({
   printIconContainer: {
@@ -94,7 +93,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const history = useHistory();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
-  const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
+  const { revisionStage, revisionChangeType } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || '';
   const schema = documentRevision?.formDocument?.formTemplate?.schema;
   const isDisabled: boolean = documentRevision?.id !== undefined;
@@ -433,10 +432,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <SubmitForApproval
           documentRevision={documentRevision}
           docRevId={values.id as string}
-          description={values.description}
           status={values.status}
-          docRevOwner={owner?.user.name}
-          updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
           renderAsButton={renderAsButton}
           hasBuildType={hasBuildType}
           isWO={isWO}

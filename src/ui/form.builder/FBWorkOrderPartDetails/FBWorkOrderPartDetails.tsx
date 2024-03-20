@@ -3,7 +3,10 @@ import { kebabCase } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBInputProps, FBTextField, FBWorkspaceModeOptions } from '..';
+import { WorkOrderTypes, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
+import ErrorBlock from '../../components/forms/fields/ErrorBlock';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from '../../form.builder';
+import { Translation } from '../../translations/types';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
 import { PART_TO_BE_MADE } from './constants';
 
@@ -17,9 +20,11 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
 
   const isPreview = formState?.workspaceMode === FBWorkspaceModeOptions.PREVIEW;
   const cyName = kebabCase(name);
+  const workOrderType = useObserver(() => (workspaceState?.formInputSync?.get(WO_TYPE_KEY)));
   const partsDefaultValue = useObserver(() => (workspaceState?.formInputSync?.get(PART_TO_BE_MADE)));
   const unitsDefaultValue = useObserver(() => (workspaceState?.formInputSync?.get(`${name}_unit`)));
   const quantityDefaultValue = useObserver(() => (workspaceState?.formInputSync?.get(`${name}_quantity`)));
+  const partSelectionLabel = label ?? 'form.builder.wo.part.selector';
 
   return (
     <Grid container spacing={1}>
@@ -27,7 +32,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
         <FBAutocompleteAsync
           {...props}
           name={PART_TO_BE_MADE}
-          label={label ?? 'form.builder.wo.part.selector'}
+          label={partSelectionLabel}
           placeholder="form.builder.select"
           optionId={FBAutocompleteAsyncOption.releasedParts}
           optionValueType="id"
@@ -37,6 +42,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           withState={true}
           autosave={true}
         />
+        <ErrorBlock label={partSelectionLabel as Translation} isErrored={!props.disabled && !partsDefaultValue && [WorkOrderTypes.MAKE_KIT, WorkOrderTypes.MAKE_PRODUCT].includes(workOrderType)} />
       </Grid>
       <Grid item md={3} xs={6}>
         <FBTextField
