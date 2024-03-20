@@ -22,7 +22,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
   const { values } = useFormikContext<EditableAllocationItem>();
   const isEditMode = isEditAllocItem(dataItem);
 
-  let quantityNeeded: number | undefined = dataItem.quantityNeeded ?? 0;
+  let quantityNeeded: number = dataItem.quantityNeeded ?? 0;
   if (isEditMode) {
     if (values.isLotAddition) {
       quantityNeeded = getParsedFieldValue(values.quantityNeeded);
@@ -32,7 +32,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
   }
 
   if (dataItem.woStatus !== DocumentRevisionStatus.Draft) {
-    quantityNeeded = dataItem.quantityAfterKitting;
+    quantityNeeded = dataItem.quantityAfterKitting ?? 0;
   }
 
   return (
