@@ -457,40 +457,111 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           const nextVal: string = audit.nextValue as string;
           try {
             const { instruction, assignedTo } = JSON.parse(nextVal);
+            const docLabel
+              = nextVal.split('-')[0] === 'WO'
+                ? 'documentRevision'
+                : 'changeRequest';
+
             returnValue = (
               <>
-                { instruction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.instruction.added', { instruction }) }
-                { assignedTo && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.to', { assignedTo }) }
+                {instruction
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.instruction.added`,
+                    { instruction },
+                  )}
+                {assignedTo
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.assignee.to`,
+                    { assignedTo },
+                  )}
               </>
             );
           } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(audit.nextValue)}
+              </div>
+            );
           }
         } else if (audit.type.includes('ARRAY_EDITED')) {
           const nextVal: string = audit.nextValue as string;
           try {
-            const { instruction, assignedAdded, assigneeDeleted, status, assignedTo, comment } = JSON.parse(nextVal);
+            const docLabel
+              = nextVal.split('-')[0] === 'WO'
+                ? 'documentRevision'
+                : 'changeRequest';
+
+            const {
+              instruction,
+              assignedAdded,
+              assigneeDeleted,
+              status,
+              assignedTo,
+              comment,
+            } = JSON.parse(nextVal);
+
             returnValue = (
               <>
-                { instruction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.instruction.updated', { instruction }) }
-                { assignedAdded && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.added', { assignedAdded }) }
-                { (status === FBInvTaskState.DONE)
-                && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.completed', { assignedTo }) }
-                { (status === FBInvTaskState.DRAFT) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.draft', { assignedTo }) }
-                { assigneeDeleted && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.deleted', { assigneeDeleted }) }
-                { comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.comment', { comment }) }
+                {instruction
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.instruction.updated`,
+                    { instruction },
+                  )}
+                {assignedAdded
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.assignee.added`,
+                    { assignedAdded },
+                  )}
+                {status === FBInvTaskState.DONE
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.completed`,
+                    { assignedTo },
+                  )}
+                {status === FBInvTaskState.DRAFT
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.draft`,
+                    { assignedTo },
+                  )}
+                {assigneeDeleted
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.assignee.deleted`,
+                    { assigneeDeleted },
+                  )}
+                {comment
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.comment`,
+                    { comment },
+                  )}
               </>
             );
           } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(audit.nextValue)}
+              </div>
+            );
           }
         } else {
           const prevVal: string = audit.previousValue as string;
           try {
             const { instruction } = JSON.parse(prevVal);
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(instruction)}</div>);
+            returnValue = (
+              <div data-cy={dataCy}>{getAuditDefaultValue(instruction)}</div>
+            );
           } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(audit.previousValue)}
+              </div>
+            );
           }
         }
         break;
