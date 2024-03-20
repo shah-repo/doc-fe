@@ -667,7 +667,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (<div data-cy={dataCy}>{getWOAuditDefaultValue(audit)}</div>);
         break;
       case 'workOrder':
-        if (audit.type.includes('ARRAY_ADDED')) {
+        try {
           const nextVal = audit.nextValue as string;
 
           const {
@@ -680,7 +680,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             isNewAddition,
           } = JSON.parse(nextVal);
 
-          try {
+          if (audit.type.includes('ARRAY_ADDED')) {
             returnValue = (
               <>
                 {lotDocId
@@ -717,22 +717,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   )}
               </>
             );
-          } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
-          }
-        } else if (audit.type.includes('ARRAY_EDITED')) {
-          const nextVal = audit.nextValue as string;
-
-          const {
-            partDocId,
-            partQuantityNeeded,
-            partVariance,
-            lotDocId,
-            lotQuantityNeeded,
-            lotVariance,
-          } = JSON.parse(nextVal);
-
-          try {
+          } else if (audit.type.includes('ARRAY_EDITED')) {
             returnValue = (
               <>
                 {lotDocId
@@ -749,10 +734,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   )}
               </>
             );
-          } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
           }
-        } else {
+        } catch (error) {
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
+
+        if (!audit.type.includes('ARRAY_ADDED') && !audit.type.includes('ARRAY_EDITED')) {
           const prevVal: string = audit.previousValue as string;
 
           try {
