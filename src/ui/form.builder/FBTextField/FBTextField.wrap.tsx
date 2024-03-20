@@ -41,7 +41,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       || formState?.getFieldValue('signatureRequestId')
     );
 
-    if (name === WO_LOT_ID_KEY_NAME && defaultValue) {
+    if (name === WO_LOT_ID_KEY_NAME) {
       disabled = true;
     }
 

@@ -47,7 +47,7 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import AutoOptions from './AutoOptions';
 import {
-  ADD_FIELD, ALLOCATION_TABLE_NAME, AllocationCheckBoxOptions, CELL_EMPTY_VALUE, DATA_ITEM_KEY,
+  ADD_FIELD, AllocationCheckBoxOptions, ALLOCATION_TABLE_NAME, CELL_EMPTY_VALUE, DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
@@ -527,6 +527,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     const item = props.dataItem as EditableAllocationItem;
     const parentChildRelkey = item.parentPartRevId ? `alloc-row-${item?.lotDocId}` : `alloc-row-${item.partRevId}-${item?.docId}`;
     item.isDisabled = isDisabled || isDocument;
+    item.woStatus = documentRevision.status;
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
