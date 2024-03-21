@@ -44,3 +44,10 @@ export const downloadFile = (url?: string): void => {
 
   window.open(url, '_blank');
 };
+
+export const isCurrentUrl = (): boolean => {
+  return `${window.location.origin}/` === window.location.href;
+};
+export const containsString = (substring: string): boolean => {
+  return window.location.href.includes(substring);
+};

@@ -12,12 +12,12 @@ import { ReactComponent as MobileLogo } from '../../assets/images/enlil_white_lo
 import Config from '../../config';
 import { WhiteLabelingEnv } from '../../state/ducks/company/types';
 import { store } from '../../state/store';
+import { isCurrentUrl } from '../common/utils/helpers';
 import Text from '../components/Text';
 import { ThemeEnv } from '../layout/theme/utils/types';
 import styles from './Header.styles';
 import { UserMenuContext } from './NavigationProfile.container';
 import AutosaveToggle from './autosave/autosave';
-
 export interface HeaderPresenterProps {
   name: string
   fullHeight?: boolean
@@ -42,6 +42,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   const user = store.getState().auth.user;
   const companyName = user.employee.company.name;
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
+  const hideComponent = isCurrentUrl();
   const {
     handleSwitchCompany,
   } = React.useContext(UserMenuContext)! ?? {};
@@ -70,7 +71,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
           )}
         </div>
       </div>
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className={cx(classes.toolbar, { [classes.welcomeHide]: !hideComponent })}>
         <Grid
           container
           alignItems="center"

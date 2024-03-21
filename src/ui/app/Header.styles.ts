@@ -112,6 +112,8 @@ export default (theme: NextTheme) =>
       logoMobile: {
         marginLeft: theme.spacing(1),
       },
-
+      welcomeHide: {
+        display: 'none',
+      },
     },
   });
