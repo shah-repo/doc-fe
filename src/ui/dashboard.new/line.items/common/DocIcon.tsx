@@ -30,7 +30,7 @@ export const getDocIcon = (docTypeGroup: DocTypeGroups, height = 30, width = 30)
 };
 
 export const getStatusLabel = (docTypeGroup: string, status: string, displaystatus: string) => {
-  if (docTypeGroup === DocTypeGroups.PI_INSTANCE) {
+  if (docTypeGroup === DocTypeGroups.PI_INSTANCE || docTypeGroup === DocTypeGroups.WORK_ORDER) {
     return displaystatus;
   }
   if (docTypeGroup === DocTypeGroups.PO && status === STATUS_TYPES_LABEL.RELEASED) {

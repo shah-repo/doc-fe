@@ -24,6 +24,7 @@ export enum DocTypeGroups {
   PI_INSTANCE = 'PI_INSTANCE',
   TRAINING_CURRICULUM = 'TRAINING_CURRICULUM',
   BULK_CREATE = 'BULK_CREATE',
+  WORK_ORDER = 'WORK_ORDER',
 }
 
 export enum DocCategories {
