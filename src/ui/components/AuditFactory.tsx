@@ -11,7 +11,7 @@ import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
-import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType, WO_CATEGORY } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
@@ -458,7 +458,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           try {
             const { instruction, assignedTo } = JSON.parse(nextVal);
             const docLabel
-              = nextVal.split('-')[0] === 'WO'
+              = nextVal.split('-')[0] === WO_CATEGORY
                 ? 'documentRevision'
                 : 'changeRequest';
 
@@ -489,7 +489,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           const nextVal: string = audit.nextValue as string;
           try {
             const docLabel
-              = nextVal.split('-')[0] === 'WO'
+              = nextVal.split('-')[0] === WO_CATEGORY
                 ? 'documentRevision'
                 : 'changeRequest';
 

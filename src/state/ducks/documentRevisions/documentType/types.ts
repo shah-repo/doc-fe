@@ -161,6 +161,7 @@ export enum WorkOrderTypesValues {
   other = 'Other',
 }
 
+export const WO_CATEGORY = 'WO';
 export const WO_LHR_TABLE_KEY_NAME = 'lhrIds';
 export const WO_PART_KEY_NAME = 'wo_part';
 export const WO_PART_QTY_KEY_NAME = 'wo_part_quantity';
