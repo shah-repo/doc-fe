@@ -2,8 +2,7 @@
 import { filter, find, groupBy, isArray, last, map, some, sortBy, union } from 'lodash';
 import { action, computed, set } from 'mobx';
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
-import { WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionStatus, DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
@@ -14,15 +13,13 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
   private readonly documentStatus?: string = '';
-  private readonly isWO?: boolean = false;
-  private readonly name?: string = '';
+  private readonly skipOptionsFilter?: boolean = false;
 
-  public constructor ({ optionId, urlValues, documentStatus, isWO, name }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, documentStatus, skipOptionsFilter }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
     this.documentStatus = documentStatus;
-    this.isWO = isWO;
-    this.name = name;
+    this.skipOptionsFilter = skipOptionsFilter;
     this.setOptionId(optionId);
   }
 
@@ -113,10 +110,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           docId: data.docId,
         }));
       case FBAutocompleteAsyncOption.releasedParts:
-        if (this.isWO && this.name === WO_PART_KEY_NAME && this.documentStatus !== DocumentRevisionStatusDisplay.Draft) {
-          return data;
-        }
-        return data.filter((item) => item.status === DocumentRevisionStatus.Released);
+        return this.skipOptionsFilter ? data : data.filter((item) => item.status === DocumentRevisionStatus.Released);
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
       case FBAutocompleteAsyncOption.trainingDocuments:
         return data.map((option) => {
