@@ -92,13 +92,14 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
               </Typography>
             )}
             {canToggleCustomLabels && (
-              <FormControlLabel className={classes.mobileStyle}
+              <FormControlLabel
+                className={`${classes.mobileStyle} ${fullHeight ? classes.toggleCustomLabels : classes.toggleCustomLabels2}`}
                 control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
                 label={<Text translation="form.builder.header.control.label" />}
               />
             )}
-            <AutosaveToggle className={classes.mobileStyle} />
-            <HelpCenter className={classes.mobileStyle} />
+              <AutosaveToggle className={`${classes.mobileStyle} ${classes.autosaveToggle}`} />
+              <HelpCenter className={`${classes.mobileStyle} ${classes.autosaveToggle}`} />
           </Grid>
         </Grid>
       </Toolbar>

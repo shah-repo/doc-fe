@@ -49,6 +49,9 @@ export default (theme: NextTheme) =>
       fontWeight: 300,
       flexGrow: 1,
       marginRight: theme.spacing(4),
+      [theme.breakpoints.only('md')]: {
+        display: 'none',
+      },
     },
     welcomeTextName: {
       fontWeight: 700,
@@ -112,6 +115,20 @@ export default (theme: NextTheme) =>
       logoMobile: {
         marginLeft: theme.spacing(1),
       },
-
+    },
+    toggleCustomLabels: {
+      [theme.breakpoints.down('md')]: {
+        display: 'none',
+      },
+    },
+    toggleCustomLabels2: {
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
+    },
+    autosaveToggle: {
+      [theme.breakpoints.down('md')]: {
+        display: 'none',
+      },
     },
   });
