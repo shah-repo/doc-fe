@@ -106,7 +106,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
       : false,
   );
-  const isOther = checkIsDocumentOTHER(outputType.groupOptions);
+  const isOther = checkIsDocumentOTHER(documentRevision.document.documentType.groupOptions);
   const isOtherForm = useSelector(
     (state: ApplicationState) => documentRevision?.formTemplate
       ? checkIsDocumentOTHER((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
