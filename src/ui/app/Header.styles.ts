@@ -53,6 +53,9 @@ export default (theme: NextTheme) =>
     welcomeTextName: {
       fontWeight: 700,
     },
+    welcomeHide: {
+      display: 'unset',
+    },
     mobileMake: {
       display: 'none',
     },
