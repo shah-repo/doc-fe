@@ -457,16 +457,14 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'inventoryTask':
 
         try {
+          const nextVal: string = audit.nextValue as string;
           const documentTypesAll = useSelector(documentTypeSelectors.getDocumentTypeList);
           const documentType = documentTypesAll.find(item => checkIsDocumentWO(item.groupOptions));
-          let relatedAcronym = documentType?.documentTypeAcronym ?? '';
-          relatedAcronym = relatedAcronym.replace('-', '');
-          const nextVal: string = audit.nextValue as string;
+          const relatedAcronym = documentType?.documentTypeAcronym ?? '';
 
+          const auditDocId = audit.docId ?? '';
           const docLabel
-          = nextVal.split('-')[0] === relatedAcronym
-            ? 'documentRevision'
-            : 'changeRequest';
+          = auditDocId.startsWith(relatedAcronym) ? 'documentRevision' : 'changeRequest';
 
           const {
             instruction,
