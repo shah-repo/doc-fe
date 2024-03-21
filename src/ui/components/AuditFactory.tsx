@@ -463,8 +463,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           const relatedAcronym = documentType?.documentTypeAcronym ?? '';
 
           const auditDocId = audit.docId ?? '';
-          const docLabel
-          = auditDocId.startsWith(relatedAcronym) ? 'documentRevision' : 'changeRequest';
+          const docLabel = relatedAcronym && auditDocId.startsWith(relatedAcronym) ? 'documentRevision' : 'changeRequest';
 
           const {
             instruction,
