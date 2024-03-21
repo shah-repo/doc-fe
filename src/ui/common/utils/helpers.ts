@@ -48,6 +48,6 @@ export const downloadFile = (url?: string): void => {
 export const isCurrentUrl = (): boolean => {
   return `${window.location.origin}/` === window.location.href;
 };
-export const containsString = (substring: string): boolean => {
+export const matchLocationUrl = (substring: string): boolean => {
   return window.location.href.includes(substring);
 };

@@ -55,7 +55,7 @@ export const styles = makeStyles((theme: NextTheme) => ({
       },
     },
     content: {
-      width: '340px',
+      width: 340,
     },
   },
 }));
