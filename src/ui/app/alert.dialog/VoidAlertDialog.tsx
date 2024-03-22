@@ -52,6 +52,7 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
   );
 
   const isLot = currentDocumentType?.group === DOC_TYPE_GROUP.LOT;
+  const isWO = currentDocumentType?.group === DOC_TYPE_GROUP.WORK_ORDER;
   const isRecordBehaviour = useMemo(
     () => checkIsDocumentDirectApproved(documentRevision.document.documentType.groupOptions ?? []),
     [documentRevision],
@@ -69,7 +70,7 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
       <p>${values[VOID_DESCRIPTION_FIELD]}</p>
       <p data-source="void">${docRevOwner}, ${moment().tz(TIME_ZONE).format(MomentFormats.DateTime)}</p>`;
 
-      if (isLot) {
+      if (isLot || isWO) {
         description += documentRevision.description ?? '';
       }
 
