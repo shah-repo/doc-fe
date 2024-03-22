@@ -39,9 +39,9 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
         />
       </FormikField>
     );
-  const isLotAddition = values.isLotAddition ?? dataItem.isLotAddition;
-  const isEnbleEditor = isLotAddition ? false : isEditMode && dataItem.isNewAddition;
-  const showFieldValue = isLotAddition ? true : (!isEditMode || !dataItem.isNewAddition);
+  const isLotAddition = isEditMode ? values.isLotAddition : dataItem.isLotAddition;
+  const isEnbleEditor = isLotAddition ? isEditMode : isEditMode && dataItem.isNewAddition;
+  const showFieldValue = isLotAddition ? !isEditMode : (!isEditMode || !dataItem.isNewAddition);
 
   return (
     <td

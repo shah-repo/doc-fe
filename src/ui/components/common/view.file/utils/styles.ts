@@ -57,5 +57,8 @@ export const styles = makeStyles((theme: NextTheme) => ({
     content: {
       width: 340,
     },
+    buttonsContainer: {
+      marginRight: theme.spacing(0),
+    },
   },
 }));

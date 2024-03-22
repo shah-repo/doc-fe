@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import { Formik, FormikProps, useFormikContext } from 'formik';
-import { filter, get, includes, map, size } from 'lodash';
+import { cloneDeep, filter, get, includes, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
 import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
 import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';
@@ -62,7 +62,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   // @todo: Mix between DocumentRevisionSummary and DocumentRevisionForm.
   // @todo: Move these elements to one component to reuse.
   // Create documentRevision and fill it
-  const documentRevision = formik.values as unknown as DocumentRevision;
+  const documentRevision = cloneDeep(formik.values) as unknown as DocumentRevision;
   const initialValues = formik.values as unknown as DocumentRevisionFormValues;
 
   const docTypeId = documentRevision?.document?.documentType?.id as string;
@@ -106,7 +106,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
       : false,
   );
-  const isOther = checkIsDocumentOTHER(documentType.groupOptions);
+  const isOther = checkIsDocumentOTHER(documentRevision.document.documentType.groupOptions);
   const isOtherForm = useSelector(
     (state: ApplicationState) => documentRevision?.formTemplate
       ? checkIsDocumentOTHER((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
