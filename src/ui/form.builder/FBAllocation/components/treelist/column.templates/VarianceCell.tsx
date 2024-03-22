@@ -44,13 +44,13 @@ const VarianceCell: React.ComponentType<CustomTreeListCellProps> = ({
   const renderVarianceValue = () => {
     if (dataItem.isLotAddition || dataItem.lotRevId) {
       return <span className={classes.Cell}>{CELL_EMPTY_VALUE}</span>;
-    } else {
-      return isEditMode ? (
-        getFieldInfo()
-      ) : (
-        <span className={classes.Cell}>{getCellValue(dataItem, field)}</span>
-      );
     }
+
+    return isEditMode ? (
+      getFieldInfo()
+    ) : (
+      <span className={classes.Cell}>{getCellValue(dataItem, field)}</span>
+    );
   };
 
   return (
