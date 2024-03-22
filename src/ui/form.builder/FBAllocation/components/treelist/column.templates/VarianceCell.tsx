@@ -3,6 +3,7 @@ import { useFormikContext } from 'formik';
 import React from 'react';
 import { FormikField, TextField } from '../../../../../components/forms/fields-next';
 import { EditableAllocationItem } from '../../../interface';
+import { CELL_EMPTY_VALUE } from '../constants';
 import { getCellValue, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -17,9 +18,8 @@ const VarianceCell: React.ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
+  const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const isEditMode = isEditAllocItem(dataItem);
-  const isLotAddition = values.isLotAddition ?? dataItem.isLotAddition;
 
   const onVarianceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
@@ -41,6 +41,18 @@ const VarianceCell: React.ComponentType<CustomTreeListCellProps> = ({
       </FormikField>
     );
 
+  const renderVarianceValue = () => {
+    if (dataItem.isLotAddition || dataItem.lotRevId) {
+      return <span className={classes.Cell}>{CELL_EMPTY_VALUE}</span>;
+    } else {
+      return isEditMode ? (
+        getFieldInfo()
+      ) : (
+        <span className={classes.Cell}>{getCellValue(dataItem, field)}</span>
+      );
+    }
+  };
+
   return (
     <td
       colSpan={colSpan}
@@ -54,12 +66,7 @@ const VarianceCell: React.ComponentType<CustomTreeListCellProps> = ({
       }}
       data-cy="cell-quantity"
     >
-      {isEditMode && !isLotAddition && getFieldInfo()}
-      {(!isEditMode || isLotAddition) && (
-        <span className={classes.Cell}>
-          {getCellValue(dataItem, field)}
-        </span>
-      )}
+      {renderVarianceValue()}
     </td>
   );
 };
