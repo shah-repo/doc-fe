@@ -13,17 +13,17 @@ const LABEL_LENGTH = 50;
 const useStyles = makeStyles({
   link: {
     textDecoration: 'none',
-    fontSize: '14px',
+    fontSize: 14,
   },
 });
 
-interface LinkProps {
+interface LHRLinkProps {
   title: string
   documentId: string
   docRevId: string
 }
 
-const DocRevLink: React.FC<LinkProps> = ({
+const LHRLink: React.FC<LHRLinkProps> = ({
   title,
   documentId,
   docRevId,
@@ -68,7 +68,7 @@ const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
   }
 
   return (
-    <DocRevLink
+    <LHRLink
       {...{
         title,
         docRevId,
