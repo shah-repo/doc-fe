@@ -2,6 +2,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isNil } from 'lodash';
 import React from 'react';
+import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { EditableAllocationItem } from '../../../interface';
 import { CELL_EMPTY_VALUE } from '../constants';
 import { isEditAllocItem } from '../utils';
@@ -20,7 +21,12 @@ const QuantityOnHandBefore: React.ComponentType<CustomTreeListCellProps> = ({
   const classes = styles({ hasChildren });
   const { values } = useFormikContext<EditableAllocationItem>();
   const isEditMode = isEditAllocItem(dataItem);
-  const value = isEditMode ? values?.quantityOnHand : dataItem?.quantityOnHand;
+  let value = isEditMode ? values?.quantityOnHand : dataItem?.quantityOnHand;
+
+  if (dataItem.woStatus !== DocumentRevisionStatus.Draft) {
+    value = dataItem.quantityBeforeKitting;
+  }
+
   return (
     <td
       colSpan={colSpan}

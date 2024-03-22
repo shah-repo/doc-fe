@@ -28,7 +28,7 @@ export const OverflowCell: React.FunctionComponent<CustomGridCellProps> = ({
   return (
     <td
       colSpan={colSpan}
-      style={{ ...style, textAlign: 'right' }}
+      style={{ ...style, textAlign: 'left' }}
       role="gridcell"
       className={className}
       data-grid-col-index={columnIndex}

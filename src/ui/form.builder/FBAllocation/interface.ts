@@ -19,6 +19,8 @@ export interface AllocationItem {
   parentPartRevId?: string
   quantityOnHand?: number
   lotDocumentId?: string
+  quantityBeforeKitting?: number
+  quantityAfterKitting?: number
 }
 
 export interface EditableAllocationItem extends AllocationItem {
@@ -28,6 +30,7 @@ export interface EditableAllocationItem extends AllocationItem {
   isUpgradeDisabled?: boolean
   isLotAddition?: boolean
   isNewAddition?: boolean
+  woStatus?: string
 }
 
 export interface AllocationItemEditEvent {

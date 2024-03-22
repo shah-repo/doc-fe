@@ -18,7 +18,7 @@ import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/compo
 import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
-import { IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
+import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -31,6 +31,8 @@ import AuditProcedure from './AuditProcedure';
 import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
+import { useSelector } from 'react-redux';
+import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
 
 interface OwnProps {
   audit: Audit
@@ -453,44 +455,107 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         }
         break;
       case 'inventoryTask':
-        if (audit.type.includes('ARRAY_ADDED')) {
+
+        try {
           const nextVal: string = audit.nextValue as string;
-          try {
-            const { instruction, assignedTo } = JSON.parse(nextVal);
-            returnValue = (
-              <>
-                { instruction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.instruction.added', { instruction }) }
-                { assignedTo && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.to', { assignedTo }) }
-              </>
-            );
-          } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          const documentTypesAll = useSelector(documentTypeSelectors.getDocumentTypeList);
+          const documentType = documentTypesAll.find(item => checkIsDocumentWO(item.groupOptions));
+          const relatedAcronym = documentType?.documentTypeAcronym ?? '';
+
+          const auditDocId = audit.docId ?? '';
+          const docLabel = relatedAcronym && auditDocId.startsWith(relatedAcronym) ? 'documentRevision' : 'changeRequest';
+
+          const {
+            instruction,
+            assignedAdded,
+            assigneeDeleted,
+            status,
+            assignedTo,
+            comment,
+          } = JSON.parse(nextVal);
+
+          if (audit.type.includes('ARRAY_ADDED')) {
+              const { instruction, assignedTo } = JSON.parse(nextVal);
+
+              returnValue = (
+                <>
+                  {instruction
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.instruction.added`,
+                      { instruction },
+                    )}
+                  {assignedTo
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.assignee.to`,
+                      { assignedTo },
+                    )}
+                </>
+              );
+          } else if (audit.type.includes('ARRAY_EDITED')) {
+              returnValue = (
+                <>
+                  {instruction
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.instruction.updated`,
+                      { instruction },
+                    )}
+                  {assignedAdded
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.assignee.added`,
+                      { assignedAdded },
+                    )}
+                  {status === FBInvTaskState.DONE
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.completed`,
+                      { assignedTo },
+                    )}
+                  {status === FBInvTaskState.DRAFT
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.draft`,
+                      { assignedTo },
+                    )}
+                  {assigneeDeleted
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.assignee.deleted`,
+                      { assigneeDeleted },
+                    )}
+                  {comment
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.comment`,
+                      { comment },
+                    )}
+                </>
+              );
           }
-        } else if (audit.type.includes('ARRAY_EDITED')) {
-          const nextVal: string = audit.nextValue as string;
-          try {
-            const { instruction, assignedAdded, assigneeDeleted, status, assignedTo, comment } = JSON.parse(nextVal);
-            returnValue = (
-              <>
-                { instruction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.instruction.updated', { instruction }) }
-                { assignedAdded && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.added', { assignedAdded }) }
-                { (status === FBInvTaskState.DONE)
-                && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.completed', { assignedTo }) }
-                { (status === FBInvTaskState.DRAFT) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.draft', { assignedTo }) }
-                { assigneeDeleted && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.deleted', { assigneeDeleted }) }
-                { comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.comment', { comment }) }
-              </>
-            );
-          } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
-          }
-        } else {
+        } catch (error) {
+          returnValue = (
+            <div data-cy={dataCy}>
+              {getAuditDefaultValue(audit.nextValue)}
+            </div>
+          );
+        }
+
+        if (!audit.type.includes('ARRAY_ADDED') && !audit.type.includes('ARRAY_EDITED')) {
           const prevVal: string = audit.previousValue as string;
           try {
             const { instruction } = JSON.parse(prevVal);
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(instruction)}</div>);
+            returnValue = (
+              <div data-cy={dataCy}>{getAuditDefaultValue(instruction)}</div>
+            );
           } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(audit.previousValue)}
+              </div>
+            );
           }
         }
         break;
@@ -662,7 +727,101 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'formInput.wo_part_unit':
       case 'formInput.wo_part_quantity':
       case 'formInput.wo_part.id':
+      case 'formInput.autoTransact':
+      case 'formInput.autoAssign':
         returnValue = (<div data-cy={dataCy}>{getWOAuditDefaultValue(audit)}</div>);
+        break;
+      case 'workOrder':
+        try {
+          const nextVal = audit.nextValue as string;
+
+          const {
+            partDocId,
+            partQuantityNeeded,
+            partVariance,
+            lotDocId,
+            lotQuantityNeeded,
+            lotVariance,
+            isNewAddition,
+          } = JSON.parse(nextVal);
+
+          if (audit.type.includes('ARRAY_ADDED')) {
+            returnValue = (
+              <>
+                {lotDocId
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.lot_info.added',
+                    { lotDocId, lotQuantityNeeded, lotVariance },
+                  )}
+                {isNewAddition
+                  && lotDocId
+                  && !lotQuantityNeeded
+                  && !lotVariance
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.lot.added',
+                    { lotDocId },
+                  )}
+                {!lotDocId
+                  && partQuantityNeeded
+                  && partVariance
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.part_info.added',
+                    { partDocId, partQuantityNeeded, partVariance },
+                  )}
+                {isNewAddition
+                  && partDocId
+                  && !partQuantityNeeded
+                  && !partVariance
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.part.added',
+                    { partDocId },
+                  )}
+              </>
+            );
+          } else if (audit.type.includes('ARRAY_EDITED')) {
+            returnValue = (
+              <>
+                {lotDocId
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.lot_info.updated',
+                    { lotDocId, lotQuantityNeeded, lotVariance },
+                  )}
+                {!lotDocId
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.part_info.updated',
+                    { partDocId, partQuantityNeeded, partVariance },
+                  )}
+              </>
+            );
+          }
+        } catch (error) {
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
+
+        if (!audit.type.includes('ARRAY_ADDED') && !audit.type.includes('ARRAY_EDITED')) {
+          const prevVal: string = audit.previousValue as string;
+
+          try {
+            const { lotDocId, partDocId } = JSON.parse(prevVal);
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(lotDocId || partDocId)}
+              </div>
+            );
+          } catch (error) {
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(audit.previousValue)}
+              </div>
+            );
+          }
+        }
         break;
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
