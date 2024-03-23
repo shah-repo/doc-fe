@@ -9,9 +9,10 @@ export interface LHRSummaryItem {
   plannedId: string
   actualId: string
   title: string
-  lotId?: string
+  lotOrEquipment?: string
   equipmentId?: string
   mpiId?: string
+  stepOrMPI: string
   expiryDate?: string
   startQuantity: number
   endQuantity: number
@@ -20,7 +21,7 @@ export interface LHRSummaryItem {
   pmDueDate: string
   ncmr: string
   comments: string
-  createdBy: string
+  enteredBy: string
   createdAt: string
 }
 
@@ -43,6 +44,26 @@ export interface EditableLHRSummaryItemEditEvent {
   dataItem: EditableLHRSummaryItem
 }
 
+export interface LHRSummaryRequestBody {
+  type: string
+  stepOrMPI: string
+  plannedId: string
+  plannedDocRevId: string
+  actualId: string
+  actualDocRevId: string
+  lotOrEquipment: string
+  lotOrEquipmentDocRevId: string
+  startQuantity: number
+  endQuantity: number
+  status: string
+  enteredBy: string
+  expiryDate: Date
+  calDueDate: Date
+  pmDueDate: Date
+  date: Date
+  comments: string
+}
+
 export interface SchemaOptions {
   actionsClass: string
   onConfirm: () => void
@@ -53,6 +74,6 @@ export interface SchemaOptions {
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableLHRSummaryItem> {
-  onClick?: (e: EditableLHRSummaryItem) => void
+  onClick?: (e: EditableLHRSummaryItemEditEvent) => void
   onSelectCell?: (dataItem: EditableLHRSummaryItem, field: string) => void
 }

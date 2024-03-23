@@ -19,6 +19,7 @@ export const buildSchema = ({
   onRowClick,
   onConfirm,
   onDiscard,
+  onDelete,
 }: SchemaOptions): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
   return [
     {
@@ -30,8 +31,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'step',
-      field: 'step',
+      id: 'mpiId',
+      field: 'mpiId',
       title: 'lhr.summary.grid.heading.step',
       show: true,
       template: (props) => <StepCell {...props} onClick={onRowClick} />,
@@ -57,17 +58,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'title',
-      field: 'title',
-      title: 'lhr.summary.grid.heading.title',
-      template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
-      show: true,
-      selectable: false,
-      width: 201,
-    },
-    {
-      id: 'lotId',
-      field: 'lotId',
+      id: 'lotOrEquipment',
+      field: 'lotOrEquipment',
       title: 'lhr.summary.grid.heading.lot',
       show: true,
       selectable: false,
@@ -128,14 +120,6 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'ncmr',
-      field: 'ncmr',
-      title: 'lhr.summary.grid.heading.ncmr',
-      show: true,
-      template: (props) => <TextInputCellTemplate {...props} onClick={onRowClick} />,
-      width: 201,
-    },
-    {
       id: 'comments',
       field: 'comments',
       title: 'lhr.summary.grid.heading.comments',
@@ -144,8 +128,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'createdBy',
-      field: 'createdBy',
+      id: 'enteredBy',
+      field: 'enteredBy',
       title: 'lhr.summary.grid.heading.entered.by',
       show: true,
       template: (props) => <ByCell {...props} onClick={onRowClick} />,
@@ -169,6 +153,7 @@ export const buildSchema = ({
           {...props}
           onConfirm={onConfirm}
           onDiscard={onDiscard}
+          onDelete={onDelete}
         />
       ),
       width: 1,

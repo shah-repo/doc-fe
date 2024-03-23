@@ -3,9 +3,9 @@ import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../../common/intl';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { Autocomplete, FormikField, TextField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { MPI_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
@@ -18,11 +18,13 @@ export const StepCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => 
     setFieldValue(field, value?.value);
   };
 
-  const defaultValue = isEditMode ? values.type : dataItem.type;
-  const value = MPI_OPTIONS.find((option) => option.value === defaultValue);
+  const { stepOrMPI } = dataItem;
 
   if (isEditMode && !isEmpty(values)) {
     const stepField = 'step';
+    const mpiId = values.mpiId;
+    const value = MPI_OPTIONS.find((option) => option.value === mpiId);
+
     return (<>
       <Grid container spacing={2}>
         <Grid item style={{ width: '30%' }}>
@@ -54,7 +56,6 @@ export const StepCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => 
               value={value}
               getOptionLabel={(option: OptionType) => option.label}
               onChange={handleChange}
-              onInputChange={handleChange}
               placeholder={translate('lhr.summary.placeholder.select.enter')}
               size="small"
             />
@@ -65,5 +66,5 @@ export const StepCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => 
     );
   }
 
-  return <>{value?.label}</>;
+  return <>{stepOrMPI}</>;
 };

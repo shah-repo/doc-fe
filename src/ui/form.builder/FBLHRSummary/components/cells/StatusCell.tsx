@@ -4,17 +4,17 @@ import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../../common/intl';
-import { statusClassMapping } from '../../../../components/common/kendo/helpers';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
 import Tooltip from '../../../../components/common/kendo/Tooltip';
+import { statusClassMapping } from '../../../../components/common/kendo/helpers';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
 import { EMPTY_PLACEHOLDER, STATUS_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import useStyles from './Status.styles';
@@ -50,7 +50,6 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
           value={value}
           getOptionLabel={(option: OptionType) => option.label}
           onChange={handleChange}
-          onInputChange={handleChange}
           placeholder={translate('lhr.summary.placeholder.select.enter')}
           size="small"
         />

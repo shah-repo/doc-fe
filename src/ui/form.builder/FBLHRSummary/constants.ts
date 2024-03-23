@@ -52,8 +52,10 @@ export const SampleLHRSummaryData = [
     pmDueDate: '12-04-24',
     ncmr: 'NCMR',
     comments: 'Comments',
-    createdBy: 'Vildana',
+    enteredBy: 'Vildana',
     createdAt: '12-04-24',
     [MODE_FIELD]: Mode.show,
   },
 ];
+export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'status', 'expiryDate', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment'];
+export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex'];

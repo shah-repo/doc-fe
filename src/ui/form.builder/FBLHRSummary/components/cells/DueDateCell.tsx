@@ -1,9 +1,9 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import { MomentFormats } from '../../../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../../../common/utils/date';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { DatePicker, FormikField } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { EMPTY_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 
@@ -11,7 +11,7 @@ export const DueDateCell: React.FC<CustomTemplateProps> = ({ field, dataItem }) 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, setFieldValue } = useFormikContext();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const value = dataItem[field] as React.ReactElement;
+  const value = getFormattedDateString(dataItem[field], MomentFormats.MonthDateYearTwoDigit);
 
   const handleChange = (date: MaterialUiPickersDate) => {
     setFieldValue(field, date?.toISOString());
@@ -32,5 +32,5 @@ export const DueDateCell: React.FC<CustomTemplateProps> = ({ field, dataItem }) 
     );
   }
 
-  return value ?? EMPTY_PLACEHOLDER;
+  return <span>{value ?? EMPTY_PLACEHOLDER}</span>;
 };

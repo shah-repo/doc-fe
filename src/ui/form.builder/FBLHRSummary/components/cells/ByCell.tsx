@@ -1,15 +1,19 @@
 import { Box } from '@material-ui/core';
+import { find } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../../../state/ducks/auth';
-import { Autocomplete } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import { changeRequestsSelectors } from '../../../../../state/ducks/changeRequest';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
+import { Autocomplete } from '../../../../components/forms/fields-next';
 import { CustomTemplateProps } from '../../types';
 
 export const ByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const userName = useSelector(authSelectors.currentUserName);
+  const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
+  const getUserDetails = (userId: string) => find(availableUsers, { value: userId });
 
   if (isEditMode) {
     return (
@@ -22,10 +26,10 @@ export const ByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick
     );
   }
 
-  const displayValue = dataItem[field] as string;
+  const displayValue = getUserDetails(dataItem[field] ?? '')?.label as string;
 
   return (
-    <Box onClick={() => onClick?.(dataItem)}>
+    <Box onClick={() => onClick?.({ dataItem })}>
       <OverflowTooltip
         title={displayValue}
         placement="top"

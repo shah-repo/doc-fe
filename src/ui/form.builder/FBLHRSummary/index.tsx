@@ -3,24 +3,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Typography } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
+import { find, pick } from 'lodash';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
-import { Button } from '../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
+import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
+import { authSelectors } from '../../../state/ducks/auth';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { FBSection } from '../../form.builder';
+import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import {
   ColumnMenuContext,
   CustomColumnMenu,
 } from './components/cells/CustomColumnMenu';
-import { DATA_ITEM_KEY, SampleLHRSummaryData, SELECTED_FIELD } from './constants';
+import { COLUMN_LOCK_FIELDS, DATA_ITEM_KEY, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import {
@@ -40,12 +45,33 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const classes = useStyles();
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
-  const [data, setData] = React.useState<EditableLHRSummaryItem[]>(SampleLHRSummaryData);
+  const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
+  const fetchAllLHRSummary = useActionCreator(lhrSummaryActions.fetchAllLHRSummary);
+  const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
+  const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
-      data && setData(data?.records ?? []);
+      data && setData(data as EditableLHRSummaryItem[]);
     },
+    onError: toastError,
+  });
+
+  useEffect(() => {
+    fetchLHRSummaryData();
+  }, []);
+
+  const fetchLHRSummaryData = () => {
+    LHRSummaryAsync.start(fetchAllLHRSummary, LHRSummaryAsync);
+  };
+
+  const addLHRSummaryAsync = useAsync({
+    onSuccess: fetchLHRSummaryData,
+    onError: toastError,
+  });
+
+  const deleteLHRSummaryAsync = useAsync({
+    onSuccess: fetchLHRSummaryData,
     onError: toastError,
   });
 
@@ -54,37 +80,34 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     onSubmit: (values) => {
       console.log('confirm data :', values);
       // TODO save & update cases
-      updateMaterialDispositionTableData([values] as EditableLHRSummaryItem[]);
+      updateLHRSummaryTableData(values as EditableLHRSummaryItem);
       ondiscardLHRSummaryItem();
     },
   });
 
   const { submitForm, resetForm, setValues } = formik;
 
-  const updateMaterialDispositionTableData = (
-    data: EditableLHRSummaryItem[],
+  const updateLHRSummaryTableData = (
+    data: EditableLHRSummaryItem,
   ) => {
-    const partToSave = {
-      materialDispositionEntryUpdates: data.map((dataItem) => ({
-        materialDispositionId: dataItem.id,
-        ...dataItem,
-      })),
+    const payload = {
+      ...pick(data, FIELDS_TO_PICK),
+      startQuantity: String(data.startQuantity),
+      endQuantity: String(data.endQuantity),
+      stepOrMPI: `${data.step}/${data.mpiId}`,
     };
-    // TODO
-    console.log(partToSave);
+    addLHRSummaryAsync.start(addLHRSummary, payload, addLHRSummaryAsync);
   };
 
   useEffect(() => {
+    setColumns(prevColumns => {
+      return schema.map(column => {
+        const updatedColumn = find(prevColumns, { id: column.id });
+        return ({ ...column, ...pick(updatedColumn, COLUMN_LOCK_FIELDS) });
+      });
+    });
     resetForm({ values: editedLHRSummaryItem ?? {} });
   }, [editedLHRSummaryItem, setValues, resetForm]);
-
-  useEffect(() => {
-    fetchLHRSummaryData();
-  }, []);
-
-  const fetchLHRSummaryData = () => {
-    // TODO later
-  };
 
   const onEditLHRSummaryItem = ({
     dataItem,
@@ -92,16 +115,33 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     if (isShowOnly || formik.dirty) {
       return;
     }
-    setEditedLHRSummaryItem(dataItem);
+    const { stepOrMPI } = dataItem;
+    console.log({ stepOrMPI, dataItem });
+    const step = stepOrMPI?.split('/')?.[0];
+    const mpiId = stepOrMPI?.split('/')?.[1];
+    setEditedLHRSummaryItem({
+      ...dataItem,
+      step,
+      mpiId,
+    });
   };
 
   const ondiscardLHRSummaryItem = () => {
     setEditedLHRSummaryItem(undefined);
   };
 
+  const onDeleteLHRSummary = () => {
+    if (!editedLHRSummaryItem?.id) {
+      return;
+    }
+    deleteLHRSummaryAsync.start(deleteLHRSummary, editedLHRSummaryItem?.id, deleteLHRSummaryAsync);
+  };
+
   const getColumns = () => {
     return columns.filter(({ show }) => show);
   };
+
+  const user = useSelector(authSelectors.currentUser);
 
   const onAddItem = () => {
     // TODO update as per edit fields
@@ -112,18 +152,18 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       plannedId: '',
       actualId: '',
       title: '',
-      lotId: '',
+      lotOrEquipment: '',
       equipmentId: '',
       mpiId: '',
-      expiryDate: '',
+      expiryDate: (new Date()).toISOString(),
       startQuantity: 0,
       endQuantity: 0,
       status: '',
-      calDueDate: '',
-      pmDueDate: '',
+      calDueDate: (new Date()).toISOString(),
+      pmDueDate: (new Date()).toISOString(),
       ncmr: '',
       comments: '',
-      createdBy: '',
+      enteredBy: user.id,
       createdAt: '',
       [MODE_FIELD]: Mode.add,
     };
@@ -170,6 +210,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     onRowClick: onEditLHRSummaryItem,
     onConfirm: submitForm,
     onDiscard: ondiscardLHRSummaryItem,
+    onDelete: onDeleteLHRSummary,
   });
 
   const [columns, setColumns]
@@ -246,7 +287,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
               {translate('lhr.summary.table.empty.records')}
             </Typography>
           }
-          loading={LHRSummaryAsync.isLoading}
+          loading={LHRSummaryAsync.isLoading || addLHRSummaryAsync.isLoading || deleteLHRSummaryAsync.isLoading}
           resizable={true}
         />
       </ColumnMenuContext.Provider>
