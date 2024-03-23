@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormControlLabel, Grid, Switch, Toolbar, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
-import cx from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
 import { SearchBar } from '../../App/Enlil/Features/Search';
@@ -93,13 +93,14 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
             )}
             {canToggleCustomLabels && (
               <FormControlLabel
-                className={`${classes.mobileStyle} ${fullHeight ? classes.toggleCustomLabels : classes.toggleCustomLabels2}`}
+                className={classNames(classes.mobileStyle,
+                {[classes.toggleCustomLabels]: fullHeight, [classes.toggleCustomLabels2]: !fullHeight })}
                 control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
                 label={<Text translation="form.builder.header.control.label" />}
               />
             )}
-              <AutosaveToggle className={`${classes.mobileStyle} ${classes.autosaveToggle}`} />
-              <HelpCenter className={`${classes.mobileStyle} ${classes.autosaveToggle}`} />
+              <AutosaveToggle className={classNames(classes.mobileStyle, classes.autosaveToggle)} />
+              <HelpCenter className={classNames(classes.mobileStyle, classes.autosaveToggle)} />
           </Grid>
         </Grid>
       </Toolbar>
