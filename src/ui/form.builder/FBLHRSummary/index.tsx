@@ -48,6 +48,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
   const fetchAllLHRSummary = useActionCreator(lhrSummaryActions.fetchAllLHRSummary);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
+  const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
 
   const LHRSummaryAsync = useAsync({
@@ -70,6 +71,15 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     onError: toastError,
   });
 
+  const updateLHRSummaryAsync = useAsync({
+    onSuccess: (response) => {
+      if (response?.affected > 0) {
+        fetchLHRSummaryData();
+      }
+    },
+    onError: toastError,
+  });
+
   const deleteLHRSummaryAsync = useAsync({
     onSuccess: fetchLHRSummaryData,
     onError: toastError,
@@ -78,8 +88,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const formik = useFormik<Partial<EditableLHRSummaryItem>>({
     initialValues: {},
     onSubmit: (values) => {
-      console.log('confirm data :', values);
-      // TODO save & update cases
       updateLHRSummaryTableData(values as EditableLHRSummaryItem);
       ondiscardLHRSummaryItem();
     },
@@ -96,7 +104,11 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       endQuantity: String(data.endQuantity),
       stepOrMPI: `${data.step}/${data.mpiId}`,
     };
-    addLHRSummaryAsync.start(addLHRSummary, payload, addLHRSummaryAsync);
+    if (data[MODE_FIELD] === Mode.add) {
+      addLHRSummaryAsync.start(addLHRSummary, payload, addLHRSummaryAsync);
+      return;
+    }
+    updateLHRSummaryAsync.start(updateLHRSummary, data.id, payload, updateLHRSummaryAsync);
   };
 
   useEffect(() => {
@@ -116,7 +128,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       return;
     }
     const { stepOrMPI } = dataItem;
-    console.log({ stepOrMPI, dataItem });
     const step = stepOrMPI?.split('/')?.[0];
     const mpiId = stepOrMPI?.split('/')?.[1];
     setEditedLHRSummaryItem({
@@ -287,7 +298,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
               {translate('lhr.summary.table.empty.records')}
             </Typography>
           }
-          loading={LHRSummaryAsync.isLoading || addLHRSummaryAsync.isLoading || deleteLHRSummaryAsync.isLoading}
+          loading={LHRSummaryAsync.isLoading || addLHRSummaryAsync.isLoading || deleteLHRSummaryAsync.isLoading || updateLHRSummaryAsync.isLoading}
           resizable={true}
         />
       </ColumnMenuContext.Provider>
