@@ -38,7 +38,7 @@ const QuantityOnHandBefore: React.ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell-quantity"
+      data-cy={`${field}-cell-quantity`}
     >
       <span className={classes.Cell}>
         {isNil(value) ? CELL_EMPTY_VALUE : value}
