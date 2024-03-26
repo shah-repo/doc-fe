@@ -37,7 +37,6 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   const quantityDefaultValue = useObserver(() => (workspaceState?.formInputSync?.get(`${name}_quantity`)));
   const partSelectionLabel = label ?? 'form.builder.wo.part.selector';
   const classes = styles();
-
   const fetchAvailablePartsAction = useActionCreator(allocationActions.fetchLatestPartRevision);
   const deleteAllocation = useActionCreator(allocationActions.deleteAllocation);
   const [latestRevisionInfo, setLatestRevisionInfo] = useState<LatestPartRevisionInfo>();
@@ -67,7 +66,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
       partsDefaultValue?.id,
       fetchAvailablePartsAsync,
     );
-  }, []);
+  }, [partsDefaultValue]);
 
   const onRevChange = async () => {
     if (latestRevisionInfo?.id) {
