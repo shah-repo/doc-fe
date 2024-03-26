@@ -5,7 +5,7 @@ import { SM, SMTabsProps } from '../../..';
 export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) => {
   const Comp = (props: T) => {
     const { tabs, onChange } = props;
-    const { _tabsState, _documentRevisionFormState } = SM.useStores();
+    const { _tabsState } = SM.useStores();
 
     // Set initial tab id.
     useEffect(
