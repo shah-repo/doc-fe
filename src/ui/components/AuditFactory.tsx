@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
@@ -11,6 +12,7 @@ import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
+import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
@@ -31,8 +33,6 @@ import AuditProcedure from './AuditProcedure';
 import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
-import { useSelector } from 'react-redux';
-import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
 
 interface OwnProps {
   audit: Audit
@@ -472,6 +472,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             status,
             assignedTo,
             comment,
+            attachmentLinks,
           } = JSON.parse(nextVal);
 
           if (audit.type.includes('ARRAY_ADDED')) {
@@ -494,6 +495,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 </>
               );
           } else if (audit.type.includes('ARRAY_EDITED')) {
+            const attachmentNameArr = attachmentLinks.map((attachmentName) => attachmentName.split('/').pop());
+            const attachmentNameList = attachmentNameArr.join(', ');
+
               returnValue = (
                 <>
                   {instruction
@@ -531,6 +535,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                       dataCy,
                       `${docLabel}.audit.inventoryTask.comment`,
                       { comment },
+                    )}
+                  {( attachmentNameArr.length > 0 )
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.attachments`,
+                      { attachmentNameList },
                     )}
                 </>
               );
