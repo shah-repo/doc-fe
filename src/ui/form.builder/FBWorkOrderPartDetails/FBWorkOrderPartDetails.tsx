@@ -1,7 +1,7 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
-import { kebabCase } from 'lodash';
+import { isEmpty, kebabCase } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { FB, FBInputProps, FBTextField, FBWorkspaceModeOptions } from '..';
@@ -40,16 +40,18 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
 
   const fetchAvailablePartsAction = useActionCreator(allocationActions.fetchLatestPartRevision);
   const deleteAllocation = useActionCreator(allocationActions.deleteAllocation);
-  const [isLatestRevisionAvailable, setIsLatestRevisionAvailable] = useState<boolean>(false);
   const [latestRevisionInfo, setLatestRevisionInfo] = useState<LatestPartRevisionInfo>();
   const dialog = useDialog();
   const openRevChangeDialog = () => { !props.disabled && dialog.open(); };
+  const isLatestRevisionAvailable
+    = !isEmpty(partsDefaultValue)
+    && !isEmpty(latestRevisionInfo)
+    && partsDefaultValue?.id !== latestRevisionInfo?.id;
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data?: LatestPartRevisionInfo) => {
       if (data) {
         setLatestRevisionInfo(data);
-        setIsLatestRevisionAvailable(partsDefaultValue?.id !== data.id);
       }
     },
   });
@@ -73,7 +75,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
         ...workspaceState?.formInput,
         [WO_PART_KEY_NAME]: { id: latestRevisionInfo?.id },
       });
-      formState?.getInputState(WO_PART_KEY_NAME)?.setRender();
+      formState?.inputState.get(WO_PART_KEY_NAME)?.setRender();
       deleteAllocationAsync.start(deleteAllocation,
       workspaceState?.document?.id,
       deleteAllocationAsync,
@@ -83,7 +85,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
 
   return (
     <Grid container spacing={1}>
-      {isLatestRevisionAvailable && partsDefaultValue?.id && (
+      {isLatestRevisionAvailable && (
         <Grid item xs="auto">
           <span className={classes.defaultIcon} onClick={openRevChangeDialog}>
             <Tooltip
@@ -105,7 +107,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
       )}
       <Grid
         item
-        xs={isLatestRevisionAvailable && partsDefaultValue?.id ? 5 : 6}
+        xs={isLatestRevisionAvailable ? 5 : 6}
       >
         <FBAutocompleteAsync
           {...props}
