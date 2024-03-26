@@ -121,7 +121,7 @@ export default (theme: NextTheme) =>
         display: 'none',
       },
     },
-    toggleCustomLabels2: {
+    toggleCustomLabelsSm: {
       [theme.breakpoints.down('sm')]: {
         display: 'none',
       },

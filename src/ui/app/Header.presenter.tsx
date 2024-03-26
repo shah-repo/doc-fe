@@ -94,7 +94,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
             {canToggleCustomLabels && (
               <FormControlLabel
                 className={cx(classes.mobileStyle,
-                  { [classes.toggleCustomLabels]: fullHeight, [classes.toggleCustomLabels2]: !fullHeight })}
+                  { [classes.toggleCustomLabels]: fullHeight, [classes.toggleCustomLabelsSm]: !fullHeight })}
                 control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
                 label={<Text translation="form.builder.header.control.label" />}
               />
