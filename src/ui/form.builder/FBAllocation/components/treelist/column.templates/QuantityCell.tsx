@@ -54,7 +54,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell-quantity"
+      data-cy={`${field}-cell-quantity`}
     >
       {isEnbleEditor && getFieldInfo()}
       {showFieldValue && (
