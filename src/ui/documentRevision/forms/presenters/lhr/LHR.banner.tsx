@@ -1,7 +1,8 @@
 import { Grid, Typography } from '@material-ui/core';
+import { concat, uniqBy } from 'lodash';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, SmartReferenceType } from '../../../../../state/ducks/documentRevisions/types';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { styles } from './LHR.banner.styles';
 
@@ -10,18 +11,33 @@ interface LHRBannerProps{
 }
 
 const LHRBanner: React.FunctionComponent<LHRBannerProps> = ({ documentRevision }) => {
-  const { smartReferencesTo } = documentRevision;
+  // const { smartReferencesTo } = documentRevision;
   const classes = styles();
   const history = useHistory();
-  if (!smartReferencesTo || (smartReferencesTo && smartReferencesTo.length === 0)) {
+
+  const allReferences = concat(
+    documentRevision?.smartReferencesTo ?? [],
+    documentRevision?.document.smartReferencesTo ?? [],
+  );
+
+  const parentLHRReference = uniqBy(allReferences, 'id').find(
+    ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+  );
+
+  if (!parentLHRReference) {
     return null;
   }
 
-  const lhrData = smartReferencesTo[0].toDocRev?.precalc?.lshs_subtitle;
-  if (!lhrData?.part.docRevId || !lhrData?.part.documentId) {
+  const parentLHR = parentLHRReference.toDocRev;
+
+  const lhrData = parentLHR?.precalc.lshs_subtitle;
+
+  if (!lhrData?.lot?.label || !lhrData?.lhr?.label || !lhrData?.part?.label || !lhrData?.part?.docRevId || !lhrData?.part?.documentId) {
     return null;
   }
-  const url = documentVersionPath(lhrData?.part.docRevId || '', lhrData?.part.documentId || '');
+
+  const { docRevId, documentId } = lhrData.part;
+  const url = documentVersionPath(docRevId, documentId);
 
   return (
     <Typography className={classes.container}>
