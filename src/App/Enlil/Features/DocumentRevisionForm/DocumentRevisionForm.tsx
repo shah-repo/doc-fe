@@ -150,7 +150,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     }];
   }
 
-  if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT]
+  if (tabConfig && [DOC_TYPE_GROUP.PAPER_LHR]
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = tabConfig && [...tabConfig, {
       labelId: 'tabId.summary',

@@ -1,7 +1,6 @@
 import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect } from 'react';
 import { SM, SMTabsProps } from '../../..';
-import { TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
 
 export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) => {
   const Comp = (props: T) => {
@@ -23,14 +22,15 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
     const handleChange: SMTabsProps['onChange'] = useCallback(
       (event, newValue) => {
         _tabsState?.setActiveTabId(newValue);
-        if (newValue === TabTypeOptions.SUMMARY.toLowerCase()) {
-          if (!_documentRevisionFormState?.openOCRSelectionView) {
-            _documentRevisionFormState?.setOpenOCRSelectionView();
-          }
-          if (!_documentRevisionFormState?.leftPanelOpen) {
-            _documentRevisionFormState?.setLeftPanelOpen();
-          }
-        }
+        // TODO enable once OCR changes available
+        // if (newValue === TabTypeOptions.SUMMARY.toLowerCase()) {
+        //   if (!_documentRevisionFormState?.openOCRSelectionView) {
+        //     _documentRevisionFormState?.setOpenOCRSelectionView();
+        //   }
+        //   if (!_documentRevisionFormState?.leftPanelOpen) {
+        //     _documentRevisionFormState?.setLeftPanelOpen();
+        //   }
+        // }
 
         return onChange?.(event, newValue);
       },

@@ -53,7 +53,7 @@ const translate = {
   gt: '>',
 };
 const translateRe = new RegExp(`&(${Object.keys(translate).join('|')});`, 'g');
-export const convertHtmlEntities = (html: string) => (html.replace(translateRe, function (match, entity) {
+export const convertHtmlEntities = (html: string) => (html?.replace(translateRe, function (match, entity) {
   return translate[entity];
 }));
 
