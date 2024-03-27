@@ -41,6 +41,6 @@ export interface AllocationItemEditEvent {
 export interface LatestPartRevisionInfo {
   id: string
   name: string
-  revision: string
+  revision: number
   displayRevision: string
 }
