@@ -7,22 +7,22 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../App';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeActions, documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP_OPTION, DocumentType, DocumentTypeById, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType, DocumentTypeById, DocumentTypeByIdForm, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, HeaderTableType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
 import { DocumentProposedId } from '../../../state/ducks/documents/types';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ApplicationState } from '../../../state/reducers';
-import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
-import Text from '../../components/Text';
 import ExportListIcon from '../../components/common/kendo/ExportListIcon';
-import { FormContext } from '../../components/forms/FormContext';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { FormContext } from '../../components/forms/FormContext';
+import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import { toastError } from '../../components/notifications';
+import Text from '../../components/Text';
 import ExportListDialog from '../../document.revision/list/ExportListDialog/ExportListDialog';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from '../../documentRevision/forms/transform';
@@ -362,6 +362,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
               className={classes.createButton}
               onClick={handleAddButtonClick}
               id="DocumentByTypeListPresenter-openDocRev"
+              data-cy="document-by-type-list-presenter-open-doc-rev"
             >
               <Text
                 message={buttonLabel}
