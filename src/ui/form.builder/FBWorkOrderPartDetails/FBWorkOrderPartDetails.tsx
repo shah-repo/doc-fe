@@ -82,10 +82,12 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
         ...workspaceState?.formInput,
         [WO_PART_KEY_NAME]: { id: latestRevisionInfo?.id },
       });
+
       formState?.inputState.get(WO_PART_KEY_NAME)?.setRender();
-      deleteAllocationAsync.start(deleteAllocation,
-      workspaceState?.document?.id,
-      deleteAllocationAsync,
+      deleteAllocationAsync.start(
+        deleteAllocation,
+        workspaceState?.document?.id,
+        deleteAllocationAsync,
       );
     }
   };
