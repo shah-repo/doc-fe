@@ -37,3 +37,10 @@ export interface AllocationItemEditEvent {
   dataItem: EditableAllocationItem
   level: number[]
 }
+
+export interface LatestPartRevisionInfo {
+  id: string
+  name: string
+  revision: number
+  displayRevision: string
+}

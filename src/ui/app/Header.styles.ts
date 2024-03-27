@@ -49,6 +49,9 @@ export default (theme: NextTheme) =>
       fontWeight: 300,
       flexGrow: 1,
       marginRight: theme.spacing(4),
+      [theme.breakpoints.only('md')]: {
+        display: 'none',
+      },
     },
     welcomeTextName: {
       fontWeight: 700,
@@ -71,7 +74,7 @@ export default (theme: NextTheme) =>
     },
     [theme.media.mobile]: {
       welcomeText: {
-        fontSize: '1.25rem',
+        zfontSize: '1.25rem',
         marginRight: 0,
         whiteSpace: 'nowrap',
       },
@@ -117,6 +120,21 @@ export default (theme: NextTheme) =>
       },
       welcomeHide: {
         display: 'none',
+      },
+      toggleCustomLabels: {
+        [theme.breakpoints.down('md')]: {
+          display: 'none',
+        },
+      },
+      toggleCustomLabelsSm: {
+        [theme.breakpoints.down('sm')]: {
+          display: 'none',
+        },
+      },
+      autosaveToggle: {
+        [theme.breakpoints.down('md')]: {
+          display: 'none',
+        },
       },
     },
   });

@@ -31,9 +31,20 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
     }
   }
 
-  if (dataItem.woStatus !== DocumentRevisionStatus.Draft) {
-    quantityNeeded = dataItem.quantityAfterKitting ?? 0;
-  }
+  const renderCellValue = () => {
+    if (dataItem.woStatus !== DocumentRevisionStatus.Draft) {
+      if (!(dataItem.isLotAddition || dataItem.lotRevId)) {
+        // This cell is not applicable for parts row
+        return CELL_EMPTY_VALUE;
+      }
+
+      return dataItem.quantityAfterKitting ?? 0;
+    }
+
+    return isNil(dataItem.quantityOnHand)
+      ? CELL_EMPTY_VALUE
+      : (dataItem.quantityOnHand ?? 0) - (quantityNeeded ?? 0);
+  };
 
   return (
     <td
@@ -46,10 +57,10 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell-quantity"
+      data-cy={`${field}-cell-quantity`}
     >
       <span className={classes.Cell}>
-        {isNil(dataItem.quantityOnHand) ? CELL_EMPTY_VALUE : (dataItem.quantityOnHand ?? 0) - (quantityNeeded ?? 0)}
+        {renderCellValue()}
       </span>
     </td>
   );
