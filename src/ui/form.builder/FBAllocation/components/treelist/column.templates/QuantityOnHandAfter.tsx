@@ -31,10 +31,6 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
     }
   }
 
-  if (dataItem.woStatus !== DocumentRevisionStatus.Draft) {
-    quantityNeeded = dataItem.quantityAfterKitting ?? 0;
-  }
-
   return (
     <td
       colSpan={colSpan}
@@ -49,7 +45,11 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy={`${field}-cell-quantity`}
     >
       <span className={classes.Cell}>
-        {isNil(dataItem.quantityOnHand) ? CELL_EMPTY_VALUE : (dataItem.quantityOnHand ?? 0) - (quantityNeeded ?? 0)}
+        {dataItem.woStatus !== DocumentRevisionStatus.Draft
+          ? dataItem.quantityAfterKitting ?? 0
+          : isNil(dataItem.quantityOnHand)
+            ? CELL_EMPTY_VALUE
+            : (dataItem.quantityOnHand ?? 0) - (quantityNeeded ?? 0)}
       </span>
     </td>
   );
