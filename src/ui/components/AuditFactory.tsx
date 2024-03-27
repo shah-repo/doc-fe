@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import { get, has } from 'lodash';
 import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
@@ -11,12 +12,15 @@ import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
+import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
-import { BOMTreeData, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../state/ducks/relatedParts/types';
-import { getAuditDefaultValue } from '../common/utils/audit';
+import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
+import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
+import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
+import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -33,7 +37,7 @@ import DialogOpener from './textDiff/DialogOpener';
 interface OwnProps {
   audit: Audit
   dataCy?: string
-  revIdRelatedTypeObj: {[key: string]: RELATED_TYPE}
+  revIdRelatedTypeObj: {[key: string]: IRevIdMapper}
 }
 
 type Props = OwnProps;
@@ -48,7 +52,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
 
-  const relatedType = revIdRelatedTypeObj[audit.documentRevisionId];
+  const relatedType = revIdRelatedTypeObj?.[audit.documentRevisionId]?.relatedType;
 
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;
@@ -451,43 +455,117 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         }
         break;
       case 'inventoryTask':
-        if (audit.type.includes('ARRAY_ADDED')) {
+
+        try {
           const nextVal: string = audit.nextValue as string;
-          try {
-            const { instruction, assignedTo } = JSON.parse(nextVal);
-            returnValue = (
-              <>
-                { instruction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.instruction.added', { instruction }) }
-                { assignedTo && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.to', { assignedTo }) }
-              </>
-            );
-          } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          const documentTypesAll = useSelector(documentTypeSelectors.getDocumentTypeList);
+          const documentType = documentTypesAll.find(item => checkIsDocumentWO(item.groupOptions));
+          const relatedAcronym = documentType?.documentTypeAcronym ?? '';
+
+          const auditDocId = audit.docId ?? '';
+          const docLabel = relatedAcronym && auditDocId.startsWith(relatedAcronym) ? 'documentRevision' : 'changeRequest';
+
+          const {
+            instruction,
+            assignedAdded,
+            assigneeDeleted,
+            status,
+            assignedTo,
+            comment,
+            attachmentLinks,
+          } = JSON.parse(nextVal);
+
+          if (audit.type.includes('ARRAY_ADDED')) {
+              const { instruction, assignedTo } = JSON.parse(nextVal);
+
+              returnValue = (
+                <>
+                  {instruction
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.instruction.added`,
+                      { instruction },
+                    )}
+                  {assignedTo
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.assignee.to`,
+                      { assignedTo },
+                    )}
+                </>
+              );
+          } else if (audit.type.includes('ARRAY_EDITED')) {
+            const attachmentNameArr = attachmentLinks.map((attachmentName) => attachmentName.split('/').pop());
+            const attachmentNameList = attachmentNameArr.join(', ');
+
+              returnValue = (
+                <>
+                  {instruction
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.instruction.updated`,
+                      { instruction },
+                    )}
+                  {assignedAdded
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.assignee.added`,
+                      { assignedAdded },
+                    )}
+                  {status === FBInvTaskState.DONE
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.completed`,
+                      { assignedTo },
+                    )}
+                  {status === FBInvTaskState.DRAFT
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.draft`,
+                      { assignedTo },
+                    )}
+                  {assigneeDeleted
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.assignee.deleted`,
+                      { assigneeDeleted },
+                    )}
+                  {comment
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.comment`,
+                      { comment },
+                    )}
+                  {( attachmentNameArr.length > 0 )
+                    && getNewLineItemAuditValue(
+                      dataCy,
+                      `${docLabel}.audit.inventoryTask.attachments`,
+                      { attachmentNameList },
+                    )}
+                </>
+              );
           }
-        } else if (audit.type.includes('ARRAY_EDITED')) {
-          const nextVal: string = audit.nextValue as string;
-          try {
-            const { instruction, assignedAdded, assigneeDeleted, status, completedAt, assignedTo } = JSON.parse(nextVal);
-            returnValue = (
-              <>
-                { instruction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.instruction.updated', { instruction }) }
-                { assignedAdded && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.added', { assignedAdded }) }
-                { (status === FBInvTaskState.DONE && completedAt)
-                && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.completed', { assignedTo }) }
-                { (status === FBInvTaskState.DRAFT) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.draft', { assignedTo }) }
-                { assigneeDeleted && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.inventoryTask.assignee.deleted', { assigneeDeleted }) }
-              </>
-            );
-          } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
-          }
-        } else {
+        } catch (error) {
+          returnValue = (
+            <div data-cy={dataCy}>
+              {getAuditDefaultValue(audit.nextValue)}
+            </div>
+          );
+        }
+
+        if (!audit.type.includes('ARRAY_ADDED') && !audit.type.includes('ARRAY_EDITED')) {
           const prevVal: string = audit.previousValue as string;
           try {
             const { instruction } = JSON.parse(prevVal);
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(instruction)}</div>);
+            returnValue = (
+              <div data-cy={dataCy}>{getAuditDefaultValue(instruction)}</div>
+            );
           } catch (error) {
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(audit.previousValue)}
+              </div>
+            );
           }
         }
         break;
@@ -508,16 +586,17 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } else if (audit.type.includes('ARRAY_EDITED')) {
           const nextVal: string = audit.nextValue as string;
           try {
-            const { onOrderPOAction, inInspectionAction, inInventoryAction, inWipAction, asFinishedGoodsAction, usedLocation, comment } = JSON.parse(nextVal);
+            const { onOrderPOAction, inInspectionAction, inInventoryAction, inWipAction, asFinishedGoodsAction, usedLocation, comment, lotDocId, partDocId } = JSON.parse(nextVal);
+            const mdDocRow = lotDocId || partDocId;
             returnValue = (
               <>
-                { onOrderPOAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.onOrderPOAction.updated', { onOrderPOAction }) }
-                { inInspectionAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInspectionAction.updated', { inInspectionAction }) }
-                { inInventoryAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInventoryAction.updated', { inInventoryAction }) }
-                { inWipAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inWipAction.updated', { inWipAction }) }
-                { asFinishedGoodsAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.asFinishedGoodsAction.updated', { asFinishedGoodsAction }) }
-                { usedLocation && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.usedLocation.updated', { usedLocation }) }
-                { comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.comment.updated', { comment }) }
+                { onOrderPOAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.onOrderPOAction.updated', { mdDocRow, onOrderPOAction: getMDOptionLabels(onOrderPOAction) }) }
+                { inInspectionAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInspectionAction.updated', { mdDocRow, inInspectionAction: getMDOptionLabels(inInspectionAction) }) }
+                { inInventoryAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInventoryAction.updated', { mdDocRow, inInventoryAction: getMDOptionLabels(inInventoryAction) }) }
+                { inWipAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inWipAction.updated', { mdDocRow, inWipAction: getMDOptionLabels(inWipAction) }) }
+                { asFinishedGoodsAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.asFinishedGoodsAction.updated', { mdDocRow, asFinishedGoodsAction: getMDOptionLabels(asFinishedGoodsAction) }) }
+                { usedLocation && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.usedLocation.updated', { mdDocRow, usedLocation: getMDOptionLabels(usedLocation) }) }
+                { comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.comment.updated', { mdDocRow, comment }) }
               </>
             );
           } catch (error) {
@@ -526,8 +605,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } else {
           const prevVal: string = audit.previousValue as string;
           try {
-            const { partDocId } = JSON.parse(prevVal);
-            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(partDocId)}</div>);
+            const { partDocId, lotDocId } = JSON.parse(prevVal);
+            if (lotDocId) {
+              returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(lotDocId)}</div>);
+            } else {
+              returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(partDocId)}</div>);
+            }
           } catch (error) {
             returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.previousValue)}</div>);
           }
@@ -648,6 +731,106 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } catch (err) {
           // Not valid JSON, so older data and is string
           returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
+        break;
+      case 'formInput.work_order_type':
+      case 'formInput.wo_part_unit':
+      case 'formInput.wo_part_quantity':
+      case 'formInput.wo_part.id':
+      case 'formInput.autoTransact':
+      case 'formInput.autoAssign':
+        returnValue = (<div data-cy={dataCy}>{getWOAuditDefaultValue(audit)}</div>);
+        break;
+      case 'workOrder':
+        try {
+          const nextVal = audit.nextValue as string;
+
+          const {
+            partDocId,
+            partQuantityNeeded,
+            partVariance,
+            lotDocId,
+            lotQuantityNeeded,
+            lotVariance,
+            isNewAddition,
+          } = JSON.parse(nextVal);
+
+          if (audit.type.includes('ARRAY_ADDED')) {
+            returnValue = (
+              <>
+                {lotDocId
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.lot_info.added',
+                    { lotDocId, lotQuantityNeeded, lotVariance },
+                  )}
+                {isNewAddition
+                  && lotDocId
+                  && !lotQuantityNeeded
+                  && !lotVariance
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.lot.added',
+                    { lotDocId },
+                  )}
+                {!lotDocId
+                  && partQuantityNeeded
+                  && partVariance
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.part_info.added',
+                    { partDocId, partQuantityNeeded, partVariance },
+                  )}
+                {isNewAddition
+                  && partDocId
+                  && !partQuantityNeeded
+                  && !partVariance
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.part.added',
+                    { partDocId },
+                  )}
+              </>
+            );
+          } else if (audit.type.includes('ARRAY_EDITED')) {
+            returnValue = (
+              <>
+                {lotDocId
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.lot_info.updated',
+                    { lotDocId, lotQuantityNeeded, lotVariance },
+                  )}
+                {!lotDocId
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.part_info.updated',
+                    { partDocId, partQuantityNeeded, partVariance },
+                  )}
+              </>
+            );
+          }
+        } catch (error) {
+          returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+        }
+
+        if (!audit.type.includes('ARRAY_ADDED') && !audit.type.includes('ARRAY_EDITED')) {
+          const prevVal: string = audit.previousValue as string;
+
+          try {
+            const { lotDocId, partDocId } = JSON.parse(prevVal);
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(lotDocId || partDocId)}
+              </div>
+            );
+          } catch (error) {
+            returnValue = (
+              <div data-cy={dataCy}>
+                {getAuditDefaultValue(audit.previousValue)}
+              </div>
+            );
+          }
         }
         break;
       default:

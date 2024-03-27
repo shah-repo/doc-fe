@@ -13,6 +13,7 @@ import { ReactComponent as InReviewIcon } from '../../../../../assets/images/in_
 import { ReactComponent as InReviewWhiteIcon } from '../../../../../assets/images/in_review_status_white.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { translate } from '../../../../../common/intl';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
@@ -149,7 +150,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
     {
       id: 'id5',
       isAttachments: true,
-      ltext: 'Attachments',
+      ltext: translate('common.attachments.poLine'),
       rtext: purchaseOrderAttachments || [],
     },
   ];

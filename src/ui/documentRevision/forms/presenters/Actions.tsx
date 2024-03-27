@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconButton, makeStyles } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from 'lodash';
 import { Observer } from 'mobx-react';
@@ -6,7 +9,6 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../../App';
-import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
@@ -27,6 +29,7 @@ import ClonePOButton from '../../../components/forms/ClonePOButton';
 import CloneEBButton from '../../../components/forms/CopyEBButton';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
+import PrintLabelDetailsDialog from '../../../components/table/printLabel/PrintLabelDetailsDialog';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { FB } from '../../../form.builder';
@@ -34,10 +37,12 @@ import { FBFormStateContext } from '../../../form.builder/FBForm/FBForm.wrap';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../../form.builder/FBInput/FBInput.wrap';
 import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
 import { useApproveAndRelease, useUndoPOChanges } from '../../../hooks/docCustomization/useCustomization';
+import useDialog from '../../../hooks/useDialog';
 import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
+import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
@@ -56,6 +61,17 @@ import { SubmitForApproval } from './SubmitForApproval';
 import UpgradeToLatestContainer from './upgrade.to.latest/UpgradeToLatest.container';
 import VoidButton from './VoidButton';
 
+const styles = makeStyles(() => ({
+  printIconContainer: {
+    backgroundColor: `${Colors.white} !important`,
+  },
+  printIcon: {
+    height: 15,
+    width: 15,
+    color: Colors.navy,
+  },
+}));
+
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isNewLayout = SM.isNewLayout;
   const formik = useFormikContext();
@@ -65,7 +81,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { isCreateDocumentDisabled, setDoNotPrompt, isSliderView } = props;
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
-
+  const printDialog = useDialog();
+  const classes = styles();
   const {
     documentRevision,
     values,
@@ -77,7 +94,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const history = useHistory();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const redlineActive = useSelector(companySelectors.getRedlineActive);
-  const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
+  const { revisionStage, revisionChangeType } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || '';
   const schema = documentRevision?.formDocument?.formTemplate?.schema;
   const isDisabled: boolean = documentRevision?.id !== undefined;
@@ -122,6 +139,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
+  const isWO = checkIsDocumentWO(documentRevision?.document?.documentType?.groupOptions);
+  const isDocHasOutput = isDocumentRevisionHasOutput(documentRevision);
   const isPart = checkIsDocumentPart(documentRevision?.document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(documentRevision?.document?.documentType?.groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
@@ -131,7 +150,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
   const isLHRProductionBuild = _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild || false;
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
-  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
+  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocHasOutput;
   const shouldShowUpgrade
    = ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isLHR && !isMPIOutput;
@@ -286,7 +305,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   ) {
     if (
       isVisible && values.id && values.status === DocumentRevisionStatus.Draft && canApprove
-      && !(isPO && isDocumentRevisionHasOutput(documentRevision))) {
+      && !(isPO && isDocHasOutput)
+      && !(isWO && isDocHasOutput)) {
       accessableButtons.push(PreviewControlButtons.ApproveAndReleaseButton);
     }
   }
@@ -412,13 +432,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       )}
       {buttons.includes(PreviewControlButtons.SubmitApprovalButton) && (
         <SubmitForApproval
+          documentRevision={documentRevision}
           docRevId={values.id as string}
-          description={values.description}
           status={values.status}
-          docRevOwner={owner?.user.name}
-          updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
           renderAsButton={renderAsButton}
           hasBuildType={hasBuildType}
+          isWO={isWO}
+          isWOForm = {isWO && !isEmpty(documentRevision?.formTemplate)}
           {...{
             revisionChangeType,
             currentDocumentType,
@@ -476,6 +496,18 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       )}
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
       {isEquipment && <HeaderEquipmentStatus documentRevision={documentRevision} />}
+      {isLot && (
+        <>
+          <IconButton className={classes.printIconContainer} onClick={printDialog.open}>
+            <FontAwesomeIcon className={classes.printIcon} icon={regular('print')} />
+          </IconButton>
+          <PrintLabelDetailsDialog
+            isOpen={printDialog.isOpen}
+            closeDialog={printDialog.close}
+            selectedItem={documentRevision}
+          />
+        </>)
+      }
       {isPO && isUserAdminEnforce && undoChangesLabel && isStatusReleased && (
         <StyledSubmitButton
           showNewButton={true}

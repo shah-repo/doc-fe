@@ -5,16 +5,19 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { find, first, get, has, isEmpty, keys, last, values } from 'lodash';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../../common/intl';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../../../components/KendoDataGrid/constants';
 import { Dialog } from '../../../../../../components/dialogs';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode, MODE_FIELD,
-} from '../../../../../../components/KendoDataGrid/constants';
+import { documentPreviewPath } from '../../../../../../document.revision/utils/paths';
 import useDialog from '../../../../../../hooks/useDialog';
 import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
@@ -65,7 +68,7 @@ const Editor: React.FC<Props> = ({ field, options, dataItem, isColumnEditMode, c
 export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const classes = styles();
   const { dataItem, field, onClick, options, onSelectCell } = props;
-  const { copyClipboardPopupMenu, selectedState, copiedItems, populateCopiedValue, clearContent } = useContext(PopupClipboardMenuContext);
+  const { copyClipboardPopupMenu, selectedState, copiedItems, containerRef, populateCopiedValue, clearContent } = useContext(PopupClipboardMenuContext);
   const isColumnEditMode = !isEmpty(copiedItems) && (first(values(copiedItems)) ?? [] as string[]).includes(field);
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]) || isColumnEditMode;
   const showPopup = has(selectedState, dataItem.id) && isColumnEditMode && last(keys(selectedState)) === dataItem.id;
@@ -83,6 +86,8 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const poDocIds = openedPO.map((po) => ({
     docId: po?.document?.docId,
     displayRevision: po.displayRevision,
+    docRevId: po?.id,
+    documentId: po?.document?.id,
   }));
   const [copiedItem, setCopiedItem] = useState<{
     [id: string]: string
@@ -125,7 +130,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   }, [copiedItems]);
 
   return (<>
-    {showSelector && <Selector />}
+    {showSelector && <Selector {...{ containerRef }} />}
     {showEditor && (<Editor {...props} {...{ isColumnEditMode, copiedItem }} />)}
     {showContent && <div onClick={handleClick}>
       <Box
@@ -136,14 +141,14 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
         <div className={classes.actionLabel}>
           <OverflowingContent>{translate(displayValue?.label)}</OverflowingContent>
         </div>
-        <div>
-          {isOnOrderPOActionColumn && openedPOsAvailable && (
-            <FontAwesomeIcon
-              icon={solid('circle')}
-              onClick={handleClickPOs}
-              className={cx(classes.dot, classes.poPreviewDot)}
-            />
-          )}
+          <Box>
+            {isOnOrderPOActionColumn && openedPOsAvailable && (
+              <FontAwesomeIcon
+                icon={solid('circle')}
+                onClick={handleClickPOs}
+                className={cx(classes.dot, classes.poPreviewDot)}
+              />
+            )}
           {showCopyButton && (
             <span ref={copyIconRef} onClick={handleCopy}>
               <Tooltip
@@ -156,8 +161,8 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
                   className={classes.copyIcon}
                 /></Tooltip>
             </span>)}
-        </div>
-      </Box>
+          </Box>
+        </Box>
       <Dialog
         title={translate(
           'approvalRequest.material.disposition.po.preview.title',
@@ -169,9 +174,15 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
         confirmLabel="common.close"
       >
         <div className={classes.poPreviewModal}>
-          {poDocIds.map(({ docId, displayRevision }) => (
+          {poDocIds.map(({ docId, displayRevision, docRevId, documentId }) => (
             <div className={classes.poPreviewModalItem}>
-              {generateDocTitleText(docId, displayRevision)}
+              <Link
+                to={documentPreviewPath(docRevId, documentId)}
+                target="_blank"
+                className={classes.link}
+              >
+                {generateDocTitleText(docId, displayRevision)}
+              </Link>
             </div>
           ))}
         </div>

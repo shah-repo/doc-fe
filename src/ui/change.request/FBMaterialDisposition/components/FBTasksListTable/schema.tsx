@@ -15,7 +15,7 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
   isDisabled,
-  currentState,
+  isClosed,
   employeeStatusUpdates,
   employeeEvidenceUpdates,
 }: SchemaOptions): Array<ColumnDefinition<EditableTLItem>> => {
@@ -49,7 +49,7 @@ export const buildSchema = ({
       field: 'attachments',
       title: 'approvalRequest.grid.heading.attachments',
       show: false,
-      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, isDisabled, currentState }} />,
+      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, isDisabled, isClosed }} />,
       width: 324,
     },
     {
@@ -57,14 +57,14 @@ export const buildSchema = ({
       field: 'comments',
       title: 'approvalRequest.grid.heading.comments',
       show: false,
-      template: (props) => <CommentCellTemplate {...props} {...{ isDisabled, currentState }} />,
+      template: (props) => <CommentCellTemplate {...props} {...{ isDisabled, isClosed }} />,
       width: 324,
     },
     {
       id: 'assigneeAction',
       title: 'approvalRequest.grid.heading.assignee.action',
       show: false,
-      template: (props) => <AssigneeActionCellTemplate {...props} {...{ employeeStatusUpdates, isDisabled, currentState }} />,
+      template: (props) => <AssigneeActionCellTemplate {...props} {...{ employeeStatusUpdates, isDisabled, isClosed }} />,
       width: 350,
     },
     {

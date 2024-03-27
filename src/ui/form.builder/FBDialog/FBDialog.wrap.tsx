@@ -1,6 +1,7 @@
 import { useObserver } from 'mobx-react';
 import React from 'react';
-import { FB, FBDialogProps } from '..';
+import { FB, FBDialogProps, FBWorkspaceModeOptions } from '..';
+import FBDataStore from '../FBStore/FBDataStore';
 
 export const withFBDialog = <T extends FBDialogProps>(
   Component: React.FunctionComponent<T>,
@@ -17,6 +18,13 @@ export const withFBDialog = <T extends FBDialogProps>(
     const { dialogState } = FB.useStores();
     const { workspaceState } = FB.useStores();
     const handleClose = () => {
+      if (workspaceState?.isPreview) {
+        workspaceState?.setMode(FBWorkspaceModeOptions.DESIGN);
+        if (workspaceState?.document?.document) {
+          workspaceState.document.document.documentType
+            = FBDataStore.documentTypes;
+        }
+      }
       workspaceState?.setIsPreview(false);
       if (dialogState?.props?.onClose) {
         dialogState?.props?.onClose?.();

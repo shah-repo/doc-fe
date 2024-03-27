@@ -11,10 +11,24 @@ interface props {
 }
 
 const FBMaterialDisposition: React.FunctionComponent<props> = ({ changeRequest, isShowOnly, isAdditionalColumnsShown, setDoNotPrompt }) => {
-  return (<>
-    <FBMaterialDispositionTable {...{ changeRequest, isShowOnly, setDoNotPrompt }} />
-    <FBTasksListTable {...{ changeRequest, isShowOnly, isAdditionalColumnsShown, setDoNotPrompt }} />
-  </>);
+  return (
+    <>
+      <FBMaterialDispositionTable
+        {...{ changeRequest, isShowOnly, setDoNotPrompt }}
+      />
+      {changeRequest && (
+        <FBTasksListTable
+          {...{
+            partOfId: changeRequest.id,
+            state: changeRequest.state,
+            isShowOnly,
+            isAdditionalColumnsShown,
+            setDoNotPrompt,
+          }}
+        />
+      )}
+    </>
+  );
 };
 
 export default FBMaterialDisposition;

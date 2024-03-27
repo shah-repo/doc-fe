@@ -12,6 +12,7 @@ import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg'
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
 import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject.svg';
 import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_solid.svg';
+import { translate } from '../../../../../common/intl';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { ChangeRequestTransitionResponse } from '../../../../../state/ducks/changeRequest/types';
@@ -141,7 +142,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     {
       id: 'id5',
       isAttachments: true,
-      ltext: 'Attachments',
+      ltext: translate('common.attachments.poLine'),
       rtext: purchaseOrderAttachments || [],
     },
   ];
@@ -306,8 +307,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     >
                       {docRevOwnerName}
                     </Typography>
-                  </Grid>
-                  <Grid item={true}>
                     <Typography
                       component="span"
                       variant="body2"
@@ -317,13 +316,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                     >
                       <Text translation="require.approval" />
                     </Typography>
-                    <DocId
-                      url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
-                      docId={docId}
-                    />
                   </Grid>
                 </Grid>
                 <Grid item={true}>
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                    docId={docId}
+                  />
                   <DocTitle
                     url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
                     docRevVersion={docRevVersion}
@@ -466,7 +465,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            {dismissLineItem && (
+            {!dismissLineItem && (
               <DismissAction classes={classes} alignCloseClass={classes.closeIconMobile} onClick={handleDismiss} />
             )}
           </Box>

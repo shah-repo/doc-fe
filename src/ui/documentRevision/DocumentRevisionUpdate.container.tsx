@@ -2,6 +2,7 @@ import { debounce, get, has, isEmpty, map, pick, set } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DocumentRevisionSummary, SM } from '../../App';
+import { getPayloadBasedOnWorkOrderType } from '../../common/utils/helpers';
 import { authSelectors } from '../../state/ducks/auth';
 import { GroupTag } from '../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../state/ducks/company';
@@ -11,6 +12,7 @@ import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
 import { FBDAMFields } from '../form.builder';
 import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
+import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
@@ -127,6 +129,16 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
     const formInput = get(dataToSubmit, 'formInput');
+
+    if (!isEmpty(formInput) && formInput.WO_TYPE_KEY !== '') {
+      const updatedFormInput = getPayloadBasedOnWorkOrderType(formInput);
+      set(dataToSubmit, 'formInput', {
+        ...formInput,
+        ...updatedFormInput,
+        [AllocationCheckBoxOptions.AUTO_TRANSACT]: FBDataStore?.refreshData?.formInput?.autoTransact,
+        [AllocationCheckBoxOptions.AUTO_ASSIGN]: FBDataStore?.refreshData?.formInput?.autoAssign,
+      });
+    }
 
     if (isDAM && !isEmpty(FBStore.damData?.approvalMatrix) && isEmpty(dataToSubmit)) {
       set(dataToSubmit, 'formInput', {

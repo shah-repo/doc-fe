@@ -11,7 +11,6 @@ import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/type
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { RELATED_TYPE } from '../../../state/ducks/relatedParts/types';
 import { AsyncStatus } from '../../../state/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
@@ -20,7 +19,7 @@ import { FBApprovalAuditState, FBSchemaProps, FBText } from '../../form.builder'
 import { isTranslation } from '../../translations/types';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
-import { revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
+import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import { styles } from './Audit.presenter.styles.new';
 
 interface OwnProps {
@@ -458,7 +457,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                     values={{
                       nextStatus: change.nextValue,
                       relatedType: getDynamicTextValue(
-                        revIdRelatedTypeObj[change.documentRevisionId], RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+                        revIdRelatedTypeObj[change.documentRevisionId]?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
                     }}
                   />
                 </Typography>
@@ -530,6 +529,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const isRemovingApproverAction = (
       auditGroup[0].field === 'approvals.status' && auditGroup[0].nextValue === ApprovalStatus.Abandoned
     );
+    const isWorkOrder = revIdRelatedTypeObj[auditGroup[0].documentRevisionId]?.isWorkOrder;
+
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Typography variant="subtitle1" className={classes.auditKey}>
@@ -538,6 +539,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               isRemovingApproverAction
                 ? `documentRevision.audit.${field}.ARRAY_DELETED`
                 : `documentRevision.audit.${field}.${type}`}
+            values={{
+              approverText: isWorkOrder ? 'User' : 'Approver',
+            }}
           />
         </Typography>
         {auditGroup.map((change, index) => (
@@ -580,7 +584,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 const labelToShow = (change: Audit,
   groupKey: number | undefined,
   key: number | undefined,
-  revIdRelatedTypeObj: {[key: string]: RELATED_TYPE}) => {
+  revIdRelatedTypeObj: {[key: string]: IRevIdMapper}) => {
+  const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId] ?? {};
   return (
     <>
       {change.field === 'relatedPartsStatus' && <Text
@@ -588,15 +593,17 @@ const labelToShow = (change: Audit,
         message={`documentRevision.audit.${change.field}.${change.type}`}
         values={{
           relatedType: getDynamicTextValue(
-            revIdRelatedTypeObj[change.documentRevisionId], RELATED_TYPE_VALUES_ENUM.BASE_PART, RELATED_TYPE_VALUES_ENUM.BASE_DOCUMENT),
+            relatedType, RELATED_TYPE_VALUES_ENUM.BASE_PART, RELATED_TYPE_VALUES_ENUM.BASE_DOCUMENT),
         }}
       />}
       {change.field !== 'relatedPartsStatus' && <Text
         dataCy={`change-key-${groupKey}-${key}`}
         message={`documentRevision.audit.${change.field}.${change.type}`}
         values={{
+          nextStatus: change.nextValue,
+          approverText: isWorkOrder ? 'User' : 'Approver',
           relatedType: getDynamicTextValue(
-            revIdRelatedTypeObj[change.documentRevisionId], RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+            relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
         }}
       />}
     </>
