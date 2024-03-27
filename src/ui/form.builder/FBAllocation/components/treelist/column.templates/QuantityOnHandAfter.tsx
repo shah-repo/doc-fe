@@ -31,6 +31,21 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
     }
   }
 
+  const renderCellValue = () => {
+    if (dataItem.woStatus !== DocumentRevisionStatus.Draft) {
+      if (!(dataItem.isLotAddition || dataItem.lotRevId)) {
+        // This cell is not applicable for parts row
+        return CELL_EMPTY_VALUE;
+      }
+
+      return dataItem.quantityAfterKitting ?? 0;
+    }
+
+    return isNil(dataItem.quantityOnHand)
+      ? CELL_EMPTY_VALUE
+      : (dataItem.quantityOnHand ?? 0) - (quantityNeeded ?? 0);
+  };
+
   return (
     <td
       colSpan={colSpan}
@@ -45,11 +60,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy={`${field}-cell-quantity`}
     >
       <span className={classes.Cell}>
-        {dataItem.woStatus !== DocumentRevisionStatus.Draft
-          ? dataItem.quantityAfterKitting ?? 0
-          : isNil(dataItem.quantityOnHand)
-            ? CELL_EMPTY_VALUE
-            : (dataItem.quantityOnHand ?? 0) - (quantityNeeded ?? 0)}
+        {renderCellValue()}
       </span>
     </td>
   );
