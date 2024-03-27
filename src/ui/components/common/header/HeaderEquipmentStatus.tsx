@@ -47,7 +47,7 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
 
   const updateEquipmentStatus = useRef<() => void>();
   const nextStatus = useRef<EquipmentStatus>();
-  
+
   const confirmUpdate = (equipmentStatus: EquipmentStatus) => {
     if(getEquipmentStatusLabel(equipmentStatus) === statusLabel) {
       return;
