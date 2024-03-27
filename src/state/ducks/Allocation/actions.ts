@@ -1,8 +1,8 @@
 import { AllocationLOTBody, AllocationPartBody } from '../../../ui/form.builder/FBAllocation/components/treelist/interface';
-import { AllocationItem } from '../../../ui/form.builder/FBAllocation/interface';
+import { AllocationItem, LatestPartRevisionInfo } from '../../../ui/form.builder/FBAllocation/interface';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { ALLOCATION_LIST_ROOT_URL } from './constants';
+import { ALLOCATION_LIST_ROOT_URL, LATEST_PART_REVISION_URL } from './constants';
 
 const loadAllocationList = (
   woId: string,
@@ -89,6 +89,26 @@ const deletePart = (
     handlers,
   });
 
+const deleteAllocation = (
+  woId: string,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}`,
+    method: 'delete',
+    handlers,
+  });
+
+const fetchLatestPartRevision = (
+  partRevId: string,
+  handlers: Handlers,
+): ApiAction<LatestPartRevisionInfo> =>
+  apiActionWithCallbacks({
+    url: `${LATEST_PART_REVISION_URL}/${partRevId}`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   loadAllocationList,
   autoAssignLOT,
@@ -96,5 +116,7 @@ export default {
   addLot,
   updatePart,
   deleteLot,
+  fetchLatestPartRevision,
   deletePart,
+  deleteAllocation,
 };
