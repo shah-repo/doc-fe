@@ -48,7 +48,6 @@ export const styles = makeStyles((theme: NextTheme) => ({
     height: 17,
     width: 17,
   },
-
   [theme.media.mobile]: {
     '@global': {
       '.MuiDialogContent-root': {
