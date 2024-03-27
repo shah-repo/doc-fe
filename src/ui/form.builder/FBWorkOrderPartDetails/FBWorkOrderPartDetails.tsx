@@ -40,6 +40,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   const fetchAvailablePartsAction = useActionCreator(allocationActions.fetchLatestPartRevision);
   const deleteAllocation = useActionCreator(allocationActions.deleteAllocation);
   const [latestRevisionInfo, setLatestRevisionInfo] = useState<LatestPartRevisionInfo>();
+  const [prevSelectedPartId, setPrevSelectedPartId] = useState<string>();
   const dialog = useDialog();
   const openRevChangeDialog = () => { !props.disabled && dialog.open(); };
   const isLatestRevisionAvailable
@@ -61,11 +62,20 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   });
 
   useEffect(() => {
-    partsDefaultValue?.id && fetchAvailablePartsAsync.start(
-      fetchAvailablePartsAction,
-      partsDefaultValue?.id,
-      fetchAvailablePartsAsync,
-    );
+    const partId = partsDefaultValue?.id;
+    if (partId) {
+      setPrevSelectedPartId(partId);
+      fetchAvailablePartsAsync.start(
+        fetchAvailablePartsAction,
+        partId,
+        fetchAvailablePartsAsync,
+      );
+    } else if (prevSelectedPartId && !partId) {
+      deleteAllocationAsync.start(deleteAllocation,
+        workspaceState?.document?.id,
+        deleteAllocationAsync,
+      );
+    }
   }, [partsDefaultValue]);
 
   const onRevChange = async () => {
