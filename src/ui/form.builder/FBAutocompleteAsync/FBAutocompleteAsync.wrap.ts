@@ -40,7 +40,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   }: T) => {
     const { formState } = FB.useStores();
     const documentStatus = formState?.workspaceState?.document?.displayStatus;
-
     const groupOptions = formState?.workspaceState?.document?.document?.documentType?.groupOptions;
     const isWO = checkIsDocumentWO(groupOptions);
     const isWOPart = name === WO_PART_KEY_NAME;
@@ -83,14 +82,17 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         return;
       }
       let slicedOptions = autocompleteAsyncState?.sliceData ?? autocompleteAsyncState?.data;
+
       if (isWO && isWOPart && slicedOptions) {
         slicedOptions = skipOptionsFilter ? slicedOptions : slicedOptions.filter((item) => item.status === DocumentRevisionStatus.Released);
       }
+
       loading = (
         loading
         || FBAutocompleteAsyncStore.loading.get(optionId)
         || autocompleteAsyncState?.autocompleteValueApi.loading
       );
+
       if (slicedOptions) {
         options = selectedOptions
           ? autocompleteAsyncState?.sliceValue(selectedOptions)

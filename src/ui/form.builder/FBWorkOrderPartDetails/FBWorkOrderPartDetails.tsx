@@ -50,9 +50,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data?: LatestPartRevisionInfo) => {
-      if (data) {
-        setLatestRevisionInfo(data);
-      }
+      data && setLatestRevisionInfo(data);
     },
   });
 
