@@ -11,24 +11,24 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
-import { ReactComponent as ViewGridIcon } from '../../../../../../assets/images/grid_view.svg';
-import { ReactComponent as SolidIcon } from '../../../../../../assets/images/view.svg';
-import { ReactComponent as ViewChecked } from '../../../../../../assets/images/view_checked.svg';
-import { translate } from '../../../../../../common/intl';
-import Text from '../../../../../components/Text';
-import { StyleTooltip } from '../../../../../dashboard.new/line.items/common/StyleTooltip';
-import { CustomTreeListColumnProps } from '../interface';
-import { styles } from './styles';
+import { ReactComponent as ViewGridIcon } from '../../../../assets/images/grid_view.svg';
+import { ReactComponent as SolidIcon } from '../../../../assets/images/view.svg';
+import { ReactComponent as ViewChecked } from '../../../../assets/images/view_checked.svg';
+import { translate } from '../../../../common/intl';
+import Text from '../../../components/Text';
+import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTooltip';
+import { styles } from './ColumnShowHideTreeMenu.styles';
+import { CustomTreeListColumnProps } from './types';
 
-interface Props {
-  columnDefinition: CustomTreeListColumnProps[]
-  onChange: (colum: CustomTreeListColumnProps) => void
+interface Props<T> {
+  columnDefinition: T[]
+  onChange: (colum: T) => void
 }
 
-const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
+function ColumnShowHideTreeMenu<T extends CustomTreeListColumnProps> ({
   columnDefinition,
   onChange,
-}) => {
+}: Props<T>): React.ReactElement {
   const classes = styles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isOpened = Boolean(anchorEl);
@@ -73,7 +73,7 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
           />
 
           <CardContent className={classes.box}>
-            {columnDefinition.map((item: CustomTreeListColumnProps) => (
+            {columnDefinition.map((item: T) => (
               <MenuItem
                 key={item.title}
                 value={item.field}
@@ -108,6 +108,6 @@ const ColumnShowHideTreeMenu: React.FunctionComponent<Props> = ({
       </Menu>
     </FormControl>
   );
-};
+}
 
 export default ColumnShowHideTreeMenu;

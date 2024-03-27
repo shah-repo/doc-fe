@@ -92,5 +92,8 @@ export default makeStyles((theme: NextTheme) => ({
     link: {
       pointerEvents: 'none',
     },
+    typographyChildrenBold: {
+      marginLeft: theme.spacing(-2),
+    },
   },
 }));

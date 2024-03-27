@@ -13,6 +13,7 @@ import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg'
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
 import { ReactComponent as RejectSolidIcon } from '../../../../../assets/images/reject_status.svg';
 import { ReactComponent as RejectIcon } from '../../../../../assets/images/reject_status_solid.svg';
+import { translate } from '../../../../../common/intl';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
@@ -138,7 +139,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
     {
       id: 'id5',
       isAttachments: true,
-      ltext: 'Attachments',
+      ltext: translate('common.attachments.poLine'),
       rtext: purchaseOrderAttachments || [],
     },
   ];
@@ -405,11 +406,11 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
+            className={cx(classes.actionIcons)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
-              <span>
+              <span className={classes.poActionIconsWidth}>
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
@@ -503,7 +504,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
               disableRipple
             >
               <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
+                <Grid item md={3} sm={6} xs={4}>
                   <Typography
                     component="span"
                     variant="caption"
@@ -513,7 +514,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     {poItem.ltext}
                   </Typography>
                 </Grid>
-                <Grid item md={9} sm={6}>
+                <Grid item md={9} sm={6} xs={8}>
                   {poItem.isSupplier && (
                     <RouterLink
                       to={

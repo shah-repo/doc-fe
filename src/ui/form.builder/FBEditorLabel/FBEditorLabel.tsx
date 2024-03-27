@@ -52,4 +52,4 @@ const FBEditorLabel: React.FunctionComponent<FBEditorProps> = ({
   );
 };
 
-export default FBEditorLabel;
+export default React.memo(FBEditorLabel);

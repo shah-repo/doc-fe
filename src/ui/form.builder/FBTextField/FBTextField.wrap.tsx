@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBTextFieldProps } from '..';
 import { THRESHOLD_KEY } from '../../../state/ducks/documentRevisions/constants';
+import { WO_LOT_ID_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isTranslation } from '../../translations/types';
@@ -39,6 +40,10 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       || get(props.hellosignFlowProps, 'type') === 'HS_DEFINED_FIELD'
       || formState?.getFieldValue('signatureRequestId')
     );
+
+    if (name === WO_LOT_ID_KEY_NAME) {
+      disabled = true;
+    }
 
     (isUndefined(multiline)) && (
       multiline = Boolean(rows && (rows as number) > 1)

@@ -10,7 +10,6 @@ import {
   MomentFormats,
 } from '../../../../../../../common/utils/date';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
-import { ChangeRequestStatus } from '../../../../../../../state/ducks/changeRequest/types';
 import { Button } from '../../../../../../components/forms/fields-next';
 import {
   EmployeeStatus,
@@ -24,7 +23,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
   props,
 ) => {
   const classes = styles();
-  const { dataItem, employeeStatusUpdates, isDisabled, currentState } = props;
+  const { dataItem, employeeStatusUpdates, isDisabled, isClosed } = props;
   const employeeResponse = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   const { taskId } = dataItem;
   const handleClick = (employeeId: string) => {
@@ -32,7 +31,6 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
   };
   const currentUserId = useSelector(authSelectors.currentEmployeeId);
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
-  const isClosedAR = currentState === ChangeRequestStatus.Closed;
 
   return (
     <>
@@ -55,7 +53,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
                 </span>
               </div>
             ) : employeeId === currentUserId ? (
-              isClosedAR ? EMPTY_VALUE_PLACEHOLDER : (
+              isClosed ? EMPTY_VALUE_PLACEHOLDER : (
                 <Button
                   className={classes.assigneeAction}
                   onClick={() => handleClick(employeeId)}
@@ -65,7 +63,7 @@ export const AssigneeActionCellTemplate: React.FC<CustomTemplateProps> = (
                   {translate('approvalRequest.tasks.list.assignee.complete')}
                 </Button>
               )
-            ) : isClosedAR ? EMPTY_VALUE_PLACEHOLDER : (
+            ) : isClosed ? EMPTY_VALUE_PLACEHOLDER : (
               <div className={classes.assigneeActionStatusContainer}>
                 <FontAwesomeIcon
                   icon={solid('circle-check')}

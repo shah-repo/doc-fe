@@ -49,7 +49,7 @@ const SuccessMsg: React.FunctionComponent<{
         <Text translation="relatedParts.created.modal.success.msg"
           values = {{
             relatedType: getDynamicTextValue(
-              relatedType, RELATED_TYPE_VALUES_ENUM.PART, RELATED_TYPE_VALUES_ENUM.DOCUMENT),
+              relatedType, RELATED_TYPE_VALUES_ENUM.PART_CAPS, RELATED_TYPE_VALUES_ENUM.DOCUMENT_CAPS),
           }} />
       </Typography>
       <div className={classes.successMessage}>

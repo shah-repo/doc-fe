@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { find, first, get, has, isEmpty, keys, last, values } from 'lodash';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../../common/intl';
 import {
   MODE_FIELD,
@@ -16,6 +17,7 @@ import {
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
+import { documentPreviewPath } from '../../../../../../document.revision/utils/paths';
 import useDialog from '../../../../../../hooks/useDialog';
 import useHover from '../../../../../../hooks/useHover';
 import OverflowingContent from '../../../commonCells/OveflowContent';
@@ -84,6 +86,8 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
   const poDocIds = openedPO.map((po) => ({
     docId: po?.document?.docId,
     displayRevision: po.displayRevision,
+    docRevId: po?.id,
+    documentId: po?.document?.id,
   }));
   const [copiedItem, setCopiedItem] = useState<{
     [id: string]: string
@@ -170,9 +174,15 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
         confirmLabel="common.close"
       >
         <div className={classes.poPreviewModal}>
-          {poDocIds.map(({ docId, displayRevision }) => (
+          {poDocIds.map(({ docId, displayRevision, docRevId, documentId }) => (
             <div className={classes.poPreviewModalItem}>
-              {generateDocTitleText(docId, displayRevision)}
+              <Link
+                to={documentPreviewPath(docRevId, documentId)}
+                target="_blank"
+                className={classes.link}
+              >
+                {generateDocTitleText(docId, displayRevision)}
+              </Link>
             </div>
           ))}
         </div>

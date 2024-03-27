@@ -37,11 +37,12 @@ export enum DOC_TYPE_GROUP {
   SEED_DOCUMENT = 'SEED_DOCUMENT',
   LHR = 'LHR',
   PAPER_LHR = 'PAPER_LHR',
+  LHRT = 'LHRT',
   PI_INSTANCE = 'PI_INSTANCE',
   TRAINING_CURRICULUM = 'TRAINING_CURRICULUM',
   BULK_CREATE = 'BULK_CREATE',
-  LHRT = 'LHRT',
   CONFIG_OPTIONS = 'CONFIG_OPTIONS',
+  WORK_ORDER = 'WORK_ORDER',
 }
 
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
@@ -58,9 +59,9 @@ export enum DOC_TYPE_GROUP_OPTION {
   CHANGE_REQUEST = 'CHANGE_REQUEST',
   ONE_ITEM = 'ONE_ITEM',
   DYNAMIC_FORM = 'DYNAMIC_FORM',
+  OTHER = 'OTHER',
   POAM = 'POAM',
   PO = 'PO',
-  OTHER = 'OTHER',
   MATERIAL = 'MATERIAL',
   PART = 'PART',
   SUPPLIER = 'SUPPLIER',
@@ -102,6 +103,7 @@ export enum DOC_TYPE_GROUP_OPTION {
   EMAILS_LHR = 'EMAILS_LHR',
   EMAILS_LHRS = 'EMAILS_LHRS',
   EMAILS_PO = 'EMAILS_PO',
+  WORK_ORDER = 'WORK_ORDER',
 
   TABS_MPI = 'TABS_MPI',
   TABS_MPI_INSTANCE = 'TABS_MPI_INSTANCE',
@@ -126,9 +128,10 @@ export enum DOC_TYPE_GROUP_OPTION {
   TABS_PART_LOT = 'TABS_PART_LOT',
   TABS_NEW_COMPANY = 'TABS_NEW_COMPANY',
   TABS_MAINTENANCE_RECORD = 'TABS_MAINTENANCE_RECORD',
-  TABS_SEED = 'TABS_SEED',
   TABS_DYNAMIC_FORM = 'TABS_DYNAMIC_FORM',
+  TABS_SEED = 'TABS_SEED',
   TABS_CONFIG_OPTIONS = 'TABS_CONFIG_OPTIONS',
+  TABS_WO = 'TABS_WO',
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
 export enum TabTypeOptions {
@@ -139,11 +142,32 @@ export enum TabTypeOptions {
   MIXED = 'MIXED',
   ITEMS = 'ITEMS',
   MATERIAL_DISPOSITION='MATERIAL_DISPOSITION',
+  ALLOCATION = 'ALLOCATION',
 }
 
 export enum CATEGORY {
   WORKORDER_CATEGORY = 'Work Order',
 }
+
+export enum WorkOrderTypes {
+  MAKE_KIT = 'make_kit',
+  MAKE_PRODUCT = 'make_product_or_part',
+  OTHER = 'other',
+}
+
+export enum WorkOrderTypesValues {
+  make_kit = 'Make Kit',
+  make_product_or_part = 'Make Product or Part',
+  other = 'Other',
+}
+
+export const WO_LHR_TABLE_KEY_NAME = 'lhrIds';
+export const WO_PART_KEY_NAME = 'wo_part';
+export const WO_PART_QTY_KEY_NAME = 'wo_part_quantity';
+export const WO_PART_UNIT_KEY_NAME = 'wo_part_unit';
+export const WO_LOT_ID_KEY_NAME = 'generated_lot_id';
+export const WO_TYPE_KEY = 'work_order_type';
+
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export const GroupWithGroupOptions = {
   FORM: [
@@ -402,6 +426,14 @@ export const GroupWithGroupOptions = {
     DOC_TYPE_GROUP_OPTION.EMAILS_RECORD,
     DOC_TYPE_GROUP_OPTION.TABS_BULK_CREATE,
   ],
+  WORK_ORDER: [
+    DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT,
+    DOC_TYPE_GROUP_OPTION.WORK_ORDER,
+    DOC_TYPE_GROUP_OPTION.EXPORTABLE,
+    DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL,
+    DOC_TYPE_GROUP_OPTION.ONLY_ON_OUTPUTS_DROPDOWN,
+    DOC_TYPE_GROUP_OPTION.TABS_WO,
+  ],
 };
 
 interface PageDetailsConfig {
@@ -491,7 +523,7 @@ export interface DocumentTypeByIdState {
   [key: string]: DocumentType
 }
 
-type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS' | 'MATERIAL_DISPOSITION';
+type TabType = 'MIXED' | 'DYNAMIC' | 'TRAINING' | 'BOM'| 'MEQ' | 'ITEMS' | 'MATERIAL_DISPOSITION' | 'ALLOCATION';
 
 export interface TabInfo {
   labelId: string
@@ -593,4 +625,5 @@ export interface DocRevQueryParam {
 export enum tabIdByInternalType {
   PAPER_LHR = 'details',
   LOT = 'details',
+  WORK_ORDER = 'details',
 }
