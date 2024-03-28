@@ -7,16 +7,17 @@ import { find, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
+import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
-import { authSelectors } from '../../../state/ducks/auth';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
-import { Button } from '../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
+import { authSelectors } from '../../../state/ducks/auth';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -50,6 +51,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   isShowOnly,
   isDisabled,
 }) => {
+  const { _documentRevisionFormState } = SM.useStores();
   console.log('isShowOnly :', isShowOnly);
   console.log('isDisabled :', isDisabled);
   const classes = useStyles();
@@ -57,12 +59,8 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
   const [mpiDocuments, setMpiDocuments] = React.useState<MPIDocument[]>([]);
-  const fetchAllLHRSummary = useActionCreator(
-    lhrSummaryActions.fetchAllLHRSummary,
-  );
-  const fetchMPIDocuments = useActionCreator(
-    lhrSummaryActions.fetchMPIDocuments,
-  );
+  const fetchLHRSummary = useActionCreator(lhrSummaryActions.fetchLHRSummary);
+  const fetchMPIDocuments = useActionCreator(lhrSummaryActions.fetchMPIDocuments);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
@@ -97,7 +95,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   }, []);
 
   const fetchLHRSummaryData = () => {
-    LHRSummaryAsync.start(fetchAllLHRSummary, LHRSummaryAsync);
+    LHRSummaryAsync.start(fetchLHRSummary, _documentRevisionFormState?.documentRevision?.id, LHRSummaryAsync);
   };
 
   const addLHRSummaryAsync = useAsync({
@@ -135,19 +133,15 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       startQuantity: String(data.startQuantity),
       endQuantity: String(data.endQuantity),
       stepOrMPI: `${data.step}/${data.mpiId}`,
+      lhrDocRevId: _documentRevisionFormState?.documentRevision?.id,
     };
 
     if (data[MODE_FIELD] === Mode.add) {
       addLHRSummaryAsync.start(addLHRSummary, payload, addLHRSummaryAsync);
       return;
     }
-
-    updateLHRSummaryAsync.start(
-      updateLHRSummary,
-      data.id,
-      payload,
-      updateLHRSummaryAsync,
-    );
+    delete payload.lhrDocRevId;
+    updateLHRSummaryAsync.start(updateLHRSummary, _documentRevisionFormState?.documentRevision?.id, data.id, payload, updateLHRSummaryAsync);
   };
 
   useEffect(() => {
@@ -187,11 +181,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     if (!editedLHRSummaryItem?.id) {
       return;
     }
-    deleteLHRSummaryAsync.start(
-      deleteLHRSummary,
-      editedLHRSummaryItem?.id,
-      deleteLHRSummaryAsync,
-    );
+    deleteLHRSummaryAsync.start(deleteLHRSummary, _documentRevisionFormState?.documentRevision?.id, editedLHRSummaryItem?.id, deleteLHRSummaryAsync);
   };
 
   const getColumns = () => {

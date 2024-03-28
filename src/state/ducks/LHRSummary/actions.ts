@@ -2,18 +2,11 @@ import { FBAutocompleteAsyncOption } from '../../../ui/form.builder';
 import { LHRSummaryItem, LHRSummaryRequestBody } from '../../../ui/form.builder/FBLHRSummary/types';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { CREATE_LHR_SUMMARY, FETCH_ALL_LHR_SUMMARY, FETCH_MPI_DOCUMENTS, ROOT_LHR_SUMMARY, UPDATE_LHR_SUMMARY } from './constants';
+import { CREATE_LHR_SUMMARY, FETCH_MPI_DOCUMENTS, ROOT_LHR_SUMMARY, UPDATE_LHR_SUMMARY } from './constants';
 
-const fetchAllLHRSummary = (handlers: Handlers): ApiAction =>
+const fetchLHRSummary = (lhrDocRevId: string, handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
-    url: FETCH_ALL_LHR_SUMMARY,
-    method: 'get',
-    handlers,
-  });
-
-const fetchLHRSummary = (lhrSummaryId: string, handlers: Handlers): ApiAction =>
-  apiActionWithCallbacks({
-    url: `${ROOT_LHR_SUMMARY}/${lhrSummaryId}`,
+    url: `${ROOT_LHR_SUMMARY}/${lhrDocRevId}`,
     method: 'get',
     handlers,
   });
@@ -34,26 +27,26 @@ const addLHRSummary = (data: LHRSummaryRequestBody, handlers: Handlers): ApiActi
   });
 
 const updateLHRSummary = (
+  lhrDocRevId: string,
   lhrSummaryId: string,
   data: LHRSummaryRequestBody,
   handlers: Handlers,
 ): ApiAction<LHRSummaryItem, LHRSummaryRequestBody> =>
   apiActionWithCallbacks({
-    url: `${UPDATE_LHR_SUMMARY}/${lhrSummaryId}`,
+    url: `${UPDATE_LHR_SUMMARY}/${lhrDocRevId}/${lhrSummaryId}/update`,
     method: 'patch',
     data,
     handlers,
   });
 
-const deleteLHRSummary = (lhrSummaryId: string, handlers: Handlers): ApiAction =>
+const deleteLHRSummary = (lhrDocRevId: string, lhrSummaryId: string, handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
-    url: `${ROOT_LHR_SUMMARY}/${lhrSummaryId}`,
+    url: `${ROOT_LHR_SUMMARY}/${lhrDocRevId}/${lhrSummaryId}`,
     method: 'delete',
     handlers,
   });
 
 export default {
-  fetchAllLHRSummary,
   fetchLHRSummary,
   fetchMPIDocuments,
   addLHRSummary,

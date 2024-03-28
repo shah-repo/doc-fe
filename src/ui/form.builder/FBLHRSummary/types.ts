@@ -46,6 +46,7 @@ export interface EditableLHRSummaryItemEditEvent {
 
 export interface LHRSummaryRequestBody {
   type: string
+  lhrDocRevId?: string
   stepOrMPI: string
   plannedId: string
   plannedDocRevId: string
