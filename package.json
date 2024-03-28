@@ -101,7 +101,7 @@
     "yup": "0.28.0"
   },
   "engines": {
-    "node": "v18.18.1"
+    "node": "v20.12.0"
   },
   "scripts": {
     "start": "EXTEND_ESLINT=true react-scripts --openssl-legacy-provider start",
