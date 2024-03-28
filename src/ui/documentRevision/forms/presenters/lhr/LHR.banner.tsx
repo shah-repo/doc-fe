@@ -6,12 +6,13 @@ import { DocumentRevision, SmartReferenceType } from '../../../../../state/ducks
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { styles } from './LHR.banner.styles';
 
+const LHR_SUBTITLE_PRECALC_KEY = 'lshs_subtitle';
+
 interface LHRBannerProps{
   documentRevision: DocumentRevision
 }
 
 const LHRBanner: React.FunctionComponent<LHRBannerProps> = ({ documentRevision }) => {
-  // const { smartReferencesTo } = documentRevision;
   const classes = styles();
   const history = useHistory();
 
@@ -29,15 +30,20 @@ const LHRBanner: React.FunctionComponent<LHRBannerProps> = ({ documentRevision }
   }
 
   const parentLHR = parentLHRReference.toDocRev;
+  const { name } = documentRevision;
+  const docLHRLabel = name.split(',')[0].trim();
 
-  const lhrData = parentLHR?.precalc.lshs_subtitle;
+  const precalcLHR = parentLHR?.precalc?.[LHR_SUBTITLE_PRECALC_KEY]?.lhr;
+  const precalcLot = parentLHR?.precalc?.[LHR_SUBTITLE_PRECALC_KEY]?.lot;
+  const precalcPart = parentLHR?.precalc?.[LHR_SUBTITLE_PRECALC_KEY]?.part;
 
-  if (!lhrData?.lot?.label || !lhrData?.lhr?.label || !lhrData?.part?.label || !lhrData?.part?.docRevId || !lhrData?.part?.documentId) {
-    return null;
-  }
+  const partLabel = precalcPart?.label;
+  const docRevId = precalcPart?.docRevId ?? parentLHR?.document.docId;
+  const documentId = precalcPart?.documentId;
+  const lotLabel = precalcLot?.label;
+  const lhrLabel = precalcLHR?.label ?? docLHRLabel;
 
-  const { docRevId, documentId } = lhrData.part;
-  const url = documentVersionPath(docRevId, documentId);
+  const url = documentVersionPath(docRevId as string, documentId as string);
 
   return (
     <Typography className={classes.container}>
@@ -47,15 +53,15 @@ const LHRBanner: React.FunctionComponent<LHRBannerProps> = ({ documentRevision }
         justify="flex-start"
         alignItems="center">
         <Grid item={true}>
-          {lhrData?.lot.label}
+          {lotLabel}
         </Grid>&nbsp;
         <Grid item={true} className={classes.blackDot} />&nbsp;
         <Grid item={true}>
-          {lhrData?.lhr.label}
+          {lhrLabel}
         </Grid>&nbsp;
         <Grid item={true} className={classes.blackDot} />&nbsp;
         <Grid item={true} className={classes.partLabel} onClick={() => history.push(url)}>
-          {lhrData?.part.label}
+          {partLabel}
         </Grid>
       </Grid>
     </Typography>
