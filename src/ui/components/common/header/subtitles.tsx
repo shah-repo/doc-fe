@@ -1,65 +1,90 @@
 import { Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { concat, uniqBy } from 'lodash';
+import { concat, truncate, uniqBy } from 'lodash';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../../documentRevision/helpers/checkDocumentGroup';
 
 const LHR_SUBTITLE_PRECALC_KEY = 'lshs_subtitle';
-
 const LABEL_LENGTH = 50;
 
-const styles = makeStyles({
+const useStyles = makeStyles({
   link: {
     textDecoration: 'none',
-    fontSize: '14px',
+    fontSize: 14,
   },
 });
 
-const generateDocRevUrl: (params: {docRevId: string, documentId: string, label: string}) => any
-  = ({ docRevId, documentId, label }) => {
-    const classes = styles();
+interface LHRLinkProps {
+  title: string
+  documentId: string
+  docRevId: string
+}
 
-    return (
-      <Link
-        component={RouterLink}
-        to={`/document_revision/${documentId}/version/${docRevId}`}
-        className={classes.link}
-        underline="hover"
-      >
-        {label.length < LABEL_LENGTH ? label : `${label.substr(0, LABEL_LENGTH - 3)}...`}
-      </Link>
-    );
-  };
+const LHRLink: React.FC<LHRLinkProps> = ({
+  title,
+  documentId,
+  docRevId,
+}) => {
+  const classes = useStyles();
 
-const generateLHRSubtitle = (documentRevision: DocumentRevision) => <React.Fragment>
-  {`${documentRevision.document?.lot?.lotId}`}
-</React.Fragment>;
-
-const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
-  const subtitle
-    = uniqBy(
-      concat(documentRevision?.smartReferencesTo, documentRevision?.document.smartReferencesTo),
-      'id',
-    )
-      ?.find((ref) => ref?.active && ref?.type === SmartReferenceType.HiddenPiInstance)
-      ?.toDocRev
-      ?.precalc?.[LHR_SUBTITLE_PRECALC_KEY];
-
-  const lhrLink = subtitle?.lhr?.docRevId && subtitle?.lhr?.documentId && generateDocRevUrl(subtitle.lhr);
-
-  return <React.Fragment>
-    {lhrLink}
-  </React.Fragment>;
+  return (
+    <Link
+      component={RouterLink}
+      to={documentVersionPath(docRevId, documentId)}
+      className={classes.link}
+      underline="hover"
+    >
+      {truncate(title, { length: LABEL_LENGTH, omission: '...' })}
+    </Link>
+  );
 };
 
-export const generateSubtitle = (documentRevision: DocumentRevision) => {
-  if (checkIsDocumentMPIOutput(documentRevision.document.documentType.groupOptions)) {
-    return generateLHRsSubtitle(documentRevision);
+const generateLHRSubtitle = (documentRevision: DocumentRevision) => documentRevision.document?.lot?.lotId;
+
+const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
+  const allReferences = concat(
+    documentRevision?.smartReferencesTo ?? [],
+    documentRevision?.document.smartReferencesTo ?? [],
+  );
+  const parentLHRReference = uniqBy(allReferences, 'id').find(
+    ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+  );
+
+  if (!parentLHRReference) {
+    return null;
   }
-  if (checkIsDocumentLHR(documentRevision.document.documentType.groupOptions)) {
-    return generateLHRSubtitle(documentRevision);
+
+  const parentLHR = parentLHRReference.toDocRev;
+  const precalcLHR = parentLHR?.precalc?.[LHR_SUBTITLE_PRECALC_KEY]?.lhr;
+  const title = precalcLHR?.label ?? parentLHR?.document.docId;
+  const documentId = precalcLHR?.documentId ?? parentLHR?.documentId;
+  const docRevId = precalcLHR?.docRevId ?? parentLHR?.id;
+
+  if (!title || !documentId || !docRevId) {
+    return null;
   }
-  return null;
+
+  return (
+    <LHRLink
+      {...{
+        title,
+        docRevId,
+        documentId,
+      }}
+    />
+  );
+};
+
+export const generateSubtitle = (documentRevision: DocumentRevision): React.ReactNode => {
+  switch (true) {
+    case checkIsDocumentMPIOutput(documentRevision.document.documentType.groupOptions):
+      return generateLHRsSubtitle(documentRevision);
+    case checkIsDocumentLHR(documentRevision.document.documentType.groupOptions):
+      return generateLHRSubtitle(documentRevision);
+    default:
+      return null;
+  }
 };
