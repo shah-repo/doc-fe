@@ -25,7 +25,12 @@ import {
   ColumnMenuContext,
   CustomColumnMenu,
 } from './components/cells/CustomColumnMenu';
-import { COLUMN_LOCK_FIELDS, DATA_ITEM_KEY, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
+import {
+  COLUMN_LOCK_FIELDS,
+  DATA_ITEM_KEY,
+  FIELDS_TO_PICK,
+  SELECTED_FIELD,
+} from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import {
@@ -52,15 +57,25 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
   const [mpiDocuments, setMpiDocuments] = React.useState<MPIDocument[]>([]);
-  const fetchAllLHRSummary = useActionCreator(lhrSummaryActions.fetchAllLHRSummary);
-  const fetchMPIDocuments = useActionCreator(lhrSummaryActions.fetchMPIDocuments);
+  const fetchAllLHRSummary = useActionCreator(
+    lhrSummaryActions.fetchAllLHRSummary,
+  );
+  const fetchMPIDocuments = useActionCreator(
+    lhrSummaryActions.fetchMPIDocuments,
+  );
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
 
   const MPIDocumentsAsync = useAsync({
     onSuccess: (data) => {
-      data && setMpiDocuments((data as [])?.map(doc => ({ id: doc?.id, docId: doc?.document?.docId })));
+      data
+        && setMpiDocuments(
+          (data as [])?.map((doc) => ({
+            id: doc?.id,
+            docId: doc?.document?.docId,
+          })),
+        );
     },
     onError: toastError,
   });
@@ -76,6 +91,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     if (isShowOnly) {
       return;
     }
+
     MPIDocumentsAsync.start(fetchMPIDocuments, MPIDocumentsAsync);
     fetchLHRSummaryData();
   }, []);
@@ -113,29 +129,35 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const { submitForm, resetForm, setValues } = formik;
 
-  const updateLHRSummaryTableData = (
-    data: EditableLHRSummaryItem,
-  ) => {
+  const updateLHRSummaryTableData = (data: EditableLHRSummaryItem) => {
     const payload = {
       ...pick(data, FIELDS_TO_PICK),
       startQuantity: String(data.startQuantity),
       endQuantity: String(data.endQuantity),
       stepOrMPI: `${data.step}/${data.mpiId}`,
     };
+
     if (data[MODE_FIELD] === Mode.add) {
       addLHRSummaryAsync.start(addLHRSummary, payload, addLHRSummaryAsync);
       return;
     }
-    updateLHRSummaryAsync.start(updateLHRSummary, data.id, payload, updateLHRSummaryAsync);
+
+    updateLHRSummaryAsync.start(
+      updateLHRSummary,
+      data.id,
+      payload,
+      updateLHRSummaryAsync,
+    );
   };
 
   useEffect(() => {
-    setColumns(prevColumns => {
-      return schema.map(column => {
+    setColumns((prevColumns) => {
+      return schema.map((column) => {
         const updatedColumn = find(prevColumns, { id: column.id });
-        return ({ ...column, ...pick(updatedColumn, COLUMN_LOCK_FIELDS) });
+        return { ...column, ...pick(updatedColumn, COLUMN_LOCK_FIELDS) };
       });
     });
+
     resetForm({ values: editedLHRSummaryItem ?? {} });
   }, [editedLHRSummaryItem, mpiDocuments, setValues, resetForm]);
 
@@ -145,9 +167,11 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     if (isShowOnly || isDisabled || formik.dirty) {
       return;
     }
+
     const { stepOrMPI } = dataItem;
     const step = stepOrMPI?.split('/')?.[0];
     const mpiId = stepOrMPI?.split('/')?.[1];
+
     setEditedLHRSummaryItem({
       ...dataItem,
       step,
@@ -163,7 +187,11 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     if (!editedLHRSummaryItem?.id) {
       return;
     }
-    deleteLHRSummaryAsync.start(deleteLHRSummary, editedLHRSummaryItem?.id, deleteLHRSummaryAsync);
+    deleteLHRSummaryAsync.start(
+      deleteLHRSummary,
+      editedLHRSummaryItem?.id,
+      deleteLHRSummaryAsync,
+    );
   };
 
   const getColumns = () => {
@@ -184,12 +212,12 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       lotOrEquipment: '',
       equipmentId: '',
       mpiId: '',
-      expiryDate: (new Date()).toISOString(),
+      expiryDate: new Date().toISOString(),
       startQuantity: 0,
       endQuantity: 0,
       status: '',
-      calDueDate: (new Date()).toISOString(),
-      pmDueDate: (new Date()).toISOString(),
+      calDueDate: new Date().toISOString(),
+      pmDueDate: new Date().toISOString(),
       ncmr: '',
       comments: '',
       enteredBy: user.id,
@@ -231,7 +259,8 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         },
         ...list,
       ];
-    }, isAlternatePartAdded ? [editedLHRSummaryItem] : [],
+    },
+    isAlternatePartAdded ? [editedLHRSummaryItem] : [],
   );
 
   const schema = buildSchema({
@@ -247,10 +276,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     = React.useState<Array<ColumnDefinition<EditableLHRSummaryItem>>>(schema);
 
   const onLock = React.useCallback(
-    ({
-      field,
-      locked,
-    }: CustomTreeListColumnProps) => {
+    ({ field, locked }: CustomTreeListColumnProps) => {
       const index = columns.findIndex((c) => c.field === field);
       const column = columns[index];
       if (column) {
@@ -273,16 +299,18 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         label={translate('lhr.summary.table.title')}
         data-cy="lhr-summary-title"
       >
-        {!isShowOnly && !isDisabled && <Button
-          kind="ghost"
-          size="small"
-          style={{ float: 'right' }}
-          startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
-          onClick={onAddItem}
-          data-cy="lhr-summary-header-add-btn"
-        >
-          {translate('lhr.summary.add.item')}
-        </Button>}
+        {(!isShowOnly || !isDisabled) && (
+          <Button
+            kind="ghost"
+            size="small"
+            style={{ float: 'right' }}
+            startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+            onClick={onAddItem}
+            data-cy="lhr-summary-header-add-btn"
+          >
+            {translate('lhr.summary.add.item')}
+          </Button>
+        )}
       </FBSection>
       <ColumnMenuContext.Provider
         value={{
@@ -305,8 +333,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
                 onLock,
               }}
             />
-          )
-          }
+          )}
           selectedField={SELECTED_FIELD}
           dataItemKey={DATA_ITEM_KEY}
           filterable={true}
@@ -314,14 +341,21 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           rowRender={rowRender}
           fallback={
             <Typography className={classes.font}>
-              {isShowOnly ? translate('table.no.results.found') : translate('lhr.summary.table.empty.records')}
+              {isShowOnly
+                ? translate('table.no.results.found')
+                : translate('lhr.summary.table.empty.records')}
             </Typography>
           }
-          loading={LHRSummaryAsync.isLoading || addLHRSummaryAsync.isLoading || deleteLHRSummaryAsync.isLoading || updateLHRSummaryAsync.isLoading}
+          loading={
+            LHRSummaryAsync.isLoading
+            || addLHRSummaryAsync.isLoading
+            || deleteLHRSummaryAsync.isLoading
+            || updateLHRSummaryAsync.isLoading
+          }
           resizable={true}
         />
       </ColumnMenuContext.Provider>
-      {!isShowOnly && !isDisabled && (
+      {(!isShowOnly || !isDisabled) && (
         <Button
           kind="add"
           fullWidth
