@@ -8,15 +8,15 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
-import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { authSelectors } from '../../../state/ducks/auth';
+import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
+import { Button } from '../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -38,11 +38,15 @@ import {
 
 interface props {
   isShowOnly?: boolean
+  isDisabled?: boolean
 }
 
 const FBLHRSummary: React.FunctionComponent<props> = ({
   isShowOnly,
+  isDisabled,
 }) => {
+  console.log('isShowOnly :', isShowOnly);
+  console.log('isDisabled :', isDisabled);
   const classes = useStyles();
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
@@ -138,7 +142,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const onEditLHRSummaryItem = ({
     dataItem,
   }: EditableLHRSummaryItemEditEvent) => {
-    if (isShowOnly || formik.dirty) {
+    if (isShowOnly || isDisabled || formik.dirty) {
       return;
     }
     const { stepOrMPI } = dataItem;
@@ -269,7 +273,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         label={translate('lhr.summary.table.title')}
         data-cy="lhr-summary-title"
       >
-        {!isShowOnly && <Button
+        {!isShowOnly && !isDisabled && <Button
           kind="ghost"
           size="small"
           style={{ float: 'right' }}
@@ -317,7 +321,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           resizable={true}
         />
       </ColumnMenuContext.Provider>
-      {!isShowOnly && (
+      {!isShowOnly && !isDisabled && (
         <Button
           kind="add"
           fullWidth
