@@ -33,6 +33,7 @@ import {
   EditableLHRSummaryItem,
   EditableLHRSummaryItemEditEvent,
   LHRSummaryItem,
+  MPIDocument,
 } from './types';
 
 interface props {
@@ -46,10 +47,19 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
+  const [mpiDocuments, setMpiDocuments] = React.useState<MPIDocument[]>([]);
   const fetchAllLHRSummary = useActionCreator(lhrSummaryActions.fetchAllLHRSummary);
+  const fetchMPIDocuments = useActionCreator(lhrSummaryActions.fetchMPIDocuments);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
+
+  const MPIDocumentsAsync = useAsync({
+    onSuccess: (data) => {
+      data && setMpiDocuments((data as [])?.map(doc => ({ id: doc?.id, docId: doc?.document?.docId })));
+    },
+    onError: toastError,
+  });
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
@@ -59,6 +69,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   });
 
   useEffect(() => {
+    MPIDocumentsAsync.start(fetchMPIDocuments, MPIDocumentsAsync);
     fetchLHRSummaryData();
   }, []);
 
@@ -119,7 +130,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       });
     });
     resetForm({ values: editedLHRSummaryItem ?? {} });
-  }, [editedLHRSummaryItem, setValues, resetForm]);
+  }, [editedLHRSummaryItem, mpiDocuments, setValues, resetForm]);
 
   const onEditLHRSummaryItem = ({
     dataItem,
@@ -218,6 +229,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
+    mpiDocuments,
     onRowClick: onEditLHRSummaryItem,
     onConfirm: submitForm,
     onDiscard: ondiscardLHRSummaryItem,

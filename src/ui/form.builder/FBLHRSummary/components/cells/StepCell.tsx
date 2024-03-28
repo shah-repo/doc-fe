@@ -1,30 +1,73 @@
 import { Grid } from '@material-ui/core';
+import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
-import React, { ChangeEvent } from 'react';
+import { find, isEmpty, lowerCase } from 'lodash';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { FB, FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import { Autocomplete, FormikField, TextField } from '../../../../components/forms/fields-next';
-import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { MPI_OPTIONS } from '../../constants';
-import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
+import { CustomTemplateProps, EditableLHRSummaryItem, MPIDocument } from '../../types';
+import AutocompleteAsync from './AutocompleteAsync';
 
-export const StepCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
+type StepCellProps = {mpiDocuments: MPIDocument[]} & CustomTemplateProps;
+
+export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocuments }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-
-  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    setFieldValue(field, value?.value);
+  const [stepOrMPI, setStepOrMPI] = useState('');
+  const handleChange = (event: ChangeEvent<unknown>, value) => {
+    setFieldValue(field, value?.id);
   };
 
-  const { stepOrMPI } = dataItem;
+  const mpiId = dataItem?.stepOrMPI?.split('/')[1];
+
+  useEffect(() => {
+    const mpiDoc = find(mpiDocuments, { id: mpiId });
+    if (isEmpty(mpiDoc) || !FB.isUUID(mpiId)) {
+      setStepOrMPI(dataItem?.stepOrMPI);
+      return;
+    }
+    const step = dataItem.stepOrMPI?.split('/')[0];
+    const mpiDocId = mpiDoc?.docId ?? '';
+    if (!isEmpty(mpiDocId)) {
+      setStepOrMPI(`${step}/${mpiDocId}`);
+    }
+  }, [mpiDocuments, dataItem[MODE_FIELD], dataItem.stepOrMPI]);
+
+  const filterOutOption = (docRev: DocumentRevision, inputValue: string) => {
+    const filterValue = lowerCase(inputValue);
+
+    return lowerCase(docRev.name).includes(filterValue)
+      || lowerCase(docRev.document.docId).includes(filterValue);
+  };
+
+  function handleFilter (
+    data: DocumentRevision[],
+    state: FilterOptionsState,
+  ) {
+    const { inputValue = '' } = state || {};
+
+    const options = data?.filter((docRev) => (docRev.status === DocumentRevisionStatus.Draft
+      || docRev.status === DocumentRevisionStatus.Released)
+        && filterOutOption(docRev, inputValue));
+
+    return options;
+  }
+
+  const filterOptions = (options, state) => handleFilter(options, state);
+
+  const onInputChange = (event, value: string, reason: string) => {
+    if (reason === 'input') {
+      setFieldValue(field, value);
+    }
+  };
 
   if (isEditMode && !isEmpty(values)) {
     const stepField = 'step';
-    const mpiId = values.mpiId;
-    const value = MPI_OPTIONS.find((option) => option.value === mpiId);
-
     return (<>
       <Grid container spacing={2}>
         <Grid item style={{ width: '30%' }}>
@@ -46,16 +89,17 @@ export const StepCell: React.FC<CustomTemplateProps> = ({ dataItem, field }) => 
           <FormikField
             name={field}
           >
-            <Autocomplete
+            <AutocompleteAsync
               {...getFieldProps(field)}
               blurOnSelect
               freeSolo
               forcePopupIcon
               disableClearable
               options={MPI_OPTIONS}
-              value={value}
-              getOptionLabel={(option: OptionType) => option.label}
+              optionId={FBAutocompleteAsyncOption.mpiDocuments}
+              {...{ filterOptions }}
               onChange={handleChange}
+              onInputChange={onInputChange}
               placeholder={translate('lhr.summary.placeholder.select.enter')}
               size="small"
             />

@@ -16,6 +16,7 @@ import { EditableLHRSummaryItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
   actionsClass,
+  mpiDocuments,
   onRowClick,
   onConfirm,
   onDiscard,
@@ -35,7 +36,7 @@ export const buildSchema = ({
       field: 'mpiId',
       title: 'lhr.summary.grid.heading.step',
       show: true,
-      template: (props) => <StepCell {...props} onClick={onRowClick} />,
+      template: (props) => <StepCell {...props} onClick={onRowClick} mpiDocuments={mpiDocuments} />,
       width: 401,
       sortable: false,
     },
