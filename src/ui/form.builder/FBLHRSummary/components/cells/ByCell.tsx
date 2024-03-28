@@ -1,42 +1,49 @@
 import { Box } from '@material-ui/core';
 import { find } from 'lodash';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { authSelectors } from '../../../../../state/ducks/auth';
 import { changeRequestsSelectors } from '../../../../../state/ducks/changeRequest';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { Autocomplete } from '../../../../components/forms/fields-next';
+import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { CustomTemplateProps } from '../../types';
 
 export const ByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const userName = useSelector(authSelectors.currentUserName);
   const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
   const getUserDetails = (userId: string) => find(availableUsers, { value: userId });
+  const [selectedUser, setSelectedUser] = useState(getUserDetails(dataItem[field] ?? ''));
+
+  const handleChange = (event: React.ChangeEvent<{}>, value?: OptionType) => {
+    if (!value?.value) { return; }
+    setSelectedUser(value);
+  };
 
   if (isEditMode) {
     return (
       <Autocomplete
-        options={[userName]}
-        value={userName}
+        options={availableUsers}
+        defaultValue={selectedUser}
+        onChange={handleChange}
+        blurOnSelect
+        getOptionLabel={(option: OptionType) => option.label}
         size="small"
-        disabled
       />
     );
   }
 
-  const displayValue = getUserDetails(dataItem[field] ?? '')?.label as string;
+  const label = selectedUser?.label;
 
   return (
     <Box onClick={() => onClick?.({ dataItem })}>
       <OverflowTooltip
-        title={displayValue}
+        title={label}
         placement="top"
         interactive
         arrow
       >
-        {displayValue}
+        {label}
       </OverflowTooltip>
     </Box>
   );

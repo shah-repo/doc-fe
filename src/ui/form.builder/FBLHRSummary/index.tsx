@@ -69,6 +69,9 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   });
 
   useEffect(() => {
+    if (isShowOnly) {
+      return;
+    }
     MPIDocumentsAsync.start(fetchMPIDocuments, MPIDocumentsAsync);
     fetchLHRSummaryData();
   }, []);
@@ -266,7 +269,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         label={translate('lhr.summary.table.title')}
         data-cy="lhr-summary-title"
       >
-        <Button
+        {!isShowOnly && <Button
           kind="ghost"
           size="small"
           style={{ float: 'right' }}
@@ -275,7 +278,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           data-cy="lhr-summary-header-add-btn"
         >
           {translate('lhr.summary.add.item')}
-        </Button>
+        </Button>}
       </FBSection>
       <ColumnMenuContext.Provider
         value={{
@@ -307,7 +310,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           rowRender={rowRender}
           fallback={
             <Typography className={classes.font}>
-              {translate('lhr.summary.table.empty.records')}
+              {isShowOnly ? translate('table.no.results.found') : translate('lhr.summary.table.empty.records')}
             </Typography>
           }
           loading={LHRSummaryAsync.isLoading || addLHRSummaryAsync.isLoading || deleteLHRSummaryAsync.isLoading || updateLHRSummaryAsync.isLoading}
