@@ -43,7 +43,7 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
   const canEquipmentStatusBeChanged = !disabledStatuses.includes(documentRevision.status);
   const isEquipmentStatusEditable = canChangeEquipmentStatus && canEquipmentStatusBeChanged && isStatusInReleased;
 
-  const statusLabel = getEquipmentStatusLabel(documentRevision.equipmentStatus || EquipmentStatus.INACTIVE);
+  const statusLabel = getEquipmentStatusLabel(documentRevision.eqStatus || EquipmentStatus.INACTIVE);
 
   const updateEquipmentStatus = useRef<() => void>();
   const nextStatus = useRef<EquipmentStatus>();
@@ -54,7 +54,7 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
     }
     nextStatus.current = equipmentStatus;
     updateEquipmentStatus.current = () => {
-      async.start(updateEquipmentStatusAction, documentRevision.id, { equipmentStatus }, async);
+      async.start(updateEquipmentStatusAction, documentRevision.id, { eqStatus: getEquipmentStatusLabel(equipmentStatus) }, async);
     };
     confirmationDialog.open();
   };

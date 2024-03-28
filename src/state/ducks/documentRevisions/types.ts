@@ -45,6 +45,8 @@ export enum POStatusType {
 export enum EquipmentStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
+  ACTIVE_CALIBRATED = 'ACTIVE_CALIBRATED',
+  ACTIVE_NO_CAL_REQUIRED = 'ACTIVE_NO_CAL_REQUIRED',
   OFC = 'OUT_FOR_CALIBRATION',
   OFM = 'Out_FOR_MAINTENANCE',
   RETIRED = 'RETIRED',
@@ -274,7 +276,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   hasPrimaryAttachment?: boolean
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
-  equipmentStatus: EquipmentStatus
+  eqStatus: EquipmentStatus
 }
 
 export interface SmartReference {
