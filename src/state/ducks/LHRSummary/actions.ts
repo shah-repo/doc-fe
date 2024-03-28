@@ -1,7 +1,8 @@
+import { FBAutocompleteAsyncOption } from '../../../ui/form.builder';
 import { LHRSummaryItem, LHRSummaryRequestBody } from '../../../ui/form.builder/FBLHRSummary/types';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { CREATE_LHR_SUMMARY, FETCH_ALL_LHR_SUMMARY, ROOT_LHR_SUMMARY, UPDATE_LHR_SUMMARY } from './constants';
+import { CREATE_LHR_SUMMARY, FETCH_ALL_LHR_SUMMARY, FETCH_MPI_DOCUMENTS, ROOT_LHR_SUMMARY, UPDATE_LHR_SUMMARY } from './constants';
 
 const fetchAllLHRSummary = (handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
@@ -13,6 +14,13 @@ const fetchAllLHRSummary = (handlers: Handlers): ApiAction =>
 const fetchLHRSummary = (lhrSummaryId: string, handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
     url: `${ROOT_LHR_SUMMARY}/${lhrSummaryId}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchMPIDocuments = (handlers: Handlers): ApiAction =>
+  apiActionWithCallbacks({
+    url: `${FETCH_MPI_DOCUMENTS}/${FBAutocompleteAsyncOption.mpiDocuments}`,
     method: 'get',
     handlers,
   });
@@ -47,6 +55,7 @@ const deleteLHRSummary = (lhrSummaryId: string, handlers: Handlers): ApiAction =
 export default {
   fetchAllLHRSummary,
   fetchLHRSummary,
+  fetchMPIDocuments,
   addLHRSummary,
   updateLHRSummary,
   deleteLHRSummary,

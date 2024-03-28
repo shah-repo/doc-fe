@@ -64,8 +64,14 @@ export interface LHRSummaryRequestBody {
   comments: string
 }
 
+export interface MPIDocument {
+  id: string
+  docId: string
+}
+
 export interface SchemaOptions {
   actionsClass: string
+  mpiDocuments: MPIDocument[]
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: () => void
