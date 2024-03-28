@@ -8,15 +8,15 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
-import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { authSelectors } from '../../../state/ducks/auth';
+import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
+import { Button } from '../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -69,6 +69,9 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   });
 
   useEffect(() => {
+    if (isShowOnly) {
+      return;
+    }
     MPIDocumentsAsync.start(fetchMPIDocuments, MPIDocumentsAsync);
     fetchLHRSummaryData();
   }, []);
@@ -266,7 +269,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         label={translate('lhr.summary.table.title')}
         data-cy="lhr-summary-title"
       >
-        <Button
+        {!isShowOnly && <Button
           kind="ghost"
           size="small"
           style={{ float: 'right' }}
@@ -275,7 +278,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           data-cy="lhr-summary-header-add-btn"
         >
           {translate('lhr.summary.add.item')}
-        </Button>
+        </Button>}
       </FBSection>
       <ColumnMenuContext.Provider
         value={{
@@ -307,7 +310,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           rowRender={rowRender}
           fallback={
             <Typography className={classes.font}>
-              {translate('lhr.summary.table.empty.records')}
+              {isShowOnly ? translate('table.no.results.found') : translate('lhr.summary.table.empty.records')}
             </Typography>
           }
           loading={LHRSummaryAsync.isLoading || addLHRSummaryAsync.isLoading || deleteLHRSummaryAsync.isLoading || updateLHRSummaryAsync.isLoading}

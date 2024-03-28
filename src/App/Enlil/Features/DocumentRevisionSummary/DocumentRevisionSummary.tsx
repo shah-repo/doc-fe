@@ -20,6 +20,7 @@ import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.
 import { checkIsDocumentChangeRequest, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
+import FBLHRSummary from '../../../../ui/form.builder/FBLHRSummary';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMForm } from '../../../Shifamed/Components/SMForm/SMForm.hoc';
@@ -84,6 +85,15 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       labelId: 'tabId.bom',
       tabId: TabTypeOptions.BOM.toLowerCase(),
       type: TabTypeOptions.BOM,
+    }];
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.PAPER_LHR]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = tabConfig && [...tabConfig, {
+      labelId: 'tabId.summary',
+      tabId: TabTypeOptions.SUMMARY.toLowerCase(),
+      type: TabTypeOptions.SUMMARY,
     }];
   }
 
@@ -265,6 +275,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                   TabTypeOptions.MATERIAL_DISPOSITION,
                                 ) && (
                                 <FBMaterialDisposition isShowOnly={true} />
+                              )}
+                              {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
+                                <FBLHRSummary isShowOnly={true} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper
