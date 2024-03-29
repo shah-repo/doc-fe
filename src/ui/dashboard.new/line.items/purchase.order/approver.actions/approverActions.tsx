@@ -595,6 +595,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 id={docRevId}
                 dialogPDF={dialogPDF}
                 onClose={handleDownloadClose}
+                downloadImmediately
                 downloadPdfHover
               />
             )}

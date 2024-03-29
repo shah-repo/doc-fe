@@ -88,10 +88,7 @@ const DownloadHtmlPreview: React.FC<Props> = ({
     },
   });
   useEffect(() => {
-    if (downloadImmediately) {
-      handleClick();
-    }
-    if (downloadPdfHover) {
+    if (downloadImmediately || downloadPdfHover) {
       handleClick();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
