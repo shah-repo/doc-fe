@@ -1,15 +1,16 @@
 import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../../common/intl';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
 import { TYPE_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
@@ -34,6 +35,7 @@ export const TypeCell: React.FC<CustomTemplateProps> = ({
       <FormikField name={field}>
         <Autocomplete
           {...getFieldProps(field)}
+          key={isEmpty(values) ? 'disabled' : 'enabled'}
           blurOnSelect
           disableClearable
           placeholder={translate('lhr.summary.placeholder.enter')}

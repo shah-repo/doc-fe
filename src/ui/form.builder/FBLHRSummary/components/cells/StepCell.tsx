@@ -40,7 +40,7 @@ export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocument
 
   if (isEditMode) {
     const stepField = 'step';
-    const { getFieldProps, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
+    const { getFieldProps, setFieldValue, values } = useFormikContext<EditableLHRSummaryItem>();
 
     const handleChange = (event: ChangeEvent<unknown>, value) => {
       setFieldValue(field, value?.id);
@@ -90,6 +90,7 @@ export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocument
           >
             <AutocompleteAsync
               {...getFieldProps(field)}
+              key={isEmpty(values) ? 'disabled' : 'enabled'}
               blurOnSelect
               freeSolo
               forcePopupIcon
