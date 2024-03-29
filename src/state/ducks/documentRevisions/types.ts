@@ -180,7 +180,7 @@ export interface IAssociatedChangeRequest {
   updatedAt: string
 }
 
-interface LSHS{
+export interface LSHS {
   lhr: LHR
   lot: LOT
   part: Part
@@ -295,6 +295,7 @@ export interface SmartReference {
     quantity?: number
     unit?: string
     lotPart?: string
+    lhr?: LSHS
   }
   toDocRevId?: Nullable<string>
   toDocRev?: Nullable<DocumentRevision>

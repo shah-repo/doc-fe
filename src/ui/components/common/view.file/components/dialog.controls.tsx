@@ -35,6 +35,7 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
         variant="outlined"
         disabled={!setPreviousAttachment}
         onClick={setPreviousAttachment}
+        className={classes.previousButton}
       >
         <Text translation="common.previous" />
       </Button>
