@@ -6,7 +6,6 @@ export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
 export const TYPE_OPTIONS = [
   { label: 'Equipment', value: 'equipment' },
-  { label: 'Process', value: 'process' },
   { label: 'Material', value: 'material' },
 ];
 export const LHR_SUMMARY_TYPE_OPTIONS = [
@@ -16,11 +15,6 @@ export const LOT_OPTIONS = [
   { label: 'LOT #24567889', value: 'LOT #24567889' },
   { label: 'LOT #24567890', value: 'LOT #24567890' },
   { label: 'LOT #24567891', value: 'LOT #24567891' }];
-
-export const MPI_OPTIONS = [
-  { label: 'MPI-67889', value: 'MPI-67889' },
-  { label: 'MPI-67890', value: 'MPI-67890' },
-  { label: 'MPI-67891', value: 'MPI-67891' }];
 
 export const STATUS_OPTIONS = [
   { label: 'Draft', value: 'draft' },
@@ -59,3 +53,9 @@ export const SampleLHRSummaryData = [
 ];
 export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'status', 'expiryDate', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex'];
+
+export enum DocType {
+  equipment = 'equipment',
+  process = 'process',
+  material = 'material',
+}

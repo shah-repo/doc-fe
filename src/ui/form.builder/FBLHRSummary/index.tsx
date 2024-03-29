@@ -9,17 +9,17 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
-import { authSelectors } from '../../../state/ducks/auth';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
-import { Button } from '../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
+import { authSelectors } from '../../../state/ducks/auth';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
-import { FBSection } from '../../form.builder';
+import { FBAutocompleteAsyncOption, FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import {
@@ -38,6 +38,7 @@ import {
   CustomTreeListColumnProps,
   EditableLHRSummaryItem,
   EditableLHRSummaryItemEditEvent,
+  EquipmentDocument,
   LHRSummaryItem,
   MPIDocument,
 } from './types';
@@ -59,8 +60,10 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
   const [mpiDocuments, setMpiDocuments] = React.useState<MPIDocument[]>([]);
+  const [equipmentDocs, setEquipmentDocs] = React.useState<EquipmentDocument[]>([]);
+  const [partDocs, setPartDocs] = React.useState<EquipmentDocument[]>([]);
   const fetchLHRSummary = useActionCreator(lhrSummaryActions.fetchLHRSummary);
-  const fetchMPIDocuments = useActionCreator(lhrSummaryActions.fetchMPIDocuments);
+  const fetchAutocompleteOptions = useActionCreator(lhrSummaryActions.fetchAutocompleteOptions);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
@@ -69,6 +72,32 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     onSuccess: (data) => {
       data
         && setMpiDocuments(
+          (data as [])?.map((doc) => ({
+            id: doc?.id,
+            docId: doc?.document?.docId,
+          })),
+        );
+    },
+    onError: toastError,
+  });
+
+  const EQDocumentsAsync = useAsync({
+    onSuccess: (data) => {
+      data
+        && setEquipmentDocs(
+          (data as [])?.map((doc) => ({
+            id: doc?.id,
+            docId: doc?.document?.docId,
+          })),
+        );
+    },
+    onError: toastError,
+  });
+
+  const PartDocumentsAsync = useAsync({
+    onSuccess: (data) => {
+      data
+        && setPartDocs(
           (data as [])?.map((doc) => ({
             id: doc?.id,
             docId: doc?.document?.docId,
@@ -90,7 +119,9 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       return;
     }
 
-    MPIDocumentsAsync.start(fetchMPIDocuments, MPIDocumentsAsync);
+    MPIDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.mpiDocuments, MPIDocumentsAsync);
+    EQDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.equipment, EQDocumentsAsync);
+    PartDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.availableParts, PartDocumentsAsync);
     fetchLHRSummaryData();
   }, []);
 
@@ -153,7 +184,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     });
 
     resetForm({ values: editedLHRSummaryItem ?? {} });
-  }, [editedLHRSummaryItem, mpiDocuments, setValues, resetForm]);
+  }, [editedLHRSummaryItem, mpiDocuments, equipmentDocs, partDocs, setValues, resetForm]);
 
   const onEditLHRSummaryItem = ({
     dataItem,
@@ -256,6 +287,8 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
     mpiDocuments,
+    equipmentDocs,
+    partDocs,
     onRowClick: onEditLHRSummaryItem,
     onConfirm: submitForm,
     onDiscard: ondiscardLHRSummaryItem,

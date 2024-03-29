@@ -6,9 +6,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { FB, FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { MPI_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, MPIDocument } from '../../types';
 import AutocompleteAsync from './AutocompleteAsync';
 
@@ -95,7 +94,6 @@ export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocument
               freeSolo
               forcePopupIcon
               disableClearable
-              options={MPI_OPTIONS}
               optionId={FBAutocompleteAsyncOption.mpiDocuments}
               {...{ filterOptions }}
               onChange={handleChange}

@@ -1,52 +1,69 @@
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import {
-  Autocomplete,
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
+import {
   FormikField,
 } from '../../../../components/forms/fields-next';
-import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
-import { EMPTY_PLACEHOLDER, LHR_SUMMARY_TYPE_OPTIONS } from '../../constants';
-import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
+import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
+import { FB } from '../../../helpers';
+import { DocType, EMPTY_PLACEHOLDER } from '../../constants';
+import { CustomTemplateProps, EditableLHRSummaryItem, EquipmentDocument, PartDocument } from '../../types';
+import AutocompleteAsync from './AutocompleteAsync';
 
-export const ActualIDCell: React.FC<CustomTemplateProps> = ({
-  dataItem,
-  field,
-}) => {
+type ActualIDCellProps = {equipmentDocs: EquipmentDocument[], partDocs: PartDocument[]} & CustomTemplateProps;
+
+export const ActualIDCell: React.FC<ActualIDCellProps> = ({ dataItem, field, equipmentDocs, partDocs, dataIndex }) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const docType = isEditMode ? values.type : dataItem.type;
+  const isMaterial = docType === DocType.material;
+  const [actualId, setActualId] = useState<string>();
 
-  const defaultValue = dataItem[field];
-  // TODO : need to rewrite method while doing integration
-  let value = LHR_SUMMARY_TYPE_OPTIONS.find(
-    (option) => option.value === defaultValue,
-  );
+  const defaultValue = isEditMode ? values[field] : dataItem[field];
+
+  useEffect(() => {
+    if (!FB.isUUID(defaultValue)) {
+      return;
+    }
+
+    let value;
+    if (isMaterial) {
+      value = partDocs.find((option) => option.id === defaultValue);
+    } else {
+      value = equipmentDocs.find((option) => option.id === defaultValue);
+    }
+
+    setActualId(value?.docId);
+  }, [equipmentDocs, partDocs]);
+
+  const getOptionId = () => {
+    if (isMaterial) {
+      return FBAutocompleteAsyncOption.availableParts;
+    } else {
+      return FBAutocompleteAsyncOption.equipment;
+    }
+  };
 
   if (isEditMode) {
-    const { values, getFieldProps, setFieldValue }
-      = useFormikContext<EditableLHRSummaryItem>();
-    value = LHR_SUMMARY_TYPE_OPTIONS.find(
-      (option) => option.value === values[field],
-    );
-
-    const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+    const handleChange = (event: ChangeEvent<unknown>, value) => {
       // {id: 'enter value', revId: selectedValue, isNew: false}
-      setFieldValue(field, value?.value ?? value);
+      setFieldValue(field, value?.id);
     };
     return (
       <FormikField name={field}>
-        <Autocomplete
+        <AutocompleteAsync
           {...getFieldProps(field)}
+          key={docType}
           blurOnSelect
           freeSolo
           forcePopupIcon
           disableClearable
-          options={LHR_SUMMARY_TYPE_OPTIONS}
-          value={value}
-          getOptionLabel={(option: OptionType) => option.label}
+          optionId={getOptionId()}
           onChange={handleChange}
           placeholder={translate('lhr.summary.placeholder.select.enter')}
           size="small"
@@ -55,5 +72,5 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
     );
   }
 
-  return <>{value?.label ?? defaultValue ?? EMPTY_PLACEHOLDER}</>;
+  return <>{actualId ?? defaultValue ?? EMPTY_PLACEHOLDER}</>;
 };

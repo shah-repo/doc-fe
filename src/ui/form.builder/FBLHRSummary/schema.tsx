@@ -17,6 +17,8 @@ import { EditableLHRSummaryItem, SchemaOptions } from './types';
 export const buildSchema = ({
   actionsClass,
   mpiDocuments,
+  equipmentDocs,
+  partDocs,
   onRowClick,
   onConfirm,
   onDiscard,
@@ -52,7 +54,7 @@ export const buildSchema = ({
       id: 'actualId',
       field: 'actualId',
       title: 'lhr.summary.grid.heading.actual.id',
-      template: (props) => <ActualIDCell {...props} onClick={onRowClick} />,
+      template: (props) => <ActualIDCell {...props} onClick={onRowClick} {...{ partDocs, equipmentDocs }} />,
       show: true,
       sortable: false,
       selectable: false,
