@@ -64,7 +64,7 @@ export default makeStyles((theme: NextTheme) => ({
     },
     typographyChildrenBold: {
       marginLeft: theme.spacing(-2),
-      paddingRight: theme.spacing(2.25),
+      paddingRight: theme.spacing(2),
     },
     poAttachmentMargin: {
       marginBottom: theme.spacing(2),

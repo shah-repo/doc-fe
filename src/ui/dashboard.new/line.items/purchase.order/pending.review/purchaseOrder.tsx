@@ -273,7 +273,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'} className={classes.textPoReviewlapMobile} onClick={handleClick}>
+              <Grid container={true} md={3} sm={6} xs={4} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'} className={classes.textPoReviewlapMobile} onClick={handleClick}>
                 <Grid item={true}>
                   <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />
                 </Grid>
@@ -410,11 +410,11 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
+            className={cx(classes.actionIcons)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
-              <span>
+              <span className={cx(classes.poActionIconsWidth)}>
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
@@ -558,7 +558,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                       alignContent="center"
                     >
                       {poItem.rtext.map((attachmentInfo, index) => (
-                        <Grid item key={index}>
+                        <Grid item key={index} className={classes.poAttachmentMargin}>
                           <AttachmentIcon
                             className={classes.attachmentIcon}
                           />
