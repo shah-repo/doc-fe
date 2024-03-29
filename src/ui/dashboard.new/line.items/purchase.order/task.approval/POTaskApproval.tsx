@@ -289,7 +289,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid item={true} lg={12} className={classes.innerWrap} onClick={handleClick}>
+              <Grid item={true} lg={12} className={classes.innerWrap} md={3} sm={6} xs={4} onClick={handleClick}>
                 <Grid
                   container={true}
                   wrap="nowrap"
@@ -550,7 +550,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                       xs={12}
                     >
                       {poItem.rtext.map((attachmentInfo, index) => (
-                        <Grid item key={index} xs={12}>
+                        <Grid item key={index} xs={12} className={classes.poAttachmentMargin}>
                           <AttachmentIcon
                             className={classes.attachmentIcon}
                           />
