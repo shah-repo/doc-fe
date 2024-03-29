@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { authActions, authSelectors } from '../../state/ducks/auth';
 import { GroupTag } from '../../state/ducks/auth/types';
-import { findMatchingUrlInLocation } from '../common/utils/helpers';
 import useGetHasTag from '../hooks/useGetHasTag';
 import HeaderPresenter from './Header.presenter';
 
@@ -15,7 +14,6 @@ interface HeaderContainerProps {
 
 const HeaderContainer: React.FC<HeaderContainerProps> = ({ isOpened, handleDrawerOpen, className }) => {
   const fullHeight = SM.isHomeURL;
-  const isComponentHidden = findMatchingUrlInLocation('/');
   const name = useSelector(authSelectors.currentUserName);
   const canToggleCustomLabels = useGetHasTag(GroupTag.LABEL_TOOLTIPS);
   const customLabelsValue = useSelector(authSelectors.isCustomLabelsOn);
@@ -35,7 +33,6 @@ const HeaderContainer: React.FC<HeaderContainerProps> = ({ isOpened, handleDrawe
         isOpened,
         handleDrawerOpen,
         className,
-        isComponentHidden,
       }}
     />
   );

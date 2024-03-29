@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
 import cx from 'classnames';
 import React from 'react';
+import { SM } from '../../App';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
 import { SearchBar } from '../../App/Enlil/Features/Search';
 import { ReactComponent as CompanyAvatar } from '../../assets/images/company_avatar.svg';
@@ -12,7 +13,6 @@ import { ReactComponent as MobileLogo } from '../../assets/images/enlil_white_lo
 import Config from '../../config';
 import { WhiteLabelingEnv } from '../../state/ducks/company/types';
 import { store } from '../../state/store';
-import { isCurrentUrl } from '../common/utils/helpers';
 import Text from '../components/Text';
 import { ThemeEnv } from '../layout/theme/utils/types';
 import styles from './Header.styles';
@@ -42,7 +42,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   const user = store.getState().auth.user;
   const companyName = user.employee.company.name;
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
-  const isComponentHidden = isCurrentUrl();
+  const isComponentHidden = SM.isHomeURL;
   const {
     handleSwitchCompany,
   } = React.useContext(UserMenuContext)! ?? {};
