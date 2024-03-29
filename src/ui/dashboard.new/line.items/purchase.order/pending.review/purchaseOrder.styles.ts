@@ -36,15 +36,15 @@ export default makeStyles((theme: NextTheme) => ({
       background: Colors.textGray,
     },
   },
+  poAttachmentMargin: {
+    marginBottom: theme.spacing(0),
+  },
   [theme.media.mobile]: {
     textPoReviewlapMobile: {
       flexWrap: 'wrap',
     },
     link: {
       pointerEvents: 'none',
-    },
-    actionIcons: {
-      display: 'none',
     },
     gridPendingMobile: {
       display: 'flex',
@@ -55,6 +55,9 @@ export default makeStyles((theme: NextTheme) => ({
     },
     typographyChildrenBold: {
       marginLeft: theme.spacing(-2),
+    },
+    poAttachmentMargin: {
+      marginBottom: theme.spacing(2),
     },
   },
 }));
