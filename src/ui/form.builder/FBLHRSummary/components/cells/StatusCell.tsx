@@ -1,20 +1,19 @@
 import { Chip } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../../common/intl';
-import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../components/KendoDataGrid/constants';
-import Tooltip from '../../../../components/common/kendo/Tooltip';
 import { statusClassMapping } from '../../../../components/common/kendo/helpers';
+import Tooltip from '../../../../components/common/kendo/Tooltip';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import {
+  Mode,
+  MODE_FIELD,
+} from '../../../../components/KendoDataGrid/constants';
 import { EMPTY_PLACEHOLDER, STATUS_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import useStyles from './Status.styles';
@@ -24,20 +23,22 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
   field,
 }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, getFieldProps, setFieldValue }
-    = useFormikContext<EditableLHRSummaryItem>();
+
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const classes = useStyles();
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    // {id: 'enter value', revId: selectedValue, isNew: false}
-    setFieldValue(field, value?.value ?? value);
-  };
+  const defaultValue = dataItem[field];
+  let value = STATUS_OPTIONS.find((option) => option.value === defaultValue);
 
-  const defaultValue = isEditMode ? values[field] : dataItem[field];
-  const value = STATUS_OPTIONS.find((option) => option.value === defaultValue);
+  if (isEditMode) {
+    const { values, getFieldProps, setFieldValue }
+      = useFormikContext<EditableLHRSummaryItem>();
 
-  if (isEditMode && !isEmpty(values)) {
+    const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+      // {id: 'enter value', revId: selectedValue, isNew: false}
+      setFieldValue(field, value?.value ?? value);
+    };
+    value = STATUS_OPTIONS.find((option) => option.value === values[field]);
     return (
       <FormikField name={field}>
         <Autocomplete

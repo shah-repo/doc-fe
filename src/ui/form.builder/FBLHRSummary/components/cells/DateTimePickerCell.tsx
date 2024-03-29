@@ -4,32 +4,40 @@ import moment from 'moment';
 import React from 'react';
 import { MomentFormats } from '../../../../../common/utils/date';
 import { FormikField } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import {
+  Mode,
+  MODE_FIELD,
+} from '../../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps } from '../../types';
 
-export const DateTimePickerCell: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps, setFieldValue } = useFormikContext();
+export const DateTimePickerCell: React.FC<CustomTemplateProps> = ({
+  field,
+  dataItem,
+}) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const value = dataItem[field];
-  const defaultDate = moment().format(MomentFormats.LHRSummaryDefaultDateTimeFormatter);
+  const defaultDate = moment().format(
+    MomentFormats.LHRSummaryDefaultDateTimeFormatter,
+  );
   const getUtcFormattedString = (date: string) =>
-    moment(date, MomentFormats.AsyncTasksDefaultDateTimeFormatter).toISOString();
+    moment(
+      date,
+      MomentFormats.AsyncTasksDefaultDateTimeFormatter,
+    ).toISOString();
   const [selectedDate, setSelectedDate] = React.useState(
     getUtcFormattedString(value || defaultDate),
   );
 
-  const handleChange = (event) => {
-    console.log('date :', event);
-    setSelectedDate(getUtcFormattedString(event?.target?.value));
-    setFieldValue(field, selectedDate);
-  };
-
   if (isEditMode) {
+    const { getFieldProps, setFieldValue } = useFormikContext();
+
+    const handleChange = (event) => {
+      setSelectedDate(getUtcFormattedString(event?.target?.value));
+      setFieldValue(field, selectedDate);
+    };
+
     return (
-      <FormikField
-        name={field}
-      >
+      <FormikField name={field}>
         <TextField
           {...getFieldProps(field)}
           id="datetime-local"

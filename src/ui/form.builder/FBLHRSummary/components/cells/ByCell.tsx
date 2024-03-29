@@ -5,18 +5,30 @@ import { useSelector } from 'react-redux';
 import { changeRequestsSelectors } from '../../../../../state/ducks/changeRequest';
 import { Autocomplete } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import {
+  Mode,
+  MODE_FIELD,
+} from '../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { CustomTemplateProps } from '../../types';
 
-export const ByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
+export const ByCell: React.FC<CustomTemplateProps> = ({
+  dataItem,
+  field,
+  onClick,
+}) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
-  const getUserDetails = (userId: string) => find(availableUsers, { value: userId });
-  const [selectedUser, setSelectedUser] = useState(getUserDetails(dataItem[field] ?? ''));
+  const getUserDetails = (userId: string) =>
+    find(availableUsers, { value: userId });
+  const [selectedUser, setSelectedUser] = useState(
+    getUserDetails(dataItem[field] ?? ''),
+  );
 
   const handleChange = (event: React.ChangeEvent<{}>, value?: OptionType) => {
-    if (!value?.value) { return; }
+    if (!value?.value) {
+      return;
+    }
     setSelectedUser(value);
   };
 
@@ -37,12 +49,7 @@ export const ByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick
 
   return (
     <Box onClick={() => onClick?.({ dataItem })}>
-      <OverflowTooltip
-        title={label}
-        placement="top"
-        interactive
-        arrow
-      >
+      <OverflowTooltip title={label} placement="top" interactive arrow>
         {label}
       </OverflowTooltip>
     </Box>

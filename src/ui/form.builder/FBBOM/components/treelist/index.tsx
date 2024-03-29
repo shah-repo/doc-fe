@@ -426,7 +426,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     if (!dataState) {
       return [];
     }
-
+    console.log('dataState.filter :', dataState.filter);
     const filter = [...(dataState.filter as FilterDescriptor[])];
     const docIDField = filter?.find((val) => val.field === ID_FIELD);
     const docIDFieldIndex = filter?.findIndex((val) => val.field === ID_FIELD);

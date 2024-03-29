@@ -381,7 +381,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 />
                               )}
                               {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
-                                <FBLHRSummary isShowOnly={!hasOutput} isDisabled={isDisabled} />
+                                <FBLHRSummary isShowOnly={!hasOutput} isDisabled={isDisabledInput} />
                               )}
                               {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
                                 <FBAllocationTreeList documentRevision={documentRevision} isDisabled={isWO && !isEmpty(documentRevision?.formTemplate)} />
