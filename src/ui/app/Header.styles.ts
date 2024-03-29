@@ -74,7 +74,7 @@ export default (theme: NextTheme) =>
     },
     [theme.media.mobile]: {
       welcomeText: {
-        zfontSize: '1.25rem',
+        fontSize: '1.25rem',
         marginRight: 0,
         whiteSpace: 'nowrap',
       },
