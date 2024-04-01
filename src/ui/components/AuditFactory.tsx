@@ -495,8 +495,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 </>
               );
           } else if (audit.type.includes('ARRAY_EDITED')) {
-            const attachmentNameArr = attachmentLinks.map((attachmentName) => attachmentName.split('/').pop());
-            const attachmentNameList = attachmentNameArr.join(', ');
+            let attachmentNameList = '';
+            if (attachmentLinks) {
+              const attachmentNameArr = attachmentLinks.map((attachmentName) => attachmentName.split('/').pop());
+              attachmentNameList = attachmentNameArr.join(', ');
+            }
 
               returnValue = (
                 <>
@@ -536,7 +539,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                       `${docLabel}.audit.inventoryTask.comment`,
                       { comment },
                     )}
-                  {( attachmentNameArr.length > 0 )
+                  {( attachmentLinks.length > 0 )
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.attachments`,
