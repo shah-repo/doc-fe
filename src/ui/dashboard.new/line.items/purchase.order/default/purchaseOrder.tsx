@@ -233,7 +233,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center">
+              <Grid container={true} wrap="nowrap" alignItems="center" md={3} sm={6} xs={4} className={classes.textPoReviewlapMobile}>
                 <Grid item={true}>
                   <DocId
                     url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
@@ -475,7 +475,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                       alignContent="center"
                     >
                       {poItem.rtext.map((attachmentInfo, index) => (
-                        <Grid item key={index}>
+                        <Grid item key={index} className={classes.poAttachmentMargin}>
                           <AttachmentIcon
                             className={classes.attachmentIcon}
                           />

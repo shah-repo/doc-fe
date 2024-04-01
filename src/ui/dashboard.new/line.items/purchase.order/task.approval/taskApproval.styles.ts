@@ -63,6 +63,9 @@ export default makeStyles((theme: NextTheme) => ({
   textOverlapMobile: {
     flexWrap: 'nowrap',
   },
+  poAttachmentMargin: {
+    marginBottom: theme.spacing(0),
+  },
   [theme.media.mobile]: {
     poActionIconsWidth: {
       display: 'none',
@@ -94,6 +97,9 @@ export default makeStyles((theme: NextTheme) => ({
     },
     typographyChildrenBold: {
       marginLeft: theme.spacing(-2),
+    },
+    poAttachmentMargin: {
+      marginBottom: theme.spacing(2),
     },
   },
 }));
