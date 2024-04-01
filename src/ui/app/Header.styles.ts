@@ -56,6 +56,9 @@ export default (theme: NextTheme) =>
     welcomeTextName: {
       fontWeight: 700,
     },
+    welcomeHide: {
+      display: 'unset',
+    },
     mobileMake: {
       display: 'none',
     },
@@ -115,20 +118,23 @@ export default (theme: NextTheme) =>
       logoMobile: {
         marginLeft: theme.spacing(1),
       },
-    },
-    toggleCustomLabels: {
-      [theme.breakpoints.down('md')]: {
+      welcomeHide: {
         display: 'none',
       },
-    },
-    toggleCustomLabelsSm: {
-      [theme.breakpoints.down('sm')]: {
-        display: 'none',
+      toggleCustomLabels: {
+        [theme.breakpoints.down('md')]: {
+          display: 'none',
+        },
       },
-    },
-    autosaveToggle: {
-      [theme.breakpoints.down('md')]: {
-        display: 'none',
+      toggleCustomLabelsSm: {
+        [theme.breakpoints.down('sm')]: {
+          display: 'none',
+        },
+      },
+      autosaveToggle: {
+        [theme.breakpoints.down('md')]: {
+          display: 'none',
+        },
       },
     },
   });
