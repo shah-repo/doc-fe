@@ -19,7 +19,7 @@ interface Props {
   documentRevision: DocumentRevision
 }
 
-export const getEquipmentStatusLabel = (status: EquipmentStatus): string =>
+const getEquipmentStatusLabel = (status: EquipmentStatus): string =>
   translate(`form.builder.header.equipment.status.label.${kebabCase(status)}`);
 
 const disabledStatuses = [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided];

@@ -674,7 +674,7 @@ const updateLotStatus = (id: string, body: { lotStatus: LotStatus }): ApiAction<
   },
 });
 
-const updateEquipmentStatus = (id: string, body: { EquipmentStatus: EquipmentStatus }): ApiAction<DocumentRevision> => apiAction({
+const updateEquipmentStatus = (id: string, body: { eqStatus: EquipmentStatus }): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}${EQUIPMENT_ROOT_URL}/${id}`,
   method: 'patch',
   data: body,
