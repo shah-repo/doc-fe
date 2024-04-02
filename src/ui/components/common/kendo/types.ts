@@ -18,6 +18,7 @@ export enum KendoCellTemplates {
   DATE_COMPLETED='DateCompleted',
   DATE_INFO='DateInfo',
   COMMON_CELL='CommonCell',
+  PO_AMOUNT_WITH_CURRENCY='POAmountWithCurrency',
   PO_AMOUNT='POAmount',
   DOCUMENT_TYPE='DocumentTypeCellTemplate',
   DURATION='DurationCell',

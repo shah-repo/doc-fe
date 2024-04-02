@@ -4,9 +4,11 @@ import { Grid, Tooltip } from '@material-ui/core';
 import { isEmpty, kebabCase } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { FB, FBInputProps, FBTextField, FBWorkspaceModeOptions } from '..';
 import { translate } from '../../../common/intl';
 import { allocationActions } from '../../../state/ducks/Allocation';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { WorkOrderTypes, WO_PART_KEY_NAME, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import ErrorBlock from '../../components/forms/fields/ErrorBlock';
@@ -42,6 +44,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   const [latestRevisionInfo, setLatestRevisionInfo] = useState<LatestPartRevisionInfo>();
   const [prevSelectedPartId, setPrevSelectedPartId] = useState<string>();
   const dialog = useDialog();
+  const dispatch = useDispatch();
   const openRevChangeDialog = () => { !props.disabled && dialog.open(); };
   const isLatestRevisionAvailable
     = !isEmpty(partsDefaultValue)
@@ -78,17 +81,17 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
 
   const onRevChange = async () => {
     if (latestRevisionInfo?.id) {
+      const docRevId = workspaceState?.document?.id;
       await workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
         [WO_PART_KEY_NAME]: { id: latestRevisionInfo?.id },
       });
-
-      formState?.inputState.get(WO_PART_KEY_NAME)?.setRender();
-      deleteAllocationAsync.start(
+      await deleteAllocationAsync.start(
         deleteAllocation,
-        workspaceState?.document?.id,
+        docRevId,
         deleteAllocationAsync,
       );
+      docRevId && dispatch(documentRevisionsActions.load(docRevId));
     }
   };
 
@@ -126,6 +129,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           optionId={FBAutocompleteAsyncOption.releasedParts}
           optionValueType="id"
           defaultValue={partsDefaultValue}
+          shouldReloadOnInit
           type={type}
           disabled={props.disabled}
           withState={true}
