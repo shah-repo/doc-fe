@@ -179,6 +179,7 @@ interface Precalc {
   formDocId: string
   revision: number
   po_amount?: string
+  po_amount_with_currency?: string
   cali_due_date?: string
   pm_due_date?: string
   lshs_subtitle?: LSHS
