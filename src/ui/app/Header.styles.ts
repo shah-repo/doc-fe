@@ -49,9 +49,6 @@ export default (theme: NextTheme) =>
       fontWeight: 300,
       flexGrow: 1,
       marginRight: theme.spacing(4),
-      [theme.breakpoints.only('md')]: {
-        display: 'none',
-      },
     },
     welcomeTextName: {
       fontWeight: 700,
@@ -74,6 +71,7 @@ export default (theme: NextTheme) =>
         fontSize: '1.25rem',
         marginRight: 0,
         whiteSpace: 'nowrap',
+        marginBottom: `${theme.spacing(0)}!important`,
       },
       mobileStyle: {
         display: 'none',
@@ -129,6 +127,16 @@ export default (theme: NextTheme) =>
     autosaveToggle: {
       [theme.breakpoints.down('md')]: {
         display: 'none',
+      },
+    },
+    mobileGrwFlex: {
+      [theme.breakpoints.down('md')]: {
+        display: 'none',
+      },
+    },
+    welcomeTextResponsive: {
+      [theme.breakpoints.down('md')]: {
+        marginBottom: theme.spacing(-4),
       },
     },
   });

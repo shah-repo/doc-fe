@@ -85,7 +85,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
           </Grid>
           <Grid item>
             {fullHeight && (
-              <Typography variant="caption" className={classes.welcomeText} component="div">
+              <Typography variant="caption" className={cx(classes.welcomeText, classes.welcomeTextResponsive)} component="div">
                 <Text translation="header.welcome.back" />,
                 {' '}
                 <b className={classes.welcomeTextName}>{name}!</b>
