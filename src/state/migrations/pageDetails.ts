@@ -4,6 +4,6 @@ export default {
   }),
   1: (state: any) => ({
     ...state,
-    byCategory: {},
+    byCategory: undefined,
   }),
 };

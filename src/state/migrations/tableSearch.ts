@@ -4,6 +4,10 @@ export default {
   }),
   1: (state: any) => ({
     ...state,
-    criteria: {},
+    criteria: undefined,
+  }),
+  2: (state: any) => ({
+    ...state,
+    criteria: undefined,
   }),
 };
