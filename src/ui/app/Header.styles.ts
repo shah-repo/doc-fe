@@ -119,20 +119,20 @@ export default (theme: NextTheme) =>
       welcomeHide: {
         display: 'none',
       },
-      toggleCustomLabels: {
-        [theme.breakpoints.down('md')]: {
-          display: 'none',
-        },
+    },
+    toggleCustomLabels: {
+      [theme.breakpoints.down('md')]: {
+        display: 'none',
       },
-      toggleCustomLabelsSm: {
-        [theme.breakpoints.down('sm')]: {
-          display: 'none',
-        },
+    },
+    toggleCustomLabelsSm: {
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
       },
-      autosaveToggle: {
-        [theme.breakpoints.down('md')]: {
-          display: 'none',
-        },
+    },
+    autosaveToggle: {
+      [theme.breakpoints.down('md')]: {
+        display: 'none',
       },
     },
     mobileGrwFlex: {
