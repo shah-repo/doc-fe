@@ -414,8 +414,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     const { expanded, inEdit } = state;
     return mapTree(dataTree, SUB_ITEMS_FIELD, (item) =>
       extendDataItem(item, SUB_ITEMS_FIELD, {
-        [EXPAND_FIELD]: expanded.includes(item.id),
-        [MODE_FIELD]: Boolean(inEdit.find((i) => i.id === item.id)),
+        [EXPAND_FIELD]: expanded?.includes(item.id),
+        [MODE_FIELD]: Boolean(inEdit?.find((i) => i.id === item.id)),
       }),
     );
   };
@@ -443,7 +443,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       = dataState.sort
       && filteredData
       && orderBy(filteredData, dataState.sort, SUB_ITEMS_FIELD);
-    return addExpandField(sortedData as BOM[]);
+    return addExpandField(sortedData ?? [] as BOM[]);
   };
 
   const onColumnShowHide = ({ field }: CustomTreeListColumnProps) => {
