@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import { Formik, FormikProps, useFormikContext } from 'formik';
-import { cloneDeep, filter, get, includes, map, size } from 'lodash';
+import { filter, get, includes, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
 import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -62,7 +62,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   // @todo: Mix between DocumentRevisionSummary and DocumentRevisionForm.
   // @todo: Move these elements to one component to reuse.
   // Create documentRevision and fill it
-  const documentRevision = cloneDeep(formik.values) as unknown as DocumentRevision;
+  const documentRevision = formik.values as unknown as DocumentRevision;
   const initialValues = formik.values as unknown as DocumentRevisionFormValues;
 
   const docTypeId = documentRevision?.document?.documentType?.id as string;
