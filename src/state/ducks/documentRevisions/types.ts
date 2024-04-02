@@ -43,14 +43,14 @@ export enum POStatusType {
 }
 
 export enum EquipmentStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  ACTIVE_CALIBRATED = 'ACTIVE_CALIBRATED',
-  ACTIVE_NO_CAL_REQUIRED = 'ACTIVE_NO_CAL_REQUIRED',
-  OUT_FOR_CALIBRATION = 'OUT_FOR_CALIBRATION',
-  OUT_FOR_MAINTENANCE = 'OUT_FOR_MAINTENANCE',
-  RETIRED = 'RETIRED',
-  UNPLANNED_DOWNTIME = 'UNPLANNED_DOWNTIME',
+  Active = 'Active',
+  ActiveCalibrated = 'Active Calibrated',
+  ActiveNoCalRequired = 'Active No Cal Required',
+  Inactive = 'Inactive',
+  OutForCalibration = 'Out for Calibration',
+  OutForMaintenance = 'Out for Maintenance',
+  Retired = 'Retired',
+  UnplannedDowntime = 'Unplanned Downtime',
 }
 
 // Lot types implemetation

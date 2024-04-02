@@ -1,5 +1,5 @@
-import { capitalize, kebabCase, noop } from 'lodash';
-import React, { useRef } from 'react';
+import { capitalize } from 'lodash';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
 import { getHasPermission } from '../../../../common/utils/selectors';
@@ -19,13 +19,10 @@ interface Props {
   documentRevision: DocumentRevision
 }
 
-const getEquipmentStatusLabel = (status: EquipmentStatus): string =>
-  translate(`form.builder.header.equipment.status.label.${kebabCase(status)}`);
-
 const disabledStatuses = [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided];
 const options = Object.values(EquipmentStatus).map(value => ({
   value,
-  label: getEquipmentStatusLabel(value),
+  label: value,
 }));
 
 const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
@@ -37,37 +34,34 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
 
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
-  const hasPermisstionToChangeEquipmentStatus = useSelector(getHasPermission(Permission.EDIT_EQ_STATUS));
-  const isStatusInReleased = documentRevision.displayStatus === capitalize(DocumentRevisionStatus.Released);
-  const canChangeEquipmentStatus = isOwner || hasPermisstionToChangeEquipmentStatus;
-  const canEquipmentStatusBeChanged = !disabledStatuses.includes(documentRevision.status);
-  const isEquipmentStatusEditable = canChangeEquipmentStatus && canEquipmentStatusBeChanged && isStatusInReleased;
+  const hasPermissionToChangeEquipmentStatus = useSelector(getHasPermission(Permission.EDIT_EQ_STATUS));
+  const isReleased = documentRevision.displayStatus === capitalize(DocumentRevisionStatus.Released);
+  const canChangeEquipmentStatus = (isOwner || hasPermissionToChangeEquipmentStatus) && (!disabledStatuses.includes(documentRevision.status));
+  const isEquipmentStatusEditable = canChangeEquipmentStatus && isReleased;
+  const statusLabel = documentRevision.eqStatus || EquipmentStatus.Inactive;
+  const [draftEquipmentStatus, setDraftEquipmentStatus] = React.useState(statusLabel);
 
-  const statusLabel = getEquipmentStatusLabel(documentRevision.eqStatus || EquipmentStatus.INACTIVE);
-
-  const updateEquipmentStatus = useRef<() => void>();
-  const nextStatus = useRef<EquipmentStatus>();
-
-  const confirmUpdate = (equipmentStatus: EquipmentStatus) => {
-    if(getEquipmentStatusLabel(equipmentStatus) === statusLabel) {
+  const handleEqStatusChange = (equipmentStatus: EquipmentStatus) => {
+    if(equipmentStatus === statusLabel) {
       return;
     }
-    nextStatus.current = equipmentStatus;
-    updateEquipmentStatus.current = () => {
-      async.start(updateEquipmentStatusAction, documentRevision.id, { eqStatus: getEquipmentStatusLabel(equipmentStatus) }, async);
-    };
+    setDraftEquipmentStatus(equipmentStatus);
     confirmationDialog.open();
   };
 
   const confirmationMessage = translate(
     'documentRevision.equipment.status.update.alert',
-    { oldStatus: <b>{getEquipmentStatusLabel(statusLabel as EquipmentStatus)}</b>, newStatus: <b>{getEquipmentStatusLabel(nextStatus.current as EquipmentStatus) }</b> },
+    { oldStatus: <b>{statusLabel as EquipmentStatus}</b>, newStatus: <b>{draftEquipmentStatus as EquipmentStatus}</b> },
   );
+
+  const confirmUpdate = () => {
+    async.start(updateEquipmentStatusAction, documentRevision.id, { eqStatus: draftEquipmentStatus }, async);
+  };
 
   return (
     <>
       <HeaderStatusButton
-        onItemSelect={confirmUpdate}
+        onItemSelect={handleEqStatusChange}
         label={statusLabel}
         options={options}
         disabled={!isEquipmentStatusEditable}
@@ -75,7 +69,7 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
       />
       <AlertDialog
         title="documentRevision.equipment.status.update.alert.title"
-        confirmAction={updateEquipmentStatus.current ?? noop}
+        confirmAction={confirmUpdate}
         message={confirmationMessage as Translation}
         dialog={confirmationDialog}
         confirmLabel="common.true"
