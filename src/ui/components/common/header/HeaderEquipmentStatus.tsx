@@ -51,7 +51,7 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
 
   const confirmationMessage = translate(
     'documentRevision.equipment.status.update.alert',
-    { oldStatus: <b>{statusLabel as EquipmentStatus}</b>, newStatus: <b>{draftEquipmentStatus as EquipmentStatus}</b> },
+    { oldStatus: <b>{statusLabel}</b>, newStatus: <b>{draftEquipmentStatus}</b> },
   );
 
   const confirmUpdate = () => {
