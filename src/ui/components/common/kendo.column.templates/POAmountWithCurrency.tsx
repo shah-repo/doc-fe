@@ -19,7 +19,7 @@ export const POAmountWithCurrency: React.FunctionComponent<CustomGridCellProps> 
   }
 
   const value = get(dataItem, field);
-  const formattedValue = value === 'NULL' ? formatNumberToCurrency(0) : value;
+  const formattedValue = !value || value === 'NULL' ? formatNumberToCurrency(0) : value;
 
   const cellClickEvent = () => cellRowClick?.({ dataItem });
 
