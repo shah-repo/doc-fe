@@ -78,7 +78,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   onDirtyFlagChange,
   isPreview,
 }) => {
-  console.log({ documentRevision, values });
   useScrollIntoView();
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
   const intl = useIntl();
