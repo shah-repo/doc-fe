@@ -291,9 +291,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
     setSelectedDataItem(undefined);
-    if (isWO) {
-      dispatch(documentRevisionsActions.reload(documentRevision?.id));
-    }
+    isWO && dispatch(documentRevisionsActions.reload(documentRevision?.id));
   };
 
   const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer, openARIDQuickView });
