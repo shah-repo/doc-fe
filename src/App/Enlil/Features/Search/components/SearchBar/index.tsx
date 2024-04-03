@@ -10,13 +10,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
 import { changeRequestPreviewPath } from '../../../../../../ui/change.request/utils/paths';
-import { Autocomplete } from '../../../../../../ui/components/forms/fields-next';
 import Text from '../../../../../../ui/components/Text';
+import { Autocomplete } from '../../../../../../ui/components/forms/fields-next';
 import { INPUT_DEBOUNCE_TIMEOUT } from '../../../../../../ui/constants/general';
 import { documentVersionPath } from '../../../../../../ui/document.revision/utils/paths';
 import { FB } from '../../../../../../ui/form.builder';
 import { withThemeNext } from '../../../../../../ui/layout/theme-next';
-import { getRecentSearch, MAX_TOP_RESULTS, searchPath, setLastRecentSearch, useSearchQuery } from '../../helpers';
+import { MAX_TOP_RESULTS, getRecentSearch, searchPath, setLastRecentSearch, useSearchQuery } from '../../helpers';
 import SearchState from '../../state';
 import { FacetCategoryId, Option } from '../../types';
 import useStyles from './styles';
@@ -186,7 +186,7 @@ const SearchBar: React.FC = () => {
       filterOptions={(options: Option[]) => options}
       ref={fieldRef}
       placeholder={translate(isFocused ? 'keyword.to.search' : 'common.search')}
-      className={cx(classes.root, { [classes.rootFocused]: isFocused })}
+      className={cx(classes.root, classes.searchBarResponsive, { [classes.rootFocused]: isFocused })}
       onFocus={handleFocus}
       onBlur={handleBlur}
       noOptionsText={translate('nothing.found')}

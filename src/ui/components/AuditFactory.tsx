@@ -495,7 +495,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 </>
               );
           } else if (audit.type.includes('ARRAY_EDITED')) {
-            const attachmentNameArr = attachmentLinks.map((attachmentName) => attachmentName.split('/').pop());
+            const attachmentNameArr = attachmentLinks?.map((attachmentName) => attachmentName.split('/').pop()) ?? [];
             const attachmentNameList = attachmentNameArr.join(', ');
 
               returnValue = (
