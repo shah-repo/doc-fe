@@ -295,7 +295,7 @@ const RelatedEquipments: React.FC<RelatedEquipmentsProps> = (props) => {
       )}
       <FormContext.Provider value={{ submitOnChange: false }}>
         <Formik initialValues={initialValues} onSubmit={emptyFunction}>
-          {multipleFormDialog.isOpen && renderFormTemplateDialog}
+          {renderFormTemplateDialog}
         </Formik>
       </FormContext.Provider>
     </Box>
