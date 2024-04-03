@@ -16,7 +16,7 @@ import { OptionType } from '../../../../components/forms/fields/Autocomplete/typ
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { EMPTY_PLACEHOLDER } from '../../constants';
-import { CustomTemplateProps, EditableLHRSummaryItem, LotDocument } from '../../types';
+import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableLHRSummaryItem>();
@@ -70,7 +70,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   );
 };
 
-type LotIDCellProps = {lotDocs: LotDocument[]} & CustomTemplateProps;
+type LotIDCellProps = {lotDocs: DocumentRevision[]} & CustomTemplateProps;
 
 export const LotIDCell: React.FC<LotIDCellProps> = ({
   dataItem,
@@ -85,7 +85,7 @@ export const LotIDCell: React.FC<LotIDCellProps> = ({
   useEffect(() => {
     const lotDoc = find(lotDocs, { id: defaultValue });
 
-    const docId = lotDoc?.docId ?? '';
+    const docId = lotDoc?.document?.docId ?? '';
     if (!isEmpty(docId)) {
       setLotDocId(docId);
     }

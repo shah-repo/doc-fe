@@ -8,13 +8,6 @@ export const TYPE_OPTIONS = [
   { label: 'Equipment', value: 'equipment' },
   { label: 'Material', value: 'material' },
 ];
-export const LHR_SUMMARY_TYPE_OPTIONS = [
-  { label: 'Equipment', value: 'equipment' },
-];
-export const LOT_OPTIONS = [
-  { label: 'LOT #24567889', value: 'LOT #24567889' },
-  { label: 'LOT #24567890', value: 'LOT #24567890' },
-  { label: 'LOT #24567891', value: 'LOT #24567891' }];
 
 export const STATUS_OPTIONS = [
   { label: 'Draft', value: 'draft' },

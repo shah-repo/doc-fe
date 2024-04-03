@@ -11,6 +11,7 @@ import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { authSelectors } from '../../../state/ducks/auth';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
@@ -40,7 +41,6 @@ import {
   EditableLHRSummaryItemEditEvent,
   EquipmentDocument,
   LHRSummaryItem,
-  LotDocument,
   MPIDocument,
 } from './types';
 
@@ -63,7 +63,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const [mpiDocuments, setMpiDocuments] = React.useState<MPIDocument[]>([]);
   const [equipmentDocs, setEquipmentDocs] = React.useState<EquipmentDocument[]>([]);
   const [partDocs, setPartDocs] = React.useState<EquipmentDocument[]>([]);
-  const [lotDocs, setLotDocs] = React.useState<LotDocument[]>([]);
+  const [lotDocs, setLotDocs] = React.useState<DocumentRevision[]>([]);
   const fetchLHRSummary = useActionCreator(lhrSummaryActions.fetchLHRSummary);
   const fetchAutocompleteOptions = useActionCreator(lhrSummaryActions.fetchAutocompleteOptions);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
@@ -111,13 +111,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const LotDocumentsAsync = useAsync({
     onSuccess: (data) => {
-      data
-        && setLotDocs(
-          (data as [])?.map((doc) => ({
-            id: doc?.id,
-            docId: doc?.document?.docId,
-          })),
-        );
+      data && setLotDocs(data as DocumentRevision[]);
     },
     onError: toastError,
   });

@@ -32,7 +32,7 @@ export const TypeCell: React.FC<CustomTemplateProps> = ({
     value = TYPE_OPTIONS.find((option) => option.value === values.type);
 
     return (
-      <FormikField name={field}>
+      <FormikField name={field} required>
         <Autocomplete
           {...getFieldProps(field)}
           key={isEmpty(values) ? 'disabled' : 'enabled'}
