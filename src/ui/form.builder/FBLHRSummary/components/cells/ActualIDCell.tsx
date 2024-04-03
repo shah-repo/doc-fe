@@ -46,9 +46,10 @@ export const ActualIDCell: React.FC<ActualIDCellProps> = ({ dataItem, field, equ
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
     const docType = values.type;
+    const isMaterial = docType === DocType.material;
 
     const getOptionId = () => {
-      if (docType === DocType.material) {
+      if (isMaterial) {
         return FBAutocompleteAsyncOption.releasedParts;
       } else {
         return FBAutocompleteAsyncOption.equipment;
@@ -66,7 +67,7 @@ export const ActualIDCell: React.FC<ActualIDCellProps> = ({ dataItem, field, equ
     ) => {
       const { inputValue = '' } = state || {};
 
-      const options = data?.filter((docRev) => (docRev.status === DocumentRevisionStatus.Released)
+      const options = data?.filter((docRev) => (isMaterial ? docRev.status === DocumentRevisionStatus.Released : true)
         && filterOutOption(docRev, inputValue));
 
       return options;
