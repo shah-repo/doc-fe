@@ -78,12 +78,17 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   onDirtyFlagChange,
   isPreview,
 }) => {
+  console.log({ documentRevision, values });
   useScrollIntoView();
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
   const intl = useIntl();
   const { workspaceState } = FB.useStores();
   const { revisionChangeType } = values ?? {};
-  const documentTypeById = documentTypesById[documentRevision?.document?.documentType?.id ?? ''];
+  const docTypeId
+    = documentRevision?.document?.documentType?.id
+      ?? values?.document?.documentType?.id
+      ?? '';
+  const documentTypeById = documentTypesById[docTypeId];
   const { schema = [] } = workspaceState ?? {};
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
