@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { useFormikContext } from 'formik';
-import { find, isEmpty, lowerCase } from 'lodash';
+import { find, isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { FB, FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
@@ -9,6 +9,7 @@ import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/d
 import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { CustomTemplateProps, EditableLHRSummaryItem, MPIDocument } from '../../types';
+import { filterOutOption } from '../../utils';
 import AutocompleteAsync from './AutocompleteAsync';
 
 type StepCellProps = {mpiDocuments: MPIDocument[]} & CustomTemplateProps;
@@ -30,13 +31,6 @@ export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocument
       setStepOrMPI(`${step}/${mpiDocId}`);
     }
   }, [mpiDocuments, dataItem[MODE_FIELD], dataItem.stepOrMPI]);
-
-  const filterOutOption = (docRev: DocumentRevision, inputValue: string) => {
-    const filterValue = lowerCase(inputValue);
-
-    return lowerCase(docRev.name).includes(filterValue)
-      || lowerCase(docRev.document.docId).includes(filterValue);
-  };
 
   if (isEditMode) {
     const stepField = 'step';
@@ -72,6 +66,7 @@ export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocument
         <Grid item style={{ width: '30%' }}>
           <FormikField
             name={stepField}
+            required
           >
             <TextField
               {...getFieldProps(stepField)}
@@ -87,6 +82,7 @@ export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocument
         <Grid item style={{ width: '60%' }}>
           <FormikField
             name={field}
+            required
           >
             <AutocompleteAsync
               {...getFieldProps(field)}

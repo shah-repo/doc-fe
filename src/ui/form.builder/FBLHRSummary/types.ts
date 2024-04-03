@@ -80,11 +80,17 @@ export interface PartDocument {
   docId: string
 }
 
+export interface LotDocument {
+  id: string
+  docId: string
+}
+
 export interface SchemaOptions {
   actionsClass: string
   mpiDocuments: MPIDocument[]
   equipmentDocs: EquipmentDocument[]
   partDocs: PartDocument[]
+  lotDocs: LotDocument[]
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: () => void

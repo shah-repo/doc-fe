@@ -1,5 +1,6 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, lowerCase } from 'lodash';
 import { translate } from '../../../common/intl';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { EditableLHRSummaryItem } from './types';
 
@@ -19,4 +20,11 @@ export const updateData = (values: Partial<EditableLHRSummaryItem>, data: Editab
 
     return dataItem;
   });
+};
+
+export const filterOutOption = (docRev: DocumentRevision, inputValue: string) => {
+  const filterValue = lowerCase(inputValue);
+
+  return lowerCase(docRev.name).includes(filterValue)
+    || lowerCase(docRev.document.docId).includes(filterValue);
 };

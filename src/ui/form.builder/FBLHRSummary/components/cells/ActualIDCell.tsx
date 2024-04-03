@@ -1,6 +1,8 @@
+import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { useFormikContext } from 'formik';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import {
   MODE_FIELD,
   Mode,
@@ -12,19 +14,18 @@ import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutoco
 import { FB } from '../../../helpers';
 import { DocType, EMPTY_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, EquipmentDocument, PartDocument } from '../../types';
+import { filterOutOption } from '../../utils';
 import AutocompleteAsync from './AutocompleteAsync';
 
 type ActualIDCellProps = {equipmentDocs: EquipmentDocument[], partDocs: PartDocument[]} & CustomTemplateProps;
 
 export const ActualIDCell: React.FC<ActualIDCellProps> = ({ dataItem, field, equipmentDocs, partDocs, dataIndex }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const docType = isEditMode ? values.type : dataItem.type;
+  const docType = dataItem.type;
   const isMaterial = docType === DocType.material;
   const [actualId, setActualId] = useState<string>();
 
-  const defaultValue = isEditMode ? values[field] : dataItem[field];
+  const defaultValue = dataItem[field];
 
   useEffect(() => {
     if (!FB.isUUID(defaultValue)) {
@@ -41,21 +42,40 @@ export const ActualIDCell: React.FC<ActualIDCellProps> = ({ dataItem, field, equ
     setActualId(value?.docId);
   }, [equipmentDocs, partDocs]);
 
-  const getOptionId = () => {
-    if (isMaterial) {
-      return FBAutocompleteAsyncOption.availableParts;
-    } else {
-      return FBAutocompleteAsyncOption.equipment;
-    }
-  };
-
   if (isEditMode) {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
+    const docType = values.type;
+
+    const getOptionId = () => {
+      if (docType === DocType.material) {
+        return FBAutocompleteAsyncOption.releasedParts;
+      } else {
+        return FBAutocompleteAsyncOption.equipment;
+      }
+    };
+
     const handleChange = (event: ChangeEvent<unknown>, value) => {
       // {id: 'enter value', revId: selectedValue, isNew: false}
       setFieldValue(field, value?.id);
     };
+
+    const handleFilter = (
+      data: DocumentRevision[],
+      state: FilterOptionsState,
+    ) => {
+      const { inputValue = '' } = state || {};
+
+      const options = data?.filter((docRev) => (docRev.status === DocumentRevisionStatus.Released)
+        && filterOutOption(docRev, inputValue));
+
+      return options;
+    };
+
+    const filterOptions = (options, state) => handleFilter(options, state);
+
     return (
-      <FormikField name={field}>
+      <FormikField name={field} required>
         <AutocompleteAsync
           {...getFieldProps(field)}
           key={docType}
@@ -64,6 +84,7 @@ export const ActualIDCell: React.FC<ActualIDCellProps> = ({ dataItem, field, equ
           forcePopupIcon
           disableClearable
           optionId={getOptionId()}
+          {...{ filterOptions }}
           onChange={handleChange}
           placeholder={translate('lhr.summary.placeholder.select.enter')}
           size="small"

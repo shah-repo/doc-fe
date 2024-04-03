@@ -40,6 +40,7 @@ import {
   EditableLHRSummaryItemEditEvent,
   EquipmentDocument,
   LHRSummaryItem,
+  LotDocument,
   MPIDocument,
 } from './types';
 
@@ -62,6 +63,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const [mpiDocuments, setMpiDocuments] = React.useState<MPIDocument[]>([]);
   const [equipmentDocs, setEquipmentDocs] = React.useState<EquipmentDocument[]>([]);
   const [partDocs, setPartDocs] = React.useState<EquipmentDocument[]>([]);
+  const [lotDocs, setLotDocs] = React.useState<LotDocument[]>([]);
   const fetchLHRSummary = useActionCreator(lhrSummaryActions.fetchLHRSummary);
   const fetchAutocompleteOptions = useActionCreator(lhrSummaryActions.fetchAutocompleteOptions);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
@@ -107,6 +109,19 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     onError: toastError,
   });
 
+  const LotDocumentsAsync = useAsync({
+    onSuccess: (data) => {
+      data
+        && setLotDocs(
+          (data as [])?.map((doc) => ({
+            id: doc?.id,
+            docId: doc?.document?.docId,
+          })),
+        );
+    },
+    onError: toastError,
+  });
+
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
       data && setData(data as EditableLHRSummaryItem[]);
@@ -121,7 +136,8 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
     MPIDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.mpiDocuments, MPIDocumentsAsync);
     EQDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.equipment, EQDocumentsAsync);
-    PartDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.availableParts, PartDocumentsAsync);
+    PartDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.releasedParts, PartDocumentsAsync);
+    LotDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.lots, LotDocumentsAsync);
     fetchLHRSummaryData();
   }, []);
 
@@ -184,7 +200,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     });
 
     resetForm({ values: editedLHRSummaryItem ?? {} });
-  }, [editedLHRSummaryItem, mpiDocuments, equipmentDocs, partDocs, setValues, resetForm]);
+  }, [editedLHRSummaryItem, mpiDocuments, equipmentDocs, partDocs, lotDocs, setValues, resetForm]);
 
   const onEditLHRSummaryItem = ({
     dataItem,
@@ -289,6 +305,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     mpiDocuments,
     equipmentDocs,
     partDocs,
+    lotDocs,
     onRowClick: onEditLHRSummaryItem,
     onConfirm: submitForm,
     onDiscard: ondiscardLHRSummaryItem,

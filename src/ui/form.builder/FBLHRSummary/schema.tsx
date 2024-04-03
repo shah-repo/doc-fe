@@ -19,6 +19,7 @@ export const buildSchema = ({
   mpiDocuments,
   equipmentDocs,
   partDocs,
+  lotDocs,
   onRowClick,
   onConfirm,
   onDiscard,
@@ -66,7 +67,7 @@ export const buildSchema = ({
       title: 'lhr.summary.grid.heading.lot',
       show: true,
       selectable: false,
-      template: (props) => <LotIDCell {...props} onClick={onRowClick} />,
+      template: (props) => <LotIDCell {...props} onClick={onRowClick} lotDocs={lotDocs} />,
       width: 201,
     },
     {
