@@ -1,20 +1,23 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { Formik, FormikProps, FormikProvider, useFormik } from 'formik';
-import { isEmpty, set, last } from 'lodash';
+import { isEmpty, last, set } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { generateRelatedEquipmentDocId } from '.';
 import { translate } from '../../../../../common/intl';
+import { emptyFunction } from '../../../../../common/utils/helpers';
+import { authSelectors } from '../../../../../state/ducks/auth';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { documentTypeActions, documentTypeSelectors } from '../../../../../state/ducks/documentRevisions/documentType';
 import { DocumentType, DocumentTypeById, DocumentTypeByIdForm } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
-import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
-import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { Button, ButtonGroup } from '../../../../components/forms/fields-next';
 import { FormContext } from '../../../../components/forms/FormContext';
 import PromptIfDirty from '../../../../components/forms/PromptIfDirty';
-import { ButtonGroup, Button } from '../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
+import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../../../components/notifications';
 import MultipleFormTemplateDialog from '../../../../documentType/dialogs/MultipleFormTemplateDialog';
 import { GridProps } from '../../../../form.builder/FBApprovalMatrix/components/Grid/types';
@@ -22,14 +25,11 @@ import FBSection from '../../../../form.builder/FBSection/FBSection';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
+import { SELECT_FORM_INITIAL_VALUES } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableRelatedEquipment, RelatedEquipmentsProps, CreateRelatedEquipmentInput } from './types';
-import { generateRelatedEquipmentDocId } from '.';
+import { CreateRelatedEquipmentInput, EditableRelatedEquipment, RelatedEquipmentsProps } from './types';
 import { withRelatedEquipments } from './wrap';
-import { authSelectors } from '../../../../../state/ducks/auth';
-import { emptyFunction } from '../../../../../common/utils/helpers';
-import { SELECT_FORM_INITIAL_VALUES } from './constants';
 
 interface FormikValues {
   selectType: DocumentType[]
@@ -236,7 +236,7 @@ const RelatedEquipments: React.FC<RelatedEquipmentsProps> = (props) => {
       areFormIdsLoading={formIdsAsync.isLoading}
       {...{
         documentTypes: documentTypesByCategory,
-        formIds: relatedDocumentTypeId ? formIds : [],
+        formIds: relatedDocumentTypeId || documentTypesByCategory.length === 1 ? formIds : [],
         isRecord: false,
         closeMultipleFormDialog,
         isLHR: false,
@@ -295,7 +295,7 @@ const RelatedEquipments: React.FC<RelatedEquipmentsProps> = (props) => {
       )}
       <FormContext.Provider value={{ submitOnChange: false }}>
         <Formik initialValues={initialValues} onSubmit={emptyFunction}>
-          {renderFormTemplateDialog}
+          {multipleFormDialog.isOpen && renderFormTemplateDialog}
         </Formik>
       </FormContext.Provider>
     </Box>
