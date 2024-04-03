@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import { Formik, FormikProps, useFormikContext } from 'formik';
-import { filter, get, includes, map, size } from 'lodash';
+import { cloneDeep, filter, get, includes, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
 import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ import { ApplicationState } from '../../../../../../../state/reducers';
 import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';
 import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../../../document.revision/form/attachments';
-import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
+import { FB, FBBOM, FBEditorState, FBProvider, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
 import FBAllocationTreeList from '../../../../../../form.builder/FBAllocation/components/treelist';
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import FBDataStore from '../../../../../../form.builder/FBStore/FBDataStore';
@@ -335,17 +335,27 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 const DocumentPreviewContainer: React.FunctionComponent<ContainerProps> = (props) => {
   const { workspaceState } = FB.useStores();
 
+  const previewWorkspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+    schema: workspaceState?.schema,
+    mode: FBWorkspaceModeOptions.FORM,
+    autosave: false,
+  });
+
+  previewWorkspaceState.document = cloneDeep(workspaceState?.document);
+
   const formik = useFormikContext<DocumentRevisionFormValues>();
   const initialValues = formik?.values ?? workspaceState?.document;
 
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize={true}
-      onSubmit={emptyFunction}
-    >
-      {(formikProps) => <DocumentPreview {...props} formik={formikProps} />}
-    </Formik>
+    <FBProvider workspaceState={previewWorkspaceState}>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize={true}
+        onSubmit={emptyFunction}
+      >
+        {(formikProps) => <DocumentPreview {...props} formik={formikProps} />}
+      </Formik>
+    </FBProvider>
   );
 };
 
