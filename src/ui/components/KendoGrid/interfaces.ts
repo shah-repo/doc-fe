@@ -77,6 +77,7 @@ export enum KendoGridFilterCell {
   STATE = 'state',
   TASKTYPE = 'taskType',
   STATUS = 'status',
+  EQ_STATUS = 'formInput.fb-default-eq-status',
   ASYNC_CREATED_AT = 'createdAtt',
 }
 

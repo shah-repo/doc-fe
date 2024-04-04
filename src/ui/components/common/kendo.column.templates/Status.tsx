@@ -31,6 +31,8 @@ export const Status: React.FC<CustomGridCellProps> = ({
   if (field === KendoGridFilterCell.LOT_STATUS) {
     fieldLabel = getLotStatusLabel(status as LotStatus);
   }
+
+  console.log('fieldLabel', fieldLabel);
   return (
     <td
       colSpan={colSpan}

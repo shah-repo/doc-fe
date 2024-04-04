@@ -12,7 +12,7 @@ import { AutoSizer, Size } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../state/ducks/company';
-import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, EquipmentStatus, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
 import { printLabelsActions } from '../../../state/ducks/printLabels';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
@@ -200,10 +200,31 @@ export function KendoGrid<T extends any> ({
     POStatusLabelMapping.VOIDED,
   ];
 
+  const eqStatuses = [
+    EquipmentStatus.Active,
+    EquipmentStatus.ActiveCalibrated,
+    EquipmentStatus.ActiveNoCalRequired,
+    EquipmentStatus.Inactive,
+    EquipmentStatus.OutForCalibration,
+    EquipmentStatus.OutForMaintenance,
+    EquipmentStatus.Retired,
+    EquipmentStatus.UnplannedDowntime,
+  ];
+
   const POStatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
       {...props}
       data={poStatusOptions}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+
+  const EQStatusFilter = (props: GridFilterCellProps) => (
+    <StatusFilterTemplate
+      {...props}
+      data={eqStatuses}
       defaultItem={intl.formatMessage({
         id: TranslatedText[DisplayText.ALL],
       })}
@@ -289,6 +310,7 @@ export function KendoGrid<T extends any> ({
     [KendoGridFilterCell.ACTIVE]: ActiveFilter,
     [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
     [KendoGridFilterCell.PO_STATUS]: POStatusFilter,
+    [KendoGridFilterCell.EQ_STATUS]: EQStatusFilter,
     [KendoGridFilterCell.LOT_STATUS]: LotStatusFilter,
     [KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM]: TypeFilter,
     [KendoGridFilterCell.EFFECTIVE_DATE]: EffectiveDate,
@@ -317,6 +339,7 @@ export function KendoGrid<T extends any> ({
               column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
             cell={(props) => {
+              console.log('props.dataItem', props.dataItem?.formInput['fb-default-eq-status']);
               props.dataItem.displayStatus = ((documentTypeCategory === DocumentCategory.PurchaseOrder
                 && props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released)
                 ? DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus);

@@ -1,7 +1,7 @@
 import { chain } from 'lodash';
+import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { pagerSettings } from '../../components/common/kendo/helpers';
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
-import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 
 const columns: KendoColumn[] = [
   {
@@ -86,7 +86,7 @@ const columns: KendoColumn[] = [
     locked: false,
     width: 14,
     groupable: true,
-    cell: KendoCellTemplates.STATUS,
+    // cell: KendoCellTemplates.STATUS,
     filterCell: KendoGridFilterCell.DISPLAY_STATUS,
     showColumnMenu: true,
     orderIndex: 7,
@@ -102,6 +102,18 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.EFFECTIVE_DATE,
     showColumnMenu: true,
     orderIndex: 8,
+  },
+  {
+    field: 'formInput.fb-default-eq-status',
+    title: 'form.builder.equipments.label',
+    show: true,
+    locked: false,
+    width: 14,
+    groupable: true,
+    cell: KendoCellTemplates.EQ_STATUS,
+    filterCell: KendoGridFilterCell.EQ_STATUS,
+    showColumnMenu: true,
+    orderIndex: 9,
   },
 ];
 

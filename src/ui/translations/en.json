@@ -1445,6 +1445,7 @@
   "form.builder.woApprovals": "Work Order Approvals",
   "form.builder.workOrderPartDetails": "Work Order Part",
   "form.builder.workOrderLhrTable": "LHR Table",
+  "form.builder.equipments.label": "EQ Status",
   "form.builder.related.equipments.title": "Related Equipment",
   "form.builder.related.equipments.add.last": "Add new using last selected form",
   "form.builder.related.equipments.add.new": "Add new",
