@@ -1,8 +1,9 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
+import { toFixed } from '../../../../../dashboard.new/line.items/common/Utils';
 import { EditableAllocationItem } from '../../../interface';
-import { CELL_EMPTY_VALUE } from '../constants';
+import { CELL_EMPTY_VALUE, MAX_DECIMALS } from '../constants';
 import { getParsedFieldValue, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -41,7 +42,7 @@ const IssuedQtyCell: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy={`${field}-cell-quantity`}
     >
       <span className={classes.Cell}>
-        {isLotAddition ? CELL_EMPTY_VALUE : issuedQuantity}
+        {isLotAddition ? CELL_EMPTY_VALUE : toFixed(issuedQuantity, MAX_DECIMALS)}
       </span>
     </td>
   );

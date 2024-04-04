@@ -3,8 +3,9 @@ import { useFormikContext } from 'formik';
 import { isNil } from 'lodash';
 import React from 'react';
 import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { toFixed } from '../../../../../dashboard.new/line.items/common/Utils';
 import { EditableAllocationItem } from '../../../interface';
-import { CELL_EMPTY_VALUE } from '../constants';
+import { CELL_EMPTY_VALUE, MAX_DECIMALS } from '../constants';
 import { getParsedFieldValue, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -60,7 +61,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy={`${field}-cell-quantity`}
     >
       <span className={classes.Cell}>
-        {renderCellValue()}
+        {toFixed(renderCellValue(), MAX_DECIMALS)}
       </span>
     </td>
   );
