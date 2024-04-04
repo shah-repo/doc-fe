@@ -23,7 +23,8 @@ import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, get,
+  chain,
+  get,
   isEmpty,
   isObject,
   map,
