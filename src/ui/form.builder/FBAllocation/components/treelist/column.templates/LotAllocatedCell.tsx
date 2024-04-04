@@ -101,6 +101,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
       <Autocomplete
         {...getFieldProps(field)}
         value={value}
+        disabled={!isEmpty(dataItem.lotRevId)}
         disableOpenOnFocus={true}
         blurOnSelect
         ListboxComponent={({ children, ...otherProps }) => {
