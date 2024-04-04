@@ -21,20 +21,22 @@ export const formatNumberToCurrency = (data: number) => {
   return data;
 };
 
-export const toFixed = (value: string | number, limit?: number) => {
+const DEFAULT_PRECISION = 10;
+
+export const toFixed = (value: string | number, precision = DEFAULT_PRECISION) => {
   if (Number.isNaN(toNumber(value))) {
     return value;
   }
-  if (!Number.isInteger(toNumber(value)) && isMoreDigitsAfterDecimal(value, limit ?? 10)) {
-    return toNumber(toFixedDecimals(value, limit));
+  if (!Number.isInteger(toNumber(value)) && isMoreDigitsAfterDecimal(value, precision)) {
+    return toNumber(toFixedDecimals(value, precision));
   } else { return toNumber(value); }
 };
-export const toFixedDecimals = (value: string | number, limit?: number) => {
+export const toFixedDecimals = (value: string | number, precision = DEFAULT_PRECISION) => {
   if (Number.isNaN(toNumber(value))) {
     return value;
   }
   const arr = value?.toString()?.split('.');
-  return `${arr[0]}.${arr[1].slice(0, limit ?? 10)}`;
+  return `${arr[0]}.${arr[1].slice(0, precision)}`;
 };
 export const isMoreDigitsAfterDecimal = (value: string | number, length: number) => value?.toString()?.split('.')[1]?.length > length;
 export const linearScale = (domain: number[], range: number[]) => {
