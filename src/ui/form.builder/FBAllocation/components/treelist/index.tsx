@@ -30,6 +30,7 @@ import { translate } from '../../../../../common/intl';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
 import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Loader from '../../../../components/common/kendo/Loader';
@@ -40,6 +41,7 @@ import { CustomTreeListColumnProps } from '../../../../components/common/treelis
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
+import { toFixed } from '../../../../dashboard.new/line.items/common/Utils';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -52,6 +54,7 @@ import {
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
   ID_FIELD,
+  MAX_DECIMALS,
   MODE_FIELD, SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
 } from './constants';
@@ -594,17 +597,29 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const getFieldValue = (value) => {
-    return isNil(value) ? CELL_EMPTY_VALUE : value;
+    return isNil(value) ? CELL_EMPTY_VALUE : toFixed(value, MAX_DECIMALS);
   };
 
   const exportToExcel = () => {
-    const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD).map(
-      (part) => {
-        const qtyOnHandAfter = isNil(part.quantityOnHand) ? CELL_EMPTY_VALUE : (part.quantityNeeded ?? 0) - (part.quantityOnHand ?? 0);
-        const quantityOnHand = getFieldValue(part.quantityOnHand);
-        const issuedQty = getFieldValue(part.issuedQty);
-        const variance = getFieldValue(part.variance);
+    const exportData = processData().map((data) => {
+      data[EXPAND_FIELD] = true;
+      return data;
+    });
+
+    const data = treeToFlat(exportData, EXPAND_FIELD, SUB_ITEMS_FIELD).map(
+      (part: EditableAllocationItem) => {
+        const isLotRecord = Boolean(part.isLotAddition || part.lotRevId);
+        const isPartRecord = !isLotRecord;
         const quantityNeeded = getFieldValue(part.quantityNeeded);
+        let qtyOnHandAfter = isPartRecord ? CELL_EMPTY_VALUE : (part.quantityOnHand ?? 0) - (part.quantityNeeded ?? 0);
+        let quantityOnHand = isPartRecord ? CELL_EMPTY_VALUE : getFieldValue(part.quantityOnHand);
+        const variance = isLotRecord ? CELL_EMPTY_VALUE : getFieldValue(part.variance);
+        const issuedQty = isLotRecord ? CELL_EMPTY_VALUE : getFieldValue((part.variance ?? 0) + part.quantityNeeded);
+
+        if (documentRevision.status !== DocumentRevisionStatus.Draft && !isPartRecord) {
+          quantityOnHand = getFieldValue(part.quantityBeforeKitting);
+          qtyOnHandAfter = getFieldValue(part.quantityAfterKitting);
+        }
 
         return {
           ...part,
