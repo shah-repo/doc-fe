@@ -2,7 +2,9 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { FormikField, TextField } from '../../../../../components/forms/fields-next';
+import { toFixed } from '../../../../../dashboard.new/line.items/common/Utils';
 import { EditableAllocationItem } from '../../../interface';
+import { MAX_DECIMALS } from '../constants';
 import { getCellValue, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -59,7 +61,7 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
       {isEnbleEditor && getFieldInfo()}
       {showFieldValue && (
         <span className={classes.Cell}>
-          {getCellValue(dataItem, field)}
+          {toFixed(getCellValue(dataItem, field), MAX_DECIMALS)}
         </span>
       )}
     </td>
