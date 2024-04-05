@@ -54,7 +54,9 @@ const DownloadHtmlPreview: React.FC<Props> = ({
   });
   const handleClick = () => {
     templateAsync.start(templateAction, id, templateAsync);
-    dialogPDF.open();
+    if (!downloadImmediately) {
+      dialogPDF.open();
+    }
   };
 
   const callback = React.useCallback((message: string) => {
