@@ -742,7 +742,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'formInput.autoTransact':
       case 'formInput.autoAssign':
-        returnValue = (<div data-cy={dataCy}>{ ((audit.nextValue === 'true') ? translate('common.true') : translate('common.false'))}</div>);
+        returnValue = (<div data-cy={dataCy}>{translate(audit.nextValue === 'true' ? 'common.true' : 'common.false')}</div>);
         break;
       case 'workOrder':
         try {
