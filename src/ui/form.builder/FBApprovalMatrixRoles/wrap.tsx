@@ -1,7 +1,5 @@
-import { cloneDeep } from 'lodash';
-import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBApprovalMatrixFieldData, FBApprovalRole } from '..';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
@@ -15,7 +13,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     name,
     ...props
   }: T) => {
-    const { workspaceState, formState, approvalMatrixFieldState } = FB.useStores();
+    const { workspaceState, approvalMatrixFieldState } = FB.useStores();
     const { formInput } = workspaceState ?? {};
 
     const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
@@ -59,17 +57,6 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
       }));
       approvalMatrixFieldState?.setApprovalRoles(updatedRoles);
     };
-
-    useEffect(() => {
-      reaction(
-        () => approvalMatrixFieldState?.data,
-        (data) => {
-          formState?.setFieldValue(name, cloneDeep(data));
-          formState?.setFieldAutosave(name);
-        },
-      );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return Component({
       ...(props as T),
