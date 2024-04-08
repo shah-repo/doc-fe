@@ -3,6 +3,7 @@ import { get, has } from 'lodash';
 import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { translate } from "../../common/intl";
 import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
@@ -741,7 +742,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'formInput.autoTransact':
       case 'formInput.autoAssign':
-        returnValue = (<div data-cy={dataCy}>{ ((audit.nextValue === 'true') ? 'Yes' : 'No')}</div>);
+        returnValue = (<div data-cy={dataCy}>{ ((audit.nextValue === 'true') ? translate('common.true') : translate('common.false'))}</div>);
         break;
       case 'workOrder':
         try {
