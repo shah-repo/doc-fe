@@ -220,7 +220,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const createOrUpdatePart = (values: Partial<EditableAllocationItem>) => {
-    const partVariance = values.variance ? values.variance : undefined;
+    const partVariance = values.variance || undefined;
     if (values[ADD_FIELD]) {
       const payload = {
         workOrderId: documentRevision?.id,
