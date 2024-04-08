@@ -42,17 +42,6 @@ export enum POStatusType {
   VOIDED = 'VOIDED',
 }
 
-export enum EquipmentStatus {
-  Active = 'Active',
-  ActiveCalibrated = 'Active Calibrated',
-  ActiveNoCalRequired = 'Active No Cal Required',
-  Inactive = 'Inactive',
-  OutForCalibration = 'Out for Calibration',
-  OutForMaintenance = 'Out for Maintenance',
-  Retired = 'Retired',
-  UnplannedDowntime = 'Unplanned Downtime',
-}
-
 // Lot types implemetation
 export enum LotStatus {
   QUARANTINE = 'QUARANTINE',
@@ -277,7 +266,6 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   hasPrimaryAttachment?: boolean
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
-  eqStatus: EquipmentStatus
 }
 
 export interface SmartReference {
