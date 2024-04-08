@@ -1,7 +1,7 @@
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { FB, FBApprovalMatrixFieldData, FBApprovalRole } from '..';
+import { FB, FBApprovalRole } from '..';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { FBApprovalMatrixRolesProps } from './types';
 
@@ -13,21 +13,14 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     name,
     ...props
   }: T) => {
-    const { workspaceState, approvalMatrixFieldState } = FB.useStores();
-    const { formInput } = workspaceState ?? {};
+    const { approvalMatrixFieldState } = FB.useStores();
 
     const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
       id: group.value,
       name: group.label,
     }));
 
-    const existingRoles = useObserver(
-      () => (
-        approvalMatrixFieldState?.getCurrentData('roles')
-          ?? approvalMatrixFieldState?.extractData(formInput as FBApprovalMatrixFieldData, 'roles')
-          ?? []
-      ),
-    );
+    const existingRoles = useObserver(() => approvalMatrixFieldState?.getCurrentData('roles') ?? []);
 
     approvalRoles = existingRoles.map((role) => {
       const foundGroups = role.groups.map(({ id }) => {
