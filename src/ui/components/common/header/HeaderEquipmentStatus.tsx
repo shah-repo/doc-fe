@@ -1,4 +1,3 @@
-import { capitalize } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
@@ -8,6 +7,7 @@ import { Permission } from '../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus, EquipmentStatus } from '../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../app/alert.dialog/AlertDialog';
+import { isDocumentRevisionInStatus } from '../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
@@ -35,14 +35,14 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
   const hasPermissionToChangeEquipmentStatus = useSelector(getHasPermission(Permission.EDIT_EQ_STATUS));
-  const isReleased = documentRevision.displayStatus === capitalize(DocumentRevisionStatus.Released);
+  const isVoidedOrObsolete = isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided], documentRevision.status);
   const canChangeEquipmentStatus = (isOwner || hasPermissionToChangeEquipmentStatus) && (!disabledStatuses.includes(documentRevision.status));
-  const isEquipmentStatusEditable = canChangeEquipmentStatus && isReleased;
+  const isEquipmentStatusEditable = canChangeEquipmentStatus && !isVoidedOrObsolete;
   const statusLabel = documentRevision.eqStatus || EquipmentStatus.Inactive;
   const [draftEquipmentStatus, setDraftEquipmentStatus] = React.useState(statusLabel);
 
   const handleEqStatusChange = (equipmentStatus: EquipmentStatus) => {
-    if(equipmentStatus === statusLabel) {
+    if (equipmentStatus === statusLabel) {
       return;
     }
     setDraftEquipmentStatus(equipmentStatus);
