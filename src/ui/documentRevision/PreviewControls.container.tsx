@@ -594,8 +594,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     </>
   );
   const isWOCloseEnabled = isWORecord && documentRevision?.approvals?.some((approval) => approval.status === ApprovalStatus.Pending);
-  const loggedinUser = store.getState().auth.user;
-  const isDocOwner = documentRevision?.owner.id === loggedinUser.employeeId;
+  const loggedInUser = store.getState().auth.user;
+  const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
 
   return (
     <>
