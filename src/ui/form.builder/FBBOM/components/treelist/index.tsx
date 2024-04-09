@@ -424,10 +424,6 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const processData = () => {
     const { data, dataState } = state;
 
-    if (!dataState) {
-      return [];
-    }
-
     const filter = [...((dataState?.filter as FilterDescriptor[]) ?? [])];
     const docIDField = filter?.find((val) => val.field === ID_FIELD);
     const docIDFieldIndex = filter?.findIndex((val) => val.field === ID_FIELD);
@@ -439,12 +435,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       });
     }
     const filteredData
-      = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
+      = dataState?.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
     const sortedData
-      = dataState.sort
+      = dataState?.sort
       && filteredData
-      && orderBy(filteredData, dataState.sort, SUB_ITEMS_FIELD);
-    return addExpandField(sortedData ?? [] as BOM[]);
+      && orderBy(filteredData, dataState?.sort, SUB_ITEMS_FIELD);
+    return addExpandField(sortedData ?? data);
   };
 
   const onColumnShowHide = ({ field }: CustomTreeListColumnProps) => {
