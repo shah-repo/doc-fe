@@ -41,7 +41,7 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
   const statusLabel = documentRevision.eqStatus || EquipmentStatus.Inactive;
   const [draftEquipmentStatus, setDraftEquipmentStatus] = React.useState(statusLabel);
 
-  const handleEqStatusChange = (equipmentStatus: EquipmentStatus) => {
+  const handleEqStatusChange = (equipmentStatus) => {
     if (equipmentStatus === statusLabel) {
       return;
     }
@@ -51,7 +51,10 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
 
   const confirmationMessage = translate(
     'documentRevision.equipment.status.update.alert',
-    { oldStatus: <b>{statusLabel}</b>, newStatus: <b>{draftEquipmentStatus}</b> },
+    {
+      oldStatus: (<b>{statusLabel}</b>) as unknown as string,
+      newStatus: (<b>{draftEquipmentStatus}</b>) as unknown as string,
+    },
   );
 
   const confirmUpdate = () => {

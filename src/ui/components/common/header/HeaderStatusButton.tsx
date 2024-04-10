@@ -7,15 +7,17 @@ import useMenu from '../../../hooks/useMenu';
 import { Button, SplitButtonMenu } from '../../forms/fields-next';
 import useStyles from './HeaderStatusButton.styles';
 
+type StatusValue = LotStatus | EquipmentStatus;
+
 interface StatusOption {
-  value: LotStatus | EquipmentStatus
+  value: StatusValue
   label: string
 }
 
 interface HeaderStatusButtonProps extends ButtonProps {
   label: string
   options: StatusOption[]
-  onItemSelect: (value: LotStatus | EquipmentStatus) => void
+  onItemSelect: (value: StatusValue) => void
 }
 
 const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
@@ -29,7 +31,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
   const classes = useStyles();
   const dataCy = props['data-cy'] ?? 'status';
 
-  const handleMenuClick = (value: LotStatus) => () => onItemSelect(value);
+  const handleMenuClick = (value: StatusValue) => () => onItemSelect(value);
 
   const Icon = <Box className={classes.buttonIcon}><FontAwesomeIcon icon={solid('chevron-down')} /></Box>;
 
