@@ -107,6 +107,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
               title={translate(isLatestRevisionObsoleted ? 'allocation.part.obsolete.revision' : 'allocation.part.replace.revision', {
                 revision: latestRevisionInfo?.displayRevision,
                 name: latestRevisionInfo?.name,
+                docId: latestRevisionInfo?.docId,
               })}
               placement="top-start"
             ><FontAwesomeIcon

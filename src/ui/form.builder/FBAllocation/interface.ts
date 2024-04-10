@@ -46,4 +46,5 @@ export interface LatestPartRevisionInfo {
   displayRevision: string
   status: DocumentRevisionStatus
   inRestrictedEditMode: boolean
+  docId: string
 }
