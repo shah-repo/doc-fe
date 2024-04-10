@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
@@ -6,13 +7,13 @@ import { authSelectors } from '../../../../state/ducks/auth';
 import { Permission } from '../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus, EquipmentStatus } from '../../../../state/ducks/documentRevisions/types';
-import AlertDialog from '../../../app/alert.dialog/AlertDialog';
+import { styles } from '../../../app/alert.dialog/AlertDialog.styles';
+import AlertDialog from '../../../components/dialogs/Alert';
 import { isDocumentRevisionInStatus } from '../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
-import { Translation } from '../../../translations/types';
 import HeaderStatusButton from './HeaderStatusButton';
 
 interface Props {
@@ -31,6 +32,7 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
     onSuccess: confirmationDialog.close,
   });
   const updateEquipmentStatusAction = useActionCreator(documentRevisionsActions.updateEquipmentStatus);
+  const classes = styles();
 
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
@@ -49,14 +51,6 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
     confirmationDialog.open();
   };
 
-  const confirmationMessage = translate(
-    'documentRevision.equipment.status.update.alert',
-    {
-      oldStatus: (<b>{statusLabel}</b>) as unknown as string,
-      newStatus: (<b>{draftEquipmentStatus}</b>) as unknown as string,
-    },
-  );
-
   const confirmUpdate = () => {
     async.start(updateEquipmentStatusAction, documentRevision.id, { eqStatus: draftEquipmentStatus }, async);
   };
@@ -71,13 +65,18 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
         data-cy="equipment-status"
       />
       <AlertDialog
+        handler={confirmationDialog}
+        loading={async.isLoading}
+        onConfirm={confirmUpdate}
         title="documentRevision.equipment.status.update.alert.title"
-        confirmAction={confirmUpdate}
-        message={confirmationMessage as Translation}
-        dialog={confirmationDialog}
-        confirmLabel="common.true"
-        cancelLabel="common.false"
-      />
+      >
+        <Typography data-cy="dialog-message" className={classes.contentText}>
+          {translate('documentRevision.equipment.status.update.alert', {
+            oldStatus: (<b>{statusLabel}</b>) as unknown as string,
+            newStatus: (<b>{draftEquipmentStatus}</b>) as unknown as string,
+          })}
+        </Typography>
+      </AlertDialog>
     </>
   );
 };
