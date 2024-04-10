@@ -101,7 +101,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
     <Grid container spacing={1}>
       {isLatestRevisionAvailable && (
         <Grid item xs="auto">
-          <span className={classes.defaultIcon} onClick={openRevChangeDialog}>
+          <span className={classes.defaultIcon} onClick={isLatestRevisionObsoleted ? undefined : openRevChangeDialog}>
             <Tooltip
               arrow
               title={translate(isLatestRevisionObsoleted ? 'allocation.part.obsolete.revision' : 'allocation.part.replace.revision', {
@@ -113,7 +113,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
                 data-cy="new-revision-available"
                 color={isLatestRevisionObsoleted ? Colors.warning : Colors.primaryLight}
                 className={classes.defaultIcon}
-                icon={solid(isLatestRevisionObsoleted ? 'triangle-exclamation' : 'circle-exclamation')}
+                icon={isLatestRevisionObsoleted ? solid('triangle-exclamation') : solid('circle-exclamation')}
               />
             </Tooltip>
           </span>
