@@ -755,11 +755,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             lotDocId,
             lotQuantityNeeded,
             lotVariance,
-            isNewAddition,
           } = JSON.parse(nextVal);
 
-          const partVarianceVal = partVariance ?? 0;
+          const partVarianceVal = (partVariance && partVariance !== '') ? partVariance : 0;
           const lotVarianceVal = lotVariance ?? 0;
+          const issuedQty = parseInt(partQuantityNeeded) + parseInt(partVarianceVal);
 
           if (audit.type.includes('ARRAY_ADDED')) {
             returnValue = (
@@ -771,8 +771,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   'documentRevision.audit.workOrder.lot_info.added',
                   { lotDocId, lotQuantityNeeded, lotVarianceVal },
                 )}
-                {isNewAddition
-                  && lotDocId
+                {lotDocId
                   && !lotQuantityNeeded
                   && getNewLineItemAuditValue(
                     dataCy,
@@ -781,16 +780,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   )}
                 {!lotDocId
                   && partQuantityNeeded
-                  && partVariance
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.part_info.added',
-                    { partDocId, partQuantityNeeded, partVarianceVal },
+                    { partDocId, partQuantityNeeded, partVarianceVal, issuedQty },
                   )}
-                {isNewAddition
-                  && partDocId
+                {!lotDocId
                   && !partQuantityNeeded
-                  && !partVariance
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.part.added',
@@ -811,7 +807,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.part_info.updated',
-                    { partDocId, partQuantityNeeded, partVarianceVal },
+                    { partDocId, partQuantityNeeded, partVarianceVal, issuedQty },
                   )}
               </>
             );
