@@ -391,10 +391,10 @@ const LineItemsPresenter: React.FC<Props> = ({
                 />
               );
             case ActionTypes.DIRECT_APPROVAL_REQ_OWNER:
-              if (pendingAction.docRevPendingApprovals.length === 0) {
-                return (<></>);
-              }
               if (pendingAction.docRevStatus === 'IN_REVIEW') {
+                if (pendingAction.docRevPendingApprovals.length === 0) {
+                  return null;
+                }
                 return (
                   <DirectApprovalActionPRItem
                     key={pendingAction.id}
