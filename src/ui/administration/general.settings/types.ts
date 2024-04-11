@@ -9,6 +9,7 @@ export enum GeneralSettingsTabs {
   MD = 'Material Disposition',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
+  Locations = 'Locations',
 }
 
 export interface GeneralSettingsProps {
