@@ -3,16 +3,6 @@ import { useFormik } from 'formik';
 import { omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-// import { companyActions } from '../../../../state/ducks/company';
-// import { CompanyLocation } from '../../../../state/ducks/company/types';
-// import { DataGridRowClickEvent } from '../../../components/KendoDataGrid/KendoDataGrid.types';
-// import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-// import LocationsSetting from '../../../components/LocationsSetting';
-// import { buildSchema } from '../../../components/LocationsSetting/schema';
-// import useStyles from '../../../components/LocationsSetting/styles';
-// import { toastError } from '../../../components/notifications';
-// import useActionCreator from '../../../hooks/useActionCreator';
-// import useAsync from '../../../hooks/useAsync';
 import { EditableCompanyLocation, Props } from './types';
 
 import { CompanyLocation } from '../../../../../state/ducks/company/types';
