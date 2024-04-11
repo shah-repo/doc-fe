@@ -10,6 +10,7 @@ import { translate } from '../../../common/intl';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { WorkOrderTypes, WO_PART_KEY_NAME, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import ErrorBlock from '../../components/forms/fields/ErrorBlock';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from '../../form.builder';
@@ -50,6 +51,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
     = !isEmpty(partsDefaultValue)
     && !isEmpty(latestRevisionInfo)
     && partsDefaultValue?.id !== latestRevisionInfo?.id;
+  const isLatestRevisionObsoleted = latestRevisionInfo?.status === DocumentRevisionStatus.Obsolete;
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data?: LatestPartRevisionInfo) => {
@@ -99,19 +101,20 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
     <Grid container spacing={1}>
       {isLatestRevisionAvailable && (
         <Grid item xs="auto">
-          <span className={classes.defaultIcon} onClick={openRevChangeDialog}>
+          <span className={classes.defaultIcon} onClick={isLatestRevisionObsoleted ? undefined : openRevChangeDialog}>
             <Tooltip
               arrow
-              title={translate('allocation.part.replace.revision', {
+              title={translate(isLatestRevisionObsoleted ? 'allocation.part.obsolete.revision' : 'allocation.part.replace.revision', {
                 revision: latestRevisionInfo?.displayRevision,
+                name: latestRevisionInfo?.name,
+                docId: latestRevisionInfo?.docId,
               })}
               placement="top-start"
-            >
-              <FontAwesomeIcon
+            ><FontAwesomeIcon
                 data-cy="new-revision-available"
-                color={Colors.primaryLight}
+                color={isLatestRevisionObsoleted ? Colors.warning : Colors.primaryLight}
                 className={classes.defaultIcon}
-                icon={solid('circle-exclamation')}
+                icon={isLatestRevisionObsoleted ? solid('triangle-exclamation') : solid('circle-exclamation')}
               />
             </Tooltip>
           </span>

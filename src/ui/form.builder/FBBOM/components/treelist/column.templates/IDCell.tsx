@@ -352,7 +352,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
       {!isEditMode
         && [...(Array(level.length) as number[])].map((e, i) => {
           const availableRevs = dataItem?.availableRevisions;
-          const isPrevLevelOfAvailableRevsExistsRow = isPrevLevel(i) && availableRevs?.isReleased;
+          const isPrevLevelOfAvailableRevsExistsRow = isPrevLevel(i) && availableRevs?.isReleased && !dataItem.isWO;
           if (isFinalLevel(i)) {
             return (
               <>
