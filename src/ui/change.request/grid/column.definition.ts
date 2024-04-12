@@ -45,13 +45,13 @@ const columns: KendoColumn[] = [
   {
     field: 'state',
     title: 'common.status',
-    show: false,
+    show: true,
     locked: false,
     width: 20,
     groupable: true,
     cell: KendoCellTemplates.STATUS,
     filterCell: KendoGridFilterCell.STATE,
-    showColumnMenu: false,
+    showColumnMenu: true,
     orderIndex: 4,
   },
 ];
