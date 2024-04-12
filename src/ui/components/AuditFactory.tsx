@@ -757,8 +757,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             lotVariance,
           } = JSON.parse(nextVal);
 
-          const partVarianceVal = (partVariance && partVariance !== '') ? partVariance : 0;
-          const lotVarianceVal = lotVariance ?? 0;
+          const partVarianceVal = partVariance || 0;
+          const lotVarianceVal = lotVariance || 0;
           const issuedQty = parseInt(partQuantityNeeded) + parseInt(partVarianceVal);
 
           if (audit.type.includes('ARRAY_ADDED')) {
