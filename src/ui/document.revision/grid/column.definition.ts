@@ -102,7 +102,7 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.EFFECTIVE_DATE,
     showColumnMenu: true,
     orderIndex: 8,
-  }
+  },
 ];
 
 const gridConfiguration: KendoGridConfiguration = {
