@@ -185,6 +185,14 @@ export enum statusClassMapping {
   'R&D_USED_ONLY'='GRAY_STATUS',
   'SCRAP'='RED_STATUS',
   'REJECTED'='RED_STATUS',
+  'Active' = 'DRAFT_STATUS',
+  'Active Calibrated' = 'DRAFT_STATUS',
+  'Active No Cal Required' = 'DRAFT_STATUS',
+  'Inactive' = 'GRAY_STATUS',
+  'Out for Calibration' = 'PENDING_STATUS',
+  'Out for Maintenance' = 'PENDING_STATUS',
+  'Retired' = 'RED_STATUS',
+  'Unplanned Downtime' = 'GRAY_STATUS',
 }
 
 export const pagerSettings: GridPagerSettings = {

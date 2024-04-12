@@ -15,7 +15,6 @@ export const EQStatus: React.FC<CustomGridCellProps> = ({
   columnIndex,
   cellRowClick,
 }) => {
-  console.log('In...');
   const classes = useStyles();
   const status = dataItem[field] as string;
   const cellClickEvent = () => {
@@ -23,8 +22,6 @@ export const EQStatus: React.FC<CustomGridCellProps> = ({
     cellRowClick({ dataItem });
   };
   const fieldLabel = status;
-
-  console.log('eqstatus=eqstatus=>', status);
 
   return (
     <td

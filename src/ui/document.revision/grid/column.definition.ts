@@ -86,7 +86,7 @@ const columns: KendoColumn[] = [
     locked: false,
     width: 14,
     groupable: true,
-    // cell: KendoCellTemplates.STATUS,
+    cell: KendoCellTemplates.STATUS,
     filterCell: KendoGridFilterCell.DISPLAY_STATUS,
     showColumnMenu: true,
     orderIndex: 7,
