@@ -1,11 +1,11 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, Tooltip } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { isEmpty, kebabCase } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { FB, FBInputProps, FBTextField, FBWorkspaceModeOptions } from '..';
+import { FB, FBInputProps, FBTextField, FBTooltip, FBWorkspaceModeOptions } from '..';
 import { translate } from '../../../common/intl';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -47,7 +47,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   const dialog = useDialog();
   const dispatch = useDispatch();
   const openRevChangeDialog = () => { !props.disabled && dialog.open(); };
-  const isLatestRevisionAvailable
+  let displayInfoIcon
     = !isEmpty(partsDefaultValue)
     && !isEmpty(latestRevisionInfo)
     && partsDefaultValue?.id !== latestRevisionInfo?.id;
@@ -96,15 +96,25 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
       docRevId && dispatch(documentRevisionsActions.load(docRevId));
     }
   };
+  const isLatestRevisionInRestrictedEditMode = latestRevisionInfo?.inRestrictedEditMode;
+  let infoLabelString = 'allocation.part.replace.revision';
+
+  if (isLatestRevisionInRestrictedEditMode) {
+    displayInfoIcon = isLatestRevisionInRestrictedEditMode;
+    infoLabelString = 'allocation.part.restricted.edit';
+  } else if (isLatestRevisionObsoleted) {
+    displayInfoIcon = isLatestRevisionObsoleted;
+    infoLabelString = 'allocation.part.obsolete.revision';
+  }
 
   return (
     <Grid container spacing={1}>
-      {isLatestRevisionAvailable && (
+      {displayInfoIcon && (
         <Grid item xs="auto">
-          <span className={classes.defaultIcon} onClick={isLatestRevisionObsoleted ? undefined : openRevChangeDialog}>
-            <Tooltip
+          <span className={classes.defaultIcon} onClick={isLatestRevisionObsoleted || isLatestRevisionInRestrictedEditMode ? undefined : openRevChangeDialog}>
+            <FBTooltip
               arrow
-              title={translate(isLatestRevisionObsoleted ? 'allocation.part.obsolete.revision' : 'allocation.part.replace.revision', {
+              title={translate(infoLabelString, {
                 revision: latestRevisionInfo?.displayRevision,
                 name: latestRevisionInfo?.name,
                 docId: latestRevisionInfo?.docId,
@@ -116,13 +126,13 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
                 className={classes.defaultIcon}
                 icon={isLatestRevisionObsoleted ? solid('triangle-exclamation') : solid('circle-exclamation')}
               />
-            </Tooltip>
+            </FBTooltip>
           </span>
         </Grid>
       )}
       <Grid
         item
-        xs={isLatestRevisionAvailable ? 5 : 6}
+        xs={displayInfoIcon ? 5 : 6}
       >
         <FBAutocompleteAsync
           {...props}
