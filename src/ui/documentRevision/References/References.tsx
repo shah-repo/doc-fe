@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, Checkbox as MuiCheckbox, FormControlLabel, Typography } from '@material-ui/core';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { DocumentRevisionFooterNew, SMText } from '../../../App';
@@ -70,18 +70,18 @@ const References = ({
       {document.referencedBy && (
         <ReferencedByContainer dataProp={document.referencedBy} />
       )}
-      <>
-        <Typography component="span" className={classes.releaseDate}>
-          <Text dataCy="training" translation="common.training" />
-        </Typography>
-        <Typography className={classes.released}>
-          {retrain ? (
-            <Text translation="form.builder.yes" />
-          ) : (
-            <Text translation="form.builder.none" />
-          )}
-        </Typography>
-      </>
+      <FormControlLabel id="Checkbox-label" className={classes.checkbox}
+        control={
+          <MuiCheckbox
+            checked={retrain}
+            disabled={true}
+            value={retrain ? 'checked' : ''}
+            data-cy="training-required-checkbox"
+            id="training-required-checkbox"
+          />
+        }
+        label={<Text data-cy="training" translation="document.revision.trainingRequired" />}
+      />
       <Box pt={2.5}>
         <Typography component="span" className={classes.releaseDate}>
           <Text dataCy="releaseDate" translation="documentRevision.form.release.date" />
