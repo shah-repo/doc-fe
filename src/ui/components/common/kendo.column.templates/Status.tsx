@@ -32,7 +32,6 @@ export const Status: React.FC<CustomGridCellProps> = ({
     fieldLabel = getLotStatusLabel(status as LotStatus);
   }
 
-  console.log('fieldLabel', fieldLabel);
   return (
     <td
       colSpan={colSpan}

@@ -102,19 +102,7 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.EFFECTIVE_DATE,
     showColumnMenu: true,
     orderIndex: 8,
-  },
-  {
-    field: 'formInput.fb-default-eq-status',
-    title: 'form.builder.equipments.label',
-    show: true,
-    locked: false,
-    width: 14,
-    groupable: true,
-    cell: KendoCellTemplates.EQ_STATUS,
-    filterCell: KendoGridFilterCell.EQ_STATUS,
-    showColumnMenu: true,
-    orderIndex: 9,
-  },
+  }
 ];
 
 const gridConfiguration: KendoGridConfiguration = {

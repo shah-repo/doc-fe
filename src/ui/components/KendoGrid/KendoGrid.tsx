@@ -339,7 +339,7 @@ export function KendoGrid<T extends any> ({
               column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
             cell={(props) => {
-              console.log('props.dataItem', props.dataItem?.formInput['fb-default-eq-status']);
+              console.log('props.dataItem', props.dataItem.eqStatus);
               props.dataItem.displayStatus = ((documentTypeCategory === DocumentCategory.PurchaseOrder
                 && props?.dataItem?.displayStatus === DocumentRevisionStatusDisplay.Released)
                 ? DocumentRevisionStatusDisplay.Approved : props?.dataItem?.displayStatus);

@@ -15,6 +15,7 @@ export const EQStatus: React.FC<CustomGridCellProps> = ({
   columnIndex,
   cellRowClick,
 }) => {
+  console.log('In...');
   const classes = useStyles();
   const status = dataItem[field] as string;
   const cellClickEvent = () => {
@@ -22,12 +23,6 @@ export const EQStatus: React.FC<CustomGridCellProps> = ({
     cellRowClick({ dataItem });
   };
   const fieldLabel = status;
-  // if (field === KendoGridFilterCell.PO_STATUS) {
-  //   fieldLabel = POStatusLabelMapping[status] as string;
-  // }
-  // if (field === KendoGridFilterCell.LOT_STATUS) {
-  //   fieldLabel = getLotStatusLabel(status as LotStatus);
-  // }
 
   console.log('eqstatus=eqstatus=>', status);
 

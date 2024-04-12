@@ -1,7 +1,7 @@
 import { chain } from 'lodash';
+import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { pagerSettings } from '../../components/common/kendo/helpers';
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
-import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 
 const columns: KendoColumn[] = [
   {
@@ -45,13 +45,13 @@ const columns: KendoColumn[] = [
   {
     field: 'state',
     title: 'common.status',
-    show: true,
+    show: false,
     locked: false,
     width: 20,
     groupable: true,
     cell: KendoCellTemplates.STATUS,
     filterCell: KendoGridFilterCell.STATE,
-    showColumnMenu: true,
+    showColumnMenu: false,
     orderIndex: 4,
   },
 ];

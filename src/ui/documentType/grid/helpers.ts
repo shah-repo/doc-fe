@@ -48,10 +48,10 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     searchOptions.dataKey = 'lotStatus';
     searchOptions.lotStatusTemplate = true;
   }
-  // if (valuePath === 'formInput.fb-default-eq-status') {
-  //   searchOptions.dataKey = 'eqStatus';
-  //   searchOptions.eqStatusTemplate = true;
-  // }
+  if (valuePath === 'eqStatus') {
+    searchOptions.dataKey = 'eqStatus';
+    searchOptions.eqStatusTemplate = true;
+  }
   return searchOptions;
 };
 
@@ -93,8 +93,8 @@ export const getStaticColumns = (
     key: 'eqStatus',
     label: 'form.builder.equipments.label',
     searchOptions: {
-      dataKey: 'formInput.fb-default-eq-status',
-      statusTemplate: true,
+      dataKey: 'eqStatus',
+      eqStatusTemplate: true,
     },
   },
   {
