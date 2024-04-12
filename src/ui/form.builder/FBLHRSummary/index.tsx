@@ -39,9 +39,7 @@ import {
   CustomTreeListColumnProps,
   EditableLHRSummaryItem,
   EditableLHRSummaryItemEditEvent,
-  EquipmentDocument,
   LHRSummaryItem,
-  MPIDocument,
 } from './types';
 
 interface props {
@@ -60,9 +58,9 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
-  const [mpiDocuments, setMpiDocuments] = React.useState<MPIDocument[]>([]);
-  const [equipmentDocs, setEquipmentDocs] = React.useState<EquipmentDocument[]>([]);
-  const [partDocs, setPartDocs] = React.useState<EquipmentDocument[]>([]);
+  const [mpiDocuments, setMpiDocuments] = React.useState<DocumentRevision[]>([]);
+  const [equipmentDocs, setEquipmentDocs] = React.useState<DocumentRevision[]>([]);
+  const [partDocs, setPartDocs] = React.useState<DocumentRevision[]>([]);
   const [lotDocs, setLotDocs] = React.useState<DocumentRevision[]>([]);
   const fetchLHRSummary = useActionCreator(lhrSummaryActions.fetchLHRSummary);
   const fetchAutocompleteOptions = useActionCreator(lhrSummaryActions.fetchAutocompleteOptions);
@@ -72,39 +70,21 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const MPIDocumentsAsync = useAsync({
     onSuccess: (data) => {
-      data
-        && setMpiDocuments(
-          (data as [])?.map((doc) => ({
-            id: doc?.id,
-            docId: doc?.document?.docId,
-          })),
-        );
+      data && setMpiDocuments(data as DocumentRevision[]);
     },
     onError: toastError,
   });
 
   const EQDocumentsAsync = useAsync({
     onSuccess: (data) => {
-      data
-        && setEquipmentDocs(
-          (data as [])?.map((doc) => ({
-            id: doc?.id,
-            docId: doc?.document?.docId,
-          })),
-        );
+      data && setEquipmentDocs(data as DocumentRevision[]);
     },
     onError: toastError,
   });
 
   const PartDocumentsAsync = useAsync({
     onSuccess: (data) => {
-      data
-        && setPartDocs(
-          (data as [])?.map((doc) => ({
-            id: doc?.id,
-            docId: doc?.document?.docId,
-          })),
-        );
+      data && setPartDocs(data as DocumentRevision[]);
     },
     onError: toastError,
   });

@@ -1,6 +1,8 @@
 import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import {
@@ -10,14 +12,16 @@ import {
 import {
   FormikField,
 } from '../../../../components/forms/fields-next';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { FB } from '../../../helpers';
 import { DocType, EMPTY_PLACEHOLDER } from '../../constants';
-import { CustomTemplateProps, EditableLHRSummaryItem, EquipmentDocument, PartDocument } from '../../types';
+import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { filterOutOption } from '../../utils';
 import AutocompleteAsync from './AutocompleteAsync';
+import { styles } from './styles';
 
-type PlannedIDCellProps = {equipmentDocs: EquipmentDocument[], partDocs: PartDocument[]} & CustomTemplateProps;
+type PlannedIDCellProps = {equipmentDocs: DocumentRevision[], partDocs: DocumentRevision[]} & CustomTemplateProps;
 
 export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
   dataItem,
@@ -28,8 +32,9 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const docType = dataItem.type;
   const isMaterial = docType === DocType.material;
-  const [plannedId, setPlannedId] = useState<string>();
+  const [documentRevision, setDocumentRevision] = useState<DocumentRevision>();
   const defaultValue = dataItem[field];
+  const classes = styles();
 
   useEffect(() => {
     if (!FB.isUUID(defaultValue)) {
@@ -43,7 +48,7 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
       value = equipmentDocs.find((option) => option.id === defaultValue);
     }
 
-    setPlannedId(value?.docId);
+    setDocumentRevision(value);
   }, [equipmentDocs, partDocs]);
 
   if (isEditMode) {
@@ -96,5 +101,13 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
     );
   }
 
-  return <>{plannedId ?? defaultValue ?? EMPTY_PLACEHOLDER}</>;
+  return (<>
+    {!isEmpty(documentRevision) ? <Link
+      to={documentVersionPath(documentRevision?.id as string, documentRevision?.document?.id as string)}
+      target="_blank"
+      id="PartOrEqDocLink-linkButton"
+      className={classes.link}
+    >{documentRevision?.document.docId } </Link>
+      : defaultValue ?? EMPTY_PLACEHOLDER}
+  </>);
 };

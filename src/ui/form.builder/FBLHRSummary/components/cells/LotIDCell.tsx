@@ -1,6 +1,7 @@
 import { useFormikContext } from 'formik';
 import { find, isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
@@ -13,10 +14,12 @@ import {
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { EMPTY_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
+import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableLHRSummaryItem>();
@@ -79,15 +82,15 @@ export const LotIDCell: React.FC<LotIDCellProps> = ({
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const [lotDocId, setLotDocId] = useState('');
+  const [documentRevision, setDocumentRevision] = useState<DocumentRevision>();
   const defaultValue = dataItem[field];
+  const classes = styles();
 
   useEffect(() => {
     const lotDoc = find(lotDocs, { id: defaultValue });
 
-    const docId = lotDoc?.document?.docId ?? '';
-    if (!isEmpty(docId)) {
-      setLotDocId(docId);
+    if (!isEmpty(lotDoc)) {
+      setDocumentRevision(lotDoc);
     }
   }, [lotDocs, dataItem[MODE_FIELD], dataItem.lotOrEquipment]);
 
@@ -97,5 +100,13 @@ export const LotIDCell: React.FC<LotIDCellProps> = ({
     );
   }
 
-  return <>{lotDocId ?? defaultValue ?? EMPTY_PLACEHOLDER}</>;
+  return (<>
+    {!isEmpty(documentRevision) ? <Link
+      to={documentVersionPath(documentRevision?.id as string, documentRevision?.document?.id as string)}
+      target="_blank"
+      id="LotDocLink-linkButton"
+      className={classes.link}
+    >{documentRevision?.document.docId } </Link>
+      : defaultValue ?? EMPTY_PLACEHOLDER}
+  </>);
 };

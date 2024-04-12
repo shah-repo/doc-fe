@@ -3,33 +3,37 @@ import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { useFormikContext } from 'formik';
 import { find, isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FB, FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
-import { CustomTemplateProps, EditableLHRSummaryItem, MPIDocument } from '../../types';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { filterOutOption } from '../../utils';
 import AutocompleteAsync from './AutocompleteAsync';
+import { styles } from './styles';
 
-type StepCellProps = {mpiDocuments: MPIDocument[]} & CustomTemplateProps;
+type StepCellProps = {mpiDocuments: DocumentRevision[]} & CustomTemplateProps;
+
+interface StepOrMPIInfo {mpiDoc: DocumentRevision| undefined, step: string, stepOrMPI: string}
 
 export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocuments }) => {
+  const classes = styles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const [stepOrMPI, setStepOrMPI] = useState('');
+  const [stepOrMPIInfo, setStepOrMPI] = useState<StepOrMPIInfo>({ mpiDoc: undefined, step: '', stepOrMPI: '' });
   const mpiId = dataItem?.stepOrMPI?.split('/')[1];
 
   useEffect(() => {
     const mpiDoc = find(mpiDocuments, { id: mpiId });
     if (isEmpty(mpiDoc) || !FB.isUUID(mpiId)) {
-      setStepOrMPI(dataItem?.stepOrMPI);
+      setStepOrMPI(prev => ({ ...prev, stepOrMPI: dataItem?.stepOrMPI }));
       return;
     }
+
     const step = dataItem.stepOrMPI?.split('/')[0];
-    const mpiDocId = mpiDoc?.docId ?? '';
-    if (!isEmpty(mpiDocId)) {
-      setStepOrMPI(`${step}/${mpiDocId}`);
-    }
+    setStepOrMPI(prev => ({ ...prev, step, mpiDoc }));
   }, [mpiDocuments, dataItem[MODE_FIELD], dataItem.stepOrMPI]);
 
   if (isEditMode) {
@@ -105,5 +109,16 @@ export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocument
     );
   }
 
-  return <>{stepOrMPI}</>;
+  const mpiDoc = stepOrMPIInfo.mpiDoc;
+  const step = stepOrMPIInfo.step;
+
+  return <>{isEmpty(mpiDoc) ? stepOrMPIInfo.stepOrMPI
+    : <span>
+      <span>{step}</span> / <Link
+        to={documentVersionPath(mpiDoc?.id as string, mpiDoc?.document?.id as string)}
+        target="_blank"
+        id="MPIDocLink-linkButton"
+        className={classes.link}
+      >{mpiDoc?.document.docId} </Link>
+    </span>}</>;
 };

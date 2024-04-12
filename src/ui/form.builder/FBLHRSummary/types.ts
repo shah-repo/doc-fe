@@ -66,26 +66,11 @@ export interface LHRSummaryRequestBody {
   comments: string
 }
 
-export interface MPIDocument {
-  id: string
-  docId: string
-}
-
-export interface EquipmentDocument {
-  id: string
-  docId: string
-}
-
-export interface PartDocument {
-  id: string
-  docId: string
-}
-
 export interface SchemaOptions {
   actionsClass: string
-  mpiDocuments: MPIDocument[]
-  equipmentDocs: EquipmentDocument[]
-  partDocs: PartDocument[]
+  mpiDocuments: DocumentRevision[]
+  equipmentDocs: DocumentRevision[]
+  partDocs: DocumentRevision[]
   lotDocs: DocumentRevision[]
   onConfirm: () => void
   onDiscard: () => void
