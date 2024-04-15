@@ -39,7 +39,7 @@ export default makeStyles((theme: Theme) =>
       cursor: 'pointer',
     },
     fieldMargin: {
-      marginBottom: '24px',
+      marginBottom: theme.spacing(3),
     },
   }),
 );
