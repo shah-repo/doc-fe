@@ -38,5 +38,8 @@ export default makeStyles((theme: Theme) =>
       background: 'none',
       cursor: 'pointer',
     },
+    fieldMargin: {
+      marginBottom: '24px',
+    },
   }),
 );

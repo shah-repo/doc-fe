@@ -24,7 +24,7 @@ import { companySelectors } from '../../../../../state/ducks/company';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
 
-export const CompanyLocations: React.FC<Props> = ({
+const CompanyLocations: React.FC<Props> = ({
   locations = [],
   isActive = false,
 }) => {
@@ -110,7 +110,6 @@ export const CompanyLocations: React.FC<Props> = ({
 const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const companyMine = useSelector(companySelectors.getCompanyMine);
   const canUpdateLocations = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
-
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.locations.tab')}>
       {canUpdateLocations && <CompanyLocations isActive={canUpdateLocations} locations={companyMine.locations} />}
