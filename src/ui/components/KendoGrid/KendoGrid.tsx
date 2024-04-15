@@ -202,11 +202,11 @@ export function KendoGrid<T extends any> ({
 
   const POStatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
-    {...props}
-    data={poStatusOptions}
-    defaultItem={intl.formatMessage({
-      id: TranslatedText[DisplayText.ALL],
-    })}
+      {...props}
+      data={poStatusOptions}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
     />
     );
 

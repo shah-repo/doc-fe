@@ -90,14 +90,6 @@ export const getStaticColumns = (
     },
   },
   {
-    key: 'eqStatus',
-    label: 'form.builder.equipments.label',
-    searchOptions: {
-      dataKey: 'eqStatus',
-      eqStatusTemplate: true,
-    },
-  },
-  {
     key: 'changeRequest',
     label: 'common.approval.id',
     searchOptions: {
