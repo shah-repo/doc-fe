@@ -51,7 +51,6 @@ export enum EquipmentStatus {
   OutForMaintenance = 'Out for Maintenance',
   Retired = 'Retired',
   UnplannedDowntime = 'Unplanned Downtime',
-  Voided = 'Voided',
 }
 
 // Lot types implemetation
