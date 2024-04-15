@@ -22,11 +22,6 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
     marginRight: theme.spacing(0.5),
   },
-  DRAFT_STATUS: {
-    background: Colors.light_cyan,
-    color: Colors.lochmara,
-    border: `1px solid ${Colors.steel_blue}`,
-  },
   GREEN_STATUS: {
     background: Colors.snow_flurry,
     color: Colors.light_forest_green,
