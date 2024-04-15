@@ -156,7 +156,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = 'displayStatus';
-    }else if (columnDetails.searchOptions?.eqStatusTemplate) {
+    } else if (columnDetails.searchOptions?.eqStatusTemplate) {
       dynamicCellTemplate = KendoCellTemplates.EQ_STATUS;
       filterCellTemplate = KendoGridFilterCell.EQ_STATUS;
       upDateField = 'eqStatus';

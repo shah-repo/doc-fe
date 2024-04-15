@@ -200,27 +200,17 @@ export function KendoGrid<T extends any> ({
     POStatusLabelMapping.VOIDED,
   ];
 
-  const eqStatuses = [
-    EquipmentStatus.Active,
-    EquipmentStatus.ActiveCalibrated,
-    EquipmentStatus.ActiveNoCalRequired,
-    EquipmentStatus.Inactive,
-    EquipmentStatus.OutForCalibration,
-    EquipmentStatus.OutForMaintenance,
-    EquipmentStatus.Retired,
-    EquipmentStatus.UnplannedDowntime,
-    EquipmentStatus.Voided,
-  ];
-
   const POStatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
-      {...props}
-      data={poStatusOptions}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
+    {...props}
+    data={poStatusOptions}
+    defaultItem={intl.formatMessage({
+      id: TranslatedText[DisplayText.ALL],
+    })}
     />
-  );
+    );
+
+  const eqStatuses = Object.values(EquipmentStatus);
 
   const EQStatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
