@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { useFormik } from 'formik';
 import { omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
@@ -99,9 +99,6 @@ const CompanyLocations: React.FC<Props> = ({
 
   return (
     <Box className={classes.root}>
-      <Typography variant="h6">
-        {/* <Text message="settings.locations" /> */}
-      </Typography>
       <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation, onRowClick }} />
     </Box>
   );
