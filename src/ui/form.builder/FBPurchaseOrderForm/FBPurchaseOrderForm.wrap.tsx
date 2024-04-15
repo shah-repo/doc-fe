@@ -1,4 +1,4 @@
-import { get, includes, map } from 'lodash';
+import { get } from 'lodash';
 import { reaction } from 'mobx';
 import React from 'react';
 import { FB, FBFormState, FBPurchaseOrderFormProps, FBPurchaseOrderItem } from '..';
@@ -77,8 +77,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     };
 
     getOptionDisabled = (option: DocumentRevision) => {
-      const selectedParts = map(purchaseOrderState?.value.items, 'partNumber');
-      return includes(selectedParts, option.id);
+      return false;
     };
 
     getOptionLabel = (option) => generateDocIdLabel(option);
