@@ -21,10 +21,12 @@ interface Props {
 }
 
 const disabledStatuses = [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided];
-const options = Object.values(EquipmentStatus).map(value => ({
-  value,
-  label: value,
-}));
+const options = Object.values(EquipmentStatus)
+  .filter(value => value !== EquipmentStatus.Voided)
+  .map(value => ({
+    value,
+    label: value,
+  }));
 
 const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
   const confirmationDialog = useDialog();
