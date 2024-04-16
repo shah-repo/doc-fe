@@ -1,3 +1,4 @@
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { MODE_FIELD } from './components/treelist/constants';
 
 export interface AllocationItem {
@@ -43,4 +44,7 @@ export interface LatestPartRevisionInfo {
   name: string
   revision: number
   displayRevision: string
+  status: DocumentRevisionStatus
+  inRestrictedEditMode: boolean
+  docId: string
 }

@@ -29,6 +29,7 @@ import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
+import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/documentType/types';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
@@ -47,7 +48,10 @@ import { withThemeNext } from '../../../../layout/theme-next';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import AutoOptions from './AutoOptions';
 import {
-  ADD_FIELD, AllocationCheckBoxOptions, ALLOCATION_TABLE_NAME, CELL_EMPTY_VALUE, DATA_ITEM_KEY,
+  ADD_FIELD,
+  ALLOCATION_TABLE_NAME,
+  AllocationCheckBoxOptions,
+  CELL_EMPTY_VALUE, DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
@@ -101,6 +105,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       documentRevision.id,
       treeListAsync,
     );
+    dispatch(documentRevisionsActions.loadAudit(documentRevision.id));
   };
 
   const partAsync = useAsync({

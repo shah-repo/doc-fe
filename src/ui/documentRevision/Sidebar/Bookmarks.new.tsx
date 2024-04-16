@@ -16,7 +16,7 @@ const Bookmarks: React.FC<{ tabConfig: TabInfo[] }> = ({ tabConfig }) => {
   const { bookmarkState } = FB.useStores();
   const { _tabsState } = SM.useStores();
   const [selectedBookmarkName, setSelectedBookmarkName] = useState<string>();
-  const [bookmarks, setBookmarks] = useState<FBBookmarkItem[]>([]);
+  const [bookmarks, setBookmarks] = useState<FBBookmarkItem[]>(bookmarkState?.bookmarks ?? []);
   const updateBookmarks = _debounce(setBookmarks, 500);
 
   SM.reaction(
