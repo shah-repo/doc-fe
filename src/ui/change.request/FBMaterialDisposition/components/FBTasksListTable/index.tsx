@@ -30,8 +30,8 @@ import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from
 import { updateData } from './utils';
 
 interface props {
-  partOfId: string
-  state: ChangeRequestStatus | DocumentRevisionStatus
+  partOfId?: string
+  state?: ChangeRequestStatus | DocumentRevisionStatus
   isShowOnly?: boolean
   disabled?: boolean
   label?: string
