@@ -49,7 +49,7 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
     }
 
     setDocumentRevision(value);
-  }, [equipmentDocs, partDocs]);
+  }, [equipmentDocs, partDocs, dataItem[field]]);
 
   if (isEditMode) {
     const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();

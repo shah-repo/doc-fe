@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Typography } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { find, pick } from 'lodash';
+import { find, isEmpty, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -23,6 +23,7 @@ import { toastError } from '../../components/notifications';
 import { FBAutocompleteAsyncOption, FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import {
   ColumnMenuContext,
   CustomColumnMenu,
@@ -70,21 +71,36 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const MPIDocumentsAsync = useAsync({
     onSuccess: (data) => {
-      data && setMpiDocuments(data as DocumentRevision[]);
+      if (isEmpty(data)) {
+        return;
+      }
+
+      setMpiDocuments(data as DocumentRevision[]);
+      FBAutocompleteAsyncStore.setOptionData(FBAutocompleteAsyncOption.mpiDocuments, data);
     },
     onError: toastError,
   });
 
   const EQDocumentsAsync = useAsync({
     onSuccess: (data) => {
-      data && setEquipmentDocs(data as DocumentRevision[]);
+      if (isEmpty(data)) {
+        return;
+      }
+
+      setEquipmentDocs(data as DocumentRevision[]);
+      FBAutocompleteAsyncStore.setOptionData(FBAutocompleteAsyncOption.equipment, data);
     },
     onError: toastError,
   });
 
   const PartDocumentsAsync = useAsync({
     onSuccess: (data) => {
-      data && setPartDocs(data as DocumentRevision[]);
+      if (isEmpty(data)) {
+        return;
+      }
+
+      setPartDocs(data as DocumentRevision[]);
+      FBAutocompleteAsyncStore.setOptionData(FBAutocompleteAsyncOption.releasedParts, data);
     },
     onError: toastError,
   });

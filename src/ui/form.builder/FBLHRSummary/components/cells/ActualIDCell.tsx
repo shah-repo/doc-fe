@@ -45,7 +45,7 @@ export const ActualIDCell: React.FC<ActualIDCellProps> = ({ dataItem, field, equ
     }
 
     setDocumentRevision(value);
-  }, [equipmentDocs, partDocs]);
+  }, [equipmentDocs, partDocs, dataItem[field]]);
 
   if (isEditMode) {
     // eslint-disable-next-line @typescript-eslint/unbound-method
