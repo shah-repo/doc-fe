@@ -1,3 +1,5 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
@@ -19,27 +21,34 @@ const TrainingDetails: React.FunctionComponent<Props>
     training,
   }) => {
     const classes = styles();
-
+console.log('---training---', { training });
     return (
       <>
         <IconButton className={classes.closeButton} onClick={dialog.close}>
           <CloseIcon data-cy="close-icon" />
         </IconButton>
         <DialogTitle>
+        <Grid container>
+        <Grid item xs="auto">
+          <FontAwesomeIcon icon={regular('graduation-cap')} className={classes.titleIcon} />
+          </Grid>
+          <Grid item xs={11}>
           <Typography className={classes.dialogTitle}>
             <Text translation="common.training.record" />
           </Typography>
+          </Grid>
+          </Grid>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent className={classes.detailsDialogContent}>
           <Grid container>
-            <Grid item xs={6}>
+            <Grid item xs={5}>
               <Grid item xs={12} className={classes.item}>
                 <Typography className={classes.label}>
                   <Text translation="training.trn.id" />
-                  <Box className={classes.itemContentBlue}>
+                </Typography>
+                  <Box>
                     {training.trId}
                   </Box>
-                </Typography>
               </Grid>
               <Grid item xs={12} className={classes.item}>
                 <Typography className={classes.label}>
@@ -60,28 +69,30 @@ const TrainingDetails: React.FunctionComponent<Props>
                 </Box>
               </Grid>
             </Grid>
-            <Grid item xs={6} >
+            <Grid item xs={7} className={classes.rightContainer} >
               <Grid item xs={12} className={classes.item}>
-                <span className={classes.label}>
+                <span>
                   <Text translation="training.acknowledge.completed.statement" />
                 </span>
-                <span className={classes.itemContentBlue}>
+                <span className={classes.itemContentBlack}>
                   &nbsp;
                   {training.trainingPlan?.document.docId}&nbsp;
                   Rev &nbsp;
                   {training.documentRevision?.displayRevision}
+                </span>&nbsp;
+                <span>
+                  on { training.completedAt
+                    && <span>
+                    &nbsp; {getFormattedDateString(training.completedAt, MomentFormats.MonthDateYear)}
+                    </span>
+                  }
                 </span>
               </Grid>
               <Grid item xs={12} className={classes.item}>
                 <Box>
-                  <span className={classes.itemContentBlue}>
+                  <span className={classes.itemContentBlack}>
                     {training.trainingPlan?.employee.user?.name}
                   </span> | Trainee &nbsp;
-                  { training.completedAt
-                    && <span>
-                    | &nbsp; {getFormattedDateString(training.completedAt, MomentFormats.DateTime)}
-                    </span>
-                  }
                 </Box>
               </Grid>
               <Grid item xs={12} className={classes.item}>
@@ -89,6 +100,14 @@ const TrainingDetails: React.FunctionComponent<Props>
                   <ExportTrainingRecordToEmail id={training.id} />
                 </Box>
               </Grid>
+            </Grid>
+            <Grid item xs={12} className={classes.item}>
+              <Typography className={classes.label}>
+                <Text translation="common.attachments" />
+              </Typography>
+                <Box>
+                  attachment data
+                </Box>
             </Grid>
           </Grid>
         </DialogContent>
