@@ -3,6 +3,7 @@ import { get, has } from 'lodash';
 import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { translate } from '../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
@@ -495,7 +496,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 </>
               );
           } else if (audit.type.includes('ARRAY_EDITED')) {
-            const attachmentNameArr = attachmentLinks.map((attachmentName) => attachmentName.split('/').pop());
+            const attachmentNameArr = attachmentLinks?.map((attachmentName) => attachmentName.split('/').pop()) ?? [];
             const attachmentNameList = attachmentNameArr.join(', ');
 
               returnValue = (
@@ -737,9 +738,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case 'formInput.wo_part_unit':
       case 'formInput.wo_part_quantity':
       case 'formInput.wo_part.id':
+        returnValue = (<div data-cy={dataCy}>{getWOAuditDefaultValue(audit)}</div>);
+        break;
       case 'formInput.autoTransact':
       case 'formInput.autoAssign':
-        returnValue = (<div data-cy={dataCy}>{getWOAuditDefaultValue(audit)}</div>);
+        returnValue = (<div data-cy={dataCy}>{translate(audit.nextValue === 'true' ? 'common.true' : 'common.false')}</div>);
         break;
       case 'workOrder':
         try {
@@ -752,22 +755,24 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             lotDocId,
             lotQuantityNeeded,
             lotVariance,
-            isNewAddition,
           } = JSON.parse(nextVal);
+
+          const partVarianceVal = partVariance || 0;
+          const lotVarianceVal = lotVariance || 0;
+          const issuedQty = parseInt(partQuantityNeeded, 10) + parseInt(partVarianceVal, 10);
 
           if (audit.type.includes('ARRAY_ADDED')) {
             returnValue = (
               <>
                 {lotDocId
-                  && getNewLineItemAuditValue(
-                    dataCy,
-                    'documentRevision.audit.workOrder.lot_info.added',
-                    { lotDocId, lotQuantityNeeded, lotVariance },
-                  )}
-                {isNewAddition
-                  && lotDocId
+                && lotQuantityNeeded
+                && getNewLineItemAuditValue(
+                  dataCy,
+                  'documentRevision.audit.workOrder.lot_info.added',
+                  { lotDocId, lotQuantityNeeded, lotVarianceVal },
+                )}
+                {lotDocId
                   && !lotQuantityNeeded
-                  && !lotVariance
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.lot.added',
@@ -775,16 +780,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   )}
                 {!lotDocId
                   && partQuantityNeeded
-                  && partVariance
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.part_info.added',
-                    { partDocId, partQuantityNeeded, partVariance },
+                    { partDocId, partQuantityNeeded, partVarianceVal, issuedQty },
                   )}
-                {isNewAddition
-                  && partDocId
+                {!lotDocId
                   && !partQuantityNeeded
-                  && !partVariance
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.part.added',
@@ -799,13 +801,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.lot_info.updated',
-                    { lotDocId, lotQuantityNeeded, lotVariance },
+                    { lotDocId, lotQuantityNeeded, lotVarianceVal },
                   )}
                 {!lotDocId
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.part_info.updated',
-                    { partDocId, partQuantityNeeded, partVariance },
+                    { partDocId, partQuantityNeeded, partVarianceVal, issuedQty },
                   )}
               </>
             );

@@ -291,6 +291,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
     setSelectedDataItem(undefined);
+    isWO && dispatch(documentRevisionsActions.reload(documentRevision?.id));
   };
 
   const schema: CustomTreeListColumnProps[] = TreeListSchema({ openDetailDrawer, openARIDQuickView });
@@ -316,7 +317,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       });
 
       setColumns(updatedColumns);
-      setState({ ...state, dataState: tableCriteria.queryDict.dataState });
+      setState({ ...state, dataState: { filter: [], sort: [] } });
     } else {
       updateColumns(schema);
     }
@@ -414,8 +415,8 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     const { expanded, inEdit } = state;
     return mapTree(dataTree, SUB_ITEMS_FIELD, (item) =>
       extendDataItem(item, SUB_ITEMS_FIELD, {
-        [EXPAND_FIELD]: expanded.includes(item.id),
-        [MODE_FIELD]: Boolean(inEdit.find((i) => i.id === item.id)),
+        [EXPAND_FIELD]: expanded?.includes(item.id),
+        [MODE_FIELD]: Boolean(inEdit?.find((i) => i.id === item.id)),
       }),
     );
   };
@@ -423,11 +424,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
   const processData = () => {
     const { data, dataState } = state;
 
-    if (!dataState) {
-      return [];
-    }
-
-    const filter = [...(dataState.filter as FilterDescriptor[])];
+    const filter = [...((dataState?.filter as FilterDescriptor[]) ?? [])];
     const docIDField = filter?.find((val) => val.field === ID_FIELD);
     const docIDFieldIndex = filter?.findIndex((val) => val.field === ID_FIELD);
 
@@ -438,12 +435,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       });
     }
     const filteredData
-      = dataState.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
+      = dataState?.filter && filterBy(data, filter, SUB_ITEMS_FIELD);
     const sortedData
-      = dataState.sort
+      = dataState?.sort
       && filteredData
-      && orderBy(filteredData, dataState.sort, SUB_ITEMS_FIELD);
-    return addExpandField(sortedData as BOM[]);
+      && orderBy(filteredData, dataState?.sort, SUB_ITEMS_FIELD);
+    return addExpandField(sortedData ?? data);
   };
 
   const onColumnShowHide = ({ field }: CustomTreeListColumnProps) => {
@@ -1057,12 +1054,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       return;
     }
     const { dataState, data } = state;
-    dataState.filter = event.filter;
+    dataState.filter = event?.filter;
     const expanded = getAllItemIds(data);
     updateState({
       ...state,
       dataState: dataState,
-      expanded: isEmpty(event.filter) ? [data[0]?.id] : expanded,
+      expanded: isEmpty(event?.filter) ? [data[0]?.id] : expanded,
     });
   };
 

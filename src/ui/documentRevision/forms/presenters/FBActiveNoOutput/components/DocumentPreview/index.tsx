@@ -17,7 +17,7 @@ import { ApplicationState } from '../../../../../../../state/reducers';
 import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';
 import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../../../document.revision/form/attachments';
-import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
+import { FB, FBBOM, FBEditorState, FBProvider, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
 import FBAllocationTreeList from '../../../../../../form.builder/FBAllocation/components/treelist';
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import FBDataStore from '../../../../../../form.builder/FBStore/FBDataStore';
@@ -62,7 +62,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   // @todo: Mix between DocumentRevisionSummary and DocumentRevisionForm.
   // @todo: Move these elements to one component to reuse.
   // Create documentRevision and fill it
-  const documentRevision = cloneDeep(formik.values) as unknown as DocumentRevision;
+  const documentRevision = formik.values as unknown as DocumentRevision;
   const initialValues = formik.values as unknown as DocumentRevisionFormValues;
 
   const docTypeId = documentRevision?.document?.documentType?.id as string;
@@ -335,17 +335,27 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 const DocumentPreviewContainer: React.FunctionComponent<ContainerProps> = (props) => {
   const { workspaceState } = FB.useStores();
 
+  const previewWorkspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+    schema: workspaceState?.schema,
+    mode: FBWorkspaceModeOptions.FORM,
+    autosave: false,
+  });
+
+  previewWorkspaceState.document = cloneDeep(workspaceState?.document);
+
   const formik = useFormikContext<DocumentRevisionFormValues>();
   const initialValues = formik?.values ?? workspaceState?.document;
 
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize={true}
-      onSubmit={emptyFunction}
-    >
-      {(formikProps) => <DocumentPreview {...props} formik={formikProps} />}
-    </Formik>
+    <FBProvider workspaceState={previewWorkspaceState}>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize={true}
+        onSubmit={emptyFunction}
+      >
+        {(formikProps) => <DocumentPreview {...props} formik={formikProps} />}
+      </Formik>
+    </FBProvider>
   );
 };
 

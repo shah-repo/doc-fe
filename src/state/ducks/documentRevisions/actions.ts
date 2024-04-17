@@ -433,7 +433,7 @@ const fetchLotsByPartId = (
   handlers: Handlers,
 ): ApiAction<DocumentRevision[]> =>
   apiActionWithCallbacks({
-    url: `${LOT_OF_PARTS}/${partId}`,
+    url: `${LOT_OF_PARTS}/${partId}?isWorkOrder=true`,
     method: 'get',
     handlers,
   });

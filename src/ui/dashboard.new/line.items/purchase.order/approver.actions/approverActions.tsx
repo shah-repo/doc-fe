@@ -257,7 +257,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center" lg={12} className={classes.innerWrap}>
+              <Grid container={true} wrap="nowrap" alignItems="center" lg={12} md={3} sm={6} xs={4} className={classes.innerWrap}>
                 <Grid item={true} >
                   <Typography
                     component="span"
@@ -388,7 +388,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true} className={classes.grayDot} />
-                <Grid item={true}>
+                <Grid item={true} >
                   <Typography
                     component="span"
                     variant="caption"
@@ -554,7 +554,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                       alignContent="center"
                     >
                       {poItem.rtext.map((attachmentInfo, index) => (
-                        <Grid item key={index}>
+                        <Grid item key={index} className={classes.poAttachmentMargin}>
                           <AttachmentIcon
                             className={classes.attachmentIcon}
                           />
@@ -595,6 +595,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 id={docRevId}
                 dialogPDF={dialogPDF}
                 onClose={handleDownloadClose}
+                downloadImmediately
                 downloadPdfHover
               />
             )}

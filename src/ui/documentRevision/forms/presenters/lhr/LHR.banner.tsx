@@ -1,48 +1,56 @@
-import { Grid, Typography } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import { concat, uniqBy } from 'lodash';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { Link } from 'react-router-dom';
+import { DocumentRevision, LSHS, SmartReferenceType } from '../../../../../state/ducks/documentRevisions/types';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
-import { styles } from './LHR.banner.styles';
+import useStyles from './LHR.banner.styles';
 
-interface LHRBannerProps{
+interface LHRBannerProps {
   documentRevision: DocumentRevision
 }
 
-const LHRBanner: React.FunctionComponent<LHRBannerProps> = ({ documentRevision }) => {
-  const { smartReferencesTo } = documentRevision;
-  const classes = styles();
-  const history = useHistory();
-  if (!smartReferencesTo || (smartReferencesTo && smartReferencesTo.length === 0)) {
+const DATA_KEYS: Array<keyof LSHS> = ['lhr', 'lot', 'part'];
+
+const LHRBanner: React.FC<LHRBannerProps> = ({ documentRevision }) => {
+  const classes = useStyles();
+
+  const allReferences = concat(
+    documentRevision?.smartReferencesTo ?? [],
+    documentRevision?.document.smartReferencesTo ?? [],
+  );
+
+  const parentLHRReference = uniqBy(allReferences, 'id').find(
+    ref => ref.active && ref.type === SmartReferenceType.HiddenPiInstance,
+  );
+
+  if (!parentLHRReference) {
     return null;
   }
 
-  const lhrData = smartReferencesTo[0].toDocRev?.precalc?.lshs_subtitle;
-  if (!lhrData?.part.docRevId || !lhrData?.part.documentId) {
+  const lhrData = parentLHRReference.toDocRev?.precalc?.lshs_subtitle ?? parentLHRReference.metadata?.lhr;
+
+  if (!lhrData || !DATA_KEYS.every(k => k in lhrData)) {
     return null;
   }
-  const url = documentVersionPath(lhrData?.part.docRevId || '', lhrData?.part.documentId || '');
+
+  const partUrl = documentVersionPath(lhrData.part.docRevId, lhrData.part.documentId);
+
+  const items = [
+    lhrData.lot.label,
+    lhrData.lhr.label,
+    <Link to={partUrl} className={classes.link}>{lhrData.part.label}</Link>,
+  ];
 
   return (
-    <Typography className={classes.container}>
-      <Grid
-        container={true}
-        wrap="nowrap"
-        justify="flex-start"
-        alignItems="center">
-        <Grid item={true}>
-          {lhrData?.lot.label}
-        </Grid>&nbsp;
-        <Grid item={true} className={classes.blackDot} />&nbsp;
-        <Grid item={true}>
-          {lhrData?.lhr.label}
-        </Grid>&nbsp;
-        <Grid item={true} className={classes.blackDot} />&nbsp;
-        <Grid item={true} className={classes.partLabel} onClick={() => history.push(url)}>
-          {lhrData?.part.label}
-        </Grid>
-      </Grid>
-    </Typography>
+    <Grid container className={classes.container}>
+      {items.map((item, index) => (
+        <>
+          {index > 0 ? <Grid item className={classes.dot} /> : null}
+          <Grid item>{item}</Grid>
+        </>
+      ))}
+    </Grid>
   );
 };
 

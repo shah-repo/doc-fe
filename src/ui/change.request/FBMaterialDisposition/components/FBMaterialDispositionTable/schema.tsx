@@ -46,7 +46,8 @@ export const buildSchema = ({
       id: 'lotDocId',
       field: 'lotDocId',
       title: 'approvalRequest.grid.heading.lot',
-      headerCell: () => <CustomHeaderTooltipCell
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
         content ="approvalRequest.grid.heading.lot"
         title="approvalRequest.grid.heading.tooltip.lot" />,
       template: (props) => <LotIdCellTemplate {...props} onClick={onRowClick} />,
@@ -60,7 +61,8 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.location',
       show: true,
       sortable: false,
-      headerCell: () => <CustomHeaderTooltipCell
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
         content ="approvalRequest.grid.heading.location"
         title="approvalRequest.grid.heading.tooltip.location" />,
       filterCell: (props) => <DropDownOptionsFilterCell
@@ -76,7 +78,8 @@ export const buildSchema = ({
       id: 'whereUsedView',
       field: 'whereUsedView',
       title: 'approvalRequest.grid.heading.whereUsedView',
-      headerCell: () => <CustomHeaderTooltipCell
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
         content ="approvalRequest.grid.heading.whereUsedView"
         title="approvalRequest.grid.heading.tooltip.whereUsedView" />,
       template: (props) => <WhereUsedCellTemplate {...props} onClick={onRowClick} />,
@@ -91,7 +94,8 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.onOrder',
       show: true,
       selectable: true,
-      headerCell: () => <CustomHeaderTooltipCell
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
         content ="approvalRequest.grid.heading.onOrder"
         title="approvalRequest.grid.heading.tooltip.onOrder" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
@@ -103,7 +107,8 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.Inspection',
       show: true,
       selectable: true,
-      headerCell: () => <CustomHeaderTooltipCell
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
         content ="approvalRequest.grid.heading.Inspection"
         title="approvalRequest.grid.heading.tooltip.Inspection" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
@@ -115,7 +120,8 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.Inventory',
       show: true,
       selectable: true,
-      headerCell: () => <CustomHeaderTooltipCell
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
         title ="approvalRequest.grid.heading.tooltip.Inventory"
         content="approvalRequest.grid.heading.Inventory" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
@@ -127,7 +133,8 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.wip',
       show: true,
       selectable: true,
-      headerCell: () => <CustomHeaderTooltipCell
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
         content ="approvalRequest.grid.heading.wip"
         title="approvalRequest.grid.heading.tooltip.wip" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
@@ -139,7 +146,8 @@ export const buildSchema = ({
       title: 'approvalRequest.grid.heading.finishedGoods',
       show: true,
       selectable: true,
-      headerCell: () => <CustomHeaderTooltipCell
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
         content ="approvalRequest.grid.heading.finishedGoods"
         title="approvalRequest.grid.heading.tooltip.finishedGoods" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,
@@ -151,7 +159,8 @@ export const buildSchema = ({
       selectable: true,
       title: 'approvalRequest.grid.heading.field',
       show: true,
-      headerCell: () => <CustomHeaderTooltipCell
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
         title ="approvalRequest.grid.heading.tooltip.field"
         content="approvalRequest.grid.heading.field" />,
       template: (props) => <DropDownCellTemplate {...props} options={OPTIONS} onClick={onRowClick} onSelectCell={onSelectCell} />,

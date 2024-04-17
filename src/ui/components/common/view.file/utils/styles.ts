@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { Colors } from '../../../../layout/theme-next';
 import { NextTheme } from '../../../../layout/theme-next/provider';
 
 export const styles = makeStyles((theme: NextTheme) => ({
@@ -54,8 +55,16 @@ export const styles = makeStyles((theme: NextTheme) => ({
         marginTop: theme.spacing(1.5),
       },
     },
+    content: {
+      width: 340,
+    },
     buttonsContainer: {
       marginRight: theme.spacing(0),
+    },
+    previousButton: {
+      '&.MuiButton-root.Mui-disabled': {
+        backgroundColor: `${Colors.statusClosed} !important`,
+      },
     },
   },
 }));

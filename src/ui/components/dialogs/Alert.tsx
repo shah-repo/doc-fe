@@ -45,7 +45,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
           />
         </Box>
         <Box className={classes.contentWrapper}>
-          <Typography variant="h3" className={classes.title}>
+          <Typography variant="h3" data-cy="dialog-header" className={classes.title}>
             {translate('common.alert')}!
           </Typography>
           {children}
