@@ -35,10 +35,11 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
       const values = formState?.getValues();
       const receivedItems = workspaceState.document?.formInput?.[name]?.receivedItems ?? [];
       const id = poReceiveFormState.item?.partNumber ?? poReceiveFormState.item?.id;
-      const hasReceivedItem = (receivedItems, id) => !isEmpty(receivedItems.find((e) => e.itemId === id));
+      const selectedItemindex = poReceiveFormState?.item?.index;
+      const hasReceivedItem = (receivedItems, id) => !isEmpty(receivedItems.find((e) => e.index === selectedItemindex));
 
-      const calculatedReceivedItems = (id) => receivedItems.map((e) => {
-        if (e.itemId === id) {
+      const calculatedReceivedItems = (index) => receivedItems.map((e) => {
+        if (e.index === index) {
           return {
             ...e,
             received: values?.received ?? 0,
@@ -47,13 +48,15 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
         return e;
       });
 
-      const newReceivedItems = hasReceivedItem(receivedItems, id) ? calculatedReceivedItems(id) : [...receivedItems, ({
+      const newReceivedItems = hasReceivedItem(receivedItems, selectedItemindex) ? calculatedReceivedItems(selectedItemindex) : [...receivedItems, ({
         itemId: id,
+        index: selectedItemindex,
         received: values?.received,
       })];
 
       const handleReceivedItems = isEmpty(receivedItems) ? [{
         itemId: id,
+        index: selectedItemindex,
         received: values?.received,
       }] : newReceivedItems;
 
