@@ -7,25 +7,26 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { SM } from '../../../App';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeActions, documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DocumentType, DocumentTypeById, DocumentTypeByIdForm, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, HeaderTableType } from '../../../state/ducks/documentRevisions/types';
+import { DOC_TYPE_GROUP_OPTION, DocumentType, DocumentTypeById, DocumentTypeByIdForm } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevision, HeaderTableType, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
 import { DocumentProposedId } from '../../../state/ducks/documents/types';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ApplicationState } from '../../../state/reducers';
-import ExportListIcon from '../../components/common/kendo/ExportListIcon';
-import { OptionType } from '../../components/forms/fields/Autocomplete/types';
-import { FormContext } from '../../components/forms/FormContext';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
-import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
+import ExportListIcon from '../../components/common/kendo/ExportListIcon';
+import { FormContext } from '../../components/forms/FormContext';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { toastError } from '../../components/notifications';
 import ExportListDialog from '../../document.revision/list/ExportListDialog/ExportListDialog';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from '../../documentRevision/forms/transform';
+import { checkIsTypeMustBeOutput } from '../../documentRevision/helpers/checkDocumentGroup';
 import CustomLabelTooltip from '../../hooks/docCustomization/CustomLabelTooltip';
 import { useCreateDocumentByTypeButton } from '../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -50,7 +51,7 @@ interface Props {
   isGrouped: boolean
 }
 
-type DocCreator = (form: DocumentRevision) => void;
+type DocCreator = (form?: DocumentRevision) => void;
 
 export const useHandleCreateDoc = (selectedDocumentTypeId: string): DocCreator => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
@@ -83,7 +84,37 @@ export const useHandleCreateDoc = (selectedDocumentTypeId: string): DocCreator =
   });
 
   const createDoc = (docId: string) => {
-    const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision, selectedDocumentType);
+    if (!form) {
+      // @todo: move to better place data formatting
+      // @todo: add loader
+      const securityGroups = filterSecurityGroupsForQms(selectedDocumentType?.isQms, groupOptions)
+        .map(({ value: id }) => ({ id }));
+
+      const data = {
+        description: '',
+        name: '',
+        attachments: [],
+        referenceTo: [],
+        revisionStage: 1,
+        revisionChangeType: RevisionChangeType.NextRevision,
+        retrain: selectedDocumentType?.defaultTraining,
+        document: {
+          docId,
+          securityList: {
+            securityEmployees: [],
+            securityGroups: securityGroups,
+            operators: [],
+          },
+          documentType: {
+            id: selectedDocumentType?.id,
+          },
+        },
+      };
+      createDocAsync.start(createDocAction, data, createDocAsync);
+      return;
+    }
+
+    const formValues = toDocumentRevisionFormValuesForOutput(form, selectedDocumentType);
     const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes ?? [];
     const isQms = (outputDocumentTypes[0] as unknown as DocumentType)?.isQms;
     formValues.securityGroups = filterSecurityGroupsForQms(isQms, groupOptions);
@@ -104,7 +135,7 @@ export const useHandleCreateDoc = (selectedDocumentTypeId: string): DocCreator =
     });
   };
 
-  return (selectedForm: DocumentRevision) => {
+  return (selectedForm?: DocumentRevision) => {
     const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
     if (selectedDocumentTypeId) {
       fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
@@ -148,9 +179,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [documentTypes, setDocumentTypes] = useState<DocumentType[]>([]);
 
   const [selectedDocumentTypeId, setSelectedDocumentTypeId] = useState('');
-  const selectedTypeLabel = useMemo(() => {
-    return documentTypes.find((type) => type.id === selectedDocumentTypeId)?.documentTypeName ?? '';
+  const selectedDocumentType = useMemo(() => {
+    return documentTypes.find((type) => type.id === selectedDocumentTypeId);
   }, [documentTypes, selectedDocumentTypeId]);
+  const selectedTypeLabel = selectedDocumentType?.documentTypeName ?? '';
   const handleCreateDocument = useHandleCreateDoc(selectedDocumentTypeId);
 
   const buttonLabel = isByCategory ? labelName : label;
@@ -182,6 +214,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       setForms(formIds);
       if (!isByCategory) {
         formDialog.open();
+        return;
+      }
+      if (isEmpty(formIds) && !checkIsTypeMustBeOutput(selectedDocumentType?.groupOptions)) {
+        handleCreateDocument();
         return;
       }
       if (formIds.length === 1) {
