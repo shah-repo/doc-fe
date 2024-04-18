@@ -13,6 +13,7 @@ import { isDocumentRevisionInStatus } from '../../../documentRevision/helpers/do
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
+import { useLatestRevision } from '../../../hooks/useLatestRevision';
 import { withThemeNext } from '../../../layout/theme-next';
 import HeaderStatusButton from './HeaderStatusButton';
 
@@ -43,6 +44,8 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
   const canChangeEquipmentStatus = (isOwner || hasPermissionToChangeEquipmentStatus) && (!disabledStatuses.includes(documentRevision.status));
   const isEquipmentStatusEditable = canChangeEquipmentStatus && !isVoidedOrObsolete;
   const statusLabel = documentRevision.eqStatus || EquipmentStatus.Inactive;
+  const latestDocRevId = useLatestRevision(documentRevision);
+  const isLatestDocumentRevision = (latestDocRevId?.id === documentRevision?.id);
   const [draftEquipmentStatus, setDraftEquipmentStatus] = React.useState(statusLabel);
 
   const handleEqStatusChange = (equipmentStatus) => {
@@ -59,13 +62,13 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
 
   return (
     <>
-      <HeaderStatusButton
+      {isLatestDocumentRevision && (<HeaderStatusButton
         onItemSelect={handleEqStatusChange}
         label={statusLabel}
         options={options}
         disabled={!isEquipmentStatusEditable}
         data-cy="equipment-status"
-      />
+      />)}
       <AlertDialog
         handler={confirmationDialog}
         loading={async.isLoading}
