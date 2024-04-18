@@ -6,14 +6,17 @@ import { getHasPermission } from '../../../../common/utils/selectors';
 import { authSelectors } from '../../../../state/ducks/auth';
 import { Permission } from '../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import { DOC_TYPE_GROUP } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, EquipmentStatus } from '../../../../state/ducks/documentRevisions/types';
+import { documentsSelectors } from '../../../../state/ducks/documents';
+import { ApplicationState } from '../../../../state/reducers';
 import { styles } from '../../../app/alert.dialog/AlertDialog.styles';
 import AlertDialog from '../../../components/dialogs/Alert';
+import { getLatestRevisionId } from '../../../document.revision/utils/helpers';
 import { isDocumentRevisionInStatus } from '../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
-import { useLatestRevision } from '../../../hooks/useLatestRevision';
 import { withThemeNext } from '../../../layout/theme-next';
 import HeaderStatusButton from './HeaderStatusButton';
 
@@ -44,8 +47,6 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
   const canChangeEquipmentStatus = (isOwner || hasPermissionToChangeEquipmentStatus) && (!disabledStatuses.includes(documentRevision.status));
   const isEquipmentStatusEditable = canChangeEquipmentStatus && !isVoidedOrObsolete;
   const statusLabel = documentRevision.eqStatus || EquipmentStatus.Inactive;
-  const latestDocRevId = useLatestRevision(documentRevision);
-  const isLatestDocumentRevision = (latestDocRevId?.id === documentRevision?.id);
   const [draftEquipmentStatus, setDraftEquipmentStatus] = React.useState(statusLabel);
 
   const handleEqStatusChange = (equipmentStatus) => {
@@ -62,13 +63,13 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
 
   return (
     <>
-      {isLatestDocumentRevision && (<HeaderStatusButton
+      <HeaderStatusButton
         onItemSelect={handleEqStatusChange}
         label={statusLabel}
         options={options}
         disabled={!isEquipmentStatusEditable}
         data-cy="equipment-status"
-      />)}
+      />
       <AlertDialog
         handler={confirmationDialog}
         loading={async.isLoading}
@@ -85,5 +86,24 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
     </>
   );
 };
+
+export function shouldShowEQStatus (documentRevision?: DocumentRevision): boolean {
+  if (!documentRevision) {
+    return false;
+  }
+
+  const isEquipment = documentRevision.document.documentType.group === DOC_TYPE_GROUP.EQUIPMENT;
+  if (!isEquipment) {
+    return false;
+  }
+
+  const document = useSelector(
+    (state: ApplicationState) => documentsSelectors.getDocument(state, documentRevision.document.id),
+  );
+
+  const lastRevisionId = getLatestRevisionId(document?.documentRevisions);
+
+  return documentRevision.id === lastRevisionId;
+}
 
 export default withThemeNext(HeaderEquipmentStatus);
