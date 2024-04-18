@@ -5,10 +5,9 @@ import { translate } from '../../../../common/intl';
 import { getHasPermission } from '../../../../common/utils/selectors';
 import { authSelectors } from '../../../../state/ducks/auth';
 import { Permission } from '../../../../state/ducks/auth/types';
-import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, EquipmentStatus } from '../../../../state/ducks/documentRevisions/types';
-import { documentsSelectors } from '../../../../state/ducks/documents';
 import { ApplicationState } from '../../../../state/reducers';
 import { styles } from '../../../app/alert.dialog/AlertDialog.styles';
 import AlertDialog from '../../../components/dialogs/Alert';
@@ -97,8 +96,8 @@ export function shouldShowEQStatus (documentRevision?: DocumentRevision): boolea
     return false;
   }
 
-  const document = useSelector(
-    (state: ApplicationState) => documentsSelectors.getDocument(state, documentRevision.document.id),
+  const document = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocument(state, documentRevision?.document.id ?? ''),
   );
 
   const lastRevisionId = getLatestRevisionId(document?.documentRevisions);
