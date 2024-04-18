@@ -6,7 +6,6 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from '..';
 import { WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
 
@@ -43,12 +42,12 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     const groupOptions = formState?.workspaceState?.document?.document?.documentType?.groupOptions;
     const isWO = checkIsDocumentWO(groupOptions);
     const isWOPart = name === WO_PART_KEY_NAME;
-    const skipOptionsFilter = isWO && isWOPart && formState?.workspaceState?.document?.status !== DocumentRevisionStatus.Draft;
+    const addPrevReleasedRevDoc = isWO && isWOPart;
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId,
       urlValues,
       documentStatus,
-      skipOptionsFilter,
+      addPrevReleasedRevDoc,
     });
     const {
       valueKey: optionValueKey = 'value',
@@ -81,11 +80,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!optionId) {
         return;
       }
-      let slicedOptions = autocompleteAsyncState?.sliceData ?? autocompleteAsyncState?.data;
-
-      if (isWO && isWOPart && slicedOptions) {
-        slicedOptions = skipOptionsFilter ? slicedOptions : slicedOptions.filter((item) => item.status === DocumentRevisionStatus.Released);
-      }
+      const slicedOptions = autocompleteAsyncState?.sliceData ?? autocompleteAsyncState?.data;
 
       loading = (
         loading

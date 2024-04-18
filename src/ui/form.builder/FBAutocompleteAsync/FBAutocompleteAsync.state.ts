@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { filter, find, groupBy, isArray, last, map, some, sortBy, union } from 'lodash';
+import { filter, find, get, groupBy, isArray, last, map, some, sortBy, union } from 'lodash';
 import { action, computed, set } from 'mobx';
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
@@ -13,13 +13,13 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
   private readonly documentStatus?: string = '';
-  private readonly skipOptionsFilter?: boolean = false;
+  private readonly addPrevReleasedRevDoc?: boolean = false;
 
-  public constructor ({ optionId, urlValues, documentStatus, skipOptionsFilter }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, documentStatus, addPrevReleasedRevDoc }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
     this.documentStatus = documentStatus;
-    this.skipOptionsFilter = skipOptionsFilter;
+    this.addPrevReleasedRevDoc = addPrevReleasedRevDoc;
     this.setOptionId(optionId);
   }
 
@@ -110,7 +110,25 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           docId: data.docId,
         }));
       case FBAutocompleteAsyncOption.releasedParts:
-        return this.skipOptionsFilter ? data : data.filter((item) => item.status === DocumentRevisionStatus.Released);
+        const addPrevReleasedRevDoc = this.addPrevReleasedRevDoc && this.additionalData?.length;
+        let prevReleaseDocId = '';
+
+        if (addPrevReleasedRevDoc) {
+          prevReleaseDocId = get(this.additionalData, '[0].docId');
+        }
+
+        const checkIsItemIsReleased = (status) => {
+          return status === DocumentRevisionStatus.Released;
+        };
+
+        return union(
+          data.filter(
+            (item) => addPrevReleasedRevDoc
+              ? item.document.docId === prevReleaseDocId || checkIsItemIsReleased(item.status)
+              : checkIsItemIsReleased(item.status),
+          ),
+          this.additionalData ?? [],
+        );
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
       case FBAutocompleteAsyncOption.trainingDocuments:
         return data.map((option) => {
