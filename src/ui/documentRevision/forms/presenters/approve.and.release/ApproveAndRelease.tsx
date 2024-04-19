@@ -61,6 +61,7 @@ interface Props {
   isBOMExists?: boolean
   isPart?: boolean
   isSliderView?: boolean
+  inDialog?: boolean
 }
 
 const OBSOLETE_RELATED_EQ_KEY = 'fb-is-obsolete-related-eq';
@@ -81,6 +82,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isBOMExists = false,
   isPart = false,
   isSliderView,
+  inDialog,
 }) => {
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
@@ -405,6 +407,10 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const closeCRDialog = () => {
     approvalRequestDialog.close();
+    if (inDialog) {
+      return;
+    }
+
     if (isSliderView) {
       FBDataStore.selectedSliderInfo = { documentId: documentRevision.document.id, documentRevision: documentRevision, reRender: true };
     } else {

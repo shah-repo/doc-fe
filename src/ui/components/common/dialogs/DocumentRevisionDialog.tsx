@@ -102,6 +102,7 @@ DocumentRevisionDialogProps
                       documentId={(docRevId ? (documentRevision as DocumentRevision)?.documentId : _documentRevisionFormState?.documentId) as string}
                       canChangeOwnerShip={false}
                       isNewVersion={false}
+                      inDialog={true}
                     />
                   </Theme>
                 )}
