@@ -46,8 +46,9 @@ export const styles = makeStyles((theme: Theme) =>
     },
     rightContainer: {
       borderRadius: theme.spacing(1),
-      padding: theme.spacing(1.2),
-      backgroundColor: Colors.light_blue,
+      padding: theme.spacing(2),
+      backgroundColor: Colors.light_blue2,
+      marginBottom: theme.spacing(3),
     },
   }),
 );
