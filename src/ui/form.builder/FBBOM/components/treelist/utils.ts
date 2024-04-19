@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { cloneDeep, isNil } from 'lodash';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
@@ -93,7 +93,23 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
       dataTree.push({ ...aData, [MODE_FIELD]: false });
     }
   });
-  return dataTree;
+
+  const updateLevelsOnBOM = (parent: EditableBOM[], parentIndex: number) => {
+    parent.forEach((children, childIndex) => {
+      const calculatedIndex = parentIndex + childIndex;
+      children.id = `${children.id}${SELECTED_PART_KEY_SEPARATOR}${calculatedIndex}`;
+
+      if (children.childNodes?.length) {
+        children.childNodes = cloneDeep(updateLevelsOnBOM(children.childNodes as EditableBOM[], calculatedIndex));
+      } else {
+        children = cloneDeep(children);
+      }
+    });
+
+    return parent;
+  };
+
+  return updateLevelsOnBOM(dataTree, 1);
 };
 
 export const updateDataAtLevels = (data?: BOM[], levels?: number[], newValue?: EditableBOM, isUpdate?: boolean): BOM[] | undefined => {
