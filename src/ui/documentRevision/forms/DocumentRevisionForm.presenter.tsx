@@ -22,7 +22,7 @@ import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from '../../h
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
 import { DocumentCloneType, DocumentCloneTypeOptions } from '../Clone.container';
 import { isOperator } from '../DocumentRevisionDisplay.container';
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentPart, checkIsDocumentRecord, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentOTHER, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../helpers/documentRevisionStatus';
 import { getRevisionStageNumber, isDocumentAlphaReleased } from '../helpers/revisionStage';
 import DocIdInput from './presenters/DocIdInput';
@@ -82,13 +82,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
   const intl = useIntl();
   const { workspaceState } = FB.useStores();
-  const { revisionChangeType } = values || {};
-  const documentTypeById = documentTypesById[values.document?.documentType?.id || ''];
-  const { schema = [] } = workspaceState || {};
+  const { revisionChangeType } = values ?? {};
+  const docTypeId
+    = documentRevision?.document?.documentType?.id
+      ?? values?.document?.documentType?.id
+      ?? '';
+  const documentTypeById = documentTypesById[docTypeId];
+  const { schema = [] } = workspaceState ?? {};
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [documentTypesById, values.document?.documentType?.id]);
+  , [documentTypeById?.groupOptions]);
 
   const isRecord = useMemo(() =>
     checkIsDocumentRecord(documentTypeById?.groupOptions)
@@ -102,6 +105,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocRevStatusInPendingChange = isDocumentRevisionPendingChange(documentRevision?.status);
   const isEB = checkIsDocumentEB(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
+  const isWO = checkIsDocumentWO(groupOptions);
   const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(documentRevision);
   const isDocumentPOAM = checkIsDocumentPOAM(groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
@@ -110,6 +114,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = hasOutput
     ? checkIsDocumentPart((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+    : false;
+  const isOther = checkIsDocumentOTHER(groupOptions);
+  const isOtherForm = hasOutput
+    ? checkIsDocumentOTHER((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
     : false;
 
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
@@ -330,7 +338,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               </FBEBPart>
             </Grid>
           )}
-          {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft
+          {!isDCO && !(isWO && !hasOutput) && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft
             && <Grid item xs={12}>
               <RevisionTypeChange
                 isDisabled={isDisabledInput || inRestrictedEditMode}
@@ -355,7 +363,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          {(isPart || isPartForm)
+          {(isPart || isPartForm || isOther || isOtherForm)
             && <Grid item xs={12}>
               <RelatedPartsWrapper
                 viewOnly={isDisabledInputInPreview || hasOutput || !isOwner || inRestrictedEditMode}

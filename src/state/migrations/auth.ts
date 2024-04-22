@@ -1,5 +1,5 @@
-import { DEFAULT_EMPLOYEE } from './ducks/auth/reducers';
-import { WhiteLabelingEnv } from './ducks/company/types';
+import { DEFAULT_EMPLOYEE } from '../ducks/auth/reducers';
+import { WhiteLabelingEnv } from '../ducks/company/types';
 
 export default {
   0: (state: any) => ({

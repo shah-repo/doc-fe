@@ -5,7 +5,9 @@ import { Active } from './Active';
 import { CommonCell } from './CommonCell';
 import { DateCompleted } from './DateCompleted';
 import { DateInfo } from './DateInfo';
+import { OverflowCell } from './OverflowCell';
 import { POAmount } from './POAmount';
+import { POAmountWithCurrency } from './POAmountWithCurrency';
 import { Status } from './Status';
 import { UserAvatar } from './UserAvatar';
 
@@ -17,6 +19,8 @@ export const cellTemplateMapping: Record<KendoCellTemplates, (props: CustomGridC
   DateInfo,
   CommonCell,
   POAmount,
+  OverflowCell,
   DocumentTypeCellTemplate,
   DurationCell,
+  POAmountWithCurrency,
 };

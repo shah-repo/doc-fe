@@ -134,6 +134,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const ownerFieldsMapping = {
     'owner.user.name': ['owner.user.avatar', 'owner.user.initialColor'],
   };
+  const overflowCellFields = ['precalc.partNumberTitle', 'precalc.partNumberDescription'];
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: string | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
@@ -155,8 +156,12 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = 'displayStatus';
+    } else if (upDateField === 'precalc.po_amount_with_currency') {
+      dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT_WITH_CURRENCY;
     } else if (upDateField === 'precalc.po_amount') {
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT;
+    } else if (overflowCellFields.includes(upDateField)) {
+      dynamicCellTemplate = KendoCellTemplates.OVERFLOW_CELL;
     } else {
       dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
     }

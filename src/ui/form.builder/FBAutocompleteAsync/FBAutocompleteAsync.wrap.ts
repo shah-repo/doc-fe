@@ -5,6 +5,9 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from '..';
+import { WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
@@ -37,10 +40,15 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   }: T) => {
     const { formState } = FB.useStores();
     const documentStatus = formState?.workspaceState?.document?.displayStatus;
+    const groupOptions = formState?.workspaceState?.document?.document?.documentType?.groupOptions;
+    const isWO = checkIsDocumentWO(groupOptions);
+    const isWOPart = name === WO_PART_KEY_NAME;
+    const skipOptionsFilter = isWO && isWOPart && formState?.workspaceState?.document?.status !== DocumentRevisionStatus.Draft;
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId,
       urlValues,
       documentStatus,
+      skipOptionsFilter,
     });
     const {
       valueKey: optionValueKey = 'value',
@@ -73,12 +81,18 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!optionId) {
         return;
       }
-      const slicedOptions = autocompleteAsyncState?.sliceData ?? autocompleteAsyncState?.data;
+      let slicedOptions = autocompleteAsyncState?.sliceData ?? autocompleteAsyncState?.data;
+
+      if (isWO && isWOPart && slicedOptions) {
+        slicedOptions = skipOptionsFilter ? slicedOptions : slicedOptions.filter((item) => item.status === DocumentRevisionStatus.Released);
+      }
+
       loading = (
         loading
         || FBAutocompleteAsyncStore.loading.get(optionId)
         || autocompleteAsyncState?.autocompleteValueApi.loading
       );
+
       if (slicedOptions) {
         options = selectedOptions
           ? autocompleteAsyncState?.sliceValue(selectedOptions)

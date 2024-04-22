@@ -265,6 +265,7 @@ export { default as FBTooltip } from './FBTooltip/FBTooltip';
 export * from './FBTooltip/FBTooltip.types';
 export * from './FBUnitMeasures/FBUnitMeasures.types';
 export * from './FBValidation/FBValidation.types';
+export { default as FBWOApprovalsState } from './FBWOApprovals/FBWOApprovals.state';
 export { default as FBWorkspace } from './FBWorkspace/FBWorkspace';
 export { default as FBWorkspaceMemo } from './FBWorkspace/FBWorkspace.memo';
 export { default as FBWorkspaceSocket } from './FBWorkspace/FBWorkspace.socket';

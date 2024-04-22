@@ -81,7 +81,13 @@ export type FBInputType =
   | 'lotOnHandQuantity'
   | 'partVendors'
   | 'numeric'
-  | 'cycleCount';
+  | 'cycleCount'
+  | 'workOrderPartDetails'
+  | 'tasksListTable'
+  | 'workOrderLhrTable'
+  | 'woApprovals'
+  | 'workOrderType'
+  ;
 
 export type FBInputProps =
   & FBLabelProps
@@ -257,6 +263,7 @@ export const FBAutosave: FBInputType[] = [
   'partVendors',
   'numeric',
   'cycleCount',
+  'workOrderType',
 ];
 
 export const SectionTypeField: FBInputType[] = [

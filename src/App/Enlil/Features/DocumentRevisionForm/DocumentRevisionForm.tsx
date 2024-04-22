@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import { debounce, filter, get, includes, map, size } from 'lodash';
+import { debounce, filter, get, includes, isEmpty, map, size } from 'lodash';
 import { Observer, useObserver } from 'mobx-react';
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
@@ -24,9 +24,10 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPart } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
+import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import FBDataStore from '../../../../ui/form.builder/FBStore/FBDataStore';
 import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
@@ -86,6 +87,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
       && schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+  const isWO = checkIsDocumentWOByGroupOrOptions(group, groupOptions);
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   const documentTypeId = formValues.values.document?.documentType?.id || '';
   const docRevId = documentRevision?.id;
@@ -161,6 +163,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     }
   });
 
+  if (isWO && !documentRevision.formTemplate && formValues.values.formInput?.work_order_type === WorkOrderTypes.OTHER) {
+    // hide allocation & BOM Tabs on Work order Other case
+    tabConfig = tabConfig.filter(tab => ![TabTypeOptions.BOM, TabTypeOptions.ALLOCATION].includes(tab.type as TabTypeOptions));
+  }
+
   const handleResize: AutoSizerProps['onResize'] = useCallback(
     debounce(
       (size) => {
@@ -218,6 +225,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 <DocumentRevisionSidebar
                   canEdit={isPart ? !referencesDisabledChangeControl(documentRevision) : true}
                   isSliderView={isSliderView}
+                  tabConfig={tabConfig}
                 />
               )}
             </Observer>
@@ -357,9 +365,12 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 />
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled} isShowOnly={isPartForm}
-                                  isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView}
+                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled || isWO} isShowOnly={isPartForm || (isWO && !isEmpty(documentRevision?.formTemplate))}
+                                  isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView} isWO={isWO}
                                 />
+                              )}
+                              {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
+                                <FBAllocationTreeList documentRevision={documentRevision} isDisabled={isWO && !isEmpty(documentRevision?.formTemplate)} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper

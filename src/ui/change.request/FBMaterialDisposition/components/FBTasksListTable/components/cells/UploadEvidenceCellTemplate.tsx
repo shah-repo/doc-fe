@@ -4,7 +4,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Attachment } from '../../../../../../../state/ducks/attachments/types';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
-import { ChangeRequestStatus } from '../../../../../../../state/ducks/changeRequest/types';
 import { FB, FBFileField, FBFileUploadState, FBProvider } from '../../../../../../form.builder';
 import { EmployeeStatus, EMPLOYEE_RESPONSE_FIELD, EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
@@ -52,12 +51,11 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
 };
 
 export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem, currentState } = props;
+  const { dataItem, isClosed } = props;
   const classes = styles();
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
   const currentUserId = useSelector(authSelectors.currentEmployeeId);
-  const isClosedAR = currentState === ChangeRequestStatus.Closed;
-  const showEditor = (employeeId, status) => currentUserId === employeeId && !isClosedAR && status !== EmployeeStatus.Done;
+  const showEditor = (employeeId, status) => currentUserId === employeeId && !isClosed && status !== EmployeeStatus.Done;
 
   return (<>
     {assigneList?.map(({ employeeId, attachments, status, name }) => {
@@ -67,7 +65,7 @@ export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props)
           {(showEditor(employeeId, status)) && (
             <Editor {...props} {...{ employeeId, name, previousAttachments: attachments } } />
           )}
-          { (!attachments.length) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: attachments, fileUploadState, isDisabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentsContainer }} />}
+          { (!attachments.length) ? !showEditor(employeeId, status) && EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: attachments, fileUploadState, isDisabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentsContainer }} />}
         </FBProvider>
       </div>;
     })}
