@@ -1,25 +1,18 @@
-import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { trainingActions } from '../../../state/ducks/training';
-import { toastError, toastSuccess } from '../../components/notifications';
 import Text from '../../components/Text';
+import { Button } from '../../components/forms/fields-next';
+import { toastError, toastSuccess } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 
 interface Props {
   id: string
-  color?: string
 }
-
-const styles = {
-  margin: 0,
-  borderRadius: '25px',
-};
 
 const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   id,
-  color = 'secondary',
 }) => {
   const intl = useIntl();
   const exportTrainingRecordEmail = useActionCreator(trainingActions.exportTrainingRecord);
@@ -40,9 +33,8 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   return (
     <Button
       variant="outlined"
-      color={color}
+      color="primary"
       data-cy="exportToEmail"
-      style={styles}
       onClick={() => handleTrainingRecordEmail()}
     >
       <Text translation="common.send.to.email" />

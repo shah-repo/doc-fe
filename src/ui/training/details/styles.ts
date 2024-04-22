@@ -7,18 +7,16 @@ export const styles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(3),
     },
     label: {
-      fontSize: '1rem',
+      fontSize: '0.8rem',
       fontWeight: 'bold',
-      letterSpacing: '1px',
       marginBottom: theme.spacing(0.5),
+      color: Colors.black,
     },
     itemContentBlue: {
-      fontSize: '1rem',
       color: Colors.navy,
     },
     itemContentBlack: {
-      fontSize: '1rem',
-      fontWeight: 700,
+      fontWeight: 'bold',
     },
     dialogContent: {
       padding: '25px',
@@ -27,7 +25,11 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: '1.5rem',
       color: Colors.black,
       fontWeight: 500,
-      marginLeft: theme.spacing(1),
+    },
+    titleIcon: {
+      fontSize: '1.7rem',
+      color: Colors.blue,
+      marginRight: theme.spacing(1.5),
     },
     detailsDialogContent: {
       marginLeft: theme.spacing(6),
@@ -38,15 +40,10 @@ export const styles = makeStyles((theme: Theme) =>
       top: theme.spacing(1),
       color: theme.palette.grey[500],
     },
-    titleIcon: {
-      fontSize: '2rem',
-      display: 'flex',
-      alignItems: 'center',
-      color: Colors.blue,
-    },
     rightContainer: {
       borderRadius: theme.spacing(1),
       padding: theme.spacing(2),
+      color: Colors.black,
       backgroundColor: Colors.light_blue2,
       marginBottom: theme.spacing(3),
     },
