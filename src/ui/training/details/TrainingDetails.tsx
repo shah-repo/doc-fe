@@ -16,7 +16,7 @@ interface Props {
   training: TrainingRecordQuery
 }
 
-//testing data
+// @todo testing data remove it once real time data is coming
 const attachments = [
   {
     'createdAt': '2024-04-03T22:12:37.287Z',
