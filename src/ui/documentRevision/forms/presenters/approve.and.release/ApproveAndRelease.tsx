@@ -479,6 +479,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       },
       password,
       isSliderView,
+      inDialog,
       async,
     );
   };

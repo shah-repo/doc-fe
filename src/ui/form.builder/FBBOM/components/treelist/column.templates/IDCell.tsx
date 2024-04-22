@@ -4,9 +4,9 @@ import { Grid, Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { Formik, FormikProps, useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import { Observer } from 'mobx-react';
-import React, { ChangeEvent, ComponentType, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, ComponentType, memo, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { SM } from '../../../../../../App';
@@ -16,13 +16,14 @@ import { documentTypeActions, documentTypeSelectors } from '../../../../../../st
 import { DocumentTypeById } from '../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
+import { AsyncStatus } from '../../../../../../state/types';
 import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
+import Text from '../../../../../components/Text';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
+import { FormContext } from '../../../../../components/forms/FormContext';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
-import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
-import Text from '../../../../../components/Text';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import { isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
@@ -33,7 +34,7 @@ import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
 import { EditableBOM } from '../../../interface';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
-import { isEditBOM } from '../utils';
+import { isAddOnly, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -155,11 +156,11 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
     if (!dataItem[ADD_FIELD]) {
       fieldValue = `${dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem?.documentId}`;
     } else {
-      const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
-      if (!isEmpty(part) && showFormDialog.isOpen) {
+      const part = cloneDeep(updatedNewlyCreatedDocumentRevision) as DocumentRevision;
+      if (!isEmpty(part)) {
         const {
           displayRevision, displayStatus, name,
-        } = part as DocumentRevision;
+        } = part;
         fieldValue = `${part?.id}${SELECTED_PART_KEY_SEPARATOR}${part?.document.id}`;
         setFieldValue('childNodeRevId', part?.id);
         setFieldValue('childNodeDocumentId', part?.document?.id);
@@ -168,6 +169,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
         setFieldValue('name', name);
         setFieldValue('quantity', 1);
         setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
+        _documentRevisionFormState?.setNewlyCreatedDocumentRevision(undefined);
       }
     }
     const value = renderOptions().find((option) => option.value === fieldValue);
@@ -202,6 +204,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
         value={value}
         disableOpenOnFocus={true}
         blurOnSelect
+        disabled={fetchAvailablePartsAsync.isLoading}
         ListboxComponent={({ children, ...otherProps }) => {
           return (<>
             <ul {...otherProps} >
@@ -240,6 +243,16 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
   const handleCreateDocument = useHandleCreateDoc();
+  const loadDocumentRevisionAsyncState = useSelector(
+    documentRevisionsSelectors.getLoadAsyncDrawerState,
+  );
+  const newlyCreatedDocumentRevisionId = useRef<DocumentRevision['id']>();
+  const updatedNewlyCreatedDocumentRevision = useSelector((state: ApplicationState) => {
+    return (
+      newlyCreatedDocumentRevisionId.current
+        && documentRevisionsSelectors.getDocumentRevision(state, newlyCreatedDocumentRevisionId.current)
+    );
+  });
 
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: () => {
@@ -258,13 +271,30 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
 
   useEffect(() => {
     const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
-    if (!isEmpty(part) && showFormDialog.isOpen) {
-      fetchAvailablePartsAsync.start(
-        fetchAvailablePartsAction,
-        fetchAvailablePartsAsync,
-      );
+    if (showFormDialog.isOpen || !isAddOnly(dataItem) || isEmpty(part)) {
+      return;
     }
-  }, [_documentRevisionFormState?.newlyCreatedDocumentRevision]);
+    newlyCreatedDocumentRevisionId.current = part?.id;
+    fetchAvailablePartsAsync.start(
+      fetchAvailablePartsAction,
+      fetchAvailablePartsAsync,
+    );
+  }, [showFormDialog.isOpen]);
+
+  useEffect(() => {
+    if (!showFormDialog.isOpen) {
+      return;
+    }
+
+    const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
+    if (part && loadDocumentRevisionAsyncState.status === AsyncStatus.Active) {
+      newlyCreatedDocumentRevisionId.current = part?.id;
+      _documentRevisionFormState?.setNewlyCreatedDocumentRevision(undefined);
+    }
+    if (updatedNewlyCreatedDocumentRevision && loadDocumentRevisionAsyncState.status === AsyncStatus.Success) {
+      _documentRevisionFormState?.setNewlyCreatedDocumentRevision(updatedNewlyCreatedDocumentRevision);
+    }
+  }, [loadDocumentRevisionAsyncState]);
 
   const categoryAsync = useAsync<DocumentType[]>({
     onSuccess: () => {
@@ -396,13 +426,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && <div className={classes.idCellEditWrapper}>
           { getFieldInfo()}
-          {/* <Tooltip
+          <Tooltip
             title={translate('form.builder.create.new.part')}
             placement="top"
             arrow
           >
             <FontAwesomeIcon onClick={handleAddButtonClick} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
-          </Tooltip> */}
+          </Tooltip>
         </div>}
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId

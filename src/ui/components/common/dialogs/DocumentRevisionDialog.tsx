@@ -92,7 +92,7 @@ DocumentRevisionDialogProps
             <>
               <AsyncGate
                 asyncAction={loadAction}
-                startActionOnMount
+                startActionOnMount={!!docRevId }
                 asyncState={docRevId ? loadDocumentRevisionAsyncState : (_documentRevisionFormState?.newlyCreatedDocumentRevision ? { status: AsyncStatus.Success } : { status: '' })}
               >
                 {(_documentRevisionFormState?.newlyCreatedDocumentRevision || documentRevision) && (
