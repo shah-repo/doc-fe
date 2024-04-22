@@ -199,7 +199,23 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
   }, [documentRevision?.id]);
 
-  const createOrUpdateLOT = (values) => {
+  const getValueOrDefaultZero = (value) => {
+    return value || 0;
+  };
+
+  const isRecordUnchanged = (values: Partial<EditableAllocationItem>) => {
+    if (
+      selectedPart
+      && getValueOrDefaultZero(selectedPart.quantityNeeded) === getValueOrDefaultZero(values.quantityNeeded)
+      && getValueOrDefaultZero(selectedPart.variance) === getValueOrDefaultZero(values.variance)
+    ) {
+      discardAllocItem(selectedPart);
+      setSelectedPart(undefined);
+      return true;
+    }
+  };
+
+  const createOrUpdateLOT = (values: Partial<EditableAllocationItem>) => {
     if (values[ADD_FIELD]) {
       const payload = {
         workOrderId: documentRevision?.id,
@@ -211,6 +227,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
       partAsync.start(createLot, payload, partAsync);
     } else {
+      if (isRecordUnchanged(values)) {
+        return;
+      }
+
       const payload = {
         lotQuantityNeeded: values.quantityNeeded,
         lotVariance: values.variance,
@@ -224,7 +244,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     }
   };
 
-  const createOrUpdatePart = (values) => {
+  const createOrUpdatePart = (values: Partial<EditableAllocationItem>) => {
     if (values[ADD_FIELD]) {
       const payload = {
         workOrderId: documentRevision?.id,
@@ -236,6 +256,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
       partAsync.start(createPart, payload, partAsync);
     } else {
+      if (isRecordUnchanged(values)) {
+        return;
+      }
       const payload = {
         partQuantityNeeded: values.quantityNeeded,
         partVariance: values.variance,
@@ -249,7 +272,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
-    onSubmit: (values) => {
+    onSubmit: (values: Partial<EditableAllocationItem>) => {
       if (values.lotRevId) {
         createOrUpdateLOT(values);
       } else {
