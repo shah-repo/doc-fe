@@ -20,9 +20,10 @@ import useStyles from './changeRequestLink.styles';
 
 type Props = DataProps<DocumentRevision> & {
   isSliderView?: boolean
+  inDialog?: boolean
 };
 
-const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp, isSliderView }) => {
+const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp, isSliderView, inDialog }) => {
   const [associatedChangeRequests, setAssociatedChangeRequests] = useState<IAssociatedChangeRequest[]>([]);
 
   const getAllApprovalRequestsAsync = useAsync({
@@ -71,6 +72,10 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp, isSliderV
 
   const closeCRDialog = () => {
     approvalRequestDialog.close();
+    if (inDialog) {
+      return;
+    }
+
     if (isSliderView) {
       FBDataStore.selectedSliderInfo = { documentId: dataProp?.id, documentRevision: dataProp, reRender: true };
     } else {

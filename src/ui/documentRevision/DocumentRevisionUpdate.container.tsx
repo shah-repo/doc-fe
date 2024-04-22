@@ -88,7 +88,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   }, []);
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState && !documentRevision?.isBeingEditedAfterRelease) {
     return (
-      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip, isSliderView }} />
+      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip, isSliderView, inDialog }} />
     );
   }
 
