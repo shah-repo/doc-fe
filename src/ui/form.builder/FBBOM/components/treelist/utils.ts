@@ -94,7 +94,7 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
     }
   });
 
-  const updateLevelsOnBOM = (parent: EditableBOM[], parentIndex: number) => {
+  const updateLevelsOnBOM = (parent: EditableBOM[], parentIndex: number): EditableBOM[] => {
     parent.forEach((children, childIndex) => {
       const calculatedIndex = parentIndex + childIndex;
       children.id = `${children.id}${SELECTED_PART_KEY_SEPARATOR}${calculatedIndex}`;
