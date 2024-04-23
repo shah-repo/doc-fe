@@ -1,5 +1,5 @@
 import { some } from 'lodash';
-import { DocumentGroupOptionsType, DocumentGroupType, DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION, DocumentGroupOptionsType, DocumentGroupType } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { RELATED_TYPE } from '../../../state/ducks/relatedParts/types';
 
@@ -65,6 +65,7 @@ export const hasDefaultNote = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROU
 export const checkCanTypeCreateInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_CREATE_INSPECTION);
 export const checkCanBeCopied = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
 export const checkIsDocumentGRPT = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.GROUP_TRAINING);
+
 export interface IRevIdMapper {
   relatedType: RELATED_TYPE
   isWorkOrder: boolean
