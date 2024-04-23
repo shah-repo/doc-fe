@@ -5,7 +5,7 @@ import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks
 import { EmployeeResponse } from '../../change.request/FBMaterialDisposition/components/FBTasksListTable/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { FBInputProps } from '../../form.builder/FBInput/FBInput.types';
+import { FBInputProps } from '../FBInput/FBInput.types';
 import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD } from './constants';
 
 export interface SchemaOptions {

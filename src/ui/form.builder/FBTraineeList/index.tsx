@@ -14,8 +14,8 @@ import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.type
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
-import FBInput from '../../form.builder/FBInput/FBInput';
-import FBSection from '../../form.builder/FBSection/FBSection';
+import FBInput from '../FBInput/FBInput';
+import FBSection from '../FBSection/FBSection';
 import { EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -33,7 +33,7 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
     // setPrimaryVendor,
     trainees = [],
     records = [],
-} = props;
+  } = props;
   const classes = useStyles();
   const isActive = !disabled;
   const [editedTrainee, setEditedTrainee] = React.useState<Partial<EditableTrainee>>();

@@ -1,9 +1,9 @@
 import { differenceBy, orderBy, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
-import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '../../form.builder';
-import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
-import { FB } from '../../form.builder/helpers';
+import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FB } from '../helpers';
 import { DocumentRevisionOption, Trainee, TrainingListTableProps } from './types';
 import { useOptions } from './utils';
 

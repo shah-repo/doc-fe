@@ -12,7 +12,6 @@ import {
   FBSchemaProps,
 } from '..';
 import FBTasksListTable from '../../change.request/FBMaterialDisposition/components/FBTasksListTable';
-import TrainingListTable from '../../training/trainingList';
 import FBApprovalMatrixField from '../FBApprovalMatrixField/FBApprovalMatrixField';
 import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatrixFieldRoles';
 import FBApprovals from '../FBApprovals/FBApprovals';
@@ -66,6 +65,7 @@ import FBTextEditor from '../FBTextEditor/FBTextEditor';
 import FBTextField from '../FBTextField/FBTextField';
 import FBTextFieldWithRange from '../FBTextFieldWithRange/FBTextFieldWithRange';
 import FBTimerField from '../FBTimerField/FBTimerField';
+import FBTraineeList from '../FBTraineeList';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
 import FBWOApprovals from '../FBWOApprovals/FBWOApprovals';
 import FBWorkOrderLHRTable from '../FBWorkOrderLHRTable/FBWorkOrderLHRTable';
@@ -110,6 +110,7 @@ class FBSchemaState {
     paragraph: FBParagraph,
     quantity: FBQuantityField,
     timer: FBTimerField,
+    traineeList: FBTraineeList,
     purchaseorder: FBPurchaseOrder,
     purchaseordersummary: FBPurchaseOrderSummary,
     poreceive: FBPOReceive,
@@ -151,7 +152,6 @@ class FBSchemaState {
     lotQuantity: FBLotQuantityField,
     lotOnHandQuantity: FBLotOnHandQuantityField,
     partVendors: FBPartVendors,
-    trainingList: TrainingListTable,
     numeric: FBNumericField,
     cycleCount: FBCycleCount,
     workOrderPartDetails: FBWorkOrderPartDetails,

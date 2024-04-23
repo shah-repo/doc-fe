@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
-import FBAutocompleteAsyncState from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.state';
-import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
-import { FBAutocompleteAsyncOption } from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.types';
-import { FB } from '../../form.builder/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import FBAutocompleteAsyncState from '../FBAutocompleteAsync/FBAutocompleteAsync.state';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocompleteAsync.types';
+import { FB } from '../helpers';
 import { DocumentRevisionOption, UseOptionsHook } from './types';
 
 export const getOptionLabel = (option: DocumentRevisionOption): string => {
