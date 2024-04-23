@@ -13,6 +13,7 @@ import { ReactComponent as InReviewIcon } from '../../../../../assets/images/in_
 import { ReactComponent as InReviewWhiteIcon } from '../../../../../assets/images/in_review_status_white.svg';
 import { ReactComponent as PinIcon } from '../../../../../assets/images/pin.svg';
 import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin_solid.svg';
+import { translate } from '../../../../../common/intl';
 import { attachmentsActions } from '../../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
 import { Nullable } from '../../../../../state/ducks/common/types';
@@ -149,7 +150,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
     {
       id: 'id5',
       isAttachments: true,
-      ltext: 'Attachments',
+      ltext: translate('common.attachments.poLine'),
       rtext: purchaseOrderAttachments || [],
     },
   ];
@@ -272,7 +273,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'} className={classes.textPoReviewlapMobile} onClick={handleClick}>
+              <Grid container={true} md={3} sm={6} xs={4} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'} className={classes.textPoReviewlapMobile} onClick={handleClick}>
                 <Grid item={true}>
                   <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />
                 </Grid>
@@ -409,11 +410,11 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
+            className={cx(classes.actionIcons)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
-              <span>
+              <span className={cx(classes.poActionIconsWidth)}>
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
@@ -557,7 +558,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                       alignContent="center"
                     >
                       {poItem.rtext.map((attachmentInfo, index) => (
-                        <Grid item key={index}>
+                        <Grid item key={index} className={classes.poAttachmentMargin}>
                           <AttachmentIcon
                             className={classes.attachmentIcon}
                           />
@@ -598,6 +599,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 id={docRevId}
                 dialogPDF={dialogPDF}
                 onClose={handleDownloadClose}
+                downloadImmediately
                 downloadPdfHover
               />
             )}

@@ -90,7 +90,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
       if (event?.dataItem) {
         const { dataItem, dataItems } = event;
         dataItems.map(item => {
-          if (item.apiKey === dataItem.apiKey) {
+          if (item.apiKey === dataItem.apiKey && item.printer?.name === dataItem.printer?.name) {
             item.printer.isActive = !item.printer.isActive;
           }
           return item;

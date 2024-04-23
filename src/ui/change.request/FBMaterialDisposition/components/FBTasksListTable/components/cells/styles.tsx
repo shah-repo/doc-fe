@@ -6,6 +6,9 @@ export const styles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
+  disabled: {
+    opacity: 0.4,
+  },
   avatarSection: {
     display: 'flex',
     alignItems: 'center',

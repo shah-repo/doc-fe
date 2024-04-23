@@ -37,9 +37,18 @@ export default makeStyles((theme: NextTheme) => ({
       background: Colors.textGray,
     },
   },
+  poAttachmentMargin: {
+    marginBottom: theme.spacing(0),
+  },
+  textPoReviewlapMobile: {
+    flexWrap: 'nowrap',
+  },
   [theme.media.mobile]: {
     poActionIconsWidth: {
       display: 'none',
+    },
+    textPoReviewlapMobile: {
+      flexWrap: 'wrap',
     },
     link: {
       pointerEvents: 'none',
@@ -48,6 +57,12 @@ export default makeStyles((theme: NextTheme) => ({
       display: 'flex',
       marginLeft: theme.spacing(2),
     },
-
+    typographyChildrenBold: {
+      marginLeft: theme.spacing(-2),
+      paddingRight: theme.spacing(2),
+    },
+    poAttachmentMargin: {
+      marginBottom: theme.spacing(2),
+    },
   },
 }));

@@ -14,6 +14,7 @@ import SM from '../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as WarningIcon } from '../../assets/images/warning.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../assets/images/warning_white.svg';
 import { ReactComponent as WithDrawSubmissionIcon } from '../../assets/images/withdraw_submission.svg';
+import { translate } from '../../common/intl';
 import { getHasPermission } from '../../common/utils/selectors';
 import { getPOIndexDbInstance } from '../../indexDb';
 import { authSelectors } from '../../state/ducks/auth';
@@ -22,10 +23,13 @@ import { documentRevisionsActions, documentRevisionsSelectors } from '../../stat
 import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../state/ducks/documents';
+import { ApprovalStatus } from '../../state/ducks/documents/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
+import { store } from '../../state/store';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
 import Text from '../components/Text';
+import HeaderEquipmentStatus, { shouldShowEQStatus } from '../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
@@ -50,9 +54,10 @@ import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
 import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
 import { PreviewControlButtons } from './PreviewControls.container.types';
+import WOClose from './forms/presenters/Close';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 
@@ -77,11 +82,12 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 
 const styles = makeStyles(() => ({
   printIconContainer: {
-    backgroundColor: Colors.white,
+    backgroundColor: `${Colors.white} !important`,
   },
   printIcon: {
     height: 15,
     width: 15,
+    color: Colors.navy,
   },
 }));
 
@@ -120,7 +126,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isPart = checkIsDocumentPart(groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
   const isEB = checkIsDocumentEB(groupOptions);
+  const isWO = checkIsDocumentWO(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
+  const isWORecord = isWO && !hasOutput;
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
 
@@ -447,7 +455,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (showEditButton) {
     accessableButtons.push(PreviewControlButtons.EditPartButton);
   }
-  if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise) {
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise && !isWORecord) {
     accessableButtons.push(PreviewControlButtons.CloneButton);
   }
   if (!isLastVersionObsolete() && hasAccess && canCreate() && isPO && showUpdate
@@ -467,7 +475,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (!isEmailSent && !hasAccess) {
     accessableButtons.push(PreviewControlButtons.RequestAccess);
   }
-  if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && !isWO) {
     accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
   if (isLot) {
@@ -586,6 +594,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       }
     </>
   );
+  const isWOCloseEnabled = isWORecord && documentRevision?.approvals?.some((approval) => approval.status === ApprovalStatus.Pending);
+  const loggedInUser = store.getState().auth.user;
+  const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
+  const showEQStatusValue = shouldShowEQStatus(documentRevision);
 
   return (
     <>
@@ -599,17 +611,16 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
+      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled || !isDocOwner} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id
           && documentRevision?.poStatus
           && (isDocumentApproved || isDocumentReleased) && (
           <HeaderPOStatusOptions
-            poStatus={documentRevision?.poStatus}
-            docId={documentRevision?.id}
-            docRevOwner= {documentRevision?.owner?.user?.name}
-            updatedAt= {documentRevision?.updatedAt || ''}
-            isOwner = {isUserDocumentOwner}
+            documentRevision={documentRevision}
+            isOwner={isUserDocumentOwner}
           />
         )}
       </>

@@ -54,7 +54,9 @@ const DownloadHtmlPreview: React.FC<Props> = ({
   });
   const handleClick = () => {
     templateAsync.start(templateAction, id, templateAsync);
-    dialogPDF.open();
+    if (!downloadImmediately) {
+      dialogPDF.open();
+    }
   };
 
   const callback = React.useCallback((message: string) => {
@@ -88,10 +90,7 @@ const DownloadHtmlPreview: React.FC<Props> = ({
     },
   });
   useEffect(() => {
-    if (downloadImmediately) {
-      handleClick();
-    }
-    if (downloadPdfHover) {
+    if (downloadImmediately || downloadPdfHover) {
       handleClick();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

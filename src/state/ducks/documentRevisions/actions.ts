@@ -6,7 +6,8 @@ import { IWhereUsedRequest } from '../../../ui/components/whereUsed/WhereUsed.in
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
 import { checkIsDocumentRecord } from '../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { CreateInspectionBody } from '../../../ui/documentRevision/InspectionControls/InspectionControls.types';
-import { BOMResponse, WhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
+import { FBEndpoint } from '../../../ui/form.builder/defaults/FBEndpoint';
+import { BOMResponse, IWhereUsedTree } from '../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { BOM } from '../../../ui/form.builder/FBBOM/interface';
 import { Vendor } from '../../../ui/form.builder/FBPartVendors/types';
 import FBDataStore from '../../../ui/form.builder/FBStore/FBDataStore';
@@ -16,9 +17,9 @@ import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
 import { MATERIAL_DISPOSITION_WHERE_USED_URL } from '../materialDisposition/constants';
-import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_ROOT_URL, PO_ROOT_URL, UPDATE_BOM_BRANCH } from './constants';
+import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, EQUIPMENT_ROOT_URL, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_OF_PARTS, LOT_ROOT_URL, PO_ROOT_URL, UPDATE_BOM_BRANCH } from './constants';
 import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from './documentType/types';
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, EquipmentStatus, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -323,9 +324,10 @@ const cancelDraft = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
-const voidDocument = (id: string): ApiAction<DocumentRevision> => apiAction({
+const voidDocument = (id: string, body?: DocumentRevisionEditRequestBody): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/void/${id}`,
   method: 'patch',
+  data: body,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },
@@ -426,6 +428,36 @@ const fetchAvailableParts = (
     handlers,
   });
 
+const fetchLotsByPartId = (
+  partId: string,
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: `${LOT_OF_PARTS}/${partId}?isWorkOrder=true`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchAvailableLHRList = (
+  partRevIdSelected: string,
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: `${FBEndpoint.FetchAvailableLhrForPart}/${partRevIdSelected}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchSelectedLHR = (
+  lhrRevIds: string[],
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: `${FBEndpoint.FetchLhrDetails}?lhrRevIds=${lhrRevIds.join(',')}`,
+    method: 'get',
+    handlers,
+  });
+
 const fetchBOMBranch = (
   docRevId,
   docId,
@@ -451,7 +483,7 @@ const fetchBOMTree = (
 const fetchWhereUsedTree = (
   docRevId,
   handlers: Handlers,
-): ApiAction<WhereUsedTree[]> =>
+): ApiAction<IWhereUsedTree[]> =>
   apiActionWithCallbacks({
     url: `${FETCH_WHERE_USED_TREE}/${docRevId}`,
     method: 'get',
@@ -642,10 +674,22 @@ const updateLotStatus = (id: string, body: { lotStatus: LotStatus }): ApiAction<
   },
 });
 
+const updateEquipmentStatus = (id: string, body: { eqStatus: EquipmentStatus }): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}${EQUIPMENT_ROOT_URL}/${id}`,
+  method: 'patch',
+  data: body,
+  onSuccess: (response, dispatch) => {
+    dispatch(load(id));
+  },
+  onFailure: () => {
+    toastError(translate('documentRevision.equipment.status.update.failed'));
+  },
+});
+
 const fetchWhereUsedLotTree = (
   body: IWhereUsedRequest,
   handlers: Handlers,
-): ApiAction<WhereUsedTree[]> =>
+): ApiAction<IWhereUsedTree[]> =>
   apiActionWithCallbacks({
     url: MATERIAL_DISPOSITION_WHERE_USED_URL,
     method: 'post',
@@ -702,6 +746,9 @@ export default {
   updateForm,
   getFormMappingTemplate,
   fetchAvailableParts,
+  fetchAvailableLHRList,
+  fetchLotsByPartId,
+  fetchSelectedLHR,
   fetchBOMBranch,
   fetchBOMTree,
   addBOMBranch,
@@ -718,4 +765,5 @@ export default {
   alternatePartRevUpdate,
   updateLotStatus,
   getAllApprovalRequests,
+  updateEquipmentStatus,
 };

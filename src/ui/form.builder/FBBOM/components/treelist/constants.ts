@@ -13,6 +13,7 @@ export const ALTERNATE_PARTS_COUNT_KEY = 'alternatePartsCount';
 export const CELL_EMPTY_VALUE = '-';
 export const EQUAL_OPERATOR = 'eq';
 export const GREATER_THAN_OPERATOR = 'gt';
+export const BOM_TABLE_NAME = 'BOM';
 export const TREELIST_CONFIG = {
   sortable: false,
   reorderable: true,

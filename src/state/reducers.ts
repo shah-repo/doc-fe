@@ -15,7 +15,7 @@ import pageDetails from './ducks/pageDetails';
 import supplierSurvey from './ducks/supplierSurvey';
 import tableSearch from './ducks/tableSearch';
 import userManagement from './ducks/userManagement';
-import migrations from './migrations';
+import { authMigrations, pageDetailsMigrations, tableSearchMigrations } from './migrations';
 import { authTransform } from './transforms';
 
 const authPersistConfig = {
@@ -24,7 +24,7 @@ const authPersistConfig = {
   version: 3,
   whitelist: ['user', 'groups'],
   transforms: [authTransform],
-  migrate: createMigrate(migrations),
+  migrate: createMigrate(authMigrations),
 };
 
 const companyPersistConfig = {
@@ -42,13 +42,17 @@ const documentTypePersistConfig = {
 const tableSearchPersistConfig = {
   key: 'tableSearch',
   storage,
+  version: 2,
   whitelist: ['criteria'],
+  migrate: createMigrate(tableSearchMigrations),
 };
 
 const pageDetailsPersistConfig = {
   key: 'pageDetails',
   storage,
+  version: 1,
   whitelist: ['byCategory'],
+  migrate: createMigrate(pageDetailsMigrations),
 };
 
 const appReducer = combineReducers({

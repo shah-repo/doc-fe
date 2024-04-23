@@ -167,7 +167,7 @@ const PartIDCell: React.FC<CustomTemplateProps> = ({ onClick, onRefresh, ...prop
   return (
     <Box onClick={onRowClick}>
       {dataItem.availableRevisions?.isReleased && getInfoIcon()}
-      {isAddMode && getFieldInfo()}
+      {isAddMode && !dataItem.isWO && getFieldInfo()}
       {!isAddMode && <span>{dataItem[field]}</span> }
       <AlertDialog
         confirmAction={onRevChange}

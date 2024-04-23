@@ -13,11 +13,13 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
   private readonly documentStatus?: string = '';
+  private readonly skipOptionsFilter?: boolean = false;
 
-  public constructor ({ optionId, urlValues, documentStatus }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, documentStatus, skipOptionsFilter }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
     this.documentStatus = documentStatus;
+    this.skipOptionsFilter = skipOptionsFilter;
     this.setOptionId(optionId);
   }
 
@@ -108,7 +110,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           docId: data.docId,
         }));
       case FBAutocompleteAsyncOption.releasedParts:
-        return data.filter((item) => item.status === DocumentRevisionStatus.Released);
+        return this.skipOptionsFilter ? data : data.filter((item) => item.status === DocumentRevisionStatus.Released);
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
       case FBAutocompleteAsyncOption.trainingDocuments:
         return data.map((option) => {

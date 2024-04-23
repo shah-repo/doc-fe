@@ -160,6 +160,7 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
 export enum statusClassMapping {
   'Pending Approval'='PENDING_STATUS',
   'In Review'='PENDING_STATUS',
+  'In Progress'='PENDING_STATUS',
   'Pending Change'='PENDING_STATUS',
   'PENDING_CHANGE'='PENDING_STATUS',
   'IN_REVIEW' = 'PENDING_STATUS',
@@ -184,6 +185,11 @@ export enum statusClassMapping {
   'R&D_USED_ONLY'='GRAY_STATUS',
   'SCRAP'='RED_STATUS',
   'REJECTED'='RED_STATUS',
+  'Inactive' = 'GRAY_STATUS',
+  'Out for Calibration' = 'PENDING_STATUS',
+  'Out for Maintenance' = 'PENDING_STATUS',
+  'Retired' = 'RED_STATUS',
+  'Unplanned Downtime' = 'GRAY_STATUS',
 }
 
 export const pagerSettings: GridPagerSettings = {

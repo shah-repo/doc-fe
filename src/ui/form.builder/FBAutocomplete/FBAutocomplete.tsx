@@ -1,12 +1,12 @@
 import { Box, IconButton, Popper, TextField, Typography } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
 import { RenderInputParams } from '@material-ui/lab/Autocomplete';
-import { get, includes, isEmpty } from 'lodash';
+import { get, includes } from 'lodash';
 import { Observer } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from '..';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
-import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApprovalStatus } from '../../../state/ducks/documents/types';
 import ListBoxComponent from '../../components/common/autocomplete/ListBoxComponent';
 import Text from '../../components/Text';
@@ -127,16 +127,17 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     if (documentType === DOC_TYPE_GROUP.PART && !props.showErrorMsg) {
       return props.showErrorMsg;
     }
+
+    if (props.name === WO_PART_KEY_NAME) {
+      return false;
+    }
+
     return true;
   };
 
   disabled = includes(['fb-approvers-approvers', 'form.builder.approvers'], props.name)
     && includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
     ? true : disabled;
-
-  if (multiple && isEmpty(value) && workspaceState.isPreview) {
-    multiple = false;
-  }
 
   return (
     <>

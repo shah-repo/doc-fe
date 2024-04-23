@@ -1,22 +1,19 @@
 import { Box, Button } from '@material-ui/core';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
+import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
-import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as VoidDocumentIcon } from '../../../../assets/images/void_document.svg';
-import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
-import AlertDialog from '../../../app/alert.dialog/AlertDialog';
+import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
+import Text from '../../../components/Text';
 import FormMessage from '../../../components/forms/FormMessage';
 import FormProgress from '../../../components/forms/FormProgress';
-import Text from '../../../components/Text';
-import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
-import { checkIsDocumentRecord } from '../../helpers/checkDocumentGroup';
 
 interface Props {
   documentRevision: DocumentRevision | undefined
@@ -29,19 +26,6 @@ const VoidButton: React.FunctionComponent<Props> = ({
   const isNewLayout = SM.isNewLayout;
   const dialog = useDialog();
   const async = useAsync();
-
-  const isRecord = useMemo(() =>
-    checkIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions || []), [documentRevision]);
-
-  const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
-  const voidDocument = () => {
-    documentRevision
-    && async.start(
-      voidAction,
-      documentRevision.id,
-      async,
-    );
-  };
 
   return (
     <>
@@ -82,11 +66,13 @@ const VoidButton: React.FunctionComponent<Props> = ({
           <Text translation="common.void" />
         </Button>
       )}
-      <AlertDialog
-        confirmAction={voidDocument}
-        message={isRecord ? 'documentRevision.record.void.alert' : 'documentRevision.void.alert'}
-        {...{ dialog }}
-      />
+      {documentRevision && (
+        <VoidAlertDialog
+          async={async}
+          dialog={dialog}
+          documentRevision={documentRevision}
+        />
+      )}
     </>
   );
 };

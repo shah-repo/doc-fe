@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -16,11 +16,11 @@ import { AsyncStatus } from '../../../state/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
-import { FBApprovalAuditState, FBSchemaProps, FBText } from '../../form.builder';
+import { EQ_STATUS_KEY, FBApprovalAuditState, FBSchemaProps, FBText } from '../../form.builder';
 import { isTranslation } from '../../translations/types';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presenters/related.parts/helper';
+import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
-import { revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import { styles } from './Audit.presenter.styles.new';
 
 interface OwnProps {
@@ -432,6 +432,13 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           fbLabel = 'Note';
         }
 
+        if (change.field.includes(EQ_STATUS_KEY)) {
+          const relatedTypeObj = revIdRelatedTypeObj[change.documentRevisionId];
+          if (relatedTypeObj.relatedType === RELATED_TYPE.PART_RELATED || relatedTypeObj.isWorkOrder) {
+            return;
+          }
+        }
+
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
         const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 
@@ -458,7 +465,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                     values={{
                       nextStatus: change.nextValue,
                       relatedType: getDynamicTextValue(
-                        revIdRelatedTypeObj[change.documentRevisionId], RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+                        revIdRelatedTypeObj[change.documentRevisionId]?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
                     }}
                   />
                 </Typography>
@@ -530,6 +537,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const isRemovingApproverAction = (
       auditGroup[0].field === 'approvals.status' && auditGroup[0].nextValue === ApprovalStatus.Abandoned
     );
+    const isWorkOrder = revIdRelatedTypeObj[auditGroup[0].documentRevisionId]?.isWorkOrder;
+
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Typography variant="subtitle1" className={classes.auditKey}>
@@ -538,6 +547,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               isRemovingApproverAction
                 ? `documentRevision.audit.${field}.ARRAY_DELETED`
                 : `documentRevision.audit.${field}.${type}`}
+            values={{
+              approverText: isWorkOrder ? 'User' : 'Approver',
+            }}
           />
         </Typography>
         {auditGroup.map((change, index) => (
@@ -580,7 +592,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 const labelToShow = (change: Audit,
   groupKey: number | undefined,
   key: number | undefined,
-  revIdRelatedTypeObj: {[key: string]: RELATED_TYPE}) => {
+  revIdRelatedTypeObj: {[key: string]: IRevIdMapper}) => {
+  const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId] ?? {};
   return (
     <>
       {change.field === 'relatedPartsStatus' && <Text
@@ -588,15 +601,17 @@ const labelToShow = (change: Audit,
         message={`documentRevision.audit.${change.field}.${change.type}`}
         values={{
           relatedType: getDynamicTextValue(
-            revIdRelatedTypeObj[change.documentRevisionId], RELATED_TYPE_VALUES_ENUM.BASE_PART, RELATED_TYPE_VALUES_ENUM.BASE_DOCUMENT),
+            relatedType, RELATED_TYPE_VALUES_ENUM.BASE_PART, RELATED_TYPE_VALUES_ENUM.BASE_DOCUMENT),
         }}
       />}
       {change.field !== 'relatedPartsStatus' && <Text
         dataCy={`change-key-${groupKey}-${key}`}
         message={`documentRevision.audit.${change.field}.${change.type}`}
         values={{
+          nextStatus: change.nextValue,
+          approverText: isWorkOrder ? 'User' : 'Approver',
           relatedType: getDynamicTextValue(
-            revIdRelatedTypeObj[change.documentRevisionId], RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+            relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
         }}
       />}
     </>

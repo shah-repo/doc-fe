@@ -1,4 +1,5 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
 import { ReactComponent as AlertIcon } from '../../../assets/images/alert.svg';
 import Text from '../../components/Text';
@@ -13,6 +14,7 @@ interface Props {
   dialog: DialogHandler
   confirmLabel?: Translation
   cancelLabel?: Translation
+  title?: Translation
 }
 
 /** Dialog with Confirm and Cancel buttons.
@@ -24,6 +26,7 @@ interface Props {
  * @param cancelLabel Cancel button text (optional).
  */
 const AlertDialog: React.FunctionComponent<Props> = ({
+  title = 'common.alert',
   dialog,
   message,
   confirmAction,
@@ -50,7 +53,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item >
                   <Typography data-cy="dialog-header" className={classes.alertTitle}>
-                    <Text translation="common.alert" />!
+                    <Text translation={title} />!
                   </Typography>
                   <Typography data-cy="dialog-message" className={classes.contentText}>
                     <Text translation={message} />
@@ -62,7 +65,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
           <Box className={classes.dialogAction}>
             <Button
               variant="contained"
-              className={`${classes.cancelButton} ${classes.buttonLabel}`}
+              className={cx(classes.cancelButton, classes.buttonLabel)}
               onClick={cancelAction}
               id="AlertDialog-cancelButton"
               data-cy="AlertDialog-cancelButton"
@@ -72,7 +75,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
             <Button
               type="submit"
               variant="contained"
-              className={`${classes.submitButton} ${classes.buttonLabel}`}
+              className={cx(classes.submitButton, classes.buttonLabel)}
               id="AlertDialog-continueButton"
               data-cy="AlertDialog-continueButton"
               onClick={confirmAction}
