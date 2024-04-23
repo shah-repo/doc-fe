@@ -81,7 +81,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   const isDocument = !isEmpty(documentRevision?.formTemplate);
-  const partRevIdSelected = isDisabled
+  const partRevIdSelected: string = isDisabled
     ? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
     : workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id ?? '';
 
@@ -199,7 +199,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
   }, [documentRevision?.id]);
 
-  const createOrUpdateLOT = (values) => {
+  const createOrUpdateLOT = (values: Partial<EditableAllocationItem>) => {
     if (values[ADD_FIELD]) {
       const payload = {
         workOrderId: documentRevision?.id,
@@ -224,21 +224,22 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     }
   };
 
-  const createOrUpdatePart = (values) => {
+  const createOrUpdatePart = (values: Partial<EditableAllocationItem>) => {
+    const partVariance = values.variance || undefined;
     if (values[ADD_FIELD]) {
       const payload = {
         workOrderId: documentRevision?.id,
         workOrderPartRevId: partRevIdSelected,
         partRevId: values.partRevId,
         partQuantityNeeded: values.quantityNeeded,
-        partVariance: values.variance,
+        partVariance,
       };
 
       partAsync.start(createPart, payload, partAsync);
     } else {
       const payload = {
         partQuantityNeeded: values.quantityNeeded,
-        partVariance: values.variance,
+        partVariance,
       };
 
       partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'),
