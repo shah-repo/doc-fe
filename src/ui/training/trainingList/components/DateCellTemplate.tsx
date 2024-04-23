@@ -1,9 +1,9 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import { MomentFormats } from '../../../../../common/utils/date';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import { DatePicker, FormikField } from '../../../../components/forms/fields-next';
+import { MomentFormats } from '../../../../common/utils/date';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { DatePicker, FormikField } from '../../../components/forms/fields-next';
 import { CustomTemplateProps } from '../types';
 
 export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {

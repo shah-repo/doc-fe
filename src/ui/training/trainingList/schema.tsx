@@ -2,18 +2,17 @@ import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import React from 'react';
 import { translate } from '../../../common/intl';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { ActionsCellTemplate } from '../../documentRevision/common/cellTemplate/components/ActionsCellTemplate';
-import { DateCellTemplate } from '../../documentRevision/common/cellTemplate/components/DateCellTemplate';
-import { TextFieldCellTemplate } from '../../documentRevision/common/cellTemplate/components/TextFieldCellTemplate';
-import { UploadEvidenceCellTemplate } from '../../documentRevision/common/cellTemplate/components/UploadEvidenceCellTemplate';
-import { UserCellTemplate } from '../../documentRevision/common/cellTemplate/components/UserCellTemplate';
 import DropdownFilter from '../../form.builder/FBApprovalMatrix/components/DropdownFilter';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
 import InputFilter from '../../form.builder/FBApprovalMatrix/components/InputFilter';
-import { CommentsCellTemplate } from '../../form.builder/FBLotTransfers/components/CommentsCellTemplate';
+import { ActionsCellTemplate } from './components/ActionsCellTemplate';
+import { CommentsCellTemplate } from './components/CommentsCellTemplate';
+import { DateCellTemplate } from './components/DateCellTemplate';
+import { PrimaryOwnerCellTemplate } from './components/PrimaryOwnerCellTemplate';
 import { RevisionCellTemplate } from './components/RevisionCellTemplate';
 import { TrainingDocID } from './components/TrainingDocID';
 import { TrainingTypeCellTemplate } from './components/TrainingTypeCellTemplate';
+import { UploadEvidenceCellTemplate } from './components/UploadEvidenceCellTemplate';
 import { DATE_FIELD, REFERENCE_FIELD, TRAINING_TYPE_OPTIONS } from './constants';
 import { EditableTrainee, SchemaOptions } from './types';
 
@@ -48,7 +47,7 @@ export const buildSchema = ({
       field: 'primaryOwner.user.name', // deep field name for correct filter working
       title: 'User',
       filterCell: InputFilter,
-      template: (props) => <UserCellTemplate {...props} field="primaryOwner" options={primaryOwnerFieldOptions} />,
+      template: (props) => <PrimaryOwnerCellTemplate {...props} field="primaryOwner" options={primaryOwnerFieldOptions} />,
       editable: false,
       width: 200,
     },
@@ -73,7 +72,9 @@ export const buildSchema = ({
       field: 'trId',
       title: 'training.trn.id',
       filterCell: InputFilter,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <>trId</>
+      ),
       width: 200,
     },
     {

@@ -33,7 +33,7 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
     // setPrimaryVendor,
     trainees = [],
     records = [],
-  } = props;
+} = props;
   const classes = useStyles();
   const isActive = !disabled;
   const [editedTrainee, setEditedTrainee] = React.useState<Partial<EditableTrainee>>();
@@ -173,3 +173,4 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
 };
 
 export default withTrainingListTable(TrainingListTable);
+export * from './utils';

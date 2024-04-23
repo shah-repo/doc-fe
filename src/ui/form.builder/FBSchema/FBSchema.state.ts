@@ -2,16 +2,16 @@ import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, siz
 import { action, get, observable, set } from 'mobx';
 import React from 'react';
 import {
-    FBActionField,
-    FBApproval,
-    FBAutocompleteAsync,
-    FBCheckboxGroup,
-    FBEditorState,
-    FBInputProps,
-    FBInputType,
-    FBSchemaProps,
+  FBActionField,
+  FBApproval,
+  FBAutocompleteAsync,
+  FBCheckboxGroup,
+  FBEditorState,
+  FBInputProps,
+  FBInputType,
+  FBSchemaProps,
 } from '..';
-import TrainingListTable from '../../training/training.list';
+import TrainingListTable from '../../training/trainingList';
 import FBApprovalMatrixField from '../FBApprovalMatrixField/FBApprovalMatrixField';
 import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatrixFieldRoles';
 import FBApprovals from '../FBApprovals/FBApprovals';

@@ -1,6 +1,6 @@
 import React from 'react';
-import { translate } from '../../../../../common/intl';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { translate } from '../../../../common/intl';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps, SchemaOptions } from '../types';
 import { ActionsCell } from './ActionsCell';
 
@@ -14,7 +14,7 @@ export const ActionsCellTemplate: React.FC<Props> = (props) => {
     return null;
   }
 
-  const shouldDisableDelete = dataItem?.primary;
+  const shouldDisableDelete = dataItem.primary;
   const deleteTootltipText
       = shouldDisableDelete
         ? translate('form.builder.part.vendors.primary.delete.message')

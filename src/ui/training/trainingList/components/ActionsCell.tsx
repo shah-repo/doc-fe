@@ -1,6 +1,6 @@
 import { makeStyles, Popper } from '@material-ui/core';
 import React, { useRef } from 'react';
-import Actions, { ActionsProps } from '../../../../form.builder/FBApprovalMatrixRoles/components/Actions';
+import Actions, { ActionsProps } from '../../../form.builder/FBApprovalMatrixRoles/components/Actions';
 
 const useStyles = makeStyles({
   popperHolder: {
