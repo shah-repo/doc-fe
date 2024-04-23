@@ -13,13 +13,13 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
   private readonly documentStatus?: string = '';
-  private readonly addPrevReleasedRevDoc?: boolean = false;
+  private readonly includePrevReleaseDoc?: boolean = false;
 
-  public constructor ({ optionId, urlValues, documentStatus, addPrevReleasedRevDoc }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, documentStatus, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
     this.documentStatus = documentStatus;
-    this.addPrevReleasedRevDoc = addPrevReleasedRevDoc;
+    this.includePrevReleaseDoc = includePrevReleaseDoc;
     this.setOptionId(optionId);
   }
 
@@ -110,20 +110,20 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           docId: data.docId,
         }));
       case FBAutocompleteAsyncOption.releasedParts:
-        const addPrevReleasedRevDoc = this.addPrevReleasedRevDoc && this.additionalData?.length;
+        const includePrevReleaseDoc = this.includePrevReleaseDoc && this.additionalData?.length;
         let prevReleaseDocId = '';
 
-        if (addPrevReleasedRevDoc) {
+        if (includePrevReleaseDoc) {
           prevReleaseDocId = get(this.additionalData, '[0].docId');
         }
 
-        const checkIsItemIsReleased = (status) => {
+        const checkIsItemIsReleased = (status: DocumentRevisionStatus): boolean => {
           return status === DocumentRevisionStatus.Released;
         };
 
         return union(
           data.filter(
-            (item) => addPrevReleasedRevDoc
+            (item) => includePrevReleaseDoc
               ? item.document.docId === prevReleaseDocId || checkIsItemIsReleased(item.status)
               : checkIsItemIsReleased(item.status),
           ),
