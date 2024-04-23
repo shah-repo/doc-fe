@@ -156,6 +156,10 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = 'displayStatus';
+    } else if (columnDetails.searchOptions?.eqStatusTemplate) {
+      dynamicCellTemplate = KendoCellTemplates.EQ_STATUS;
+      filterCellTemplate = KendoGridFilterCell.EQ_STATUS;
+      upDateField = 'eqStatus';
     } else if (upDateField === 'precalc.po_amount_with_currency') {
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT_WITH_CURRENCY;
     } else if (upDateField === 'precalc.po_amount') {

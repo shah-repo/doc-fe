@@ -1,5 +1,6 @@
 import { get, isString } from 'lodash';
 import { useObserver } from 'mobx-react';
+import { translate } from '../../../common/intl';
 import { Audit } from '../../../state/ducks/audit/types';
 import { WorkOrderTypesValues } from '../../../state/ducks/documentRevisions/documentType/types';
 import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '../../form.builder';
@@ -40,7 +41,11 @@ export const getWOAuditDefaultValue = (audit: Audit): string => {
 
     if (data) {
       const record = data.get(auditValue);
-      label = get(record, labelPrefixRoot, '') + ' ' + FB.stripTags(get(record, labelKey, ''));
+      label = translate('wo.displayRevision', {
+        docId: get(record, labelPrefixRoot, ''),
+        displayRevision: record.displayRevision,
+        name: FB.stripTags(get(record, labelKey, '')),
+      });
     }
 
     return label;
