@@ -693,7 +693,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
               className={cx({ [classes.disabled]: isShowOnly })}
             >
               <ColumnShowHideTreeMenu
-                columnDefinition={columns}
+                columnDefinition={columns.filter(item => item.id !== 'actions')}
                 onChange={onColumnShowHide}
               />
             </Grid>
