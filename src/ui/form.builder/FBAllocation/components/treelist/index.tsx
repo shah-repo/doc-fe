@@ -206,7 +206,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     return value || 0;
   };
 
-  const isRecordUnchanged = (values: Partial<EditableAllocationItem>) => {
+  const isRecordUnchanged = (values: Partial<EditableAllocationItem>): boolean => {
     if (
       selectedPart
       && getValueOrDefaultZero(selectedPart.quantityNeeded) === getValueOrDefaultZero(values.quantityNeeded)
@@ -216,6 +216,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       setSelectedPart(undefined);
       return true;
     }
+    return false;
   };
 
   const createOrUpdateLOT = (values: Partial<EditableAllocationItem>) => {
@@ -318,6 +319,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter(
           (data) => !data[ADD_FIELD],
         );
+
+        if (isNil(state.data[index][SUB_ITEMS_FIELD])) {
+          state.data[index][SUB_ITEMS_FIELD] = [];
+        }
 
       state.data[index][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
 
