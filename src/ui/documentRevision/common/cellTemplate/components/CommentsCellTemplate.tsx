@@ -2,13 +2,13 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import { translate } from '../../../../common/intl';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../components/OverflowTooltip';
-import { FormikField, TextField } from '../../../components/forms/fields-next';
+import { translate } from '../../../../../common/intl';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
+import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import useStyles from '../styles';
 import { CustomTemplateProps, EditableTrainee } from '../types';
+import useStyles from './styles';
 
 export const CommentsCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method

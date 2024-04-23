@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../../layout/theme/utils/colors';
+import Colors from '../../../../layout/theme/utils/colors';
 
-export const styles = makeStyles((theme) => ({
+export default makeStyles((theme) => ({
   deleteIcon: {
     display: 'flex',
     alignItems: 'center',
@@ -140,5 +140,13 @@ export const styles = makeStyles((theme) => ({
       height: '1em',
       width: '1em',
     },
+  },
+  tooltipContent: {
+    maxWidth: 425,
+    maxHeight: 200,
+    overflow: 'auto',
+    whiteSpace: 'pre-line',
+    paddingRight: theme.spacing(0.5),
+    marginRight: theme.spacing(-0.5),
   },
 }));

@@ -1,11 +1,11 @@
-import { Attachment } from '../../../state/ducks/attachments/types';
-import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
-import { Employee } from '../../../state/ducks/company/types';
-import { DocumentRevision, DocumentRevisionDocument } from '../../../state/ducks/documentRevisions/types';
-import { EmployeeResponse } from '../../change.request/FBMaterialDisposition/components/FBTasksListTable/types';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
-import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { FBInputProps } from '../../form.builder/FBInput/FBInput.types';
+import { Attachment } from '../../../../state/ducks/attachments/types';
+import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
+import { Employee } from '../../../../state/ducks/company/types';
+import { DocumentRevision, DocumentRevisionDocument } from '../../../../state/ducks/documentRevisions/types';
+import { EmployeeResponse } from '../../../change.request/FBMaterialDisposition/components/FBTasksListTable/types';
+import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { FBInputProps } from '../../../form.builder/FBInput/FBInput.types';
 import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD } from './constants';
 
 export interface SchemaOptions {
