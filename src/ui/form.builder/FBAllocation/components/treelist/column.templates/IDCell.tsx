@@ -137,7 +137,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
           { getFieldInfo()}
         </div>}
         {!isEditMode
-        && (dataItem.docId) }
+        && dataItem.docId ? `${dataItem.docId}.${dataItem.displayRevision}` : '' }
       </span>
     </td>
   );
