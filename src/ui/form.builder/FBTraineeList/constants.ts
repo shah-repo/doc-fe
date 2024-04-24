@@ -1,6 +1,4 @@
-import { translate } from '../../../common/intl';
 import { MODE_FIELD } from '../../components/KendoDataGrid/constants';
-import { TrainingType } from './types';
 
 export const EMPLOYEE_FIELD = 'employeeName';
 export const BUILD_FIELD = 'buildName';
@@ -15,8 +13,3 @@ export const EMPLOYEE_RESPONSE_FIELD = 'employeeResponse';
 export enum EmployeeStatus {
   Done = 'DONE',
 }
-
-export const TRAINING_TYPE_OPTIONS = Object.values(TrainingType).map((value) => ({
-  value,
-  label: translate(`form.builder.training.type.${value}`),
-}));

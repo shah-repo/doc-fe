@@ -1,9 +1,5 @@
-import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import React from 'react';
-import { translate } from '../../../common/intl';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import DropdownFilter from '../FBApprovalMatrix/components/DropdownFilter';
-import { createOption } from '../FBApprovalMatrix/components/Grid';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { CommentsCellTemplate } from './components/CommentsCellTemplate';
@@ -11,9 +7,8 @@ import { DateCellTemplate } from './components/DateCellTemplate';
 import { PrimaryOwnerCellTemplate } from './components/PrimaryOwnerCellTemplate';
 import { RevisionCellTemplate } from './components/RevisionCellTemplate';
 import { TrainingDocID } from './components/TrainingDocID';
-import { TrainingTypeCellTemplate } from './components/TrainingTypeCellTemplate';
 import { UploadEvidenceCellTemplate } from './components/UploadEvidenceCellTemplate';
-import { DATE_FIELD, REFERENCE_FIELD, TRAINING_TYPE_OPTIONS } from './constants';
+import { DATE_FIELD, REFERENCE_FIELD } from './constants';
 import { EditableTrainee, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -32,14 +27,6 @@ export const buildSchema = ({
   employeeEvidenceUpdates,
 }: SchemaOptions): Array<ColumnDefinition<EditableTrainee>> => {
   const primaryOwnerFieldOptions = primaryOwners.filter(item => item.active);
-  const trainingTypeOptions = TRAINING_TYPE_OPTIONS.map((option) => createOption(option.value, option.label));
-  const TrainingTypeFilter: React.FC<GridFilterCellProps> = (props) => (
-    <DropdownFilter
-      {...props}
-      data={trainingTypeOptions}
-      defaultItem={createOption(undefined, translate('common.all'))}
-    />
-  );
 
   return [
     {
@@ -57,14 +44,6 @@ export const buildSchema = ({
       title: 'Training Doc ID',
       filterCell: InputFilter,
       template: TrainingDocID,
-      width: 200,
-    },
-    {
-      id: 'trainingType',
-      field: 'trainingType',
-      title: 'Training Type',
-      filterCell: TrainingTypeFilter,
-      template: TrainingTypeCellTemplate,
       width: 200,
     },
     {

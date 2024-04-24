@@ -4,7 +4,6 @@ import React, { ChangeEvent } from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
-import { TRAINING_TYPE_OPTIONS } from '../constants';
 import { CustomTemplateProps, EditableTrainee } from '../types';
 
 export const TrainingDocID: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
@@ -17,7 +16,7 @@ export const TrainingDocID: React.FC<CustomTemplateProps> = ({ dataItem, field }
   };
 
   const defaultValue = isEditMode ? values.trainingType : dataItem.trainingType;
-  const value = TRAINING_TYPE_OPTIONS.find((option) => option.value === defaultValue);
+  const value = [].find((option) => option.value === defaultValue);
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
@@ -30,7 +29,7 @@ export const TrainingDocID: React.FC<CustomTemplateProps> = ({ dataItem, field }
           {...getFieldProps(field)}
           blurOnSelect
           disableClearable
-          options={TRAINING_TYPE_OPTIONS}
+          options={[]}
           value={value}
           getOptionLabel={(option: OptionType) => option.label}
           onChange={handleChange}
