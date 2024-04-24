@@ -43,7 +43,7 @@ export const getWOAuditDefaultValue = (audit: Audit): string => {
       const record = data.get(auditValue);
       label = translate('wo.displayRevision', {
         docId: get(record, labelPrefixRoot, ''),
-        displayRevision: record.displayRevision,
+        displayRevision: get(record, 'displayRevision', ''),
         name: FB.stripTags(get(record, labelKey, '')),
       });
     }
