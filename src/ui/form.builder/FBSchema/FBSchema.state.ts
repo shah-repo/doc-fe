@@ -88,7 +88,8 @@ class FBSchemaState {
   ];
 
   private static readonly control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
-    section: FBSection,
+    // section: FBSection,
+    section: FBTraineeList,
     subsection: FBSubsection,
     stepsection: FBSection,
     teststep: FBSection,
