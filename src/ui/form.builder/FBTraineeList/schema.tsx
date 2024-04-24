@@ -1,15 +1,14 @@
 import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import InputCellTemplate from '../FBApprovalMatrix/components/InputCellTemplate';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
-import { CommentsCellTemplate } from './components/CommentsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
 import { PrimaryOwnerCellTemplate } from './components/PrimaryOwnerCellTemplate';
 import { RevisionCellTemplate } from './components/RevisionCellTemplate';
-import { TrainingDocID } from './components/TrainingDocID';
 import { UploadEvidenceCellTemplate } from './components/UploadEvidenceCellTemplate';
-import { DATE_FIELD, REFERENCE_FIELD } from './constants';
-import { EditableTrainee, SchemaOptions } from './types';
+import { DATE_FIELD } from './constants';
+import { CustomTemplateProps, EditableTrainee, SchemaOptions } from './types';
 
 export const buildSchema = ({
   primaryOwners,
@@ -31,30 +30,28 @@ export const buildSchema = ({
   return [
     {
       id: 'user',
-      field: 'primaryOwner.user.name', // deep field name for correct filter working
-      title: 'User',
+      field: 'user.name', // deep field name for correct filter working
+      title: 'common.user',
       filterCell: InputFilter,
-      template: (props) => <PrimaryOwnerCellTemplate {...props} field="primaryOwner" options={primaryOwnerFieldOptions} />,
+      template: (props) => <PrimaryOwnerCellTemplate {...props} field="user" options={primaryOwnerFieldOptions} />,
       editable: false,
       width: 200,
     },
     {
-      id: 'trDocId',
-      field: 'trDocId',
-      title: 'Training Doc ID',
+      id: 'docId',
+      field: 'docId',
+      title: 'form.builder.trainee.list.doc.id',
       filterCell: InputFilter,
-      template: TrainingDocID,
-      width: 200,
+      template: (props) => <RevisionCellTemplate {...props} options={records} onClick={onRowClick} fieldToEdit="docId" />,
+      width: 150,
     },
     {
-      id: 'trId',
-      field: 'trId',
-      title: 'training.trn.id',
+      id: 'id',
+      field: 'id',
+      title: 'form.builder.trainee.list.id',
       filterCell: InputFilter,
-      template: (props) => (
-        <>trId</>
-      ),
-      width: 200,
+      template: (props) => <></>,
+      width: 150,
     },
     {
       id: 'attachments',
@@ -62,30 +59,22 @@ export const buildSchema = ({
       title: 'Attachments',
       show: false,
       template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, isDisabled, currentState }} />,
-      width: 324,
-    },
-    {
-      id: 'reference',
-      field: REFERENCE_FIELD,
-      title: 'form.builder.training.reference',
-      filterCell: InputFilter,
-      template: (props) => <RevisionCellTemplate {...props} options={records} onClick={onRowClick} fieldToEdit="reference" />,
-      width: 350,
+      width: 300,
     },
     {
       id: 'date',
       field: DATE_FIELD,
-      title: 'form.builder.training.completion.date',
+      title: 'form.builder.trainee.list.completion.date',
       filterCell: InputFilter,
       template: DateCellTemplate,
-      width: 260,
+      width: 200,
     },
     {
       id: 'comments',
       field: 'comments',
-      title: 'form.builder.training.comments',
+      title: 'form.builder.trainee.list.comments',
       filterCell: InputFilter,
-      template: (props) => <CommentsCellTemplate {...props} onClick={onRowClick} />,
+      template: InputCellTemplate as React.FC<CustomTemplateProps>,
       width: 250,
     },
     {

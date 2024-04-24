@@ -6,7 +6,7 @@ import { EmployeeResponse } from '../../change.request/FBMaterialDisposition/com
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FBInputProps } from '../FBInput/FBInput.types';
-import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD } from './constants';
+import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD } from './constants';
 
 export interface SchemaOptions {
   statuses: string[]
@@ -73,7 +73,6 @@ export interface EditableTrainee extends Trainee {
   [MODE_FIELD]: Mode
   [EMPLOYEE_FIELD]: string
   [BUILD_FIELD]: string
-  [REFERENCE_FIELD]: string
   [DATE_FIELD]: string
 }
 

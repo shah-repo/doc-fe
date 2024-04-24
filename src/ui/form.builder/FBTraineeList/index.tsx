@@ -16,7 +16,7 @@ import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
-import { EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_FIELD } from './constants';
+import { EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableTrainee, Trainee, TraineeEditEvent, TrainingListTableProps } from './types';
@@ -118,7 +118,7 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
       ...list,
       {
         ...(isTraineeEdited ? editedTrainee : item),
-        [REFERENCE_FIELD]: referenceName,
+        referenceName: referenceName,
         [MODE_FIELD]: isTraineeEdited ? Mode.edit : Mode.show,
       },
     ];
