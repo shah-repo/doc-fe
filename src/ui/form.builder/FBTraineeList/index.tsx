@@ -110,7 +110,7 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
     onPrimaryChange: setPrimaryTrainee,
   });
 
-  const traineesList = trainees.reduce((list, item) => {
+  const traineeList = trainees.reduce((list, item) => {
     const isTraineeEdited = editedTrainee && editedTrainee.id === item.id;
     const reference = records?.find(record => record.id === item.reference?.id);
     const referenceName = reference ? getOptionLabel(reference) : EMPTY_VALUE_PLACEHOLDER;
@@ -125,11 +125,11 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
   }, isTraineeAdded ? [editedTrainee] : []);
 
   return (
-    <Box className={classes.root} data-cy="part-trainees">
+    <Box className={classes.root} data-cy="traineeList">
       <PromptIfDirty
         dirty={dirty}
       />
-      <FBInput {...props} type="trainees" name={name}>
+      <FBInput {...props} type="traineeList" name={name}>
         <FBSection label={label}>
           {isActive && (
             <Button
@@ -152,7 +152,7 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
         filterable
         hasBoxScrollbars
         schema={schema}
-        data={traineesList as EditableTrainee[]}
+        data={traineeList as EditableTrainee[]}
         onRowClick={handleRowClick}
         rowRender={rowRender}
       />
