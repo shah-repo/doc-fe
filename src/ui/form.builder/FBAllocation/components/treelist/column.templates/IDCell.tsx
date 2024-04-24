@@ -1,5 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
@@ -12,6 +13,7 @@ import { Autocomplete, FormikField } from '../../../../../components/forms/field
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import { Colors } from '../../../../../layout/theme-next';
 import { EditableAllocationItem } from '../../../interface';
 import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { isEditAllocItem } from '../utils';
@@ -23,6 +25,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const navigationAttributes = useTableKeyboardNavigation(id);
+  const docIdWithRevision = dataItem.docId ? `${dataItem.docId}.${dataItem.displayRevision}` : '';
 
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
@@ -137,7 +140,27 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
           { getFieldInfo()}
         </div>}
         {!isEditMode
-        && dataItem.docId ? `${dataItem.docId}.${dataItem.displayRevision}` : '' }
+        && docIdWithRevision }
+        {!isEditMode && dataItem.docId && dataItem.isUnfulfiled && (
+          <span className={cx(classes.defaultIcon, classes.quantityShortInfoIcon)}>
+            <Tooltip
+              arrow
+              title={translate('allocation.part.quantity.short.info.message',
+                {
+                  unit: dataItem.unit || '',
+                  quantityShort: dataItem.quantityShort || '',
+                  partID: docIdWithRevision,
+                })}
+              placement="top-start"
+            >
+              <FontAwesomeIcon
+                data-cy="new-revision-available"
+                color={Colors.primaryLight}
+                icon={solid('circle-exclamation')}
+              />
+            </Tooltip>
+          </span>
+        )}
       </span>
     </td>
   );

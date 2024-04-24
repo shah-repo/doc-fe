@@ -27,6 +27,9 @@ export const styles = makeStyles((theme) => ({
     height: 14,
     width: 14,
   },
+  quantityShortInfoIcon: {
+    marginLeft: theme.spacing(0.625),
+  },
   disabled: {
     color: `${Colors.gray} !important`,
     pointerEvents: 'none',
