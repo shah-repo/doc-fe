@@ -5,22 +5,21 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { RELATED_TYPE } from '../../../state/ducks/relatedParts/types';
 import { AsyncStatus } from '../../../state/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
-import { EQ_STATUS_KEY, FBApprovalAuditState, FBSchemaProps, FBText } from '../../form.builder';
+import { FBApprovalAuditState, FBSchemaProps, FBText } from '../../form.builder';
 import { isTranslation } from '../../translations/types';
-import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presenters/related.parts/helper';
-import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
+import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import { styles } from './Audit.presenter.styles.new';
 
 interface OwnProps {
@@ -430,13 +429,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // However there is no entry for this in the schema, & the incoming audit log still maps it to the original input,
         if (change.field.includes('input-context') && change.fbSchemaItem) {
           fbLabel = 'Note';
-        }
-
-        if (change.field.includes(EQ_STATUS_KEY)) {
-          const relatedTypeObj = revIdRelatedTypeObj[change.documentRevisionId];
-          if (relatedTypeObj.relatedType === RELATED_TYPE.PART_RELATED || relatedTypeObj.isWorkOrder) {
-            return;
-          }
         }
 
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
