@@ -26,7 +26,7 @@ const UnitCell: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell-unit"
+      data-cy="unit-cell"
     >
       <span className={classes.Cell}>
         {getCellValue(dataItem, field)}

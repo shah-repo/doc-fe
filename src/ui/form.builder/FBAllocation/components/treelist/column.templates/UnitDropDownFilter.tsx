@@ -1,11 +1,11 @@
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { FilterDescriptor } from '@progress/kendo-react-dropdowns/dist/npm/common/filterDescriptor';
 import { TreeListFilterCellProps } from '@progress/kendo-react-treelist/dist/npm/interfaces/TreeListFilterCellProps';
-import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import * as React from 'react';
 import { FBOption } from '../../../..';
 import { translate } from '../../../../../../common/intl';
+import { KendoGridFilterCellOperators } from '../../../../../components/KendoGrid/interfaces';
 import unitsOptions from '../../../../FBData/unitsOptions.json';
 import { styles } from './styles';
 
@@ -40,7 +40,7 @@ const UnitDropDownFilter: React.ComponentType<TreeListFilterCellProps> = (props)
       filter.push({
         value: value.text,
         field,
-        operator: 'contains',
+        operator: KendoGridFilterCellOperators.CONTAINS,
       });
     }
     onFilterChange?.({
@@ -51,7 +51,7 @@ const UnitDropDownFilter: React.ComponentType<TreeListFilterCellProps> = (props)
   };
 
   return (
-    <div className={cx('k-filtercell', classes.unitCell)}>
+    <div className="k-filtercell">
       <DropDownList data={data} textField="text" dataItemKey="value" value={value} onChange={onChange} />
       <button
         className="k-button k-button-icon k-clear-button-visible"
