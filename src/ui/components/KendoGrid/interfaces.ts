@@ -77,6 +77,7 @@ export enum KendoGridFilterCell {
   STATE = 'state',
   TASKTYPE = 'taskType',
   STATUS = 'status',
+  EQ_STATUS = 'eqStatus',
   ASYNC_CREATED_AT = 'createdAtt',
 }
 
