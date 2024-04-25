@@ -73,6 +73,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({ dataProp, isSliderV
   const closeCRDialog = () => {
     approvalRequestDialog.close();
     if (inDialog) {
+      FBDataStore.newlyCreatedDocInfo = { ...FBDataStore.newlyCreatedDocInfo, reRender: !FBDataStore.newlyCreatedDocInfo?.reRender };
       return;
     }
 

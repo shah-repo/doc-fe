@@ -261,6 +261,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 type={type}
                 inRestrictedEditMode={inRestrictedEditMode}
                 documentTypeId={formValues.values.document?.documentType?.id}
+                inDialog={inDialog}
               />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >

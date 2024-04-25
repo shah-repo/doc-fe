@@ -5,8 +5,8 @@ import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { Formik, FormikProps, useFormikContext } from 'formik';
 import { cloneDeep, isEmpty } from 'lodash';
-import { Observer } from 'mobx-react';
-import React, { ChangeEvent, ComponentType, memo, useEffect, useRef, useState } from 'react';
+import { Observer, useObserver } from 'mobx-react';
+import React, { ChangeEvent, ComponentType, memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { SM } from '../../../../../../App';
@@ -16,7 +16,6 @@ import { documentTypeActions, documentTypeSelectors } from '../../../../../../st
 import { DocumentTypeById } from '../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
-import { AsyncStatus } from '../../../../../../state/types';
 import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
 import Text from '../../../../../components/Text';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
@@ -32,6 +31,7 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
+import FBDataStore from '../../../../FBStore/FBDataStore';
 import { EditableBOM } from '../../../interface';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
 import { isAddOnly, isEditBOM } from '../utils';
@@ -156,7 +156,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
     if (!dataItem[ADD_FIELD]) {
       fieldValue = `${dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem?.documentId}`;
     } else {
-      const part = cloneDeep(updatedNewlyCreatedDocumentRevision) as DocumentRevision;
+      const part = cloneDeep(updatedNewlyCreatedDocumentRevision);
       if (!isEmpty(part)) {
         const {
           displayRevision, displayStatus, name,
@@ -169,7 +169,6 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
         setFieldValue('name', name);
         setFieldValue('quantity', 1);
         setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
-        _documentRevisionFormState?.setNewlyCreatedDocumentRevision(undefined);
       }
     }
     const value = renderOptions().find((option) => option.value === fieldValue);
@@ -243,14 +242,11 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
   const handleCreateDocument = useHandleCreateDoc();
-  const loadDocumentRevisionAsyncState = useSelector(
-    documentRevisionsSelectors.getLoadAsyncDrawerState,
-  );
-  const newlyCreatedDocumentRevisionId = useRef<DocumentRevision['id']>();
+  const newlyCreatedDocumentRevisionId = useObserver(() => FBDataStore.newlyCreatedDocInfo?.docRevId);
   const updatedNewlyCreatedDocumentRevision = useSelector((state: ApplicationState) => {
     return (
-      newlyCreatedDocumentRevisionId.current
-        && documentRevisionsSelectors.getDocumentRevision(state, newlyCreatedDocumentRevisionId.current)
+      newlyCreatedDocumentRevisionId
+        && documentRevisionsSelectors.getDocumentRevision(state, newlyCreatedDocumentRevisionId)
     );
   });
 
@@ -270,11 +266,10 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
   });
 
   useEffect(() => {
-    const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
-    if (showFormDialog.isOpen || !isAddOnly(dataItem) || isEmpty(part)) {
+    if (showFormDialog.isOpen || !isAddOnly(dataItem) || isEmpty(newlyCreatedDocumentRevisionId)) {
       return;
     }
-    newlyCreatedDocumentRevisionId.current = part?.id;
+
     fetchAvailablePartsAsync.start(
       fetchAvailablePartsAction,
       fetchAvailablePartsAsync,
@@ -282,19 +277,12 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
   }, [showFormDialog.isOpen]);
 
   useEffect(() => {
-    if (!showFormDialog.isOpen) {
+    if (isEditMode || isEmpty(newlyCreatedDocumentRevisionId) || !_documentRevisionFormState?.showPartInDialog) {
       return;
     }
 
-    const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
-    if (part && loadDocumentRevisionAsyncState.status === AsyncStatus.Active) {
-      newlyCreatedDocumentRevisionId.current = part?.id;
-      _documentRevisionFormState?.setNewlyCreatedDocumentRevision(undefined);
-    }
-    if (updatedNewlyCreatedDocumentRevision && loadDocumentRevisionAsyncState.status === AsyncStatus.Success) {
-      _documentRevisionFormState?.setNewlyCreatedDocumentRevision(updatedNewlyCreatedDocumentRevision);
-    }
-  }, [loadDocumentRevisionAsyncState]);
+    FBDataStore.newlyCreatedDocInfo = undefined;
+  }, [isEditMode]);
 
   const categoryAsync = useAsync<DocumentType[]>({
     onSuccess: () => {
@@ -506,7 +494,11 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
           {renderFormTemplateDialog}
         </Formik>
       </FormContext.Provider>
-      <DocumentRevisionDialog dialog={showFormDialog} />
+      <Observer>
+        {() => (
+          <DocumentRevisionDialog key={FBDataStore.newlyCreatedDocInfo?.reRender ?? false} dialog={showFormDialog} docRevId={newlyCreatedDocumentRevisionId} />
+        )}
+      </Observer>
     </td>
   );
 };

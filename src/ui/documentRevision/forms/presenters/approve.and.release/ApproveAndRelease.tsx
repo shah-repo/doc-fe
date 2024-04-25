@@ -408,6 +408,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const closeCRDialog = () => {
     approvalRequestDialog.close();
     if (inDialog) {
+      FBDataStore.newlyCreatedDocInfo = { ...FBDataStore.newlyCreatedDocInfo, reRender: true };
       return;
     }
 
