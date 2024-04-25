@@ -46,8 +46,6 @@ export enum DOCUMENT_REVISION_LOT_STATUS {
   VOIDED = 'VOIDED',
 }
 
-export const EQ_STATUS_KEY = 'eqStatus';
-
 export enum EQStatus {
   NoInfo = 'No Info',
   Inactive = 'Inactive',
