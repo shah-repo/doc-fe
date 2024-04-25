@@ -233,7 +233,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center">
+              <Grid container={true} wrap="nowrap" alignItems="center" md={3} sm={6} xs={4} className={classes.textPoReviewlapMobile}>
                 <Grid item={true}>
                   <DocId
                     url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
@@ -327,11 +327,11 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
+            className={cx(classes.actionIcons)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
-              <span>
+              <span className={classes.poActionIconsWidth}>
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
@@ -425,7 +425,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               disableRipple
             >
               <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
+                <Grid item md={3} sm={6} xs={4}>
                   <Typography
                     component="span"
                     variant="caption"
@@ -435,7 +435,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                     {poItem.ltext}
                   </Typography>
                 </Grid>
-                <Grid item md={9} sm={6}>
+                <Grid item md={9} sm={6} xs={8}>
                   {poItem.isSupplier && (
                     <RouterLink
                       to={
@@ -475,7 +475,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                       alignContent="center"
                     >
                       {poItem.rtext.map((attachmentInfo, index) => (
-                        <Grid item key={index}>
+                        <Grid item key={index} className={classes.poAttachmentMargin}>
                           <AttachmentIcon
                             className={classes.attachmentIcon}
                           />
@@ -517,6 +517,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 id={docRevId}
                 dialogPDF={dialogPDF}
                 onClose={handleDownloadClose}
+                downloadImmediately
                 downloadPdfHover
               />
             )}

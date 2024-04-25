@@ -1,7 +1,9 @@
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
+import { toFixed } from '../../../../../dashboard.new/line.items/common/Utils';
 import { EditableAllocationItem } from '../../../interface';
+import { CELL_EMPTY_VALUE, MAX_DECIMALS } from '../constants';
 import { getParsedFieldValue, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -18,14 +20,11 @@ const IssuedQtyCell: React.ComponentType<CustomTreeListCellProps> = ({
   const classes = styles({ hasChildren });
   const { values } = useFormikContext<EditableAllocationItem>();
   const isEditMode = isEditAllocItem(dataItem);
+  const isLotAddition = dataItem.isLotAddition || dataItem.lotRevId;
 
   let quantityNeeded = dataItem.quantityNeeded ?? 0;
-  if (isEditMode) {
-    if (values.isLotAddition) {
-      quantityNeeded = getParsedFieldValue(values.quantityNeeded);
-    } else {
-      quantityNeeded = dataItem?.isNewAddition ? getParsedFieldValue(values.quantityNeeded) : (dataItem.quantityNeeded ?? 0);
-    }
+  if (isEditMode && !isLotAddition) {
+    quantityNeeded = dataItem?.isNewAddition ? getParsedFieldValue(values.quantityNeeded) : (dataItem.quantityNeeded ?? 0);
   }
   const issuedQuantity = isEditMode ? (getParsedFieldValue(values.variance) + quantityNeeded) : ((dataItem.variance ?? 0) + quantityNeeded);
 
@@ -40,10 +39,10 @@ const IssuedQtyCell: React.ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell-quantity"
+      data-cy={`${field}-cell-quantity`}
     >
       <span className={classes.Cell}>
-        {issuedQuantity}
+        {isLotAddition ? CELL_EMPTY_VALUE : toFixed(issuedQuantity, MAX_DECIMALS)}
       </span>
     </td>
   );

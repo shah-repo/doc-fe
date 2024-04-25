@@ -42,6 +42,18 @@ export enum POStatusType {
   VOIDED = 'VOIDED',
 }
 
+export enum EquipmentStatus {
+  Active = 'Active',
+  ActiveCalibrated = 'Active Calibrated',
+  ActiveNoCalRequired = 'Active No Cal Required',
+  Inactive = 'Inactive',
+  OutForCalibration = 'Out for Calibration',
+  OutForMaintenance = 'Out for Maintenance',
+  Retired = 'Retired',
+  UnplannedDowntime = 'Unplanned Downtime',
+  Voided = 'Voided',
+}
+
 // Lot types implemetation
 export enum LotStatus {
   QUARANTINE = 'QUARANTINE',
@@ -169,7 +181,7 @@ export interface IAssociatedChangeRequest {
   updatedAt: string
 }
 
-interface LSHS{
+export interface LSHS {
   lhr: LHR
   lot: LOT
   part: Part
@@ -179,6 +191,7 @@ interface Precalc {
   formDocId: string
   revision: number
   po_amount?: string
+  po_amount_with_currency?: string
   cali_due_date?: string
   pm_due_date?: string
   lshs_subtitle?: LSHS
@@ -265,6 +278,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   hasPrimaryAttachment?: boolean
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
+  eqStatus: EquipmentStatus
 }
 
 export interface SmartReference {
@@ -283,6 +297,7 @@ export interface SmartReference {
     quantity?: number
     unit?: string
     lotPart?: string
+    lhr?: LSHS
   }
   toDocRevId?: Nullable<string>
   toDocRev?: Nullable<DocumentRevision>

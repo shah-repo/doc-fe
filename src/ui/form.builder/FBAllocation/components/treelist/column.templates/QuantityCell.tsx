@@ -2,7 +2,9 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { FormikField, TextField } from '../../../../../components/forms/fields-next';
+import { toFixed } from '../../../../../dashboard.new/line.items/common/Utils';
 import { EditableAllocationItem } from '../../../interface';
+import { MAX_DECIMALS } from '../constants';
 import { getCellValue, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -39,9 +41,9 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
         />
       </FormikField>
     );
-  const isLotAddition = values.isLotAddition ?? dataItem.isLotAddition;
-  const isEnbleEditor = isLotAddition ? false : isEditMode && dataItem.isNewAddition;
-  const showFieldValue = isLotAddition ? true : (!isEditMode || !dataItem.isNewAddition);
+  const isLotAddition = isEditMode ? values.isLotAddition : dataItem.isLotAddition;
+  const isEnbleEditor = isLotAddition ? isEditMode : isEditMode && dataItem.isNewAddition;
+  const showFieldValue = isLotAddition ? !isEditMode : (!isEditMode || !dataItem.isNewAddition);
 
   return (
     <td
@@ -54,12 +56,12 @@ const QuantityCell: React.ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="cell-quantity"
+      data-cy={`${field}-cell-quantity`}
     >
       {isEnbleEditor && getFieldInfo()}
       {showFieldValue && (
         <span className={classes.Cell}>
-          {getCellValue(dataItem, field)}
+          {toFixed(getCellValue(dataItem, field), MAX_DECIMALS)}
         </span>
       )}
     </td>

@@ -257,7 +257,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center" lg={12} className={classes.innerWrap}>
+              <Grid container={true} wrap="nowrap" alignItems="center" lg={12} md={3} sm={6} xs={4} className={classes.innerWrap}>
                 <Grid item={true} >
                   <Typography
                     component="span"
@@ -388,7 +388,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true} className={classes.grayDot} />
-                <Grid item={true}>
+                <Grid item={true} >
                   <Typography
                     component="span"
                     variant="caption"
@@ -406,11 +406,11 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={cx(classes.actionIcons, classes.poActionIconsWidth)}
+            className={cx(classes.actionIcons)}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
-              <span>
+              <span className={classes.poActionIconsWidth}>
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
@@ -504,7 +504,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
               disableRipple
             >
               <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
+                <Grid item md={3} sm={6} xs={4}>
                   <Typography
                     component="span"
                     variant="caption"
@@ -514,7 +514,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                     {poItem.ltext}
                   </Typography>
                 </Grid>
-                <Grid item md={9} sm={6}>
+                <Grid item md={9} sm={6} xs={8}>
                   {poItem.isSupplier && (
                     <RouterLink
                       to={
@@ -554,7 +554,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                       alignContent="center"
                     >
                       {poItem.rtext.map((attachmentInfo, index) => (
-                        <Grid item key={index}>
+                        <Grid item key={index} className={classes.poAttachmentMargin}>
                           <AttachmentIcon
                             className={classes.attachmentIcon}
                           />
@@ -595,6 +595,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 id={docRevId}
                 dialogPDF={dialogPDF}
                 onClose={handleDownloadClose}
+                downloadImmediately
                 downloadPdfHover
               />
             )}

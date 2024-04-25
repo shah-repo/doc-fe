@@ -26,8 +26,10 @@ import { documentsActions } from '../../state/ducks/documents';
 import { ApprovalStatus } from '../../state/ducks/documents/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
+import { store } from '../../state/store';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
 import Text from '../components/Text';
+import HeaderEquipmentStatus, { shouldShowEQStatus } from '../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
@@ -593,6 +595,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     </>
   );
   const isWOCloseEnabled = isWORecord && documentRevision?.approvals?.some((approval) => approval.status === ApprovalStatus.Pending);
+  const loggedInUser = store.getState().auth.user;
+  const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
+  const showEQStatusValue = shouldShowEQStatus(documentRevision);
 
   return (
     <>
@@ -606,7 +611,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled} />}
+      {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
+      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled || !isDocOwner} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id
