@@ -70,6 +70,7 @@ import {
 } from './interface';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
+import { processAllocationData } from './utils';
 
 const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   documentRevision,
@@ -94,7 +95,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onSuccess: (response?: AllocationItem[]) => {
       updateState({
         ...state,
-        data: [...(response ?? [])],
+        data: [...(processAllocationData(response))],
       });
       selectedPart && discardAllocItem(selectedPart);
       setSelectedPart(undefined);

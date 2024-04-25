@@ -25,6 +25,11 @@ export interface AllocationItem {
   displayRevision?: string
   lotUsedUnit?: string
   partRevDisplayRevision?: string
+  revision?: string
+  usedUnit?: string
+  unit?: string
+  quantityShort?: number
+  isUnfulfiled?: boolean
 }
 
 export interface EditableAllocationItem extends AllocationItem {
@@ -35,9 +40,6 @@ export interface EditableAllocationItem extends AllocationItem {
   isLotAddition?: boolean
   isNewAddition?: boolean
   woStatus?: string
-  unit?: string
-  quantityShort?: number
-  isUnfulfiled?: boolean
 }
 
 export interface AllocationItemEditEvent {

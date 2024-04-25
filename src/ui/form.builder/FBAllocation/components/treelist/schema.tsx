@@ -44,7 +44,7 @@ export const TreeListSchema = ({
       cell: (props) => <LotAllocatedCell {...props} addLot={addLot} deleteLot={onDeleteLot} />,
     },
     {
-      field: 'partRevDisplayRevision',
+      field: 'revision',
       locked: false,
       title: translate('allocation.treelist.treeColumns.field.revision.title'),
       width: 228,
@@ -61,7 +61,7 @@ export const TreeListSchema = ({
       cell: QuantityCell,
     },
     {
-      field: 'lotUsedUnit',
+      field: 'usedUnit',
       locked: false,
       title: translate('allocation.treelist.treeColumns.field.unit.title'),
       width: 228,
