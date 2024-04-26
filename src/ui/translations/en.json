@@ -1474,6 +1474,7 @@
   "training.label.cancel": "No, Go Back",
   "training.label.continue": "Yes, Continue",
   "training.doc.warning.alert": "This action cannot be undone. Are you sure you want to continue?",
+  "training.ref.id": "Reference ID",
   "training.acknowladge.password": "Enter Password to Acknowledge",
   "training.acknowledge.statement": "I acknowledge I am trained on",
   "training.acknowledge.completed.statement": "I completed training on {revision}{date, select, null {} other { on {date}}}",
