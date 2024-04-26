@@ -40,7 +40,7 @@ export type DocumentRevisionOption =
   document: Document
 };
 
-export type TrainingListTableProps =
+export type TraineeListProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>
 & {
   parentDocumentRevision: DocumentRevision

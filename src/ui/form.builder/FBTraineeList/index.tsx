@@ -18,11 +18,11 @@ import FBSection from '../FBSection/FBSection';
 import { EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableTrainee, Trainee, TraineeEditEvent, TrainingListTableProps } from './types';
+import { EditableTrainee, Trainee, TraineeEditEvent, TraineeListProps } from './types';
 import { getOptionLabel } from './utils';
-import { withTrainingListTable } from './wrap';
+import { withTraineeList } from './wrap';
 
-const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
+const TraineeList: React.FC<TraineeListProps> = (props) => {
   const {
     label = 'training.record.trainees.list',
     setPrimaryTrainee,
@@ -168,5 +168,5 @@ const TrainingListTable: React.FC<TrainingListTableProps> = (props) => {
   );
 };
 
-export default withTrainingListTable(TrainingListTable);
+export default withTraineeList(TraineeList);
 export * from './utils';

@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FB } from '../helpers';
-import { DocumentRevisionOption, Trainee, TrainingListTableProps } from './types';
-import { useOptions } from './utils';
+import { DocumentRevisionOption, Trainee, TraineeListProps } from './types';
 
+// @todo
 const prepareData = (list: Trainee[] = []) => orderBy(list, 'primary', 'desc');
 
-export const withTrainingListTable = <T extends TrainingListTableProps>(
+export const withTraineeList = <T extends TraineeListProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
   const Comp = ({
@@ -19,7 +19,6 @@ export const withTrainingListTable = <T extends TrainingListTableProps>(
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     const [trainees, setTrainees] = useState<Trainee[]>(prepareData(workspaceState?.formInputSync.get(name) ?? []));
-    const { statuses } = useOptions(trainees.map(v => v.trainee));
 
     const updateState = (state: Trainee[]) => {
       setTrainees(prepareData(state));
@@ -27,12 +26,9 @@ export const withTrainingListTable = <T extends TrainingListTableProps>(
       formState?.setFieldAutosave(name);
     };
 
+    // @todo
     const prepareTrainee = (trainee: Trainee): Trainee => ({
       ...trainee,
-      trainee: {
-        name: trainee.name,
-        id: trainee.id,
-      },
     });
 
     const deleteTrainee = (item: Trainee) => {
@@ -41,32 +37,23 @@ export const withTrainingListTable = <T extends TrainingListTableProps>(
     };
 
     const updateTrainee = (item: Trainee) => {
-      const newTrainees = unionBy([prepareTrainee(item)], trainees, 'id');
-      const updatedTrainees = item.name ? updatePrimaryTrainee(item.id, newTrainees) : newTrainees;
+      const updatedTrainees = unionBy([prepareTrainee(item)], trainees, 'id');
       updateState(updatedTrainees);
     };
 
-    const updatePrimaryTrainee = (id: string, trainees: Trainee[]) => trainees.map(item => ({
-      ...item,
-      primary: item.id === id,
-    }));
-
-    const setPrimaryTrainee = (id: string) => {
-      const updatedTrainees = updatePrimaryTrainee(id, trainees);
-      updateState(updatedTrainees);
-    };
-
-    const recordsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
-      optionId: FBAutocompleteAsyncOption.records,
+    const documentRevisionsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+      optionId: FBAutocompleteAsyncOption.documentRevisions,
     });
 
     useEffect(() => {
-      recordsAsync.load();
-    }, [recordsAsync]);
+      documentRevisionsAsync.load();
+    }, [documentRevisionsAsync]);
 
-    const records = useObserver(
+    const documentRevisions = useObserver(
       () => {
-        const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.records) as Map<string, DocumentRevisionOption[]>;
+        const asyncData = FBAutocompleteAsyncStore.data.get(
+          FBAutocompleteAsyncOption.documentRevisions,
+        ) as Map<string, DocumentRevisionOption[]>;
         return asyncData ? Array.from(asyncData.values()) : [];
       },
     );
@@ -76,11 +63,9 @@ export const withTrainingListTable = <T extends TrainingListTableProps>(
       name,
       disabled: disabled ?? workspaceState?.isPreview,
       trainees,
-      statuses,
-      records,
+      documentRevisions,
       updateTrainee,
       deleteTrainee,
-      setPrimaryTrainee,
     });
   };
 
