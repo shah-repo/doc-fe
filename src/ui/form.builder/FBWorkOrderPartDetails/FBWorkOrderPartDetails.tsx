@@ -9,7 +9,7 @@ import { FB, FBInputProps, FBTextField, FBTooltip, FBWorkspaceModeOptions } from
 import { translate } from '../../../common/intl';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
-import { WorkOrderTypes, WO_PART_KEY_NAME, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
+import { WO_PART_KEY_NAME, WO_TYPE_KEY, WorkOrderTypes } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import ErrorBlock from '../../components/forms/fields/ErrorBlock';
@@ -60,25 +60,36 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   });
 
   const deleteAllocationAsync = useAsync({
-    onSuccess: dialog.close,
-    onError: dialog.close,
-  });
+    onSuccess: () => {
+      dialog.close();
+      const partId = partsDefaultValue?.id;
+      if (!partId) return;
 
-  useEffect(() => {
-    const partId = partsDefaultValue?.id;
-    if (partId) {
-      setPrevSelectedPartId(partId);
       fetchAvailablePartsAsync.start(
         fetchAvailablePartsAction,
         partId,
         fetchAvailablePartsAsync,
       );
-    } else if (prevSelectedPartId && !partId) {
+    },
+    onError: dialog.close,
+  });
+
+  useEffect(() => {
+    const partId = partsDefaultValue?.id;
+    if (!prevSelectedPartId && partId) {
+      fetchAvailablePartsAsync.start(
+        fetchAvailablePartsAction,
+        partId,
+        fetchAvailablePartsAsync,
+      );
+    } else if (prevSelectedPartId && (!partId || (FB.isUUID(partId) && prevSelectedPartId !== partId))) {
       deleteAllocationAsync.start(deleteAllocation,
         workspaceState?.document?.id,
         deleteAllocationAsync,
       );
     }
+
+    setPrevSelectedPartId(partId);
   }, [partsDefaultValue]);
 
   const onRevChange = async () => {
