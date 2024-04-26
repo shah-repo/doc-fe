@@ -19,7 +19,6 @@ import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/d
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
-import GRPTAlertDialog from '../../../app/alert.dialog/GRPTAlertDialog';
 import HeaderEquipmentStatus, { shouldShowEQStatus } from '../../../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
@@ -45,7 +44,7 @@ import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
 import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
 import { PreviewControlButtons } from '../../PreviewControls.container.types';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentGroupTraining, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
@@ -139,7 +138,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
-  const isGroupTraining = checkIsDocumentGroupTraining(documentRevision?.document?.documentType?.groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const isWO = checkIsDocumentWO(documentRevision?.document?.documentType?.groupOptions);
   const isDocHasOutput = isDocumentRevisionHasOutput(documentRevision);
@@ -160,8 +158,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
-
-  console.log('documentRevision', documentRevision);
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -271,13 +267,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       dispatch(documentRevisionsActions.load(documentRevision.id));
     }
   };
-  const dialog = useDialog();
-
-  const onCompleteButton = () => {
-    console.log('IN');
-    dialog.open();
-  };
-
   React.useEffect(() => {
     // Autosave when record is updated
     if (isNewVersion && (isRecord || (isPO && !isUserAdminEnforce))) {
@@ -527,24 +516,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           data-cy="undo-changes"
         />
       )}
-      {isGroupTraining && <StyledSubmitButton
-        showNewButton={isNewLayout && !isCreateUrl}
-        asyncState={asyncState}
-        label="training.doc.complete.btn"
-        onClick={onCompleteButton}
-        id="DocumentRevisionForm-training-complete"
-        data-cy="DocumentRevisionForm-training-complete"
-        disabled={
-          isCreateDocumentDisabled
-            || _documentRevisionFormState?.disabledAction
-        }
-      />}
-      <GRPTAlertDialog
-         dialog={dialog}
-         documentRevision={documentRevision}
-        //  async={updateDocAsync}
-         completeAction={documentRevisionsActions.save}
-      />
       <Observer>
         {() => (
           <>
