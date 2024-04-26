@@ -1,6 +1,6 @@
-import { DocumentRevisionOption } from './types';
+import { translate } from '../../../common/intl';
+import { DocumentOption } from './types';
 
-export const getOptionLabel = (option: DocumentRevisionOption): string => {
-  const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
-  return option.name ? `${baseLabel} - ${option.name}` : baseLabel;
+export const getOptionLabel = ({ docId, displayRevision }: DocumentOption): string => {
+  return translate('common.displayRevision', { docId, displayRevision });
 };

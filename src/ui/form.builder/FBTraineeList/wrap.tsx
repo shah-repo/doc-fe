@@ -42,7 +42,7 @@ export const withTraineeList = <T extends TraineeListProps>(
     };
 
     const documentOptionsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
-      optionId: FBAutocompleteAsyncOption.documentRevisions,
+      optionId: FBAutocompleteAsyncOption.trainingDocuments,
     });
 
     useEffect(() => {
@@ -52,7 +52,7 @@ export const withTraineeList = <T extends TraineeListProps>(
     const documentOptions = useObserver(
       () => {
         const asyncData = FBAutocompleteAsyncStore.data.get(
-          FBAutocompleteAsyncOption.documentRevisions,
+          FBAutocompleteAsyncOption.trainingDocuments,
         ) as Map<string, DocumentRevisionOption[]>;
         return asyncData ? Array.from(asyncData.values()) : [];
       },

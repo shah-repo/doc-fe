@@ -15,22 +15,19 @@ import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
 import FBSection from '../FBSection/FBSection';
-import { EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT } from './constants';
+import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableTrainee, Trainee, TraineeEditEvent, TraineeListProps } from './types';
-import { getOptionLabel } from './utils';
 import { withTraineeList } from './wrap';
 
 const TraineeList: React.FC<TraineeListProps> = (props) => {
   const {
     label = 'training.record.trainees.list',
-    setPrimaryTrainee,
     disabled = false,
     updateTrainee,
-    // setPrimaryVendor,
     trainees = [],
-    records = [],
+    documentOptions = [],
   } = props;
   const classes = useStyles();
   const isActive = !disabled;
@@ -96,27 +93,21 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
   };
 
   const schema = buildSchema({
-    primaryOwners: companyMine.employees ?? [],
-    isActive,
-    isInEditMode,
-    records,
+    employees: companyMine.employees ?? [],
+    documentOptions,
     actionsClass: classes.actionsCell,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardTrainee,
     onDelete: removeTrainee,
-    onPrimaryChange: setPrimaryTrainee,
   });
 
   const traineeList = trainees.reduce((list, item) => {
     const isTraineeEdited = editedTrainee && editedTrainee.id === item.id;
-    const reference = records?.find(record => record.id === item.reference?.id);
-    const referenceName = reference ? getOptionLabel(reference) : EMPTY_VALUE_PLACEHOLDER;
     return [
       ...list,
       {
         ...(isTraineeEdited ? editedTrainee : item),
-        referenceName: referenceName,
         [MODE_FIELD]: isTraineeEdited ? Mode.edit : Mode.show,
       },
     ];

@@ -7,25 +7,19 @@ import { DateCellTemplate } from './components/DateCellTemplate';
 import { PrimaryOwnerCellTemplate } from './components/PrimaryOwnerCellTemplate';
 import { RevisionCellTemplate } from './components/RevisionCellTemplate';
 import { UploadEvidenceCellTemplate } from './components/UploadEvidenceCellTemplate';
-import { DATE_FIELD } from './constants';
-import { CustomTemplateProps, EditableTrainee, SchemaOptions } from './types';
+import { EditableTrainee, SchemaOptions } from './types';
 
 export const buildSchema = ({
-  primaryOwners,
-  isActive,
-  isInEditMode,
+  employees,
   actionsClass,
   onRowClick,
   onConfirm,
   onDiscard,
   onDelete,
-  onPrimaryChange,
-  records,
-  isDisabled,
+  documentOptions,
   currentState,
-  employeeEvidenceUpdates,
 }: SchemaOptions): Array<ColumnDefinition<EditableTrainee>> => {
-  const primaryOwnerFieldOptions = primaryOwners.filter(item => item.active);
+  const employeeOptions = employees.filter(item => item.active);
 
   return [
     {
@@ -33,7 +27,7 @@ export const buildSchema = ({
       field: 'user.name', // deep field name for correct filter working
       title: 'common.user',
       filterCell: InputFilter,
-      template: (props) => <PrimaryOwnerCellTemplate {...props} field="user" options={primaryOwnerFieldOptions} />,
+      template: (props) => <PrimaryOwnerCellTemplate {...props} field="user" options={employeeOptions} />,
       editable: false,
       width: 200,
     },
@@ -42,7 +36,7 @@ export const buildSchema = ({
       field: 'docId',
       title: 'form.builder.trainee.list.doc.id',
       filterCell: InputFilter,
-      template: (props) => <RevisionCellTemplate {...props} options={records} onClick={onRowClick} fieldToEdit="docId" />,
+      template: (props) => <RevisionCellTemplate {...props} options={documentOptions} onClick={onRowClick} fieldToEdit="docId" />,
       width: 150,
     },
     {
@@ -58,12 +52,12 @@ export const buildSchema = ({
       field: 'attachments',
       title: 'Attachments',
       show: false,
-      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, isDisabled, currentState }} />,
+      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates: undefined, isDisabled: false, currentState }} />,
       width: 300,
     },
     {
       id: 'date',
-      field: DATE_FIELD,
+      field: 'date',
       title: 'form.builder.trainee.list.completion.date',
       filterCell: InputFilter,
       template: DateCellTemplate,
@@ -74,7 +68,7 @@ export const buildSchema = ({
       field: 'comments',
       title: 'form.builder.trainee.list.comments',
       filterCell: InputFilter,
-      template: InputCellTemplate as React.FC<CustomTemplateProps>,
+      template: InputCellTemplate,
       width: 250,
     },
     {

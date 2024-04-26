@@ -337,7 +337,7 @@
   "common.delete": "Delete",
   "common.restore": "Restore",
   "common.reorder": "Reorder",
-  "common.displayRevision": "{docId} • Rev {displayRevision}",
+  "common.displayRevision": "{docId} - Rev {displayRevision}",
   "common.assigned.to": "Assigned To",
   "common.due.date": "Due date",
   "common.name": "Name",
