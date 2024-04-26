@@ -26,4 +26,7 @@ export default makeStyles(theme => ({
   icon: {
     color: Colors.error,
   },
+  iconWarn: {
+    color: Colors.warning,
+  },
 }));

@@ -41,8 +41,8 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       <Box className={classes.content}>
         <Box className={classes.iconWrapper}>
           <FontAwesomeIcon
-            icon={regular('triangle-exclamation')}
-            className={classes.icon}
+            icon={title === 'common.warning' ? regular('circle-exclamation') : regular('triangle-exclamation')}
+            className={title === 'common.warning' ? classes.iconWarn : classes.icon}
           />
         </Box>
         <Box className={classes.contentWrapper}>
