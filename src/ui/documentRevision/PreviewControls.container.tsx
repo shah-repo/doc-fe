@@ -413,35 +413,60 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       />
     </>;
 
-  const newRenderWithdrawSubmissionButton = (renderAsButton: boolean) => {
-    const label: Translation = isWORecord
-      ? 'wo.withdraw.button.label'
-      : 'changeRequest.transition.withdrawn';
-
-    const alertMessage: Translation = isWORecord
-      ? 'wo.withdraw.alert'
-      : 'document.revision.withdraw.alert';
-
-    return (<>
-      {renderAsButton ? <StyledButton
-        color="primary"
-        onClick={dialog.open}
+  const newRenderWithdrawSubmissionButton = (renderAsButton: boolean) => (<>
+    {renderAsButton ? <StyledButton
+      color="primary"
+      onClick={dialog.open}
+      data-cy="document.revision.withdraw.alert"
+    >
+      <Text translation="changeRequest.transition.withdrawn" />
+    </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
+      <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
+      <StyledMenuListItemText
         data-cy="document.revision.withdraw.alert"
-      >
-        <Text translation={label} />
-      </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
-        <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
-        <StyledMenuListItemText
-          data-cy="document.revision.withdraw.alert"
-          primary={<Text translation={label} />}
-        />
-      </StyledMenuListItem>}
-      <AlertDialog
-        confirmAction={withdrawAction}
-        message={alertMessage}
-        {...{ dialog }}
+        primary={<Text translation="changeRequest.transition.withdrawn" />}
       />
-    </>);
+    </StyledMenuListItem>}
+    <AlertDialog
+      confirmAction={withdrawAction}
+      message="document.revision.withdraw.alert"
+      {...{ dialog }}
+    />
+  </>);
+
+  const renderWOWithdrawButton = (renderAsButton: boolean) => {
+    const label: Translation = 'wo.withdraw.button.label';
+    const alertMessage: Translation = 'wo.withdraw.alert';
+    const dataCy = 'wo-withdraw-alert-button';
+
+    return (
+      <>
+        {renderAsButton ? (
+          <StyledButton color="primary" onClick={dialog.open} data-cy={dataCy}>
+            <Text translation={label} />
+          </StyledButton>
+        ) : (
+          <StyledMenuListItem
+            button
+            alignItems="flex-start"
+            onClick={dialog.open}
+          >
+            <StyledMenuListIcon>
+              <WithDrawSubmissionIcon />
+            </StyledMenuListIcon>
+            <StyledMenuListItemText
+              data-cy={dataCy}
+              primary={<Text translation={label} />}
+            />
+          </StyledMenuListItem>
+        )}
+        <AlertDialog
+          confirmAction={withdrawAction}
+          message={alertMessage}
+          {...{ dialog }}
+        />
+      </>
+    );
   };
 
   const requestAccessSentButton = (renderAsButton) => !hasAccess && !isEmailSent && (
@@ -486,9 +511,14 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (!isEmailSent && !hasAccess) {
     accessableButtons.push(PreviewControlButtons.RequestAccess);
   }
-  if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && !isWO) {
     accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
+
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && isWORecord) {
+    accessableButtons.push(PreviewControlButtons.WOWithdrawButton);
+  }
+
   if (isLot) {
     accessableButtons.push(PreviewControlButtons.PrintLabelButton);
   }
@@ -564,6 +594,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         && renderWithdrawSubmissionButton()}
       {buttons.includes(PreviewControlButtons.WithdrawSubmission) && isNewLayout
         && newRenderWithdrawSubmissionButton(renderAsButton)}
+      {buttons.includes(PreviewControlButtons.WOWithdrawButton) && isNewLayout
+        && renderWOWithdrawButton(renderAsButton)}
       {buttons.includes(PreviewControlButtons.InspectionControl) && (
         <InspectionControlsContainer {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
