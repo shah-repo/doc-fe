@@ -447,6 +447,9 @@ export default makeStyles((theme) => ({
   grayBg: {
     backgroundColor: Colors.gray,
   },
+  errorBg: {
+    backgroundColor: Colors.errorLightShadow,
+  },
   viewIcon: {
     fill: Colors.textBlack,
     paddingRight: theme.spacing(1.25),

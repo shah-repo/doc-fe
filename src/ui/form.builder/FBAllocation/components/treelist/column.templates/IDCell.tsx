@@ -155,7 +155,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
             >
               <FontAwesomeIcon
                 data-cy="new-revision-available"
-                color={Colors.primaryLight}
+                color={Colors.error}
                 icon={solid('circle-exclamation')}
               />
             </Tooltip>
