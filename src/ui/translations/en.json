@@ -1476,7 +1476,7 @@
   "training.doc.warning.alert": "This action cannot be undone. Are you sure you want to continue?",
   "training.acknowladge.password": "Enter Password to Acknowledge",
   "training.acknowledge.statement": "I acknowledge I am trained on",
-  "training.acknowledge.completed.statement": "I completed training on",
+  "training.acknowledge.completed.statement": "I completed training on {revision}{date, select, null {} other { on {date}}}",
   "file.viewer.video.not.supported": "Your browser does not support the video tag",
   "company.switch.subtitle": "Select a company below to sign-in to",
   "company.switch.company": "Switch Company",

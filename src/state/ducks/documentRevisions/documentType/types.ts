@@ -43,6 +43,7 @@ export enum DOC_TYPE_GROUP {
   BULK_CREATE = 'BULK_CREATE',
   CONFIG_OPTIONS = 'CONFIG_OPTIONS',
   WORK_ORDER = 'WORK_ORDER',
+  GROUP_TRAINING = 'GROUP_TRAINING',
 }
 
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
@@ -133,6 +134,7 @@ export enum DOC_TYPE_GROUP_OPTION {
   TABS_SEED = 'TABS_SEED',
   TABS_CONFIG_OPTIONS = 'TABS_CONFIG_OPTIONS',
   TABS_WO = 'TABS_WO',
+  TABS_GROUP_TRAINING = 'TABS_GROUP_TRAINING',
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
 export enum TabTypeOptions {
@@ -435,6 +437,11 @@ export const GroupWithGroupOptions = {
     DOC_TYPE_GROUP_OPTION.ONLY_ON_OUTPUTS_DROPDOWN,
     DOC_TYPE_GROUP_OPTION.TABS_WO,
   ],
+  GROUP_TRAINING: [
+    DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT,
+    DOC_TYPE_GROUP_OPTION.GROUP_TRAINING,
+    DOC_TYPE_GROUP_OPTION.TABS_GROUP_TRAINING,
+  ],
 };
 
 interface PageDetailsConfig {
@@ -588,9 +595,9 @@ export enum DisplayFieldType{
   STATUS_IN_REVIEW = 'A5',
   STATUS_PENDING_CHANGE = 'A6',
   STATUS_APPROVED = 'A7',
-  STATUS_SUBMITTED = 'A8',
-  STATUS_CANCELED = 'A9',
-  STATUS_VOIDED = 'A10',
+  STATUS_SUBMITTED ='UNUSED',
+  STATUS_CANCELED = 'A8',
+  STATUS_VOIDED = 'A9',
   DOC_ID = 'B',
   APPROVE_RELEASE_BTN = 'N',
   VERSIONS = 'O',
@@ -602,15 +609,15 @@ export enum DisplayFieldType{
   VERSION_IN_REVIEW = 'P5',
   VERSION_PENDING_CHANGE = 'P6',
   VERSION_APPROVED = 'P7',
-  VERSION_SUBMITTED = 'P8',
-  VERSION_CANCELED = 'P9',
-  VERSION_VOIDED = 'P10',
+  VERSION_SUBMITTED ='UNUSED',
+  VERSION_CANCELED = 'P8',
+  VERSION_VOIDED = 'P9',
   CR_ID = 'R',
   REVISE_BTN = 'S',
   BOOKMARKS = 'Q',
   ADD_NEW_BTN = 'V',
   UPDATE_NEW_BTN = 'V1',
-  UNDO_BTN='V2',
+  UNDO_BTN = 'V2',
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;

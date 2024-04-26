@@ -37,7 +37,7 @@ import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCust
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
-import { checkIsDocumentES, checkIsDocumentPO, checkIsDocumentWO } from '../../../helpers/checkDocumentGroup';
+import { checkIsDocumentES, checkIsDocumentGRPT, checkIsDocumentPO, checkIsDocumentWO } from '../../../helpers/checkDocumentGroup';
 import { ApproveAndReleaseFormValues } from '../../types';
 import useStyles from './ApproveAndRelease.styles';
 import ApproveAndReleaseForm from './ApproveAndReleaseForm';
@@ -108,6 +108,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const title = documentRevision?.name;
   const isDocumentPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const isWO = checkIsDocumentWO(documentRevision?.document?.documentType?.groupOptions);
+  const isGRPT = checkIsDocumentGRPT(documentRevision?.document?.documentType?.groupOptions);
+  const isRecordBehaviour = isRecord || isGRPT;
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
   const classes = useStyles();
@@ -451,7 +453,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       );
       return;
     }
-    if (isRecord) {
+    if (isRecordBehaviour) {
       async.start(
         finalizeAction,
         id,
@@ -492,7 +494,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   return (
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
-        {isNewLayout && !isRecord ? (
+        {isNewLayout && !isRecordBehaviour ? (
           renderAsButton
             ? (
               <SplitReleaseButton
@@ -515,7 +517,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           <Button
             kind="white"
             className={classes.button}
-            onClick={() => isRecord ? alertDialog.open() : openDialog()}
+            onClick={() => isRecordBehaviour ? alertDialog.open() : openDialog()}
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
           >
