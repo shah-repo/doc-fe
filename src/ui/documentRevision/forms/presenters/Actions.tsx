@@ -267,6 +267,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       dispatch(documentRevisionsActions.load(documentRevision.id));
     }
   };
+  
   React.useEffect(() => {
     // Autosave when record is updated
     if (isNewVersion && (isRecord || (isPO && !isUserAdminEnforce))) {
