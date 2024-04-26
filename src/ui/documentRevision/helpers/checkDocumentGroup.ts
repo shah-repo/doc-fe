@@ -34,7 +34,6 @@ export const checkIsDocumentChangeRequest = checkDocumentGroupOptions.bind(this,
 export const checkIsDocumentPart = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PART);
 export const checkIsDocumentEB = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD);
 export const checkIsDocumentPO = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PO);
-export const checkIsDocumentGroupTraining = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.GROUP_TRAINING);
 export const checkIsDocumentForm = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.FORM);
 export const checkIsDocumentDAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DAM);
 export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.POAM);

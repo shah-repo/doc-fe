@@ -123,7 +123,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const approvalRequestDialog = useDialog();
 
   const alertDialog = useDialog();
-  const groupTrainingDialog = useDialog();
+  const GRPTDialog = useDialog();
 
   const dispatch = useDispatch();
 
@@ -519,7 +519,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           <Button
             kind="white"
             className={classes.button}
-            onClick={() => isRecordBehaviour ? groupTrainingDialog.open() : openDialog()}
+            onClick={() => isRecord ? alertDialog.open() : isGRPT ? GRPTDialog.open() : openDialog()}
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
           >
