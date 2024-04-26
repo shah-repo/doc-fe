@@ -3,11 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
-import Text from '../../components/Text';
 import AttachmentIconPresenter from '../../components/common/attachment.icon/presenter';
+import Text from '../../components/Text';
 import { DialogHandler } from '../../hooks/useDialog';
 import ExportTrainingRecordToEmail from '../export.email/ExportTrainingRecordToEmail';
 import { styles } from './styles';
@@ -171,6 +172,12 @@ const TrainingDetails: React.FunctionComponent<Props>
                     displayRevision: training.documentRevision?.displayRevision,
                   })}
                 </Box>
+              </Grid>
+              <Grid item xs={12} className={classes.item}>
+                <Typography className={classes.label}>
+                  <Text translation="training.ref.id" />
+                </Typography>
+                <Link to="TODO path to parent doc" className={classes.refID}>Ref ID</Link>
               </Grid>
               <Grid item xs={12} className={classes.item}>
                 <Typography className={classes.label}>
