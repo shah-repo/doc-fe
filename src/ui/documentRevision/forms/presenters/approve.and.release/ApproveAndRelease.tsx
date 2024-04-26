@@ -597,9 +597,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         confirmAction={onSubmit}
       />
       <GRPTAlertDialog
-         dialog={groupTrainingDialog}
+         dialog={GRPTDialog}
          documentRevision={documentRevision}
-        //  completeAction={onSubmit}
       />
     </>
   );
