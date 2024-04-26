@@ -7,11 +7,9 @@ import { FBOption } from '../../../..';
 import { translate } from '../../../../../../common/intl';
 import { KendoGridFilterCellOperators } from '../../../../../components/KendoGrid/interfaces';
 import unitsOptions from '../../../../FBData/unitsOptions.json';
-import { styles } from './styles';
 
 const UnitDropDownFilter: React.ComponentType<TreeListFilterCellProps> = (props) => {
   const { field, onFilterChange } = props;
-  const classes = styles();
   const data = unitsOptions.map(item => ({ ...item, text: translate(item.text) }));
   const [value, setValue] = React.useState<FBOption>({} as FBOption);
 
