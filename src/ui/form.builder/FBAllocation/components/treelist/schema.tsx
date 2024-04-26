@@ -8,6 +8,7 @@ import LotAllocatedCell from './column.templates/LotAllocatedCell';
 import QuantityCell from './column.templates/QuantityCell';
 import QuantityOnHandAfter from './column.templates/QuantityOnHandAfter';
 import QuantityOnHandBefore from './column.templates/QuantityOnHandBefore';
+import { RevHeaderCell } from './column.templates/RevHeader';
 import UnitDropDownFilter from './column.templates/UnitDropDownFilter';
 import UnitCell from './column.templates/UnitsCell';
 import VarianceCell from './column.templates/VarianceCell';
@@ -49,6 +50,7 @@ export const TreeListSchema = ({
       title: translate('allocation.treelist.treeColumns.field.revision.title'),
       width: 228,
       filter: TreeListTextFilter,
+      headerCell: RevHeaderCell,
       mainOrderIndex: 3,
     },
     {

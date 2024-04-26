@@ -1886,6 +1886,7 @@
   "allocation.part.obsolete.revision": "{docId} {name} revision {revision} has been obsoleted",
   "allocation.part.restricted.edit": "{docId} {name} revision {revision} is in Restricted Edit Mode",
   "allocation.part.quantity.short.info.message": "Based on your Qty needed and Variance, you are short {quantityShort} {unit} for {partID}",
+  "allocation.rev.header.title": "This is the revision of the part in the Lot",
   "wo.displayRevision": "{docId} Rev {displayRevision} - {name}",
   "bom.add.child.part": "Add Child Part",
   "bom.owner": "Owner",
