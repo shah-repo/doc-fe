@@ -48,6 +48,10 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     searchOptions.dataKey = 'lotStatus';
     searchOptions.lotStatusTemplate = true;
   }
+  if (valuePath === 'eqStatus') {
+    searchOptions.dataKey = 'eqStatus';
+    searchOptions.eqStatusTemplate = true;
+  }
   return searchOptions;
 };
 
