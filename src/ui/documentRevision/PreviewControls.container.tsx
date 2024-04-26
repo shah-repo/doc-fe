@@ -7,9 +7,9 @@ import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { StyledButton } from '../../App/Shifamed/Components/forms/presenters/StyledListButton';
-import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListIcon } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../App/Shifamed/Utils/SM/SM';
 import { ReactComponent as WarningIcon } from '../../assets/images/warning.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../assets/images/warning_white.svg';
@@ -28,7 +28,6 @@ import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
 import { store } from '../../state/store';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
-import Text from '../components/Text';
 import HeaderEquipmentStatus, { shouldShowEQStatus } from '../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
@@ -40,6 +39,7 @@ import ClonePOButton from '../components/forms/ClonePOButton';
 import CopyEBButton from '../components/forms/CopyEBButton';
 import { toastInfo } from '../components/notifications';
 import PrintLabelDetailsDialog from '../components/table/printLabel/PrintLabelDetailsDialog';
+import Text from '../components/Text';
 import { DocTypeGroups } from '../dashboard.new/line.items/common/types';
 import DownloadHTML from '../document.revision/summary/download.html';
 import PDFSocket from '../document.revision/summary/pdf.socket';
@@ -52,14 +52,15 @@ import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
-import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from './PreviewControls.container.types';
+import { Translation } from '../translations/types';
 import WOClose from './forms/presenters/Close';
-import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
+import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from './PreviewControls.container.types';
 
 interface OwnProps {
   documentRevision: DocumentRevision
@@ -412,26 +413,36 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       />
     </>;
 
-  const newRenderWithdrawSubmissionButton = (renderAsButton: boolean) => (<>
-    {renderAsButton ? <StyledButton
-      color="primary"
-      onClick={dialog.open}
-      data-cy="document.revision.withdraw.alert"
-    >
-      <Text translation="changeRequest.transition.withdrawn" />
-    </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
-      <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
-      <StyledMenuListItemText
+  const newRenderWithdrawSubmissionButton = (renderAsButton: boolean) => {
+    const label: Translation = isWORecord
+      ? 'wo.withdraw.button.label'
+      : 'changeRequest.transition.withdrawn';
+
+    const alertMessage: Translation = isWORecord
+      ? 'wo.withdraw.alert'
+      : 'document.revision.withdraw.alert';
+
+    return (<>
+      {renderAsButton ? <StyledButton
+        color="primary"
+        onClick={dialog.open}
         data-cy="document.revision.withdraw.alert"
-        primary={<Text translation="changeRequest.transition.withdrawn" />}
+      >
+        <Text translation={label} />
+      </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
+        <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
+        <StyledMenuListItemText
+          data-cy="document.revision.withdraw.alert"
+          primary={<Text translation={label} />}
+        />
+      </StyledMenuListItem>}
+      <AlertDialog
+        confirmAction={withdrawAction}
+        message={alertMessage}
+        {...{ dialog }}
       />
-    </StyledMenuListItem>}
-    <AlertDialog
-      confirmAction={withdrawAction}
-      message="document.revision.withdraw.alert"
-      {...{ dialog }}
-    />
-  </>);
+    </>);
+  };
 
   const requestAccessSentButton = (renderAsButton) => !hasAccess && !isEmailSent && (
     renderAsButton ? <StyledButton
@@ -475,7 +486,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (!isEmailSent && !hasAccess) {
     accessableButtons.push(PreviewControlButtons.RequestAccess);
   }
-  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && !isWO) {
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
     accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
   if (isLot) {
