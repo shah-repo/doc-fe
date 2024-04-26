@@ -41,15 +41,15 @@ export const withTraineeList = <T extends TraineeListProps>(
       updateState(updatedTrainees);
     };
 
-    const documentRevisionsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+    const documentOptionsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId: FBAutocompleteAsyncOption.documentRevisions,
     });
 
     useEffect(() => {
-      documentRevisionsAsync.load();
-    }, [documentRevisionsAsync]);
+      documentOptionsAsync.load();
+    }, [documentOptionsAsync]);
 
-    const documentRevisions = useObserver(
+    const documentOptions = useObserver(
       () => {
         const asyncData = FBAutocompleteAsyncStore.data.get(
           FBAutocompleteAsyncOption.documentRevisions,
@@ -63,7 +63,7 @@ export const withTraineeList = <T extends TraineeListProps>(
       name,
       disabled: disabled ?? workspaceState?.isPreview,
       trainees,
-      documentRevisions,
+      documentOptions,
       updateTrainee,
       deleteTrainee,
     });
