@@ -2,6 +2,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import classMerge from 'classnames';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../common/intl';
@@ -177,7 +178,7 @@ const TrainingDetails: React.FunctionComponent<Props>
                 <Typography className={classes.label}>
                   <Text translation="training.ref.id" />
                 </Typography>
-                <Link to="TODO path to parent doc" className={classes.refID}>Ref ID</Link>
+                <Link to="TODO path to parent doc" className={classMerge(classes.refID, classes.itemContentBlue)}>Ref ID</Link>
               </Grid>
               <Grid item xs={12} className={classes.item}>
                 <Typography className={classes.label}>
