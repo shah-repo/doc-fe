@@ -28,6 +28,7 @@ export const styles = makeStyles((theme) => ({
     width: 14,
   },
   quantityShortInfoIcon: {
+    cursor: 'pointer',
     marginLeft: theme.spacing(0.625),
   },
   disabled: {

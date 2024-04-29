@@ -541,8 +541,8 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]) && !item.isUnfulfiled,
+        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD] && !item.isUnfulfiled),
         [classes.errorBg]: item.isUnfulfiled,
       }),
     };

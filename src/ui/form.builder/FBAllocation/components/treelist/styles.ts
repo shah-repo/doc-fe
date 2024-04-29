@@ -448,7 +448,7 @@ export default makeStyles((theme) => ({
     backgroundColor: Colors.gray,
   },
   errorBg: {
-    backgroundColor: Colors.errorLightShadow,
+    backgroundColor: `${Colors.errorLightShadow} !important`,
   },
   viewIcon: {
     fill: Colors.textBlack,
