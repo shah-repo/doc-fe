@@ -21,7 +21,7 @@ import { DocumentTypeById } from '../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../state/reducers';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
-import GRPTAlertDialog from '../../../../app/alert.dialog/GRPTAlertDialog';
+import GRPTWarningDialog from '../../../../app/alert.dialog/GRPTWarningDialog';
 import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from '../../../../change.request/form/transform';
 import { ApproverPayload, InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
@@ -596,7 +596,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         dialog={alertDialog}
         confirmAction={onSubmit}
       />
-      <GRPTAlertDialog
+      <GRPTWarningDialog
         async={async}
         dialog={GRPTDialog}
         onConfirm={onSubmit}
