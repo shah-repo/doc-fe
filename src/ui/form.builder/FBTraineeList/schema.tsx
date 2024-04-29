@@ -37,7 +37,7 @@ export const buildSchema = ({
       title: 'form.builder.trainee.list.doc.id',
       filterCell: InputFilter,
       template: (props) => <RevisionCellTemplate {...props} options={documentOptions} onClick={onRowClick} fieldToEdit="docId" />,
-      width: 150,
+      width: 220,
     },
     {
       id: 'id',
