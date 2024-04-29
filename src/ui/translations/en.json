@@ -1473,6 +1473,7 @@
   "training.record.trainees.list": "Trainee List",
   "training.record.trainees.add": "Add Trainee",
   "training.doc.id.rev": "Doc ID Rev",
+  "training.ref.id": "Reference ID",
   "form.builder.trainee.list.id": "TRN ID",
   "form.builder.trainee.list.doc.id": "Training Doc ID",
   "form.builder.trainee.list.completion.date": "Training Completion Date",

@@ -47,5 +47,8 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: Colors.light_blue2,
       marginBottom: theme.spacing(3),
     },
+    refID: {
+      textDecoration: 'none',
+    },
   }),
 );
