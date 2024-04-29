@@ -21,6 +21,7 @@ import { DocumentTypeById } from '../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../state/reducers';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import GRPTWarningDialog from '../../../../app/alert.dialog/GRPTWarningDialog';
 import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from '../../../../change.request/form/transform';
 import { ApproverPayload, InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
@@ -122,6 +123,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const approvalRequestDialog = useDialog();
 
   const alertDialog = useDialog();
+  const GRPTDialog = useDialog();
 
   const dispatch = useDispatch();
 
@@ -517,7 +519,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           <Button
             kind="white"
             className={classes.button}
-            onClick={() => isRecordBehaviour ? alertDialog.open() : openDialog()}
+            onClick={() => isRecord ? alertDialog.open() : isGRPT ? GRPTDialog.open() : openDialog()}
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
           >
@@ -593,6 +595,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         message="record.release.alert"
         dialog={alertDialog}
         confirmAction={onSubmit}
+      />
+      <GRPTWarningDialog
+        async={async}
+        dialog={GRPTDialog}
+        onConfirm={onSubmit}
       />
     </>
   );
