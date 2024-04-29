@@ -13,17 +13,17 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
   const value = dataItem[field] as React.ReactElement;
 
   const handleChange = (date: MaterialUiPickersDate) => {
-    setFieldValue('date', date?.toISOString());
+    setFieldValue(field, date?.toISOString());
   };
 
   if (isEditMode) {
     return (
       <FormikField
-        name="date"
+        name={field}
         required
       >
         <DatePicker
-          {...getFieldProps('date')}
+          {...getFieldProps(field)}
           size="small"
           onChange={handleChange}
           format={MomentFormats.MonthDateYearTwoDigit}

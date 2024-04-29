@@ -11,7 +11,7 @@ interface Props extends CustomTemplateProps {
 
 const getOptionLabel = (option: Employee) => option.user?.name ?? '';
 
-export const PrimaryOwnerCellTemplate: React.FC<Props> = (props) => {
+export const UserCellTemplate: React.FC<Props> = (props) => {
   const { dataItem, field } = props;
 
   const renderStoredValue = () => {

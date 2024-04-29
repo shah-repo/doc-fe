@@ -4,9 +4,9 @@ import InputCellTemplate from '../FBApprovalMatrix/components/InputCellTemplate'
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
-import { PrimaryOwnerCellTemplate } from './components/PrimaryOwnerCellTemplate';
 import { RevisionCellTemplate } from './components/RevisionCellTemplate';
 import { UploadEvidenceCellTemplate } from './components/UploadEvidenceCellTemplate';
+import { UserCellTemplate } from './components/UserCellTemplate';
 import { EditableTrainee, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -27,7 +27,7 @@ export const buildSchema = ({
       field: 'user.name', // deep field name for correct filter working
       title: 'common.user',
       filterCell: InputFilter,
-      template: (props) => <PrimaryOwnerCellTemplate {...props} field="user" options={employeeOptions} />,
+      template: (props) => <UserCellTemplate {...props} field="user" options={employeeOptions} />,
       editable: false,
       width: 200,
     },
