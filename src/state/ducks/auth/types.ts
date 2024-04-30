@@ -222,6 +222,8 @@ export enum Permission {
   EDIT_BOM = 'EDIT_BOM',
   // AR
   AR_IN_REVIEW_EDIT = 'AR_IN_REVIEW_EDIT',
+  // EQUIPMENT
+  EDIT_EQ_STATUS = 'EDIT_EQ_STATUS',
 }
 
 export enum GroupTag {
