@@ -1,7 +1,7 @@
 import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import InputCellTemplate from '../FBApprovalMatrix/components/InputCellTemplate';
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
+import { CommentsCellTemplate } from '../FBCycleCount/components/CommentsCellTemplate';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
 import { RevisionCellTemplate } from './components/RevisionCellTemplate';
@@ -70,7 +70,7 @@ export const buildSchema = ({
       field: 'comments',
       title: 'form.builder.trainee.list.comments',
       filterCell: InputFilter,
-      template: InputCellTemplate,
+      template: CommentsCellTemplate,
       editable: true,
       width: 250,
     },
