@@ -53,6 +53,7 @@ const updatePart = (
         handlers.successHandler.execute(null);
       }
     },
+    onFailure: handlers.errorHandler.execute,
   });
 
 const addLot = (
