@@ -101,8 +101,6 @@ export const processBOMData = (bomTreeRelations: BOM[], parentRevDetails: BOM): 
 
       if (children.childNodes?.length) {
         children.childNodes = cloneDeep(updateLevelsOnBOM(children.childNodes as EditableBOM[], calculatedIndex));
-      } else {
-        children = cloneDeep(children);
       }
     });
 
