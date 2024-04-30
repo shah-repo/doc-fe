@@ -47,6 +47,9 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
+import FBBOMDetailDrawer from '../../../FBBOM/components/drawer/AlternateParts';
+import DocumentRevisionDrawer from '../../../FBBOM/components/drawer/DocumentRevisionDrawer';
+import FBDataStore from '../../../FBStore/FBDataStore';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import AutoOptions from './AutoOptions';
 import {
@@ -87,6 +90,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const partRevIdSelected: string = isDisabled
     ? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
     : workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id ?? '';
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const classes = useStyles({ size });
 
@@ -347,10 +351,16 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     setSelectedPart(dataItem);
   };
 
+  const openDetailDrawer = (dataItem: EditableAllocationItem) => {
+    setIsPartsDrawerOpened(true);
+    setSelectedPart(dataItem);
+  };
+
   const schema: CustomTreeListColumnProps[] = TreeListSchema({
     addLot,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
+    openDetailDrawer,
     onConfirm: formik.submitForm,
     onDiscard: discardAllocItem,
     onDelete: removeAllocItem,
@@ -784,6 +794,12 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const sortedColumnDefinitions = orderByLockedState(getColumns());
   const isLoading = treeListAsync.isLoading || partAsync.isLoading || deleteLotAsync.isLoading;
 
+  const closeDetailDrawer = () => {
+    FBDataStore.selectedSliderInfo = undefined;
+    setIsPartsDrawerOpened(false);
+    setSelectedPart(undefined);
+  };
+
   return (
     <>
       <AutoOptions documentRevision={documentRevision} onAutoAssign={handleAutoAssignLot} isDisabled={isDisabled || isDocument} />
@@ -862,6 +878,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           </ColumnMenuContext.Provider>
         </FormikProvider>
       </Grid>
+      <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer: closeDetailDrawer, dataItem: selectedPart }} >
+        <DocumentRevisionDrawer {...{ dataItem: selectedPart, closeDrawer: closeDetailDrawer, isSliderView: isPartsDrawerOpened }} />
+      </FBBOMDetailDrawer>
       <Grid item>
         {!isDisabled && !isDocument && (
           <AddButton
