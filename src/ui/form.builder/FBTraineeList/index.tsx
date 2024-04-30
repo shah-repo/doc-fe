@@ -7,6 +7,7 @@ import { omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
+import * as Yup from 'yup';
 import { translate } from '../../../common/intl';
 import { companySelectors } from '../../../state/ducks/company';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -42,6 +43,11 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
 
   const formik = useFormik<Partial<EditableTrainee>>({
     initialValues: {},
+    validationSchema: Yup.object().shape({
+      userId: Yup.string().required('common.required'),
+      documentId: Yup.string().required('common.required'),
+      date: Yup.string().required('common.required'),
+    }),
     onSubmit: (values) => {
       const traineeToSave = omit(values, FIELDS_TO_OMIT);
       updateTrainee?.(traineeToSave as Trainee);

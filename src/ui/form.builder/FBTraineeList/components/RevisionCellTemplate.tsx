@@ -49,6 +49,7 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
           placeholder={translate(column.title ?? '')}
           blurOnSelect
           options={options}
+          disableClearable
           getOptionLabel={getOptionLabel}
           renderOption={(option) => <div className={classes.wrap}>{getOptionLabel(option)}</div>}
           value={value}

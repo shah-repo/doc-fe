@@ -336,6 +336,7 @@
   "common.submit": "Submit",
   "common.delete": "Delete",
   "common.restore": "Restore",
+  "common.required": "Field is required",
   "common.reorder": "Reorder",
   "common.displayRevision": "{docId} - Rev {displayRevision}",
   "common.assigned.to": "Assigned To",

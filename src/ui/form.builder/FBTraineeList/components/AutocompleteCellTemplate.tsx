@@ -26,7 +26,7 @@ const Editor = <T extends OptionItem>(props: Props<T>): JSX.Element => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableTrainee>();
 
   const handleChange = (event: ChangeEvent<unknown>, value: OptionItem) => {
-    setFieldValue(field, value.id);
+    setFieldValue(field, value?.id);
   };
 
   const value = options?.find(item => item.id === values[field]);

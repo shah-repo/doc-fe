@@ -21,11 +21,11 @@ export const buildSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<EditableTrainee>> => {
   return [
     {
-      id: 'user',
-      field: 'user.name', // deep field name for correct filter working
+      id: 'userId',
+      field: 'userId',
       title: 'common.user',
       filterCell: InputFilter,
-      template: (props) => <UserCellTemplate {...props} field="user" options={employees} />,
+      template: (props) => <UserCellTemplate {...props} options={employees} />,
       editable: true,
       width: 200,
     },
@@ -52,6 +52,7 @@ export const buildSchema = ({
       field: 'attachments',
       title: 'Attachments',
       show: false,
+      filterCell: InputFilter,
       template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates: undefined, isDisabled: false, currentState }} />,
       editable: true,
       width: 300,
