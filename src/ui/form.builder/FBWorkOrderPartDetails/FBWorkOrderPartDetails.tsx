@@ -142,6 +142,14 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           optionId={FBAutocompleteAsyncOption.releasedParts}
           optionValueType="id"
           defaultValue={partsDefaultValue}
+          additionalData={latestRevisionInfo ? [{
+            ...latestRevisionInfo,
+            ...{
+              document: {
+                docId: latestRevisionInfo.docId,
+              },
+            },
+          }] : []}
           shouldReloadOnInit
           type={type}
           disabled={props.disabled}
