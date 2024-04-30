@@ -2,9 +2,11 @@ import { Box, makeStyles } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
+import { translate } from '../../../../common/intl';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
+import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, DocumentOption, EditableTrainee } from '../types';
 import { getOptionLabel } from '../utils';
 
@@ -23,7 +25,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldToEdit, options, onClick }) => {
+export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldToEdit, options, column, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableTrainee>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -31,12 +33,12 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
   const targetField = fieldToEdit ?? field;
 
   const handleChange = (event: ChangeEvent<unknown>, option?: DocumentOption) => {
-    setFieldValue(targetField, option?.docId);
+    setFieldValue(targetField, option?.id);
   };
 
   const source = isEditMode ? values : dataItem;
-  const defaultValue = source[targetField] as DocumentOption | undefined;
-  const value = options?.find((revision) => revision.id === defaultValue?.id);
+  const defaultValue = source[targetField] as string;
+  const value = options?.find((revision) => revision.id === defaultValue);
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
@@ -44,6 +46,7 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
       <FormikField name={targetField}>
         <Autocomplete
           {...getFieldProps(targetField)}
+          placeholder={translate(column.title ?? '')}
           blurOnSelect
           options={options}
           getOptionLabel={getOptionLabel}
@@ -57,7 +60,7 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
     );
   }
 
-  const displayValue = dataItem[field] as string;
+  const displayValue = value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER;
 
   const handleClick = () => {
     onClick?.({ dataItem });
