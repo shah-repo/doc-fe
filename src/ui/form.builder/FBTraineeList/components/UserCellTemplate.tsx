@@ -12,25 +12,28 @@ interface Props extends CustomTemplateProps {
 const getOptionLabel = (option: Employee) => option.user?.name ?? '';
 
 export const UserCellTemplate: React.FC<Props> = (props) => {
-  const { dataItem, field } = props;
+  const { dataItem, field, options } = props;
+
+  const actoveEmployeeOptions = options.filter(item => item.active);
+  const userId = dataItem[field] as string;
+  const user = options.find((item) => item.id === userId) as Employee;
 
   const renderStoredValue = () => {
-    const owner = dataItem[field] as Employee;
-
-    if (!owner?.user) {
+    if (!user?.user) {
       return EMPTY_VALUE_PLACEHOLDER;
     }
 
     return (
-      <AvatarComponent {...owner.user} />
+      <AvatarComponent {...user.user} />
     );
   };
 
   return (
     <AutocompleteCellTemplate
+      {...props}
       getOptionLabel={getOptionLabel}
       renderStoredValue={renderStoredValue}
-      {...props}
+      options={actoveEmployeeOptions}
     />
   );
 };

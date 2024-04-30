@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FB } from '../helpers';
-import { DocumentRevisionOption, Trainee, TraineeListProps } from './types';
+import { DocumentOption, Trainee, TraineeListProps } from './types';
 
 // @todo
 const prepareData = (list: Trainee[] = []) => orderBy(list, 'primary', 'desc');
@@ -53,7 +53,7 @@ export const withTraineeList = <T extends TraineeListProps>(
       () => {
         const asyncData = FBAutocompleteAsyncStore.data.get(
           FBAutocompleteAsyncOption.trainingDocuments,
-        ) as Map<string, DocumentRevisionOption[]>;
+        ) as Map<string, DocumentOption[]>;
         return asyncData ? Array.from(asyncData.values()) : [];
       },
     );

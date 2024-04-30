@@ -19,16 +19,14 @@ export const buildSchema = ({
   documentOptions,
   currentState,
 }: SchemaOptions): Array<ColumnDefinition<EditableTrainee>> => {
-  const employeeOptions = employees.filter(item => item.active);
-
   return [
     {
       id: 'user',
       field: 'user.name', // deep field name for correct filter working
       title: 'common.user',
       filterCell: InputFilter,
-      template: (props) => <UserCellTemplate {...props} field="user" options={employeeOptions} />,
-      editable: false,
+      template: (props) => <UserCellTemplate {...props} field="user" options={employees} />,
+      editable: true,
       width: 200,
     },
     {
@@ -37,6 +35,7 @@ export const buildSchema = ({
       title: 'form.builder.trainee.list.doc.id',
       filterCell: InputFilter,
       template: (props) => <RevisionCellTemplate {...props} options={documentOptions} onClick={onRowClick} fieldToEdit="docId" />,
+      editable: true,
       width: 220,
     },
     {
@@ -45,6 +44,7 @@ export const buildSchema = ({
       title: 'form.builder.trainee.list.id',
       filterCell: InputFilter,
       template: (props) => <></>,
+      editable: false,
       width: 150,
     },
     {
@@ -53,6 +53,7 @@ export const buildSchema = ({
       title: 'Attachments',
       show: false,
       template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates: undefined, isDisabled: false, currentState }} />,
+      editable: true,
       width: 300,
     },
     {
@@ -61,6 +62,7 @@ export const buildSchema = ({
       title: 'form.builder.trainee.list.completion.date',
       filterCell: InputFilter,
       template: DateCellTemplate,
+      editable: true,
       width: 200,
     },
     {
@@ -69,6 +71,7 @@ export const buildSchema = ({
       title: 'form.builder.trainee.list.comments',
       filterCell: InputFilter,
       template: InputCellTemplate,
+      editable: true,
       width: 250,
     },
     {
