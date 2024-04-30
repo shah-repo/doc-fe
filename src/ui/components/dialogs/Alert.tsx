@@ -18,6 +18,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   onClose = handler.close,
   onCancel = handler.close,
   title = 'common.alert',
+  eqTheme = false,
   ...props
 }) => {
   const classes = useStyles();
@@ -41,13 +42,13 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       <Box className={classes.content}>
         <Box className={classes.iconWrapper}>
           <FontAwesomeIcon
-            icon={regular('triangle-exclamation')}
-            className={classes.icon}
+            icon={eqTheme ? regular('circle-exclamation') : regular('triangle-exclamation')}
+            className={eqTheme ? classes.circleIcon : classes.icon}
           />
         </Box>
         <Box className={classes.contentWrapper}>
           <Typography variant="h3" data-cy="dialog-header" className={classes.title}>
-            {translate(title)}!
+            {translate(title)}{eqTheme ? null : <span>!</span>}
           </Typography>
           {children}
         </Box>

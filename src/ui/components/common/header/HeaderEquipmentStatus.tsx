@@ -74,6 +74,9 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
         loading={async.isLoading}
         onConfirm={confirmUpdate}
         title="documentRevision.equipment.status.update.alert.title"
+        confirmLabel="common.true"
+        cancelLabel="common.false"
+        eqTheme={true}
       >
         <Typography data-cy="dialog-message" className={classes.contentText}>
           {translate('documentRevision.equipment.status.update.alert', {
