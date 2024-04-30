@@ -3,6 +3,7 @@ import { Employee } from '../../../state/ducks/company/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import FBAutocompleteAsyncState from '../FBAutocompleteAsync/FBAutocompleteAsync.state';
 import { FBInputProps } from '../FBInput/FBInput.types';
 
 export interface SchemaOptions {
@@ -23,6 +24,7 @@ export type TraineeListProps =
 & {
   trainees: Trainee[]
   documentOptions: DocumentOption[]
+  documentOptionsAsync: FBAutocompleteAsyncState
   updateTrainee: (item: Trainee) => void
   deleteTrainee: (item: Trainee) => void
 };

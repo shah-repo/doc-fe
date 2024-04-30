@@ -27,8 +27,10 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
     label = 'training.record.trainees.list',
     disabled = false,
     updateTrainee,
+    deleteTrainee,
     trainees = [],
     documentOptions = [],
+    documentOptionsAsync,
   } = props;
   const classes = useStyles();
   const isActive = !disabled;
@@ -70,11 +72,12 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
   const discardTrainee = () => setEditedTrainee(undefined);
 
   const removeTrainee = () => {
-    if (!editedTrainee) {
-      return;
+    if (isTraineeAdded) {
+      return discardTrainee();
     }
-    // deleteTrainee?.(editedTrainee as Trainee);
-    discardTrainee();
+    if (editedTrainee) {
+      return deleteTrainee?.(editedTrainee as Trainee);
+    }
   };
 
   const rowRender: DataGridProps<EditableTrainee>['rowRender'] = (row, { dataItem }) => {
@@ -111,11 +114,11 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
   const traineeList = trainees.reduce((list, item) => {
     const isTraineeEdited = editedTrainee && editedTrainee.id === item.id;
     return [
-      ...list,
       {
         ...(isTraineeEdited ? editedTrainee : item),
         [MODE_FIELD]: isTraineeEdited ? Mode.edit : Mode.show,
       },
+      ...list,
     ];
   }, isTraineeAdded ? [editedTrainee] : []);
 
@@ -148,6 +151,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
         data={traineeList as EditableTrainee[]}
         onRowClick={handleRowClick}
         rowRender={rowRender}
+        loading={Boolean(traineeList?.length && documentOptionsAsync.loading)}
       />
       {isActive && (
         <Button
