@@ -23,4 +23,5 @@ export enum PreviewControlButtons {
   EditPartButton='restrictedEditPart',
   CancelEditPartButton='cancelEditPart',
   PrintLabelButton='printLabelButton',
+  WOWithdrawButton='workorderWithdrawButton',
 }

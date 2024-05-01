@@ -1,6 +1,6 @@
 import { isEmpty, map, sortBy, union } from 'lodash';
 import { action, observable, set } from 'mobx';
-import * as generateUuid from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixItem, FBApprovalRole, FBDAMFields } from '..';
 import FBRequest from '../FBApi/FBApi.request';
 import { FBEndpoint } from '../defaults/FBEndpoint';
@@ -31,7 +31,15 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
       || !formValue?.[FBDAMFields.DAR];
 
     if (isFormEmpty || outputRevision) {
-      this.fetch();
+      this.set({
+        url: this.url,
+        method: 'get',
+      }, (data) => {
+        this.setData({
+          approvalMatrix: (formValue?.[FBDAMFields.DAM] ?? data?.approvalMatrix ?? []) as FBApprovalMatrixItem[],
+          approvalRoles: (formValue?.[FBDAMFields.DAR] ?? data?.approvalRoles ?? []) as FBApprovalRole[],
+        });
+      });
       return;
     }
 
@@ -74,7 +82,7 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
     approvalMatrix: sortBy(data?.approvalMatrix, (row) => row.docType.name.toLowerCase()) || [],
   });
 
-  @action public setMode = (mode: FBApprovalMatrixFieldMode) => {
+  @action public setMode = (mode: FBApprovalMatrixFieldMode): void => {
     set(this, 'mode', mode);
   };
 
@@ -85,26 +93,26 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
     });
   };
 
-  @action public setApprovalRoles = (approvalRoles?: FBApprovalRole[]) => {
+  @action public setApprovalRoles = (approvalRoles?: FBApprovalRole[]): void => {
     set(this, 'data', {
       approvalRoles,
       approvalMatrix: this.getCurrentData('matrix') ?? [],
     });
   };
 
-  @action public setApprovalMatrix = (approvalMatrix?: FBApprovalMatrixItem[]) => {
+  @action public setApprovalMatrix = (approvalMatrix?: FBApprovalMatrixItem[]): void => {
     set(this, 'data', {
       approvalRoles: this.getCurrentData('roles') ?? [],
       approvalMatrix,
     });
   };
 
-  @action public addApprovalRole = (role: FBApprovalRole) => {
+  @action public addApprovalRole = (role: FBApprovalRole): void => {
     const defaultApprovalRoles: FBApprovalRole[] = this.getCurrentData('roles') ?? [];
     const defaultApprovalMatrix: FBApprovalMatrixItem[] = this.getCurrentData('matrix') ?? [];
     const approvalRoles = union(defaultApprovalRoles, [{
       ...role,
-      id: generateUuid(),
+      id: uuidv4(),
       index: defaultApprovalRoles?.length || 0,
     }]);
     const approvalMatrix = map(defaultApprovalMatrix, (am) => {

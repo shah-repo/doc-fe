@@ -11,11 +11,11 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
 import { FBDAMFields } from '../form.builder';
-import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
+import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -24,7 +24,7 @@ import { isOperator } from './DocumentRevisionDisplay.container';
 import DocumentRevisionForm from './forms/DocumentRevisionForm.container';
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from './forms/transform';
 import { DocumentRevisionFormValues } from './forms/types';
-import { checkIsDocumentDAM, checkIsDocumentPO, checkIsDocumentReceivable } from './helpers/checkDocumentGroup';
+import { checkIsDocumentPO, checkIsDocumentReceivable } from './helpers/checkDocumentGroup';
 import { canEditDocumentRevision } from './helpers/documentRevisionPermissions';
 import { isDocumentRevisionHasOutput } from './helpers/documentRevisionStatus';
 
@@ -54,7 +54,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
   const formGroupOptions = documentRevision?.document.documentType.groupOptions;
-  const isDAM = checkIsDocumentDAM(formGroupOptions);
   const isReceivable = checkIsDocumentReceivable(formGroupOptions);
   useDocumentTitle(docId);
   const status = documentRevision ? documentRevision.status : undefined;
@@ -83,7 +82,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   }, [documentRevision]);
 
   useEffect(() => () => {
-    FBStore.damData = { approvalMatrix: [], approvalRoles: [] };
     documentRevisionStatusContextFromCR = React.createContext<undefined | DocumentRevisionStatus>(undefined);
   }, []);
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState && !documentRevision?.isBeingEditedAfterRelease) {
@@ -137,16 +135,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         ...updatedFormInput,
         [AllocationCheckBoxOptions.AUTO_TRANSACT]: FBDataStore?.refreshData?.formInput?.autoTransact,
         [AllocationCheckBoxOptions.AUTO_ASSIGN]: FBDataStore?.refreshData?.formInput?.autoAssign,
-      });
-    }
-
-    if (isDAM && !isEmpty(FBStore.damData?.approvalMatrix) && isEmpty(dataToSubmit)) {
-      set(dataToSubmit, 'formInput', {
-        ...formInput,
-        ...{
-          [FBDAMFields.DAM]: FBStore.damData?.approvalMatrix,
-          [FBDAMFields.DAR]: FBStore.damData?.approvalRoles,
-        },
       });
     }
     if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)) {
