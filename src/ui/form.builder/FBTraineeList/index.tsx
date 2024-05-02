@@ -15,6 +15,7 @@ import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.type
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
+import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
@@ -24,6 +25,8 @@ import { withTraineeList } from './wrap';
 
 const TraineeList: React.FC<TraineeListProps> = (props) => {
   const {
+    type,
+    name,
     label = 'training.record.trainees.list',
     disabled = false,
     updateTrainee,
@@ -128,21 +131,23 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
       <PromptIfDirty
         dirty={dirty}
       />
-      <FBSection label={label}>
-        {isActive && (
-          <Button
-            kind="ghost"
-            size="small"
-            disabled={isInEditMode}
-            className={classes.addButton}
-            startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
-            onClick={createDraftTrainee}
-            data-cy="add-link"
-          >
-            {translate('training.record.trainees.add')}
-          </Button>
-        )}
-      </FBSection>
+      <FBInput {...props} type={type} name={name}>
+        <FBSection label={label}>
+          {isActive && (
+            <Button
+              kind="ghost"
+              size="small"
+              disabled={isInEditMode}
+              className={classes.addButton}
+              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+              onClick={createDraftTrainee}
+              data-cy="add-link"
+            >
+              {translate('training.record.trainees.add')}
+            </Button>
+          )}
+        </FBSection>
+      </FBInput>
       <KendoDataGrid<EditableTrainee>
         className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
         fullWidth

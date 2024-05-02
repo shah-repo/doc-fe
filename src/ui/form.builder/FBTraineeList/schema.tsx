@@ -58,8 +58,8 @@ export const buildSchema = ({
       width: 300,
     },
     {
-      id: 'date',
-      field: 'date',
+      id: 'trainingCompletionDate',
+      field: 'trainingCompletionDate',
       title: 'form.builder.trainee.list.completion.date',
       filterCell: InputFilter,
       template: DateCellTemplate,

@@ -20,7 +20,7 @@ export interface SchemaOptions {
 export type DocumentOption = Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayRevision'> & { documentRevisions: DocumentRevision[] };
 
 export type TraineeListProps =
-& Pick<FBInputProps, 'name' | 'label' | 'disabled'>
+& Pick<FBInputProps, 'name' | 'type' | 'label' | 'disabled'>
 & {
   trainees: Trainee[]
   documentOptions: DocumentOption[]
