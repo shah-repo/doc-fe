@@ -317,7 +317,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       });
 
       setColumns(updatedColumns);
-      setState({ ...state, dataState: tableCriteria.queryDict.dataState });
+      setState({ ...state, dataState: { filter: [], sort: [] } });
     } else {
       updateColumns(schema);
     }
@@ -814,7 +814,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
   const handleExpandAll = () => {
     const { data } = state;
-    const expanded = getAllItemIds(data);
+    const expanded = uniq(getAllItemIds(data));
     updateState({
       ...state,
       expanded,
@@ -1054,12 +1054,12 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       return;
     }
     const { dataState, data } = state;
-    dataState.filter = event.filter;
+    dataState.filter = event?.filter;
     const expanded = getAllItemIds(data);
     updateState({
       ...state,
       dataState: dataState,
-      expanded: isEmpty(event.filter) ? [data[0]?.id] : expanded,
+      expanded: isEmpty(event?.filter) ? [data[0]?.id] : expanded,
     });
   };
 

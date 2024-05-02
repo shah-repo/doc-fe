@@ -4,12 +4,14 @@ import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
-import React, { ChangeEvent, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, memo, MouseEventHandler, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import { EditableAllocationItem } from '../../../interface';
@@ -26,6 +28,11 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
 
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
+  };
+
+  const openDetailDrawerDialog: MouseEventHandler = (event?) => {
+    event?.preventDefault();
+    openDetailDrawer?.(dataItem);
   };
 
   const [parts, setParts] = React.useState<DocumentRevision[]>([]);
@@ -136,8 +143,20 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
         {isEditMode && !dataItem.isLotAddition && !dataItem.lotRevId && <div className={classes.idCellEditWrapper}>
           { getFieldInfo()}
         </div>}
-        {!isEditMode
-        && (dataItem.docId) }
+        {!isEditMode && (
+          <Link
+            onClick={openDetailDrawerDialog}
+            className={classes.link}
+            to={
+              dataItem?.documentId
+                ? documentVersionPath(dataItem?.id, dataItem?.documentId)
+                : '#'
+            }
+            target="_blank"
+          >
+            {dataItem.docId}
+          </Link>
+        )}
       </span>
     </td>
   );

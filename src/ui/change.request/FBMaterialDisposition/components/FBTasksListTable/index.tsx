@@ -12,11 +12,11 @@ import { Attachment } from '../../../../../state/ducks/attachments/types';
 import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
-import { Button } from '../../../../components/forms/fields-next';
-import { useFormContext } from '../../../../components/forms/FormContext';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { useFormContext } from '../../../../components/forms/FormContext';
+import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBSection } from '../../../../form.builder';
@@ -26,12 +26,12 @@ import { changeRequestPreviewPath } from '../../../utils/paths';
 import { COMMENTS_FIELD, EmployeeStatus } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './types';
+import { EditableTLItem, EmployeeResponse, TLItemEditEvent, TasksListItem } from './types';
 import { updateData } from './utils';
 
 interface props {
-  partOfId: string
-  state: ChangeRequestStatus | DocumentRevisionStatus
+  partOfId?: string
+  state?: ChangeRequestStatus | DocumentRevisionStatus
   isShowOnly?: boolean
   disabled?: boolean
   label?: string
@@ -225,6 +225,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
       return;
     }
     deleteTaskAsync.start(deleteTask, editedTLItem?.taskId, deleteTaskAsync);
+    discardTLItem();
   };
 
   const employeeStatusUpdates = (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => {
