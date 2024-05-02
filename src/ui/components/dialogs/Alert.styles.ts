@@ -26,4 +26,7 @@ export default makeStyles(theme => ({
   icon: {
     color: Colors.error,
   },
+  circleIcon: {
+    color: Colors.warning,
+  },
 }));
