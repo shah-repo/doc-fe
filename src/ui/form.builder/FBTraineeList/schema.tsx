@@ -7,7 +7,7 @@ import { DateCellTemplate } from './components/DateCellTemplate';
 import { RevisionCellTemplate } from './components/RevisionCellTemplate';
 import { UploadEvidenceCellTemplate } from './components/UploadEvidenceCellTemplate';
 import { UserCellTemplate } from './components/UserCellTemplate';
-import { EditableTrainee, SchemaOptions } from './types';
+import { CustomTemplateProps, EditableTrainee, SchemaOptions } from './types';
 
 export const buildSchema = ({
   employees,
@@ -71,7 +71,7 @@ export const buildSchema = ({
       field: 'comments',
       title: 'form.builder.trainee.list.comments',
       filterCell: InputFilter,
-      template: CommentsCellTemplate,
+      template: CommentsCellTemplate as unknown as React.FC<CustomTemplateProps>,
       editable: true,
       width: 250,
     },

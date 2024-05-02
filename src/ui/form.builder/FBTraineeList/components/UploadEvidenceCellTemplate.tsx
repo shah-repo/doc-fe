@@ -12,9 +12,11 @@ import { CustomTemplateProps } from '../types';
 import { styles } from './styles';
 
 interface Props extends CustomTemplateProps {
+  employeeEvidenceUpdates?: any
   employeeId: string
   name: string
   previousAttachments: Attachment[]
+  isDisabled?: boolean
 }
 
 const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, isDisabled, previousAttachments }) => {
@@ -51,7 +53,7 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
     />);
 };
 
-export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps> = (props) => {
+export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps & { currentState: any }> = (props) => {
   const { dataItem, currentState } = props;
   const classes = styles();
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
