@@ -38,6 +38,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     value,
     ...props
   }: T) => {
+    // @todo
+    if (name === 'fb-grpt-trainer') {
+      freeSolo = true;
+    }
+
     const { formState } = FB.useStores();
     const documentStatus = formState?.workspaceState?.document?.displayStatus;
     const groupOptions = formState?.workspaceState?.document?.document?.documentType?.groupOptions;
