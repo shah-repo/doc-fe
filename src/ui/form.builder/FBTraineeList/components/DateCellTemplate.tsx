@@ -8,7 +8,7 @@ import { CustomTemplateProps } from '../types';
 
 export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps, setFieldValue } = useFormikContext();
+  const { getFieldProps, setFieldValue } = useFormikContext() ?? {};
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const value = dataItem[field] as string;
 
@@ -23,7 +23,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
         required
       >
         <DatePicker
-          {...getFieldProps(field)}
+          {...getFieldProps?.(field)}
           size="small"
           onChange={handleChange}
           format={MomentFormats.MonthDateYearTwoDigit}

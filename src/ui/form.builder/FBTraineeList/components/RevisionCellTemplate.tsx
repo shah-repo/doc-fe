@@ -39,7 +39,7 @@ const getValue = (item?: DocumentOption) => {
 
 export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldToEdit, options, column, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableTrainee>();
+  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableTrainee>() ?? {};
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const classes = useStyles();
   const targetField = fieldToEdit ?? field;
@@ -57,7 +57,7 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
     return (
       <FormikField name={targetField}>
         <Autocomplete
-          {...getFieldProps(targetField)}
+          {...getFieldProps?.(targetField)}
           placeholder={translate(column.title ?? '')}
           blurOnSelect
           options={options}
