@@ -31,9 +31,16 @@ export type TraineeListProps =
 
 export interface Trainee {
   id: string
-  userId: string
-  docId: string
-  date: string
+  employee: {
+    id: string
+    name: string
+  }
+  trainingDocument: {
+    docId: string
+    documentId: string
+    docRevId: string
+  }
+  trainingCompletionDate: string
   attachments: any // @todo
   comments?: string
 }
