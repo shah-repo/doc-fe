@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import React from 'react';
 import { Employee } from '../../../../state/ducks/company/types';
 import { AvatarComponent } from '../../../components/common/kendo.column.templates/UserAvatar';
@@ -10,12 +11,23 @@ interface Props extends CustomTemplateProps {
 }
 
 const getOptionLabel = (option: Employee) => option.user?.name ?? '';
+const getValue = (option?: Employee) => {
+  if (!option) {
+    return undefined;
+  }
+
+  return {
+    id: option.id,
+    name: option.user?.name,
+  };
+};
+const getKey = item => item?.id;
 
 export const UserCellTemplate: React.FC<Props> = (props) => {
   const { dataItem, field, options } = props;
 
-  const actoveEmployeeOptions = options.filter(item => item.active);
-  const userId = dataItem[field] as string;
+  const activeEmployeeOptions = options.filter(item => item.active);
+  const userId = get(dataItem, `${field}.id`, '') as string;
   const user = options.find((item) => item.id === userId) as Employee;
 
   const renderStoredValue = () => {
@@ -33,7 +45,9 @@ export const UserCellTemplate: React.FC<Props> = (props) => {
       {...props}
       getOptionLabel={getOptionLabel}
       renderStoredValue={renderStoredValue}
-      options={actoveEmployeeOptions}
+      options={activeEmployeeOptions}
+      getValue={getValue}
+      getKey={getKey}
     />
   );
 };

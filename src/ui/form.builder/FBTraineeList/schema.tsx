@@ -25,16 +25,16 @@ export const buildSchema = ({
       field: 'employee.name', // deep field name for correct filter working
       title: 'common.user',
       filterCell: InputFilter,
-      template: (props) => <UserCellTemplate {...props} field="trainee" options={employees} />,
+      template: (props) => <UserCellTemplate {...props} field="employee" options={employees} />,
       editable: true,
       width: 200,
     },
     {
       id: 'trainingDocument',
-      field: 'trainingDocument.',
+      field: 'trainingDocument.docId', // deep field name for correct filter working
       title: 'form.builder.trainee.list.doc.id',
       filterCell: InputFilter,
-      template: (props) => <RevisionCellTemplate {...props} options={documentOptions} onClick={onRowClick} />,
+      template: (props) => <RevisionCellTemplate {...props} field="trainingDocument" options={documentOptions} onClick={onRowClick} />,
       editable: true,
       width: 220,
     },

@@ -1,6 +1,6 @@
 import { Box, makeStyles } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../common/intl';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
@@ -25,6 +25,18 @@ const useStyles = makeStyles({
   },
 });
 
+const getValue = (item?: DocumentOption) => {
+  if (!item) {
+    return undefined;
+  }
+
+  return {
+    docId: item.docId,
+    documentId: item.id,
+    docRevId: item.documentRevisions?.[0]?.id,
+  };
+};
+
 export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldToEdit, options, column, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableTrainee>();
@@ -33,11 +45,11 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
   const targetField = fieldToEdit ?? field;
 
   const handleChange = (event: ChangeEvent<unknown>, option?: DocumentOption) => {
-    setFieldValue(targetField, option?.id);
+    setFieldValue(targetField, getValue(option));
   };
 
   const source = isEditMode ? values : dataItem;
-  const defaultValue = source[targetField] as string;
+  const defaultValue = get(source, `${targetField}.documentId`, '') as string;
   const value = options?.find((revision) => revision.id === defaultValue);
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete

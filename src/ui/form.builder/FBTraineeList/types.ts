@@ -17,7 +17,7 @@ export interface SchemaOptions {
   onRowClick?: (e: TraineeEditEvent) => void
 }
 
-export type DocumentOption = Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayRevision'>;
+export type DocumentOption = Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayRevision'> & { documentRevisions: DocumentRevision[] };
 
 export type TraineeListProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>

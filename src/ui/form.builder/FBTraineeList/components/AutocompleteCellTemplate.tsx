@@ -15,21 +15,23 @@ interface Props<T extends OptionItem> extends CustomTemplateProps {
   options: T[]
   getOptionLabel: (item: T) => string
   getOptionDisabled?: (item: T) => boolean
+  getValue: (item?: T) => any
+  getKey: (item?: EditableTrainee) => string
   renderStoredValue: () => React.ReactNode
 }
 
 const getOptionDisabled = (option: OptionItem) => !option.active;
 
 const Editor = <T extends OptionItem>(props: Props<T>): JSX.Element => {
-  const { field, options, column: { title }, getOptionLabel } = props;
+  const { field, options, column: { title }, getOptionLabel, getValue, getKey } = props;
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableTrainee>();
 
-  const handleChange = (event: ChangeEvent<unknown>, value: OptionItem) => {
-    setFieldValue(field, value?.id);
+  const handleChange = (event: ChangeEvent<unknown>, value: T) => {
+    setFieldValue(field, getValue(value));
   };
 
-  const value = options?.find(item => item.id === values[field]);
+  const value = options?.find(item => item.id === getKey(values[field]));
 
   return (
     <FormikField name={field}>
