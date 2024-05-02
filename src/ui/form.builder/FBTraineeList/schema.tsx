@@ -21,17 +21,17 @@ export const buildSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<EditableTrainee>> => {
   return [
     {
-      id: 'userId',
-      field: 'userId',
+      id: 'employee',
+      field: 'employee.name', // deep field name for correct filter working
       title: 'common.user',
       filterCell: InputFilter,
-      template: (props) => <UserCellTemplate {...props} options={employees} />,
+      template: (props) => <UserCellTemplate {...props} field="trainee" options={employees} />,
       editable: true,
       width: 200,
     },
     {
-      id: 'documentId',
-      field: 'documentId',
+      id: 'trainingDocument',
+      field: 'trainingDocument.',
       title: 'form.builder.trainee.list.doc.id',
       filterCell: InputFilter,
       template: (props) => <RevisionCellTemplate {...props} options={documentOptions} onClick={onRowClick} />,
