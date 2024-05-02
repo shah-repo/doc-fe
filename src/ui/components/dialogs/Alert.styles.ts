@@ -23,10 +23,10 @@ export default makeStyles(theme => ({
     fontSize: 26,
     marginRight: theme.spacing(2),
   },
-  icon: {
+  iconError: {
     color: Colors.error,
   },
-  iconWarn: {
+  iconWarning: {
     color: Colors.warning,
   },
 }));
