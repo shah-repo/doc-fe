@@ -39,7 +39,8 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
   const isActive = !disabled;
   const [editedTrainee, setEditedTrainee] = React.useState<Partial<EditableTrainee>>();
 
-  const isTraineeAdded = editedTrainee?.[MODE_FIELD] === Mode.add;
+  const isTraineeAdding = editedTrainee?.[MODE_FIELD] === Mode.add;
+  const isTraineeEditing = editedTrainee?.[MODE_FIELD] === Mode.edit;
 
   const editTrainee = ({ dataItem }: TraineeEditEvent) => setEditedTrainee(dataItem);
   const isInEditMode = editedTrainee !== undefined;
@@ -76,12 +77,11 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
   const discardTrainee = () => setEditedTrainee(undefined);
 
   const removeTrainee = () => {
-    if (isTraineeAdded) {
-      return discardTrainee();
+    if (isTraineeEditing) {
+      deleteTrainee?.(editedTrainee as Trainee);
     }
-    if (editedTrainee) {
-      return deleteTrainee?.(editedTrainee as Trainee);
-    }
+
+    return discardTrainee();
   };
 
   const rowRender: DataGridProps<EditableTrainee>['rowRender'] = (row, { dataItem }) => {
@@ -124,7 +124,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
       },
       ...list,
     ];
-  }, isTraineeAdded ? [editedTrainee] : []);
+  }, isTraineeAdding ? [editedTrainee] : []);
 
   return (
     <Box className={classes.root} data-cy="traineeList">
@@ -176,4 +176,3 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
 };
 
 export default withTraineeList(TraineeList);
-export * from './utils';

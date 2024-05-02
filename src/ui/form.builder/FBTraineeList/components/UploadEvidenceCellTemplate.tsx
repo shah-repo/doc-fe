@@ -7,7 +7,7 @@ import { Attachment } from '../../../../state/ducks/attachments/types';
 import { authSelectors } from '../../../../state/ducks/auth';
 import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
 import FBAttachmentNamePresenter from '../../../change.request/FBMaterialDisposition/components/FBTasksListTable/components/FBAttachmentNamePresenter';
-import { EMPLOYEE_RESPONSE_FIELD, EMPTY_VALUE_PLACEHOLDER, EmployeeStatus } from '../constants';
+import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 import { styles } from './styles';
 
@@ -17,6 +17,12 @@ interface Props extends CustomTemplateProps {
   name: string
   previousAttachments: Attachment[]
   isDisabled?: boolean
+}
+
+const EMPLOYEE_RESPONSE_FIELD = 'EMPLOYEE_RESPONSE_FIELD';
+
+enum EmployeeStatus {
+  Done = 'DONE',
 }
 
 const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, isDisabled, previousAttachments }) => {
