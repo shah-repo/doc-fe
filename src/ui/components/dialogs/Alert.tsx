@@ -19,6 +19,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   onCancel = handler.close,
   title = 'common.alert',
   warning = false,
+  warning = false,
   ...props
 }) => {
   const classes = useStyles();
@@ -50,7 +51,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
         </Box>
         <Box className={classes.contentWrapper}>
           <Typography variant="h3" data-cy="dialog-header" className={classes.title}>
-            {translate(title)}!
+            {translate(title)}
           </Typography>
           {children}
         </Box>

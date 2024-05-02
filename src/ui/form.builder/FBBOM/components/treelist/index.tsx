@@ -814,7 +814,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
 
   const handleExpandAll = () => {
     const { data } = state;
-    const expanded = getAllItemIds(data);
+    const expanded = uniq(getAllItemIds(data));
     updateState({
       ...state,
       expanded,
