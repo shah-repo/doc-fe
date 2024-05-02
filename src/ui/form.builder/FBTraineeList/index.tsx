@@ -157,7 +157,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
         data={traineeList as EditableTrainee[]}
         onRowClick={handleRowClick}
         rowRender={rowRender}
-        loading={Boolean(traineeList?.length && documentOptionsAsync.loading)}
+        loading={documentOptionsAsync.loading}
       />
       {isActive && (
         <Button
