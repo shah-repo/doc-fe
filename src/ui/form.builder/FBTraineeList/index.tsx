@@ -40,7 +40,6 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
   const [editedTrainee, setEditedTrainee] = React.useState<Partial<EditableTrainee>>();
 
   const isTraineeAdding = editedTrainee?.[MODE_FIELD] === Mode.add;
-  const isTraineeEditing = editedTrainee?.[MODE_FIELD] === Mode.edit;
 
   const editTrainee = ({ dataItem }: TraineeEditEvent) => setEditedTrainee(dataItem);
   const isInEditMode = editedTrainee !== undefined;
@@ -77,7 +76,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
   const discardTrainee = () => setEditedTrainee(undefined);
 
   const removeTrainee = () => {
-    if (isTraineeEditing) {
+    if (!isTraineeAdding) {
       deleteTrainee?.(editedTrainee as Trainee);
     }
 
