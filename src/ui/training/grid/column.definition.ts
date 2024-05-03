@@ -1,7 +1,7 @@
 import { chain } from 'lodash';
+import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { pagerSettings } from '../../components/common/kendo/helpers';
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
-import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { DateFields } from './interfaces';
 
 const columns: KendoColumn[] = [
@@ -103,7 +103,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: 'trainingPlan.curriculumDocIds',
-    title: 'common.tc.id',
+    title: 'common.ref.id',
     show: true,
     locked: false,
     width: 10,

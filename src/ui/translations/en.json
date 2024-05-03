@@ -506,7 +506,7 @@
   "common.completed.on": "Completed On",
   "common.pending": "Pending",
   "common.completed": "Completed",
-  "common.tc.id": "TC ID",
+  "common.ref.id": "REF ID",
   "common.warning.message": "Are you sure you want to approve and release {name}?",
   "common.permissions": "Permissions",
   "common.tags": "Tags",
