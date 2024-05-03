@@ -59,7 +59,7 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
     />);
 };
 
-export const UploadEvidenceCellTemplate: React.FC<CustomTemplateProps & { currentState: any }> = (props) => {
+export const AttachmentsCellTemplate: React.FC<CustomTemplateProps & { currentState: any }> = (props) => {
   const { dataItem, currentState } = props;
   const classes = styles();
   const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);

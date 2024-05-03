@@ -3,9 +3,9 @@ import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.t
 import InputFilter from '../FBApprovalMatrix/components/InputFilter';
 import { CommentsCellTemplate } from '../FBCycleCount/components/CommentsCellTemplate';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
+import { AttachmentsCellTemplate } from './components/AttachmentsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
 import { RevisionCellTemplate } from './components/RevisionCellTemplate';
-import { UploadEvidenceCellTemplate } from './components/UploadEvidenceCellTemplate';
 import { UserCellTemplate } from './components/UserCellTemplate';
 import { CustomTemplateProps, EditableTrainee, SchemaOptions } from './types';
 
@@ -51,9 +51,8 @@ export const buildSchema = ({
       id: 'attachments',
       field: 'attachments',
       title: 'Attachments',
-      show: false,
       filterCell: InputFilter,
-      template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates: undefined, isDisabled: false, currentState }} />,
+      template: (props) => <AttachmentsCellTemplate {...props} {...{ employeeEvidenceUpdates: undefined, isDisabled: false, currentState }} />,
       editable: true,
       width: 300,
     },
