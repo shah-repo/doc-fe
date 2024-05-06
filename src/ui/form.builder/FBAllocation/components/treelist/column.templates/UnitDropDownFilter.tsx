@@ -31,9 +31,11 @@ const UnitDropDownFilter: React.ComponentType<TreeListFilterCellProps> = (props)
   const updateFilter = (value, event) => {
     const filter = [...props.filter as FilterDescriptor[]];
     const currentFilterIndex = filter.findIndex((f) => f.field === field);
+
     if (currentFilterIndex !== -1) {
       filter.splice(currentFilterIndex, 1);
     }
+
     if (!isEmpty(value)) {
       filter.push({
         value: value.text,
@@ -41,6 +43,7 @@ const UnitDropDownFilter: React.ComponentType<TreeListFilterCellProps> = (props)
         operator: KendoGridFilterCellOperators.CONTAINS,
       });
     }
+
     onFilterChange?.({
       filter,
       field: field as string,

@@ -85,6 +85,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   };
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
+  const isPartHasInsufficientQty = !isEditMode && dataItem.docId && dataItem.isUnfulfiled;
 
   const getFieldInfo = () => (
     field && <FormikField
@@ -160,7 +161,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
             {docIdWithRevision}
           </Link>
         )}
-        {!isEditMode && dataItem.docId && dataItem.isUnfulfiled && (
+        {isPartHasInsufficientQty && (
           <span className={cx(classes.defaultIcon, classes.quantityShortInfoIcon)}>
             <Tooltip
               arrow
