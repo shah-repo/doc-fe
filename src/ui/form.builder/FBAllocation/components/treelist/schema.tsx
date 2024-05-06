@@ -20,6 +20,7 @@ export const TreeListSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  openDetailDrawer,
   onDeleteLot,
 }) => {
   return [
@@ -32,7 +33,7 @@ export const TreeListSchema = ({
       locked: false,
       mainOrderIndex: 1,
       disableShowOrHideSelection: true,
-      cell: IDCell,
+      cell: (props) => <IDCell {...props} openDetailDrawer={openDetailDrawer} />,
       sortable: false,
     },
     {
