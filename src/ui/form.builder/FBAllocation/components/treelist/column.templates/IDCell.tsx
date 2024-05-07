@@ -1,5 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
@@ -14,6 +15,7 @@ import { OptionType } from '../../../../../components/forms/fields/Autocomplete/
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import { Colors } from '../../../../../layout/theme-next';
 import { EditableAllocationItem } from '../../../interface';
 import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { isEditAllocItem } from '../utils';
@@ -25,6 +27,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const navigationAttributes = useTableKeyboardNavigation(id);
+  const docIdWithRevision = dataItem.docId ? `${dataItem.docId}.${dataItem.displayRevision}` : '';
 
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
@@ -82,6 +85,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   };
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
+  const isPartHasInsufficientQty = !isEditMode && dataItem.docId && dataItem.isUnfulfiled;
 
   const getFieldInfo = () => (
     field && <FormikField
@@ -154,8 +158,28 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
             }
             target="_blank"
           >
-            {dataItem.docId}
+            {docIdWithRevision}
           </Link>
+        )}
+        {isPartHasInsufficientQty && (
+          <span className={cx(classes.defaultIcon, classes.quantityShortInfoIcon)}>
+            <Tooltip
+              arrow
+              title={translate('allocation.part.quantity.short.info.message',
+                {
+                  unit: dataItem.unit || '',
+                  quantityShort: dataItem.quantityShort || '',
+                  partID: docIdWithRevision,
+                })}
+              placement="top-start"
+            >
+              <FontAwesomeIcon
+                data-cy="new-revision-available"
+                color={Colors.error}
+                icon={solid('circle-exclamation')}
+              />
+            </Tooltip>
+          </span>
         )}
       </span>
     </td>

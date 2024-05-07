@@ -73,6 +73,7 @@ import {
 } from './interface';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
+import { processAllocationData } from './utils';
 
 const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   documentRevision,
@@ -98,7 +99,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onSuccess: (response?: AllocationItem[]) => {
       updateState({
         ...state,
-        data: [...(response ?? [])],
+        data: [...(processAllocationData(response))],
       });
       selectedPart && discardAllocItem(selectedPart);
       setSelectedPart(undefined);
@@ -550,8 +551,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]) && !item.isUnfulfiled,
+        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD] && !item.isUnfulfiled),
+        [classes.errorBg]: item.isUnfulfiled,
       }),
     };
 
