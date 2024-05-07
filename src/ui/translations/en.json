@@ -1820,6 +1820,7 @@
   "approvalRequest.grid.heading.autoUpdate.title": "Part revision will be auto updated in the parent BOM",
   "approvalRequest.grid.heading.item": "Item",
   "approvalRequest.grid.heading.rev": "Rev (From-To)",
+  "approvalRequest.md.grid.heading.rev": "Rev",
   "approvalRequest.grid.heading.location": "Location",
   "approvalRequest.grid.heading.description.of.change": "Description of change",
   "approvalRequest.grid.heading.justification.of.change": "Justification of change",
