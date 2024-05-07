@@ -52,7 +52,7 @@ export const buildSchema = ({
       field: 'attachments',
       title: 'Attachments',
       filterCell: InputFilter,
-      template: (props) => <AttachmentsCellTemplate {...props} {...{ employeeEvidenceUpdates: undefined, isDisabled: false, currentState }} />,
+      template: AttachmentsCellTemplate,
       editable: true,
       width: 300,
     },

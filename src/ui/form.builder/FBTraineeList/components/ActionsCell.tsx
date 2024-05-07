@@ -7,7 +7,7 @@ const useStyles = makeStyles({
     height: '100%',
   },
   popper: {
-    zIndex: 1400,
+    zIndex: 1300,
   },
 });
 
