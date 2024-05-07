@@ -37,8 +37,8 @@ const Actions: React.FC<ActionsProps> = ({
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
-  const saveTooltipContent = !isSubmitDisabled ? 'common.save' : 'approvalRequest.tasks.list.task.completed.tooltip';
-  const deleteTooltipContent = !isDeleteDisabled ? 'common.delete' : 'approvalRequest.tasks.list.task.completed.tooltip';
+  const saveTooltipContent = isSubmitDisabled ? 'approvalRequest.tasks.list.task.completed.tooltip' : 'common.save';
+  const deleteTooltipContent = isDeleteDisabled ? 'approvalRequest.tasks.list.task.completed.tooltip' : 'common.delete';
 
   const ref = useCallback((node: HTMLDivElement | null) => {
     if (node) {
