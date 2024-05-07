@@ -16,6 +16,7 @@ interface EditableItem {
 export interface ActionsProps {
   dataItem: EditableItem
   isDeleteDisabled?: boolean
+  isSubmitDisabled?: boolean
   deleteTooltipText?: string
   scrollBehavior?: ScrollBehavior
   onConfirm?: () => void
@@ -27,6 +28,7 @@ const Actions: React.FC<ActionsProps> = ({
   dataItem,
   scrollBehavior = 'auto',
   isDeleteDisabled,
+  isSubmitDisabled,
   deleteTooltipText,
   onConfirm,
   onDiscard,
@@ -54,7 +56,7 @@ const Actions: React.FC<ActionsProps> = ({
     >
       {onDelete && (
         <Tooltip
-          title={deleteTooltipText ?? translate('common.delete')}
+          title={deleteTooltipText ?? translate(!isDeleteDisabled ? 'common.delete' : 'approvalRequest.tasks.list.task.completed.tooltip')}
           placement="top"
           arrow
         >
@@ -93,7 +95,7 @@ const Actions: React.FC<ActionsProps> = ({
       )}
       {onConfirm && (
         <Tooltip
-          title={translate('common.save')}
+          title={translate(!isSubmitDisabled ? 'common.save' : 'approvalRequest.tasks.list.task.completed.tooltip')}
           placement="top"
           arrow
         >
@@ -102,6 +104,7 @@ const Actions: React.FC<ActionsProps> = ({
             kind="action"
             size="small"
             onClick={onConfirm}
+            disabled={isSubmitDisabled}
           >
             <FontAwesomeIcon icon={regular('check')} />
           </IconButton>
