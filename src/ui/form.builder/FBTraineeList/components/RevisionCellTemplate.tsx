@@ -3,9 +3,9 @@ import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../common/intl';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, DocumentOption, EditableTrainee } from '../types';
 import { getOptionLabel } from '../utils';
@@ -55,7 +55,7 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
-      <FormikField name={targetField}>
+      <FormikField name={targetField} error={isEmpty(value)}>
         <Autocomplete
           {...getFieldProps?.(targetField)}
           placeholder={translate(column.title ?? '')}
