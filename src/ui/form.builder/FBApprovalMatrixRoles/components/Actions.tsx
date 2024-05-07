@@ -37,6 +37,8 @@ const Actions: React.FC<ActionsProps> = ({
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
+  const saveTooltipContent = !isSubmitDisabled ? 'common.save' : 'approvalRequest.tasks.list.task.completed.tooltip';
+  const deleteTooltipContent = !isDeleteDisabled ? 'common.delete' : 'approvalRequest.tasks.list.task.completed.tooltip';
 
   const ref = useCallback((node: HTMLDivElement | null) => {
     if (node) {
@@ -56,7 +58,7 @@ const Actions: React.FC<ActionsProps> = ({
     >
       {onDelete && (
         <Tooltip
-          title={deleteTooltipText ?? translate(!isDeleteDisabled ? 'common.delete' : 'approvalRequest.tasks.list.task.completed.tooltip')}
+          title={deleteTooltipText ?? translate(deleteTooltipContent)}
           placement="top"
           arrow
         >
@@ -95,7 +97,7 @@ const Actions: React.FC<ActionsProps> = ({
       )}
       {onConfirm && (
         <Tooltip
-          title={translate(!isSubmitDisabled ? 'common.save' : 'approvalRequest.tasks.list.task.completed.tooltip')}
+          title={translate(saveTooltipContent)}
           placement="top"
           arrow
         >

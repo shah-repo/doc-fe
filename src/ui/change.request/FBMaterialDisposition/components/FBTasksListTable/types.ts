@@ -38,7 +38,7 @@ export interface SchemaOptions {
   onDiscard: () => void
   onDelete?: () => void
   isDisabled: boolean
-  isDisabledEditDelete: boolean
+  isActionsDisabled: boolean
   isClosed: boolean
   onRowClick?: (e: TLItemEditEvent) => void
   employeeStatusUpdates: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void

@@ -64,7 +64,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
   const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
   const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
-  const [isDisabledEditDelete, setIsDisabledEditDelete] = React.useState<boolean>(false);
+  const [isActionsDisabled, setIsDisabledEditDelete] = React.useState<boolean>(false);
 
   if (enbleTasksAdditionalColumns) {
     isAdditionalColumnsShown = true;
@@ -292,7 +292,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: debounceEmployeeEvidenceUpdates,
     isDisabled: isWORecord ? isWOReleased : ChangeRequestStatus.Closed === state,
-    isDisabledEditDelete,
+    isActionsDisabled,
     isClosed,
   });
 
