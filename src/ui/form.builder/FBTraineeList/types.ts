@@ -1,3 +1,4 @@
+import { Attachment } from '../../../state/ducks/attachments/types';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -41,7 +42,7 @@ export interface Trainee {
     docRevId: string
   }
   trainingCompletionDate: string
-  attachments: any // @todo
+  attachments: Attachment[]
   comments?: string
 }
 

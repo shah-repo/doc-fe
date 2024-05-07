@@ -1,34 +1,24 @@
 import { get, isEmpty } from 'lodash';
 import { reaction } from 'mobx';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { FB, FBFileField, FBFileUploadState, FBProvider } from '../..';
 import { Attachment } from '../../../../state/ducks/attachments/types';
-import { authSelectors } from '../../../../state/ducks/auth';
-import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
 import FBAttachmentNamePresenter from '../../../change.request/FBMaterialDisposition/components/FBTasksListTable/components/FBAttachmentNamePresenter';
+import { MODE_FIELD, Mode } from '../../FBApprovalMatrixRoles/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 import { styles } from './styles';
 
 interface Props extends CustomTemplateProps {
-  employeeEvidenceUpdates?: any
-  employeeId: string
   name: string
   previousAttachments: Attachment[]
-  isDisabled?: boolean
+  attachmentsUpdates?: any
 }
 
-const EMPLOYEE_RESPONSE_FIELD = 'EMPLOYEE_RESPONSE_FIELD';
-
-enum EmployeeStatus {
-  Done = 'DONE',
-}
-
-const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId, isDisabled, previousAttachments }) => {
+const Editor: React.FC<Props> = ({ dataItem, attachmentsUpdates, previousAttachments }) => {
   const classes = styles();
   const { fileUploadState } = FB.useStores();
-  const { id: taskId } = dataItem;
+  const { id } = dataItem;
 
   React.useEffect(() => {
     if (!isEmpty(previousAttachments)) {
@@ -41,43 +31,60 @@ const Editor: React.FC<Props> = ({ dataItem, employeeEvidenceUpdates, employeeId
       () => fileUploadState?.attachments,
       (attachments) => {
         if (attachments?.length !== previousAttachments.length) {
-            employeeEvidenceUpdates?.(dataItem, employeeId, attachments as Attachment[]);
+          attachmentsUpdates?.(dataItem, attachments as Attachment[]);
         }
       },
     );
     return () => {
       disposer();
     };
-  }, [dataItem, employeeEvidenceUpdates]);
+  }, [dataItem, attachmentsUpdates]);
 
   return (
     <FBFileField className={classes.uploadEvidenceField}
       labelClassName={classes.uploadEvidenceFieldLabel}
       iconClassName={classes.uploadEvidenceFieldIcon}
       disabled={true}
-      name={taskId}
+      name={id}
     />);
 };
 
-export const AttachmentsCellTemplate: React.FC<CustomTemplateProps & { currentState: any }> = (props) => {
-  const { dataItem, currentState } = props;
-  const classes = styles();
-  const assigneList = get(dataItem, EMPLOYEE_RESPONSE_FIELD, []);
-  const currentUserId = useSelector(authSelectors.currentEmployeeId);
-  const isClosedAR = currentState === ChangeRequestStatus.Closed;
-  const showEditor = (employeeId, status) => currentUserId === employeeId && !isClosedAR && status !== EmployeeStatus.Done;
+export const AttachmentsCellTemplate: React.FC<CustomTemplateProps> = (props) => {
+  const { dataItem, column, field } = props;
+  const { editable } = column;
 
-  return (<>
-    {assigneList?.map(({ employeeId, attachments, status, name }) => {
-      const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
-      return <div className={classes.employeeResponseFields}>
-        <FBProvider {...{ fileUploadState }}>
-          {(showEditor(employeeId, status)) && (
-            <Editor {...props} {...{ employeeId, name, previousAttachments: attachments } } />
-          )}
-          { (!attachments.length) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: attachments, fileUploadState, isDisabled: !showEditor(employeeId, status) }} boxProps={{ className: classes.attachmentsContainer }} />}
-        </FBProvider>
-      </div>;
-    })}
-  </>);
+  const classes = styles();
+  const attachments = get(dataItem, field, []);
+  const mode = get(dataItem, MODE_FIELD);
+  const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
+
+  return (
+    <>
+      {attachments?.map(({ id, name }) => {
+        const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
+        return (
+          <div key={id} className={classes.employeeResponseFields}>
+            <FBProvider {...{ fileUploadState }}>
+              {canBeModified && (
+                <Editor
+                  {...props}
+                  name={name}
+                  previousAttachments={attachments}
+                />
+              )}
+              {Boolean(attachments.length) && (
+                <FBAttachmentNamePresenter
+                  boxProps={{ className: classes.attachmentsContainer }}
+                  files={attachments}
+                  fileUploadState={fileUploadState}
+                  isDisabled={!canBeModified}
+                />
+              )}
+              {!attachments.length && EMPTY_VALUE_PLACEHOLDER}
+            </FBProvider>
+          </div>
+        );
+      })}
+    </>
+  );
 };
