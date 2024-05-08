@@ -17,7 +17,7 @@ import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, get, isEmpty, isNil, map, replace, uniq,
+  chain, isEmpty, isNil, map, replace, uniq,
 } from 'lodash';
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -73,6 +73,7 @@ import {
 } from './interface';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
+import { processAllocationData } from './utils';
 
 const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   documentRevision,
@@ -98,7 +99,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onSuccess: (response?: AllocationItem[]) => {
       updateState({
         ...state,
-        data: [...(response ?? [])],
+        data: [...(processAllocationData(response))],
       });
       selectedPart && discardAllocItem(selectedPart);
       setSelectedPart(undefined);
@@ -248,10 +249,16 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         partQuantityNeeded: values.quantityNeeded,
         partVariance,
       };
-
-      partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'),
-        workspaceState?.formInputSync?.get(AllocationCheckBoxOptions.AUTO_ASSIGN),
-        payload, partAsync);
+      partAsync.start(
+        updatePart,
+        documentRevision?.id,
+        values.id,
+        workspaceState?.formInputSync?.get(
+          AllocationCheckBoxOptions.AUTO_ASSIGN,
+        ),
+        payload,
+        partAsync,
+      );
     }
   };
 
@@ -550,8 +557,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]) && !item.isUnfulfiled,
+        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD] && !item.isUnfulfiled),
+        [classes.errorBg]: item.isUnfulfiled,
       }),
     };
 

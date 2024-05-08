@@ -34,9 +34,9 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'revisionsFromTo',
-      field: 'revisionsFromTo',
-      title: 'approvalRequest.grid.heading.rev',
+      id: 'lotPartDisplayRev',
+      field: 'lotPartDisplayRev',
+      title: 'approvalRequest.md.grid.heading.rev',
       show: true,
       width: 201,
       selectable: false,
