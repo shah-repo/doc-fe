@@ -202,10 +202,12 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
           >
             <span className={classes.actionIcon}>
               { isChangeRequest && <Link
+                data-cy="dashboard-change-request-task-view-button"
                 to={`${changeRequestPreviewPath(revId)}?tabId=material_disposition`} className={classes.link} >
                 {translate('dashboard.task.view')}
               </Link> }
               { isDocumentRevision && documentId && <Link
+                data-cy="dashboard-task-view-button"
                 to={`${documentPreviewPath(revId, documentId)}`} className={classes.link}
               >
                 {translate('dashboard.task.view')}

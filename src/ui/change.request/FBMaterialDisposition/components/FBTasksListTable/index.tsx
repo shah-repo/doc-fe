@@ -50,7 +50,10 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const increasedBy = isTasksListAdded ? 2 : 1;
   const [data, setData] = React.useState<EditableTLItem[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const discardTLItem = () => setEditedTLItem(undefined);
+  const discardTLItem = () => {
+    setEditedTLItem(undefined);
+    setIsActionsDisabled(false);
+  };
   const fetchTasksList = useActionCreator(taskActions.fetchTasksList);
   const addTask = useActionCreator(taskActions.addTask);
   const updateTask = useActionCreator(taskActions.updateTask);
@@ -61,6 +64,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
   const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
   const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
+  const [isActionsDisabled, setIsActionsDisabled] = React.useState<boolean>(false);
 
   if (enbleTasksAdditionalColumns) {
     isAdditionalColumnsShown = true;
@@ -71,6 +75,10 @@ const FBTasksListTable: React.FunctionComponent<props> = (
       return;
     }
     setEditedTLItem(dataItem);
+
+    if (dataItem.isCompleted) {
+      setIsActionsDisabled(dataItem.isCompleted);
+    }
   };
 
   const loadTasksTableData = () => {
@@ -284,6 +292,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: debounceEmployeeEvidenceUpdates,
     isDisabled: isWORecord ? isWOReleased : ChangeRequestStatus.Closed === state,
+    isActionsDisabled,
     isClosed,
   });
 
