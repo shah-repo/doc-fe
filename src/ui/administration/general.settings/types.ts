@@ -7,6 +7,8 @@ export enum GeneralSettingsTabs {
   APITokens = 'API Tokens',
   AR = 'Approval Requests',
   MD = 'Material Disposition',
+  LotAutoAllocationOrder = 'Lot Auto-allocation Order',
+  ExpiredLots = 'Expired Lots',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
 }

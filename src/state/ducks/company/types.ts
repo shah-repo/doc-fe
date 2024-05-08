@@ -90,11 +90,23 @@ export interface CompanyMineRequest {
 export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
+export type AllocationOrderType = 'FIFO' | 'LIFO';
+export type expiredLotType = 'warning' | 'error';
 
 export enum NavigationItems {
   LINK = 'LINK',
   MENU = 'MENU',
   CATEGORY = 'CATEGORY',
+}
+
+export enum AllocationOrder {
+  FIFO = 'FIFO',
+  LIFO = 'LIFO',
+}
+
+export enum ExpiredLotTypes {
+  WARNING = 'warning',
+  ERROR = 'error',
 }
 
 export interface NavigationItem {
@@ -167,11 +179,16 @@ interface EquipmentFamilySettings {
   locations: EquipmentLocation[]
 }
 
+interface AllocationConfig {
+  orderByReleaseDate: AllocationOrderType
+  expiredLotsSelectionPrompt: expiredLotType
+}
 export interface GeneralSettings {
   zebraPrint: ZebraPrintSettings[]
   equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
+  allocationConfig: AllocationConfig
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

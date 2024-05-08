@@ -74,6 +74,10 @@ const getGeneralSettings = (): ApiAction => apiAction({
   url: COMPANY_SETTINGS_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
+    if (!data.allocationConfig) {
+      // Remove once API Integration is done
+      data.allocationConfig = { orderByReleaseDate: 'FIFO', expiredLotsSelectionPrompt: 'warning' };
+    }
     dispatch(setGeneralSettings(data));
   },
 });
