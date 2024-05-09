@@ -47,6 +47,9 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
       title={translate(
         'administration.general.settings.lot.auto.allocation.order',
       )}
+      helperText={
+        translate('administration.general.settings.lot.auto.allocation.order.helper.text')
+      }
     >
       <List className={classes.list}>
         <ListItem disableGutters>

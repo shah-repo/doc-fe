@@ -21,6 +21,7 @@ export interface GeneralSettingsProps {
 
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
+  helperText: string
   onToggle: () => void
   onAddNew?: () => void
 }

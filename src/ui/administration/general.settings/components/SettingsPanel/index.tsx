@@ -9,6 +9,7 @@ import useStyles from './styles';
 
 const SettingsPanel: React.FC<SettingsPanelProps> = ({
   title,
+  helperText,
   children,
   onToggle,
   onAddNew,
@@ -45,6 +46,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         )}
       >
         <Typography variant="h2" className={classes.title}>{title}</Typography>
+        {helperText && <Typography className={classes.helperText}>{helperText}</Typography>}
         {onAddNew && (
           <Button
             kind="ghost"
