@@ -96,7 +96,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
         value={value}
         disableOpenOnFocus={true}
         blurOnSelect
-        disabled={dataItem.partRevId !== ''}
+        disabled={!isEmpty(dataItem.partRevId)}
         ListboxComponent={({ children, ...otherProps }) => {
           return (<>
             <ul {...otherProps} >
