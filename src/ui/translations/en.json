@@ -746,6 +746,8 @@
   "documentRevision.audit.poStatus.STRING_EDITED": "Updated PO status",
   "documentRevision.audit.poStatus.updated.by": "{name} {status} PO on {timestamp}",
   "documentRevision.audit.poStatus.quantity.discrepancies": "This Purchase Order has quantity discrepancies that were not 100% received.",
+  "documentRevision.audit.eqStatus.STRING_NEW": "EQ Status Added",
+  "documentRevision.audit.eqStatus.STRING_EDITED": "EQ Status Updated",
   "documentRevision.audit.send.to.email": "{name} exported {docId}",
   "documentRevision.audit.view.pdf": "{name} viewed PDF",
   "documentRevision.audit.EMAIL_SENT.EMAIL_SENT": "Send to Email",
