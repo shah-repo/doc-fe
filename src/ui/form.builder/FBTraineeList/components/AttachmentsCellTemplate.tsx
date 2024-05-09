@@ -24,13 +24,14 @@ const Editor: React.FC<Props> = ({ dataItem, field, previousAttachments, onUpdat
     if (!isEmpty(previousAttachments)) {
       fileUploadState?.setAttachments(previousAttachments as Attachment[]);
     }
-  }, []);
+  }, [previousAttachments]);
 
   useEffect(() => {
     const disposer = reaction(
       () => fileUploadState?.attachments,
       (attachments) => {
         if (attachments?.length !== previousAttachments.length) {
+          fileUploadState?.setAttachments(attachments ?? []);
           onUpdate(attachments ?? []);
         }
       },
