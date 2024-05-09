@@ -57,7 +57,7 @@ export const AttachmentsCellTemplate: React.FC<CustomTemplateProps> = (props) =>
 
   const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
   const classes = styles();
-  const { values, setFieldValue } = useFormikContext<EditableTrainee>();
+  const { values, setFieldValue } = useFormikContext<EditableTrainee>() ?? {};
 
   const handleUpdate = (attachments) => {
     setFieldValue('attachmentIds', attachments?.map(item => item.id) ?? []);
