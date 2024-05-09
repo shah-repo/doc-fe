@@ -1,4 +1,4 @@
-import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, throttle, toNumber, union } from 'lodash';
+import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, replace, startsWith, throttle, toNumber, union } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -9,6 +9,7 @@ import FBDataStore from '../FBStore/FBDataStore';
 import { FBFieldName } from '../helpers/FBFieldName';
 
 const QUANTITY_FIELDS = ['lhrs-start-quantity', 'lhrs-accepted-quantity', 'lhrs-rejected-quantity'];
+const WO_PART_QUANTITY = 'wo_part_quantity';
 const DECIMAL_TOAST_TIMEOUT = 2000;
 const showDecimalToastError = throttle((name, intl) => {
   toastError(
@@ -194,6 +195,9 @@ export const withFBOnChange = <T extends FBInputProps>(
               to avoid updating state after each keypress
             */
             ev.target.value = value;
+          }
+          if (name === WO_PART_QUANTITY && startsWith(value, '-')) {
+            value = replace(value, '-', '');
           }
           value = toNumber(value);
         }
