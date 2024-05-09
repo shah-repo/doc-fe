@@ -46,6 +46,7 @@ export interface Trainee {
   trainingCompletionDate: string
   attachments: TraineeAttachment[]
   comments?: string
+  createdAt: string
 }
 
 export interface EditableTrainee extends Trainee {

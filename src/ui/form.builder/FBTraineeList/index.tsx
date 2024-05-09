@@ -69,6 +69,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
   const createDraftTrainee = () => setEditedTrainee({
     id: uuidv4(),
     trainingCompletionDate: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
     [MODE_FIELD]: Mode.add,
   });
 

@@ -1,10 +1,12 @@
-import { differenceBy, unionBy } from 'lodash';
+import { differenceBy, orderBy, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FB } from '../helpers';
 import { DocumentOption, Trainee, TraineeListProps } from './types';
+
+const prepareData = (list: Trainee[] = []) => orderBy(list, 'createdAt', 'desc');
 
 export const withTraineeList = <T extends TraineeListProps>(
   Component: React.FC<T>,
@@ -15,11 +17,12 @@ export const withTraineeList = <T extends TraineeListProps>(
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
-    const [trainees, setTrainees] = useState<Trainee[]>(workspaceState?.formInputSync.get(name) ?? []);
+    const [trainees, setTrainees] = useState<Trainee[]>(prepareData(workspaceState?.formInputSync.get(name) ?? []));
 
     const updateState = (state: Trainee[]) => {
-      setTrainees(state);
-      formState?.setFieldValue(name, state);
+      const data = prepareData(state);
+      setTrainees(data);
+      formState?.setFieldValue(name, data);
       formState?.setFieldAutosave(name);
     };
 
