@@ -7,7 +7,7 @@ import { AttachmentsCellTemplate } from './components/AttachmentsCellTemplate';
 import { DateCellTemplate } from './components/DateCellTemplate';
 import { RevisionCellTemplate } from './components/RevisionCellTemplate';
 import { UserCellTemplate } from './components/UserCellTemplate';
-import { CustomTemplateProps, EditableTrainee, SchemaOptions } from './types';
+import { CustomTemplateProps, EditableTrainee, SchemaOptions, TraineeAttachment } from './types';
 
 export const buildSchema = ({
   employees,
@@ -18,6 +18,18 @@ export const buildSchema = ({
   onDelete,
   documentOptions,
 }: SchemaOptions): Array<ColumnDefinition<EditableTrainee>> => {
+  const attachmentFilterOperator = (attachments: TraineeAttachment[], query) => {
+    if (!query) {
+      return true;
+    }
+
+    return Boolean(
+      attachments.find(
+        (item) => (item?.name ?? '').toLowerCase().includes(query),
+      ),
+    );
+  };
+
   return [
     {
       id: 'employee',
@@ -50,7 +62,7 @@ export const buildSchema = ({
       id: 'attachments',
       field: 'attachments',
       title: 'Attachments',
-      filterCell: (props) => <InputFilter {...props} operator={console.log} />,
+      filterCell: (props) => <InputFilter {...props} operator={attachmentFilterOperator} />,
       template: AttachmentsCellTemplate,
       editable: true,
       width: 300,
