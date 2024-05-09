@@ -1,3 +1,4 @@
+import { Attachment } from '../../../state/ducks/attachments/types';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -29,11 +30,7 @@ export type TraineeListProps =
   deleteTrainee: (item: Trainee) => void
 };
 
-export interface TraineeAttachment {
-  id: string
-  name: string
-  type: string
-}
+export interface TraineeAttachment extends Attachment {}
 
 export interface Trainee {
   id: string
