@@ -17,7 +17,6 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
   documentOptions,
-  currentState,
 }: SchemaOptions): Array<ColumnDefinition<EditableTrainee>> => {
   return [
     {
@@ -51,7 +50,7 @@ export const buildSchema = ({
       id: 'attachments',
       field: 'attachments',
       title: 'Attachments',
-      filterCell: InputFilter,
+      filterCell: (props) => <InputFilter {...props} operator={console.log} />,
       template: AttachmentsCellTemplate,
       editable: true,
       width: 300,
