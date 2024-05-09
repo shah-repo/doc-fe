@@ -86,14 +86,14 @@ export const AttachmentsCellTemplate: React.FC<CustomTemplateProps> = (props) =>
             />
           );
         })}
+        {canBeModified && (
+          <Editor
+            {...props}
+            previousAttachments={attachments}
+            onUpdate={handleUpdate}
+          />
+        )}
       </div>
-      {canBeModified && (
-        <Editor
-          {...props}
-          previousAttachments={attachments}
-          onUpdate={handleUpdate}
-        />
-      )}
     </FBProvider>
   );
 };

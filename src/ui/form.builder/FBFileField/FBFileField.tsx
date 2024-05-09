@@ -46,7 +46,7 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
             onClick={() => onUploadClick?.()}
           >
             <Box pl={1} display="flex" flexDirection="row">
-              {loading && <Box mt={0.3} mr={1}><CircularProgress size={18} /></Box>}
+              {loading && <Box mt={0.3} mr={1}><CircularProgress size={13} /></Box>}
               {!loading && <AttachFile className={iconClassName} width={20} height={20} />}
               <FBText locale="common.upload.files" boxProps={{ mt: 0.2, className: labelClassName }} />
             </Box>

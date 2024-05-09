@@ -47,7 +47,7 @@ export const styles = makeStyles((theme) => ({
   },
   attachmentsList: {
     '& > * + *': {
-      marginTop: theme.spacing(1.25),
+      marginTop: `${theme.spacing(1.25)}px !important`,
     },
   },
   attachmentsContainer: {
