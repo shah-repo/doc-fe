@@ -37,7 +37,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     value,
     ...props
   }: T) => {
-    // @todo
+    // @todo in ENC-19556
     if (name === 'fb-grpt-trainer') {
       freeSolo = true;
     }
