@@ -25,7 +25,7 @@ const getOptionDisabled = (option: OptionItem) => !option.active;
 const Editor = <T extends OptionItem>(props: Props<T>): JSX.Element => {
   const { field, options, column: { title }, getOptionLabel, getValue, getKey } = props;
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, setFieldValue, getFieldProps } = useFormikContext<EditableTrainee>();
+  const { values, setFieldValue, getFieldProps, errors } = useFormikContext<EditableTrainee>();
 
   const handleChange = (event: ChangeEvent<unknown>, value: T) => {
     setFieldValue(field, getValue(value));
@@ -34,7 +34,7 @@ const Editor = <T extends OptionItem>(props: Props<T>): JSX.Element => {
   const value = options?.find(item => item.id === getKey(values[field]));
 
   return (
-    <FormikField name={field}>
+    <FormikField name={field} error={get(errors, field)}>
       <Autocomplete
         {...getFieldProps(field)}
         key={isEmpty(values) ? 'disabled' : 'enabled'}

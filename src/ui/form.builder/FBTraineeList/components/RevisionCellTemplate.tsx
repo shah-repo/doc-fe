@@ -3,9 +3,9 @@ import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../common/intl';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, DocumentOption, EditableTrainee } from '../types';
 import { getOptionLabel } from '../utils';
@@ -39,7 +39,7 @@ const getValue = (item?: DocumentOption) => {
 
 export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldToEdit, options, column, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableTrainee>() ?? {};
+  const { values, getFieldProps, setFieldValue, errors } = useFormikContext<EditableTrainee>() ?? {};
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const classes = useStyles();
   const targetField = fieldToEdit ?? field;
@@ -55,7 +55,7 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
-      <FormikField name={targetField}>
+      <FormikField name={targetField} error={get(errors, targetField)}>
         <Autocomplete
           {...getFieldProps?.(targetField)}
           placeholder={translate(column.title ?? '')}
