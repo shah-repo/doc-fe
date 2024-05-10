@@ -1,5 +1,5 @@
 import { FBFormProps, FBInputProps, FBProcedureItemType, FBProviderProps } from '..';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, EquipmentStatus } from '../../../state/ducks/documentRevisions/types';
 
 export type FBMPIProcedureSelectProps =
 & Pick<FBInputProps, 'name'>
@@ -46,20 +46,8 @@ export enum DOCUMENT_REVISION_LOT_STATUS {
   VOIDED = 'VOIDED',
 }
 
-export enum EQStatus {
-  NoInfo = 'No Info',
-  Inactive = 'Inactive',
-  Retired = 'Retired',
-  Active = 'Active',
-  ActiveCalibrated = 'Active Calibrated',
-  ActiveNoCalRequired = 'Active No Cal Required',
-  OutForCalibration = 'Out for Calibration',
-  OutForMaintenance = 'Out for Maintenance',
-  UnplannedDowntime = 'Unplanned Downtime',
-}
-
 export interface FBSelectedEQ {
-  status: EQStatus
+  status: EquipmentStatus
   pmDate?: string
   calDate?: string
 }
