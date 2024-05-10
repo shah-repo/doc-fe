@@ -5,11 +5,11 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
-import { EQStatus, FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions, FBSelectedEQ } from '..';
+import { FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions, FBSelectedEQ } from '..';
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, EquipmentStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../components/notifications';
 import { isMoreDigitsAfterDecimal } from '../../dashboard.new/line.items/common/Utils';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
@@ -103,7 +103,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     };
 
     const isEqActive = (eqStatus) => {
-      if (eqStatus !== EQStatus.Inactive && eqStatus !== EQStatus.Retired) { return true; }
+      if (eqStatus === EquipmentStatus.Active) { return true; }
       return false;
     };
 
@@ -117,8 +117,12 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         return true;
       }
 
-      if (enforceFlag && Boolean(isLHRProductionBuild)) {
-        return !isEqActive(option.eqStatus) || isOverdue;
+      if (enforceFlag) {
+        if (isOverdue && isLHRProductionBuild) {
+          return isEqActive(option.eqStatus);
+        } else {
+          return !isEqActive(option.eqStatus);
+        }
       }
       return !isEqActive(option.eqStatus);
     };

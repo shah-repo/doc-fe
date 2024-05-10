@@ -1,6 +1,5 @@
 import cx from 'classnames';
 import React, { ComponentType } from 'react';
-import { getCellValue } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -29,7 +28,7 @@ const UnitCell: ComponentType<CustomTreeListCellProps> = ({
       data-cy="unit-cell"
     >
       <span className={classes.Cell}>
-        {getCellValue(dataItem, field)}
+        {field && dataItem[field]}
       </span>
     </td>
   );
