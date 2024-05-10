@@ -39,7 +39,7 @@ const getValue = (item?: DocumentOption) => {
 
 export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldToEdit, options, column, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableTrainee>() ?? {};
+  const { values, getFieldProps, setFieldValue, errors } = useFormikContext<EditableTrainee>() ?? {};
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const classes = useStyles();
   const targetField = fieldToEdit ?? field;
@@ -55,7 +55,7 @@ export const RevisionCellTemplate: React.FC<Props> = ({ dataItem, field, fieldTo
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
-      <FormikField name={targetField} error={isEmpty(value)}>
+      <FormikField name={targetField} error={get(errors, targetField)}>
         <Autocomplete
           {...getFieldProps?.(targetField)}
           placeholder={translate(column.title ?? '')}
