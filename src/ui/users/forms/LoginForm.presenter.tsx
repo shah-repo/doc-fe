@@ -1,7 +1,6 @@
 import { Box, Button, Paper, Typography, withStyles, WithStyles } from '@material-ui/core';
 import { Form, FormikProps } from 'formik';
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
 import { AsyncState } from '../../../state/types';
 import InputField from '../../components/forms/fields/Input';
 import { email, required, validator } from '../../components/forms/fields/validators';
@@ -90,12 +89,13 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
           id="LoginFormPresenter-submit"
           dataCy="LoginFormPresenter-submit"
         />
+        {/*  https://shifamed.atlassian.net/browse/ENC-19359
         <Typography component="h1" variant="h5" className={classes.navigationText}>
           <Text translation={signMessage} />
           <NavLink to={route} exact={true} className={classes.navigationLink} id="LoginFormPresenter-linkRoute">
             <Text translation={signLabel} />
           </NavLink>
-        </Typography>
+        </Typography> */}
       </Form>
     </Paper>
   );

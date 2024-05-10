@@ -1,17 +1,21 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
-import React, { ChangeEvent, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, memo, MouseEventHandler, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import { Colors } from '../../../../../layout/theme-next';
 import { EditableAllocationItem } from '../../../interface';
 import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { isEditAllocItem } from '../utils';
@@ -23,9 +27,15 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   const classes = styles({ hasChildren, isEditMode });
   const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
   const navigationAttributes = useTableKeyboardNavigation(id);
+  const docIdWithRevision = dataItem.docId ? `${dataItem.docId}.${dataItem.displayRevision}` : '';
 
   const onClick = (ev) => {
     onExpandChange(ev, dataItem, level);
+  };
+
+  const openDetailDrawerDialog: MouseEventHandler = (event?) => {
+    event?.preventDefault();
+    openDetailDrawer?.(dataItem);
   };
 
   const [parts, setParts] = React.useState<DocumentRevision[]>([]);
@@ -75,6 +85,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   };
 
   const [value, setValue] = useState<OptionType>({ label: '', value: '' });
+  const isPartHasInsufficientQty = !isEditMode && dataItem.docId && dataItem.isUnfulfiled;
 
   const getFieldInfo = () => (
     field && <FormikField
@@ -85,6 +96,7 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
         value={value}
         disableOpenOnFocus={true}
         blurOnSelect
+        disabled={dataItem.partRevId !== ''}
         ListboxComponent={({ children, ...otherProps }) => {
           return (<>
             <ul {...otherProps} >
@@ -136,8 +148,40 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
         {isEditMode && !dataItem.isLotAddition && !dataItem.lotRevId && <div className={classes.idCellEditWrapper}>
           { getFieldInfo()}
         </div>}
-        {!isEditMode
-        && (dataItem.docId) }
+        {!isEditMode && (
+          <Link
+            onClick={openDetailDrawerDialog}
+            className={classes.link}
+            to={
+              dataItem?.documentId
+                ? documentVersionPath(dataItem?.id, dataItem?.documentId)
+                : '#'
+            }
+            target="_blank"
+          >
+            {docIdWithRevision}
+          </Link>
+        )}
+        {isPartHasInsufficientQty && (
+          <span className={cx(classes.defaultIcon, classes.quantityShortInfoIcon)}>
+            <Tooltip
+              arrow
+              title={translate('allocation.part.quantity.short.info.message',
+                {
+                  unit: dataItem.unit || '',
+                  quantityShort: dataItem.quantityShort || '',
+                  partID: docIdWithRevision,
+                })}
+              placement="top-start"
+            >
+              <FontAwesomeIcon
+                data-cy="new-revision-available"
+                color={Colors.error}
+                icon={solid('circle-exclamation')}
+              />
+            </Tooltip>
+          </span>
+        )}
       </span>
     </td>
   );

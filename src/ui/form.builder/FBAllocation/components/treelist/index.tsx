@@ -17,7 +17,7 @@ import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, get, isEmpty, isNil, map, replace, uniq,
+  chain, isEmpty, isNil, map, replace, uniq,
 } from 'lodash';
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -47,6 +47,9 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
+import FBBOMDetailDrawer from '../../../FBBOM/components/drawer/AlternateParts';
+import DocumentRevisionDrawer from '../../../FBBOM/components/drawer/DocumentRevisionDrawer';
+import FBDataStore from '../../../FBStore/FBDataStore';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import AutoOptions from './AutoOptions';
 import {
@@ -70,6 +73,7 @@ import {
 } from './interface';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
+import { processAllocationData } from './utils';
 
 const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   documentRevision,
@@ -87,6 +91,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const partRevIdSelected: string = isDisabled
     ? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
     : workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id ?? '';
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const classes = useStyles({ size });
 
@@ -94,7 +99,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onSuccess: (response?: AllocationItem[]) => {
       updateState({
         ...state,
-        data: [...(response ?? [])],
+        data: [...(processAllocationData(response))],
       });
       selectedPart && discardAllocItem(selectedPart);
       setSelectedPart(undefined);
@@ -244,10 +249,16 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         partQuantityNeeded: values.quantityNeeded,
         partVariance,
       };
-
-      partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'),
-        workspaceState?.formInputSync?.get(AllocationCheckBoxOptions.AUTO_ASSIGN),
-        payload, partAsync);
+      partAsync.start(
+        updatePart,
+        documentRevision?.id,
+        values.id,
+        workspaceState?.formInputSync?.get(
+          AllocationCheckBoxOptions.AUTO_ASSIGN,
+        ),
+        payload,
+        partAsync,
+      );
     }
   };
 
@@ -341,10 +352,16 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     setSelectedPart(dataItem);
   };
 
+  const openDetailDrawer = (dataItem: EditableAllocationItem) => {
+    setIsPartsDrawerOpened(true);
+    setSelectedPart(dataItem);
+  };
+
   const schema: CustomTreeListColumnProps[] = TreeListSchema({
     addLot,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
+    openDetailDrawer,
     onConfirm: formik.submitForm,
     onDiscard: discardAllocItem,
     onDelete: removeAllocItem,
@@ -540,8 +557,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]) && !item.isUnfulfiled,
+        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD] && !item.isUnfulfiled),
+        [classes.errorBg]: item.isUnfulfiled,
       }),
     };
 
@@ -778,6 +796,12 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const sortedColumnDefinitions = orderByLockedState(getColumns());
   const isLoading = treeListAsync.isLoading || partAsync.isLoading || deleteLotAsync.isLoading;
 
+  const closeDetailDrawer = () => {
+    FBDataStore.selectedSliderInfo = undefined;
+    setIsPartsDrawerOpened(false);
+    setSelectedPart(undefined);
+  };
+
   return (
     <>
       <AutoOptions documentRevision={documentRevision} onAutoAssign={handleAutoAssignLot} isDisabled={isDisabled || isDocument} />
@@ -856,6 +880,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           </ColumnMenuContext.Provider>
         </FormikProvider>
       </Grid>
+      <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer: closeDetailDrawer, dataItem: selectedPart }} >
+        <DocumentRevisionDrawer {...{ dataItem: selectedPart, closeDrawer: closeDetailDrawer, isSliderView: isPartsDrawerOpened }} />
+      </FBBOMDetailDrawer>
       <Grid item>
         {!isDisabled && !isDocument && (
           <AddButton
