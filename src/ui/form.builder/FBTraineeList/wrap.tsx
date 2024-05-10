@@ -26,18 +26,13 @@ export const withTraineeList = <T extends TraineeListProps>(
       formState?.setFieldAutosave(name);
     };
 
-    // @todo
-    const prepareTrainee = (trainee: Trainee): Trainee => ({
-      ...trainee,
-    });
-
     const deleteTrainee = (item: Trainee) => {
       const updatedTrainees = differenceBy(trainees, [item], 'id');
       updateState(updatedTrainees);
     };
 
     const updateTrainee = (item: Trainee) => {
-      const updatedTrainees = unionBy([prepareTrainee(item)], trainees, 'id');
+      const updatedTrainees = unionBy([item], trainees, 'id');
       updateState(updatedTrainees);
     };
 
