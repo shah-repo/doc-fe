@@ -1,3 +1,4 @@
+import { Attachment } from '../attachments/types';
 import { Id } from '../common/types';
 import { Employee } from '../company/types';
 import {
@@ -52,6 +53,7 @@ export interface TrainingRecordQuery {
   trainingPlan?: TrainingPlan
   completedAt?: Date
   id: string
+  attachments?: Attachment[]
 }
 
 export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
