@@ -17,7 +17,7 @@ import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, get, isEmpty, isNil, map, replace, uniq,
+  chain, isEmpty, isNil, map, replace, uniq,
 } from 'lodash';
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -248,10 +248,16 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         partQuantityNeeded: values.quantityNeeded,
         partVariance,
       };
-
-      partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'),
-        workspaceState?.formInputSync?.get(AllocationCheckBoxOptions.AUTO_ASSIGN),
-        payload, partAsync);
+      partAsync.start(
+        updatePart,
+        documentRevision?.id,
+        values.id,
+        workspaceState?.formInputSync?.get(
+          AllocationCheckBoxOptions.AUTO_ASSIGN,
+        ),
+        payload,
+        partAsync,
+      );
     }
   };
 
@@ -550,8 +556,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]) && !item.isUnfulfiled,
+        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD] && !item.isUnfulfiled),
+        [classes.errorBg]: item.isUnfulfiled,
       }),
     };
 
@@ -792,6 +799,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
     setSelectedPart(undefined);
+    dispatch(documentRevisionsActions.reload(documentRevision?.id));
   };
 
   return (

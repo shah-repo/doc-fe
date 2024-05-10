@@ -28,25 +28,33 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
     return { setPreviousAttachment: setPrevious, setNextAttachment: setNext };
   }, [attachment, attachments, setFile]);
   const classes = styles();
+
+  const prevDisabled = !setPreviousAttachment;
+  const nextDisabled = !setNextAttachment;
+
   return (
     <span className={classes.buttonsContainer}>
-      <Button
-        color="secondary"
-        variant="outlined"
-        disabled={!setPreviousAttachment}
-        onClick={setPreviousAttachment}
-        className={classes.previousButton}
-      >
-        <Text translation="common.previous" />
-      </Button>
-      <Button
-        color="secondary"
-        variant="contained"
-        disabled={!setNextAttachment}
-        onClick={setNextAttachment}
-      >
-        <Text translation="common.next" />
-      </Button>
+      {!prevDisabled && (
+        <Button
+          color="secondary"
+          variant="outlined"
+          disabled={prevDisabled}
+          onClick={setPreviousAttachment}
+          className={classes.previousButton}
+        >
+          <Text translation="common.previous" />
+        </Button>
+      )}
+      {!nextDisabled && (
+        <Button
+          color="secondary"
+          variant="contained"
+          disabled={nextDisabled}
+          onClick={setNextAttachment}
+        >
+          <Text translation="common.next" />
+        </Button>
+      )}
     </span>
   );
 };

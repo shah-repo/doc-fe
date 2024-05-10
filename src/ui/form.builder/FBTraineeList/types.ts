@@ -1,4 +1,4 @@
-import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { Attachment } from '../../../state/ducks/attachments/types';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
@@ -13,7 +13,6 @@ export interface SchemaOptions {
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: () => void
-  currentState?: ChangeRequestStatus
   onRowClick?: (e: TraineeEditEvent) => void
 }
 
@@ -29,6 +28,8 @@ export type TraineeListProps =
   deleteTrainee: (item: Trainee) => void
 };
 
+export interface TraineeAttachment extends Attachment {}
+
 export interface Trainee {
   id: string
   employee: {
@@ -41,8 +42,9 @@ export interface Trainee {
     docRevId: string
   }
   trainingCompletionDate: string
-  attachments: any // @todo
+  attachments: TraineeAttachment[]
   comments?: string
+  createdAt: string
 }
 
 export interface EditableTrainee extends Trainee {

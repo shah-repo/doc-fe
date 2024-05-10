@@ -45,10 +45,22 @@ export const styles = makeStyles((theme) => ({
       marginBottom: theme.spacing(0),
     },
   },
-  employeeResponseFields: {
-    marginBottom: theme.spacing(1.25),
-    '&:last-child': {
-      marginBottom: theme.spacing(0),
+  attachmentsList: {
+    '& > * + *': {
+      marginTop: `${theme.spacing(1.25)}px !important`,
+    },
+  },
+  attachmentsContainer: {
+    color: Colors.navy,
+    fontSize: 12,
+    overflow: 'auto',
+    width: 'fit-content',
+    '& > *': {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    '& span': {
+      cursor: 'pointer',
     },
   },
   assigneeAction: {
@@ -69,25 +81,24 @@ export const styles = makeStyles((theme) => ({
   },
   assigneeActionStatusDate: {
     color: Colors.font_gray,
-
     fontWeight: 400,
     marginLeft: theme.spacing(0.5),
     wordWrap: 'break-word',
   },
-  uploadEvidenceField: {
-    height: 20,
-    padding: theme.spacing(0.625, 1.25),
-    marginBottom: theme.spacing(1.25),
-    '&:last-child': {
-      marginBottom: theme.spacing(0),
+  uploadField: {
+    height: 26,
+    padding: theme.spacing(0.5),
+    marginTop: theme.spacing(0.25),
+    '&, & *': {
+      cursor: 'pointer',
     },
   },
-  uploadEvidenceFieldIcon: {
+  uploadFieldIcon: {
     transform: 'rotate(45deg)',
     height: '0.7em',
     width: '0.7em',
   },
-  uploadEvidenceFieldLabel: {
+  uploadFieldLabel: {
     fontSize: 12,
     fontWeight: 400,
     marginLeft: theme.spacing(0.75),
@@ -117,17 +128,6 @@ export const styles = makeStyles((theme) => ({
     padding: theme.spacing(0.25),
     fontSize: 12,
     whiteSpace: 'pre-line',
-  },
-  attachmentsContainer: {
-    color: Colors.navy,
-    fontSize: 12,
-    marginBottom: theme.spacing(1.25),
-    overflow: 'auto',
-    maxHeight: 105,
-    width: 'fit-content',
-    '&:last-child': {
-      marginBottom: theme.spacing(0),
-    },
   },
   attachmentName: {
     display: 'flex',

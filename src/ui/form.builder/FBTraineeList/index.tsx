@@ -54,7 +54,6 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
       trainingCompletionDate: Yup.string().required('common.required'),
     }),
     onSubmit: (values) => {
-      console.log(values);
       const traineeToSave = omit(values, FIELDS_TO_OMIT);
       updateTrainee?.(traineeToSave as Trainee);
       discardTrainee();
@@ -70,6 +69,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
   const createDraftTrainee = () => setEditedTrainee({
     id: uuidv4(),
     trainingCompletionDate: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
     [MODE_FIELD]: Mode.add,
   });
 
