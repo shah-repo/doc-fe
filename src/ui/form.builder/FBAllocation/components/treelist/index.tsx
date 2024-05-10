@@ -800,6 +800,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
     setSelectedPart(undefined);
+    dispatch(documentRevisionsActions.reload(documentRevision?.id));
   };
 
   return (
