@@ -282,7 +282,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
 
   const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
   const isWOReleased = isWORecord && DocumentRevisionStatus.Released === workspaceState?.document?.status;
-  const isClosed = isWORecord ? isWOReleased : [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state);
+  const isWOVoided = isWORecord && DocumentRevisionStatus.Voided === workspaceState?.document?.status;
+  const isClosed = isWORecord ? (isWOReleased || isWOVoided) : [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state);
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
     onRowClick: editTLItem,
