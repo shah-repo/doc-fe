@@ -103,7 +103,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     };
 
     const isEqActive = (eqStatus) => {
-      if (eqStatus !== EQStatus.Inactive && eqStatus !== EQStatus.Retired) { return true; }
+      if (eqStatus === EQStatus.Active) { return true; }
       return false;
     };
 
@@ -117,8 +117,12 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         return true;
       }
 
-      if (enforceFlag && Boolean(isLHRProductionBuild)) {
-        return !isEqActive(option.eqStatus) || isOverdue;
+      if (enforceFlag) {
+        if (isOverdue && isLHRProductionBuild) {
+            return isEqActive(option.eqStatus);
+        } else {
+            return !isEqActive(option.eqStatus);
+        }
       }
       return !isEqActive(option.eqStatus);
     };

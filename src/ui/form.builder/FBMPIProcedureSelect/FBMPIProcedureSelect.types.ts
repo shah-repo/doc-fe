@@ -53,6 +53,9 @@ export enum EQStatus {
   Active = 'Active',
   ActiveCalibrated = 'Active Calibrated',
   ActiveNoCalRequired = 'Active No Cal Required',
+  OutForCalibration = 'Out for Calibration',
+  OutForMaintenance = 'Out for Maintenance',
+  UnplannedDowntime = 'Unplanned Downtime',
 }
 
 export interface FBSelectedEQ {
