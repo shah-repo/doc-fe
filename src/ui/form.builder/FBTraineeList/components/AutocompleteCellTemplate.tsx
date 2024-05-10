@@ -2,8 +2,8 @@ import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../common/intl';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps, EditableTrainee } from '../types';
 
 interface OptionItem {
@@ -34,7 +34,7 @@ const Editor = <T extends OptionItem>(props: Props<T>): JSX.Element => {
   const value = options?.find(item => item.id === getKey(values[field]));
 
   return (
-    <FormikField name={field} error={get(errors, field)} >
+    <FormikField name={field} error={get(errors, field)}>
       <Autocomplete
         {...getFieldProps(field)}
         key={isEmpty(values) ? 'disabled' : 'enabled'}

@@ -36,8 +36,12 @@ export default makeStyles(theme => ({
     outlineOffset: -1,
 
     '& td': {
-      verticalAlign: 'middle !important',
+      paddingTop: `${theme.spacing(1)}px !important`,
+      verticalAlign: 'top !important',
       whiteSpace: 'normal !important' as 'normal',
+    },
+    '& td:last-child': {
+      paddingTop: '0 !important',
     },
   },
   actionsCell: {
