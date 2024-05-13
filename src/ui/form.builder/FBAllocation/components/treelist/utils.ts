@@ -27,6 +27,8 @@ export const processAllocationData = (data?: AllocationItem[]) => {
       part.revision = part.displayRevision;
       part.usedUnit = part.unit;
     part[SUB_ITEMS_FIELD]?.forEach(lot => {
+      lot.expiryDate = '18/02/2024';
+      lot.hasLotExpired = Math.random() > 0.5; // remove once lot expired data coming from BE
       lot.revision = part.displayRevision;
       lot.usedUnit = lot.lotUsedUnit;
     });

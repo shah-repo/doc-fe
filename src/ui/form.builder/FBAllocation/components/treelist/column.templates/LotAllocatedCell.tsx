@@ -1,6 +1,6 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from '@material-ui/core';
+import { Link, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
@@ -18,11 +18,12 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
+import { Colors } from '../../../../../layout/theme-next';
 import { EditableAllocationItem } from '../../../interface';
 import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
-import { CustomTreeListCellProps } from './types';
+import { CustomTreeListCellProps, LotAutoCompleteOptions } from './types';
 
 const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot }) => {
   const isEditMode = isEditAllocItem(dataItem) && !dataItem.isDisabled;
@@ -73,10 +74,11 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     }
   }, [lots]);
 
-  const renderOptions = () => {
+  const renderOptions = (): LotAutoCompleteOptions[] => {
     return lots.map((lot) => ({
-      label: translate('wo.displayRevision', { docId: lot.document.docId, displayRevision: lot?.displayRevision, name: lot?.name }),
+      label: lot.document.docId,
       value: lot.id,
+      isExpired: Math.random() > 0.5,
     }));
   };
 
@@ -111,7 +113,28 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
         }}
         options={renderOptions()}
         placeholder={translate('common.select')}
-        getOptionLabel={(option: OptionType) => option.label}
+        getOptionLabel={(option: LotAutoCompleteOptions) => option.label}
+        renderOption={(option: LotAutoCompleteOptions, props) => {
+          return (
+            <ListItem sx={{ display: 'flex', justifyContent: 'space-between' }} className={classes.listItem} disableGutters>
+              <ListItemText primary={option.label} />
+              {option.isExpired && <ListItemIcon>
+                <StyleTooltip
+                  title={translate('common.expired')}
+                  placement="top"
+                  arrow
+                >
+                  <FontAwesomeIcon
+                    size="sm"
+                    data-cy={`expired-lot-${option.label}`}
+                    color={Colors.error}
+                    icon={solid('circle-exclamation')}
+                  />
+                </StyleTooltip>
+              </ListItemIcon>}
+            </ListItem>
+          );
+        }}
         onChange={handleChange}
         size="small"
       />

@@ -34,6 +34,7 @@ import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import TasksInfoDialog, { DialogTypes } from '../../../../change.request/dialogs/TasksInfoDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
@@ -129,6 +130,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onError: toastError,
   });
   const alertDialog = useDialog();
+  const expiredDialog = useDialog();
 
   const fetchAllocationTreeList = useActionCreator(
     allocationActions.loadAllocationList,
@@ -161,6 +163,13 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const onDeleteLot = (dataItem) => {
     alertDialog.open();
     setSelectedPart(dataItem);
+  };
+
+  const onConfirmLotAddition = () => {
+    // continue adding LOT
+    expiredDialog.close();
+    createOrUpdateLOT(selectedPart);
+    setSelectedPart(undefined);
   };
 
   const onConfirmDelete = () => {
@@ -261,11 +270,17 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       );
     }
   };
-
+  // setSelectedPart(editItemInfo);
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
     onSubmit: (values) => {
       if (values.lotRevId) {
+        // TODO add expired check here
+        if (values) {
+          setSelectedPart(values as unknown as EditableAllocationItem);
+          expiredDialog.open();
+          return;
+        }
         createOrUpdateLOT(values);
       } else {
         createOrUpdatePart(values);
@@ -904,6 +919,15 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         cancelLabel="common.cancel"
         message="allocation.lot.delete.confirmation"
         dialog={alertDialog}
+      />
+      <TasksInfoDialog
+        dialog={expiredDialog}
+        message="allocation.lot.expired.confirm.prompt.message"
+        type={DialogTypes.Warning}
+        title="common.warning"
+        confirmLabel="common.yes.continue"
+        cancelLabel="common.no.go.back"
+        confirmAction={onConfirmLotAddition}
       />
     </>
   );

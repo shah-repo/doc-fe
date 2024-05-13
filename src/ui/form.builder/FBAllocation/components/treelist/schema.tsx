@@ -2,6 +2,7 @@ import { TreeListTextFilter } from '@progress/kendo-react-treelist';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { ActionsCell } from './column.templates/Actions';
+import ExpiryDateCellTemplate from './column.templates/ExpiryDateCell';
 import IDCell from './column.templates/IDCell';
 import IssuedQtyCell from './column.templates/IssuedQtyCell';
 import LotAllocatedCell from './column.templates/LotAllocatedCell';
@@ -44,6 +45,15 @@ export const TreeListSchema = ({
       filter: TreeListTextFilter,
       mainOrderIndex: 2,
       cell: (props) => <LotAllocatedCell {...props} addLot={addLot} deleteLot={onDeleteLot} />,
+    },
+    {
+      field: 'expiryDate',
+      locked: false,
+      title: translate('allocation.treelist.treeColumns.field.expiry.date.title'),
+      width: 228,
+      filter: TreeListTextFilter,
+      mainOrderIndex: 2,
+      cell: (props) => <ExpiryDateCellTemplate {...props} />,
     },
     {
       field: 'revision',

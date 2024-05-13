@@ -30,6 +30,8 @@ export interface AllocationItem {
   unit?: string
   quantityShort?: number
   isUnfulfiled?: boolean
+  expiryDate?: string
+  hasLotExpired?: boolean
 }
 
 export interface EditableAllocationItem extends AllocationItem {
