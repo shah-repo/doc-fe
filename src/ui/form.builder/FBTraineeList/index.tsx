@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box } from '@material-ui/core';
+import { Box, Dialog } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
@@ -10,11 +10,14 @@ import { v4 as uuidv4 } from 'uuid';
 import * as Yup from 'yup';
 import { translate } from '../../../common/intl';
 import { companySelectors } from '../../../state/ducks/company';
+import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
+import useDialog from '../../hooks/useDialog';
+import TrainingDetails from '../../training/details/TrainingDetails';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import { FIELDS_TO_OMIT } from './constants';
@@ -36,14 +39,28 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
     documentOptionsAsync,
   } = props;
   const classes = useStyles();
-  const isActive = !disabled;
   const [editedTrainee, setEditedTrainee] = React.useState<Partial<EditableTrainee>>();
+  const [dialogTrainee, setDialogTrainee] = React.useState<TrainingRecordQuery>();
+  const trainingRecordDialog = useDialog();
 
+  const isActive = !disabled;
   const isTraineeAdding = editedTrainee?.[MODE_FIELD] === Mode.add;
 
   const editTrainee = ({ dataItem }: TraineeEditEvent) => setEditedTrainee(dataItem);
+  const openTrainee = ({ dataItem }: TraineeEditEvent) => {
+    const record = dataItem.trainingRecord;
+
+    if (!record) {
+      return;
+    }
+
+    record.attachments = dataItem.attachments;
+
+    trainingRecordDialog.open();
+    setDialogTrainee(record);
+  };
   const isInEditMode = editedTrainee !== undefined;
-  const handleRowClick = isActive && !isInEditMode ? editTrainee : undefined;
+  const handleRowClick = isActive && !isInEditMode ? editTrainee : openTrainee;
   const companyMine = useSelector(companySelectors.getCompanyMine);
 
   const formik = useFormik<Partial<EditableTrainee>>({
@@ -169,6 +186,21 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
         >
           {translate('training.record.trainees.add')}
         </Button>
+      )}
+      {trainingRecordDialog.isOpen && dialogTrainee && (
+        <Dialog
+          open={trainingRecordDialog.isOpen}
+          classes={{ paper: classes.dialogContent }}
+          fullWidth
+          maxWidth="md"
+          onEscapeKeyDown={trainingRecordDialog.close}
+          onBackdropClick={trainingRecordDialog.close}
+        >
+          <TrainingDetails
+            dialog={trainingRecordDialog}
+            training={dialogTrainee}
+          />
+        </Dialog>
       )}
     </Box>
   );

@@ -67,4 +67,7 @@ export default makeStyles(theme => ({
     paddingRight: theme.spacing(0.5),
     marginRight: theme.spacing(-0.5),
   },
+  dialogContent: {
+    padding: theme.spacing(3.125),
+  },
 }));

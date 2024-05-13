@@ -1,6 +1,7 @@
 import { Attachment } from '../../../state/ducks/attachments/types';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import FBAutocompleteAsyncState from '../FBAutocompleteAsync/FBAutocompleteAsync.state';
@@ -45,6 +46,7 @@ export interface Trainee {
   attachments: TraineeAttachment[]
   comments?: string
   createdAt: string
+  trainingRecord?: TrainingRecordQuery
 }
 
 export interface EditableTrainee extends Trainee {
