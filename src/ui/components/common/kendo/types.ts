@@ -24,6 +24,7 @@ export enum KendoCellTemplates {
   DOCUMENT_TYPE='DocumentTypeCellTemplate',
   DURATION='DurationCell',
   OVERFLOW_CELL ='OverflowCell',
+  DOC_ID_LIST_CELL ='DocIdListCell',
 }
 export interface KendoColumn {
   sortable?: ColumnSortSettings

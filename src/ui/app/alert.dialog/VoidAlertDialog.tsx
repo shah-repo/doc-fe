@@ -93,17 +93,6 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
         handler={dialog}
         loading={async.isLoading}
         onConfirm={formik.submitForm}
-        PaperProps={{
-          id: 'alertDialog',
-        }}
-        cancelProps={{
-          id: 'AlertDialog-cancelButton',
-          'data-cy': 'AlertDialog-cancelButton',
-        }}
-        confirmProps={{
-          id: 'AlertDialog-continueButton',
-          'data-cy': 'AlertDialog-continueButton',
-        }}
       >
         <Typography data-cy="dialog-message" className={classes.contentText}>
           {translate(isRecordBehaviour ? 'documentRevision.record.void.alert' : 'documentRevision.void.alert')}

@@ -23,7 +23,8 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
 }) => {
   const classes = useStyles();
   const icon = warning ? regular('circle-exclamation') : regular('triangle-exclamation');
-  const iconClass = warning ? classes.circleIcon : classes.icon;
+  const iconClass = warning ? classes.iconWarning : classes.iconError;
+
   return (
     <Dialog
       {...props}
@@ -34,8 +35,19 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       cancelLabel={cancelLabel}
       confirmLabel={confirmLabel}
       confirmProps={{
+        id: 'dialog-continue',
+        'data-cy': 'dialog-continue',
         ...props.confirmProps,
         disabled: loading,
+      }}
+      cancelProps={{
+        id: 'dialog-cancel',
+        'data-cy': 'dialog-cancel',
+        ...props.cancelProps,
+      }}
+      PaperProps={{
+        id: 'dialog',
+        ...props.PaperProps,
       }}
       onClose={onClose}
       onCancel={onCancel}
