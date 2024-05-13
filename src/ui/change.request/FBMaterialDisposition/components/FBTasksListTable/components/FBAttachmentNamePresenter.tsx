@@ -71,7 +71,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
             <div className={classes.attachmentName}>
               <AttachFile />
               <Box
-                width={253}
+                width={235}
                 marginLeft={0.75}
                 marginRight={0.75}
                 onClick={() => downloadOrViewFile(file)}
