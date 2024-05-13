@@ -51,10 +51,9 @@ export const buildSchema = ({
     },
     {
       id: 'id',
-      field: 'id',
+      field: 'trainingRecord.trId',
       title: 'form.builder.trainee.list.id',
       filterCell: InputFilter,
-      template: (props) => <></>,
       editable: false,
       width: 150,
     },
