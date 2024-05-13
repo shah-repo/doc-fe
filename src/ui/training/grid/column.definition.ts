@@ -64,7 +64,7 @@ const columns: KendoColumn[] = [
     extraFields: ['trainingPlan.employee.user.avatar', 'trainingPlan.employee.user.initialColor'],
   },
   {
-    field: DateFields.CREATED_AT,
+    field: DateFields.ASSIGNED_AT,
     title: 'common.assign.date',
     show: true,
     locked: false,
@@ -102,7 +102,7 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.COMPLETED_AT,
   },
   {
-    field: 'trainingPlan.curriculumDocIds',
+    field: 'trainingPlan.sourceReferences',
     title: 'common.ref.id',
     show: true,
     locked: false,
@@ -110,6 +110,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     showColumnMenu: true,
     orderIndex: 9,
+    cell: KendoCellTemplates.DOC_ID_LIST_CELL,
     filter: 'text',
   },
   {
