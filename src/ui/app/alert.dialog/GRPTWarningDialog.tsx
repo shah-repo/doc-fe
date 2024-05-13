@@ -28,17 +28,6 @@ const GRPTWarningDialog: React.FunctionComponent<Props> = (props) => {
       onConfirm={onConfirm}
       title="common.warning"
       warning={true}
-      PaperProps={{
-        id: 'warnDialog',
-      }}
-      cancelProps={{
-        id: 'AlertDialog-cancelButton',
-        'data-cy': 'AlertDialog-cancelButton',
-      }}
-      confirmProps={{
-        id: 'AlertDialog-continueButton',
-        'data-cy': 'AlertDialog-continueButton',
-      }}
     >
       <Typography data-cy="dialog-message" className={classes.contentText}>
         {translate('training.doc.warning.alert')}
