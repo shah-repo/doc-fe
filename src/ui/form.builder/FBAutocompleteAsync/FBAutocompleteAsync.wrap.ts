@@ -4,7 +4,7 @@ import { get, isArray, isEmpty, isObject, isString, map } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from '..';
+import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBFieldName, FBOptionValueType } from '..';
 import { WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
@@ -38,7 +38,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     ...props
   }: T) => {
     // @todo in ENC-19556
-    if (name === 'fb-grpt-trainer') {
+    if (name === FBFieldName.GRPTTrainer) {
       freeSolo = true;
     }
 
