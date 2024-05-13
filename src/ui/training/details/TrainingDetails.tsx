@@ -7,9 +7,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
-import { TrainingRecordQuery } from '../../../state/ducks/training/types';
+import { TrainingRecordQuery, TrainingReference } from '../../../state/ducks/training/types';
 import Text from '../../components/Text';
 import AttachmentIconPresenter from '../../components/common/attachment.icon/presenter';
+import { documentVersionPath } from '../../document.revision/utils/paths';
 import { DialogHandler } from '../../hooks/useDialog';
 import ExportTrainingRecordToEmail from '../export.email/ExportTrainingRecordToEmail';
 import { styles } from './styles';
@@ -19,8 +20,31 @@ interface Props {
   training: TrainingRecordQuery
 }
 
+const ReferenceLink: React.FC<TrainingReference> = (props) => {
+  const { docId, documentId, revisionId } = props;
+  const classes = styles();
+
+  if (!documentId || !revisionId) {
+    return <>{docId}</>;
+  }
+
+  const link = documentVersionPath(revisionId, documentId);
+
+  return (
+    <Link
+      className={classMerge(classes.refID, classes.itemContentBlue)}
+      to={link}
+    >
+      {docId}
+    </Link>
+  );
+};
+
 const TrainingDetails: React.FunctionComponent<Props> = ({ dialog, training }) => {
   const classes = styles();
+
+  const attachments = training.attachments;
+  const references = training.trainingPlan?.sourceReferences;
 
   return (
     <>
@@ -58,12 +82,24 @@ const TrainingDetails: React.FunctionComponent<Props> = ({ dialog, training }) =
                 })}
               </Box>
             </Grid>
-            <Grid item xs={12} className={classes.item}>
-              <Typography className={classes.label}>
-                <Text translation="training.ref.id" />
-              </Typography>
-              <Link to="TODO path to parent doc" className={classMerge(classes.refID, classes.itemContentBlue)}>Ref ID</Link>
-            </Grid>
+            {references && (
+              <Grid item xs={12} className={classes.item}>
+                <Typography className={classes.label}>
+                  <Text translation="training.ref.id" />
+                </Typography>
+                {references.map((item, index, arr) => {
+                  return (
+                    <>
+                      <ReferenceLink
+                        key={item.docId}
+                        {...item}
+                      />
+                      {index < (arr.length - 1) && ', '}
+                    </>
+                  );
+                })}
+              </Grid>
+            )}
             <Grid item xs={12} className={classes.item}>
               <Typography className={classes.label}>
                 <Text translation="common.title" />
@@ -102,13 +138,13 @@ const TrainingDetails: React.FunctionComponent<Props> = ({ dialog, training }) =
               </Box>
             </Grid>
           </Grid>
-          {Boolean(training.attachments?.length) && (
+          {Boolean(attachments?.length) && (
             <Grid item xs={12} className={classes.item}>
               <Typography className={classes.label}>
                 <Text translation="common.attachments" />
               </Typography>
               <Grid container>
-                {training.attachments?.map(attachment => (
+                {attachments?.map(attachment => (
                   <Grid key={attachment.id} item xs={6}>
                     <AttachmentIconPresenter attachment={attachment} />
                   </Grid>
