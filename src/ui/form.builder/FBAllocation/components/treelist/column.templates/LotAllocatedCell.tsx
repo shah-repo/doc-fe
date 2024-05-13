@@ -128,7 +128,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
                     size="sm"
                     data-cy={`expired-lot-${option.label}`}
                     color={Colors.error}
-                    icon={solid('circle-exclamation')}
+                    icon={regular('circle-exclamation')}
                   />
                 </StyleTooltip>
               </ListItemIcon>}
