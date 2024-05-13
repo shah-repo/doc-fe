@@ -8,12 +8,11 @@ export const withFBFilesPresenter = <T extends FBFilesPresenterProps>(
 ) => {
   const Comp = ({
     filesPresenterState,
-    attachments,
+    attachments = [],
     files,
     ...props
   }: T) => {
     filesPresenterState = FB.useRef(FBFilesPresenterState);
-    attachments = attachments ?? [];
 
     useEffect(() => {
       const ids = map(files, 'id');
@@ -25,7 +24,7 @@ export const withFBFilesPresenter = <T extends FBFilesPresenterProps>(
 
     useObserver(() => {
       if (!isEmpty(files)) {
-        attachments = filesPresenterState?.filesApi.data;
+        attachments = filesPresenterState?.filesApi.data ?? [];
       }
     });
 
