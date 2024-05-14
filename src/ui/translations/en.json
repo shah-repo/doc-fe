@@ -1803,6 +1803,8 @@
   "relatedSubPart.dialog.title": "Quick View",
   "relatedParts.confirm.message": "Are you sure, you want to switch to \"{currentOption}\" ?\n\n  All {relatedType} related to the previous option \"{previous}\" will be deleted.",
   "relatedParts.confirm.selection": "Confirm Switch",
+  "relatedParts.set.new.primary.supplier": "Please select primary supplier",
+  "relatedParts.confirm.delete.primary.supplier.message": "You are about to delete the Primary Supplier please select a new Primary Supplier",
   "releaseButton.option.expressAR": "Express AR",
   "releaseButton.option.newAR": "New AR",
   "releaseButton.option.existingAR": "Existing AR",
