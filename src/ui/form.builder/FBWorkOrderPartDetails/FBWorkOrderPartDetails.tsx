@@ -9,7 +9,7 @@ import { FB, FBInputProps, FBTextField, FBTooltip, FBWorkspaceModeOptions } from
 import { translate } from '../../../common/intl';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
-import { WorkOrderTypes, WO_PART_KEY_NAME, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
+import { WO_PART_KEY_NAME, WO_TYPE_KEY, WorkOrderTypes } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import ErrorBlock from '../../components/forms/fields/ErrorBlock';
@@ -21,7 +21,7 @@ import { Colors } from '../../layout/theme-next';
 import { Translation } from '../../translations/types';
 import { LatestPartRevisionInfo } from '../FBAllocation/interface';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
-import { PART_TO_BE_MADE } from './constants';
+import { PART_TO_BE_MADE, QUANTITY_DEFAULT_VALUE } from './constants';
 import { styles } from './styles';
 
 const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
@@ -174,7 +174,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           label="form.builder.wo.part.quantity"
           name={`${name}_quantity`}
           type="number"
-          defaultValue={quantityDefaultValue}
+          defaultValue={quantityDefaultValue ?? QUANTITY_DEFAULT_VALUE}
           inputProps={{ min: '1' }}
           gutter={false}
           showErrorMsg={false}
