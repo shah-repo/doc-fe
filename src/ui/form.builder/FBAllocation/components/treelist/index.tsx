@@ -361,6 +361,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     openDetailDrawer,
+    woRevId: documentRevision?.id,
     onConfirm: formik.submitForm,
     onDiscard: discardAllocItem,
     onDelete: removeAllocItem,
