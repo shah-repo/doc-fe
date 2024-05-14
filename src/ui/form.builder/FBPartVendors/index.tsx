@@ -4,14 +4,17 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import Text from '../../components/Text';
+import Dialog from '../../components/dialogs';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button } from '../../components/forms/fields-next';
+import { Autocomplete, Button } from '../../components/forms/fields-next';
+import useDialog from '../../hooks/useDialog';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import { FIELDS_TO_OMIT, SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
@@ -34,11 +37,12 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   ...props
 }) => {
   const classes = useStyles();
+  const primarySupplierDialog = useDialog();
   const isActive = !disabled;
-  const [editedVendor, setEditedVendor] = React.useState<Partial<EditableVendor>>();
+  const [editedVendor, setEditedVendor] = useState<Partial<EditableVendor>>();
+  const [newPrimaryVendor, setNewPrimaryVendor] = useState<EditableVendor>();
 
   const isVendorAdded = editedVendor?.[MODE_FIELD] === Mode.add;
-
   const editVendor = ({ dataItem }: VendorEditEvent) => setEditedVendor(dataItem);
   const isInEditMode = editedVendor !== undefined;
   const handleRowClick = isActive && !isInEditMode ? editVendor : undefined;
@@ -67,11 +71,43 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   const discardVendor = () => setEditedVendor(undefined);
 
   const removeVendor = () => {
-    if (!editedVendor) {
-      return;
+    if (!editedVendor) return;
+
+    if (editedVendor.primary) {
+      if (vendors.length === 2) {
+        const remainingVendor = vendors.find(v => v !== editedVendor && !v?.primary);
+        if (remainingVendor) {
+          setPrimaryVendor(remainingVendor.id);
+           deleteVendor?.(editedVendor as Vendor, remainingVendor.id);
+           discardVendor();
+           return;
+        }
+      } else if (vendors.length > 2) {
+        primarySupplierDialog.open();
+        setNewPrimaryVendor(undefined);
+        return;
+      }
     }
-    deleteVendor?.(editedVendor as Vendor);
-    discardVendor();
+
+   deleteVendor?.(editedVendor as Vendor);
+   discardVendor();
+  };
+
+  const deletePrimaryVendor = () => {
+    if (newPrimaryVendor) {
+       deleteVendor?.(editedVendor as Vendor, newPrimaryVendor.id);
+       discardVendor();
+    }
+    primarySupplierDialog.close();
+  };
+
+  const onPrimaryVendorChange = (e, value: EditableVendor) => {
+    setNewPrimaryVendor(value);
+  };
+
+  const handleDialogClose = () => {
+    setNewPrimaryVendor(undefined);
+    primarySupplierDialog.close();
   };
 
   const rowRender: DataGridProps<EditableVendor>['rowRender'] = (row, { dataItem }) => {
@@ -170,6 +206,31 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
           {translate('form.builder.part.vendors.add')}
         </Button>
       )}
+      <Dialog
+        open={primarySupplierDialog.isOpen}
+        title="relatedParts.set.new.primary.supplier"
+        confirmLabel="common.confirm"
+        cancelLabel = "common.cancel"
+        onConfirm={deletePrimaryVendor}
+        onCancel={handleDialogClose}
+        onClose={handleDialogClose}
+        confirmProps={{
+          disabled: !newPrimaryVendor,
+        }}
+      >
+        <Text
+          translation="relatedParts.confirm.delete.primary.supplier.message"
+        />
+        <Autocomplete
+          blurOnSelect
+          disableClearable
+          className={classes.marginTop}
+          value={newPrimaryVendor}
+          onChange={onPrimaryVendorChange}
+          options={vendorsList.filter(v => v.id !== editedVendor?.id)}
+          getOptionLabel={(vendors: EditableVendor) => vendors?.vendor?.name}
+        />
+      </Dialog>
     </Box>
   );
 };
