@@ -39,8 +39,12 @@ export const withFBPartVendors = <T extends FBPartVendorsProps>(
       },
     });
 
-    const deleteVendor = (item: Vendor) => {
-      const updatedVendors = differenceBy(vendors, [item], 'id');
+    const deleteVendor = (item: Vendor, updatedPrimaryVendorId?: string) => {
+      const fiteredVendors = differenceBy(vendors, [item], 'id');
+      const updatedVendors
+        = updatedPrimaryVendorId
+          ? updatePrimaryVendor(updatedPrimaryVendorId, fiteredVendors)
+          : fiteredVendors;
       updateState(updatedVendors);
     };
 

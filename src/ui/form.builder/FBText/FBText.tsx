@@ -1,5 +1,4 @@
 import { Box, CircularProgress } from '@material-ui/core';
-import { kebabCase } from 'lodash';
 import React from 'react';
 import { FBTextProps } from '..';
 import Text from '../../components/Text';
@@ -11,7 +10,7 @@ const FBText: React.FunctionComponent<FBTextProps> = ({
   values,
   labelProps,
 }) => (
-  <Box {...boxProps} data-cy={kebabCase(locale)} flexDirection="row">
+  <Box {...boxProps} data-cy={locale} flexDirection="row">
     <Box display="flex" style={labelProps}>
       <Text message={locale} {...{ values }} />
       {loading && (
