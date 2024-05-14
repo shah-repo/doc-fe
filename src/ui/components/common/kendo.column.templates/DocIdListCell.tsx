@@ -13,8 +13,8 @@ export const DocIdListCell: React.FunctionComponent<CustomGridCellProps> = ({
   columnIndex,
   cellRowClick,
 }) => {
-  const list = field ? get(dataItem, field, []) : [];
-  const formattedValue = list.map(item => item.docId).filter(Boolean).join(', ');
+  const list = get(dataItem, field ?? '') ?? [];
+  const formattedValue = list.map(item => item?.docId).filter(Boolean).join(', ');
 
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
