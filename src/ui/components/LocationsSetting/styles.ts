@@ -41,4 +41,17 @@ export default makeStyles(theme => ({
     outline: `1px solid ${Colors.primaryLight}`,
     outlineOffset: -1,
   },
+  paper: {
+    pointerEvents: 'auto',
+  },
+  cellStyle: {
+    textAlign: 'center',
+    color: props => props.isActive ? Colors.textBlack : Colors.textDisabled,
+  },
+  deleteButton: {
+    color: Colors.error,
+  },
+  icon: {
+    fontSize: '16px',
+  },
 }));

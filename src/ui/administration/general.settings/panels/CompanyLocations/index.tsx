@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { EditableCompanyLocation, Props } from './types';
+import { EditableCompanyLocation } from './types';
 
 import { CompanyLocation } from '../../../../../state/ducks/company/types';
 import { DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -24,10 +24,13 @@ import { companySelectors } from '../../../../../state/ducks/company';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
 
-const CompanyLocations: React.FC<Props> = ({
-  locations = [],
-  isActive = false,
-}) => {
+const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
+  const companyMine = useSelector(companySelectors.getCompanyMine);
+  const canUpdateLocations = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
+
+  const isActive = canUpdateLocations;
+  const locations = companyMine.locations;
+
   const editLocation = ({ dataItem }: DataGridRowClickEvent<EditableCompanyLocation>) => setEditedLocation(dataItem);
   const discardLocation = () => setEditedLocation(undefined);
   const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations);
@@ -69,9 +72,14 @@ const CompanyLocations: React.FC<Props> = ({
     setLocationsData(locations);
   }, [locations]);
 
+  const deleteCompanyLocation = () => {
+    console.log('deleteCompanyLocation');
+  };
+
   const addLocation = () => setEditedLocation({
     id: uuidv4(),
     name: '',
+    includedTotalQty: '',
     active: true,
     [MODE_FIELD]: Mode.add,
   });
@@ -95,22 +103,28 @@ const CompanyLocations: React.FC<Props> = ({
     actionsClass: classes.actionsCell,
     onDiscard: discardLocation,
     onConfirm: submitForm,
+    onDelete: deleteCompanyLocation,
+    renderIncludedTotalQty: true,
+    onRowClick: onRowClick,
   });
+  console.log({ formik });
 
   return (
     <Box className={classes.root}>
-      <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation, onRowClick }} />
+      <SettingsPanel {...props} title={translate('administration.general.settings.locations.tab')} onAddNew={addLocation} >
+        <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation }} />
+      </SettingsPanel>
     </Box>
   );
 };
 
-const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
-  const companyMine = useSelector(companySelectors.getCompanyMine);
-  const canUpdateLocations = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
-  return (
-    <SettingsPanel {...props} title={translate('administration.general.settings.locations.tab')}>
-      {canUpdateLocations && <CompanyLocations isActive={canUpdateLocations} locations={companyMine.locations} />}
-    </SettingsPanel>
-  );
-};
+// const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
+//   const companyMine = useSelector(companySelectors.getCompanyMine);
+//   const canUpdateLocations = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
+//   return (
+//     <SettingsPanel {...props} title={translate('administration.general.settings.locations.tab')} onAddNew={() => console.log('onAddNew')}>
+//       {canUpdateLocations && <CompanyLocations isActive={canUpdateLocations} locations={companyMine.locations} />}
+//     </SettingsPanel>
+//   );
+// };
 export default CompanyLocationSettingsPanel;

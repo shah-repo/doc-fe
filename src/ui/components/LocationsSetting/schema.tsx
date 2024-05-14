@@ -1,27 +1,30 @@
-import { ColumnDefinition } from '../KendoDataGrid/KendoDataGrid.types';
+import React from 'react';
+import { EditableCompanyLocation } from '../../administration/general.settings/panels/CompanyLocations/types';
+import { ColumnDefinition, DataGridRowClickEvent } from '../KendoDataGrid/KendoDataGrid.types';
 import ActionsCellTemplate from './components/ActionsCellTemplate';
 import { ActiveCellTemplate } from './components/ActiveCellTemplate';
+import { IncludedTotalQtyCellTemplate } from './components/IncludedTotalQtyCellTemplate';
 import { TextCellTemplate } from './components/TextCellTemplate';
-import { EditableCompanyLocation } from '../../user.management/profile/CompanyLocations/types';
-import React from 'react';
+
+export interface EditableCompanyLocationEvent {
+  dataItem: EditableCompanyLocation
+}
 
 interface SchemaOptions {
   actionsClass: string
   isActive: boolean
+  renderIncludedTotalQty: boolean
   onDiscard: () => void
+  onDelete: () => void
   onConfirm: () => unknown
+  onRowClick?: (e: DataGridRowClickEvent<EditableCompanyLocation>) => void
+
 }
 
 type schemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableCompanyLocation>>;
 
-export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm, isActive }) => {
+export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm, onDelete, renderIncludedTotalQty, onRowClick }) => {
   return [
-    {
-      id: 'name',
-      field: 'name',
-      title: 'common.name',
-      template: TextCellTemplate,
-    },
     {
       id: 'active',
       field: 'active',
@@ -30,13 +33,26 @@ export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm,
       template: ActiveCellTemplate,
     },
     {
+      id: 'name',
+      field: 'name',
+      title: 'common.name',
+      template: TextCellTemplate,
+    },
+    {
+      id: 'includedTotalQty',
+      field: 'includedTotalQty',
+      title: 'settings.locations.included.total.quantity',
+      template: IncludedTotalQtyCellTemplate,
+      hidden: !renderIncludedTotalQty,
+    },
+    {
       id: 'actions',
       field: 'actions',
+      title: 'common.actions',
       filterable: false,
-      className: actionsClass,
-      template: (props) => <ActionsCellTemplate {...props} onDiscard={onDiscard} onConfirm={onConfirm} />,
-      hidden: !isActive,
-      width: 0,
+      template: (props) => <ActionsCellTemplate {...props} onClick ={onRowClick} onDiscard={onDiscard} onConfirm={onConfirm} onDelete={onDelete} />,
+      hidden: !renderIncludedTotalQty,
+      width: 100,
     },
   ];
 };

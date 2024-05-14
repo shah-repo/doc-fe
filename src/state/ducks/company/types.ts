@@ -38,6 +38,7 @@ export interface CompanyLocation {
   id: string
   name: string
   active: boolean
+  includedTotalQty: string
 }
 
 export interface Company {
