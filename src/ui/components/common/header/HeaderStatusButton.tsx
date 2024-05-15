@@ -61,7 +61,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
             <MenuItem
               key={option.value}
               onClick={handleMenuClick(option.value)}
-              data-cy= {`${kebabCase(option.value)}-option`}
+              data-cy={`${kebabCase(option.value)}-option`}
             >
               <ListItemText>{option.label}</ListItemText>
             </MenuItem>
