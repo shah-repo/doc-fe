@@ -1,6 +1,7 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, ButtonProps, ListItemText, MenuItem } from '@material-ui/core';
+import { kebabCase } from 'lodash';
 import React from 'react';
 import { EquipmentStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
 import useMenu from '../../../hooks/useMenu';
@@ -52,12 +53,15 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         <SplitButtonMenu
           anchorEl={optionsMenu.anchor}
           onClose={optionsMenu.close}
-          data-cy={`${dataCy}-menu`}
+          MenuListProps={{
+            'data-cy': `${dataCy}-list`,
+          }}
         >
           {options.map(option => (
             <MenuItem
               key={option.value}
               onClick={handleMenuClick(option.value)}
+              data-cy={`${kebabCase(option.value)}-option`}
             >
               <ListItemText>{option.label}</ListItemText>
             </MenuItem>
