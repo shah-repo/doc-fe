@@ -27,8 +27,8 @@ import OwnerChangerContainer from '../../../components/common/owner.changer/cont
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
 import ClonePOButton from '../../../components/forms/ClonePOButton';
 import CloneEBButton from '../../../components/forms/CopyEBButton';
-import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
+import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
 import PrintLabelDetailsDialog from '../../../components/table/printLabel/PrintLabelDetailsDialog';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
@@ -42,24 +42,24 @@ import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
-import { PreviewControlButtons } from '../../PreviewControls.container.types';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
+import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
+import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
 import { withActionButton } from './ActionButton.wrap';
+import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
 import CancelButton from './CancelButton';
 import CancelEditPartButton from './CancelEditPartButton';
-import GenerateHtmlPreview from './GenerateHtmlPreview';
-import { SubmitForApproval } from './SubmitForApproval';
-import VoidButton from './VoidButton';
-import ApproveAndRelease from './approve.and.release/ApproveAndRelease';
 import ExportToCSVButton from './export.to.csv/ExportToCSV.button';
 import ExportToEmail from './export.to.email/ExportToEmail';
+import GenerateHtmlPreview from './GenerateHtmlPreview';
 import RedlineButton from './redline/Redline.button';
+import { SubmitForApproval } from './SubmitForApproval';
 import UpgradeToLatestContainer from './upgrade.to.latest/UpgradeToLatest.container';
+import VoidButton from './VoidButton';
 
 const styles = makeStyles(() => ({
   printIconContainer: {
@@ -130,6 +130,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
+  const isEquipment = checkIsDocumentEquipment(values.document?.documentType?.groupOptions);
   const isDirectlyApproved = checkIsDocumentDirectApproved(values.document?.documentType?.groupOptions);
   const isMPIOutput = checkIsDocumentMPIOutput(values.document?.documentType?.groupOptions);
   const isLHR = checkIsDocumentLHR(values.document?.documentType?.groupOptions);
@@ -270,7 +271,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   React.useEffect(() => {
     // Autosave when record is updated
-    if (isNewVersion && (isRecord || (isPO && !isUserAdminEnforce))) {
+    if (isNewVersion && (isRecord || isEquipment || (isPO && !isUserAdminEnforce))) {
       onFormClick();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
