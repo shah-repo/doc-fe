@@ -26,8 +26,8 @@ const Editor: React.FC<Props> = ({ dataItem, field, previousAttachments, onUpdat
     }
   }, [previousAttachments]);
 
-  useEffect(() => {
-    const disposer = reaction(
+  useEffect(() => (
+    reaction(
       () => fileUploadState?.attachments,
       (attachments) => {
         if (attachments?.length !== previousAttachments.length) {
@@ -35,11 +35,8 @@ const Editor: React.FC<Props> = ({ dataItem, field, previousAttachments, onUpdat
           onUpdate(attachments ?? []);
         }
       },
-    );
-    return () => {
-      disposer();
-    };
-  }, [dataItem, onUpdate]);
+    )
+  ), [dataItem, onUpdate]);
 
   return (
     <FBFileField
@@ -66,11 +63,7 @@ export const AttachmentsCellTemplate: React.FC<CustomTemplateProps> = (props) =>
 
   const mode = get(dataItem, MODE_FIELD);
   const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
-  const attachments = (
-    canBeModified
-      ? (values[field] ?? [])
-      : get(dataItem, field, [])
-  ) as TraineeAttachment[];
+  const attachments = get(canBeModified ? values : dataItem, field, []) as TraineeAttachment[];
 
   return (
     <FBProvider {...{ fileUploadState }}>

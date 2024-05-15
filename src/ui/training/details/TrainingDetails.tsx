@@ -41,12 +41,12 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = (props) => {
   );
 };
 
-interface Props {
+interface TrainingDetailsProps {
   dialog: DialogHandler
   training: TrainingRecordQuery
 }
 
-const TrainingDetails: React.FunctionComponent<Props> = ({ dialog, training }) => {
+const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog, training }) => {
   const classes = styles();
 
   const attachments = training.attachments;
