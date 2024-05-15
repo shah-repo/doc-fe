@@ -44,7 +44,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         kind="white"
         endIcon={!disabled ? Icon : undefined}
         onClick={!disabled ? optionsMenu.open : undefined}
-        data-cy={`${dataCy}-button 123`}
+        data-cy={`${dataCy}-button`}
       >
         {label}
       </Button>
@@ -61,7 +61,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
             <MenuItem
               key={option.value}
               onClick={handleMenuClick(option.value)}
-        >
+            >
               <ListItemText>{option.label}</ListItemText>
             </MenuItem>
           ))}
