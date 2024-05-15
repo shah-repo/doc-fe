@@ -44,7 +44,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         kind="white"
         endIcon={!disabled ? Icon : undefined}
         onClick={!disabled ? optionsMenu.open : undefined}
-        data-cy={`${dataCy}-button`}
+        data-cy={`${dataCy}-button 123`}
       >
         {label}
       </Button>
@@ -53,12 +53,15 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
           anchorEl={optionsMenu.anchor}
           onClose={optionsMenu.close}
           data-cy={`${dataCy}-menu`}
+          MenuListProps={{
+            'data-cy': `fb-default-${dataCy}`,
+          }}
         >
           {options.map(option => (
             <MenuItem
               key={option.value}
               onClick={handleMenuClick(option.value)}
-            >
+        >
               <ListItemText>{option.label}</ListItemText>
             </MenuItem>
           ))}
