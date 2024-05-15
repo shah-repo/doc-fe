@@ -52,7 +52,6 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         <SplitButtonMenu
           anchorEl={optionsMenu.anchor}
           onClose={optionsMenu.close}
-          data-cy={`${dataCy}-menu`}
           MenuListProps={{
             'data-cy': `fb-default-${dataCy}`,
           }}
