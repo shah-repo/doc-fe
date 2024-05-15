@@ -53,7 +53,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
           anchorEl={optionsMenu.anchor}
           onClose={optionsMenu.close}
           MenuListProps={{
-            'data-cy': `fb-default-${dataCy}`,
+            'data-cy': `${dataCy}-list`,
           }}
         >
           {options.map(option => (
