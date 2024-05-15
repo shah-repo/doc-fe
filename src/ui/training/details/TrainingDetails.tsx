@@ -7,7 +7,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
-import { TrainingRecordQuery, TrainingReference } from '../../../state/ducks/training/types';
+import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import Text from '../../components/Text';
 import AttachmentIconPresenter from '../../components/common/attachment.icon/presenter';
 import { documentVersionPath } from '../../document.revision/utils/paths';
@@ -15,17 +15,18 @@ import { DialogHandler } from '../../hooks/useDialog';
 import ExportTrainingRecordToEmail from '../export.email/ExportTrainingRecordToEmail';
 import { styles } from './styles';
 
-interface Props {
-  dialog: DialogHandler
-  training: TrainingRecordQuery
+interface ReferenceLinkProps {
+  label: string
+  documentId?: string
+  revisionId?: string
 }
 
-const ReferenceLink: React.FC<TrainingReference> = (props) => {
-  const { docId, documentId, revisionId } = props;
+const ReferenceLink: React.FC<ReferenceLinkProps> = (props) => {
+  const { label, documentId, revisionId } = props;
   const classes = styles();
 
   if (!documentId || !revisionId) {
-    return <>{docId}</>;
+    return <>{label}</>;
   }
 
   const link = documentVersionPath(revisionId, documentId);
@@ -35,10 +36,15 @@ const ReferenceLink: React.FC<TrainingReference> = (props) => {
       className={classMerge(classes.refID, classes.itemContentBlue)}
       to={link}
     >
-      {docId}
+      {label}
     </Link>
   );
 };
+
+interface Props {
+  dialog: DialogHandler
+  training: TrainingRecordQuery
+}
 
 const TrainingDetails: React.FunctionComponent<Props> = ({ dialog, training }) => {
   const classes = styles();
@@ -75,12 +81,14 @@ const TrainingDetails: React.FunctionComponent<Props> = ({ dialog, training }) =
               <Typography className={classes.label}>
                 <Text translation="training.doc.id.rev" />
               </Typography>
-              <Box className={classes.itemContentBlue}>
-                {translate('common.displayRevision', {
+              <ReferenceLink
+                label={translate('common.displayRevision', {
                   docId: training.trainingPlan?.document.docId,
                   displayRevision: training.documentRevision?.displayRevision,
                 })}
-              </Box>
+                documentId={training.documentRevision?.documentId}
+                revisionId={training.documentRevision?.id}
+              />
             </Grid>
             {references && (
               <Grid item xs={12} className={classes.item}>
@@ -92,7 +100,9 @@ const TrainingDetails: React.FunctionComponent<Props> = ({ dialog, training }) =
                     <>
                       <ReferenceLink
                         key={item.docId}
-                        {...item}
+                        label={item.docId}
+                        documentId={item.documentId}
+                        revisionId={item.revisionId}
                       />
                       {index < (arr.length - 1) && ', '}
                     </>
@@ -105,7 +115,7 @@ const TrainingDetails: React.FunctionComponent<Props> = ({ dialog, training }) =
                 <Text translation="common.title" />
               </Typography>
               <Box>
-                {training.documentRevision?.name}
+                {training.documentRevision?.name || '-'}
               </Box>
             </Grid>
           </Grid>
