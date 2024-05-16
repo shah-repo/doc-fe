@@ -67,7 +67,7 @@ export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
   id: '',
 };
 
-export interface TrainingReference {
+interface TrainingReference {
   docId: string
   documentId?: string
   revisionId?: string
