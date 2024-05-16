@@ -74,11 +74,9 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     if (isShowOnly || formik.dirty) {
       return;
     }
-    setEditedTLItem(dataItem);
 
-    if (dataItem.isCompleted) {
-      setIsActionsDisabled(dataItem.isCompleted);
-    }
+    setEditedTLItem(dataItem);
+    setIsActionsDisabled(dataItem.isCompleted);
   };
 
   const loadTasksTableData = () => {
