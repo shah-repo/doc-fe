@@ -50,7 +50,7 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
   const classes = styles();
 
   const attachments = training.attachments;
-  const references = training.trainingPlan?.sourceReferences;
+  const referencesIds = training.trainingPlan?.sourceReferencesIds;
 
   return (
     <>
@@ -90,12 +90,12 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
                 revisionId={training.documentRevision?.id}
               />
             </Grid>
-            {references && (
+            {referencesIds && (
               <Grid item xs={12} className={classes.item}>
                 <Typography className={classes.label}>
                   <Text translation="training.ref.id" />
                 </Typography>
-                {references.map((item, index, arr) => {
+                {referencesIds.map((item, index, arr) => {
                   return (
                     <>
                       <ReferenceLink
