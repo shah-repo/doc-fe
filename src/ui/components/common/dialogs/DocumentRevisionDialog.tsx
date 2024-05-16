@@ -22,12 +22,12 @@ import { styles } from './DocumentRevisionDialog.styles';
 interface DocumentRevisionDialogProps {
   dialog: DialogHandler
   docRevId?: string
-  woRevId?: string
+  parentRevId?: string
 }
 
 const DocumentRevisionDialog: React.FC<
 DocumentRevisionDialogProps
-> = ({ dialog, docRevId, woRevId }) => {
+> = ({ dialog, docRevId, parentRevId }) => {
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ DocumentRevisionDialogProps
 
   const handleCloseDialog = () => {
     dialog.close();
-    woRevId && dispatch(documentRevisionsActions.reload(woRevId));
+    parentRevId && dispatch(documentRevisionsActions.reload(parentRevId));
   };
 
   return (

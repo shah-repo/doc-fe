@@ -20,7 +20,7 @@ export const TreeListSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
-  woRevId,
+  parentRevId,
   openDetailDrawer,
   onDeleteLot,
 }) => {
@@ -44,7 +44,7 @@ export const TreeListSchema = ({
       width: 228,
       filter: TreeListTextFilter,
       mainOrderIndex: 2,
-      cell: (props) => <LotAllocatedCell {...props} addLot={addLot} woRevId={woRevId} deleteLot={onDeleteLot} />,
+      cell: (props) => <LotAllocatedCell {...props} addLot={addLot} parentRevId={parentRevId} deleteLot={onDeleteLot} />,
     },
     {
       field: 'partRevDisplayRevision',
