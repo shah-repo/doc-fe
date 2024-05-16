@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import classMerge from 'classnames';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../common/intl';
@@ -11,6 +12,8 @@ import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import Text from '../../components/Text';
 import AttachmentIconPresenter from '../../components/common/attachment.icon/presenter';
 import { documentVersionPath } from '../../document.revision/utils/paths';
+import { FBFieldName } from '../../form.builder';
+import { Trainee, TraineeAttachment } from '../../form.builder/FBTraineeList/types';
 import { DialogHandler } from '../../hooks/useDialog';
 import ExportTrainingRecordToEmail from '../export.email/ExportTrainingRecordToEmail';
 import { styles } from './styles';
@@ -49,8 +52,21 @@ interface TrainingDetailsProps {
 const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog, training }) => {
   const classes = styles();
 
-  const attachments = training.attachments;
-  const referencesIds = training.trainingPlan?.sourceReferencesIds;
+  const referencesIds = training.trainingPlan?.sourceReferencesIds ?? [];
+  const references = training.trainingPlan?.sourceReferences ?? [];
+  const attachments = training.attachments ?? references.reduce(
+    (acc: TraineeAttachment[], item) => {
+      const grptTraineeList = (item.formInput?.[FBFieldName.GRPTTraineeList] ?? []) as Trainee[];
+      const recordTrainee = grptTraineeList.find(traineeItem => training.id === traineeItem.trainingRecordId);
+
+      if (recordTrainee && !isEmpty(recordTrainee.attachments)) {
+        acc.push(...recordTrainee.attachments);
+      }
+
+      return acc;
+    },
+    [],
+  );
 
   return (
     <>
@@ -90,7 +106,7 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
                 revisionId={training.documentRevision?.id}
               />
             </Grid>
-            {referencesIds && (
+            {!isEmpty(referencesIds) && (
               <Grid item xs={12} className={classes.item}>
                 <Typography className={classes.label}>
                   <Text translation="training.ref.id" />
