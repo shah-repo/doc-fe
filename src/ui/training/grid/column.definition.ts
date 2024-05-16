@@ -1,7 +1,7 @@
 import { chain } from 'lodash';
+import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { pagerSettings } from '../../components/common/kendo/helpers';
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
-import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { DateFields } from './interfaces';
 
 const columns: KendoColumn[] = [
@@ -64,7 +64,7 @@ const columns: KendoColumn[] = [
     extraFields: ['trainingPlan.employee.user.avatar', 'trainingPlan.employee.user.initialColor'],
   },
   {
-    field: DateFields.CREATED_AT,
+    field: DateFields.ASSIGNED_AT,
     title: 'common.assign.date',
     show: true,
     locked: false,
@@ -102,14 +102,15 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.COMPLETED_AT,
   },
   {
-    field: 'trainingPlan.curriculumDocIds',
-    title: 'common.tc.id',
+    field: 'trainingPlan.sourceReferences',
+    title: 'common.ref.id',
     show: true,
     locked: false,
     width: 10,
     groupable: false,
     showColumnMenu: true,
     orderIndex: 9,
+    cell: KendoCellTemplates.DOC_ID_LIST_CELL,
     filter: 'text',
   },
   {

@@ -65,6 +65,7 @@ import FBTextEditor from '../FBTextEditor/FBTextEditor';
 import FBTextField from '../FBTextField/FBTextField';
 import FBTextFieldWithRange from '../FBTextFieldWithRange/FBTextFieldWithRange';
 import FBTimerField from '../FBTimerField/FBTimerField';
+import FBTraineeList from '../FBTraineeList';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
 import FBWOApprovals from '../FBWOApprovals/FBWOApprovals';
 import FBWorkOrderLHRTable from '../FBWorkOrderLHRTable/FBWorkOrderLHRTable';
@@ -109,6 +110,7 @@ class FBSchemaState {
     paragraph: FBParagraph,
     quantity: FBQuantityField,
     timer: FBTimerField,
+    traineeList: FBTraineeList,
     purchaseorder: FBPurchaseOrder,
     purchaseordersummary: FBPurchaseOrderSummary,
     poreceive: FBPOReceive,
