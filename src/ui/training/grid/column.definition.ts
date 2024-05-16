@@ -38,6 +38,7 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     groupable: false,
     orderIndex: 3,
+    extraFields: ['documentRevision.documentId', 'documentRevision.id'], // to render data in Record popup
   },
   {
     field: 'documentRevision.name',
