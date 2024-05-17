@@ -5,7 +5,7 @@ import { TIME_ZONE } from '../../../common/utils/date';
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../../../state/ducks/documentRevisions/constants';
 import { POStatusLabelMapping, POStatusType } from '../../../state/ducks/documentRevisions/types';
 import { TRAINING_RECORDS_SEARCH_URL } from '../../../state/ducks/training/constants';
-import { documentRevisionEffectiveDateOption, trainingAssignedDateOptions, trainingCompletedOnDateOption } from '../../document.revision/utils/helpers';
+import { documentRevisionEffectiveDateOption, trainingAssignDateOptions, trainingCompletedOnDateOption } from '../../document.revision/utils/helpers';
 import { CompletedOnDateOptions } from '../../document.revision/utils/types';
 import { DateFields } from '../../training/kendo/types';
 import { KendoGridFilterCell } from './interfaces';
@@ -64,7 +64,7 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
       }
 
       if (assignAtField) {
-        const assignedDateOptions = trainingAssignedDateOptions();
+        const assignedDateOptions = trainingAssignDateOptions();
         payload.createdAtAfter = find(assignedDateOptions, { text: assignAtField.value })?.value;
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.ASSIGNED_AT);
       }

@@ -49,7 +49,7 @@ export const dueDateOption = () => [
   },
 ];
 
-export const trainingAssignedDateOptions = () => [
+export const trainingAssignDateOptions = () => [
   {
     text: ReleasedDateOptions.LAST_WEEK,
     value: moment().subtract(7, 'd').startOf('day').toISOString(),
