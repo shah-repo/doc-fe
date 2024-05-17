@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 import { FB, FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { filterOutOption } from '../../utils';
@@ -70,7 +70,6 @@ export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocument
         <Grid item style={{ width: '30%' }}>
           <FormikField
             name={stepField}
-            required
           >
             <TextField
               {...getFieldProps(stepField)}
@@ -86,7 +85,6 @@ export const StepCell: React.FC<StepCellProps> = ({ dataItem, field, mpiDocument
         <Grid item style={{ width: '60%' }}>
           <FormikField
             name={field}
-            required
           >
             <AutocompleteAsync
               {...getFieldProps(field)}

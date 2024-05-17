@@ -6,12 +6,11 @@ import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../components/KendoDataGrid/constants';
-import {
-  FormikField,
+  FormikField
 } from '../../../../components/forms/fields-next';
+import {
+  Mode, MODE_FIELD
+} from '../../../../components/KendoDataGrid/constants';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { FB } from '../../../helpers';
@@ -40,6 +39,9 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
     if (!FB.isUUID(defaultValue)) {
       return;
     }
+    // TODO:: Fetch materials/ Equipments based on MPI selection
+    //     /api/v1/document_revisions/cccd050d-0057-46f4-a8eb-cf32cccc34b7/materials_and_equipment
+    //     /api/v1/document_revisions/${mpiDocRevId}/materials_and_equipment
 
     let value;
     if (isMaterial) {
@@ -83,7 +85,7 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
     const filterOptions = (options, state) => handleFilter(options, state);
 
     return (
-      <FormikField name={field} required>
+      <FormikField name={field}>
         <AutocompleteAsync
           {...getFieldProps(field)}
           key={docType}

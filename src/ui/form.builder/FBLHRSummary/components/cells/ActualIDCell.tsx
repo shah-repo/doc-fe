@@ -6,12 +6,11 @@ import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../components/KendoDataGrid/constants';
-import {
   FormikField,
 } from '../../../../components/forms/fields-next';
+import {
+  Mode, MODE_FIELD,
+} from '../../../../components/KendoDataGrid/constants';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { FB } from '../../../helpers';
@@ -81,7 +80,7 @@ export const ActualIDCell: React.FC<ActualIDCellProps> = ({ dataItem, field, equ
     const filterOptions = (options, state) => handleFilter(options, state);
 
     return (
-      <FormikField name={field} required>
+      <FormikField name={field}>
         <AutocompleteAsync
           {...getFieldProps(field)}
           key={docType}
