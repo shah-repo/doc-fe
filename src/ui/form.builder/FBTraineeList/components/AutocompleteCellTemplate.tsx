@@ -15,7 +15,7 @@ interface Props<T extends OptionItem> extends CustomTemplateProps {
   options: T[]
   getOptionLabel: (item: T) => string
   getOptionDisabled?: (item: T) => boolean
-  getValue: (item?: T) => any
+  getValue: (item?: T) => unknown
   getKey: (item?: EditableTrainee) => string
   renderStoredValue: () => React.ReactNode
 }

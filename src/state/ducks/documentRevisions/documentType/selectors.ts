@@ -7,7 +7,7 @@ import { ApplicationState } from '../../../reducers';
 import { AsyncState } from '../../../types';
 import { companySelectors } from '../../company';
 import { DocumentCategory } from '../types';
-import { DocumentGroupType, DocumentType, DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION, TabInfo } from './types';
+import { DOC_TYPE_GROUP_OPTION, DocumentGroupType, DocumentType, DocumentTypeByIdState, TabInfo } from './types';
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -68,6 +68,7 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
             DOC_TYPE_GROUP_OPTION.SUPPLIER,
             DOC_TYPE_GROUP_OPTION.PO,
             DOC_TYPE_GROUP_OPTION.RECEIVABLE,
+            DOC_TYPE_GROUP_OPTION.GROUP_TRAINING,
           ],
           documentTypes[id].groupOptions,
         ),

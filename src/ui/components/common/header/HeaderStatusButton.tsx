@@ -54,7 +54,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
           anchorEl={optionsMenu.anchor}
           onClose={optionsMenu.close}
           MenuListProps={{
-            'data-cy': `${dataCy}-list`,
+            ['data-cy' as string]: `${dataCy}-menu`,
           }}
         >
           {options.map(option => (
