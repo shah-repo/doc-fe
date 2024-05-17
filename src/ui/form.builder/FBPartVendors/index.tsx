@@ -77,10 +77,9 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
       if (vendors.length === 2) {
         const remainingVendor = vendors.find(v => v !== editedVendor && !v?.primary);
         if (remainingVendor) {
-          setPrimaryVendor(remainingVendor.id);
-           deleteVendor?.(editedVendor as Vendor, remainingVendor.id);
-           discardVendor();
-           return;
+          deleteVendor?.(editedVendor as Vendor, remainingVendor.id);
+          discardVendor();
+          return;
         }
       } else if (vendors.length > 2) {
         primarySupplierDialog.open();
@@ -89,14 +88,14 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
       }
     }
 
-   deleteVendor?.(editedVendor as Vendor);
-   discardVendor();
+    deleteVendor?.(editedVendor as Vendor);
+    discardVendor();
   };
 
   const deletePrimaryVendor = () => {
     if (newPrimaryVendor) {
-       deleteVendor?.(editedVendor as Vendor, newPrimaryVendor.id);
-       discardVendor();
+      deleteVendor?.(editedVendor as Vendor, newPrimaryVendor.id);
+      discardVendor();
     }
     primarySupplierDialog.close();
   };
@@ -210,7 +209,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
         open={primarySupplierDialog.isOpen}
         title="relatedParts.set.new.primary.supplier"
         confirmLabel="common.confirm"
-        cancelLabel = "common.cancel"
+        cancelLabel="common.cancel"
         onConfirm={deletePrimaryVendor}
         onCancel={handleDialogClose}
         onClose={handleDialogClose}

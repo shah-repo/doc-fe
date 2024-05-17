@@ -4,8 +4,10 @@ import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../c
 import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { DateFields } from './interfaces';
 
-export const SOURCE_REFERENCES_KEY = 'trainingPlan.sourceReferences';
 export const ACTIVE_KEY = 'trainingPlan.employee.active';
+export const REF_ID_FIELD = 'trainingPlan.sourceReferencesIds';
+export const REF_ID_FILTER_FIELD = 'sourceReference';
+
 const columns: KendoColumn[] = [
   {
     field: 'trId',
@@ -105,7 +107,7 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.COMPLETED_AT,
   },
   {
-    field: SOURCE_REFERENCES_KEY,
+    field: REF_ID_FIELD,
     title: 'common.ref.id',
     show: true,
     locked: false,
@@ -115,6 +117,7 @@ const columns: KendoColumn[] = [
     orderIndex: 9,
     cell: KendoCellTemplates.DOC_ID_LIST_CELL,
     filter: 'text',
+    extraFields: ['trainingPlan.sourceReferences'], // to render data in Record popup
   },
   {
     field: ACTIVE_KEY,

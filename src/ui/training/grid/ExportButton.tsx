@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core';
-import { isEmpty, map, startCase } from 'lodash';
+import { compact, isEmpty, map, startCase } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { translate } from '../../../common/intl';
@@ -10,7 +10,7 @@ import Text from '../../components/Text';
 import styles from '../../document.revision/grid/ExportButton/styles';
 import ExportListDialog from '../../document.revision/list/ExportListDialog/ExportListDialog';
 import useDialog from '../../hooks/useDialog';
-import { ACTIVE_KEY, SOURCE_REFERENCES_KEY } from './column.definition';
+import { ACTIVE_KEY, REF_ID_FIELD } from './column.definition';
 
 interface Props {
   gridData: TrainingListData[]
@@ -25,8 +25,8 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGro
   const headers = map(columns, (column) => {
     let field = column.field;
 
-    if (column.field === SOURCE_REFERENCES_KEY) {
-      field = 'sourceReferences';
+    if (column.field === REF_ID_FIELD) {
+      field = 'refId';
     }
 
     if (column.field === ACTIVE_KEY) {
@@ -56,7 +56,7 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGro
         completedAtAfter: e.completedAt
           ? getFormattedDateString(e.completedAt, MomentFormats.DateTimeComplete)
           : getTranslatedText('common.pending'),
-        sourceReferences: e.trainingPlan?.sourceReferences?.map(item => item?.docId).filter(Boolean).join(', '),
+        refId: compact(e.trainingPlan?.sourceReferencesIds?.map(item => item?.docId)).join(', '),
         active: translate(e.trainingPlan?.employee?.active ? 'common.active' : 'common.inactive'),
       }));
     }

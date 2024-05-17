@@ -82,7 +82,8 @@ interface TrainingPlan {
   document: DocumentRevisionDocument
   employee: Employee
   curriculumDocIds: string[]
-  sourceReferences: TrainingReference[]
+  sourceReferencesIds: TrainingReference[]
+  sourceReferences: DocumentRevision[]
 }
 
 export interface TrainingTransitionRequestBody {
