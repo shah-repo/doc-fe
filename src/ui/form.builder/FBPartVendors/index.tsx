@@ -77,7 +77,6 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
       if (vendors.length === 2) {
         const remainingVendor = vendors.find(v => v !== editedVendor && !v?.primary);
         if (remainingVendor) {
-          setPrimaryVendor(remainingVendor.id);
            deleteVendor?.(editedVendor as Vendor, remainingVendor.id);
            discardVendor();
            return;
