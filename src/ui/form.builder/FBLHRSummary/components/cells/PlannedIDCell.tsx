@@ -6,10 +6,10 @@ import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import {
-  FormikField
+  FormikField,
 } from '../../../../components/forms/fields-next';
 import {
-  Mode, MODE_FIELD
+  Mode, MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
