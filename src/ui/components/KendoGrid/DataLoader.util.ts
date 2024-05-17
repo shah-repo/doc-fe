@@ -5,7 +5,7 @@ import { TIME_ZONE } from '../../../common/utils/date';
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../../../state/ducks/documentRevisions/constants';
 import { POStatusLabelMapping, POStatusType } from '../../../state/ducks/documentRevisions/types';
 import { TRAINING_RECORDS_SEARCH_URL } from '../../../state/ducks/training/constants';
-import { documentRevisionEffectiveDateOption, trainingCompletedOnDateOption } from '../../document.revision/utils/helpers';
+import { documentRevisionEffectiveDateOption, trainingAssignedDateOptions, trainingCompletedOnDateOption } from '../../document.revision/utils/helpers';
 import { CompletedOnDateOptions } from '../../document.revision/utils/types';
 import { DateFields } from '../../training/kendo/types';
 import { KendoGridFilterCell } from './interfaces';
@@ -49,17 +49,26 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
     case TRAINING_RECORDS_SEARCH_URL: {
       const createdAtField = find(payload.filters, { field: DateFields.CREATED_AT });
       const completedAtField = find(payload.filters, { field: DateFields.COMPLETED_AT });
+      const assignAtField = find(payload.filters, { field: DateFields.ASSIGNED_AT });
       const dueOnField = find(payload.filters, { field: DateFields.DUE_ON });
       if (createdAtField) {
         const createdDateOptions = documentRevisionEffectiveDateOption();
         payload.createdAtAfter = find(createdDateOptions, { text: createdAtField.value })?.value;
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.CREATED_AT);
       }
+
       if (completedAtField) {
         const completedDateOptions = trainingCompletedOnDateOption();
         payload.completedAtAfter = find(completedDateOptions, { text: completedAtField.value })?.value;
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.COMPLETED_AT);
       }
+
+      if (assignAtField) {
+        const assignedDateOptions = trainingAssignedDateOptions();
+        payload.createdAtAfter = find(assignedDateOptions, { text: assignAtField.value })?.value;
+        payload.filters = removeFieldFromFilters(payload.filters, DateFields.ASSIGNED_AT);
+      }
+
       if (dueOnField) {
         if (dueOnField.value === CompletedOnDateOptions.NEXT_WEEK) {
           payload.dueOnBefore = moment().tz(TIME_ZONE).add(7, 'd').startOf('day').toISOString();

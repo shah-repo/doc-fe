@@ -49,6 +49,21 @@ export const dueDateOption = () => [
   },
 ];
 
+export const trainingAssignedDateOptions = () => [
+  {
+    text: ReleasedDateOptions.LAST_WEEK,
+    value: moment().subtract(7, 'd').startOf('day').toISOString(),
+  },
+  {
+    text: ReleasedDateOptions.LAST_TWO_WEEKS,
+    value: moment().subtract(14, 'd').startOf('day').toISOString(),
+  },
+  {
+    text: ReleasedDateOptions.LAST_MONTH,
+    value: moment().subtract(30, 'd').startOf('day').toISOString(),
+  },
+];
+
 export const trainingCompletedOnDateOption = () => [
   {
     text: ReleasedDateOptions.LAST_WEEK,
