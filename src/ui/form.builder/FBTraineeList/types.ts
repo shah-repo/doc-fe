@@ -47,6 +47,7 @@ export interface Trainee {
   comments?: string
   createdAt: string
   trainingRecord?: TrainingRecordQuery
+  trainingRecordId?: string
 }
 
 export interface EditableTrainee extends Trainee {

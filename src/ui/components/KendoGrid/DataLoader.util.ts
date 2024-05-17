@@ -7,6 +7,7 @@ import { POStatusLabelMapping, POStatusType } from '../../../state/ducks/documen
 import { TRAINING_RECORDS_SEARCH_URL } from '../../../state/ducks/training/constants';
 import { documentRevisionEffectiveDateOption, trainingCompletedOnDateOption } from '../../document.revision/utils/helpers';
 import { CompletedOnDateOptions } from '../../document.revision/utils/types';
+import { REF_ID_FIELD, REF_ID_FILTER_FIELD } from '../../training/grid/column.definition';
 import { DateFields } from '../../training/kendo/types';
 import { KendoGridFilterCell } from './interfaces';
 
@@ -50,6 +51,7 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
       const createdAtField = find(payload.filters, { field: DateFields.CREATED_AT });
       const completedAtField = find(payload.filters, { field: DateFields.COMPLETED_AT });
       const dueOnField = find(payload.filters, { field: DateFields.DUE_ON });
+      const refIdField = find(payload.filters, { field: REF_ID_FIELD });
       if (createdAtField) {
         const createdDateOptions = documentRevisionEffectiveDateOption();
         payload.createdAtAfter = find(createdDateOptions, { text: createdAtField.value })?.value;
@@ -69,6 +71,10 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
         }
         payload.isCompleted = 'false';
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.DUE_ON);
+      }
+      if (refIdField) {
+        payload[REF_ID_FILTER_FIELD] = refIdField.value;
+        payload.filters = removeFieldFromFilters(payload.filters, REF_ID_FIELD);
       }
       break;
     }
