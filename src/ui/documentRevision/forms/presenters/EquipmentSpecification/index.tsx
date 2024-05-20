@@ -1,17 +1,17 @@
 import { Box, Typography } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import Text from '../../../../components/Text';
-import { styles } from '../styles/RevisionStage.styles';
-import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { Link } from 'react-router-dom';
-import { toastSuccess } from '../../../../components/notifications';
-import NeedSyncMessage from './components/NeedSyncMessage';
-import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
-import { isDocumentRevisionInDraft } from '../../../helpers/documentRevisionStatus';
-import SyncedSuccessMessage from './components/SyncedSuccessMessage';
-import RelatedEquipmentsState from '../related.equipments/state';
 import { translate } from '../../../../../common/intl';
+import { MomentFormats, getFormattedDateString } from '../../../../../common/utils/date';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import Text from '../../../../components/Text';
+import { toastSuccess } from '../../../../components/notifications';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import { isDocumentRevisionInDraft } from '../../../helpers/documentRevisionStatus';
+import RelatedEquipmentsState from '../related.equipments/state';
+import { styles } from '../styles/RevisionStage.styles';
+import NeedSyncMessage from './components/NeedSyncMessage';
+import SyncedSuccessMessage from './components/SyncedSuccessMessage';
 
 interface FormInputEquipmentSpecification {
   id: string
@@ -52,7 +52,6 @@ const EquipmentSpecification: React.FC<Props> = (props) => {
         relatedDocumentRevision.needSyncedSuccessNotify = false;
       });
   }, [showSyncedSuccessMessage, es, relatedDocumentRevision]);
-
   return (
     <>
       <Box>
@@ -60,8 +59,8 @@ const EquipmentSpecification: React.FC<Props> = (props) => {
           <Text message="document.equipment.specification" />
         </Typography>
         <Box>
-          <Link to={documentVersionPath(es.id, es.documentId)}>
-            {translate('common.displayRevision', {
+          <Link to={documentVersionPath(es.id, es.documentId)} id="s">
+            {translate('equipment.specification.displayRevision', {
               docId: es.docId,
               displayRevision: es.displayRevision,
             })}

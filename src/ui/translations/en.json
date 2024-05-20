@@ -1995,5 +1995,6 @@
   "ccc.bom.selected.fields.changes.tooltip": "The selected fields can be edited in the BOM line item without a new revision of the part.",
   "ccc.approved.supplier.list.changes.tooltip": "Supplier list changes CRUD",
   "ccc.changes.to.attachments.tooltip": "Attachments changes means any additions, deletions of attachments",
-  "ccc.changes.to.references.tooltip": "Reference changes means any additions or deletions"
+  "ccc.changes.to.references.tooltip": "Reference changes means any additions or deletions",
+  "equipment.specification.displayRevision": "{docId} • Rev {displayRevision}"
 }
