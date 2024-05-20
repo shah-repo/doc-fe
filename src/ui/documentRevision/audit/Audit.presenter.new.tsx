@@ -15,7 +15,7 @@ import { AsyncStatus } from '../../../state/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
-import { FBApprovalAuditState, FBSchemaProps, FBText } from '../../form.builder';
+import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { isTranslation } from '../../translations/types';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
@@ -235,6 +235,18 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         if (change.type !== 'ARRAY_DELETED') {
           const fieldName = translate(`form.builder.cycle.count.${field}`);
+          fbLabel = `${fbLabel as string} ${fieldName}`;
+        }
+      }
+      // TRAINEE LIST
+      if (fbType === 'traineeList') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        if (['id', 'createdAt', 'documentId', 'docRevId'].includes(field)) {
+          return;
+        }
+        if (field !== FBFieldName.GRPTTraineeList) {
+          const fieldName = translate(`form.builder.trainee.list.${field}`);
           fbLabel = `${fbLabel as string} ${fieldName}`;
         }
       }

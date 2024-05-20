@@ -1,5 +1,5 @@
 import { CircularProgress } from '@material-ui/core';
-import { first, isString } from 'lodash';
+import { isString } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { Fragment } from 'react';
 import { Audit } from '../../state/ducks/audit/types';
@@ -24,10 +24,11 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
   }
 
   React.useEffect(() => {
-    if (auditValue === 'undefined') { return; }
+    if (!auditValue || auditValue === 'undefined') { return; }
+
     try {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      auditValue = JSON.parse(auditValue)?.id;
+      const data = JSON.parse(auditValue);
+      auditValue = data?.id ?? data;
     } catch {
       if (isString(auditValue)) {
         auditValue = [auditValue];
@@ -45,9 +46,11 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
   return (
     <Fragment>
       {loading && <CircularProgress size={12} />}
-      {!loading
-      && <div>{`${first(attachmentState.filesApi.data)?.name}.${first(attachmentState.filesApi.data)?.type}`}</div>
-      }
+      {!loading && (
+        attachmentState.filesApi.data?.map(item => (
+          <div key={item.id}>{`${item.name}.${item.type}`}</div>
+        ))
+      )}
     </Fragment>
   );
 };
