@@ -1,28 +1,25 @@
 import { Box } from '@material-ui/core';
 import { useFormik } from 'formik';
 import { omit, unionBy } from 'lodash';
-import React, { useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { EditableCompanyLocation } from './types';
-
-import { CompanyLocation } from '../../../../../state/ducks/company/types';
-import { DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import LocationsSetting from '../../../../components/LocationsSetting';
-import { buildSchema } from '../../../../components/LocationsSetting/schema';
-import useStyles from '../../../../components/LocationsSetting/styles';
-import { toastError } from '../../../../components/notifications';
-import useActionCreator from '../../../../hooks/useActionCreator';
-import useAsync from '../../../../hooks/useAsync';
-import { companyActions } from './../../../../../state/ducks/company';
-
+import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
-import { companySelectors } from '../../../../../state/ducks/company';
+import { companyActions, companySelectors } from '../../../../../state/ducks/company';
+import { CompanyLocation } from '../../../../../state/ducks/company/types';
+import { DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../../components/notifications';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import LocationsSetting from '../../components/LocationsSetting';
+import useStyles from '../../components/LocationsSetting/styles';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
+import { buildSchema } from './schema';
+import { EditableCompanyLocation } from './types';
 
 const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const companyMine = useSelector(companySelectors.getCompanyMine);
@@ -72,10 +69,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     setLocationsData(locations);
   }, [locations]);
 
-  const deleteCompanyLocation = () => {
-    console.log('deleteCompanyLocation');
-  };
-
   const addLocation = () => setEditedLocation({
     id: uuidv4(),
     name: '',
@@ -103,28 +96,23 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     actionsClass: classes.actionsCell,
     onDiscard: discardLocation,
     onConfirm: submitForm,
-    onDelete: deleteCompanyLocation,
-    renderIncludedTotalQty: true,
     onRowClick: onRowClick,
   });
-  console.log({ formik });
+
+  const ref = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      requestAnimationFrame(() => node.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+    }
+  }, []);
 
   return (
     <Box className={classes.root}>
       <SettingsPanel {...props} title={translate('administration.general.settings.locations.tab')} onAddNew={addLocation} >
-        <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation }} />
+        <div ref={ref}>
+          <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation }} />
+        </div>
       </SettingsPanel>
     </Box>
   );
 };
-
-// const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
-//   const companyMine = useSelector(companySelectors.getCompanyMine);
-//   const canUpdateLocations = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
-//   return (
-//     <SettingsPanel {...props} title={translate('administration.general.settings.locations.tab')} onAddNew={() => console.log('onAddNew')}>
-//       {canUpdateLocations && <CompanyLocations isActive={canUpdateLocations} locations={companyMine.locations} />}
-//     </SettingsPanel>
-//   );
-// };
 export default CompanyLocationSettingsPanel;

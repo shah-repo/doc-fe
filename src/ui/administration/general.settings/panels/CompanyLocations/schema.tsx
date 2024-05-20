@@ -1,10 +1,10 @@
 import React from 'react';
-import { EditableCompanyLocation } from '../../administration/general.settings/panels/CompanyLocations/types';
-import { ColumnDefinition, DataGridRowClickEvent } from '../KendoDataGrid/KendoDataGrid.types';
-import ActionsCellTemplate from './components/ActionsCellTemplate';
-import { ActiveCellTemplate } from './components/ActiveCellTemplate';
-import { IncludedTotalQtyCellTemplate } from './components/IncludedTotalQtyCellTemplate';
-import { TextCellTemplate } from './components/TextCellTemplate';
+import { ColumnDefinition, DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { ActiveCellTemplate } from '../../components/LocationsSetting/components/ActiveCellTemplate';
+import { IncludedTotalQtyCellTemplate } from '../../components/LocationsSetting/components/IncludedTotalQtyCellTemplate';
+import LocationActionsCellTemplate from '../../components/LocationsSetting/components/LocationActionsCellTemplate';
+import { TextCellTemplate } from '../../components/LocationsSetting/components/TextCellTemplate';
+import { EditableCompanyLocation } from './types';
 
 export interface EditableCompanyLocationEvent {
   dataItem: EditableCompanyLocation
@@ -13,9 +13,7 @@ export interface EditableCompanyLocationEvent {
 interface SchemaOptions {
   actionsClass: string
   isActive: boolean
-  renderIncludedTotalQty: boolean
   onDiscard: () => void
-  onDelete: () => void
   onConfirm: () => unknown
   onRowClick?: (e: DataGridRowClickEvent<EditableCompanyLocation>) => void
 
@@ -23,7 +21,7 @@ interface SchemaOptions {
 
 type schemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableCompanyLocation>>;
 
-export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm, onDelete, renderIncludedTotalQty, onRowClick }) => {
+export const buildSchema: schemaBuilder = ({ onDiscard, onConfirm, onRowClick }) => {
   return [
     {
       id: 'active',
@@ -43,15 +41,13 @@ export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm,
       field: 'includedTotalQty',
       title: 'settings.locations.included.total.quantity',
       template: IncludedTotalQtyCellTemplate,
-      hidden: !renderIncludedTotalQty,
     },
     {
       id: 'actions',
       field: 'actions',
       title: 'common.actions',
       filterable: false,
-      template: (props) => <ActionsCellTemplate {...props} onClick ={onRowClick} onDiscard={onDiscard} onConfirm={onConfirm} onDelete={onDelete} />,
-      hidden: !renderIncludedTotalQty,
+      template: (props) => <LocationActionsCellTemplate {...props} onClick ={onRowClick} onDiscard={onDiscard} onConfirm={onConfirm} />,
       width: 100,
     },
   ];

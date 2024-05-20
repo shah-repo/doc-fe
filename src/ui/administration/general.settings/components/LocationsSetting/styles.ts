@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import { Colors } from '../../layout/theme-next';
+import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   root: {
@@ -45,13 +45,7 @@ export default makeStyles(theme => ({
     pointerEvents: 'auto',
   },
   cellStyle: {
-    textAlign: 'center',
+    textAlign: 'start',
     color: props => props.isActive ? Colors.textBlack : Colors.textDisabled,
-  },
-  deleteButton: {
-    color: Colors.error,
-  },
-  icon: {
-    fontSize: '16px',
   },
 }));
