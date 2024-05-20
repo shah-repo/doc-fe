@@ -1,7 +1,6 @@
 import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
@@ -23,17 +22,11 @@ import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
-import { FB } from '../../../helpers';
 import { DocType, EMPTY_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { filterOutOption } from '../../utils';
 import AutocompleteAsync from './AutocompleteAsync';
 import { styles } from './styles';
-
-type PlannedIDCellProps = {
-  equipmentDocs: DocumentRevision[]
-  partDocs: DocumentRevision[]
-} & CustomTemplateProps;
 
 const Editor: React.FC<CustomTemplateProps & { options: any[], docType: DocType }> = ({
   field,
@@ -82,34 +75,13 @@ const Editor: React.FC<CustomTemplateProps & { options: any[], docType: DocType 
   );
 };
 
-export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
+export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
   field,
-  partDocs,
-  equipmentDocs,
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const docType = dataItem.type;
-  const isMaterial = docType === DocType.material;
-  const [documentRevision, setDocumentRevision] = useState<DocumentRevision>();
-  const defaultValue = dataItem[field];
   const classes = styles();
-
-  useEffect(() => {
-    if (!FB.isUUID(defaultValue)) {
-      return;
-    }
-
-    let value;
-    if (isMaterial) {
-      value = partDocs.find((option) => option.id === defaultValue);
-    } else {
-      value = equipmentDocs.find((option) => option.id === defaultValue);
-    }
-
-    setDocumentRevision(value);
-  }, [equipmentDocs, partDocs, dataItem[field]]);
 
   if (isEditMode) {
     const { values, getFieldProps, setFieldValue }
@@ -199,22 +171,26 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
     );
   }
 
+  const plannedDocId = dataItem.plannedDocId;
+  const plannedRevId = dataItem.plannedId;
+  const plannedDocumentId = dataItem.plannedDocumentId;
+
   return (
     <>
-      {!isEmpty(documentRevision) ? (
+      {plannedRevId && plannedDocumentId ? (
         <Link
           to={documentVersionPath(
-            documentRevision?.id as string,
-            documentRevision?.document?.id as string,
+            plannedRevId,
+            plannedDocumentId,
           )}
           target="_blank"
           id="PartOrEqDocLink-linkButton"
           className={classes.link}
         >
-          {documentRevision?.document.docId}{' '}
+          {plannedDocId}
         </Link>
       ) : (
-        defaultValue ?? EMPTY_PLACEHOLDER
+        plannedDocId ?? EMPTY_PLACEHOLDER
       )}
     </>
   );

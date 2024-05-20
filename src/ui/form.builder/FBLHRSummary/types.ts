@@ -24,6 +24,14 @@ export interface LHRSummaryItem {
   comments: string
   enteredBy: string
   createdAt: string
+  lotOrEqDocId?: string
+  lotOrEqDocumentId?: string
+  actualDocId?: string
+  actualDocumentId?: string
+  plannedDocId?: string
+  plannedDocumentId?: string
+  stepOrMpiDocId?: string
+  stepOrMpiDocumentId?: string
 }
 
 export interface CustomTreeListColumnProps extends TreeListColumnProps {
