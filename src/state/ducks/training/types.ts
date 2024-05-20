@@ -35,6 +35,7 @@ export interface TrainingListData {
   dueOn: Date
   completedAt: Date
   trId: string
+  assignedAt: string
 }
 
 export interface TrainingRecordQuery {

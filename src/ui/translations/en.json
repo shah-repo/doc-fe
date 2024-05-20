@@ -1478,10 +1478,13 @@
   "training.doc.id.rev": "Doc ID Rev",
   "training.doc.warning.alert": "This action cannot be undone. Are you sure you want to continue?",
   "training.ref.id": "Reference ID",
-  "form.builder.trainee.list.id": "TRN ID",
-  "form.builder.trainee.list.doc.id": "Training Doc ID",
-  "form.builder.trainee.list.completion.date": "Training Completion Date",
+  "form.builder.trainee.list.name": "User",
+  "form.builder.trainee.list.trainingRecordId": "TRN ID",
+  "form.builder.trainee.list.docId": "Training Doc ID",
+  "form.builder.trainee.list.trainingCompletionDate": "Training Completion Date",
   "form.builder.trainee.list.comments": "Comments",
+  "form.builder.trainee.list.attachmentIds": "Attachments",
+  "form.builder.trainee.list.deleted": "{name} for {docId}",
   "training.acknowladge.password": "Enter Password to Acknowledge",
   "training.acknowledge.statement": "I acknowledge I am trained on",
   "training.acknowledge.completed.statement": "I completed training on {revision}{date, select, null {} other { on {date}}}",
@@ -1995,5 +1998,6 @@
   "ccc.bom.selected.fields.changes.tooltip": "The selected fields can be edited in the BOM line item without a new revision of the part.",
   "ccc.approved.supplier.list.changes.tooltip": "Supplier list changes CRUD",
   "ccc.changes.to.attachments.tooltip": "Attachments changes means any additions, deletions of attachments",
-  "ccc.changes.to.references.tooltip": "Reference changes means any additions or deletions"
+  "ccc.changes.to.references.tooltip": "Reference changes means any additions or deletions",
+  "equipment.specification.displayRevision": "{docId} • Rev {displayRevision}"
 }
