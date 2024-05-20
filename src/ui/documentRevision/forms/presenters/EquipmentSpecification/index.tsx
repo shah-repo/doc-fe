@@ -59,7 +59,7 @@ const EquipmentSpecification: React.FC<Props> = (props) => {
           <Text message="document.equipment.specification" />
         </Typography>
         <Box>
-          <Link to={documentVersionPath(es.id, es.documentId)} id="s">
+          <Link to={documentVersionPath(es.id, es.documentId)}>
             {translate('equipment.specification.displayRevision', {
               docId: es.docId,
               displayRevision: es.displayRevision,
