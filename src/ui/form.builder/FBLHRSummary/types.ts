@@ -1,5 +1,4 @@
 import { TreeListColumnProps } from '@progress/kendo-react-treelist';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 
@@ -76,10 +75,6 @@ export interface LHRSummaryRequestBody {
 
 export interface SchemaOptions {
   actionsClass: string
-  mpiDocuments: DocumentRevision[]
-  equipmentDocs: DocumentRevision[]
-  partDocs: DocumentRevision[]
-  lotDocs: DocumentRevision[]
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: () => void

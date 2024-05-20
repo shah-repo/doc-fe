@@ -83,12 +83,9 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   );
 };
 
-type LotIDCellProps = { lotDocs: DocumentRevision[] } & CustomTemplateProps;
-
-export const LotIDCell: React.FC<LotIDCellProps> = ({
+export const LotIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
   field,
-  lotDocs,
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);

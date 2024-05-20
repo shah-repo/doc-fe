@@ -16,10 +16,6 @@ import { EditableLHRSummaryItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
   actionsClass,
-  mpiDocuments,
-  equipmentDocs,
-  partDocs,
-  lotDocs,
   onRowClick,
   onConfirm,
   onDiscard,
@@ -39,7 +35,7 @@ export const buildSchema = ({
       field: 'mpiId',
       title: 'lhr.summary.grid.heading.step',
       show: true,
-      template: (props) => <StepCell {...props} onClick={onRowClick} mpiDocuments={mpiDocuments} />,
+      template: (props) => <StepCell {...props} onClick={onRowClick} />,
       width: 401,
       sortable: false,
     },
@@ -67,7 +63,7 @@ export const buildSchema = ({
       title: 'lhr.summary.grid.heading.lot',
       show: true,
       selectable: false,
-      template: (props) => <LotIDCell {...props} onClick={onRowClick} lotDocs={lotDocs} />,
+      template: (props) => <LotIDCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -102,7 +98,7 @@ export const buildSchema = ({
       field: 'status',
       title: 'lhr.summary.grid.heading.status',
       show: true,
-      template: (props) => <StatusCell {...props} onClick={onRowClick} lotDocs={lotDocs} />,
+      template: (props) => <StatusCell {...props} onClick={onRowClick} />,
       selectable: false,
       width: 201,
     },

@@ -3,14 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Typography } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { find, isEmpty, pick } from 'lodash';
+import { find, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { authSelectors } from '../../../state/ducks/auth';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { Button } from '../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
@@ -20,10 +19,9 @@ import {
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../components/notifications';
-import { FBAutocompleteAsyncOption, FBSection } from '../../form.builder';
+import { FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
-import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import {
   ColumnMenuContext,
   CustomColumnMenu,
@@ -57,58 +55,10 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
-  const [mpiDocuments, setMpiDocuments] = React.useState<DocumentRevision[]>([]);
-  const [equipmentDocs, setEquipmentDocs] = React.useState<DocumentRevision[]>([]);
-  const [partDocs, setPartDocs] = React.useState<DocumentRevision[]>([]);
-  const [lotDocs, setLotDocs] = React.useState<DocumentRevision[]>([]);
   const fetchLHRSummary = useActionCreator(lhrSummaryActions.fetchLHRSummary);
-  const fetchAutocompleteOptions = useActionCreator(lhrSummaryActions.fetchAutocompleteOptions);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
-
-  const MPIDocumentsAsync = useAsync({
-    onSuccess: (data) => {
-      if (isEmpty(data)) {
-        return;
-      }
-
-      setMpiDocuments(data as DocumentRevision[]);
-      FBAutocompleteAsyncStore.setOptionData(FBAutocompleteAsyncOption.mpiDocuments, data);
-    },
-    onError: toastError,
-  });
-
-  const EQDocumentsAsync = useAsync({
-    onSuccess: (data) => {
-      if (isEmpty(data)) {
-        return;
-      }
-
-      setEquipmentDocs(data as DocumentRevision[]);
-      FBAutocompleteAsyncStore.setOptionData(FBAutocompleteAsyncOption.equipment, data);
-    },
-    onError: toastError,
-  });
-
-  const PartDocumentsAsync = useAsync({
-    onSuccess: (data) => {
-      if (isEmpty(data)) {
-        return;
-      }
-
-      setPartDocs(data as DocumentRevision[]);
-      FBAutocompleteAsyncStore.setOptionData(FBAutocompleteAsyncOption.releasedParts, data);
-    },
-    onError: toastError,
-  });
-
-  const LotDocumentsAsync = useAsync({
-    onSuccess: (data) => {
-      data && setLotDocs(data as DocumentRevision[]);
-    },
-    onError: toastError,
-  });
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
@@ -122,10 +72,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       return;
     }
 
-    MPIDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.mpiDocuments, MPIDocumentsAsync);
-    EQDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.equipment, EQDocumentsAsync);
-    PartDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.releasedParts, PartDocumentsAsync);
-    LotDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.lots, LotDocumentsAsync);
     fetchLHRSummaryData();
   }, []);
 
@@ -188,7 +134,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     });
 
     resetForm({ values: editedLHRSummaryItem ?? {} });
-  }, [editedLHRSummaryItem, mpiDocuments, equipmentDocs, partDocs, lotDocs, setValues, resetForm]);
+  }, [editedLHRSummaryItem, setValues, resetForm]);
 
   const onEditLHRSummaryItem = ({
     dataItem,
@@ -290,10 +236,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
-    mpiDocuments,
-    equipmentDocs,
-    partDocs,
-    lotDocs,
     onRowClick: onEditLHRSummaryItem,
     onConfirm: submitForm,
     onDiscard: ondiscardLHRSummaryItem,
