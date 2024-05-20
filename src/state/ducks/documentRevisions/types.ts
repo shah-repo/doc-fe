@@ -281,6 +281,11 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   eqStatus: EquipmentStatus
 }
 
+export interface MeqResponse {
+  equipment: DocumentRevision[]
+  materials: DocumentRevision[]
+}
+
 export interface SmartReference {
   fromDocRev?: Nullable<DocumentRevision>
   fromDocRevId?: Nullable<string>

@@ -9,16 +9,16 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
-import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { authSelectors } from '../../../state/ducks/auth';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
+import { Button } from '../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { FBAutocompleteAsyncOption, FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -53,8 +53,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   isDisabled,
 }) => {
   const { _documentRevisionFormState } = SM.useStores();
-  console.log('isShowOnly :', isShowOnly);
-  console.log('isDisabled :', isDisabled);
   const classes = useStyles();
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();

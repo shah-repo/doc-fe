@@ -4,14 +4,24 @@ import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
-import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import {
+  DocumentRevision,
+  DocumentRevisionStatus,
+  MeqResponse,
+} from '../../../../../state/ducks/documentRevisions/types';
+import {
+  Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
+import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import {
-  Mode, MODE_FIELD,
+  Mode,
+  MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { FB } from '../../../helpers';
 import { DocType, EMPTY_PLACEHOLDER } from '../../constants';
@@ -20,13 +30,64 @@ import { filterOutOption } from '../../utils';
 import AutocompleteAsync from './AutocompleteAsync';
 import { styles } from './styles';
 
-type PlannedIDCellProps = {equipmentDocs: DocumentRevision[], partDocs: DocumentRevision[]} & CustomTemplateProps;
+type PlannedIDCellProps = {
+  equipmentDocs: DocumentRevision[]
+  partDocs: DocumentRevision[]
+} & CustomTemplateProps;
+
+const Editor: React.FC<CustomTemplateProps & { options: any[], docType: DocType }> = ({
+  field,
+  options = [],
+  docType,
+  dataItem,
+}) => {
+  const { values, setFieldValue, getFieldProps }
+    = useFormikContext<EditableLHRSummaryItem>();
+
+  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+    setFieldValue(field, value?.value);
+  };
+
+  const renderOptions = () => {
+    return options.map((option) => ({
+      label: translate('wo.displayRevision', {
+        docId: option.docId,
+        displayRevision: option?.revision,
+        name: option.title,
+      }),
+      value: option.docRevId,
+    }));
+  };
+
+  const defaultValue = values[field] ?? dataItem[field];
+  const value = renderOptions().find((option) => option.value === defaultValue);
+
+  return (
+    <FormikField name={field}>
+      <Autocomplete
+        {...getFieldProps(field)}
+        key={docType}
+        blurOnSelect
+        disableClearable
+        freeSolo
+        forcePopupIcon
+        options={renderOptions()}
+        value={value}
+        getOptionLabel={(option: OptionType) => option.label}
+        onChange={handleChange}
+        placeholder={translate('lhr.summary.placeholder.select.enter')}
+        size="small"
+      />
+    </FormikField>
+  );
+};
 
 export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
   dataItem,
   field,
   partDocs,
   equipmentDocs,
+  ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const docType = dataItem.type;
@@ -39,9 +100,6 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
     if (!FB.isUUID(defaultValue)) {
       return;
     }
-    // TODO:: Fetch materials/ Equipments based on MPI selection
-    //     /api/v1/document_revisions/cccd050d-0057-46f4-a8eb-cf32cccc34b7/materials_and_equipment
-    //     /api/v1/document_revisions/${mpiDocRevId}/materials_and_equipment
 
     let value;
     if (isMaterial) {
@@ -54,9 +112,29 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
   }, [equipmentDocs, partDocs, dataItem[field]]);
 
   if (isEditMode) {
-    const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
+    const { values, getFieldProps, setFieldValue }
+      = useFormikContext<EditableLHRSummaryItem>();
+    const fetchMEQByMPI = useActionCreator(
+      documentRevisionsActions.fetchMaterialsOrEquipmentsBySelectedMPI,
+    );
+    const [meqs, setMeqs] = React.useState<MeqResponse>({
+      materials: [],
+      equipment: [],
+    });
+    const fetchMeqsAsync = useAsync({
+      onSuccess: (data?: MeqResponse) => {
+        data && setMeqs(data);
+      },
+    });
     const docType = values.type;
     const isMaterial = docType === DocType.material;
+    const selectedMPI = values.mpiId;
+
+    useEffect(() => {
+      if (selectedMPI) {
+        fetchMeqsAsync.start(fetchMEQByMPI, selectedMPI, fetchMeqsAsync);
+      }
+    }, [values.mpiId]);
 
     const getOptionId = () => {
       if (isMaterial) {
@@ -76,13 +154,31 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
     ) => {
       const { inputValue = '' } = state || {};
 
-      const options = data?.filter((docRev) => (isMaterial ? docRev.status === DocumentRevisionStatus.Released : true)
-        && filterOutOption(docRev, inputValue));
+      const options = data?.filter(
+        (docRev) =>
+          (isMaterial
+            ? docRev.status === DocumentRevisionStatus.Released
+            : true) && filterOutOption(docRev, inputValue),
+      );
 
       return options;
     };
 
     const filterOptions = (options, state) => handleFilter(options, state);
+
+    if (selectedMPI && (meqs?.materials?.length || meqs?.equipment?.length)) {
+      return (
+        <Editor
+          {...props}
+          {...{
+            dataItem,
+            field,
+            docType,
+            options: isMaterial ? meqs.materials : meqs.equipment,
+          }}
+        />
+      );
+    }
 
     return (
       <FormikField name={field}>
@@ -103,13 +199,23 @@ export const PlannedIDCell: React.FC<PlannedIDCellProps> = ({
     );
   }
 
-  return (<>
-    {!isEmpty(documentRevision) ? <Link
-      to={documentVersionPath(documentRevision?.id as string, documentRevision?.document?.id as string)}
-      target="_blank"
-      id="PartOrEqDocLink-linkButton"
-      className={classes.link}
-    >{documentRevision?.document.docId } </Link>
-      : defaultValue ?? EMPTY_PLACEHOLDER}
-  </>);
+  return (
+    <>
+      {!isEmpty(documentRevision) ? (
+        <Link
+          to={documentVersionPath(
+            documentRevision?.id as string,
+            documentRevision?.document?.id as string,
+          )}
+          target="_blank"
+          id="PartOrEqDocLink-linkButton"
+          className={classes.link}
+        >
+          {documentRevision?.document.docId}{' '}
+        </Link>
+      ) : (
+        defaultValue ?? EMPTY_PLACEHOLDER
+      )}
+    </>
+  );
 };
