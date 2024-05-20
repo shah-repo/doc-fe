@@ -34,7 +34,7 @@ export const buildSchema = ({
     {
       id: 'employee',
       field: 'employee.name', // deep field name for correct filter working
-      title: 'common.user',
+      title: 'form.builder.trainee.list.name',
       filterCell: InputFilter,
       template: (props) => <UserCellTemplate {...props} field="employee" options={employees} />,
       editable: true,
@@ -43,7 +43,7 @@ export const buildSchema = ({
     {
       id: 'trainingDocument',
       field: 'trainingDocument.docId', // deep field name for correct filter working
-      title: 'form.builder.trainee.list.doc.id',
+      title: 'form.builder.trainee.list.docId',
       filterCell: InputFilter,
       template: (props) => <RevisionCellTemplate {...props} field="trainingDocument" options={documentOptions} onClick={onRowClick} />,
       editable: true,
@@ -52,7 +52,7 @@ export const buildSchema = ({
     {
       id: 'id',
       field: 'trainingRecord.trId',
-      title: 'form.builder.trainee.list.id',
+      title: 'form.builder.trainee.list.trainingRecordId',
       filterCell: InputFilter,
       editable: false,
       width: 150,
@@ -60,7 +60,7 @@ export const buildSchema = ({
     {
       id: 'attachments',
       field: 'attachments',
-      title: 'Attachments',
+      title: 'form.builder.trainee.list.attachmentIds',
       filterCell: (props) => <InputFilter {...props} operator={attachmentFilterOperator} />,
       template: AttachmentsCellTemplate,
       editable: true,
@@ -69,7 +69,7 @@ export const buildSchema = ({
     {
       id: 'trainingCompletionDate',
       field: 'trainingCompletionDate',
-      title: 'form.builder.trainee.list.completion.date',
+      title: 'form.builder.trainee.list.trainingCompletionDate',
       filterCell: InputFilter,
       template: DateCellTemplate,
       editable: true,
