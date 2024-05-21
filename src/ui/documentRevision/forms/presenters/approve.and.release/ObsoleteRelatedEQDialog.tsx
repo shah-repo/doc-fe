@@ -95,8 +95,8 @@ const ObsoleteRelatedEQDialog: React.FC<Props> = ({
           variant="contained"
           className={`${classes.cancelButton} ${classes.buttonLabel}`}
           onClick={handleNoClick}
-          id="AlertDialog-cancelButton"
-          data-cy="AlertDialog-cancelButton"
+          id="dialog-cancel"
+          data-cy="dialog-cancel"
         >
           <Text translation="common.false" />
         </Button>
@@ -104,8 +104,8 @@ const ObsoleteRelatedEQDialog: React.FC<Props> = ({
           type="button"
           variant="contained"
           className={`${classes.submitButton} ${classes.buttonLabel}`}
-          id="AlertDialog-continueButton"
-          data-cy="AlertDialog-continueButton"
+          id="dialog-continue"
+          data-cy="dialog-continue"
           onClick={handleYesClick}
         >
           <Text translation="common.true" />

@@ -21,6 +21,7 @@ export const TreeListSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  parentRevId,
   openDetailDrawer,
   onDeleteLot,
 }) => {
@@ -44,7 +45,7 @@ export const TreeListSchema = ({
       width: 228,
       filter: TreeListTextFilter,
       mainOrderIndex: 2,
-      cell: (props) => <LotAllocatedCell {...props} addLot={addLot} deleteLot={onDeleteLot} />,
+      cell: (props) => <LotAllocatedCell {...props} addLot={addLot} parentRevId={parentRevId} deleteLot={onDeleteLot} />,
     },
     {
       field: 'expiryDate',
@@ -56,7 +57,7 @@ export const TreeListSchema = ({
       cell: (props) => <ExpiryDateCellTemplate {...props} />,
     },
     {
-      field: 'revision',
+      field: 'partRevDisplayRevision',
       locked: false,
       title: translate('allocation.treelist.treeColumns.field.revision.title'),
       width: 228,
@@ -74,7 +75,7 @@ export const TreeListSchema = ({
       cell: QuantityCell,
     },
     {
-      field: 'usedUnit',
+      field: 'lotUsedUnit',
       locked: false,
       title: translate('allocation.treelist.treeColumns.field.unit.title'),
       width: 228,

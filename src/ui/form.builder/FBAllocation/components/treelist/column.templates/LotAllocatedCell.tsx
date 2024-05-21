@@ -25,7 +25,7 @@ import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps, LotAutoCompleteOptions } from './types';
 
-const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot }) => {
+const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, parentRevId, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot }) => {
   const isEditMode = isEditAllocItem(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const navigationAttributes = useTableKeyboardNavigation(id);
@@ -258,7 +258,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           }
         </span>
       }
-      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: dataItem.lotRevId }} />
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: dataItem.lotRevId, parentRevId }} />
     </td>
   );
 };

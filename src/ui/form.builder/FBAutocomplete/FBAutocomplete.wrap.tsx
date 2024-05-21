@@ -138,12 +138,18 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       includes(disabledOptions, option.id)
     );
 
+    const debouncedFieldAutosave = debounce(
+      (name) => formState?.setFieldAutosave(name),
+      1000,
+    );
+
     onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       // setField doesn't work here, the same problem prefilled with first option
       if (!freeSolo) { return; }
       const { target: { value = '' } = {} } = ev;
       formState?.setFieldValue(name, value, withState, omitFormValue);
       formState?.validate();
+      debouncedFieldAutosave(name);
     };
 
     if (!filterOptions) {
@@ -152,7 +158,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     }
 
     const onFilterInputChange = (event, inputValue) => {
-      if(isUndefined(options)) {
+      if (isUndefined(options)) {
         return setModifiedOptions([]);
       }
       if (inputValue && inputValue.length > 2) {

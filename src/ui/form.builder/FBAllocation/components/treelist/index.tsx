@@ -74,7 +74,6 @@ import {
 } from './interface';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
-import { processAllocationData } from './utils';
 
 const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   documentRevision,
@@ -100,7 +99,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onSuccess: (response?: AllocationItem[]) => {
       updateState({
         ...state,
-        data: [...(processAllocationData(response))],
+        data: [...(response ?? [])],
       });
       selectedPart && discardAllocItem(selectedPart);
       setSelectedPart(undefined);
@@ -377,6 +376,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
     openDetailDrawer,
+    parentRevId: documentRevision?.id,
     onConfirm: formik.submitForm,
     onDiscard: discardAllocItem,
     onDelete: removeAllocItem,
@@ -815,6 +815,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     FBDataStore.selectedSliderInfo = undefined;
     setIsPartsDrawerOpened(false);
     setSelectedPart(undefined);
+    dispatch(documentRevisionsActions.reload(documentRevision?.id));
   };
 
   return (
