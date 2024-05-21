@@ -56,7 +56,7 @@ export const withTraineeList = <T extends TraineeListProps>(
     return Component({
       ...props as T,
       name,
-      disabled: workspaceState?.isPreview ? false : disabled,
+      disabled: !workspaceState?.isPreview && disabled,
       trainees,
       documentOptions,
       documentOptionsAsync,
