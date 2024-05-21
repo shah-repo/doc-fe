@@ -177,7 +177,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <>
-      {plannedRevId && plannedDocumentId ? (
+      {plannedDocumentId ? (
         <Link
           to={documentVersionPath(
             plannedRevId,
@@ -190,7 +190,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
           {plannedDocId}
         </Link>
       ) : (
-        plannedDocId ?? EMPTY_PLACEHOLDER
+        plannedRevId || EMPTY_PLACEHOLDER
       )}
     </>
   );

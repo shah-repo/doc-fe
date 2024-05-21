@@ -90,7 +90,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <>
-      {actualRevId && actualDocumentId ? (
+      {actualDocumentId ? (
         <Link
           to={documentVersionPath(actualRevId, actualDocumentId)}
           target="_blank"
@@ -100,7 +100,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
           {actualDocId}
         </Link>
       ) : (
-        actualDocId ?? EMPTY_PLACEHOLDER
+        actualRevId ?? EMPTY_PLACEHOLDER
       )}
     </>
   );
