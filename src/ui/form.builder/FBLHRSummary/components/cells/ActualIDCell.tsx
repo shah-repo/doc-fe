@@ -69,6 +69,17 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
 
     const filterOptions = (options, state) => handleFilter(options, state);
 
+    const onInputChange = (
+      event: React.FocusEvent<HTMLInputElement>,
+      value: string,
+      reason: string,
+    ) => {
+      console.log('reson', value, reason);
+      if (reason === 'input') {
+        setFieldValue(field, value);
+      }
+    };
+
     return (
       <FormikField name={field}>
         <AutocompleteAsync
@@ -79,6 +90,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
           forcePopupIcon
           disableClearable
           optionId={getOptionId()}
+          onInputChange={onInputChange}
           {...{ filterOptions }}
           onChange={handleChange}
           placeholder={translate('lhr.summary.placeholder.select.enter')}

@@ -52,6 +52,16 @@ const Editor: React.FC<CustomTemplateProps & { options: any[], docType: DocType 
     }));
   };
 
+  const onInputChange = (
+    event: React.FocusEvent<HTMLInputElement>,
+    value: string,
+    reason: string,
+  ) => {
+    if (reason === 'input') {
+      setFieldValue(field, value);
+    }
+  };
+
   const defaultValue = values[field] ?? dataItem[field];
   const value = renderOptions().find((option) => option.value === defaultValue);
 
@@ -65,6 +75,7 @@ const Editor: React.FC<CustomTemplateProps & { options: any[], docType: DocType 
         freeSolo
         forcePopupIcon
         options={renderOptions()}
+        onInputChange={onInputChange}
         value={value}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
@@ -116,6 +127,16 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
       }
     };
 
+    const onInputChange = (
+      event: React.FocusEvent<HTMLInputElement>,
+      value: string,
+      reason: string,
+    ) => {
+      if (reason === 'input') {
+        setFieldValue(field, value);
+      }
+    };
+
     const handleChange = (event: ChangeEvent<unknown>, value?) => {
       setFieldValue(field, value?.id);
     };
@@ -162,6 +183,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
           forcePopupIcon
           disableClearable
           optionId={getOptionId()}
+          onInputChange={onInputChange}
           {...{ filterOptions }}
           onChange={handleChange}
           placeholder={translate('lhr.summary.placeholder.select.enter')}
