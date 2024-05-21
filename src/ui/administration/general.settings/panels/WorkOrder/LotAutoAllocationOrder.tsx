@@ -21,7 +21,7 @@ import { styles } from './styles';
 const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
   const classes = styles();
   const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
-  const orderByReleaseDateKey = 'allocationConfig.orderByReleaseDate';
+  const orderByReleaseDateKey = 'allocationConfig.sortOrderByReleaseDate';
   const orderByReleaseDateValue = getFieldProps(orderByReleaseDateKey)
     .value as AllocationOrderType;
   const isFIFOOrderingEnabled

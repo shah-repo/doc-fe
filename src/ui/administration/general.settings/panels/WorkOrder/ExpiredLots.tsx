@@ -8,7 +8,7 @@ import { SettingsPanelProps } from '../../types';
 
 const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
-  const expiredLotsKey = 'allocationConfig.expiredLotsSelectionPrompt';
+  const expiredLotsKey = 'allocationConfig.expiredLotsPrompt';
   const isExpiredLotsAllowed = getFieldProps(expiredLotsKey).value === ExpiredLotTypes.WARNING;
 
   const handleExpiredLotChange = (event: ChangeEvent<{}>, checked: boolean) => {
@@ -18,7 +18,7 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.expired.lots')}>
       <SwitchControl
-        {...getFieldProps('allocationConfig.expiredLotsSelectionPrompt')}
+        {...getFieldProps('allocationConfig.expiredLotsPrompt')}
         checked={isExpiredLotsAllowed}
         onChange={handleExpiredLotChange}
         label={translate('administration.general.settings.expired.lots.label')}

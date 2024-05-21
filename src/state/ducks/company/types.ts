@@ -90,7 +90,7 @@ export interface CompanyMineRequest {
 export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
-export type AllocationOrderType = 'FIFO' | 'LIFO';
+export type AllocationOrderType = 'fifo' | 'lifo';
 export type expiredLotType = 'warning' | 'error';
 
 export enum NavigationItems {
@@ -100,8 +100,8 @@ export enum NavigationItems {
 }
 
 export enum AllocationOrder {
-  FIFO = 'FIFO',
-  LIFO = 'LIFO',
+  FIFO = 'fifo',
+  LIFO = 'lifo',
 }
 
 export enum ExpiredLotTypes {
@@ -180,8 +180,8 @@ interface EquipmentFamilySettings {
 }
 
 interface AllocationConfig {
-  orderByReleaseDate: AllocationOrderType
-  expiredLotsSelectionPrompt: expiredLotType
+  sortOrderByReleaseDate: AllocationOrderType
+  expiredLotsPrompt: expiredLotType
 }
 export interface GeneralSettings {
   zebraPrint: ZebraPrintSettings[]
