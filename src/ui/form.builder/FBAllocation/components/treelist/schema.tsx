@@ -48,7 +48,7 @@ export const TreeListSchema = ({
       cell: (props) => <LotAllocatedCell {...props} addLot={addLot} parentRevId={parentRevId} deleteLot={onDeleteLot} />,
     },
     {
-      field: 'expiryDate',
+      field: 'releasedAt',
       locked: false,
       title: translate('allocation.treelist.treeColumns.field.expiry.date.title'),
       width: 228,

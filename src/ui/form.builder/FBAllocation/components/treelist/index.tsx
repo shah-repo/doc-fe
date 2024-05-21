@@ -27,6 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FB } from '../../..';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
+import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
@@ -54,10 +55,7 @@ import FBDataStore from '../../../FBStore/FBDataStore';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import AutoOptions from './AutoOptions';
 import {
-  ADD_FIELD,
-  ALLOCATION_TABLE_NAME,
-  AllocationCheckBoxOptions,
-  CELL_EMPTY_VALUE, DATA_ITEM_KEY,
+  ADD_FIELD, AllocationCheckBoxOptions, ALLOCATION_TABLE_NAME, CELL_EMPTY_VALUE, DATA_ITEM_KEY,
   DOC_ID_FIELD,
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
@@ -659,12 +657,14 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           quantityOnHand = getFieldValue(part.quantityBeforeKitting);
           qtyOnHandAfter = getFieldValue(part.quantityAfterKitting);
         }
+        const releaseAt = getFormattedDateString(part.releaseAt, MomentFormats.MonthDateYearTwoDigit);
 
         return {
           ...part,
           quantityOnHand,
           quantityNeeded,
           variance,
+          releaseAt,
           issuedQty,
           partRevId: part.docId,
           qtyOnHandAfter,

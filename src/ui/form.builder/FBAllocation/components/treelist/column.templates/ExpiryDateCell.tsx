@@ -1,5 +1,6 @@
 import cx from 'classnames';
 import React, { ComponentType } from 'react';
+import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -28,7 +29,7 @@ const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
       data-cy="unit-cell"
     >
       <span className={cx(classes.Cell, { [classes.expired]: !dataItem.hasLotExpired && fieldValue })}>
-        {fieldValue}
+        {getFormattedDateString(fieldValue, MomentFormats.MonthDateYearTwoDigit)}
       </span>
     </td>
   );

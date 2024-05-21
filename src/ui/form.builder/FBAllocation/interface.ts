@@ -32,6 +32,7 @@ export interface AllocationItem {
   isUnfulfiled?: boolean
   expiryDate?: string
   hasLotExpired?: boolean
+  releaseAt?: string
 }
 
 export interface EditableAllocationItem extends AllocationItem {
