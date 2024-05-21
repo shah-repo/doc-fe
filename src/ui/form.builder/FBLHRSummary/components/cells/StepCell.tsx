@@ -121,21 +121,18 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <>
-      {mpiRevId && mpiDocumentId ? (
-        <span>
-          <span>{step}</span> /{' '}
-          <Link
-            to={documentVersionPath(mpiRevId, mpiDocumentId)}
-            target="_blank"
-            id="MPIDocLink-linkButton"
-            className={classes.link}
-          >
-            {mpiDocId}{' '}
-          </Link>
-        </span>
-      ) : (
-        mpiDocId
-      )}
+      <span>
+        <span>{step}</span> /
+        {mpiDocId && mpiDocumentId ? <Link
+          to={documentVersionPath(mpiRevId, mpiDocumentId)}
+          target="_blank"
+          id="step-mpi-field"
+          data-cy="step-mpi-field"
+          className={classes.link}
+        >
+          {mpiDocId}
+        </Link> : mpiRevId}
+      </span>
     </>
   );
 };
