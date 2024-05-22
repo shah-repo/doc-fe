@@ -19,8 +19,6 @@ const TrainingDialog: React.FunctionComponent<Props> = (props) => {
     return null;
   }
 
-  console.log('New Training Dialog...');
-
   return (
     <Dialog
       open={dialog.isOpen}
