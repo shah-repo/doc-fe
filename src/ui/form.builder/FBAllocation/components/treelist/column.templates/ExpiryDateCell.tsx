@@ -15,6 +15,7 @@ const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
 }) => {
   const classes = styles({ hasChildren });
   const fieldValue = field && dataItem[field];
+  console.log('fieldValue :', fieldValue, dataItem);
   return (
     <td
       colSpan={colSpan}
@@ -28,7 +29,7 @@ const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
       }}
       data-cy="unit-cell"
     >
-      <span className={cx(classes.Cell, { [classes.expired]: !dataItem.hasLotExpired && fieldValue })}>
+      <span className={cx(classes.Cell, { [classes.expired]: dataItem.isExpired && fieldValue })}>
         {getFormattedDateString(fieldValue, MomentFormats.MonthDateYearTwoDigit)}
       </span>
     </td>

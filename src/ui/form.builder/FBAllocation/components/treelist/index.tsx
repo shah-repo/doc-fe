@@ -657,14 +657,14 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           quantityOnHand = getFieldValue(part.quantityBeforeKitting);
           qtyOnHandAfter = getFieldValue(part.quantityAfterKitting);
         }
-        const releaseAt = getFormattedDateString(part.releaseAt, MomentFormats.MonthDateYearTwoDigit);
+        const expiryDate = getFormattedDateString(part.expiryDate, MomentFormats.MonthDateYearTwoDigit);
 
         return {
           ...part,
           quantityOnHand,
           quantityNeeded,
           variance,
-          releaseAt,
+          expiryDate,
           issuedQty,
           partRevId: part.docId,
           qtyOnHandAfter,

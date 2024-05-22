@@ -279,6 +279,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
   eqStatus: EquipmentStatus
+  isExpired?: boolean
 }
 
 export interface SmartReference {

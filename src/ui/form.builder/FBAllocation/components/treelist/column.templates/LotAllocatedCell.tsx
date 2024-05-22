@@ -78,7 +78,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     return lots.map((lot) => ({
       label: lot.document.docId,
       value: lot.id,
-      isExpired: Math.random() > 0.5,
+      isExpired: lot.isExpired ?? false,
     }));
   };
 

@@ -31,7 +31,7 @@ export interface AllocationItem {
   quantityShort?: number
   isUnfulfiled?: boolean
   expiryDate?: string
-  hasLotExpired?: boolean
+  isExpired?: boolean
   releaseAt?: string
 }
 
