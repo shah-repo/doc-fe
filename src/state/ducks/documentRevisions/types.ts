@@ -54,6 +54,12 @@ export enum EquipmentStatus {
   Voided = 'Voided',
 }
 
+export const ACTIVE_EQUIPMENT_STATUSES = [
+  EquipmentStatus.Active,
+  EquipmentStatus.ActiveCalibrated,
+  EquipmentStatus.ActiveNoCalRequired,
+];
+
 // Lot types implemetation
 export enum LotStatus {
   QUARANTINE = 'QUARANTINE',
