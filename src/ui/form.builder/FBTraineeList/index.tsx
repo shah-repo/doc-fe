@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Dialog } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
@@ -17,7 +17,7 @@ import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Button } from '../../components/forms/fields-next';
 import useDialog from '../../hooks/useDialog';
-import TrainingDetails from '../../training/details/TrainingDetails';
+import TrainingDialog from '../../training/details/TrainingDialog';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import { FIELDS_TO_OMIT } from './constants';
@@ -188,19 +188,9 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
         </Button>
       )}
       {trainingRecordDialog.isOpen && dialogTrainee && (
-        <Dialog
-          open={trainingRecordDialog.isOpen}
-          classes={{ paper: classes.dialogContent }}
-          fullWidth
-          maxWidth="md"
-          onEscapeKeyDown={trainingRecordDialog.close}
-          onBackdropClick={trainingRecordDialog.close}
-        >
-          <TrainingDetails
-            dialog={trainingRecordDialog}
-            training={dialogTrainee}
-          />
-        </Dialog>
+        <TrainingDialog
+          dialog={trainingRecordDialog}
+          training={dialogTrainee} />
       )}
     </Box>
   );

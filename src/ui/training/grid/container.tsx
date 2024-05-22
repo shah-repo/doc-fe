@@ -1,4 +1,3 @@
-import { Dialog } from '@material-ui/core';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,10 +10,9 @@ import { getSchemaFromColumns } from '../../common/utils/helpers';
 import { DataStateProps } from '../../components/KendoGrid/interfaces';
 import { KendoColumn } from '../../components/common/kendo/types';
 import useDialog from '../../hooks/useDialog';
-import TrainingDetails from '../details/TrainingDetails';
+import TrainingDialog from '../details/TrainingDialog';
 import gridConfiguration from './column.definition';
 import { TrainingListPresenter } from './presenter';
-import KendoGridStyles from './presenter.styles';
 
 export const TRAINING_TABLE_NAME = 'training';
 
@@ -22,7 +20,6 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TRAINING_TABLE_NAME));
-  const classes = KendoGridStyles();
 
   const setSearchStatus = (
     dataState: DataStateProps,
@@ -95,19 +92,9 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
         defaultPayloadData={{}}
       />
       {trainingDetailsDialog.isOpen && (
-        <Dialog
-          open={trainingDetailsDialog.isOpen}
-          classes={{ paper: classes.dialogContent }}
-          fullWidth
-          maxWidth="md"
-          onEscapeKeyDown={trainingDetailsDialog.close}
-          onBackdropClick={trainingDetailsDialog.close}
-        >
-          <TrainingDetails
-            dialog={trainingDetailsDialog}
-            training={training}
-          />
-        </Dialog>
+        <TrainingDialog
+          dialog={trainingDetailsDialog}
+          training={training} />
       )}
     </>
   );
