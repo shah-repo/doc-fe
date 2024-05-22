@@ -9,17 +9,11 @@ import { FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, 
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, EquipmentStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { ACTIVE_EQUIPMENT_STATUSES, DocumentRevision, EquipmentStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../components/notifications';
 import { isMoreDigitsAfterDecimal } from '../../dashboard.new/line.items/common/Utils';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import useStyles from './styles';
-
-const ACTIVE_EQUIPMENT_STATUSES = [
-  EquipmentStatus.Active,
-  EquipmentStatus.ActiveCalibrated,
-  EquipmentStatus.ActiveNoCalRequired,
-];
 
 export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
   Component: React.FC<T>,
