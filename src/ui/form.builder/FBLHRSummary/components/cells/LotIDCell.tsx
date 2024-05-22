@@ -59,9 +59,20 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     }));
   };
 
+  const defaultValue = values[field] ?? dataItem[field];
   const value = renderOptions().find(
-    (option) => option.value === values[field],
+    (option) => option.value === defaultValue,
   );
+
+  const onInputChange = (
+    event: React.FocusEvent<HTMLInputElement>,
+    value: string,
+    reason: string,
+  ) => {
+    if (reason === 'input') {
+      setFieldValue(field, value);
+    }
+  };
 
   return (
     <FormikField name={field}>
@@ -73,6 +84,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
         freeSolo
         forcePopupIcon
         options={renderOptions()}
+        onInputChange={onInputChange}
         value={value}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
@@ -114,7 +126,7 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
           {lotDocId}
         </Link>
       ) : (
-        lotDocId ?? EMPTY_PLACEHOLDER
+        lotRevId ?? EMPTY_PLACEHOLDER
       )}
     </>
   );
