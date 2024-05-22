@@ -34,7 +34,8 @@ export const panels = [
     key: GeneralSettingsTabs.EF,
     title: 'administration.general.settings.equipmentFamily.tab',
     component: EquipmentFamilySettingsPanel,
-  }, {
+  },
+  {
     key: GeneralSettingsTabs.Locations,
     title: 'administration.general.settings.locations.tab',
     component: CompanyLocationSettingsPanel,

@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import { useFormik } from 'formik';
 import { omit, unionBy } from 'lodash';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
@@ -23,14 +23,15 @@ import { EditableCompanyLocation } from './types';
 
 const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const companyMine = useSelector(companySelectors.getCompanyMine);
-  const canUpdateLocations = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
+  const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
 
-  const isActive = canUpdateLocations;
   const locations = companyMine.locations;
 
+  const [expanded, setExpanded] = useState(false);
   const editLocation = ({ dataItem }: DataGridRowClickEvent<EditableCompanyLocation>) => setEditedLocation(dataItem);
   const discardLocation = () => setEditedLocation(undefined);
   const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations);
+  const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
 
   const async = useAsync({
     onError: (error) => {
@@ -38,7 +39,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       toastError(error);
     },
   });
-  const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
 
   const [editedLocation, setEditedLocation] = React.useState<EditableCompanyLocation>();
   const formik = useFormik<EditableCompanyLocation | Record<string, never>>({
@@ -69,13 +69,20 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     setLocationsData(locations);
   }, [locations]);
 
-  const addLocation = () => setEditedLocation({
-    id: uuidv4(),
-    name: '',
-    includedTotalQty: '',
-    active: true,
-    [MODE_FIELD]: Mode.add,
-  });
+  const addLocation = () => {
+    setEditedLocation({
+      id: uuidv4(),
+      name: '',
+      includedTotalQty: '',
+      active: true,
+      [MODE_FIELD]: Mode.add,
+    });
+    if (!expanded) {
+      handleToggle();
+    }
+  };
+
+  const handleToggle = () => setExpanded((prevExpanded) => !prevExpanded);
 
   const mappedLocations = locationsData?.map((location) => {
     return {
@@ -99,18 +106,16 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     onRowClick: onRowClick,
   });
 
-  const ref = useCallback((node: HTMLDivElement | null) => {
-    if (node) {
-      requestAnimationFrame(() => node.scrollIntoView({ behavior: 'smooth', block: 'center' }));
-    }
-  }, []);
-
   return (
-    <Box className={classes.root}>
-      <SettingsPanel {...props} title={translate('administration.general.settings.locations.tab')} onAddNew={addLocation} >
-        <div ref={ref}>
-          <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation }} />
-        </div>
+    <Box className={classes.root} >
+      <SettingsPanel
+        {...props}
+        title={translate('administration.general.settings.locations.tab')}
+        onAddNew={addLocation}
+        expanded={expanded}
+        onToggle={handleToggle}
+      >
+        <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation }} />
       </SettingsPanel>
     </Box>
   );

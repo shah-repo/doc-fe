@@ -16,11 +16,9 @@ interface SchemaOptions {
   onDiscard: () => void
   onConfirm: () => unknown
   onRowClick?: (e: DataGridRowClickEvent<EditableCompanyLocation>) => void
-
 }
 
 type schemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableCompanyLocation>>;
-
 export const buildSchema: schemaBuilder = ({ onDiscard, onConfirm, onRowClick }) => {
   return [
     {

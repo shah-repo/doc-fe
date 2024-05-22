@@ -45,7 +45,7 @@ export default makeStyles(theme => ({
     pointerEvents: 'auto',
   },
   cellStyle: {
-    textAlign: 'start',
+    textAlign: 'center',
     color: props => props.isActive ? Colors.textBlack : Colors.textDisabled,
   },
 }));

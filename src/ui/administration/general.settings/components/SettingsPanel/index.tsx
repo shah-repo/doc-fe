@@ -12,6 +12,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   children,
   onToggle,
   onAddNew,
+  expanded,
   ...props
 }) => {
   const classes = useStyles();
@@ -25,6 +26,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     <ExpansionPanel
       {...props}
       className={classes.root}
+      expanded={expanded}
     >
       <ExpansionPanelSummary
         onClick={onToggle}
