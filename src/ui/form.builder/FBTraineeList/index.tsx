@@ -190,7 +190,8 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
       {trainingRecordDialog.isOpen && dialogTrainee && (
         <TrainingDialog
           dialog={trainingRecordDialog}
-          training={dialogTrainee} />
+          training={dialogTrainee}
+        />
       )}
     </Box>
   );

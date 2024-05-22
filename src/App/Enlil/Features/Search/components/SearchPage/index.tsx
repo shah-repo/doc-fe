@@ -244,7 +244,8 @@ const SearchPage: React.FC = () => {
       />
       <TrainingDialog
         dialog={trainingDetailsDialog}
-        training={trainingRecordData as TrainingRecordQuery} />
+        training={trainingRecordData as TrainingRecordQuery}
+      />
     </Box>
   );
 };

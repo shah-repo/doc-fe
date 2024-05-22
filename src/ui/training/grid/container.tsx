@@ -94,7 +94,8 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
       {trainingDetailsDialog.isOpen && (
         <TrainingDialog
           dialog={trainingDetailsDialog}
-          training={training} />
+          training={training}
+        />
       )}
     </>
   );
