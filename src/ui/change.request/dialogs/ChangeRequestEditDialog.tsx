@@ -120,4 +120,9 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   );
 };
 
-export default ChangeRequestEditDialog;
+export default React.memo(ChangeRequestEditDialog, (prevProps, nextProps) => {
+  return (
+    prevProps.changeRequestId === nextProps.changeRequestId
+    || prevProps.currentDocRevId === nextProps.currentDocRevId
+  );
+});
