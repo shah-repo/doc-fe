@@ -163,10 +163,12 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const onConfirmLotAddition = () => {
-    // continue adding LOT
     expiredDialog.close();
-    createOrUpdateLOT(selectedPart);
-    setSelectedPart(undefined);
+    if (selectedPart) {
+      createOrUpdateLOT(selectedPart);
+      discardAllocItem(selectedPart);
+      setSelectedPart(undefined);
+    }
   };
 
   const onConfirmDelete = () => {
@@ -267,13 +269,11 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       );
     }
   };
-  // setSelectedPart(editItemInfo);
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
     onSubmit: (values) => {
       if (values.lotRevId) {
-        // TODO add expired check here
-        if (values) {
+        if (values.isExpired) {
           setSelectedPart(values as unknown as EditableAllocationItem);
           expiredDialog.open();
           return;

@@ -41,6 +41,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
+      // TODO update isExpired here
       setLots(data);
     },
   });
@@ -89,6 +90,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     field && setFieldValue(field, option?.value);
     setFieldValue('quantityOnHand', selectedLOT?.precalc?.lot_on_hand_quantity);
     setFieldValue('parentPartRevId', dataItem.parentPartRevId);
+    // TODO update isExpired here
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
