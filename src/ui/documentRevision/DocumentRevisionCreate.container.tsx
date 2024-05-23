@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { documentRevisionsActions } from '../../state/ducks/documentRevisions';
-import { DocumentRevision, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { documentsActions, documentsSelectors } from '../../state/ducks/documents';
 import { ApplicationState } from '../../state/reducers';
 import { documentVersionPath } from '../document.revision/utils/paths';
@@ -12,6 +12,7 @@ import { DocumentCloneType } from './Clone.container';
 import DocumentRevisionForm from './forms/DocumentRevisionForm.container';
 import { toDocumentRevisionFormValuesForOutput, toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from './forms/transform';
 import { DocumentRevisionFormValues } from './forms/types';
+import { checkIsDocumentEquipment } from './helpers/checkDocumentGroup';
 
 interface DispatchProps {
   create: typeof documentRevisionsActions.create
@@ -71,7 +72,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   isSliderView,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
-
+  const isEquipment = checkIsDocumentEquipment(documentRevision.document?.documentType?.groupOptions);
   const initialValues = useMemo(() => {
     if (type === 'newVersion') {
       return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
@@ -104,6 +105,9 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
+    if(isEquipment && documentRevision.status === DocumentRevisionStatus.Released) {
+      values.formInput = documentRevision.formInput;
+    }
     const promise = async.start(create, toNewVersionRequestBody(values), async);
 
     promise?.then(() => {
