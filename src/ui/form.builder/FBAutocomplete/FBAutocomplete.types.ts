@@ -4,7 +4,7 @@ import { FBAutocompleteAsyncConfig, FBInputProps } from '..';
 
 export type FBAutocompleteProps =
  & FBInputProps
- & Pick<Partial<AutocompleteProps>, 'renderOption'>
+ & Pick<Partial<AutocompleteProps>, 'renderOption' | 'onBlur'>
  & Pick<FBAutocompleteAsyncConfig, 'labelPrefixRoot' | 'includeRevision'>
  & Pick<UseAutocompleteProps,
  | 'getOptionLabel'
