@@ -109,7 +109,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
       values.formInput = documentRevision.formInput;
     }
     const promise = async.start(create, toNewVersionRequestBody(values), async);
-console.log('-----form values--values--', { values, documentRevision });
+
     promise?.then(() => {
       FBDataStore?.setRefreshData({
         ...values,
