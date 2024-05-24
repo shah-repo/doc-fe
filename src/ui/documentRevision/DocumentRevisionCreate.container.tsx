@@ -72,7 +72,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   isSliderView,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
-  const isEquipment = checkIsDocumentEquipment(documentRevision.document?.documentType?.groupOptions);
+  const isEquipment = checkIsDocumentEquipment(documentRevision?.document?.documentType?.groupOptions);
   const initialValues = useMemo(() => {
     if (type === 'newVersion') {
       return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
@@ -105,7 +105,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    if(isEquipment && documentRevision.status === DocumentRevisionStatus.Released) {
+    if(isEquipment && documentRevision?.status === DocumentRevisionStatus.Released) {
       values.formInput = documentRevision.formInput;
     }
     const promise = async.start(create, toNewVersionRequestBody(values), async);
