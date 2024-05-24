@@ -29,7 +29,7 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
     };
 
     React.useEffect(() => {
-      const disposer = reaction( // Form sync & autosave
+      return reaction( // Form sync & autosave
         () => approvalMatrixFieldState?.data,
         (data) => {
           formState?.setFieldValue(FBDAMFields.DAM, cloneDeep(data?.approvalMatrix));
@@ -40,7 +40,6 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
           approvalMatrixFieldState?.setMode('none');
         },
       );
-      return disposer;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
