@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import { useFormik } from 'formik';
-import { omit, unionBy } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import { isEmpty, omit, unionBy } from 'lodash';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
@@ -24,10 +24,8 @@ import { EditableCompanyLocation } from './types';
 const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const companyMine = useSelector(companySelectors.getCompanyMine);
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
-
   const locations = companyMine.locations;
 
-  const [expanded, setExpanded] = useState(false);
   const editLocation = ({ dataItem }: DataGridRowClickEvent<EditableCompanyLocation>) => setEditedLocation(dataItem);
   const discardLocation = () => setEditedLocation(undefined);
   const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations);
@@ -46,6 +44,12 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     validate: (values) => {
       const error: Record<string, string> = {};
       const isDuplicate = locations.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
+      if (isEmpty(values.name)) {
+        error.name = 'validators.required';
+      }
+      if (isEmpty(values.includedTotalQty)) {
+        error.includedTotalQty = 'validators.required';
+      }
       if (values.name && isDuplicate) {
         error.name = 'validator.location.same.name.exist';
       }
@@ -68,7 +72,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   useEffect(() => {
     setLocationsData(locations);
   }, [locations]);
-
   const addLocation = () => {
     setEditedLocation({
       id: uuidv4(),
@@ -77,12 +80,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       active: true,
       [MODE_FIELD]: Mode.add,
     });
-    if (!expanded) {
-      handleToggle();
-    }
   };
-
-  const handleToggle = () => setExpanded((prevExpanded) => !prevExpanded);
 
   const mappedLocations = locationsData?.map((location) => {
     return {
@@ -112,8 +110,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
         {...props}
         title={translate('administration.general.settings.locations.tab')}
         onAddNew={addLocation}
-        expanded={expanded}
-        onToggle={handleToggle}
       >
         <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation }} />
       </SettingsPanel>
