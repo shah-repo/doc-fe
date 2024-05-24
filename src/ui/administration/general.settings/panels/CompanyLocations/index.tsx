@@ -80,6 +80,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       active: true,
       [MODE_FIELD]: Mode.add,
     });
+    props.onToggle(true);
   };
 
   const mappedLocations = locationsData?.map((location) => {
@@ -111,7 +112,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
         title={translate('administration.general.settings.locations.tab')}
         onAddNew={addLocation}
       >
-        <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation }} />
+        <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation, scrollBehavior: 'smooth' }} />
       </SettingsPanel>
     </Box>
   );

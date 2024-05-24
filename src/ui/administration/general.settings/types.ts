@@ -20,7 +20,7 @@ export interface GeneralSettingsProps {
 
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
-  onToggle: () => void
+  onToggle: (isExpanded?: boolean) => void
   onAddNew?: () => void
 }
 
