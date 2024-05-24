@@ -1,6 +1,9 @@
 import cx from 'classnames';
+import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
 import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
+import { EditableAllocationItem } from '../../../interface';
+import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -14,8 +17,11 @@ const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
   ...otherProps
 }) => {
   const classes = styles({ hasChildren });
-  const fieldValue = field && dataItem[field];
-  console.log('fieldValue :', fieldValue, dataItem);
+  const isEditMode = isEditAllocItem(dataItem);
+  const { values } = useFormikContext<EditableAllocationItem>();
+  const fieldValue = isEditMode ? values?.expiryDate : field && dataItem[field];
+  const isExpired = isEditMode ? values.isExpired : dataItem.isExpired;
+
   return (
     <td
       colSpan={colSpan}
@@ -29,7 +35,7 @@ const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
       }}
       data-cy="unit-cell"
     >
-      <span className={cx(classes.Cell, { [classes.expired]: dataItem.isExpired && fieldValue })}>
+      <span className={cx(classes.Cell, { [classes.expired]: isExpired && fieldValue })}>
         {fieldValue && getFormattedDateString(fieldValue, MomentFormats.MonthDateYearTwoDigit)}
       </span>
     </td>

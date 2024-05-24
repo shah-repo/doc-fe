@@ -79,7 +79,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     return lots.map((lot) => ({
       label: lot.document.docId,
       value: lot.id,
-      isExpired: lot.isExpired ?? false,
+      isExpired: lot.isExpired,
     }));
   };
 
@@ -91,6 +91,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     setFieldValue('quantityOnHand', selectedLOT?.precalc?.lot_on_hand_quantity);
     setFieldValue('parentPartRevId', dataItem.parentPartRevId);
     setFieldValue('isExpired', selectedLOT?.isExpired);
+    setFieldValue('expiryDate', selectedLOT?.expiryDate);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
