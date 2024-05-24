@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
@@ -45,6 +45,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   }, [values.actualId]);
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+    setFieldValue('status', get(value, 'status'));
     setFieldValue(field, value?.value);
   };
 
@@ -55,6 +56,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
         displayRevision: lot?.displayRevision,
         name: lot?.name,
       }),
+      status: lot?.status,
       value: lot.id,
     }));
   };
@@ -62,7 +64,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   const defaultValue = values[field] ?? dataItem[field];
   const value = renderOptions().find(
     (option) => option.value === defaultValue,
-  );
+  ) ?? { label: defaultValue, value: defaultValue };
 
   const onInputChange = (
     event: React.FocusEvent<HTMLInputElement>,
@@ -70,6 +72,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     reason: string,
   ) => {
     if (reason === 'input') {
+      setFieldValue('status', '');
       setFieldValue(field, value);
     }
   };

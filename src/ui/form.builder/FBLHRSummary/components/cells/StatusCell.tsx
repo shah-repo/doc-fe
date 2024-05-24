@@ -1,10 +1,12 @@
 import { Chip } from '@material-ui/core';
 import cx from 'classnames';
+import { useFormikContext } from 'formik';
 import React from 'react';
 import { statusClassMapping } from '../../../../components/common/kendo/helpers';
 import Tooltip from '../../../../components/common/kendo/Tooltip';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { EMPTY_PLACEHOLDER, STATUS_OPTIONS } from '../../constants';
-import { CustomTemplateProps } from '../../types';
+import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import useStyles from './Status.styles';
 
 export const StatusCell: React.FC<CustomTemplateProps> = ({
@@ -13,8 +15,10 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
   ...props
 }) => {
   const classes = useStyles();
+  const { values } = useFormikContext<EditableLHRSummaryItem>();
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  const defaultValue = dataItem[field];
+  const defaultValue = isEditMode ? values.status || dataItem[field] : dataItem[field];
   const displayStatus = STATUS_OPTIONS.find((option) => option.value === defaultValue)?.label ?? defaultValue;
 
   return (

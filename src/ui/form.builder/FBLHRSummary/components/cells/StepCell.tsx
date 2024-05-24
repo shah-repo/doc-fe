@@ -122,7 +122,7 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
   return (
     <>
       <span>
-        <span>{step}</span> /
+        <span>{step}</span> /&nbsp;
         {mpiDocId && mpiDocumentId ? <Link
           to={documentVersionPath(mpiRevId, mpiDocumentId)}
           target="_blank"
