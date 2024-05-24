@@ -72,7 +72,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   isSliderView,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
-  const isEquipment = checkIsDocumentEquipment(documentRevision.document?.documentType?.groupOptions);
+  const isEquipment = checkIsDocumentEquipment(documentRevision?.document?.documentType?.groupOptions);
   const initialValues = useMemo(() => {
     if (type === 'newVersion') {
       return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
