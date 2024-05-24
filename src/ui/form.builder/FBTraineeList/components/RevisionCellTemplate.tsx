@@ -46,44 +46,25 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
   const classes = useStyles();
   const targetField = fieldToEdit ?? field;
 
-  // const handleChange = (event: ChangeEvent<unknown>, option?: DocumentOption) => {
-  //   setFieldValue(targetField, getValue(option));
-  // };
-
   const source = isEditMode ? values : dataItem;
   const defaultValue = get(source, `${targetField}.documentId`, '') as string;
   const value = options?.find((revision) => revision.id === defaultValue);
 
   const displayValue = value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER;
-console.log('---field----', { field, options });
+
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
       <AutocompleteCellTemplate
-      {...props}
-      getOptionLabel={getOptionLabel}
-      renderStoredValue={displayValue}
-      options={options}
-      getValue={getValue}
-      getKey={getKey}
-      renderOption={(option) => <div className={classes.wrap}>{getOptionLabel(option)}</div>}
-      getOptionDisabled={false}
-    />
-      // <FormikField name={targetField} error={get(errors, targetField)}>
-      //   <Autocomplete
-      //     {...getFieldProps?.(targetField)}
-      //     placeholder={translate(column.title ?? '')}
-      //     blurOnSelect
-      //     options={options}
-      //     disableClearable
-      //     getOptionLabel={getOptionLabel}
-      //     renderOption={(option) => <div className={classes.wrap}>{getOptionLabel(option)}</div>}
-      //     value={value}
-      //     defaultValue={value}
-      //     onChange={handleChange}
-      //     size="small"
-      //   />
-      // </FormikField>
+        {...props}
+        getOptionLabel={getOptionLabel}
+        renderStoredValue={displayValue}
+        options={options}
+        getValue={getValue}
+        getKey={getKey}
+        renderOption={(option) => <div className={classes.wrap}>{getOptionLabel(option)}</div>}
+        getOptionDisabled={false}
+      />
     );
   }
 
