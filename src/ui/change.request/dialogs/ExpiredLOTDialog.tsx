@@ -26,7 +26,7 @@ export enum DialogTypes {
   Alert = 'alert',
 }
 
-const TasksInfoDialog: React.FunctionComponent<Props> = ({
+const ExpiredLOTDialog: React.FunctionComponent<Props> = ({
   dialog,
   message,
   confirmAction,
@@ -72,8 +72,8 @@ const TasksInfoDialog: React.FunctionComponent<Props> = ({
               variant="contained"
               className={`${classes.cancelButton} ${classes.buttonLabel}`}
               onClick={cancelAction}
-              id="TasksInfoDialog-cancelButton"
-              data-cy="TasksInfoDialog-cancelButton"
+              id="expired-lot-dialog-cancel-button"
+              data-cy="expired-lot-dialog-cancel-button"
             >
               <Text translation={cancelLabel} />
             </Button>
@@ -81,8 +81,8 @@ const TasksInfoDialog: React.FunctionComponent<Props> = ({
               type="submit"
               variant="contained"
               className={`${classes.submitButton} ${classes.buttonLabel}`}
-              id="TasksInfoDialog-continueButton"
-              data-cy="TasksInfoDialog-continueButton"
+              id="expired-lot-dialog-confirm-button"
+              data-cy="expired-lot-dialog-confirm-button"
               onClick={confirmAction}
             >
               <Text translation={confirmLabel} />
@@ -94,4 +94,4 @@ const TasksInfoDialog: React.FunctionComponent<Props> = ({
   );
 };
 
-export default TasksInfoDialog;
+export default ExpiredLOTDialog;

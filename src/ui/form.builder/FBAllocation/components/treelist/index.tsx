@@ -35,7 +35,7 @@ import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
-import TasksInfoDialog, { DialogTypes } from '../../../../change.request/dialogs/TasksInfoDialog';
+import ExpiredLOTDialog, { DialogTypes } from '../../../../change.request/dialogs/ExpiredLOTDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
@@ -921,7 +921,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         message="allocation.lot.delete.confirmation"
         dialog={alertDialog}
       />
-      <TasksInfoDialog
+      <ExpiredLOTDialog
         dialog={expiredDialog}
         message="allocation.lot.expired.confirm.prompt.message"
         type={DialogTypes.Warning}
