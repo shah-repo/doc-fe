@@ -90,7 +90,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     field && setFieldValue(field, option?.value);
     setFieldValue('quantityOnHand', selectedLOT?.precalc?.lot_on_hand_quantity);
     setFieldValue('parentPartRevId', dataItem.parentPartRevId);
-    // TODO update isExpired here
+    setFieldValue('isExpired', selectedLOT?.isExpired);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
@@ -143,13 +143,6 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     </FormikField>
   );
 
-  const handleOpenNewTab = () => {
-    if (dataItem.lotRevId && dataItem.lotDocumentId) {
-      const path = documentVersionPath(dataItem.lotRevId, dataItem.lotDocumentId);
-      window.open(path);
-    }
-  };
-
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
@@ -199,7 +192,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           </div>}
           {!isEditMode && (dataItem.isLotAddition || dataItem.lotRevId) && (<div className={classes.lotInfoWrapper}>
             <span className={classes.lotInfoId}>
-              <Link onClick={handleOpenNewTab} className={classes.link}>
+              <Link to={(dataItem.lotRevId && dataItem.lotDocumentId) ? documentVersionPath(dataItem.lotRevId, dataItem.lotDocumentId) : '#'} className={classes.link} target="_blank">
                 {dataItem.lotDocId}
               </Link>
             </span>

@@ -8,8 +8,8 @@ import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from '..';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP, WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApprovalStatus } from '../../../state/ducks/documents/types';
-import ListBoxComponent from '../../components/common/autocomplete/ListBoxComponent';
 import Text from '../../components/Text';
+import ListBoxComponent from '../../components/common/autocomplete/ListBoxComponent';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { withFBAutocomplete } from './FBAutocomplete.wrap';
 import { StyledAutoComplete, StyledChip, StyledPopupAutoComplete } from './StyledAutoComplete';
@@ -46,6 +46,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   type,
   customStyles,
   autoCompleteClasses,
+  onBlur,
   ...props
 }) => {
   const { workspaceState, dialogState } = FB.useStores();
@@ -63,6 +64,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         {...params}
         {...!params.InputProps.startAdornment && { placeholder }}
         onChange={onInputChange}
+        onBlur={onBlur}
         onKeyDown={(event: React.KeyboardEvent) => {
           const key = event.keyCode || event.charCode;
           if (key === 8 && disableBackspace) {
@@ -176,6 +178,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             ListboxComponent={groupByKey ? undefined : ListBoxComponent }
             renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
             renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
+            blurOnSelect={freeSolo}
           /> : <StyledAutoComplete
             {...{
               getOptionDisabled,
@@ -196,6 +199,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
             renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
             PopperComponent={(props) => (<Popper {...props} />)}
+            blurOnSelect={freeSolo}
           />}
         </FBInput>}
       </Observer>
