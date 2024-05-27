@@ -27,7 +27,7 @@ export const buildSchema = ({
     {
       id: 'partDocId',
       field: 'partDocId',
-      title: 'approvalRequest.grid.heading.partId',
+      title: 'approvalRequest.grid.heading.itemId',
       template: (props) => <PartIdCellTemplate {...props} onClick={onRowClick} />,
       show: true,
       selectable: false,
