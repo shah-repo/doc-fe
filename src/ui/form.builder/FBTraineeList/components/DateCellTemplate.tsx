@@ -2,9 +2,9 @@ import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
-import { MomentFormats, getFormattedDateString } from '../../../../common/utils/date';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { getFormattedDateStringWithoutTimeZone, MomentFormats } from '../../../../common/utils/date';
 import { DatePicker, FormikField } from '../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps } from '../types';
 
 export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
@@ -32,7 +32,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
 
   return (
     <>
-      {getFormattedDateString(value, MomentFormats.MonthDateYearTwoDigit)}
+      {getFormattedDateStringWithoutTimeZone(value, MomentFormats.MonthDateYearTwoDigit)}
     </>
   );
 };

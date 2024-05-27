@@ -23,6 +23,9 @@ export const getFormattedStartOfDayDateString = (date: DateTypes) =>
 export const getFormattedDateString = (date: DateTypes, format = '') =>
   moment(date).tz(TIME_ZONE).format(format);
 
+export const getFormattedDateStringWithoutTimeZone = (date: DateTypes, format = '') =>
+  moment(date).format(format);
+
 export const getHumanizedFormat = (dateString: string) => moment.utc(dateString).local().startOf('seconds').fromNow();
 
 export const getCurrentDate = (format: string) => moment().tz(TIME_ZONE).format(format);
