@@ -101,29 +101,22 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       return moment(currentDate).isAfter(date);
     };
 
-    const isEqActive = (eqStatus: EquipmentStatus) => {
-      if (ACTIVE_EQUIPMENT_STATUSES.includes(eqStatus)) { return true; }
-      return false;
-    };
+    const isEqActive = (eqStatus: EquipmentStatus) => (
+      ACTIVE_EQUIPMENT_STATUSES.includes(eqStatus)
+    );
 
     // MARK: @helpers
     isOptionDisabled = (option) => {
       const pmDate = FB.calculateDateByType(option, 'preventativeMaintenance');
       const calDate = FB.calculateDateByType(option, 'calibration');
       const isOverdue = isDateOverdue(pmDate) || isDateOverdue(calDate);
+      const isActive = isEqActive(option.eqStatus);
 
-      if (!enforceFlag && !isEqActive(option.eqStatus)) {
+      if (enforceFlag && isOverdue && isLHRProductionBuild) {
         return true;
       }
 
-      if (enforceFlag) {
-        if (isOverdue && isLHRProductionBuild) {
-          return isEqActive(option.eqStatus);
-        } else {
-          return !isEqActive(option.eqStatus);
-        }
-      }
-      return !isEqActive(option.eqStatus);
+      return !isActive;
     };
 
     // eslint-disable-next-line react/display-name
