@@ -4,11 +4,13 @@ import { Box, Dialog } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
+import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import * as Yup from 'yup';
 import { translate } from '../../../common/intl';
+import { TIME_ZONE } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -85,7 +87,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
 
   const createDraftTrainee = () => setEditedTrainee({
     id: uuidv4(),
-    trainingCompletionDate: new Date().toISOString(),
+    trainingCompletionDate: moment().tz(TIME_ZONE).startOf('day').toISOString(),
     createdAt: new Date().toISOString(),
     [MODE_FIELD]: Mode.add,
   });
