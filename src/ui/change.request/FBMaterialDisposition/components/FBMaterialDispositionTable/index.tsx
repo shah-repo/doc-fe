@@ -9,6 +9,7 @@ import { cloneDeep, each, find, first, get, intersection, isEmpty, keys, map, om
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../../../../common/utils/date';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
@@ -21,9 +22,10 @@ import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDat
 import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import Text from '../../../../components/Text';
 import { useFormContext } from '../../../../components/forms/FormContext';
+import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
-import { FB } from '../../../../form.builder';
+import { FB, FBSection } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -46,6 +48,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const classes = useStyles();
   const dispatch = useDispatch();
   const [editedMDItem, setEditedMDItem] = React.useState<EditableMDItem>();
+  const isMDItemAdded = editedMDItem?.[MODE_FIELD] === Mode.add;
   const [isCopyConflictedSelections, setIsCopyConflictedSelections] = React.useState<boolean>(false);
   const [data, setData] = React.useState<EditableMDItem[]>([]);
   const [lastRefreshedAt, setLastRefreshedAt] = React.useState<Date>();
@@ -168,6 +171,27 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
       discardMDItem();
     },
+  });
+
+  const createDraftMDItem = () => setEditedMDItem({
+    id: uuidv4(),
+    partDocRevId: '',
+    basePartDocRevId: '',
+    lotDocRevId: '',
+    partDocId: '',
+    revisionsFromTo: '',
+    lotDocId: '',
+    arId: '',
+    onOrderPOAction: '',
+    inInspectionAction: '',
+    inInventoryAction: '',
+    inWipAction: '',
+    whereUsed: 0,
+    asFinishedGoodsAction: '',
+    usedLocation: '',
+    comment: '',
+    openedPO: [],
+    [MODE_FIELD]: Mode.add,
   });
 
   const { submitForm, resetForm, setValues } = formik;
@@ -304,7 +328,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const rowRender: DataGridProps<MaterialDispositionItem>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as MaterialDispositionItem;
-    const isUpdating = [Mode.edit].includes(item[MODE_FIELD]);
+    const isUpdating = [Mode.edit, Mode.add].includes(item[MODE_FIELD]);
 
     if (!isUpdating) {
       return row;
@@ -336,7 +360,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         [SELECTED_FIELD]: isEmpty(copiedItems) ? undefined : selectedState?.[item.id],
       },
     ];
-  }, []);
+  }, isMDItemAdded ? [editedMDItem] : []);
 
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
@@ -385,6 +409,19 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   return (<>
     <PopupClipboardMenuContext.Provider value={{ copyClipboardPopupMenu, selectedState, copiedItems, containerRef: containerRef.current, onUpdateSelectedCell, populateCopiedValue, clearContent }}>
+      <FBSection label={translate('approvalRequest.material.disposition.section.heading')}>
+        <Button
+          kind="ghost"
+          size="small"
+          className={classes.addButton}
+          startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+          onClick={createDraftMDItem}
+          data-cy="add-md-small-btn"
+          disabled={isShowOnly || formContext?.isEditing}
+        >
+          {translate('form.builder.add.item')}
+        </Button>
+      </FBSection>
       <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
         <KendoDataGrid<EditableMDItem>
           data={MDItemList}
@@ -464,6 +501,15 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         </KendoDataGrid>
       </ExcelExport>
     </PopupClipboardMenuContext.Provider>
+    {!isShowOnly && !formContext?.isEditing && <Button
+      kind="add"
+      fullWidth
+      attached
+      onClick={createDraftMDItem}
+      data-cy="add-md-item"
+    >
+      {translate('form.builder.add.item')}
+    </Button>}
     <AlertDialog
       dialog={dialog}
       message="approvalRequest.material.disposition.warning.alert"
