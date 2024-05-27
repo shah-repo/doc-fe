@@ -1,6 +1,7 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
+import moment from 'moment';
 import React from 'react';
 import { getFormattedDateStringWithoutTimeZone, MomentFormats } from '../../../../common/utils/date';
 import { DatePicker, FormikField } from '../../../components/forms/fields-next';
@@ -14,7 +15,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
   const value = dataItem[field] as string;
 
   const handleChange = (date: MaterialUiPickersDate) => {
-    setFieldValue(field, date?.toISOString());
+    setFieldValue(field, moment(date).startOf('day').toISOString());
   };
 
   if (isEditMode) {
