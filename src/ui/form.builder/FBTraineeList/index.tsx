@@ -12,11 +12,11 @@ import * as Yup from 'yup';
 import { translate } from '../../../common/intl';
 import { companySelectors } from '../../../state/ducks/company';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
-import { Button } from '../../components/forms/fields-next';
-import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { Button } from '../../components/forms/fields-next';
 import useDialog from '../../hooks/useDialog';
 import TrainingDetails from '../../training/details/TrainingDetails';
 import FBInput from '../FBInput/FBInput';
@@ -86,7 +86,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
 
   const createDraftTrainee = () => setEditedTrainee({
     id: uuidv4(),
-    trainingCompletionDate: moment().startOf('day').toISOString(),
+    trainingCompletionDate: moment().utc().startOf('day').toISOString(),
     createdAt: new Date().toISOString(),
     [MODE_FIELD]: Mode.add,
   });

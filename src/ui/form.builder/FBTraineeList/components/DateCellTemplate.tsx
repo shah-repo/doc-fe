@@ -3,9 +3,9 @@ import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import moment from 'moment';
 import React from 'react';
-import { getFormattedDateStringWithoutTimeZone, MomentFormats } from '../../../../common/utils/date';
+import { MomentFormats } from '../../../../common/utils/date';
+import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { DatePicker, FormikField } from '../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps } from '../types';
 
 export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
@@ -15,7 +15,11 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
   const value = dataItem[field] as string;
 
   const handleChange = (date: MaterialUiPickersDate) => {
-    setFieldValue(field, moment(date).startOf('day').toISOString());
+    if (!date) {
+      return;
+    }
+
+    setFieldValue(field, date.utc().startOf('day').toISOString());
   };
 
   if (isEditMode) {
@@ -33,7 +37,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
 
   return (
     <>
-      {getFormattedDateStringWithoutTimeZone(value, MomentFormats.MonthDateYearTwoDigit)}
+      {moment.utc(value).format(MomentFormats.MonthDateYearTwoDigit)}
     </>
   );
 };
