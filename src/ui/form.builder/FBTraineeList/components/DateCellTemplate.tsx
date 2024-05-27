@@ -19,7 +19,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
       return;
     }
 
-    setFieldValue(field, date.toISOString());
+    setFieldValue(field, date.startOf('day').toISOString());
   };
 
   if (isEditMode) {
