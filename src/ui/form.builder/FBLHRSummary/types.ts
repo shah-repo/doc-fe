@@ -13,16 +13,16 @@ export interface LHRSummaryItem {
   equipmentId?: string
   mpiId?: string
   stepOrMPI: string
-  expiryDate?: string
+  expiryDate?: null | string
   startQuantity: number
   endQuantity: number
   status: string
-  calDueDate: string
-  pmDueDate: string
+  calDueDate?: null | string
+  pmDueDate?: null | string
   ncmr: string
   comments: string
   enteredBy: string
-  createdAt: string
+  createdAt?: null | string
   lotOrEqDocId?: string
   lotOrEqDocumentId?: string
   actualDocId?: string
