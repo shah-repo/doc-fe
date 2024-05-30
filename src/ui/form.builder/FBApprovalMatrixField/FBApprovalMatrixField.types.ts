@@ -6,7 +6,7 @@ export type FBApprovalMatrixFieldProps =
 & {
   handleAdd?: FBButtonProps['onClick']
   approvalMatrixFieldState?: FBApprovalMatrixFieldState
-  mode?: FBApprovalMatrixFieldMode
+  mode?: FBApprovalMatrixFieldModes
   workspaceMode: FBWorkspaceMode
 };
 
@@ -47,8 +47,6 @@ export interface FBApprovalMatrixFieldData {
   approvalRoles: FBApprovalRole[]
   approvalMatrix: FBApprovalMatrixItem[]
 }
-
-export type FBApprovalMatrixFieldMode = 'none' | 'add' | 'edit' | 'fullscreen' | 'refresh';
 
 export enum FBApprovalMatrixFieldModes {
   NONE = 'none',
