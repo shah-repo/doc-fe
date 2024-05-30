@@ -50,6 +50,14 @@ export interface FBApprovalMatrixFieldData {
 
 export type FBApprovalMatrixFieldMode = 'none' | 'add' | 'edit' | 'fullscreen' | 'refresh';
 
+export enum FBApprovalMatrixFieldModes {
+  NONE = 'none',
+  ADD = 'add',
+  EDIT = 'edit',
+  FULLSCREEN = 'fullscreen',
+  REFRESH = 'refresh',
+}
+
 export interface FBApprovalMatrixConstructor {
   formValue?: FBApprovalMatrixFieldData
   outputRevision?: boolean
