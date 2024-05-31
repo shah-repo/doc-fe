@@ -1,0 +1,60 @@
+import { Box, CircularProgress } from '@material-ui/core';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { bulkImportActions, bulkImportSelectors } from '../../state/ducks/bulkImport';
+import { BULK_IMPORT_URL } from '../constants/urls';
+import Header from './components/Header';
+import ImportLog from './components/ImportLog';
+import ImportProgress from './components/ImportProgress';
+import useStyles from './styles';
+
+interface BulkImportContainerProps extends RouteComponentProps {}
+
+const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = ({ history }) => {
+  const dispatch = useDispatch();
+  const classes = useStyles();
+  const isLoading = useSelector(bulkImportSelectors.getIsLoadingMain);
+  const firstLoad = useRef(false);
+  const showLoadingComponent = !firstLoad.current && isLoading;
+
+  const fetchBulkImportData = useCallback(() => {
+    dispatch(bulkImportActions.setIsLoadingMain(true));
+    dispatch(bulkImportActions.getBulkImports());
+    dispatch(bulkImportActions.resetSteps());
+  }, [dispatch]);
+
+  const onNewImport = () => {
+    history.push(BULK_IMPORT_URL);
+  };
+
+  useEffect(() => {
+    fetchBulkImportData();
+  }, [fetchBulkImportData]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (!isLoading) {
+        firstLoad.current = true;
+        fetchBulkImportData();
+      }
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [fetchBulkImportData, isLoading]);
+
+  return (
+    <Box className={classes.root}>
+      {showLoadingComponent && <Box className={classes.loadingContainer}>
+        <CircularProgress color="primary" size={24} className={classes.loading} />
+      </Box>}
+      <Header onNewImport={onNewImport} />
+      <Box className={classes.importContainer}>
+        <ImportProgress />
+        <ImportLog />
+      </Box>
+    </Box>
+  );
+};
+
+export default withRouter(BulkImportContainer);

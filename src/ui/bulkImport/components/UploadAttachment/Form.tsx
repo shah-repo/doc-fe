@@ -1,0 +1,176 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Dialog, Typography } from '@material-ui/core';
+import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+import { Form, Formik } from 'formik';
+import React, { ReactNode, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { bulkImportActions, bulkImportSelectors } from '../../../../state/ducks/bulkImport';
+import { BulkImport } from '../../../../state/ducks/bulkImport/types';
+import Text from '../../../components/Text';
+import { Button } from '../../../components/forms/fields-next';
+import DropzoneField, { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.field';
+import InputField from '../../../components/forms/fields/Input';
+import { toastError } from '../../../components/notifications';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import ListFiles from '../ListFiles';
+import MessageInformation from '../MessageInformation';
+import StepTitle from '../StepTitle';
+import Tree from './Tree';
+import useStyles from './styles';
+
+const errorsList = ['ECO-00100', 'ECO-00121', 'ECO-00124', 'ECO-00198', 'ECO-00201'];
+
+interface UploadAttachmentProps {
+  children?: ReactNode
+  handleNext: () => void
+}
+
+const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNext }) => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const bulkImport = useSelector(bulkImportSelectors.getBulkImport);
+  const uploadFileDataAction = useActionCreator(bulkImportActions.uploadS3);
+  const [files, setFiles] = useState<FileWithPreview[]>([]);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const showErrors = false;
+
+  const asyncUploadFile = useAsync({
+    onSuccess: () => {
+      handleNext();
+    },
+  });
+
+  const handleFilesDrop = (acceptedFilesWithPreview: FileWithPreview[]) => {
+    setFiles([...acceptedFilesWithPreview]);
+  };
+
+  const handleSubmit = (values: { files: FileWithPreview[], link: string }) => {
+    if (values.files.length === 0 && !values.link) {
+      toastError('Please select a file or link to continue', { position: 'top-right' });
+    }
+    // Handle form submission and file processing
+    dispatch(bulkImportActions.setIsLoading(true));
+    asyncUploadFile.start(uploadFileDataAction, { file: values.files && values.files.length > 0 ? values.files[0] : null, link: values.link ? values.link : null, bulkImportId: (bulkImport as BulkImport)?.id }, asyncUploadFile);
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setFiles(files.filter((_, i) => i !== index));
+  };
+
+  const handleConfirmOpen = () => {
+    setConfirmOpen(true);
+  };
+
+  const handleConfirmClose = () => {
+    setConfirmOpen(false);
+  };
+
+  const renderMessage = (showError = false) => {
+    if (!showErrors) return null;
+
+    return (
+      <MessageInformation showLink={false} showError={true} message="5 folders have mismatched structure errors." />
+    );
+  };
+
+  const renderForm = () => {
+    if (showErrors) {
+      return (
+        <Box className={classes.errorsContainer}>
+          <Typography className={classes.errorsTitle}><Text translation="common.folder.errorFound" /></Typography>
+          <Box className={classes.errorsList}>
+            {errorsList.map(err => (
+              <Box className={classes.errorCard}>
+                {err}
+                <ReportProblemOutlinedIcon className={classes.warningIcon} />
+              </Box>
+            ))}
+          </Box>
+          <Box className={classes.reUploadContainer}>
+            <Button
+              onClick={handleNext}
+              className={classes.reUpload}
+            >
+              <Text translation="common.file.reUpload" />
+            </Button>
+          </Box>
+        </Box>
+      );
+    }
+
+    return (
+      <Formik initialValues={{
+        files: [],
+        link: '',
+      }} onSubmit={handleSubmit}>
+        <Form>
+          <InputField
+            name="link"
+            size="sm"
+            label="bulkImport.uploadFromLink"
+            inputProps={{ id: 'link', placeholder: 's3://bulk-import-test/eco.zip' }}
+            inputStyleProps={classes.linkInput}
+            labelProps={{ color: 'black', fontSize: 14, fontWeight: 600 }}
+          />
+          <Typography className={classes.dropzoneLabel}><Text translation="common.file.OrUploadFromFiles" /></Typography>
+          <DropzoneField name="files" onDropCallback={handleFilesDrop} className={classes.dropzopne} accept={{ 'application/zip': ['.zip'] }}>
+            <Typography variant="body2" className={classes.textDropZone}>
+              <span><Text translation="dropzone.noDrag.textOr" /><span className={classes.browseText}><Text translation="dropzone.noDrag.subText" /></span></span>
+            </Typography>
+          </DropzoneField>
+          <ListFiles files={files} handleRemoveFile={handleRemoveFile} />
+          {children}
+        </Form>
+      </Formik>
+    );
+  };
+
+  return (
+    <>
+      <StepTitle title="bulkImport.uploadAttachments.title" subTitle={showErrors ? 'bulkImport.uploadAttachments.subTitleError' : 'bulkImport.uploadAttachments.subTitle'} extraTitle={!showErrors ? 'bulkImport.uploadAttachments.subTitle2' : undefined} className={classes.titleContainer2} />
+      <Box className={classes.buttonsContainer}>
+        <Button
+          kind="secondary"
+          onClick={handleConfirmOpen}
+          className={classes.sampleTemplate}
+        >
+          <FontAwesomeIcon
+            className={classes.folderTreeIcon}
+            icon={regular('folder-tree')}
+          />
+          <Text translation="bulkImport.approvals.viewFolderStructureGuide" />
+        </Button>
+        {renderMessage()}
+      </Box>
+      <Box className={classes.container}>
+        <Box className={showErrors ? classes.formContainerError : classes.formContainer}>
+          {renderForm()}
+        </Box>
+        <Dialog
+          open={confirmOpen}
+          onClose={handleConfirmClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <Box className={classes.guideRoot}>
+            <Box className={classes.guideTitleContainer}>
+              <Typography className={classes.guideTitle}><Text translation="common.folder.structureGuide" /></Typography>
+            </Box>
+            <Box className={classes.guideList}>
+              <Tree />
+            </Box>
+          </Box>
+          {/* <DialogActions style={{ marginRight: 10 }}>
+            <Button onClick={handleConfirmClose} color="primary">
+              <Text translation="common.close" />
+            </Button>
+          </DialogActions> */}
+        </Dialog>
+      </Box>
+    </>
+  );
+};
+
+export default UploadAttachment;
