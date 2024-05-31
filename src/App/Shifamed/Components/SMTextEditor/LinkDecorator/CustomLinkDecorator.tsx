@@ -17,7 +17,7 @@ const CustomLinkDecorator: React.FC<CustomLinkDecoratorProps> = ({
   children,
 }) => {
   const classes = SMEditorStyles();
-  const { url } = contentState.getEntity(entityKey).getData();
+  const { url, targetOption } = contentState.getEntity(entityKey).getData();
 
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -30,10 +30,10 @@ const CustomLinkDecorator: React.FC<CustomLinkDecoratorProps> = ({
     <a
       href={url}
       className={classes.customLinkDecorator}
-      onClick={handleClick}
+      target={targetOption}
     >
       {children}
-      <span className={classes.rdwLinkDecoratorIcon}>
+      <span className={classes.rdwLinkDecoratorIcon} onClick={handleClick}>
         <FontAwesomeIcon icon={solid('arrow-up-right-from-square')} />
       </span>
     </a>
