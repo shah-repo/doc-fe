@@ -11,6 +11,13 @@ interface CustomLinkDecoratorProps {
   readOnly?: boolean
 }
 
+enum AnchorTarget {
+  Self = '_self',
+  Blank = '_blank',
+  Parent = '_parent',
+  Top = '_top',
+}
+
 const CustomLinkDecorator: React.FC<CustomLinkDecoratorProps> = ({
   contentState,
   entityKey,
@@ -20,17 +27,19 @@ const CustomLinkDecorator: React.FC<CustomLinkDecoratorProps> = ({
   const { url, targetOption } = contentState.getEntity(entityKey).getData();
 
   const handleClick = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    event: React.MouseEvent<HTMLAnchorElement | HTMLSpanElement, MouseEvent>,
+    target?: AnchorTarget,
   ) => {
     event.preventDefault();
-    window.open(url, '_blank');
+    event.stopPropagation();
+    window.open(url, target ?? AnchorTarget.Blank);
   };
 
   return (
     <a
       href={url}
       className={classes.customLinkDecorator}
-      target={targetOption}
+      onClick={(evt) => handleClick(evt, targetOption)}
     >
       {children}
       <span className={classes.rdwLinkDecoratorIcon} onClick={handleClick}>
