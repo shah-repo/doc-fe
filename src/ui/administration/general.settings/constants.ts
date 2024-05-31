@@ -1,6 +1,6 @@
 import ApprovalRequestsSettingsPanel from './panels/ApprovalRequest';
-import IntegrationsSettings from './panels/Integrations';
 import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
+import IntegrationsSettings from './panels/Integrations';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import PrintingSettingsPanel from './panels/Printing';
 import { GeneralSettingsTabs } from './types';
@@ -35,3 +35,8 @@ export const panels = [
     component: EquipmentFamilySettingsPanel,
   },
 ];
+
+export enum EquipmentFamily {
+  Locations = 'locations',
+  Statuses = 'statuses',
+}

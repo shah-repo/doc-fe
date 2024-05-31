@@ -1,26 +1,27 @@
+import React from 'react';
+import { EditableCompanyLocation } from '../../user.management/profile/CompanyLocations/types';
 import { ColumnDefinition } from '../KendoDataGrid/KendoDataGrid.types';
 import ActionsCellTemplate from './components/ActionsCellTemplate';
 import { ActiveCellTemplate } from './components/ActiveCellTemplate';
 import { TextCellTemplate } from './components/TextCellTemplate';
-import { EditableCompanyLocation } from '../../user.management/profile/CompanyLocations/types';
-import React from 'react';
 
 interface SchemaOptions {
   actionsClass: string
   isActive: boolean
   onDiscard: () => void
   onConfirm: () => unknown
+  isNameDisable: boolean
 }
 
 type schemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableCompanyLocation>>;
 
-export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm, isActive }) => {
+export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm, isActive, isNameDisable }) => {
   return [
     {
       id: 'name',
       field: 'name',
       title: 'common.name',
-      template: TextCellTemplate,
+      template: (props) => <TextCellTemplate {...props} { ...{ isNameDisable }} />,
     },
     {
       id: 'active',

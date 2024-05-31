@@ -1,12 +1,12 @@
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
-import { CellTemplateProps } from '../../KendoDataGrid/KendoDataGrid.types';
-import { FormikField, TextField } from '../../forms/fields-next';
 import { EditableCompanyLocation } from '../../../user.management/profile/CompanyLocations/types';
-import { MODE_FIELD, Mode } from '../../KendoDataGrid/constants';
+import { FormikField, TextField } from '../../forms/fields-next';
+import { Mode, MODE_FIELD } from '../../KendoDataGrid/constants';
+import { CellTemplateProps } from '../../KendoDataGrid/KendoDataGrid.types';
 
-export const TextCellTemplate: React.FC<CellTemplateProps<EditableCompanyLocation>> = ({ dataItem, field }) => {
+export const TextCellTemplate: React.FC<CellTemplateProps<EditableCompanyLocation>> = ({ dataItem, field, isNameDisable = false }) => {
   const { getFieldProps } = useFormikContext();
 
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -16,7 +16,8 @@ export const TextCellTemplate: React.FC<CellTemplateProps<EditableCompanyLocatio
     return (
       <FormikField name={field}>
         <TextField
-          {...getFieldProps(field)} />
+          {...getFieldProps(field)}
+          disabled={isNameDisable} />
       </FormikField>
     );
   }

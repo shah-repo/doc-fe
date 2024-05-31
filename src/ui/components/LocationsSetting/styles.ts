@@ -20,13 +20,15 @@ export default makeStyles(theme => ({
   gridWithButton: {
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    borderBottom: 'none',
 
     '& .k-grid-content, & .k-grid-container': {
       overflow: 'visible',
       overflowX: 'visible',
       overflowY: 'visible',
     },
+  },
+  tableWithNoBottomBorder: {
+    borderBottom: 'none',
   },
   actionsCell: {
     width: 0,

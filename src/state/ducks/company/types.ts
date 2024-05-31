@@ -162,6 +162,12 @@ export interface EquipmentLocation {
   active: boolean
 }
 
+export interface EquipmentStatuses {
+  id: string
+  name: string
+  active: boolean
+}
+
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
