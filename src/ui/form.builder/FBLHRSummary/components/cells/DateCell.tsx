@@ -13,7 +13,6 @@ import {
   Mode,
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
-import { NA_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 
 export const DateCell: React.FC<CustomTemplateProps> = ({
@@ -21,8 +20,9 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
   dataItem,
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const value = getFormattedDateString(
-    dataItem[field],
+  const fieldValue = dataItem[field];
+  const value = fieldValue && getFormattedDateString(
+    fieldValue,
     MomentFormats.MonthDateYearTwoDigit,
   );
 
@@ -44,5 +44,5 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     );
   }
 
-  return <span>{value ?? NA_PLACEHOLDER}</span>;
+  return <span>{value}</span>;
 };
