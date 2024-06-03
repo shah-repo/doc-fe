@@ -39,9 +39,9 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     if (isEmpty(actualId)) {
       return;
     }
-
+    const actualID = values?.prevActualDocId && values?.prevActualDocId === values?.actualId ? values?.prevActualId : values?.actualId;
     // Fetching LOTs based on actual ID
-    fetchPartLotsAsync.start(fetchLotsByPartId, actualId, fetchPartLotsAsync);
+    fetchPartLotsAsync.start(fetchLotsByPartId, actualID, fetchPartLotsAsync);
   }, [values.actualId]);
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {

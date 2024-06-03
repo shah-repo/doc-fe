@@ -122,6 +122,9 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       return;
     }
     delete payload.lhrDocRevId;
+
+    const actualId = data.prevActualDocId === data.actualId ? data.prevActualId : data.actualId;
+    payload.actualId = actualId;
     updateLHRSummaryAsync.start(updateLHRSummary, _documentRevisionFormState?.documentRevision?.id, data.id, payload, updateLHRSummaryAsync);
   };
 

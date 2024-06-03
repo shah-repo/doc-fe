@@ -46,6 +46,8 @@ export interface CustomTreeListColumnProps extends TreeListColumnProps {
 export interface EditableLHRSummaryItem extends LHRSummaryItem {
   [MODE_FIELD]: Mode
   isSelected?: boolean
+  prevActualDocId?: string
+  prevActualId?: string
 }
 
 export interface EditableLHRSummaryItemEditEvent {

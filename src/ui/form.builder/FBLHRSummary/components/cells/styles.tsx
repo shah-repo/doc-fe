@@ -7,6 +7,11 @@ export const styles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  option: {
+    fontSize: '14px',
+    fontFamily: 'Sora',
+    overflowWrap: 'anywhere',
+  },
   dot: {
     height: 10,
     width: 10,
