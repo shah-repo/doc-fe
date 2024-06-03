@@ -22,6 +22,14 @@ export interface AllocationItem {
   lotDocumentId?: string
   quantityBeforeKitting?: number
   quantityAfterKitting?: number
+  displayRevision?: string
+  lotUsedUnit?: string
+  partRevDisplayRevision?: string
+  revision?: string
+  usedUnit?: string
+  unit?: string
+  quantityShort?: number
+  isUnfulfiled?: boolean
 }
 
 export interface EditableAllocationItem extends AllocationItem {

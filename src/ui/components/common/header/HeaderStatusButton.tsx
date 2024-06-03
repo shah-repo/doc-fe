@@ -1,21 +1,24 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, ButtonProps, ListItemText, MenuItem } from '@material-ui/core';
+import { kebabCase } from 'lodash';
 import React from 'react';
-import { LotStatus } from '../../../../state/ducks/documentRevisions/types';
+import { EquipmentStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
 import useMenu from '../../../hooks/useMenu';
 import { Button, SplitButtonMenu } from '../../forms/fields-next';
 import useStyles from './HeaderStatusButton.styles';
 
+type StatusValue = LotStatus | EquipmentStatus;
+
 interface StatusOption {
-  value: LotStatus
+  value: StatusValue
   label: string
 }
 
 interface HeaderStatusButtonProps extends ButtonProps {
   label: string
   options: StatusOption[]
-  onItemSelect: (value: LotStatus) => void
+  onItemSelect: (value: StatusValue) => void
 }
 
 const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
@@ -29,7 +32,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
   const classes = useStyles();
   const dataCy = props['data-cy'] ?? 'status';
 
-  const handleMenuClick = (value: LotStatus) => () => onItemSelect(value);
+  const handleMenuClick = (value: StatusValue) => () => onItemSelect(value);
 
   const Icon = <Box className={classes.buttonIcon}><FontAwesomeIcon icon={solid('chevron-down')} /></Box>;
 
@@ -50,12 +53,15 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         <SplitButtonMenu
           anchorEl={optionsMenu.anchor}
           onClose={optionsMenu.close}
-          data-cy={`${dataCy}-menu`}
+          MenuListProps={{
+            ['data-cy' as string]: `${dataCy}-menu`,
+          }}
         >
           {options.map(option => (
             <MenuItem
               key={option.value}
               onClick={handleMenuClick(option.value)}
+              data-cy={`${kebabCase(option.value)}-option`}
             >
               <ListItemText>{option.label}</ListItemText>
             </MenuItem>

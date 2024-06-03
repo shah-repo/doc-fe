@@ -48,7 +48,7 @@ export interface FBApprovalMatrixFieldData {
   approvalMatrix: FBApprovalMatrixItem[]
 }
 
-export type FBApprovalMatrixFieldMode = 'none' | 'add' | 'edit' | 'fullscreen';
+export type FBApprovalMatrixFieldMode = 'none' | 'add' | 'edit' | 'fullscreen' | 'refresh';
 
 export interface FBApprovalMatrixConstructor {
   formValue?: FBApprovalMatrixFieldData
