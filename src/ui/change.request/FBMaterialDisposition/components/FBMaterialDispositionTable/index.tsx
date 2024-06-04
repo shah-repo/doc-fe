@@ -5,7 +5,7 @@ import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel
 import { GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar, getSelectedState, getSelectedStateFromKeyDown } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { cloneDeep, each, find, first, get, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
+import { cloneDeep, each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -32,7 +32,7 @@ import useDialog from '../../../../hooks/useDialog';
 import { changeRequestPreviewPath } from '../../../utils/paths';
 import ColumnShowHideMDMenu from './components/ColumnShowHideMDMenu';
 import { PopupClipboardMenuContext } from './components/PopupClipboardMenu';
-import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
+import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, EXISTING_DOC_FIELDS_TO_PICK, FIELDS_TO_PICK, NON_EXISTING_DOC_FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { CopiedItems, EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
@@ -94,6 +94,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const load = useActionCreator(materialDispositionActions.loadMaterialDispositionList);
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
+  const addMDItem = useActionCreator(materialDispositionActions.addMDItem);
   const materialDispositionAsync = useAsync({
     onSuccess: (data: {records: EditableMDItem[], lastRefreshedAt: Date}) => {
       setData(data?.records ?? []);
@@ -166,7 +167,11 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       if (formContext.isEditing) {
         updateUnsavedData(values);
       } else {
-        updateMaterialDispositionTableData([values] as EditableMDItem[]);
+        if (values[MODE_FIELD] === Mode.add) {
+          addMDTableItem(values as EditableMDItem);
+        } else {
+          updateMaterialDispositionTableData([values] as EditableMDItem[]);
+        }
       }
 
       discardMDItem();
@@ -182,19 +187,26 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     revisionsFromTo: '',
     lotDocId: '',
     arId: '',
-    onOrderPOAction: '',
-    inInspectionAction: '',
-    inInventoryAction: '',
-    inWipAction: '',
+    onOrderPOAction: EMPTY_DROPDOWN_PLACEHOLDER,
+    inInspectionAction: EMPTY_DROPDOWN_PLACEHOLDER,
+    inInventoryAction: EMPTY_DROPDOWN_PLACEHOLDER,
+    inWipAction: EMPTY_DROPDOWN_PLACEHOLDER,
     whereUsed: 0,
-    asFinishedGoodsAction: '',
-    usedLocation: '',
+    asFinishedGoodsAction: EMPTY_DROPDOWN_PLACEHOLDER,
+    usedLocation: EMPTY_DROPDOWN_PLACEHOLDER,
     comment: '',
     openedPO: [],
     [MODE_FIELD]: Mode.add,
   });
 
   const { submitForm, resetForm, setValues } = formik;
+
+  const addMDTableItem = (data: EditableMDItem) => {
+    const partToSave = {
+      ...pick(data, has(data, 'text') ? NON_EXISTING_DOC_FIELDS_TO_PICK : EXISTING_DOC_FIELDS_TO_PICK),
+    };
+    partAsync.start(addMDItem, changeRequest?.id, partToSave, partAsync);
+  };
 
   const updateMaterialDispositionTableData = (data: EditableMDItem[]) => {
     const partToSave = {
@@ -258,16 +270,21 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   };
 
   const onConfirm = () => {
+    const values = formik.values;
     if (formContext.isEditing) {
       if (!copyClipboardPopupMenu.isOpen) {
-        updateUnsavedData(formik.values);
+        updateUnsavedData(values);
       } else {
         updateUnsavedCopiedData();
       }
     } else if ((!isEmpty(copiedItems) || isCopyConflictedSelections) && !isEmpty(bulkDataToSubmit)) {
       updateMaterialDispositionTableData(bulkDataToSubmit);
     } else {
-      updateMaterialDispositionTableData([formik.values] as EditableMDItem[]);
+      if (values[MODE_FIELD] === Mode.add) {
+        addMDTableItem(values as EditableMDItem);
+      } else {
+        updateMaterialDispositionTableData([values] as EditableMDItem[]);
+      }
     }
     copyClipboardPopupMenu.close();
     dialog.close();

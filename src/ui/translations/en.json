@@ -1818,6 +1818,7 @@
   "approvalRequest.material.disposition.po.preview.title": "{partDocId}-On Order (PO)",
   "approvalRequest.material.disposition.refresh.date": "As of {date}",
   "approvalRequest.material.disposition.refresh": "Refresh",
+  "approvalRequest.material.disposition.warning.non.enlil.doc": "Not an Enlil part",
   "approvalRequest.material.disposition.warning.alert": "The Lot Status and part revision will not be auto updated in the Lot item as there are conflicting selections.\n\nWould you like to proceed?",
   "approvalRequest.material.disposition.options.mustConform": "Must conform (Approved per specification)",
   "approvalRequest.material.disposition.options.rework": "Rework",

@@ -21,6 +21,7 @@ export interface MaterialDispositionItem {
   usedLocation: string
   comment: string
   openedPO: DocumentRevision[]
+  userEnteredItemId?: string
 }
 
 export interface MDItemEditRequestBody{

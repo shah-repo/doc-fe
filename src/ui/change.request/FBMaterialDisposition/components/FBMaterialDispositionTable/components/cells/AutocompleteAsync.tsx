@@ -6,7 +6,7 @@ import { withFBAutocompleteAsync } from '../../../../../../form.builder/FBAutoco
 type AutocompleteAsyncProps = FBAutocompleteAsyncProps & AutocompleteProps;
 const AutocompleteAsync: React.FunctionComponent<
 AutocompleteAsyncProps
-> = ({ defaultValue, ...props }) => (
-  <Autocomplete {...props} value={defaultValue} />
+> = ({ defaultValue, loading, ...props }) => (
+  <Autocomplete {...props} value={defaultValue} key={loading ? 'disable' : 'enable' } />
 );
 export default withFBAutocompleteAsync(AutocompleteAsync);

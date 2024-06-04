@@ -57,4 +57,10 @@ export const styles = makeStyles((theme) => ({
   paper: {
     width: '238px',
   },
+  nonEnlilDocInfoIcon: {
+    height: 14,
+    width: 14,
+    cursor: 'pointer',
+    marginLeft: theme.spacing(0.625),
+  },
 }));
