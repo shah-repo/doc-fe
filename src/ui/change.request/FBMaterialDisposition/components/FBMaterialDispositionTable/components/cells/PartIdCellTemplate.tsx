@@ -2,61 +2,136 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
-import React, { ChangeEvent } from 'react';
+import { debounce, isEmpty } from 'lodash';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../../common/intl';
 import { DocumentRevision } from '../../../../../../../state/ducks/documentRevisions/types';
+import { materialDispositionActions } from '../../../../../../../state/ducks/materialDisposition';
 import { MODE_FIELD, Mode } from '../../../../../../components/KendoDataGrid/constants';
-import { FormikField } from '../../../../../../components/forms/fields-next';
+import { Autocomplete, FormikField } from '../../../../../../components/forms/fields-next';
+import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
 import { documentPreviewPath } from '../../../../../../document.revision/utils/paths';
-import { FBAutocompleteAsyncOption } from '../../../../../../form.builder';
+import useActionCreator from '../../../../../../hooks/useActionCreator';
+import useAsync from '../../../../../../hooks/useAsync';
 import { Colors } from '../../../../../../layout/theme-next';
 import OverflowingContent from '../../../commonCells/OveflowContent';
 import { CustomTemplateProps, EditableMDItem } from '../../types';
-import AutocompleteAsync from './AutocompleteAsync';
 import { styles } from './styles';
+const MIN_SEARCH_TERM_LENGTH = 3;
 
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
-  const { setFieldValue, getFieldProps, values } = useFormikContext<EditableMDItem>();
+  const { setFieldValue, getFieldProps } = useFormikContext<EditableMDItem>();
+  const [parts, setParts] = React.useState<DocumentRevision[]>([]);
+  const [value, setValue] = useState<OptionType>({ label: '', value: '' });
   const { userEnteredItemId } = dataItem;
   const isUserEnteredItemId = !isEmpty(userEnteredItemId);
+  const fieldName = isUserEnteredItemId ? 'userEnteredItemId' : 'partDocRevId';
+  const [inputValue, setInputValue] = React.useState('');
+  const [offset, setOffset] = React.useState(0);
+  const limit = 25;
   const classes = styles();
+  const isEdit = dataItem[MODE_FIELD] === Mode.edit;
 
-  const handleChange = (event: ChangeEvent<unknown>, value: DocumentRevision) => {
-    setFieldValue('docId', value.document.docId);
-    setFieldValue('docRevId', value.id);
-    setFieldValue('displayRevision', value.displayRevision);
+  const loadAllDocsListAction = useActionCreator(materialDispositionActions.loadAllDocsList);
+
+  const loadAllDocsListAsync = useAsync({
+    onSuccess: (data: DocumentRevision[] = []) => {
+      setParts(prev => [...prev, ...data?.items]);
+    },
+  });
+
+  useEffect(() => {
+    loadAllDocsListAsync.start(
+      loadAllDocsListAction,
+      offset,
+      '',
+      loadAllDocsListAsync,
+    );
+  }, [dataItem[MODE_FIELD]]);
+
+  const renderOptions = () => {
+    return parts.map((part) => ({
+      label: translate('wo.displayRevision', { docId: part.document.docId, displayRevision: part?.displayRevision, name: part?.name }),
+      value: part.id,
+    }));
   };
 
-  console.log({ values, field });
+  useEffect(() => {
+    const value = renderOptions().find((option) => option.value === dataItem.partDocRevId) ?? { label: dataItem.partDocId, value: dataItem.partDocRevId };
+    if (value && field) {
+      setFieldValue('partDocRevId', value.value);
+      setValue(value);
+    }
+  }, [parts]);
 
-  const onInputChange = (
-    event: React.FocusEvent<HTMLInputElement>,
-    value: string,
-    reason: string,
-  ) => {
-    if (reason === 'input') {
-      setFieldValue('text', value);
+  const handleChange = (event: ChangeEvent<unknown>, value: OptionType) => {
+    const selectedDoc = parts.find(doc => doc.id === value.value);
+    setFieldValue('docId', selectedDoc?.document.docId);
+    setFieldValue('docRevId', value.value);
+    setFieldValue('displayRevision', selectedDoc?.displayRevision);
+    setValue(value);
+  };
+
+  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string, reason: string) => {
+    if (reason !== 'input') {
+      return;
+    }
+    setFieldValue('text', inputVal);
+    setInputValue(inputVal);
+    if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
+      setOffset(0);
+      queryApi(0, inputVal);
+    } else if (!inputVal) {
+      setOffset(0);
+      queryApi(0);
     }
   };
 
+  const debounceFunction = debounce(onInputChange, 1000, {
+    leading: true,
+    trailing: true,
+  });
+  const onScroll = (event: React.SyntheticEvent) => {
+    const listboxNode = event.currentTarget;
+    if (
+      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop)
+    === listboxNode.clientHeight
+    ) {
+      const nextOffset = offset + limit;
+      setOffset(nextOffset);
+      queryApi(nextOffset, inputValue);
+    }
+  };
+  const queryApi = (offset: number, searchText?: string) => {
+    loadAllDocsListAsync.start(
+      loadAllDocsListAction,
+      offset,
+      searchText,
+      loadAllDocsListAsync,
+    );
+  };
+
   return (
-    <FormikField name={isUserEnteredItemId ? 'userEnteredItemId' : 'partDocRevId'}>
-      <AutocompleteAsync
-        {...getFieldProps(isUserEnteredItemId ? 'userEnteredItemId' : 'partDocRevId')}
+    <FormikField name={fieldName}>
+      <Autocomplete
+        {...getFieldProps(fieldName)}
+        key={isEmpty(parts) ? 'disabled' : 'enabled'}
         blurOnSelect
-        freeSolo
-        forcePopupIcon
         disableClearable
-        optionId={FBAutocompleteAsyncOption.allDocuments}
-        onInputChange={onInputChange}
+        freeSolo
+        disabled={isEdit}
+        forcePopupIcon
+        ListboxProps={{ onScroll }}
+        options={renderOptions()}
+        onInputChange={debounceFunction}
+        value={value}
+        getOptionLabel={(option: OptionType) => option.label}
         classes={{
           paper: classes.paper,
         }}
         renderOption={(option) => {
-          const label = translate('wo.displayRevision', { docId: option.document.docId, displayRevision: option?.displayRevision, name: option?.name });
-          return <div className={classes.optionWrap}>{label}</div>;
+          return <div className={classes.optionWrap}>{option.label}</div>;
         }}
         onChange={handleChange}
         placeholder={translate('common.select.or.enter.placeholder')}
