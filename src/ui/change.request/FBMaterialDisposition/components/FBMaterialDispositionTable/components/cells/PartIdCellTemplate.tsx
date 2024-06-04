@@ -59,13 +59,14 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
 
   useEffect(() => {
     const value = renderOptions().find((option) => option.value === dataItem.partDocRevId) ?? { label: dataItem.partDocId, value: dataItem.partDocRevId };
-    if (value && field) {
+    if (value && isEmpty(inputValue)) {
       setFieldValue('partDocRevId', value.value);
       setValue(value);
     }
   }, [parts]);
 
   const handleChange = (event: ChangeEvent<unknown>, value: OptionType) => {
+    setFieldValue('text', undefined);
     const selectedDoc = parts.find(doc => doc.id === value.value);
     setFieldValue('docId', selectedDoc?.document.docId);
     setFieldValue('docRevId', value.value);
