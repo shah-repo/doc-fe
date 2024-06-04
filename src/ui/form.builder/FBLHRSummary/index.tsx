@@ -94,7 +94,10 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   });
 
   const deleteLHRSummaryAsync = useAsync({
-    onSuccess: fetchLHRSummaryData,
+    onSuccess: () => {
+      ondiscardLHRSummaryItem();
+      fetchLHRSummaryData();
+    },
     onError: toastError,
   });
 
