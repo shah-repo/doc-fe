@@ -21,7 +21,20 @@ const updateMDItem = (
     handlers,
   });
 
+const addMDItem = (
+  id: string,
+  data: MDItemEditRequestBody,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `${MATERIAL_DISPOSITION_ROOT_URL}/${id}`,
+    method: 'post',
+    data,
+    handlers,
+  });
+
 export default {
   loadMaterialDispositionList,
   updateMDItem,
+  addMDItem,
 };
