@@ -46,6 +46,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
     setFieldValue('status', get(value, 'status'));
+    setFieldValue('expiryDate', get(value, 'expiryDate'));
     setFieldValue(field, value?.value);
   };
 
@@ -57,6 +58,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
         name: lot?.name,
       }),
       status: lot?.status,
+      expiryDate: lot?.formInput?.lot_expiry_date,
       value: lot.id,
     }));
   };
@@ -73,6 +75,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   ) => {
     if (reason === 'input') {
       setFieldValue('status', '');
+      setFieldValue('expiryDate', null);
       setFieldValue(field, value);
     }
   };
