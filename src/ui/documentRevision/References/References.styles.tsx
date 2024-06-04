@@ -3,20 +3,16 @@ import Colors from '../../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
-    checkbox: {
+    checkboxHolder: {
+      margin: 0,
       '& .MuiTypography-root': {
         fontFamily: 'Sora',
         fontWeight: 400,
         fontSize: 14,
         color: Colors.almost_black,
-      },
-      '& .MuiCheckbox-colorSecondary.Mui-checked': {
-        color: Colors.navy,
-      },
-      '& .MuiButtonBase-root': {
-        color: Colors.font_gray,
-        '&:hover': {
-          backgroundColor: Colors.sky_blue,
+        paddingLeft: theme.spacing(1.125),
+        '& .MuiFormControlLabel-label.Mui-disabled': {
+          color: Colors.almost_black,
         },
       },
     },
