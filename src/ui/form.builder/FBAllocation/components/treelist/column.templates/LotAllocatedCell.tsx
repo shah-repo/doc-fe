@@ -1,11 +1,11 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
@@ -24,7 +24,7 @@ import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
-const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot }) => {
+const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, parentRevId, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot }) => {
   const isEditMode = isEditAllocItem(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const navigationAttributes = useTableKeyboardNavigation(id);
@@ -118,13 +118,6 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     </FormikField>
   );
 
-  const handleOpenNewTab = () => {
-    if (dataItem.lotRevId && dataItem.lotDocumentId) {
-      const path = documentVersionPath(dataItem.lotRevId, dataItem.lotDocumentId);
-      window.open(path);
-    }
-  };
-
   return (
     <td
       className={cx('k-table-td k-text-nowrap', classes.cellborderBottom, className)}
@@ -174,7 +167,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           </div>}
           {!isEditMode && (dataItem.isLotAddition || dataItem.lotRevId) && (<div className={classes.lotInfoWrapper}>
             <span className={classes.lotInfoId}>
-              <Link onClick={handleOpenNewTab} className={classes.link}>
+              <Link to={(dataItem.lotRevId && dataItem.lotDocumentId) ? documentVersionPath(dataItem.lotRevId, dataItem.lotDocumentId) : '#'} className={classes.link} target="_blank">
                 {dataItem.lotDocId}
               </Link>
             </span>
@@ -235,7 +228,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           }
         </span>
       }
-      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: dataItem.lotRevId }} />
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: dataItem.lotRevId, parentRevId }} />
     </td>
   );
 };

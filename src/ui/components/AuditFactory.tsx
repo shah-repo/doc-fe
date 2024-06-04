@@ -31,6 +31,7 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditTraineeList from './AuditTraineeList';
 import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
@@ -170,6 +171,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       cycleCount () {
         return <AuditCycleCount {...{ audit, dataCy, auditValue }} />;
+      },
+      traineeList () {
+        return <AuditTraineeList {...{ audit, dataCy, auditValue }} />;
       },
       partVendors () {
         return <AuditPartVendors {...{ audit, dataCy, auditValue }} />;
@@ -477,74 +481,74 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           } = JSON.parse(nextVal);
 
           if (audit.type.includes('ARRAY_ADDED')) {
-              const { instruction, assignedTo } = JSON.parse(nextVal);
+            const { instruction, assignedTo } = JSON.parse(nextVal);
 
-              returnValue = (
-                <>
-                  {instruction
+            returnValue = (
+              <>
+                {instruction
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.instruction.added`,
                       { instruction },
                     )}
-                  {assignedTo
+                {assignedTo
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.assignee.to`,
                       { assignedTo },
                     )}
-                </>
-              );
+              </>
+            );
           } else if (audit.type.includes('ARRAY_EDITED')) {
             const attachmentNameArr = attachmentLinks?.map((attachmentName) => attachmentName.split('/').pop()) ?? [];
             const attachmentNameList = attachmentNameArr.join(', ');
 
-              returnValue = (
-                <>
-                  {instruction
+            returnValue = (
+              <>
+                {instruction
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.instruction.updated`,
                       { instruction },
                     )}
-                  {assignedAdded
+                {assignedAdded
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.assignee.added`,
                       { assignedAdded },
                     )}
-                  {status === FBInvTaskState.DONE
+                {status === FBInvTaskState.DONE
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.completed`,
                       { assignedTo },
                     )}
-                  {status === FBInvTaskState.DRAFT
+                {status === FBInvTaskState.DRAFT
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.draft`,
                       { assignedTo },
                     )}
-                  {assigneeDeleted
+                {assigneeDeleted
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.assignee.deleted`,
                       { assigneeDeleted },
                     )}
-                  {comment
+                {comment
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.comment`,
                       { comment },
                     )}
-                  {( attachmentNameArr.length > 0 )
+                {(attachmentNameArr.length > 0)
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.attachments`,
                       { attachmentNameList },
                     )}
-                </>
-              );
+              </>
+            );
           }
         } catch (error) {
           returnValue = (
@@ -755,11 +759,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             lotDocId,
             lotQuantityNeeded,
             lotVariance,
-            isNewAddition,
           } = JSON.parse(nextVal);
 
-          const partVarianceVal = partVariance ?? 0;
-          const lotVarianceVal = lotVariance ?? 0;
+          const partVarianceVal = partVariance || 0;
+          const lotVarianceVal = lotVariance || 0;
+          const issuedQty = parseInt(partQuantityNeeded, 10) + parseInt(partVarianceVal, 10);
 
           if (audit.type.includes('ARRAY_ADDED')) {
             returnValue = (
@@ -771,8 +775,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   'documentRevision.audit.workOrder.lot_info.added',
                   { lotDocId, lotQuantityNeeded, lotVarianceVal },
                 )}
-                {isNewAddition
-                  && lotDocId
+                {lotDocId
                   && !lotQuantityNeeded
                   && getNewLineItemAuditValue(
                     dataCy,
@@ -781,16 +784,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   )}
                 {!lotDocId
                   && partQuantityNeeded
-                  && partVariance
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.part_info.added',
-                    { partDocId, partQuantityNeeded, partVarianceVal },
+                    { partDocId, partQuantityNeeded, partVarianceVal, issuedQty },
                   )}
-                {isNewAddition
-                  && partDocId
+                {!lotDocId
                   && !partQuantityNeeded
-                  && !partVariance
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.part.added',
@@ -811,7 +811,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                   && getNewLineItemAuditValue(
                     dataCy,
                     'documentRevision.audit.workOrder.part_info.updated',
-                    { partDocId, partQuantityNeeded, partVarianceVal },
+                    { partDocId, partQuantityNeeded, partVarianceVal, issuedQty },
                   )}
               </>
             );
