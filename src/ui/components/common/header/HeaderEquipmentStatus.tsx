@@ -5,6 +5,7 @@ import { translate } from '../../../../common/intl';
 import { getHasPermission } from '../../../../common/utils/selectors';
 import { authSelectors } from '../../../../state/ducks/auth';
 import { Permission } from '../../../../state/ducks/auth/types';
+import { companySelectors } from '../../../../state/ducks/company';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, EquipmentStatus } from '../../../../state/ducks/documentRevisions/types';
@@ -24,12 +25,6 @@ interface Props {
 }
 
 const disabledStatuses = [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided];
-const options = Object.values(EquipmentStatus)
-  .filter(value => value !== EquipmentStatus.Voided)
-  .map(value => ({
-    value,
-    label: value,
-  }));
 
 const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
   const confirmationDialog = useDialog();
@@ -47,6 +42,13 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
   const isEquipmentStatusEditable = canChangeEquipmentStatus && !isVoidedOrObsolete;
   const statusLabel = documentRevision.eqStatus || EquipmentStatus.Inactive;
   const [draftEquipmentStatus, setDraftEquipmentStatus] = React.useState(statusLabel);
+  const { equipmentFamily: { statuses } } = useSelector(companySelectors.getGeneralSettings);
+
+  const options = statuses?.filter(value => value.active)
+  .map(value => ({
+    value: value.name,
+    label: value.name,
+  }));
 
   const handleEqStatusChange = (equipmentStatus) => {
     if (equipmentStatus === statusLabel) {

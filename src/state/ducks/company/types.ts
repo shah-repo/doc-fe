@@ -171,6 +171,7 @@ export interface EquipmentStatuses {
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
+  statuses: EquipmentStatuses[]
 }
 
 export interface GeneralSettings {
