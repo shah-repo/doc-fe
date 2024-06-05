@@ -1,9 +1,9 @@
 import { isEmpty, map, sortBy, union } from 'lodash';
 import { action, observable, set } from 'mobx';
 import { v4 as uuidv4 } from 'uuid';
-import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixItem, FBApprovalRole, FBDAMFields } from '..';
-import FBRequest from '../FBApi/FBApi.request';
+import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixItem, FBApprovalRole, FBDAMFields } from '..';
 import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 type DataKey = 'roles' | 'matrix';
 
@@ -13,7 +13,7 @@ type DataType<T extends DataKey> =
         never;
 
 class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, null> {
-  @observable public mode: FBApprovalMatrixFieldMode = 'none';
+  @observable public mode: FBApprovalMatrixFieldModes = FBApprovalMatrixFieldModes.NONE;
   public url = FBEndpoint.ApprovalMatrix;
 
   public constructor ({ formValue, outputRevision, isOutput }: FBApprovalMatrixConstructor) {
@@ -82,7 +82,7 @@ class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, nu
     approvalMatrix: sortBy(data?.approvalMatrix, (row) => row.docType.name.toLowerCase()) || [],
   });
 
-  @action public setMode = (mode: FBApprovalMatrixFieldMode): void => {
+  @action public setMode = (mode: FBApprovalMatrixFieldModes): void => {
     set(this, 'mode', mode);
   };
 
