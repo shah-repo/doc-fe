@@ -71,7 +71,7 @@ const References = ({
       {document.referencedBy && (
         <ReferencedByContainer dataProp={document.referencedBy} />
       )}
-      <FormControlLabel id="Checkbox-label" className={classes.checkboxHolder}
+      <FormControlLabel id="checkbox-label" className={classes.checkboxHolder}
         control={
           <Checkbox
             checked={retrain}
