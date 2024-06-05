@@ -1910,7 +1910,7 @@
   "allocation.part.restricted.edit": "{docId} {name} revision {revision} is in Restricted Edit Mode",
   "allocation.part.quantity.short.info.message": "Based on your Qty needed and Variance, you are short {quantityShort} {unit} for {partID}",
   "allocation.rev.header.title": "This is the revision of the part in the Lot",
-  "wo.displayRevision": "{docId} • Rev {displayRevision} - {name}",
+  "wo.displayRevision": "{docId} Rev {displayRevision} - {name}",
   "wo.withdraw.alert": "Are you sure you want to withdraw this Work Order?",
   "wo.withdraw.button.label": "Withdraw",
   "bom.add.child.part": "Add Child Part",

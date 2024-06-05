@@ -367,15 +367,5 @@
     "valueKey": "id",
     "labelKey": "name",
     "hidden": false
-  },
-  {
-    "id": "47",
-    "label": "All Documents",
-    "valueKey": "id",
-    "labelKey": "name",
-    "labelPrefixRoot": "document.docId",
-    "includeRevision": "displayRevision",
-    "root": "",
-    "hidden": false
   }
 ]
