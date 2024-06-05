@@ -103,9 +103,7 @@ const steps = (
               }
 
               return error;
-            },
-            ) ?? [];
-            console.log('updatedErrors', updatedErrors, normalizedField);
+            }) ?? [];
             return { ...table, [action.payload.field]: action.payload.cellValue, errors: updatedErrors };
           }
 

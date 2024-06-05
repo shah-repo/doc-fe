@@ -1,107 +1,109 @@
-import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.field';
+import { orderBy } from 'lodash';
+import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.types';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Approval } from '../common/types';
-import { APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CURRENT_STEP, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
-import { Approver, AttachmentFile, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
+import { approvalFieldId, APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CURRENT_STEP, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, documentRevisionFormInput, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { Approver, BKAttachmentFile, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
+import { downloadFile } from './utils';
 
 // STEPS
 
-const resetSteps = () => ({
+export const resetSteps = () => ({
   type: RESET_STEPS,
 });
 
-const setCurrentStep = (step: number) => ({
+export const setCurrentStep = (step: number) => ({
   type: CURRENT_STEP,
   payload: step,
 });
 
-const setSelectedDataType = (type: string) => ({
+export const setSelectedDataType = (type: string) => ({
   type: SET_SELECTED_TYPE,
   payload: type,
 });
 
-const setDataTypes = (data: DataType) => ({
+export const setDataTypes = (data: DataType) => ({
   type: SET_DATA_TYPES,
   payload: data,
 });
 
-const setFormDocumentsTypeGroup = (data: FormDocumentTypeGroup[]) => ({
+export const setFormDocumentsTypeGroup = (data: FormDocumentTypeGroup[]) => ({
   type: SET_FORM_DOCUMENTS_TYPE_GROUP,
   payload: data,
 });
 
-const setBulkImport = (data: BulkImport) => ({
+export const setBulkImport = (data: BulkImport) => ({
   type: SET_BULK_IMPORT,
   payload: data,
 });
 
-const setTemplateFile = (file: File[]) => ({
+export const setTemplateFile = (file: File[]) => ({
   type: SET_TEMPLATE_FILE,
   payload: file,
 });
 
-const setXlsxFile = (attachment: AttachmentFile) => ({
+export const setXlsxFile = (attachment: BKAttachmentFile) => ({
   type: SET_XLSX_FILE,
   payload: attachment,
 });
 
-const setShowTable = (bool: boolean) => ({
+export const setShowTable = (payload: boolean) => ({
   type: SET_SHOW_TABLE,
-  payload: bool,
+  payload,
 });
 
-const setOnlyErrorsTable = (bool: boolean) => ({
+export const setOnlyErrorsTable = (payload: boolean) => ({
   type: SET_ONLY_ERRORS_TABLE,
-  payload: bool,
+  payload,
 });
 
-const setHeaders = (payload: Headers) => ({
+export const setHeaders = (payload: Headers) => ({
   type: SET_HEADERS,
   payload,
 });
 
-const setTableData = (payload: TableRow[]) => ({
+export const setTableData = (payload: TableRow[]) => ({
   type: SET_TABLE_DATA,
   payload,
 });
 
-const updateRowFieldTable = (payload: UpdateRowFieldTablePayload) => ({
+export const updateRowFieldTable = (payload: UpdateRowFieldTablePayload) => ({
   type: UPDATE_ROW_FIELD_TABLE,
   payload,
 });
 
-const setApprovers = (payload: Approver[]) => ({
+export const setApprovers = (payload: Approver[]) => ({
   type: SET_APPROVALS,
   payload,
 });
 
-const setApproval = (payload: Approval) => ({
+export const setApproval = (payload: Approval) => ({
   type: SET_APPROVAL,
   payload,
 });
 
-const setBulkImports = (payload: BulkImport[]) => ({
+export const setBulkImports = (payload: BulkImport[]) => ({
   type: SET_BULK_IMPORTS,
   payload,
 });
 
-const setIsLoading = (payload: boolean) => ({
+export const setIsLoading = (payload: boolean) => ({
   type: SET_IS_LOADING,
   payload,
 });
 
-const setDataTypeFilter = (payload: string) => ({
+export const setDataTypeFilter = (payload: string) => ({
   type: SET_DATA_TYPE_FILTER,
   payload,
 });
 
-const setStatusFilter = (payload: string) => ({
+export const setStatusFilter = (payload: string) => ({
   type: SET_STATUS_FILTER,
   payload,
 });
 
-const getDataTypes = (): ApiAction<DataType> => apiAction({
+export const getDataTypes = (): ApiAction<DataType> => apiAction({
   url: BULK_IMPORT_TYPE_DATA_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
@@ -112,7 +114,7 @@ const getDataTypes = (): ApiAction<DataType> => apiAction({
   },
 });
 
-const getFormDocumentsTypeGroup = (option: string): ApiAction<FormDocumentTypeGroup[]> => apiAction({
+export const getFormDocumentsTypeGroup = (option: string): ApiAction<FormDocumentTypeGroup[]> => apiAction({
   url: `${BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL}?form_option=${option}`,
   method: 'get',
   onSuccess: (data, dispatch) => {
@@ -123,7 +125,7 @@ const getFormDocumentsTypeGroup = (option: string): ApiAction<FormDocumentTypeGr
   },
 });
 
-const getHeadersToMap = (bulkImportId: string): ApiAction<Headers> => apiAction({
+export const getHeadersToMap = (bulkImportId: string): ApiAction<Headers> => apiAction({
   url: `${BULK_HEADERS_TO_MAP_URL}${bulkImportId}`,
   method: 'get',
   onSuccess: (data, dispatch) => {
@@ -134,7 +136,7 @@ const getHeadersToMap = (bulkImportId: string): ApiAction<Headers> => apiAction(
   },
 });
 
-const getBulkImportTableData = (bulkImportId: string): ApiAction<TableRow[]> => apiAction({
+export const getBulkImportTableData = (bulkImportId: string): ApiAction<TableRow[]> => apiAction({
   url: `${BULK_TABLE_DATA}${bulkImportId}`,
   method: 'get',
   onSuccess: (data, dispatch) => {
@@ -145,67 +147,29 @@ const getBulkImportTableData = (bulkImportId: string): ApiAction<TableRow[]> => 
   },
 });
 
-const getReportsExcelFile = (bulkImportId: string): ApiAction<Blob> => apiAction({
+export const getReportsExcelFile = (bulkImportId: string): ApiAction<Blob> => apiAction({
   url: `${BULK_GET_REPORTS_EXCEL_URL}${bulkImportId}`,
   method: 'get',
-  onSuccess: (data, dispatch) => {
-    // download the file
-    const file = new Blob([data], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    });
-
-    // Create a URL for the blob object
-    const fileURL = URL.createObjectURL(file);
-
-    // Create a temporary link element and trigger the download
-    const link = document.createElement('a');
-    link.href = fileURL;
-    link.setAttribute('download', 'template.xlsx'); // Set the file name for download
-    document.body.appendChild(link);
-    link.click();
-
-    // Clean up and remove the link element
-    if (link?.parentNode) link.parentNode.removeChild(link);
-
-    // Optional: Release the object URL
-    URL.revokeObjectURL(fileURL);
+  onSuccess: (data, _) => {
+    downloadFile(data, 'template.xlsx');
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
 });
 
-const getDownloadFile = (bulkImportId: string): ApiAction<Blob> => apiAction({
+export const getDownloadFile = (bulkImportId: string): ApiAction<Blob> => apiAction({
   url: `${BULK_DOWNLOAD_FILE_URL}${bulkImportId}`,
   method: 'get',
-  onSuccess: (data, dispatch) => {
-    // download the file
-    const file = new Blob([data], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    });
-
-    // Create a URL for the blob object
-    const fileURL = URL.createObjectURL(file);
-
-    // Create a temporary link element and trigger the download
-    const link = document.createElement('a');
-    link.href = fileURL;
-    link.setAttribute('download', 'template.xlsx'); // Set the file name for download
-    document.body.appendChild(link);
-    link.click();
-
-    // Clean up and remove the link element
-    if (link?.parentNode) link.parentNode.removeChild(link);
-
-    // Optional: Release the object URL
-    URL.revokeObjectURL(fileURL);
+  onSuccess: (data, _) => {
+    downloadFile(data, 'report.xlsx');
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
 });
 
-const getApprovers = (): ApiAction<Approver[]> => apiAction({
+export const getApprovers = (): ApiAction<Approver[]> => apiAction({
   url: BULK_GET_APPROVERS_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
@@ -216,7 +180,7 @@ const getApprovers = (): ApiAction<Approver[]> => apiAction({
   },
 });
 
-const createBulkImport = (
+export const createBulkImport = (
   body: {formId: string, processId: string},
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
@@ -232,7 +196,7 @@ const createBulkImport = (
   handlers,
 });
 
-const uploadFileData = (
+export const uploadFileData = (
   body: {file: FileWithPreview, bulkImportId: string},
   handlers: Handlers,
 ): ApiAction => {
@@ -253,7 +217,7 @@ const uploadFileData = (
   });
 };
 
-const saveHeaderToMap = (
+export const saveHeaderToMap = (
   body: { headers: Headers, bulkImportId: string },
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
@@ -269,7 +233,7 @@ const saveHeaderToMap = (
   handlers,
 });
 
-const setDataTable = (
+export const setDataTable = (
   body: { data: TableRow[], bulkImportId: string },
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
@@ -285,7 +249,7 @@ const setDataTable = (
   handlers,
 });
 
-const saveApprovals = (
+export const saveApprovals = (
   body: { approval: string, documentRevisionId: string },
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
@@ -296,7 +260,7 @@ const saveApprovals = (
       id: body.approval,
     },
     type: 'MASTER',
-    fieldId: 'fb-approvals-kn7izl3v',
+    fieldId: approvalFieldId,
     partOf: {
       id: body.documentRevisionId,
     },
@@ -310,13 +274,13 @@ const saveApprovals = (
   handlers,
 });
 
-const saveDocumentRevisions = (
+export const saveDocumentRevisions = (
   body: { approvalId: string, documentRevisionId: string },
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_URL}${body.documentRevisionId}`,
   method: 'patch',
-  data: { formInput: { 'fb-approvals-fb-approvals-kn7izlov': [body.approvalId] } },
+  data: { formInput: { [documentRevisionFormInput]: [body.approvalId] } },
   onSuccess: (data, dispatch) => {
     console.log('🚀 ~ saveDocumentRevisions data:', data);
   },
@@ -326,7 +290,7 @@ const saveDocumentRevisions = (
   handlers,
 });
 
-const saveDocumentRevisionsInReview = (
+export const saveDocumentRevisionsInReview = (
   body: { documentRevisionId: string },
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
@@ -341,7 +305,7 @@ const saveDocumentRevisionsInReview = (
   handlers,
 });
 
-const uploadS3 = (
+export const uploadS3 = (
   body: {file: FileWithPreview, link: string, bulkImportId: string},
   handlers: Handlers,
 ): ApiAction => {
@@ -370,58 +334,19 @@ const uploadS3 = (
 };
 
 // MAIN
-const setIsLoadingMain = (payload: boolean) => ({
+export const setIsLoadingMain = (payload: boolean) => ({
   type: SET_IS_LOADING_MAIN,
   payload,
 });
 
-const getBulkImports = (): ApiAction<BulkImport[]> => apiAction({
+export const getBulkImports = (): ApiAction<BulkImport[]> => apiAction({
   url: BULK_IMPORT_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
-    const bulkImportDataSorted = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const bulkImportDataSorted = orderBy(data, 'createdAt', 'desc');
     dispatch(setBulkImports(bulkImportDataSorted));
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoadingMain(false));
   },
 });
-
-export default {
-  resetSteps,
-  setCurrentStep,
-  setSelectedDataType,
-  setDataTypes,
-  setFormDocumentsTypeGroup,
-  getDataTypes,
-  getFormDocumentsTypeGroup,
-  createBulkImport,
-  setTemplateFile,
-  uploadFileData,
-  setXlsxFile,
-  setShowTable,
-  setOnlyErrorsTable,
-  setTableData,
-  getHeadersToMap,
-  getBulkImportTableData,
-  getReportsExcelFile,
-  getDownloadFile,
-  setHeaders,
-  setIsLoading,
-  setIsLoadingMain,
-  saveHeaderToMap,
-  updateRowFieldTable,
-  setDataTable,
-  uploadS3,
-  getApprovers,
-  setApprovers,
-  saveApprovals,
-  setApproval,
-  saveDocumentRevisions,
-  saveDocumentRevisionsInReview,
-  getBulkImports,
-  setBulkImports,
-  setBulkImport,
-  setDataTypeFilter,
-  setStatusFilter,
-};

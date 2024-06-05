@@ -1,4 +1,4 @@
-import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.field';
+import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.types';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { Approval } from '../common/types';
 import { CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
@@ -21,7 +21,7 @@ export interface BulkImportStepsState {
   dataTypeList: DataType
   bulkImport: BulkImport | null
   templateFile: FileWithPreview[]
-  xlsx: AttachmentFile | null
+  xlsx: BKAttachmentFile | null
   showTable: boolean
   showErrorsOnly: boolean
   headers: Headers | null
@@ -92,7 +92,7 @@ export interface SetTemplateFIle {
 
 export interface SetXlsxFile {
   type: typeof SET_XLSX_FILE
-  payload: AttachmentFile
+  payload: BKAttachmentFile
 }
 
 export interface SetShowTable {
@@ -178,7 +178,7 @@ interface Owner {
   id: string
 }
 
-export interface AttachmentFile {
+export interface BKAttachmentFile {
   company: Company
   lineType: string
   isCleanCopyRequired: boolean
@@ -217,7 +217,7 @@ export interface SystemHeaderEntity extends CustomHeaderEntity {
 }
 
 export interface Headers {
-  custom: SystemHeaderEntity[]
+  custom: CustomHeaderEntity[]
   system: SystemHeaderEntity[]
 }
 
