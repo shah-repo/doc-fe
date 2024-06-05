@@ -50,4 +50,23 @@ export const styles = makeStyles((theme) => ({
       textDecoration: 'underline !important',
     },
   },
+  stepCellContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  step: {
+    width: '30%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  seperator: {
+    margin: theme.spacing(0, 1),
+  },
+  mpi: {
+    width: '60%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
 }));

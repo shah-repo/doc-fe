@@ -18,6 +18,7 @@ import {
   Mode,
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { filterOutOption } from '../../utils';
@@ -99,6 +100,7 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
                 blurOnSelect
                 freeSolo
                 forcePopupIcon
+                disabled={Mode.edit === dataItem[MODE_FIELD]}
                 disableClearable
                 optionId={FBAutocompleteAsyncOption.mpiDocuments}
                 {...{ filterOptions }}
@@ -121,17 +123,36 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <>
-      <span>
-        <span>{step}</span> /&nbsp;
-        {mpiDocId && mpiDocumentId ? <Link
-          to={documentVersionPath(mpiRevId, mpiDocumentId)}
-          target="_blank"
-          id="step-mpi-field"
-          data-cy="step-mpi-field"
-          className={classes.link}
-        >
-          {mpiDocId}
-        </Link> : mpiRevId}
+      <span className={classes.stepCellContainer}>
+        <span className={classes.step}>
+          <OverflowTooltip
+            title={step}
+            placement="top"
+            interactive
+            arrow
+            data-cy="step-field"
+          >
+            {step}
+          </OverflowTooltip>
+        </span>
+        <span className={classes.seperator}>/</span>
+        {mpiDocId && mpiDocumentId ? (
+          <span className={classes.mpi}>
+            <Link
+              to={documentVersionPath(mpiRevId, mpiDocumentId)}
+              target="_blank"
+              id="step-mpi-field"
+              data-cy="step-mpi-field"
+              className={classes.link}
+            >
+              {mpiDocId}
+            </Link>
+          </span>
+        ) : (
+          <span className={classes.mpi} data-cy="step-mpi-field">
+            {mpiRevId}
+          </span>
+        )}
       </span>
     </>
   );

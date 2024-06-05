@@ -133,6 +133,7 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
           // disable filtering on client
           filterOptions={(x) => x}
           size="small"
+          disabled={Mode.edit === dataItem[MODE_FIELD]}
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%" data-cy="actualId">

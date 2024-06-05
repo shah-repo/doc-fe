@@ -36,8 +36,9 @@ export const TypeCell: React.FC<CustomTemplateProps> = ({
           {...getFieldProps(field)}
           key={isEmpty(values) ? 'disabled' : 'enabled'}
           blurOnSelect
+          disabled={Mode.edit === dataItem[MODE_FIELD]}
           disableClearable
-          placeholder={translate('lhr.summary.placeholder.enter')}
+          placeholder={translate('common.select')}
           options={TYPE_OPTIONS}
           value={value}
           getOptionLabel={(option: OptionType) => option.label}

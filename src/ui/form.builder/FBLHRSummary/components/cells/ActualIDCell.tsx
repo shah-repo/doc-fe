@@ -89,6 +89,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
           freeSolo
           forcePopupIcon
           disableClearable
+          disabled={Mode.edit === dataItem[MODE_FIELD]}
           optionId={getOptionId()}
           onInputChange={onInputChange}
           {...{ filterOptions }}

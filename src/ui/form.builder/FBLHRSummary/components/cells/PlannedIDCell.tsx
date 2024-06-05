@@ -74,6 +74,7 @@ const Editor: React.FC<CustomTemplateProps & { options: any[], docType: DocType 
         disableClearable
         freeSolo
         forcePopupIcon
+        disabled={Mode.edit === dataItem[MODE_FIELD]}
         options={renderOptions()}
         onInputChange={onInputChange}
         value={value}
@@ -181,6 +182,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
           blurOnSelect
           freeSolo
           forcePopupIcon
+          disabled={Mode.edit === dataItem[MODE_FIELD]}
           disableClearable
           optionId={getOptionId()}
           onInputChange={onInputChange}
