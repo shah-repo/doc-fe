@@ -6,8 +6,7 @@ export const styles = makeStyles((theme: Theme) =>
     checkboxHolder: {
       margin: 0,
       '& .MuiTypography-root': {
-        fontFamily: 'Sora',
-        fontWeight: 400,
+        fontWeight: 'normal',
         fontSize: 14,
         color: Colors.almost_black,
         paddingLeft: theme.spacing(1.125),
