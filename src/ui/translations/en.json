@@ -625,6 +625,7 @@
   "common.no.go.back": "No, Go Back",
   "common.search": "Search",
   "common.print": "Print Label",
+  "common.pH": "pH",
   "common.send.to.print.success": "Print Sent Successfully!",
   "common.logout": "Logout",
   "common.field.required": "The {label} is a required field",
