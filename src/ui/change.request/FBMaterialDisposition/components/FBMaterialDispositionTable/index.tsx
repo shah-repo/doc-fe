@@ -169,7 +169,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       if (formContext.isEditing) {
         updateUnsavedData(values);
       } else {
-        if (values[MODE_FIELD] === Mode.add) {
+        if (isMDItemAdded) {
           addMDTableItem(values as EditableMDItem);
         } else {
           updateMaterialDispositionTableData([values] as EditableMDItem[]);
@@ -282,7 +282,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     } else if ((!isEmpty(copiedItems) || isCopyConflictedSelections) && !isEmpty(bulkDataToSubmit)) {
       updateMaterialDispositionTableData(bulkDataToSubmit);
     } else {
-      if (values[MODE_FIELD] === Mode.add) {
+      if (isMDItemAdded) {
         addMDTableItem(values as EditableMDItem);
       } else {
         updateMaterialDispositionTableData([values] as EditableMDItem[]);
