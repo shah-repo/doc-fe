@@ -2,7 +2,7 @@ import { get, isEmpty, isUndefined, omit, set } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem } from '..';
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixItem } from '..';
 import { SM } from '../../../App';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { DEFAULT_CATEGORY_LABEL } from './constants';
@@ -46,8 +46,8 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
 
       if (isEmpty(approvalMatrix)) { return; }
 
+      approvalMatrixFieldState?.setMode(FBApprovalMatrixFieldModes.NONE);
       approvalMatrixFieldState?.setApprovalMatrix(approvalMatrix);
-      approvalMatrixFieldState?.setMode('none');
     };
 
     const { document, formInput } = workspaceState ?? {};
