@@ -55,7 +55,7 @@ export const styles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
   },
   paper: {
-    width: '238px',
+    width: 238,
   },
   nonEnlilDocInfoIcon: {
     height: 14,

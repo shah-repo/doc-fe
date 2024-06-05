@@ -158,6 +158,14 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
         setData(updatedData);
   };
 
+  const saveMDItem = (values: EditableMDItem) => {
+    if (isMDItemAdded) {
+      addMDTableItem(values);
+    } else {
+      updateMaterialDispositionTableData([values]);
+    }
+  };
+
   const formik = useFormik<Partial<EditableMDItem>>({
     initialValues: {},
     onSubmit: (values) => {
@@ -169,11 +177,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
       if (formContext.isEditing) {
         updateUnsavedData(values);
       } else {
-        if (isMDItemAdded) {
-          addMDTableItem(values as EditableMDItem);
-        } else {
-          updateMaterialDispositionTableData([values] as EditableMDItem[]);
-        }
+        saveMDItem(values as EditableMDItem);
       }
 
       discardMDItem();
@@ -282,11 +286,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     } else if ((!isEmpty(copiedItems) || isCopyConflictedSelections) && !isEmpty(bulkDataToSubmit)) {
       updateMaterialDispositionTableData(bulkDataToSubmit);
     } else {
-      if (isMDItemAdded) {
-        addMDTableItem(values as EditableMDItem);
-      } else {
-        updateMaterialDispositionTableData([values] as EditableMDItem[]);
-      }
+      saveMDItem(values as EditableMDItem);
     }
     copyClipboardPopupMenu.close();
     dialog.close();
