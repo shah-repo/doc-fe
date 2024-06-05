@@ -21,6 +21,7 @@ export const buildSchema = ({
   onRowClick,
   onConfirm,
   onDiscard,
+  onDelete,
   onSelectCell,
 }: SchemaOptions): Array<ColumnDefinition<EditableMDItem>> => {
   return [
@@ -184,6 +185,7 @@ export const buildSchema = ({
           {...props}
           onConfirm={onConfirm}
           onDiscard={onDiscard}
+          onDelete={onDelete}
         />
       ),
       width: 1,

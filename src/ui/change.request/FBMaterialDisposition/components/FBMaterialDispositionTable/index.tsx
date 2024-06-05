@@ -95,6 +95,8 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const load = useActionCreator(materialDispositionActions.loadMaterialDispositionList);
   const updateItem = useActionCreator(materialDispositionActions.updateMDItem);
   const addMDItem = useActionCreator(materialDispositionActions.addMDItem);
+  const deleteItem = useActionCreator(materialDispositionActions.deleteMDItem);
+
   const materialDispositionAsync = useAsync({
     onSuccess: (data: {records: EditableMDItem[], lastRefreshedAt: Date}) => {
       setData(data?.records ?? []);
@@ -292,6 +294,20 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     discardMDItem();
   };
 
+  const deleteMDItemAsync = useAsync({
+    onSuccess: fetchMaterialDispositionTableData,
+    onError: toastError,
+  });
+
+  const deleteMDItem = () => {
+    if (!editedMDItem?.id) {
+      return;
+    }
+
+    deleteMDItemAsync.start(deleteItem, changeRequest?.id, editedMDItem?.id, deleteMDItemAsync);
+    discardMDItem();
+  };
+
   const onOpen = () => {
     dialog.open();
   };
@@ -307,6 +323,12 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   };
 
   useEffect(() => {
+    if (editedMDItem) {
+      setColumns(prevCols => schema.map(column => {
+        const prevCol = prevCols.find(prevCol => prevCol.id === column.id);
+        return { ...column, show: prevCol?.show };
+      }));
+    }
     resetForm({ values: editedMDItem ?? {} });
   }, [editedMDItem, setValues, resetForm]);
 
@@ -328,6 +350,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     onRowClick: editMDItem,
     onConfirm: submitForm,
     onDiscard: discardMDItem,
+    onDelete: deleteMDItem,
     onSelectCell: onSelectCell,
   });
 
@@ -461,7 +484,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
           rowRender={rowRender}
           onSelectionChange={onSelectionChange}
           onKeyDown={onKeyDown}
-          loading={materialDispositionAsync.isLoading || partAsync.isLoading}
+          loading={materialDispositionAsync.isLoading || partAsync.isLoading || deleteMDItemAsync.isLoading}
           resizable={true}
         >
           <GridToolbar>

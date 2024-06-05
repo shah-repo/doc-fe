@@ -20,10 +20,12 @@ import { CustomTemplateProps, EditableMDItem } from '../../types';
 import { styles } from './styles';
 const MIN_SEARCH_TERM_LENGTH = 3;
 
+type ItemOptionType = {docId: string, displayRevision: string} & OptionType;
+
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   const { setFieldValue, getFieldProps } = useFormikContext<EditableMDItem>();
-  const [parts, setParts] = React.useState<DocumentRevision[]>([]);
-  const [value, setValue] = useState<OptionType>({ label: '', value: '' });
+  const [items, setItems] = React.useState<ItemOptionType[]>([]);
+  const [value, setValue] = useState<Partial<ItemOptionType>>({ label: '', value: '', docId: '', displayRevision: '' });
   const { userEnteredItemId } = dataItem;
   const isUserEnteredItemId = !isEmpty(userEnteredItemId);
   const fieldName = isUserEnteredItemId ? 'userEnteredItemId' : 'partDocRevId';
@@ -36,8 +38,14 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   const loadAllDocsListAction = useActionCreator(materialDispositionActions.loadAllDocsList);
 
   const loadAllDocsListAsync = useAsync({
-    onSuccess: (data: DocumentRevision[] = []) => {
-      setParts(prev => [...prev, ...data?.items]);
+    onSuccess: (data: {items: DocumentRevision[]} = { items: [] }) => {
+      const modifiedItems = data?.items?.map((item) => ({
+        label: translate('approvalRequest.material.disposition.displayRevision', { docId: item.document.docId, displayRevision: item?.displayRevision, name: item?.name }),
+        value: item.id,
+        docId: item.document.docId,
+        displayRevision: item?.displayRevision,
+      }));
+      setItems(prev => [...prev, ...modifiedItems]);
     },
   });
 
@@ -50,27 +58,20 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     );
   }, [dataItem[MODE_FIELD]]);
 
-  const renderOptions = () => {
-    return parts.map((part) => ({
-      label: translate('wo.displayRevision', { docId: part.document.docId, displayRevision: part?.displayRevision, name: part?.name }),
-      value: part.id,
-    }));
-  };
-
   useEffect(() => {
-    const value = renderOptions().find((option) => option.value === dataItem.partDocRevId) ?? { label: dataItem.partDocId, value: dataItem.partDocRevId };
+    const defaultValue = isUserEnteredItemId ? { label: dataItem.userEnteredItemId ?? '' } : { label: dataItem.partDocId, value: dataItem.partDocRevId };
+    const value = items.find((option) => option.value === dataItem.partDocRevId) ?? defaultValue;
     if (value && isEmpty(inputValue)) {
       setFieldValue('partDocRevId', value.value);
       setValue(value);
     }
-  }, [parts]);
+  }, [items]);
 
-  const handleChange = (event: ChangeEvent<unknown>, value: OptionType) => {
+  const handleChange = (event: ChangeEvent<unknown>, value: ItemOptionType) => {
     setFieldValue('text', undefined);
-    const selectedDoc = parts.find(doc => doc.id === value.value);
-    setFieldValue('docId', selectedDoc?.document.docId);
+    setFieldValue('docId', value.docId);
     setFieldValue('docRevId', value.value);
-    setFieldValue('displayRevision', selectedDoc?.displayRevision);
+    setFieldValue('displayRevision', value?.displayRevision);
     setValue(value);
   };
 
@@ -117,14 +118,14 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     <FormikField name={fieldName}>
       <Autocomplete
         {...getFieldProps(fieldName)}
-        key={isEmpty(parts) ? 'disabled' : 'enabled'}
+        key={isEmpty(items) ? 'disabled' : 'enabled'}
         blurOnSelect
         disableClearable
         freeSolo
         disabled={isEdit}
         forcePopupIcon
         ListboxProps={{ onScroll }}
-        options={renderOptions()}
+        options={items}
         onInputChange={debounceFunction}
         value={value}
         getOptionLabel={(option: OptionType) => option.label}
