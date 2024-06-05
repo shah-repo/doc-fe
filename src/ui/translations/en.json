@@ -1818,6 +1818,7 @@
   "approvalRequest.material.disposition.section.heading": "Material Disposition",
   "approvalRequest.material.disposition.add": "Add Material Disposition",
   "approvalRequest.material.disposition.po.preview.title": "{partDocId}-On Order (PO)",
+  "approvalRequest.material.disposition.displayRevision": "{docId} • Rev {displayRevision} - {name}",
   "approvalRequest.material.disposition.refresh.date": "As of {date}",
   "approvalRequest.material.disposition.refresh": "Refresh",
   "approvalRequest.material.disposition.warning.non.enlil.doc": "Not an Enlil part",

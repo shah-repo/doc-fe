@@ -44,9 +44,17 @@ const addMDItem = (
     handlers,
   });
 
+const deleteMDItem = (arId: string, materialDispositionId: string, handlers: Handlers): ApiAction =>
+  apiActionWithCallbacks({
+    url: `${MATERIAL_DISPOSITION_ROOT_URL}/${arId}/${materialDispositionId}`,
+    method: 'delete',
+    handlers,
+  });
+
 export default {
   loadMaterialDispositionList,
   updateMDItem,
   addMDItem,
+  deleteMDItem,
   loadAllDocsList,
 };
