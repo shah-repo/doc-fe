@@ -198,7 +198,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       ncmr: '',
       comments: '',
       enteredBy: user.id,
-      createdAt: null,
+      createdAt: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
     };
     setEditedLHRSummaryItem(newLHRSummaryItem);
