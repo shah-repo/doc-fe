@@ -45,7 +45,11 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
         docId: item.document.docId,
         displayRevision: item?.displayRevision,
       }));
-      setItems(prev => [...prev, ...modifiedItems]);
+      if (isEmpty(inputValue)) {
+        setItems(prev => [...prev, ...modifiedItems]);
+      } else {
+        setItems(modifiedItems);
+      }
     },
   });
 
