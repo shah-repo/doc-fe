@@ -14,7 +14,7 @@ export const MOBILECOLLAPSE_BAR_SPACE = -5;
 export default (theme: NextTheme) =>
   createStyles({
     appBar: {
-      position: 'absolute',
+      position: 'fixed',
       background: `linear-gradient(260deg, ${Colors.cerulean}, ${Colors.ultramarine_blue} 17%, ${Colors.navy} 85%)`,
       marginLeft: DRAWER_WIDTH,
       color: Colors.white,

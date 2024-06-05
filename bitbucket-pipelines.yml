@@ -12,7 +12,7 @@ definitions:
   steps:
     - step: &COMMON
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-2.5
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-2.6
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -23,7 +23,7 @@ definitions:
 
     - step: &COMMON_BUILD
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-2.5
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-2.6
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -34,7 +34,7 @@ definitions:
 
     - step: &COMMON_DEPLOY
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-2.5
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-2.6
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY

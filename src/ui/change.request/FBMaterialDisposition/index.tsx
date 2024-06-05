@@ -16,17 +16,15 @@ const FBMaterialDisposition: React.FunctionComponent<props> = ({ changeRequest, 
       <FBMaterialDispositionTable
         {...{ changeRequest, isShowOnly, setDoNotPrompt }}
       />
-      {changeRequest && (
-        <FBTasksListTable
-          {...{
-            partOfId: changeRequest.id,
-            state: changeRequest.state,
-            isShowOnly,
-            isAdditionalColumnsShown,
-            setDoNotPrompt,
-          }}
-        />
-      )}
+      <FBTasksListTable
+        {...{
+          partOfId: changeRequest?.id,
+          state: changeRequest?.state,
+          isShowOnly,
+          isAdditionalColumnsShown,
+          setDoNotPrompt,
+        }}
+      />
     </>
   );
 };

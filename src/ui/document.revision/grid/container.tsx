@@ -9,8 +9,8 @@ import { CATEGORY, DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRe
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
-import { KendoColumn } from '../../components/common/kendo/types';
 import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import { KendoColumn } from '../../components/common/kendo/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { canEditDocumentRevision, documentRevisionQueryStatus } from '../utils/helpers';
@@ -22,7 +22,12 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const TABLE_NAME = 'documentRevisions';
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
-  const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD, DOC_TYPE_GROUP_OPTION.PO];
+  const notGroupOptions = [
+    DOC_TYPE_GROUP_OPTION.RECORD,
+    DOC_TYPE_GROUP_OPTION.PO,
+    DOC_TYPE_GROUP_OPTION.GROUP_TRAINING,
+    DOC_TYPE_GROUP_OPTION.WORK_ORDER,
+  ];
   const notIncategory = CATEGORY.WORKORDER_CATEGORY;
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const history = useHistory();

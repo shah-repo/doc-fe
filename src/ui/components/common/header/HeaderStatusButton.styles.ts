@@ -6,7 +6,7 @@ export default makeStyles(theme => ({
     borderRadius: theme.shape.borderRadius / 2,
     padding: theme.spacing(0, 1.5),
     color: `${Colors.textBlack} !important`,
-    marginRight: theme.spacing(1),
+    margin: theme.spacing(0, 1),
   },
   buttonIcon: {
     height: 36,

@@ -178,6 +178,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     React.useEffect(() => reaction(
       () => formState?.newValues.get(`fb-approvals-${name}`),
       (fieldValue: string[]) => {
+        if (workspaceState?.isPreview) {
+          return;
+        }
         const formValue: string[] = get(formState?.oldValues, `fb-approvals-${name}`);
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));

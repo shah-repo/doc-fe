@@ -193,6 +193,7 @@ const TaskCompletedItemPresenter: React.FC<Props> = ({
           >
             <span className={classes.actionIcon}>
               { approvalId && <Link
+                data-cy="dashboard-task-complete-button"
                 to="#"
                 className={classes.link}
                 onClick={onApproveClick}

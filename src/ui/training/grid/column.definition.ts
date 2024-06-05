@@ -4,6 +4,10 @@ import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../c
 import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { DateFields } from './interfaces';
 
+export const ACTIVE_KEY = 'trainingPlan.employee.active';
+export const REF_ID_FIELD = 'trainingPlan.sourceReferencesIds';
+export const REF_ID_FILTER_FIELD = 'sourceReference';
+
 const columns: KendoColumn[] = [
   {
     field: 'trId',
@@ -38,6 +42,7 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     groupable: false,
     orderIndex: 3,
+    extraFields: ['documentRevision.documentId', 'documentRevision.id'], // to render data in Record popup
   },
   {
     field: 'documentRevision.name',
@@ -64,7 +69,7 @@ const columns: KendoColumn[] = [
     extraFields: ['trainingPlan.employee.user.avatar', 'trainingPlan.employee.user.initialColor'],
   },
   {
-    field: DateFields.CREATED_AT,
+    field: DateFields.ASSIGNED_AT,
     title: 'common.assign.date',
     show: true,
     locked: false,
@@ -102,18 +107,20 @@ const columns: KendoColumn[] = [
     filterCell: KendoGridFilterCell.COMPLETED_AT,
   },
   {
-    field: 'trainingPlan.curriculumDocIds',
-    title: 'common.tc.id',
+    field: REF_ID_FIELD,
+    title: 'common.ref.id',
     show: true,
     locked: false,
     width: 10,
     groupable: false,
     showColumnMenu: true,
     orderIndex: 9,
+    cell: KendoCellTemplates.DOC_ID_LIST_CELL,
     filter: 'text',
+    extraFields: ['trainingPlan.sourceReferences'], // to render data in Record popup
   },
   {
-    field: 'trainingPlan.employee.active',
+    field: ACTIVE_KEY,
     title: 'common.active',
     show: true,
     locked: false,
