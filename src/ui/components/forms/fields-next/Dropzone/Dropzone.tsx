@@ -1,7 +1,8 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Typography } from '@material-ui/core';
 import React, { ReactNode } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
-import { ReactComponent as MultipleFilesIcon } from '../../../../../assets/images/multiple_files.svg';
 import Text from '../../../Text';
 import useStyles from './Dropzone.styles';
 
@@ -39,7 +40,10 @@ const Dropzone: React.FC<DropzoneProps> = ({
       <Box {...getRootProps({ className: classes.dropzone })}>
         <input {...getInputProps()} />
         <Box className={classes.textContainer}>
-          <MultipleFilesIcon className={classes.icon} />
+          <FontAwesomeIcon
+            className={classes.icon}
+            icon={regular('files')}
+          />
           {children || (<Typography variant="body2" className={classes.text}>
             {isDragActive
               ? <Text translation="dropzone.drag.text" />
