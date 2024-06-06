@@ -1,12 +1,9 @@
-import { Field, FieldProps } from 'formik';
+import { Field, FieldProps, useFormikContext } from 'formik';
 import React, { ReactNode } from 'react';
 import { Accept } from 'react-dropzone';
 import { withThemeNext } from '../../../../layout/theme-next';
 import CustomDropzone from './Dropzone';
-
-export interface FileWithPreview extends File {
-  preview: string
-}
+import { FileWithPreview } from './Dropzone.types';
 
 interface DropzoneFieldProps {
   name: string
@@ -17,26 +14,30 @@ interface DropzoneFieldProps {
   onDropCallback?: (files: FileWithPreview[]) => void
 }
 
-const DropzoneField: React.FC<DropzoneFieldProps> = ({ name, accept, children, onDropCallback, ...props }) => {
+const DropzoneField: React.FC<DropzoneFieldProps> = ({ name, children, onDropCallback, ...restProps }) => {
+  const { setFieldValue } = useFormikContext();
+
+  const handleDrop = (acceptedFiles: File[]) => {
+    setFieldValue(name, acceptedFiles);
+
+    if (onDropCallback) {
+      const filesWithPreview: FileWithPreview[] = acceptedFiles.map(file =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        }),
+      );
+
+      onDropCallback(filesWithPreview);
+    }
+  };
+
   return (
     <Field name={name}>
-      {({ form }: FieldProps) => {
-        const handleDrop = (acceptedFiles: File[]) => {
-          form.setFieldValue(name, acceptedFiles);
-
-          if (onDropCallback) {
-            const filesWithPreview: FileWithPreview[] = acceptedFiles.map(file =>
-              Object.assign(file, {
-                preview: URL.createObjectURL(file),
-              }),
-            );
-
-            onDropCallback(filesWithPreview);
-          }
-        };
-
-        return (<CustomDropzone onDrop={handleDrop} accept={accept} {...props}>{children}</CustomDropzone>);
-      }}
+      {({ form }: FieldProps) => (
+        <CustomDropzone onDrop={handleDrop} {...restProps}>
+          {children}
+        </CustomDropzone>
+      )}
     </Field>
   );
 };

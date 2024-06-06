@@ -7,16 +7,12 @@ import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import GeneralSettingsPage from '../administration/general.settings';
 import AsyncTasksContainer from '../async.tasks/grid/container';
-import BilkImportPage from '../bulkImport/container';
-import BilkImportProgressPage from '../bulkImport/container.progress';
 import ChangeRequestCreateContainer from '../change.request/ChangeRequestCreate.container';
 import ChangeRequestContainer from '../change.request/Container';
 import ChangeRequestListContainer from '../change.request/grid/container';
 import WatermarkFooterContainer from '../components/watermarkFooter/container';
 import {
   ASYNC_TASKS_URL,
-  BULK_IMPORT_PROGRESS_URL,
-  BULK_IMPORT_URL,
   CHANGE_REQUEST_CREATE_URL,
   CHANGE_REQUEST_LIST_URL,
   CHANGE_REQUEST_ROOT_URL,
@@ -165,16 +161,6 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={GENERAL_SETTINGS_URL}
             component={GeneralSettingsPage}
-          />
-          <Route
-            path={BULK_IMPORT_URL}
-            component={BilkImportPage}
-            exact
-          />
-          <Route
-            path={BULK_IMPORT_PROGRESS_URL}
-            component={BilkImportProgressPage}
-            exact
           />
           <Redirect to={HOME_URL} />
         </Switch>

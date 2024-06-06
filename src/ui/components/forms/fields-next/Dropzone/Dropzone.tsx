@@ -14,7 +14,16 @@ interface DropzoneProps {
   maxSize?: number
 }
 
-const Dropzone: React.FC<DropzoneProps> = ({ children, className, accept, onDrop, multiple = true, maxSize = 2147483648 }) => {
+const MAX_SIZE = 2147483648;
+
+const Dropzone: React.FC<DropzoneProps> = ({
+  children,
+  className,
+  accept,
+  onDrop,
+  multiple = true,
+  maxSize = MAX_SIZE, // as default is 2GB
+}) => {
   const classes = useStyles();
   const containerClassName = className ? `${classes.container} ${className}` : classes.container;
 

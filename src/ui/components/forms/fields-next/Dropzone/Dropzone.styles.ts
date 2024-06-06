@@ -19,7 +19,6 @@ export default makeStyles((theme) => createStyles({
     padding: theme.spacing(2),
     textAlign: 'center',
     cursor: 'pointer',
-    // backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.secondary,
     height: '100%',
     display: 'grid',
