@@ -16,3 +16,9 @@ export type FBPOReceiveProps =
 export type FBPOReceiveItemProps =
 & Pick<FBPurchaseOrderProps, 'handleItem' | 'mode'>
 & Partial<FBSchemaProps>;
+
+export interface IReceivedItem {
+  itemId: string
+  rowId: string
+  received: number
+}

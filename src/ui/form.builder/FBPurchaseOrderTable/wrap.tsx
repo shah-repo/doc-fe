@@ -4,7 +4,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue } from '..';
+import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue, IReceivedItem } from '..';
 import { SM } from '../../../App';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
@@ -361,12 +361,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     if (isReceivable) {
       const receivedName = first(workspaceState?.getItemsByType('poreceive'))?.name || '';
-      const receivedItems = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
+      const receivedItems: IReceivedItem[] = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
       let isReceivedAll = true;
       items = items?.map((item) => {
-        const id = item.id;
-        const received = getReceivedQuantity(receivedItems, id) || 0;
-        if (received < item.order && isReceivedAll) {
+        const received: number = getReceivedQuantity(receivedItems, item) || 0;
+        if (received < Number(item.order) && isReceivedAll) {
           isReceivedAll = false;
         }
         return {
