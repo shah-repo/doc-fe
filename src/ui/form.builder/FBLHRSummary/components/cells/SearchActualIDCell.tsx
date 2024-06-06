@@ -63,7 +63,12 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
 
         setLoading(false);
         const modifiedItems = data?.items?.map((item) => ({
-          label: translate('wo.displayRevision', { docId: item.document?.docId, displayRevision: item?.displayRevision, name: item?.name }),
+          label: translate('lhr.summary.displayRevision',
+            {
+              docId: item.document?.docId,
+              displayRevision: item?.displayRevision,
+              name: item?.name,
+            }),
           value: item.id,
         })) ?? [];
 
