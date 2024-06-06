@@ -3,7 +3,8 @@ import { Box } from '@material-ui/core';
 import _ from 'lodash';
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { bulkImportActions, bulkImportSelectors } from '../../../../state/ducks/bulkImport';
+import { getBulkImportTableData, setShowTable, setTableData } from '../../../../state/ducks/bulkImport/actions';
+import { getBulkImport, getShowTable, getTableData } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport } from '../../../../state/ducks/bulkImport/types';
 import { NeedHelpButton } from '../ButtonActions';
 import CheckValuesTable from './CheckValuesTable';
@@ -19,21 +20,21 @@ interface MapColumnsProps {
 const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleBack }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const showTable = useSelector(bulkImportSelectors.getShowTable);
-  const bulkImport = useSelector(bulkImportSelectors.getBulkImport);
-  const TableData = useSelector(bulkImportSelectors.getTableData);
+  const showTable = useSelector(getShowTable);
+  const bulkImport = useSelector(getBulkImport);
+  const TableData = useSelector(getTableData);
   const alreadyCheckValues = useRef<boolean>(false);
 
   const handleSourceTarget = () => {
-    dispatch(bulkImportActions.setShowTable(true));
+    dispatch(setShowTable(true));
   };
 
   const init = () => {
     // before it starts checking the table data we clean it up to be sure the data is new
-    dispatch(bulkImportActions.setTableData([]));
+    dispatch(setTableData([]));
 
     if (bulkImport?.id) {
-      dispatch(bulkImportActions.getBulkImportTableData(bulkImport.id));
+      dispatch(getBulkImportTableData(bulkImport.id));
     }
   };
 

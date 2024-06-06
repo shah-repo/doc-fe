@@ -6,7 +6,7 @@ export const createValidationSchema = (fields: SystemHeaderEntity[]) => {
   return Yup.object().shape(
     fields.reduce((acc, field) => {
       if (field.required) {
-        acc[field.id] = Yup.string().required('This field is required');
+        acc[field.id] = Yup.string().required('common.required');
       }
       return acc;
     }, {}),

@@ -6,7 +6,8 @@ import { noop } from 'lodash';
 import React, { ComponentType, ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
-import { bulkImportActions, bulkImportSelectors } from '../../../../state/ducks/bulkImport';
+import { setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
+import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport, TableRow } from '../../../../state/ducks/bulkImport/types';
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import Text from '../../../components/Text';
@@ -46,7 +47,7 @@ const CustomCell = ({ dataItem, field, ...props }) => {
 
   const handleBlur = () => {
     setIsEditing(false);
-    dispatch(bulkImportActions.updateRowFieldTable({ cellValue, field, dataIndex: props.dataIndex }));
+    dispatch(updateRowFieldTable({ cellValue, field, dataIndex: props.dataIndex }));
   };
 
   const content = (
@@ -111,13 +112,13 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const [pageSize, setPageSize] = useState(pageSizes[0]);
   const [data, setData] = useState<TableRow[]>([]);
   const [errorCount, setErrorCount] = useState(0);
-  const tableData = useSelector(bulkImportSelectors.getTableDataFiltered);
-  const showErrorsOnly = useSelector(bulkImportSelectors.getShowErrorsOnly);
-  const uploadFileDataAction = useActionCreator(bulkImportActions.setDataTable);
+  const tableData = useSelector(getTableDataFiltered);
+  const showErrorsOnly = useSelector(getShowErrorsOnly);
+  const uploadFileDataAction = useActionCreator(setDataTable);
 
   const asyncSetDataTable = useAsync({
     onSuccess: () => {
-      dispatch(bulkImportActions.setShowTable(false));
+      dispatch(setShowTable(false));
       handleNext();
     },
   });
@@ -133,11 +134,11 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
       toastError(`Please fix the ${errorCount > 1 ? `${errorCount} errors` : 'error'} before continue`, { position: 'top-right' });
       return;
     }
-    dispatch(bulkImportActions.setIsLoading(true));
+    dispatch(setIsLoading(true));
     asyncSetDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTable);
   };
 
-  const updateShowErrorOnly = () => dispatch(bulkImportActions.setOnlyErrorsTable(!showErrorsOnly));
+  const updateShowErrorOnly = () => dispatch(setOnlyErrorsTable(!showErrorsOnly));
 
   useEffect(() => {
     setData(tableData.slice(page, pageSize));

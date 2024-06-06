@@ -2,7 +2,8 @@ import { Box } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { bulkImportActions, bulkImportSelectors } from '../../../../state/ducks/bulkImport';
+import { getHeadersToMap, saveHeaderToMap, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
+import { getHeaders } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport, SystemHeaderEntity } from '../../../../state/ducks/bulkImport/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -24,8 +25,8 @@ export interface InitialValues {
 const SourceTarget: React.FC<SourceTargetProps> = ({ children, handleNext, bulkImport }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const headers = useSelector(bulkImportSelectors.getHeaders);
-  const uploadFileDataAction = useActionCreator(bulkImportActions.saveHeaderToMap);
+  const headers = useSelector(getHeaders);
+  const uploadFileDataAction = useActionCreator(saveHeaderToMap);
 
   const asyncHeadersToMap = useAsync({
     onSuccess: () => {
@@ -41,15 +42,15 @@ const SourceTarget: React.FC<SourceTargetProps> = ({ children, handleNext, bulkI
         match: values[header.id] || '',
       }));
 
-      dispatch(bulkImportActions.setIsLoading(true));
+      dispatch(setIsLoading(true));
       asyncHeadersToMap.start(uploadFileDataAction, { headers: { custom: headers.custom, system: updatedSystemHeaders }, bulkImportId: bulkImport?.id }, asyncHeadersToMap);
     }
   };
 
   useEffect(() => {
     if (bulkImport) {
-      dispatch(bulkImportActions.setIsLoading(true));
-      dispatch(bulkImportActions.getHeadersToMap(bulkImport.id));
+      dispatch(setIsLoading(true));
+      dispatch(getHeadersToMap(bulkImport.id));
     }
   }, [bulkImport, dispatch]);
 
