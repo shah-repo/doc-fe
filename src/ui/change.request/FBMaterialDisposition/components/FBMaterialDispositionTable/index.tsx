@@ -36,7 +36,7 @@ import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { CopiedItems, EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
-import { getExcelColumns, hasConflictingSelections, updateData, updateDataWithCopiedValue } from './utils';
+import { getExcelColumns, getMDItemList, hasConflictingSelections, updateData, updateDataWithCopiedValue } from './utils';
 
 interface props {
   changeRequest?: ChangeRequest
@@ -57,6 +57,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const [selectedState, setSelectedState] = React.useState<{
     [id: string]: boolean | number[]
   }>({});
+  const [isDeleteDisabled, setIsDeleteDisabled] = React.useState<boolean>(false);
 
   const editMDItem = ({ dataItem }: MDItemEditEvent) => {
     if (!isEmpty(dataItem?.[SELECTED_FIELD]) && !dataItem.isSelected) {
@@ -64,6 +65,9 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     }
     if (isShowOnly || formik.dirty) {
       return;
+    }
+    if (dataItem.lotDocRevId) {
+      setIsDeleteDisabled(true);
     }
     const updatedDataItem = omit(dataItem, DROPDOWN_FIELDS);
     const prepareDataItem = {
@@ -81,6 +85,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     setCopiedItems(undefined);
     setEditedMDItem(undefined);
     setSelectedState({});
+    setIsDeleteDisabled(false);
   };
   const getColumns = () => {
     return columns.filter(({ show }) => show);
@@ -350,7 +355,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     onRowClick: editMDItem,
     onConfirm: submitForm,
     onDiscard: discardMDItem,
-    onDelete: deleteMDItem,
+    ...!isDeleteDisabled && { onDelete: deleteMDItem },
     onSelectCell: onSelectCell,
   });
 
@@ -405,7 +410,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
     if (_export.current !== null) {
-      _export.current.save(MDItemList, getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
+      _export.current.save(getMDItemList(MDItemList), getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
     }
   };
 
