@@ -1,15 +1,18 @@
 import { Box, IconButton, List, ListItem, ListItemText } from '@material-ui/core';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import React from 'react';
+import { translate } from '../../../../common/intl';
 import { attachmentColorByType } from '../../../components/common/attachment.icon/attachmentColorByType';
 import { renderDefaultAttachment } from '../../../components/common/attachment.icon/attachmentIcons';
-import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.field';
+import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.types';
 import useStyles from './styles';
 
 interface ListFilesProps {
   files: FileWithPreview[]
   handleRemoveFile: (index: number) => void
 }
+
+const BYTES_IN_KILOBYTE = 1024;
 
 const ListFiles: React.FC<ListFilesProps> = ({ files, handleRemoveFile }) => {
   const classes = useStyles();
@@ -20,7 +23,7 @@ const ListFiles: React.FC<ListFilesProps> = ({ files, handleRemoveFile }) => {
         <ListItem key={index} className={classes.listItem}>
           <Box className={classes.fileInfo}>
             {renderDefaultAttachment(attachmentColorByType.XLS, 'XLS')}
-            <ListItemText primary={file.name} secondary={`${(file.size / 1024).toFixed(2)} KB Microsoft Excel File`} />
+            <ListItemText primary={file.name} secondary={`${(file.size / BYTES_IN_KILOBYTE).toFixed(2)} ${translate('bulkImport.upload.infoExcelKB')}`} />
           </Box>
           <IconButton onClick={() => handleRemoveFile(index)} className={classes.removeIcon}>
             <RemoveCircleOutlineIcon />

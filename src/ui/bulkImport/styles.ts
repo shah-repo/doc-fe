@@ -2,17 +2,16 @@ import { makeStyles } from '@material-ui/core';
 
 export default makeStyles(theme => ({
   root: {
-    padding: theme.spacing(3, 3, 0),
+    padding: theme.spacing(3, 3, 12.5, 3),
     overflow: 'auto',
     maxHeight: '100vh',
-    paddingBottom: 100,
   },
   importContainer: {
     display: 'flex',
-    padding: 20,
+    padding: theme.spacing(2.5),
     [theme.breakpoints.down('md')]: {
       display: 'block',
-      marginBottom: 50,
+      marginBottom: theme.spacing(6.25),
     },
   },
   loadingContainer: {

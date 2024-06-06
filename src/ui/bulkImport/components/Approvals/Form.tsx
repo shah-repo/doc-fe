@@ -6,7 +6,8 @@ import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { bulkImportActions, bulkImportSelectors } from '../../../../state/ducks/bulkImport';
+import { getApprovers, saveApprovals, saveDocumentRevisions, saveDocumentRevisionsInReview, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
+import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
 import { Approval } from '../../../../state/ducks/common/types';
 import Text from '../../../components/Text';
@@ -27,11 +28,11 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
   const history = useHistory();
   const [users, setUsers] = useState<ApproverOption[]>([]);
   const classes = useStyles();
-  const bulkImport = useSelector(bulkImportSelectors.getBulkImport);
-  const approversOptionList = useSelector(bulkImportSelectors.getApproversSelectList);
-  const saveApprovals = useActionCreator(bulkImportActions.saveApprovals);
-  const saveDocumentRevisions = useActionCreator(bulkImportActions.saveDocumentRevisions);
-  const saveDocumentRevisionsInReview = useActionCreator(bulkImportActions.saveDocumentRevisionsInReview);
+  const bulkImport = useSelector(getBulkImport);
+  const approversOptionList = useSelector(getApproversSelectList);
+  const saveApprovalsAction = useActionCreator(saveApprovals);
+  const saveDocumentRevisionsAction = useActionCreator(saveDocumentRevisions);
+  const saveDocumentRevisionsInReviewAction = useActionCreator(saveDocumentRevisionsInReview);
   const asyncDocumentRevisionInReview = useAsync({
     onSuccess: () => {
       history.push({
@@ -41,24 +42,24 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
   });
   const asyncDocumentRevision = useAsync({
     onSuccess: () => {
-      dispatch(bulkImportActions.setIsLoading(true));
-      asyncDocumentRevisionInReview.start(saveDocumentRevisionsInReview, { documentRevisionId: bulkImport?.documentRevisionId }, asyncDocumentRevisionInReview);
+      dispatch(setIsLoading(true));
+      asyncDocumentRevisionInReview.start(saveDocumentRevisionsInReviewAction, { documentRevisionId: bulkImport?.documentRevisionId }, asyncDocumentRevisionInReview);
     },
   });
   const asyncApprovals = useAsync({
     onSuccess: (approval?: Approval) => {
       if (approval) {
-        dispatch(bulkImportActions.setIsLoading(true));
-        asyncDocumentRevision.start(saveDocumentRevisions, { approvalId: approval.id, documentRevisionId: bulkImport?.documentRevisionId }, asyncDocumentRevision);
+        dispatch(setIsLoading(true));
+        asyncDocumentRevision.start(saveDocumentRevisionsAction, { approvalId: approval.id, documentRevisionId: bulkImport?.documentRevisionId }, asyncDocumentRevision);
       }
     },
   });
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = () => {
     // Handle form submission and file processing
     if (users && users.length > 0) {
-      dispatch(bulkImportActions.setIsLoading(true));
-      asyncApprovals.start(saveApprovals, { approval: users[0].value, documentRevisionId: bulkImport?.documentRevisionId }, asyncApprovals);
+      dispatch(setIsLoading(true));
+      asyncApprovals.start(saveApprovalsAction, { approval: users[0].value, documentRevisionId: bulkImport?.documentRevisionId }, asyncApprovals);
     }
   };
 
@@ -67,12 +68,10 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
   };
 
   const init = () => {
-    dispatch(bulkImportActions.getApprovers());
+    dispatch(getApprovers());
   };
 
-  useEffect(() => {
-    init();
-  }, []);
+  useEffect(init, []);
 
   return (
     <>

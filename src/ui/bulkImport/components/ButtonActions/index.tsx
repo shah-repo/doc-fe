@@ -4,6 +4,7 @@ import {
   Box,
 } from '@material-ui/core';
 import React from 'react';
+import { translate } from '../../../../common/intl';
 import { Button } from '../../../components/forms/fields-next';
 import Text from '../../../components/Text';
 import useStyles from './styles';
@@ -50,7 +51,7 @@ const ButtonActions: React.FC<ButtonActionsProps> = ({ activeStep, steps, nextSu
           <Text translation="common.next" />
         </Button>
       </Box>
-      {useReset && (<Button onClick={handleReset}>Reset</Button>)}
+      {useReset && (<Button onClick={handleReset}>{translate('common.reset')}</Button>)}
     </Box>
   );
 };

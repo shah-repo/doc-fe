@@ -3,9 +3,12 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Form, Formik } from 'formik';
+import { noop } from 'lodash';
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { bulkImportActions, bulkImportSelectors } from '../../../../state/ducks/bulkImport';
+import { translate } from '../../../../common/intl';
+import { setDataTypeFilter, setStatusFilter } from '../../../../state/ducks/bulkImport/actions';
+import { getBulkImports } from '../../../../state/ducks/bulkImport/selectors';
 import SelectField from '../../../components/forms/fields/Select';
 import Text from '../../../components/Text';
 import ProgressSection from '../ProgressSection';
@@ -14,11 +17,11 @@ import useStyles from './styles';
 const ImportProgress: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const bulkImports = useSelector(bulkImportSelectors.getBulkImports);
+  const bulkImports = useSelector(getBulkImports);
 
   const dateTypeOptions = useMemo(() => {
     const uniqueProcessIds = Array.from(new Set(bulkImports.map((item: any) => item.processId)));
-    return [{ value: '', text: 'Data Type' }, ...uniqueProcessIds.map(id => ({ value: id, text: id }))];
+    return [{ value: '', text: translate('common.dataType') }, ...uniqueProcessIds.map(id => ({ value: id, text: id }))];
   }, [bulkImports]);
   const statusesOptions = useMemo(() => {
     const uniqueStatuses = Array.from(new Set(bulkImports.map((item: any) => item.status)));
@@ -26,11 +29,11 @@ const ImportProgress: React.FC = () => {
   }, [bulkImports]);
 
   const dataTypeChange = (event) => {
-    dispatch(bulkImportActions.setDataTypeFilter(event.target.value));
+    dispatch(setDataTypeFilter(event.target.value));
   };
 
   const statusesChange = (event) => {
-    dispatch(bulkImportActions.setStatusFilter(event.target.value));
+    dispatch(setStatusFilter(event.target.value));
   };
 
   return (
@@ -40,9 +43,7 @@ const ImportProgress: React.FC = () => {
         <Box className={classes.filtersContainer}>
           <Formik
             initialValues={{ processId: 'dateType', formId: '' }}
-            onSubmit={(values: any) => {
-              console.log('🚀 ~ onSubmit - values:', values);
-            }}
+            onSubmit={noop}
           >
             <Form className={classes.form}>
               <Typography className={classes.filterByText}><Text translation="bulkImport.progress.filterBy" /></Typography>

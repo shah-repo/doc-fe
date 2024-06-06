@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../../layout/theme/utils/colors';
+import { Colors } from '../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   container: {
@@ -8,28 +8,26 @@ export default makeStyles(theme => ({
     maxWidth: 550,
   },
   titleContainer: {
-    marginTop: 50,
+    marginTop: theme.spacing(6.25),
     textAlign: 'center',
   },
   title: {
     fontSize: 30,
-    fontFamily: 'Sora',
     fontWeight: 600,
   },
   subTitle: {
     fontSize: 18,
-    fontFamily: 'Sora',
     fontWeight: 400,
   },
   listContainer: {
-    paddingTop: 20,
+    paddingTop: theme.spacing(2.5),
   },
   listItem: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: Colors.sky_blue,
-    marginBottom: 10,
+    backgroundColor: Colors.primaryHighlight,
+    marginBottom: theme.spacing(1.25),
   },
   fileInfo: {
     display: 'flex',
@@ -39,7 +37,7 @@ export default makeStyles(theme => ({
     marginRight: theme.spacing(2),
     width: 42,
     height: 42,
-    color: Colors.chinese_silver,
+    color: Colors.lightGray,
   },
   avatar: {
     marginRight: theme.spacing(2),
@@ -47,7 +45,7 @@ export default makeStyles(theme => ({
     height: 42,
   },
   removeIcon: {
-    color: Colors.opal_red,
+    color: Colors.remove,
   },
   select: {
     width: '100%',
@@ -56,9 +54,8 @@ export default makeStyles(theme => ({
     width: '100%',
   },
   selectLabel: {
-    marginBottom: 20,
+    marginBottom: theme.spacing(2.5),
     fontSize: 17,
     fontWeight: 400,
-    fontFamily: 'Sora',
   },
 }));

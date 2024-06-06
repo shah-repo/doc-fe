@@ -1,5 +1,6 @@
 import { Box, List, ListItem, Typography } from '@material-ui/core';
 import React from 'react';
+import { translate } from '../../../../common/intl';
 import { CustomHeaderEntity, SystemHeaderEntity } from '../../../../state/ducks/bulkImport/types';
 import SelectField, { SelectOption } from '../../../components/forms/fields/Select';
 import useStyles from './styles';
@@ -15,14 +16,14 @@ const TargetDataList: React.FC<TargetDataListProps> = ({ data, options }) => {
   if (!data) return null;
 
   const optionsList: SelectOption[] = options
-    ? [{ value: '', text: 'Select an option' }, ...options.map(val => ({ value: val.id, text: val.name }))]
+    ? [{ value: '', text: translate('common.selectOption') }, ...options.map(val => ({ value: val.id, text: val.name }))]
     : [];
 
   return (
     <List>
       {data.map((item) => {
         return (
-          <ListItem key={item.id} className={classes.listSelectItem}>
+          <ListItem key={item.id}>
             <Box className={classes.listSelectContainer}>
               <Typography className={classes.listSelectText}>{item.name}</Typography>
               <Box className={classes.selectContainer}>

@@ -2,7 +2,8 @@ import { Box, CircularProgress } from '@material-ui/core';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { bulkImportActions, bulkImportSelectors } from '../../state/ducks/bulkImport';
+import { getBulkImports, resetSteps, setIsLoadingMain } from '../../state/ducks/bulkImport/actions';
+import { getIsLoadingMain } from '../../state/ducks/bulkImport/selectors';
 import { BULK_IMPORT_URL } from '../constants/urls';
 import Header from './components/Header';
 import ImportLog from './components/ImportLog';
@@ -14,14 +15,14 @@ interface BulkImportContainerProps extends RouteComponentProps {}
 const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = ({ history }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const isLoading = useSelector(bulkImportSelectors.getIsLoadingMain);
+  const isLoading = useSelector(getIsLoadingMain);
   const firstLoad = useRef(false);
   const showLoadingComponent = !firstLoad.current && isLoading;
 
   const fetchBulkImportData = useCallback(() => {
-    dispatch(bulkImportActions.setIsLoadingMain(true));
-    dispatch(bulkImportActions.getBulkImports());
-    dispatch(bulkImportActions.resetSteps());
+    dispatch(setIsLoadingMain(true));
+    dispatch(getBulkImports());
+    dispatch(resetSteps());
   }, [dispatch]);
 
   const onNewImport = () => {

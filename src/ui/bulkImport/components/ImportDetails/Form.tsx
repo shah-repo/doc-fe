@@ -7,7 +7,8 @@ import {
 import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { bulkImportActions, bulkImportSelectors } from '../../../../state/ducks/bulkImport';
+import { createBulkImport, getDataTypes, getFormDocumentsTypeGroup, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
+import { getDataTypeSelectList, getFormDocumentsTypeGroupSelectList } from '../../../../state/ducks/bulkImport/selectors';
 import Text from '../../../components/Text';
 import SelectField from '../../../components/forms/fields/Select';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -29,7 +30,7 @@ interface ImportDetailFormProps {
 const ImportDetailForm: React.FC<ImportDetailFormProps> = ({ children, handleNext }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const createBulkImportAction = useActionCreator(bulkImportActions.createBulkImport);
+  const createBulkImportAction = useActionCreator(createBulkImport);
   const async = useAsync({
     onSuccess: (complete?) => {
       if (complete) {
@@ -38,17 +39,17 @@ const ImportDetailForm: React.FC<ImportDetailFormProps> = ({ children, handleNex
     },
   });
 
-  const typeOfDataOptions = useSelector(bulkImportSelectors.getDataTypeSelectList);
-  const formDocumentsTypeGroupOptions = useSelector(bulkImportSelectors.getFormDocumentsTypeGroupSelectList);
+  const typeOfDataOptions = useSelector(getDataTypeSelectList);
+  const formDocumentsTypeGroupOptions = useSelector(getFormDocumentsTypeGroupSelectList);
 
   const handleTypeOfDataChange = (value) => {
-    dispatch(bulkImportActions.setIsLoading(true));
-    dispatch(bulkImportActions.getFormDocumentsTypeGroup(value as string));
+    dispatch(setIsLoading(true));
+    dispatch(getFormDocumentsTypeGroup(value as string));
   };
 
   useEffect(() => {
-    dispatch(bulkImportActions.setIsLoading(true));
-    dispatch(bulkImportActions.getDataTypes());
+    dispatch(setIsLoading(true));
+    dispatch(getDataTypes());
   }, [dispatch]);
 
   return (
@@ -57,7 +58,7 @@ const ImportDetailForm: React.FC<ImportDetailFormProps> = ({ children, handleNex
         initialValues={{ processId: '', formId: '' }}
         validationSchema={validationSchema}
         onSubmit={(values: FormValues) => {
-          dispatch(bulkImportActions.setIsLoading(true));
+          dispatch(setIsLoading(true));
           async.start(createBulkImportAction, values, async);
         }}
       >

@@ -14,15 +14,14 @@ export default makeStyles(theme => ({
     width: '100%',
   },
   selectLabel: {
-    marginBottom: 20,
+    marginBottom: theme.spacing(2.5),
     fontSize: 17,
     fontWeight: 400,
-    fontFamily: 'Sora',
   },
   contactSupportLink: {
     position: 'absolute',
-    right: -140,
-    top: 17,
+    right: theme.spacing(-17.5),
+    top: theme.spacing(2.125),
     color: Colors.primary,
     fontSize: 14,
     fontWeight: 400,

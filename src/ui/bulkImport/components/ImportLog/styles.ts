@@ -5,19 +5,18 @@ export default makeStyles(theme => ({
   container: {
     flex: '0 0 35%',
     borderRadius: 4,
-    padding: 20,
+    padding: theme.spacing(2.5),
   },
   backgroundItems: {
     borderRadius: 8,
     borderColor: Colors.tableStroke,
     border: '1px solid',
-    padding: 10,
+    padding: theme.spacing(1.25),
   },
   title: {
-    fontFamily: 'Sora',
     fontSize: 18,
     fontWeight: 600,
-    marginBottom: 22,
+    marginBottom: theme.spacing(2.75),
   },
   categoryTitle: {
     fontSize: 12,
@@ -30,24 +29,22 @@ export default makeStyles(theme => ({
   },
   primaryText: {
     fontSize: 12,
-    fontFamily: 'Sora',
   },
   secondaryText: {
     marginLeft: 'auto',
     fontSize: 12,
-    fontFamily: 'Sora',
   },
   categoryTitleContainer: {
     display: 'flex',
     alignItems: 'center',
   },
   listCategory: {
-    paddingLeft: 5,
+    paddingLeft: theme.spacing(0.625),
   },
   chevronRightIcon: {
     color: Colors.textBlack,
     width: 11,
     height: 9,
-    marginRight: 8,
+    marginRight: theme.spacing(1),
   },
 }));

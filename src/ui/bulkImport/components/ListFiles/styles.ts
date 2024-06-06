@@ -1,21 +1,21 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../../layout/theme/utils/colors';
+import { Colors } from '../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   listContainer: {
-    paddingTop: 20,
+    paddingTop: theme.spacing(2.5),
   },
   listItem: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: Colors.sky_blue,
-    marginBottom: 10,
+    backgroundColor: Colors.primaryHighlight,
+    marginBottom: theme.spacing(1.25),
   },
   fileInfo: {
     display: 'flex',
     alignItems: 'center',
-    gap: '20px',
+    gap: `${theme.spacing(2.5)}px`,
     '& .MuiListItemText-primary': {
       fontWeight: 700,
     },
@@ -24,7 +24,7 @@ export default makeStyles(theme => ({
     marginRight: theme.spacing(2),
   },
   removeIcon: {
-    color: Colors.opal_red,
+    color: Colors.remove,
   },
   buttonsContainer: {
     display: 'flex',

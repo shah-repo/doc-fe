@@ -1,17 +1,16 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../../layout/theme/utils/colors';
+import { Colors } from '../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   container: {
     flex: 1,
     borderRadius: 4,
-    padding: 20,
+    padding: theme.spacing(2.5),
   },
   title: {
-    fontFamily: 'Sora',
     fontSize: 18,
     fontWeight: 600,
-    marginBottom: 22,
+    marginBottom: theme.spacing(2.75),
     alignSelf: 'center',
   },
   filtersContainer: {
@@ -26,16 +25,10 @@ export default makeStyles(theme => ({
     minWidth: 50,
     alignSelf: 'center',
   },
-  progressTitle: {
-  },
   progressBar: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  progressLabel: {
-  },
-  errorButton: {
   },
   statusActions: {
     display: 'flex',
@@ -47,15 +40,15 @@ export default makeStyles(theme => ({
   select: {
     width: 150,
     height: 36,
-    color: Colors.lightest_grey2,
+    color: Colors.textDisabled,
   },
   selectInput: {
     fontSize: 12,
   },
   form: {
     display: 'flex',
-    gap: '10px',
+    gap: `${theme.spacing(1.25)}px`,
     height: 36,
-    marginBottom: 15,
+    marginBottom: theme.spacing(1.875),
   },
 }));

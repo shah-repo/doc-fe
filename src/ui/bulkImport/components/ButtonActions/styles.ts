@@ -2,14 +2,13 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
 export default makeStyles(theme => ({
-  container: {},
   buttonsContainer: {
     display: 'grid',
-    marginTop: 20,
+    marginTop: theme.spacing(2.5),
   },
   buttonsContainerMultiBtn: {
     display: 'flex',
-    marginTop: 20,
+    marginTop: theme.spacing(2.5),
   },
   buttonsNext: {
     justifySelf: 'right',
@@ -21,14 +20,14 @@ export default makeStyles(theme => ({
     minWidth: 140,
     fontWeight: 700,
     marginLeft: 'auto',
-    marginRight: 20,
+    marginRight: theme.spacing(2.5),
   },
   helpContainer: {
     display: 'flex',
     fontSize: 12,
     fontWeight: 400,
     color: Colors.primary,
-    gap: '10px',
+    gap: `${theme.spacing(1.25)}px`,
   },
   containerHelp: {
     display: 'flex',

@@ -1,23 +1,25 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, List, ListItem, Typography } from '@material-ui/core';
+import moment from 'moment';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import { bulkImportSelectors } from '../../../../state/ducks/bulkImport';
+import { MomentFormats } from '../../../../common/utils/date';
+import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImportCustom, BulkImportFile } from '../../../../state/ducks/bulkImport/types';
 import Text from '../../../components/Text';
 import useStyles from './styles';
 
 const ImportLog: React.FC = () => {
   const classes = useStyles();
-  const bulkImportsGroupByProcess = useSelector(bulkImportSelectors.getBulkImportsGroupByProcess);
+  const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
 
   const renderFileData = (file: BulkImportFile) => {
     // Create a new Date object from the createdAt string
     const date = new Date(file.createdAt);
 
     // Format the date as MM/DD/YYYY
-    const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
+    const formattedDate = moment(date).format(MomentFormats.MonthDateYearTwoDigit);
 
     return (
       <ListItem className={classes.listItem}>

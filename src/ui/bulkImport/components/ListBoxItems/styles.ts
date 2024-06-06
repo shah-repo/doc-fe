@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import { Colors as ColorsNext } from '../../../layout/theme-next';
-import Colors from '../../../layout/theme/utils/colors';
+import { Colors } from '../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   root: {
@@ -12,7 +11,6 @@ export default makeStyles(theme => ({
     backgroundColor: Colors.white,
   },
   title: {
-    fontFamily: 'Sora',
     fontWeight: 600,
     fontSize: 16,
     whiteSpace: 'nowrap',
@@ -23,11 +21,11 @@ export default makeStyles(theme => ({
     display: 'flex',
     height: 60,
     alignItems: 'center',
-    padding: '0 30px',
-    border: `1px solid ${ColorsNext.tableStroke}`,
+    padding: theme.spacing(0, 3.75),
+    border: `1px solid ${Colors.tableStroke}`,
     borderTopRightRadius: 8,
     borderTopLeftRadius: 8,
-    backgroundColor: ColorsNext.tableHeader,
+    backgroundColor: Colors.tableHeader,
   },
   search: {
     marginLeft: 'auto',
@@ -41,23 +39,22 @@ export default makeStyles(theme => ({
     },
   },
   listItem: {
-    padding: '5px 30px',
+    padding: theme.spacing(0.625, 3.75),
   },
   childrenContainer: {
     height: 500,
     overflowY: 'auto',
-    border: `1px solid ${ColorsNext.tableStroke}`,
+    border: `1px solid ${Colors.tableStroke}`,
     borderTopWidth: 0,
   },
   listItemContainer: {
-    border: `1px solid ${Colors.chinese_silver}`,
-    padding: '10px 15px',
+    border: `1px solid ${Colors.lightGray}`,
+    padding: theme.spacing(1.25, 1.875),
     backgroundColor: Colors.white,
     width: '100%',
     borderRadius: 3,
   },
   listItemText: {
-    fontFamili: 'Sora',
     fontWeight: 400,
     fontSize: 14,
   },
@@ -66,9 +63,7 @@ export default makeStyles(theme => ({
     width: '100%',
     placeItems: 'center',
   },
-  listSelectItem: {},
   listSelectText: {
-    fontFamily: 'Sora',
     fontWeight: 600,
     fontSize: 14,
   },
