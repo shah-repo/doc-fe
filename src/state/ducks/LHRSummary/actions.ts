@@ -1,7 +1,14 @@
-import { LHRSummaryItem, LHRSummaryRequestBody } from '../../../ui/form.builder/FBLHRSummary/types';
+import {
+  LHRSummaryItem,
+  LHRSummaryOptionsResponse,
+  LHRSummaryRequestBody,
+} from '../../../ui/form.builder/FBLHRSummary/types';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { CREATE_LHR_SUMMARY, FETCH_AUTOCOMPLETE_OPTIONS, ROOT_LHR_SUMMARY, UPDATE_LHR_SUMMARY } from './constants';
+import {
+  CREATE_LHR_SUMMARY, ROOT_LHR_SUMMARY,
+  UPDATE_LHR_SUMMARY,
+} from './constants';
 
 const fetchLHRSummary = (lhrDocRevId: string, handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
@@ -10,14 +17,22 @@ const fetchLHRSummary = (lhrDocRevId: string, handlers: Handlers): ApiAction =>
     handlers,
   });
 
-const fetchAutocompleteOptions = (optionId: string, handlers: Handlers): ApiAction =>
+const fetchLHRSummaryDataByOptionId = (
+  searchText: string,
+  optionId: string,
+  offset: string,
+  handlers: Handlers,
+): ApiAction<LHRSummaryOptionsResponse> =>
   apiActionWithCallbacks({
-    url: `${FETCH_AUTOCOMPLETE_OPTIONS}/${optionId}`,
+    url: `${ROOT_LHR_SUMMARY}/search?optionId=${optionId}&searchQuery=${searchText}&offset=${offset}&limit=25`,
     method: 'get',
     handlers,
   });
 
-const addLHRSummary = (data: LHRSummaryRequestBody, handlers: Handlers): ApiAction<LHRSummaryItem, LHRSummaryRequestBody> =>
+const addLHRSummary = (
+  data: LHRSummaryRequestBody,
+  handlers: Handlers,
+): ApiAction<LHRSummaryItem, LHRSummaryRequestBody> =>
   apiActionWithCallbacks({
     url: CREATE_LHR_SUMMARY,
     method: 'post',
@@ -38,7 +53,11 @@ const updateLHRSummary = (
     handlers,
   });
 
-const deleteLHRSummary = (lhrDocRevId: string, lhrSummaryId: string, handlers: Handlers): ApiAction =>
+const deleteLHRSummary = (
+  lhrDocRevId: string,
+  lhrSummaryId: string,
+  handlers: Handlers,
+): ApiAction =>
   apiActionWithCallbacks({
     url: `${ROOT_LHR_SUMMARY}/${lhrDocRevId}/${lhrSummaryId}`,
     method: 'delete',
@@ -47,7 +66,7 @@ const deleteLHRSummary = (lhrDocRevId: string, lhrSummaryId: string, handlers: H
 
 export default {
   fetchLHRSummary,
-  fetchAutocompleteOptions,
+  fetchLHRSummaryDataByOptionId,
   addLHRSummary,
   updateLHRSummary,
   deleteLHRSummary,
