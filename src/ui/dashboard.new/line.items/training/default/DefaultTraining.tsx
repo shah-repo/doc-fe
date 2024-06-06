@@ -1,5 +1,6 @@
 import { Box, Grid, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as OverdueIcon } from '../../../../../assets/images/overdue_status.svg';
@@ -9,15 +10,20 @@ import { ReactComponent as PinSolidIcon } from '../../../../../assets/images/pin
 import { ReactComponent as TrainingIcon } from '../../../../../assets/images/training.svg';
 import { ReactComponent as WarningIcon } from '../../../../../assets/images/warning_status.svg';
 import { ReactComponent as WarningWhiteIcon } from '../../../../../assets/images/warning_status_white.svg';
+import { translate } from '../../../../../common/intl';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { TrainingStatus, TrainingStatusLabels } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
+import { documentTypeSelectors } from '../../../../../state/ducks/documentRevisions/documentType';
+import { DOC_TYPE_GROUP_OPTION } from '../../../../../state/ducks/documentRevisions/documentType/types';
+import { TrainingReference } from '../../../../../state/ducks/training/types';
+import { ApplicationState } from '../../../../../state/reducers';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
-import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
+import { StyledListItem } from '../../common/StyledListItem';
 import { HoverStyleChip } from './DefaultHoverStyleChip';
 import { NormalStyleChip } from './DefaultNormalStyleChip';
 import useStyles from './DefaultTraining.styles';
@@ -33,6 +39,7 @@ interface Props {
   status: string
   timestamp: string
   dueOn: Nullable<string>
+  trainingSourceReferences?: TrainingReference[]
   hoverItemId: string
   onMouseHoverItem: (id: string) => void
   pinned: boolean
@@ -50,6 +57,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   status,
   timestamp,
   dueOn,
+  trainingSourceReferences,
   docId,
   hoverItemId,
   onMouseHoverItem,
@@ -84,6 +92,16 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
 
   const isPinShown = pinLineItem && !pinned;
   const isUnpinShown = unPinLineItem && pinned;
+
+  const GRPTDocumentType = useSelector(
+    (state: ApplicationState) => documentTypeSelectors.getDocumentTypeByGroup(
+      state,
+      DOC_TYPE_GROUP_OPTION.GROUP_TRAINING,
+    ),
+  );
+  const isCompletedByGRPT = GRPTDocumentType
+    && status === TrainingStatus.COMPLETED
+    && Boolean(trainingSourceReferences?.find(item => item.docId.startsWith(GRPTDocumentType.documentTypeAcronym)));
 
   return (
     <StyledListItem
@@ -196,6 +214,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       )}
                     </Typography>
                   )}
+                  {isCompletedByGRPT && ` ${translate('training.grpt')}`}
                 </Grid>
               )}
               {TrainingStatus[status]
