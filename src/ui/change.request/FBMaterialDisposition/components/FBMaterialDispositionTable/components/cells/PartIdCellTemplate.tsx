@@ -34,6 +34,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   const limit = 25;
   const classes = styles();
   const isEdit = dataItem[MODE_FIELD] === Mode.edit;
+  const isAdd = dataItem[MODE_FIELD] === Mode.add;
 
   const loadAllDocsListAction = useActionCreator(materialDispositionActions.loadAllDocsList);
 
@@ -63,6 +64,11 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   }, [dataItem[MODE_FIELD]]);
 
   useEffect(() => {
+    if (isAdd && !isEmpty(inputValue)) {
+      setValue({ label: inputValue });
+      return;
+    }
+
     const defaultValue = isUserEnteredItemId ? { label: dataItem.userEnteredItemId ?? '' } : { label: dataItem.partDocId, value: dataItem.partDocRevId };
     const value = items.find((option) => option.value === dataItem.partDocRevId) ?? defaultValue;
     if (value && isEmpty(inputValue)) {
