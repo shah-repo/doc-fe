@@ -8,6 +8,14 @@ export const getExcelColumns = (columns: Array<ColumnDefinition<EditableMDItem>>
   return [...columns].map(col => ({ ...col, title: translate(col.title) }));
 };
 
+export const getMDItemList = (mdItemList: EditableMDItem[]): EditableMDItem[] => {
+  return [...mdItemList].map(mdItem => {
+    const { userEnteredItemId } = mdItem;
+    const isUserEnteredItemId = !isEmpty(userEnteredItemId);
+    return { ...mdItem, ...isUserEnteredItemId && { partDocId: userEnteredItemId } };
+  });
+};
+
 export const generateDocTitleText = (docId: string, displayRevision: string) => (
   `${docId} • Rev ${displayRevision}`
 );
