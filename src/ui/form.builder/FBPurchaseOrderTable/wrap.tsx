@@ -19,11 +19,11 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 import { usePoApprovals } from '../FBPOApprovals/hooks';
 import { getReceivedQuantity } from '../FBPOReceive/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 import { TAX_RATE } from '../helpers/constants';
 import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from './helpers';
 import { FBPurchaseOrderTableProps } from './types';
@@ -364,7 +364,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       const receivedItems = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
       let isReceivedAll = true;
       items = items?.map((item) => {
-        const id = item.partNumber || item.id;
+        const id = item.id;
         const received = getReceivedQuantity(receivedItems, id) || 0;
         if (received < item.order && isReceivedAll) {
           isReceivedAll = false;

@@ -1,1 +1,1 @@
-export const getReceivedQuantity = (receivedItems, id) => receivedItems.find((receivedItem) => receivedItem.itemId === id)?.received || 0;
+export const getReceivedQuantity = (receivedItems, id) => receivedItems.find((receivedItem) => receivedItem.rowId === id)?.received || 0;
