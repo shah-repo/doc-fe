@@ -16,11 +16,9 @@ import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
-import { DocType, EMPTY_PLACEHOLDER } from '../../constants';
+import { DocType, EMPTY_PLACEHOLDER, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { styles } from './styles';
-
-const MIN_SEARCH_TERM_LENGTH = 3;
 
 export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
@@ -40,6 +38,7 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
     const [inputValue, setInputValue] = useState('');
     const [selectedObj, setSelectedObj] = useState<OptionType>();
     const [items, setItems] = useState<OptionType[]>([]);
+    const [offset, setOffset] = React.useState(0);
 
     useEffect(() => {
       if (!inputValue && values?.actualDocId) {
@@ -80,9 +79,6 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
       },
     });
 
-    const [offset, setOffset] = React.useState(0);
-    const limit = 25;
-
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
       setInputValue(inputVal);
       if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
@@ -108,7 +104,7 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
     const onScroll = (event: React.SyntheticEvent) => {
       const listboxNode = event.currentTarget;
       if (Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) === listboxNode.clientHeight) {
-        const nextOffset = offset + limit;
+        const nextOffset = offset + LIMIT;
         setOffset(nextOffset);
         queryApi(nextOffset, inputValue);
       }
@@ -166,7 +162,7 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
                   placeholder={translate('lhr.summary.placeholder.select.enter')}
                   InputProps={{
                     ...params.InputProps,
-                    style: { padding: '0px 30px 0px 9px' },
+                    style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
                     startAdornment: (
                       <div>
                         {params.InputProps.startAdornment}

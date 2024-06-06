@@ -8,6 +8,8 @@ export const TYPE_OPTIONS = [
   { label: 'Equipment', value: 'equipment' },
   { label: 'Material', value: 'material' },
 ];
+export const MIN_SEARCH_TERM_LENGTH = 3;
+export const LIMIT = 25;
 
 export const STATUS_OPTIONS = [
   { label: 'Draft', value: 'draft' },
