@@ -8,8 +8,6 @@ import { CustomTemplateProps } from '../../types';
 import { isEditMode } from '../../utils';
 import { styles } from './styles';
 
-export const getEmptyPlaceholderJSX: React.FC = () => (<span>{EMPTY_VALUE_PLACEHOLDER}</span>);
-
 export const LotIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem, field, onClick } = props;
@@ -18,7 +16,7 @@ export const LotIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const fieldValue = dataItem[field];
 
   if (isEditMode(dataItem)) {
-    return getEmptyPlaceholderJSX({});
+    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
   }
 
   return (
