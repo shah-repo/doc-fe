@@ -1,16 +1,17 @@
-import { FilterOptionsState } from '@material-ui/lab/useAutocomplete';
+import { Box, CircularProgress, TextField } from '@material-ui/core';
+import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent, useEffect } from 'react';
+import { debounce, get, isEmpty } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FB } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import {
-  DocumentRevision,
-  DocumentRevisionStatus,
   MeqResponse,
 } from '../../../../../state/ducks/documentRevisions/types';
+import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import {
-  Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
@@ -22,70 +23,9 @@ import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
-import { DocType, EMPTY_PLACEHOLDER } from '../../constants';
-import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
-import { filterOutOption } from '../../utils';
-import AutocompleteAsync from './AutocompleteAsync';
+import { DocType, EMPTY_PLACEHOLDER, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
+import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { styles } from './styles';
-
-const Editor: React.FC<CustomTemplateProps & { options: any[], docType: DocType }> = ({
-  field,
-  options = [],
-  docType,
-  dataItem,
-}) => {
-  const { values, setFieldValue, getFieldProps }
-    = useFormikContext<EditableLHRSummaryItem>();
-
-  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-    setFieldValue(field, value?.value);
-  };
-
-  const renderOptions = () => {
-    return options.map((option) => ({
-      label: translate('wo.displayRevision', {
-        docId: option.docId,
-        displayRevision: option?.revision,
-        name: option.title,
-      }),
-      value: option.docRevId,
-    }));
-  };
-
-  const onInputChange = (
-    event: React.FocusEvent<HTMLInputElement>,
-    value: string,
-    reason: string,
-  ) => {
-    if (reason === 'input') {
-      setFieldValue(field, value);
-    }
-  };
-
-  const defaultValue = values[field] ?? dataItem[field];
-  const value = renderOptions().find((option) => option.value === defaultValue);
-
-  return (
-    <FormikField name={field}>
-      <Autocomplete
-        {...getFieldProps(field)}
-        key={docType}
-        blurOnSelect
-        disableClearable
-        freeSolo
-        forcePopupIcon
-        disabled={Mode.edit === dataItem[MODE_FIELD]}
-        options={renderOptions()}
-        onInputChange={onInputChange}
-        value={value}
-        getOptionLabel={(option: OptionType) => option.label}
-        onChange={handleChange}
-        placeholder={translate('lhr.summary.placeholder.select.enter')}
-        size="small"
-      />
-    </FormikField>
-  );
-};
 
 export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
@@ -96,100 +36,195 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
   const classes = styles();
 
   if (isEditMode) {
-    const { values, getFieldProps, setFieldValue }
+    const { values, setFieldValue }
       = useFormikContext<EditableLHRSummaryItem>();
+    const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
+    const [loading, setLoading] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [selectedObj, setSelectedObj] = useState<OptionType>();
+    const [items, setItems] = useState<OptionType[]>([]);
+    const [offset, setOffset] = React.useState(0);
+    const isMaterialTypeSelected = values.type === DocType.material;
+    const selectedMPI = values.mpiId;
+
     const fetchMEQByMPI = useActionCreator(
       documentRevisionsActions.fetchMaterialsOrEquipmentsBySelectedMPI,
     );
-    const [meqs, setMeqs] = React.useState<MeqResponse>({
-      materials: [],
-      equipment: [],
-    });
     const fetchMeqsAsync = useAsync({
       onSuccess: (data?: MeqResponse) => {
-        data && setMeqs(data);
+        const selectedTypeItems = isMaterialTypeSelected ? data?.materials : data?.equipment;
+        if (!selectedTypeItems?.length) {
+          setOffset(0);
+          queryApi(0);
+          return;
+        }
+
+        const items = selectedTypeItems?.map((item) => ({
+          label: translate('lhr.summary.displayRevision',
+            {
+              docId: item?.docId,
+              displayRevision: item?.revision,
+              name: get(item, 'title'),
+            }),
+          value: get(item, 'docRevId'),
+        })) ?? [];
+        setItems(items);
       },
     });
-    const docType = values.type;
-    const isMaterial = docType === DocType.material;
-    const selectedMPI = values.mpiId;
 
     useEffect(() => {
-      if (selectedMPI) {
+      if (selectedMPI && FB.isUUID(selectedMPI ?? '')) {
         fetchMeqsAsync.start(fetchMEQByMPI, selectedMPI, fetchMeqsAsync);
       }
     }, [values.mpiId]);
 
+    useEffect(() => {
+      if (isUpdateAction && !inputValue && !dataItem.plannedDocId) {
+        setInputValue(dataItem[field] ?? '');
+      }
+      if (isUpdateAction && !inputValue && dataItem.plannedDocId) {
+        setInputValue(dataItem.plannedDocId ?? '');
+      }
+    }, [values?.stepOrMPI]);
+
+    const fetchLHRSummaryByOptionId = useActionCreator(lhrSummaryActions.fetchLHRSummaryDataByOptionId);
+
+    const fetchOptionsDataAsync = useAsync({
+      onSuccess: (data?: LHRSummaryOptionsResponse) => {
+        if (!isUpdateAction && !selectedObj?.value) {
+          setFieldValue(field, inputValue);
+        }
+
+        setLoading(false);
+        const modifiedItems = data?.items?.map((item) => ({
+          label: translate('lhr.summary.displayRevision',
+            {
+              docId: item.document?.docId,
+              displayRevision: item?.displayRevision,
+              name: item?.name,
+            }),
+          value: item.id,
+        })) ?? [];
+
+        if (isEmpty(inputValue)) {
+          setItems(prev => [...prev, ...modifiedItems]);
+        } else {
+          setItems(modifiedItems);
+        }
+      },
+    });
+
+    const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+      setInputValue(inputVal);
+      if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
+        setOffset(0);
+        queryApi(0, inputVal);
+      } else if (!inputVal) {
+        setOffset(0);
+        queryApi(0);
+      }
+    };
+
+    const onChange = (e, value) => {
+      setSelectedObj(value);
+      setInputValue(value?.label);
+      setFieldValue(field, value?.value);
+    };
+
+    const debounceFunction = debounce(onInputChange, 1000, {
+      leading: true,
+      trailing: true,
+    });
+
+    const onScroll = (event: React.SyntheticEvent) => {
+      const listboxNode = event.currentTarget;
+      if (Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) === listboxNode.clientHeight) {
+        const nextOffset = offset + LIMIT;
+        setOffset(nextOffset);
+        queryApi(nextOffset, inputValue);
+      }
+    };
+
     const getOptionId = () => {
-      if (isMaterial) {
+      if (isMaterialTypeSelected) {
         return FBAutocompleteAsyncOption.releasedParts;
       } else {
         return FBAutocompleteAsyncOption.equipment;
       }
     };
 
-    const onInputChange = (
-      event: React.FocusEvent<HTMLInputElement>,
-      value: string,
-      reason: string,
-    ) => {
-      if (reason === 'input') {
-        setFieldValue(field, value);
+    const queryApi = (offset: number, searchText?: string) => {
+      setLoading(true);
+      fetchOptionsDataAsync.start(
+        fetchLHRSummaryByOptionId,
+        searchText ?? '',
+        getOptionId(),
+        offset,
+        fetchOptionsDataAsync,
+      );
+    };
+
+    useEffect(() => {
+      if (isUpdateAction) {
+        return;
+      } else {
+        setInputValue('');
+        setFieldValue(field, '');
       }
-    };
-
-    const handleChange = (event: ChangeEvent<unknown>, value?) => {
-      setFieldValue(field, value?.id);
-    };
-
-    const handleFilter = (
-      data: DocumentRevision[],
-      state: FilterOptionsState,
-    ) => {
-      const { inputValue = '' } = state || {};
-
-      const options = data?.filter(
-        (docRev) =>
-          (isMaterial
-            ? docRev.status === DocumentRevisionStatus.Released
-            : true) && filterOutOption(docRev, inputValue),
-      );
-
-      return options;
-    };
-
-    const filterOptions = (options, state) => handleFilter(options, state);
-
-    if (selectedMPI && (meqs?.materials?.length || meqs?.equipment?.length)) {
-      return (
-        <Editor
-          {...props}
-          {...{
-            dataItem,
-            field,
-            docType,
-            options: isMaterial ? meqs.materials : meqs.equipment,
-          }}
-        />
-      );
-    }
+      setItems([]);
+      queryApi(0);
+    }, [dataItem[MODE_FIELD], values.type]);
 
     return (
       <FormikField name={field}>
-        <AutocompleteAsync
-          {...getFieldProps(field)}
-          key={docType}
-          blurOnSelect
-          freeSolo
-          forcePopupIcon
-          disabled={Mode.edit === dataItem[MODE_FIELD]}
-          disableClearable
-          optionId={getOptionId()}
-          onInputChange={onInputChange}
-          {...{ filterOptions }}
-          onChange={handleChange}
-          placeholder={translate('lhr.summary.placeholder.select.enter')}
+        <Autocomplete
+          {...{ onChange }}
+          classes={{ option: classes.option }}
+          key={isEmpty(items) ? 'disabled' : 'enabled'}
+          value={{ label: inputValue }}
+          options={items}
+          getOptionLabel={(option) => option.label ?? '' }
+          filterOptions={(x) => x}
           size="small"
+          disabled={isUpdateAction}
+          renderInput={(params: RenderInputParams) => (
+            <Box display="flex">
+              <Box width="100%" data-cy="actualId">
+                <TextField
+                  {...params}
+                  fullWidth
+                  variant="outlined"
+                  placeholder={translate('lhr.summary.placeholder.select.enter')}
+                  InputProps={{
+                    ...params.InputProps,
+                    style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
+                    startAdornment: (
+                      <div>
+                        {params.InputProps.startAdornment}
+                      </div>
+                    ),
+                    endAdornment: (
+                      <>
+                        { loading && (
+                          <CircularProgress color="inherit" size={16} />
+                        )}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
+                  inputProps={{
+                    ...params.inputProps,
+                    style: { padding: '4.5px 0' },
+                  }}
+                />
+              </Box>
+            </Box>
+          )}
+          renderOption={(option) => option.label}
+          onInputChange={debounceFunction}
+          disableClearable
+          ListboxProps={{ onScroll }}
+          loading={loading}
         />
       </FormikField>
     );

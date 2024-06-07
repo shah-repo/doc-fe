@@ -281,9 +281,25 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   eqStatus: EquipmentStatus
 }
 
+interface EQ {
+  docId: string
+  docRevId: string
+  nextCalibration: string
+  nextPm: string
+  title: string
+}
+
+interface Material {
+  docId: string
+  docRevId: string
+  quantity?: string
+  revision: string
+  title: string
+  unit: string
+}
 export interface MeqResponse {
-  equipment: DocumentRevision[]
-  materials: DocumentRevision[]
+  equipment: EQ[]
+  materials: Material[]
 }
 
 export interface SmartReference {
