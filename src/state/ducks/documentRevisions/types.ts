@@ -321,7 +321,7 @@ export enum SmartReferenceType {
   LotSoruce = 'LOT_SOURCE',
 }
 
-interface InputOwner {
+export interface InputOwner {
   [key: string]: string
 }
 

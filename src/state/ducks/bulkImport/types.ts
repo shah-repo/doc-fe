@@ -1,8 +1,9 @@
 import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.types';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
+import { FBSchemaProps } from '../../../ui/form.builder/FBSchema/FBSchema.types';
 import { Group } from '../auth/types';
 import { Approval } from '../common/types';
-import { DocumentRevisionStatus, EquipmentStatus, LotStatus, POStatusType, Precalc, TypeSpecificConfig, UsedDocumentsInLHRS } from '../documentRevisions/types';
+import { DocumentRevisionStatus, EquipmentStatus, InputOwner, LotStatus, POStatusType, Precalc, TypeSpecificConfig, UsedDocumentsInLHRS } from '../documentRevisions/types';
 import { CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 
 export interface DataType {
@@ -397,14 +398,14 @@ export interface DocumentRevision {
   retrain: boolean
   redline: boolean
   formInput: Record<string, string[]>
-  inputOwners: Record<string, any>
+  inputOwners: InputOwner
   downloadAllAttachmentsZipS3Link: string | null
   lastZipFileUpdate: string | null
   documentId: string
   changeRequestId: string | null
   companyId: string
   revisionChangeType: string
-  schema: any
+  schema: FBSchemaProps[]
   formDocumentId: string | null
   externalId: string | null
   renderHTMLDefined: boolean
