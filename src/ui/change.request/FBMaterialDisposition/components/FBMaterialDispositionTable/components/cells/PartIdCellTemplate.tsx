@@ -46,6 +46,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
         docId: item.document.docId,
         displayRevision: item?.displayRevision,
       }));
+
       if (isEmpty(inputValue)) {
         setItems(prev => [...prev, ...modifiedItems]);
       } else {
@@ -71,6 +72,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
 
     const defaultValue = isUserEnteredItemId ? { label: dataItem.userEnteredItemId ?? '' } : { label: dataItem.partDocId, value: dataItem.partDocRevId };
     const value = items.find((option) => option.value === dataItem.partDocRevId) ?? defaultValue;
+
     if (value && isEmpty(inputValue)) {
       setFieldValue('partDocRevId', value.value);
       setValue(value);
@@ -112,8 +114,10 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     leading: true,
     trailing: true,
   });
+
   const onScroll = (event: React.SyntheticEvent) => {
     const listboxNode = event.currentTarget;
+
     if (
       Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop)
     === listboxNode.clientHeight
