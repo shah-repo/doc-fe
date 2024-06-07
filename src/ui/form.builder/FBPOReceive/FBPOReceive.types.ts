@@ -19,6 +19,6 @@ export type FBPOReceiveItemProps =
 
 export interface IReceivedItem {
   itemId: string
-  rowId: string
+  rowId?: string
   received: number
 }
