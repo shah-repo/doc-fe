@@ -6,7 +6,7 @@ import { Approval, Owner } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
 import { DocumentRevision, Reference, SmartReference } from '../documentRevisions/types';
 
-type AuditTypes =
+export type AuditTypes =
     'ARRAY_NEW'
     |'ARRAY_DELETED'
     | 'STRING_NEW'

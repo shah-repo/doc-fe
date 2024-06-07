@@ -1,8 +1,12 @@
 import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.types';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { FBSchemaProps } from '../../../ui/form.builder/FBSchema/FBSchema.types';
+import { Attachment } from '../attachments/types';
+import { Audit } from '../audit/types';
 import { Group } from '../auth/types';
 import { Approval } from '../common/types';
+import { Employee as EmployeeCompany } from '../company/types';
+import { User } from '../dashboard.new/training.stats/types';
 import { DocumentRevisionStatus, EquipmentStatus, InputOwner, LotStatus, POStatusType, Precalc, TypeSpecificConfig, UsedDocumentsInLHRS } from '../documentRevisions/types';
 import { CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 
@@ -177,28 +181,15 @@ interface Company {
   id: string
 }
 
-interface Owner {
-  id: string
-}
-
-export interface BKAttachmentFile {
+export interface BKAttachmentFile extends Partial<Attachment> {
   company: Company
-  lineType: string
   isCleanCopyRequired: boolean
-  name: string
-  type: string
-  s3link: string
-  owner: Owner
-  fileSizeS3Link: number
   cleanCopyStatus: string
   companyId: string
   description: string | null
   version: string | null
-  s3linkCleanCopy: string | null
-  fileSizeS3LinkCleanCopy: number | null
   createdAt: string
   updatedAt: string
-  id: string
   billIds: string[]
 }
 
@@ -238,20 +229,7 @@ export interface TableRow extends Record<string, string | TableErrorDetail[] | u
   errors?: TableErrorDetail[]
 }
 
-export interface Employee {
-  createdAt: string
-  updatedAt: string
-  id: string
-  email: string
-  name: string
-  confirmed: boolean
-  locked: boolean
-  passwordExpires: boolean
-  passwordLastEmailSentAt: string | null
-  passwordUpdatedAt: string
-  permissions: string | null
-  avatar: string | null
-  initialColor: string
+export interface Employee extends User {
   resetPasswordEmailTimestamp: string | null
   resendConfirmationEmailTimestamp: string | null
   forgotPasswordEmailTimestamp: string | null
@@ -266,14 +244,9 @@ export interface EmployeeGroup extends Pick<Group, 'id' | 'name' | 'permissions'
   isOfficial: boolean
 }
 
-export interface Approver {
+export interface Approver extends EmployeeCompany {
   createdAt: string
   updatedAt: string
-  id: string
-  companyId: string
-  active: boolean
-  slackUserId: string | null
-  user: Employee
   groups: EmployeeGroup[]
 }
 
@@ -425,7 +398,7 @@ export interface DocumentInfo {
   typeSpecificConfig?: TypeSpecificConfig
 }
 
-export enum SNAPSHOT_FIELD_TYPE {
+export enum FieldType {
   STRING = 'STRING',
   OBJECT = 'OBJECT',
   NUMBER = 'NUMBER',
@@ -435,53 +408,21 @@ export enum SNAPSHOT_FIELD_TYPE {
   BOOLEAN = 'BOOLEAN',
 }
 
-export enum SNAPSHOT_OPTIONS {
-  STRING_NEW = 'STRING_NEW',
-  STRING_DELETED = 'STRING_DELETED',
-  STRING_EDITED = 'STRING_EDITED',
-  NUMBER_NEW = 'NUMBER_NEW',
-  NUMBER_DELETED = 'NUMBER_DELETED',
-  NUMBER_EDITED = 'NUMBER_EDITED',
-  OBJECT_NEW = 'OBJECT_NEW',
-  OBJECT_DELETED = 'OBJECT_DELETED',
-  OBJECT_EDITED = 'OBJECT_EDITED',
-  ARRAY_NEW = 'ARRAY_NEW',
-  ARRAY_ADDED = 'ARRAY_ADDED',
-  ARRAY_DELETED = 'ARRAY_DELETED',
-  ARRAY_EDITED = 'ARRAY_EDITED',
-  ARRAY_REMOVED = 'ARRAY_REMOVED',
-  BOOLEAN_NEW = 'BOOLEAN_NEW',
-  BOOLEAN_DELETED = 'BOOLEAN_DELETED',
-  BOOLEAN_EDITED = 'BOOLEAN_EDITED',
-  EMAIL_SENT = 'EMAIL_SENT',
-  VIEW_PDF = 'VIEW_PDF',
-}
-
-export interface LogEntry {
+export interface LogEntry extends Partial<Audit> {
   createdAt: string
   updatedAt: string
-  id: string
   changeRequestId: string | null
   documentId: string | null
-  documentRevisionId: string | null
   referenceId: string | null
   employeeId: string | null
   userId: string | null
-  approvalId: string | null
   companyGroupId: string | null
-  type: SNAPSHOT_OPTIONS
-  fieldType: SNAPSHOT_FIELD_TYPE
+  fieldType: FieldType
   fieldPath: string
-  timestamp: string
-  previousValue: string
-  nextValue: string
-  groupId: string
   ownerId: string
   ownerUserId: string | null
   fileUploadCandidatesId: string | null
   companyId: string
   attachmentId: string | null
-  ownerName: string
   ownerEmail: string
-  hasPoReceivedQtyFlag: boolean
 }
