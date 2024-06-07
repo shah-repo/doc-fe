@@ -19,11 +19,12 @@ import OverflowingContent from '../../../commonCells/OveflowContent';
 import { CustomTemplateProps, EditableMDItem } from '../../types';
 import { styles } from './styles';
 const MIN_SEARCH_TERM_LENGTH = 3;
+const limit = 25;
 
 type ItemOptionType = {docId: string, displayRevision: string} & OptionType;
 
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
-  const { setFieldValue, getFieldProps } = useFormikContext<EditableMDItem>();
+  const { setFieldValue, getFieldProps, setValues, values } = useFormikContext<EditableMDItem>();
   const [items, setItems] = React.useState<ItemOptionType[]>([]);
   const [value, setValue] = useState<Partial<ItemOptionType>>({ label: '', value: '', docId: '', displayRevision: '' });
   const { userEnteredItemId } = dataItem;
@@ -31,7 +32,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   const fieldName = isUserEnteredItemId ? 'userEnteredItemId' : 'partDocRevId';
   const [inputValue, setInputValue] = React.useState('');
   const [offset, setOffset] = React.useState(0);
-  const limit = 25;
   const classes = styles();
   const isEdit = dataItem[MODE_FIELD] === Mode.edit;
   const isAdd = dataItem[MODE_FIELD] === Mode.add;
@@ -78,10 +78,13 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   }, [items]);
 
   const handleChange = (event: ChangeEvent<unknown>, value: ItemOptionType) => {
-    setFieldValue('text', undefined);
-    setFieldValue('docId', value.docId);
-    setFieldValue('docRevId', value.value);
-    setFieldValue('displayRevision', value?.displayRevision);
+    const itemInfo = {
+      text: undefined,
+      docId: value.docId,
+      docRevId: value.value,
+      displayRevision: value?.displayRevision,
+    };
+    setValues({ ...values, ...itemInfo });
     setValue(value);
   };
 
@@ -89,14 +92,19 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     if (reason !== 'input') {
       return;
     }
+
     setFieldValue('text', inputVal);
     setInputValue(inputVal);
-    if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
-      setOffset(0);
-      queryApi(0, inputVal);
-    } else if (!inputVal) {
+
+    if (!inputVal) {
       setOffset(0);
       queryApi(0);
+      return;
+    }
+
+    if (inputVal?.length >= MIN_SEARCH_TERM_LENGTH) {
+      setOffset(0);
+      queryApi(0, inputVal);
     }
   };
 

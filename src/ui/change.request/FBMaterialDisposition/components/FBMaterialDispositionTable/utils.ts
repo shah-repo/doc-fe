@@ -1,12 +1,15 @@
 import { cloneDeep, find, first, isEmpty, keys } from 'lodash';
 import { translate } from '../../../../../common/intl';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER } from './constants';
 import { CopiedItems, EditableMDItem } from './types';
 
 export const getExcelColumns = (columns: Array<ColumnDefinition<EditableMDItem>>): Array<ColumnDefinition<EditableMDItem>> => {
   return [...columns].map(col => ({ ...col, title: translate(col.title) }));
 };
+
+export const isEditMode = (dataItem: EditableMDItem): boolean => [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
 export const getMDItemList = (mdItemList: EditableMDItem[]): EditableMDItem[] => {
   return [...mdItemList].map(mdItem => {
