@@ -26,6 +26,9 @@ export const TypeCell: React.FC<CustomTemplateProps> = ({
       = useFormikContext<EditableLHRSummaryItem>();
 
     const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+      setFieldValue('status', '');
+      setFieldValue('expiryDate', null);
+      setFieldValue('lotOrEquipment', null);
       setFieldValue(field, value?.value);
     };
     value = TYPE_OPTIONS.find((option) => option.value === values.type);
