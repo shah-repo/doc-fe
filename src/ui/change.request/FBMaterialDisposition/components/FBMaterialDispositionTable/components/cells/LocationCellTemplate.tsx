@@ -11,7 +11,7 @@ export const LocationCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
-    return (<span>{EMPTY_VALUE_PLACEHOLDER}</span>);
+    return (<>{EMPTY_VALUE_PLACEHOLDER}</>);
   }
 
   return (
