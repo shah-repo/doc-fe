@@ -19,7 +19,7 @@ import OverflowingContent from '../../../commonCells/OveflowContent';
 import { CustomTemplateProps, EditableMDItem } from '../../types';
 import { styles } from './styles';
 const MIN_SEARCH_TERM_LENGTH = 3;
-const limit = 25;
+const MAX_SEARCH_OPTIONS_LIMIT = 25;
 
 type ItemOptionType = {docId: string, displayRevision: string} & OptionType;
 
@@ -118,7 +118,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
       Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop)
     === listboxNode.clientHeight
     ) {
-      const nextOffset = offset + limit;
+      const nextOffset = offset + MAX_SEARCH_OPTIONS_LIMIT;
       setOffset(nextOffset);
       queryApi(nextOffset, inputValue);
     }
