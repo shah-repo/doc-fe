@@ -4,6 +4,7 @@ import { Typography } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { find, pick } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -50,7 +51,8 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   isShowOnly,
   isDisabled,
 }) => {
-  const { _documentRevisionFormState } = SM.useStores();
+  const { _documentRevisionFormState, _tabsState } = SM.useStores();
+  const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles();
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
@@ -230,11 +232,11 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         = editedLHRSummaryItem && editedLHRSummaryItem?.id === item.id;
 
       return [
+        ...list,
         {
           ...(isLHRSummaryItemEdited ? editedLHRSummaryItem : item),
           [MODE_FIELD]: isLHRSummaryItemEdited ? Mode.edit : Mode.show,
         },
-        ...list,
       ];
     },
     isAlternatePartAdded ? [editedLHRSummaryItem] : [],
@@ -295,6 +297,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         }}
       >
         <KendoDataGrid<EditableLHRSummaryItem>
+          style={{ overflow: 'auto', maxHeight: size?.height ? `${size.height - 160}px` : '100px' }}
           data={LHRSummaryItemList}
           schema={getColumns()}
           fullWidth
