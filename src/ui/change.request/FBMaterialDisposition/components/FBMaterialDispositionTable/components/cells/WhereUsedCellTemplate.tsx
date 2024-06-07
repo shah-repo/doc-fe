@@ -1,11 +1,11 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { MouseEventHandler } from 'react';
-import { MODE_FIELD, Mode } from '../../../../../../components/KendoDataGrid/constants';
 import WhereUsedDialog, { WhereUsedType } from '../../../../../../components/whereUsed/WhereUsedDialog';
 import useDialog from '../../../../../../hooks/useDialog';
-import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
+import { isEditMode } from '../../utils';
+import { getEmptyPlaceholderJSX } from './LotIdCellTemplate';
 import { styles } from './styles';
 
 export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem }) => {
@@ -13,7 +13,6 @@ export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem 
 
   const { lotDocRevId, whereUsed } = dataItem;
   const isWhereUsedTreeExist = whereUsed > 0;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   const whereUsedDialog = useDialog();
   const openWhereUsedDialog: MouseEventHandler = (e) => {
@@ -25,8 +24,8 @@ export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem 
     e.stopPropagation();
   };
 
-  if (isEditMode) {
-    return (<span>{EMPTY_VALUE_PLACEHOLDER}</span>);
+  if (isEditMode(dataItem)) {
+    return getEmptyPlaceholderJSX({});
   }
 
   return (
