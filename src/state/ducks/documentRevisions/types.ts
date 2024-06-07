@@ -193,7 +193,7 @@ export interface LSHS {
   part: Part
 }
 
-interface Precalc {
+export interface Precalc {
   formDocId: string
   revision: number
   po_amount?: string
@@ -485,7 +485,7 @@ export interface UpdateFormRequestBody {
   formToBeUsed: Id
 }
 
-interface TypeSpecificConfig {
+export interface TypeSpecificConfig {
   eqProdEnforceConfig: {
     date: string
     value: boolean

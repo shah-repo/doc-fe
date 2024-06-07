@@ -1,6 +1,8 @@
 import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.types';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
+import { Group } from '../auth/types';
 import { Approval } from '../common/types';
+import { DocumentRevisionStatus, EquipmentStatus, LotStatus, POStatusType, Precalc, TypeSpecificConfig, UsedDocumentsInLHRS } from '../documentRevisions/types';
 import { CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 
 export interface DataType {
@@ -182,7 +184,6 @@ export interface BKAttachmentFile {
   company: Company
   lineType: string
   isCleanCopyRequired: boolean
-  importMetadataJson: Record<string, unknown>
   name: string
   type: string
   s3link: string
@@ -256,16 +257,11 @@ export interface Employee {
   passwordSetTimestamp: string | null
 }
 
-export interface EmployeeGroup {
+export interface EmployeeGroup extends Pick<Group, 'id' | 'name' | 'permissions' | 'type' | 'tags'> {
   createdAt: string
   updatedAt: string
-  id: string
-  name: string
-  permissions: string[]
   defaultForNewUsers: boolean
   companyId: string
-  tags: string[]
-  type: string
   isOfficial: boolean
 }
 
@@ -295,7 +291,6 @@ export interface BulkImportCustom extends BulkImport {
   progress?: number
   icons?: IconsBk[]
   date?: string
-  button: boolean
 }
 
 export interface BulkImport {
@@ -322,7 +317,7 @@ export interface BulkImport {
   logs: LogEntry[]
   bulkImportReports: string
   bulkImportCompletedAt: string | null
-  bulkImportProcess: BulkImportProcess
+  bulkImportProcess: BkProcess
   excelFile: BulkImportFile | null
   zipFile: BulkImportFile | null
 }
@@ -339,23 +334,31 @@ export interface BulkImportFile {
   s3link: string
   s3linkCleanCopy: string | null
   billIds: string[]
-  importMetadataJson: object
   cleanCopyStatus: string
   companyId: string
   fileSizeS3Link: number
   fileSizeS3LinkCleanCopy: number | null
 }
 
-interface ProcessStep {
+export enum BkStatus {
+  STARTED = 'STARTED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED',
+  CANCELLED = 'CANCELLED',
+  COMPLETED = 'COMPLETED',
+}
+
+interface Process {
   name: string
   step: number
-  status: string
+  status: BkStatus
   percentage: number
   description: string
 }
 
-interface BulkImportProcess {
-  process: ProcessStep[]
+interface BkProcess {
+  process: Process[]
   totalSteps: number
 }
 
@@ -380,11 +383,11 @@ export interface DocumentRevision {
   displayRevision: string
   description: string
   name: string
-  status: string
-  poStatus: string
-  lotStatus: string
-  eqStatus: string
-  displayStatus: string
+  status: DocumentRevisionStatus
+  poStatus: POStatusType
+  lotStatus: LotStatus
+  eqStatus: EquipmentStatus
+  displayStatus: DocumentRevisionStatus
   deprecatedAt: string | null
   effectiveDate: string | null
   approvedAt: string | null
@@ -405,8 +408,8 @@ export interface DocumentRevision {
   formDocumentId: string | null
   externalId: string | null
   renderHTMLDefined: boolean
-  usedDocumentsInLHRS: any
-  precalc: any
+  usedDocumentsInLHRS: UsedDocumentsInLHRS[]
+  precalc: Precalc
   document: DocumentInfo
   approvals: Approval[]
 }
@@ -418,7 +421,39 @@ export interface DocumentInfo {
   docId: string
   companyId: string
   massCreateExecuted: boolean | null
-  typeSpecificConfig: any
+  typeSpecificConfig?: TypeSpecificConfig
+}
+
+export enum SNAPSHOT_FIELD_TYPE {
+  STRING = 'STRING',
+  OBJECT = 'OBJECT',
+  NUMBER = 'NUMBER',
+  ARRAY = 'ARRAY',
+  UNDEFINED = 'UNDEFINED',
+  NULL = 'NULL',
+  BOOLEAN = 'BOOLEAN',
+}
+
+export enum SNAPSHOT_OPTIONS {
+  STRING_NEW = 'STRING_NEW',
+  STRING_DELETED = 'STRING_DELETED',
+  STRING_EDITED = 'STRING_EDITED',
+  NUMBER_NEW = 'NUMBER_NEW',
+  NUMBER_DELETED = 'NUMBER_DELETED',
+  NUMBER_EDITED = 'NUMBER_EDITED',
+  OBJECT_NEW = 'OBJECT_NEW',
+  OBJECT_DELETED = 'OBJECT_DELETED',
+  OBJECT_EDITED = 'OBJECT_EDITED',
+  ARRAY_NEW = 'ARRAY_NEW',
+  ARRAY_ADDED = 'ARRAY_ADDED',
+  ARRAY_DELETED = 'ARRAY_DELETED',
+  ARRAY_EDITED = 'ARRAY_EDITED',
+  ARRAY_REMOVED = 'ARRAY_REMOVED',
+  BOOLEAN_NEW = 'BOOLEAN_NEW',
+  BOOLEAN_DELETED = 'BOOLEAN_DELETED',
+  BOOLEAN_EDITED = 'BOOLEAN_EDITED',
+  EMAIL_SENT = 'EMAIL_SENT',
+  VIEW_PDF = 'VIEW_PDF',
 }
 
 export interface LogEntry {
@@ -433,21 +468,19 @@ export interface LogEntry {
   userId: string | null
   approvalId: string | null
   companyGroupId: string | null
-  type: string
-  fieldType: string
+  type: SNAPSHOT_OPTIONS
+  fieldType: SNAPSHOT_FIELD_TYPE
   fieldPath: string
   timestamp: string
   previousValue: string
   nextValue: string
   groupId: string
   ownerId: string
-  server: string | null
   ownerUserId: string | null
   fileUploadCandidatesId: string | null
   companyId: string
   attachmentId: string | null
   ownerName: string
   ownerEmail: string
-  unknown: any
   hasPoReceivedQtyFlag: boolean
 }

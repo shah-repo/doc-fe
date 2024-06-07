@@ -84,7 +84,6 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
       ...bulkImport,
       progress: progress,
       icons,
-      button: true,
     };
     // Apply filters before adding to accumulator
     if ((!filterDataType || processId === filterDataType) && (!filterStatus || status === filterStatus)) {
