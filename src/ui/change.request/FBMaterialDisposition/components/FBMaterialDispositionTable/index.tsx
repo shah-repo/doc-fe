@@ -214,7 +214,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
 
   const addMDTableItem = (data: EditableMDItem) => {
     const partToSave = {
-      ...pick(data, has(data, 'text') ? NON_EXISTING_DOC_FIELDS_TO_PICK : EXISTING_DOC_FIELDS_TO_PICK),
+      ...pick(data, has(data, 'docId') ? EXISTING_DOC_FIELDS_TO_PICK : NON_EXISTING_DOC_FIELDS_TO_PICK),
     };
     partAsync.start(addMDItem, changeRequest?.id, partToSave, partAsync);
   };
