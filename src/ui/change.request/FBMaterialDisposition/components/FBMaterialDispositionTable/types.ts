@@ -20,6 +20,7 @@ export interface MaterialDispositionItem {
   asFinishedGoodsAction: string
   usedLocation: string
   comment: string
+  text?: string
   docId?: string
   docRevId?: string
   displayRevision?: string
