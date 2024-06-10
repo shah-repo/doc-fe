@@ -80,9 +80,9 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   }, [items]);
 
   const handleChange = (event: ChangeEvent<unknown>, value: ItemOptionType) => {
-    setFieldValue('text', undefined);
     setValues({
       ...values,
+      text: undefined,
       docId: value.docId,
       docRevId: value.value,
       displayRevision: value?.displayRevision,
