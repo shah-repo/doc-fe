@@ -31,7 +31,7 @@ const ActiveCellTemplate: React.FC<CellTemplateProps> = ({ dataItem, onChange })
   );
 };
 
-export const buildSchema: schemaBuilder = ({ onChange }) => {
+const buildSchema: schemaBuilder = ({ onChange }) => {
   return [
     {
       id: 'active',
