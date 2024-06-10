@@ -1,6 +1,7 @@
 import { Box, Grid, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as OverdueIcon } from '../../../../../assets/images/overdue_status.svg';
@@ -18,7 +19,7 @@ import { DOC_TYPE_GROUP_OPTION } from '../../../../../state/ducks/documentRevisi
 import { TrainingReference } from '../../../../../state/ducks/training/types';
 import { ApplicationState } from '../../../../../state/reducers';
 import Text from '../../../../components/Text';
-import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import { documentPreviewPath, documentVersionPath } from '../../../../document.revision/utils/paths';
 import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
@@ -214,7 +215,37 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       )}
                     </Typography>
                   )}
-                  {isCompletedByGRPT && ` ${translate('training.grpt')}`}
+                  {isCompletedByGRPT && (
+                    <>
+                      {' '}
+                      {translate('training.as.per', {
+                        reference: (trainingSourceReferences?.length === 1
+                          ? (
+                            <Link
+                              className={classes.link}
+                              to={documentPreviewPath(trainingSourceReferences[0].revisionId ?? '', trainingSourceReferences[0].documentId ?? '')}
+                            >
+                              {trainingSourceReferences[0].docId}
+                            </Link>
+                          ) : (
+                            <StyleTooltip
+                              title={trainingSourceReferences?.map(item => item.docId).join(', ')}
+                              placement="top"
+                              arrow
+                            >
+                              <Typography
+                                component="span"
+                                variant="inherit"
+                                color="textSecondary"
+                                noWrap
+                              >
+                                <Text translation="training.as.per.grpts" />
+                              </Typography>
+                            </StyleTooltip>
+                          )) as unknown as string,
+                      })}
+                    </>
+                  )}
                 </Grid>
               )}
               {TrainingStatus[status]
