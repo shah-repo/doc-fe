@@ -162,6 +162,12 @@ export interface EquipmentLocation {
   active: boolean
 }
 
+export interface ApprovalRoles {
+  id: string
+  name: string
+  active: boolean
+}
+
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
@@ -172,6 +178,7 @@ export interface GeneralSettings {
   equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
+  approvalRoles: ApprovalRoles
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

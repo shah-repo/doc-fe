@@ -9,6 +9,7 @@ export enum GeneralSettingsTabs {
   MD = 'Material Disposition',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
+  ApprovalRoles = 'Approval Roles',
 }
 
 export interface GeneralSettingsProps {
