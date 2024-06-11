@@ -8,11 +8,11 @@ export const CustomLinearProgress = withStyles((theme) => ({
     borderRadius: 4.5,
   },
   colorPrimary: {
-    backgroundColor: '#C4C4C4',
+    backgroundColor: Colors.lightGray2,
   },
   bar: {
     borderRadius: 4.5,
-    backgroundColor: '#0DB78D',
+    backgroundColor: Colors.success,
   },
 
 }))(LinearProgress);
@@ -23,7 +23,7 @@ export default makeStyles(theme => ({
     width: '100%',
     padding: theme.spacing(1.25),
     alignItems: 'center',
-    gap: `${theme.spacing(1.25)}px`,
+    gap: theme.spacing(1.25, 1.25),
     borderRadius: 4,
     background: Colors.tableHeader,
     borderColor: Colors.tableStroke,
@@ -58,13 +58,13 @@ export default makeStyles(theme => ({
     minHeight: 14,
   },
   checkGreenIcon: {
-    width: 15,
-    height: 15,
+    width: 14,
+    height: 14,
     color: Colors.statusReleased,
   },
   watchLaterIcon: {
-    width: 15,
-    height: 15,
+    width: 14,
+    height: 14,
     color: Colors.statusReview,
   },
   dateContainer: {
@@ -136,7 +136,7 @@ export default makeStyles(theme => ({
   },
   statusesContainer: {
     display: 'flex',
-    gap: `${theme.spacing(2.5)}px`,
+    gap: theme.spacing(2.5, 2.5),
     marginBottom: theme.spacing(1.25),
     [theme.breakpoints.down('sm')]: {
       display: 'block',
@@ -240,8 +240,8 @@ export default makeStyles(theme => ({
     paddingLeft: theme.spacing(0.75),
   },
   expandIcon: {
-    width: 18,
-    height: 18,
-    marginRight: theme.spacing(0.625),
+    width: 12,
+    height: 12,
+    color: Colors.primary,
   },
 }));

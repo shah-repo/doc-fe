@@ -34,7 +34,7 @@ const ProgressIcons: React.FC<ProgressIconsProps> = ({ item }) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Box className={classes.statusesContainer}>
         {icons?.map(icon => {
           let iconData = iconStatuses[icon.icon] ? iconStatuses[icon.icon] : iconStatuses.blank;
@@ -56,7 +56,7 @@ const ProgressIcons: React.FC<ProgressIconsProps> = ({ item }) => {
           );
         })}
       </Box>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -1,8 +1,9 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Box,
   Typography,
 } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../../state/ducks/auth';
@@ -23,7 +24,10 @@ const ProgressSection: React.FC = () => {
           return (
             <Box key={key}>
               <Typography className={classes.progressTitle}>
-                <ExpandMoreIcon className={classes.expandIcon} />{key}
+                <FontAwesomeIcon
+                  className={classes.expandIcon}
+                  icon={solid('chevron-down')}
+                />{key}
               </Typography>
               {bulkImportsGroupByProcess[key]?.map((item: BulkImportCustom, idx: number) => {
                 return (

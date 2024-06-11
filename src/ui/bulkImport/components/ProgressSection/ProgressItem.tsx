@@ -1,4 +1,4 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Box,
@@ -11,16 +11,17 @@ import {
   Typography,
 } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import WatchLaterIcon from '@material-ui/icons/WatchLater';
 import { History } from 'history';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { translate } from '../../../../common/intl';
 import { getReportsExcelFile, setBulkImport, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
 import { ChangeRequestTransitionResponse } from '../../../../state/ducks/changeRequest/types';
+import { ApprovalStatus } from '../../../../state/ducks/common/types';
 import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
 import { BULK_IMPORT_URL } from '../../../constants/urls';
@@ -28,7 +29,6 @@ import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTool
 import ApproveDialogueContainer from '../../../dashboard.new/line.items/purchase.order/task.approval/POApprovalDialogContainer';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
-import ModalReport from './ModalReport';
 import ProgressIcons, { iconStatuses } from './ProgressIcons';
 import useStyles, { CustomLinearProgress } from './styles';
 
@@ -46,9 +46,8 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
   const [approveHover, setApproveHover] = useState(false);
   const [rejectHover, setRejectHover] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const showApprovals = item?.documentRevision?.approvals[0]?.status === 'PENDING';
+  const showApprovals = item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending;
   const approvalId = item?.documentRevision?.approvals[0]?.id;
   const approverId = item?.documentRevision?.approvals[0]?.approverId;
   const transitionDialog = useDialog();
@@ -100,15 +99,6 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     openRejectDialog();
   };
 
-  // NOTE: If it required the modal
-  // const handleOpenDialog = () => {
-  //   setDialogOpen(true);
-  // };
-
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-  };
-
   const handleConfirmOpen = () => {
     setConfirmOpen(true);
   };
@@ -141,7 +131,13 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     <React.Fragment key={idx}>
       <Box className={classes.itemContainer}>
         <Box className={classes.titleContainer}>
-          {item.bulkImportCompletedAt ? <CheckCircleIcon className={classes.checkGreenIcon} /> : <WatchLaterIcon className={classes.watchLaterIcon} /> }
+          {item.bulkImportCompletedAt ? <FontAwesomeIcon
+                className={classes.checkGreenIcon}
+                icon={solid('circle-check')}
+              /> : <FontAwesomeIcon
+                className={classes.watchLaterIcon}
+                icon={solid('clock-three')}
+              />}
           <Typography className={classes.itemTitle}>
             {item.jobId}
           </Typography>
@@ -151,7 +147,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
             <>
               <CheckCircleIcon className={classes.checkGreenIcon} />
               <Typography className={classes.completedText}>
-              Completed ({moment(item.bulkImportCompletedAt).format('MM/DD/YYYY HH:mm')})
+              {translate('common.completed')} ({moment(item.bulkImportCompletedAt).format('MM/DD/YYYY HH:mm')})
               </Typography>
             </>
           ) : (
@@ -159,7 +155,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
               <ProgressIcons item={item} />
               <Box className={classes.progressBarContainer}>
                 <Typography className={classes.progressBarTitle}>
-                  Importing files
+                  {translate('common.importingFiles')}
                 </Typography>
                 <CustomLinearProgress variant="determinate" value={item.progress} className={classes.progressBar} />
                 <Typography className={classes.progressBarText}>
@@ -243,7 +239,6 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           />
         </>
       }
-      <ModalReport open={dialogOpen} onClose={handleCloseDialog} bulkImportReports={item?.bulkImportReports} />
       <Dialog
         open={confirmOpen}
         onClose={handleConfirmClose}
@@ -253,15 +248,15 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
         <DialogTitle id="alert-dialog-title">Confirm Action</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to go back to this step?
+            {translate('bulkImport.goBackStep')}
           </DialogContentText>
         </DialogContent>
         <DialogActions style={{ marginRight: 10 }}>
           <Button onClick={handleConfirmClose} color="primary">
-            No
+            {translate('common.false')}
           </Button>
           <Button onClick={handleConfirmYes} color="primary" autoFocus>
-            Yes
+          {translate('common.true')}
           </Button>
         </DialogActions>
       </Dialog>
