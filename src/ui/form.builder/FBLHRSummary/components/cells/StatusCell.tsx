@@ -15,10 +15,14 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { values } = useFormikContext<EditableLHRSummaryItem>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  let defaultValue = dataItem[field];
 
-  const defaultValue = isEditMode ? values.status || dataItem[field] : dataItem[field];
+  if (isEditMode) {
+    const { values } = useFormikContext<EditableLHRSummaryItem>();
+    defaultValue = values.status || dataItem[field];
+  }
+
   const displayStatus = STATUS_OPTIONS.find((option) => option.value === defaultValue)?.label ?? defaultValue;
 
   return (
