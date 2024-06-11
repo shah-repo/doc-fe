@@ -62,7 +62,7 @@ export const styles = makeStyles((theme) => ({
     border: `1px solid ${Colors.navy}`,
   },
   pHCheckbox: {
-    marginTop: theme.spacing(-3.25),
+    marginTop: theme.spacing(-2.50),
   },
 }));
 
