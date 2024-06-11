@@ -28,9 +28,7 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
   const bulkImport = useSelector(getBulkImport);
 
   const asyncUploadFile = useAsync({
-    onSuccess: () => {
-      handleNext();
-    },
+    onSuccess: () => handleNext(),
   });
 
   const handleFilesDrop = (acceptedFilesWithPreview: FileWithPreview[]) => {
