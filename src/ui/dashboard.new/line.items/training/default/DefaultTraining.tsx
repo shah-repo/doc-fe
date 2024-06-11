@@ -219,40 +219,18 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     <>
                       {' '}
                       {translate('training.as.per', {
-                        reference: (trainingSourceReferences?.length === 1
-                          ? (
+                        reference: (trainingSourceReferences?.map((item, index, arr) => (
+                          <>
                             <ReferenceLink
+                              key={item.docId}
                               className={classes.link}
-                              label={trainingSourceReferences[0].docId}
-                              documentId={trainingSourceReferences[0].documentId}
-                              revisionId={trainingSourceReferences[0].revisionId}
+                              label={item.docId}
+                              documentId={item.documentId}
+                              revisionId={item.revisionId}
                             />
-                          ) : (
-                            <StyleTooltip
-                              title={trainingSourceReferences?.map((item, index, arr) => (
-                                <>
-                                  <ReferenceLink
-                                    key={item.docId}
-                                    label={item.docId}
-                                    documentId={item.documentId}
-                                    revisionId={item.revisionId}
-                                  />
-                                  {index < (arr.length - 1) && ', '}
-                                </>
-                              ))}
-                              placement="top"
-                              arrow
-                            >
-                              <Typography
-                                component="span"
-                                variant="inherit"
-                                color="textSecondary"
-                                noWrap
-                              >
-                                <Text translation="training.as.per.grpts" />
-                              </Typography>
-                            </StyleTooltip>
-                          )) as unknown as string,
+                            {index < (arr.length - 1) && ', '}
+                          </>
+                        ))) as unknown as string,
                       })}
                     </>
                   )}
