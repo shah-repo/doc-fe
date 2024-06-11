@@ -48,6 +48,7 @@
   "navigation.change.request.list": "Approval request List",
   "navigation.user.management": "User Management",
   "navigation.group.management": "Group Management",
+  "navigation.userGroup.management": "User / Group Management",
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
   "validators.email": "Invalid email address",

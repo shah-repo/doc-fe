@@ -5,6 +5,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
+import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import ChangeRequestCreateContainer from '../change.request/ChangeRequestCreate.container';
@@ -31,6 +32,7 @@ import {
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
   TRAINING_URL,
+  USER_GROUP_URL,
   USER_MANAGEMENT_ROOT_URL,
 } from '../constants/urls';
 import DashboardLayout from '../dashboard.new/Dashboard.layout';
@@ -161,6 +163,10 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={GENERAL_SETTINGS_URL}
             component={GeneralSettingsPage}
+          />
+          <Route
+            path={USER_GROUP_URL}
+            component={UserGroupManagment}
           />
           <Redirect to={HOME_URL} />
         </Switch>
