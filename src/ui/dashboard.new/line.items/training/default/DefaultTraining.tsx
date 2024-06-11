@@ -1,7 +1,6 @@
 import { Box, Grid, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { ReactComponent as ApprovedIcon } from '../../../../../assets/images/approved_status.svg';
 import { ReactComponent as ApprovedWhiteIcon } from '../../../../../assets/images/approved_status_white.svg';
 import { ReactComponent as OverdueIcon } from '../../../../../assets/images/overdue_status.svg';
@@ -19,7 +18,8 @@ import { DOC_TYPE_GROUP_OPTION } from '../../../../../state/ducks/documentRevisi
 import { TrainingReference } from '../../../../../state/ducks/training/types';
 import { ApplicationState } from '../../../../../state/reducers';
 import Text from '../../../../components/Text';
-import { documentPreviewPath, documentVersionPath } from '../../../../document.revision/utils/paths';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import ReferenceLink from '../../../../training/details/ReferenceLink';
 import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
@@ -221,15 +221,25 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       {translate('training.as.per', {
                         reference: (trainingSourceReferences?.length === 1
                           ? (
-                            <Link
+                            <ReferenceLink
                               className={classes.link}
-                              to={documentPreviewPath(trainingSourceReferences[0].revisionId ?? '', trainingSourceReferences[0].documentId ?? '')}
-                            >
-                              {trainingSourceReferences[0].docId}
-                            </Link>
+                              label={trainingSourceReferences[0].docId}
+                              documentId={trainingSourceReferences[0].documentId}
+                              revisionId={trainingSourceReferences[0].revisionId}
+                            />
                           ) : (
                             <StyleTooltip
-                              title={trainingSourceReferences?.map(item => item.docId).join(', ')}
+                              title={trainingSourceReferences?.map((item, index, arr) => (
+                                <>
+                                  <ReferenceLink
+                                    key={item.docId}
+                                    label={item.docId}
+                                    documentId={item.documentId}
+                                    revisionId={item.revisionId}
+                                  />
+                                  {index < (arr.length - 1) && ', '}
+                                </>
+                              ))}
                               placement="top"
                               arrow
                             >

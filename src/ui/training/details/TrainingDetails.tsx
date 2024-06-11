@@ -86,20 +86,18 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
                 <Typography className={classes.label}>
                   <Text translation="training.ref.id" />
                 </Typography>
-                {referencesIds.map((item, index, arr) => {
-                  return (
-                    <>
-                      <ReferenceLink
-                        key={item.docId}
-                        className={referenceClassName}
-                        label={item.docId}
-                        documentId={item.documentId}
-                        revisionId={item.revisionId}
-                      />
-                      {index < (arr.length - 1) && ', '}
-                    </>
-                  );
-                })}
+                {referencesIds.map((item, index, arr) => (
+                  <>
+                    <ReferenceLink
+                      key={item.docId}
+                      className={referenceClassName}
+                      label={item.docId}
+                      documentId={item.documentId}
+                      revisionId={item.revisionId}
+                    />
+                    {index < (arr.length - 1) && ', '}
+                  </>
+                ))}
               </Grid>
             )}
             <Grid item xs={12} className={classes.item}>
