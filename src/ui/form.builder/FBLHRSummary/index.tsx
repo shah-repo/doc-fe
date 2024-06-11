@@ -78,6 +78,10 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   }, []);
 
   const fetchLHRSummaryData = () => {
+    if (!_documentRevisionFormState?.documentRevision?.id) {
+      return;
+    }
+
     LHRSummaryAsync.start(fetchLHRSummary, _documentRevisionFormState?.documentRevision?.id, LHRSummaryAsync);
   };
 
