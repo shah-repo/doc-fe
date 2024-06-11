@@ -17,6 +17,7 @@ import InputField from '../../../components/forms/fields/Input';
 import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
 import ListFiles from '../ListFiles';
 import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
@@ -36,7 +37,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const bulkImport = useSelector(getBulkImport);
   const uploadFileDataAction = useActionCreator(uploadS3);
   const [files, setFiles] = useState<FileWithPreview[]>([]);
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const dialog = useDialog();
   const showErrors = false;
 
   const asyncUploadFile = useAsync({
@@ -61,11 +62,11 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   };
 
   const handleConfirmOpen = () => {
-    setConfirmOpen(true);
+    dialog.open();
   };
 
   const handleConfirmClose = () => {
-    setConfirmOpen(false);
+    dialog.close();
   };
 
   const renderMessage = (showError = false) => {
@@ -150,7 +151,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
           {renderForm()}
         </Box>
         <Dialog
-          open={confirmOpen}
+          open={dialog.isOpen}
           onClose={handleConfirmClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
