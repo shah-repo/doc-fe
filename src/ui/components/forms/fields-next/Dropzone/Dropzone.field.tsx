@@ -10,7 +10,7 @@ interface DropzoneFieldProps {
   accept?: Accept
   children?: ReactNode
   className?: string
-  multiple?: boolean
+  isMultiple?: boolean
   onDropCallback?: (files: FileWithPreview[]) => void
 }
 

@@ -10,7 +10,7 @@ interface DropzoneProps {
   accept?: Accept
   className?: string
   children?: ReactNode
-  multiple?: boolean
+  isMultiple?: boolean
   onDrop: (acceptedFiles: File[]) => void
   maxSize?: number
 }
@@ -22,7 +22,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
   className,
   accept,
   onDrop,
-  multiple = true,
+  isMultiple = true,
   maxSize = MAX_SIZE, // as default is 2GB
 }) => {
   const classes = useStyles();
@@ -31,8 +31,8 @@ const Dropzone: React.FC<DropzoneProps> = ({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     ...(accept ? { accept } : {}),
     onDrop,
-    multiple,
-    maxSize, // as default is 2GB
+    multiple: isMultiple,
+    maxSize,
   });
 
   return (
