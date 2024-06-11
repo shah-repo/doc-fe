@@ -43,6 +43,11 @@ export default makeStyles((theme: NextTheme) => ({
       textDecoration: 'underline',
     },
   },
+  ellipsis: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    textWrap: 'nowrap',
+  },
   [theme.media.mobile]: {
     itemlistMobile: {
       flexWrap: 'wrap',

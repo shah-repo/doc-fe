@@ -170,7 +170,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               </Grid>
 
               {TrainingStatus[status] && (
-                <Grid item={true}>
+                <Grid item={true} className={classes.ellipsis}>
                   {TrainingStatus.ASSIGNED !== status && (
                     <Typography
                       component="span"
