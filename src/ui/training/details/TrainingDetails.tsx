@@ -2,47 +2,20 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import classMerge from 'classnames';
+import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { translate } from '../../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import Text from '../../components/Text';
 import AttachmentIconPresenter from '../../components/common/attachment.icon/presenter';
-import { documentVersionPath } from '../../document.revision/utils/paths';
 import { FBFieldName } from '../../form.builder';
 import { Trainee, TraineeAttachment } from '../../form.builder/FBTraineeList/types';
 import { DialogHandler } from '../../hooks/useDialog';
 import ExportTrainingRecordToEmail from '../export.email/ExportTrainingRecordToEmail';
+import ReferenceLink from './ReferenceLink';
 import { styles } from './styles';
-
-interface ReferenceLinkProps {
-  label: string
-  documentId?: string
-  revisionId?: string
-}
-
-const ReferenceLink: React.FC<ReferenceLinkProps> = (props) => {
-  const { label, documentId, revisionId } = props;
-  const classes = styles();
-
-  if (!documentId || !revisionId) {
-    return <>{label}</>;
-  }
-
-  const link = documentVersionPath(revisionId, documentId);
-
-  return (
-    <Link
-      className={classMerge(classes.refID, classes.itemContentBlue)}
-      to={link}
-    >
-      {label}
-    </Link>
-  );
-};
 
 interface TrainingDetailsProps {
   dialog: DialogHandler
@@ -67,6 +40,7 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
     },
     [],
   );
+  const referenceClassName = cx(classes.refID, classes.itemContentBlue);
 
   return (
     <>
@@ -98,6 +72,7 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
                 <Text translation="training.doc.id.rev" />
               </Typography>
               <ReferenceLink
+                className={referenceClassName}
                 label={translate('common.displayRevision', {
                   docId: training.trainingPlan?.document.docId,
                   displayRevision: training.documentRevision?.displayRevision,
@@ -116,6 +91,7 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
                     <>
                       <ReferenceLink
                         key={item.docId}
+                        className={referenceClassName}
                         label={item.docId}
                         documentId={item.documentId}
                         revisionId={item.revisionId}
