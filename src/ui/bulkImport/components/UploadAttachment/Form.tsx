@@ -5,6 +5,7 @@ import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined'
 import { Form, Formik } from 'formik';
 import React, { ReactNode, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { translate } from '../../../../common/intl';
 import { setIsLoading, uploadS3 } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport } from '../../../../state/ducks/bulkImport/types';
@@ -39,9 +40,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const showErrors = false;
 
   const asyncUploadFile = useAsync({
-    onSuccess: () => {
-      handleNext();
-    },
+    onSuccess: () => handleNext(),
   });
 
   const handleFilesDrop = (acceptedFilesWithPreview: FileWithPreview[]) => {
@@ -73,7 +72,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
     if (!showErrors) return null;
 
     return (
-      <MessageInformation showLink={false} showError={true} message="5 folders have mismatched structure errors." />
+      <MessageInformation showLink={false} showError={true} message={translate('bulkImport.mismatchedStructure')} />
     );
   };
 
@@ -164,11 +163,6 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
               <Tree />
             </Box>
           </Box>
-          {/* <DialogActions style={{ marginRight: 10 }}>
-            <Button onClick={handleConfirmClose} color="primary">
-              <Text translation="common.close" />
-            </Button>
-          </DialogActions> */}
         </Dialog>
       </Box>
     </>

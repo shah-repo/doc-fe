@@ -5,7 +5,7 @@ export default makeStyles(theme => ({
   container: {
     display: 'flex',
     margin: '0 auto',
-    gap: `${theme.spacing(7.5)}px`,
+    gap: theme.spacing(7.5, 7.5),
     maxWidth: 550,
     marginTop: theme.spacing(7.5),
   },
@@ -85,7 +85,7 @@ export default makeStyles(theme => ({
     marginBottom: theme.spacing(3.75),
   },
   errorsList: {
-    gap: `${theme.spacing(1.25)}px`,
+    gap: theme.spacing(1.25, 1.25),
     display: 'flex',
     flexDirection: 'column',
   },
