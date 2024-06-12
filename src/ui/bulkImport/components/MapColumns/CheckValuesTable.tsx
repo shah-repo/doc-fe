@@ -2,6 +2,7 @@ import { Box, Tooltip, Typography } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { GridCellProps, GridColumn, GridPageChangeEvent } from '@progress/kendo-react-grid';
 import { Input } from '@progress/kendo-react-inputs';
+import cx from 'classnames';
 import { noop } from 'lodash';
 import React, { ComponentType, ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -51,7 +52,7 @@ const CustomCell = ({ dataItem, field, ...props }) => {
   };
 
   const content = (
-    <Box className={`${classes.cell} ${showError ? classes.errorCell : ''}`}>
+    <Box className={cx(classes.cell, { [classes.errorCell]: showError })}>
       {cellValue}
       {showError && (
         <ReportProblemOutlinedIcon className={classes.warningIcon} />
@@ -76,14 +77,14 @@ const CustomCell = ({ dataItem, field, ...props }) => {
             title={
               <span>
                 {error.message}
-                {error?.help && error.help?.message && (
+                {error?.help?.message && (
                   <>
                     <br />
                     {error.help.message}
-                    {error.help?.data && error.help?.data.length && (
+                    {error?.help?.data?.length && (
                       <>
                         <br />
-                        Allowed: {error.help.data.join(', ')}
+                        {translate('common.allowed')}: {error.help.data.join(', ')}
                       </>
                     )}
                   </>
@@ -131,7 +132,10 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
 
   const triggerNext = () => {
     if (errorCount > 0) {
-      toastError(`Please fix the ${errorCount > 1 ? `${errorCount} errors` : 'error'} before continue`, { position: 'top-right' });
+      const errorMessage = translate('bulkImport.tableErrorCountMessage', {
+        error: errorCount > 1 ? `${errorCount} errors` : 'error',
+      });
+      toastError(errorMessage, { position: 'top-right' });
       return;
     }
     dispatch(setIsLoading(true));
@@ -144,7 +148,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     setData(tableData.slice(page, pageSize));
     const count = tableData.reduce((acc, item) => {
       // Check if item has errors and it's an array
-      if (item.errors && Array.isArray(item.errors)) {
+      if (Array.isArray(item.errors)) {
         // Filter errors that are not edited and count them
         const uneditedErrors = item.errors.filter(error => !error.edited).length;
         return acc + uneditedErrors;
@@ -154,6 +158,8 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     setErrorCount(count);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData]);
+
+  const tableDataFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors') : [];
 
   return (
     <>
@@ -184,7 +190,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
         }}
         onPageChange={handlePageChange}
       >
-        {tableData.length > 0 && Object.keys(tableData[0]).filter(key => key !== 'errors').map((key, idx) => (
+        {tableDataFiltered.map((key, idx) => (
           <GridColumn key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
         ))}
       </StyledKendoGrid>

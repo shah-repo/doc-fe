@@ -50,13 +50,13 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleBac
     }
   };
 
-  useEffect(() => {
-    init();
-  }, []);
+  useEffect(
+    init
+    , []);
 
-  useEffect(() => {
-    checkStatus();
-  }, [TableData]);
+  useEffect(
+    checkStatus
+    , [TableData]);
 
   if (showTable) {
     return (

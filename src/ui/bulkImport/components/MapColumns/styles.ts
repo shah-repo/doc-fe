@@ -7,7 +7,7 @@ export default makeStyles(theme => ({
     margin: '0 auto',
     maxWidth: 1066,
     marginTop: theme.spacing(7.5),
-    gap: `${theme.spacing(3.75)}px`,
+    gap: theme.spacing(3.75, 3.75),
   },
   titleContainer: {
     marginTop: theme.spacing(6.25),
@@ -72,7 +72,7 @@ export default makeStyles(theme => ({
   },
   actionsHeader: {
     display: 'flex',
-    gap: `${theme.spacing(2.5)}px`,
+    gap: theme.spacing(2.5, 2.5),
     position: 'absolute',
     right: 24,
     alignItems: 'center',
@@ -86,7 +86,7 @@ export default makeStyles(theme => ({
   buttonsFooterContainer: {
     display: 'flex',
     width: 'fit-content',
-    gap: `${theme.spacing(2.5)}px`,
+    gap: theme.spacing(2.5, 2.5),
   },
   button: {
     minWidth: 180,
