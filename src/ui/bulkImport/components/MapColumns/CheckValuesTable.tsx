@@ -197,12 +197,6 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
       <Box className={classes.actionsContainer}>
         <NeedHelpButton />
         <Box className={classes.buttonsFooterContainer}>
-          {/* <Button
-            onClick={handleBack}
-            className={classes.button}
-          >
-            <Text translation="common.export.csv" />
-          </Button> */}
           <Button
             onClick={handleBack}
             kind="outlined"
