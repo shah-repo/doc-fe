@@ -6,18 +6,18 @@ const messageContainerBase = theme => ({
   alignItems: 'center',
   borderRadius: 5,
   padding: theme.spacing(0.875, 0.625),
-  margin: `${theme.spacing(0)} auto ${theme.spacing(2.875)} auto`,
+  margin: `${theme.spacing(0)} auto ${theme.spacing(2.875)}px auto`,
   width: 'fit-content',
 });
 
 export default makeStyles(theme => ({
   messageContainer: {
     ...messageContainerBase(theme),
-    backgroundColor: '#B4FFEC',
+    backgroundColor: Colors.successLight,
   },
   messageContainerError: {
     ...messageContainerBase(theme),
-    backgroundColor: '#FFD9D1',
+    backgroundColor: Colors.errorLight,
   },
   messageIconError: {
     color: Colors.error,
