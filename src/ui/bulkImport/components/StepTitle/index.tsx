@@ -1,4 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../common/intl';
 import useStyles from './styles';
@@ -19,7 +20,7 @@ const StepTitle: React.FC<BulkImportProgressProps> = ({
   const classes = useStyles();
 
   return (
-    <Box className={`${classes.container} ${className}`}>
+    <Box className={cx(classes.container, className)}>
       <Typography
         variant="h1"
         className={classes.title}
