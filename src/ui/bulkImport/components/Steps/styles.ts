@@ -28,13 +28,13 @@ export default makeStyles(theme => ({
   },
   step: {
     '& .MuiStepIcon-root': {
-      color: '#9A9FAB',
+      color: Colors.textDisabled,
       fill: 'transparent',
-      border: '2px solid #9A9FAB',
+      border: `2px solid ${Colors.textDisabled}`,
       borderRadius: '50%',
       fontWeight: '700',
       '& text': {
-        fill: '#9A9FAB',
+        fill: Colors.textDisabled,
       },
       '&.MuiStepIcon-active': {
         color: Colors.textBlack,
@@ -53,7 +53,7 @@ export default makeStyles(theme => ({
       },
     },
     '& .MuiStepLabel-label': {
-      color: '#9A9FAB',
+      color: Colors.textDisabled,
       fontSize: 12,
       fontWeight: '400',
       '&.MuiStepLabel-active': {
