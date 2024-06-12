@@ -66,7 +66,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
     if (isShowOnly || formik.dirty) {
       return;
     }
-    if (dataItem.lotDocRevId) {
+    if (!dataItem?.isManuallyAdded) {
       setIsDeleteDisabled(true);
     }
     const updatedDataItem = omit(dataItem, DROPDOWN_FIELDS);
