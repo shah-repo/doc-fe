@@ -2047,6 +2047,7 @@
   "bulkImport.upload.infoExcelKB": "KB Microsoft Excel File",
   "bulkImport.mismatchedStructure": "5 folders have mismatched structure errors.",
   "bulkImport.goBackStep": "Are you sure you want to go back to this step?",
+  "bulkImport.tableErrorCountMessage": "Please fix the {error} before continue",
   "common.importingFiles": "Importing files",
   "common.table.rowsErrors": "rows contain errors.",
   "common.table.noRowsErrors": "Great! All errors have been resolved.",
@@ -2059,5 +2060,6 @@
   "common.file.OrUploadFromFiles": "Or Upload from Files",
   "common.template.reUpload": "Re-Upload Template",
   "common.selectOption": "Select an option",
+  "common.allowed": "Allowed",
   "common.dataType": "Data Type"
 }

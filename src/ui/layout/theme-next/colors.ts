@@ -29,6 +29,7 @@ enum Colors {
   success='#0DB78D',
   successHighlight='#F3FCF9',
   approve='#16bd23',
+  successLight = '#B4FFEC',
 
   // Warning
   warning='#EFA10B',
@@ -40,6 +41,7 @@ enum Colors {
   errorLightShadow='#FAE1DD',
   remove='#f05a5c',
   reject='#c40000',
+  errorLight='#FFD9D1',
 
   // Shades
   white='#FFF',
