@@ -25,6 +25,7 @@ export interface MaterialDispositionItem {
   docRevId?: string
   displayRevision?: string
   openedPO: DocumentRevision[]
+  isManuallyAdded?: boolean
   userEnteredItemId?: string
 }
 
