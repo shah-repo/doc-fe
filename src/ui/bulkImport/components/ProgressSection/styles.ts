@@ -187,24 +187,18 @@ export default makeStyles(theme => ({
     color: Colors.statusVoid,
     width: 24,
     height: 24,
-  },
-  rejectIconHover: {
-    cursor: 'pointer',
-    color: Colors.reject,
-    width: 24,
-    height: 24,
+    '&:hover': {
+      color: Colors.reject,
+    },
   },
   approveIcon: {
     cursor: 'pointer',
     color: Colors.statusReleased,
     width: 24,
     height: 24,
-  },
-  approveIconHover: {
-    cursor: 'pointer',
-    color: Colors.approve,
-    width: 24,
-    height: 24,
+    '&:hover': {
+      color: Colors.approve,
+    },
   },
   approvalsContainer: {
     display: 'flex',

@@ -44,8 +44,6 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const history = useHistory() as History;
   const dispatch = useDispatch();
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
-  const [approveHover, setApproveHover] = useState(false);
-  const [rejectHover, setRejectHover] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const showApprovals = item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending;
   const approvalId = item?.documentRevision?.approvals[0]?.id;
@@ -73,22 +71,6 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const openRejectDialog = () => {
     async.reset();
     transitionDialog1.open();
-  };
-
-  const onMouseHoverApproveIcon = () => {
-    setApproveHover(true);
-  };
-
-  const onMouseLeaveApproveIcon = () => {
-    setApproveHover(false);
-  };
-
-  const onMouseHoverRejectIcon = () => {
-    setRejectHover(true);
-  };
-
-  const onMouseLeaveRejectIcon = () => {
-    setRejectHover(false);
   };
 
   const handleApproveClick = () => {
@@ -132,12 +114,12 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
       <Box className={classes.itemContainer}>
         <Box className={classes.titleContainer}>
           {item.bulkImportCompletedAt ? <FontAwesomeIcon
-                className={classes.checkGreenIcon}
-                icon={solid('circle-check')}
-              /> : <FontAwesomeIcon
-                className={classes.watchLaterIcon}
-                icon={solid('clock-three')}
-              />}
+            className={classes.checkGreenIcon}
+            icon={solid('circle-check')}
+          /> : <FontAwesomeIcon
+            className={classes.watchLaterIcon}
+            icon={solid('clock-three')}
+          />}
           <Typography className={classes.itemTitle}>
             {item.jobId}
           </Typography>
@@ -147,7 +129,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
             <>
               <CheckCircleIcon className={classes.checkGreenIcon} />
               <Typography className={classes.completedText}>
-              {translate('common.completed')} ({moment(item.bulkImportCompletedAt).format('MM/DD/YYYY HH:mm')})
+                {translate('common.completed')} ({moment(item.bulkImportCompletedAt).format('MM/DD/YYYY HH:mm')})
               </Typography>
             </>
           ) : (
@@ -167,54 +149,30 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
         </Box>
         <Box className={classes.viewModalContainer}>
           {showApprovals && <Box className={classes.approvalsContainer}>
-            {!rejectHover && (
+            <StyleTooltip
+              title={<Text translation="common.reject" />}
+              placement="top"
+              arrow
+            >
               <FontAwesomeIcon
                 data-cy="transition-reject"
-                onMouseEnter={onMouseHoverRejectIcon}
-                onMouseLeave={onMouseLeaveRejectIcon}
+                onClick={handleRejectClick}
                 className={classes.rejectIcon}
                 icon={regular('xmark-to-slot')}
               />
-            )}
-            {rejectHover && (
-              <StyleTooltip
-                title={<Text translation="common.reject" />}
-                placement="top"
-                arrow
-              >
-                <FontAwesomeIcon
-                  data-cy="transition-reject"
-                  onClick={handleRejectClick}
-                  onMouseLeave={onMouseLeaveRejectIcon}
-                  className={classes.rejectIconHover}
-                  icon={regular('xmark-to-slot')}
-                />
-              </StyleTooltip>
-            )}
-            {!approveHover && (
+            </StyleTooltip>
+            <StyleTooltip
+              title={<Text translation="common.approve" />}
+              placement="top"
+              arrow
+            >
               <FontAwesomeIcon
                 data-cy="transition-approve"
-                onMouseEnter={onMouseHoverApproveIcon}
-                onMouseLeave={onMouseLeaveApproveIcon}
+                onClick={handleApproveClick}
                 className={classes.approveIcon}
                 icon={regular('check-to-slot')}
               />
-            )}
-            {approveHover && (
-              <StyleTooltip
-                title={<Text translation="common.approve" />}
-                placement="top"
-                arrow
-              >
-                <FontAwesomeIcon
-                  data-cy="transition-approve"
-                  onClick={handleApproveClick}
-                  onMouseLeave={onMouseLeaveApproveIcon}
-                  className={classes.approveIconHover}
-                  icon={regular('check-to-slot')}
-                />
-              </StyleTooltip>
-            )}
+            </StyleTooltip>
           </Box>}
           {showButtonView && <Button className={!item?.bulkImportCompletedAt ? classes.viewButton : classes.downloadLogs} kind="outlined" color="inherit" onClick={!item?.bulkImportCompletedAt ? handleConfirmOpen : handleDownloadFile}>
             <Text translation={!item?.bulkImportCompletedAt ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
@@ -256,7 +214,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
             {translate('common.false')}
           </Button>
           <Button onClick={handleConfirmYes} color="primary" autoFocus>
-          {translate('common.true')}
+            {translate('common.true')}
           </Button>
         </DialogActions>
       </Dialog>

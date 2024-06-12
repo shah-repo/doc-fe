@@ -19,25 +19,23 @@ const ProgressSection: React.FC = () => {
 
   return (
     <Box>
-      <Box>
-        {Object.keys(bulkImportsGroupByProcess).map((key: string) => {
-          return (
-            <Box key={key}>
-              <Typography className={classes.progressTitle}>
-                <FontAwesomeIcon
-                  className={classes.expandIcon}
-                  icon={solid('chevron-down')}
-                />{key}
-              </Typography>
-              {bulkImportsGroupByProcess[key]?.map((item: BulkImportCustom, idx: number) => {
-                return (
-                  <ProgressItem item={item} key={`${key}-${idx}`} valKey={key} idx={idx} currentEmployeeId={currentEmployeeId} />
-                );
-              })}
-            </Box>
-          );
-        })}
-      </Box>
+      {Object.keys(bulkImportsGroupByProcess).map((key: string) => {
+        return (
+          <Box key={key}>
+            <Typography className={classes.progressTitle}>
+              <FontAwesomeIcon
+                className={classes.expandIcon}
+                icon={solid('chevron-down')}
+              />{key}
+            </Typography>
+            {bulkImportsGroupByProcess[key]?.map((item: BulkImportCustom, idx: number) => {
+              return (
+                <ProgressItem item={item} key={`${key}-${idx}`} valKey={key} idx={idx} currentEmployeeId={currentEmployeeId} />
+              );
+            })}
+          </Box>
+        );
+      })}
     </Box>
   );
 };

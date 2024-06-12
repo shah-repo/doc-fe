@@ -34,29 +34,27 @@ const ProgressIcons: React.FC<ProgressIconsProps> = ({ item }) => {
   }
 
   return (
-    <>
-      <Box className={classes.statusesContainer}>
-        {icons?.map(icon => {
-          let iconData = iconStatuses[icon.icon] ? iconStatuses[icon.icon] : iconStatuses.blank;
-          if ((!iconStatuses[icon.icon] || icon.icon === 'blank') && !firstBlankIconFound) {
-            firstBlankIconFound = true;
-            iconData = iconStatuses.progress;
-          }
+    <Box className={classes.statusesContainer}>
+      {icons?.map(icon => {
+        let iconData = iconStatuses[icon.icon] ? iconStatuses[icon.icon] : iconStatuses.blank;
+        if ((!iconStatuses[icon.icon] || icon.icon === 'blank') && !firstBlankIconFound) {
+          firstBlankIconFound = true;
+          iconData = iconStatuses.progress;
+        }
 
-          return (
-            <Box className={classes.statusContainer}>
-              <FontAwesomeIcon
-                className={classes[iconData.className]}
-                icon={iconData.name}
-              />
-              <Typography className={classes.statusText}>
-                {icon.text}
-              </Typography>
-            </Box>
-          );
-        })}
-      </Box>
-    </>
+        return (
+          <Box className={classes.statusContainer}>
+            <FontAwesomeIcon
+              className={classes[iconData.className]}
+              icon={iconData.name}
+            />
+            <Typography className={classes.statusText}>
+              {icon.text}
+            </Typography>
+          </Box>
+        );
+      })}
+    </Box>
   );
 };
 
