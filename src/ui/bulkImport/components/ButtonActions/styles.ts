@@ -27,7 +27,7 @@ export default makeStyles(theme => ({
     fontSize: 12,
     fontWeight: 400,
     color: Colors.primary,
-    gap: `${theme.spacing(1.25)}px`,
+    gap: theme.spacing(1.25, 1.25),
   },
   containerHelp: {
     display: 'flex',

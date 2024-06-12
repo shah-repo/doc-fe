@@ -15,7 +15,7 @@ export default makeStyles(theme => ({
   fileInfo: {
     display: 'flex',
     alignItems: 'center',
-    gap: `${theme.spacing(2.5)}px`,
+    gap: theme.spacing(2.5, 2.5),
     '& .MuiListItemText-primary': {
       fontWeight: 700,
     },

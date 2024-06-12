@@ -47,7 +47,7 @@ export default makeStyles(theme => ({
   },
   form: {
     display: 'flex',
-    gap: `${theme.spacing(1.25)}px`,
+    gap: theme.spacing(1.25, 1.25),
     height: 36,
     marginBottom: theme.spacing(1.875),
   },

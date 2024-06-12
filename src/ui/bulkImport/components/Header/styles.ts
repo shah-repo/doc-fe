@@ -24,12 +24,12 @@ export default makeStyles(theme => ({
     justifyContent: 'flex-end',
     whiteSpace: 'nowrap',
     flexWrap: 'wrap',
-    gap: `${theme.spacing(1, 1.25)}px`,
+    gap: theme.spacing(1.25, 1.25),
   },
   buttons: {
     display: 'flex',
     alignItems: 'center',
-    gap: `${theme.spacing(0.5, 1.25)}px`,
+    gap: theme.spacing(0.5, 1.25),
   },
   progress: {
     position: 'absolute',
