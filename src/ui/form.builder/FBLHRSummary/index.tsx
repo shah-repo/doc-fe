@@ -1,6 +1,8 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
+import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { find, isEmpty, pick } from 'lodash';
@@ -11,6 +13,7 @@ import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { authSelectors } from '../../../state/ducks/auth';
+import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
@@ -20,6 +23,7 @@ import {
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
+import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 import { FBAutocompleteAsyncOption, FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -31,6 +35,7 @@ import {
 import {
   COLUMN_LOCK_FIELDS,
   DATA_ITEM_KEY,
+  EXCEL_FILE_NAME,
   FIELDS_TO_PICK,
   SELECTED_FIELD,
 } from './constants';
@@ -42,6 +47,7 @@ import {
   EditableLHRSummaryItemEditEvent,
   LHRSummaryItem,
 } from './types';
+import { getExcelColumns, getExcelData } from './utils';
 
 interface props {
   isShowOnly?: boolean
@@ -68,6 +74,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
+  const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
 
   const MPIDocumentsAsync = useAsync({
     onSuccess: (data) => {
@@ -323,6 +330,13 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     [columns],
   );
 
+  const _export = React.useRef<ExcelExport | null>(null);
+  const exportToExcel = () => {
+    if (_export.current !== null) {
+      _export.current.save(getExcelData(LHRSummaryItemList, mpiDocuments, partDocs, equipmentDocs, availableUsers), getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
+    }
+  };
+
   return (
     <>
       <FBSection
@@ -348,42 +362,67 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           onLock,
         }}
       >
-        <KendoDataGrid<EditableLHRSummaryItem>
-          data={LHRSummaryItemList}
-          schema={getColumns()}
-          fullWidth
-          className={classes.rootLHRSummaryTable}
-          hasBoxScrollbars
-          onRowClick={onEditLHRSummaryItem}
-          columnMenu={(props) => (
-            <CustomColumnMenu
-              {...props}
-              columns={getColumns()}
-              {...{
-                onLock,
-              }}
-            />
-          )}
-          selectedField={SELECTED_FIELD}
-          dataItemKey={DATA_ITEM_KEY}
-          filterable={true}
-          navigatable={true}
-          rowRender={rowRender}
-          fallback={
-            <Typography className={classes.font}>
-              {isShowOnly
-                ? translate('table.no.results.found')
-                : translate('lhr.summary.table.empty.records')}
-            </Typography>
-          }
-          loading={
-            LHRSummaryAsync.isLoading
+        <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
+          <KendoDataGrid<EditableLHRSummaryItem>
+            data={LHRSummaryItemList}
+            schema={getColumns()}
+            fullWidth
+            className={classes.rootLHRSummaryTable}
+            hasBoxScrollbars
+            onRowClick={onEditLHRSummaryItem}
+            columnMenu={(props) => (
+              <CustomColumnMenu
+                {...props}
+                columns={getColumns()}
+                {...{
+                  onLock,
+                }}
+              />
+            )}
+            selectedField={SELECTED_FIELD}
+            dataItemKey={DATA_ITEM_KEY}
+            filterable={true}
+            navigatable={true}
+            rowRender={rowRender}
+            fallback={
+              <Typography className={classes.font}>
+                {isShowOnly
+                  ? translate('table.no.results.found')
+                  : translate('lhr.summary.table.empty.records')}
+              </Typography>
+            }
+            loading={
+              LHRSummaryAsync.isLoading
             || addLHRSummaryAsync.isLoading
             || deleteLHRSummaryAsync.isLoading
             || updateLHRSummaryAsync.isLoading
-          }
-          resizable={true}
-        />
+            || MPIDocumentsAsync.isLoading
+            || PartDocumentsAsync.isLoading
+            || EQDocumentsAsync.isLoading
+            || LotDocumentsAsync.isLoading
+            }
+            resizable={true}
+          >
+            <GridToolbar>
+              <Grid container justify="flex-end"
+                className={classes.toolbarContainer}
+              >
+                <Grid item >
+                  <StyleTooltip
+                    title={translate('common.download')}
+                    placement="top"
+                    arrow
+                  >
+                    <FontAwesomeIcon data-cy="excel-download"
+                      className={classes.icon}
+                      onClick={exportToExcel}
+                      icon={solid('arrow-down-to-line')} />
+                  </StyleTooltip>
+                </Grid>
+              </Grid>
+            </GridToolbar>
+          </KendoDataGrid>
+        </ExcelExport>
       </ColumnMenuContext.Provider>
       {(!isShowOnly && !isDisabled) && (
         <Button

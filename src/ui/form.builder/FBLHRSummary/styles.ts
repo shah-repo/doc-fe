@@ -36,6 +36,11 @@ export default makeStyles((theme) => ({
     height: 14,
     cursor: 'pointer',
   },
+  toolbarContainer: {
+    height: 44,
+    paddingBottom: theme.spacing(1.25),
+    paddingRight: theme.spacing(1.25),
+  },
   updatingRow: {
     position: 'relative',
     zIndex: 3,
