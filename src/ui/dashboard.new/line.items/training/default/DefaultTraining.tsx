@@ -100,9 +100,12 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       DOC_TYPE_GROUP_OPTION.GROUP_TRAINING,
     ),
   );
-  const isCompletedByGRPT = GRPTDocumentType
-    && status === TrainingStatus.COMPLETED
-    && Boolean(trainingSourceReferences?.find(item => item.docId.startsWith(GRPTDocumentType.documentTypeAcronym)));
+  const GRPTReferences = (
+    GRPTDocumentType && trainingSourceReferences?.filter(
+      item => item.docId.startsWith(GRPTDocumentType.documentTypeAcronym),
+    )
+  ) ?? [];
+  const isCompletedByGRPT = status === TrainingStatus.COMPLETED && GRPTReferences.length > 0;
 
   return (
     <StyledListItem
@@ -219,7 +222,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     <>
                       {' '}
                       {translate('training.as.per', {
-                        reference: (trainingSourceReferences?.map((item, index, arr) => (
+                        reference: (GRPTReferences.map((item, index, arr) => (
                           <>
                             <ReferenceLink
                               key={item.docId}
