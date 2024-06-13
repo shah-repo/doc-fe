@@ -3,6 +3,7 @@ import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import { FormikField } from '../../../../components/forms/fields-next';
@@ -11,9 +12,10 @@ import {
   Mode,
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
+import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
+import { EMPTY_PLACEHOLDER, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, RecordsResponse } from '../../types';
 import { styles } from './styles';
 
@@ -23,9 +25,9 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
 }) => {
   const classes = styles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  // const actualDocId = dataItem.actualDocId; // TODO keys chana as per Issues
-  // const actualRevId = dataItem.actualId; // TODO keys chana as per Issues
-  // const actualDocumentId = dataItem.actualDocumentId; // TODO keys chana as per Issues
+  const issueDocId = dataItem.issueDocId;
+  const issueRevId = dataItem.issue;
+  const issueDocumentId = dataItem.issueDocumentId;
 
   if (isEditMode) {
     const { values, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
@@ -37,10 +39,10 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
     const [offset, setOffset] = React.useState(0);
 
     useEffect(() => {
-      if (isUpdateAction && !inputValue && !dataItem.actualDocId) {
+      if (isUpdateAction && !inputValue && !dataItem.issueDocId) {
         setInputValue(dataItem[field] ?? '');
       }
-    }, [values?.actualDocId]);
+    }, [values?.issueDocId]);
 
     const fetchLHRSummaryByOptionId = useActionCreator(lhrSummaryActions.fetchRecords);
     const [isOpen, setIsOpen] = useState(false);
@@ -60,7 +62,6 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
         }
 
         setLoading(false);
-        // TODO keys change as per Issues
         const modifiedItems = data?.results?.map((item) => ({
           label: translate('lhr.summary.displayRevision',
             {
@@ -192,21 +193,20 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
     );
   }
 
-  return <></>;
-  // return (
-  //   <>
-  //     {actualDocumentId ? (
-  //       <Link
-  //         to={documentVersionPath(actualRevId, actualDocumentId)}
-  //         target="_blank"
-  //         id="PartOrEqDocLink-linkButton"
-  //         className={classes.link}
-  //       >
-  //         {actualDocId}
-  //       </Link>
-  //     ) : (
-  //       actualRevId ?? EMPTY_PLACEHOLDER
-  //     )}
-  //   </>
-  // );
+  return (
+    <>
+      {issueDocumentId ? (
+        <Link
+          to={documentVersionPath(issueRevId ?? '', issueDocumentId)}
+          target="_blank"
+          data-cy="issue-link-button"
+          className={classes.link}
+        >
+          {issueDocId}
+        </Link>
+      ) : (
+        issueRevId ?? EMPTY_PLACEHOLDER
+      )}
+    </>
+  );
 };

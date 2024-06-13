@@ -31,6 +31,8 @@ export interface LHRSummaryItem {
   actualDocumentId?: string
   plannedDocId?: string
   plannedDocumentId?: string
+  issueDocId?: string
+  issueDocumentId?: string
   stepOrMpiDocId?: string
   stepOrMpiDocumentId?: string
 }
