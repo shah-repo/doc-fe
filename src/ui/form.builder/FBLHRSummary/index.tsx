@@ -193,6 +193,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       actualId: '',
       title: '',
       lotOrEquipment: '',
+      issue: '',
       equipmentId: '',
       mpiId: '',
       expiryDate: null,

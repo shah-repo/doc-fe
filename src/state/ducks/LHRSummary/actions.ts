@@ -1,3 +1,5 @@
+import { KendoGridFilterCellOperators } from '../../../ui/components/KendoGrid/interfaces';
+import { LIMIT } from '../../../ui/form.builder/FBLHRSummary/constants';
 import {
   LHRSummaryItem,
   LHRSummaryOptionsResponse,
@@ -5,6 +7,8 @@ import {
 } from '../../../ui/form.builder/FBLHRSummary/types';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
+import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../documentRevisions/constants';
+import { DocumentRevisionStatus } from '../documentRevisions/types';
 import {
   CREATE_LHR_SUMMARY, ROOT_LHR_SUMMARY,
   UPDATE_LHR_SUMMARY,
@@ -26,6 +30,36 @@ const fetchLHRSummaryDataByOptionId = (
   apiActionWithCallbacks({
     url: `${ROOT_LHR_SUMMARY}/search?optionId=${optionId}&searchQuery=${searchText}&offset=${offset}&limit=25`,
     method: 'get',
+    handlers,
+  });
+
+const fetchRecords = (
+  searchStr,
+  offset = 0,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: DOCUMENT_REVISION_SEARCH_ROOT_URL,
+    method: 'post',
+    data: {
+      documentTypeCategory: 'Record',
+      status: [DocumentRevisionStatus.Released],
+      limit: LIMIT,
+      offset: offset,
+      filters: [
+        { field: 'document.docId', operator: KendoGridFilterCellOperators.CONTAINS, value: searchStr },
+        { field: 'displayStatus', operator: KendoGridFilterCellOperators.EQ, value: 'Released' },
+      ],
+      sort: [],
+      schema: [
+        {
+          displayStatus: true,
+          document: { docId: true, id: true },
+          id: true,
+          name: true,
+        },
+      ],
+    },
     handlers,
   });
 
@@ -68,6 +102,7 @@ export default {
   fetchLHRSummary,
   fetchLHRSummaryDataByOptionId,
   addLHRSummary,
+  fetchRecords,
   updateLHRSummary,
   deleteLHRSummary,
 };

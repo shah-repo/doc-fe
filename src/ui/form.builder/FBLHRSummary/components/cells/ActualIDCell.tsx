@@ -76,6 +76,11 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
     ) => {
       console.log('reson', value, reason);
       if (reason === 'input') {
+        // if (docType === DocType.equipment) {
+        //   setFieldValue('calDueDate', ''); // calDueDate
+        //   setFieldValue('pmDueDate', null); // pmDueDate
+        // }
+
         setFieldValue(field, value);
       }
     };

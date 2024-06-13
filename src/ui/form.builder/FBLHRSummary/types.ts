@@ -13,6 +13,7 @@ export interface LHRSummaryItem {
   lotOrEquipment?: string
   equipmentId?: string
   mpiId?: string
+  issue?: string
   stepOrMPI: string
   expiryDate?: null | string
   startQuantity: number
@@ -32,6 +33,11 @@ export interface LHRSummaryItem {
   plannedDocumentId?: string
   stepOrMpiDocId?: string
   stepOrMpiDocumentId?: string
+}
+
+export interface RecordsResponse {
+  results: DocumentRevision[]
+  totalCount: number
 }
 
 export interface CustomTreeListColumnProps extends TreeListColumnProps {

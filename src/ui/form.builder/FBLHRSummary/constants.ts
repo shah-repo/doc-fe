@@ -46,7 +46,7 @@ export const SampleLHRSummaryData = [
     [MODE_FIELD]: Mode.show,
   },
 ];
-export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'status', 'expiryDate', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment'];
+export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'status', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex'];
 
 export enum DocType {

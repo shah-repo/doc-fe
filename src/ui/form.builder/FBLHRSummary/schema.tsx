@@ -4,6 +4,7 @@ import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.t
 import { ByCell } from './components/cells/ByCell';
 import { DateCell } from './components/cells/DateCell';
 import { DueDateCell } from './components/cells/DueDateCell';
+import { IssuesCell } from './components/cells/IssuesCell';
 import { LotIDCell } from './components/cells/LotIDCell';
 import { PlannedIDCell } from './components/cells/PlannedIDCell';
 import { QuantityCell } from './components/cells/QuantityCell';
@@ -73,6 +74,16 @@ export const buildSchema = ({
       show: true,
       selectable: false,
       template: (props) => <DateCell {...props} onClick={onRowClick} />,
+      width: 201,
+    },
+    {
+      id: 'issue',
+      field: 'issue',
+      title: 'lhr.summary.grid.heading.issues',
+      template: (props) => <IssuesCell {...props} onClick={onRowClick} />,
+      show: true,
+      sortable: false,
+      selectable: false,
       width: 201,
     },
     {
