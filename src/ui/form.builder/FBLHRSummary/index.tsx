@@ -1,7 +1,7 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Typography } from '@material-ui/core';
-import { ExcelExport } from '@progress/kendo-react-excel-export';
+import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
@@ -14,6 +14,7 @@ import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { authSelectors } from '../../../state/ducks/auth';
+import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
@@ -45,6 +46,7 @@ import {
   EditableLHRSummaryItemEditEvent,
   LHRSummaryItem,
 } from './types';
+import { getExcelColumns, getExcelData } from './utils';
 
 interface props {
   isShowOnly?: boolean
@@ -65,7 +67,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
-  // const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
+  const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
@@ -284,7 +286,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
     if (_export.current !== null) {
-      // _export.current.save(getExcelData(LHRSummaryItemList, mpiDocuments, partDocs, equipmentDocs, availableUsers), getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
+      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers), getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
     }
   };
 
@@ -348,10 +350,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
             || addLHRSummaryAsync.isLoading
             || deleteLHRSummaryAsync.isLoading
             || updateLHRSummaryAsync.isLoading
-            // || MPIDocumentsAsync.isLoading
-            // || PartDocumentsAsync.isLoading
-            // || EQDocumentsAsync.isLoading
-            // || LotDocumentsAsync.isLoading
             }
             resizable={true}
           >
