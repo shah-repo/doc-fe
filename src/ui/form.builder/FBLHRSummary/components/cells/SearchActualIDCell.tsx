@@ -34,6 +34,7 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
     const { values, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
     const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
     const isMaterialTypeSelected = values.type === DocType.material;
+    const isEqTypeSelected = values.type === DocType.equipment;
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [selectedObj, setSelectedObj] = useState<OptionType>();
@@ -69,6 +70,8 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
               name: item?.name,
             }),
           value: item.id,
+          calDueDate: item.calDueDate,
+          pmDueDate: item.pmDueDate,
         })) ?? [];
 
         if (isEmpty(inputValue)) {
@@ -80,6 +83,11 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
     });
 
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+      if (!inputVal && inputValue && isEqTypeSelected) {
+        setFieldValue('calDueDate', null);
+        setFieldValue('pmDueDate', null);
+      }
+
       setInputValue(inputVal);
       if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
         setOffset(0);
@@ -92,6 +100,11 @@ export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
 
     const onChange = (e, value) => {
       setSelectedObj(value);
+      if (isEqTypeSelected) {
+        setFieldValue('calDueDate', value.calDueDate ?? null);
+        setFieldValue('pmDueDate', value.pmDueDate ?? null);
+      }
+
       setInputValue(value?.label);
       setFieldValue(field, value?.value);
     };
