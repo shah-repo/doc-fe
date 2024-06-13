@@ -1,39 +1,49 @@
 import { Box, Grid, Tab } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
-import KendoContainer from '../../group.management/kendo/container';
+import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import StyledTabs from '../../dashboard.new/tabs/common/StyledTabs';
+import GroupManagementListContainer from '../../group.management/kendo/container';
 import UserManagementKendoContainer from '../../user.management/kendo/container';
+import { UserGroupTabValues } from './userGroupType';
 
 const UserGroupManagment: React.FC = () => {
-  const [value, setValue] = useState('1'); // State to manage selected tab
+  const [value, setValue] = useState<UserGroupTabValues>(UserGroupTabValues.User);
+  const classes = KendoGridStyles();
+  const handleChange = useCallback(
+    (event: any, newValue: UserGroupTabValues) => setValue(newValue),
+    [],
+  );
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  console.log('check');
   return (
     <>
-
-      <Grid item>
-        <GridTitle translation="navigation.userGroup.management" />
+      <Grid item xs={12} className={classes.headerGridItem}>
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
+            <GridTitle translation="navigation.userGroup.management" />
+          </Grid>
+        </Grid>
+        <StyledTabs
+          value={value}
+          onChange={handleChange}
+          aria-label="dashboard tabs">
+          <Tab
+            value={UserGroupTabValues.User}
+            label="User Management"
+          />
+          <Tab
+            value={UserGroupTabValues.Group}
+            label="Group Management"
+          />
+        </StyledTabs>
       </Grid>
       <Box>
-        <Tab
-          value="1"
-          label="User Management "
-          onChange={() => handleChange(null, '1')} />
-        <Tab
-          value="2"
-          label="Group Management"
-          onChange={() => handleChange(null, '2')} />
-
-        <Box>
-          <div>
-            {value === '1' && <UserManagementKendoContainer />}
-            {value === '2' && <KendoContainer history={undefined} location={undefined} match={undefined} />}
-          </div>
-        </Box>
-      </Box></>
+        <div>
+          {value === UserGroupTabValues.User && <UserManagementKendoContainer />}
+          {value === UserGroupTabValues.Group && <GroupManagementListContainer history={null} location={null} match={null} />}
+        </div>
+      </Box>
+    </>
   );
 };
 
