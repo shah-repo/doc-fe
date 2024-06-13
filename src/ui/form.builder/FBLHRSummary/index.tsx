@@ -12,7 +12,6 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
-import { authSelectors } from '../../../state/ducks/auth';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
@@ -194,10 +193,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     return columns.filter(({ show }) => show);
   };
 
-  const user = useSelector(authSelectors.currentUser);
-
   const onAddItem = () => {
-    // TODO update as per edit fields
     const newLHRSummaryItem: EditableLHRSummaryItem = {
       id: uuidv4(),
       step: '',
@@ -217,10 +213,11 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       pmDueDate: null,
       ncmr: '',
       comments: '',
-      enteredBy: user.id,
+      enteredBy: '',
       createdAt: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
     };
+
     setEditedLHRSummaryItem(newLHRSummaryItem);
   };
 

@@ -126,7 +126,7 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
             lotDocumentId,
           )}
           target="_blank"
-          id="LotDocLink-linkButton"
+          data-cy="lot-id"
           className={classes.link}
         >
           {lotDocId}

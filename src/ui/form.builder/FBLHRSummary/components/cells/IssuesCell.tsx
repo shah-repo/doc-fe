@@ -199,7 +199,7 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
         <Link
           to={documentVersionPath(issueRevId ?? '', issueDocumentId)}
           target="_blank"
-          data-cy="issue-link-button"
+          data-cy="issue-link"
           className={classes.link}
         >
           {issueDocId}

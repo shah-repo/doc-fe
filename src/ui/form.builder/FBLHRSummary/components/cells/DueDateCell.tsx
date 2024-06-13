@@ -36,6 +36,7 @@ export const DueDateCell: React.FC<CustomTemplateProps> = ({
         <DatePicker
           {...getFieldProps(field)}
           size="small"
+          data-cy={`${field}`}
           onChange={handleChange}
           format={MomentFormats.MonthDateYearTwoDigit}
         />
