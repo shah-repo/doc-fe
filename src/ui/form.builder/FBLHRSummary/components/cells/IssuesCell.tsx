@@ -9,7 +9,7 @@ import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import {
   Mode,
-  MODE_FIELD
+  MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
