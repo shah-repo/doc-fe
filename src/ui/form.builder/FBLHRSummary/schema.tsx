@@ -79,7 +79,7 @@ export const buildSchema = ({
     {
       id: 'issue',
       field: 'issue',
-      title: 'lhr.summary.grid.heading.issues',
+      title: 'lhr.summary.grid.heading.issue',
       template: (props) => <IssuesCell {...props} onClick={onRowClick} />,
       show: true,
       sortable: false,

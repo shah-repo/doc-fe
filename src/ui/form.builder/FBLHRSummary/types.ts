@@ -98,7 +98,12 @@ export interface CustomTemplateProps extends CellTemplateProps<EditableLHRSummar
   onSelectCell?: (dataItem: EditableLHRSummaryItem, field: string) => void
 }
 
+interface DueDateCombined extends DocumentRevision{
+  calDueDate: string
+  pmDueDate: string
+}
+
 export interface LHRSummaryOptionsResponse {
-  items: DocumentRevision[]
+  items: DueDateCombined[]
   totalCount: number
 }

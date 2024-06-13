@@ -1967,7 +1967,7 @@
   "lhr.summary.grid.heading.title": "Title",
   "lhr.summary.grid.heading.lot": "LOT",
   "lhr.summary.grid.heading.expiry.date": "Expiry Date",
-  "lhr.summary.grid.heading.issues": "Issues",
+  "lhr.summary.grid.heading.issue": "Issue",
   "lhr.summary.grid.heading.start.qty": "Start Qty",
   "lhr.summary.grid.heading.end.qty": "End Qty",
   "lhr.summary.grid.heading.status": "Lot Status",
