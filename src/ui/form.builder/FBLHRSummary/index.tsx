@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { authSelectors } from '../../../state/ducks/auth';
+import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { Button } from '../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
@@ -61,6 +62,11 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
+  const isVoided = Boolean(_documentRevisionFormState?.documentRevision?.displayStatus?.includes(DocumentRevisionStatusDisplay.VOIDED));
+
+  if (isVoided) {
+    return null;
+  }
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
