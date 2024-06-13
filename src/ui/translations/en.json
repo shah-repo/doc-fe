@@ -1694,7 +1694,7 @@
   "training.your": "Your training",
   "training.your.on": "Your training on",
   "training.assign": "A training is assigned to you",
-  "training.grpt": "as per GRPT",
+  "training.as.per": "as per {reference}",
   "require.approval": "needs your approval for",
   "require.completion": "needs your completion for",
   "pending.approval": "pending approvals from",

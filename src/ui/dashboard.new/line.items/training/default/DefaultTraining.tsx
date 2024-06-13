@@ -19,6 +19,7 @@ import { TrainingReference } from '../../../../../state/ducks/training/types';
 import { ApplicationState } from '../../../../../state/reducers';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import ReferenceLink from '../../../../training/details/ReferenceLink';
 import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
@@ -169,7 +170,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               </Grid>
 
               {TrainingStatus[status] && (
-                <Grid item={true}>
+                <Grid item={true} className={classes.ellipsis}>
                   {TrainingStatus.ASSIGNED !== status && (
                     <Typography
                       component="span"
@@ -214,7 +215,25 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       )}
                     </Typography>
                   )}
-                  {isCompletedByGRPT && ` ${translate('training.grpt')}`}
+                  {isCompletedByGRPT && (
+                    <>
+                      {' '}
+                      {translate('training.as.per', {
+                        reference: (trainingSourceReferences?.map((item, index, arr) => (
+                          <>
+                            <ReferenceLink
+                              key={item.docId}
+                              className={classes.link}
+                              label={item.docId}
+                              documentId={item.documentId}
+                              revisionId={item.revisionId}
+                            />
+                            {index < (arr.length - 1) && ', '}
+                          </>
+                        ))) as unknown as string,
+                      })}
+                    </>
+                  )}
                 </Grid>
               )}
               {TrainingStatus[status]
