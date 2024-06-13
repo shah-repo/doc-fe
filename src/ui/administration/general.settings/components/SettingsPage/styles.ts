@@ -99,6 +99,7 @@ export default makeStyles((theme: NextTheme) => ({
     },
     root: {
       display: 'flow-root',
+      overflow: 'scroll',
     },
     spaceTitle: {
       display: 'block',

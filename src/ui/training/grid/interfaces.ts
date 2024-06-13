@@ -14,6 +14,7 @@ export interface KendoPresenterProps {
 }
 
 export enum DateFields {
+  ASSIGNED_AT='assignedAt',
   CREATED_AT= 'createdAt',
   DUE_ON= 'dueOn',
   COMPLETED_AT='completedAt',

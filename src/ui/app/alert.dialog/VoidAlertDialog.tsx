@@ -62,9 +62,9 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
     initialValues: {
       [VOID_DESCRIPTION_FIELD]: '',
     },
-    validationSchema: Yup.object().shape({
+    validationSchema: isRecordBehaviour ? Yup.object().shape({
       [VOID_DESCRIPTION_FIELD]: Yup.string().trim().required('validator.justification'),
-    }),
+    }) : undefined,
     onSubmit: (values) => {
       let description = `<p>Void</p>
       <p>${values[VOID_DESCRIPTION_FIELD]}</p>
@@ -93,17 +93,6 @@ const VoidAlertDialog: React.FunctionComponent<Props> = (props) => {
         handler={dialog}
         loading={async.isLoading}
         onConfirm={formik.submitForm}
-        PaperProps={{
-          id: 'alertDialog',
-        }}
-        cancelProps={{
-          id: 'AlertDialog-cancelButton',
-          'data-cy': 'AlertDialog-cancelButton',
-        }}
-        confirmProps={{
-          id: 'AlertDialog-continueButton',
-          'data-cy': 'AlertDialog-continueButton',
-        }}
       >
         <Typography data-cy="dialog-message" className={classes.contentText}>
           {translate(isRecordBehaviour ? 'documentRevision.record.void.alert' : 'documentRevision.void.alert')}

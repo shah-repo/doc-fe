@@ -4,19 +4,19 @@ import Colors from '../../layout/theme/utils/colors';
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     item: {
-      marginBottom: theme.spacing(4),
+      marginBottom: theme.spacing(3),
     },
     label: {
-      fontSize: '1rem',
-      color: '#737674',
+      fontSize: '0.8rem',
       fontWeight: 'bold',
-      letterSpacing: '1px',
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(0.5),
+      color: Colors.black,
     },
     itemContentBlue: {
-      fontSize: '1rem',
-      color: Colors.blue,
-      fontWeight: 700,
+      color: Colors.navy,
+    },
+    itemContentBlack: {
+      fontWeight: 'bold',
     },
     dialogContent: {
       padding: '25px',
@@ -26,11 +26,29 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.black,
       fontWeight: 500,
     },
+    titleIcon: {
+      fontSize: '1.7rem',
+      color: Colors.blue,
+      marginRight: theme.spacing(1.5),
+    },
+    detailsDialogContent: {
+      marginLeft: theme.spacing(6),
+    },
     closeButton: {
       position: 'absolute',
       right: theme.spacing(1),
       top: theme.spacing(1),
       color: theme.palette.grey[500],
+    },
+    rightContainer: {
+      borderRadius: theme.spacing(1),
+      padding: theme.spacing(2),
+      color: Colors.black,
+      backgroundColor: Colors.light_blue2,
+      marginBottom: theme.spacing(3),
+    },
+    refID: {
+      textDecoration: 'none',
     },
   }),
 );

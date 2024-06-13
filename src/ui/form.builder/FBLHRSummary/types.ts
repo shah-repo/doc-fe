@@ -13,17 +13,33 @@ export interface LHRSummaryItem {
   lotOrEquipment?: string
   equipmentId?: string
   mpiId?: string
+  issue?: string
   stepOrMPI: string
-  expiryDate?: string
+  expiryDate?: null | string
   startQuantity: number
   endQuantity: number
   status: string
-  calDueDate: string
-  pmDueDate: string
+  calDueDate?: null | string
+  pmDueDate?: null | string
   ncmr: string
   comments: string
   enteredBy: string
-  createdAt: string
+  createdAt?: null | string
+  lotOrEqDocId?: string
+  lotOrEqDocumentId?: string
+  actualDocId?: string
+  actualDocumentId?: string
+  plannedDocId?: string
+  plannedDocumentId?: string
+  issueDocId?: string
+  issueDocumentId?: string
+  stepOrMpiDocId?: string
+  stepOrMpiDocumentId?: string
+}
+
+export interface RecordsResponse {
+  results: DocumentRevision[]
+  totalCount: number
 }
 
 export interface CustomTreeListColumnProps extends TreeListColumnProps {
@@ -39,6 +55,8 @@ export interface CustomTreeListColumnProps extends TreeListColumnProps {
 export interface EditableLHRSummaryItem extends LHRSummaryItem {
   [MODE_FIELD]: Mode
   isSelected?: boolean
+  prevActualDocId?: string
+  prevActualId?: string
 }
 
 export interface EditableLHRSummaryItemEditEvent {
@@ -68,10 +86,6 @@ export interface LHRSummaryRequestBody {
 
 export interface SchemaOptions {
   actionsClass: string
-  mpiDocuments: DocumentRevision[]
-  equipmentDocs: DocumentRevision[]
-  partDocs: DocumentRevision[]
-  lotDocs: DocumentRevision[]
   onConfirm: () => void
   onDiscard: () => void
   onDelete?: () => void
@@ -82,4 +96,9 @@ export interface SchemaOptions {
 export interface CustomTemplateProps extends CellTemplateProps<EditableLHRSummaryItem> {
   onClick?: (e: EditableLHRSummaryItemEditEvent) => void
   onSelectCell?: (dataItem: EditableLHRSummaryItem, field: string) => void
+}
+
+export interface LHRSummaryOptionsResponse {
+  items: DocumentRevision[]
+  totalCount: number
 }

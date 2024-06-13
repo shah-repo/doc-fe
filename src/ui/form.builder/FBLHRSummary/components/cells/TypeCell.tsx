@@ -3,14 +3,13 @@ import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../../common/intl';
 import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../components/KendoDataGrid/constants';
-import {
   Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import {
+  Mode, MODE_FIELD,
+} from '../../../../components/KendoDataGrid/constants';
 import { TYPE_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
@@ -27,18 +26,22 @@ export const TypeCell: React.FC<CustomTemplateProps> = ({
       = useFormikContext<EditableLHRSummaryItem>();
 
     const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+      setFieldValue('status', '');
+      setFieldValue('expiryDate', null);
+      setFieldValue('lotOrEquipment', null);
       setFieldValue(field, value?.value);
     };
     value = TYPE_OPTIONS.find((option) => option.value === values.type);
 
     return (
-      <FormikField name={field} required>
+      <FormikField name={field}>
         <Autocomplete
           {...getFieldProps(field)}
           key={isEmpty(values) ? 'disabled' : 'enabled'}
           blurOnSelect
+          disabled={Mode.edit === dataItem[MODE_FIELD]}
           disableClearable
-          placeholder={translate('lhr.summary.placeholder.enter')}
+          placeholder={translate('common.select')}
           options={TYPE_OPTIONS}
           value={value}
           getOptionLabel={(option: OptionType) => option.label}

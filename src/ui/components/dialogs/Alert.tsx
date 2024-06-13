@@ -17,9 +17,13 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   confirmLabel = 'common.yes.im.sure',
   onClose = handler.close,
   onCancel = handler.close,
+  title = 'common.alert',
+  warning = false,
   ...props
 }) => {
   const classes = useStyles();
+  const icon = warning ? regular('circle-exclamation') : regular('triangle-exclamation');
+  const iconClass = warning ? classes.iconWarning : classes.iconError;
 
   return (
     <Dialog
@@ -31,8 +35,19 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       cancelLabel={cancelLabel}
       confirmLabel={confirmLabel}
       confirmProps={{
+        id: 'dialog-continue',
+        'data-cy': 'dialog-continue',
         ...props.confirmProps,
         disabled: loading,
+      }}
+      cancelProps={{
+        id: 'dialog-cancel',
+        'data-cy': 'dialog-cancel',
+        ...props.cancelProps,
+      }}
+      PaperProps={{
+        id: 'dialog',
+        ...props.PaperProps,
       }}
       onClose={onClose}
       onCancel={onCancel}
@@ -40,13 +55,13 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       <Box className={classes.content}>
         <Box className={classes.iconWrapper}>
           <FontAwesomeIcon
-            icon={regular('triangle-exclamation')}
-            className={classes.icon}
+            icon={icon}
+            className={iconClass}
           />
         </Box>
         <Box className={classes.contentWrapper}>
-          <Typography variant="h3" className={classes.title}>
-            {translate('common.alert')}!
+          <Typography variant="h3" data-cy="dialog-header" className={classes.title}>
+            {translate(title)}
           </Typography>
           {children}
         </Box>

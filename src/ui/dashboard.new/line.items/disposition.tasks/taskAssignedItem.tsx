@@ -8,16 +8,16 @@ import { ReactComponent as PinSolidIcon } from '../../../../assets/images/pin_so
 import { translate } from '../../../../common/intl';
 import { Nullable } from '../../../../state/ducks/common/types';
 import { changeRequestPreviewPath } from '../../../change.request/utils/paths';
+import Text from '../../../components/Text';
 import Tooltip from '../../../components/common/kendo/Tooltip';
 import { getInitalsFromName } from '../../../components/icons/avatar/helpers';
-import Text from '../../../components/Text';
 import { documentPreviewPath } from '../../../document.revision/utils/paths';
 import Colors from '../../../layout/theme/utils/colors';
 import ApprovalTitle from '../common/ApprovalTitle/presenter';
 import DismissAction from '../common/DismissAction';
 import DocId from '../common/DocId/presenter';
-import { StyledListItem } from '../common/StyledListItem';
 import { StyleTooltip } from '../common/StyleTooltip';
+import { StyledListItem } from '../common/StyledListItem';
 import useStyles from './taskAssignedItem.styles';
 
 interface Props {
@@ -139,6 +139,7 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
                   wrap="nowrap"
                   justify="flex-start"
                   alignItems="center"
+                  className={classes.innerWrap}
                 >
                   <Grid item={true}>
                     <Typography
@@ -201,10 +202,12 @@ const TaskAssignedItemPresenter: React.FC<Props> = ({
           >
             <span className={classes.actionIcon}>
               { isChangeRequest && <Link
+                data-cy="dashboard-change-request-task-view-button"
                 to={`${changeRequestPreviewPath(revId)}?tabId=material_disposition`} className={classes.link} >
                 {translate('dashboard.task.view')}
               </Link> }
               { isDocumentRevision && documentId && <Link
+                data-cy="dashboard-task-view-button"
                 to={`${documentPreviewPath(revId, documentId)}`} className={classes.link}
               >
                 {translate('dashboard.task.view')}

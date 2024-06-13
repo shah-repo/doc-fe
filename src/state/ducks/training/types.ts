@@ -1,3 +1,4 @@
+import { Attachment } from '../attachments/types';
 import { Id } from '../common/types';
 import { Employee } from '../company/types';
 import {
@@ -52,6 +53,7 @@ export interface TrainingRecordQuery {
   trainingPlan?: TrainingPlan
   completedAt?: Date
   id: string
+  attachments?: Attachment[]
 }
 
 export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
@@ -65,6 +67,12 @@ export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
   id: '',
 };
 
+interface TrainingReference {
+  docId: string
+  documentId?: string
+  revisionId?: string
+}
+
 interface TrainingPlan {
   id: string
   status: TrainingPlanStatus
@@ -73,6 +81,8 @@ interface TrainingPlan {
   document: DocumentRevisionDocument
   employee: Employee
   curriculumDocIds: string[]
+  sourceReferencesIds: TrainingReference[]
+  sourceReferences: DocumentRevision[]
 }
 
 export interface TrainingTransitionRequestBody {

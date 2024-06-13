@@ -13,7 +13,6 @@ import {
   Mode,
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
-import { EMPTY_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 
 export const DueDateCell: React.FC<CustomTemplateProps> = ({
@@ -21,8 +20,9 @@ export const DueDateCell: React.FC<CustomTemplateProps> = ({
   dataItem,
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const value = getFormattedDateString(
-    dataItem[field],
+  const fieldValue = dataItem[field];
+  const value = fieldValue && getFormattedDateString(
+    fieldValue,
     MomentFormats.MonthDateYearTwoDigit,
   );
 
@@ -43,5 +43,5 @@ export const DueDateCell: React.FC<CustomTemplateProps> = ({
     );
   }
 
-  return <span>{value ?? EMPTY_PLACEHOLDER}</span>;
+  return <span>{value}</span>;
 };

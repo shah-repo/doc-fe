@@ -9,16 +9,16 @@ import { Nullable } from '../../../../state/ducks/common/types';
 import { MyFeedsListApiResponse } from '../../../../state/ducks/dashboard.new/my.feeds/types';
 import { taskActions } from '../../../../state/ducks/tasks';
 import { ApiAction } from '../../../../state/types';
-import { getInitalsFromName } from '../../../components/icons/avatar/helpers';
 import Text from '../../../components/Text';
+import { getInitalsFromName } from '../../../components/icons/avatar/helpers';
 import { documentPreviewPath } from '../../../document.revision/utils/paths';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import Colors from '../../../layout/theme/utils/colors';
 import ApprovalTitle from '../common/ApprovalTitle/presenter';
 import DismissAction from '../common/DismissAction';
-import { StyledListItem } from '../common/StyledListItem';
 import { StyleTooltip } from '../common/StyleTooltip';
+import { StyledListItem } from '../common/StyledListItem';
 import useStyles from './taskAssignedItem.styles';
 
 interface Props {
@@ -135,6 +135,7 @@ const TaskCompletedItemPresenter: React.FC<Props> = ({
                   wrap="nowrap"
                   justify="flex-start"
                   alignItems="center"
+                  className={classes.innerWrap}
                 >
                   <Grid item={true}>
                     <Typography
@@ -192,6 +193,7 @@ const TaskCompletedItemPresenter: React.FC<Props> = ({
           >
             <span className={classes.actionIcon}>
               { approvalId && <Link
+                data-cy="dashboard-task-complete-button"
                 to="#"
                 className={classes.link}
                 onClick={onApproveClick}

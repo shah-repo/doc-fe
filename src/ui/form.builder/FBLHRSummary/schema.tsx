@@ -1,13 +1,14 @@
 import React from 'react';
 import { ActionsCellTemplate } from '../../change.request/FBMaterialDisposition/components/commonCells/ActionsCellTemplate';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { ActualIDCell } from './components/cells/ActualIDCell';
 import { ByCell } from './components/cells/ByCell';
 import { DateCell } from './components/cells/DateCell';
 import { DueDateCell } from './components/cells/DueDateCell';
+import { IssuesCell } from './components/cells/IssuesCell';
 import { LotIDCell } from './components/cells/LotIDCell';
 import { PlannedIDCell } from './components/cells/PlannedIDCell';
 import { QuantityCell } from './components/cells/QuantityCell';
+import { SearchActualIDCell } from './components/cells/SearchActualIDCell';
 import { StatusCell } from './components/cells/StatusCell';
 import { StepCell } from './components/cells/StepCell';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
@@ -16,10 +17,6 @@ import { EditableLHRSummaryItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
   actionsClass,
-  mpiDocuments,
-  equipmentDocs,
-  partDocs,
-  lotDocs,
   onRowClick,
   onConfirm,
   onDiscard,
@@ -39,7 +36,7 @@ export const buildSchema = ({
       field: 'mpiId',
       title: 'lhr.summary.grid.heading.step',
       show: true,
-      template: (props) => <StepCell {...props} onClick={onRowClick} mpiDocuments={mpiDocuments} />,
+      template: (props) => <StepCell {...props} onClick={onRowClick} />,
       width: 401,
       sortable: false,
     },
@@ -47,7 +44,7 @@ export const buildSchema = ({
       id: 'plannedId',
       field: 'plannedId',
       title: 'lhr.summary.grid.heading.planned.id',
-      template: (props) => <PlannedIDCell {...props} onClick={onRowClick} {...{ partDocs, equipmentDocs }} />,
+      template: (props) => <PlannedIDCell {...props} onClick={onRowClick} />,
       show: true,
       width: 201,
     },
@@ -55,7 +52,7 @@ export const buildSchema = ({
       id: 'actualId',
       field: 'actualId',
       title: 'lhr.summary.grid.heading.actual.id',
-      template: (props) => <ActualIDCell {...props} onClick={onRowClick} {...{ partDocs, equipmentDocs }} />,
+      template: (props) => <SearchActualIDCell {...props} onClick={onRowClick} />,
       show: true,
       sortable: false,
       selectable: false,
@@ -67,7 +64,7 @@ export const buildSchema = ({
       title: 'lhr.summary.grid.heading.lot',
       show: true,
       selectable: false,
-      template: (props) => <LotIDCell {...props} onClick={onRowClick} lotDocs={lotDocs} />,
+      template: (props) => <LotIDCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -77,6 +74,16 @@ export const buildSchema = ({
       show: true,
       selectable: false,
       template: (props) => <DateCell {...props} onClick={onRowClick} />,
+      width: 201,
+    },
+    {
+      id: 'issue',
+      field: 'issue',
+      title: 'lhr.summary.grid.heading.issues',
+      template: (props) => <IssuesCell {...props} onClick={onRowClick} />,
+      show: true,
+      sortable: false,
+      selectable: false,
       width: 201,
     },
     {
@@ -102,7 +109,7 @@ export const buildSchema = ({
       field: 'status',
       title: 'lhr.summary.grid.heading.status',
       show: true,
-      template: (props) => <StatusCell {...props} onClick={onRowClick} lotDocs={lotDocs} />,
+      template: (props) => <StatusCell {...props} onClick={onRowClick} />,
       selectable: false,
       width: 201,
     },

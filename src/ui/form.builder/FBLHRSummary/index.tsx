@@ -1,11 +1,12 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Typography } from '@material-ui/core';
-import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
+import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { find, isEmpty, pick } from 'lodash';
+import { find, pick } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,8 +14,6 @@ import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { authSelectors } from '../../../state/ducks/auth';
-import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
@@ -24,10 +23,9 @@ import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
-import { FBAutocompleteAsyncOption, FBSection } from '../../form.builder';
+import { FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
-import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import {
   ColumnMenuContext,
   CustomColumnMenu,
@@ -47,7 +45,6 @@ import {
   EditableLHRSummaryItemEditEvent,
   LHRSummaryItem,
 } from './types';
-import { getExcelColumns, getExcelData } from './utils';
 
 interface props {
   isShowOnly?: boolean
@@ -58,66 +55,17 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   isShowOnly,
   isDisabled,
 }) => {
-  const { _documentRevisionFormState } = SM.useStores();
-  console.log('isShowOnly :', isShowOnly);
-  console.log('isDisabled :', isDisabled);
+  const { _documentRevisionFormState, _tabsState } = SM.useStores();
+  const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles();
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
-  const [mpiDocuments, setMpiDocuments] = React.useState<DocumentRevision[]>([]);
-  const [equipmentDocs, setEquipmentDocs] = React.useState<DocumentRevision[]>([]);
-  const [partDocs, setPartDocs] = React.useState<DocumentRevision[]>([]);
-  const [lotDocs, setLotDocs] = React.useState<DocumentRevision[]>([]);
   const fetchLHRSummary = useActionCreator(lhrSummaryActions.fetchLHRSummary);
-  const fetchAutocompleteOptions = useActionCreator(lhrSummaryActions.fetchAutocompleteOptions);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
-  const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
-
-  const MPIDocumentsAsync = useAsync({
-    onSuccess: (data) => {
-      if (isEmpty(data)) {
-        return;
-      }
-
-      setMpiDocuments(data as DocumentRevision[]);
-      FBAutocompleteAsyncStore.setOptionData(FBAutocompleteAsyncOption.mpiDocuments, data);
-    },
-    onError: toastError,
-  });
-
-  const EQDocumentsAsync = useAsync({
-    onSuccess: (data) => {
-      if (isEmpty(data)) {
-        return;
-      }
-
-      setEquipmentDocs(data as DocumentRevision[]);
-      FBAutocompleteAsyncStore.setOptionData(FBAutocompleteAsyncOption.equipment, data);
-    },
-    onError: toastError,
-  });
-
-  const PartDocumentsAsync = useAsync({
-    onSuccess: (data) => {
-      if (isEmpty(data)) {
-        return;
-      }
-
-      setPartDocs(data as DocumentRevision[]);
-      FBAutocompleteAsyncStore.setOptionData(FBAutocompleteAsyncOption.releasedParts, data);
-    },
-    onError: toastError,
-  });
-
-  const LotDocumentsAsync = useAsync({
-    onSuccess: (data) => {
-      data && setLotDocs(data as DocumentRevision[]);
-    },
-    onError: toastError,
-  });
+  // const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
@@ -131,14 +79,14 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       return;
     }
 
-    MPIDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.mpiDocuments, MPIDocumentsAsync);
-    EQDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.equipment, EQDocumentsAsync);
-    PartDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.releasedParts, PartDocumentsAsync);
-    LotDocumentsAsync.start(fetchAutocompleteOptions, FBAutocompleteAsyncOption.lots, LotDocumentsAsync);
     fetchLHRSummaryData();
   }, []);
 
   const fetchLHRSummaryData = () => {
+    if (!_documentRevisionFormState?.documentRevision?.id) {
+      return;
+    }
+
     LHRSummaryAsync.start(fetchLHRSummary, _documentRevisionFormState?.documentRevision?.id, LHRSummaryAsync);
   };
 
@@ -157,7 +105,10 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   });
 
   const deleteLHRSummaryAsync = useAsync({
-    onSuccess: fetchLHRSummaryData,
+    onSuccess: () => {
+      ondiscardLHRSummaryItem();
+      fetchLHRSummaryData();
+    },
     onError: toastError,
   });
 
@@ -185,6 +136,9 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       return;
     }
     delete payload.lhrDocRevId;
+
+    const actualId = data.prevActualDocId === data.actualId ? data.prevActualId : data.actualId;
+    payload.actualId = actualId;
     updateLHRSummaryAsync.start(updateLHRSummary, _documentRevisionFormState?.documentRevision?.id, data.id, payload, updateLHRSummaryAsync);
   };
 
@@ -197,7 +151,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     });
 
     resetForm({ values: editedLHRSummaryItem ?? {} });
-  }, [editedLHRSummaryItem, mpiDocuments, equipmentDocs, partDocs, lotDocs, setValues, resetForm]);
+  }, [editedLHRSummaryItem, setValues, resetForm]);
 
   const onEditLHRSummaryItem = ({
     dataItem,
@@ -244,18 +198,19 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       actualId: '',
       title: '',
       lotOrEquipment: '',
+      issue: '',
       equipmentId: '',
       mpiId: '',
-      expiryDate: new Date().toISOString(),
+      expiryDate: null,
       startQuantity: 0,
       endQuantity: 0,
       status: '',
-      calDueDate: new Date().toISOString(),
-      pmDueDate: new Date().toISOString(),
+      calDueDate: null,
+      pmDueDate: null,
       ncmr: '',
       comments: '',
       enteredBy: user.id,
-      createdAt: '',
+      createdAt: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
     };
     setEditedLHRSummaryItem(newLHRSummaryItem);
@@ -287,11 +242,11 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         = editedLHRSummaryItem && editedLHRSummaryItem?.id === item.id;
 
       return [
+        ...list,
         {
           ...(isLHRSummaryItemEdited ? editedLHRSummaryItem : item),
           [MODE_FIELD]: isLHRSummaryItemEdited ? Mode.edit : Mode.show,
         },
-        ...list,
       ];
     },
     isAlternatePartAdded ? [editedLHRSummaryItem] : [],
@@ -299,10 +254,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
-    mpiDocuments,
-    equipmentDocs,
-    partDocs,
-    lotDocs,
     onRowClick: onEditLHRSummaryItem,
     onConfirm: submitForm,
     onDiscard: ondiscardLHRSummaryItem,
@@ -333,7 +284,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
     if (_export.current !== null) {
-      _export.current.save(getExcelData(LHRSummaryItemList, mpiDocuments, partDocs, equipmentDocs, availableUsers), getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
+      // _export.current.save(getExcelData(LHRSummaryItemList, mpiDocuments, partDocs, equipmentDocs, availableUsers), getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
     }
   };
 
@@ -364,6 +315,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       >
         <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
           <KendoDataGrid<EditableLHRSummaryItem>
+            style={{ overflow: 'auto', maxHeight: size?.height ? `${size.height - 160}px` : '100px' }}
             data={LHRSummaryItemList}
             schema={getColumns()}
             fullWidth
@@ -396,10 +348,10 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
             || addLHRSummaryAsync.isLoading
             || deleteLHRSummaryAsync.isLoading
             || updateLHRSummaryAsync.isLoading
-            || MPIDocumentsAsync.isLoading
-            || PartDocumentsAsync.isLoading
-            || EQDocumentsAsync.isLoading
-            || LotDocumentsAsync.isLoading
+            // || MPIDocumentsAsync.isLoading
+            // || PartDocumentsAsync.isLoading
+            // || EQDocumentsAsync.isLoading
+            // || LotDocumentsAsync.isLoading
             }
             resizable={true}
           >

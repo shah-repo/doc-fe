@@ -7,6 +7,11 @@ export const styles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  option: {
+    fontSize: '14px',
+    fontFamily: 'Sora',
+    overflowWrap: 'anywhere',
+  },
   dot: {
     height: 10,
     width: 10,
@@ -44,5 +49,24 @@ export const styles = makeStyles((theme) => ({
     '&:hover': {
       textDecoration: 'underline !important',
     },
+  },
+  stepCellContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  step: {
+    width: '30%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  seperator: {
+    margin: theme.spacing(0, 1),
+  },
+  mpi: {
+    width: '60%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
 }));

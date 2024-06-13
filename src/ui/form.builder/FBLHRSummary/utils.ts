@@ -1,4 +1,4 @@
-import { cloneDeep, find, lowerCase } from 'lodash';
+import { cloneDeep, lowerCase } from 'lodash';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
@@ -71,10 +71,4 @@ export const filterOutOption = (docRev: DocumentRevision, inputValue: string) =>
 
   return lowerCase(docRev.name).includes(filterValue)
     || lowerCase(docRev.document.docId).includes(filterValue);
-};
-
-export const getLotStatus = (lotId: string, lotDocs: DocumentRevision[]) => {
-  const lotDoc = find(lotDocs, { id: lotId });
-
-  return lotDoc?.status;
 };
