@@ -46,6 +46,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
     const [offset, setOffset] = React.useState(0);
     const isMaterialTypeSelected = values.type === DocType.material;
     const selectedMPI = values.mpiId;
+    const [isOpen, setIsOpen] = useState(false);
 
     const fetchMEQByMPI = useActionCreator(
       documentRevisionsActions.fetchMaterialsOrEquipmentsBySelectedMPI,
@@ -116,6 +117,10 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
 
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
       setInputValue(inputVal);
+      if (!isOpen) {
+        return;
+      }
+
       if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
         setOffset(0);
         queryApi(0, inputVal);
@@ -162,6 +167,14 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
         offset,
         fetchOptionsDataAsync,
       );
+    };
+
+    const handleOpen = () => {
+      setIsOpen(true);
+    };
+
+    const handleClose = () => {
+      setIsOpen(false);
     };
 
     useEffect(() => {
@@ -221,6 +234,9 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
             </Box>
           )}
           renderOption={(option) => option.label}
+          open={isOpen}
+          onOpen={handleOpen}
+          onClose={handleClose}
           onInputChange={debounceFunction}
           disableClearable
           ListboxProps={{ onScroll }}

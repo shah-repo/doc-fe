@@ -42,6 +42,7 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
     const [selectedObj, setSelectedObj] = useState<OptionType>();
     const [items, setItems] = useState<OptionType[]>([]);
     const [offset, setOffset] = React.useState(0);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
       if (isUpdateAction && !inputValue && !dataItem.stepOrMpiDocumentId) {
@@ -81,6 +82,10 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
 
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
       setInputValue(inputVal);
+      if (!isOpen) {
+        return;
+      }
+
       if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
         setOffset(0);
         queryApi(0, inputVal);
@@ -88,6 +93,14 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
         setOffset(0);
         queryApi(0);
       }
+    };
+
+    const handleOpen = () => {
+      setIsOpen(true);
+    };
+
+    const handleClose = () => {
+      setIsOpen(false);
     };
 
     const onChange = (e, value) => {
@@ -128,6 +141,11 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
         setInputValue('');
         setFieldValue(field, '');
       }
+
+      if (loading) {
+        return;
+      }
+
       setItems([]);
       queryApi(0);
     }, [dataItem[MODE_FIELD], values.type]);
@@ -202,6 +220,9 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
                 )}
                 renderOption={(option) => option.label}
                 onInputChange={debounceFunction}
+                open={isOpen}
+                onOpen={handleOpen}
+                onClose={handleClose}
                 disableClearable
                 ListboxProps={{ onScroll }}
                 loading={loading}

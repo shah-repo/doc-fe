@@ -39,6 +39,10 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
     const [offset, setOffset] = React.useState(0);
 
     useEffect(() => {
+      if (isUpdateAction && !inputValue && values?.issueDocId) {
+        setInputValue(values?.issueDocId);
+      }
+
       if (isUpdateAction && !inputValue && !dataItem.issueDocId) {
         setInputValue(dataItem[field] ?? '');
       }
@@ -131,6 +135,11 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
         setInputValue('');
         setFieldValue(field, '');
       }
+
+      if (loading) {
+        return;
+      }
+
       setItems([]);
       queryApi(0);
     }, [dataItem[MODE_FIELD], values.type]);
