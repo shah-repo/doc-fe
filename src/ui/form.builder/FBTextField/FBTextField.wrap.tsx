@@ -1,4 +1,4 @@
-import { get, isEmpty, isUndefined } from 'lodash';
+import { get, isEmpty, isUndefined, toNumber } from 'lodash';
 import { reaction } from 'mobx';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -64,10 +64,33 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       }, name);
     };
 
+    const roundToStep = function (number: number, step: number, min = Number.MIN_VALUE, max = Number.MAX_VALUE) {
+      const roundedValue = Math.ceil((number - min) / step) * step + min;
+      return Math.min(
+        max,
+        Math.max(
+          min,
+          roundedValue,
+        ),
+      );
+    };
+
     const onBlur = (ev) => {
+      const { type } = ev?.target;
+      let { value, step, min, max } = ev?.target;
+
+      value = toNumber(value);
+      step = toNumber(step);
+      min = toNumber(min);
+      max = toNumber(max);
+
       if (formState?.isBackdropOpen) {
         ev.target.focus();
         return;
+      }
+      if (type === 'number' && value !== '') {
+        value = roundToStep(value, step, min, max);
+        formState?.setFieldValue(name, value, true);
       }
       if (ev?.target?.type === 'number' && ev?.target?.step === '.01') {
         ev.target.value = Math.abs(ev.target?.value).toFixed(2).toString();
