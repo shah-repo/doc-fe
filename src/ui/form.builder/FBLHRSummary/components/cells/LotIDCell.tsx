@@ -40,7 +40,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
       return;
     }
     const actualID = values?.prevActualDocId && values?.prevActualDocId === values?.actualId ? values?.prevActualId : values?.actualId;
-    // Fetching LOTs based on actual ID
     fetchPartLotsAsync.start(fetchLotsByPartId, actualID, fetchPartLotsAsync);
   }, [values.actualId]);
 
@@ -57,7 +56,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
         displayRevision: lot?.displayRevision,
         name: lot?.name,
       }),
-      status: lot?.status,
+      status: lot?.lotStatus,
       expiryDate: lot?.formInput?.lot_expiry_date,
       value: lot.id,
     }));
