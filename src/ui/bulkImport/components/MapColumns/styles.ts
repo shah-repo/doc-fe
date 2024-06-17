@@ -107,4 +107,7 @@ export default makeStyles(theme => ({
     marginTop: theme.spacing(2.5),
     alignSelf: 'center',
   },
+  tooltipContent: {
+    gap: theme.spacing(1, 1),
+  },
 }));

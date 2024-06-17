@@ -1,7 +1,7 @@
 import { Box, Tooltip, Typography } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { GridCellProps, GridColumn, GridPageChangeEvent } from '@progress/kendo-react-grid';
-import { Input } from '@progress/kendo-react-inputs';
+import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { noop } from 'lodash';
 import React, { ComponentType, ReactNode, useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
 import { setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
 import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
-import { BulkImport, TableRow } from '../../../../state/ducks/bulkImport/types';
+import { BulkImport, TableErrorDetail, TableRow } from '../../../../state/ducks/bulkImport/types';
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import Text from '../../../components/Text';
 import { Button, Switch } from '../../../components/forms/fields-next';
@@ -28,7 +28,17 @@ interface CheckValuesTableProps {
   handleBack: () => void
 }
 
-const CustomCell = ({ dataItem, field, ...props }) => {
+interface CustomDataItem {
+  [key: string]: string | string[] | number | TableErrorDetail[] | undefined
+  errors?: TableErrorDetail[]
+}
+
+interface CustomCellProps extends GridCellProps {
+  dataItem: CustomDataItem
+  field: string
+}
+
+const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): JSX.Element => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [isEditing, setIsEditing] = useState(false);
@@ -36,25 +46,25 @@ const CustomCell = ({ dataItem, field, ...props }) => {
 
   const normalizedField = field?.replace(/\s/g, '').toLowerCase();
   const error = dataItem.errors?.find(error => error.column === normalizedField);
-  const showError = error && !error?.edited;
+  const isErrorShown = error && !error?.edited;
 
   const handleDoubleClick = () => {
     setIsEditing(true);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: InputChangeEvent) => {
     setCellValue(e.target.value);
   };
 
   const handleBlur = () => {
     setIsEditing(false);
-    dispatch(updateRowFieldTable({ cellValue, field, dataIndex: props.dataIndex }));
+    dispatch(updateRowFieldTable({ cellValue: cellValue as string, field, dataIndex: props.dataIndex }));
   };
 
   const content = (
-    <Box className={cx(classes.cell, { [classes.errorCell]: showError })}>
+    <Box className={cx(classes.cell, { [classes.errorCell]: isErrorShown })}>
       {cellValue}
-      {showError && (
+      {isErrorShown && (
         <ReportProblemOutlinedIcon className={classes.warningIcon} />
       )}
     </Box>
@@ -67,23 +77,20 @@ const CustomCell = ({ dataItem, field, ...props }) => {
       role="gridcell"
       className={props?.className}
       onDoubleClick={error ? handleDoubleClick : undefined}
-      {...props}
     >
       {isEditing ? (
-        <Input value={cellValue} onChange={handleChange} onBlur={handleBlur} autoFocus />
+        <Input value={cellValue as string} onChange={handleChange} onBlur={handleBlur} autoFocus />
       ) : (
-        showError ? (
+        isErrorShown ? (
           <Tooltip
             title={
-              <span>
+              <span className={classes.tooltipContent}>
                 {error.message}
                 {error?.help?.message && (
                   <>
-                    <br />
                     {error.help.message}
                     {error?.help?.data?.length && (
                       <>
-                        <br />
                         {translate('common.allowed')}: {error.help.data.join(', ')}
                       </>
                     )}
@@ -104,13 +111,14 @@ const CustomCell = ({ dataItem, field, ...props }) => {
 };
 
 // Create an array of mock data items
-const pageSizes = [12, 24, 50, 100];
+const PAGE_SIZES = [12, 24, 50, 100];
+const BUTTON_COUNT = 4;
 
 const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleBack, bulkImport }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(pageSizes[0]);
+  const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [data, setData] = useState<TableRow[]>([]);
   const [errorCount, setErrorCount] = useState(0);
   const tableData = useSelector(getTableDataFiltered);
@@ -185,8 +193,8 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
         total={tableData.length}
         editField="inEdit"
         pageable={{
-          buttonCount: 4,
-          pageSizes,
+          buttonCount: BUTTON_COUNT,
+          pageSizes: PAGE_SIZES,
         }}
         onPageChange={handlePageChange}
       >
