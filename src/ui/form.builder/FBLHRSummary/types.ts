@@ -68,11 +68,8 @@ export interface LHRSummaryRequestBody {
   lhrDocRevId?: string
   stepOrMPI: string
   plannedId: string
-  plannedDocRevId: string
   actualId: string
-  actualDocRevId: string
   lotOrEquipment: string
-  lotOrEquipmentDocRevId: string
   startQuantity: number
   endQuantity: number
   status: string
