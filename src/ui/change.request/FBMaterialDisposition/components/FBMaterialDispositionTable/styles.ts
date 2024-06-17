@@ -56,6 +56,9 @@ export default makeStyles((theme) => ({
       whiteSpace: 'normal !important' as 'normal',
     },
   },
+  addButton: {
+    float: 'right',
+  },
   actionsCell: {
     overflow: 'visible !important',
     position: 'sticky',
