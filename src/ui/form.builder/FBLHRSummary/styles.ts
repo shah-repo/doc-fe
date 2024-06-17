@@ -20,9 +20,7 @@ export default makeStyles((theme) => ({
     },
     '& .k-grid-content tr:hover td': {
       backgroundColor: Colors.white,
-    },
-    '& td.k-state-selected': {
-      backgroundColor: Colors.white,
+      boxShadow: 'none !important',
     },
   },
   font: {
