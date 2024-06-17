@@ -72,6 +72,7 @@ export enum STATUS_TYPES_LABEL {
   ACCEPTED = 'ACCEPTED',
   VOID = 'VOID',
   EDIT = 'EDIT',
+  IN_PROGRESS = 'IN PROGRESS',
 }
 
 export interface MyFeedsItems {
