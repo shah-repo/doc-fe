@@ -1,6 +1,7 @@
 import React from 'react';
 import { ActionsCellTemplate } from '../../change.request/FBMaterialDisposition/components/commonCells/ActionsCellTemplate';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { ActualIDCell } from './components/cells/ActualIDCell';
 import { ByCell } from './components/cells/ByCell';
 import { DateCell } from './components/cells/DateCell';
 import { DueDateCell } from './components/cells/DueDateCell';
@@ -8,7 +9,6 @@ import { IssuesCell } from './components/cells/IssuesCell';
 import { LotIDCell } from './components/cells/LotIDCell';
 import { PlannedIDCell } from './components/cells/PlannedIDCell';
 import { QuantityCell } from './components/cells/QuantityCell';
-import { SearchActualIDCell } from './components/cells/SearchActualIDCell';
 import { StatusCell } from './components/cells/StatusCell';
 import { StepCell } from './components/cells/StepCell';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
@@ -52,7 +52,7 @@ export const buildSchema = ({
       id: 'actualId',
       field: 'actualId',
       title: 'lhr.summary.grid.heading.actual.id',
-      template: (props) => <SearchActualIDCell {...props} onClick={onRowClick} />,
+      template: (props) => <ActualIDCell {...props} onClick={onRowClick} />,
       show: true,
       sortable: false,
       selectable: false,

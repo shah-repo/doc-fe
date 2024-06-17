@@ -155,7 +155,6 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
           getOptionLabel={(option) => option.label ?? '' }
           filterOptions={(x) => x}
           size="small"
-          disabled={isUpdateAction}
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%" data-cy="actualId">

@@ -20,7 +20,7 @@ import { DocType, EMPTY_PLACEHOLDER, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../..
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { styles } from './styles';
 
-export const SearchActualIDCell: React.FC<CustomTemplateProps> = ({
+export const ActualIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
   field,
 }) => {
