@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import attachments from './ducks/attachments';
 import auth from './ducks/auth';
 import { CLEAR_NON_AUTH_DATA, LOGOUT_USER } from './ducks/auth/constants';
+import bulkImport from './ducks/bulkImport';
 import changeRequests from './ducks/changeRequest';
 import company from './ducks/company';
 import dashboard from './ducks/dashboard';
@@ -69,6 +70,7 @@ const appReducer = combineReducers({
   supplierSurvey,
   userManagement,
   pageDetails: persistReducer(pageDetailsPersistConfig, pageDetails),
+  bulkImport,
 });
 
 const rootReducer = (state: any, action: any) => {
