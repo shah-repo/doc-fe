@@ -25,6 +25,8 @@ export const MD_LOCATION_KEYS_MAPPING = {
 export const DROPDOWN_FIELDS = ['onOrderPOAction', 'inInspectionAction', 'inInventoryAction', 'inWipAction', 'asFinishedGoodsAction', 'usedLocation'];
 export const ON_ORDER_PO_ACTION_COLUMN = 'onOrderPOAction';
 export const FIELDS_TO_PICK = [...DROPDOWN_FIELDS, 'comment'];
+export const EXISTING_DOC_FIELDS_TO_PICK = [...FIELDS_TO_PICK, 'docId', 'docRevId', 'displayRevision'];
+export const NON_EXISTING_DOC_FIELDS_TO_PICK = [...FIELDS_TO_PICK, 'text'];
 export const SELECTER_MARGIN_BOTTOM = 8;
 export const SELECTER_MARGIN_TOP = 5;
 
