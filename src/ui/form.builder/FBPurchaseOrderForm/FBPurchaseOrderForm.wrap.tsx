@@ -11,7 +11,6 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
   const Comp = ({
     handlePartTitle,
     handleTotal,
-    getOptionDisabled,
     getOptionLabel,
     formState,
     initialValues,
@@ -24,7 +23,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       const item = formState?.getValues() as FBPurchaseOrderItem;
       purchaseOrderState?.setPartNumber(item.partNumber);
       formState?.setFieldValue('type', get(initialValues, 'type') || 'product');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     handlePartTitle = (_ev: any, value?: DocumentRevision) => {
@@ -68,16 +67,12 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
           formState?.removeFieldRules('supplierPartNumber');
         }
       },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     const handlePartDescription = (ev: React.ChangeEvent<any>) => {
       const value = get(ev.target, 'value');
       formState?.setFieldValue('partNumberTitle', value, true);
-    };
-
-    getOptionDisabled = (option: DocumentRevision) => {
-      return false;
     };
 
     getOptionLabel = (option) => generateDocIdLabel(option);
@@ -86,7 +81,6 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       ...(props as T),
       handlePartTitle,
       handleTotal,
-      getOptionDisabled,
       getOptionLabel,
       handlePartDescription,
       purchaseOrderState,
