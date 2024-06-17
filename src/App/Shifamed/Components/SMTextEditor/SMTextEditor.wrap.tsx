@@ -112,6 +112,11 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     };
 
     onBlur = () => {
+      const isLinkModelOpen = document.querySelector('.rdw-link-modal');
+      if (isLinkModelOpen) {
+        return;
+      }
+
       handleMask?.(true);
       const editorState = _textEditorState?.editorState;
       if (!editorState) { return; }

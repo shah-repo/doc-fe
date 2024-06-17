@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { reaction } from 'mobx';
 import React from 'react';
-import { FB, FBApprovalMatrixFieldProps, FBApprovalMatrixFieldState, FBDAMFields } from '..';
+import { FB, FBApprovalMatrixFieldModes, FBApprovalMatrixFieldProps, FBApprovalMatrixFieldState, FBDAMFields } from '..';
 
 export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -34,10 +34,10 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
         (data) => {
           formState?.setFieldValue(FBDAMFields.DAM, cloneDeep(data?.approvalMatrix));
           formState?.setFieldValue(FBDAMFields.DAR, cloneDeep(data?.approvalRoles));
-          if (approvalMatrixFieldState?.mode !== 'refresh') {
+          if (approvalMatrixFieldState?.mode !== FBApprovalMatrixFieldModes.REFRESH) {
             formState?.setFieldAutosave(name);
           }
-          approvalMatrixFieldState?.setMode('none');
+          approvalMatrixFieldState?.setMode(FBApprovalMatrixFieldModes.NONE);
         },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps

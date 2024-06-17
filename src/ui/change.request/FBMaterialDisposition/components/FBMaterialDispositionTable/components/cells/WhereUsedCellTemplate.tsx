@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { MouseEventHandler } from 'react';
 import WhereUsedDialog, { WhereUsedType } from '../../../../../../components/whereUsed/WhereUsedDialog';
 import useDialog from '../../../../../../hooks/useDialog';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
+import { isEditMode } from '../../utils';
 import { styles } from './styles';
 
 export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem }) => {
@@ -21,6 +23,10 @@ export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem 
     whereUsedDialog.close();
     e.stopPropagation();
   };
+
+  if (isEditMode(dataItem)) {
+    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
+  }
 
   return (
     <>

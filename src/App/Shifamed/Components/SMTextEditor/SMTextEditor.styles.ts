@@ -30,6 +30,15 @@ export const SMEditorStyles = makeStyles((theme) =>
         margin: '0px !important',
       },
     },
+    customLinkDecorator: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+    },
+    rdwLinkDecoratorIcon: {
+      margin: theme.spacing(0, 0.625),
+      cursor: 'pointer',
+    },
     descriptionToolbarEditorClass: {
       marginBottom: '0px !important',
       borderLeft: '1px solid #2684FF !important',
