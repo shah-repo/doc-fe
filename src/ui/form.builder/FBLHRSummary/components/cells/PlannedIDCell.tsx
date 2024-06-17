@@ -51,6 +51,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
     const fetchMEQByMPI = useActionCreator(
       documentRevisionsActions.fetchMaterialsOrEquipmentsBySelectedMPI,
     );
+
     const fetchMeqsAsync = useAsync({
       onSuccess: (data?: MeqResponse) => {
         const selectedTypeItems = isMaterialTypeSelected ? data?.materials : data?.equipment;
@@ -116,6 +117,9 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
     });
 
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+      if (!inputVal && inputValue) {
+        setFieldValue(field, '');
+      }
       setInputValue(inputVal);
       if (!isOpen) {
         return;
@@ -199,7 +203,6 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
           getOptionLabel={(option) => option.label ?? '' }
           filterOptions={(x) => x}
           size="small"
-          disabled={isUpdateAction}
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%" data-cy="actualId">

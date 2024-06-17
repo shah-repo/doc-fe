@@ -82,6 +82,10 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
 
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
       setInputValue(inputVal);
+      if (!inputVal && inputValue) {
+        setFieldValue(field, '');
+      }
+
       if (!isOpen) {
         return;
       }
@@ -184,7 +188,6 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
                 getOptionLabel={(option) => option.label ?? '' }
                 filterOptions={(x) => x}
                 size="small"
-                disabled={isUpdateAction}
                 renderInput={(params: RenderInputParams) => (
                   <Box display="flex">
                     <Box width="100%" data-cy="actualId">

@@ -84,11 +84,17 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
     });
 
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
-      if (!inputVal && inputValue && isEqTypeSelected) {
-        setFieldValue('calDueDate', null);
-        setFieldValue('pmDueDate', null);
+      if (!inputVal && inputValue) {
+        if (isEqTypeSelected) {
+          setFieldValue('calDueDate', null);
+          setFieldValue('pmDueDate', null);
+        } else if (isMaterialTypeSelected) {
+          setFieldValue('lotOrEquipment', null);
+          setFieldValue('status', '');
+          setFieldValue('expiryDate', null);
+        }
+        setFieldValue(field, '');
       }
-
       setInputValue(inputVal);
 
       if (!isOpen) {
@@ -109,6 +115,10 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
       if (isEqTypeSelected) {
         setFieldValue('calDueDate', value.calDueDate ?? null);
         setFieldValue('pmDueDate', value.pmDueDate ?? null);
+      } else if (isMaterialTypeSelected) {
+        setFieldValue('lotOrEquipment', null);
+        setFieldValue('status', '');
+        setFieldValue('expiryDate', null);
       }
 
       setInputValue(value?.label);
@@ -183,7 +193,6 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
           getOptionLabel={(option) => option.label ?? '' }
           filterOptions={(x) => x}
           size="small"
-          disabled={isUpdateAction}
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%" data-cy="actualId">

@@ -39,8 +39,8 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     if (isEmpty(actualId)) {
       return;
     }
-    const actualID = values?.prevActualDocId && values?.prevActualDocId === values?.actualId ? values?.prevActualId : values?.actualId;
-    fetchPartLotsAsync.start(fetchLotsByPartId, actualID, fetchPartLotsAsync);
+
+    fetchPartLotsAsync.start(fetchLotsByPartId, values?.actualId, fetchPartLotsAsync);
   }, [values.actualId]);
 
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
@@ -62,7 +62,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     }));
   };
 
-  const defaultValue = values[field] ?? dataItem[field];
+  const defaultValue = values[field] ?? '';
   const value = renderOptions().find(
     (option) => option.value === defaultValue,
   ) ?? { label: defaultValue, value: defaultValue };
