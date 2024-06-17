@@ -1,7 +1,6 @@
 import { get, orderBy } from 'lodash';
 import { createSelector } from 'reselect';
 import { removeLastCharacterIfNotAlphaNumeric } from '../../../../ui/common/utils/helpers';
-import { DocTypeGroups } from '../../../../ui/dashboard.new/line.items/common/types';
 import { checkIfDocumentHasOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { ApplicationState } from '../../../reducers';
 import { AsyncState } from '../../../types';
@@ -93,8 +92,8 @@ const getDocumentTypeByAcronym = createSelector(
 
 const getDocumentTypeByGroup = createSelector(
   byId,
-  (state: ApplicationState, group: DocTypeGroups) => group,
-  (docTypesById: DocumentTypeByIdState, group: DocTypeGroups) =>
+  (state: ApplicationState, group: DOC_TYPE_GROUP_OPTION) => group,
+  (docTypesById: DocumentTypeByIdState, group: DOC_TYPE_GROUP_OPTION) =>
     Object
       .values(docTypesById)
       .find((docType) => docType.group === group),

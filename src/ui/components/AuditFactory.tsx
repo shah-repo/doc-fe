@@ -578,11 +578,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         if (audit.type.includes('ARRAY_ADDED')) {
           const nextVal: string = audit.nextValue as string;
           try {
-            const { partDocId, lotDocId } = JSON.parse(nextVal);
+            const { partDocId, lotDocId, isExternalItem, userEnteredItemId } = JSON.parse(nextVal);
             returnValue = (
               <>
-                { (partDocId && !lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId }) }
-                { (partDocId && lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.partLot.added', { partDocId, lotDocId }) }
+                { (isExternalItem && userEnteredItemId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId: userEnteredItemId }) }
+                { (!isExternalItem && partDocId && !lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId }) }
+                { (!isExternalItem && partDocId && lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.partLot.added', { partDocId, lotDocId }) }
               </>
             );
           } catch (error) {
@@ -591,8 +592,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } else if (audit.type.includes('ARRAY_EDITED')) {
           const nextVal: string = audit.nextValue as string;
           try {
-            const { onOrderPOAction, inInspectionAction, inInventoryAction, inWipAction, asFinishedGoodsAction, usedLocation, comment, lotDocId, partDocId } = JSON.parse(nextVal);
-            const mdDocRow = lotDocId || partDocId;
+            const { onOrderPOAction, inInspectionAction, inInventoryAction, inWipAction, asFinishedGoodsAction, usedLocation, comment, lotDocId, partDocId, isExternalItem, userEnteredItemId } = JSON.parse(nextVal);
+            const mdDocRow = isExternalItem ? userEnteredItemId : (lotDocId || partDocId);
             returnValue = (
               <>
                 { onOrderPOAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.onOrderPOAction.updated', { mdDocRow, onOrderPOAction: getMDOptionLabels(onOrderPOAction) }) }

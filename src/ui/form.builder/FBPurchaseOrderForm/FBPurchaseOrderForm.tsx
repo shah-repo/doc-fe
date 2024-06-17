@@ -8,7 +8,6 @@ import { withFBPurchaseOrderForm } from './FBPurchaseOrderForm.wrap';
 const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
   handlePartTitle,
   handleTotal,
-  getOptionDisabled,
   getOptionLabel,
   handlePartDescription,
   purchaseOrderState,
@@ -40,7 +39,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
             optionId="11"
             onChange={handlePartTitle}
             rules="required_without:supplierPartNumber"
-            {...{ getOptionDisabled, getOptionLabel }}
+            {...{ getOptionLabel }}
           />
           <FBTextField
             label="form.builder.field.supplier.part.number"
@@ -87,8 +86,8 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
             label="form.builder.field.units"
             name="units"
             options={
-                  formState?.newValues.get('type') === FBPurchaseOrderItemType.PRODUCT ? FBData.productUnitsOptions
-                    : FBData.unitsOptions
+              formState?.newValues.get('type') === FBPurchaseOrderItemType.PRODUCT ? FBData.productUnitsOptions
+                : FBData.unitsOptions
             }
             optionValueKey="value"
             optionLabelKey="text"
