@@ -123,9 +123,11 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
         const htmlContent = draftToHtml(
           convertToRaw(editorState?.getCurrentContent()),
         ).trim();
+
         if (_formState?.getValue(name) === htmlContent) {
           return;
         }
+
         formik.setFieldValue(name, htmlContent);
         _formState?.setValue(name, htmlContent);
         submitForm?.();
