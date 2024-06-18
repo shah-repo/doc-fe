@@ -37,9 +37,9 @@ export const getIsLoading = (state: ApplicationState) => state.bulkImport.steps.
 export const getApproversSelectList = (state: ApplicationState): ApproverOption[] =>
   state.bulkImport.steps.approvers.map((approver) => ({
     value: approver?.id,
-    text: approver?.user?.name as string,
-    email: approver?.user?.email as string,
-    avatar: approver?.user?.avatar as string,
+    text: approver?.user?.name,
+    email: approver?.user?.email,
+    avatar: approver?.user?.avatar,
   }));
 // MAIN
 export const getBulkImports = (state: ApplicationState) => state.bulkImport.main.bulkImports;

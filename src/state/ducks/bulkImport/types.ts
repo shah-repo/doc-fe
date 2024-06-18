@@ -243,8 +243,8 @@ export interface Approver extends EmployeeCompany {
 }
 
 export interface ApproverOption extends SelectOption {
-  email: string
-  avatar: string | null
+  email?: string
+  avatar?: string | null
 }
 
 interface IconsBk {
