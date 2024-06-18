@@ -19,6 +19,7 @@ import {
   Mode,
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../../components/notifications';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -47,6 +48,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
     const isMaterialTypeSelected = values.type === DocType.material;
     const selectedMPI = values.mpiId;
     const [isOpen, setIsOpen] = useState(false);
+    const isTypeFieldEmpty = isEmpty(values.type);
 
     const fetchMEQByMPI = useActionCreator(
       documentRevisionsActions.fetchMaterialsOrEquipmentsBySelectedMPI,
@@ -75,7 +77,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
     });
 
     useEffect(() => {
-      if (selectedMPI && FB.isUUID(selectedMPI ?? '')) {
+      if (selectedMPI && FB.isUUID(selectedMPI ?? '') && values.type) {
         fetchMeqsAsync.start(fetchMEQByMPI, selectedMPI, fetchMeqsAsync);
       }
     }, [values.mpiId]);
@@ -117,6 +119,12 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
     });
 
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+      if (isTypeFieldEmpty) {
+        setFieldValue(field, '');
+        setInputValue('');
+        return;
+      }
+
       if (!inputVal && inputValue) {
         setFieldValue(field, '');
       }
@@ -135,6 +143,10 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
     };
 
     const onChange = (e, value) => {
+      if (isTypeFieldEmpty) {
+        return;
+      }
+
       setSelectedObj(value);
       setInputValue(value?.label);
       setFieldValue(field, value?.value);
@@ -163,6 +175,10 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
     };
 
     const queryApi = (offset: number, searchText?: string) => {
+      if (isTypeFieldEmpty) {
+        return;
+      }
+
       setLoading(true);
       fetchOptionsDataAsync.start(
         fetchLHRSummaryByOptionId,
@@ -174,6 +190,10 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
     };
 
     const handleOpen = () => {
+      if (isTypeFieldEmpty) {
+        toastError(translate('lhr.summary.type.empty.error.message'));
+      }
+
       setIsOpen(true);
     };
 
@@ -210,6 +230,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
                   {...params}
                   fullWidth
                   variant="outlined"
+                  disabled={isTypeFieldEmpty}
                   placeholder={translate('lhr.summary.placeholder.select.enter')}
                   InputProps={{
                     ...params.InputProps,

@@ -343,9 +343,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
             rowRender={rowRender}
             fallback={
               <Typography className={classes.font}>
-                {isShowOnly
-                  ? translate('table.no.results.found')
-                  : translate('lhr.summary.table.empty.records')}
+                {translate('lhr.summary.table.empty.records')}
               </Typography>
             }
             loading={

@@ -12,6 +12,7 @@ import {
   Mode,
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../../components/notifications';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -41,6 +42,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
     const [items, setItems] = useState<OptionType[]>([]);
     const [offset, setOffset] = React.useState(0);
     const [isOpen, setIsOpen] = useState(false);
+    const isTypeFieldEmpty = isEmpty(values.type);
 
     useEffect(() => {
       if (!inputValue && values?.actualDocId) {
@@ -84,6 +86,12 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
     });
 
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+      if (isTypeFieldEmpty) {
+        setFieldValue(field, '');
+        setInputValue('');
+        return;
+      }
+
       if (!inputVal && inputValue) {
         if (isEqTypeSelected) {
           setFieldValue('calDueDate', null);
@@ -113,6 +121,10 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
     };
 
     const onChange = (e, value) => {
+      if (isTypeFieldEmpty) {
+        return;
+      }
+
       setSelectedObj(value);
       if (isEqTypeSelected) {
         setFieldValue('calDueDate', value.calDueDate ?? null);
@@ -150,6 +162,10 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
     };
 
     const queryApi = (offset: number, searchText?: string) => {
+      if (isTypeFieldEmpty) {
+        return;
+      }
+
       setLoading(true);
       fetchOptionsDataAsync.start(
         fetchLHRSummaryByOptionId,
@@ -161,6 +177,10 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
     };
 
     const handleOpen = () => {
+      if (isTypeFieldEmpty) {
+        toastError(translate('lhr.summary.type.empty.error.message'));
+      }
+
       setIsOpen(true);
     };
 
@@ -202,6 +222,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
                   {...params}
                   fullWidth
                   variant="outlined"
+                  disabled={isTypeFieldEmpty}
                   placeholder={translate('lhr.summary.placeholder.select.enter')}
                   InputProps={{
                     ...params.InputProps,
