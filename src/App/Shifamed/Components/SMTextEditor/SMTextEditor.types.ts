@@ -20,6 +20,7 @@ export type SMTextEditorProps =
   isPreview?: boolean
   disabled?: boolean
   showToggleButton?: () => void
+  onAwayClick: (event: React.MouseEvent<Document, MouseEvent>) => void
   isTextClamped?: boolean
 };
 
