@@ -1,10 +1,11 @@
 import { first, isEmpty } from 'lodash';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FB, FBPOReceiveFormProps } from '..';
+import { FB, FBPOReceiveFormProps, IReceivedItem } from '..';
 import { Id } from '../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
+import { getExistingReceivedItem, receivedItemEqualityCheck } from '../FBPOReceive/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBPOReceiveFormState from './FBPOReceiveForm.state';
 
@@ -33,27 +34,33 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
         return;
       }
       const values = formState?.getValues();
-      const receivedItems = workspaceState.document?.formInput?.[name]?.receivedItems ?? [];
-      const id = poReceiveFormState.item?.partNumber ?? poReceiveFormState.item?.id;
-      const hasReceivedItem = (receivedItems, id) => !isEmpty(receivedItems.find((e) => e.itemId === id));
+      const receivedItems: IReceivedItem[] = (workspaceState.document?.formInput?.[name]?.receivedItems ?? []) as IReceivedItem[];
 
-      const calculatedReceivedItems = (id) => receivedItems.map((e) => {
-        if (e.itemId === id) {
+      const id = poReceiveFormState.item?.partNumber ?? poReceiveFormState.item?.id;
+      const rowId: string | undefined = poReceiveFormState.item?.id;
+
+      const existingReceivedItem = getExistingReceivedItem(receivedItems, poReceiveFormState.item);
+
+      const calculatedReceivedItems = () => receivedItems.map((receivedItem: IReceivedItem) => {
+        if (receivedItemEqualityCheck(receivedItem, poReceiveFormState.item)) {
           return {
-            ...e,
+            ...receivedItem,
+            rowId: poReceiveFormState.item?.id,
             received: values?.received ?? 0,
           };
         }
-        return e;
+        return receivedItem;
       });
 
-      const newReceivedItems = hasReceivedItem(receivedItems, id) ? calculatedReceivedItems(id) : [...receivedItems, ({
+      const newReceivedItems = existingReceivedItem ? calculatedReceivedItems() : [...receivedItems, ({
         itemId: id,
+        rowId,
         received: values?.received,
       })];
 
       const handleReceivedItems = isEmpty(receivedItems) ? [{
         itemId: id,
+        rowId,
         received: values?.received,
       }] : newReceivedItems;
 
