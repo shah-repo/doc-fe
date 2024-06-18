@@ -20,6 +20,10 @@ import { DocType, EMPTY_PLACEHOLDER, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../..
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { styles } from './styles';
 
+interface customOptionType extends OptionType{
+  calDueDate: string
+  pmDueDate: string
+}
 export const ActualIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
   field,
@@ -119,7 +123,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
       }
     };
 
-    const onChange = (e, value) => {
+    const onChange = (event: React.ChangeEvent, value: customOptionType) => {
       if (isTypeFieldEmpty) {
         return;
       }
