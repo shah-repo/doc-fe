@@ -59,6 +59,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
    * @cfg {boolean} Left Panel open/close.
    */
   @observable public leftPanelOpen = false;
+
   /**
    * @cfg {string} Selected Tab Id at the time of opening form builder Library
    */

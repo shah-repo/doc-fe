@@ -14,6 +14,5 @@ export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex'];
 
 export enum DocType {
   equipment = 'equipment',
-  process = 'process',
   material = 'material',
 }
