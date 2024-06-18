@@ -5,6 +5,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import { useIntl } from 'react-intl';
 import { SMTextEditorProps } from '../../..';
 import Colors from '../../../../ui/layout/theme/utils/colors';
+import { linkDecorator } from './LinkDecorator/LinkDecorator';
 import { editorStyles, SMEditorStyles } from './SMTextEditor.styles';
 import { withSMTextEditor } from './SMTextEditor.wrap';
 
@@ -101,6 +102,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         readOnly={disabled}
                         toolbarHidden={_textEditorState?.previewMode}
                         toolbarStyle={editorStyles.toolbarStyle}
+                        customDecorators={[linkDecorator]}
                         editorStyle={editorStyles.editorStyle}
                         toolbarClassName={classes.descriptionToolbarEditorClass}
                         editorClassName={_textEditorState?.previewMode ? classes.descriptionEditorClass

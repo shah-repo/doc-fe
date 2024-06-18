@@ -8,7 +8,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     contenttitle: {
       position: 'static',
-      paddingTop: 29,
       marginLeft: theme.spacing(4.375),
       fontSize: 12,
       fontWeight: 600,
@@ -16,7 +15,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     radio: {
       paddingTop: 11,
-      marginLeft: theme.spacing(4.375),
+      marginLeft: theme.spacing(5.625),
       '&:hover': {
         backgroundColor: 'transparent',
         boxShadow: 'none',
@@ -30,6 +29,7 @@ export const styles = makeStyles((theme: Theme) =>
       },
     },
     radioLabel: {
+      margin: theme.spacing(1.375, 0, 0, 0.625),
       fontWeight: 400,
       fontSize: 14,
       lineHeight: 1,

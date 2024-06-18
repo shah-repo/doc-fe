@@ -1,9 +1,10 @@
 import { chain } from 'lodash';
-import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { pagerSettings } from '../../components/common/kendo/helpers';
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
+import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { DateFields } from './interfaces';
 
+export const ACTIVE_KEY = 'trainingPlan.employee.active';
 export const REF_ID_FIELD = 'trainingPlan.sourceReferencesIds';
 export const REF_ID_FILTER_FIELD = 'sourceReference';
 
@@ -119,7 +120,7 @@ const columns: KendoColumn[] = [
     extraFields: ['trainingPlan.sourceReferences'], // to render data in Record popup
   },
   {
-    field: 'trainingPlan.employee.active',
+    field: ACTIVE_KEY,
     title: 'common.active',
     show: true,
     locked: false,

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
+import { NextTheme } from '../../../../layout/theme-next/provider';
 import Colors from '../../../../layout/theme/utils/colors';
 import { grayDotStyles, lineItemStyles } from '../../common/styles';
-import { NextTheme } from '../../../../layout/theme-next/provider';
 
 export default makeStyles((theme: NextTheme) => ({
   ...lineItemStyles(theme),
@@ -35,6 +35,18 @@ export default makeStyles((theme: NextTheme) => ({
     right: 4,
     position: 'relative',
     background: Colors.latest_yellow_varient,
+  },
+  link: {
+    color: Colors.light_gray_II,
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+  ellipsis: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    textWrap: 'nowrap',
   },
   [theme.media.mobile]: {
     itemlistMobile: {
