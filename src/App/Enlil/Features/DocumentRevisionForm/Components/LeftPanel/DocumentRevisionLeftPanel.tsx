@@ -7,7 +7,6 @@ import Text from '../../../../../../ui/components/Text';
 import { FB } from '../../../../../../ui/form.builder';
 import LeftPanelFormEditor from './Components/LeftPanelFormEditor';
 import ListPanel from './Components/ListPanel';
-import OCRSelection from './Components/OCRSelection';
 import useStyles from './DocumentRevisionLeftPanel.styles';
 
 const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
@@ -20,7 +19,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
       {() => (
         <>
           {
-            _documentRevisionFormState?.leftPanelOpen && !_documentRevisionFormState?.openOCRSelectionView && (
+            _documentRevisionFormState?.leftPanelOpen && (
               <Box className={classes.root}>
                 <Box
                   ml={1.75}
@@ -47,22 +46,6 @@ const DocumentRevisionLeftPanel: React.FunctionComponent = () => {
                       {leftPanelState?.showLeftPanelEditor && <LeftPanelFormEditor />}
                     </>)}
                   </Observer>
-                </SMBox>
-              </Box>
-            )}
-          {
-            _documentRevisionFormState?.leftPanelOpen && _documentRevisionFormState?.openOCRSelectionView && (
-              <Box className={classes.root}>
-                <Box className={classes.ocrView}>
-                  <Typography variant="h6" className={classes.ocrTitle}>
-                    <Text translation="common.attachments" />
-                  </Typography>
-                  <Typography variant="h6" className={classes.ocrSubTitle}>
-                    <Text translation="ocr.sub.title.msg" />
-                  </Typography>
-                </Box>
-                <SMBox className={classes.list} >
-                  <OCRSelection />
                 </SMBox>
               </Box>
             )}

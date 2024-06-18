@@ -60,10 +60,6 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
    */
   @observable public leftPanelOpen = false;
   /**
-   * @cfg {boolean} OCR Selection Left Panel open/close.
-   */
-  @observable public openOCRSelectionView = false;
-  /**
    * @cfg {string} Selected Tab Id at the time of opening form builder Library
    */
   public selectedTabIdForSchemaAddition = '';
@@ -251,7 +247,6 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @action setLeftPanelOpen = () => set(this, 'leftPanelOpen', !this.leftPanelOpen);
   @action setRightPanelOpen = () => set(this, 'rightPanelOpen', !this.rightPanelOpen);
-  @action setOpenOCRSelectionView = () => set(this, 'openOCRSelectionView', !this.openOCRSelectionView);
 
   @action public setTabIdForSchemaAddition = (tabName: string) => {
     set(this, 'selectedTabIdForSchemaAddition', tabName);

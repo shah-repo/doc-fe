@@ -22,16 +22,6 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
     const handleChange: SMTabsProps['onChange'] = useCallback(
       (event, newValue) => {
         _tabsState?.setActiveTabId(newValue);
-        // TODO enable once OCR changes available
-        // if (newValue === TabTypeOptions.SUMMARY.toLowerCase()) {
-        //   if (!_documentRevisionFormState?.openOCRSelectionView) {
-        //     _documentRevisionFormState?.setOpenOCRSelectionView();
-        //   }
-        //   if (!_documentRevisionFormState?.leftPanelOpen) {
-        //     _documentRevisionFormState?.setLeftPanelOpen();
-        //   }
-        // }
-
         return onChange?.(event, newValue);
       },
       [_tabsState, onChange],
