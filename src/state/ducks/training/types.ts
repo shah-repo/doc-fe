@@ -35,6 +35,7 @@ export interface TrainingListData {
   dueOn: Date
   completedAt: Date
   trId: string
+  assignedAt: string
 }
 
 export interface TrainingRecordQuery {
@@ -67,7 +68,7 @@ export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
   id: '',
 };
 
-interface TrainingReference {
+export interface TrainingReference {
   docId: string
   documentId?: string
   revisionId?: string

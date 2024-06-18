@@ -54,6 +54,12 @@ export enum EquipmentStatus {
   Voided = 'Voided',
 }
 
+export const ACTIVE_EQUIPMENT_STATUSES = [
+  EquipmentStatus.Active,
+  EquipmentStatus.ActiveCalibrated,
+  EquipmentStatus.ActiveNoCalRequired,
+];
+
 // Lot types implemetation
 export enum LotStatus {
   QUARANTINE = 'QUARANTINE',
@@ -187,7 +193,7 @@ export interface LSHS {
   part: Part
 }
 
-interface Precalc {
+export interface Precalc {
   formDocId: string
   revision: number
   po_amount?: string
@@ -297,6 +303,7 @@ interface Material {
   title: string
   unit: string
 }
+
 export interface MeqResponse {
   equipment: EQ[]
   materials: Material[]
@@ -336,7 +343,7 @@ export enum SmartReferenceType {
   LotSoruce = 'LOT_SOURCE',
 }
 
-interface InputOwner {
+export interface InputOwner {
   [key: string]: string
 }
 
@@ -500,7 +507,7 @@ export interface UpdateFormRequestBody {
   formToBeUsed: Id
 }
 
-interface TypeSpecificConfig {
+export interface TypeSpecificConfig {
   eqProdEnforceConfig: {
     date: string
     value: boolean

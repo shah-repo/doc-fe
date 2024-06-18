@@ -31,6 +31,7 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditTraineeList from './AuditTraineeList';
 import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
@@ -170,6 +171,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       cycleCount () {
         return <AuditCycleCount {...{ audit, dataCy, auditValue }} />;
+      },
+      traineeList () {
+        return <AuditTraineeList {...{ audit, dataCy, auditValue }} />;
       },
       partVendors () {
         return <AuditPartVendors {...{ audit, dataCy, auditValue }} />;
@@ -477,74 +481,74 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           } = JSON.parse(nextVal);
 
           if (audit.type.includes('ARRAY_ADDED')) {
-              const { instruction, assignedTo } = JSON.parse(nextVal);
+            const { instruction, assignedTo } = JSON.parse(nextVal);
 
-              returnValue = (
-                <>
-                  {instruction
+            returnValue = (
+              <>
+                {instruction
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.instruction.added`,
                       { instruction },
                     )}
-                  {assignedTo
+                {assignedTo
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.assignee.to`,
                       { assignedTo },
                     )}
-                </>
-              );
+              </>
+            );
           } else if (audit.type.includes('ARRAY_EDITED')) {
             const attachmentNameArr = attachmentLinks?.map((attachmentName) => attachmentName.split('/').pop()) ?? [];
             const attachmentNameList = attachmentNameArr.join(', ');
 
-              returnValue = (
-                <>
-                  {instruction
+            returnValue = (
+              <>
+                {instruction
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.instruction.updated`,
                       { instruction },
                     )}
-                  {assignedAdded
+                {assignedAdded
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.assignee.added`,
                       { assignedAdded },
                     )}
-                  {status === FBInvTaskState.DONE
+                {status === FBInvTaskState.DONE
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.completed`,
                       { assignedTo },
                     )}
-                  {status === FBInvTaskState.DRAFT
+                {status === FBInvTaskState.DRAFT
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.draft`,
                       { assignedTo },
                     )}
-                  {assigneeDeleted
+                {assigneeDeleted
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.assignee.deleted`,
                       { assigneeDeleted },
                     )}
-                  {comment
+                {comment
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.comment`,
                       { comment },
                     )}
-                  {( attachmentNameArr.length > 0 )
+                {(attachmentNameArr.length > 0)
                     && getNewLineItemAuditValue(
                       dataCy,
                       `${docLabel}.audit.inventoryTask.attachments`,
                       { attachmentNameList },
                     )}
-                </>
-              );
+              </>
+            );
           }
         } catch (error) {
           returnValue = (
@@ -574,11 +578,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         if (audit.type.includes('ARRAY_ADDED')) {
           const nextVal: string = audit.nextValue as string;
           try {
-            const { partDocId, lotDocId } = JSON.parse(nextVal);
+            const { partDocId, lotDocId, isExternalItem, userEnteredItemId } = JSON.parse(nextVal);
             returnValue = (
               <>
-                { (partDocId && !lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId }) }
-                { (partDocId && lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.partLot.added', { partDocId, lotDocId }) }
+                { (isExternalItem && userEnteredItemId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId: userEnteredItemId }) }
+                { (!isExternalItem && partDocId && !lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId }) }
+                { (!isExternalItem && partDocId && lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.partLot.added', { partDocId, lotDocId }) }
               </>
             );
           } catch (error) {
@@ -587,8 +592,8 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         } else if (audit.type.includes('ARRAY_EDITED')) {
           const nextVal: string = audit.nextValue as string;
           try {
-            const { onOrderPOAction, inInspectionAction, inInventoryAction, inWipAction, asFinishedGoodsAction, usedLocation, comment, lotDocId, partDocId } = JSON.parse(nextVal);
-            const mdDocRow = lotDocId || partDocId;
+            const { onOrderPOAction, inInspectionAction, inInventoryAction, inWipAction, asFinishedGoodsAction, usedLocation, comment, lotDocId, partDocId, isExternalItem, userEnteredItemId } = JSON.parse(nextVal);
+            const mdDocRow = isExternalItem ? userEnteredItemId : (lotDocId || partDocId);
             returnValue = (
               <>
                 { onOrderPOAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.onOrderPOAction.updated', { mdDocRow, onOrderPOAction: getMDOptionLabels(onOrderPOAction) }) }

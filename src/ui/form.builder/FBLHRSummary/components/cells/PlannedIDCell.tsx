@@ -8,16 +8,15 @@ import { FB } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import {
-  MeqResponse,
+  MeqResponse
 } from '../../../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import {
-  FormikField,
+  FormikField
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import {
-  Mode,
-  MODE_FIELD,
+  Mode, MODE_FIELD
 } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
@@ -86,6 +85,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
       if (isUpdateAction && !inputValue && !dataItem.plannedDocId) {
         setInputValue(dataItem[field] ?? '');
       }
+
       if (isUpdateAction && !inputValue && dataItem.plannedDocId) {
         setInputValue(dataItem.plannedDocId ?? '');
       }
@@ -129,6 +129,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
         setFieldValue(field, '');
       }
       setInputValue(inputVal);
+
       if (!isOpen) {
         return;
       }
@@ -159,6 +160,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
 
     const onScroll = (event: React.SyntheticEvent) => {
       const listboxNode = event.currentTarget;
+
       if (Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) === listboxNode.clientHeight) {
         const nextOffset = offset + LIMIT;
         setOffset(nextOffset);
@@ -208,6 +210,7 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = ({
         setInputValue('');
         setFieldValue(field, '');
       }
+
       setItems([]);
       queryApi(0);
     }, [dataItem[MODE_FIELD], values.type]);

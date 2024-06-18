@@ -9,8 +9,7 @@ import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import {
-  Mode,
-  MODE_FIELD,
+  Mode, MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
@@ -126,6 +125,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
       }
 
       setSelectedObj(value);
+
       if (isEqTypeSelected) {
         setFieldValue('calDueDate', value.calDueDate ?? null);
         setFieldValue('pmDueDate', value.pmDueDate ?? null);
@@ -146,6 +146,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
 
     const onScroll = (event: React.SyntheticEvent) => {
       const listboxNode = event.currentTarget;
+
       if (Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) === listboxNode.clientHeight) {
         const nextOffset = offset + LIMIT;
         setOffset(nextOffset);

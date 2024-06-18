@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import { concat, isUndefined, uniqBy } from 'lodash';
 import { reaction } from 'mobx';
-import moment from 'moment';
+import moment, { MomentInput } from 'moment';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
@@ -9,15 +9,15 @@ import { FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, 
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, EquipmentStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
+import { ACTIVE_EQUIPMENT_STATUSES, DocumentRevision, EquipmentStatus, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../components/notifications';
 import { isMoreDigitsAfterDecimal } from '../../dashboard.new/line.items/common/Utils';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import useStyles from './styles';
 
 export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     isOptionDisabled,
     renderOptionWithDate,
@@ -50,7 +50,6 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // MARK: @reactions
     // MARK: @reactions
     React.useEffect(() => {
       reaction(
@@ -96,35 +95,28 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const isDateOverdue = (date) => {
-      if (!date) { return; }
+    const isDateOverdue = (date: MomentInput) => {
+      if (!date) { return false; }
       const currentDate = getFormattedDateString(Date.now());
       return moment(currentDate).isAfter(date);
     };
 
-    const isEqActive = (eqStatus) => {
-      if (eqStatus === EquipmentStatus.Active) { return true; }
-      return false;
-    };
+    const isEqActive = (eqStatus: EquipmentStatus) => (
+      ACTIVE_EQUIPMENT_STATUSES.includes(eqStatus)
+    );
 
     // MARK: @helpers
     isOptionDisabled = (option) => {
       const pmDate = FB.calculateDateByType(option, 'preventativeMaintenance');
       const calDate = FB.calculateDateByType(option, 'calibration');
       const isOverdue = isDateOverdue(pmDate) || isDateOverdue(calDate);
+      const isActive = isEqActive(option.eqStatus);
 
-      if (!enforceFlag && !isEqActive(option.eqStatus)) {
+      if (enforceFlag && isOverdue && isLHRProductionBuild) {
         return true;
       }
 
-      if (enforceFlag) {
-        if (isOverdue && isLHRProductionBuild) {
-          return isEqActive(option.eqStatus);
-        } else {
-          return !isEqActive(option.eqStatus);
-        }
-      }
-      return !isEqActive(option.eqStatus);
+      return !isActive;
     };
 
     // eslint-disable-next-line react/display-name

@@ -5,7 +5,7 @@ import { TIME_ZONE } from '../../../common/utils/date';
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../../../state/ducks/documentRevisions/constants';
 import { POStatusLabelMapping, POStatusType } from '../../../state/ducks/documentRevisions/types';
 import { TRAINING_RECORDS_SEARCH_URL } from '../../../state/ducks/training/constants';
-import { documentRevisionEffectiveDateOption, trainingCompletedOnDateOption } from '../../document.revision/utils/helpers';
+import { documentRevisionEffectiveDateOption, trainingAssignDateOptions, trainingCompletedOnDateOption } from '../../document.revision/utils/helpers';
 import { CompletedOnDateOptions } from '../../document.revision/utils/types';
 import { REF_ID_FIELD, REF_ID_FILTER_FIELD } from '../../training/grid/column.definition';
 import { DateFields } from '../../training/kendo/types';
@@ -50,6 +50,7 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
     case TRAINING_RECORDS_SEARCH_URL: {
       const createdAtField = find(payload.filters, { field: DateFields.CREATED_AT });
       const completedAtField = find(payload.filters, { field: DateFields.COMPLETED_AT });
+      const assignAtField = find(payload.filters, { field: DateFields.ASSIGNED_AT });
       const dueOnField = find(payload.filters, { field: DateFields.DUE_ON });
       const refIdField = find(payload.filters, { field: REF_ID_FIELD });
       if (createdAtField) {
@@ -57,11 +58,19 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
         payload.createdAtAfter = find(createdDateOptions, { text: createdAtField.value })?.value;
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.CREATED_AT);
       }
+
       if (completedAtField) {
         const completedDateOptions = trainingCompletedOnDateOption();
         payload.completedAtAfter = find(completedDateOptions, { text: completedAtField.value })?.value;
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.COMPLETED_AT);
       }
+
+      if (assignAtField) {
+        const assignedDateOptions = trainingAssignDateOptions();
+        payload.createdAtAfter = find(assignedDateOptions, { text: assignAtField.value })?.value;
+        payload.filters = removeFieldFromFilters(payload.filters, DateFields.ASSIGNED_AT);
+      }
+
       if (dueOnField) {
         if (dueOnField.value === CompletedOnDateOptions.NEXT_WEEK) {
           payload.dueOnBefore = moment().tz(TIME_ZONE).add(7, 'd').startOf('day').toISOString();

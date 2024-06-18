@@ -6,12 +6,12 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -86,9 +86,11 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
 
     const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
       setInputValue(inputVal);
+
       if (!isOpen) {
         return;
       }
+
       if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
         setOffset(0);
         queryApi(0, inputVal);
@@ -111,6 +113,7 @@ export const IssuesCell: React.FC<CustomTemplateProps> = ({
 
     const onScroll = (event: React.SyntheticEvent) => {
       const listboxNode = event.currentTarget;
+
       if (Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) === listboxNode.clientHeight) {
         const nextOffset = offset + LIMIT;
         setOffset(nextOffset);

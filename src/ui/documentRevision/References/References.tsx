@@ -1,10 +1,11 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, FormControlLabel, Typography } from '@material-ui/core';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { DocumentRevisionFooterNew, SMText } from '../../../App';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { authSelectors } from '../../../state/ducks/auth';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { Checkbox } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
 import ReferencedByContainer from '../../document.revision/summary/referencedBy.container.new';
 import ReferenceToContainer from '../../document.revision/summary/referenceTo.container.new';
@@ -70,18 +71,17 @@ const References = ({
       {document.referencedBy && (
         <ReferencedByContainer dataProp={document.referencedBy} />
       )}
-      <>
-        <Typography component="span" className={classes.releaseDate}>
-          <Text dataCy="training" translation="common.training" />
-        </Typography>
-        <Typography className={classes.released}>
-          {retrain ? (
-            <Text translation="form.builder.yes" />
-          ) : (
-            <Text translation="form.builder.none" />
-          )}
-        </Typography>
-      </>
+      <FormControlLabel id="checkbox-label" className={classes.checkboxHolder}
+        control={
+          <Checkbox
+            checked={retrain}
+            disabled
+            data-cy="training-required-checkbox"
+            id="training-required-checkbox"
+          />
+        }
+        label={<Text data-cy="training" translation="document.revision.trainingRequired" />}
+      />
       <Box pt={2.5}>
         <Typography component="span" className={classes.releaseDate}>
           <Text dataCy="releaseDate" translation="documentRevision.form.release.date" />

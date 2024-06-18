@@ -39,6 +39,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     disabled,
     isDocumentLHRT,
     editorProperties,
+    onBlur,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
@@ -138,18 +139,20 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       includes(disabledOptions, option.id)
     );
 
-    const debouncedFieldAutosave = debounce(
-      (name) => formState?.setFieldAutosave(name),
-      1000,
-    );
-
     onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       // setField doesn't work here, the same problem prefilled with first option
       if (!freeSolo) { return; }
       const { target: { value = '' } = {} } = ev;
       formState?.setFieldValue(name, value, withState, omitFormValue);
       formState?.validate();
-      debouncedFieldAutosave(name);
+    };
+
+    const handleBlur = (event) => {
+      if (freeSolo) {
+        formState?.setFieldAutosave(name);
+      }
+
+      onBlur?.(event);
     };
 
     if (!filterOptions) {
@@ -203,6 +206,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       includeQRScan,
       disabledOptions,
       type: schemaItem?.type,
+      onBlur: handleBlur,
     });
   };
 

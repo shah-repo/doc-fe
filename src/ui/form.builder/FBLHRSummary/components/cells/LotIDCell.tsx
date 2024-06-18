@@ -6,14 +6,14 @@ import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
+import {
   Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -29,6 +29,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
     documentRevisionsActions.fetchLotsByPartId,
   );
   const { actualId } = values ?? {};
+
   const fetchPartLotsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
       setLots(data);
