@@ -2,8 +2,8 @@ import { ColumnMenuItem } from '@progress/kendo-react-data-tools';
 import { GridColumnMenuProps } from '@progress/kendo-react-grid';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { DisplayText, TranslatedText } from '../../../../components/common/kendo/helpers';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { DisplayText, TranslatedText } from '../../../../components/common/kendo/helpers';
 import { EditableLHRSummaryItem } from '../../types';
 
 interface CustomColumnMenuProps extends GridColumnMenuProps {
@@ -23,6 +23,7 @@ export const CustomColumnMenu: React.ComponentType<CustomColumnMenuProps> = (pro
   const selectedColumn = columns.find(c => c.field === column.field);
   const isLocked = Boolean(selectedColumn?.locked);
   const index = selectedColumn?.orderIndex ?? selectedColumn?.mainOrderIndex ?? 0;
+
   return (
     <ColumnMenuItem
       {...props}

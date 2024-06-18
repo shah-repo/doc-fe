@@ -31,6 +31,7 @@ export const DueDateCell: React.FC<CustomTemplateProps> = ({
     const handleChange = (date: MaterialUiPickersDate) => {
       setFieldValue(field, date?.toISOString());
     };
+
     return (
       <FormikField name={field}>
         <DatePicker

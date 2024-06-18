@@ -8,15 +8,15 @@ import { FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
+import {
   FormikField,
   TextField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -48,6 +48,7 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
       if (isUpdateAction && !inputValue && !dataItem.stepOrMpiDocumentId) {
         setInputValue(dataItem[field] ?? '');
       }
+
       if (isUpdateAction && !inputValue && dataItem.stepOrMpiDocumentId) {
         setInputValue(dataItem.stepOrMpiDocId ?? '');
       }
@@ -120,6 +121,7 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
 
     const onScroll = (event: React.SyntheticEvent) => {
       const listboxNode = event.currentTarget;
+
       if (Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) === listboxNode.clientHeight) {
         const nextOffset = offset + LIMIT;
         setOffset(nextOffset);

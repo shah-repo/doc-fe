@@ -303,6 +303,7 @@ interface Material {
   title: string
   unit: string
 }
+
 export interface MeqResponse {
   equipment: EQ[]
   materials: Material[]
