@@ -1,4 +1,3 @@
-import { flatMap } from 'lodash';
 import { translate } from '../../../common/intl';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
@@ -6,8 +5,6 @@ import { ApproverOption, BulkImportCustom } from './types';
 
 // STEPS
 export const getStep = (state: ApplicationState) => state.bulkImport.steps.step;
-export const getDataType = (state: ApplicationState) => flatMap(state.bulkImport.steps.dataType);
-export const getDataTypeList = (state: ApplicationState) => flatMap(state.bulkImport.steps.dataTypeList);
 export const getDataTypeSelectList = (state: ApplicationState): SelectOption[] =>
   state.bulkImport.steps.dataTypeList && Object.keys(state.bulkImport.steps.dataTypeList).length > 0
     ? Object.entries(state.bulkImport.steps.dataTypeList).map(([value, text]) => ({
@@ -15,7 +12,6 @@ export const getDataTypeSelectList = (state: ApplicationState): SelectOption[] =
       text,
     }))
     : [];
-export const getFormDocumentsTypeGroupList = (state: ApplicationState) => flatMap(state.bulkImport.steps.formDocumentsTypeGroupList);
 export const getFormDocumentsTypeGroupSelectList = (state: ApplicationState): SelectOption[] =>
   state.bulkImport.steps.formDocumentsTypeGroupList.map((docTypeGroup) => ({
     value: docTypeGroup.id,
@@ -23,7 +19,6 @@ export const getFormDocumentsTypeGroupSelectList = (state: ApplicationState): Se
   }));
 export const getBulkImport = (state: ApplicationState) => state.bulkImport.steps.bulkImport;
 export const getTemplateFile = (state: ApplicationState) => state.bulkImport.steps.templateFile;
-export const getXlsxFile = (state: ApplicationState) => state.bulkImport.steps.xlsx;
 export const getShowTable = (state: ApplicationState) => state.bulkImport.steps.showTable;
 export const getHeaders = (state: ApplicationState) => state.bulkImport.steps.headers;
 export const getTableData = (state: ApplicationState) => state.bulkImport.steps.tableData;
@@ -39,13 +34,12 @@ export const getTableDataFiltered = (state: ApplicationState) => {
   return tableData || [];
 };
 export const getIsLoading = (state: ApplicationState) => state.bulkImport.steps.isLoading;
-export const getApproversData = (state: ApplicationState) => state.bulkImport.steps.approvers;
 export const getApproversSelectList = (state: ApplicationState): ApproverOption[] =>
   state.bulkImport.steps.approvers.map((approver) => ({
     value: approver?.id,
-    text: approver?.user?.name,
-    email: approver?.user?.email,
-    avatar: approver?.user?.avatar,
+    text: approver?.user?.name as string,
+    email: approver?.user?.email as string,
+    avatar: approver?.user?.avatar as string,
   }));
 // MAIN
 export const getBulkImports = (state: ApplicationState) => state.bulkImport.main.bulkImports;

@@ -12,7 +12,7 @@ export enum TrainingStatusChartLabelTypes {
   TOTAL_OUTSTANDING = 'Total Outstanding',
 }
 
-export interface User {
+interface User {
   createdAt: string
   updatedAt: string
   internalTags?: string

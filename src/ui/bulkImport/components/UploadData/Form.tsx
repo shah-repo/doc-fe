@@ -6,8 +6,8 @@ import { getDownloadFile, setIsLoading, setTemplateFile, uploadFileData } from '
 import { getBulkImport, getTemplateFile } from '../../../../state/ducks/bulkImport/selectors';
 import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
-import DropzoneField from '../../../components/forms/fields-next/Dropzone/Dropzone.field';
 import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.types';
+import { DropzoneField } from '../../../components/forms/fields-next/index';
 import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';

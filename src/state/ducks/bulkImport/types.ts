@@ -6,7 +6,6 @@ import { Audit } from '../audit/types';
 import { Group } from '../auth/types';
 import { Approval } from '../common/types';
 import { Employee as EmployeeCompany } from '../company/types';
-import { User } from '../dashboard.new/training.stats/types';
 import { DocumentRevisionStatus, EquipmentStatus, InputOwner, LotStatus, POStatusType, Precalc, TypeSpecificConfig, UsedDocumentsInLHRS } from '../documentRevisions/types';
 import { CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 
@@ -63,102 +62,102 @@ SetStatusFilter |
 SetIsLoadingMain;
 
 // STEPS
-export interface ResetSteps {
+interface ResetSteps {
   type: typeof RESET_STEPS
 }
 
-export interface SetCurrentStep {
+interface SetCurrentStep {
   type: typeof CURRENT_STEP
   payload: number
 }
 
-export interface SetSelectedDataType {
+interface SetSelectedDataType {
   type: typeof SET_SELECTED_TYPE
   payload: string
 }
 
-export interface SetDataTypes {
+interface SetDataTypes {
   type: typeof SET_DATA_TYPES
   payload: DataType
 }
 
-export interface SetFormDocumentsTypeGroup {
+interface SetFormDocumentsTypeGroup {
   type: typeof SET_FORM_DOCUMENTS_TYPE_GROUP
   payload: FormDocumentTypeGroup[]
 }
 
-export interface SetBulkImport {
+interface SetBulkImport {
   type: typeof SET_BULK_IMPORT
   payload: BulkImport
 }
 
-export interface SetTemplateFIle {
+interface SetTemplateFIle {
   type: typeof SET_TEMPLATE_FILE
   payload: FileWithPreview[]
 }
 
-export interface SetXlsxFile {
+interface SetXlsxFile {
   type: typeof SET_XLSX_FILE
   payload: BKAttachmentFile
 }
 
-export interface SetShowTable {
+interface SetShowTable {
   type: typeof SET_SHOW_TABLE
   payload: boolean
 }
 
-export interface SetOnlyErrorsTable {
+interface SetOnlyErrorsTable {
   type: typeof SET_ONLY_ERRORS_TABLE
   payload: boolean
 }
 
-export interface SetHeaders {
+interface SetHeaders {
   type: typeof SET_HEADERS
   payload: Headers
 }
 
-export interface SetTableData {
+interface SetTableData {
   type: typeof SET_TABLE_DATA
   payload: TableRow[]
 }
 
-export interface UpdateRowFieldTable {
+interface UpdateRowFieldTable {
   type: typeof UPDATE_ROW_FIELD_TABLE
   payload: UpdateRowFieldTablePayload
 }
 
-export interface SetApprovers {
+interface SetApprovers {
   type: typeof SET_APPROVALS
   payload: Approver[]
 }
 
-export interface SetApproval {
+interface SetApproval {
   type: typeof SET_APPROVAL
   payload: Approval
 }
 
-export interface SetIsLoading {
+interface SetIsLoading {
   type: typeof SET_IS_LOADING
   payload: boolean
 }
 
 // MAIN BULK IMPORT
-export interface SetBulkImports {
+interface SetBulkImports {
   type: typeof SET_BULK_IMPORTS
   payload: BulkImport[]
 }
 
-export interface SetIsLoadingMain {
+interface SetIsLoadingMain {
   type: typeof SET_IS_LOADING_MAIN
   payload: boolean
 }
 
-export interface SetDataTypeFilter {
+interface SetDataTypeFilter {
   type: typeof SET_DATA_TYPE_FILTER
   payload: string
 }
 
-export interface SetStatusFilter {
+interface SetStatusFilter {
   type: typeof SET_STATUS_FILTER
   payload: string
 }
@@ -209,7 +208,7 @@ export interface SystemHeaderEntity extends CustomHeaderEntity {
   match?: string
 }
 
-export interface Headers {
+interface Headers {
   custom: CustomHeaderEntity[]
   system: SystemHeaderEntity[]
 }
@@ -229,14 +228,7 @@ export interface TableRow extends Record<string, string | TableErrorDetail[] | u
   errors?: TableErrorDetail[]
 }
 
-export interface Employee extends User {
-  resetPasswordEmailTimestamp: string | null
-  resendConfirmationEmailTimestamp: string | null
-  forgotPasswordEmailTimestamp: string | null
-  passwordSetTimestamp: string | null
-}
-
-export interface EmployeeGroup extends Pick<Group, 'id' | 'name' | 'permissions' | 'type' | 'tags'> {
+interface EmployeeGroup extends Pick<Group, 'id' | 'name' | 'permissions' | 'type' | 'tags'> {
   createdAt: string
   updatedAt: string
   defaultForNewUsers: boolean
@@ -255,7 +247,7 @@ export interface ApproverOption extends SelectOption {
   avatar: string | null
 }
 
-export interface IconsBk {
+interface IconsBk {
   icon: string
   text: string
   step: number
@@ -314,7 +306,7 @@ export interface BulkImportFile {
   fileSizeS3LinkCleanCopy: number | null
 }
 
-export enum BkStatus {
+enum BkStatus {
   STARTED = 'STARTED',
   IN_PROGRESS = 'IN_PROGRESS',
   SUCCESS = 'SUCCESS',
@@ -341,12 +333,12 @@ interface OriginalHeader {
   name: string
 }
 
-export interface Xlsx {
+interface Xlsx {
   active: boolean
   fileId: string
 }
 
-export interface DocumentRevision {
+interface DocumentRevision {
   createdAt: string
   updatedAt: string
   id: string
@@ -388,7 +380,7 @@ export interface DocumentRevision {
   approvals: Approval[]
 }
 
-export interface DocumentInfo {
+interface DocumentInfo {
   createdAt: string
   updatedAt: string
   id: string
@@ -398,7 +390,7 @@ export interface DocumentInfo {
   typeSpecificConfig?: TypeSpecificConfig
 }
 
-export enum FieldType {
+enum FieldType {
   STRING = 'STRING',
   OBJECT = 'OBJECT',
   NUMBER = 'NUMBER',
@@ -408,7 +400,7 @@ export enum FieldType {
   BOOLEAN = 'BOOLEAN',
 }
 
-export interface LogEntry extends Partial<Audit> {
+interface LogEntry extends Partial<Audit> {
   createdAt: string
   updatedAt: string
   changeRequestId: string | null
