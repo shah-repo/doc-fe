@@ -93,8 +93,10 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
           setFieldValue('status', '');
           setFieldValue('expiryDate', null);
         }
+
         setFieldValue(field, '');
       }
+
       setInputValue(inputVal);
 
       if (!isOpen) {

@@ -1,9 +1,7 @@
-import { cloneDeep, lowerCase } from 'lodash';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FB } from '../helpers';
 import { EditableLHRSummaryItem } from './types';
 
@@ -45,24 +43,3 @@ export const getExcelData = (
 
     return modifiedItem;
   });
-
-export const generateDocTitleText = (docId: string, displayRevision: string) => (
-  `${docId} • Rev ${displayRevision}`
-);
-
-export const updateData = (values: Partial<EditableLHRSummaryItem>, data: EditableLHRSummaryItem[]): EditableLHRSummaryItem[] => {
-  return cloneDeep(data).map(dataItem => {
-    if (values.id === dataItem.id) {
-      return values as EditableLHRSummaryItem;
-    }
-
-    return dataItem;
-  });
-};
-
-export const filterOutOption = (docRev: DocumentRevision, inputValue: string) => {
-  const filterValue = lowerCase(inputValue);
-
-  return lowerCase(docRev.name).includes(filterValue)
-    || lowerCase(docRev.document.docId).includes(filterValue);
-};
