@@ -4,7 +4,6 @@ import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.t
 import { ActualIDCell } from './components/cells/ActualIDCell';
 import { ByCell } from './components/cells/ByCell';
 import { DateCell } from './components/cells/DateCell';
-import { DueDateCell } from './components/cells/DueDateCell';
 import { IssuesCell } from './components/cells/IssuesCell';
 import { LotIDCell } from './components/cells/LotIDCell';
 import { PlannedIDCell } from './components/cells/PlannedIDCell';
@@ -119,7 +118,7 @@ export const buildSchema = ({
       selectable: false,
       title: 'lhr.summary.grid.heading.cal.due.date',
       show: true,
-      template: (props) => <DueDateCell {...props} onClick={onRowClick} />,
+      template: (props) => <DateCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {
@@ -127,7 +126,7 @@ export const buildSchema = ({
       field: 'pmDueDate',
       title: 'lhr.summary.grid.heading.pm.due.date',
       show: true,
-      template: (props) => <DueDateCell {...props} onClick={onRowClick} />,
+      template: (props) => <DateCell {...props} onClick={onRowClick} />,
       width: 201,
     },
     {

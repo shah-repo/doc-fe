@@ -19,7 +19,7 @@ import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
+import { LIMIT, MIN_SEARCH_TERM_LENGTH, STEP_FIELD } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { styles } from './styles';
 
@@ -29,253 +29,245 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
 }) => {
   const classes = styles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const { step, stepOrMpiDocId: mpiDocId, stepOrMpiDocumentId: mpiDocumentId } = dataItem;
+  const mpiRevId = dataItem.stepOrMPI?.split('/')[1];
 
-  if (isEditMode) {
-    const stepField = 'step';
-    const { getFieldProps, setFieldValue, values }
-      = useFormikContext<EditableLHRSummaryItem>();
-
-    const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
-    const [loading, setLoading] = useState(false);
-    const [inputValue, setInputValue] = useState('');
-    const [selectedObj, setSelectedObj] = useState<OptionType>();
-    const [items, setItems] = useState<OptionType[]>([]);
-    const [offset, setOffset] = React.useState(0);
-    const [isOpen, setIsOpen] = useState(false);
-
-    useEffect(() => {
-      if (isUpdateAction && !inputValue && !dataItem.stepOrMpiDocumentId) {
-        setInputValue(dataItem[field] ?? '');
-      }
-
-      if (isUpdateAction && !inputValue && dataItem.stepOrMpiDocumentId) {
-        setInputValue(dataItem.stepOrMpiDocId ?? '');
-      }
-    }, [values?.stepOrMPI]);
-
-    const fetchLHRSummaryByOptionId = useActionCreator(lhrSummaryActions.fetchLHRSummaryDataByOptionId);
-
-    const fetchOptionsDataAsync = useAsync({
-      onSuccess: (data?: LHRSummaryOptionsResponse) => {
-        if (!isUpdateAction && !selectedObj?.value) {
-          setFieldValue(field, inputValue);
-        }
-
-        setLoading(false);
-        const modifiedItems = data?.items?.map((item) => ({
-          label: translate('lhr.summary.displayRevision',
-            {
-              docId: item.document?.docId,
-              displayRevision: item?.displayRevision,
-              name: item?.name,
-            }),
-          value: item.id,
-        })) ?? [];
-
-        if (isEmpty(inputValue)) {
-          setItems(prev => [...prev, ...modifiedItems]);
-        } else {
-          setItems(modifiedItems);
-        }
-      },
-    });
-
-    const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
-      setInputValue(inputVal);
-      if (!inputVal && inputValue) {
-        setFieldValue(field, '');
-      }
-
-      if (!isOpen) {
-        return;
-      }
-
-      if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
-        setOffset(0);
-        queryApi(0, inputVal);
-      } else if (!inputVal) {
-        setOffset(0);
-        queryApi(0);
-      }
-    };
-
-    const handleOpen = () => {
-      setIsOpen(true);
-    };
-
-    const handleClose = () => {
-      setIsOpen(false);
-    };
-
-    const onChange = (event: React.ChangeEvent, value: OptionType) => {
-      setSelectedObj(value);
-      setInputValue(value?.label);
-      setFieldValue(field, value?.value);
-    };
-
-    const debounceFunction = debounce(onInputChange, 1000, {
-      leading: true,
-      trailing: true,
-    });
-
-    const onScroll = (event: React.SyntheticEvent) => {
-      const listboxNode = event.currentTarget;
-
-      if (Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) === listboxNode.clientHeight) {
-        const nextOffset = offset + LIMIT;
-        setOffset(nextOffset);
-        queryApi(nextOffset, inputValue);
-      }
-    };
-
-    const queryApi = (offset: number, searchText?: string) => {
-      setLoading(true);
-      fetchOptionsDataAsync.start(
-        fetchLHRSummaryByOptionId,
-        searchText ?? '',
-        FBAutocompleteAsyncOption.mpiDocuments,
-        offset,
-        fetchOptionsDataAsync,
-      );
-    };
-
-    useEffect(() => {
-      if (isUpdateAction) {
-        return;
-      } else {
-        setInputValue('');
-        setFieldValue(field, '');
-      }
-
-      if (loading) {
-        return;
-      }
-
-      setItems([]);
-      queryApi(0);
-    }, [dataItem[MODE_FIELD], values.type]);
-
+  if (!isEditMode) {
     return (
       <>
-        <Grid container spacing={2}>
-          <Grid item style={{ width: '30%' }}>
-            <FormikField name={stepField}>
-              <TextField
-                {...getFieldProps(stepField)}
-                defaultValue={undefined}
-                fullWidth={false}
-                placeholder={translate('lhr.summary.placeholder.enter')}
-                type="text"
-                size="small"
-              />
-            </FormikField>
-          </Grid>
-          <Grid
-            item
-            justify="center"
-            alignItems="center"
-            style={{ paddingTop: 10 }}
-          >
-            /
-          </Grid>
-          <Grid item style={{ width: '60%' }}>
-            <FormikField name={field}>
-              <Autocomplete
-                {...{ onChange }}
-                classes={{ option: classes.option }}
-                key={isEmpty(items) ? 'disabled' : 'enabled'}
-                value={{ label: inputValue }}
-                options={items}
-                getOptionLabel={(option) => option.label ?? '' }
-                filterOptions={(x) => x}
-                size="small"
-                renderInput={(params: RenderInputParams) => (
-                  <Box display="flex">
-                    <Box width="100%" data-cy="actualId">
-                      <MuiTextField
-                        {...params}
-                        fullWidth
-                        variant="outlined"
-                        placeholder={translate('lhr.summary.placeholder.select.enter')}
-                        InputProps={{
-                          ...params.InputProps,
-                          style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
-                          startAdornment: (
-                            <div>
-                              {params.InputProps.startAdornment}
-                            </div>
-                          ),
-                          endAdornment: (
-                            <>
-                              { loading && (
-                                <CircularProgress color="inherit" size={16} />
-                              )}
-                              {params.InputProps.endAdornment}
-                            </>
-                          ),
-                        }}
-                        inputProps={{
-                          ...params.inputProps,
-                          style: { padding: '4.5px 0' },
-                        }}
-                      />
-                    </Box>
-                  </Box>
-                )}
-                renderOption={(option) => option.label}
-                onInputChange={debounceFunction}
-                open={isOpen}
-                onOpen={handleOpen}
-                onClose={handleClose}
-                disableClearable
-                ListboxProps={{ onScroll }}
-                loading={loading}
-              />
-            </FormikField>
-          </Grid>
-        </Grid>
+        <span className={classes.stepCellContainer}>
+          <span className={classes.step}>
+            <OverflowTooltip
+              title={step}
+              placement="top"
+              interactive
+              arrow
+              data-cy="step-field"
+            >
+              {step}
+            </OverflowTooltip>
+          </span>
+          <span className={classes.seperator}>/</span>
+          {mpiDocId && mpiDocumentId ? (
+            <span className={classes.mpi}>
+              <Link
+                to={documentVersionPath(mpiRevId, mpiDocumentId)}
+                target="_blank"
+                id="step-mpi-field"
+                data-cy="step-mpi-field"
+                className={classes.link}
+              >
+                {mpiDocId}
+              </Link>
+            </span>
+          ) : (
+            <span className={classes.mpi} data-cy="step-mpi-field">
+              {mpiRevId}
+            </span>
+          )}
+        </span>
       </>
     );
   }
 
-  const step = dataItem.step;
-  const mpiDocId = dataItem.stepOrMpiDocId;
-  const mpiRevId = dataItem.stepOrMPI?.split('/')[1];
-  const mpiDocumentId = dataItem.stepOrMpiDocumentId;
+  const { getFieldProps, setFieldValue, values }
+      = useFormikContext<EditableLHRSummaryItem>();
+  const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
+  const [inputValue, setInputValue] = useState('');
+  const [selectedObj, setSelectedObj] = useState<OptionType>();
+  const [items, setItems] = useState<OptionType[]>([]);
+  const [offset, setOffset] = React.useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (isUpdateAction && !inputValue && !dataItem.stepOrMpiDocumentId) {
+      setInputValue(dataItem[field] ?? '');
+    }
+
+    if (isUpdateAction && !inputValue && dataItem.stepOrMpiDocumentId) {
+      setInputValue(dataItem.stepOrMpiDocId ?? '');
+    }
+  }, [values?.stepOrMPI]);
+
+  const fetchLHRSummaryByOptionId = useActionCreator(lhrSummaryActions.fetchLHRSummaryDataByOptionId);
+
+  const fetchOptionsDataAsync = useAsync({
+    onSuccess: (data?: LHRSummaryOptionsResponse) => {
+      if (!isUpdateAction && !selectedObj?.value) {
+        setFieldValue(field, inputValue);
+      }
+
+      const modifiedItems = data?.items?.map((item) => ({
+        label: translate('lhr.summary.displayRevision',
+          {
+            docId: item.document?.docId,
+            displayRevision: item?.displayRevision,
+            name: item?.name,
+          }),
+        value: item.id,
+      })) ?? [];
+
+      if (isEmpty(inputValue)) {
+        setItems(prev => [...prev, ...modifiedItems]);
+      } else {
+        setItems(modifiedItems);
+      }
+    },
+  });
+
+  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+    setInputValue(inputVal);
+    if (!inputVal && inputValue) {
+      setFieldValue(field, '');
+    }
+
+    if (!isOpen) {
+      return;
+    }
+
+    if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
+      setOffset(0);
+      queryApi(0, inputVal);
+    } else if (!inputVal) {
+      setOffset(0);
+      queryApi(0);
+    }
+  };
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const onChange = (event: React.ChangeEvent, value: OptionType) => {
+    setSelectedObj(value);
+    setInputValue(value?.label);
+    setFieldValue(field, value?.value);
+  };
+
+  const debounceFunction = debounce(onInputChange, 1000, {
+    leading: true,
+    trailing: true,
+  });
+
+  const onScroll = (event: React.SyntheticEvent) => {
+    const listboxNode = event.currentTarget;
+
+    if (Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) === listboxNode.clientHeight) {
+      const nextOffset = offset + LIMIT;
+      setOffset(nextOffset);
+      queryApi(nextOffset, inputValue);
+    }
+  };
+
+  const queryApi = (offset: number, searchText?: string) => {
+    fetchOptionsDataAsync.start(
+      fetchLHRSummaryByOptionId,
+      searchText ?? '',
+      FBAutocompleteAsyncOption.mpiDocuments,
+      offset,
+      fetchOptionsDataAsync,
+    );
+  };
+
+  useEffect(() => {
+    if (isUpdateAction) {
+      return;
+    } else {
+      setInputValue('');
+      setFieldValue(field, '');
+    }
+
+    if (fetchOptionsDataAsync.isLoading) {
+      return;
+    }
+
+    setItems([]);
+    queryApi(0);
+  }, [dataItem[MODE_FIELD], values.type]);
 
   return (
     <>
-      <span className={classes.stepCellContainer}>
-        <span className={classes.step}>
-          <OverflowTooltip
-            title={step}
-            placement="top"
-            interactive
-            arrow
-            data-cy="step-field"
-          >
-            {step}
-          </OverflowTooltip>
-        </span>
-        <span className={classes.seperator}>/</span>
-        {mpiDocId && mpiDocumentId ? (
-          <span className={classes.mpi}>
-            <Link
-              to={documentVersionPath(mpiRevId, mpiDocumentId)}
-              target="_blank"
-              id="step-mpi-field"
-              data-cy="step-mpi-field"
-              className={classes.link}
-            >
-              {mpiDocId}
-            </Link>
-          </span>
-        ) : (
-          <span className={classes.mpi} data-cy="step-mpi-field">
-            {mpiRevId}
-          </span>
-        )}
-      </span>
+      <Grid container spacing={2}>
+        <Grid item style={{ width: '30%' }}>
+          <FormikField name={STEP_FIELD}>
+            <TextField
+              {...getFieldProps(STEP_FIELD)}
+              defaultValue={undefined}
+              fullWidth={false}
+              placeholder={translate('lhr.summary.placeholder.enter')}
+              type="text"
+              size="small"
+            />
+          </FormikField>
+        </Grid>
+        <Grid
+          item
+          justify="center"
+          alignItems="center"
+          style={{ paddingTop: 10 }}
+        >
+            /
+        </Grid>
+        <Grid item style={{ width: '60%' }}>
+          <FormikField name={field}>
+            <Autocomplete
+              {...{ onChange }}
+              classes={{ option: classes.option }}
+              key={isEmpty(items) ? 'disabled' : 'enabled'}
+              value={{ label: inputValue }}
+              options={items}
+              getOptionLabel={(option) => option.label ?? '' }
+              filterOptions={(x) => x}
+              size="small"
+              renderInput={(params: RenderInputParams) => (
+                <Box display="flex">
+                  <Box width="100%" data-cy="actualId">
+                    <MuiTextField
+                      {...params}
+                      fullWidth
+                      variant="outlined"
+                      placeholder={translate('lhr.summary.placeholder.select.enter')}
+                      InputProps={{
+                        ...params.InputProps,
+                        style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
+                        startAdornment: (
+                          <div>
+                            {params.InputProps.startAdornment}
+                          </div>
+                        ),
+                        endAdornment: (
+                          <>
+                            { fetchOptionsDataAsync.isLoading && (
+                              <CircularProgress color="inherit" size={16} />
+                            )}
+                            {params.InputProps.endAdornment}
+                          </>
+                        ),
+                      }}
+                      inputProps={{
+                        ...params.inputProps,
+                        style: { padding: '4.5px 0' },
+                      }}
+                    />
+                  </Box>
+                </Box>
+              )}
+              renderOption={(option) => option.label}
+              onInputChange={debounceFunction}
+              open={isOpen}
+              onOpen={handleOpen}
+              onClose={handleClose}
+              disableClearable
+              ListboxProps={{ onScroll }}
+              loading={fetchOptionsDataAsync.isLoading}
+            />
+          </FormikField>
+        </Grid>
+      </Grid>
     </>
   );
 };

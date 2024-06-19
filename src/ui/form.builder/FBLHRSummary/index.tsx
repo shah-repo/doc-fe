@@ -12,17 +12,17 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
-import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
+import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
+import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
+import { Button } from '../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
-import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 import { FBSection } from '../../form.builder';
@@ -136,18 +136,17 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       startQuantity: String(data.startQuantity),
       endQuantity: String(data.endQuantity),
       stepOrMPI: `${data.step}/${data.mpiId}`,
-      lhrDocRevId: _documentRevisionFormState?.documentRevision?.id,
     };
 
     if (data[MODE_FIELD] === Mode.add) {
-      addLHRSummaryAsync.start(addLHRSummary, payload, addLHRSummaryAsync);
+      addLHRSummaryAsync.start(addLHRSummary, {
+        ...payload,
+        lhrDocRevId: _documentRevisionFormState?.documentRevision?.id,
+      }, addLHRSummaryAsync);
       return;
     }
 
-    delete payload.lhrDocRevId;
-
-    const actualId = data.prevActualDocId === data.actualId ? data.prevActualId : data.actualId;
-    payload.actualId = actualId;
+    payload.actualId = data.prevActualDocId === data.actualId ? data.prevActualId : data.actualId;
     updateLHRSummaryAsync.start(updateLHRSummary, _documentRevisionFormState?.documentRevision?.id, data.id, payload, updateLHRSummaryAsync);
   };
 

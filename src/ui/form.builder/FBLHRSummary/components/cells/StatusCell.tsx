@@ -19,33 +19,29 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   let defaultValue = dataItem[field];
+  const formik = useFormikContext<EditableLHRSummaryItem>();
 
   if (isEditMode) {
-    const { values } = useFormikContext<EditableLHRSummaryItem>();
-    defaultValue = values.status || dataItem[field];
+    defaultValue = formik?.values.status || dataItem[field];
   }
 
   const displayStatus = getLotStatusLabel(defaultValue as LotStatus);
 
-  return (
-    <>
-      {defaultValue ? (
-        <Tooltip
-          data={displayStatus}
-          childrenElement={
-            <Chip
-              size="small"
-              className={cx(
-                classes.chip,
-                classes[statusClassMapping[displayStatus]],
-              )}
-              label={displayStatus}
-            />
-          }
+  if (defaultValue) {
+    return <Tooltip
+      data={displayStatus}
+      childrenElement={
+        <Chip
+          size="small"
+          className={cx(
+            classes.chip,
+            classes[statusClassMapping[displayStatus]],
+          )}
+          label={displayStatus}
         />
-      ) : (
-        EMPTY_PLACEHOLDER
-      )}
-    </>
-  );
+      }
+    />;
+  }
+
+  return <>{EMPTY_PLACEHOLDER}</>;
 };

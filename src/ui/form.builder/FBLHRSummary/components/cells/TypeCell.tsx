@@ -18,39 +18,39 @@ export const TypeCell: React.FC<CustomTemplateProps> = ({
   field,
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const defaultValue = dataItem.type;
-  let value = TYPE_OPTIONS.find((option) => option.value === defaultValue);
+  let value = TYPE_OPTIONS.find((option) => option.value === dataItem.type);
 
-  if (isEditMode) {
-    const { values, getFieldProps, setFieldValue }
-      = useFormikContext<EditableLHRSummaryItem>();
-
-    const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
-      setFieldValue('status', '');
-      setFieldValue('expiryDate', null);
-      setFieldValue('lotOrEquipment', null);
-      setFieldValue(field, value?.value);
-    };
-    value = TYPE_OPTIONS.find((option) => option.value === values.type);
-
-    return (
-      <FormikField name={field}>
-        <Autocomplete
-          {...getFieldProps(field)}
-          key={isEmpty(values) ? 'disabled' : 'enabled'}
-          blurOnSelect
-          disabled={Mode.edit === dataItem[MODE_FIELD]}
-          disableClearable
-          placeholder={translate('common.select')}
-          options={TYPE_OPTIONS}
-          value={value}
-          getOptionLabel={(option: OptionType) => option.label}
-          onChange={handleChange}
-          size="small"
-        />
-      </FormikField>
-    );
+  if (!isEditMode) {
+    return <>{value?.label}</>;
   }
 
-  return <>{value?.label}</>;
+  const { values, getFieldProps, setValues } = useFormikContext<EditableLHRSummaryItem>();
+  value = TYPE_OPTIONS.find((option) => option.value === values.type);
+  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+    setValues({
+      ...values,
+      status: '',
+      expiryDate: null,
+      lotOrEquipment: undefined,
+      type: value?.value ?? '',
+    });
+  };
+
+  return (
+    <FormikField name={field}>
+      <Autocomplete
+        {...getFieldProps(field)}
+        key={isEmpty(values) ? 'disabled' : 'enabled'}
+        blurOnSelect
+        disabled={Mode.edit === dataItem[MODE_FIELD]}
+        disableClearable
+        placeholder={translate('common.select')}
+        options={TYPE_OPTIONS}
+        value={value}
+        getOptionLabel={(option: OptionType) => option.label}
+        onChange={handleChange}
+        size="small"
+      />
+    </FormikField>
+  );
 };

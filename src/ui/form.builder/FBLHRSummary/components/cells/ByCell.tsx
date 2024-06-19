@@ -19,44 +19,39 @@ export const ByCell: React.FC<CustomTemplateProps> = ({
   onClick,
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const availableUsers = useSelector(changeRequestsSelectors?.getUsersList);
-
-  const getUserDetails = (userId: string) =>
-    find(availableUsers, { value: userId });
-
+  const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
+  const getUserDetails = (userId: string) => find(availableUsers, { value: userId });
   const user = getUserDetails(dataItem[field] ?? '');
+  const [selectedUser, setSelectedUser] = useState(user ?? '');
+  const label = user?.label;
 
-  if (isEditMode) {
-    const { setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
-    const [selectedUser, setSelectedUser] = useState(user ?? '');
-
-    const handleChange = (event: React.ChangeEvent<{}>, value?: OptionType) => {
-      if (!value?.value) {
-        return;
-      }
-      setSelectedUser(value);
-      setFieldValue(field, value?.value);
-    };
-
+  if (!isEditMode) {
     return (
-      <Autocomplete
-        options={availableUsers}
-        defaultValue={selectedUser}
-        onChange={handleChange}
-        blurOnSelect
-        getOptionLabel={(option: OptionType) => option.label}
-        size="small"
-      />
+      <Box onClick={() => onClick?.({ dataItem })}>
+        <OverflowTooltip title={label} placement="top" interactive arrow>
+          {label}
+        </OverflowTooltip>
+      </Box>
     );
   }
 
-  const label = user?.label;
+  const { setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
+  const handleChange = (event: React.ChangeEvent<{}>, value?: OptionType) => {
+    if (!value?.value) {
+      return;
+    }
+    setSelectedUser(value);
+    setFieldValue(field, value?.value);
+  };
 
   return (
-    <Box onClick={() => onClick?.({ dataItem })}>
-      <OverflowTooltip title={label} placement="top" interactive arrow>
-        {label}
-      </OverflowTooltip>
-    </Box>
+    <Autocomplete
+      options={availableUsers}
+      defaultValue={selectedUser}
+      onChange={handleChange}
+      blurOnSelect
+      getOptionLabel={(option: OptionType) => option.label}
+      size="small"
+    />
   );
 };

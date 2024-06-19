@@ -3,8 +3,8 @@ import { get } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import OverflowingContent from '../../../../change.request/FBMaterialDisposition/components/commonCells/OveflowContent';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 
@@ -35,7 +35,6 @@ export const TextInputCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   }
 
   const handleClick = () => onClick?.({ dataItem });
-
   const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
 
   return (

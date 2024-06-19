@@ -1,6 +1,7 @@
 export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
+export const STEP_FIELD = 'step';
 export const EXCEL_FILE_NAME = 'lhrSummary.xlsx';
 export const TYPE_OPTIONS = [
   { label: 'Equipment', value: 'equipment' },

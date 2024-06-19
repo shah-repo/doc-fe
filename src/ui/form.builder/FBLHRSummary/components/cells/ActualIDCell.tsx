@@ -20,7 +20,7 @@ import { DocType, EMPTY_PLACEHOLDER, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../..
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { styles } from './styles';
 
-interface customOptionType extends OptionType{
+interface CustomOptionType extends OptionType{
   calDueDate: string
   pmDueDate: string
 }
@@ -30,16 +30,14 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
 }) => {
   const classes = styles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const actualDocId = dataItem.actualDocId;
-  const actualRevId = dataItem.actualId;
-  const actualDocumentId = dataItem.actualDocumentId;
+  const { actualDocId, actualId: actualRevId, actualDocumentId } = dataItem;
+  const formik = useFormikContext<EditableLHRSummaryItem>();
 
   if (isEditMode) {
-    const { values, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
+    const { values, setFieldValue } = formik;
     const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
     const isMaterialTypeSelected = values.type === DocType.material;
     const isEqTypeSelected = values.type === DocType.equipment;
-    const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [selectedObj, setSelectedObj] = useState<OptionType>();
     const [items, setItems] = useState<OptionType[]>([]);
@@ -67,7 +65,6 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
           setFieldValue(field, inputValue);
         }
 
-        setLoading(false);
         const modifiedItems = data?.items?.map((item) => ({
           label: translate('lhr.summary.displayRevision',
             {
@@ -123,7 +120,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
       }
     };
 
-    const onChange = (event: React.ChangeEvent, value: customOptionType) => {
+    const onChange = (event: React.ChangeEvent, value: CustomOptionType) => {
       if (isTypeFieldEmpty) {
         return;
       }
@@ -171,7 +168,6 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
         return;
       }
 
-      setLoading(true);
       fetchOptionsDataAsync.start(
         fetchLHRSummaryByOptionId,
         searchText ?? '',
@@ -196,12 +192,12 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
     useEffect(() => {
       if (isUpdateAction) {
         return;
-      } else {
-        setInputValue('');
-        setFieldValue(field, '');
       }
 
-      if (loading) {
+      setInputValue('');
+      setFieldValue(field, '');
+
+      if (fetchOptionsDataAsync.isLoading) {
         return;
       }
 
@@ -239,7 +235,7 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
                     ),
                     endAdornment: (
                       <>
-                        { loading && (
+                        { fetchOptionsDataAsync.isLoading && (
                           <CircularProgress color="inherit" size={16} />
                         )}
                         {params.InputProps.endAdornment}
@@ -261,26 +257,25 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = ({
           onClose={handleClose}
           disableClearable
           ListboxProps={{ onScroll }}
-          loading={loading}
+          loading={fetchOptionsDataAsync.isLoading}
         />
       </FormikField>
     );
   }
 
+  if (!actualDocumentId) {
+    return <>{actualRevId ?? EMPTY_PLACEHOLDER}</>;
+  }
+
   return (
-    <>
-      {actualDocumentId ? (
-        <Link
-          to={documentVersionPath(actualRevId, actualDocumentId)}
-          target="_blank"
-          id="PartOrEqDocLink-linkButton"
-          className={classes.link}
-        >
-          {actualDocId}
-        </Link>
-      ) : (
-        actualRevId ?? EMPTY_PLACEHOLDER
-      )}
-    </>
+    <Link
+      to={documentVersionPath(actualRevId, actualDocumentId)}
+      target="_blank"
+      id="PartOrEqDocLink-linkButton"
+      data-cy="actual-id-link"
+      className={classes.link}
+    >
+      {actualDocId}
+    </Link>
   );
 };

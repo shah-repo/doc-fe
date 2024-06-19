@@ -28,7 +28,7 @@ const fetchLHRSummaryDataByOptionId = (
   handlers: Handlers,
 ): ApiAction<LHRSummaryOptionsResponse> =>
   apiActionWithCallbacks({
-    url: `${ROOT_LHR_SUMMARY}/search?optionId=${optionId}&searchQuery=${searchText}&offset=${offset}&limit=25`,
+    url: `${ROOT_LHR_SUMMARY}/search?optionId=${optionId}&searchQuery=${searchText}&offset=${offset}&limit=${LIMIT}`,
     method: 'get',
     handlers,
   });

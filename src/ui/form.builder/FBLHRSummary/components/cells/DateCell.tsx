@@ -26,24 +26,24 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     MomentFormats.MonthDateYearTwoDigit,
   );
 
-  if (isEditMode) {
-    const { getFieldProps, setFieldValue } = useFormikContext();
-
-    const handleChange = (date: MaterialUiPickersDate) => {
-      setFieldValue(field, date?.toISOString());
-    };
-
-    return (
-      <FormikField name={field}>
-        <DatePicker
-          {...getFieldProps(field)}
-          size="small"
-          onChange={handleChange}
-          format={MomentFormats.MonthDateYearTwoDigit}
-        />
-      </FormikField>
-    );
+  if (!isEditMode) {
+    return <>{value}</>;
   }
 
-  return <span>{value}</span>;
+  const { getFieldProps, setFieldValue } = useFormikContext();
+  const handleChange = (date: MaterialUiPickersDate) => {
+    setFieldValue(field, date?.toISOString());
+  };
+
+  return (
+    <FormikField name={field}>
+      <DatePicker
+        {...getFieldProps(field)}
+        size="small"
+        data-cy={`${field}`}
+        onChange={handleChange}
+        format={MomentFormats.MonthDateYearTwoDigit}
+      />
+    </FormikField>
+  );
 };
