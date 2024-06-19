@@ -32,10 +32,10 @@ export const getExcelData = (
     const modifiedItem = {
       ...item,
       stepOrMPI: `${step}/${stepOrMpiDocId}`,
-      expiryDate: getFormattedDateString(item.expiryDate ?? '', MomentFormats.MonthDateYearTwoDigit),
-      calDueDate: getFormattedDateString(item.calDueDate ?? '', MomentFormats.MonthDateYearTwoDigit),
-      pmDueDate: getFormattedDateString(item.pmDueDate ?? '', MomentFormats.MonthDateYearTwoDigit),
-      createdAt: getFormattedDateString(item.createdAt ?? '', MomentFormats.MonthDateYearTwoDigit),
+      ...(item.expiryDate && { expiryDate: getFormattedDateString(item.expiryDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
+      ...(item.calDueDate && { calDueDate: getFormattedDateString(item.calDueDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
+      ...(item.pmDueDate && { pmDueDate: getFormattedDateString(item.pmDueDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
+      ...(item.createdAt && { createdAt: getFormattedDateString(item.createdAt ?? '', MomentFormats.MonthDateYearTwoDigit) }),
       enteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,

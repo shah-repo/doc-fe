@@ -5,23 +5,24 @@ import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel
 import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { find, pick } from 'lodash';
+import { find, map, pick } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
+import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
-import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
-import { Button } from '../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
+import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 import { FBSection } from '../../form.builder';
@@ -142,6 +143,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       addLHRSummaryAsync.start(addLHRSummary, payload, addLHRSummaryAsync);
       return;
     }
+
     delete payload.lhrDocRevId;
 
     const actualId = data.prevActualDocId === data.actualId ? data.prevActualId : data.actualId;
@@ -186,6 +188,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     if (!editedLHRSummaryItem?.id) {
       return;
     }
+
     deleteLHRSummaryAsync.start(deleteLHRSummary, _documentRevisionFormState?.documentRevision?.id, editedLHRSummaryItem?.id, deleteLHRSummaryAsync);
   };
 
@@ -272,6 +275,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     ({ field, locked }: CustomTreeListColumnProps) => {
       const index = columns.findIndex((c) => c.field === field);
       const column = columns[index];
+
       if (column) {
         const newColumns = [...columns];
         newColumns.splice(index, 1, {
@@ -285,6 +289,17 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     },
     [columns],
   );
+
+  const onColumnShowHide = ({ field }: Partial<ColumnDefinition<EditableLHRSummaryItem>>) => {
+    const dataColumns = map(columns, (column: ColumnDefinition<EditableLHRSummaryItem>) => {
+      if (column.field === field) {
+        column.show = !column.show;
+      }
+
+      return column;
+    });
+    setColumns(dataColumns);
+  };
 
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
@@ -369,6 +384,14 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
                       onClick={exportToExcel}
                       icon={solid('arrow-down-to-line')} />
                   </StyleTooltip>
+                </Grid>
+                <Grid item
+                  data-cy="show-hide-columns"
+                >
+                  <ColumnShowHideMenu
+                    columnDefinition={columns}
+                    onChange={onColumnShowHide}
+                  />
                 </Grid>
               </Grid>
             </GridToolbar>
