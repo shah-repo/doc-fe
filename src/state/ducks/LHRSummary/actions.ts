@@ -43,12 +43,11 @@ const fetchRecords = (
     method: 'post',
     data: {
       documentTypeCategory: 'Record',
-      status: [DocumentRevisionStatus.Released],
+      status: [DocumentRevisionStatus.Released, DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved],
       limit: LIMIT,
       offset: offset,
       filters: [
         { field: 'document.docId', operator: KendoGridFilterCellOperators.CONTAINS, value: searchStr },
-        { field: 'displayStatus', operator: KendoGridFilterCellOperators.EQ, value: 'Released' },
       ],
       sort: [],
       schema: [

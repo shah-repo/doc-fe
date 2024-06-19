@@ -1,17 +1,16 @@
 import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React from 'react';
-import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../../components/OverflowTooltip';
 import {
   FormikField,
   TextField,
 } from '../../../../components/forms/fields-next';
+import {
+  Mode, MODE_FIELD,
+} from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { EMPTY_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
-
 export const QuantityCell: React.FC<CustomTemplateProps> = ({
   dataItem,
   field,
@@ -42,7 +41,7 @@ export const QuantityCell: React.FC<CustomTemplateProps> = ({
 
   return (
     <>
-      {defaultValue ? (
+      {isEmpty(defaultValue) ? (
         <OverflowTooltip
           title={defaultValue}
           onClick={handleClick}
