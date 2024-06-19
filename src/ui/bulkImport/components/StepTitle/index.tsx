@@ -4,7 +4,7 @@ import React from 'react';
 import { translate } from '../../../../common/intl';
 import useStyles from './styles';
 
-export interface BulkImportProgressProps {
+interface BulkImportProgressProps {
   title: string
   subTitle?: string
   extraTitle?: string

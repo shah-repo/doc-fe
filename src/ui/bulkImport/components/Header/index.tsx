@@ -7,7 +7,7 @@ import { withThemeNext } from '../../../layout/theme-next';
 
 import useStyles from './styles';
 
-export interface BulkImportProgressProps {
+interface BulkImportProgressProps {
   isLoading?: boolean
   onHistory?: () => void
   onNewOCR?: () => void
