@@ -13,7 +13,7 @@ import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import {
   Mode,
-  MODE_FIELD
+  MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
@@ -24,12 +24,12 @@ import {
   DocType,
   EMPTY_PLACEHOLDER,
   LIMIT,
-  MIN_SEARCH_TERM_LENGTH
+  MIN_SEARCH_TERM_LENGTH,
 } from '../../constants';
 import {
   CustomTemplateProps,
   EditableLHRSummaryItem,
-  LHRSummaryOptionsResponse
+  LHRSummaryOptionsResponse,
 } from '../../types';
 import { styles } from './styles';
 
