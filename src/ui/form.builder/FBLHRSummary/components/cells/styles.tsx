@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../../../layout/theme/utils/colors';
+import { Colors } from '../../../../layout/theme-next';
 
 export const styles = makeStyles((theme) => ({
   contentCenter: {
@@ -23,10 +23,10 @@ export const styles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   selectedDot: {
-    color: Colors.almost_black,
+    color: Colors.textBlack,
   },
   deselectedDot: {
-    color: Colors.dark_gray2,
+    color: Colors.buttonDisabled,
   },
   poPreviewDot: {
     marginLeft: theme.spacing(1.875),
@@ -34,7 +34,7 @@ export const styles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   poPreviewModal: {
-    color: `${Colors.navy_active} !important`,
+    color: `${Colors.primaryDark} !important`,
     width: 343,
   },
   poPreviewModalItem: {
@@ -43,7 +43,7 @@ export const styles = makeStyles((theme) => ({
     },
   },
   link: {
-    color: `${Colors.navy_active} !important`,
+    color: `${Colors.primaryDark} !important`,
     cursor: 'Pointer',
     textDecoration: 'initial !important',
     '&:hover': {

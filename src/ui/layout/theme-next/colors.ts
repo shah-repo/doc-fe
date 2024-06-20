@@ -34,6 +34,7 @@ enum Colors {
   // Warning
   warning='#EFA10B',
   warningHighlight='#FEFAF3',
+  warningStatusBorder='#CE8723',
 
   // Destructive/Error/Remove
   error='#EC2B00',
@@ -54,6 +55,8 @@ enum Colors {
 
   // Statuses
   statusDraft='#4D88FF',
+  statusDraftBg='#DCF4FD',
+  statusDraftBorder='#457AB5',
   statusReview='#EFA10B',
   statusReleased='#0DB78D',
   statusVoid='#EC2B00',

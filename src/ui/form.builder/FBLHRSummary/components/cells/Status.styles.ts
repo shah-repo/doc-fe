@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import Colors from '../../../../layout/theme/utils/colors';
+import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles((theme) => ({
   wrapper: {
@@ -11,35 +11,35 @@ export default makeStyles((theme) => ({
     display: 'inline-flex',
     flexDirection: 'row',
     borderRadius: 3,
-    border: `1px solid ${Colors.steel_blue}`,
-    background: Colors.light_cyan,
+    border: `1px solid ${Colors.statusDraftBorder}`,
+    background: Colors.statusDraftBg,
     fontWeight: 600,
     fontSize: 10,
     lineHeight: 1.3,
     alignItems: 'center',
     justifyContent: 'center',
-    color: Colors.lochmara,
+    color: Colors.statusDraft,
     cursor: 'pointer',
     marginRight: theme.spacing(0.5),
   },
   GREEN_STATUS: {
-    background: Colors.snow_flurry,
-    color: Colors.light_forest_green,
-    border: `1px solid ${Colors.light_forest_green_border}`,
+    background: Colors.successHighlight,
+    color: Colors.approve,
+    border: `1px solid ${Colors.success}`,
   },
   PENDING_STATUS: {
-    background: Colors.old_lace,
-    color: Colors.tawny,
-    border: `1px solid ${Colors.ochre}`,
+    background: Colors.warningHighlight,
+    color: Colors.warning,
+    border: `1px solid ${Colors.warningStatusBorder}`,
   },
   GRAY_STATUS: {
-    background: Colors.lily_white,
-    color: Colors.font_gray,
-    border: `1px solid ${Colors.font_gray}`,
+    background: Colors.gray,
+    color: Colors.textGray,
+    border: `1px solid ${Colors.textGray}`,
   },
   RED_STATUS: {
     background: Colors.errorHighlight,
-    color: Colors.latest_red_varient,
-    border: `1px solid ${Colors.latest_red_varient}`,
+    color: Colors.error,
+    border: `1px solid ${Colors.error}`,
   },
 }));
