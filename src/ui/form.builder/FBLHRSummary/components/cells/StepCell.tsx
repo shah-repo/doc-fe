@@ -23,55 +23,13 @@ import { LIMIT, MIN_SEARCH_TERM_LENGTH, STEP_FIELD } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { styles } from './styles';
 
-export const StepCell: React.FC<CustomTemplateProps> = ({
+const Editor: React.FC<CustomTemplateProps> = ({
   dataItem,
   field,
 }) => {
-  const classes = styles();
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { step, stepOrMpiDocId: mpiDocId, stepOrMpiDocumentId: mpiDocumentId } = dataItem;
-  const mpiRevId = dataItem.stepOrMPI?.split('/')[1];
-
-  if (!isEditMode) {
-    return (
-      <>
-        <span className={classes.stepCellContainer}>
-          <span className={classes.step}>
-            <OverflowTooltip
-              title={step}
-              placement="top"
-              interactive
-              arrow
-              data-cy="step-field"
-            >
-              {step}
-            </OverflowTooltip>
-          </span>
-          <span className={classes.seperator}>/</span>
-          {mpiDocId && mpiDocumentId ? (
-            <span className={classes.mpi}>
-              <Link
-                to={documentVersionPath(mpiRevId, mpiDocumentId)}
-                target="_blank"
-                id="step-mpi-field"
-                data-cy="step-mpi-field"
-                className={classes.link}
-              >
-                {mpiDocId}
-              </Link>
-            </span>
-          ) : (
-            <span className={classes.mpi} data-cy="step-mpi-field">
-              {mpiRevId}
-            </span>
-          )}
-        </span>
-      </>
-    );
-  }
-
   const { getFieldProps, setFieldValue, values }
       = useFormikContext<EditableLHRSummaryItem>();
+  const classes = styles();
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const [inputValue, setInputValue] = useState('');
   const [selectedObj, setSelectedObj] = useState<OptionType>();
@@ -142,7 +100,7 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
     setIsOpen(false);
   };
 
-  const onChange = (event: React.ChangeEvent, value: OptionType) => {
+  const onChange = (event: React.ChangeEvent<{}>, value: OptionType) => {
     setSelectedObj(value);
     setInputValue(value?.label);
     setFieldValue(field, value?.value);
@@ -268,6 +226,54 @@ export const StepCell: React.FC<CustomTemplateProps> = ({
           </FormikField>
         </Grid>
       </Grid>
+    </>
+  );
+};
+
+export const StepCell: React.FC<CustomTemplateProps> = (props) => {
+  const classes = styles();
+  const { dataItem } = props;
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const { step, stepOrMpiDocId: mpiDocId, stepOrMpiDocumentId: mpiDocumentId } = dataItem;
+  const mpiRevId = dataItem.stepOrMPI?.split('/')[1];
+
+  if (isEditMode) {
+    return <Editor {...props} />;
+  }
+
+  return (
+    <>
+      <span className={classes.stepCellContainer}>
+        <span className={classes.step}>
+          <OverflowTooltip
+            title={step}
+            placement="top"
+            interactive
+            arrow
+            data-cy="step-field"
+          >
+            {step}
+          </OverflowTooltip>
+        </span>
+        <span className={classes.seperator}>/</span>
+        {mpiDocId && mpiDocumentId ? (
+          <span className={classes.mpi}>
+            <Link
+              to={documentVersionPath(mpiRevId, mpiDocumentId)}
+              target="_blank"
+              id="step-mpi-field"
+              data-cy="step-mpi-field"
+              className={classes.link}
+            >
+              {mpiDocId}
+            </Link>
+          </span>
+        ) : (
+          <span className={classes.mpi} data-cy="step-mpi-field">
+            {mpiRevId}
+          </span>
+        )}
+      </span>
     </>
   );
 };

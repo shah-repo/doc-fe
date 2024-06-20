@@ -11,7 +11,8 @@ import {
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import {
-  Mode, MODE_FIELD,
+  Mode,
+  MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -20,7 +21,7 @@ import { EMPTY_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { styles } from './styles';
 
-const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
+const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   const { values, setFieldValue, getFieldProps }
     = useFormikContext<EditableLHRSummaryItem>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
@@ -40,7 +41,11 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
       return;
     }
 
-    fetchPartLotsAsync.start(fetchLotsByPartId, values?.actualId, fetchPartLotsAsync);
+    fetchPartLotsAsync.start(
+      fetchLotsByPartId,
+      values?.actualId,
+      fetchPartLotsAsync,
+    );
   }, [values.actualId]);
 
   const handleChange = (event: ChangeEvent<{}>, value?: OptionType) => {
@@ -106,9 +111,11 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const lotDocId = dataItem.lotOrEqDocId;
-  const lotRevId = dataItem.lotOrEquipment;
-  const lotDocumentId = dataItem.lotOrEqDocumentId;
+  const {
+    lotOrEqDocumentId: lotDocumentId,
+    lotOrEquipment: lotRevId,
+    lotOrEqDocId: lotDocId,
+  } = dataItem;
 
   const classes = styles();
 
@@ -120,10 +127,7 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
     <>
       {lotRevId && lotDocumentId ? (
         <Link
-          to={documentVersionPath(
-            lotRevId,
-            lotDocumentId,
-          )}
+          to={documentVersionPath(lotRevId, lotDocumentId)}
           target="_blank"
           data-cy="lot-id"
           className={classes.link}
