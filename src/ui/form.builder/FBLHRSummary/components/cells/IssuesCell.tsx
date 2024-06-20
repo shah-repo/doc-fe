@@ -204,16 +204,16 @@ export const IssuesCell: React.FC<CustomTemplateProps> = (props) => {
     return <Editor {...props} />;
   }
 
-  if (!issueDocumentId) {
-    return <>{issueRevId ?? EMPTY_PLACEHOLDER}</>;
+  if (issueRevId && issueDocumentId) {
+    return <Link
+      to={documentVersionPath(issueRevId ?? '', issueDocumentId)}
+      target="_blank"
+      data-cy="issue-link"
+      className={classes.link}
+    >
+      {issueDocId}
+    </Link>;
   }
 
-  return <Link
-    to={documentVersionPath(issueRevId ?? '', issueDocumentId)}
-    target="_blank"
-    data-cy="issue-link"
-    className={classes.link}
-  >
-    {issueDocId}
-  </Link>;
+  return <>{issueRevId ?? EMPTY_PLACEHOLDER}</>;
 };

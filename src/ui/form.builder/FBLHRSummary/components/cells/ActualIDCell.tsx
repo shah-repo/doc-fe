@@ -16,7 +16,7 @@ import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
-import { DocType, EMPTY_PLACEHOLDER, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
+import { DocType, EMPTY_PLACEHOLDER, LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { styles } from './styles';
 
@@ -90,12 +90,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
 
     if (!inputVal && inputValue) {
       if (isEqTypeSelected) {
-        setFieldValue('calDueDate', null);
-        setFieldValue('pmDueDate', null);
+        setFieldValue(LHR_SUMARY_FIELDS.calDueDate, null);
+        setFieldValue(LHR_SUMARY_FIELDS.pmDueDate, null);
       } else if (isMaterialTypeSelected) {
-        setFieldValue('lotOrEquipment', null);
-        setFieldValue('status', '');
-        setFieldValue('expiryDate', null);
+        setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, null);
+        setFieldValue(LHR_SUMARY_FIELDS.status, '');
+        setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
       }
 
       setFieldValue(field, '');
@@ -124,12 +124,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
     setSelectedObj(value);
 
     if (isEqTypeSelected) {
-      setFieldValue('calDueDate', value.calDueDate ?? null);
-      setFieldValue('pmDueDate', value.pmDueDate ?? null);
+      setFieldValue(LHR_SUMARY_FIELDS.calDueDate, value.calDueDate ?? null);
+      setFieldValue(LHR_SUMARY_FIELDS.pmDueDate, value.pmDueDate ?? null);
     } else if (isMaterialTypeSelected) {
-      setFieldValue('lotOrEquipment', null);
-      setFieldValue('status', '');
-      setFieldValue('expiryDate', null);
+      setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, null);
+      setFieldValue(LHR_SUMARY_FIELDS.status, '');
+      setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
     }
 
     setInputValue(value?.label);

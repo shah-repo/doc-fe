@@ -18,7 +18,7 @@ export default makeStyles((theme) => ({
     lineHeight: 1.3,
     alignItems: 'center',
     justifyContent: 'center',
-    color: Colors.statusDraft,
+    color: Colors.statusDraftBorder,
     cursor: 'pointer',
     marginRight: theme.spacing(0.5),
   },

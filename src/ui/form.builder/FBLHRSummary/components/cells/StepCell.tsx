@@ -183,7 +183,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
               size="small"
               renderInput={(params: RenderInputParams) => (
                 <Box display="flex">
-                  <Box width="100%" data-cy="actualId">
+                  <Box width="100%" data-cy="mpi">
                     <MuiTextField
                       {...params}
                       fullWidth

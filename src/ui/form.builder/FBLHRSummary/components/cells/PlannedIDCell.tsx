@@ -1,7 +1,7 @@
 import { Box, CircularProgress, TextField } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
-import { debounce, get, isEmpty } from 'lodash';
+import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FB } from '../../..';
@@ -13,7 +13,7 @@ import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import {
   Mode,
-  MODE_FIELD,
+  MODE_FIELD
 } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
@@ -24,12 +24,12 @@ import {
   DocType,
   EMPTY_PLACEHOLDER,
   LIMIT,
-  MIN_SEARCH_TERM_LENGTH,
+  MIN_SEARCH_TERM_LENGTH
 } from '../../constants';
 import {
   CustomTemplateProps,
   EditableLHRSummaryItem,
-  LHRSummaryOptionsResponse,
+  LHRSummaryOptionsResponse
 } from '../../types';
 import { styles } from './styles';
 
@@ -66,15 +66,14 @@ const Editor: React.FC<CustomTemplateProps> = ({
         return;
       }
 
-      const items
-        = selectedTypeItems?.map((item) => ({
-          label: translate('lhr.summary.displayRevision', {
-            docId: item?.docId,
-            displayRevision: item?.revision,
-            name: get(item, 'title'),
-          }),
-          value: get(item, 'docRevId'),
-        })) ?? [];
+      const items = selectedTypeItems?.map((item) => ({
+        label: translate('lhr.summary.displayRevision', {
+          docId: item?.docId,
+          displayRevision: item?.revision,
+          name: item?.title,
+        }),
+        value: item?.docRevId,
+      })) ?? [];
       setItems(items);
     },
   });

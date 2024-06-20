@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { get, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
@@ -17,9 +17,14 @@ import {
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { EMPTY_PLACEHOLDER } from '../../constants';
+import { EMPTY_PLACEHOLDER, LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { styles } from './styles';
+
+interface CustomOptionType extends OptionType {
+  status: string
+  expiryDate: string
+}
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   const { values, setFieldValue, getFieldProps }
@@ -48,13 +53,13 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
     );
   }, [values.actualId]);
 
-  const handleChange = (event: ChangeEvent<{}>, value?: OptionType) => {
-    setFieldValue('status', get(value, 'status'));
-    setFieldValue('expiryDate', get(value, 'expiryDate'));
+  const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
+    setFieldValue(LHR_SUMARY_FIELDS.status, value?.status);
+    setFieldValue(LHR_SUMARY_FIELDS.expiryDate, value?.expiryDate);
     setFieldValue(field, value?.value);
   };
 
-  const renderOptions = () => {
+  const renderOptions = (): CustomOptionType[] => {
     return lots.map((lot) => ({
       label: translate('wo.displayRevision', {
         docId: lot.document.docId,
@@ -78,8 +83,8 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
     reason: string,
   ) => {
     if (reason === 'input') {
-      setFieldValue('status', '');
-      setFieldValue('expiryDate', null);
+      setFieldValue(LHR_SUMARY_FIELDS.status, '');
+      setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
       setFieldValue(field, value);
     }
   };
@@ -123,20 +128,16 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
     return <Editor {...props} {...{ dataItem, field }} />;
   }
 
-  return (
-    <>
-      {lotRevId && lotDocumentId ? (
-        <Link
-          to={documentVersionPath(lotRevId, lotDocumentId)}
-          target="_blank"
-          data-cy="lot-id"
-          className={classes.link}
-        >
-          {lotDocId}
-        </Link>
-      ) : (
-        lotRevId ?? EMPTY_PLACEHOLDER
-      )}
-    </>
-  );
+  if (lotRevId && lotDocumentId) {
+    return <Link
+      to={documentVersionPath(lotRevId, lotDocumentId)}
+      target="_blank"
+      data-cy="lot-id"
+      className={classes.link}
+    >
+      {lotDocId}
+    </Link>;
+  }
+
+  return <>{lotRevId ?? EMPTY_PLACEHOLDER}</>;
 };

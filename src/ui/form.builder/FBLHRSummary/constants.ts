@@ -10,6 +10,21 @@ export const TYPE_OPTIONS = [
 export const MIN_SEARCH_TERM_LENGTH = 3;
 export const LIMIT = 25;
 export const EMPTY_PLACEHOLDER = '-';
+export const LHR_SUMARY_FIELDS = {
+  plannedId: 'plannedId',
+  actualId: 'actualId',
+  startQuantity: 'startQuantity',
+  endQuantity: 'endQuantity',
+  status: 'status',
+  expiryDate: 'expiryDate',
+  issue: 'issue',
+  calDueDate: 'calDueDate',
+  pmDueDate: 'pmDueDate',
+  comments: 'comments',
+  type: 'type',
+  enteredBy: 'enteredBy',
+  lotOrEquipment: 'lotOrEquipment',
+};
 export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'status', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex'];
 
