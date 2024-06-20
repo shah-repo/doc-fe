@@ -3,7 +3,7 @@ import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzo
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Approval } from '../common/types';
-import { approvalFieldId, APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CURRENT_STEP, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, documentRevisionFormInput, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { approvalFieldId, APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CURRENT_STEP, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, documentRevisionFormInput, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 import { Approver, BKAttachmentFile, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
 import { downloadFile } from './utils';
 
@@ -18,17 +18,12 @@ export const setCurrentStep = (step: number) => ({
   payload: step,
 });
 
-export const setSelectedDataType = (type: string) => ({
-  type: SET_SELECTED_TYPE,
-  payload: type,
-});
-
-export const setDataTypes = (data: DataType) => ({
+const setDataTypes = (data: DataType) => ({
   type: SET_DATA_TYPES,
   payload: data,
 });
 
-export const setFormDocumentsTypeGroup = (data: FormDocumentTypeGroup[]) => ({
+const setFormDocumentsTypeGroup = (data: FormDocumentTypeGroup[]) => ({
   type: SET_FORM_DOCUMENTS_TYPE_GROUP,
   payload: data,
 });
@@ -43,7 +38,7 @@ export const setTemplateFile = (file: File[]) => ({
   payload: file,
 });
 
-export const setXlsxFile = (attachment: BKAttachmentFile) => ({
+const setXlsxFile = (attachment: BKAttachmentFile) => ({
   type: SET_XLSX_FILE,
   payload: attachment,
 });
@@ -58,7 +53,7 @@ export const setOnlyErrorsTable = (payload: boolean) => ({
   payload,
 });
 
-export const setHeaders = (payload: Headers) => ({
+const setHeaders = (payload: Headers) => ({
   type: SET_HEADERS,
   payload,
 });
@@ -73,17 +68,17 @@ export const updateRowFieldTable = (payload: UpdateRowFieldTablePayload) => ({
   payload,
 });
 
-export const setApprovers = (payload: Approver[]) => ({
+const setApprovers = (payload: Approver[]) => ({
   type: SET_APPROVALS,
   payload,
 });
 
-export const setApproval = (payload: Approval) => ({
+const setApproval = (payload: Approval) => ({
   type: SET_APPROVAL,
   payload,
 });
 
-export const setBulkImports = (payload: BulkImport[]) => ({
+const setBulkImports = (payload: BulkImport[]) => ({
   type: SET_BULK_IMPORTS,
   payload,
 });

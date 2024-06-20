@@ -4,7 +4,6 @@ export const BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL = '/bulk_import/get_forms
 export const BULK_IMPORT_CREATE_URL = '/bulk_import/create';
 export const BULK_IMPORT_UPLOAD_DATA_URL = '/bulk_import/upload/';
 export const BULK_IMPORT_UPLOAD_S3_URL = '/bulk_import/upload_s3/';
-export const BULK_XLSX_FILE_TO_MAP_URL = '/bulk_import/xlsx_file_to_map/';
 export const BULK_HEADERS_TO_MAP_URL = '/bulk_import/headers_to_map/';
 export const BULK_TABLE_DATA = '/bulk_import/bulk_import_data/';
 export const BULK_DOWNLOAD_FILE_URL = '/bulk_import/download_file/';
