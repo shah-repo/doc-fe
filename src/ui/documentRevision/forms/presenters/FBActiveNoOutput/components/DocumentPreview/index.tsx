@@ -161,7 +161,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   if (tabConfig && [DOC_TYPE_GROUP.PART]
     .includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = tabConfig && [...tabConfig, {
+    tabConfig = [...tabConfig, {
       labelId: 'tabId.bom',
       tabId: TabTypeOptions.BOM.toLowerCase(),
       type: TabTypeOptions.BOM,
@@ -170,7 +170,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   if (tabConfig && [DOC_TYPE_GROUP.PAPER_LHR]
     .includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = tabConfig && [...tabConfig, {
+    tabConfig = [...tabConfig, {
       labelId: 'tabId.summary',
       tabId: TabTypeOptions.SUMMARY.toLowerCase(),
       type: TabTypeOptions.SUMMARY,
