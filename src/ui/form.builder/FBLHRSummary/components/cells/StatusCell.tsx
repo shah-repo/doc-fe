@@ -22,7 +22,7 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
   const formik = useFormikContext<EditableLHRSummaryItem>();
 
   if (isEditMode) {
-    defaultValue = formik?.values.status || dataItem[field];
+    defaultValue = formik?.values.lotStatus || dataItem[field];
   }
 
   const displayStatus = getLotStatusLabel(defaultValue as LotStatus);

@@ -22,7 +22,7 @@ import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { styles } from './styles';
 
 interface CustomOptionType extends OptionType {
-  status: string
+  lotStatus: string
   expiryDate: string
 }
 
@@ -54,7 +54,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   }, [values.actualId]);
 
   const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
-    setFieldValue(LHR_SUMARY_FIELDS.status, value?.status);
+    setFieldValue(LHR_SUMARY_FIELDS.lotStatus, value?.lotStatus);
     setFieldValue(LHR_SUMARY_FIELDS.expiryDate, value?.expiryDate);
     setFieldValue(field, value?.value);
   };
@@ -66,7 +66,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
         displayRevision: lot?.displayRevision,
         name: lot?.name,
       }),
-      status: lot?.lotStatus,
+      lotStatus: lot?.lotStatus,
       expiryDate: lot?.formInput?.lot_expiry_date,
       value: lot.id,
     }));
@@ -83,7 +83,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
     reason: string,
   ) => {
     if (reason === 'input') {
-      setFieldValue(LHR_SUMARY_FIELDS.status, '');
+      setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
       setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
       setFieldValue(field, value);
     }

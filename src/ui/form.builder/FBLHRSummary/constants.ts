@@ -15,7 +15,7 @@ export const LHR_SUMARY_FIELDS = {
   actualId: 'actualId',
   startQuantity: 'startQuantity',
   endQuantity: 'endQuantity',
-  status: 'status',
+  lotStatus: 'lotStatus',
   expiryDate: 'expiryDate',
   issue: 'issue',
   calDueDate: 'calDueDate',
@@ -25,7 +25,7 @@ export const LHR_SUMARY_FIELDS = {
   enteredBy: 'enteredBy',
   lotOrEquipment: 'lotOrEquipment',
 };
-export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'status', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment'];
+export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex'];
 
 export enum DocType {
