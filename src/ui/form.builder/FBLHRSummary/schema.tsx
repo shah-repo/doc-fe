@@ -104,9 +104,9 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'status',
-      field: 'status',
-      title: 'lhr.summary.grid.heading.status',
+      id: 'lotStatus',
+      field: 'lotStatus',
+      title: 'lhr.summary.grid.heading.lotStatus',
       show: true,
       template: (props) => <StatusCell {...props} onClick={onRowClick} />,
       selectable: false,

@@ -29,7 +29,7 @@ export const TypeCell: React.FC<CustomTemplateProps> = ({
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
     setValues({
       ...values,
-      status: '',
+      lotStatus: '',
       expiryDate: null,
       lotOrEquipment: undefined,
       type: value?.value ?? '',

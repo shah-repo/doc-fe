@@ -18,7 +18,7 @@ export interface LHRSummaryItem {
   expiryDate?: null | string
   startQuantity: number
   endQuantity: number
-  status: string
+  lotStatus: string
   calDueDate?: null | string
   pmDueDate?: null | string
   ncmr: string
@@ -72,7 +72,7 @@ export interface LHRSummaryRequestBody {
   lotOrEquipment: string
   startQuantity: number
   endQuantity: number
-  status: string
+  lotStatus: string
   enteredBy: string
   expiryDate: Date
   calDueDate: Date

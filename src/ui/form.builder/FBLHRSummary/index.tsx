@@ -210,7 +210,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       expiryDate: null,
       startQuantity: 0,
       endQuantity: 0,
-      status: '',
+      lotStatus: '',
       calDueDate: null,
       pmDueDate: null,
       ncmr: '',

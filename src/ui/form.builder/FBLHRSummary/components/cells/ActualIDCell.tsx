@@ -94,7 +94,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
         setFieldValue(LHR_SUMARY_FIELDS.pmDueDate, null);
       } else if (isMaterialTypeSelected) {
         setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, null);
-        setFieldValue(LHR_SUMARY_FIELDS.status, '');
+        setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
         setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
       }
 
@@ -128,7 +128,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
       setFieldValue(LHR_SUMARY_FIELDS.pmDueDate, value.pmDueDate ?? null);
     } else if (isMaterialTypeSelected) {
       setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, null);
-      setFieldValue(LHR_SUMARY_FIELDS.status, '');
+      setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
       setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
     }
 
