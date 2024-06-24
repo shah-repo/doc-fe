@@ -39,7 +39,7 @@ import DialogOpener from './textDiff/DialogOpener';
 interface OwnProps {
   audit: Audit
   dataCy?: string
-  revIdRelatedTypeObj: {[key: string]: IRevIdMapper}
+  revIdRelatedTypeObj: { [key: string]: IRevIdMapper }
 }
 
 type Props = OwnProps;
@@ -126,29 +126,29 @@ const AuditFactory: React.FunctionComponent<Props> = ({
 
   if (isFBField) {
     const fbValue = {
-      texteditor () {
+      texteditor() {
         return (
           <div style={{ width: '100%', height: '100%' }} dangerouslySetInnerHTML={{ __html: auditValue as string }} />
         );
       },
-      datepicker () {
+      datepicker() {
         return (
           <Box>
             {getFormattedDateString(auditValue as string, MomentFormats.MonthDateYear)}
           </Box>
         );
       },
-      autocomplete () {
+      autocomplete() {
         return <AuditAutocomplete audit={audit} />;
       },
-      supplier () {
+      supplier() {
         if (audit.fbSchemaItem) {
           audit.fbSchemaItem.optionId = '5';
         }
         return <AuditAutocomplete audit={audit} />;
       },
-      fileupload () { return (<AuditAttachment audit={audit} />); },
-      checkboxgroup () {
+      fileupload() { return (<AuditAttachment audit={audit} />); },
+      checkboxgroup() {
         const arrayValue: string[] = [];
         try {
           arrayValue.push(JSON.parse(auditValue));
@@ -157,31 +157,31 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         }
         return (<div>{arrayValue?.join(', ')}</div>);
       },
-      procedure () {
+      procedure() {
         if (audit.field === 'fileUploadCandidate') {
           return <div data-cy={dataCy}>{get(auditValue, 'name')}</div>;
         }
         return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
       },
-      mpiprocedure () {
+      mpiprocedure() {
         return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
       },
-      lotTransfers () {
+      lotTransfers() {
         return <AuditLotTransfer {...{ audit, dataCy, auditValue }} />;
       },
-      cycleCount () {
+      cycleCount() {
         return <AuditCycleCount {...{ audit, dataCy, auditValue }} />;
       },
-      traineeList () {
+      traineeList() {
         return <AuditTraineeList {...{ audit, dataCy, auditValue }} />;
       },
-      partVendors () {
+      partVendors() {
         return <AuditPartVendors {...{ audit, dataCy, auditValue }} />;
       },
-      quantity () {
+      quantity() {
         return auditValue === 'null' ? '' : auditValue;
       },
-      default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
+      default() { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
     returnValue = (fbValue[type] || fbValue.default)();
   } else {
@@ -240,7 +240,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Employee).user?.name}</div>);
           break;
         }
-        // falls through intentionally
+      // falls through intentionally
       case 'status':
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;
@@ -297,7 +297,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           returnValue = <Text
             dataCy={dataCy}
             translation={obj.comments ? 'changeRequest.audit.lotStatus.update.with.comments' : 'changeRequest.audit.lotStatus.update.with.out.comments'}
-            values={{ ...obj, ...{ ownerName: audit.ownerName } } }
+            values={{ ...obj, ...{ ownerName: audit.ownerName } }}
           />;
         } catch (e) {
           returnValue = (<div data-cy={dataCy}>{getLotStatusLabel(audit.nextValue as LotStatus)}</div>);
@@ -359,7 +359,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
 
           returnValue = (
             <>
-              { docId && <Text
+              {docId && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.docId.updated"
                 values={{
@@ -367,25 +367,25 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 }}
               />
               }
-              { (quantity !== undefined) && <Text
+              {(quantity !== undefined) && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.quantity.updated"
                 values={{ quantity }}
               />
               }
-              { unit && <Text
+              {unit && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.unit.updated"
                 values={{ unit }}
               />
               }
-              { refDesignator && <Text
+              {refDesignator && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.refDesignator.updated"
                 values={{ refDesignator }}
               />
               }
-              { comment && <Text
+              {comment && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.comment.updated"
                 values={{ comment }}
@@ -398,7 +398,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
 
           returnValue = (
             <>
-              { docId && <Text
+              {docId && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.docId.added"
                 values={{
@@ -406,25 +406,25 @@ const AuditFactory: React.FunctionComponent<Props> = ({
                 }}
               />
               }
-              { (quantity !== undefined) && <Text
+              {(quantity !== undefined) && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.quantity.added"
                 values={{ quantity }}
               />
               }
-              { unit && <Text
+              {unit && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.unit.added"
                 values={{ unit }}
               />
               }
-              { refDesignator && <Text
+              {refDesignator && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.refDesignator.added"
                 values={{ refDesignator }}
               />
               }
-              { comment && <Text
+              {comment && <Text
                 dataCy={dataCy}
                 translation="documentRevision.audit.bomParts.comment.added"
                 values={{ comment }}
@@ -486,17 +486,17 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             returnValue = (
               <>
                 {instruction
-                    && getNewLineItemAuditValue(
-                      dataCy,
-                      `${docLabel}.audit.inventoryTask.instruction.added`,
-                      { instruction },
-                    )}
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.instruction.added`,
+                    { instruction },
+                  )}
                 {assignedTo
-                    && getNewLineItemAuditValue(
-                      dataCy,
-                      `${docLabel}.audit.inventoryTask.assignee.to`,
-                      { assignedTo },
-                    )}
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.assignee.to`,
+                    { assignedTo },
+                  )}
               </>
             );
           } else if (audit.type.includes('ARRAY_EDITED')) {
@@ -506,47 +506,47 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             returnValue = (
               <>
                 {instruction
-                    && getNewLineItemAuditValue(
-                      dataCy,
-                      `${docLabel}.audit.inventoryTask.instruction.updated`,
-                      { instruction },
-                    )}
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.instruction.updated`,
+                    { instruction },
+                  )}
                 {assignedAdded
-                    && getNewLineItemAuditValue(
-                      dataCy,
-                      `${docLabel}.audit.inventoryTask.assignee.added`,
-                      { assignedAdded },
-                    )}
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.assignee.added`,
+                    { assignedAdded },
+                  )}
                 {status === FBInvTaskState.DONE
-                    && getNewLineItemAuditValue(
-                      dataCy,
-                      `${docLabel}.audit.inventoryTask.completed`,
-                      { assignedTo },
-                    )}
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.completed`,
+                    { assignedTo },
+                  )}
                 {status === FBInvTaskState.DRAFT
-                    && getNewLineItemAuditValue(
-                      dataCy,
-                      `${docLabel}.audit.inventoryTask.draft`,
-                      { assignedTo },
-                    )}
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.draft`,
+                    { assignedTo },
+                  )}
                 {assigneeDeleted
-                    && getNewLineItemAuditValue(
-                      dataCy,
-                      `${docLabel}.audit.inventoryTask.assignee.deleted`,
-                      { assigneeDeleted },
-                    )}
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.assignee.deleted`,
+                    { assigneeDeleted },
+                  )}
                 {comment
-                    && getNewLineItemAuditValue(
-                      dataCy,
-                      `${docLabel}.audit.inventoryTask.comment`,
-                      { comment },
-                    )}
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.comment`,
+                    { comment },
+                  )}
                 {(attachmentNameArr.length > 0)
-                    && getNewLineItemAuditValue(
-                      dataCy,
-                      `${docLabel}.audit.inventoryTask.attachments`,
-                      { attachmentNameList },
-                    )}
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    `${docLabel}.audit.inventoryTask.attachments`,
+                    { attachmentNameList },
+                  )}
               </>
             );
           }
@@ -581,9 +581,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             const { partDocId, lotDocId, isExternalItem, userEnteredItemId } = JSON.parse(nextVal);
             returnValue = (
               <>
-                { (isExternalItem && userEnteredItemId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId: userEnteredItemId }) }
-                { (!isExternalItem && partDocId && !lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId }) }
-                { (!isExternalItem && partDocId && lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.partLot.added', { partDocId, lotDocId }) }
+                {(isExternalItem && userEnteredItemId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId: userEnteredItemId })}
+                {(!isExternalItem && partDocId && !lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.added', { partDocId })}
+                {(!isExternalItem && partDocId && lotDocId) && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.partLot.added', { partDocId, lotDocId })}
               </>
             );
           } catch (error) {
@@ -596,13 +596,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             const mdDocRow = isExternalItem ? userEnteredItemId : (lotDocId || partDocId);
             returnValue = (
               <>
-                { onOrderPOAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.onOrderPOAction.updated', { mdDocRow, onOrderPOAction: getMDOptionLabels(onOrderPOAction) }) }
-                { inInspectionAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInspectionAction.updated', { mdDocRow, inInspectionAction: getMDOptionLabels(inInspectionAction) }) }
-                { inInventoryAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInventoryAction.updated', { mdDocRow, inInventoryAction: getMDOptionLabels(inInventoryAction) }) }
-                { inWipAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inWipAction.updated', { mdDocRow, inWipAction: getMDOptionLabels(inWipAction) }) }
-                { asFinishedGoodsAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.asFinishedGoodsAction.updated', { mdDocRow, asFinishedGoodsAction: getMDOptionLabels(asFinishedGoodsAction) }) }
-                { usedLocation && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.usedLocation.updated', { mdDocRow, usedLocation: getMDOptionLabels(usedLocation) }) }
-                { comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.comment.updated', { mdDocRow, comment }) }
+                {onOrderPOAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.onOrderPOAction.updated', { mdDocRow, onOrderPOAction: getMDOptionLabels(onOrderPOAction) })}
+                {inInspectionAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInspectionAction.updated', { mdDocRow, inInspectionAction: getMDOptionLabels(inInspectionAction) })}
+                {inInventoryAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inInventoryAction.updated', { mdDocRow, inInventoryAction: getMDOptionLabels(inInventoryAction) })}
+                {inWipAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.inWipAction.updated', { mdDocRow, inWipAction: getMDOptionLabels(inWipAction) })}
+                {asFinishedGoodsAction && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.asFinishedGoodsAction.updated', { mdDocRow, asFinishedGoodsAction: getMDOptionLabels(asFinishedGoodsAction) })}
+                {usedLocation && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.usedLocation.updated', { mdDocRow, usedLocation: getMDOptionLabels(usedLocation) })}
+                {comment && getNewLineItemAuditValue(dataCy, 'changeRequest.audit.materialDisposition.comment.updated', { mdDocRow, comment })}
               </>
             );
           } catch (error) {
@@ -622,13 +622,37 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           }
         }
         break;
+      case 'lhrSummary':
+        console.log(audit.type);
+        if (audit.type.includes('ARRAY_ADDED')) {
+          const nextVal: string = audit.nextValue as string;
+          return getLHRSummaryRowAddedDetails(audit, nextVal, dataCy);
+        } else if (audit.type.includes('ARRAY_EDITED')) {
+          const nextVal: string = audit.nextValue as string;
+          return getLHRSummaryRowEditedDetails(audit, nextVal, dataCy);
+        } else if (audit.type.includes('ARRAY_DELETED')) {
+          const prevValue: string = audit.previousValue as string;
+          try {
+            const { type, step, stepOrMpiDetails } = JSON.parse(prevValue);
+            const stepRow = `${step} / ${stepOrMpiDetails?.isExternalItem ? stepOrMpiDetails.value : stepOrMpiDetails?.docId}`;
+
+            returnValue = (
+              getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.row.deleted', {
+                stepDetails: stepRow, type,
+              })
+            );
+          } catch (error) {
+            returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+          }
+        }
+        break;
       case 'relatedPartsStatus':
         if (audit.nextValue === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
           returnValue = (
             <Text
               dataCy={`${dataCy}-basepart-status`}
               translation="relatedParts.parentPart.answer.yes.together"
-              values = {{
+              values={{
                 relatedType: getDynamicTextValue(
                   relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
               }}
@@ -639,7 +663,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             <Text
               dataCy={`${dataCy}-basepart-status`}
               translation="relatedParts.parentPart.answer.yes.separate"
-              values = {{
+              values={{
                 relatedType: getDynamicTextValue(
                   relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART, RELATED_TYPE_VALUES_ENUM.RELATED_DOCUMENTS),
               }}
@@ -659,7 +683,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'subPartObsolete':
         try {
-          const { docId, value } = JSON.parse(auditValue) as {docId: string, value: string};
+          const { docId, value } = JSON.parse(auditValue) as { docId: string, value: string };
           if (value) {
             const text = value === RevisionChangeType.Obsolete
               ? intl.formatMessage({ id: 'documentRevision.audit.relatedParts.subPart.obsolete.checked' }, { docId })
@@ -770,12 +794,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             returnValue = (
               <>
                 {lotDocId
-                && lotQuantityNeeded
-                && getNewLineItemAuditValue(
-                  dataCy,
-                  'documentRevision.audit.workOrder.lot_info.added',
-                  { lotDocId, lotQuantityNeeded, lotVarianceVal },
-                )}
+                  && lotQuantityNeeded
+                  && getNewLineItemAuditValue(
+                    dataCy,
+                    'documentRevision.audit.workOrder.lot_info.added',
+                    { lotDocId, lotQuantityNeeded, lotVarianceVal },
+                  )}
                 {lotDocId
                   && !lotQuantityNeeded
                   && getNewLineItemAuditValue(
@@ -857,6 +881,176 @@ const FBInvTaskState = {
   DONE: 'DONE',
   ABANDONED: 'ABANDONED',
 };
+
+const getLHRSummaryRowAddedDetails = (audit: Audit, nextVal: string, dataCy: string | undefined) => {
+  try {
+    const {
+      type, step, startQuantity, endQuantity, expiryDate, calDueDate, pmDueDate, comments, lotStatus,
+      stepOrMpiDetails, plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails,
+    } = JSON.parse(nextVal);
+    return (
+      <>
+        {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.added', { type })}
+        {startQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.startQuantity.added', { startQuantity })}
+        {endQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.endQuantity.added', { endQuantity })}
+
+        {expiryDate && [<Text
+          dataCy={dataCy}
+          translation="documentRevision.audit.lhrSummary.expiryDate.added"
+          values={{
+            timestamp: (
+              <DateTime
+                data-cy={`${dataCy}-date-time`}
+                value={expiryDate}
+                format={MomentFormats.BriefDateTime}
+              />
+            ),
+          }}
+        />,
+        <br />]}
+
+        {calDueDate && [<Text
+          dataCy={dataCy}
+          translation="documentRevision.audit.lhrSummary.calDueDate.added"
+          values={{
+            timestamp: (
+              <DateTime
+                data-cy={`${dataCy}-date-time`}
+                value={calDueDate}
+                format={MomentFormats.BriefDateTime}
+              />
+            ),
+          }}
+        />,
+        <br />]}
+
+        {pmDueDate && [<Text
+          dataCy={dataCy}
+          translation="documentRevision.audit.lhrSummary.pmDueDate.added"
+          values={{
+            timestamp: (
+              <DateTime
+                data-cy={`${dataCy}-date-time`}
+                value={pmDueDate}
+                format={MomentFormats.BriefDateTime}
+              />
+            ),
+          }}
+        />,
+        <br />]}
+
+        {comments && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.comment.added', { comment: comments })}
+        {stepOrMpiDetails && stepOrMpiDetails.value
+          && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.step.added', {
+            docId: stepOrMpiDetails?.isExternalItem ? stepOrMpiDetails.value : stepOrMpiDetails?.docId, step,
+          })}
+        {plannedDetails && plannedDetails.value
+          && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.planned.added', {
+            docId: plannedDetails?.isExternalItem ? plannedDetails.value : plannedDetails?.docId,
+          })}
+        {actualDetails && actualDetails.value
+          && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.actual.added', {
+            docId: actualDetails?.isExternalItem ? actualDetails.value : actualDetails?.docId,
+          })}
+        {lotOrEquipmentDetails && lotOrEquipmentDetails.value
+          && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.lot.added', {
+            docId: lotOrEquipmentDetails?.isExternalItem ? lotOrEquipmentDetails.value : lotOrEquipmentDetails?.docId,
+            status: lotStatus ?? 'NA',
+          })}
+        {issueDetails && issueDetails.value
+          && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.issue.added', {
+            docId: issueDetails?.isExternalItem ? issueDetails.value : issueDetails?.docId,
+          })}
+      </>
+    );
+  } catch (error) {
+    return (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+  }
+};
+
+const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: string | undefined) => {
+  try {
+    const {
+      type, startQuantity, endQuantity, expiryDate, calDueDate, pmDueDate, comments, lotStatus,
+      plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails,
+    } = JSON.parse(nextVal);
+
+    return (
+      <>
+        {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.updated', { type })}
+        {startQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.startQuantity.updated', { startQuantity })}
+        {endQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.endQuantity.updated', { endQuantity })}
+
+        <Text
+          dataCy={dataCy}
+          translation="documentRevision.audit.lhrSummary.expiryDate.updated"
+          values={{
+            timestamp: (
+              <DateTime
+                data-cy={`${dataCy}-date-time`}
+                value={expiryDate}
+                format={MomentFormats.BriefDateTime}
+              />
+            ),
+          }}
+        />
+        <br />
+
+        <Text
+          dataCy={dataCy}
+          translation="documentRevision.audit.lhrSummary.calDueDate.updated"
+          values={{
+            timestamp: (
+              <DateTime
+                data-cy={`${dataCy}-date-time`}
+                value={calDueDate}
+                format={MomentFormats.BriefDateTime}
+              />
+            ),
+          }}
+        />
+        <br />
+
+        <Text
+          dataCy={dataCy}
+          translation="documentRevision.audit.lhrSummary.pmDueDate.updated"
+          values={{
+            timestamp: (
+              <DateTime
+                data-cy={`${dataCy}-date-time`}
+                value={pmDueDate}
+                format={MomentFormats.BriefDateTime}
+              />
+            ),
+          }}
+        />
+        <br />
+
+        {comments && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.comment.updated', { comment: comments })}
+        {plannedDetails && plannedDetails.value
+          && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.planned.updated', {
+            docId: plannedDetails?.isExternalItem ? plannedDetails.value : plannedDetails?.docId,
+          })}
+        {actualDetails && actualDetails.value
+          && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.actual.updated', {
+            docId: actualDetails?.isExternalItem ? actualDetails.value : actualDetails?.docId,
+          })}
+        {lotOrEquipmentDetails && lotOrEquipmentDetails.value
+          && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.lot.updated', {
+            docId: lotOrEquipmentDetails?.isExternalItem ? lotOrEquipmentDetails.value : lotOrEquipmentDetails?.docId,
+            status: lotStatus ?? 'NA',
+          })}
+        {issueDetails && issueDetails.value
+          && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.issue.updated', {
+            docId: issueDetails?.isExternalItem ? issueDetails.value : issueDetails?.docId,
+          })}
+      </>
+    );
+  } catch (error) {
+    return (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
+  }
+};
+
 const getNewLineItemAuditValue = (
   dataCy: string | undefined,
   translation: Translation,
