@@ -24,7 +24,7 @@ export interface LHRSummaryItem {
   ncmr: string
   comments: string
   enteredBy: string
-  createdAt?: null | string
+  date?: null | string
   lotOrEqDocId?: string
   lotOrEqDocumentId?: string
   actualDocId?: string
