@@ -18,7 +18,7 @@ import useStyles from './styles';
 import { validationSchema } from './validation';
 
 interface FormValues {
-  processId: string
+  processType: string
   formId: string
 }
 
@@ -55,7 +55,7 @@ const ImportDetailForm: React.FC<ImportDetailFormProps> = ({ children, handleNex
   return (
     <Box className={classes.container}>
       <Formik
-        initialValues={{ processId: '', formId: '' }}
+        initialValues={{ processType: '', formId: '' }}
         validationSchema={validationSchema}
         onSubmit={(values: FormValues) => {
           dispatch(setIsLoading(true));
@@ -67,8 +67,8 @@ const ImportDetailForm: React.FC<ImportDetailFormProps> = ({ children, handleNex
           <Box>
             <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
               <SelectField
-                selectProps={{ id: 'processId', onChange: (e) => handleTypeOfDataChange(e.target.value) }}
-                name="processId"
+                selectProps={{ id: 'processType', onChange: (e) => handleTypeOfDataChange(e.target.value) }}
+                name="processType"
                 includeEmpty={false}
                 options={typeOfDataOptions}
                 inputStyleProps={classes.select}
