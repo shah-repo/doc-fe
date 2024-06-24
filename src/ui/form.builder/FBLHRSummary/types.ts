@@ -3,6 +3,14 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 
+interface DetailsObj {
+  value: string
+  isExternalItem: boolean
+  documentId?: string
+  docId?: string
+  displayRevision?: string
+}
+
 export interface LHRSummaryItem {
   id: string
   type: string
@@ -35,6 +43,11 @@ export interface LHRSummaryItem {
   issueDocumentId?: string
   stepOrMpiDocId?: string
   stepOrMpiDocumentId?: string
+  stepOrMpiDetails: DetailsObj
+  issueDetails: DetailsObj
+  lotOrEquipmentDetails: DetailsObj
+  plannedDetails: DetailsObj
+  actualDetails: DetailsObj
 }
 
 export interface RecordsResponse {

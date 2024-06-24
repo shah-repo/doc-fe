@@ -18,6 +18,7 @@ import useAsync from '../../../../hooks/useAsync';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import { DocType, EMPTY_PLACEHOLDER, LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
+import { getDisplayDocument } from '../../utils';
 import { styles } from './styles';
 
 interface CustomOptionType extends OptionType{
@@ -42,16 +43,23 @@ const Editor: React.FC<CustomTemplateProps> = ({
   const isTypeFieldEmpty = isEmpty(values.type);
 
   useEffect(() => {
-    if (!inputValue && values?.actualDocId) {
-      setFieldValue('prevActualId', values[field]);
-      setFieldValue('prevActualDocId', values?.actualDocId);
-      setInputValue(values?.actualDocId);
+    const actualDetails = values?.actualDetails;
+    const docId = actualDetails?.docId;
+
+    if (isEmpty(actualDetails)) {
+      return;
     }
 
-    if (isUpdateAction && !inputValue && !dataItem.actualDocId) {
+    if (!inputValue && docId) {
+      setFieldValue('prevActualId', values[field]);
+      setFieldValue('prevActualDocId', docId);
+      setInputValue(docId);
+    }
+
+    if (isUpdateAction && !inputValue && !docId) {
       setInputValue(dataItem[field] ?? '');
     }
-  }, [values?.actualDocId]);
+  }, [values?.actualDetails]);
 
   const fetchLHRSummaryByOptionId = useActionCreator(lhrSummaryActions.fetchLHRSummaryDataByOptionId);
 
@@ -263,25 +271,25 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { actualDocId, actualId: actualRevId, actualDocumentId } = dataItem;
+  const { docId, documentId, displayRevision, value } = dataItem?.actualDetails;
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  if (!actualDocumentId) {
-    return <>{actualRevId ?? EMPTY_PLACEHOLDER}</>;
+  if (documentId) {
+    return (
+      <Link
+        to={documentVersionPath(value, documentId)}
+        target="_blank"
+        id="PartOrEqDocLink-linkButton"
+        data-cy="actual-id-link"
+        className={classes.link}
+      >
+        {getDisplayDocument(docId, displayRevision)}
+      </Link>
+    );
   }
 
-  return (
-    <Link
-      to={documentVersionPath(actualRevId, actualDocumentId)}
-      target="_blank"
-      id="PartOrEqDocLink-linkButton"
-      data-cy="actual-id-link"
-      className={classes.link}
-    >
-      {actualDocId}
-    </Link>
-  );
+  return <>{value ?? EMPTY_PLACEHOLDER}</>;
 };

@@ -21,6 +21,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { LIMIT, MIN_SEARCH_TERM_LENGTH, STEP_FIELD } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
+import { getDisplayDocument } from '../../utils';
 import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({
@@ -38,12 +39,19 @@ const Editor: React.FC<CustomTemplateProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (isUpdateAction && !inputValue && !dataItem.stepOrMpiDocumentId) {
+    const stepOrMpiDetails = values?.stepOrMpiDetails;
+    const docId = stepOrMpiDetails?.docId;
+
+    if (isEmpty(stepOrMpiDetails)) {
+      return;
+    }
+
+    if (isUpdateAction && !inputValue && !docId) {
       setInputValue(dataItem[field] ?? '');
     }
 
-    if (isUpdateAction && !inputValue && dataItem.stepOrMpiDocumentId) {
-      setInputValue(dataItem.stepOrMpiDocId ?? '');
+    if (isUpdateAction && !inputValue && docId) {
+      setInputValue(docId ?? '');
     }
   }, [values?.stepOrMPI]);
 
@@ -234,8 +242,9 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { step, stepOrMpiDocId: mpiDocId, stepOrMpiDocumentId: mpiDocumentId } = dataItem;
-  const mpiRevId = dataItem.stepOrMPI?.split('/')[1];
+  const { docId, documentId, displayRevision, value } = dataItem?.stepOrMpiDetails;
+  const step = dataItem.step;
+  const mpiRevId = value?.split('/')[1];
 
   if (isEditMode) {
     return <Editor {...props} />;
@@ -256,16 +265,16 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
           </OverflowTooltip>
         </span>
         <span className={classes.seperator}>/</span>
-        {mpiDocId && mpiDocumentId ? (
+        {docId && documentId ? (
           <span className={classes.mpi}>
             <Link
-              to={documentVersionPath(mpiRevId, mpiDocumentId)}
+              to={documentVersionPath(mpiRevId, documentId)}
               target="_blank"
               id="step-mpi-field"
               data-cy="step-mpi-field"
               className={classes.link}
             >
-              {mpiDocId}
+              {getDisplayDocument(docId, displayRevision)}
             </Link>
           </span>
         ) : (

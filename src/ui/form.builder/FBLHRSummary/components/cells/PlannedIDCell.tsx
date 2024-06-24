@@ -31,6 +31,7 @@ import {
   EditableLHRSummaryItem,
   LHRSummaryOptionsResponse,
 } from '../../types';
+import { getDisplayDocument } from '../../utils';
 import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({
@@ -85,12 +86,19 @@ const Editor: React.FC<CustomTemplateProps> = ({
   }, [values.mpiId]);
 
   useEffect(() => {
-    if (isUpdateAction && !inputValue && !dataItem.plannedDocId) {
+    const plannedDetails = values?.plannedDetails;
+    const docId = plannedDetails?.docId;
+
+    if (isEmpty(plannedDetails)) {
+      return;
+    }
+
+    if (isUpdateAction && !inputValue && !docId) {
       setInputValue(dataItem[field] ?? '');
     }
 
-    if (isUpdateAction && !inputValue && dataItem.plannedDocId) {
-      setInputValue(dataItem.plannedDocId ?? '');
+    if (isUpdateAction && !inputValue && docId) {
+      setInputValue(docId ?? '');
     }
   }, [values?.stepOrMPI]);
 
@@ -280,25 +288,25 @@ const Editor: React.FC<CustomTemplateProps> = ({
 export const PlannedIDCell: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { plannedDocumentId, plannedId: plannedRevId, plannedDocId } = dataItem;
+  const { docId, documentId, displayRevision, value } = dataItem?.plannedDetails;
   const classes = styles();
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  if (plannedDocumentId) {
+  if (documentId) {
     return (
       <Link
-        to={documentVersionPath(plannedRevId, plannedDocumentId)}
+        to={documentVersionPath(value, documentId)}
         target="_blank"
-        id="PartOrEqDocLink-linkButton"
+        data-cy="planned-id-cell"
         className={classes.link}
       >
-        {plannedDocId}
+        {getDisplayDocument(docId, displayRevision)}
       </Link>
     );
   }
 
-  return <>{plannedRevId || EMPTY_PLACEHOLDER}</>;
+  return <>{value || EMPTY_PLACEHOLDER}</>;
 };

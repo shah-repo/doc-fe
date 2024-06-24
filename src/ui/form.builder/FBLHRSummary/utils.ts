@@ -43,3 +43,7 @@ export const getExcelData = (
 
     return modifiedItem;
   });
+
+export const getDisplayDocument = (docId?: string, displayRevision?: string): string => {
+  return `${docId ?? ''} - ${displayRevision ?? ''}`;
+};
