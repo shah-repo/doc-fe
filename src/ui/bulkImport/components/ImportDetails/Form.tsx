@@ -59,7 +59,10 @@ const ImportDetailForm: React.FC<ImportDetailFormProps> = ({ children, handleNex
         validationSchema={validationSchema}
         onSubmit={(values: FormValues) => {
           dispatch(setIsLoading(true));
-          async.start(createBulkImportAction, values, async);
+          // Remove formId if it is empty
+          const { formId, ...otherValues } = values;
+          const valuesToSubmit = formId ? values : otherValues;
+          async.start(createBulkImportAction, valuesToSubmit, async);
         }}
       >
         <Form>
@@ -67,7 +70,7 @@ const ImportDetailForm: React.FC<ImportDetailFormProps> = ({ children, handleNex
           <Box>
             <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
               <SelectField
-                selectProps={{ id: 'processType', onChange: (e) => handleTypeOfDataChange(e.target.value) }}
+                selectProps={{ id: 'processType', onChange: (e: React.ChangeEvent<{ value: unknown }>) => handleTypeOfDataChange(e.target.value) }}
                 name="processType"
                 includeEmpty={false}
                 options={typeOfDataOptions}

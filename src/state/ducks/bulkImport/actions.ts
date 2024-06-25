@@ -176,7 +176,7 @@ export const getApprovers = (): ApiAction<Approver[]> => apiAction({
 });
 
 export const createBulkImport = (
-  body: {formId: string, processType: string},
+  body: {formId?: string, processType: string},
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: BULK_IMPORT_CREATE_URL,
