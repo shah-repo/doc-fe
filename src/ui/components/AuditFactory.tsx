@@ -886,13 +886,14 @@ const getLHRSummaryRowAddedDetails = (audit: Audit, nextVal: string, dataCy: str
   try {
     const {
       type, step, startQuantity, endQuantity, expiryDate, calDueDate, pmDueDate, comments, lotStatus,
-      stepOrMpiDetails, plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails,
+      stepOrMpiDetails, plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails, enteredByUserName,
     } = JSON.parse(nextVal);
     return (
       <>
         {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.added', { type })}
         {startQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.startQuantity.added', { startQuantity })}
         {endQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.endQuantity.added', { endQuantity })}
+        {enteredByUserName && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.enteredBy.added', { enteredByUserName })}
 
         {expiryDate && [<Text
           dataCy={dataCy}
@@ -972,7 +973,7 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
   try {
     const {
       type, startQuantity, endQuantity, expiryDate, calDueDate, pmDueDate, comments, lotStatus,
-      plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails,
+      plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails, enteredByUserName,
     } = JSON.parse(nextVal);
 
     return (
@@ -980,6 +981,8 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
         {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.updated', { type })}
         {startQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.startQuantity.updated', { startQuantity })}
         {endQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.endQuantity.updated', { endQuantity })}
+
+        {enteredByUserName && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.enteredBy.added', { enteredByUserName })}
 
         {expiryDate && [<Text
           dataCy={dataCy}

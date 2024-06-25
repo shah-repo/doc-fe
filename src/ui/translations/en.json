@@ -811,6 +811,7 @@
   "documentRevision.audit.lhrSummary.type.added": "Type: {type}",
   "documentRevision.audit.lhrSummary.startQuantity.added": "Start Quantity: {startQuantity}",
   "documentRevision.audit.lhrSummary.endQuantity.added": "End Quantity: {endQuantity}",
+  "documentRevision.audit.lhrSummary.enteredBy.added": "Entered By: {enteredByUserName}",
   "documentRevision.audit.lhrSummary.expiryDate.added": "Expiry Date: {timestamp}",
   "documentRevision.audit.lhrSummary.calDueDate.added": "Cal Due Date: {timestamp}",
   "documentRevision.audit.lhrSummary.pmDueDate.added": "Pm Due Date: {timestamp}",
