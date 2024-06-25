@@ -3,7 +3,8 @@ import { getFormattedDateString, MomentFormats } from '../../../common/utils/dat
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FB } from '../helpers';
-import { EditableLHRSummaryItem } from './types';
+import { EMPTY_PLACEHOLDER } from './constants';
+import { DetailsObj, EditableLHRSummaryItem } from './types';
 
 export const getExcelColumns = (columns: Array<ColumnDefinition<EditableLHRSummaryItem>>): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
   return [...columns].filter(col => col.show).map(col => {
@@ -27,15 +28,17 @@ export const getExcelData = (
   availableUsers: OptionType[],
 ): Array<ColumnDefinition<EditableLHRSummaryItem>> =>
   LHRSummaryItemList.map(item => {
-    const { step, stepOrMpiDocId } = item;
-
     const modifiedItem = {
       ...item,
-      stepOrMPI: `${step}/${stepOrMpiDocId}`,
+      stepOrMPI: `${item.step}/${getDisplayDocumentByDetailsObj(item?.stepOrMpiDetails)}`,
+      plannedDocId: getDisplayDocumentByDetailsObj(item?.plannedDetails),
+      actualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
+      lotOrEqDocId: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       ...(item.expiryDate && { expiryDate: getFormattedDateString(item.expiryDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
+      issue: getDisplayDocumentByDetailsObj(item?.issueDetails),
       ...(item.calDueDate && { calDueDate: getFormattedDateString(item.calDueDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
       ...(item.pmDueDate && { pmDueDate: getFormattedDateString(item.pmDueDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
-      ...(item.createdAt && { createdAt: getFormattedDateString(item.createdAt ?? '', MomentFormats.MonthDateYearTwoDigit) }),
+      ...(item.date && { date: getFormattedDateString(item.date ?? '', MomentFormats.MonthDateYearTwoDigit) }),
       enteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,
@@ -43,6 +46,13 @@ export const getExcelData = (
 
     return modifiedItem;
   });
+
+export const getDisplayDocumentByDetailsObj = (object?: DetailsObj): string => {
+  const { docId, displayRevision, documentId, value } = object ?? {};
+  return documentId && value
+    ? `${docId ?? ''} - ${displayRevision ?? ''}`
+    : value ?? EMPTY_PLACEHOLDER;
+};
 
 export const getDisplayDocument = (docId?: string, displayRevision?: string): string => {
   return `${docId ?? ''} - ${displayRevision ?? ''}`;

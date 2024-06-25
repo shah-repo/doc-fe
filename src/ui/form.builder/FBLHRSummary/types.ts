@@ -3,7 +3,7 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 
-interface DetailsObj {
+export interface DetailsObj {
   value: string
   isExternalItem: boolean
   documentId?: string
