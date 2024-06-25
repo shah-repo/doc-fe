@@ -146,8 +146,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'createdAt',
-      field: 'createdAt',
+      id: 'date',
+      field: 'date',
       title: 'lhr.summary.grid.heading.date',
       show: true,
       template: (props) => <DateCell {...props} onClick={onRowClick} />,
