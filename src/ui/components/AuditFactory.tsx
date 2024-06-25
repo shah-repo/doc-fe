@@ -981,7 +981,7 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
         {startQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.startQuantity.updated', { startQuantity })}
         {endQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.endQuantity.updated', { endQuantity })}
 
-        <Text
+        {expiryDate && [<Text
           dataCy={dataCy}
           translation="documentRevision.audit.lhrSummary.expiryDate.updated"
           values={{
@@ -993,10 +993,10 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
               />
             ),
           }}
-        />
-        <br />
+        />,
+        <br />]}
 
-        <Text
+        {calDueDate && [<Text
           dataCy={dataCy}
           translation="documentRevision.audit.lhrSummary.calDueDate.updated"
           values={{
@@ -1008,10 +1008,10 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
               />
             ),
           }}
-        />
-        <br />
+        />,
+        <br />]}
 
-        <Text
+        {pmDueDate && [<Text
           dataCy={dataCy}
           translation="documentRevision.audit.lhrSummary.pmDueDate.updated"
           values={{
@@ -1023,8 +1023,8 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
               />
             ),
           }}
-        />
-        <br />
+        />,
+        <br />]}
 
         {comments && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.comment.updated', { comment: comments })}
         {plannedDetails && plannedDetails.value
