@@ -117,7 +117,7 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.lotOrEquipmentDetails;
+  const { docId, documentId, displayRevision, value } = dataItem?.lotOrEquipmentDetails ?? {};
   const classes = styles();
 
   if (isEditMode) {

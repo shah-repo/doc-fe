@@ -242,7 +242,7 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.stepOrMpiDetails;
+  const { docId, documentId, displayRevision, value } = dataItem?.stepOrMpiDetails ?? {};
   const step = dataItem.step;
   const mpiRevId = value?.split('/')[1];
 

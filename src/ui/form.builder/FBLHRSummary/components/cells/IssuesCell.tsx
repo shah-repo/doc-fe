@@ -206,7 +206,7 @@ export const IssuesCell: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.issueDetails;
+  const { docId, documentId, displayRevision, value } = dataItem?.issueDetails ?? {};
 
   if (isEditMode) {
     return <Editor {...props} />;

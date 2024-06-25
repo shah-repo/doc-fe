@@ -288,7 +288,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
 export const PlannedIDCell: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.plannedDetails;
+  const { docId, documentId, displayRevision, value } = dataItem?.plannedDetails ?? {};
   const classes = styles();
 
   if (isEditMode) {
