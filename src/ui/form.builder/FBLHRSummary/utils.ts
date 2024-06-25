@@ -47,7 +47,7 @@ export const getExcelData = (
     return modifiedItem;
   });
 
-export const getDisplayDocumentByDetailsObj = (object?: DetailsObj): string => {
+const getDisplayDocumentByDetailsObj = (object?: DetailsObj): string => {
   const { docId, displayRevision, documentId, value } = object ?? {};
   return documentId && value
     ? `${docId ?? ''} - ${displayRevision ?? ''}`
