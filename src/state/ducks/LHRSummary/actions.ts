@@ -8,9 +8,9 @@ import {
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../documentRevisions/constants';
-import { DocumentRevisionStatus } from '../documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../documentRevisions/types';
 import {
-  CREATE_LHR_SUMMARY, ROOT_LHR_SUMMARY,
+  CREATE_LHR_SUMMARY, FETCH_LOTS, ROOT_LHR_SUMMARY,
   UPDATE_LHR_SUMMARY,
 } from './constants';
 
@@ -97,6 +97,16 @@ const deleteLHRSummary = (
     handlers,
   });
 
+const fetchLotsByPartId = (
+  partId: string,
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: `${FETCH_LOTS}/${partId}`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   fetchLHRSummary,
   fetchLHRSummaryDataByOptionId,
@@ -104,4 +114,5 @@ export default {
   fetchRecords,
   updateLHRSummary,
   deleteLHRSummary,
+  fetchLotsByPartId,
 };

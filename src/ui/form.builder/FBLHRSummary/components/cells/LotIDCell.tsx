@@ -3,8 +3,8 @@ import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
-import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import {
   Autocomplete,
   FormikField,
@@ -32,7 +32,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
     = useFormikContext<EditableLHRSummaryItem>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const fetchLotsByPartId = useActionCreator(
-    documentRevisionsActions.fetchLotsByPartId,
+    lhrSummaryActions.fetchLotsByPartId,
   );
   const { actualId } = values ?? {};
 
