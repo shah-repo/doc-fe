@@ -11,6 +11,7 @@ export const MIN_SEARCH_TERM_LENGTH = 3;
 export const LIMIT = 25;
 export const EMPTY_PLACEHOLDER = '-';
 export const LHR_SUMARY_FIELDS = {
+  mpiId: 'mpiId',
   plannedId: 'plannedId',
   actualId: 'actualId',
   startQuantity: 'startQuantity',
@@ -24,8 +25,9 @@ export const LHR_SUMARY_FIELDS = {
   type: 'type',
   enteredBy: 'enteredBy',
   lotOrEquipment: 'lotOrEquipment',
+  recordCreationDate: 'recordCreationDate',
 };
-export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment', 'date'];
+export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment', 'recordCreationDate'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex'];
 
 export enum DocType {

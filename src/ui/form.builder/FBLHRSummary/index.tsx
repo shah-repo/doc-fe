@@ -8,11 +8,12 @@ import { FormikProvider, useFormik } from 'formik';
 import { find, map, pick } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
@@ -48,7 +49,7 @@ import {
   EditableLHRSummaryItemEditEvent,
   LHRSummaryItem,
 } from './types';
-import { getExcelColumns, getExcelData } from './utils';
+import { getExcelColumns, getExcelData, processData } from './utils';
 
 interface props {
   isShowOnly?: boolean
@@ -62,6 +63,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
   const size = useObserver(() => _tabsState?.contentSize);
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
@@ -78,7 +80,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
-      data && setData(data as EditableLHRSummaryItem[]);
+      data && setData(processData(data as EditableLHRSummaryItem[], availableUsers));
     },
     onError: toastError,
   });
@@ -92,11 +94,13 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   }, []);
 
   const fetchLHRSummaryData = () => {
-    if (!_documentRevisionFormState?.documentRevision?.id) {
+    const docRevId = _documentRevisionFormState?.documentRevision?.id;
+    if (!docRevId) {
       return;
     }
 
-    LHRSummaryAsync.start(fetchLHRSummary, _documentRevisionFormState?.documentRevision?.id, LHRSummaryAsync);
+    LHRSummaryAsync.start(fetchLHRSummary, docRevId, LHRSummaryAsync);
+    dispatch(documentRevisionsActions.loadAudit(docRevId));
   };
 
   const addLHRSummaryAsync = useAsync({
@@ -217,7 +221,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       ncmr: '',
       comments: '',
       enteredBy: '',
-      date: new Date().toISOString(),
+      recordCreationDate: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
     };
 

@@ -3,8 +3,8 @@ import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
-import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import {
   Autocomplete,
   FormikField,
@@ -27,12 +27,12 @@ interface CustomOptionType extends OptionType {
   expiryDate: string
 }
 
-const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
-  const { values, setFieldValue, getFieldProps }
+const Editor: React.FC<CustomTemplateProps> = (props) => {
+  const { values, setFieldValue, getFieldProps, setValues }
     = useFormikContext<EditableLHRSummaryItem>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const fetchLotsByPartId = useActionCreator(
-    documentRevisionsActions.fetchLotsByPartId,
+    lhrSummaryActions.fetchLotsByPartId,
   );
   const { actualId } = values ?? {};
 
@@ -55,9 +55,12 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   }, [values.actualId]);
 
   const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
-    setFieldValue(LHR_SUMARY_FIELDS.lotStatus, value?.lotStatus);
-    setFieldValue(LHR_SUMARY_FIELDS.expiryDate, value?.expiryDate);
-    setFieldValue(field, value?.value);
+    setValues({
+      ...values,
+      lotStatus: value?.lotStatus ?? '',
+      expiryDate: value?.expiryDate ?? null,
+      lotOrEquipment: value?.value,
+    });
   };
 
   const renderOptions = (): CustomOptionType[] => {
@@ -73,7 +76,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
     }));
   };
 
-  const defaultValue = values[field] ?? '';
+  const defaultValue = values[LHR_SUMARY_FIELDS.lotOrEquipment] ?? '';
   const value = renderOptions().find(
     (option) => option.value === defaultValue,
   ) ?? { label: defaultValue, value: defaultValue };
@@ -86,14 +89,14 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
     if (reason === 'input') {
       setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
       setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
-      setFieldValue(field, value);
+      setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, value);
     }
   };
 
   return (
-    <FormikField name={field}>
+    <FormikField name={LHR_SUMARY_FIELDS.lotOrEquipment}>
       <Autocomplete
-        {...getFieldProps(field)}
+        {...getFieldProps(LHR_SUMARY_FIELDS.lotOrEquipment)}
         key={isEmpty(lots) ? 'disabled' : 'enabled'}
         blurOnSelect
         disableClearable
@@ -113,7 +116,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
 
 export const LotIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
-  field,
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -121,7 +123,7 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
   const classes = styles();
 
   if (isEditMode) {
-    return <Editor {...props} {...{ dataItem, field }} />;
+    return <Editor {...props} {...{ dataItem }} />;
   }
 
   if (value && documentId) {

@@ -23,6 +23,7 @@ import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutoco
 import {
   DocType,
   EMPTY_PLACEHOLDER,
+  LHR_SUMARY_FIELDS,
   LIMIT,
   MIN_SEARCH_TERM_LENGTH,
 } from '../../constants';
@@ -36,7 +37,6 @@ import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({
   dataItem,
-  field,
   ...props
 }) => {
   const { values, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
@@ -94,7 +94,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
     }
 
     if (isUpdateAction && !inputValue) {
-      setInputValue(docId ?? dataItem[field] ?? '');
+      setInputValue(docId ?? dataItem[LHR_SUMARY_FIELDS.plannedId] ?? '');
     }
   }, [values?.stepOrMPI]);
 
@@ -105,7 +105,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   const fetchOptionsDataAsync = useAsync({
     onSuccess: (data?: LHRSummaryOptionsResponse) => {
       if (!isUpdateAction && !selectedObj?.value) {
-        setFieldValue(field, inputValue);
+        setFieldValue(LHR_SUMARY_FIELDS.plannedId, inputValue);
       }
 
       setLoading(false);
@@ -129,13 +129,13 @@ const Editor: React.FC<CustomTemplateProps> = ({
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
     if (isTypeFieldEmpty) {
-      setFieldValue(field, '');
+      setFieldValue(LHR_SUMARY_FIELDS.plannedId, '');
       setInputValue('');
       return;
     }
 
     if (!inputVal && inputValue) {
-      setFieldValue(field, '');
+      setFieldValue(LHR_SUMARY_FIELDS.plannedId, '');
     }
     setInputValue(inputVal);
 
@@ -159,7 +159,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
 
     setSelectedObj(value);
     setInputValue(value?.label);
-    setFieldValue(field, value?.value);
+    setFieldValue(LHR_SUMARY_FIELDS.plannedId, value?.value);
   };
 
   const debounceFunction = debounce(onInputChange, 1000, {
@@ -220,7 +220,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
       return;
     } else {
       setInputValue('');
-      setFieldValue(field, '');
+      setFieldValue(LHR_SUMARY_FIELDS.plannedId, '');
     }
 
     setItems([]);
@@ -228,7 +228,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   }, [dataItem[MODE_FIELD], values.type]);
 
   return (
-    <FormikField name={field}>
+    <FormikField name={LHR_SUMARY_FIELDS.plannedId}>
       <Autocomplete
         {...{ onChange }}
         classes={{ option: classes.option }}
