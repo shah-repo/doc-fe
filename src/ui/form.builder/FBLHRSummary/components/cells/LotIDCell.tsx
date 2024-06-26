@@ -28,7 +28,7 @@ interface CustomOptionType extends OptionType {
 }
 
 const Editor: React.FC<CustomTemplateProps> = (props) => {
-  const { values, setFieldValue, getFieldProps }
+  const { values, setFieldValue, getFieldProps, setValues }
     = useFormikContext<EditableLHRSummaryItem>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
   const fetchLotsByPartId = useActionCreator(
@@ -55,9 +55,12 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
   }, [values.actualId]);
 
   const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
-    setFieldValue(LHR_SUMARY_FIELDS.lotStatus, value?.lotStatus);
-    setFieldValue(LHR_SUMARY_FIELDS.expiryDate, value?.expiryDate);
-    setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, value?.value);
+    setValues({
+      ...values,
+      lotStatus: value?.lotStatus ?? '',
+      expiryDate: value?.expiryDate ?? null,
+      lotOrEquipment: value?.value,
+    });
   };
 
   const renderOptions = (): CustomOptionType[] => {
