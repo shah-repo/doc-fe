@@ -50,7 +50,7 @@ export const getExcelData = (
 const getDisplayDocumentByDetailsObj = (object?: DetailsObj): string => {
   const { docId, displayRevision, documentId, value } = object ?? {};
   return documentId && value
-    ? `${docId ?? ''} - ${displayRevision ?? ''}`
+    ? getDisplayDocument(docId, displayRevision)
     : value ?? EMPTY_PLACEHOLDER;
 };
 

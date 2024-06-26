@@ -277,19 +277,19 @@ export const ActualIDCell: React.FC<CustomTemplateProps> = (props) => {
     return <Editor {...props} />;
   }
 
-  if (documentId) {
-    return (
-      <Link
-        to={documentVersionPath(value, documentId)}
-        target="_blank"
-        id="PartOrEqDocLink-linkButton"
-        data-cy="actual-id-link"
-        className={classes.link}
-      >
-        {getDisplayDocument(docId, displayRevision)}
-      </Link>
-    );
+  if (!documentId) {
+    return <>{value ?? EMPTY_PLACEHOLDER}</>;
   }
 
-  return <>{value ?? EMPTY_PLACEHOLDER}</>;
+  return (
+    <Link
+      to={documentVersionPath(value, documentId)}
+      target="_blank"
+      id="PartOrEqDocLink-linkButton"
+      data-cy="actual-id-link"
+      className={classes.link}
+    >
+      {getDisplayDocument(docId, displayRevision)}
+    </Link>
+  );
 };

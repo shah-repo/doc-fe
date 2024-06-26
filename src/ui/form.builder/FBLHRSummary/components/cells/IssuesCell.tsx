@@ -39,12 +39,8 @@ const Editor: React.FC<CustomTemplateProps> = ({
       return;
     }
 
-    if (isUpdateAction && !inputValue && docId) {
-      setInputValue(docId);
-    }
-
-    if (isUpdateAction && !inputValue && !docId) {
-      setInputValue(dataItem[field] ?? '');
+    if (isUpdateAction && !inputValue) {
+      setInputValue(docId ?? dataItem[field] ?? '');
     }
   }, [values?.issueDetails]);
 
