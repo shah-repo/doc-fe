@@ -38,7 +38,7 @@ export const getExcelData = (
       issue: getDisplayDocumentByDetailsObj(item?.issueDetails),
       ...(item.calDueDate && { calDueDate: getFormattedDateString(item.calDueDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
       ...(item.pmDueDate && { pmDueDate: getFormattedDateString(item.pmDueDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
-      ...(item.date && { date: getFormattedDateString(item.date ?? '', MomentFormats.MonthDateYearTwoDigit) }),
+      ...(item.recordCreationDate && { recordCreationDate: getFormattedDateString(item.recordCreationDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
       enteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,
@@ -56,4 +56,21 @@ const getDisplayDocumentByDetailsObj = (object?: DetailsObj): string => {
 
 export const getDisplayDocument = (docId?: string, displayRevision?: string): string => {
   return `${docId ?? ''} - ${displayRevision ?? ''}`;
+};
+
+export const processData = (
+  data: EditableLHRSummaryItem[],
+): EditableLHRSummaryItem[] => {
+  return data?.map(item => {
+    const modifiedItem = {
+      ...item,
+      // stepOrMPI: `${item.step}/${getDisplayDocumentByDetailsObj(item?.stepOrMpiDetails)}`,
+      // plannedDocId: getDisplayDocumentByDetailsObj(item?.plannedDetails),
+      // actualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
+      customLotOrEqDocId: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
+      customIssue: getDisplayDocumentByDetailsObj(item?.issueDetails),
+    };
+
+    return modifiedItem;
+  });
 };

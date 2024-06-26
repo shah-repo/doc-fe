@@ -48,7 +48,7 @@ import {
   EditableLHRSummaryItemEditEvent,
   LHRSummaryItem,
 } from './types';
-import { getExcelColumns, getExcelData } from './utils';
+import { getExcelColumns, getExcelData, processData } from './utils';
 
 interface props {
   isShowOnly?: boolean
@@ -78,7 +78,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
-      data && setData(data as EditableLHRSummaryItem[]);
+      data && setData(processData(data as EditableLHRSummaryItem[]));
     },
     onError: toastError,
   });
@@ -217,7 +217,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       ncmr: '',
       comments: '',
       enteredBy: '',
-      date: new Date().toISOString(),
+      recordCreationDate: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
     };
 

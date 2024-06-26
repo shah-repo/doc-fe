@@ -32,7 +32,7 @@ export interface LHRSummaryItem {
   ncmr: string
   comments: string
   enteredBy: string
-  date?: null | string
+  recordCreationDate?: null | string
   lotOrEqDocId?: string
   lotOrEqDocumentId?: string
   actualDocId?: string
@@ -90,7 +90,7 @@ export interface LHRSummaryRequestBody {
   expiryDate: Date
   calDueDate: Date
   pmDueDate: Date
-  date: Date
+  recordCreationDate: Date
   comments: string
 }
 

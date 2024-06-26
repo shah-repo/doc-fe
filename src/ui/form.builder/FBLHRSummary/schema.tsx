@@ -58,8 +58,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'lotOrEquipment',
-      field: 'lotOrEquipment',
+      id: 'customLotOrEquipment',
+      field: 'customLotOrEquipment',
       title: 'lhr.summary.grid.heading.lot',
       show: true,
       selectable: false,
@@ -76,8 +76,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'issue',
-      field: 'issue',
+      id: 'customIssue',
+      field: 'customIssue',
       title: 'lhr.summary.grid.heading.issue',
       template: (props) => <IssuesCell {...props} onClick={onRowClick} />,
       show: true,
@@ -146,8 +146,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'date',
-      field: 'date',
+      id: 'recordCreationDate',
+      field: 'recordCreationDate',
       title: 'lhr.summary.grid.heading.date',
       show: true,
       template: (props) => <DateCell {...props} onClick={onRowClick} />,

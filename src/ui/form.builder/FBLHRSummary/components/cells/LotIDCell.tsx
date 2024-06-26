@@ -27,7 +27,7 @@ interface CustomOptionType extends OptionType {
   expiryDate: string
 }
 
-const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
+const Editor: React.FC<CustomTemplateProps> = (props) => {
   const { values, setFieldValue, getFieldProps }
     = useFormikContext<EditableLHRSummaryItem>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
@@ -57,7 +57,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
     setFieldValue(LHR_SUMARY_FIELDS.lotStatus, value?.lotStatus);
     setFieldValue(LHR_SUMARY_FIELDS.expiryDate, value?.expiryDate);
-    setFieldValue(field, value?.value);
+    setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, value?.value);
   };
 
   const renderOptions = (): CustomOptionType[] => {
@@ -73,7 +73,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
     }));
   };
 
-  const defaultValue = values[field] ?? '';
+  const defaultValue = values[LHR_SUMARY_FIELDS.lotOrEquipment] ?? '';
   const value = renderOptions().find(
     (option) => option.value === defaultValue,
   ) ?? { label: defaultValue, value: defaultValue };
@@ -86,14 +86,14 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
     if (reason === 'input') {
       setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
       setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
-      setFieldValue(field, value);
+      setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, value);
     }
   };
 
   return (
-    <FormikField name={field}>
+    <FormikField name={LHR_SUMARY_FIELDS.lotOrEquipment}>
       <Autocomplete
-        {...getFieldProps(field)}
+        {...getFieldProps(LHR_SUMARY_FIELDS.lotOrEquipment)}
         key={isEmpty(lots) ? 'disabled' : 'enabled'}
         blurOnSelect
         disableClearable
@@ -113,7 +113,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
 
 export const LotIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
-  field,
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -121,7 +120,7 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
   const classes = styles();
 
   if (isEditMode) {
-    return <Editor {...props} {...{ dataItem, field }} />;
+    return <Editor {...props} {...{ dataItem }} />;
   }
 
   if (value && documentId) {
