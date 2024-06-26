@@ -19,14 +19,13 @@ import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { LIMIT, MIN_SEARCH_TERM_LENGTH, STEP_FIELD } from '../../constants';
+import { LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH, STEP_FIELD } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { getDisplayDocument } from '../../utils';
 import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({
   dataItem,
-  field,
 }) => {
   const { getFieldProps, setFieldValue, values }
       = useFormikContext<EditableLHRSummaryItem>();
@@ -47,7 +46,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
     }
 
     if (isUpdateAction && !inputValue) {
-      setInputValue(docId ?? dataItem[field] ?? '');
+      setInputValue(docId ?? dataItem[LHR_SUMARY_FIELDS.mpiId] ?? '');
     }
   }, [values?.stepOrMPI]);
 
@@ -56,7 +55,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   const fetchOptionsDataAsync = useAsync({
     onSuccess: (data?: LHRSummaryOptionsResponse) => {
       if (!isUpdateAction && !selectedObj?.value) {
-        setFieldValue(field, inputValue);
+        setFieldValue(LHR_SUMARY_FIELDS.mpiId, inputValue);
       }
 
       const modifiedItems = data?.items?.map((item) => ({
@@ -80,7 +79,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
     setInputValue(inputVal);
     if (!inputVal && inputValue) {
-      setFieldValue(field, '');
+      setFieldValue(LHR_SUMARY_FIELDS.mpiId, '');
     }
 
     if (!isOpen) {
@@ -107,7 +106,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   const onChange = (event: React.ChangeEvent<{}>, value: OptionType) => {
     setSelectedObj(value);
     setInputValue(value?.label);
-    setFieldValue(field, value?.value);
+    setFieldValue(LHR_SUMARY_FIELDS.mpiId, value?.value);
   };
 
   const debounceFunction = debounce(onInputChange, 1000, {
@@ -140,7 +139,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
       return;
     } else {
       setInputValue('');
-      setFieldValue(field, '');
+      setFieldValue(LHR_SUMARY_FIELDS.mpiId, '');
     }
 
     if (fetchOptionsDataAsync.isLoading) {
@@ -175,7 +174,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
             /
         </Grid>
         <Grid item style={{ width: '60%' }}>
-          <FormikField name={field}>
+          <FormikField name={LHR_SUMARY_FIELDS.mpiId}>
             <Autocomplete
               {...{ onChange }}
               classes={{ option: classes.option }}

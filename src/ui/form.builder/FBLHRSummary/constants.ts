@@ -11,6 +11,7 @@ export const MIN_SEARCH_TERM_LENGTH = 3;
 export const LIMIT = 25;
 export const EMPTY_PLACEHOLDER = '-';
 export const LHR_SUMARY_FIELDS = {
+  mpiId: 'mpiId',
   plannedId: 'plannedId',
   actualId: 'actualId',
   startQuantity: 'startQuantity',

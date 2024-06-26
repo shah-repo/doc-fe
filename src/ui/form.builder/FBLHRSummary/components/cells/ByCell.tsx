@@ -11,17 +11,17 @@ import {
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
+import { LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
 export const ByCell: React.FC<CustomTemplateProps> = ({
   dataItem,
-  field,
   onClick,
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
   const getUserDetails = (userId: string) => find(availableUsers, { value: userId });
-  const user = getUserDetails(dataItem[field] ?? '');
+  const user = getUserDetails(dataItem[LHR_SUMARY_FIELDS.enteredBy] ?? '');
   const [selectedUser, setSelectedUser] = useState(user ?? '');
   const label = user?.label;
 
@@ -41,7 +41,7 @@ export const ByCell: React.FC<CustomTemplateProps> = ({
       return;
     }
     setSelectedUser(value);
-    setFieldValue(field, value?.value);
+    setFieldValue(LHR_SUMARY_FIELDS.enteredBy, value?.value);
   };
 
   return (

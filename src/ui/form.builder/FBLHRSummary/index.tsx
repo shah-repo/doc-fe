@@ -80,7 +80,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
-      data && setData(processData(data as EditableLHRSummaryItem[]));
+      data && setData(processData(data as EditableLHRSummaryItem[], availableUsers));
     },
     onError: toastError,
   });

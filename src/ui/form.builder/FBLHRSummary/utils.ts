@@ -60,15 +60,19 @@ export const getDisplayDocument = (docId?: string, displayRevision?: string): st
 
 export const processData = (
   data: EditableLHRSummaryItem[],
+  availableUsers: OptionType[],
 ): EditableLHRSummaryItem[] => {
   return data?.map(item => {
     const modifiedItem = {
       ...item,
-      // stepOrMPI: `${item.step}/${getDisplayDocumentByDetailsObj(item?.stepOrMpiDetails)}`,
-      // plannedDocId: getDisplayDocumentByDetailsObj(item?.plannedDetails),
-      // actualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
-      customLotOrEqDocId: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
+      customMpiId: getDisplayDocumentByDetailsObj(item?.stepOrMpiDetails),
+      customPlannedId: getDisplayDocumentByDetailsObj(item?.plannedDetails),
+      customActualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
+      customLotOrEquipment: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       customIssue: getDisplayDocumentByDetailsObj(item?.issueDetails),
+      customEnteredBy: FB.isUUID(item.enteredBy)
+        ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
+        : item.enteredBy,
     };
 
     return modifiedItem;
