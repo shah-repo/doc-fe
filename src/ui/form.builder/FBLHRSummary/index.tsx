@@ -216,7 +216,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       ncmr: '',
       comments: '',
       enteredBy: '',
-      createdAt: new Date().toISOString(),
+      date: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
     };
 
