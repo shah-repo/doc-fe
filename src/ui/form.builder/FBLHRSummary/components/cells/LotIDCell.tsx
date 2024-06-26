@@ -19,6 +19,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { EMPTY_PLACEHOLDER, LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
+import { getDisplayDocument } from '../../utils';
 import { styles } from './styles';
 
 interface CustomOptionType extends OptionType {
@@ -116,28 +117,23 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const {
-    lotOrEqDocumentId: lotDocumentId,
-    lotOrEquipment: lotRevId,
-    lotOrEqDocId: lotDocId,
-  } = dataItem;
-
+  const { docId, documentId, displayRevision, value } = dataItem?.lotOrEquipmentDetails ?? {};
   const classes = styles();
 
   if (isEditMode) {
     return <Editor {...props} {...{ dataItem, field }} />;
   }
 
-  if (lotRevId && lotDocumentId) {
+  if (value && documentId) {
     return <Link
-      to={documentVersionPath(lotRevId, lotDocumentId)}
+      to={documentVersionPath(value, documentId)}
       target="_blank"
       data-cy="lot-id"
       className={classes.link}
     >
-      {lotDocId}
+      {getDisplayDocument(docId, displayRevision)}
     </Link>;
   }
 
-  return <>{lotRevId ?? EMPTY_PLACEHOLDER}</>;
+  return <>{value ?? EMPTY_PLACEHOLDER}</>;
 };

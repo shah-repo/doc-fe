@@ -16,6 +16,7 @@ import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { EMPTY_PLACEHOLDER, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, RecordsResponse } from '../../types';
+import { getDisplayDocument } from '../../utils';
 import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({
@@ -31,14 +32,17 @@ const Editor: React.FC<CustomTemplateProps> = ({
   const [offset, setOffset] = React.useState(0);
 
   useEffect(() => {
-    if (isUpdateAction && !inputValue && values?.issueDocId) {
-      setInputValue(values?.issueDocId);
+    const issueDetails = values?.issueDetails;
+    const docId = issueDetails?.docId;
+
+    if (isEmpty(issueDetails)) {
+      return;
     }
 
-    if (isUpdateAction && !inputValue && !dataItem.issueDocId) {
-      setInputValue(dataItem[field] ?? '');
+    if (isUpdateAction && !inputValue) {
+      setInputValue(docId ?? dataItem[field] ?? '');
     }
-  }, [values?.issueDocId]);
+  }, [values?.issueDetails]);
 
   const fetchLHRSummaryByOptionId = useActionCreator(lhrSummaryActions.fetchRecords);
   const [isOpen, setIsOpen] = useState(false);
@@ -198,22 +202,22 @@ export const IssuesCell: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { issueDocId, issue: issueRevId, issueDocumentId } = dataItem;
+  const { docId, documentId, displayRevision, value } = dataItem?.issueDetails ?? {};
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  if (issueRevId && issueDocumentId) {
+  if (value && documentId) {
     return <Link
-      to={documentVersionPath(issueRevId ?? '', issueDocumentId)}
+      to={documentVersionPath(value ?? '', documentId)}
       target="_blank"
       data-cy="issue-link"
       className={classes.link}
     >
-      {issueDocId}
+      {getDisplayDocument(docId, displayRevision)}
     </Link>;
   }
 
-  return <>{issueRevId ?? EMPTY_PLACEHOLDER}</>;
+  return <>{value ?? EMPTY_PLACEHOLDER}</>;
 };

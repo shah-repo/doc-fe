@@ -59,6 +59,7 @@ export const styles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    textAlign: 'right',
   },
   seperator: {
     margin: theme.spacing(0, 1),

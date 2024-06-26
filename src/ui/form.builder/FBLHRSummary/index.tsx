@@ -16,6 +16,7 @@ import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
+import { KendoColumn } from '../../components/common/kendo/types';
 import { Button } from '../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -105,7 +106,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const updateLHRSummaryAsync = useAsync({
     onSuccess: (response) => {
-      if (response?.affected > 0) {
+      if (response) {
         fetchLHRSummaryData();
       }
     },
@@ -289,7 +290,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     [columns],
   );
 
-  const onColumnShowHide = ({ field }: Partial<ColumnDefinition<EditableLHRSummaryItem>>) => {
+  const onColumnShowHide = ({ field }: KendoColumn) => {
     const dataColumns = map(columns, (column: ColumnDefinition<EditableLHRSummaryItem>) => {
       if (column.field === field) {
         column.show = !column.show;
@@ -388,7 +389,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
                   data-cy="show-hide-columns"
                 >
                   <ColumnShowHideMenu
-                    columnDefinition={columns}
+                    columnDefinition={columns?.filter(data => data.id !== 'actions') as KendoColumn[]}
                     onChange={onColumnShowHide}
                   />
                 </Grid>
