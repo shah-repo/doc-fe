@@ -28,21 +28,28 @@ enum Colors {
   // Success
   success='#0DB78D',
   successHighlight='#F3FCF9',
+  approve='#16bd23',
+  successLight = '#B4FFEC',
 
   // Warning
   warning='#EFA10B',
   warningHighlight='#FEFAF3',
 
-  // Destructive/Error
+  // Destructive/Error/Remove
   error='#EC2B00',
   errorHighlight='#FEF4F2',
   errorLightShadow='#FAE1DD',
+  remove='#f05a5c',
+  reject='#c40000',
+  errorLight='#FFD9D1',
 
   // Shades
   white='#FFF',
   whiteDimmed='rgba(255, 255, 255, .5)',
   gray='#F9F9F9',
   darkGray='#F5F5F5',
+  lightGray='#C8CACF',
+  lightGray2='#C4C4C4',
   black='#000',
 
   // Statuses

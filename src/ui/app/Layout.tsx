@@ -8,12 +8,14 @@ import { SearchPage } from '../../App/Enlil/Features/Search';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import AsyncTasksContainer from '../async.tasks/grid/container';
+import BulkImportProgressPage from '../bulkImport/container.progress';
 import ChangeRequestCreateContainer from '../change.request/ChangeRequestCreate.container';
 import ChangeRequestContainer from '../change.request/Container';
 import ChangeRequestListContainer from '../change.request/grid/container';
 import WatermarkFooterContainer from '../components/watermarkFooter/container';
 import {
   ASYNC_TASKS_URL,
+  BULK_IMPORT_PROGRESS_URL,
   CHANGE_REQUEST_CREATE_URL,
   CHANGE_REQUEST_LIST_URL,
   CHANGE_REQUEST_ROOT_URL,
@@ -167,6 +169,10 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={USER_GROUP_URL}
             component={UserGroupManagment}
+          />
+          <Route
+            path={BULK_IMPORT_PROGRESS_URL}
+            component={BulkImportProgressPage}
           />
           <Redirect to={HOME_URL} />
         </Switch>
