@@ -1,7 +1,6 @@
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
@@ -14,13 +13,11 @@ import {
   Mode,
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
-import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { EMPTY_PLACEHOLDER, LHR_SUMARY_FIELDS } from '../../constants';
+import { LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
-import { getDisplayDocument } from '../../utils';
-import { styles } from './styles';
+import { PreviewDoc } from './PreviewDoc';
 
 interface CustomOptionType extends OptionType {
   lotStatus: string
@@ -65,7 +62,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
 
   const renderOptions = (): CustomOptionType[] => {
     return lots.map((lot) => ({
-      label: translate('wo.displayRevision', {
+      label: translate('lhr.summary.displayRevision', {
         docId: lot.document.docId,
         displayRevision: lot?.displayRevision,
         name: lot?.name,
@@ -119,23 +116,10 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.lotOrEquipmentDetails ?? {};
-  const classes = styles();
 
   if (isEditMode) {
     return <Editor {...props} {...{ dataItem }} />;
   }
 
-  if (value && documentId) {
-    return <Link
-      to={documentVersionPath(value, documentId)}
-      target="_blank"
-      data-cy="lot-id"
-      className={classes.link}
-    >
-      {getDisplayDocument(docId, displayRevision)}
-    </Link>;
-  }
-
-  return <>{value ?? EMPTY_PLACEHOLDER}</>;
+  return <PreviewDoc detailsObj= {dataItem?.lotOrEquipmentDetails} field={LHR_SUMARY_FIELDS.lotOrEquipment} dataItem={dataItem} />;
 };

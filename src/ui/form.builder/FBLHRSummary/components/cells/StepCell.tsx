@@ -22,6 +22,7 @@ import useAsync from '../../../../hooks/useAsync';
 import { LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH, STEP_FIELD } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { getDisplayDocument } from '../../utils';
+import { InvalidDocIndicator } from './InvalidDocIndicator';
 import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({
@@ -237,7 +238,7 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
   const { dataItem } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.stepOrMpiDetails ?? {};
+  const { docId, documentId, displayRevision, value, displayStatus } = dataItem?.stepOrMpiDetails ?? {};
   const step = dataItem.step;
   const mpiRevId = value?.split('/')[1];
 
@@ -262,15 +263,18 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
         <span className={classes.seperator}>/</span>
         {docId && documentId ? (
           <span className={classes.mpi}>
-            <Link
-              to={documentVersionPath(mpiRevId, documentId)}
-              target="_blank"
-              id="step-mpi-field"
-              data-cy="step-mpi-field"
-              className={classes.link}
-            >
-              {getDisplayDocument(docId, displayRevision)}
-            </Link>
+            <Box display="flex" justifyContent="space-between">
+              <Link
+                to={documentVersionPath(mpiRevId, documentId)}
+                target="_blank"
+                id="step-mpi-field"
+                data-cy="step-mpi-field"
+                className={classes.link}
+              >
+                {getDisplayDocument(docId, displayRevision)}
+              </Link>
+              <InvalidDocIndicator status={displayStatus} dataCy="step-mpi-invalid-indicator" />
+            </Box>
           </span>
         ) : (
           <span className={classes.mpi} data-cy="step-mpi-field">

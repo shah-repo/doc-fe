@@ -2019,6 +2019,7 @@
   "lhr.summary.placeholder.enter": "Enter",
   "lhr.summary.displayRevision": "{docId} Rev {displayRevision} - {name}",
   "lhr.summary.type.empty.error.message": "Please select a type before entering a value",
+  "lhr.summary.status.invalid.message": "The selected revision was canceled, voided or obsoleted",
   "controlConfig.editPart.button.text": "Restricted Edit",
   "print.label.dialog.field.quantity.units": "Quantity Units",
   "print.label.dialog.field.partId": "Part ID",
