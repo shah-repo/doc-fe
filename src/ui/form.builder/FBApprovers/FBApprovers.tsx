@@ -3,6 +3,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import React from 'react';
 import { FBApproversProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBInput, FBMapWrapper, FBRequiredApprover, FBText } from '..';
 import Approvers from '../../change.request/summary/approvers';
+import ApprovalApprovedGroup from '../FBApprovals/ApprovalApprovedGroup';
 import { withFBApprovers } from './FBApprovers.wrap';
 
 const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
@@ -17,6 +18,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
   groups = {},
   autosave,
   changeRequestApprovals,
+  approvalApprovedGroup,
 }) => (
   <FBInput {...{ name, gutter, disabled, autosave }} type="approvers">
     <FBAutocompleteAsync
@@ -33,7 +35,15 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
     />
     <Box display="flex" flexDirection="row" flexWrap="wrap">
       <Box display="flex" flexWrap="wrap" >
-        <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
+        {approvalApprovedGroup && (
+          <>
+            {approvalApprovedGroup.map((groupName: string, index: number) => (
+              <ApprovalApprovedGroup groupName={groupName} key={index} />
+            ))}
+          </>
+        )}
+
+        {!approvalApprovedGroup && <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
           {(group: FBRequiredApprover, id) => (
             <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5}>
               <CheckCircleIcon
@@ -43,6 +53,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
             </Box>
           )}
         </FBMapWrapper>
+        }
       </Box>
       <Box flexBasis="100%" >
         {changeRequestApprovals && changeRequestApprovals.length > 0 && (

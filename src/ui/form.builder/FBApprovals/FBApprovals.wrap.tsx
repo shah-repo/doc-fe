@@ -42,8 +42,11 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     dialogState,
     showFieldOwnersWarning,
     owners,
+    approvalApprovedGroup,
     ...props
   }: T) => {
+    let approvedStatuses;
+    let uniqApproverGrp;
     let isComponentVisible = false;
     let inlineApprovalExists = false;
 
@@ -292,6 +295,17 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       return null;
     }
 
+    if (documentStatus === DocumentStatus.Released) {
+      if (!approvals) groups = {};
+      if (approvals) {
+        if (approvals.length > 0) {
+          approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
+          const approverGrp = approvedStatuses.flatMap(item => item.approverGroups);
+          uniqApproverGrp = uniq([...approverGrp]);
+        }
+      }
+    }
+
     return Component({
       ...(props as T),
       requestApproval,
@@ -316,6 +330,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       disableChipDelete,
       showFieldOwnersWarning,
       isContributorIncluded,
+      approvalApprovedGroup: uniqApproverGrp,
     });
   };
 

@@ -11,6 +11,7 @@ export type FBApproversProps =
   checkedGroups?: FBRequiredApprover[]
   value?: string[]
   changeRequestApprovals?: Approval[]
+  approvalApprovedGroup: string[]
 };
 
 export interface FBId {

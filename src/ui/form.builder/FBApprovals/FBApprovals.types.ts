@@ -30,6 +30,7 @@ export type FBApprovalsProps =
   owners?: Owner[]
   showFieldOwnersWarning?: boolean
   isContributorIncluded?: (id: string) => void
+  approvalApprovedGroup: string[]
 };
 
 export interface Owner {
