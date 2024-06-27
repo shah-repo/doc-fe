@@ -8,15 +8,14 @@ interface Props {
   key: number
 }
 
-const ApprovalApprovedGroup: React.FunctionComponent<Props> = ({ groupName, key }) => {
-  return (
-    <>
-      <Box display="flex" key={`fb-approvers-group-${key}`} mr={2.5}>
-        <CheckCircleIcon color="primary" />
-        <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={groupName} />
-      </Box>
-    </>
-  );
-};
+const ApprovalApprovedGroup: React.FC<Props> = ({
+  groupName,
+  key,
+}) => (
+  <Box display="flex" key={`fb-approvers-group-${key}`} mr={2.5}>
+    <CheckCircleIcon color="primary" />
+    <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={groupName} />
+  </Box>
+);
 
 export default ApprovalApprovedGroup;
