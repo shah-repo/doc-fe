@@ -21,6 +21,7 @@ const AvatarUploadContainer: React.FunctionComponent<Props> = ({
   const classes = styles();
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     const file = event.currentTarget.files && event.currentTarget.files[0];
+    // @ts-ignore
     setPreviewAvatar(URL.createObjectURL(file));
     setFile(file);
   };

@@ -1,9 +1,9 @@
+import React from 'react';
+import { EditableCompanyLocation } from '../../user.management/profile/CompanyLocations/types';
 import { ColumnDefinition } from '../KendoDataGrid/KendoDataGrid.types';
 import ActionsCellTemplate from './components/ActionsCellTemplate';
 import { ActiveCellTemplate } from './components/ActiveCellTemplate';
 import { TextCellTemplate } from './components/TextCellTemplate';
-import { EditableCompanyLocation } from '../../user.management/profile/CompanyLocations/types';
-import React from 'react';
 
 interface SchemaOptions {
   actionsClass: string
@@ -34,6 +34,7 @@ export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm,
       field: 'actions',
       filterable: false,
       className: actionsClass,
+      // @ts-ignore
       template: (props) => <ActionsCellTemplate {...props} onDiscard={onDiscard} onConfirm={onConfirm} />,
       hidden: !isActive,
       width: 0,

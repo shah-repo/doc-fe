@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { DocumentRevisionFooterInfo, DocumentRevisionFooterStateProps } from '../../../../..';
 

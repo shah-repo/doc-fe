@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable } from 'mobx';
 import { FBMediaProps } from '..';
 

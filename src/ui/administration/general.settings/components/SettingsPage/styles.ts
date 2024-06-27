@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 import { NextTheme } from '../../../../layout/theme-next/provider';
 import { SIDEBAR_WIDTH } from '../../constants';
-
+// @ts-ignore
 export default makeStyles((theme: NextTheme) => ({
   root: {
     width: '100%',

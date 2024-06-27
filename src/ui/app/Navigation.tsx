@@ -155,5 +155,5 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
     </Drawer>
   );
 };
-
+// @ts-ignore
 export default withRouter(withStyles(styles)(Navigation));

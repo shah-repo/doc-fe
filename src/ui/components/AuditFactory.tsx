@@ -4,7 +4,7 @@ import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { translate } from '../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -20,8 +20,8 @@ import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedPart
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
-import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
+import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -32,14 +32,14 @@ import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
 import AuditTraineeList from './AuditTraineeList';
-import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
+import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
   audit: Audit
   dataCy?: string
-  revIdRelatedTypeObj: {[key: string]: IRevIdMapper}
+  revIdRelatedTypeObj?: {[key: string]: IRevIdMapper}
 }
 
 type Props = OwnProps;

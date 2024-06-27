@@ -1,14 +1,4 @@
-import {
-  Box,
-  ButtonProps,
-  Dialog,
-  DialogContent,
-  Grid,
-  IconButton,
-  Typography,
-  withStyles,
-  WithStyles,
-} from '@material-ui/core';
+import { Box, ButtonProps, Dialog, DialogContent, Grid, IconButton, Typography, withStyles, WithStyles } from '@material-ui/core';
 import { Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React from 'react';
@@ -193,5 +183,5 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
     </>
   );
 };
-
+// @ts-ignore
 export default withStyles(styles)(TransitionDialog);

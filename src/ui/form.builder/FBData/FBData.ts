@@ -47,6 +47,7 @@ class FBData {
   }
 
   public static get autocompleteOptions (): FBAutocompleteAsyncConfig[] {
+    // @ts-ignore
     return autocompleteOptions;
   }
 

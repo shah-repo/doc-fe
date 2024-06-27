@@ -15,9 +15,9 @@ import { WhiteLabelingEnv } from '../../state/ducks/company/types';
 import { store } from '../../state/store';
 import Text from '../components/Text';
 import { ThemeEnv } from '../layout/theme/utils/types';
+import AutosaveToggle from './autosave/autosave';
 import styles from './Header.styles';
 import { UserMenuContext } from './NavigationProfile.container';
-import AutosaveToggle from './autosave/autosave';
 export interface HeaderPresenterProps {
   name: string
   fullHeight?: boolean
@@ -108,4 +108,5 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
     </AppBar>
   );
 };
+// @ts-ignore
 export default withStyles(styles)(Header);

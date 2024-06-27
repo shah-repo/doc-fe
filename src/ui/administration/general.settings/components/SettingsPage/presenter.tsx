@@ -79,6 +79,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
       </Box>
       <Box className={classes.panels}>
         {panels.map(panel => (
+          // @ts-ignore
           <panel.component
             key={panel.key}
             title={panel.title}

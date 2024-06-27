@@ -38,6 +38,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
     = intl.formatMessage({ id: isTruncated ? 'document.revision.view.more' : 'document.revision.view.less' });
 
   return (
+    // @ts-ignore
     <Grid item={true} xs={12} className={classes.root}>
       {label && (
         <Grid item={true} xs={12} id="BaseWithhtml-label">

@@ -8,6 +8,7 @@ const FBMapWrapper = <T extends any>({
   ...props
 }: FBMapWrapperProps<T>) => (
   <React.Fragment>
+    {/* @ts-ignore */}
     {map(collection, (value: T, key: number | any) => children(value, key, props))}
   </React.Fragment>
 );

@@ -1,4 +1,5 @@
 import { template } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action } from 'mobx';
 import { FBPOReceiveFormConstructor, FBPurchaseOrderItem } from '..';
 import { DocumentType } from '../../../state/ducks/documentRevisions/documentType/types';

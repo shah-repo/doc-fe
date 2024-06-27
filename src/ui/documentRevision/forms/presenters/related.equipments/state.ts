@@ -1,10 +1,11 @@
-import { computed, observable, action } from 'mobx';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { action, computed, observable } from 'mobx';
+import { stripTags } from '../../../../../common/utils/helpers';
+import { Id } from '../../../../../state/ducks/common/types';
+import { SecurityListRequest } from '../../../../../state/ducks/documentRevisions/types';
 import { FBEndpoint } from '../../../../form.builder/defaults/FBEndpoint';
 import FBRequest from '../../../../form.builder/FBApi/FBApi.request';
 import { RelatedEquipment } from './types';
-import { Id } from '../../../../../state/ducks/common/types';
-import { SecurityListRequest } from '../../../../../state/ducks/documentRevisions/types';
-import { stripTags } from '../../../../../common/utils/helpers';
 
 interface ConstructorOptions {
   parentSpecificationId: string

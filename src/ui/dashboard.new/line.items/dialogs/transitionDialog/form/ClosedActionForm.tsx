@@ -1,10 +1,4 @@
-import {
-  Button,
-  Grid,
-  Typography,
-  withStyles,
-  WithStyles,
-} from '@material-ui/core';
+import { Button, Grid, Typography, withStyles, WithStyles } from '@material-ui/core';
 import { Form } from 'formik';
 import * as React from 'react';
 import { AsyncState, AsyncStatus } from '../../../../../../state/types';
@@ -89,5 +83,5 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({
     </Button>
   </Form>
 );
-
+// @ts-ignore
 export default withStyles(styles)(ClosedActionForm);

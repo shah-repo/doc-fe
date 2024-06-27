@@ -1,4 +1,5 @@
 import { includes, isUndefined, set, truncate } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, reaction } from 'mobx';
 import { FBAttachment, FBFilePresenterDownloadType } from '..';
 import { ATTACHMENT_ROOT_URL } from '../../../state/ducks/attachments/constants';

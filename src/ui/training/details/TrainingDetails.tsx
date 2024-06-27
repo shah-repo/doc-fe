@@ -6,10 +6,10 @@ import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
-import Text from '../../components/Text';
 import AttachmentIconPresenter from '../../components/common/attachment.icon/presenter';
+import Text from '../../components/Text';
 import { FBFieldName } from '../../form.builder';
 import { Trainee, TraineeAttachment } from '../../form.builder/FBTraineeList/types';
 import { DialogHandler } from '../../hooks/useDialog';
@@ -146,6 +146,7 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
               <Grid container>
                 {attachments?.map(attachment => (
                   <Grid key={attachment.id} item xs={6}>
+                     {/* @ts-ignore */}
                     <AttachmentIconPresenter attachment={attachment} />
                   </Grid>
                 ))}

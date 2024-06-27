@@ -5,10 +5,7 @@ import React from 'react';
 import { translate } from '../../../common/intl';
 import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import {
-  FBApprovalMatrixFieldData,
-  FBApprovalMatrixItem,
-} from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
+import { FBApprovalMatrixFieldData, FBApprovalMatrixItem } from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
 import BooleanFilter from './components/BooleanFilter';
 import CheckboxCellTemplate from './components/CheckboxCellTemplate';
 import DropdownCellTemplate from './components/DropdownCellTemplate';
@@ -99,6 +96,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: StatusFilter,
+      // @ts-ignore
       template: StatusCellTemplate,
       locked: true,
       width: 140,
@@ -110,6 +108,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: InputFilter,
+      // @ts-ignore
       template: InputCellTemplate,
       locked: true,
       required: true,
@@ -133,6 +132,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: InputFilter,
+      // @ts-ignore
       template: InputCellTemplate,
       locked: true,
       required: true,
@@ -145,6 +145,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
+      // @ts-ignore
       template: CheckboxCellTemplate,
       width: 100,
     },
@@ -155,6 +156,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
+      // @ts-ignore
       template: CheckboxCellTemplate,
       width: 100,
     },
@@ -176,6 +178,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
         id: kebabCase(headTitle),
         title: headTitle,
         headerClassName: cellARHeaderClassName,
+        // @ts-ignore
         children: approvalRoles.map((role, index, arr) => ({
           id: kebabCase(role.name),
           title: role.name,

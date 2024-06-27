@@ -1,4 +1,5 @@
 import { set } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable } from 'mobx';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { ListItemEdited, ListItemUpdateData, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';

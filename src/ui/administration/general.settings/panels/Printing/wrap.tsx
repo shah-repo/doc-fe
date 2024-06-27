@@ -19,7 +19,7 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     const [isOpened, setIsOpened] = useState(false);
     const [dataResult, setDataResult] = React.useState(isArray(PrintersData?.value) ? PrintersData?.value : []);
     const [isEdit, setIsEdit] = React.useState({});
-    const [deleteData, setDeleteData] = React.useState({});
+    const [deleteData, setDeleteData] = React.useState<ZebraPrintSettings>({} as ZebraPrintSettings);
     const [rowIndex, setRowIndex] = React.useState(0);
     const confirmationDialog = useDialog();
     const dispatch = useDispatch();
@@ -30,19 +30,20 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
     }, [PrintersData?.value]);
 
     const formik = useFormik<ZebraPrintSettings>({
-      initialValues: { apiKey: '', tenantId: '', printer: { isActive: true, name: '', sn: '' } },
+      initialValues: { apiKey: '', tenantId: '', printer: { isActive: true, name: '', sn: '', labelTemplates: [{ id: '', name: '' }] } },
       onSubmit: values => {
+        const fValues = formValues as GeneralSettings;
         if (isEdit) {
           const newDataResult = cloneDeep(dataResult);
           newDataResult[rowIndex] = values;
-          formValues.zebraPrint = newDataResult;
-          dispatch(companyActions.updateGeneralSettings(formValues, settingsId, 'PUT'));
+          fValues.zebraPrint = newDataResult;
+          dispatch(companyActions.updateGeneralSettings(fValues, settingsId, 'put'));
         } else {
           values.printer.isActive = true;
           const newData = cloneDeep(dataResult);
           newData.push(values);
-          formValues.zebraPrint = newData;
-          dispatch(companyActions.updateGeneralSettings(formValues));
+          fValues.zebraPrint = newData;
+          dispatch(companyActions.updateGeneralSettings(fValues));
         }
         setIsOpened(false);
       },
@@ -71,9 +72,9 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
 
     const confirmDeletePrinter = () => {
       const newData = dataResult.filter(item => item.apiKey !== deleteData.apiKey);
-      const fValues: GeneralSettings = cloneDeep(formValues);
+      const fValues: GeneralSettings = cloneDeep(formValues as GeneralSettings);
       fValues.zebraPrint = newData;
-      dispatch(companyActions.updateGeneralSettings(fValues, settingsId, 'PUT'));
+      dispatch(companyActions.updateGeneralSettings(fValues, settingsId, 'put'));
       confirmationDialog.close();
     };
 
@@ -96,9 +97,9 @@ export const withLabelPrinting = <T extends SettingsPanelProps>(
           return item;
         });
         setDataResult(dataItems);
-        const fValues: GeneralSettings = cloneDeep(formValues);
+        const fValues: GeneralSettings = cloneDeep(formValues as GeneralSettings);
         fValues.zebraPrint = dataItems;
-        dispatch(companyActions.updateGeneralSettings(fValues, settingsId, 'PUT'));
+        dispatch(companyActions.updateGeneralSettings(fValues, settingsId, 'put'));
       }
     };
 

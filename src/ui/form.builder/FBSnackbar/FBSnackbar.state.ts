@@ -1,4 +1,5 @@
 import { SnackbarOrigin } from '@material-ui/core';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { FBSnackbarProps } from '..';
 

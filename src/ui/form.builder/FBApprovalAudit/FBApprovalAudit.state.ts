@@ -1,8 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action } from 'mobx';
 import { FBApprovalAuditConstructor, FBAuditData, FBAutocompleteAsyncState, FBInputType } from '..';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import FBStore from '../FBStore/FBStore';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 
 class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
   public static omitAudit: FBInputType[] = [

@@ -2,7 +2,7 @@ import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Ra
 import cx from 'classnames';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
-import { COLOR_TYPES, ListItemEdited, RELATED_PARTS_STATUS, RELATED_TYPE, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
+import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../../../../state/ducks/relatedParts/types';
 import { FBButton, FBTooltip } from '../../../../form.builder';
 
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
@@ -20,19 +20,19 @@ import { Link } from 'react-router-dom';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
-import Text from '../../../../components/Text';
 import Dialog from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { isDocumentRevisionReleased } from '../../../helpers/documentRevisionStatus';
+import { getDynamicTextValue, getReplacedMessage, RELATED_TYPE_VALUES_ENUM } from './helper';
 import useStyles from './RelatedPart.styles';
 import RelatedPartsState from './RelatedParts.state';
-import RelatedPartsTableHeader from './RelatedPartsTableHeader';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue, getReplacedMessage } from './helper';
 import RelatedPartsQuickViewDialog from './relatedPartsQuickViewDialog';
+import RelatedPartsTableHeader from './RelatedPartsTableHeader';
 
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_PARTS_STATUS
@@ -190,6 +190,7 @@ const ParentPartSelector: React.FunctionComponent<{
 
       <Dialog
         open={showConfirmDialog}
+        // @ts-ignore
         className={classes.dialog}
         title="relatedParts.confirm.selection"
         confirmLabel="common.confirm"
@@ -737,7 +738,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             data-cy="delete-related-part-sub-part"
             className={classes.actionButton}>
             <DeleteIcon className={classes.deleteIconButton}
-              onClick={() => handleRemove?.(listItemBeingEdited?.docRevId as string)} />
+              onClick={() => handleRemove?.(listItemBeingEdited?.docRevId)} />
           </Button> }
           <Button
             data-cy="cancel-related-part-sub-part-addition"

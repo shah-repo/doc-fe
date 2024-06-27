@@ -278,8 +278,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
     onError: (msg) => toastError(msg),
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleAddButtonClick = () => {
+  // @ts-ignore
+  const handleAddButtonClick = () => { // eslint-disable-line @typescript-eslint/no-unused-vars
     // commented create new part temporarily
     categoryAsync.start(getDocTypesByCategory, { category: 'Parts' }, categoryAsync);
   };

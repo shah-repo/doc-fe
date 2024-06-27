@@ -50,7 +50,7 @@ const createImplementationPlan = () => (
     attachments: [],
   }
 );
-
+// @ts-ignore
 export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): ChangeRequest => ({
   createdAt: '2019-05-31',
   id: faker.random.uuid(),
@@ -78,7 +78,7 @@ export const getApprover = (
   user: getUser(),
   ...approver,
 });
-
+// @ts-ignore
 export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
   id: faker.random.uuid(),
   type: 'ARRAY_NEW',

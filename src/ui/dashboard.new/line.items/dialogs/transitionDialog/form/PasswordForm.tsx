@@ -3,10 +3,7 @@ import { Form } from 'formik';
 import * as React from 'react';
 import { AsyncState, AsyncStatus } from '../../../../../../state/types';
 import InputField from '../../../../../components/forms/fields/Input';
-import {
-  required,
-  validator,
-} from '../../../../../components/forms/fields/validators';
+import { required, validator } from '../../../../../components/forms/fields/validators';
 import FormMessage from '../../../../../components/forms/FormMessage';
 import FormProgress from '../../../../../components/forms/FormProgress';
 import SubmitButton from '../../../../../components/forms/SubmitButton';
@@ -22,7 +19,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
   cancel,
   classes,
   asyncState,
-}) => (
+}) => (// @ts-ignore
   <Form className={classes.form}>
     <FormMessage asyncState={asyncState} />
     <InputField

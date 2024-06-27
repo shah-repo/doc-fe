@@ -1,4 +1,5 @@
 import { filter, isUndefined, union } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { Attachment } from '../../../state/ducks/attachments/types';
 import { Id } from '../../../state/ducks/common/types';

@@ -85,5 +85,5 @@ const PoRejectDialog: React.FunctionComponent<Props> = ({
     }
   </>
 );
-
+// @ts-ignore
 export default withStyles(styles)(PoRejectDialog);

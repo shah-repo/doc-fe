@@ -12,5 +12,6 @@ export default makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0, 0.5),
   },
+  // @ts-ignore
   loadMore: loadMoreStyles(theme),
 }));

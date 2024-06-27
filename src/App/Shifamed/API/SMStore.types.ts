@@ -11,11 +11,11 @@ interface SMStoreResponse {
 }
 
 export interface SMStoreAdapter {
-  get: (path: string, data?: {}, options?: {}) => SMStoreResponse
-  patch: (path: string, data?: {}, options?: {}) => SMStoreResponse
-  post: (path: string, data?: {}, options?: {}) => SMStoreResponse
-  put: (path: string, data?: {}, options?: {}) => SMStoreResponse
-  del: (path: string, data?: {}, options?: {}) => SMStoreResponse
+  get: (path: string, data?, options?: {}) => SMStoreResponse
+  patch: (path: string, data?, options?: {}) => SMStoreResponse
+  post: (path: string, data?, options?: {}) => SMStoreResponse
+  put: (path: string, data?, options?: {}) => SMStoreResponse
+  del: (path: string, data?, options?: {}) => SMStoreResponse
 }
 
 // interface SMStoreRequestProps<Response, Body> {

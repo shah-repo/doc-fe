@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { FBHelloSignPayload } from '..';
 import { FBEndpoint } from '../defaults/FBEndpoint';

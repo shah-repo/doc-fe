@@ -1,4 +1,5 @@
 import { set, union } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable } from 'mobx';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 

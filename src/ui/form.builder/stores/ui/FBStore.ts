@@ -1,8 +1,9 @@
-import { Dictionary, filter, first, get, isUndefined, set as lodashSet, map, uniqBy } from 'lodash';
+import { Dictionary, filter, first, get, isUndefined, map, set as lodashSet, uniqBy } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
-import FBAutocompleteAsyncStore from '../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBFormValues } from '../../defaults/formik';
+import FBAutocompleteAsyncStore from '../../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { FBInputProps } from '../../types/common';
 import { FBTemplateSchema } from '../../types/store';
 import { FBWorkspaceMode } from '../../types/workspace';

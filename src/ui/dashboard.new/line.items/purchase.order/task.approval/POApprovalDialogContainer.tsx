@@ -6,8 +6,8 @@ import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
-import Text from '../../../../components/Text';
 import { toastSuccess } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import Colors from '../../../../layout/theme/utils/colors';
@@ -26,6 +26,10 @@ interface Props {
   type?: string
 }
 
+interface ResponseProps {
+  status: string
+}
+
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   approvalId,
   transition,
@@ -37,7 +41,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
 }) => {
   const dispatch = useDispatch();
   const async = useAsync({
-    onSuccess: (response) => {
+    onSuccess: (response?: ResponseProps) => {
       transitionDialog.close();
       toastSuccess(
         <>

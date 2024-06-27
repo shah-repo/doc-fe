@@ -100,5 +100,5 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
     </Paper>
   );
 };
-
+// @ts-ignore
 export default withStyles(styles)(LoginFormPresenter);

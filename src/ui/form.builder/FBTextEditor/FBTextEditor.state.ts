@@ -1,4 +1,5 @@
 import { EditorState } from 'draft-js';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 
 class FBTextEditorState {

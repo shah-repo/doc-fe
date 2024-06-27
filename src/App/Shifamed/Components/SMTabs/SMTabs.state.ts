@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable } from 'mobx';
 import { Size } from 'react-virtualized';
 

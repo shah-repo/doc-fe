@@ -1,14 +1,4 @@
-import {
-  Box,
-  ButtonProps,
-  Dialog,
-  DialogContent,
-  Grid,
-  IconButton,
-  Typography,
-  withStyles,
-  WithStyles,
-} from '@material-ui/core';
+import { Box, ButtonProps, Dialog, DialogContent, Grid, IconButton, Typography, withStyles, WithStyles } from '@material-ui/core';
 import { Formik, FormikProps } from 'formik';
 import React from 'react';
 import { ReactComponent as ModelCloseIcon } from '../../../../../../src/assets/images/modelClose.svg';
@@ -97,5 +87,5 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
     </>
   );
 };
-
+// @ts-ignore
 export default withStyles(styles)(TransitionDialog);

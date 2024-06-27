@@ -1,5 +1,6 @@
 import { Approval } from 'aws-sdk/clients/codecommit';
 import { every, filter, isEmpty, map, unionBy, values } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPOInlineApprovalUpdateBody, FBRequiredApprover } from '..';
 import { GroupType } from '../../../state/ducks/auth/types';

@@ -1,8 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
-import { FBEndpoint } from '../defaults/FBEndpoint';
-import FBRequest from '../FBApi/FBApi.request';
 import { AvailableMaintenanceForm, ProposedDocIdBody } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 
 class FBEQMaintenanceState {
   @observable public newPMDisabled?: boolean;

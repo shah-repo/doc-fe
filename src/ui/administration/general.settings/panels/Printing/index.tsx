@@ -43,7 +43,7 @@ interface SchemaBuilderProps {
   cellRender: (props: any) => JSX.Element
 }
 
-type schemaBuilder = (options: SchemaBuilderProps) => Array<ColumnDefinition<T>>;
+type schemaBuilder = (options: SchemaBuilderProps) => Array<ColumnDefinition<{}>>;
 const buildSchema: schemaBuilder = ({ ActionCell, cellRender }) => {
   return [
     {
@@ -122,7 +122,7 @@ const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
 
   const cellRender = (props: GridCellProps) => {
     const { dataItem, field } = props;
-    const value = get(dataItem, field);
+    const value = get(dataItem, field ?? '');
     return (<td className="k-command-cell"><OverflowTooltip title={value}>{value}</OverflowTooltip></td>);
   };
 

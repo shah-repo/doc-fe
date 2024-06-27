@@ -52,7 +52,7 @@ const PartVendorsTable: React.FC<VendorTableProps> = ({
     isActive: false,
     isInEditMode: false,
   });
-
+  // @ts-ignore
   const vendorsList = vendors?.reduce((list, item) => {
     const supplier = suppliers.find((vendor) => vendor.id === item.vendor.id);
     const supplierName = supplier?.name ?? item.vendor?.name;

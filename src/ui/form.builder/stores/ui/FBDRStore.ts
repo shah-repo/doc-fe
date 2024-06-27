@@ -1,4 +1,5 @@
 import { get, isEmpty, union } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable } from 'mobx';
 import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';

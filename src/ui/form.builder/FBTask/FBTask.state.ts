@@ -1,4 +1,5 @@
 import { filter, find, findIndex, omit } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { FBClosingNoteProps, FBTaskItem, FBTaskItemStatus } from '..';
 import { FBEndpoint } from '../defaults/FBEndpoint';

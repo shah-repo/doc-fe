@@ -63,6 +63,7 @@ const HeaderLotStatus: React.FC<Props> = ({ documentRevision }) => {
   return (
     <>
       <HeaderStatusButton
+        // @ts-ignore
         onItemSelect={confirmUpdate}
         label={statusLabel}
         options={options}

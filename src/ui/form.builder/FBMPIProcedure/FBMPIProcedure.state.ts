@@ -1,4 +1,5 @@
 import { cloneDeep } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { FBMPIProcedureSelectValue, FBProcedureValue } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 import { NextTheme } from '../../../../layout/theme-next/provider';
-
+// @ts-ignore
 export const styles = makeStyles((theme: NextTheme) => ({
   paper: ({ isPDF }: { isPDF: boolean } = { isPDF: false }) => ({
     height: isPDF ? '100%' : undefined,

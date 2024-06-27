@@ -5,8 +5,8 @@ import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import Dialog from '../../../../components/dialogs';
-import PromptIfDirty from '../../../../components/forms/PromptIfDirty';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
+import PromptIfDirty from '../../../../components/forms/PromptIfDirty';
 import useStyles from './styles';
 
 interface AddNewPrinterProps {
@@ -39,6 +39,7 @@ const AddNewPrinter: React.FunctionComponent<AddNewPrinterProps> = ({
           'data-cy': 'label-print-cancel-button',
         }}
         open={isOpened}
+        // @ts-ignore
         onConfirm={formik?.handleSubmit}
         onCancel={onCancel}
         disableEnforceFocus

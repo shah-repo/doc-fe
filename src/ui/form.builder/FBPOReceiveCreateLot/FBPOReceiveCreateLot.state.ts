@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action } from 'mobx';
 import { CreateLotBody, FBPOReceiveCreateLotConstructor, FBPurchaseOrderItem } from '..';
 import { FBEndpoint } from '../defaults/FBEndpoint';

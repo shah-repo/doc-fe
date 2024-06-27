@@ -1,4 +1,5 @@
 import { isEmpty, union } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { FBApprovalApi, FBApprovalConstructor, FBApprovalValue, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalRole } from '..';
 import { Audit } from '../../../state/ducks/audit/types';

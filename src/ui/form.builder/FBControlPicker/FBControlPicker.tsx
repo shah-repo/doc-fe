@@ -24,6 +24,7 @@ const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({
                   <FBButton
                     label={`form.builder.${picker as string}`}
                     dataCy={`form.builder.${picker as string}`}
+                    // @ts-ignore
                     onClick={openEditor && openEditor({ type: picker, index })}
                   />
                 )}

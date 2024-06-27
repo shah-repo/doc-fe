@@ -23,8 +23,8 @@ import ReferenceLink from '../../../../training/details/ReferenceLink';
 import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
-import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
 import { HoverStyleChip } from './DefaultHoverStyleChip';
 import { NormalStyleChip } from './DefaultNormalStyleChip';
 import useStyles from './DefaultTraining.styles';
@@ -126,6 +126,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               wrap="nowrap"
               justify="flex-start"
               alignItems="center"
+              // @ts-ignore
               className={classes.itemlistMobile}
             >
               {TrainingStatus.ASSIGNED !== status && (

@@ -100,6 +100,7 @@ DocumentRevisionDialogProps
               <AsyncGate
                 asyncAction={loadAction}
                 startActionOnMount
+                // @ts-ignore
                 asyncState={docRevId ? loadDocumentRevisionAsyncState : (_documentRevisionFormState?.newlyCreatedDocumentRevision ? { status: AsyncStatus.Success } : { status: '' })}
               >
                 {(_documentRevisionFormState?.newlyCreatedDocumentRevision || documentRevision) && (

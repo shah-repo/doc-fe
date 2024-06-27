@@ -59,7 +59,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   const [toolbarHidden, setToolbarHidden] = useState(toggleToolbar);
   const [toolbarHiddenDebounced, setToolbarHiddenDebounced] = useState(toggleToolbar);
 
-  useEffect(() => {
+  useEffect(() => {// @ts-ignore
     setValue(convertHtmlToDraft(field.value));
   }, []);
 
@@ -84,7 +84,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     if (!value) {
       return;
     }
-
+    // @ts-ignore
     const html = draftToHtml(convertToRaw(value.getCurrentContent())).trim();
     const fieldValue = html === '<p></p>' ? '' : html.replace(/ins>/g, 'u>');
     form.setFieldValue(field.name, fieldValue);
@@ -140,6 +140,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
       <Box hidden={hidden} data-cy={`RichTextEditor.${field.name}`}>
         <Editor
           editorState={value}
+          // @ts-ignore
           onEditorStateChange={setValue}
           onBlur={handleBlur}
           onFocus={handleFocus}

@@ -1,4 +1,5 @@
 import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { apiClient, FBRequestSet, FBRequestTemplateUrl } from '..';
 import { encodeString } from '../../../common/utils/helpers';

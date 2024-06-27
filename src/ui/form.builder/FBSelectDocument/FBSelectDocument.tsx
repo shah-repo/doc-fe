@@ -9,6 +9,7 @@ const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
   return (
     <>
       {isOutput && (
+        // @ts-ignore
         <FBAutocompleteAsync
           {...props}
           selectedOptions={options as string[]}
@@ -17,6 +18,7 @@ const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
         />
       )}
       {!isOutput && (
+        // @ts-ignore
         <FBAutocompleteAsync
           {...props}
           multiple={true}

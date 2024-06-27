@@ -8,6 +8,7 @@ const SMMap = <T extends any>({
   ...props
 }: SMMapProps<T>) => (
   <React.Fragment>
+    {/* @ts-ignore */}
     {map(collection, (value: T, key: number | any) => children(value, key, props))}
   </React.Fragment>
 );

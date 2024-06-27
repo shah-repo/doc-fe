@@ -1,4 +1,5 @@
 import { isUndefined } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import React from 'react';
 import { FBDialogProps } from '..';

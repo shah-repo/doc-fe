@@ -81,7 +81,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
       return toDocumentRevisionFormValuesForOutput(documentRevision);
     }
     if (history.location.state) {
-      return toDocumentRevisionFormValuesForOutput(history.location.state);
+      return toDocumentRevisionFormValuesForOutput(history.location.state as DocumentRevision);
     }
     return DEFAULT_INITIAL_VALUES();
   // eslint-disable-next-line react-hooks/exhaustive-deps

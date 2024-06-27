@@ -4,11 +4,11 @@ import React, { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDownloadFile, setIsLoading, setTemplateFile, uploadFileData } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImport, getTemplateFile } from '../../../../state/ducks/bulkImport/selectors';
-import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
 import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.types';
 import { DropzoneField } from '../../../components/forms/fields-next/index';
 import { toastError } from '../../../components/notifications';
+import Text from '../../../components/Text';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import ListFiles from '../ListFiles';
@@ -75,7 +75,7 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
       <Box className={classes.container}>
         <Formik initialValues={{ files: [] }} onSubmit={handleSubmit}>
           <Form>
-            <DropzoneField name="files" onDropCallback={handleFilesDrop} multiple={false} accept={{
+            <DropzoneField name="files" onDropCallback={handleFilesDrop} isMultiple={false} accept={{
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
                 '.xlsx',
               ],

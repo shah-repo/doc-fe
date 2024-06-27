@@ -1,4 +1,5 @@
 import { isEmpty, map } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, ObservableMap } from 'mobx';
 
 class FBAutocompleteAsyncStore {

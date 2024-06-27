@@ -1,4 +1,5 @@
 import { filter, find, isUndefined, map, union } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { FBAttachment, FBFile, FBMediaAlbumFieldMode } from '..';
 import { ATTACHMENT_ROOT_URL } from '../../../state/ducks/attachments/constants';

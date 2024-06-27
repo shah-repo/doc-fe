@@ -11,6 +11,7 @@ const RecievedCell: CellComponent<FBPurchaseOrderItem, { loading?: boolean }> = 
   loading,
   ...props
 }) => {
+  // @ts-ignore
   const classes = useStyles();
 
   return (

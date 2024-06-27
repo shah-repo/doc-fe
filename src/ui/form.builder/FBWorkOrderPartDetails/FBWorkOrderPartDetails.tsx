@@ -134,6 +134,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
         item
         xs={displayInfoIcon ? 5 : 6}
       >
+        {/* @ts-ignore */}
         <FBAutocompleteAsync
           {...props}
           name={PART_TO_BE_MADE}

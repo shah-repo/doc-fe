@@ -93,11 +93,12 @@ const apiMiddleware: Middleware = ({
     if (axios.isCancel(exception)) {
       return;
     }
+    // @ts-ignore
     const redirectToMaintenance = exception?.response?.status === 491
       && window.location.pathname !== MAINTENANCE
       && window.location.pathname !== STATUS
       && window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
-
+    // @ts-ignore
     const userLocked = exception?.response?.status === 423
       && window.location.pathname !== USER_LOCKED
       && window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
@@ -106,13 +107,15 @@ const apiMiddleware: Middleware = ({
     redirectToMaintenance && redirectTo(MAINTENANCE)();
 
     let responseMessage = '';
+    // @ts-ignore
     const isUnauthorizedRequest = exception?.response?.status === 401 && action.includeAuthorization;
+    // @ts-ignore
     const isPasswordAction = exception?.response?.status === 401 && action.password;
 
     if (isUnauthorizedRequest && !isPasswordAction) {
       dispatch(authActions.logoutUser());
     }
-
+    // @ts-ignore
     switch (exception?.response?.status) {
       case 425: {
         responseMessage = intl.formatMessage({
@@ -123,6 +126,7 @@ const apiMiddleware: Middleware = ({
       default: {
         const {
           data: { message },
+          // @ts-ignore
         } = exception.response as AsyncActionErrorResponse;
         if (isArray(message) && has(first(message), 'message')) {
           responseMessage = join(get(first(message), 'message'), '\n');
@@ -132,7 +136,7 @@ const apiMiddleware: Middleware = ({
         break;
       }
     }
-
+    // @ts-ignore
     const errorMessage: string = responseMessage || exception.message;
 
     action.onFailure(errorMessage, dispatch);

@@ -35,7 +35,7 @@ export enum AsyncStatus {
 
 export interface AsyncActionPayload {
   status: AsyncStatus
-  message: string
+  message?: string
 }
 
 export type AsyncReducerState = AsyncActionPayload;

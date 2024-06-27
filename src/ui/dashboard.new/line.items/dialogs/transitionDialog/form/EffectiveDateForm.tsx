@@ -3,18 +3,10 @@ import { Form } from 'formik';
 import moment from 'moment';
 import * as React from 'react';
 import { ReactComponent as ScheduleIcon } from '../../../../../../assets/images/ScheduleIcon.svg';
-import {
-  getFormattedDateString,
-  getStartOfDayDateString,
-  MomentFormats,
-  TIME_ZONE,
-} from '../../../../../../common/utils/date';
+import { getFormattedDateString, getStartOfDayDateString, MomentFormats, TIME_ZONE } from '../../../../../../common/utils/date';
 import { AsyncState } from '../../../../../../state/types';
 import DatePickerStaticField from '../../../../../components/forms/fields/DatePickerStaticField';
-import {
-  required,
-  validator,
-} from '../../../../../components/forms/fields/validators/index';
+import { required, validator } from '../../../../../components/forms/fields/validators/index';
 import FormMessage from '../../../../../components/forms/FormMessage';
 import FormProgress from '../../../../../components/forms/FormProgress';
 import SubmitButton from '../../../../../components/forms/SubmitButton';
@@ -72,5 +64,5 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps & DateFi
     </Form>
   );
 };
-
+// @ts-ignore
 export default withStyles(styles)(EffectiveDateForm);

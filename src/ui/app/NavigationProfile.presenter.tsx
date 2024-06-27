@@ -1,17 +1,6 @@
 import { light } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Button,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Typography,
-} from '@material-ui/core';
+import { Button, Divider, Grid, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, MenuItem, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
@@ -155,5 +144,5 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
     </ClickAwayListener>
   </Box>);
 };
-
+// @ts-ignore
 export default withStyles(styles)(NavigationProfilePresenter);
