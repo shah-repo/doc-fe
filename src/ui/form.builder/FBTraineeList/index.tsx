@@ -13,11 +13,11 @@ import { translate } from '../../../common/intl';
 import { TIME_ZONE } from '../../../common/utils/date';
 import { companySelectors } from '../../../state/ducks/company';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
-import { Button, ButtonGroup } from '../../components/forms/fields-next';
-import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { Button, ButtonGroup } from '../../components/forms/fields-next';
 import useDialog from '../../hooks/useDialog';
 import TrainingDetails from '../../training/details/TrainingDetails';
 import FBInput from '../FBInput/FBInput';
@@ -128,7 +128,8 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
       return createDraftTrainee();
     }
 
-    const lastTrainee = traineeList[traineeList.length - 1];
+    const lastTrainee = last(traineeList);
+
     setEditedTrainee({
       id: uuidv4(),
       trainingCompletionDate: lastTrainee?.trainingCompletionDate,
