@@ -54,6 +54,7 @@ const fetchRecords = (
         {
           displayStatus: true,
           document: { docId: true, id: true },
+          precalc: { revision: true },
           id: true,
           name: true,
         },

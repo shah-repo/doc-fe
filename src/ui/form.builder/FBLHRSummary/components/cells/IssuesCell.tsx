@@ -64,7 +64,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
         label: translate('lhr.summary.displayRevision',
           {
             docId: item.document?.docId,
-            displayRevision: item?.displayRevision,
+            displayRevision: item.precalc?.revision,
             name: item?.name,
           }),
         value: item.id,
