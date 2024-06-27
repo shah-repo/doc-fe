@@ -470,6 +470,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                       nextStatus: change.nextValue,
                       relatedType: getDynamicTextValue(
                         revIdRelatedTypeObj[change.documentRevisionId]?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+                      rowDetails: getLhrSummaryRowIdentifier(change),
                     }}
                   />
                 </Typography>
@@ -596,7 +597,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 const labelToShow = (change: Audit,
   groupKey: number | undefined,
   key: number | undefined,
-  revIdRelatedTypeObj: {[key: string]: IRevIdMapper}) => {
+  revIdRelatedTypeObj: { [key: string]: IRevIdMapper }) => {
   const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId] ?? {};
   return (
     <>
@@ -620,6 +621,41 @@ const labelToShow = (change: Audit,
       />}
     </>
   );
+};
+
+const getLhrSummaryRowIdentifier = (change: Audit): string => {
+  const prevVal: string = change.previousValue as string;
+  const nextVal: string = change.nextValue as string;
+
+  const { step: prevStep, stepOrMpiDetails: prevDetails } = JSON.parse(prevVal);
+  const { step: nextStep, stepOrMpiDetails: nextDetails } = JSON.parse(nextVal);
+
+  const prevStepValue = prevDetails?.isExternalItem ? prevDetails.value : prevDetails?.docId;
+  const nextStepValue = nextDetails?.isExternalItem ? nextDetails.value : nextDetails?.docId;
+
+  let stepNumber = '';
+  if (prevStep !== nextStep && nextStep !== undefined) {
+    if (prevStep === undefined) {
+      stepNumber = nextStep;
+    } else {
+      stepNumber = `${prevStep} To ${nextStep}`;
+    }
+  } else {
+    stepNumber = prevStep;
+  }
+
+  let stepDetails = '';
+  if (prevStepValue !== nextStepValue && nextStepValue !== undefined) {
+    if (prevStepValue === undefined) {
+      stepDetails = nextStepValue;
+    } else {
+      stepDetails = `${prevStepValue} To ${nextStepValue}`;
+    }
+  } else {
+    stepDetails = prevStepValue;
+  }
+
+  return `${stepNumber}/${stepDetails}`;
 };
 
 export default AuditPresenter;
