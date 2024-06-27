@@ -11,7 +11,7 @@ import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
 import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';
@@ -19,6 +19,7 @@ import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common
 import AttachmentsField from '../../../../../../document.revision/form/attachments';
 import { FB, FBBOM, FBEditorState, FBProvider, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
 import FBAllocationTreeList from '../../../../../../form.builder/FBAllocation/components/treelist';
+import FBLHRSummary from '../../../../../../form.builder/FBLHRSummary';
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import FBDataStore from '../../../../../../form.builder/FBStore/FBDataStore';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
@@ -160,10 +161,19 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   if (tabConfig && [DOC_TYPE_GROUP.PART]
     .includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = tabConfig && [...tabConfig, {
+    tabConfig = [...tabConfig, {
       labelId: 'tabId.bom',
       tabId: TabTypeOptions.BOM.toLowerCase(),
       type: TabTypeOptions.BOM,
+    }];
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.PAPER_LHR]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = [...tabConfig, {
+      labelId: 'tabId.summary',
+      tabId: TabTypeOptions.SUMMARY.toLowerCase(),
+      type: TabTypeOptions.SUMMARY,
     }];
   }
 
@@ -308,6 +318,9 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           documentRevisionId={documentRevision?.id}
                           docRevStatus={documentRevision?.status}
                         />
+                      )}
+                      {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
+                        <FBLHRSummary isShowOnly={false} isDisabled={true} />
                       )}
                       {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
                         <FBAllocationTreeList documentRevision={documentRevision} isDisabled={true} />

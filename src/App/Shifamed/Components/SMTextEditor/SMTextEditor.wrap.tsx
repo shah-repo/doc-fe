@@ -114,12 +114,12 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
 
     const onAwayClick = () => {
       _documentRevisionFormState?.setExpanded(false);
-      _documentRevisionFormState?.setDescriptionFocused(false);
       _textEditorState?.setPreviewMode(true);
       showToggleButton?.();
       const editorState = _textEditorState?.editorState;
 
-      if (!disabled && name && editorState) {
+      if (!disabled && name && editorState && _documentRevisionFormState?.isDescriptionFocused) {
+        _documentRevisionFormState?.setDescriptionFocused(false);
         const htmlContent = draftToHtml(
           convertToRaw(editorState?.getCurrentContent()),
         ).trim();
