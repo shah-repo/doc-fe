@@ -147,7 +147,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   const { workspaceState } = FB.useStores();
   const { document } = workspaceState || {};
   const EQname = document?.formInput?.['fb-requipment-maintenance-section'];
-  const isPMform = Boolean(document?.['parentEquipment']?.['formInput']?.[EQname]?.preventativeForm);
+  const isPMform = Boolean(document?..parentEquipment?..formInput?.[EQname]?.preventativeForm);
 
   props.disabled = props.disabled && !isPMform;
   return (
