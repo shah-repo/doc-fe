@@ -46,7 +46,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     ...props
   }: T) => {
     let approvedStatuses;
-    let uniqApproverGrp;
+    let uniqApproverGroups;
     let isComponentVisible = false;
     let inlineApprovalExists = false;
 
@@ -301,7 +301,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         if (approvals.length > 0) {
           approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
           const approverGrp = approvedStatuses.flatMap(item => item.approverGroups);
-          uniqApproverGrp = uniq([...approverGrp]);
+          uniqApproverGroups = uniq([...approverGrp]);
         }
       }
     }
@@ -330,7 +330,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       disableChipDelete,
       showFieldOwnersWarning,
       isContributorIncluded,
-      approvalApprovedGroup: uniqApproverGrp,
+      approvalApprovedGroup: uniqApproverGroups,
     });
   };
 
