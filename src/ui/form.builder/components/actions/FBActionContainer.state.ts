@@ -1,4 +1,5 @@
 import { get, isEmpty, isUndefined } from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, set } from 'mobx';
 import { FETCH_VALIDATORS_REMOTE_URL_URL } from '../../../../state/ducks/auth/constants';
 import { RemoteValidatorHelper } from '../../../remoteValidators/remoteValidatorsHelper';

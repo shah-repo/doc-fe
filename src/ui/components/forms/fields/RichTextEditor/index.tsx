@@ -59,7 +59,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   const [toolbarHidden, setToolbarHidden] = useState(toggleToolbar);
   const [toolbarHiddenDebounced, setToolbarHiddenDebounced] = useState(toggleToolbar);
 
-  useEffect(() => {// @ts-ignore
+  useEffect(() => { // @ts-ignore
     setValue(convertHtmlToDraft(field.value));
   }, []);
 
