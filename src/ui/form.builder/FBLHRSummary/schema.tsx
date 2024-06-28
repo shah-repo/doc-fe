@@ -12,6 +12,7 @@ import { StatusCell } from './components/cells/StatusCell';
 import { StepCell } from './components/cells/StepCell';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { TypeCell } from './components/cells/TypeCell';
+import styles from './styles';
 import { EditableLHRSummaryItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -21,6 +22,7 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
 }: SchemaOptions): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
+  const classes = styles();
   return [
     {
       id: 'type',
@@ -150,7 +152,13 @@ export const buildSchema = ({
       field: 'recordCreationDate',
       title: 'lhr.summary.grid.heading.date',
       show: true,
-      template: (props) => <DateCell {...props} onClick={onRowClick} />,
+      template: (props) => <DateCell {...props}
+        onClick={onRowClick}
+        PopoverProps={{
+          PaperProps: {
+            className: classes.createdDatePaper,
+          },
+        }} />,
       width: 201,
     },
     {

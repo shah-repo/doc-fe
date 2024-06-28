@@ -18,6 +18,7 @@ import { CustomTemplateProps } from '../../types';
 export const DateCell: React.FC<CustomTemplateProps> = ({
   field,
   dataItem,
+  PopoverProps,
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const fieldValue = dataItem[field];
@@ -39,6 +40,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     <FormikField name={field}>
       <DatePicker
         {...getFieldProps(field)}
+        PopoverProps={PopoverProps}
         size="small"
         data-cy={`${field}`}
         onChange={handleChange}
