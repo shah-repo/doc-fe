@@ -3,7 +3,7 @@ import { getFormattedDateString, MomentFormats } from '../../../common/utils/dat
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FB } from '../helpers';
-import { EMPTY_PLACEHOLDER } from './constants';
+import { EMPTY_PLACEHOLDER, TYPE_OPTIONS } from './constants';
 import { DetailsObj, EditableLHRSummaryItem } from './types';
 
 export const getExcelColumns = (columns: Array<ColumnDefinition<EditableLHRSummaryItem>>): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
@@ -47,7 +47,7 @@ export const getExcelData = (
     return modifiedItem;
   });
 
-const getDisplayDocumentByDetailsObj = (object?: DetailsObj): string => {
+export const getDisplayDocumentByDetailsObj = (object?: DetailsObj): string => {
   const { docId, displayRevision, documentId, value } = object ?? {};
   return documentId && value
     ? getDisplayDocument(docId, displayRevision)
@@ -77,4 +77,8 @@ export const processData = (
 
     return modifiedItem;
   });
+};
+
+export const getTypeOptionLabelByValue = (value: string) => {
+  return TYPE_OPTIONS.find((option) => option.value === value)?.label;
 };

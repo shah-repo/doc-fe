@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -16,10 +16,11 @@ import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { isTranslation } from '../../translations/types';
-import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presenters/related.parts/helper';
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
+import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
 
 interface OwnProps {
@@ -629,7 +630,7 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
 
   const { step: prevStep, stepOrMpiDetails: prevDetails } = JSON.parse(prevVal);
   const { step: nextStep, stepOrMpiDetails: nextDetails } = JSON.parse(nextVal);
-
+  // modify here
   const prevStepValue = prevDetails?.isExternalItem ? prevDetails.value : prevDetails?.docId;
   const nextStepValue = nextDetails?.isExternalItem ? nextDetails.value : nextDetails?.docId;
 
@@ -645,17 +646,20 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
   }
 
   let stepDetails = '';
+  const prevStepValueWithRev = getDisplayDocumentByDetailsObj(prevDetails);
+  const nextStepValueWithRev = getDisplayDocumentByDetailsObj(nextDetails);
+
   if (prevStepValue !== nextStepValue && nextStepValue !== undefined) {
     if (prevStepValue === undefined) {
-      stepDetails = nextStepValue;
+      stepDetails = nextStepValueWithRev;
     } else {
-      stepDetails = `${prevStepValue} To ${nextStepValue}`;
+      stepDetails = `${prevStepValueWithRev} To ${nextStepValueWithRev}`;
     }
   } else {
-    stepDetails = prevStepValue;
+    stepDetails = prevStepValueWithRev;
   }
 
-  return `${stepNumber}/${stepDetails}`;
+  return `${stepNumber} / ${stepDetails}`;
 };
 
 export default AuditPresenter;
