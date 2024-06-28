@@ -516,7 +516,9 @@ export function KendoGrid<T extends any> ({
             </Grid>
           </Grid>
         </GridToolbar>
-        {isPrintColumnAvailable && isPrintColumnVisible && (// @ts-ignore
+        {isPrintColumnAvailable && isPrintColumnVisible && (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           <GridColumn
             {...printColumnProps }
             filterable={false}

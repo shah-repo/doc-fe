@@ -26,8 +26,10 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
     menuItems && (menuEls = map(menuItems, (menuItem, index) => {
       const [message, values, onClick] = at(menuItem, ['text', 'textValues', 'onClick']);
       return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         <MenuItem key={`fb-context-menu-item-${menuId}-${index}`} {...{ onClick }}>
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
           {/* @ts-ignore */}
           <Text {...{ message, values }} />
         </MenuItem>

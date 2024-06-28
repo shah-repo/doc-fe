@@ -278,6 +278,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
     onError: (msg) => toastError(msg),
   });
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const handleAddButtonClick = () => { // eslint-disable-line @typescript-eslint/no-unused-vars
     // commented create new part temporarily

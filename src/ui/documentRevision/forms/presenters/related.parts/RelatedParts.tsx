@@ -190,6 +190,7 @@ const ParentPartSelector: React.FunctionComponent<{
 
       <Dialog
         open={showConfirmDialog}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         className={classes.dialog}
         title="relatedParts.confirm.selection"

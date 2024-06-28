@@ -96,6 +96,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: StatusFilter,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       template: StatusCellTemplate,
       locked: true,
@@ -108,6 +109,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: InputFilter,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       template: InputCellTemplate,
       locked: true,
@@ -132,6 +134,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: InputFilter,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       template: InputCellTemplate,
       locked: true,
@@ -145,6 +148,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       template: CheckboxCellTemplate,
       width: 100,
@@ -156,6 +160,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       template: CheckboxCellTemplate,
       width: 100,
@@ -178,6 +183,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
         id: kebabCase(headTitle),
         title: headTitle,
         headerClassName: cellARHeaderClassName,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         children: approvalRoles.map((role, index, arr) => ({
           id: kebabCase(role.name),

@@ -1,6 +1,7 @@
 import faker from 'faker';
 import { DEFAULT_NAVIGATION_ITEMS } from '../constants';
 import { Company, Employee, WhiteLabeling } from '../types';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export const getCompany = (company: Partial<Company> = {}): Company => ({
   id: faker.random.uuid(),

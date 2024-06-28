@@ -146,6 +146,7 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
               <Grid container>
                 {attachments?.map(attachment => (
                   <Grid key={attachment.id} item xs={6}>
+                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                      {/* @ts-ignore */}
                     <AttachmentIconPresenter attachment={attachment} />
                   </Grid>

@@ -26,6 +26,7 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick,
   };
   return (
     column.cell
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
       ? <column.cell {...props} column={column} field={field} onClick={onCellClick} />
       : (
@@ -40,6 +41,7 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick,
                   ['data-cy' as string]: `cell-${kebabCase(column.id)}`,
                 },
                 column.template
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                   ? column.template({ ...props, column, field, onClick: onCellClick })
                   : undefined,

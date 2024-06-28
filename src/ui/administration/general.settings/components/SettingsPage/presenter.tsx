@@ -79,6 +79,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
       </Box>
       <Box className={classes.panels}>
         {panels.map(panel => (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           <panel.component
             key={panel.key}

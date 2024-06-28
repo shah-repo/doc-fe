@@ -93,11 +93,13 @@ const apiMiddleware: Middleware = ({
     if (axios.isCancel(exception)) {
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const redirectToMaintenance = exception?.response?.status === 491
       && window.location.pathname !== MAINTENANCE
       && window.location.pathname !== STATUS
       && window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const userLocked = exception?.response?.status === 423
       && window.location.pathname !== USER_LOCKED
@@ -107,14 +109,17 @@ const apiMiddleware: Middleware = ({
     redirectToMaintenance && redirectTo(MAINTENANCE)();
 
     let responseMessage = '';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const isUnauthorizedRequest = exception?.response?.status === 401 && action.includeAuthorization;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const isPasswordAction = exception?.response?.status === 401 && action.password;
 
     if (isUnauthorizedRequest && !isPasswordAction) {
       dispatch(authActions.logoutUser());
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     switch (exception?.response?.status) {
       case 425: {
@@ -126,6 +131,7 @@ const apiMiddleware: Middleware = ({
       default: {
         const {
           data: { message },
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
         } = exception.response as AsyncActionErrorResponse;
         if (isArray(message) && has(first(message), 'message')) {
@@ -136,6 +142,7 @@ const apiMiddleware: Middleware = ({
         break;
       }
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const errorMessage: string = responseMessage || exception.message;
 

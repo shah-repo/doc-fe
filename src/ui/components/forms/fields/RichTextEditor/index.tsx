@@ -59,7 +59,9 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   const [toolbarHidden, setToolbarHidden] = useState(toggleToolbar);
   const [toolbarHiddenDebounced, setToolbarHiddenDebounced] = useState(toggleToolbar);
 
-  useEffect(() => { // @ts-ignore
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     setValue(convertHtmlToDraft(field.value));
   }, []);
 
@@ -84,6 +86,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     if (!value) {
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const html = draftToHtml(convertToRaw(value.getCurrentContent())).trim();
     const fieldValue = html === '<p></p>' ? '' : html.replace(/ins>/g, 'u>');
@@ -140,6 +143,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
       <Box hidden={hidden} data-cy={`RichTextEditor.${field.name}`}>
         <Editor
           editorState={value}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           onEditorStateChange={setValue}
           onBlur={handleBlur}

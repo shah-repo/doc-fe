@@ -12,6 +12,7 @@ export default makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0, 0.5),
   },
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   loadMore: loadMoreStyles(theme),
 }));

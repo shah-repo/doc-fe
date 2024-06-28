@@ -39,6 +39,7 @@ const AddNewPrinter: React.FunctionComponent<AddNewPrinterProps> = ({
           'data-cy': 'label-print-cancel-button',
         }}
         open={isOpened}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         onConfirm={formik?.handleSubmit}
         onCancel={onCancel}

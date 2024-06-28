@@ -86,6 +86,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                         }`}
                         disableGutters
                       >
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/* @ts-ignore */}
                         <IconButton
                           disableRipple={true}
@@ -108,6 +109,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                           )}
                         </IconButton>
                         <ListItemText key={index} data-cy={picker.label}
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                           onClick={openEditor?.({ type: picker.key, index, isAddAction: true })
                           }

@@ -9,6 +9,7 @@ const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
   return (
     <>
       {isOutput && (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         <FBAutocompleteAsync
           {...props}
@@ -18,6 +19,7 @@ const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
         />
       )}
       {!isOutput && (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         <FBAutocompleteAsync
           {...props}

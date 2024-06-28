@@ -50,6 +50,7 @@ const createImplementationPlan = () => (
     attachments: [],
   }
 );
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): ChangeRequest => ({
   createdAt: '2019-05-31',
@@ -78,6 +79,7 @@ export const getApprover = (
   user: getUser(),
   ...approver,
 });
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
   id: faker.random.uuid(),

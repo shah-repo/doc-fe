@@ -1,4 +1,5 @@
 import { RouteComponentProps } from 'react-router-dom';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const getRouteComponentProps = <P = {}>(params?: P): RouteComponentProps<P> => ({
   match: {

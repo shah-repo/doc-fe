@@ -126,6 +126,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               wrap="nowrap"
               justify="flex-start"
               alignItems="center"
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               className={classes.itemlistMobile}
             >

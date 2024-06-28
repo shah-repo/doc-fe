@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 import { NextTheme } from '../../../../layout/theme-next/provider';
 import { SIDEBAR_WIDTH } from '../../constants';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export default makeStyles((theme: NextTheme) => ({
   root: {

@@ -109,7 +109,9 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
           });
         }
       }).filter(Boolean);
-      if (activeEmployees) { // @ts-ignore
+      if (activeEmployees) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         setEmployees(activeEmployees);
       }
 
@@ -119,7 +121,9 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       }
     }, [companyEmployees]);
 
-    const handleDateChange = (date: MaterialUiPickersDate) => { // @ts-ignore
+    const handleDateChange = (date: MaterialUiPickersDate) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       setSelectedDate(new Date(date?.toISOString()));
     };
 
@@ -189,7 +193,9 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
       const params = {
         printerSerial: printerSerial,
         labelTemplate: labelTemplate,
-        labelData: { // @ts-ignore
+        labelData: {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           status: getLotStatusLabel(selectedItem?.lotStatus),
           description: selectedParams.includes('description') ? description.slice(0, 90) : '',
           partDocId: selectedParams.includes('partDocId') ? initialValues.partId : '',

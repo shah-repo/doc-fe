@@ -183,5 +183,6 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
     </>
   );
 };
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export default withStyles(styles)(TransitionDialog);

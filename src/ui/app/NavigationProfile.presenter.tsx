@@ -144,5 +144,6 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
     </ClickAwayListener>
   </Box>);
 };
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export default withStyles(styles)(NavigationProfilePresenter);

@@ -341,6 +341,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   }, isTasksListAdded ? [editedTLItem] : []);
 
   return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     <Box ref={containerRef} className={classes.root} data-cy="tasks-list-table">
       <FBSection label={label ?? translate('approvalRequest.tasks.list.section.heading')}>

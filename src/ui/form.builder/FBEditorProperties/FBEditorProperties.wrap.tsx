@@ -51,9 +51,11 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     }
 
     onChange = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const [valueName, checked] = at(ev.target, ['value', 'checked']);
       // *NOTE: Mobile support until mobile switches to editor props
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       formState?.setFieldValue(valueName, checked);
     };

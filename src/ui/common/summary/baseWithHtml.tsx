@@ -38,6 +38,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
     = intl.formatMessage({ id: isTruncated ? 'document.revision.view.more' : 'document.revision.view.less' });
 
   return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     <Grid item={true} xs={12} className={classes.root}>
       {label && (

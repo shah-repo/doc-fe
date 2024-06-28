@@ -108,5 +108,6 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
     </AppBar>
   );
 };
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export default withStyles(styles)(Header);

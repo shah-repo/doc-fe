@@ -35,6 +35,7 @@ const schema: Array<ColumnDefinition<Document>> = [
     id: 'status',
     field: 'status',
     title: 'common.status',
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     cell: Status,
     width: 130,
