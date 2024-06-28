@@ -31,6 +31,8 @@ describe(' survey management actions test', () => {
       user: getUser(),
       groups: null,
     };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const handlers: Handlers = {
       successHandler: getCallbackHandler(),
       errorHandler: getCallbackHandler<string>(),
@@ -45,6 +47,8 @@ describe(' survey management actions test', () => {
 
   describe('getEmployee test', () => {
     const params: any = {};
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const handlers: Handlers<GetEmployeeResponse[]> = {
       successHandler: getCallbackHandler<GetEmployeeResponse[]>(),
       errorHandler: getCallbackHandler<string>(),
@@ -58,6 +62,8 @@ describe(' survey management actions test', () => {
   });
 
   describe('loadGroupsMe test', () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const handlers: Handlers<Group[]> = {
       successHandler: getCallbackHandler<Group[]>(),
       errorHandler: getCallbackHandler<string>(),
@@ -85,6 +91,8 @@ describe(' survey management actions test', () => {
         },
       ],
     };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const handlers: Handlers<Group[]> = {
       successHandler: getCallbackHandler<Group[]>(),
       errorHandler: getCallbackHandler<string>(),

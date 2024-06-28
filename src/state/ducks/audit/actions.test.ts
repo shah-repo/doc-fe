@@ -6,6 +6,8 @@ import { Audit } from './types';
 
 describe('audit actions tests', () => {
   describe('getChanges tests', () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const handlers: Handlers<Audit> = {
       successHandler: getCallbackHandler<Audit>(),
       errorHandler: getCallbackHandler<string>(),

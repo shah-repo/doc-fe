@@ -4,6 +4,8 @@ import AttachmentField from '../../components/common/attachment.icon/container';
 import { Attachment, Props } from './attachment';
 
 describe('Attachment tests', () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const defaultProps: Props = {
     isAttachmentEmpty: false,
   };

@@ -6,6 +6,8 @@ import { TrainingPlanTransition } from './types';
 
 describe('training actions tests', () => {
   describe('applyTransition tests', () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const handlers: Handlers = {
       successHandler: getCallbackHandler(),
       errorHandler: getCallbackHandler<string>(),

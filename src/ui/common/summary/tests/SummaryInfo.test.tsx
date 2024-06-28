@@ -17,6 +17,8 @@ describe('SummaryInfo tests', () => {
     const wrapper = getWrapper();
 
     expect(wrapper.find(Text).prop('translation')).toEqual(defaultProps.label);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     expect(wrapper.contains(defaultProps.value)).toBe(true);
   });
 });

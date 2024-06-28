@@ -7,6 +7,8 @@ import Container, { Props } from './Container';
 
 describe('Container tests', () => {
   const getWrapper = (props: Partial<Props> = {}) => shallow(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <Container {...props} />,
   );
 

@@ -22,24 +22,5 @@
   },
   "include": [
     "src"
-  ],
-  "exclude": [
-    "node_modules/@types/**",
-    "/home/infinitylabs/Enlil/doc-fe/src/state/ducks/attachments/actions.test.ts",
-    "/home/infinitylabs/Enlil/doc-fe/src/state/ducks/audit/actions.test.ts",
-    "/home/infinitylabs/Enlil/doc-fe/src/state/ducks/supplierSurvey/actions.test.ts",
-    "/home/infinitylabs/Enlil/doc-fe/src/state/ducks/changeRequest/tests/**",
-    "/home/infinitylabs/Enlil/doc-fe/src/state/ducks/company/tests/**",
-    "/home/infinitylabs/Enlil/doc-fe/src/state/ducks/training/actions.test.ts",
-    "/home/infinitylabs/Enlil/doc-fe/src/state/ducks/userManagement/actions.test.ts",
-    "/home/infinitylabs/Enlil/doc-fe/src/ui/common/summary/tests/SummaryInfo.test.tsx",
-    "/home/infinitylabs/Enlil/doc-fe/src/ui/tests/helpers/getRouteComponentProps.ts",
-    "/home/infinitylabs/Enlil/doc-fe/src/ui/form.builder/components/inputs/FBButton.test.tsx",
-    "/home/infinitylabs/Enlil/doc-fe/src/ui/documentRevision/Clone.container.test.tsx",
-    "/home/infinitylabs/Enlil/doc-fe/src/ui/document.revision/summary/attachment.test.tsx",
-    "/home/infinitylabs/Enlil/doc-fe/src/ui/change.request/form/assessmentForm/implementationPlan/Container.test.tsx",
-    "/home/infinitylabs/Enlil/doc-fe/src/ui/components/cards/DownloadButton.container.test.tsx",
-    "/home/infinitylabs/Enlil/doc-fe/src/ui/components/cards/FileCard.test.tsx",
-    "/home/infinitylabs/Enlil/doc-fe/src/ui/components/table/tests/DocumentInfo.test.tsx"
   ]
 }
