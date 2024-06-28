@@ -2,6 +2,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { ComponentType } from 'react';
 import { FormikField, TextField } from '../../../../../components/forms/fields-next';
+import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { EditableBOM } from '../../../interface';
 import { enableFieldAfterPartSelection, getCellValue, isEditBOM } from '../utils';
 import { styles } from './styles';
@@ -19,6 +20,7 @@ const RefDesignatorCell: ComponentType<CustomTreeListCellProps> = ({
   const classes = styles({ hasChildren });
   const { values, getFieldProps } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem) && dataItem.enabledFieldsForEditing?.includes(field ?? '');
+  const refDesignatorValue = !isEditMode && getCellValue(dataItem, field);
   const getFieldInfo = () =>
     field && (
       <FormikField name={field}>
@@ -31,6 +33,7 @@ const RefDesignatorCell: ComponentType<CustomTreeListCellProps> = ({
         />
       </FormikField>
     );
+
   return (
     <td
       colSpan={colSpan}
@@ -45,11 +48,14 @@ const RefDesignatorCell: ComponentType<CustomTreeListCellProps> = ({
       data-cy="cell-ref-designator"
     >
       {isEditMode && getFieldInfo()}
-      {!isEditMode && (
-        <span className={classes.Cell}>
-          {getCellValue(dataItem, field)}
-        </span>
-      )}
+      {!isEditMode && <OverflowTooltip
+        title={refDesignatorValue}
+        placement="top"
+        interactive
+        arrow
+      >
+        {refDesignatorValue}
+      </OverflowTooltip>}
     </td>
   );
 };
