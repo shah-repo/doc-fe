@@ -19,7 +19,6 @@
     "removeComments": true,
     "noUnusedLocals": true,
     "noImplicitAny": false,
-    "noEmitOnError": false
   },
   "include": [
     "src"

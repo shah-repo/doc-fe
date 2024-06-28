@@ -31,6 +31,22 @@ export interface LogoutRequestBody {
   AccessToken: string
 }
 
+interface Credentials {
+  AccessKeyId: string
+  SecretAccessKey: string
+  SessionToken: string
+  Expiration: string
+}
+
+export interface IotCredentials {
+  credentials: Credentials
+  endpoint: string
+  environment: string
+  companyId: string
+  employeeId: string
+  region: string
+}
+
 export interface AuthResponse {
   ExpiresAt: string
   ExpiresIn: number
@@ -111,22 +127,6 @@ export interface UserState {
   passwordSoonToExpire: boolean
   daysUntilPasswordExpires: number
   initialColor: string
-}
-
-export interface IotCredentials {
-  credentials: Credentials
-  endpoint: string
-  environment: string
-  companyId: string
-  employeeId: string
-  region: string
-}
-
-interface Credentials {
-  AccessKeyId: string
-  SecretAccessKey: string
-  SessionToken: string
-  Expiration: string
 }
 
 export interface AuthProps {

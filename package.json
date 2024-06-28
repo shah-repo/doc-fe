@@ -105,7 +105,7 @@
     "node": "v20.12.0"
   },
   "scripts": {
-    "start": "tsc --skipLibCheck && EXTEND_ESLINT=true react-scripts --openssl-legacy-provider start",
+    "start": "tsc && EXTEND_ESLINT=true react-scripts --openssl-legacy-provider start",
     "build": "EXTEND_ESLINT=true react-scripts --openssl-legacy-provider --max_old_space_size=8192 build",
     "test": "EXTEND_ESLINT=true react-scripts --openssl-legacy-provider --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
