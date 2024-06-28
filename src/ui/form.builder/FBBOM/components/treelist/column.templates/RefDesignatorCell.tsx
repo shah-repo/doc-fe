@@ -20,7 +20,7 @@ const RefDesignatorCell: ComponentType<CustomTreeListCellProps> = ({
   const classes = styles({ hasChildren });
   const { values, getFieldProps } = useFormikContext<EditableBOM>();
   const isEditMode = isEditBOM(dataItem) && dataItem.enabledFieldsForEditing?.includes(field ?? '');
-  const refDesignatorValue = !isEditMode && getCellValue(dataItem, field);
+  const refDesignatorValue = getCellValue(dataItem, field);
   const getFieldInfo = () =>
     field && (
       <FormikField name={field}>
@@ -49,7 +49,7 @@ const RefDesignatorCell: ComponentType<CustomTreeListCellProps> = ({
     >
       {isEditMode && getFieldInfo()}
       {!isEditMode && <OverflowTooltip
-        title={refDesignatorValue}
+        title={<div className={cx('containing-box-scrollbar', classes.tooltipContent)}>{refDesignatorValue}</div>}
         placement="top"
         interactive
         arrow
