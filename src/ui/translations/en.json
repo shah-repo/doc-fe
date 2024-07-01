@@ -1457,6 +1457,7 @@
   "form.builder.part.vendors.leadTime": "Lead Time (days)",
   "form.builder.part.vendors.cost.standard": "Standard Cost",
   "form.builder.part.vendors.lead.time.standard": "Standard Lead Time (days)",
+  "form.builder.supplier.contacts.title": "Supplier Contacts",
   "form.builder.supplier.contacts.add": "Add Contact",
   "form.builder.supplier.contacts.grid.heading.name": "Name",
   "form.builder.supplier.contacts.grid.heading.title": "Title",

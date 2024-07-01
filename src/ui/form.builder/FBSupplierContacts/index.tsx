@@ -20,8 +20,8 @@ import useStyles from './styles';
 import { EditableSupplierContact, FBSupplierContactsProps, SupplierContactEditEvent } from './types';
 import { withFBSupplierContacts } from './wrap';
 
-const FBPartVendors: React.FC<FBSupplierContactsProps> = ({
-  label = 'form.builder.part.vendors.title',
+const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
+  label = 'form.builder.supplier.contacts.title',
   name = '',
   disabled,
   contacts = [],
@@ -64,7 +64,7 @@ const FBPartVendors: React.FC<FBSupplierContactsProps> = ({
 
   const discardContact = () => setEditedContact(undefined);
 
-  const removeVendor = () => {
+  const removeContact = () => {
     if (!editedContact) return;
     // TO DO DELETE the contact
     discardContact();
@@ -98,28 +98,28 @@ const FBPartVendors: React.FC<FBSupplierContactsProps> = ({
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardContact,
-    onDelete: removeVendor,
+    onDelete: removeContact,
     onPrimaryChange: setPrimaryContact,
   });
 
   const contactsList = contacts.reduce((list, item) => {
-    const isVendorEdited = editedContact && editedContact.id === item.id;
+    const isContactEdited = editedContact && editedContact.id === item.id;
 
     return [
       ...list,
       {
-        ...(isVendorEdited ? editedContact : item),
-        [MODE_FIELD]: isVendorEdited ? Mode.edit : Mode.show,
+        ...(isContactEdited ? editedContact : item),
+        [MODE_FIELD]: isContactEdited ? Mode.edit : Mode.show,
       },
     ];
   }, isContactAdded ? [editedContact] : []);
 
   return (
-    <Box className={classes.root} data-cy="part-vendors">
+    <Box className={classes.root} data-cy="contacts">
       <PromptIfDirty
         dirty={dirty}
       />
-      <FBInput {...props} type="partVendors" name={name}>
+      <FBInput {...props} type="contacts" name={name}>
         <FBSection label={label}>
           {isActive && (
             <Button
@@ -161,4 +161,4 @@ const FBPartVendors: React.FC<FBSupplierContactsProps> = ({
   );
 };
 
-export default withFBSupplierContacts(FBPartVendors);
+export default withFBSupplierContacts(FBSupplierContacts);

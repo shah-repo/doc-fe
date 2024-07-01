@@ -19,6 +19,7 @@ export type FBInputType =
   | 'datepicker'
   | 'texteditor'
   | 'select'
+  | 'contacts'
   | 'radio'
   | 'radiogroup'
   | 'autocomplete'
