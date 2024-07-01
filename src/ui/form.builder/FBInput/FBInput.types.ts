@@ -20,6 +20,7 @@ export type FBInputType =
   | 'texteditor'
   | 'select'
   | 'contacts'
+  | 'certifications'
   | 'radio'
   | 'radiogroup'
   | 'autocomplete'
