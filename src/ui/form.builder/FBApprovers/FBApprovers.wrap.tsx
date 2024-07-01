@@ -4,6 +4,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useMemo } from 'react';
 import { FB, FBApprover, FBApproversProps, FBApproversState, FBDocumentRevisionsValue, FBJoinedEmployee, FBOption, FBRequiredApprover } from '..';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus } from '../../../state/ducks/common/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import { checkIsDocumentPO } from '../../documentRevision/helpers/checkDocumentGroup';
@@ -181,11 +182,14 @@ export const withFBApprovers = <T extends FBApproversProps>(
       disabled = !workspaceState?.changeRequest;
     });
 
-    if (approvals) {
-      if (approvals.length > 0) {
-        approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
-        const approverGrp = approvedStatuses.flatMap(item => item.approverGroups);
-        uniqApproverGroup = uniq([...approverGrp]);
+    if (changeRequest?.state.includes(ChangeRequestStatus.Approved || ChangeRequestStatus.Closed)) {
+      if (!approvals) groups = {};
+      if (approvals) {
+        if (approvals.length > 0) {
+          approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
+          const approverGrp = approvedStatuses.flatMap(item => item.approverGroups);
+          uniqApproverGroup = uniq([...approverGrp]);
+        }
       }
     }
 
