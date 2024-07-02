@@ -1,5 +1,6 @@
 import React from 'react';
 import { ActionsCellTemplate } from '../../change.request/FBMaterialDisposition/components/commonCells/ActionsCellTemplate';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActualIDCell } from './components/cells/ActualIDCell';
 import { ByCell } from './components/cells/ByCell';
@@ -158,14 +159,16 @@ export const buildSchema = ({
       title: 'actions',
       className: actionsClass,
       show: true,
-      template: (props) => (
-        <ActionsCellTemplate
+      template: (props) => {
+        const isAddition = props?.dataItem?.[MODE_FIELD] === Mode.add;
+        return (<ActionsCellTemplate
           {...props}
           onConfirm={onConfirm}
           onDiscard={onDiscard}
-          onDelete={onDelete}
+          onDelete={isAddition ? undefined : onDelete}
         />
-      ),
+        );
+      },
       width: 1,
     },
   ];
