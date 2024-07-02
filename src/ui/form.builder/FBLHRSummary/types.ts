@@ -1,3 +1,4 @@
+import { PopoverProps } from '@material-ui/core';
 import { TreeListColumnProps } from '@progress/kendo-react-treelist';
 import { DocumentRevision, DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
@@ -108,6 +109,7 @@ export interface SchemaOptions {
 export interface CustomTemplateProps extends CellTemplateProps<EditableLHRSummaryItem> {
   onClick?: (e: EditableLHRSummaryItemEditEvent) => void
   onSelectCell?: (dataItem: EditableLHRSummaryItem, field: string) => void
+  PopoverProps?: Partial<PopoverProps>
 }
 
 interface DueDateCombined extends DocumentRevision{
