@@ -12,19 +12,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
+import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
-import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
-import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
-import { KendoColumn } from '../../components/common/kendo/types';
-import { Button } from '../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
+import { KendoColumn } from '../../components/common/kendo/types';
+import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 import { FBSection } from '../../form.builder';
@@ -156,15 +156,17 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   };
 
   useEffect(() => {
+    resetForm({ values: editedLHRSummaryItem ?? {} });
+  }, [editedLHRSummaryItem, setValues, resetForm]);
+
+  useEffect(() => {
     setColumns((prevColumns) => {
       return schema.map((column) => {
         const updatedColumn = find(prevColumns, { id: column.id });
         return { ...column, ...pick(updatedColumn, COLUMN_LOCK_FIELDS) };
       });
     });
-
-    resetForm({ values: editedLHRSummaryItem ?? {} });
-  }, [editedLHRSummaryItem, setValues, resetForm]);
+  }, [editedLHRSummaryItem, formik.dirty]);
 
   const onEditLHRSummaryItem = ({
     dataItem,
