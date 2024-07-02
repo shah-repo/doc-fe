@@ -17,6 +17,7 @@ import {
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import { FB } from '../../../helpers';
 import { EMPTY_PLACEHOLDER, LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { getDisplayDocument } from '../../utils';
@@ -77,9 +78,9 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
   };
 
   const defaultValue = values[LHR_SUMARY_FIELDS.lotOrEquipment] ?? '';
-  const value = renderOptions().find(
+  const value = FB.isUUID(defaultValue) ? renderOptions().find(
     (option) => option.value === defaultValue,
-  ) ?? { label: defaultValue, value: defaultValue };
+  ) : { label: defaultValue, value: defaultValue };
 
   const onInputChange = (
     event: React.ChangeEvent<{}>,
