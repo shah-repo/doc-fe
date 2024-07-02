@@ -11,4 +11,5 @@ const EquipmentActionsCellTemplate: React.FC<Props> = (props) => (
     {...props}
   />
 );
+
 export default EquipmentActionsCellTemplate;
