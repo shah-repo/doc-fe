@@ -5,15 +5,15 @@ import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { FB } from '../../..';
 import { translate } from '../../../../../common/intl';
+import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { MeqResponse } from '../../../../../state/ducks/documentRevisions/types';
-import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -278,12 +278,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
 };
 
 export const PlannedIDCell: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem } = props;
+  const { dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  return <PreviewDoc detailsObj= {dataItem?.plannedDetails} isRevRemoved={dataItem.isRevRemoved} field={LHR_SUMARY_FIELDS.plannedId} dataItem={dataItem} />;
+  return <PreviewDoc detailsObj= {dataItem?.plannedDetails} isRevRemoved={dataItem.isRevRemoved} field={LHR_SUMARY_FIELDS.plannedId} dataItem={dataItem} onClick={onClick} />;
 };

@@ -8,14 +8,15 @@ import { FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
+import {
   FormikField,
   TextField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode, MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -236,11 +237,13 @@ const Editor: React.FC<CustomTemplateProps> = ({
 
 export const StepCell: React.FC<CustomTemplateProps> = (props) => {
   const classes = styles();
-  const { dataItem } = props;
+  const { dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const { docId, documentId, displayRevision, value, displayStatus } = dataItem?.stepOrMpiDetails ?? {};
   const step = dataItem.step;
   const mpiRevId = value?.split('/')[1];
+
+  const handleClick = () => onClick?.({ dataItem });
 
   if (isEditMode) {
     return <Editor {...props} />;
@@ -248,7 +251,7 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
 
   return (
     <>
-      <span className={classes.stepCellContainer}>
+      <span className={classes.stepCellContainer} onClick={handleClick}>
         <span className={classes.step}>
           <OverflowTooltip
             title={step}
