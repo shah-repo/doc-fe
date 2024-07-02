@@ -264,7 +264,7 @@ export interface BulkImport {
   updatedAt: string
   id: string
   companyId: string
-  processId: string
+  processType: string
   xlsx: Xlsx[]
   attachmentId: string
   attachmentLink: string | null

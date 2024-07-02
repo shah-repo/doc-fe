@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
 
 export const validationSchema = Yup.object().shape({
-  processId: Yup.string().required('common.required'),
+  processType: Yup.string().required('common.required'),
 });
