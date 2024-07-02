@@ -6,10 +6,6 @@ import LocationActionsCellTemplate from '../../components/LocationsSetting/compo
 import { TextCellTemplate } from '../../components/LocationsSetting/components/TextCellTemplate';
 import { EditableCompanyLocation } from './types';
 
-export interface EditableCompanyLocationEvent {
-  dataItem: EditableCompanyLocation
-}
-
 interface SchemaOptions {
   actionsClass: string
   isActive: boolean
