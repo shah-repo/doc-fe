@@ -2,7 +2,7 @@ import { GridCellProps } from '@progress/kendo-react-grid';
 import React from 'react';
 import { CellTemplateProps, DataGridRowClickEvent } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { EditableCompanyLocation } from '../../../panels/CompanyLocations/types';
-import Actions from './Actions'; // Import the Actions component
+import Actions from './Actions';
 
 export type ActionsProps = CellTemplateProps<EditableCompanyLocation> & GridCellProps & {
   onConfirm: () => void
