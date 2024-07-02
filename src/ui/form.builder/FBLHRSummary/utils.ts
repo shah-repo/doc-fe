@@ -79,6 +79,6 @@ export const processData = (
   });
 };
 
-export const getTypeOptionLabelByValue = (value: string) => {
+export const getTypeOptionLabelByValue = (value: string): string | undefined => {
   return TYPE_OPTIONS.find((option) => option.value === value)?.label;
 };
