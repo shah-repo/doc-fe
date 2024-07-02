@@ -49,6 +49,7 @@ export interface LHRSummaryItem {
   lotOrEquipmentDetails: DetailsObj
   plannedDetails: DetailsObj
   actualDetails: DetailsObj
+  isRevRemoved?: boolean
 }
 
 export interface RecordsResponse {

@@ -16,6 +16,7 @@ import { styles } from './styles';
 interface props {
   detailsObj: DetailsObj
   dataItem: EditableLHRSummaryItem
+  isRevRemoved?: boolean
   onClick?: (event: EditableLHRSummaryItemEditEvent) => void
   field: string
 }
@@ -23,6 +24,7 @@ interface props {
 export const PreviewDoc: React.FC<props> = ({
   dataItem,
   detailsObj,
+  isRevRemoved,
   onClick,
   field,
 }) => {
@@ -53,7 +55,7 @@ export const PreviewDoc: React.FC<props> = ({
       >
         {getDisplayDocument(docId, displayRevision)}
       </Link>
-      <InvalidDocIndicator status={displayStatus} dataCy={`${dataCy}-invalid-indicator`} />
+      <InvalidDocIndicator status={displayStatus} isRevRemoved={isRevRemoved} dataCy={`${dataCy}-invalid-indicator`} />
     </Box>
   );
 };
