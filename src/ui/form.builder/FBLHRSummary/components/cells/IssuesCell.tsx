@@ -104,7 +104,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
     setFieldValue(LHR_SUMARY_FIELDS.issue, value?.value);
   };
 
-  const debounceFunction = debounce(onInputChange, 2000, {
+  const debounceFunction = debounce(onInputChange, 1000, {
     leading: true,
     trailing: true,
   });
