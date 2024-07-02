@@ -2053,7 +2053,7 @@
   "administration.general.settings.ar": "Approval Requests",
   "administration.general.settings.ar.allow.edit": "Allow AR admin edit while AR is in In Review",
   "administration.general.settings.equipmentFamily.tab": "Equipment Family",
-  "administration.general.settings.locations.tab": "Locations",
+  "administration.general.settings.locations.tab": "Material Impact on Total Quantity",
   "administration.general.settings.equipmentFamily.es": "Equipment Specification",
   "administration.general.settings.equipmentFamily.es.autoSync": "Enable Auto-sync between ES and related EQ",
   "administration.general.settings.equipmentFamily.locations": "Locations",

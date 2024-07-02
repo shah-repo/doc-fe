@@ -1,7 +1,7 @@
 import React from 'react';
 import { ColumnDefinition, DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActiveCellTemplate } from '../../components/LocationsSetting/components/ActiveCellTemplate';
-import { IncludedTotalQtyCellTemplate } from '../../components/LocationsSetting/components/IncludedTotalQtyCellTemplate';
+import { IncludedInTotalQtyCellTemplate } from '../../components/LocationsSetting/components/IncludedInTotalQtyCellTemplate';
 import LocationActionsCellTemplate from '../../components/LocationsSetting/components/LocationActionsCellTemplate';
 import { TextCellTemplate } from '../../components/LocationsSetting/components/TextCellTemplate';
 import { EditableCompanyLocation } from './types';
@@ -35,17 +35,24 @@ export const buildSchema: schemaBuilder = ({ onDiscard, onConfirm, onRowClick })
       template: TextCellTemplate,
     },
     {
-      id: 'includedTotalQty',
-      field: 'includedTotalQty',
+      id: 'includedInTotalQty',
+      field: 'includedInTotalQty',
       title: 'settings.locations.included.total.quantity',
-      template: IncludedTotalQtyCellTemplate,
+      template: IncludedInTotalQtyCellTemplate,
     },
     {
       id: 'actions',
       field: 'actions',
       title: 'common.actions',
       filterable: false,
-      template: (props) => <LocationActionsCellTemplate {...props} onClick ={onRowClick} onDiscard={onDiscard} onConfirm={onConfirm} />,
+      template: (props) => (
+        <LocationActionsCellTemplate
+          {...props}
+          onClick={onRowClick}
+          onDiscard={onDiscard}
+          onConfirm={onConfirm}
+        />
+      ),
       width: 100,
     },
   ];

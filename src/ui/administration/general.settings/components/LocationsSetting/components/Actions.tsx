@@ -1,4 +1,4 @@
-import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Tooltip } from '@material-ui/core';
 import React, { useCallback } from 'react';
@@ -20,16 +20,13 @@ const Actions: React.FC<ActionsProps> = ({
   const { cellStyle } = useStyles({ isActive: dataItem?.isActive });
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
-  const [discardRef, isDHovered] = useHover<HTMLButtonElement>();
+  const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
 
   const ref = useCallback((node: HTMLDivElement | null) => {
     if (node) {
       requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'center' }));
     }
   }, [scrollBehavior]);
-
-  const onDiscardIcon = isEditMode && (isDHovered ? solid('square-xmark') : regular('square-xmark'));
-  const onEditIcon = isEditMode ? isSaveHovered ? solid('square-check') : regular('square-check') : regular('pen-to-square');
 
   const onEdit = () => onClick?.({ dataItem });
 
@@ -39,27 +36,43 @@ const Actions: React.FC<ActionsProps> = ({
       ref={ref}
     >
       <Box className={`${cellStyle} k-command-cell`}>
-        <Tooltip title={translate(isEditMode ? 'common.discard' : '')}>
-          <IconButton
-            kind="simple"
-            color="primary"
-            style={{ marginRight: '10px' }}
-            ref={discardRef}
-            onClick={onDiscard}
-          >
-            {onDiscardIcon && <FontAwesomeIcon icon={onDiscardIcon} size="lg" />}
-          </IconButton>
-        </Tooltip>
-        <Tooltip title={translate(isEditMode ? 'common.save' : 'common.edit')}>
-          <IconButton
-            kind="simple"
-            color="primary"
-            ref={saveRef}
-            onClick={isEditMode ? onConfirm : onEdit}
-          >
-            {onEditIcon && <FontAwesomeIcon icon={onEditIcon} size="lg" />}
-          </IconButton>
-        </Tooltip>
+        {isEditMode ? (
+          <>
+            <Tooltip title={translate('common.discard')}>
+              <IconButton
+                kind="simple"
+                color="primary"
+                ref={discardRef}
+                onClick={onDiscard}
+                iconSize={22}
+              >
+                <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={translate('common.save')}>
+              <IconButton
+                kind="simple"
+                color="primary"
+                ref={saveRef}
+                onClick={onConfirm}
+                iconSize={22}
+              >
+                <FontAwesomeIcon icon={isSaveHovered ? solid('square-check') : light('square-check')} />
+              </IconButton>
+            </Tooltip>
+          </>
+        ) : (
+          <Tooltip title={translate('common.edit')}>
+            <IconButton
+              kind="simple"
+              color="primary"
+              ref={saveRef}
+              onClick={onEdit}
+            >
+              <FontAwesomeIcon icon={regular('pen-to-square')} />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
     </div>
   );

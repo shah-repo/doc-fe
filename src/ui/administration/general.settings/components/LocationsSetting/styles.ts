@@ -46,6 +46,8 @@ export default makeStyles(theme => ({
   },
   cellStyle: {
     textAlign: 'center',
-    color: props => props.isActive ? Colors.textBlack : Colors.textDisabled,
+    display: 'flex',
+    justifyContent: 'center',
+    gap: theme.spacing(0.5, 0.5),
   },
 }));

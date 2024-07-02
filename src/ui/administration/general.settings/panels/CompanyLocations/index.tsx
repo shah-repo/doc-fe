@@ -47,9 +47,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       if (isEmpty(values.name)) {
         error.name = 'validators.required';
       }
-      if (isEmpty(values.includedTotalQty)) {
-        error.includedTotalQty = 'validators.required';
-      }
       if (values.name && isDuplicate) {
         error.name = 'validator.location.same.name.exist';
       }
@@ -76,7 +73,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     setEditedLocation({
       id: uuidv4(),
       name: '',
-      includedTotalQty: '',
+      includedInTotalQty: false,
       active: true,
       [MODE_FIELD]: Mode.add,
     });

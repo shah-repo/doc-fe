@@ -8,7 +8,7 @@ export type ActionsProps = CellTemplateProps<EditableCompanyLocation> & GridCell
   onConfirm: () => void
   onDiscard: () => void
   onDelete: () => void
-  onClick: (e: DataGridRowClickEvent<EditableCompanyLocation>) => void
+  onClick?: (e: DataGridRowClickEvent<EditableCompanyLocation>) => void
   scrollBehavior?: ScrollBehavior
 };
 
