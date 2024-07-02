@@ -137,9 +137,14 @@ const Editor: React.FC<CustomTemplateProps> = ({
     if (!inputVal && inputValue) {
       setFieldValue(LHR_SUMARY_FIELDS.plannedId, '');
     }
+
+    if (inputValue === inputVal && !isEmpty(inputVal)) {
+      return;
+    }
+
     setInputValue(inputVal);
 
-    if (!isOpen) {
+    if (fetchOptionsDataAsync.isLoading) {
       return;
     }
 
@@ -216,9 +221,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   };
 
   useEffect(() => {
-    if (isUpdateAction) {
-      return;
-    } else {
+    if (!isUpdateAction) {
       setInputValue('');
       setFieldValue(LHR_SUMARY_FIELDS.plannedId, '');
     }

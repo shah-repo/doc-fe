@@ -79,10 +79,10 @@ const Editor: React.FC<CustomTemplateProps> = ({
   });
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
-    console.log('Values', inputVal, 'origional', inputValue);
     if (inputValue === inputVal && !isEmpty(inputVal)) {
       return;
     }
+
     setInputValue(inputVal);
 
     if (fetchOptionsDataAsync.isLoading) {
