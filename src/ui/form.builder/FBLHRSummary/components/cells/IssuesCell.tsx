@@ -79,9 +79,13 @@ const Editor: React.FC<CustomTemplateProps> = ({
   });
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+    console.log('Values', inputVal, 'origional', inputValue);
+    if (inputValue === inputVal && !isEmpty(inputVal)) {
+      return;
+    }
     setInputValue(inputVal);
 
-    if (!isOpen) {
+    if (fetchOptionsDataAsync.isLoading) {
       return;
     }
 
@@ -100,7 +104,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
     setFieldValue(LHR_SUMARY_FIELDS.issue, value?.value);
   };
 
-  const debounceFunction = debounce(onInputChange, 1000, {
+  const debounceFunction = debounce(onInputChange, 2000, {
     leading: true,
     trailing: true,
   });
@@ -125,9 +129,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   };
 
   useEffect(() => {
-    if (isUpdateAction) {
-      return;
-    } else {
+    if (!isUpdateAction) {
       setInputValue('');
       setFieldValue(LHR_SUMARY_FIELDS.issue, '');
     }
