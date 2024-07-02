@@ -295,7 +295,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       return null;
     }
 
-    if (documentStatus.includes(DocumentRevisionStatus.Released || DocumentRevisionStatus.Deprecated)) {
+    if ([DocumentRevisionStatus.Released || DocumentRevisionStatus.Deprecated].includes(documentStatus)) {
       if (!approvals) groups = {};
       if (approvals) {
         if (approvals.length > 0) {

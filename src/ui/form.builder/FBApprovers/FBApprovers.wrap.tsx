@@ -182,7 +182,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       disabled = !workspaceState?.changeRequest;
     });
 
-    if (changeRequest?.state.includes(ChangeRequestStatus.Approved || ChangeRequestStatus.Closed)) {
+    if ([ChangeRequestStatus.Closed, ChangeRequestStatus.Approved].includes(changeRequest?.state)) {
       if (!approvals) groups = {};
       if (approvals) {
         if (approvals.length > 0) {
