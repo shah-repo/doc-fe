@@ -15,7 +15,8 @@ import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
 import { PRINTER_LABEL_TYPE_KEY, PRINTER_NAME_KEY, withPrintLabelDetailsDialog } from './PrintLabelDetailsDialog.wrap';
 
 const gridMaxWidth = 920;
-
+const PH_PRINT_LABEL_TYPE = '4x1.5" (300 DPI)';
+const phCheck = 'ph';
 const useStyle = makeStyles(theme => createStyles({
   checkBoxField: {
     margin: theme.spacing(0, 1, 0, 0),
@@ -29,12 +30,13 @@ interface FieldCheckboxProps {
   onFieldCheck: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void
   fullWidth?: boolean
   children?: React.ReactNode
+  className?: string
 }
 
-const FieldCheckbox: React.FC<FieldCheckboxProps> = ({ label, checked, checkboxName, onFieldCheck, fullWidth = true, children }) => {
+const FieldCheckbox: React.FC<FieldCheckboxProps> = ({ className, label, checked, checkboxName, onFieldCheck, fullWidth = true, children }) => {
   const style = useStyle();
   return (
-    <FormField {...{ fullWidth }} label={<Box>
+    <FormField {...{ fullWidth }} label={<Box className={className} >
       <Checkbox className={style.checkBoxField} {...{ checked }} name={checkboxName} onChange={onFieldCheck} />
       <>{translate(label)}</>
     </Box>}>{children}</FormField>
@@ -74,6 +76,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
   const isRecentPrinterExist = zebraPrint?.find(item => item.printer.name === printerValue?.printer?.name && item.printer.isActive);
   const recentPrinterLabelType = localStorage.getItem(PRINTER_LABEL_TYPE_KEY);
   const defaultLabelType = isRecentPrinterExist ? JSON.parse(recentPrinterLabelType) : '';
+  const isShowpH = defaultLabelType?.name === PH_PRINT_LABEL_TYPE;
   const qtyUnitsRender = () => {
     const gridSize = selectedNumberOfLabel < 6 ? (gridMaxWidth / selectedNumberOfLabel) : (gridMaxWidth / 5);
     const qtyClasses = qtyLabelStyle(gridSize);
@@ -218,7 +221,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
               />
             </FieldCheckbox>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={isShowpH ? 6 : 12}>
             <FormField label="print.label.dialog.field.number.of.labels">
               <Autocomplete
                 disableClearable
@@ -229,6 +232,13 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 onChange={(e, value: number) => onNumberOfLabelChange(value)} />
             </FormField>
           </Grid>
+          {isShowpH && (
+            <Grid item xs={6}>
+              <FieldCheckbox className={classes.pHCheckbox} label="common.pH" {...{ onFieldCheck }}
+                checkboxName="ph"
+                checked={includes(selectedParams, phCheck)} />
+            </Grid>
+          )}
           {qtyUnitsRender()}
         </Grid>
       </DialogContent>

@@ -8,8 +8,8 @@ import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { TRAINING_RECORDS_SEARCH_URL } from '../../../state/ducks/training/constants';
 import { DEFAULT_TRAINING_RECORD_QUERY, TrainingRecordQuery } from '../../../state/ducks/training/types';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
-import { KendoColumn } from '../../components/common/kendo/types';
 import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import { KendoColumn } from '../../components/common/kendo/types';
 import useDialog from '../../hooks/useDialog';
 import TrainingDetails from '../details/TrainingDetails';
 import gridConfiguration from './column.definition';
@@ -100,6 +100,8 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
           classes={{ paper: classes.dialogContent }}
           fullWidth
           maxWidth="md"
+          onEscapeKeyDown={trainingDetailsDialog.close}
+          onBackdropClick={trainingDetailsDialog.close}
         >
           <TrainingDetails
             dialog={trainingDetailsDialog}

@@ -473,6 +473,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     pendingAction.dueOn,
                     MomentFormats.ShortBriefDate,
                   )}
+                  trainingSourceReferences={pendingAction.trainingSourceReferences}
                   hoverItemId={hoverItemId}
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}

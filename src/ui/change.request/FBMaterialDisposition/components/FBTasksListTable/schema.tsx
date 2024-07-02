@@ -15,6 +15,7 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
   isDisabled,
+  isActionsDisabled,
   isClosed,
   employeeStatusUpdates,
   employeeEvidenceUpdates,
@@ -77,6 +78,8 @@ export const buildSchema = ({
           onConfirm={onConfirm}
           onDiscard={onDiscard}
           onDelete={onDelete}
+          isDeleteDisabled={isActionsDisabled}
+          isSubmitDisabled={isActionsDisabled}
         />
       ),
       width: 1,
