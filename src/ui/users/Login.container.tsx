@@ -23,7 +23,7 @@ interface StateProps {
 export type LoginContainerProps = StateProps & Pick<RouteComponentProps, 'location'>;
 
 const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => {
-  const { from } = props.location.state as any || { from: { pathname: HOME_URL } };
+  const { from } = props.location.state || { from: { pathname: HOME_URL } };
   const intl = useIntl();
 
   if (props.isUserAuthenticated) {

@@ -55,7 +55,7 @@ SupplierSurveyContainerProps
   const [showMessage, setShowMessage] = useState(false);
   const toggleShowMessage = () => setShowMessage(!showMessage);
 
-  const { from } = location.state as any || { from: { pathname: HOME_URL } };
+  const { from } = location.state || { from: { pathname: HOME_URL } };
   const { token } = useParams();
   const loadAction = () => loadSupplierSurvey(token);
   if (isUserAuthenticated) {
