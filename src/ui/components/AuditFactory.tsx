@@ -3,8 +3,9 @@ import { get, has } from 'lodash';
 import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { SM } from '../../App';
 import { translate } from '../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, POLineItem } from '../../state/ducks/audit/types';
@@ -14,14 +15,14 @@ import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types'
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
-import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
-import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
-import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
+import { IRevIdMapper, checkIsDocumentWO, checkIsDocumentWOByGroupOrOptions } from '../documentRevision/helpers/checkDocumentGroup';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
@@ -33,8 +34,8 @@ import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
 import AuditTraineeList from './AuditTraineeList';
-import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DateTime from './DateTime';
+import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
@@ -125,6 +126,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
     }
   };
 
+  const { _documentRevisionFormState } = SM.useStores();
   if (isFBField) {
     const fbValue = {
       texteditor () {
@@ -242,22 +244,31 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           break;
         }
       // falls through intentionally
-      case 'status':
+      case 'status': {
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
+
+        const groupOptions = _documentRevisionFormState?.documentRevision?.document.documentType?.groupOptions;
+        const isWO = checkIsDocumentWOByGroupOrOptions(DOC_TYPE_GROUP.WORK_ORDER, groupOptions);
+        let auditNextValue = audit.nextValue;
+        if (isWO) {
+          auditNextValue = (audit.nextValue === 'APPROVED') ? 'COMPLETED' : audit.nextValue;
+        }
+
         returnValue = (
           <Text
             dataCy={dataCy}
             translation="changeRequest.audit.status.updated.by"
             values={{
-              status: <Text translation={audit.nextValue as Translation} />,
+              status: <Text translation={auditNextValue as Translation} />,
               name: audit.owner?.user.name,
             }}
           />
         );
         break;
+      }
       case 'displayStatus':
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;
