@@ -5,11 +5,12 @@ import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode, MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
@@ -77,9 +78,13 @@ const Editor: React.FC<CustomTemplateProps> = ({
   });
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+    if (inputValue === inputVal && !isEmpty(inputVal)) {
+      return;
+    }
+
     setInputValue(inputVal);
 
-    if (!isOpen) {
+    if (fetchOptionsDataAsync.isLoading) {
       return;
     }
 
@@ -123,9 +128,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   };
 
   useEffect(() => {
-    if (isUpdateAction) {
-      return;
-    } else {
+    if (!isUpdateAction) {
       setInputValue('');
       setFieldValue(LHR_SUMARY_FIELDS.issue, '');
     }
@@ -196,12 +199,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
 };
 
 export const IssuesCell: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem } = props;
+  const { dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  return <PreviewDoc detailsObj= {dataItem?.issueDetails} field={LHR_SUMARY_FIELDS.issue} dataItem={dataItem} />;
+  return <PreviewDoc detailsObj= {dataItem?.issueDetails} field={LHR_SUMARY_FIELDS.issue} dataItem={dataItem} onClick={onClick} />;
 };

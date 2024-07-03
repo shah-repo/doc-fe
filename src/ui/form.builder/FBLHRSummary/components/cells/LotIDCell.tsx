@@ -2,17 +2,17 @@ import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect } from 'react';
 import { translate } from '../../../../../common/intl';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FB } from '../../../helpers';
@@ -114,6 +114,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
 
 export const LotIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
+  onClick,
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -122,5 +123,5 @@ export const LotIDCell: React.FC<CustomTemplateProps> = ({
     return <Editor {...props} {...{ dataItem }} />;
   }
 
-  return <PreviewDoc detailsObj= {dataItem?.lotOrEquipmentDetails} field={LHR_SUMARY_FIELDS.lotOrEquipment} dataItem={dataItem} />;
+  return <PreviewDoc detailsObj= {dataItem?.lotOrEquipmentDetails} field={LHR_SUMARY_FIELDS.lotOrEquipment} dataItem={dataItem} onClick={onClick} />;
 };
