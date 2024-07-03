@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import React from 'react';
 import { FBApprovalsProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText, Owner } from '..';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
 import { DocumentStatus } from '../../../state/ducks/documents/types';
 import { isDocumentRevisionApproved } from '../../documentRevision/helpers/documentRevisionStatus';
@@ -57,23 +57,21 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
       />
       <Box display="flex" flexWrap="wrap" my={2}>
-        {approvalApprovedGroup && (
+        {approvalApprovedGroup ? (
           <>
             {approvalApprovedGroup.map((groupName: string, index: number) => (
-              <ApprovalApprovedGroup groupName={groupName} key={index} />
+              <ApprovalApprovedGroup groupName={groupName} key={index} checked />
             ))}
           </>
+        ) : (
+          <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
+            {(group: FBRequiredApprover, id) => (
+              <ApprovalApprovedGroup groupName={group.name} key={id} checked={isIncluded?.(group)} />
+            )}
+          </FBMapWrapper>
         )}
-        {!approvalApprovedGroup && <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
-          {(group: FBRequiredApprover, id) => (
-            <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5}>
-              <CheckCircleIcon color={isIncluded?.(group) ? 'primary' : 'disabled'} />
-              <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
-            </Box>
-          )}
-        </FBMapWrapper>}
       </Box>
-      {showFieldOwnersWarning && owners && <Box display="flex" flexWrap="wrap" mb={4}>
+      {showFieldOwnersWarning && owners && <Box display="flex" flexWrap="wrap" mb={4} mt={1}>
         <FBMapWrapper<Owner[]> collection={owners}>
           {(owner: Owner, id) => (
             <Box display="flex" key={`fb-approvals-${id}`} mr={2.5} >

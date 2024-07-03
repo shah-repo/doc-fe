@@ -21,7 +21,7 @@ export type FBApprovalsProps =
   documentStatus: DocumentStatus
   formState?: FBFormState
   groups?: Record<string, FBRequiredApprover>
-  isIncluded?: (group: FBRequiredApprover) => void
+  isIncluded?: (group: FBRequiredApprover) => boolean
   ownerId?: string
   currentUser?: string
   inlineApprovalExists?: boolean
