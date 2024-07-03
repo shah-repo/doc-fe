@@ -15,14 +15,14 @@ import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types'
 import { Employee } from '../../state/ducks/company/types';
 import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/types';
 import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
+import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
-import { IRevIdMapper, checkIsDocumentWO, checkIsDocumentWOByGroupOrOptions } from '../documentRevision/helpers/checkDocumentGroup';
+import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
 import { FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
@@ -251,7 +251,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         }
 
         const groupOptions = _documentRevisionFormState?.documentRevision?.document.documentType?.groupOptions;
-        const isWO = checkIsDocumentWOByGroupOrOptions(DOC_TYPE_GROUP.WORK_ORDER, groupOptions);
+        const isWO = checkIsDocumentWO(groupOptions);
         let auditNextValue = audit.nextValue;
         if (isWO) {
           auditNextValue = (audit.nextValue === 'APPROVED') ? 'COMPLETED' : audit.nextValue;
