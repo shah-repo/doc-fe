@@ -57,9 +57,11 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
       />
       <Box display="flex" flexWrap="wrap" my={2} mt={1}>
-        {approvalApprovedGroup ? approvalApprovedGroup.map((groupName: string, index: number) => (
-          <ApprovalApprovedGroup groupName={groupName} key={index} checked />
-        )) : (
+        {approvalApprovedGroup ? (
+          approvalApprovedGroup.map((groupName: string, index: number) => (
+            <ApprovalApprovedGroup groupName={groupName} key={index} checked />
+          ))
+        ) : (
           <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
             {(group: FBRequiredApprover, id) => (
               <ApprovalApprovedGroup groupName={group.name} key={id} checked={isIncluded?.(group)} />
