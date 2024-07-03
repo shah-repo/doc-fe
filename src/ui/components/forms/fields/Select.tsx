@@ -1,6 +1,6 @@
 import { BoxProps, InputBaseProps, MenuItem, Select as MuiSelect } from '@material-ui/core';
 import { SelectProps as MuiSelectProps } from '@material-ui/core/Select';
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
 import * as React from 'react';
 import { TypographyProps } from '../../../../state/ducks/common/types';
 import Text from '../../Text';
@@ -10,7 +10,7 @@ import { InputField } from './Input.styles';
 
 export interface SelectOption {
   value: string | number
-  text: string
+  text?: string
 }
 
 interface SelectOwnProps extends FieldOwnProps {
