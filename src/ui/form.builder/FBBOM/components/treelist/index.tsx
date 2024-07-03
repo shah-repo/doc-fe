@@ -637,7 +637,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       if (!treeList && !dataItem) return;
       setTimeout(() => {
         const id = dataItem[SUB_ITEMS_FIELD]?.length
-          ? dataItem[SUB_ITEMS_FIELD][dataItem[SUB_ITEMS_FIELD]?.length - 1].id
+          ? dataItem[SUB_ITEMS_FIELD]?.[dataItem[SUB_ITEMS_FIELD]?.length - 1]?.id
           : dataItem.id;
         const rowElement = treeList?.querySelector(`[id^="_${id}"]`);
         if (rowElement) {
@@ -750,7 +750,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     );
   };
 
-  const getAllItemIds = (items: BOM[]) => {
+  const getAllItemIds = (items?: BOM[]) => {
     if (!items) return [];
     const ids: string[] = [];
     items.forEach((item) => {
