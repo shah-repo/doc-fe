@@ -209,7 +209,7 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
               onClick={handleAddLastButtonClick}
               data-cy="add-last-button"
             >
-              {translate('form.builder.related.equipments.add.last')}
+              {translate('form.builder.trainee.list.add.previous')}
             </Button>
           )}
           <Button
