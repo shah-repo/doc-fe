@@ -303,7 +303,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const isApproved = documentStatus && approvedStates.includes(documentStatus as unknown as DocumentRevisionStatus);
 
     if (isApproved) {
-      if (approvals && approvals.length > 0) {
+      if (approvals?.length) {
         approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
         const approverGroup = approvedStatuses.flatMap(item => item.approverGroups);
         uniqApproverGroup = uniq([...approverGroup]);

@@ -186,7 +186,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     const isApproved = changeRequest?.state && approvedStates.includes(changeRequest?.state);
 
     if (isApproved) {
-      if (approvals && approvals?.length > 0) {
+      if (approvals?.length) {
         approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
         const approverGroup = approvedStatuses.flatMap(item => item.approverGroups);
         uniqApproverGroup = uniq([...approverGroup]);
