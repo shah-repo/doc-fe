@@ -56,7 +56,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         autosave={false}
         {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
       />
-      <Box display="flex" flexWrap="wrap" my={2}>
+      <Box display="flex" flexWrap="wrap" my={2} mt={1}>
         {approvalApprovedGroup ? (
           <>
             {approvalApprovedGroup.map((groupName: string, index: number) => (
