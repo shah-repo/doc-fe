@@ -295,14 +295,20 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       return null;
     }
 
-    if ([DocumentRevisionStatus.Released || DocumentRevisionStatus.Deprecated].includes(documentStatus)) {
-      if (!approvals) groups = {};
-      if (approvals) {
-        if (approvals.length > 0) {
-          approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
-          const approverGrp = approvedStatuses.flatMap(item => item.approverGroups);
-          uniqApproverGroup = uniq([...approverGrp]);
-        }
+    const approvedStates = [
+      DocumentRevisionStatus.Released,
+      DocumentRevisionStatus.Approved,
+      DocumentRevisionStatus.Deprecated,
+    ];
+    const isApproved = documentStatus && approvedStates.includes(documentStatus as unknown as DocumentRevisionStatus);
+
+    if (isApproved) {
+      if (approvals && approvals.length > 0) {
+        approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
+        const approverGroup = approvedStatuses.flatMap(item => item.approverGroups);
+        uniqApproverGroup = uniq([...approverGroup]);
+      } else {
+        groups = {};
       }
     }
 

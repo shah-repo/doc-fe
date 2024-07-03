@@ -182,14 +182,16 @@ export const withFBApprovers = <T extends FBApproversProps>(
       disabled = !workspaceState?.changeRequest;
     });
 
-    if ([ChangeRequestStatus.Closed, ChangeRequestStatus.Approved].includes(changeRequest?.state)) {
-      if (!approvals) groups = {};
-      if (approvals) {
-        if (approvals.length > 0) {
-          approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
-          const approverGrp = approvedStatuses.flatMap(item => item.approverGroups);
-          uniqApproverGroup = uniq([...approverGrp]);
-        }
+    const approvedStates = [ChangeRequestStatus.Closed, ChangeRequestStatus.Approved];
+    const isApproved = changeRequest?.state && approvedStates.includes(changeRequest?.state);
+
+    if (isApproved) {
+      if (approvals && approvals?.length > 0) {
+        approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
+        const approverGroup = approvedStatuses.flatMap(item => item.approverGroups);
+        uniqApproverGroup = uniq([...approverGroup]);
+      } else {
+        groups = {};
       }
     }
 
