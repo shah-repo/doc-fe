@@ -2056,6 +2056,7 @@
   "administration.general.settings.equipmentFamily.locations": "Locations",
   "administration.general.settings.md": "Material Disposition",
   "administration.general.settings.md.label": "Auto update the LOT status and part rev based on Material Disposition",
+  "administration.general.settings.lcp": "Lifecycle Phases",
   "administration.general.settings.integrations": "Integrations",
   "ccc.attribute.changes.tooltip": "All user added controls & pre-defined controls on tabs, except Supplier table.",
   "ccc.bom.line.changes.tooltip": "This configuration (when 'No' is selected) allows users to edit a line item in the BOM without a new revision of the part based on the 'Select the fields that can be edited'",

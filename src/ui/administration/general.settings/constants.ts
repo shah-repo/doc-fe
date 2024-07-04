@@ -1,6 +1,7 @@
 import ApprovalRequestsSettingsPanel from './panels/ApprovalRequest';
-import IntegrationsSettings from './panels/Integrations';
 import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
+import IntegrationsSettings from './panels/Integrations';
+import LCPSettings from './panels/LCP';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import PrintingSettingsPanel from './panels/Printing';
 import { GeneralSettingsTabs } from './types';
@@ -23,6 +24,11 @@ export const panels = [
     key: GeneralSettingsTabs.MD,
     title: 'administration.general.settings.md',
     component: MaterialDispositionSettings,
+  },
+  {
+    key: GeneralSettingsTabs.LCP,
+    title: 'administration.general.settings.lcp',
+    component: LCPSettings,
   },
   {
     key: GeneralSettingsTabs.Integrations,

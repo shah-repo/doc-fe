@@ -7,6 +7,7 @@ export enum GeneralSettingsTabs {
   APITokens = 'API Tokens',
   AR = 'Approval Requests',
   MD = 'Material Disposition',
+  LCP = 'Life Cycle Phases',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
 }
