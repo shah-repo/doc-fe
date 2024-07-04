@@ -24,7 +24,7 @@ export const AvatarComponent: React.FC<AvatarComponentProps> = (props) => {
           {getInitalsFromName(name)}
         </Avatar>
       )}
-      <OverflowTooltip
+    <OverflowTooltip
         arrow
         placement="top"
         title={name ?? ''}
