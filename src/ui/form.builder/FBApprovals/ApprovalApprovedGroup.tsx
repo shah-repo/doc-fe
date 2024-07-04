@@ -6,16 +6,16 @@ import FBText from '../FBText/FBText';
 interface Props {
   groupName: string
   key: number
-  checked?: boolean
+  isChecked?: boolean
 }
 
 const ApprovalApprovedGroup: React.FC<Props> = ({
   groupName,
   key,
-  checked,
+  isChecked,
 }) => (
   <Box display="flex" key={`fb-approvers-group-${key}`} mr={2.5}>
-    <CheckCircleIcon color={checked ? 'primary' : 'disabled'} />
+    <CheckCircleIcon color={isChecked ? 'primary' : 'disabled'} />
     <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={groupName} />
   </Box>
 );

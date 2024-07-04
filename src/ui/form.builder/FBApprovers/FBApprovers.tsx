@@ -36,13 +36,13 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       <Box display="flex" flexWrap="wrap" mt={1}>
         {approvalApprovedGroup ? (
           approvalApprovedGroup.map((groupName: string, index: number) => (
-            <ApprovalApprovedGroup groupName={groupName} key={index} checked />
+            <ApprovalApprovedGroup groupName={groupName} key={index} isChecked />
           ))
         ) : (
           <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
             {(group: FBRequiredApprover, id) => (
               <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5}>
-                <ApprovalApprovedGroup groupName={group.name} key={id} checked={isIncluded?.(group) } />
+                <ApprovalApprovedGroup groupName={group.name} key={id} isChecked={isIncluded?.(group) } />
               </Box>
             )}
           </FBMapWrapper>
