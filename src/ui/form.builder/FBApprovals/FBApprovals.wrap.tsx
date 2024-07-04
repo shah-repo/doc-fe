@@ -302,6 +302,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     if (isApproved) {
       if (approvals?.length) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         approvalApprovedGroup = approvals.reduce((list, approval) => {
           if (approval.status !== ApprovalStatus.Approved) {
             return list;
