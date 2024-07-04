@@ -87,7 +87,7 @@ export function KendoPanel({
       ),
     );
   };
-  const processWithGroups = (data: Array<Partial<GetEmployeeResponse>>, dataState: State) => {
+  const processWithGroups = (data: Partial<GetEmployeeResponse>[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
@@ -413,8 +413,8 @@ export function KendoPanel({
   const fieldToCellMapping = {
     'user.name': NameCell,
     'user.email': EmailCell,
-    groups: userGroups,
-    status: SignedCell,
+    'groups': userGroups,
+    'status': SignedCell,
     '': commandCell,
   };
 
