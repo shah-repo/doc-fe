@@ -162,7 +162,7 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
                 /></Tooltip>
             </span>)}
           </Box>
-      </Box>
+        </Box>
       <Dialog
         title={translate(
           'approvalRequest.material.disposition.po.preview.title',
