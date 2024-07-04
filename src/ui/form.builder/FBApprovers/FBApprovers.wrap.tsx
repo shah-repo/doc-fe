@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map, some, sortBy, uniq } from 'lodash';
+import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map, some, sortBy, union } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useMemo } from 'react';
@@ -28,7 +28,6 @@ export const withFBApprovers = <T extends FBApproversProps>(
     approvalApprovedGroup,
     ...props
   }: T) => {
-    let uniqApproverGroup;
     const { formState, workspaceState } = FB.useStores();
     const { changeRequest } = workspaceState || {};
     const { approvals } = changeRequest || {};
@@ -189,10 +188,12 @@ export const withFBApprovers = <T extends FBApproversProps>(
 
     if (isApproved) {
       if (approvals?.length) {
-        const allGroups = approvals
-          .filter(item => item.status === ApprovalStatus.Approved)
-          .flatMap(item => item.approverGroups);
-        uniqApproverGroup = uniq(allGroups);
+        approvalApprovedGroup = approvals.reduce((list, approval) => {
+          if (approval.status !== ApprovalStatus.Approved) {
+            return list;
+          }
+          return union(list, approval.approverGroups);
+        }, []);
       } else {
         groups = {};
       }
@@ -210,7 +211,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       defaultValue,
       disabled,
       changeRequestApprovals,
-      approvalApprovedGroup: uniqApproverGroup,
+      approvalApprovedGroup,
     });
   };
 

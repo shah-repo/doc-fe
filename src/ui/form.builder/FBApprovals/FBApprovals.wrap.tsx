@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, unionBy, uniq } from 'lodash';
+import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, union, unionBy, uniq } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
@@ -45,7 +45,6 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     approvalApprovedGroup,
     ...props
   }: T) => {
-    let uniqApproverGroup;
     let isComponentVisible = false;
     let inlineApprovalExists = false;
 
@@ -303,10 +302,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     if (isApproved) {
       if (approvals?.length) {
-        const allGroups = approvals
-          .filter(item => item.status === ApprovalStatus.Approved)
-          .flatMap(item => item.approverGroups);
-        uniqApproverGroup = uniq(allGroups);
+        approvalApprovedGroup = approvals.reduce((list, approval) => {
+          if (approval.status !== ApprovalStatus.Approved) {
+            return list;
+          }
+          return union(list, approval.approverGroups);
+        }, []);
       } else {
         groups = {};
       }
@@ -336,7 +337,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       disableChipDelete,
       showFieldOwnersWarning,
       isContributorIncluded,
-      approvalApprovedGroup: uniqApproverGroup,
+      approvalApprovedGroup,
     });
   };
 
