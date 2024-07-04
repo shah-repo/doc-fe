@@ -45,7 +45,6 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     approvalApprovedGroup,
     ...props
   }: T) => {
-    let approvedStatuses;
     let uniqApproverGroup;
     let isComponentVisible = false;
     let inlineApprovalExists = false;
@@ -304,9 +303,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     if (isApproved) {
       if (approvals?.length) {
-        approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
-        const approverGroup = approvedStatuses.flatMap(item => item.approverGroups);
-        uniqApproverGroup = uniq([...approverGroup]);
+        const allGroups = approvals
+          .filter(item => item.status === ApprovalStatus.Approved)
+          .flatMap(item => item.approverGroups);
+        uniqApproverGroup = uniq(allGroups);
       } else {
         groups = {};
       }

@@ -28,7 +28,6 @@ export const withFBApprovers = <T extends FBApproversProps>(
     approvalApprovedGroup,
     ...props
   }: T) => {
-    let approvedStatuses;
     let uniqApproverGroup;
     const { formState, workspaceState } = FB.useStores();
     const { changeRequest } = workspaceState || {};
@@ -182,14 +181,18 @@ export const withFBApprovers = <T extends FBApproversProps>(
       disabled = !workspaceState?.changeRequest;
     });
 
-    const approvedStates = [ChangeRequestStatus.Closed, ChangeRequestStatus.Approved];
+    const approvedStates = [
+      ChangeRequestStatus.Closed,
+      ChangeRequestStatus.Approved,
+    ];
     const isApproved = changeRequest?.state && approvedStates.includes(changeRequest?.state);
 
     if (isApproved) {
       if (approvals?.length) {
-        approvedStatuses = approvals.filter(item => item.status === ApprovalStatus.Approved);
-        const approverGroup = approvedStatuses.flatMap(item => item.approverGroups);
-        uniqApproverGroup = uniq([...approverGroup]);
+        const allGroups = approvals
+          .filter(item => item.status === ApprovalStatus.Approved)
+          .flatMap(item => item.approverGroups);
+        uniqApproverGroup = uniq(allGroups);
       } else {
         groups = {};
       }
