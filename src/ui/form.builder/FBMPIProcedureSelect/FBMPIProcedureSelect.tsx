@@ -41,11 +41,16 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
     return isAcceptedStatus && !isZeroOnHandQuantity;
   };
 
-  const getLotOptions = () => mpiProcedureSelectState?.lotsApi.data
-    ?.filter((option) => {
-      return option.document.documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.TABS_PART_LOT) || (isDocumentRevisionReleased(option.status)
-  && checkIsDocumentLot(option.document.documentType.groupOptions)
-  && isValidLOT(option));
+  const getLotOptions = () =>
+    mpiProcedureSelectState?.lotsApi.data?.filter((option) => {
+      const groupOptions = option.document.documentType.groupOptions;
+
+      return (
+        groupOptions?.includes(DOC_TYPE_GROUP_OPTION.TABS_PART_LOT)
+        || (isDocumentRevisionReleased(option.status)
+          && checkIsDocumentLot(groupOptions)
+          && isValidLOT(option))
+      );
     });
 
   return (
