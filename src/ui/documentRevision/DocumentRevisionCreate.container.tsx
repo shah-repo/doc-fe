@@ -105,7 +105,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    if (isEquipment && documentRevision?.status === DocumentRevisionStatus.Released) {
+    if(isEquipment && documentRevision?.status === DocumentRevisionStatus.Released) {
       values.formInput = documentRevision.formInput;
     }
     const promise = async.start(create, toNewVersionRequestBody(values), async);

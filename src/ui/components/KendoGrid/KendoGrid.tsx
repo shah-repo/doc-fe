@@ -208,7 +208,7 @@ export function KendoGrid<T extends any> ({
         id: TranslatedText[DisplayText.ALL],
       })}
     />
-  );
+    );
 
   const eqStatuses = Object.values(EquipmentStatus);
 
