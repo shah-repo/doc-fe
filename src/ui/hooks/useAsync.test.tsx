@@ -62,6 +62,9 @@ describe('useAsync hook tests', () => {
   it('resets state', () => {
     act(() => {
       async.errorHandler.execute('ERROR');
+    });
+
+    act(() => {
       async.reset();
     });
 
