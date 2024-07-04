@@ -3,7 +3,8 @@ import { Observer } from 'mobx-react';
 import React from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { DOCUMENT_REVISION_LOT_STATUS, FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBMPIProcedureSelectProps, FBProcedureItemType, FBQuantityUnitField } from '..';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
 import Text from '../../components/Text';
 import { checkIsDocumentLot } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
@@ -39,6 +40,14 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
 
     return isAcceptedStatus && !isZeroOnHandQuantity;
   };
+
+  const getLotOptions = () => mpiProcedureSelectState?.lotsApi.data
+    ?.filter((option) => {
+      return option.document.documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.TABS_PART_LOT) || (isDocumentRevisionReleased(option.status)
+  && checkIsDocumentLot(option.document.documentType.groupOptions)
+  && isValidLOT(option));
+    });
+
   return (
     <FBForm {...{ formState }} >
       {type !== FBProcedureItemType.equipment
@@ -49,12 +58,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                 <FBAutocomplete
                   label="form.builder.lot.number"
                   name="usedOverride"
-                  options={mpiProcedureSelectState?.lotsApi.data
-                    ?.filter((option) =>
-                      isDocumentRevisionReleased(option.status)
-                    && checkIsDocumentLot(option.document.documentType.groupOptions)
-                    && isValidLOT(option))
-                  }
+                  options={getLotOptions()}
                   loading={mpiProcedureSelectState?.lotsApi.loading}
                   optionValueKey="id"
                   optionLabelKey="document.docId"
