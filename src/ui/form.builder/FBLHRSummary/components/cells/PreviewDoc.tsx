@@ -4,17 +4,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { EMPTY_PLACEHOLDER } from '../../constants';
-import {
-  DetailsObj,
-  EditableLHRSummaryItem,
-  EditableLHRSummaryItemEditEvent,
-} from '../../types';
+import { DetailsObj, EditableLHRSummaryItem, EditableLHRSummaryItemEditEvent } from '../../types';
 import { getDisplayDocument } from '../../utils';
 import { InvalidDocIndicator } from './InvalidDocIndicator';
 import { styles } from './styles';
 
 interface props {
-  detailsObj: DetailsObj
+  detailsObj?: DetailsObj
   dataItem: EditableLHRSummaryItem
   isRevRemoved?: boolean
   onClick?: (event: EditableLHRSummaryItemEditEvent) => void
