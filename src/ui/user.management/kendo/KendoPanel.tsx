@@ -54,7 +54,7 @@ import { AddUserManage, UserManage, UserManagementProps } from './types';
 
 let call: CancelTokenSource;
 
-export function KendoPanel ({
+export function KendoPanel({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
   gridData,
