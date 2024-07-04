@@ -139,15 +139,17 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   };
 
   useEffect(() => {
+    resetForm({ values: editedLHRSummaryItem ?? {} });
+  }, [editedLHRSummaryItem, setValues, resetForm]);
+
+  useEffect(() => {
     setColumns((prevColumns) => {
       return schema.map((column) => {
         const updatedColumn = find(prevColumns, { id: column.id });
         return { ...column, ...pick(updatedColumn, COLUMN_LOCK_FIELDS) };
       });
     });
-
-    resetForm({ values: editedLHRSummaryItem ?? {} });
-  }, [editedLHRSummaryItem, setValues, resetForm]);
+  }, [editedLHRSummaryItem, formik.dirty]);
 
   const onEditLHRSummaryItem = ({
     dataItem,

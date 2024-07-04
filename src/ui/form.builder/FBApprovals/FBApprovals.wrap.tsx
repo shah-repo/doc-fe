@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, unionBy, uniq } from 'lodash';
+import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, union, unionBy, uniq } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
@@ -42,6 +42,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     dialogState,
     showFieldOwnersWarning,
     owners,
+    approvalApprovedGroup,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -292,6 +293,26 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       return null;
     }
 
+    const approvedStates = [
+      DocumentRevisionStatus.Released,
+      DocumentRevisionStatus.Approved,
+      DocumentRevisionStatus.Deprecated,
+    ];
+    const isApproved = documentStatus && approvedStates.includes(documentStatus as unknown as DocumentRevisionStatus);
+
+    if (isApproved) {
+      if (approvals?.length) {
+        approvalApprovedGroup = approvals.reduce((list, approval) => {
+          if (approval.status !== ApprovalStatus.Approved) {
+            return list;
+          }
+          return union(list, approval.approverGroups);
+        }, []);
+      } else {
+        groups = {};
+      }
+    }
+
     return Component({
       ...(props as T),
       requestApproval,
@@ -316,6 +337,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       disableChipDelete,
       showFieldOwnersWarning,
       isContributorIncluded,
+      approvalApprovedGroup,
     });
   };
 

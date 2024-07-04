@@ -5,12 +5,13 @@ export type FBApproversProps =
 & Pick<FBProviderProps, 'approversState'>
 & FBAutocompleteAsyncProps
 & {
-  isIncluded?: (group: FBRequiredApprover) => void
+  isIncluded?: (group: FBRequiredApprover) => boolean
   onBlur?: () => any
   groups?: Record<string, FBRequiredApprover>
   checkedGroups?: FBRequiredApprover[]
   value?: string[]
   changeRequestApprovals?: Approval[]
+  approvalApprovedGroup?: string[]
 };
 
 export interface FBId {

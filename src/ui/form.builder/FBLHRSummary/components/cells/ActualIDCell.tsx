@@ -3,20 +3,18 @@ import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
-import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
-import { DocType, EMPTY_PLACEHOLDER, LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
+import { DocType, LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
-import { getDisplayDocument } from '../../utils';
+import { PreviewDoc } from './PreviewDoc';
 import { styles } from './styles';
 
 interface CustomOptionType extends OptionType{
@@ -106,9 +104,13 @@ const Editor: React.FC<CustomTemplateProps> = ({
       setFieldValue(LHR_SUMARY_FIELDS.actualId, '');
     }
 
+    if (inputValue === inputVal && !isEmpty(inputVal)) {
+      return;
+    }
+
     setInputValue(inputVal);
 
-    if (!isOpen) {
+    if (fetchOptionsDataAsync.isLoading) {
       return;
     }
 
@@ -191,12 +193,10 @@ const Editor: React.FC<CustomTemplateProps> = ({
   };
 
   useEffect(() => {
-    if (isUpdateAction) {
-      return;
+    if (!isUpdateAction) {
+      setInputValue('');
+      setFieldValue(LHR_SUMARY_FIELDS.actualId, '');
     }
-
-    setInputValue('');
-    setFieldValue(LHR_SUMARY_FIELDS.actualId, '');
 
     if (fetchOptionsDataAsync.isLoading) {
       return;
@@ -265,28 +265,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
 };
 
 export const ActualIDCell: React.FC<CustomTemplateProps> = (props) => {
-  const classes = styles();
-  const { dataItem } = props;
+  const { dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.actualDetails ?? {};
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  if (!documentId) {
-    return <>{value ?? EMPTY_PLACEHOLDER}</>;
-  }
-
-  return (
-    <Link
-      to={documentVersionPath(value ?? '', documentId)}
-      target="_blank"
-      id="PartOrEqDocLink-linkButton"
-      data-cy="actual-id-link"
-      className={classes.link}
-    >
-      {getDisplayDocument(docId, displayRevision)}
-    </Link>
-  );
+  return <PreviewDoc dataItem= {dataItem} detailsObj={dataItem.actualDetails} field={LHR_SUMARY_FIELDS.actualId} onClick={onClick} />;
 };
