@@ -59,6 +59,9 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       dispatch(dashboardTodoActions.loadMyFeedsList());
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
+    onError: () => {
+      async.reset();
+    },
   });
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const onSubmit = (props: PasswordFormValues) => {
