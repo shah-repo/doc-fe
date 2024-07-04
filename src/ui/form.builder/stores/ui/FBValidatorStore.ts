@@ -1,5 +1,4 @@
 import { assign, Dictionary, isEmpty, isNull, isUndefined, map } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable } from 'mobx';
 import Validator from 'validatorjs';
 import { SelectOption } from '../../../components/forms/fields/Select';

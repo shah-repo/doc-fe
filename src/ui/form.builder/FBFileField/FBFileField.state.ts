@@ -1,5 +1,4 @@
 import { isUndefined } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action } from 'mobx';
 import { FBFile } from '..';
 import { Attachment } from '../../../state/ducks/attachments/types';

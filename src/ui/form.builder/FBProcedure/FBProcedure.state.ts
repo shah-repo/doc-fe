@@ -1,5 +1,4 @@
 import { filter, flattenDeep, get, omit, unionBy } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';

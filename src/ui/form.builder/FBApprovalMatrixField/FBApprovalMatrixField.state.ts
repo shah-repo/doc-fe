@@ -1,5 +1,4 @@
 import { isEmpty, map, sortBy, union } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { v4 as uuidv4 } from 'uuid';
 import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixItem, FBApprovalRole, FBDAMFields } from '..';

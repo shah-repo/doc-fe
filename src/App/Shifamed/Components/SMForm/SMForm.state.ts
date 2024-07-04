@@ -1,5 +1,4 @@
 import { get, isEmpty, isString, isUndefined, join, map, omitBy } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import * as Validator from 'validatorjs';
 import { SMFormProps, SMFormStateProps } from '../../..';

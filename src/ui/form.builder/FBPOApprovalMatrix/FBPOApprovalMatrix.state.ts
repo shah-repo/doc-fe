@@ -1,5 +1,4 @@
 import { findIndex, isEmpty, union } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBFormState } from '..';
 import { intl } from '../../../common/intl';

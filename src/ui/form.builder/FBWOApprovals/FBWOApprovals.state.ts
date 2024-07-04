@@ -1,5 +1,4 @@
 import { filter, isEmpty, map } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { FBApprovalsConstructor, FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBRequiredApprover } from '..';
 import { Approval } from '../../../state/ducks/common/types';

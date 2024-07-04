@@ -1,5 +1,4 @@
 import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union, unionBy } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, get, observable, set } from 'mobx';
 import React from 'react';
 import { FBActionField, FBApproval, FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType, FBSchemaProps } from '..';

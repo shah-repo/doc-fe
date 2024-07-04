@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable } from 'mobx';
 import { stripTags } from '../../../../../common/utils/helpers';
 import { Id } from '../../../../../state/ducks/common/types';

@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { AvailableMaintenanceForm, ProposedDocIdBody } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';

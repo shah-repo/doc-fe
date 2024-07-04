@@ -1,5 +1,4 @@
 import { omit } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { EBPartPatchBody, EBPartPostBody, ProposedDocIdBody } from '..';
 import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';

@@ -1,5 +1,4 @@
 import { unionBy, values } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { computed, observable } from 'mobx';
 import { FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from '..';
 import FBProcedureState from '../FBProcedure/FBProcedure.state';

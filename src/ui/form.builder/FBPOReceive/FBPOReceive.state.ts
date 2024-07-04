@@ -1,5 +1,4 @@
 import { Dictionary, template } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed } from 'mobx';
 import { useIntl } from 'react-intl';
 import { FBPurchaseOrderItem, FBSchemaProps, ReceiveQuantityBody } from '..';

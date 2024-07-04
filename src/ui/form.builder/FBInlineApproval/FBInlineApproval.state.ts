@@ -1,5 +1,4 @@
 import { filter, map, uniqBy } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalOptions, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBRequestApprovalTransitionBody } from '..';
 import { Document } from '../../../state/ducks/documentRevisions/types';

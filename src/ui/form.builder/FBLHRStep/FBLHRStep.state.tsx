@@ -1,5 +1,4 @@
 import { find, get, isUndefined, keyBy, map, omit } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, StartMpiBody } from '..';
 import { Document, DocumentRevision } from '../../../state/ducks/documentRevisions/types';

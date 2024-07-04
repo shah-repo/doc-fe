@@ -1,5 +1,4 @@
 import { cloneDeep, includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, get, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { appGlobals } from '../../../appGlobals';

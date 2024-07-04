@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { observable } from 'mobx';
 import { FBMPIProcedureSelectValue } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';

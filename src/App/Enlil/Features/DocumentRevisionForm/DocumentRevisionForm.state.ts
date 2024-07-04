@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { DocumentInfo, DocumentRevisionFormStateProps, SMStore } from '../../..';
 import { Id } from '../../../../state/ducks/common/types';

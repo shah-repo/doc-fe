@@ -1,6 +1,5 @@
 import { flatten, unflatten } from 'flat';
 import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, get, observable, set } from 'mobx';
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
 import FBSchemaState from '../FBSchema/FBSchema.state';

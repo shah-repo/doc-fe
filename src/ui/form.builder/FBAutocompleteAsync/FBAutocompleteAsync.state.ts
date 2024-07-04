@@ -1,6 +1,5 @@
 /* eslint-disable no-case-declarations */
 import { filter, find, get, groupBy, isArray, last, map, some, sortBy, union } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, set } from 'mobx';
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';

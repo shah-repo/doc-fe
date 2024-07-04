@@ -19,6 +19,8 @@ export const withOptions = <T extends FBOptionProps>(
       const splitArray = split(props.options as string, '\n');
       const isValueVar = type === 'radiogroup' || type === 'select';
       const valueVar = isValueVar ? '-<-val->' : '';
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       return map(splitArray, (option) => ({
         [optionValueKey]: `${kebabCase(option)}${valueVar}-${name}`,
         [optionLabelKey]: option,
@@ -26,6 +28,8 @@ export const withOptions = <T extends FBOptionProps>(
     }
 
     function unionNoneOption (options: any[]): string | NonNullable<T['options']> {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       return union([{
         [optionValueKey]: '',
         [optionLabelKey]: 'fields.select.none',
@@ -33,6 +37,8 @@ export const withOptions = <T extends FBOptionProps>(
     }
 
     function unionContextOption (options: any[]): string | NonNullable<T['options']> {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       return union(options, [{
         [optionValueKey]: `context-${name}`,
         [optionLabelKey]: 'form.builder.other',

@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { computed } from 'mobx';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';

@@ -1,5 +1,4 @@
 import { findIndex, isArray, map, unionBy } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 import { Approval } from '../../../state/ducks/common/types';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';

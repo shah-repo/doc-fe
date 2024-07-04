@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action } from 'mobx';
 import { TrainingRecordQuery } from '../../../../state/ducks/training/types';
 import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';

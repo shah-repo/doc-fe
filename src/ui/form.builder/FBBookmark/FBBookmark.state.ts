@@ -1,5 +1,4 @@
 import { filter, isUndefined } from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, observable, set } from 'mobx';
 import { FBBookmarkItem } from '..';
 

@@ -1,5 +1,4 @@
 import { PopoverPosition } from '@material-ui/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { action, computed, observable, set } from 'mobx';
 
 class FBContextMenuState {
