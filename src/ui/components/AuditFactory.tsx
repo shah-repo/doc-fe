@@ -254,7 +254,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         const isWO = checkIsDocumentWO(groupOptions);
         let auditNextValue = audit.nextValue;
         if (isWO) {
-          auditNextValue = (audit.nextValue === 'APPROVED') ? 'COMPLETED' : audit.nextValue;
+          auditNextValue = (audit.nextValue === STATUS_TYPES_LABEL.APPROVED) ? STATUS_TYPES_LABEL.COMPLETED : audit.nextValue;
         }
 
         returnValue = (
