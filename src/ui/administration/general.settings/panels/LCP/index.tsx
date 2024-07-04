@@ -1,6 +1,6 @@
 import React from 'react';
 import { SettingsPanelProps } from '../../types';
-import LCPGrid from './components/treelist';
+import LCPGrid from './components/Grid';
 
 const LCPSettings: React.FC<SettingsPanelProps> = (props) => {
   return <LCPGrid {...props} />;

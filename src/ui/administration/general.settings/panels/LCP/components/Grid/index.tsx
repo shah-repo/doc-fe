@@ -1,0 +1,87 @@
+import { Grid } from '@material-ui/core';
+import { GridToolbar } from '@progress/kendo-react-grid';
+import React from 'react';
+import { translate } from '../../../../../../../common/intl';
+import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
+import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { withThemeNext } from '../../../../../../layout/theme-next';
+import SettingsPanel from '../../../../components/SettingsPanel';
+import { SettingsPanelProps } from '../../../../types';
+import { DATA_ITEM_KEY, initialData } from './constants';
+import { LCPSchema } from './schema';
+import useStyles from './styles';
+import { EditableLCP, LCP } from './types';
+
+const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
+  const schema: Array<ColumnDefinition<LCP>> = LCPSchema();
+  const classes = useStyles();
+  const [columns]
+    = React.useState<Array<ColumnDefinition<LCP>>>(schema);
+
+  const onAddNew = () => {
+    // TODO
+  };
+
+  const getColumns = () => {
+    return columns.filter(({ isHidden }) => !isHidden) ?? [];
+  };
+
+  const handleExpandAll = () => {
+    // TODO
+  };
+
+  const handleCollapseAll = () => {
+    // TODO
+  };
+
+  return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={onAddNew}>
+    <Grid item>
+      <KendoDataGrid<EditableLCP>
+        data={initialData}
+        schema={getColumns()}
+        fullWidth
+        className={classes.rootMDTable}
+        hasBoxScrollbars
+        dataItemKey={DATA_ITEM_KEY}
+        selectable={{
+          enabled: true,
+          drag: true,
+          cell: true,
+          mode: 'multiple',
+        }}
+        filterable={true}
+        navigatable={true}
+        // onRowClick={editMDItem}
+        // selectedField={SELECTED_FIELD}
+        // rowRender={rowRender}
+        // onSelectionChange={onSelectionChange}
+        // onKeyDown={onKeyDown}
+        // loading={materialDispositionAsync.isLoading || partAsync.isLoading || deleteMDItemAsync.isLoading}
+        resizable={true}
+      >
+        <GridToolbar>
+          <Grid container justify="flex-start"
+            className={classes.toolbarContainer}
+          >
+            <Grid
+              item
+              data-cy="collapse-expand-collapse"
+              className={classes.toggleExpandCollapse}
+              alignItems="center"
+              justify="center"
+            >
+              <span onClick={handleExpandAll}>
+                {translate('common.expand.all')} /{' '}
+              </span>
+              <span onClick={handleCollapseAll}>
+                {translate('common.collapse.all')}
+              </span>
+            </Grid>
+          </Grid>
+        </GridToolbar>
+      </KendoDataGrid>
+    </Grid>
+  </SettingsPanel>;
+};
+
+export default React.memo(withThemeNext(React.forwardRef(LCPGrid)));
