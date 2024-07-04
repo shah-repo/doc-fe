@@ -20,7 +20,7 @@ const ImportProgress: React.FC = () => {
   const bulkImports = useSelector(getBulkImports);
 
   const dateTypeOptions = useMemo(() => {
-    const uniqueProcessIds = Array.from(new Set(bulkImports.map((item: any) => item.processId)));
+    const uniqueProcessIds = Array.from(new Set(bulkImports.map((item: any) => item.processType)));
     return [{ value: '', text: translate('common.dataType') }, ...uniqueProcessIds.map(id => ({ value: id, text: id }))];
   }, [bulkImports]);
   const statusesOptions = useMemo(() => {
@@ -42,7 +42,7 @@ const ImportProgress: React.FC = () => {
         <Typography className={classes.title} variant="h4"><Text translation="bulkImport.progress.importProgress" /></Typography>
         <Box className={classes.filtersContainer}>
           <Formik
-            initialValues={{ processId: 'dateType', formId: '' }}
+            initialValues={{ processType: 'dateType', formId: '' }}
             onSubmit={noop}
           >
             <Form className={classes.form}>
