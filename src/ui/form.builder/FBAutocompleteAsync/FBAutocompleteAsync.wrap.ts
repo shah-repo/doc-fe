@@ -107,8 +107,10 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (shouldReloadOnInit || optionId) {
         autocompleteAsyncState?.load(true);
       }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+      if (FB.isUUID(defaultValue) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
+        autocompleteAsyncState?.fetchAutocompleteOption(defaultValue, optionId);
+      }
+    }, [shouldReloadOnInit, optionId, defaultValue, autocompleteAsyncState]);
 
     if (optionId) {
       (options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
@@ -126,15 +128,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-
-    React.useEffect(
-      () => {
-        if (FB.isUUID(defaultValue) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
-          autocompleteAsyncState?.fetchAutocompleteOption(defaultValue, optionId);
-        }
-      },
-      [autocompleteAsyncState, defaultValue, optionId],
-    );
 
     !getOptionLabel && (getOptionLabel = (option) => {
       if (freeSolo && !isObject(option)) {
