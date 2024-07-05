@@ -1,15 +1,15 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider } from 'formik';
-import React from 'react';
-import { Button } from '../forms/fields-next';
-import KendoDataGrid from '../KendoDataGrid/KendoDataGrid';
-import Text from '../Text';
-import useStyles from './styles';
-import { LocationProps, EditableLocation } from './types';
-import { DataGridProps } from '../KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD } from '../KendoDataGrid/constants';
 import { kebabCase } from 'lodash';
+import React from 'react';
+import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
+import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import Text from '../../../../components/Text';
+import { Button } from '../../../../components/forms/fields-next';
+import useStyles from './styles';
+import { EditableLocation, LocationProps } from './types';
 
 const LocationsSetting: React.FC<LocationProps> = ({
   formik,
