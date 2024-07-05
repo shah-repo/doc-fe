@@ -10,10 +10,10 @@ export const TREELIST_CONFIG = {
 };
 
 export const initialData = [
-  { id: '1', type: 'Preliminary', label: 'Preliminary', AllowOnPOWithApprovedSupplier: 'No', AllowOnLHRProduction: 'Yes', category: 'FG', AllowToBuy: 'Yes' },
-  { id: '2', type: 'Concept', label: 'Concept', AllowOnPOWithApprovedSupplier: 'No', AllowOnLHRProduction: 'Yes', category: 'FG', AllowToBuy: 'No' },
-  { id: '3', type: 'Planning', label: 'Planning', AllowOnPOWithApprovedSupplier: 'No', AllowOnLHRProduction: 'Yes', category: 'FG', AllowToBuy: 'No' },
-  { id: '4', type: 'Design & Engineering', label: 'Design & Engineering', AllowOnPOWithApprovedSupplier: 'Yes', AllowOnLHRProduction: 'Yes', category: 'FG', AllowToBuy: 'No' },
-  { id: '5', type: 'Production', label: 'Production', AllowOnPOWithApprovedSupplier: 'No', AllowOnLHRProduction: 'Yes', category: 'FG', AllowToBuy: 'Yes' },
-  { id: '6', type: 'Obsolute', label: 'Obsolute', AllowOnPOWithApprovedSupplier: 'No', AllowOnLHRProduction: 'Yes', category: 'SA', AllowToBuy: 'No' },
+  { id: '1', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'FG', isAllowedToBuy: 'Yes' },
+  { id: '2', enlilType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'FG', isAllowedToBuy: 'No' },
+  { id: '3', enlilType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'FG', isAllowedToBuy: 'No' },
+  { id: '4', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'FG', isAllowedToBuy: 'No' },
+  { id: '5', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'FG', isAllowedToBuy: 'Yes' },
+  { id: '6', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'SA', isAllowedToBuy: 'No' },
 ];

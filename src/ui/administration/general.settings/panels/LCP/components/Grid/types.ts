@@ -1,14 +1,17 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 
+// Remove keys at last
+// id , createdAt, updatedAt, order, enlilType, displayLabel, isAllowedOnPO, isAllowedOnLhrProd, isAllowedToBuy,
 export interface LCP {
   id: string
   category: string
-  type: string
-  label: string
-  AllowOnPOWithApprovedSupplier: string
-  AllowOnLHRProduction: string
-  AllowToBuy: string
+  order?: string
+  enlilType: string
+  displayLabel: string
+  isAllowedOnPO: string
+  isAllowedOnLhrProd: string
+  isAllowedToBuy: string
 }
 
 export interface EditableLCP extends LCP {

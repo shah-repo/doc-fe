@@ -5,8 +5,8 @@ import { LCP } from './types';
 export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
   return [
     {
-      id: 'type',
-      field: 'type',
+      id: 'enlilType',
+      field: 'enlilType',
       title: translate('administration.general.settings.lcp.col1'),
       width: 200,
       locked: false,
@@ -14,16 +14,16 @@ export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
       sortable: false,
     },
     {
-      id: 'label',
-      field: 'label',
+      id: 'displayLabel',
+      field: 'displayLabel',
       locked: false,
       groupable: false,
       title: translate('administration.general.settings.lcp.col2'),
       width: 228,
     },
     {
-      id: 'AllowOnPOWithApprovedSupplier',
-      field: 'AllowOnPOWithApprovedSupplier',
+      id: 'isAllowedOnPO',
+      field: 'isAllowedOnPO',
       locked: false,
       groupable: false,
       title: translate('administration.general.settings.lcp.col3'),
@@ -40,8 +40,8 @@ export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
       mainOrderIndex: 4,
     },
     {
-      id: 'AllowToBuy',
-      field: 'AllowToBuy',
+      id: 'isAllowedToBuy',
+      field: 'isAllowedToBuy',
       locked: false,
       groupable: false,
       title: translate('administration.general.settings.lcp.col5'),
