@@ -48,5 +48,13 @@ export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
       width: 228,
       mainOrderIndex: 5,
     },
+    {
+      id: 'category',
+      field: 'category',
+      hidden: true,
+      locked: false,
+      groupable: false,
+      mainOrderIndex: 5,
+    },
   ];
 };

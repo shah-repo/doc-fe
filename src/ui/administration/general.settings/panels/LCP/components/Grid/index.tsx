@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core';
-import { GridToolbar } from '@progress/kendo-react-grid';
+import { GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import React, { useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
 import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
@@ -7,6 +7,7 @@ import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/Ken
 import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
+import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
 import { DATA_GROUP, DATA_ITEM_KEY, initialData } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
@@ -14,10 +15,24 @@ import { EditableLCP, LCP } from './types';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema();
+  // const [editGroup, setEditGroup] = useState<GroupDescriptor | null>(null);
+  // const [group, setGroup] = useState<GroupDescriptor[]>([{ field: 'category' }]);
   const [data] = useState(initialData);
   const classes = useStyles();
   const [columns]
     = React.useState<Array<ColumnDefinition<LCP>>>(schema);
+
+  // const onEditGroup = (group: GroupDescriptor) => {
+  //   setEditGroup(group);
+  // };
+
+  // const onSaveGroup = () => {
+  //   setEditGroup(null);
+  // };
+
+  // const onGroupChange = (group: GroupDescriptor[]) => {
+  //   setGroup(group);
+  // };
 
   const onAddNew = () => {
     // TODO
@@ -33,6 +48,29 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const handleCollapseAll = () => {
     // TODO
+  };
+
+  // const handleExpandCollapse = (group: GroupDataItem) => {
+  //   const newGroup = group.expanded
+  //     ? collapseGroup(group, group.groupId)
+  //     : expandGroup(group, group.groupId);
+  //   setGroup(newGroup);
+  // };
+
+  const rowRender = (row: React.ReactElement, rowProps: GridRowProps) => {
+    console.log('rowProps.dataItem.groupId', rowProps);
+    if (rowProps.rowType === 'groupHeader') {
+      // handleExpandCollapse={handleExpandCollapse} onEditGroup={onEditGroup} onSaveGroup={onSaveGroup}
+      return React.cloneElement(row, {
+        ...rowProps,
+        children: (
+          <td colSpan={rowProps.dataItem.fieldCount ?? 6} className={classes.groupHeader}>
+            <GroupHeaderCell {...rowProps} />
+          </td>
+        ),
+      });
+    }
+    return row;
   };
 
   return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={onAddNew}>
@@ -54,6 +92,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         filterable={true}
         groupable={true}
         navigatable={true}
+        rowRender={rowRender}
+        // onGroupChange={onGroupChange}
         // onRowClick={editMDItem}
         // selectedField={SELECTED_FIELD}
         // rowRender={rowRender}

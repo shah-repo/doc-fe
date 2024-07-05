@@ -17,6 +17,12 @@ export default makeStyles((theme) => ({
     '& .k-grouping-header': {
       display: 'none',
     },
+    '& .k-grouping-row': {
+      backgroundColor: `${Colors.gray} !important`,
+    },
+    '& .k-master-row, .k-group-cell': {
+      backgroundColor: `${Colors.white} !important`,
+    },
     '& .k-grid-header thead th': {
       textTransform: 'uppercase',
       color: Colors.textBlack,
@@ -57,6 +63,12 @@ export default makeStyles((theme) => ({
   refreshText: {
     color: Colors.textBlack,
     marginRight: theme.spacing(2.5),
+  },
+  groupHeader: {
+    backgroundColor: `${Colors.gray} !important`,
+  },
+  deleteButton: {
+    color: Colors.error,
   },
   updatingRow: {
     position: 'relative',
