@@ -7,8 +7,6 @@ import { CloneContainer, CloneContainerProps } from './Clone.container';
 import DocumentRevisionCreateContainer from './DocumentRevisionCreate.container';
 
 describe('Clone container redirect test', () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const defaultProps: CloneContainerProps = {
     disableCreateNewVersion: true,
     documentRevision: getDocumentRevision(),
@@ -30,8 +28,6 @@ describe('Clone container redirect test', () => {
 });
 
 describe('Clone container test', () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const defaultProps: CloneContainerProps = {
     disableCreateNewVersion: false,
     documentRevision: { ...getDocumentRevision(), status: DocumentRevisionStatus.Released },

@@ -6,8 +6,6 @@ import { DownloadButtonContainer, DownloadButtonContainerProps } from './Downloa
 import DownloadButtonPresenter from './DownloadButton.presenter';
 
 describe('DownloadButtonContainer tests', () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
   const attachment: Attachment = { id: 'DASfjsak', name: 'Test', type: 'txt', s3link: '', isLoading: false };
   const defaultProps: DownloadButtonContainerProps = {
     attachment,

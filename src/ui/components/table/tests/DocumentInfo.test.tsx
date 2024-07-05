@@ -15,8 +15,6 @@ describe('DocumentInfo tests', () => {
   it('Renders correctly', () => {
     const wrapper = getWrapper();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     expect(wrapper.find('span').contains(defaultProps.numberOfRecords)).toBe(true);
   });
 });

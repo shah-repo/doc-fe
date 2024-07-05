@@ -32,8 +32,6 @@ describe('supplier survey action test', () => {
   };
 
   describe('submitSupplierSurvey tests', () => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const handlers: Handlers<SupplierSurveyForm> = {
       successHandler: getCallbackHandler<SupplierSurveyForm>(),
       errorHandler: getCallbackHandler<string>(),

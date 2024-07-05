@@ -6,8 +6,6 @@ import DownloadButtonContainer from './DownloadButton.container';
 import FileCard, { FileCardProps } from './FileCard';
 
 describe('Filecard component unit tests', () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const attachment: Attachment = {
     id: 'testId',
     name: 'testName',

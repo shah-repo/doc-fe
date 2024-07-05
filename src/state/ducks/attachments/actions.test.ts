@@ -17,8 +17,6 @@ describe('attachemnt actions tests', () => {
 
     const uploadHandler: CallbackHandler<Attachment> = new CallbackHandler();
     uploadHandler.execute = jest.fn();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const attachment: Attachment = {
       id: 'sdasd-1-e-asd-d',
       name: 'Title',
@@ -27,8 +25,6 @@ describe('attachemnt actions tests', () => {
       lineType: LINE_TYPES.CLEAN_COPY,
     };
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const action = attachmentsActions.upload(file, attachment.lineType, handlers);
 
     it('calls POST on ATTACHMENT_UPLOAD_URL', () => {
@@ -49,8 +45,6 @@ describe('attachemnt actions tests', () => {
       setCancelToken: () => true,
     };
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const attachment: Attachment = {
       id: 'ki23jrlo2i3jr;',
       name: 'Title',
