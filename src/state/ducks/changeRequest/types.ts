@@ -74,7 +74,7 @@ export interface ChangeRequest {
   formDocument?: FBDocumentRevisionProps
   tasks?: FBTaskItem[]
   documentType: DocumentType
-  isLineItemPartCanBeSubstituted: boolean
+  isLineItemPartCanBeSubstituted?: boolean
 }
 
 export interface ChangeRequestEditRequestBody {

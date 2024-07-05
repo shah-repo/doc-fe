@@ -24,8 +24,6 @@ const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({
                   <FBButton
                     label={`form.builder.${picker as string}`}
                     dataCy={`form.builder.${picker as string}`}
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
                     onClick={openEditor && openEditor({ type: picker, index })}
                   />
                 )}

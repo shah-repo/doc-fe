@@ -28,16 +28,12 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     ...restProps
   } = props;
   const classes = useStyles();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData));
+  const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData) as GridItem<T>[]);
   const [activeItem, setActiveItem] = useState<GridItem<T>>();
 
   useEffect(
     () => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      setData(normalizeData(originData));
+      setData(normalizeData(originData) as GridItem<T>[]);
     },
     [originData],
   );

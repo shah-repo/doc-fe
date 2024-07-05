@@ -34,8 +34,6 @@ export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm,
       field: 'actions',
       filterable: false,
       className: actionsClass,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       template: (props) => <ActionsCellTemplate {...props} onDiscard={onDiscard} onConfirm={onConfirm} />,
       hidden: !isActive,
       width: 0,

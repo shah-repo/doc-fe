@@ -134,8 +134,6 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
         item
         xs={displayInfoIcon ? 5 : 6}
       >
-        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-        {/* @ts-ignore */}
         <FBAutocompleteAsync
           {...props}
           name={PART_TO_BE_MADE}
@@ -157,6 +155,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           disabled={props.disabled}
           withState={true}
           autosave={true}
+          onBlur={undefined}
         />
         <ErrorBlock
           label={partSelectionLabel as Translation}

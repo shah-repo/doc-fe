@@ -47,9 +47,7 @@ class FBData {
   }
 
   public static get autocompleteOptions (): FBAutocompleteAsyncConfig[] {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return autocompleteOptions;
+    return autocompleteOptions as FBAutocompleteAsyncConfig[];
   }
 
   public static get unitsOptions (): FBOption[] {

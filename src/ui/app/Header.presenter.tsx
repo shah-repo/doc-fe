@@ -2,7 +2,8 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormControlLabel, Grid, Switch, Toolbar, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import { WithStyles, withStyles } from '@material-ui/core/styles';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import { Styles } from '@material-ui/core/styles/withStyles';
 import cx from 'classnames';
 import React from 'react';
 import { SM } from '../../App';
@@ -108,6 +109,5 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
     </AppBar>
   );
 };
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export default withStyles(styles)(Header);
+
+export default withStyles(styles as Styles<Theme, {}, string>)(Header);

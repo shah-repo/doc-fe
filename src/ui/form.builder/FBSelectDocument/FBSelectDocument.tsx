@@ -9,24 +9,22 @@ const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
   return (
     <>
       {isOutput && (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         <FBAutocompleteAsync
           {...props}
           selectedOptions={options as string[]}
           multiple={true}
           optionId="1"
+          onBlur={undefined}
         />
       )}
       {!isOutput && (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         <FBAutocompleteAsync
           {...props}
           multiple={true}
           optionId="1"
           value={options}
           // defaultValue={options}
+          onBlur={undefined}
         />
       )}
     </>

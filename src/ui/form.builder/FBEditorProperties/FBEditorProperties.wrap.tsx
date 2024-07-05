@@ -55,9 +55,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
       // @ts-ignore
       const [valueName, checked] = at(ev.target, ['value', 'checked']);
       // *NOTE: Mobile support until mobile switches to editor props
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      formState?.setFieldValue(valueName, checked);
+      formState?.setFieldValue(valueName as string, checked);
     };
 
     // We need to refactor this. All disabled props will have to be handled from editor properties

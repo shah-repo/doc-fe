@@ -110,9 +110,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         }
       }).filter(Boolean);
       if (activeEmployees) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        setEmployees(activeEmployees);
+        setEmployees(activeEmployees as SelectOption[]);
       }
 
       const defaultEmployee = activeEmployees.find(item => item?.email === authUser.email);
@@ -122,9 +120,9 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     }, [companyEmployees]);
 
     const handleDateChange = (date: MaterialUiPickersDate) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      setSelectedDate(new Date(date?.toISOString()));
+      if(date) {
+        setSelectedDate(new Date(date?.toISOString()));
+      }
     };
 
     const onQtyUnitsChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -194,8 +192,6 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         printerSerial: printerSerial,
         labelTemplate: labelTemplate,
         labelData: {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           status: getLotStatusLabel(selectedItem?.lotStatus),
           description: selectedParams.includes('description') ? description.slice(0, 90) : '',
           partDocId: selectedParams.includes('partDocId') ? initialValues.partId : '',

@@ -11,9 +11,7 @@ const RecievedCell: CellComponent<FBPurchaseOrderItem, { loading?: boolean }> = 
   loading,
   ...props
 }) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const classes = useStyles();
+  const classes = useStyles({ disabled: false });
 
   return (
     <ContentCell

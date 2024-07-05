@@ -1,4 +1,5 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { Box, Button, Dialog, DialogContent, DialogContentText, Theme, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { Styles } from '@material-ui/core/styles/withStyles';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import React from 'react';
 import Text from '../../../../components/Text';
@@ -85,6 +86,5 @@ const PoRejectDialog: React.FunctionComponent<Props> = ({
     }
   </>
 );
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export default withStyles(styles)(PoRejectDialog);
+
+export default withStyles(styles as Styles<Theme, {}, string>)(PoRejectDialog);

@@ -13,8 +13,7 @@ const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType
   defaultTraining: false,
   ...docType,
 });
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+
 export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> = {}): DocumentRevision => ({
   id: faker.random.uuid(),
   precalc: {
@@ -126,8 +125,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
   },
   ...document,
 });
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+
 export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
   id: faker.random.uuid(),
   type: 'ARRAY_DELETED',

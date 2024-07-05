@@ -1,5 +1,5 @@
 import { Status } from '../../../../../../ui/components/common/kendo.column.templates/Status';
-import { ColumnDefinition } from '../../../../../../ui/components/KendoDataGrid/KendoDataGrid.types';
+import { CellComponent, ColumnDefinition } from '../../../../../../ui/components/KendoDataGrid/KendoDataGrid.types';
 import { Document } from '../../types';
 import OverflowCellTemplate from './components/OverflowCellTemplate';
 
@@ -35,9 +35,7 @@ const schema: Array<ColumnDefinition<Document>> = [
     id: 'status',
     field: 'status',
     title: 'common.status',
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    cell: Status,
+    cell: Status as CellComponent<Document>,
     width: 130,
   },
 ];

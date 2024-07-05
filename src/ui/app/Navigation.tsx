@@ -4,7 +4,8 @@ import { CircularProgress, Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import { Styles } from '@material-ui/core/styles/withStyles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import cx from 'classnames';
@@ -155,6 +156,5 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
     </Drawer>
   );
 };
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export default withRouter(withStyles(styles)(Navigation));
+
+export default withRouter(withStyles(styles as Styles<Theme, {}, string>)(Navigation));

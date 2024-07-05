@@ -15,31 +15,25 @@ export const withOptions = <T extends FBOptionProps>(
     type,
     ...props
   }: T) => {
-    function mapStringOption (): string | NonNullable<T['options']> {
+    function mapStringOption () {
       const splitArray = split(props.options as string, '\n');
       const isValueVar = type === 'radiogroup' || type === 'select';
       const valueVar = isValueVar ? '-<-val->' : '';
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       return map(splitArray, (option) => ({
         [optionValueKey]: `${kebabCase(option)}${valueVar}-${name}`,
         [optionLabelKey]: option,
       }));
     }
 
-    function unionNoneOption (options: any[]): string | NonNullable<T['options']> {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+    function unionNoneOption (options: any[]) {
       return union([{
         [optionValueKey]: '',
         [optionLabelKey]: 'fields.select.none',
       }], options);
     }
 
-    function unionContextOption (options: any[]): string | NonNullable<T['options']> {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      return union(options, [{
+    function unionContextOption (options: any[]) {
+      return union<any>(options, [{
         [optionValueKey]: `context-${name}`,
         [optionLabelKey]: 'form.builder.other',
       }]);
@@ -47,9 +41,9 @@ export const withOptions = <T extends FBOptionProps>(
 
     const optionsSet = (): T['options'] => {
       let options = props.options || '';
-      isString(options) && (options = mapStringOption());
-      includeNone && (options = unionNoneOption(options as any[]));
-      includeContext && (options = unionContextOption(options as any[]));
+      isString(options) && (options = mapStringOption() as string | NonNullable<T['options']>);
+      includeNone && (options = unionNoneOption(options as any[]) as string | NonNullable<T['options']>);
+      includeContext && (options = unionContextOption(options as any[]) as string | NonNullable<T['options']>);
       return options;
     };
 

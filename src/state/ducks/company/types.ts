@@ -53,7 +53,7 @@ export interface Company {
   teamId: string
   addresses: string[]
   acctCodes: string[]
-  locations: CompanyLocation[]
+  locations?: CompanyLocation[]
   navigation: NavigationItem[]
   employees?: Employee[]
   scheduledForDeletion: boolean

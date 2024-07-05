@@ -41,7 +41,7 @@ export interface Audit {
   previousValue?: Audit['nextValue']
   reference?: SmartReference
   timestamp: string
-  documentRevisionId: string
+  documentRevisionId?: string
   docId?: string
   groupId: string
   owner: Owner

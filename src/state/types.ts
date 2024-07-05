@@ -34,7 +34,7 @@ export enum AsyncStatus {
 }
 
 export interface AsyncActionPayload {
-  status: AsyncStatus
+  status?: AsyncStatus
   message?: string
 }
 

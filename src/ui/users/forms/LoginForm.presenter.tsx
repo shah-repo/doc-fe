@@ -1,4 +1,5 @@
-import { Box, Button, Paper, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { Box, Button, Paper, Theme, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { Styles } from '@material-ui/core/styles/withStyles';
 import { Form, FormikProps } from 'formik';
 import * as React from 'react';
 import { AsyncState } from '../../../state/types';
@@ -100,6 +101,5 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
     </Paper>
   );
 };
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export default withStyles(styles)(LoginFormPresenter);
+
+export default withStyles(styles as Styles<Theme, {}, string>)(LoginFormPresenter);

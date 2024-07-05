@@ -55,7 +55,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
 
-  const relatedType = revIdRelatedTypeObj?.[audit.documentRevisionId]?.relatedType;
+  const relatedType = revIdRelatedTypeObj?.[audit?.documentRevisionId ?? '']?.relatedType;
 
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;

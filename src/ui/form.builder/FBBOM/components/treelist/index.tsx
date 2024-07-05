@@ -631,9 +631,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         inEdit: [newBOM],
       });
       formik.setValues(newBOM);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const treeList: HTMLElement = treeListRef.current;
+      const treeList: HTMLElement = treeListRef.current as any;
       if (!treeList && !dataItem) return;
       setTimeout(() => {
         const id = dataItem[SUB_ITEMS_FIELD]?.length

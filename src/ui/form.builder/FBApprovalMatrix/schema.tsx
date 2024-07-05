@@ -96,9 +96,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: StatusFilter,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      template: StatusCellTemplate,
+      template: StatusCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       locked: true,
       width: 140,
     },
@@ -109,9 +107,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: InputFilter,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      template: InputCellTemplate,
+      template: InputCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       locked: true,
       required: true,
       width: 100,
@@ -134,9 +130,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: InputFilter,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      template: InputCellTemplate,
+      template: InputCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       locked: true,
       required: true,
       width: 140,
@@ -148,9 +142,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      template: CheckboxCellTemplate,
+      template: CheckboxCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       width: 100,
     },
     {
@@ -160,9 +152,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      template: CheckboxCellTemplate,
+      template: CheckboxCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       width: 100,
     },
     {
@@ -183,15 +173,13 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
         id: kebabCase(headTitle),
         title: headTitle,
         headerClassName: cellARHeaderClassName,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         children: approvalRoles.map((role, index, arr) => ({
           id: kebabCase(role.name),
           title: role.name,
           field: `approvalRoles.${headKey}.${role.index}`,
           filterable: false,
           editable: true,
-          template: CheckboxCellTemplate,
+          template: CheckboxCellTemplate as CellTemplate<FBApprovalMatrixItem, Record<string, unknown>>,
           width: 90,
           headerClassName: cx(cellARHeaderClassName, { [clearRightBorderClassName]: index !== arr.length - 1 }),
           className: cellARClassName,
