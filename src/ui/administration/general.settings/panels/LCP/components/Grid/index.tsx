@@ -1,19 +1,20 @@
 import { Grid } from '@material-ui/core';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import React from 'react';
+import React, { useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
 import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
-import { DATA_ITEM_KEY, initialData } from './constants';
+import { DATA_GROUP, DATA_ITEM_KEY, initialData } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { EditableLCP, LCP } from './types';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema();
+  const [data] = useState(initialData);
   const classes = useStyles();
   const [columns]
     = React.useState<Array<ColumnDefinition<LCP>>>(schema);
@@ -37,8 +38,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={onAddNew}>
     <Grid item>
       <KendoDataGrid<EditableLCP>
-        data={initialData}
+        data={data}
         schema={getColumns()}
+        group={DATA_GROUP}
         fullWidth
         className={classes.rootMDTable}
         hasBoxScrollbars
@@ -50,6 +52,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
           mode: 'multiple',
         }}
         filterable={true}
+        groupable={true}
         navigatable={true}
         // onRowClick={editMDItem}
         // selectedField={SELECTED_FIELD}

@@ -1,5 +1,6 @@
 export const DATA_ITEM_KEY = 'id';
 export const EXPAND_FIELD = 'expanded';
+export const DATA_GROUP = [{ field: 'category' }];
 export const TREELIST_CONFIG = {
   sortable: false,
   reorderable: false,
@@ -14,5 +15,5 @@ export const initialData = [
   { id: '3', type: 'Planning', label: 'Planning', AllowOnPOWithApprovedSupplier: 'No', AllowOnLHRProduction: 'Yes', category: 'FG', AllowToBuy: 'No' },
   { id: '4', type: 'Design & Engineering', label: 'Design & Engineering', AllowOnPOWithApprovedSupplier: 'Yes', AllowOnLHRProduction: 'Yes', category: 'FG', AllowToBuy: 'No' },
   { id: '5', type: 'Production', label: 'Production', AllowOnPOWithApprovedSupplier: 'No', AllowOnLHRProduction: 'Yes', category: 'FG', AllowToBuy: 'Yes' },
-  { id: '6', type: 'Obsolute', label: 'Obsolute', AllowOnPOWithApprovedSupplier: 'No', AllowOnLHRProduction: 'Yes', category: 'FG', AllowToBuy: 'No' },
+  { id: '6', type: 'Obsolute', label: 'Obsolute', AllowOnPOWithApprovedSupplier: 'No', AllowOnLHRProduction: 'Yes', category: 'SA', AllowToBuy: 'No' },
 ];

@@ -14,6 +14,9 @@ export default makeStyles((theme) => ({
     '& .k-grid-header thead th:first-child': {
       paddingLeft: theme.spacing(2.5),
     },
+    '& .k-grouping-header': {
+      display: 'none',
+    },
     '& .k-grid-header thead th': {
       textTransform: 'uppercase',
       color: Colors.textBlack,
