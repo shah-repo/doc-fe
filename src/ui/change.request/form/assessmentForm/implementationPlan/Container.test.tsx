@@ -1,13 +1,17 @@
 import { shallow } from 'enzyme';
-import { ErrorMessage, FieldArray } from 'formik';
+import { ErrorMessage, FieldArray, FieldInputProps, FieldMetaProps, FormikProps } from 'formik';
 import React from 'react';
 import AttachmentIconField from '../../../../components/common/attachment.icon/container';
 import HeaderField from '../../../../components/common/header.field/field';
+import { ChangeRequestFormValues } from '../../types';
 import Container, { Props } from './Container';
 
 describe('Container tests', () => {
   const getWrapper = (props: Partial<Props> = {}) => shallow(
-    <Container {...props} />,
+    <Container {...props}
+      field={props?.field as FieldInputProps<ChangeRequestFormValues>}
+      form={props.form as FormikProps<any>}
+      meta={props.meta as FieldMetaProps<ChangeRequestFormValues>} />,
   );
 
   it('Displays correctly', () => {

@@ -25,7 +25,7 @@ describe('attachemnt actions tests', () => {
       lineType: LINE_TYPES.CLEAN_COPY,
     };
 
-    const action = attachmentsActions.upload(file, attachment.lineType, handlers);
+    const action = attachmentsActions.upload(file, attachment.lineType ?? '', handlers);
 
     it('calls POST on ATTACHMENT_UPLOAD_URL', () => {
       expect(action.url).toBe(ATTACHMENT_UPLOAD_URL);
