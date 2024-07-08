@@ -1,5 +1,4 @@
-// eslint-disable-next-line max-classes-per-file
-import { action, observable, set } from 'mobx'; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { action, observable, set } from 'mobx';
 import { FBTaskFieldProps } from '..';
 
 class FBTaskFieldState {
