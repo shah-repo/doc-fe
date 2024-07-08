@@ -46,13 +46,14 @@ definitions:
 
     - step: &RUN_LINTER
         <<: *COMMON
-        name: Linter
+        name: Linter & Typecheck
         artifacts:
           - eslint-results/**
         script:
           - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runUnusedExportsCheck.sh
           - ./aws/bash_scripts/runLinter.sh
+          - ./aws/bash_scripts/runTypecheck.sh
 
     - step: &RUN_TESTS
         <<: *COMMON
