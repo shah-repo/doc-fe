@@ -46,7 +46,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
                   groupName={group.name}
                   key={id}
                   isChecked={isIncluded?.(group)}
-                  component="approvers"
+                  dataCyPrefix="fb-approvers"
                 />
               </Box>
             )}
