@@ -5,28 +5,31 @@ import { GridRowProps } from '@progress/kendo-react-grid';
 import * as React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { IconButton } from '../../../../../../../components/forms/fields-next';
+import { CustomGroupDataItem } from '../types';
 import useStyles from './styles';
 
 interface GroupHeaderCellProps extends GridRowProps {
+  onExpandChange: (groupDataItem: CustomGroupDataItem) => void
 }
 
 export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   const classes = useStyles();
-  // onClick={() => handleExpandCollapse(props.dataItem)}
+  const { dataItem, onExpandChange } = props;
+  const groupLabel = dataItem.value;
 
   return (
     <Grid container justify="space-between" alignItems="center">
       <Grid item alignItems="center">
         <FontAwesomeIcon
-          data-cy="minimize-row-button"
-          // onClick={hasChildren ? onClick : undefined}
+          data-cy={`${groupLabel}-toggle-group`}
           size="sm"
-          style={{ paddingRight: '10px' }}
+          className={classes.toggleExpandCollapse}
+          onClick={() => onExpandChange?.(dataItem)}
           icon={
-            props.dataItem.expanded ? solid('square-plus') : regular('square-minus')
+            dataItem.expanded ? regular('square-minus') : solid('square-plus')
           }
         />
-        <span>{props.dataItem.value}</span>
+        {groupLabel}
       </Grid>
       <Grid item>
         <Tooltip title={translate('common.edit')} placement="top">

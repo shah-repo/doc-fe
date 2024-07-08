@@ -9,6 +9,12 @@ export const TREELIST_CONFIG = {
   rowHeight: 50,
 };
 
+export const initialDataState = {
+  take: 100,
+  skip: 0,
+  group: DATA_GROUP,
+};
+
 export const initialData = [
   { id: '1', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes' },
   { id: '2', enlilType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No' },

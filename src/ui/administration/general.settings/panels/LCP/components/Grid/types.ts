@@ -29,3 +29,11 @@ interface DataState {
   sort?: SortDescriptor[]
   filter?: FilterDescriptor[]
 }
+
+export interface CustomGroupDataItem {
+  items: LCP[]
+  value: string
+  field: string
+  groupId: string
+  expanded: boolean
+}
