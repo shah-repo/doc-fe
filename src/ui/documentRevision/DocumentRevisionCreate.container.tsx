@@ -24,7 +24,7 @@ interface DispatchProps {
 interface OwnProps {
   documentRevision: DocumentRevision
   type?: DocumentCloneType
-  isNewVersion: boolean
+  isNewVersion?: boolean
   isSliderView?: boolean
 }
 

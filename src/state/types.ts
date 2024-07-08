@@ -49,5 +49,5 @@ export interface LoadAsyncState {
 export interface Handlers<S = any, E = string> {
   successHandler: CallbackHandler<S>
   errorHandler: CallbackHandler<E>
-  setCancelToken: (token?: CancelTokenSource) => void
+  setCancelToken?: (token?: CancelTokenSource) => void
 }

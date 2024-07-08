@@ -20,5 +20,6 @@
     "noUnusedLocals": true,
     "noImplicitAny": false
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/*.test.tsx", "**/*.test.ts"]
 }
