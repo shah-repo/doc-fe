@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { first, get, has, isArray, join } from 'lodash';
 import { Action, Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import { intl } from '../../../common/intl';
@@ -93,15 +93,15 @@ const apiMiddleware: Middleware = ({
     if (axios.isCancel(exception)) {
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const redirectToMaintenance = exception?.response?.status === 491
+
+    const response = (exception as AxiosError)?.response;
+
+    const redirectToMaintenance = response?.status === 491
       && window.location.pathname !== MAINTENANCE
       && window.location.pathname !== STATUS
       && window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const userLocked = exception?.response?.status === 423
+
+    const userLocked = response?.status === 423
       && window.location.pathname !== USER_LOCKED
       && window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
 
@@ -109,19 +109,16 @@ const apiMiddleware: Middleware = ({
     redirectToMaintenance && redirectTo(MAINTENANCE)();
 
     let responseMessage = '';
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const isUnauthorizedRequest = exception?.response?.status === 401 && action.includeAuthorization;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const isPasswordAction = exception?.response?.status === 401 && action.password;
+
+    const isUnauthorizedRequest = response?.status === 401 && action.includeAuthorization;
+
+    const isPasswordAction = response?.status === 401 && action.password;
 
     if (isUnauthorizedRequest && !isPasswordAction) {
       dispatch(authActions.logoutUser());
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    switch (exception?.response?.status) {
+
+    switch (response?.status) {
       case 425: {
         responseMessage = intl.formatMessage({
           id: 'errors.somethingWentWrong',
@@ -131,9 +128,7 @@ const apiMiddleware: Middleware = ({
       default: {
         const {
           data: { message },
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-        } = exception.response as AsyncActionErrorResponse;
+        } = response as AsyncActionErrorResponse;
         if (isArray(message) && has(first(message), 'message')) {
           responseMessage = join(get(first(message), 'message'), '\n');
         } else {
@@ -142,9 +137,8 @@ const apiMiddleware: Middleware = ({
         break;
       }
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const errorMessage: string = responseMessage || exception.message;
+
+    const errorMessage: string = responseMessage || (exception as AxiosError)?.message;
 
     action.onFailure(errorMessage, dispatch);
     dispatchAsyncStatusAction(
