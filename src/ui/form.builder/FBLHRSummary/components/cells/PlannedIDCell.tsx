@@ -272,10 +272,11 @@ const Editor: React.FC<CustomTemplateProps> = ({
 export const PlannedIDCell: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const detailsObj = dataItem?.plannedDetails;
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  return <PreviewDoc detailsObj= {dataItem?.plannedDetails} isRevRemoved={dataItem.isRevRemoved} field={LHR_SUMARY_FIELDS.plannedId} dataItem={dataItem} onClick={onClick} />;
+  return <PreviewDoc detailsObj= {detailsObj} isRevRemoved={detailsObj?.isRevRemoved} field={LHR_SUMARY_FIELDS.plannedId} dataItem={dataItem} onClick={onClick} />;
 };
