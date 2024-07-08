@@ -288,5 +288,5 @@ export const PlannedIDCell: React.FC<CustomTemplateProps> = (props) => {
     return <Editor {...props} />;
   }
 
-  return <PreviewDoc detailsObj= {dataItem?.plannedDetails} isRevRemoved={dataItem.isRevRemoved} field={LHR_SUMARY_FIELDS.plannedId} dataItem={dataItem} onClick={onClick} />;
+  return <PreviewDoc detailsObj= {dataItem?.plannedDetails} isRevRemoved={dataItem?.plannedDetails?.isRevRemoved} field={LHR_SUMARY_FIELDS.plannedId} dataItem={dataItem} onClick={onClick} />;
 };
