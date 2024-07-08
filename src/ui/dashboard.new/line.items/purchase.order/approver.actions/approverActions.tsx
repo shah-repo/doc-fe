@@ -257,8 +257,6 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-              {/* @ts-ignore */}
               <Grid container={true} wrap="nowrap" alignItems="center" lg={12} md={3} sm={6} xs={4} className={classes.innerWrap}>
                 <Grid item={true} >
                   <Typography

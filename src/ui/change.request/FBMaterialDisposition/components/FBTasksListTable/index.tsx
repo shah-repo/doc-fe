@@ -1,6 +1,5 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
@@ -341,9 +340,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   }, isTasksListAdded ? [editedTLItem] : []);
 
   return (
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    <Box ref={containerRef} className={classes.root} data-cy="tasks-list-table">
+    <div ref={containerRef} className={classes.root} data-cy="tasks-list-table">
       <FBSection label={label ?? translate('approvalRequest.tasks.list.section.heading')}>
         <Button
           kind="ghost"
@@ -378,7 +375,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
       >
         {translate('approvalRequest.tasks.list.add')}
       </Button>}
-    </Box>);
+    </div>
+  );
 };
 
 export default FBTasksListTable;

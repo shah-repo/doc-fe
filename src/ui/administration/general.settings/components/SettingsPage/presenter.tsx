@@ -5,7 +5,7 @@ import { translate } from '../../../../../common/intl';
 import { Button } from '../../../../components/forms/fields-next';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { panels } from '../../constants';
-import { GeneralSettingsProps, GeneralSettingsTabs } from '../../types';
+import { GeneralSettingsProps, GeneralSettingsTabs, SettingsPanelProps } from '../../types';
 import HeaderLastSaved from '../HeaderLastSaved';
 import useStyles from './styles';
 
@@ -78,17 +78,19 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
         </Button>
       </Box>
       <Box className={classes.panels}>
-        {panels.map(panel => (
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          <panel.component
-            key={panel.key}
-            title={panel.title}
-            expanded={expandedPanels.includes(panel.key)}
-            onToggle={togglePanel(panel.key)}
-            data-cy={kebabCase(panel.title)}
-          />
-        ))}
+        {panels.map(panel => {
+          const PanelComponent = panel.component as React.FC<SettingsPanelProps>;
+
+          return (
+            <PanelComponent
+              key={panel.key}
+              title={panel.title}
+              expanded={expandedPanels.includes(panel.key)}
+              onToggle={togglePanel(panel.key)}
+              data-cy={kebabCase(panel.title)}
+            />
+          );
+        })}
       </Box>
     </Box>
   );

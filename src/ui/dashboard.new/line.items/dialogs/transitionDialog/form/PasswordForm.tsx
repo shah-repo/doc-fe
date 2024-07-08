@@ -20,9 +20,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
   classes,
   asyncState,
 }) => (
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  <Form className={classes.form}>
+  <Form>
     <FormMessage asyncState={asyncState} />
     <InputField
       name="password"
