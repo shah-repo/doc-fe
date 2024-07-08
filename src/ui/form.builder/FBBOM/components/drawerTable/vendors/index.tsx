@@ -52,9 +52,7 @@ const PartVendorsTable: React.FC<VendorTableProps> = ({
     isActive: false,
     isInEditMode: false,
   });
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const vendorsList = vendors?.reduce((list, item) => {
+  const vendorsList = vendors?.reduce((list: any, item) => {
     const supplier = suppliers.find((vendor) => vendor.id === item.vendor.id);
     const supplierName = supplier?.name ?? item.vendor?.name;
     const supplierStatus = supplier?.displayStatus ?? '';

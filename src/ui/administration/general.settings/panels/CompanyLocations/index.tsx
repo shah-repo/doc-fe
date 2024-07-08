@@ -9,8 +9,8 @@ import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { CompanyLocation } from '../../../../../state/ducks/company/types';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -28,12 +28,12 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const editLocation = ({ dataItem }: DataGridRowClickEvent<EditableCompanyLocation>) => setEditedLocation(dataItem);
   const discardLocation = () => setEditedLocation(undefined);
-  const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations);
+  const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations ?? []);
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
 
   const async = useAsync({
     onError: (error) => {
-      setLocationsData(locations);
+      setLocationsData(locations ?? []);
       toastError(error);
     },
   });
@@ -43,7 +43,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
-      const isDuplicate = locations.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
+      const isDuplicate = locations?.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
       if (isEmpty(values.name)) {
         error.name = 'validators.required';
       }
@@ -67,7 +67,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   }, [editedLocation, setValues]);
 
   useEffect(() => {
-    setLocationsData(locations);
+    setLocationsData(locations ?? []);
   }, [locations]);
   const addLocation = () => {
     setEditedLocation({

@@ -5,7 +5,7 @@ import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-da
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridCellProps, GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, isEmpty, isNull, map, set } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ComponentType, useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
@@ -517,11 +517,10 @@ export function KendoGrid<T extends any> ({
           </Grid>
         </GridToolbar>
         {isPrintColumnAvailable && isPrintColumnVisible && (
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           <GridColumn
             {...printColumnProps }
             filterable={false}
+            filterCell={printColumnProps.filterCell as ComponentType<GridFilterCellProps>}
             cell={(props) => <td className={props?.className} style={props?.style} >
               <IconButton data-cy="print-label-icon" onClick={() => onPrintIconClick(props)}>
                 <FontAwesomeIcon icon={regular('print')} />

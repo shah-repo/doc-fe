@@ -44,7 +44,7 @@ export const buildSchema: schemaBuilder = ({ onDiscard, onConfirm, onRowClick })
       template: (props) => (
         <LocationActionsCellTemplate
           {...props}
-          onClick={onRowClick}
+          onClick={onRowClick as ((e: { dataItem: EditableCompanyLocation }) => void) & ((e: DataGridRowClickEvent<EditableCompanyLocation>) => void)}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
         />

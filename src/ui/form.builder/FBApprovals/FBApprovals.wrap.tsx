@@ -302,14 +302,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     if (isApproved) {
       if (approvals?.length) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        approvalApprovedGroup = approvals.reduce((list, approval) => {
+        approvalApprovedGroup = approvals.reduce((list: string[], approval) => {
           if (approval.status !== ApprovalStatus.Approved) {
             return list;
           }
           return union(list, approval.approverGroups);
-        }, []);
+        }, []) as unknown as string[];
       } else {
         groups = {};
       }

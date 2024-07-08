@@ -38,7 +38,7 @@ export interface CompanyLocation {
   id: string
   name: string
   active: boolean
-  includedInTotalQty: boolean
+  includedInTotalQty?: boolean
 }
 
 export interface Company {

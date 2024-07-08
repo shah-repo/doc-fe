@@ -1,29 +1,27 @@
-import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, TextField, Tooltip, Typography } from '@material-ui/core';
-import cx from 'classnames';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
-import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../../../../state/ducks/relatedParts/types';
-import { FBButton, FBTooltip } from '../../../../form.builder';
-
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, TextField, Tooltip, Typography } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import InfoIcon from '@material-ui/icons/Info';
-import { ReactComponent as DeleteIcon } from '../../../../../assets/images/trash-can 2.svg';
-
+import cx from 'classnames';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { ReactComponent as DeleteIcon } from '../../../../../assets/images/trash-can 2.svg';
 import { authSelectors } from '../../../../../state/ducks/auth';
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
+import { COLOR_TYPES, ListItemEdited, RelatedPartsListItem, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../../../../state/ducks/relatedParts/types';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import Dialog from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
+import { FBButton, FBTooltip } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -190,9 +188,6 @@ const ParentPartSelector: React.FunctionComponent<{
 
       <Dialog
         open={showConfirmDialog}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        className={classes.dialog}
         title="relatedParts.confirm.selection"
         confirmLabel="common.confirm"
         cancelLabel="common.cancel"

@@ -635,9 +635,7 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
       if (!treeList && !dataItem) return;
       setTimeout(() => {
         const id = dataItem[SUB_ITEMS_FIELD]?.length
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-          ? dataItem[SUB_ITEMS_FIELD]?.[dataItem[SUB_ITEMS_FIELD]?.length - 1]?.id
+          ? dataItem[SUB_ITEMS_FIELD]?.[Number(dataItem[SUB_ITEMS_FIELD]?.length) - 1]?.id
           : dataItem.id;
         const rowElement = treeList?.querySelector(`[id^="_${id}"]`);
         if (rowElement) {
