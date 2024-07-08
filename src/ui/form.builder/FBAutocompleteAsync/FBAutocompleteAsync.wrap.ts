@@ -107,9 +107,12 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (shouldReloadOnInit || optionId) {
         autocompleteAsyncState?.load(true);
       }
-      if (FB.isUUID(defaultValue) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
-        autocompleteAsyncState?.fetchAutocompleteOption(defaultValue, optionId);
-      }
+      const values = isArray(defaultValue) ? defaultValue : [defaultValue];
+      values.forEach((optionValue) => {
+        if (FB.isUUID(optionValue) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
+          autocompleteAsyncState?.fetchAutocompleteOption(optionValue, optionId);
+        }
+      });
     }, [shouldReloadOnInit, optionId, defaultValue, autocompleteAsyncState]);
 
     if (optionId) {
