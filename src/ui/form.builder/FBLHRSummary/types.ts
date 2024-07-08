@@ -11,6 +11,7 @@ export interface DetailsObj {
   docId?: string
   displayRevision?: string
   displayStatus?: DocumentRevisionStatusDisplay
+  isRevRemoved?: boolean
 }
 
 export interface LHRSummaryItem {
