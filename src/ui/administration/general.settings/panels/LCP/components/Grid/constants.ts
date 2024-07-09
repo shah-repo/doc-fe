@@ -8,12 +8,25 @@ export const TREELIST_CONFIG = {
   scrollable: 'virtual',
   rowHeight: 50,
 };
+export const EDIT_FIELD = 'inEdit';
 
 export const initialDataState = {
   take: 100,
   skip: 0,
   group: DATA_GROUP,
 };
+
+export const PART_GROUPS = [
+  { label: 'Component Spec (CS)', value: 'CS' },
+  { label: 'Sub-Assembly (SA)', value: 'SA' },
+  { label: 'Finished Good (FG)', value: 'FG' },
+];
+
+export const OPTIONS = [
+  { label: 'Yes', value: 'yes' },
+  { label: 'Allow with warning', value: 'warning' },
+  { label: 'No', value: 'no' },
+];
 
 export const initialData = [
   { id: '1', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes' },

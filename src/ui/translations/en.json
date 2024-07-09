@@ -2057,6 +2057,7 @@
   "administration.general.settings.md": "Material Disposition",
   "administration.general.settings.md.label": "Auto update the LOT status and part rev based on Material Disposition",
   "administration.general.settings.lcp": "Lifecycle Phases",
+  "administration.general.settings.lcp.group.select.placeholder": "Select Group",
   "administration.general.settings.lcp.enlilType": "Enlil Internal",
   "administration.general.settings.lcp.displayLabel": "Customer Label",
   "administration.general.settings.lcp.isAllowedOnPO": "Allow on PO with Approved suppliers",

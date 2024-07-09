@@ -1,5 +1,6 @@
 import { translate } from '../../../../../../../common/intl';
 import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { DropdownCell } from './cell.templates/DropdownCell';
 import { LCP } from './types';
 
 export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
@@ -45,6 +46,7 @@ export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
       locked: false,
       groupable: false,
       title: translate('administration.general.settings.lcp.isAllowedToBuy'),
+      cell: DropdownCell,
       width: 180,
       mainOrderIndex: 5,
     },

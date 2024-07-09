@@ -11,7 +11,7 @@ import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { DATA_GROUP, DATA_ITEM_KEY, EXPAND_FIELD, initialData, initialDataState } from './constants';
+import { DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, EditableLCP, LCP } from './types';
@@ -20,7 +20,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema();
   const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
-  // const [editGroup, setEditGroup] = useState<GroupDescriptor | null>(null);
+  const [editGroup, setEditGroup] = useState<string>('');
   const classes = useStyles();
   const [columns]
     = React.useState<Array<ColumnDefinition<LCP>>>(schema);
@@ -72,13 +72,22 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     [collapsedState],
   );
 
+  const onEditGroup = (dataItem) => {
+    console.log('Edit group ', dataState, dataItem, editGroup);
+    setEditGroup(dataItem.groupId);
+  };
+
+  const discardGroup = () => {
+    setEditGroup('');
+  };
+
   const rowRender = (row: React.ReactElement, rowProps: GridRowProps) => {
     if (rowProps.rowType === 'groupHeader') {
       return React.cloneElement(row, {
         ...rowProps,
         children: (
           <td colSpan={rowProps.dataItem.fieldCount ?? 6} className={classes.groupHeader}>
-            <GroupHeaderCell {...rowProps} onExpandChange={onExpandChange} />
+            <GroupHeaderCell {...rowProps} onExpandChange={onExpandChange} onEditGroup={onEditGroup} editGroup={editGroup} discardGroup={discardGroup} />
           </td>
         ),
       });
@@ -97,8 +106,24 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     );
   }, [collapsedState, dataState]);
 
+  const getUpdatedStateDataByEditInfo = React.useCallback((resultState) => {
+    if (!editGroup) {
+      return resultState.data;
+    }
+
+    resultState.data?.forEach(group => {
+      group.items?.forEach((data) => {
+        data[EDIT_FIELD] = group.groupId === editGroup;
+        return data;
+      });
+      return group;
+    });
+
+    return resultState.data;
+  }, [editGroup, resultState]);
+
   const newData = setExpandedState({
-    data: resultState.data,
+    data: getUpdatedStateDataByEditInfo(resultState),
     collapsedIds: collapsedState,
   });
 
