@@ -1,8 +1,8 @@
 import { TreeListTextFilter } from '@progress/kendo-react-treelist';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
 import ARIDCell from './column.templates/ARIDCell';
+import { AlternatePartsCell } from './column.templates/AlternatePartsCell';
 import AttachmentCell from './column.templates/AttachmentCell';
 import CommentsCell from './column.templates/CommentsCell';
 import CostCell from './column.templates/CostCell';
@@ -80,7 +80,7 @@ export const TreeListSchema = ({ openDetailDrawer, openARIDQuickView }) => {
     {
       field: 'costRollUp',
       title: translate('bom.treelist.treeColumns.field.costRollup.title'),
-      width: 120,
+      width: 139,
       locked: false,
       filter: TreeListTextFilter,
       mainOrderIndex: 5,
