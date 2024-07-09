@@ -1,11 +1,18 @@
 import { orderBy } from 'lodash';
 import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.types';
+import { toastError } from '../../../ui/components/notifications';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { Approval } from '../common/types';
 import { approvalFieldId, APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CURRENT_STEP, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, documentRevisionFormInput, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 import { Approver, BKAttachmentFile, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
 import { downloadFile } from './utils';
+
+const COMMON_TRIGGER_ERROR = {
+  onFailure: (err) => {
+    toastError(err as string);
+  },
+};
 
 // STEPS
 
@@ -107,6 +114,7 @@ export const getDataTypes = (): ApiAction<DataType> => apiAction({
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const getFormDocumentsTypeGroup = (option: string): ApiAction<FormDocumentTypeGroup[]> => apiAction({
@@ -118,6 +126,7 @@ export const getFormDocumentsTypeGroup = (option: string): ApiAction<FormDocumen
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const getHeadersToMap = (bulkImportId: string): ApiAction<Headers> => apiAction({
@@ -129,6 +138,7 @@ export const getHeadersToMap = (bulkImportId: string): ApiAction<Headers> => api
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const getBulkImportTableData = (bulkImportId: string): ApiAction<TableRow[]> => apiAction({
@@ -140,28 +150,31 @@ export const getBulkImportTableData = (bulkImportId: string): ApiAction<TableRow
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const getReportsExcelFile = (bulkImportId: string): ApiAction<Blob> => apiAction({
   url: `${BULK_GET_REPORTS_EXCEL_URL}${bulkImportId}`,
   method: 'get',
   onSuccess: (data, _) => {
-    downloadFile(data, 'template.xlsx');
+    downloadFile(data, 'template.csv');
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const getDownloadFile = (bulkImportId: string): ApiAction<Blob> => apiAction({
   url: `${BULK_DOWNLOAD_FILE_URL}${bulkImportId}`,
   method: 'get',
   onSuccess: (data, _) => {
-    downloadFile(data, 'report.xlsx');
+    downloadFile(data, 'report.csv');
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const getApprovers = (): ApiAction<Approver[]> => apiAction({
@@ -173,6 +186,7 @@ export const getApprovers = (): ApiAction<Approver[]> => apiAction({
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const createBulkImport = (
@@ -189,6 +203,7 @@ export const createBulkImport = (
     dispatch(setIsLoading(false));
   },
   handlers,
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const uploadFileData = (
@@ -209,6 +224,7 @@ export const uploadFileData = (
       dispatch(setIsLoading(false));
     },
     handlers,
+    ...COMMON_TRIGGER_ERROR,
   });
 };
 
@@ -226,6 +242,7 @@ export const saveHeaderToMap = (
     dispatch(setIsLoading(false));
   },
   handlers,
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const setDataTable = (
@@ -242,6 +259,7 @@ export const setDataTable = (
     dispatch(setIsLoading(false));
   },
   handlers,
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const saveApprovals = (
@@ -263,8 +281,9 @@ export const saveApprovals = (
   onSuccess: (data, dispatch) => {
     dispatch(setApproval(data));
   },
-  onFailure: (message, dispatch) => {
+  onFailure: (err, dispatch) => {
     dispatch(setIsLoading(false));
+    toastError(err as string);
   },
   handlers,
 });
@@ -276,11 +295,9 @@ export const saveDocumentRevisions = (
   url: `${DOCUMENT_REVISION_URL}${body.documentRevisionId}`,
   method: 'patch',
   data: { formInput: { [documentRevisionFormInput]: [body.approvalId] } },
-  onSuccess: (data, dispatch) => {
-    console.log('🚀 ~ saveDocumentRevisions data:', data);
-  },
-  onFailure: (message, dispatch) => {
+  onFailure: (err, dispatch) => {
     dispatch(setIsLoading(false));
+    toastError(err as string);
   },
   handlers,
 });
@@ -291,13 +308,11 @@ export const saveDocumentRevisionsInReview = (
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_IN_REVIEW_URL}${body.documentRevisionId}`,
   method: 'post',
-  onSuccess: (data, dispatch) => {
-    console.log('🚀 ~ saveDocumentRevisionsInReview data:', data);
-  },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
   handlers,
+  ...COMMON_TRIGGER_ERROR,
 });
 
 export const uploadS3 = (
@@ -318,13 +333,11 @@ export const uploadS3 = (
     url: `${BULK_IMPORT_UPLOAD_S3_URL}${body.bulkImportId}`,
     method: 'post',
     data: formData,
-    onSuccess: (data, dispatch) => {
-      console.log('🚀 ~ data:', data);
-    },
     onCompleted: (dispatch) => {
       dispatch(setIsLoading(false));
     },
     handlers,
+    ...COMMON_TRIGGER_ERROR,
   });
 };
 
@@ -344,4 +357,5 @@ export const getBulkImports = (): ApiAction<BulkImport[]> => apiAction({
   onCompleted: (dispatch) => {
     dispatch(setIsLoadingMain(false));
   },
+  ...COMMON_TRIGGER_ERROR,
 });

@@ -49,8 +49,8 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
   return state.bulkImport.main.bulkImports.reduce<Record<string, BulkImportCustom[]>>((acc, bulkImport) => {
     const processType = bulkImport.processType;
     const status = bulkImport.status;
-    const progress = bulkImport?.bulkImportProcess?.process
-      ? bulkImport.bulkImportProcess.process.filter(p => p.status === 'COMPLETED')
+    const progress = bulkImport?.process?.process
+      ? bulkImport.process.process.filter(p => p.status === 'COMPLETED')
         .reduce((total, current) => total + (current.percentage * 100), 0) : 0;
     const icons = [
       {

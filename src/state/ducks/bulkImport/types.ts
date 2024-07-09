@@ -281,9 +281,9 @@ export interface BulkImport {
   dataId: string
   jobId: string
   logs: LogEntry[]
-  bulkImportReports: string
-  bulkImportCompletedAt: string | null
-  bulkImportProcess: BkProcess
+  reports: string
+  completedAt: string | null
+  process: BkProcess
   excelFile: BulkImportFile | null
   zipFile: BulkImportFile | null
 }

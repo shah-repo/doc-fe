@@ -52,7 +52,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const transitionDialog1 = useDialog();
   const showApproverButtons = approvalId && approverId === currentEmployeeId;
   const currentProgressStep = useRef(0);
-  const showButtonView = item?.bulkImportReports || (currentProgressStep.current > 0 && !item?.bulkImportCompletedAt);
+  const showButtonView = item?.reports || (currentProgressStep.current > 0 && !item?.completedAt);
 
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
@@ -113,7 +113,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     <React.Fragment key={idx}>
       <Box className={classes.itemContainer}>
         <Box className={classes.titleContainer}>
-          {item.bulkImportCompletedAt ? <FontAwesomeIcon
+          {item.completedAt ? <FontAwesomeIcon
             className={classes.checkGreenIcon}
             icon={solid('circle-check')}
           /> : <FontAwesomeIcon
@@ -125,13 +125,13 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           </Typography>
         </Box>
         <Box className={classes.progressBarIconsContainer}>
-          {item.progress === 100 && item?.bulkImportCompletedAt ? (
-            <>
+          {item.progress === 100 && item?.completedAt ? (
+            <Box className={classes.completedMsgContainer}>
               <CheckCircleIcon className={classes.checkGreenIcon} />
               <Typography className={classes.completedText}>
-                {translate('common.completed')} ({moment(item.bulkImportCompletedAt).format('MM/DD/YYYY HH:mm')})
+                {translate('common.completed')} ({moment(item.completedAt).format('dddd, MMMM DD, YYYY hh:mm A')})
               </Typography>
-            </>
+            </Box>
           ) : (
             <>
               <ProgressIcons item={item} />
@@ -174,8 +174,8 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
               />
             </StyleTooltip>
           </Box>}
-          {showButtonView && <Button className={!item?.bulkImportCompletedAt ? classes.viewButton : classes.downloadLogs} kind="outlined" color="inherit" onClick={!item?.bulkImportCompletedAt ? handleConfirmOpen : handleDownloadFile}>
-            <Text translation={!item?.bulkImportCompletedAt ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
+          {showButtonView && <Button className={!item?.completedAt ? classes.viewButton : classes.downloadLogs} kind="outlined" color={item?.completedAt ? 'primary' : 'inherit'} onClick={!item?.completedAt ? handleConfirmOpen : handleDownloadFile}>
+            <Text translation={!item?.completedAt ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
           </Button>}
         </Box>
       </Box>

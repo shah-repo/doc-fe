@@ -118,6 +118,11 @@ export default makeStyles(theme => ({
       minWidth: 250,
     },
   },
+  completedMsgContainer: {
+    display: 'flex',
+    gap: theme.spacing(0.625, 0.625),
+    alignItems: 'center',
+  },
   progressBarContainer: {
     display: 'flex',
     [theme.breakpoints.down('xs')]: {
