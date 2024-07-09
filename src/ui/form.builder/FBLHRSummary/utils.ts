@@ -30,7 +30,6 @@ export const getExcelData = (
   LHRSummaryItemList.map(item => {
     const modifiedItem = {
       ...item,
-      // stepOrMPI: `${item.step}/${getDisplayDocumentByDetailsObj(item?.stepOrMpiDetails)}`,
       customMpiId: `${item.step}/${getDisplayDocumentByDetailsObj(item?.stepOrMpiDetails)}`,
       plannedDocId: getDisplayDocumentByDetailsObj(item?.plannedDetails),
       actualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
