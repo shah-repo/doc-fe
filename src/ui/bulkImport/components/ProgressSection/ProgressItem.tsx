@@ -10,7 +10,6 @@ import {
   Divider,
   Typography,
 } from '@material-ui/core';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { History } from 'history';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
@@ -127,7 +126,10 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
         <Box className={classes.progressBarIconsContainer}>
           {item.progress === 100 && item?.completedAt ? (
             <Box className={classes.completedMsgContainer}>
-              <CheckCircleIcon className={classes.checkGreenIcon} />
+              <FontAwesomeIcon
+                className={classes.checkGreenIcon}
+                icon={solid('circle-check')}
+              />
               <Typography className={classes.completedText}>
                 {translate('common.completed')} ({moment(item.completedAt).format('dddd, MMMM DD, YYYY hh:mm A')})
               </Typography>
