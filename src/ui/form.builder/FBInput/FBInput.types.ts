@@ -22,6 +22,7 @@ export type FBInputType =
   | 'contacts'
   | 'certifications'
   | 'references'
+  | 'productorservice'
   | 'radio'
   | 'radiogroup'
   | 'autocomplete'
