@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBFieldName, FBOptionValueType } from '..';
 import { WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
-import FBAutocompleteAsyncStore from './FBAutocompleteAsync.store';
+import FBAutocompleteAsyncStore, { AutocompleteAsyncStore } from './FBAutocompleteAsync.store';
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   Component: React.FunctionComponent<T>,
@@ -61,6 +61,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       labelKey: props.optionLabelKey,
     };
 
+    const loadedOptions = FB.useRef<AutocompleteAsyncStore>(AutocompleteAsyncStore);
+
     // TODO: handle autocomplete default value from input wrap
     // and discard value prop
     const formValue = formState?.getFieldValue(name, defaultValue, omitFormValue) || value;
@@ -90,6 +92,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         loading
         || FBAutocompleteAsyncStore.loading.get(optionId)
         || autocompleteAsyncState?.autocompleteValueApi.loading
+        || autocompleteAsyncState.loading
       );
 
       if (slicedOptions) {
@@ -103,22 +106,32 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     useEffect(() => autocompleteAsyncState?.setAdditionalData(additionalData),
       [additionalData, autocompleteAsyncState]);
 
-    useEffect(() => {
-      if (shouldReloadOnInit || optionId) {
-        autocompleteAsyncState?.load(true);
-      }
-      const values = isArray(defaultValue) ? defaultValue : [defaultValue];
-      values.forEach((optionValue) => {
-        if (FB.isUUID(optionValue) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
-          autocompleteAsyncState?.fetchAutocompleteOption(optionValue, optionId);
-        }
-      });
-    }, [shouldReloadOnInit, optionId, defaultValue, autocompleteAsyncState]);
-
     if (optionId) {
       (options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
       refresh = () => autocompleteAsyncState?.load(true);
     }
+
+    const { load: fetchOptions, fetchAutocompleteOption: fetchSingleOption } = autocompleteAsyncState;
+
+    useEffect(() => {
+      if (shouldReloadOnInit || optionId) {
+        fetchOptions(true);
+      }
+    }, [shouldReloadOnInit, optionId, fetchOptions]);
+
+    useEffect(() => {
+      const values = isArray(defaultValue) ? defaultValue : [defaultValue];
+      values.forEach((optionValue) => {
+        const existingOption = loadedOptions.getValue(optionId, optionValue);
+        if (existingOption) {
+          FBAutocompleteAsyncStore.add(String(optionId), optionValue, existingOption);
+          return;
+        }
+        if (FB.isUUID(optionValue) && !loading) {
+          fetchSingleOption(optionValue, optionId);
+        }
+      });
+    }, [optionId, defaultValue, loading, fetchSingleOption, loadedOptions]);
 
     // Fetch missing selected autocomplete value
     React.useEffect(() => reaction(
@@ -127,6 +140,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         const { id } = data || {};
         const preparedData = autocompleteAsyncState?.prepareData([data])?.at(0) ?? data;
         FBAutocompleteAsyncStore.add(optionId as string, id, preparedData);
+        loadedOptions.add(optionId as string, id, preparedData);
         formState?.getInputState(name || '')?.setRender();
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
