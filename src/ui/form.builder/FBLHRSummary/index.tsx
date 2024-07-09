@@ -140,7 +140,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       ...pick(data, FIELDS_TO_PICK),
       startQuantity: String(data.startQuantity),
       endQuantity: String(data.endQuantity),
-      // stepOrMPI: `${data.step}/${data.mpiId}`,
       stepOrMPI: data.mpiId ? `${data.step}/${data.mpiId}` : data.step,
     };
 
