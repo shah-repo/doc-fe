@@ -85,6 +85,5 @@ export const getTypeOptionLabelByValue = (value: string): string | undefined => 
 
 export const getDipslayStepAndMpiValue = (step: string, stepOrMpiDetails: DetailsObj): string => {
   const customMpiIdValue = getDisplayDocumentByDetailsObj(stepOrMpiDetails);
-  const stepAndMpi = (customMpiIdValue !== step) ? step + customMpiIdValue : step;
-  return stepAndMpi;
+  return (customMpiIdValue === step) ? step : `${step}/${customMpiIdValue}`;
 };
