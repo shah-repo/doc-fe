@@ -5,16 +5,6 @@ import { FBReferenceProps, Reference } from './types';
 
 const prepareData = (list: Reference[] = []) => orderBy(list, 'primary', 'desc');
 
-const demoReferences = [
-  {
-    referenceId: 'ABC',
-    revision: 2,
-    title: 'Title test',
-    status: 'ACCEPTED',
-    owner: '',
-    createdDate: '2024-07-04T03:38:11.343Z',
-  },
-];
 export const withFBReferences = <T extends FBReferenceProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
@@ -24,7 +14,7 @@ export const withFBReferences = <T extends FBReferenceProps>(
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
-    const [references, setReferences] = useState<Reference[]>(prepareData(workspaceState?.formInputSync.get(name) ?? demoReferences));
+    const [references, setReferences] = useState<Reference[]>(prepareData(workspaceState?.formInputSync.get(name) ?? []));
 
     const updateState = (state: Reference[]) => {
       setReferences(prepareData(state));
