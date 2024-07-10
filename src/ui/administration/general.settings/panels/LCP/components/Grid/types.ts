@@ -1,4 +1,5 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
+import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 
 // Remove keys at last
@@ -38,4 +39,8 @@ export interface CustomGroupDataItem {
   field: string
   groupId: string
   expanded: boolean
+}
+
+export interface CustomGroupOptions extends OptionType{
+  category: string
 }

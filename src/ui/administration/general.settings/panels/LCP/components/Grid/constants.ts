@@ -18,9 +18,9 @@ export const initialDataState = {
 };
 
 export const PART_GROUPS = [
-  { label: 'Component Spec (CS)', value: 'CS' },
-  { label: 'Sub-Assembly (SA)', value: 'SA' },
-  { label: 'Finished Good (FG)', value: 'FG' },
+  { label: 'Component Spec (CS)', value: 'CS', category: 'PARTS' },
+  { label: 'Sub-Assembly (SA)', value: 'SA', category: 'PARTS' },
+  { label: 'Finished Good (FG)', value: 'FG', category: 'PARTS' },
 ];
 
 export const OPTIONS = [
@@ -43,4 +43,13 @@ export const initialData = [
   { id: '10', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
   { id: '11', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes' },
   { id: '12', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
+];
+
+export const newSelectedOptions = [
+  { id: '13', enlilType: 'Preliminary NW', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes' },
+  { id: '14', enlilType: 'Concept NW', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No' },
+  { id: '15', enlilType: 'Planning NW', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No' },
+  { id: '16', enlilType: 'Design & Engineering NW', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No' },
+  { id: '17', enlilType: 'Production NW', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes' },
+  { id: '18', enlilType: 'Obsolute NW', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No' },
 ];

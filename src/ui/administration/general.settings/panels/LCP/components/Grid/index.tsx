@@ -14,10 +14,10 @@ import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { ADD_GROUP_ID, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState } from './constants';
+import { ADD_GROUP_ID, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState, newSelectedOptions } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
-import { CustomGroupDataItem, EditableLCP, LCP } from './types';
+import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, LCP } from './types';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema();
@@ -77,6 +77,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setPrevData(initialData.filter((data: LCP) => `${data.category}category` !== dataItem.groupId));
   };
 
+  const onGroupChange = (options: CustomGroupOptions[]) => {
+    setResultState(processWithGroups([...newSelectedOptions, ...initialData.filter((data: LCP) => `${data.category}category` !== ADD_GROUP_ID)], initialDataState));
+    setEditGroup('PARTScategory');
+  };
+
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
     setEditGroup('');
   };
@@ -95,7 +100,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
               editGroup={editGroup}
               onDiscardGroup={onDiscardGroup}
               onUpdateAddOrEditGroup={onUpdateAddOrEditGroup}
-              onDeleteGroup={onDeleteGroup} />
+              onDeleteGroup={onDeleteGroup}
+              onGroupChange={onGroupChange} />
           </td>
         ),
       });

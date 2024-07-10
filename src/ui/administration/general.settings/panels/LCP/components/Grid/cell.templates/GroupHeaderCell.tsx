@@ -5,14 +5,9 @@ import { GridRowProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import * as React from 'react';
 import { translate } from '../../../../../../../../common/intl';
-import {
-  Autocomplete,
-  FormField,
-  IconButton,
-} from '../../../../../../../components/forms/fields-next';
-import { OptionType } from '../../../../../../../components/forms/fields/Autocomplete/types';
+import { Autocomplete, IconButton } from '../../../../../../../components/forms/fields-next';
 import { EXPAND_FIELD, PART_GROUPS } from '../constants';
-import { CustomGroupDataItem } from '../types';
+import { CustomGroupDataItem, CustomGroupOptions } from '../types';
 import useStyles from './styles';
 
 interface GroupHeaderCellProps extends GridRowProps {
@@ -21,6 +16,7 @@ interface GroupHeaderCellProps extends GridRowProps {
   onDiscardGroup: (groupDataItem: CustomGroupDataItem) => void
   onUpdateAddOrEditGroup: (groupDataItem: CustomGroupDataItem) => void
   onDeleteGroup: (groupDataItem: CustomGroupDataItem) => void
+  onGroupChange: (value: CustomGroupOptions[]) => void
   editGroup?: string
 }
 
@@ -32,14 +28,15 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     editGroup,
     onDiscardGroup,
     onUpdateAddOrEditGroup,
+    onGroupChange,
     onDeleteGroup,
   } = props;
   const groupLabel = dataItem.value;
   const classes = useStyles();
   const isEditMode = editGroup === dataItem.groupId;
 
-  const handleChange = (data) => {
-    console.log('inside editor', data);
+  const handleGroupChange = (e, value: CustomGroupOptions[]) => {
+    onGroupChange(value);
   };
 
   return (
@@ -67,20 +64,18 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
           </Grid>
           {isEditMode && (
             <Grid item xs={11} className={classes.autocomplete}>
-              <FormField>
-                <Autocomplete
-                  placeholder={translate(
-                    'administration.general.settings.lcp.group.select.placeholder',
-                  )}
-                  options={PART_GROUPS}
-                  getOptionLabel={(option: OptionType) => option.label}
-                  getOptionSelected={(option, value) =>
+              <Autocomplete
+                placeholder={translate(
+                  'administration.general.settings.lcp.group.select.placeholder',
+                )}
+                options={PART_GROUPS}
+                getOptionLabel={(option: CustomGroupOptions) => option.label}
+                getOptionSelected={(option, value) =>
                     option?.value === value?.value
-                  }
-                  onChange={handleChange}
-                  multiple
-                />
-              </FormField>
+                }
+                onChange={handleGroupChange}
+                multiple
+              />
             </Grid>
           )}
         </Grid>
