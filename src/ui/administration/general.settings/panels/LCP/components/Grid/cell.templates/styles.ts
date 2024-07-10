@@ -9,6 +9,9 @@ export default makeStyles((theme) => ({
     width: 20,
     height: 20,
   },
+  autocomplete: {
+    padding: theme.spacing(0.625),
+  },
   container: {
     width: '95%',
   },

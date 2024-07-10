@@ -4,16 +4,18 @@ import { Autocomplete, FormikField } from '../../../../../../../components/forms
 import { OptionType } from '../../../../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { OPTIONS } from '../constants';
+import { EDIT_FIELD, OPTIONS } from '../constants';
 import { LCP } from '../types';
 
 export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
   dataItem,
   field,
+  colSpan,
+  style,
+  className,
   ...rest
 }) => {
-  console.log('dataItem :', dataItem);
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const isEditMode = dataItem[EDIT_FIELD];
   const value = OPTIONS[0];
   // let value = OPTIONS.find((option) => option.value === dataItem.type);
 
@@ -36,20 +38,28 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
   };
 
   return (
-    <FormikField name={field}>
-      <Autocomplete
+    <td
+      colSpan={colSpan}
+      style={style}
+      role="gridcell"
+      className={className}
+      data-cy="cell-alternate-parts"
+    >
+      <FormikField name={field}>
+        <Autocomplete
         // {...getFieldProps(field)}
         // key={isEmpty(values) ? 'disabled' : 'enabled'}
-        blurOnSelect
-        disabled={Mode.edit === dataItem[MODE_FIELD]}
-        disableClearable
-        placeholder={translate('common.select')}
-        options={OPTIONS}
-        value={value}
-        getOptionLabel={(option: OptionType) => option.label}
-        onChange={handleChange}
-        size="small"
-      />
-    </FormikField>
+          blurOnSelect
+          disabled={Mode.edit === dataItem[MODE_FIELD]}
+          disableClearable
+          placeholder={translate('common.select')}
+          options={OPTIONS}
+          value={value}
+          getOptionLabel={(option: OptionType) => option.label}
+          onChange={handleChange}
+          size="small"
+        />
+      </FormikField>
+    </td>
   );
 };

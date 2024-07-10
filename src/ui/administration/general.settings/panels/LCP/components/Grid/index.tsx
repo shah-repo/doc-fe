@@ -2,6 +2,7 @@ import { Grid } from '@material-ui/core';
 import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
+import cx from 'classnames';
 import { uniq } from 'lodash';
 import React, { useState } from 'react';
 import { translate } from '../../../../../../../common/intl';
@@ -83,8 +84,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const rowRender = (row: React.ReactElement, rowProps: GridRowProps) => {
     if (rowProps.rowType === 'groupHeader') {
+      console.log('rowProps.dataItem.category', rowProps.dataItem.category, editGroup);
       return React.cloneElement(row, {
         ...rowProps,
+        className: cx(row.props.className, { updatingRow: editGroup === rowProps.dataItem.groupId }),
         children: (
           <td colSpan={rowProps.dataItem.fieldCount ?? 6} className={classes.groupHeader}>
             <GroupHeaderCell {...rowProps} onExpandChange={onExpandChange} onEditGroup={onEditGroup} editGroup={editGroup} discardGroup={discardGroup} />
@@ -93,7 +96,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
     }
 
-    return row;
+    return React.cloneElement(row, {
+      ...rowProps,
+      className: cx(row.props.className, { updatingRow: editGroup === `${rowProps.dataItem.category}category` }),
+    });
   };
 
   const onGroupsToggle = React.useCallback((isExpandAll?) => {
@@ -107,10 +113,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   }, [collapsedState, dataState]);
 
   const getUpdatedStateDataByEditInfo = React.useCallback((resultState) => {
-    if (!editGroup) {
-      return resultState.data;
-    }
-
     resultState.data?.forEach(group => {
       group.items?.forEach((data) => {
         data[EDIT_FIELD] = group.groupId === editGroup;
@@ -140,12 +142,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         hasBoxScrollbars
         dataItemKey={DATA_ITEM_KEY}
         skipDataProcessing
-        selectable={{
-          enabled: true,
-          drag: true,
-          cell: true,
-          mode: 'multiple',
-        }}
         {...dataState}
         filterable={true}
         groupable={true}

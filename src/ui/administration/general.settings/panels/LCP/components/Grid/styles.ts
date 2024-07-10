@@ -17,6 +17,23 @@ export default makeStyles((theme) => ({
     '& .k-grouping-header': {
       display: 'none',
     },
+    // '& .updatingRow': {
+    // // '.k-grouping-row , .k-master-row ': {
+    //   '&:first-of-type': {
+    //     borderTop: `1px solid ${Colors.primaryLight} !important`,
+    //   },
+    //   borderLeft: `1px solid ${Colors.primaryLight} !important`,
+    //   borderRight: `1px solid ${Colors.primaryLight} !important`,
+    // },
+    // '.k-master-row:last-of-type': {
+    //   borderBottom: `1px solid ${Colors.primaryLight} !important`,
+    // },
+    '& .k-grouping-row + .updatingRow': {
+      backgroundColor: `${Colors.statusReleased} !important`,
+    },
+    '& .k-master-row.updatingRow, .k-group-cell.updatingRow': {
+      backgroundColor: `${Colors.statusReleased} !important`,
+    },
     '& .k-grouping-row': {
       backgroundColor: `${Colors.gray} !important`,
     },
@@ -70,15 +87,17 @@ export default makeStyles((theme) => ({
   deleteButton: {
     color: Colors.error,
   },
-  updatingRow: {
-    position: 'relative',
-    zIndex: 3,
-    outline: `1px solid ${Colors.primaryLight}`,
-    outlineOffset: -1,
-
-    '& td': {
-      verticalAlign: 'top !important',
-      whiteSpace: 'normal !important' as 'normal',
-    },
-  },
+  // updatingRow: {
+  //   position: 'relative',
+  //   zIndex: 3,
+  //   // outline: `1px solid ${Colors.primaryLight}`,
+  //   outlineOffset: -1,
+  //   '& tr': {
+  //     // backgroundColor: Colors.primaryLight,
+  //   },
+  //   '& td': {
+  //     verticalAlign: 'top !important',
+  //     whiteSpace: 'normal !important' as 'normal',
+  //   },
+  // },
 }));

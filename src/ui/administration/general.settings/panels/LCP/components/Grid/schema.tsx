@@ -1,6 +1,7 @@
 import { translate } from '../../../../../../../common/intl';
 import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { DropdownCell } from './cell.templates/DropdownCell';
+import { LabelCell } from './cell.templates/LabelCell';
 import { LCP } from './types';
 
 export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
@@ -19,6 +20,7 @@ export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
       field: 'displayLabel',
       locked: false,
       groupable: false,
+      cell: LabelCell,
       title: translate('administration.general.settings.lcp.displayLabel'),
       width: 228,
     },
@@ -29,6 +31,7 @@ export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
       groupable: false,
       title: translate('administration.general.settings.lcp.isAllowedOnPO'),
       width: 260,
+      cell: DropdownCell,
       mainOrderIndex: 3,
     },
     {
@@ -38,6 +41,7 @@ export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
       groupable: false,
       title: translate('administration.general.settings.lcp.isAllowedOnLhrProd'),
       width: 180,
+      cell: DropdownCell,
       mainOrderIndex: 4,
     },
     {

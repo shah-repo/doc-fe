@@ -35,4 +35,11 @@ export const initialData = [
   { id: '4', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No' },
   { id: '5', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes' },
   { id: '6', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No' },
+
+  { id: '7', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes' },
+  { id: '8', enlilType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
+  { id: '9', enlilType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
+  { id: '10', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
+  { id: '11', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes' },
+  { id: '12', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
 ];

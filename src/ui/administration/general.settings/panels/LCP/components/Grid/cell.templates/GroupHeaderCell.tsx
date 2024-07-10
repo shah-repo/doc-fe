@@ -43,7 +43,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             />
             {!isEditMode && groupLabel}
           </Grid>
-          {isEditMode && <Grid item xs={11}>
+          {isEditMode && <Grid item xs={11} className={classes.autocomplete}>
             <FormField>
               <Autocomplete
                 placeholder={translate('administration.general.settings.lcp.group.select.placeholder')}
