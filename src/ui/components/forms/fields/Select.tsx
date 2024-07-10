@@ -10,7 +10,7 @@ import { InputField } from './Input.styles';
 
 export interface SelectOption {
   value: string | number
-  text: string
+  text?: string
 }
 
 interface SelectOwnProps extends FieldOwnProps {
