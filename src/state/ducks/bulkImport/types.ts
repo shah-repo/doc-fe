@@ -306,7 +306,7 @@ export interface BulkImportFile {
   fileSizeS3LinkCleanCopy: number | null
 }
 
-enum BkStatus {
+export enum BkStatus {
   STARTED = 'STARTED',
   IN_PROGRESS = 'IN_PROGRESS',
   SUCCESS = 'SUCCESS',

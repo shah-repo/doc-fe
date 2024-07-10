@@ -62,6 +62,11 @@ export default makeStyles(theme => ({
     height: 14,
     color: Colors.statusReleased,
   },
+  xmarkRedIcon: {
+    width: 14,
+    height: 14,
+    color: Colors.error,
+  },
   watchLaterIcon: {
     width: 14,
     height: 14,

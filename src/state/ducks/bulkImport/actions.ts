@@ -8,10 +8,11 @@ import { approvalFieldId, APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_GET_APPROV
 import { Approver, BKAttachmentFile, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
 import { downloadFile } from './utils';
 
+const TEMPLATE_CSV = 'template.csv';
+const REPORT_CSV = 'report.csv';
+
 const COMMON_TRIGGER_ERROR = {
-  onFailure: (err) => {
-    toastError(err as string);
-  },
+  onFailure: (err) => toastError(err)
 };
 
 // STEPS
@@ -157,7 +158,7 @@ export const getReportsExcelFile = (bulkImportId: string): ApiAction<Blob> => ap
   url: `${BULK_GET_REPORTS_EXCEL_URL}${bulkImportId}`,
   method: 'get',
   onSuccess: (data, _) => {
-    downloadFile(data, 'template.csv');
+    downloadFile(data, TEMPLATE_CSV);
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
@@ -169,7 +170,7 @@ export const getDownloadFile = (bulkImportId: string): ApiAction<Blob> => apiAct
   url: `${BULK_DOWNLOAD_FILE_URL}${bulkImportId}`,
   method: 'get',
   onSuccess: (data, _) => {
-    downloadFile(data, 'report.csv');
+    downloadFile(data, REPORT_CSV);
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
@@ -283,7 +284,7 @@ export const saveApprovals = (
   },
   onFailure: (err, dispatch) => {
     dispatch(setIsLoading(false));
-    toastError(err as string);
+    toastError(err);
   },
   handlers,
 });
@@ -297,7 +298,7 @@ export const saveDocumentRevisions = (
   data: { formInput: { [documentRevisionFormInput]: [body.approvalId] } },
   onFailure: (err, dispatch) => {
     dispatch(setIsLoading(false));
-    toastError(err as string);
+    toastError(err);
   },
   handlers,
 });

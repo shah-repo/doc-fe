@@ -16,9 +16,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
+import { MomentFormats } from '../../../../common/utils/date';
 import { getReportsExcelFile, setBulkImport, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
-import { BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
+import { BkStatus, BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
 import { ChangeRequestTransitionResponse } from '../../../../state/ducks/changeRequest/types';
 import { ApprovalStatus } from '../../../../state/ducks/common/types';
 import Text from '../../../components/Text';
@@ -51,7 +52,13 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const transitionDialog1 = useDialog();
   const showApproverButtons = approvalId && approverId === currentEmployeeId;
   const currentProgressStep = useRef(0);
-  const showButtonView = item?.reports || (currentProgressStep.current > 0 && !item?.completedAt);
+  const isRejected = item?.status === BkStatus.CANCELLED;
+  const showButtonView = !isRejected && !showApproverButtons && (item?.reports || (currentProgressStep.current > 0 && !item?.completedAt));
+  let rejectedDate;
+
+  if (item?.documentRevision?.approvals?.length) {
+    rejectedDate = item?.documentRevision?.approvals.find(approval => approval.status === ApprovalStatus.Rejected)?.updatedAt;
+  }
 
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
@@ -112,7 +119,10 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     <React.Fragment key={idx}>
       <Box className={classes.itemContainer}>
         <Box className={classes.titleContainer}>
-          {item.completedAt ? <FontAwesomeIcon
+          {isRejected ? <FontAwesomeIcon
+            className={classes.xmarkRedIcon}
+            icon={solid('circle-xmark')}
+          /> : item.completedAt ? <FontAwesomeIcon
             className={classes.checkGreenIcon}
             icon={solid('circle-check')}
           /> : <FontAwesomeIcon
@@ -124,14 +134,22 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           </Typography>
         </Box>
         <Box className={classes.progressBarIconsContainer}>
-          {item.progress === 100 && item?.completedAt ? (
+          {isRejected ? <Box className={classes.completedMsgContainer}>
+            <FontAwesomeIcon
+              className={classes.xmarkRedIcon}
+              icon={solid('circle-xmark')}
+            />
+            <Typography className={classes.completedText}>
+              {translate('common.rejected')} {rejectedDate ? `(${moment(rejectedDate).format(MomentFormats.FullDateTime)})` : null}
+            </Typography>
+          </Box> : item.progress === 100 && item?.completedAt ? (
             <Box className={classes.completedMsgContainer}>
               <FontAwesomeIcon
                 className={classes.checkGreenIcon}
                 icon={solid('circle-check')}
               />
               <Typography className={classes.completedText}>
-                {translate('common.completed')} ({moment(item.completedAt).format('dddd, MMMM DD, YYYY hh:mm A')})
+                {translate('common.completed')} ({moment(item.completedAt).format(MomentFormats.FullDateTime)})
               </Typography>
             </Box>
           ) : (

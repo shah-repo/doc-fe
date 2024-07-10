@@ -2128,5 +2128,8 @@
   "common.template.reUpload": "Re-Upload Template",
   "common.selectOption": "Select an option",
   "common.allowed": "Allowed",
-  "common.dataType": "Data Type"
+  "common.dataType": "Data Type",
+  "common.viewAll": "View All",
+  "common.rejected": "Rejected",
+  "common.status": "Status"
 }
