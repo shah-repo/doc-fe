@@ -168,11 +168,20 @@ interface EquipmentFamilySettings {
   locations: EquipmentLocation[]
 }
 
+interface TrainingReminder {
+  trainingAssigned: boolean
+  sevenDays: boolean
+  customDays: { isChecked: boolean, value: number }
+  trainingDueToday: boolean
+  trainingOverdue: boolean
+}
+
 export interface GeneralSettings {
   zebraPrint: ZebraPrintSettings[]
   equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
+  trainingReminder: TrainingReminder
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

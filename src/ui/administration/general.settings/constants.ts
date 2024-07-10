@@ -4,9 +4,10 @@ import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import PrintingSettingsPanel from './panels/Printing';
+import TrainingReminder from './panels/TrainingReminder';
 import { GeneralSettingsTabs } from './types';
 
-export const MAX_PANEL_WIDTH = 660;
+export const MAX_PANEL_WIDTH = 920;
 export const SIDEBAR_WIDTH = 150;
 
 export const panels = [
@@ -14,6 +15,11 @@ export const panels = [
     key: GeneralSettingsTabs.Printing,
     title: 'administration.general.settings.printing',
     component: PrintingSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.TrainingReminder,
+    title: 'administration.general.settings.training.reminder',
+    component: TrainingReminder,
   },
   {
     key: GeneralSettingsTabs.AR,
