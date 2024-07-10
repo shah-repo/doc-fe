@@ -1,6 +1,8 @@
+import { Box, CircularProgress, TextField } from '@material-ui/core';
+import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
@@ -9,17 +11,17 @@ import {
   Mode,
 } from '../../../../components/KendoDataGrid/constants';
 import {
-  Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FB } from '../../../helpers';
 import { LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 import { PreviewDoc } from './PreviewDoc';
-
+import { styles } from './styles';
 interface CustomOptionType extends OptionType {
   lotStatus: string
   expiryDate: string
@@ -33,13 +35,27 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
     lhrSummaryActions.fetchLotsByPartId,
   );
   const { actualId } = values ?? {};
-
+  const classes = styles();
+  const [isOpen, setIsOpen] = useState(false);
+  const isTypeFieldEmpty = isEmpty(values.type);
+  const [loading, setLoading] = useState(false);
   const fetchPartLotsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
       setLots(data);
     },
   });
 
+  const handleOpen = () => {
+    if (isTypeFieldEmpty) {
+      toastError(translate('lhr.summary.type.empty.error.message'));
+    }
+
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
   useEffect(() => {
     if (isEmpty(actualId)) {
       return;
@@ -50,6 +66,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
       values?.actualId,
       fetchPartLotsAsync,
     );
+    setLoading(false);
   }, [values.actualId]);
 
   const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
@@ -95,18 +112,52 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
     <FormikField name={LHR_SUMARY_FIELDS.lotOrEquipment}>
       <Autocomplete
         {...getFieldProps(LHR_SUMARY_FIELDS.lotOrEquipment)}
+        classes={{ option: classes.option }}
         key={isEmpty(lots) ? 'disabled' : 'enabled'}
-        blurOnSelect
-        disableClearable
-        freeSolo
-        forcePopupIcon
-        options={renderOptions()}
-        onInputChange={onInputChange}
         value={value}
-        getOptionLabel={(option: OptionType) => option.label}
-        onChange={handleChange}
-        placeholder={translate('lhr.summary.placeholder.select.enter')}
+        options={renderOptions()}
+        getOptionLabel={(option) => option.label ?? ''}
+        filterOptions={(x) => x}
         size="small"
+        renderInput={(params: RenderInputParams) => (
+          <Box display="flex">
+            <Box width="100%">
+              <TextField
+                {...params}
+                fullWidth
+                variant="outlined"
+                disabled={isTypeFieldEmpty}
+                placeholder={translate('lhr.summary.placeholder.select.enter')}
+                InputProps={{
+                  ...params.InputProps,
+                  style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
+                  startAdornment: <div>{params.InputProps.startAdornment}</div>,
+                  endAdornment: (
+                    <>
+                      {loading && (
+                        <CircularProgress color="inherit" size={16} />
+                      )}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                }}
+                inputProps={{
+                  ...params.inputProps,
+                  style: { padding: '4.5px 0' },
+                }}
+              />
+            </Box>
+          </Box>
+        )}
+        renderOption={(option) => option.label}
+        onInputChange={onInputChange}
+        onChange={handleChange}
+        open={isOpen}
+        onOpen={handleOpen}
+        onClose={handleClose}
+        disableClearable
+        ListboxProps={{ onscroll }}
+        loading={loading}
       />
     </FormikField>
   );
