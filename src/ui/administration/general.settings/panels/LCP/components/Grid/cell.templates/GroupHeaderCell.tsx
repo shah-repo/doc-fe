@@ -13,7 +13,7 @@ import useStyles from './styles';
 interface GroupHeaderCellProps extends GridRowProps {
   onExpandChange: (groupDataItem: CustomGroupDataItem) => void
   onEditGroup: (groupDataItem: CustomGroupDataItem) => void
-  discardGroup: () => void
+  discardGroup: (groupDataItem: CustomGroupDataItem) => void
   editGroup?: string
 }
 
@@ -63,7 +63,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
           <IconButton
             color="primary"
             kind="white"
-            onClick={() => discardGroup()}
+            onClick={() => discardGroup(dataItem)}
             className={classes.editButtons}
           >
             <FontAwesomeIcon

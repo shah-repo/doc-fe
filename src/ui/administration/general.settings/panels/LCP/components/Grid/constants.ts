@@ -9,6 +9,7 @@ export const TREELIST_CONFIG = {
   rowHeight: 50,
 };
 export const EDIT_FIELD = 'inEdit';
+export const ADD_GROUP_ID = 'Addcategory';
 
 export const initialDataState = {
   take: 100,

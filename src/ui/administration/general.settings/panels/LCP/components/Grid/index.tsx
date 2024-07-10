@@ -14,7 +14,7 @@ import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState } from './constants';
+import { ADD_GROUP_ID, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, EditableLCP, LCP } from './types';
@@ -71,13 +71,17 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     [collapsedState],
   );
 
-  const onEditGroup = (dataItem) => {
+  const onEditGroup = (dataItem: CustomGroupDataItem) => {
     console.log('Edit group ', dataState, dataItem, editGroup);
     setEditGroup(dataItem.groupId);
   };
 
-  const discardGroup = () => {
+  const discardGroup = (dataItem: CustomGroupDataItem) => {
     setEditGroup('');
+    if (dataItem.groupId === ADD_GROUP_ID) {
+      setResultState(processWithGroups(initialData.filter((item: LCP) => !item.isAdd), initialDataState));
+      setEditGroup('');
+    }
   };
 
   const rowRender = (row: React.ReactElement, rowProps: GridRowProps) => {
@@ -148,7 +152,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(resultState);
   };
 
-  const addLCP = () => {
+  const addLCP = React.useCallback(() => {
     initialData.push({
       id: uuidv4(),
       enlilType: '',
@@ -160,10 +164,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       [EDIT_FIELD]: true,
       isAdd: true,
     } as LCP);
-    setEditGroup('Addcategory');
+    setEditGroup(ADD_GROUP_ID);
 
     setResultState(processWithGroups(initialData, initialDataState));
-  };
+  }, []);
 
   return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={addLCP}>
     <Grid item>
