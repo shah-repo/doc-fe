@@ -89,7 +89,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         ...rowProps,
         className: cx(row.props.className, { updatingRow: editGroup === rowProps.dataItem.groupId }),
         children: (
-          <td colSpan={rowProps.dataItem.fieldCount ?? 6} className={classes.groupHeader}>
+          <td colSpan={rowProps.dataItem.fieldCount ?? 6} className="groupHeader">
             <GroupHeaderCell {...rowProps} onExpandChange={onExpandChange} onEditGroup={onEditGroup} editGroup={editGroup} discardGroup={discardGroup} />
           </td>
         ),

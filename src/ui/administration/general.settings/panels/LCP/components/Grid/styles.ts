@@ -17,28 +17,19 @@ export default makeStyles((theme) => ({
     '& .k-grouping-header': {
       display: 'none',
     },
-    // '& .updatingRow': {
-    // // '.k-grouping-row , .k-master-row ': {
-    //   '&:first-of-type': {
-    //     borderTop: `1px solid ${Colors.primaryLight} !important`,
-    //   },
-    //   borderLeft: `1px solid ${Colors.primaryLight} !important`,
-    //   borderRight: `1px solid ${Colors.primaryLight} !important`,
-    // },
-    // '.k-master-row:last-of-type': {
-    //   borderBottom: `1px solid ${Colors.primaryLight} !important`,
-    // },
-    '& .k-grouping-row + .updatingRow': {
-      backgroundColor: `${Colors.statusReleased} !important`,
-    },
-    '& .k-master-row.updatingRow, .k-group-cell.updatingRow': {
-      backgroundColor: `${Colors.statusReleased} !important`,
-    },
-    '& .k-grouping-row': {
-      backgroundColor: `${Colors.gray} !important`,
-    },
     '& .k-master-row, .k-group-cell': {
       backgroundColor: `${Colors.white} !important`,
+    },
+    '& .k-grouping-row': {
+      // '&:has( > .updatingRow)': {
+      //   '& .groupHeader': {
+      //     backgroundColor: `${Colors.primaryHighlight} !important`,
+      //     border: `1px solid ${Colors.primaryLight} !important`,
+      //   },
+      // },
+      '&:not(.updatingRow) > td': {
+        backgroundColor: `${Colors.gray} !important`,
+      },
     },
     '& .k-grid-header thead th': {
       textTransform: 'uppercase',
@@ -80,9 +71,6 @@ export default makeStyles((theme) => ({
   refreshText: {
     color: Colors.textBlack,
     marginRight: theme.spacing(2.5),
-  },
-  groupHeader: {
-    backgroundColor: `${Colors.gray} !important`,
   },
   deleteButton: {
     color: Colors.error,
