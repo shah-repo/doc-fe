@@ -3,7 +3,7 @@ import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { uniq } from 'lodash';
+import { cloneDeep, uniq } from 'lodash';
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
@@ -22,26 +22,17 @@ import { CustomGroupDataItem, EditableLCP, LCP } from './types';
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema();
   const [dataState, setDataState] = useState<State>(initialDataState);
+  const [prevData, setPrevData] = useState<LCP[]>(initialData);
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const [editGroup, setEditGroup] = useState<string>('');
   const classes = useStyles();
   const [columns]
     = React.useState<Array<ColumnDefinition<LCP>>>(schema);
 
-  // const onEditGroup = (group: GroupDescriptor) => {
-  //   setEditGroup(group);
-  // };
-
-  // const onSaveGroup = () => {
-  //   setEditGroup(null);
-  // };
-
   const onDataStateChange = (event: GridDataStateChangeEvent): State => {
     const newDataState = processWithGroups(initialData, event.dataState);
-
     setDataState(event.dataState);
     setResultState(newDataState);
-
     return dataState;
   };
 
@@ -72,27 +63,39 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   );
 
   const onEditGroup = (dataItem: CustomGroupDataItem) => {
-    console.log('Edit group ', dataState, dataItem, editGroup);
+    setPrevData(cloneDeep(initialData));
     setEditGroup(dataItem.groupId);
   };
 
-  const discardGroup = (dataItem: CustomGroupDataItem) => {
+  const onDiscardGroup = () => {
     setEditGroup('');
-    if (dataItem.groupId === ADD_GROUP_ID) {
-      setResultState(processWithGroups(initialData.filter((item: LCP) => !item.isAdd), initialDataState));
-      setEditGroup('');
-    }
+    setResultState(processWithGroups(prevData, initialDataState));
+  };
+
+  const onDeleteGroup = (dataItem: CustomGroupDataItem) => {
+    setResultState(processWithGroups(initialData.filter((data: LCP) => `${data.category}category` !== dataItem.groupId), initialDataState));
+    setPrevData(initialData.filter((data: LCP) => `${data.category}category` !== dataItem.groupId));
+  };
+
+  const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
+    setEditGroup('');
   };
 
   const rowRender = (row: React.ReactElement, rowProps: GridRowProps) => {
     if (rowProps.rowType === 'groupHeader') {
-      console.log('rowProps.dataItem.category', rowProps.dataItem.category, editGroup);
       return React.cloneElement(row, {
         ...rowProps,
         className: cx(row.props.className, { updatingRow: editGroup === rowProps.dataItem.groupId }),
         children: (
           <td colSpan={rowProps.dataItem.fieldCount ?? 6} className="groupHeader">
-            <GroupHeaderCell {...rowProps} onExpandChange={onExpandChange} onEditGroup={onEditGroup} editGroup={editGroup} discardGroup={discardGroup} />
+            <GroupHeaderCell
+              {...rowProps}
+              onExpandChange={onExpandChange}
+              onEditGroup={onEditGroup}
+              editGroup={editGroup}
+              onDiscardGroup={onDiscardGroup}
+              onUpdateAddOrEditGroup={onUpdateAddOrEditGroup}
+              onDeleteGroup={onDeleteGroup} />
           </td>
         ),
       });
@@ -153,6 +156,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const addLCP = React.useCallback(() => {
+    setPrevData(cloneDeep(initialData));
+
     initialData.push({
       id: uuidv4(),
       enlilType: '',
