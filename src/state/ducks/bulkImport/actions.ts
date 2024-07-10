@@ -12,7 +12,7 @@ const TEMPLATE_CSV = 'template.csv';
 const REPORT_CSV = 'report.csv';
 
 const COMMON_TRIGGER_ERROR = {
-  onFailure: (err) => toastError(err)
+  onFailure: (err) => toastError(err),
 };
 
 // STEPS
