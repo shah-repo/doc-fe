@@ -12,6 +12,8 @@ export interface LCP {
   isAllowedOnPO: string
   isAllowedOnLhrProd: string
   isAllowedToBuy: string
+  inEdit?: boolean
+  isAdd?: boolean
 }
 
 export interface EditableLCP extends LCP {

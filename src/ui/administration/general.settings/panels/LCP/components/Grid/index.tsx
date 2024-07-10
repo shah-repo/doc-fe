@@ -5,7 +5,9 @@ import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolba
 import cx from 'classnames';
 import { uniq } from 'lodash';
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
+import { Button as AddButton } from '../../../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { withThemeNext } from '../../../../../../layout/theme-next';
@@ -53,10 +55,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     processWithGroups(initialData, initialDataState),
   );
 
-  const onAddNew = () => {
-    // TODO
-  };
-
   const getColumns = () => {
     return columns.filter(({ isHidden }) => !isHidden) ?? [];
   };
@@ -96,6 +94,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
     }
 
+    if (rowProps.dataItem.isAdd) {
+      // hide other elements while adding the row
+      return <></>;
+    }
+
     return React.cloneElement(row, {
       ...rowProps,
       className: cx(row.props.className, { updatingRow: editGroup === `${rowProps.dataItem.category}category` }),
@@ -130,7 +133,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   });
 
   const onItemChange = (e: GridItemChangeEvent) => {
-    console.log('e', e);
     resultState.data?.forEach(group => {
       if (group.groupId === `${e.dataItem.category}category`) {
       group.items?.forEach((data) => {
@@ -146,7 +148,24 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(resultState);
   };
 
-  return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={onAddNew}>
+  const addLCP = () => {
+    initialData.push({
+      id: uuidv4(),
+      enlilType: '',
+      displayLabel: '',
+      isAllowedOnPO: '',
+      isAllowedOnLhrProd: '',
+      category: 'Add',
+      isAllowedToBuy: '',
+      [EDIT_FIELD]: true,
+      isAdd: true,
+    } as LCP);
+    setEditGroup('Addcategory');
+
+    setResultState(processWithGroups(initialData, initialDataState));
+  };
+
+  return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={addLCP}>
     <Grid item>
       <KendoDataGrid<EditableLCP>
         data={newData}
@@ -189,6 +208,18 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
           </Grid>
         </GridToolbar>
       </KendoDataGrid>
+    </Grid>
+    <Grid item>
+      {<AddButton
+        fullWidth
+        attached
+        kind="add"
+        // className={classes.bottomAddButtom}
+        data-cy="fb-control-btn"
+        onClick={addLCP}
+      >
+        {translate('form.builder.add.item')}
+      </AddButton>}
     </Grid>
   </SettingsPanel>;
 };
