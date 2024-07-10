@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
-import { GridDataStateChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
+import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { uniq } from 'lodash';
 import React, { useState } from 'react';
@@ -129,6 +129,23 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     collapsedIds: collapsedState,
   });
 
+  const onItemChange = (e: GridItemChangeEvent) => {
+    console.log('e', e);
+    resultState.data?.forEach(group => {
+      if (group.groupId === `${e.dataItem.category}category`) {
+      group.items?.forEach((data) => {
+        if (data.id === e.dataItem.id) {
+          data[e.field || ''] = e.value;
+        }
+        return data;
+      });
+      }
+      return group;
+    });
+
+    setResultState(resultState);
+  };
+
   return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={onAddNew}>
     <Grid item>
       <KendoDataGrid<EditableLCP>
@@ -148,6 +165,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         navigatable={true}
         expandField={EXPAND_FIELD}
         rowRender={rowRender}
+        onItemChange={onItemChange}
         resizable={true}
       >
         <GridToolbar>

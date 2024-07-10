@@ -1,29 +1,30 @@
-import { useFormikContext } from 'formik';
-import { get } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import OverflowingContent from '../../../../../../../change.request/FBMaterialDisposition/components/commonCells/OveflowContent';
-import { FormikField, TextField } from '../../../../../../../components/forms/fields-next';
+import { TextField } from '../../../../../../../components/forms/fields-next';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { EDIT_FIELD } from '../constants';
 import { LCP } from '../types';
 
-const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, field }) => {
-  const { getFieldProps } = useFormikContext();
-  const value = dataItem[field];
+const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, onChange }) => {
+  const handleChange = (e) => {
+    onChange?.({
+      dataIndex,
+      dataItem,
+      syntheticEvent: e.syntheticEvent,
+      field,
+      value: e.target.value,
+    });
+  };
 
   return (
-    <FormikField
-      name={field}
-    >
-      <TextField
-        {...getFieldProps(field)}
-        defaultValue={value}
-        type="text"
-        placeholder={translate('lhr.summary.placeholder.enter')}
-        size="small"
-      />
-    </FormikField>
+    <TextField
+      defaultValue={dataItem[field]}
+      type="text"
+      placeholder={translate('lhr.summary.placeholder.enter')}
+      onChange={handleChange}
+      size="small"
+    />
   );
 };
 
@@ -31,7 +32,6 @@ export const LabelCell: React.FC<CellTemplateProps<LCP>> = (props) => {
   const { field, dataItem, onClick, colSpan, style, className } = props;
   const isEditMode = dataItem[EDIT_FIELD];
   const handleClick = () => onClick?.({ dataItem });
-  const displayValue = get(dataItem, field, '') as string;
 
   return <td
     colSpan={colSpan}
@@ -42,7 +42,7 @@ export const LabelCell: React.FC<CellTemplateProps<LCP>> = (props) => {
   >
     {isEditMode && <Editor {...props} />}
     {!isEditMode && <OverflowingContent onClick={handleClick}>
-      {displayValue}
+      {dataItem[field]}
     </OverflowingContent>}
   </td>;
 };
