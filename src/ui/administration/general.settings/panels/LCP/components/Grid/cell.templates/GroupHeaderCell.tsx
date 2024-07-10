@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { GridRowProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
+import { kebabCase } from 'lodash';
 import * as React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete, IconButton } from '../../../../../../../components/forms/fields-next';
@@ -73,6 +74,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
                 getOptionSelected={(option, value) =>
                     option?.value === value?.value
                 }
+                data-cy={`${kebabCase(dataItem.groupId)}-field`}
                 onChange={handleGroupChange}
                 multiple
               />

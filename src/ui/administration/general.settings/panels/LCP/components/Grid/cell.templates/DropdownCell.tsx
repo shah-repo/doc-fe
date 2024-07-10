@@ -1,3 +1,4 @@
+import { kebabCase } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete } from '../../../../../../../components/forms/fields-next';
@@ -19,9 +20,10 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
 }) => {
   const isEditMode = dataItem[EDIT_FIELD];
   const value = OPTIONS.find((option) => option.value === dataItem[field]) ?? OPTIONS[0];
+  const datCy = `${kebabCase(field)}-td`;
 
   if (!isEditMode) {
-    return <td>{value?.label}</td>;
+    return <td data-cy={datCy}>{value?.label}</td>;
   }
 
   const handleChange = (e, value) => {
@@ -40,7 +42,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
       style={style}
       role="gridcell"
       className={className}
-      data-cy="cell-alternate-parts"
+      data-cy={datCy}
     >
       <Autocomplete
         blurOnSelect
@@ -48,6 +50,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
         disableClearable
         placeholder={translate('common.select')}
         options={OPTIONS}
+        data-cy={`${kebabCase(field)}-field`}
         value={value}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}

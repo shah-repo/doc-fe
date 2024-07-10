@@ -4,7 +4,7 @@ import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-reac
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { cloneDeep, uniq } from 'lodash';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
 import { Button as AddButton } from '../../../../../../components/forms/fields-next';
@@ -14,7 +14,7 @@ import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { ADD_GROUP_ID, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState, newSelectedOptions } from './constants';
+import { ADD_GROUP_ID, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState, newSelectedOptions, PARTS_GROUP_ID } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, LCP } from './types';
@@ -22,15 +22,21 @@ import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, LCP } from './typ
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema();
   const [dataState, setDataState] = useState<State>(initialDataState);
-  const [prevData, setPrevData] = useState<LCP[]>(initialData);
+  const [data, setData] = useState<LCP[]>();
+  const [prevData, setPrevData] = useState<LCP[]>();
+  const [resultState, setResultState] = useState<DataResult>();
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const [editGroup, setEditGroup] = useState<string>('');
   const classes = useStyles();
   const [columns]
     = React.useState<Array<ColumnDefinition<LCP>>>(schema);
 
+  useEffect(() => {
+    updateStateGridData(initialData);
+  }, []);
+
   const onDataStateChange = (event: GridDataStateChangeEvent): State => {
-    const newDataState = processWithGroups(initialData, event.dataState);
+    const newDataState = processWithGroups(data ?? [], event.dataState);
     setDataState(event.dataState);
     setResultState(newDataState);
     return dataState;
@@ -41,10 +47,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
-
-  const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(initialData, initialDataState),
-  );
 
   const getColumns = () => {
     return columns.filter(({ isHidden }) => !isHidden) ?? [];
@@ -63,23 +65,34 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   );
 
   const onEditGroup = (dataItem: CustomGroupDataItem) => {
-    setPrevData(cloneDeep(initialData));
+    setPrevData(cloneDeep(data));
     setEditGroup(dataItem.groupId);
   };
 
   const onDiscardGroup = () => {
     setEditGroup('');
-    setResultState(processWithGroups(prevData, initialDataState));
+    setResultState(processWithGroups(prevData ?? [], initialDataState));
+  };
+
+  const getGroupIdByCategory = (category: string): string => {
+    return `${category}category`;
+  };
+
+  const updateStateGridData = (updatedData: LCP[]) => {
+    setData(updatedData);
+    setPrevData(cloneDeep(updatedData));
+    setResultState(processWithGroups(updatedData, initialDataState));
   };
 
   const onDeleteGroup = (dataItem: CustomGroupDataItem) => {
-    setResultState(processWithGroups(initialData.filter((data: LCP) => `${data.category}category` !== dataItem.groupId), initialDataState));
-    setPrevData(initialData.filter((data: LCP) => `${data.category}category` !== dataItem.groupId));
+    const updatedData = (data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== dataItem.groupId);
+    updateStateGridData(updatedData);
   };
 
   const onGroupChange = (options: CustomGroupOptions[]) => {
-    setResultState(processWithGroups([...newSelectedOptions, ...initialData.filter((data: LCP) => `${data.category}category` !== ADD_GROUP_ID)], initialDataState));
-    setEditGroup('PARTScategory');
+    const updatedData = [...newSelectedOptions, ...(data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID)];
+    updateStateGridData(updatedData);
+    setEditGroup(PARTS_GROUP_ID);
   };
 
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
@@ -114,12 +127,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
     return React.cloneElement(row, {
       ...rowProps,
-      className: cx(row.props.className, { updatingRow: editGroup === `${rowProps.dataItem.category}category` }),
+      className: cx(row.props.className, { updatingRow: editGroup === getGroupIdByCategory(rowProps.dataItem.category) }),
     });
   };
 
   const onGroupsToggle = React.useCallback((isExpandAll?) => {
-    const dataStateWithoutPaging = processWithGroups(initialData, {
+    const dataStateWithoutPaging = processWithGroups((data ?? []), {
       group: dataState.group,
     });
 
@@ -129,7 +142,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   }, [collapsedState, dataState]);
 
   const getUpdatedStateDataByEditInfo = React.useCallback((resultState) => {
-    resultState.data?.forEach(group => {
+    resultState?.data?.forEach(group => {
       group.items?.forEach((data) => {
         data[EDIT_FIELD] = group.groupId === editGroup;
         return data;
@@ -137,17 +150,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       return group;
     });
 
-    return resultState.data;
+    return resultState?.data ?? [];
   }, [editGroup, resultState]);
 
-  const newData = setExpandedState({
-    data: getUpdatedStateDataByEditInfo(resultState),
-    collapsedIds: collapsedState,
-  });
-
   const onItemChange = (e: GridItemChangeEvent) => {
-    resultState.data?.forEach(group => {
-      if (group.groupId === `${e.dataItem.category}category`) {
+    resultState?.data?.forEach(group => {
+      if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
       group.items?.forEach((data) => {
         if (data.id === e.dataItem.id) {
           data[e.field || ''] = e.value;
@@ -161,46 +169,52 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(resultState);
   };
 
-  const addLCP = React.useCallback(() => {
-    setPrevData(cloneDeep(initialData));
-
-    initialData.push({
-      id: uuidv4(),
-      enlilType: '',
-      displayLabel: '',
-      isAllowedOnPO: '',
-      isAllowedOnLhrProd: '',
-      category: 'Add',
-      isAllowedToBuy: '',
-      [EDIT_FIELD]: true,
-      isAdd: true,
-    } as LCP);
+  const addLCP = () => {
+    setPrevData(cloneDeep(data));
+    const newData = [
+      ...(data ?? []),
+      {
+        id: uuidv4(),
+        enlilType: '',
+        displayLabel: '',
+        isAllowedOnPO: '',
+        isAllowedOnLhrProd: '',
+        category: 'Add',
+        isAllowedToBuy: '',
+        [EDIT_FIELD]: true,
+        isAdd: true,
+      },
+    ];
+    setData(newData);
     setEditGroup(ADD_GROUP_ID);
+    setResultState(processWithGroups(newData, initialDataState));
+  };
 
-    setResultState(processWithGroups(initialData, initialDataState));
-  }, []);
+  const newData = setExpandedState({
+    data: getUpdatedStateDataByEditInfo(resultState),
+    collapsedIds: collapsedState,
+  });
 
   return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={addLCP}>
     <Grid item>
       <KendoDataGrid<EditableLCP>
+        {...dataState}
         data={newData}
         schema={getColumns()}
         onDataStateChange={onDataStateChange}
-        total={resultState.total}
+        total={resultState?.total}
         group={DATA_GROUP}
         fullWidth
         className={classes.rootMDTable}
         hasBoxScrollbars
         dataItemKey={DATA_ITEM_KEY}
         skipDataProcessing
-        {...dataState}
         filterable={true}
         groupable={true}
         navigatable={true}
         expandField={EXPAND_FIELD}
         rowRender={rowRender}
         onItemChange={onItemChange}
-        resizable={true}
       >
         <GridToolbar>
           <Grid container justify="flex-start"
@@ -225,16 +239,15 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       </KendoDataGrid>
     </Grid>
     <Grid item>
-      {<AddButton
+      <AddButton
         fullWidth
         attached
         kind="add"
-        // className={classes.bottomAddButtom}
-        data-cy="fb-control-btn"
+        data-cy="add-lcp-button"
         onClick={addLCP}
       >
         {translate('form.builder.add.item')}
-      </AddButton>}
+      </AddButton>
     </Grid>
   </SettingsPanel>;
 };
