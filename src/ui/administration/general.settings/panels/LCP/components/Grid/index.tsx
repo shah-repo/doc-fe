@@ -3,7 +3,7 @@ import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { cloneDeep, last, uniq } from 'lodash';
+import { cloneDeep, last, uniq, uniqBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
@@ -14,10 +14,11 @@ import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { ADD_GROUP_ID, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState, newSelectedOptions, PARTS_GROUP_ID } from './constants';
+import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState, newSelectedOptions, PARTS_GROUP_ID } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, LCP } from './types';
+import { sortGroups } from './utils';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema();
@@ -90,8 +91,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const onGroupChange = (options: CustomGroupOptions[]) => {
-    const updatedData = [...newSelectedOptions, ...(data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID)];
-    updateStateGridData(updatedData);
+    const updatedData = newSelectedOptions.concat((data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID));
+    console.log('updatedData ::', updatedData);
+    updateStateGridData(uniqBy(updatedData, 'id'));
     setEditGroup(PARTS_GROUP_ID);
   };
 
@@ -107,9 +109,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const rowRender = (row: React.ReactElement, rowProps: GridRowProps) => {
     if (rowProps.rowType === 'groupHeader') {
+      const groupId = rowProps.dataItem.groupId;
       return React.cloneElement(row, {
         ...rowProps,
-        className: cx(row.props.className, { updatingRow: editGroup === rowProps.dataItem.groupId }),
+        className: cx(row.props.className, { updatingRow: editGroup === groupId }, { groupLastRow: groupId === ADD_GROUP_ID && rowProps.dataItem.items.length === 1 }),
         children: (
           <td colSpan={rowProps.dataItem.fieldCount ?? 6} className="groupHeader">
             <GroupHeaderCell
@@ -156,7 +159,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       return group;
     });
 
-    return resultState?.data ?? [];
+    return sortGroups(resultState?.data ?? []);
   }, [editGroup, resultState]);
 
   const onItemChange = (e: GridItemChangeEvent) => {
@@ -185,7 +188,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         displayLabel: '',
         isAllowedOnPO: '',
         isAllowedOnLhrProd: '',
-        category: 'Add',
+        category: ADD_GROUP_NAME,
         isAllowedToBuy: '',
         [EDIT_FIELD]: true,
         isAdd: true,

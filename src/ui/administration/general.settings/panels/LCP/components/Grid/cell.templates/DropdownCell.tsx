@@ -5,7 +5,7 @@ import { Autocomplete } from '../../../../../../../components/forms/fields-next'
 import { OptionType } from '../../../../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { EDIT_FIELD, OPTIONS } from '../constants';
+import { DEFAULT_OPTIONS, EDIT_FIELD, LCP_KEYS, PART_PURCHASE_OPTIONS } from '../constants';
 import { LCP } from '../types';
 
 export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
@@ -19,7 +19,13 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
   ...rest
 }) => {
   const isEditMode = dataItem[EDIT_FIELD];
-  const value = OPTIONS.find((option) => option.value === dataItem[field]) ?? OPTIONS[0];
+
+  const getOptions = () => {
+    return field === LCP_KEYS.isAllowedToBuy ? PART_PURCHASE_OPTIONS : DEFAULT_OPTIONS;
+  };
+
+  const options = getOptions();
+  const value = options.find((option) => option.value === dataItem[field]) ?? options[0];
   const datCy = `${kebabCase(field)}-td`;
 
   if (!isEditMode) {
@@ -49,7 +55,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
         disabled={Mode.edit === dataItem[MODE_FIELD]}
         disableClearable
         placeholder={translate('common.select')}
-        options={OPTIONS}
+        options={DEFAULT_OPTIONS}
         data-cy={`${kebabCase(field)}-field`}
         value={value}
         getOptionLabel={(option: OptionType) => option.label}

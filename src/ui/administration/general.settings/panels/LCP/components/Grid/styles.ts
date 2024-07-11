@@ -40,12 +40,15 @@ export default makeStyles((theme) => ({
       '&.updatingRow td': {
         borderTop: `1px solid ${Colors.primaryLight} !important`,
       },
+      '&.updatingRow.groupLastRow td': {
+        borderBottom: `1px solid ${Colors.primaryLight} !important`,
+      },
     },
     '& .k-master-row.updatingRow.groupLastRow td': {
       borderBottom: `1px solid ${Colors.primaryLight} !important`,
     },
     '& .k-grid-header thead th': {
-      textTransform: 'uppercase',
+      // textTransform: 'uppercase',
       color: Colors.textBlack,
     },
     '& .k-grid-content tr:hover td': {
