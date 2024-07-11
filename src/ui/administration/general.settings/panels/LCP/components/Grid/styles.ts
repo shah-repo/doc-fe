@@ -20,16 +20,29 @@ export default makeStyles((theme) => ({
     '& .k-master-row, .k-group-cell': {
       backgroundColor: `${Colors.white} !important`,
     },
+    '& .k-grouping-row, .k-master-row': {
+      '&.updatingRow': {
+        '& td': {
+          backgroundColor: `${Colors.primaryHighlight} !important`,
+        },
+        '& td:first-child': {
+          borderLeft: `1px solid ${Colors.primaryLight} !important`,
+        },
+        '& td:last-child': {
+          borderRight: `1px solid ${Colors.primaryLight} !important`,
+        },
+      },
+    },
     '& .k-grouping-row': {
-      // '&:has( > .updatingRow)': {
-      //   '& .groupHeader': {
-      //     backgroundColor: `${Colors.primaryHighlight} !important`,
-      //     border: `1px solid ${Colors.primaryLight} !important`,
-      //   },
-      // },
-      '&:not(.updatingRow) > td': {
+      '& td': {
         backgroundColor: `${Colors.gray} !important`,
       },
+      '&.updatingRow td': {
+        borderTop: `1px solid ${Colors.primaryLight} !important`,
+      },
+    },
+    '& .k-master-row.updatingRow.groupLastRow td': {
+      borderBottom: `1px solid ${Colors.primaryLight} !important`,
     },
     '& .k-grid-header thead th': {
       textTransform: 'uppercase',

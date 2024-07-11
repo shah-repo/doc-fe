@@ -3,7 +3,7 @@ import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { cloneDeep, uniq } from 'lodash';
+import { cloneDeep, last, uniq } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
@@ -99,6 +99,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setEditGroup('');
   };
 
+  const isLastGroupRow = (id: string) => {
+    const group = resultState?.data.find((item: CustomGroupDataItem) => getGroupIdByCategory(item.value) === editGroup) as CustomGroupDataItem;
+    const lastItem = last(group?.items ?? []) as LCP;
+    return lastItem?.id === id;
+  };
+
   const rowRender = (row: React.ReactElement, rowProps: GridRowProps) => {
     if (rowProps.rowType === 'groupHeader') {
       return React.cloneElement(row, {
@@ -127,7 +133,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
     return React.cloneElement(row, {
       ...rowProps,
-      className: cx(row.props.className, { updatingRow: editGroup === getGroupIdByCategory(rowProps.dataItem.category) }),
+      className: cx(row.props.className, { updatingRow: editGroup === getGroupIdByCategory(rowProps.dataItem.category) }, { groupLastRow: isLastGroupRow(rowProps?.dataItem?.id) }),
     });
   };
 
