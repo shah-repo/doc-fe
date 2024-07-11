@@ -7,7 +7,7 @@ import { kebabCase } from 'lodash';
 import * as React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete, IconButton } from '../../../../../../../components/forms/fields-next';
-import { EXPAND_FIELD, PART_GROUPS } from '../constants';
+import { EXPAND_FIELD } from '../constants';
 import { CustomGroupDataItem, CustomGroupOptions } from '../types';
 import useStyles from './styles';
 
@@ -17,7 +17,8 @@ interface GroupHeaderCellProps extends GridRowProps {
   onDiscardGroup: (groupDataItem: CustomGroupDataItem) => void
   onUpdateAddOrEditGroup: (groupDataItem: CustomGroupDataItem) => void
   onDeleteGroup: (groupDataItem: CustomGroupDataItem) => void
-  onGroupChange: (value: CustomGroupOptions[]) => void
+  onGroupChange: (value: CustomGroupOptions[], groupId: string) => void
+  partGroups: CustomGroupOptions[]
   editGroup?: string
 }
 
@@ -31,14 +32,20 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     onUpdateAddOrEditGroup,
     onGroupChange,
     onDeleteGroup,
+    partGroups,
   } = props;
   const groupLabel = dataItem.value;
   const classes = useStyles();
-  const isEditMode = editGroup === dataItem.groupId;
+  const groupId = dataItem.groupId;
+  const isEditMode = editGroup === groupId;
 
   const handleGroupChange = (e, value: CustomGroupOptions[]) => {
-    onGroupChange(value);
+    onGroupChange(value, groupId);
   };
+
+  const selectedGroupIDs = dataItem.items?.[0].selectedGroupIDs;
+  const defaultValue = partGroups.filter((groups: CustomGroupOptions) => selectedGroupIDs.includes(groups.value));
+  const displayValue = defaultValue.map(data => data.label).join(', ');
 
   return (
     <Grid container justify="space-between" alignItems="center">
@@ -61,7 +68,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
                   : solid('square-plus')
               }
             />
-            {!isEditMode && groupLabel}
+            {!isEditMode && displayValue}
           </Grid>
           {isEditMode && (
             <Grid item xs={11} className={classes.autocomplete}>
@@ -69,12 +76,13 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
                 placeholder={translate(
                   'administration.general.settings.lcp.group.select.placeholder',
                 )}
-                options={PART_GROUPS}
+                options={partGroups}
+                defaultValue= {defaultValue}
                 getOptionLabel={(option: CustomGroupOptions) => option.label}
                 getOptionSelected={(option, value) =>
                     option?.value === value?.value
                 }
-                data-cy={`${kebabCase(dataItem.groupId)}-field`}
+                data-cy={`${kebabCase(groupId)}-field`}
                 onChange={handleGroupChange}
                 multiple
               />

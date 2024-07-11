@@ -55,7 +55,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
         disabled={Mode.edit === dataItem[MODE_FIELD]}
         disableClearable
         placeholder={translate('common.select')}
-        options={DEFAULT_OPTIONS}
+        options={options}
         data-cy={`${kebabCase(field)}-field`}
         value={value}
         getOptionLabel={(option: OptionType) => option.label}

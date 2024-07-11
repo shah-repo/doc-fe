@@ -5,6 +5,7 @@ export const ADD_GROUP_NAME = 'ADD';
 const PARTS_GROUP_NAME = 'PARTS';
 export const LCP_KEYS = {
   isAllowedToBuy: 'isAllowedToBuy',
+  isAllowedOnPO: 'isAllowedOnPO',
   category: 'category',
 };
 export const ADD_GROUP_ID = `${ADD_GROUP_NAME}${LCP_KEYS.category}`;
@@ -39,27 +40,27 @@ export const PART_PURCHASE_OPTIONS = [
 
 // LCP table initial data
 export const initialData = [
-  { id: '1', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes' },
-  { id: '2', enlilType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No' },
-  { id: '3', enlilType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No' },
-  { id: '4', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No' },
-  { id: '5', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes' },
-  { id: '6', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No' },
+  // { id: '1', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes', selectedGroupIDs: ['CS'] },
+  // { id: '2', enlilType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', selectedGroupIDs: ['CS'] },
+  // { id: '3', enlilType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', selectedGroupIDs: ['CS'] },
+  // { id: '4', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', selectedGroupIDs: ['CS'] },
+  // { id: '5', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes', selectedGroupIDs: ['CS'] },
+  // { id: '6', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', selectedGroupIDs: ['CS'] },
 
-  { id: '7', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes' },
-  { id: '8', enlilType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
-  { id: '9', enlilType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
-  { id: '10', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
-  { id: '11', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes' },
-  { id: '12', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No' },
+  // { id: '7', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes', selectedGroupIDs: ['FG'] },
+  // { id: '8', enlilType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', selectedGroupIDs: ['FG'] },
+  // { id: '9', enlilType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', selectedGroupIDs: ['FG'] },
+  // { id: '10', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', selectedGroupIDs: ['FG'] },
+  // { id: '11', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes', selectedGroupIDs: ['FG'] },
+  // { id: '12', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', selectedGroupIDs: ['FG'] },
 ];
 
 // selected part sample data
 export const newSelectedOptions = [
-  { id: '13', enlilType: 'Preliminary NW', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes' },
-  { id: '14', enlilType: 'Concept NW', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No' },
-  { id: '15', enlilType: 'Planning NW', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No' },
-  { id: '16', enlilType: 'Design & Engineering NW', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No' },
-  { id: '17', enlilType: 'Production NW', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes' },
-  { id: '18', enlilType: 'Obsolute NW', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No' },
+  { id: '13', enlilType: 'Preliminary NW', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes', selectedGroupIDs: ['SA'] },
+  { id: '14', enlilType: 'Concept NW', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', selectedGroupIDs: ['SA'] },
+  { id: '15', enlilType: 'Planning NW', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', selectedGroupIDs: ['SA'] },
+  { id: '16', enlilType: 'Design & Engineering NW', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', selectedGroupIDs: ['SA'] },
+  { id: '17', enlilType: 'Production NW', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes', selectedGroupIDs: ['SA'] },
+  { id: '18', enlilType: 'Obsolute NW', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', selectedGroupIDs: ['SA'] },
 ];

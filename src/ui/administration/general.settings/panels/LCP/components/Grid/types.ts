@@ -13,6 +13,7 @@ export interface LCP {
   isAllowedOnPO: string
   isAllowedOnLhrProd: string
   isAllowedToBuy: string
+  selectedGroupIDs: string[]
   inEdit?: boolean
   isAdd?: boolean
 }
