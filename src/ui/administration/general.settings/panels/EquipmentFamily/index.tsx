@@ -7,19 +7,19 @@ import { translate } from '../../../../../common/intl';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { EquipmentLocation, GeneralSettings } from '../../../../../state/ducks/company/types';
 import { DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import LocationsSetting from '../../../../components/LocationsSetting';
-import useStyles from '../../../../components/LocationsSetting/styles';
-import { EditableLocation } from '../../../../components/LocationsSetting/types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import Text from '../../../../components/Text';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { buildSchema } from '../../../../components/LocationsSetting/schema';
+import LocationsSetting from '../../components/LocationsSetting';
+import useStyles from '../../components/LocationsSetting/styles';
+import { EditableLocation } from '../../components/LocationsSetting/types';
 import SettingsPanel from '../../components/SettingsPanel';
+import SettingsPanelSection from '../../components/SettingsPanelSection';
 import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import Text from '../../../../components/Text';
-import SettingsPanelSection from '../../components/SettingsPanelSection';
+import { buildSchema } from './schema';
 
 const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();

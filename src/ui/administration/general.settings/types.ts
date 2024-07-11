@@ -10,6 +10,7 @@ export enum GeneralSettingsTabs {
   LCP = 'Life Cycle Phases',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
+  Locations = 'Locations',
 }
 
 export interface GeneralSettingsProps {
@@ -20,7 +21,7 @@ export interface GeneralSettingsProps {
 
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
-  onToggle: () => void
+  onToggle: (isExpanded?: boolean) => void
   onAddNew?: () => void
 }
 

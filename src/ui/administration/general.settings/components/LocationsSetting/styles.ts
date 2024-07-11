@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import { Colors } from '../../layout/theme-next';
+import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   root: {
@@ -40,5 +40,14 @@ export default makeStyles(theme => ({
     zIndex: 3,
     outline: `1px solid ${Colors.primaryLight}`,
     outlineOffset: -1,
+  },
+  paper: {
+    pointerEvents: 'auto',
+  },
+  cellStyle: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    gap: theme.spacing(0.5, 0.5),
   },
 }));

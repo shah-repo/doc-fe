@@ -1,4 +1,5 @@
 import ApprovalRequestsSettingsPanel from './panels/ApprovalRequest';
+import CompanyLocationSettingsPanel from './panels/CompanyLocations';
 import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import LCPSettings from './panels/LCP';
@@ -24,6 +25,11 @@ export const panels = [
     key: GeneralSettingsTabs.MD,
     title: 'administration.general.settings.md',
     component: MaterialDispositionSettings,
+  },
+  {
+    key: GeneralSettingsTabs.Locations,
+    title: 'administration.general.settings.locations.tab',
+    component: CompanyLocationSettingsPanel,
   },
   {
     key: GeneralSettingsTabs.LCP,
