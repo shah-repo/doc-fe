@@ -96,9 +96,8 @@ const steps = (
         ...state,
         tableData: state.tableData.map((table, idx) => {
           if (idx === action.payload.dataIndex) {
-            const normalizedField = action.payload.field?.replace(/\s/g, '').toLowerCase();
             const updatedErrors = table.errors?.map(error => {
-              if (error.column === normalizedField) {
+              if (error.column === action.payload.field) {
                 error.edited = true;
               }
 

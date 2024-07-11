@@ -142,7 +142,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
             <Typography className={classes.completedText}>
               {translate('common.rejected')} {rejectedDate ? `(${moment(rejectedDate).format(MomentFormats.FullDateTime)})` : null}
             </Typography>
-          </Box> : item.progress === 100 && item?.completedAt ? (
+          </Box> : item?.completedAt ? (
             <Box className={classes.completedMsgContainer}>
               <FontAwesomeIcon
                 className={classes.checkGreenIcon}

@@ -43,9 +43,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
   const classes = useStyles();
   const [isEditing, setIsEditing] = useState(false);
   const [cellValue, setCellValue] = useState(dataItem[field]);
-
-  const normalizedField = field?.replace(/\s/g, '').toLowerCase();
-  const error = dataItem.errors?.find(error => error.column === normalizedField);
+  const error = dataItem.errors?.find(error => error.column === field);
   const isErrorShown = error && !error?.edited;
 
   const handleDoubleClick = () => {
