@@ -10,6 +10,7 @@ export type ActionsProps = CellTemplateProps<EditableCompanyLocation> & GridCell
   onDelete: () => void
   onClick?: (e: DataGridRowClickEvent<EditableCompanyLocation>) => void
   scrollBehavior?: ScrollBehavior
+  isActive: boolean
 };
 
 const LocationActionsCellTemplate: React.FC<ActionsProps> = (props) => (
