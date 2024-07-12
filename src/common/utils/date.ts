@@ -48,3 +48,6 @@ export enum MomentFormats {
 }
 
 export const toValidateIfDate = (value: moment.MomentInput) => moment(value, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
+export const validateDateFormats = (date: string, formats: string[]): boolean => {
+  return formats.some(fmt => moment(date, fmt, true).isValid());
+};

@@ -208,6 +208,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
             approvalId={approvalId}
             transitionDialog={transitionDialog1}
             label="transition.action.reject"
+            translationRejectMsg="bulkImport.reject.alert"
           />
           <ApproveDialogueContainer
             transition="approve"

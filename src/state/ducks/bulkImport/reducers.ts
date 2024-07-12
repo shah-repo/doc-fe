@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
-import { BulkImportActions, BulkImportState, BulkImportStepsActions, BulkImportStepsState } from './types';
+import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { BulkImport, BulkImportActions, BulkImportState, BulkImportStepsActions, BulkImportStepsState } from './types';
 
 const BULK_IMPORT_DEFAULT_STEPS = {
   step: 0,
@@ -90,6 +90,13 @@ const steps = (
       return {
         ...state,
         approval: action.payload,
+      };
+    case CLEAN_UP_MAPPED_HEADERS:
+      return {
+        ...state,
+        bulkImport: state?.bulkImport
+          ? { ...state.bulkImport, mappedHeaders: {} as BulkImport['mappedHeaders'] }
+          : state.bulkImport,
       };
     case UPDATE_ROW_FIELD_TABLE:
       return {

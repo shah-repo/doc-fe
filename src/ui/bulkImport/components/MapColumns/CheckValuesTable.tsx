@@ -7,6 +7,7 @@ import { noop } from 'lodash';
 import React, { ComponentType, ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
+import { validateDateFormats } from '../../../../common/utils/date';
 import { setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
 import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport, TableErrorDetail, TableRow } from '../../../../state/ducks/bulkImport/types';
@@ -56,7 +57,38 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
 
   const handleBlur = () => {
     setIsEditing(false);
-    dispatch(updateRowFieldTable({ cellValue: cellValue as string, field, dataIndex: props.dataIndex }));
+    const valueCheck = cellValue as string;
+    console.log('🚀 ~ handleBlur ~ props:', props);
+    console.log('🚀 ~ handleBlur ~ field:', field);
+    console.log('🚀 ~ handleBlur ~ cellValue:', cellValue);
+    console.log('🚀 ~ error:', error);
+
+    // validate if the value is the same as requiered or if have - star with the value
+    if (error?.help?.data?.length) {
+      const isValid = error?.help?.data.some(entry => {
+        if (entry.includes('-')) {
+          const pattern = new RegExp(`^${entry.replace(/-/g, '.*')}`);
+          return pattern.test(valueCheck);
+        }
+        return entry === valueCheck;
+      });
+
+      if (!isValid) return;
+    }
+
+    // At the moment format is only for dates
+    if (error?.help?.format?.length) {
+      const dateFormats = error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
+      const datePattern = new RegExp(`^(${dateFormats.join('|')})$`);
+      const isDateValid = datePattern.test(valueCheck);
+
+      if (!isDateValid) return;
+
+      const checkValidDate = validateDateFormats(valueCheck, error?.help?.format);
+      if (!checkValidDate) return;
+    }
+
+    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: props.dataIndex }));
   };
 
   const content = (
