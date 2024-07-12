@@ -29,6 +29,10 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleBac
     dispatch(setShowTable(true));
   };
 
+  const handleBackTable = () => {
+    dispatch(setShowTable(false));
+  };
+
   const init = () => {
     // before it starts checking the table data we clean it up to be sure the data is new
     dispatch(setTableData([]));
@@ -60,7 +64,7 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleBac
 
   if (showTable) {
     return (
-      <CheckValuesTable handleNext={handleNext} handleBack={handleBack} bulkImport={bulkImport as BulkImport} />
+      <CheckValuesTable handleNext={handleNext} handleBack={handleBackTable} bulkImport={bulkImport as BulkImport} />
     );
   }
 
