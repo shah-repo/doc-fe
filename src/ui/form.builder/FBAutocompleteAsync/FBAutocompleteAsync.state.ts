@@ -12,13 +12,11 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
-  private readonly documentStatus?: string = '';
   private readonly includePrevReleaseDoc?: boolean = false;
 
-  public constructor ({ optionId, urlValues, documentStatus, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
-    this.documentStatus = documentStatus;
     this.includePrevReleaseDoc = includePrevReleaseDoc;
     this.setOptionId(optionId);
   }
@@ -163,19 +161,15 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   }
 
   protected loadInternal () {
-    if (!this.optionConfig) {
+    const isIncomplete = !this.optionConfig || !this.optionId;
+    if (isIncomplete) {
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    FBAutocompleteAsyncStore.loading.set(this.optionId!, true);
+    FBAutocompleteAsyncStore.loading.set(this.optionId, true);
     const { id, root = '', publicApi } = this.optionConfig;
 
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
-
-    if (id === FBAutocompleteAsyncOption.POList && this.documentStatus?.toUpperCase() === DocumentRevisionStatus.Released) {
-      return;
-    }
 
     if (this.urlValues) {
       this.set({
