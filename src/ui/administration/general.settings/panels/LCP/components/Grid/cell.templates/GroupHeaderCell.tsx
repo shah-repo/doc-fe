@@ -43,8 +43,8 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     onGroupChange(value, groupId);
   };
 
-  const selectedGroupIDs = dataItem.items?.[0].selectedGroupIDs;
-  const defaultValue = partGroups.filter((groups: CustomGroupOptions) => selectedGroupIDs.includes(groups.value));
+  const documentTypeIdArr = dataItem.items?.[0].documentTypeIdArr;
+  const defaultValue = partGroups.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
   const displayValue = defaultValue.map(data => data.label).join(', ');
 
   return (
@@ -73,9 +73,6 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
           {isEditMode && (
             <Grid item xs={11} className={classes.autocomplete}>
               <Autocomplete
-                placeholder={translate(
-                  'administration.general.settings.lcp.group.select.placeholder',
-                )}
                 options={partGroups}
                 defaultValue= {defaultValue}
                 getOptionLabel={(option: CustomGroupOptions) => option.label}

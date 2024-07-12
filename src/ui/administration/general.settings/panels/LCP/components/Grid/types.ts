@@ -13,7 +13,10 @@ export interface LCP {
   isAllowedOnPO: string
   isAllowedOnLhrProd: string
   isAllowedToBuy: string
-  selectedGroupIDs: string[]
+  documentTypeIdArr: string[]
+  isUserAdded?: boolean
+  group?: string
+  isUserModified?: boolean
   inEdit?: boolean
   isAdd?: boolean
 }
@@ -44,4 +47,21 @@ export interface CustomGroupDataItem {
 
 export interface CustomGroupOptions extends OptionType{
   category: string
+}
+
+export interface GroupDocTypes {
+  id: string
+  documentTypeName: string
+  documentTypeAcronym: string
+  group: string
+}
+
+export interface LCPResponse {
+  docTypes: GroupDocTypes[]
+  phases: LCP[]
+}
+
+export interface processLCPType {
+  groups: CustomGroupOptions[]
+  phases: LCP[]
 }

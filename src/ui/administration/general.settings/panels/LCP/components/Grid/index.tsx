@@ -14,11 +14,11 @@ import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialData, initialDataState, LCP_KEYS, newSelectedOptions, PARTS_GROUP_ID, PART_GROUPS } from './constants';
+import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, newSelectedOptions, PARTS_GROUP_ID, realTimeData } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
-import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, LCP } from './types';
-import { sortGroups } from './utils';
+import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, LCP, LCPResponse } from './types';
+import { processRealData, sortGroups } from './utils';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema();
@@ -34,8 +34,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     = React.useState<Array<ColumnDefinition<LCP>>>(schema);
 
   useEffect(() => {
-    updateStateGridData(initialData);
-    setPartGroups(PART_GROUPS);
+    const data = processRealData(realTimeData.categories as unknown as LCPResponse[]);
+    updateStateGridData(data.phases);
+    setPartGroups(data.groups);
   }, []);
 
   const onDataStateChange = (event: GridDataStateChangeEvent): State => {
@@ -100,7 +101,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
       // newSelectedOptions will fetch from DB
       newSelectedOptions.forEach(data => {
-        data.selectedGroupIDs = selectedGroudIds;
+        data.documentTypeIdArr = selectedGroudIds;
         return data;
       });
       const updatedData = newSelectedOptions.concat((data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID));
@@ -110,8 +111,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       // Edit case
       if (data) {
       data?.forEach(data => {
-        if (getGroupIdByCategory(data.category) !== groupId) {
-          data.selectedGroupIDs = selectedGroudIds;
+        if (getGroupIdByCategory(data.category) === groupId) {
+          data.documentTypeIdArr = selectedGroudIds;
         }
         return data;
       });
@@ -215,10 +216,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         isAllowedOnPO: '',
         isAllowedOnLhrProd: '',
         category: ADD_GROUP_NAME,
-        selectedGroupIDs: [],
+        documentTypeIdArr: [],
         isAllowedToBuy: '',
         [EDIT_FIELD]: true,
         isAdd: true,
+        isUserAdded: true,
+        isUserModified: false,
       },
     ];
     setData(newData);
