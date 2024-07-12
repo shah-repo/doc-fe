@@ -91,6 +91,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onDeleteGroup = (dataItem: CustomGroupDataItem) => {
     const updatedData = (data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== dataItem.groupId);
     updateStateGridData(updatedData);
+    console.log('Data Final to save ', updatedData);
   };
 
   const onGroupChange = (options: CustomGroupOptions[], groupId: string) => {
@@ -194,6 +195,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
       group.items?.forEach((data) => {
         if (data.id === e.dataItem.id) {
+          data.isUserModified = true;
           data[e.field || ''] = e.value;
         }
         return data;
