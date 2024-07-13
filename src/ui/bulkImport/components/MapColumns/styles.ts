@@ -52,6 +52,8 @@ export default makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     color: Colors.textBlack,
+    position: 'relative',
+    overflow: 'hidden',
   },
   errorCell: {
     backgroundColor: Colors.errorHighlight,
@@ -63,6 +65,8 @@ export default makeStyles(theme => ({
     width: 16,
     height: 16,
     marginLeft: 'auto',
+    position: 'absolute',
+    right: 5,
   },
   informationHeader: {
     display: 'flex',
