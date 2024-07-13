@@ -58,10 +58,6 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
   const handleBlur = () => {
     setIsEditing(false);
     const valueCheck = cellValue as string;
-    console.log('🚀 ~ handleBlur ~ props:', props);
-    console.log('🚀 ~ handleBlur ~ field:', field);
-    console.log('🚀 ~ handleBlur ~ cellValue:', cellValue);
-    console.log('🚀 ~ error:', error);
 
     // validate if the value is the same as requiered or if have - star with the value
     if (error?.help?.data?.length) {
@@ -245,6 +241,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           <Button
             onClick={triggerNext}
             className={classes.button}
+            disabled={tableData.length === 0 || errorCount > 0 }
           >
             <Text translation="common.next" />
           </Button>

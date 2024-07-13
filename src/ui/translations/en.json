@@ -2116,6 +2116,7 @@
   "bulkImport.goBackStep": "Are you sure you want to go back to this step?",
   "bulkImport.tableErrorCountMessage": "Please fix the {error} before continue",
   "bulkImport.reject.alert": "You are rejecting a Bulk Import\nAre you sure you want to continue?",
+  "common.mapHeaders.noHeaders": "There are no headers in the file. Please upload a new file.",
   "common.importingFiles": "Importing files",
   "common.table.rowsErrors": "rows contain errors.",
   "common.table.noRowsErrors": "Great! All errors have been resolved.",
