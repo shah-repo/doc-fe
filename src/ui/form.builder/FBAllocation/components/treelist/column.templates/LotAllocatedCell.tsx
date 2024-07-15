@@ -41,7 +41,6 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data: DocumentRevision[] = []) => {
-      // TODO update isExpired here
       setLots(data);
     },
   });
