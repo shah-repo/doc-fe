@@ -3,13 +3,14 @@ import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
+import { useFormikContext } from 'formik';
 import { cloneDeep, last, pick, uniq, uniqBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
 import { Button as AddButton } from '../../../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
-import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { ColumnDefinition, DataGridProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
@@ -33,8 +34,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [columns]
     = React.useState<Array<ColumnDefinition<LCP>>>(schema);
 
+  const { getFieldProps, setValues, values: formValues } = useFormikContext();
+  const lifeCycleData = getFieldProps('lifecyclePhases') as unknown as { categories: LCPResponse[] };
+
   useEffect(() => {
-    const data = processRealData(realTimeData.categories as unknown as LCPResponse[]);
+    const data = processRealData(lifeCycleData.categories ?? realTimeData.categories as unknown as LCPResponse[]);
     updateStateGridData(data.phases);
     setPartGroups(data.groups);
   }, []);
@@ -92,6 +96,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     // TODO call API POST HERE
     const payload = updatedData?.map((item) => pick(item, REQUEST_PAYLOAD_KEYS));
     console.log('Data Final to save settings ', payload);
+    // updated formik here
+    formValues.lifecyclePhases = payload;
+    setValues(formValues);
   };
 
   const onDeleteGroup = (dataItem: CustomGroupDataItem) => {
@@ -140,7 +147,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     return lastItem?.id === id;
   };
 
-  const rowRender = (row: React.ReactElement, rowProps: GridRowProps) => {
+  const rowRender: DataGridProps<LCP>['rowRender'] = (row: React.ReactElement, rowProps: GridRowProps) => {
     if (rowProps.rowType === 'groupHeader') {
       const groupId = rowProps.dataItem.groupId as string;
       return React.cloneElement(row, {
