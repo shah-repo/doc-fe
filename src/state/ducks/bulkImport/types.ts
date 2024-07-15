@@ -219,6 +219,10 @@ interface Headers {
   system: SystemHeaderEntity[]
 }
 
+export enum TableErrorValidation {
+  DOC_ID = 'docId',
+}
+
 export interface TableErrorDetail {
   column: string
   message: string
@@ -228,6 +232,7 @@ export interface TableErrorDetail {
     message: string
     data?: string[]
     format?: string[]
+    validate?: TableErrorValidation
   }
 }
 

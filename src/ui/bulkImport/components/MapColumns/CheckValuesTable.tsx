@@ -10,7 +10,7 @@ import { translate } from '../../../../common/intl';
 import { validateDateFormats } from '../../../../common/utils/date';
 import { setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
 import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
-import { BulkImport, TableErrorDetail, TableRow } from '../../../../state/ducks/bulkImport/types';
+import { BulkImport, TableErrorDetail, TableErrorValidation, TableRow } from '../../../../state/ducks/bulkImport/types';
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import Text from '../../../components/Text';
 import { Button, Switch } from '../../../components/forms/fields-next';
@@ -21,6 +21,7 @@ import { NeedHelpButton } from '../ButtonActions';
 import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
+import { getBaseDocId, getBaseDocIdParts } from './validation';
 
 interface CheckValuesTableProps {
   children?: ReactNode
@@ -60,25 +61,29 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
     const valueCheck = cellValue as string;
     let isValid = true;
 
-    // validate if the value is the same as requiered or if have - star with the value
-    if (error?.help?.data?.length) {
-      isValid = error?.help?.data.some(entry => {
-        if (entry.includes('-')) {
-          const pattern = new RegExp(`^${entry.replace(/-/g, '.*')}`);
-          return pattern.test(valueCheck);
+    if (error?.help?.validate === TableErrorValidation.DOC_ID && error?.help?.data?.length) {
+      const docId = valueCheck?.split('.')[0];
+      const baseDocId = getBaseDocId(docId, error?.help?.data);
+      isValid = !!baseDocId;
+
+      if (baseDocId) {
+        isValid = getBaseDocIdParts(docId, baseDocId);
+      }
+    } else {
+      // validate if the value is the same as requiered or if have - star with the value
+      if (error?.help?.data?.length) {
+        isValid = error?.help?.data.some(entry => entry === valueCheck);
+      }
+
+      // At the moment format is only for dates
+      if (isValid && error?.help?.format?.length) {
+        const dateFormats = error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
+        const datePattern = new RegExp(`^(${dateFormats.join('|')})$`);
+        isValid = datePattern.test(valueCheck);
+
+        if (isValid) {
+          isValid = validateDateFormats(valueCheck, error?.help?.format);
         }
-        return entry === valueCheck;
-      });
-    }
-
-    // At the moment format is only for dates
-    if (isValid && error?.help?.format?.length) {
-      const dateFormats = error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
-      const datePattern = new RegExp(`^(${dateFormats.join('|')})$`);
-      isValid = datePattern.test(valueCheck);
-
-      if (isValid) {
-        isValid = validateDateFormats(valueCheck, error?.help?.format);
       }
     }
 
@@ -112,10 +117,11 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
                 {error.message}
                 {error?.help?.message && (
                   <>
+                    <br />
                     {error.help.message}
                     {error?.help?.data?.length && (
                       <>
-                        {translate('common.allowed')}: {error.help.data.join(', ')}
+                        : {error.help.data.join(', ')}
                       </>
                     )}
                   </>
