@@ -17,6 +17,7 @@ export const initialDataState = {
   skip: 0,
   group: DATA_GROUP,
 };
+export const REQUEST_PAYLOAD_KEYS = ['order', 'enlilType', 'displayLabel', 'isAllowedOnPO', 'isAllowedOnLhrProd', 'isAllowedToBuy', 'documentTypeIdArr'];
 
 // Sample Data for PART GROUP Options
 export const PART_GROUPS = [

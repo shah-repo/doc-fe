@@ -3,7 +3,7 @@ import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { cloneDeep, last, uniq, uniqBy } from 'lodash';
+import { cloneDeep, last, pick, uniq, uniqBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
@@ -14,7 +14,7 @@ import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, newSelectedOptions, PARTS_GROUP_ID, realTimeData } from './constants';
+import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, newSelectedOptions, PARTS_GROUP_ID, realTimeData, REQUEST_PAYLOAD_KEYS } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, LCP, LCPResponse } from './types';
@@ -88,10 +88,16 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(processWithGroups(updatedData, initialDataState));
   };
 
+  const updateSettingsObj = (updatedData) => {
+    // TODO call API POST HERE
+    const payload = updatedData?.map((item) => pick(item, REQUEST_PAYLOAD_KEYS));
+    console.log('Data Final to save settings ', payload);
+  };
+
   const onDeleteGroup = (dataItem: CustomGroupDataItem) => {
     const updatedData = (data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== dataItem.groupId);
     updateStateGridData(updatedData);
-    console.log('Data Final to save ', updatedData);
+    updateSettingsObj(updatedData);
   };
 
   const onGroupChange = (options: CustomGroupOptions[], groupId: string) => {
@@ -125,7 +131,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
     setEditGroup('');
-    console.log('Data Final to save ', data);
+    updateSettingsObj(data);
   };
 
   const isLastGroupRow = (id: string) => {
