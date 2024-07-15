@@ -92,7 +92,7 @@ export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
 export type AllocationOrderType = 'fifo' | 'lifo';
-export type expiredLotType = 'warning' | 'error';
+type expiredLotType = 'warning' | 'error';
 
 export enum NavigationItems {
   LINK = 'LINK',
