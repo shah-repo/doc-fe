@@ -28,7 +28,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       className={classes.root}
     >
       <ExpansionPanelSummary
-        onClick={onToggle}
+        onClick={() => onToggle()}
         classes={{
           root: classes.summary,
           content: classes.content,

@@ -1,4 +1,5 @@
 import ApprovalRequestsSettingsPanel from './panels/ApprovalRequest';
+import CompanyLocationSettingsPanel from './panels/CompanyLocations';
 import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
@@ -35,6 +36,11 @@ export const panels = [
     key: GeneralSettingsTabs.ExpiredLots,
     title: 'administration.general.settings.expired.lots',
     component: ExpiredLots,
+  },
+  {
+    key: GeneralSettingsTabs.Locations,
+    title: 'administration.general.settings.locations.tab',
+    component: CompanyLocationSettingsPanel,
   },
   {
     key: GeneralSettingsTabs.Integrations,

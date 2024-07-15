@@ -5,6 +5,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import { useIntl } from 'react-intl';
 import { SMTextEditorProps } from '../../..';
 import Colors from '../../../../ui/layout/theme/utils/colors';
+import { linkDecorator } from './LinkDecorator/LinkDecorator';
 import { editorStyles, SMEditorStyles } from './SMTextEditor.styles';
 import { withSMTextEditor } from './SMTextEditor.wrap';
 
@@ -24,6 +25,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   isPreview,
   toolbar,
   disabled,
+  onAwayClick,
   placeholder,
   showToggleButton,
   isTextClamped,
@@ -43,12 +45,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     _documentRevisionFormState?.setExpanded(true);
     _documentRevisionFormState?.setDescriptionFocused(true);
     _textEditorState?.setPreviewMode(false);
-  };
-  const onAway = () => {
-    _documentRevisionFormState?.setExpanded(false);
-    _documentRevisionFormState?.setDescriptionFocused(false);
-    _textEditorState?.setPreviewMode(true);
-    showToggleButton && showToggleButton();
   };
 
   const toggleButton = (el: React.MouseEvent<HTMLButtonElement>) => {
@@ -75,7 +71,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
-            <ClickAwayListener onClickAway={onAway} mouseEvent="onMouseUp">
+            <ClickAwayListener onClickAway={onAwayClick} mouseEvent="onMouseUp">
               <Box
                 borderColor={Colors.hint_gray}
                 borderRadius={4}
@@ -101,6 +97,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         readOnly={disabled}
                         toolbarHidden={_textEditorState?.previewMode}
                         toolbarStyle={editorStyles.toolbarStyle}
+                        customDecorators={[linkDecorator]}
                         editorStyle={editorStyles.editorStyle}
                         toolbarClassName={classes.descriptionToolbarEditorClass}
                         editorClassName={_textEditorState?.previewMode ? classes.descriptionEditorClass
