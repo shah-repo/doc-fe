@@ -8,7 +8,10 @@ import {
 } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { ChangeEvent } from 'react';
+import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
+import { getHasPermission } from '../../../../../common/utils/selectors';
+import { Permission } from '../../../../../state/ducks/auth/types';
 import {
   AllocationOrder,
   AllocationOrderType,
@@ -21,6 +24,7 @@ import { styles } from './styles';
 const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
   const classes = styles();
   const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
+  const hasPermission = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const orderByReleaseDateKey = 'allocationConfig.sortOrderByReleaseDate';
   const orderByReleaseDateValue = getFieldProps(orderByReleaseDateKey)
     .value as AllocationOrderType;
@@ -57,8 +61,9 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
             className={classes.root}
             control={
               <Radio
-                classes={{ root: classes.radio, checked: classes.checked }}
+                classes={{ root: classes.radio, checked: classes.checked, disabled: classes.disabled }}
                 size="small"
+                disabled={!hasPermission}
               />
             }
             labelPlacement="start"
@@ -79,7 +84,8 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
             className={classes.root}
             control={
               <Radio
-                classes={{ root: classes.radio, checked: classes.checked }}
+                classes={{ root: classes.radio, checked: classes.checked, disabled: classes.disabled }}
+                disabled={!hasPermission}
                 size="small"
               />
             }

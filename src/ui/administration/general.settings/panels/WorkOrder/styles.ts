@@ -27,6 +27,9 @@ export const styles = makeStyles((theme: Theme) =>
       margin: 0,
     },
     checked: {},
+    disabled: {
+      color: `${Colors.buttonDisabled} !important`,
+    },
     radioLabel: {
       fontWeight: 400,
       fontSize: 14,
