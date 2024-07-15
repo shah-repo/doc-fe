@@ -105,7 +105,7 @@ const steps = (
           if (idx === action.payload.dataIndex) {
             const updatedErrors = table.errors?.map(error => {
               if (error.column === action.payload.field) {
-                error.edited = true;
+                error.edited = action.payload.isEdited;
               }
 
               return error;

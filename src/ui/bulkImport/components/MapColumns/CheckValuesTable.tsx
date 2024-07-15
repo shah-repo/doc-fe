@@ -58,33 +58,31 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
   const handleBlur = () => {
     setIsEditing(false);
     const valueCheck = cellValue as string;
+    let isValid = true;
 
     // validate if the value is the same as requiered or if have - star with the value
     if (error?.help?.data?.length) {
-      const isValid = error?.help?.data.some(entry => {
+      isValid = error?.help?.data.some(entry => {
         if (entry.includes('-')) {
           const pattern = new RegExp(`^${entry.replace(/-/g, '.*')}`);
           return pattern.test(valueCheck);
         }
         return entry === valueCheck;
       });
-
-      if (!isValid) return;
     }
 
     // At the moment format is only for dates
-    if (error?.help?.format?.length) {
+    if (isValid && error?.help?.format?.length) {
       const dateFormats = error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
       const datePattern = new RegExp(`^(${dateFormats.join('|')})$`);
-      const isDateValid = datePattern.test(valueCheck);
+      isValid = datePattern.test(valueCheck);
 
-      if (!isDateValid) return;
-
-      const checkValidDate = validateDateFormats(valueCheck, error?.help?.format);
-      if (!checkValidDate) return;
+      if (isValid) {
+        isValid = validateDateFormats(valueCheck, error?.help?.format);
+      }
     }
 
-    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: props.dataIndex }));
+    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: props.dataIndex, isEdited: !!isValid }));
   };
 
   const content = (

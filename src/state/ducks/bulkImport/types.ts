@@ -201,6 +201,7 @@ export interface UpdateRowFieldTablePayload {
   cellValue: string
   field: string
   dataIndex: number
+  isEdited?: boolean
 }
 
 export interface CustomHeaderEntity {
