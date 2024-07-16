@@ -45,12 +45,12 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const dispatch = useDispatch();
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const showApprovals = item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending;
   const approvalId = item?.documentRevision?.approvals[0]?.id;
   const approverId = item?.documentRevision?.approvals[0]?.approverId;
   const transitionDialog = useDialog();
   const transitionDialog1 = useDialog();
   const showApproverButtons = approvalId && approverId === currentEmployeeId;
+  const showApprovals = item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending && showApproverButtons;
   const currentProgressStep = useRef(0);
   const isRejected = item?.status === BkStatus.CANCELLED;
   const showButtonView = (!isRejected && !showApproverButtons && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports && item?.completedAt);
