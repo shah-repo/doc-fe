@@ -2,8 +2,9 @@ import { Box } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { cleanUpMappedHeaders, getDownloadFile, setIsLoading, setTemplateFile, uploadFileData } from '../../../../state/ducks/bulkImport/actions';
+import { cleanUpMappedHeaders, setIsLoading, setTemplateFile, uploadFileData } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImport, getTemplateFile } from '../../../../state/ducks/bulkImport/selectors';
+import { getDownloadTemplate } from '../../../../state/ducks/bulkImport/utils';
 import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
 import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.types';
@@ -55,7 +56,7 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
 
   const handleDownloadFile = () => {
     if (bulkImport) {
-      dispatch(getDownloadFile(bulkImport.id));
+      getDownloadTemplate(bulkImport.id);
     }
   };
 
