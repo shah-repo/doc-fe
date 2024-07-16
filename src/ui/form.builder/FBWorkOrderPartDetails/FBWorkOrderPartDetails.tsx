@@ -107,7 +107,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
     infoLabelString = 'allocation.part.obsolete.revision';
   }
 
-  const onQuanityValidate = (e) => {
+  const onQuanityValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = /^[1-9]\d*$/;
     if (!regex.test(e.target.value)) {
       e.target.value = '';
