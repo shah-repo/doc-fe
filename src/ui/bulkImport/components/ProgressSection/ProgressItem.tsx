@@ -53,7 +53,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const showApproverButtons = approvalId && approverId === currentEmployeeId;
   const currentProgressStep = useRef(0);
   const isRejected = item?.status === BkStatus.CANCELLED;
-  const showButtonView = !isRejected && !showApproverButtons && (item?.reports || (currentProgressStep.current > 0 && !item?.completedAt));
+  const showButtonView = (!isRejected && !showApproverButtons && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports && item?.completedAt);
   let rejectedDate;
 
   if (item?.documentRevision?.approvals?.length) {

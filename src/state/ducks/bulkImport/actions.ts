@@ -8,7 +8,7 @@ import { approvalFieldId, APPROVALS_URL, BULK_GET_APPROVERS_URL, BULK_GET_REPORT
 import { Approver, BKAttachmentFile, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
 import { downloadFile } from './utils';
 
-const REPORT_CSV = 'report.xlsx';
+const REPORT_CSV = 'report.csv';
 
 const COMMON_TRIGGER_ERROR = {
   onFailure: (err) => toastError(err),
