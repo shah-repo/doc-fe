@@ -4,7 +4,7 @@ import { Link, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
+import { chain, isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
@@ -75,11 +75,14 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   }, [lots]);
 
   const renderOptions = (): LotAutoCompleteOptions[] => {
-    return lots.map((lot) => ({
-      label: lot.document.docId,
-      value: lot.id,
-      isExpired: lot.isExpired,
-    }));
+    return chain(lots)
+      ?.sortBy(lot => lot.expiryDate ? new Date(lot.expiryDate) : null)
+      ?.map(({ document: { docId }, id, isExpired }) => ({
+        label: docId,
+        value: id,
+        isExpired,
+      }))
+      ?.value() ?? [];
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
