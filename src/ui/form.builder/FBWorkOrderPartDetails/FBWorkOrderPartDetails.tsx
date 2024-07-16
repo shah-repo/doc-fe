@@ -9,7 +9,7 @@ import { FB, FBInputProps, FBTextField, FBTooltip, FBWorkspaceModeOptions } from
 import { translate } from '../../../common/intl';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
-import { WorkOrderTypes, WO_PART_KEY_NAME, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
+import { WO_PART_KEY_NAME, WO_TYPE_KEY, WorkOrderTypes } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import ErrorBlock from '../../components/forms/fields/ErrorBlock';
@@ -107,6 +107,13 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
     infoLabelString = 'allocation.part.obsolete.revision';
   }
 
+  const onQuanityValidate = (e) => {
+    const regex = /^[1-9]\d*$/;
+    if (!regex.test(e.target.value)) {
+      e.target.value = '';
+    }
+  };
+
   return (
     <Grid container spacing={1}>
       {displayInfoIcon && (
@@ -179,6 +186,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           gutter={false}
           showErrorMsg={false}
           placeholder="1"
+          onChange={onQuanityValidate}
         />
       </Grid>
       <Grid item md={3} xs={6}>
