@@ -1949,6 +1949,7 @@
   "allocation.part.quantity.short.info.message": "Based on your Qty needed and Variance, you are short {quantityShort} {unit} for {partID}",
   "allocation.rev.header.title": "This is the revision of the part in the Lot",
   "allocation.lot.expired.confirm.prompt.message": "The selected lot has expired.\n\nAre you sure you want to continue?",
+  "allocation.lot.expired.tooltip.message": "Lot expired on {expiryDate}",
   "wo.displayRevision": "{docId} Rev {displayRevision} - {name}",
   "wo.withdraw.alert": "Are you sure you want to withdraw this Work Order?",
   "wo.withdraw.button.label": "Withdraw",

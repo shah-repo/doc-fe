@@ -8,6 +8,7 @@ import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
+import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
@@ -76,11 +77,15 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
   }, [lots]);
 
   const renderOptions = (): LotAutoCompleteOptions[] => {
-    return lots.map((lot) => ({
-      label: lot.document.docId,
-      value: lot.id,
-      isExpired: lot.isExpired,
-    }));
+    return lots.map((lot) => {
+      const expiryDate = lot.isExpired ? getFormattedDateString(lot.expiryDate, MomentFormats.MonthDateYearTwoDigit) : '';
+      return {
+        label: lot.document.docId,
+        value: lot.id,
+        expiryDate,
+        isExpired: lot.isExpired,
+      };
+    });
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
@@ -123,7 +128,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
               <ListItemText primary={option.label} />
               {option.isExpired && <ListItemIcon>
                 <StyleTooltip
-                  title={translate('common.expired')}
+                  title={translate('allocation.lot.expired.tooltip.message', { expiryDate: option.expiryDate })}
                   placement="top"
                   arrow
                 >

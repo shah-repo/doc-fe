@@ -28,6 +28,7 @@ export interface LotAutoCompleteOptions {
   label: string
   value: string
   isExpired?: boolean
+  expiryDate?: string
 }
 
 type IAllocationCallback = (dataItem: EditableAllocationItem) => void;
