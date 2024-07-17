@@ -1,10 +1,18 @@
+import React from 'react';
 import { translate } from '../../../../../../../common/intl';
 import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { ActionsCell } from './cell.templates/ActionsCell';
 import { DropdownCell } from './cell.templates/DropdownCell';
 import { LabelCell } from './cell.templates/LabelCell';
-import { LCP } from './types';
+import { TextInputCellTemplate } from './cell.templates/TextInputCellTemplate';
+import { LCP, SchemaOptions } from './types';
 
-export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
+export const LCPSchema = ({
+  actionsClass,
+  onConfirm,
+  onDiscard,
+  onDelete,
+}: SchemaOptions): Array<ColumnDefinition<LCP>> => {
   return [
     {
       id: 'enlilType',
@@ -12,6 +20,7 @@ export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
       title: translate('administration.general.settings.lcp.enlilType'),
       width: 200,
       locked: false,
+      cell: TextInputCellTemplate,
       groupable: false,
       sortable: false,
     },
@@ -61,6 +70,20 @@ export const LCPSchema = (): Array<ColumnDefinition<LCP>> => {
       locked: false,
       groupable: false,
       mainOrderIndex: 5,
+    },
+    {
+      id: 'actions',
+      title: 'actions',
+      className: actionsClass,
+      template: (props) => (
+        <ActionsCell
+          {...props}
+          onConfirm={onConfirm}
+          onDiscard={onDiscard}
+          onDelete={onDelete}
+        />
+      ),
+      width: 1,
     },
   ];
 };

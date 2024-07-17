@@ -32,7 +32,7 @@ const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, 
 
 export const LabelCell: React.FC<CellTemplateProps<LCP>> = (props) => {
   const { field, dataItem, onClick, colSpan, style, className } = props;
-  const isEditMode = dataItem[EDIT_FIELD];
+  const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
   const handleClick = () => onClick?.({ dataItem });
   const datCy = `${kebabCase(field)}-td`;
 

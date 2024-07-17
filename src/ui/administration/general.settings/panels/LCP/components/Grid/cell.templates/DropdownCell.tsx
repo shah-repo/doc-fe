@@ -18,7 +18,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
   onChange,
   ...rest
 }) => {
-  const isEditMode = dataItem[EDIT_FIELD];
+  const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
 
   const getOptions = () => {
     return field === LCP_KEYS.isAllowedToBuy ? PART_PURCHASE_OPTIONS : DEFAULT_OPTIONS;

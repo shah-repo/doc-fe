@@ -25,4 +25,23 @@ export default makeStyles((theme) => ({
     paddingRight: theme.spacing(1.2),
     cursor: 'pointer',
   },
+  addPhaseButton: {
+    paddingLeft: theme.spacing(4.25),
+  },
+  actions: {
+    gap: theme.spacing(1.25, 1.25),
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: theme.spacing(1.25),
+    backgroundColor: Colors.primaryLight,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    position: 'absolute',
+    zIndex: 3,
+    right: 0,
+    top: '100%',
+  },
+  deleteIcon: {
+    color: Colors.error,
+  },
 }));

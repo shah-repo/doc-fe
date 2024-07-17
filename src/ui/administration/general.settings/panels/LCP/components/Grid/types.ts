@@ -1,6 +1,7 @@
 import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
+import { CellTemplateProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 
 // Remove keys at last
 // id , createdAt, updatedAt, order, enlilType, displayLabel, isAllowedOnPO, isAllowedOnLhrProd, isAllowedToBuy,
@@ -19,6 +20,7 @@ export interface LCP {
   isUserModified?: boolean
   inEdit?: boolean
   isAdd?: boolean
+  isAddPhase?: boolean
 }
 
 export interface EditableLCP extends LCP {
@@ -65,3 +67,12 @@ export interface processLCPType {
   groups: CustomGroupOptions[]
   phases: LCP[]
 }
+
+export interface SchemaOptions {
+  actionsClass: string
+  onConfirm?: () => void
+  onDiscard?: () => void
+  onDelete?: () => void
+}
+
+export type CustomTemplateProps = CellTemplateProps<EditableLCP>;

@@ -47,6 +47,19 @@ export default makeStyles((theme) => ({
     '& .k-master-row.updatingRow.groupLastRow td': {
       borderBottom: `1px solid ${Colors.primaryLight} !important`,
     },
+    '& .k-master-row.addingPhaseRow': {
+      '& td': {
+        borderTop: `1px solid ${Colors.primaryLight} !important`,
+        borderBottom: `1px solid ${Colors.primaryLight} !important`,
+      },
+      '& td:first-child': {
+        borderLeft: `1px solid ${Colors.primaryLight} !important`,
+      },
+      '& td:last-child': {
+        borderRight: `1px solid ${Colors.primaryLight} !important`,
+        paddingLeft: theme.spacing(0.25),
+      },
+    },
     '& .k-grid-header thead th': {
       // textTransform: 'uppercase',
       color: Colors.textBlack,
@@ -104,4 +117,12 @@ export default makeStyles((theme) => ({
   //     whiteSpace: 'normal !important' as 'normal',
   //   },
   // },
+  actionsCell: {
+    overflow: 'visible !important',
+    position: 'sticky',
+    right: 0,
+    width: '0 !important',
+    padding: '0 !important',
+    verticalAlign: 'bottom !important',
+  },
 }));
