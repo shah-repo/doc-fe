@@ -6,7 +6,7 @@ import MaterialDispositionSettings from './panels/MaterialDisposition';
 import PrintingSettingsPanel from './panels/Printing';
 import { GeneralSettingsTabs } from './types';
 
-export const MAX_PANEL_WIDTH = 660;
+export const MAX_PANEL_WIDTH = 990;
 export const SIDEBAR_WIDTH = 150;
 
 export const panels = [

@@ -3,6 +3,7 @@ import { get } from 'lodash';
 import React from 'react';
 import { CellTemplateProps } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { FormikField, TextField } from '../../../../../components/forms/fields-next';
 import { EditableCompanyLocation } from '../../../panels/CompanyLocations/types';
 
@@ -20,5 +21,13 @@ export const TextCellTemplate: React.FC<CellTemplateProps<EditableCompanyLocatio
       </FormikField>
     );
   }
-  return <>{defaultValue}</>;
+  return (
+    <OverflowTooltip
+      title={defaultValue}
+      arrow
+      placement="top"
+    >
+      {defaultValue}
+    </OverflowTooltip>
+  );
 };
