@@ -2068,7 +2068,7 @@
   "administration.general.settings.lot.auto.allocation.order.helper.text": "Expiry date will override FIFO/LIFO",
   "administration.general.settings.lot.auto.allocation.order.fifo.label": "FIFO (First In First Out)",
   "administration.general.settings.lot.auto.allocation.order.lifo.label": "LIFO (Last In First Out)",
-  "administration.general.settings.expired.lots": "Expired Lots",
+  "administration.general.settings.expired.lots": "Warnings vs Errors",
   "administration.general.settings.expired.lots.label": "Allow allocation of expired lots with a warning",
   "ccc.attribute.changes.tooltip": "All user added controls & pre-defined controls on tabs, except Supplier table.",
   "ccc.bom.line.changes.tooltip": "This configuration (when 'No' is selected) allows users to edit a line item in the BOM without a new revision of the part based on the 'Select the fields that can be edited'",
