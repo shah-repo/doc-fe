@@ -56,6 +56,12 @@ const getAssignessList = createSelector(
     ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
+const getUsersList = createSelector(
+  approversAllIds, approversById,
+  (ids, approvers): OptionType[] =>
+    ids.map((id) => ({ value: approvers[id].user.id, label: approvers[id].user.name })),
+);
+
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];
 const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByCRId(state)[changeRequestId];
 
@@ -108,4 +114,5 @@ export default {
   makeGetAudit,
   getDependentOnDocRevsState,
   usersById,
+  getUsersList,
 };

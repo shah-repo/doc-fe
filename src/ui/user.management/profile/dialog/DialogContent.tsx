@@ -20,7 +20,6 @@ import styles from '../../profile/UserProfile.styles';
 import { toEmployeeActiveStatusEditRequestBody } from '../../utils/transform';
 import AcctCodes from '../AddressesAndCodes/AcctCodes';
 import Addresses from '../AddressesAndCodes/Addresses';
-import { CompanyLocations } from '../CompanyLocations';
 import ApiTokenContent from '../apiTokenContent/ApiTokenContent';
 import CompanyStageManagementContainer from '../company.stage.management/CompanyStageManagement.container';
 import UserGroups from '../groups/UserGroups';
@@ -54,7 +53,6 @@ interface OwnProps {
   usernameError: Translation | null
   isDeveloper: boolean
   canUpdateCompany: boolean
-  canUpdateLocations: boolean
 }
 
 type Props = OwnProps;
@@ -86,7 +84,6 @@ const DialogContent: React.FunctionComponent<Props> = ({
   usernameError,
   isDeveloper,
   canUpdateCompany,
-  canUpdateLocations,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
@@ -269,7 +266,6 @@ const DialogContent: React.FunctionComponent<Props> = ({
         <CompanyStageManagementContainer />
         <WhiteLabelingManagementContainer />
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
-        {canUpdateLocations && <CompanyLocations isActive={canUpdateLocations} locations={companyMine.locations} />}
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
         {isDeveloper && <ApiTokenContent />}
