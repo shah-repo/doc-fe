@@ -1,11 +1,12 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
@@ -192,7 +193,10 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           </div>}
           {!isEditMode && (dataItem.isLotAddition || dataItem.lotRevId) && (<div className={classes.lotInfoWrapper}>
             <span className={classes.lotInfoId}>
-              <Link to={(dataItem.lotRevId && dataItem.lotDocumentId) ? documentVersionPath(dataItem.lotRevId, dataItem.lotDocumentId) : '#'} className={classes.link} target="_blank">
+              <Link
+                to={(dataItem.lotRevId && dataItem.lotDocumentId) ? documentVersionPath(dataItem.lotRevId, dataItem.lotDocumentId) : '#'}
+                className={classes.link}
+                target="_blank">
                 {dataItem.lotDocId}
               </Link>
             </span>
