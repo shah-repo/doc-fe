@@ -173,6 +173,7 @@ export interface GeneralSettings {
   equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
+  lifecyclePhases?: any
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
