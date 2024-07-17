@@ -17,7 +17,6 @@ import { Button, Switch } from '../../../components/forms/fields-next';
 import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { NeedHelpButton } from '../ButtonActions';
 import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
@@ -233,7 +232,6 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
         ))}
       </StyledKendoGrid>
       <Box className={classes.actionsContainer}>
-        <NeedHelpButton />
         <Box className={classes.buttonsFooterContainer}>
           <Button
             onClick={handleBack}

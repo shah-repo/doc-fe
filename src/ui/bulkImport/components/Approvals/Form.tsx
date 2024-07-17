@@ -11,7 +11,7 @@ import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/b
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
 import { Approval } from '../../../../state/ducks/common/types';
 import Text from '../../../components/Text';
-import SelectField from '../../../components/forms/fields/Select';
+import { Autocomplete } from '../../../components/forms/fields-next';
 import { BULK_IMPORT_PROGRESS_URL } from '../../../constants/urls';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -20,10 +20,9 @@ import useStyles from './styles';
 
 interface UploadDataProps {
   children?: ReactNode
-  handleNext: () => void
 }
 
-const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
+const UploadData: React.FC<UploadDataProps> = ({ children }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [users, setUsers] = useState<ApproverOption[]>([]);
@@ -84,24 +83,22 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
                 <Text translation="bulkImport.approvals.approvers" />
               </Typography>
               <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
-                <SelectField
-                  selectProps={{
-                    id: 'selectedUser',
-                    onChange: (event) => {
-                      const selectedUser = approversOptionList.find(user => user.value === event.target.value);
+                <Autocomplete
+                  name="selectedUser"
+                  options={approversOptionList}
+                  getOptionLabel={(option) => option.text}
+                  placeholder="Start typing to see list of users..."
+                  onChange={(_, value: ApproverOption) => {
+                    if (value?.value) {
+                      const selectedUser = approversOptionList.find(user => user.value === value.value);
                       if (selectedUser) {
                         setUsers([selectedUser]);
                         setFieldValue('selectedUser', '');
                       }
-                    },
-                  }}
-                  name="selectedUser"
-                  includeEmpty={false}
-                  options={approversOptionList}
-                  inputStyleProps={classes.select}
-                />
+                    }
+                  }} />
               </FormControl>
-              <List className={classes.listContainer}>
+              {users && <List className={classes.listContainer}>
                 {users.map((user, index) => (
                   <ListItem key={index} className={classes.listItem}>
                     <Box className={classes.fileInfo}>
@@ -120,7 +117,7 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
                     </IconButton>
                   </ListItem>
                 ))}
-              </List>
+              </List>}
               {children}
             </Form>
           )}

@@ -84,7 +84,7 @@ export default makeStyles(theme => ({
   actionsContainer: {
     display: 'flex',
     marginTop: theme.spacing(6.25),
-    justifyContent: 'space-between',
+    justifyContent: 'end',
     alignItems: 'center',
   },
   buttonsFooterContainer: {
@@ -105,11 +105,7 @@ export default makeStyles(theme => ({
     width: '100%',
     margin: '0 auto',
     maxWidth: 1066,
-    justifyContent: 'space-between',
-  },
-  needHelpContainer: {
-    marginTop: theme.spacing(2.5),
-    alignSelf: 'center',
+    justifyContent: 'end',
   },
   tooltipContent: {
     gap: theme.spacing(1, 1),
