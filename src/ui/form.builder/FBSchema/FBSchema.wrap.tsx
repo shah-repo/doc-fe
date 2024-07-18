@@ -9,7 +9,7 @@ import { formFieldsDisabledChangeControl, suppliersDisabledChangeControl } from 
 import { isTranslation } from '../../translations/types';
 import FBFieldOutputWrapper from '../FBFieldOutputWrapper/FBFieldOutputWrapper';
 
-const loader = () => (
+const loaderRenderer = () => (
   <Box display="flex" justifyContent="center">
     <CircularProgress size={40} disableShrink />
   </Box>
@@ -133,7 +133,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       schemaState,
       workspaceMode,
       schema,
-      children: rendered ? schemaRenderer() : loader(),
+      children: rendered ? schemaRenderer() : loaderRenderer(),
     });
   };
 
