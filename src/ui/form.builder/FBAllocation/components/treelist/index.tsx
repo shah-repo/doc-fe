@@ -206,7 +206,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
   }, [documentRevision?.id]);
 
-  const getValueOrDefaultZero = (value) => {
+  const getValueOrDefaultZero = (value?: number | string): number | string => {
     return value || 0;
   };
 
