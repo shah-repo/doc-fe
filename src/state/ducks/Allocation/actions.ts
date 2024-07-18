@@ -1,0 +1,123 @@
+import { AllocationLOTBody, AllocationPartBody } from '../../../ui/form.builder/FBAllocation/components/treelist/interface';
+import { AllocationItem, LatestPartRevisionInfo } from '../../../ui/form.builder/FBAllocation/interface';
+import { apiAction, apiActionWithCallbacks } from '../../factories';
+import { ApiAction, Handlers } from '../../types';
+import { ALLOCATION_LIST_ROOT_URL, LATEST_PART_REVISION_URL } from './constants';
+
+const loadAllocationList = (
+  woId: string,
+  handlers: Handlers,
+): ApiAction<AllocationItem[]> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}`,
+    method: 'get',
+    handlers,
+  });
+
+const autoAssignLOT = (
+  woId: string,
+  handlers: Handlers,
+): ApiAction<AllocationItem[]> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/autoAssign`,
+    method: 'get',
+    handlers,
+  });
+
+const addPart = (
+  data: AllocationPartBody,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}`,
+    method: 'post',
+    data: data,
+    handlers,
+  });
+
+const updatePart = (
+  woId: string,
+  partRevId: string,
+  isAutoAssigned: boolean,
+  data: AllocationPartBody,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiAction({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/parts/${partRevId}`,
+    method: 'patch',
+    data: data,
+    onSuccess: (unknown, dispatch) => {
+      if (isAutoAssigned) {
+        dispatch(autoAssignLOT(woId, handlers));
+      } else {
+        handlers.successHandler.execute(null);
+      }
+    },
+    onFailure: handlers.errorHandler.execute,
+  });
+
+const addLot = (
+  data: AllocationLOTBody,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}`,
+    method: 'post',
+    data: data,
+    handlers,
+  });
+
+const deleteLot = (
+  woId: string,
+  partRevId: string,
+  lotRevId: string,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/parts/${partRevId}/lots/${lotRevId}`,
+    method: 'delete',
+    handlers,
+  });
+
+const deletePart = (
+  woId: string,
+  partRevId: string,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}/parts/${partRevId}`,
+    method: 'delete',
+    handlers,
+  });
+
+const deleteAllocation = (
+  woId: string,
+  handlers: Handlers,
+): ApiAction<AllocationItem> =>
+  apiActionWithCallbacks({
+    url: `${ALLOCATION_LIST_ROOT_URL}/${woId}`,
+    method: 'delete',
+    handlers,
+  });
+
+const fetchLatestPartRevision = (
+  partRevId: string,
+  handlers: Handlers,
+): ApiAction<LatestPartRevisionInfo> =>
+  apiActionWithCallbacks({
+    url: `${LATEST_PART_REVISION_URL}/${partRevId}`,
+    method: 'get',
+    handlers,
+  });
+
+export default {
+  loadAllocationList,
+  autoAssignLOT,
+  addPart,
+  addLot,
+  updatePart,
+  deleteLot,
+  fetchLatestPartRevision,
+  deletePart,
+  deleteAllocation,
+};

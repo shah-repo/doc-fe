@@ -1,0 +1,113 @@
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  FormControl,
+  IconButton,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@material-ui/core';
+import React from 'react';
+import { ReactComponent as ViewGridIcon } from '../../../../assets/images/grid_view.svg';
+import { ReactComponent as SolidIcon } from '../../../../assets/images/view.svg';
+import { ReactComponent as ViewChecked } from '../../../../assets/images/view_checked.svg';
+import { translate } from '../../../../common/intl';
+import Text from '../../../components/Text';
+import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTooltip';
+import { styles } from './ColumnShowHideTreeMenu.styles';
+import { CustomTreeListColumnProps } from './types';
+
+interface Props<T> {
+  columnDefinition: T[]
+  onChange: (colum: T) => void
+}
+
+function ColumnShowHideTreeMenu<T extends CustomTreeListColumnProps> ({
+  columnDefinition,
+  onChange,
+}: Props<T>): React.ReactElement {
+  const classes = styles();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const isOpened = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <FormControl variant="outlined">
+      <StyleTooltip
+        title={<Text translation="common.column" />}
+        placement="top"
+        arrow
+      >
+        <IconButton onClick={handleClick} data-cy="manage-columns-btn">
+          <ViewGridIcon className={classes.viewIcon} />
+        </IconButton>
+      </StyleTooltip>
+      <Menu
+        id="bom-togglecolumns-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={isOpened}
+        onClose={handleClose}
+      >
+        <Card>
+          <CardHeader
+            className={classes.headerMenuItem}
+            title={
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.columnsCus}
+                data-cy="column-menu"
+                color="textPrimary"
+              >
+                <Text translation="common.column" />
+              </Typography>
+            }
+          />
+
+          <CardContent className={classes.box}>
+            {columnDefinition.map((item: T) => (
+              <MenuItem
+                key={item.title}
+                value={item.field}
+                disabled={item.disableShowOrHideSelection}
+              >
+                <ListItemText
+                  id={item.field}
+                  primary={
+                    <Typography className={classes.menuItem} data-cy={`${item.title}-${item.isHidden}`}>
+                      {translate(item.title ?? '').toUpperCase()}
+                    </Typography>
+                  }
+                />
+                <Box flexGrow={1} mr={5} />
+                {item.isHidden ? (
+                  <ViewChecked
+                    onClick={() => {
+                      onChange(item);
+                    }}
+                  />
+                ) : (
+                  <SolidIcon
+                    onClick={() => {
+                      onChange(item);
+                    }}
+                  />
+                )}
+              </MenuItem>
+            ))}
+          </CardContent>
+        </Card>
+      </Menu>
+    </FormControl>
+  );
+}
+
+export default ColumnShowHideTreeMenu;

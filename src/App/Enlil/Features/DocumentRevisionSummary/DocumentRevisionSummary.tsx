@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import FBMaterialDisposition from '../../../../ui/change.request/FBMaterialDisposition';
@@ -17,8 +17,11 @@ import SummaryHeader from '../../../../ui/document.revision/header/SummaryHeader
 import Attachment from '../../../../ui/document.revision/summary/attachment';
 import SummaryPresenter from '../../../../ui/document.revision/summary/presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
-import { checkIsDocumentChangeRequest, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
+import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
+import FBLHRSummary from '../../../../ui/form.builder/FBLHRSummary';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMForm } from '../../../Shifamed/Components/SMForm/SMForm.hoc';
@@ -41,6 +44,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const hasOutput = isDocumentRevisionHasOutput(documentRevision);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
   const isPartForm = checkIsDocumentPart(
@@ -58,6 +62,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   );
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+  const isWO = checkIsDocumentWOByGroupOrOptions(group, groupOptions);
   let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, group));
   if (tabConfig && [DOC_TYPE_GROUP.LHR, DOC_TYPE_GROUP.LHRT, DOC_TYPE_GROUP.ENGINEERING_BUILD, DOC_TYPE_GROUP.PI]
@@ -78,11 +83,25 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
   if (tabConfig && [DOC_TYPE_GROUP.PART]
     .includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = tabConfig && [...tabConfig, {
+    tabConfig = [...tabConfig, {
       labelId: 'tabId.bom',
       tabId: TabTypeOptions.BOM.toLowerCase(),
       type: TabTypeOptions.BOM,
     }];
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.PAPER_LHR]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = [...tabConfig, {
+      labelId: 'tabId.summary',
+      tabId: TabTypeOptions.SUMMARY.toLowerCase(),
+      type: TabTypeOptions.SUMMARY,
+    }];
+  }
+
+  if (isWO && !documentRevision.formTemplate && documentRevision.formInput?.work_order_type === WorkOrderTypes.OTHER) {
+    // hide allocation & BOM Tabs on Work order Other case
+    tabConfig = tabConfig.filter(tab => ![TabTypeOptions.BOM, TabTypeOptions.ALLOCATION].includes(tab.type as TabTypeOptions));
   }
 
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
@@ -150,7 +169,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           rightSidebar: (
             <Observer>
               {() => (
-                <DocumentRevisionSidebar isSliderView={isSliderView} />
+                <DocumentRevisionSidebar isSliderView={isSliderView} tabConfig={tabConfig} />
               )}
             </Observer>
           ),
@@ -247,16 +266,20 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                 />
                               )}
                               {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision} isDisabled={true} isShowOnly={isPartForm}
-                                  isUpgradeDisabled={true}
+                                <FBBOM documentRevision={documentRevision} isDisabled={true} isShowOnly={isPartForm || (isWO && !isEmpty(documentRevision?.formTemplate))}
+                                  isUpgradeDisabled={true} isWO={isWO}
                                 />
                               )}
-                              {tabType
-                                === TabTypeOptions.MATERIAL_DISPOSITION
+                              {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
+                                <FBAllocationTreeList documentRevision={documentRevision} isDisabled={true} />)}
+                              {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                                 && _tabsState?.isTabActive(
                                   TabTypeOptions.MATERIAL_DISPOSITION,
                                 ) && (
                                 <FBMaterialDisposition isShowOnly={true} />
+                              )}
+                              {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
+                                <FBLHRSummary isShowOnly={!hasOutput} isDisabled={true} />
                               )}
                               {tabType === TabTypeOptions.ITEMS && (
                                 <ItemsAndDetailsWrapper

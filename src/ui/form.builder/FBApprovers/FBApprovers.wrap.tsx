@@ -1,10 +1,11 @@
 import { Box } from '@material-ui/core';
-import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map, some, sortBy } from 'lodash';
+import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map, some, sortBy, union } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useMemo } from 'react';
 import { FB, FBApprover, FBApproversProps, FBApproversState, FBDocumentRevisionsValue, FBJoinedEmployee, FBOption, FBRequiredApprover } from '..';
-import { Approval } from '../../../state/ducks/common/types';
+import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
+import { Approval, ApprovalStatus } from '../../../state/ducks/common/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import { checkIsDocumentPO } from '../../documentRevision/helpers/checkDocumentGroup';
 import Colors from '../../layout/theme/utils/colors';
@@ -24,9 +25,12 @@ export const withFBApprovers = <T extends FBApproversProps>(
     checkedGroups,
     defaultValue = [],
     disabled,
+    approvalApprovedGroup,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
+    const { changeRequest } = workspaceState || {};
+    const { approvals } = changeRequest || {};
     const { submitForm } = useFormContext();
     const schema = workspaceState?.getSchema();
     const { name: docRevName } = useMemo(() => find(schema, { type: 'documentRevisions' }) ?? {}, [schema]);
@@ -176,6 +180,25 @@ export const withFBApprovers = <T extends FBApproversProps>(
       disabled = !workspaceState?.changeRequest;
     });
 
+    const approvedStates = [
+      ChangeRequestStatus.Closed,
+      ChangeRequestStatus.Approved,
+    ];
+    const isApproved = changeRequest?.state && approvedStates.includes(changeRequest?.state);
+
+    if (isApproved) {
+      if (approvals?.length) {
+        approvalApprovedGroup = approvals.reduce((list, approval) => {
+          if (approval.status !== ApprovalStatus.Approved) {
+            return list;
+          }
+          return union(list, approval.approverGroups);
+        }, []);
+      } else {
+        groups = {};
+      }
+    }
+
     return Component({
       ...(props as T),
       renderOption,
@@ -188,6 +211,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       defaultValue,
       disabled,
       changeRequestApprovals,
+      approvalApprovedGroup,
     });
   };
 

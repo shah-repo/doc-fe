@@ -80,8 +80,15 @@ export type FBInputType =
   | 'lotQuantity'
   | 'lotOnHandQuantity'
   | 'partVendors'
+  | 'traineeList'
   | 'numeric'
-  | 'cycleCount';
+  | 'cycleCount'
+  | 'workOrderPartDetails'
+  | 'tasksListTable'
+  | 'workOrderLhrTable'
+  | 'woApprovals'
+  | 'workOrderType'
+  ;
 
 export type FBInputProps =
   & FBLabelProps
@@ -255,8 +262,10 @@ export const FBAutosave: FBInputType[] = [
   'texteditor',
   'lotTransfers',
   'partVendors',
+  'traineeList',
   'numeric',
   'cycleCount',
+  'workOrderType',
 ];
 
 export const SectionTypeField: FBInputType[] = [

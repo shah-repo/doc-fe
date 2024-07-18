@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import { Formik, FormikProps, useFormikContext } from 'formik';
-import { filter, get, includes, map, size } from 'lodash';
+import { cloneDeep, filter, get, includes, map, size } from 'lodash';
 import { Observer } from 'mobx-react';
 import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -11,17 +11,20 @@ import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
 import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';
 import { DocTypeGroups } from '../../../../../../dashboard.new/line.items/common/types';
 import AttachmentsField from '../../../../../../document.revision/form/attachments';
-import { FB, FBBOM, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
+import { FB, FBBOM, FBEditorState, FBProvider, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from '../../../../../../form.builder';
+import FBAllocationTreeList from '../../../../../../form.builder/FBAllocation/components/treelist';
+import FBLHRSummary from '../../../../../../form.builder/FBLHRSummary';
 import FBMaterialEqInfoContainer from '../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
+import FBDataStore from '../../../../../../form.builder/FBStore/FBDataStore';
 import { DocumentCloneTypeOptions } from '../../../../../Clone.container';
 import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart } from '../../../../../helpers/checkDocumentGroup';
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentOTHER, checkIsDocumentPart, checkIsDocumentWO } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
 import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../../related.equipments';
@@ -48,7 +51,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 }) => {
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
-  const { workspaceState, formState } = FB.useStores();
+  const { workspaceState } = FB.useStores();
   const previewWorkspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
     schema: workspaceState?.schema ?? _documentRevisionFormState?.schema,
     mode: FBWorkspaceModeOptions.FORM,
@@ -79,11 +82,13 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   // By default the documentType points to being a Form, but while previewing, it needs to
   // behave as if it is the documentType that was selected as an output.
   if (documentRevision && outputType) {
+    FBDataStore.documentTypes = documentRevision.document.documentType;
     documentRevision.document.documentType = outputType;
   }
   const outputTypeGroup = get(outputType, 'group');
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+  const isWO = group === DOC_TYPE_GROUP.WORK_ORDER || checkIsDocumentWO(documentType?.groupOptions);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);
@@ -102,6 +107,11 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       ? checkIsDocumentPart((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
       : false,
   );
+  const isOther = checkIsDocumentOTHER(documentRevision.document.documentType.groupOptions);
+  const isOtherForm = useSelector(
+    (state: ApplicationState) => documentRevision?.formTemplate
+      ? checkIsDocumentOTHER((documentRevision?.formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+      : false);
 
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
@@ -151,10 +161,19 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   if (tabConfig && [DOC_TYPE_GROUP.PART]
     .includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = tabConfig && [...tabConfig, {
+    tabConfig = [...tabConfig, {
       labelId: 'tabId.bom',
       tabId: TabTypeOptions.BOM.toLowerCase(),
       type: TabTypeOptions.BOM,
+    }];
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.PAPER_LHR]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = [...tabConfig, {
+      labelId: 'tabId.summary',
+      tabId: TabTypeOptions.SUMMARY.toLowerCase(),
+      type: TabTypeOptions.SUMMARY,
     }];
   }
 
@@ -174,13 +193,17 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     _formState?.setMode(mode);
     workspaceState?.setMode(mode);
 
+    if (isWO && !documentRevision.formTemplate && initialValues?.formInput?.work_order_type === WorkOrderTypes.OTHER) {
+      // hide allocation & BOM Tabs on Work order Other case
+      tabConfig = tabConfig.filter(tab => ![TabTypeOptions?.BOM, TabTypeOptions?.ALLOCATION].includes(tab.type as TabTypeOptions));
+    }
+
     return () => {
       if (prevMode.current) {
         workspaceState?.setMode(prevMode.current);
       }
-      schema?.map((item) => formState?.setFieldValue(item.name, null));
     };
-  }, [_formState, initialValues, workspaceState, mode, formState, schema]);
+  }, [_formState, initialValues, workspaceState, mode]);
 
   useEffect(() => () => {
     documentRevision.document.documentType = documentType;
@@ -239,7 +262,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
-                        {((isPart || isPartForm) && formPreview) && (
+                        {((isPart || isPartForm || isOther || isOtherForm) && formPreview) && (
                           <Grid item xs={12}>
                             <RelatedPartsWrapper
                               viewOnly={true}
@@ -296,9 +319,15 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                           docRevStatus={documentRevision?.status}
                         />
                       )}
+                      {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
+                        <FBLHRSummary isShowOnly={false} isDisabled={true} />
+                      )}
+                      {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
+                        <FBAllocationTreeList documentRevision={documentRevision} isDisabled={true} />
+                      )}
                       {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
                         <FBBOM documentRevision={documentRevision}
-                          isDisabled={true} isShowOnly={true} />
+                          isDisabled={true} isShowOnly={true} isWO={isWO} />
                       )}
                       {tabType === TabTypeOptions.MATERIAL_DISPOSITION
                         && _tabsState?.isTabActive(
@@ -319,17 +348,27 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 const DocumentPreviewContainer: React.FunctionComponent<ContainerProps> = (props) => {
   const { workspaceState } = FB.useStores();
 
+  const previewWorkspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+    schema: workspaceState?.schema,
+    mode: FBWorkspaceModeOptions.FORM,
+    autosave: false,
+  });
+
+  previewWorkspaceState.document = cloneDeep(workspaceState?.document);
+
   const formik = useFormikContext<DocumentRevisionFormValues>();
   const initialValues = formik?.values ?? workspaceState?.document;
 
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize={true}
-      onSubmit={emptyFunction}
-    >
-      {(formikProps) => <DocumentPreview {...props} formik={formikProps} />}
-    </Formik>
+    <FBProvider workspaceState={previewWorkspaceState}>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize={true}
+        onSubmit={emptyFunction}
+      >
+        {(formikProps) => <DocumentPreview {...props} formik={formikProps} />}
+      </Formik>
+    </FBProvider>
   );
 };
 

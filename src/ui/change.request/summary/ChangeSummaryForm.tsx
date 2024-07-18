@@ -74,7 +74,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
-  if (tabConfig.findIndex((tab: TabInfo) => tab.labelId === 'tabId.items') === -1) {
+  if (tabConfig?.findIndex((tab: TabInfo) => tab.labelId === 'tabId.items') === -1) {
     tabConfig.splice(1, 0, {
       labelId: 'tabId.items',
       tabId: TabTypeOptions.ITEMS.toLowerCase(),
@@ -123,7 +123,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
-                setOpen={changeSidebarOpenStatus} fromEdit={true} />}
+                setOpen={changeSidebarOpenStatus} fromEdit tabConfig={tabConfig} />}
             </Observer>
           ),
         }}

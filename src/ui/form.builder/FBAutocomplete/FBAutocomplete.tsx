@@ -1,15 +1,15 @@
 import { Box, IconButton, Popper, TextField, Typography } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
 import { RenderInputParams } from '@material-ui/lab/Autocomplete';
-import { get, includes, isEmpty } from 'lodash';
+import { get, includes } from 'lodash';
 import { Observer } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from '..';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
-import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ApprovalStatus } from '../../../state/ducks/documents/types';
-import ListBoxComponent from '../../components/common/autocomplete/ListBoxComponent';
 import Text from '../../components/Text';
+import ListBoxComponent from '../../components/common/autocomplete/ListBoxComponent';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { withFBAutocomplete } from './FBAutocomplete.wrap';
 import { StyledAutoComplete, StyledChip, StyledPopupAutoComplete } from './StyledAutoComplete';
@@ -46,6 +46,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   type,
   customStyles,
   autoCompleteClasses,
+  onBlur,
   ...props
 }) => {
   const { workspaceState, dialogState } = FB.useStores();
@@ -63,6 +64,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         {...params}
         {...!params.InputProps.startAdornment && { placeholder }}
         onChange={onInputChange}
+        onBlur={onBlur}
         onKeyDown={(event: React.KeyboardEvent) => {
           const key = event.keyCode || event.charCode;
           if (key === 8 && disableBackspace) {
@@ -127,16 +129,17 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     if (documentType === DOC_TYPE_GROUP.PART && !props.showErrorMsg) {
       return props.showErrorMsg;
     }
+
+    if (props.name === WO_PART_KEY_NAME) {
+      return false;
+    }
+
     return true;
   };
 
   disabled = includes(['fb-approvers-approvers', 'form.builder.approvers'], props.name)
     && includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
     ? true : disabled;
-
-  if (multiple && isEmpty(value) && workspaceState.isPreview) {
-    multiple = false;
-  }
 
   return (
     <>
@@ -175,6 +178,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             ListboxComponent={groupByKey ? undefined : ListBoxComponent }
             renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
             renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
+            blurOnSelect={freeSolo}
           /> : <StyledAutoComplete
             {...{
               getOptionDisabled,
@@ -195,6 +199,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
             renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
             PopperComponent={(props) => (<Popper {...props} />)}
+            blurOnSelect={freeSolo}
           />}
         </FBInput>}
       </Observer>

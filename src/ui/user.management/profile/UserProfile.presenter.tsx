@@ -41,7 +41,6 @@ interface OwnProps {
   userId: string
   isDeveloper: boolean
   canUpdateCompany: boolean
-  canUpdateLocations: boolean
 }
 
 type Props = OwnProps;
@@ -73,7 +72,6 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   callbackUpdateWithUpload,
   isDeveloper,
   canUpdateCompany,
-  canUpdateLocations,
 }) => {
   const [usernameError, setUsernameError] = useState<Translation | null>(null);
   const currentUserId = useSelector(authSelectors.currentUserId);
@@ -157,7 +155,6 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
         usernameError={usernameError}
         isDeveloper={isDeveloper}
         canUpdateCompany={canUpdateCompany}
-        canUpdateLocations={canUpdateLocations}
       />
     </Dialog>
   );

@@ -1,6 +1,7 @@
 import List from '@material-ui/core/List';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { ActionCreator } from 'redux';
 import {
   getFormattedDateString,
   MomentFormats,
@@ -9,8 +10,10 @@ import { authSelectors } from '../../../state/ducks/auth';
 import {
   ActionTypes,
   LINE_ITEMS_STATUS_TYPES,
+  MyFeedsListApiResponse,
 } from '../../../state/ducks/dashboard.new/my.feeds/types';
-import { AsyncState } from '../../../state/types';
+import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/documentType/types';
+import { ApiAction, AsyncState } from '../../../state/types';
 import AsyncGate from '../../components/AsyncGate';
 import LoadMoreButton from '../../components/common/load.more.button/LoadMoreButton';
 import { DialogHandler } from '../../hooks/useDialog';
@@ -26,6 +29,7 @@ import ARTaskApproval from '../line.items/approvals/task.approval/taskApproval';
 import CalibrationItem from '../line.items/calibration/calibrationItem';
 import DefaultLineItem from '../line.items/default/defaultLineItem';
 import TaskAssignedItemPresenter from '../line.items/disposition.tasks/taskAssignedItem';
+import TaskCompletedItemPresenter from '../line.items/disposition.tasks/taskCompletionItem';
 import POApproverActions from '../line.items/purchase.order/approver.actions/approverActions';
 import PurchaseOrder from '../line.items/purchase.order/default/purchaseOrder';
 import PurchaseOrderPendingReview from '../line.items/purchase.order/pending.review/purchaseOrder';
@@ -35,7 +39,7 @@ import TrainingItem from '../line.items/training/default/DefaultTraining';
 import NoPendingActions from '../NoPendingActions';
 
 interface Props {
-  loadMyFeeds: any
+  loadMyFeeds: ActionCreator<ApiAction<MyFeedsListApiResponse, any>>
   hoverItemId: string
   pinLineItem?: (id: string) => void
   unPinLineItem?: (pinnedItemId: string) => void
@@ -153,6 +157,33 @@ const LineItemsPresenter: React.FC<Props> = ({
               );
             case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
             case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
+              if (pendingAction.docTypeGroup === DOC_TYPE_GROUP_OPTION.WORK_ORDER) {
+                return (
+                  <TaskCompletedItemPresenter
+                    key={pendingAction.id}
+                    id={pendingAction.id}
+                    ownerName={pendingAction.docRevOwnerName}
+                    ownerAvatar={pendingAction.docRevOwnerAvatar}
+                    ownerInitialColor={pendingAction.docRevOwnerInitialColor}
+                    loadMyFeeds={loadMyFeeds}
+                    timestamp={getFormattedDateString(
+                      pendingAction.timestamp,
+                      MomentFormats.BriefDateTime,
+                    )}
+                    approvalId={pendingAction.approvalId}
+                    docId={pendingAction.docId}
+                    revId={pendingAction.docRevId}
+                    docDocumentId={pendingAction.docDocumentId}
+                    displayRevision={pendingAction.docRevVersion}
+                    onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
+                    dismissLineItem={dismissLineItem}
+                    isPinned={pendingAction.pinned}
+                    hoverItemId={hoverItemId}
+                  />
+                );
+              }
               return (
                 <NONPOTaskApproval
                   key={pendingAction.id}
@@ -361,6 +392,9 @@ const LineItemsPresenter: React.FC<Props> = ({
               );
             case ActionTypes.DIRECT_APPROVAL_REQ_OWNER:
               if (pendingAction.docRevStatus === 'IN_REVIEW') {
+                if (pendingAction.docRevPendingApprovals.length === 0) {
+                  return null;
+                }
                 return (
                   <DirectApprovalActionPRItem
                     key={pendingAction.id}
@@ -439,6 +473,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                     pendingAction.dueOn,
                     MomentFormats.ShortBriefDate,
                   )}
+                  trainingSourceReferences={pendingAction.trainingSourceReferences}
                   hoverItemId={hoverItemId}
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
@@ -582,24 +617,53 @@ const LineItemsPresenter: React.FC<Props> = ({
                   key={pendingAction.id}
                   id={pendingAction.id}
                   type={pendingAction.type}
-                  arOwnerName={pendingAction.arOwnerName}
-                  arOwnerAvatar={pendingAction.arOwnerAvatar}
-                  arOwnerInitialColor={pendingAction.arOwnerInitialColor}
+                  ownerName={pendingAction.arOwnerName}
+                  ownerAvatar={pendingAction.arOwnerAvatar}
+                  ownerInitialColor={pendingAction.arOwnerInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime,
                   )}
                   status={pendingAction.taskStatus}
                   instruction={pendingAction.taskInstruction}
-                  arTitle={pendingAction.arTitle}
-                  arId={pendingAction.arId}
-                  arChangeRequestId={pendingAction.arChangeRequestId}
+                  title={pendingAction.arTitle}
+                  docId={pendingAction.arId}
+                  revId={pendingAction.arChangeRequestId}
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
                   dismissLineItem={dismissLineItem}
                   isPinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
+                  isChangeRequest={true}
+                />
+              );
+            case ActionTypes.WORK_ORDER_TASKS_ASSIGNED:
+              return (
+                <TaskAssignedItemPresenter
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  type={pendingAction.type}
+                  ownerName={pendingAction.docRevOwnerName}
+                  ownerAvatar={pendingAction.docRevOwnerAvatar}
+                  ownerInitialColor={pendingAction.docRevOwnerInitialColor}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime,
+                  )}
+                  status={pendingAction.taskStatus}
+                  instruction={pendingAction.taskInstruction}
+                  docId={pendingAction.docId}
+                  revId={pendingAction.docRevId}
+                  documentId={pendingAction.documentId}
+                  displayRevision={pendingAction.displayRevision}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
+                  isPinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                  isDocumentRevision={true}
                 />
               );
               // falls through

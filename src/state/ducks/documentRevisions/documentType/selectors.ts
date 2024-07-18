@@ -4,9 +4,9 @@ import { removeLastCharacterIfNotAlphaNumeric } from '../../../../ui/common/util
 import { checkIfDocumentHasOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { ApplicationState } from '../../../reducers';
 import { AsyncState } from '../../../types';
-import { DocumentGroupType, DocumentType, DOC_TYPE_GROUP_OPTION, TabInfo } from './types';
 import { companySelectors } from '../../company';
 import { DocumentCategory } from '../types';
+import { DOC_TYPE_GROUP_OPTION, DocumentGroupType, DocumentType, DocumentTypeByIdState, TabInfo } from './types';
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -67,6 +67,7 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
             DOC_TYPE_GROUP_OPTION.SUPPLIER,
             DOC_TYPE_GROUP_OPTION.PO,
             DOC_TYPE_GROUP_OPTION.RECEIVABLE,
+            DOC_TYPE_GROUP_OPTION.GROUP_TRAINING,
           ],
           documentTypes[id].groupOptions,
         ),
@@ -88,6 +89,16 @@ const getDocumentTypeByAcronym = createSelector(
       .values(docTypesById)
       .find((docType) => docType.documentTypeAcronym.toLowerCase() === acronym.toLowerCase()),
 );
+
+const getDocumentTypeByGroup = createSelector(
+  byId,
+  (state: ApplicationState, group: DOC_TYPE_GROUP_OPTION) => group,
+  (docTypesById: DocumentTypeByIdState, group: DOC_TYPE_GROUP_OPTION) =>
+    Object
+      .values(docTypesById)
+      .find((docType) => docType.group === group),
+);
+
 const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0]
   ? state.documentType.docRevTypeId.forms[0].id : '';
 
@@ -141,6 +152,7 @@ export default {
   getDocumentTypeById,
   getDocumentTypesWithPageDetails,
   getDocumentTypeByAcronym,
+  getDocumentTypeByGroup,
   docRevTypeById,
   getDocTypeName,
   getDocTypeCategory,

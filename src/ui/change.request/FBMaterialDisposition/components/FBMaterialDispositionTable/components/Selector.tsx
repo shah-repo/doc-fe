@@ -99,6 +99,7 @@ export const Selector: React.FC<Props> = ({ containerRef }) => {
           <div
             className={classes.selecterHandler}
             onMouseDown={handleMouseDown}
+            data-cy="selection-handler"
             ref={selecterHandlerRef}
           />
         </div>

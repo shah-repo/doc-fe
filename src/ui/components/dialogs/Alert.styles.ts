@@ -6,12 +6,13 @@ export default makeStyles(theme => ({
     width: 520,
   },
   contentWrapper: {
+    width: '100%',
     paddingTop: theme.spacing(0.75),
   },
   content: {
     display: 'flex',
     alignItems: 'flex-start',
-    padding: theme.spacing(3),
+    padding: theme.spacing(3, 3, 0),
     whiteSpace: 'pre-line',
   },
   title: {
@@ -22,7 +23,10 @@ export default makeStyles(theme => ({
     fontSize: 26,
     marginRight: theme.spacing(2),
   },
-  icon: {
+  iconError: {
     color: Colors.error,
+  },
+  iconWarning: {
+    color: Colors.warning,
   },
 }));

@@ -41,5 +41,8 @@ export default makeStyles((theme: NextTheme) => ({
     mobileTab: {
       display: 'none',
     },
+    tabs: {
+      overflowX: 'hidden',
+    },
   },
 }));

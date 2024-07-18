@@ -75,8 +75,8 @@ export const withFBOnChange = <T extends FBInputProps>(
       // TODO: refactor with state opt
       formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
 
-      if (!isFbEditorField && !workspaceState?.isPreview) {
-        FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
+      if (!isFbEditorField) {
+        FBDataStore?.setRefreshData(workspaceState?.isPreview ? FBDataStore?.refreshData : cloneDeep(FBDataStore?.refreshData));
       }
 
       if (type && !FBInputState.omitOnChange.includes(type)) {

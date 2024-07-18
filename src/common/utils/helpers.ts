@@ -1,10 +1,11 @@
 import Base64 from 'Base64';
 import DOMPurify from 'dompurify';
-import { cloneDeep, get, debounce, DebounceSettings } from 'lodash';
+import { cloneDeep, debounce, DebounceSettings, get, isEmpty } from 'lodash';
 import { useEffect } from 'react';
 import striptags from 'striptags';
 import Config from '../../config';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
+import { WorkOrderTypes, WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
 
 export const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
@@ -88,3 +89,25 @@ export function asyncDebounce (func: (...args: any) => any, wait?: number, optio
     debounced(resolve, reject, args);
   });
 }
+
+export const getPayloadBasedOnWorkOrderType = (payload: Record<string, unknown>): Record<string, unknown> => {
+  if (isEmpty(payload)) {
+    return payload;
+  }
+
+  if (payload[WO_TYPE_KEY] !== '') {
+    if (payload[WO_TYPE_KEY] === WorkOrderTypes.OTHER) {
+      payload[WO_LOT_ID_KEY_NAME] = '';
+      payload[WO_LHR_TABLE_KEY_NAME] = [];
+      delete payload[WO_PART_UNIT_KEY_NAME];
+      delete payload[WO_PART_QTY_KEY_NAME];
+      payload[WO_PART_KEY_NAME] = '';
+    } else if (payload[WO_TYPE_KEY] === WorkOrderTypes.MAKE_PRODUCT) {
+      payload[WO_LOT_ID_KEY_NAME] = '';
+    } else if (payload[WO_TYPE_KEY] === WorkOrderTypes.MAKE_KIT) {
+      payload[WO_LHR_TABLE_KEY_NAME] = [];
+    }
+  }
+
+  return payload;
+};

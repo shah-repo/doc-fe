@@ -37,7 +37,7 @@ export interface BOM {
   changeRequestDetails?: ChangeRequestDetails
   costRollUp?: number
   isEditEnabled?: boolean
-  uniqid?: string
+  uniqueId?: string
   enabledFieldsForEditing?: string[]
   inRestrictedEditMode?: boolean
 }
@@ -59,6 +59,8 @@ export interface EditableBOM extends BOM {
   replacementStatus?: string
   isMaximizedWindow?: boolean
   parentDocId?: string
+  hasChildren?: boolean
+  isWO?: boolean
 }
 
 export interface BOMEditEvent {

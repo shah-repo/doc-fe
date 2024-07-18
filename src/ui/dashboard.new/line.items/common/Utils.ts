@@ -21,22 +21,25 @@ export const formatNumberToCurrency = (data: number) => {
   return data;
 };
 
-export const toFixed = (value: string | number) => {
+const DEFAULT_PRECISION = 10;
+
+export const toFixed = (value: string | number, precision = DEFAULT_PRECISION) => {
   if (Number.isNaN(toNumber(value))) {
     return value;
   }
-  if (!Number.isInteger(toNumber(value)) && isMoreDigitsAfterDecimal(value, 10)) {
-    return toNumber(toFixedDecimals(value));
+  if (!Number.isInteger(toNumber(value)) && isMoreDigitsAfterDecimal(value, precision)) {
+    return toNumber(toFixedDecimals(value, precision));
   } else { return toNumber(value); }
 };
-export const toFixedDecimals = (value: string | number) => {
+export const toFixedDecimals = (value: string | number, precision = DEFAULT_PRECISION) => {
   if (Number.isNaN(toNumber(value))) {
     return value;
   }
   const arr = value?.toString()?.split('.');
-  return `${arr[0]}.${arr[1].slice(0, 10)}`;
+  return `${arr[0]}.${arr[1].slice(0, precision)}`;
 };
-export const isMoreDigitsAfterDecimal = (value: string | number, length: number) => value?.toString()?.split('.')[1]?.length > length;
+export const isMoreDigitsAfterDecimal = (value: string | number, length: number) => getDigitsCountAfterDecimal(value) > length;
+export const getDigitsCountAfterDecimal = (value: string | number) => value?.toString()?.split('.')[1]?.length;
 export const linearScale = (domain: number[], range: number[]) => {
   const scale = (value: number) => {
     const [minValue, maxValue] = [...domain];

@@ -55,6 +55,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       })) : undefined;
 
     useEffect(() => {
+        approvalMatrixState?.setMode('refresh');
         approvalMatrixState?.setData(cloneDeep(props?.formInput) as FBApprovalMatrixFieldData);
     }, [approvalMatrixState, props?.formInput]);
 

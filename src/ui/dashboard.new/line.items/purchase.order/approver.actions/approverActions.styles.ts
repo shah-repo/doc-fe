@@ -39,6 +39,9 @@ export default makeStyles((theme: NextTheme) => ({
       display: 'flex',
     },
   },
+  poAttachmentMargin: {
+    marginBottom: theme.spacing(0),
+  },
   [theme.media.mobile]: {
     truncateMobile: {
       textOverflow: 'ellipsis',
@@ -58,6 +61,13 @@ export default makeStyles((theme: NextTheme) => ({
     },
     poActionIconsWidth: {
       display: 'none',
+    },
+    typographyChildrenBold: {
+      marginLeft: theme.spacing(-2),
+      paddingRight: theme.spacing(2),
+    },
+    poAttachmentMargin: {
+      marginBottom: theme.spacing(2),
     },
   },
 }));
