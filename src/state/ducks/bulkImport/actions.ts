@@ -10,102 +10,98 @@ import { downloadFile } from './utils';
 
 const REPORT_CSV = 'report.csv';
 
-const COMMON_TRIGGER_ERROR = {
-  onFailure: (err) => toastError(err),
-};
-
 // STEPS
 
-export const resetSteps = () => ({
+export const resetSteps = (): { type: string } => ({
   type: RESET_STEPS,
 });
 
-export const setCurrentStep = (step: number) => ({
+export const setCurrentStep = (step: number): { type: string, payload: number } => ({
   type: CURRENT_STEP,
   payload: step,
 });
 
-const setDataTypes = (data: DataType) => ({
+const setDataTypes = (data: DataType): { type: string, payload: DataType } => ({
   type: SET_DATA_TYPES,
   payload: data,
 });
 
-const setFormDocumentsTypeGroup = (data: FormDocumentTypeGroup[]) => ({
+const setFormDocumentsTypeGroup = (data: FormDocumentTypeGroup[]): { type: string, payload: FormDocumentTypeGroup[] } => ({
   type: SET_FORM_DOCUMENTS_TYPE_GROUP,
   payload: data,
 });
 
-export const setBulkImport = (data: BulkImport) => ({
+export const setBulkImport = (data: BulkImport): { type: string, payload: BulkImport } => ({
   type: SET_BULK_IMPORT,
   payload: data,
 });
 
-export const setTemplateFile = (file: File[]) => ({
+export const setTemplateFile = (file: File[]): { type: string, payload: File[] } => ({
   type: SET_TEMPLATE_FILE,
   payload: file,
 });
 
-const setXlsxFile = (attachment: BKAttachmentFile) => ({
+const setXlsxFile = (attachment: BKAttachmentFile): { type: string, payload: BKAttachmentFile } => ({
   type: SET_XLSX_FILE,
   payload: attachment,
 });
 
-export const setShowTable = (payload: boolean) => ({
+export const setShowTable = (payload: boolean): { type: string, payload: boolean } => ({
   type: SET_SHOW_TABLE,
   payload,
 });
 
-export const setOnlyErrorsTable = (payload: boolean) => ({
+export const setOnlyErrorsTable = (payload: boolean): { type: string, payload: boolean } => ({
   type: SET_ONLY_ERRORS_TABLE,
   payload,
 });
 
-const setHeaders = (payload: Headers) => ({
+const setHeaders = (payload: Headers): { type: string, payload: Headers } => ({
   type: SET_HEADERS,
   payload,
 });
 
-export const setTableData = (payload: TableRow[]) => ({
+export const setTableData = (payload: TableRow[]): { type: string, payload: TableRow[] } => ({
   type: SET_TABLE_DATA,
   payload,
 });
 
-export const updateRowFieldTable = (payload: UpdateRowFieldTablePayload) => ({
+export const updateRowFieldTable = (payload: UpdateRowFieldTablePayload): { type: string, payload: UpdateRowFieldTablePayload } => ({
   type: UPDATE_ROW_FIELD_TABLE,
   payload,
 });
 
-const setApprovers = (payload: Approver[]) => ({
+const setApprovers = (payload: Approver[]): { type: string, payload: Approver[] } => ({
   type: SET_APPROVALS,
   payload,
 });
 
-const setApproval = (payload: Approval) => ({
+const setApproval = (payload: Approval): { type: string, payload: Approval } => ({
   type: SET_APPROVAL,
   payload,
 });
 
-const setBulkImports = (payload: BulkImport[]) => ({
+const setBulkImports = (payload: BulkImport[]): { type: string, payload: BulkImport[] } => ({
   type: SET_BULK_IMPORTS,
   payload,
 });
 
-export const setIsLoading = (payload: boolean) => ({
+export const setIsLoading = (payload: boolean): { type: string, payload: boolean } => ({
   type: SET_IS_LOADING,
   payload,
 });
 
-export const setDataTypeFilter = (payload: string) => ({
+export const setDataTypeFilter = (payload: string): { type: string, payload: string } => ({
   type: SET_DATA_TYPE_FILTER,
   payload,
 });
 
-export const setStatusFilter = (payload: string) => ({
+export const setStatusFilter = (payload: string): { type: string, payload: string } => ({
   type: SET_STATUS_FILTER,
   payload,
 });
 
-export const cleanUpMappedHeaders = () => ({
+export const cleanUpMappedHeaders = (): { type: string } => ({
   type: CLEAN_UP_MAPPED_HEADERS,
 });
 
@@ -118,7 +114,9 @@ export const getDataTypes = (): ApiAction<DataType> => apiAction({
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const getFormDocumentsTypeGroup = (option: string): ApiAction<FormDocumentTypeGroup[]> => apiAction({
@@ -130,7 +128,9 @@ export const getFormDocumentsTypeGroup = (option: string): ApiAction<FormDocumen
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const getHeadersToMap = (bulkImportId: string): ApiAction<Headers> => apiAction({
@@ -142,7 +142,9 @@ export const getHeadersToMap = (bulkImportId: string): ApiAction<Headers> => api
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const getBulkImportTableData = (bulkImportId: string): ApiAction<TableRow[]> => apiAction({
@@ -154,7 +156,9 @@ export const getBulkImportTableData = (bulkImportId: string): ApiAction<TableRow
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const getReportsExcelFile = (bulkImportId: string): ApiAction<Blob> => apiAction({
@@ -166,7 +170,9 @@ export const getReportsExcelFile = (bulkImportId: string): ApiAction<Blob> => ap
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const getApprovers = (): ApiAction<Approver[]> => apiAction({
@@ -178,7 +184,9 @@ export const getApprovers = (): ApiAction<Approver[]> => apiAction({
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const createBulkImport = (
@@ -195,7 +203,9 @@ export const createBulkImport = (
     dispatch(setIsLoading(false));
   },
   handlers,
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const uploadFileData = (
@@ -216,7 +226,9 @@ export const uploadFileData = (
       dispatch(setIsLoading(false));
     },
     handlers,
-    ...COMMON_TRIGGER_ERROR,
+    onFailure: (err: string) => {
+      toastError(err);
+    },
   });
 };
 
@@ -234,7 +246,9 @@ export const saveHeaderToMap = (
     dispatch(setIsLoading(false));
   },
   handlers,
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const setDataTable = (
@@ -251,7 +265,9 @@ export const setDataTable = (
     dispatch(setIsLoading(false));
   },
   handlers,
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const saveApprovals = (
@@ -304,7 +320,9 @@ export const saveDocumentRevisionsInReview = (
     dispatch(setIsLoading(false));
   },
   handlers,
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
 
 export const uploadS3 = (
@@ -329,12 +347,14 @@ export const uploadS3 = (
       dispatch(setIsLoading(false));
     },
     handlers,
-    ...COMMON_TRIGGER_ERROR,
+    onFailure: (err: string) => {
+      toastError(err);
+    },
   });
 };
 
 // MAIN
-export const setIsLoadingMain = (payload: boolean) => ({
+export const setIsLoadingMain = (payload: boolean): { type: string, payload: boolean } => ({
   type: SET_IS_LOADING_MAIN,
   payload,
 });
@@ -349,5 +369,7 @@ export const getBulkImports = (): ApiAction<BulkImport[]> => apiAction({
   onCompleted: (dispatch) => {
     dispatch(setIsLoadingMain(false));
   },
-  ...COMMON_TRIGGER_ERROR,
+  onFailure: (err: string) => {
+    toastError(err);
+  },
 });
