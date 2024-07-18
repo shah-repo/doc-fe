@@ -1,26 +1,32 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Grid } from '@material-ui/core';
 import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { cloneDeep, last, pick, uniq, uniqBy } from 'lodash';
+import { cloneDeep, last, pick, uniq } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
+import { companyActions } from '../../../../../../../state/ducks/company';
+import { DOC_TYPE_GROUP } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { Button as AddButton } from '../../../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { toastError } from '../../../../../../components/notifications';
+import useActionCreator from '../../../../../../hooks/useActionCreator';
+import useAsync from '../../../../../../hooks/useAsync';
 import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { AddPhase } from './cell.templates/AddPhase';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, newSelectedOptions, PARTS_GROUP_ID, realTimeData, REQUEST_PAYLOAD_KEYS } from './constants';
+import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, PARTS_GROUP_ID, realTimeData1, REQUEST_PAYLOAD_KEYS } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
-import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, LCP, LCPResponse } from './types';
-import { processRealData, sortGroups } from './utils';
+import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, GroupDocTypes, LCP, LCPResponse } from './types';
+import { processGroups, processRealData, sortGroups } from './utils';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [dataState, setDataState] = useState<State>(initialDataState);
@@ -30,15 +36,49 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [resultState, setResultState] = useState<DataResult>();
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const [editGroup, setEditGroup] = useState<string>('');
+  const [selectedDocTypes, setSelectedDocTypes] = useState<CustomGroupOptions[]>([]);
+  const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
+  const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
   const classes = useStyles();
-
   const { getFieldProps, setValues, values: formValues } = useFormikContext();
   const lifeCycleData = getFieldProps('lifecyclePhases') as unknown as { categories: LCPResponse[] };
 
+  const fetchLCPDocTypesAsync = useAsync({
+    onSuccess: (data?: GroupDocTypes[]) => {
+      data && setPartGroups(processGroups(data));
+    },
+    onError: toastError,
+  });
+
+  const fetchLCPPhasesAsync = useAsync({
+    onSuccess: (newPhases?: LCP[]) => {
+      const selectedGroudIds = selectedDocTypes.map(data => data.value);
+      const category = uuidv4();
+      newPhases = newPhases?.map(phase => {
+        return {
+          ...phase,
+          documentTypeIdArr: selectedGroudIds,
+          group: selectedDocTypes[0].category,
+          category,
+          [EDIT_FIELD]: true,
+          isUserAdded: true,
+          isUserModified: false,
+        };
+      });
+      const updatedData = newPhases?.concat((data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID));
+      setEditGroup(getGroupIdByCategory(category));
+      updateStateGridData(updatedData ?? []);
+    },
+    onError: toastError,
+  });
+
   useEffect(() => {
-    const data = processRealData(lifeCycleData.categories ?? realTimeData.categories as unknown as LCPResponse[]);
+    const data = processRealData(lifeCycleData.categories ?? realTimeData1.categories as unknown as LCPResponse[]);
     updateStateGridData(data.phases);
-    setPartGroups(data.groups);
+    fetchLCPDocTypesAsync.start(
+      fetchLCPDocTypes,
+      fetchLCPDocTypesAsync,
+    );
   }, []);
 
   const onDataStateChange = (event: GridDataStateChangeEvent): State => {
@@ -95,8 +135,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     const payload = updatedData?.map((item) => pick(item, REQUEST_PAYLOAD_KEYS));
     console.log('Data Final to save settings ', payload);
     // updated formik here
-    formValues.lifecyclePhases = payload;
-    setValues(formValues);
+    if (formValues) {
+      formValues.lifecyclePhases = payload;
+      setValues(formValues);
+    }
   };
 
   const onDeleteGroup = (dataItem: CustomGroupDataItem) => {
@@ -110,15 +152,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
     if ([PARTS_GROUP_ID, ADD_GROUP_ID].includes(groupId)) {
       // new Add case
-
-      // newSelectedOptions will fetch from DB
-      newSelectedOptions.forEach(data => {
-        data.documentTypeIdArr = selectedGroudIds;
-        return data;
-      });
-      const updatedData = newSelectedOptions.concat((data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID));
-      updateStateGridData(uniqBy(updatedData, 'id'));
-      setEditGroup(PARTS_GROUP_ID);
+      setSelectedDocTypes(options);
+      fetchLCPPhasesAsync.start(
+        fetchLCPPhases,
+        DOC_TYPE_GROUP.PART,
+        fetchLCPPhasesAsync,
+      );
     } else {
       // Edit case
       if (data) {
