@@ -43,14 +43,12 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     }
 
     const { formState } = FB.useStores();
-    const documentStatus = formState?.workspaceState?.document?.displayStatus;
     const groupOptions = formState?.workspaceState?.document?.document?.documentType?.groupOptions;
     const isWO = checkIsDocumentWO(groupOptions);
     const isWOPart = name === WO_PART_KEY_NAME;
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
       optionId,
       urlValues,
-      documentStatus,
       includePrevReleaseDoc: isWO && isWOPart,
     });
     const {
