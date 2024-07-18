@@ -9,4 +9,6 @@ export enum FBFieldName {
   EquipmentSection = 'fb-equipment-section-',
   ProcedureDiff = 'fb-procedure-diff',
   MPIProcedureId = 'fb-mpiprocedure-ref',
+  GRPTTrainer = 'fb-grpt-trainer',
+  GRPTTraineeList = 'fb-grpt-trainee-list',
 }

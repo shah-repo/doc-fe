@@ -4,7 +4,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue } from '..';
+import { FB, FBPurchaseOrderItem, FBPurchaseOrderValue, IReceivedItem } from '..';
 import { SM } from '../../../App';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../indexDb';
 import { GroupTag } from '../../../state/ducks/auth/types';
@@ -19,11 +19,11 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 import { usePoApprovals } from '../FBPOApprovals/hooks';
 import { getReceivedQuantity } from '../FBPOReceive/utils';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 import { TAX_RATE } from '../helpers/constants';
 import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from './helpers';
 import { FBPurchaseOrderTableProps } from './types';
@@ -361,12 +361,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     if (isReceivable) {
       const receivedName = first(workspaceState?.getItemsByType('poreceive'))?.name || '';
-      const receivedItems = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
+      const receivedItems: IReceivedItem[] = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
       let isReceivedAll = true;
       items = items?.map((item) => {
-        const id = item.partNumber || item.id;
-        const received = getReceivedQuantity(receivedItems, id) || 0;
-        if (received < item.order && isReceivedAll) {
+        const received: number = getReceivedQuantity(receivedItems, item) || 0;
+        if (received < Number(item.order) && isReceivedAll) {
           isReceivedAll = false;
         }
         return {

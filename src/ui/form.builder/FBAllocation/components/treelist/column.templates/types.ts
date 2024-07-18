@@ -7,6 +7,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   addLot?: IAllocationCallback
   deleteLot?: IAllocationCallback
   deletePart?: IAllocationCallback
+  parentRevId?: string
 }
 
 export interface AllocItemActionsProps<EditableAllocationItem> {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { translate } from '../../../../common/intl';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps, SchemaOptions } from '../types';
 import { ActionsCell } from './ActionsCell';
@@ -14,20 +13,12 @@ export const ActionsCellTemplate: React.FC<Props> = (props) => {
     return null;
   }
 
-  const shouldDisableDelete = dataItem.primary;
-  const deleteTootltipText
-      = shouldDisableDelete
-        ? translate('form.builder.part.vendors.primary.delete.message')
-        : undefined;
-
   return (
     <ActionsCell
       dataItem={dataItem}
       onConfirm={onConfirm}
       onDiscard={onDiscard}
       onDelete={onDelete}
-      deleteTooltipText={deleteTootltipText}
-      isDeleteDisabled={shouldDisableDelete}
     />
   );
 };
