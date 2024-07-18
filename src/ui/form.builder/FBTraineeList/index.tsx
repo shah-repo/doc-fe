@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Dialog } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { omit } from 'lodash';
+import { last, omit } from 'lodash';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button } from '../../components/forms/fields-next';
+import { Button, ButtonGroup } from '../../components/forms/fields-next';
 import useDialog from '../../hooks/useDialog';
 import TrainingDetails from '../../training/details/TrainingDetails';
 import FBInput from '../FBInput/FBInput';
@@ -123,6 +123,22 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
     );
   };
 
+  const handleAddLastButtonClick = () => {
+    if (!traineeList?.length) {
+      return createDraftTrainee();
+    }
+
+    const lastTrainee = last(traineeList);
+
+    setEditedTrainee({
+      id: uuidv4(),
+      trainingCompletionDate: lastTrainee?.trainingCompletionDate,
+      trainingDocument: lastTrainee?.trainingDocument,
+      createdAt: new Date().toISOString(),
+      [MODE_FIELD]: Mode.add,
+    });
+  };
+
   const schema = buildSchema({
     employees: companyMine.employees ?? [],
     documentOptions,
@@ -143,6 +159,9 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
       ...list,
     ];
   }, isTraineeAdding ? [editedTrainee] : []);
+
+  const lastTrainee = last(traineeList);
+  const isAddingLastAllowed = Boolean(lastTrainee?.trainingDocument);
 
   return (
     <Box className={classes.root} data-cy="traineeList">
@@ -178,16 +197,34 @@ const TraineeList: React.FC<TraineeListProps> = (props) => {
         loading={documentOptionsAsync.loading}
       />
       {isActive && (
-        <Button
-          kind="add"
+        <ButtonGroup
+          variant="outlined"
+          color="secondary"
           fullWidth
-          attached
           disabled={isInEditMode}
-          onClick={createDraftTrainee}
-          data-cy="add-button"
         >
-          {translate('training.record.trainees.add')}
-        </Button>
+          {isAddingLastAllowed && (
+            <Button
+              kind="add"
+              attached
+              onClick={handleAddLastButtonClick}
+              data-cy="add-last-button"
+            >
+              {translate('form.builder.trainee.list.add.previous')}
+            </Button>
+          )}
+          <Button
+            kind="add"
+            fullWidth
+            attached
+            disabled={isInEditMode}
+            onClick={createDraftTrainee}
+            data-cy="add-button"
+            className={cx({ [classes.fitContent]: isAddingLastAllowed })}
+          >
+            {translate('training.record.trainees.add')}
+          </Button>
+        </ButtonGroup>
       )}
       {trainingRecordDialog.isOpen && dialogTrainee && (
         <Dialog

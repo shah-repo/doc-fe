@@ -1517,6 +1517,7 @@
   "form.builder.trainee.list.comments": "Comments",
   "form.builder.trainee.list.attachmentIds": "Attachments",
   "form.builder.trainee.list.deleted": "{name} for {docId}",
+  "form.builder.trainee.list.add.previous": "Add new based on previous",
   "training.acknowladge.password": "Enter Password to Acknowledge",
   "training.acknowledge.statement": "I acknowledge I am trained on",
   "training.acknowledge.completed.statement": "I completed training on {revision}{date, select, null {} other { on {date}}}",
