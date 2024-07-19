@@ -4,6 +4,7 @@ import { useObserver } from 'mobx-react';
 import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBDialogState, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from '..';
+import { ApprovalStatus } from '../../../state/ducks/common/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { store } from '../../../state/store';
 import { FBDataStoreApprovalKeys } from '../../documentRevision/forms/types';
@@ -48,7 +49,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     );
 
     isPreview = workspaceState?.mode === 'preview';
-    const fieldApprovals = useMemo(() => filter(docApprovals, { fieldId: name }), [docApprovals, name]);
+    const fieldApprovals = useMemo(() => filter(docApprovals, { fieldId: name, status: !ApprovalStatus.Abandoned }), [docApprovals, name]);
 
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
