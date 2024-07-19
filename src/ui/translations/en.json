@@ -2066,7 +2066,7 @@
   "administration.general.settings.md.label": "Auto update the LOT status and part rev based on Material Disposition",
   "administration.general.settings.integrations": "Integrations",
   "administration.general.settings.lot.auto.allocation.order": "Lot Auto-allocation order",
-  "administration.general.settings.lot.auto.allocation.order.helper.text": "Expiry date will override FIFO/LIFO",
+  "administration.general.settings.lot.auto.allocation.order.info": "Expiry date will override FIFO/LIFO",
   "administration.general.settings.lot.auto.allocation.order.fifo.label": "FIFO (First In First Out)",
   "administration.general.settings.lot.auto.allocation.order.lifo.label": "LIFO (Last In First Out)",
   "administration.general.settings.expired.lots": "Warnings vs Errors",

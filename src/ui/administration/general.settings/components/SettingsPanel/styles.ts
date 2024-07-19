@@ -51,7 +51,7 @@ export default makeStyles(theme => ({
     fontWeight: 600,
     fontSize: 16,
   },
-  helperText: {
+  info: {
     fontWeight: 400,
     fontSize: 12,
     color: Colors.textGray,

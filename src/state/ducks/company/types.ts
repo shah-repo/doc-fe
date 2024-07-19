@@ -91,8 +91,14 @@ export interface CompanyMineRequest {
 export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
-export type AllocationOrderType = 'fifo' | 'lifo';
-type expiredLotType = 'warning' | 'error';
+export interface AllocationOrderType {
+  fifo: string
+  lifo: string
+}
+interface expiredLotType {
+  warning: string
+  error: string
+}
 
 export enum NavigationItems {
   LINK = 'LINK',

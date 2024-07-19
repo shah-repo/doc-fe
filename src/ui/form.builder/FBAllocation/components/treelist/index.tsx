@@ -274,10 +274,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
-    onSubmit: (values) => {
+    onSubmit: (values: Partial<EditableAllocationItem>) => {
       if (values.lotRevId) {
         if (values.isExpired) {
-          setSelectedPart(values as unknown as EditableAllocationItem);
+          setSelectedPart(values as EditableAllocationItem);
           expiredDialog.open();
           return;
         }

@@ -10,7 +10,7 @@ import { Translation } from '../../translations/types';
 import { styles } from './styles';
 
 interface Props {
-  confirmAction: (values?) => void
+  confirmAction: () => void
   cancelAction?: (e: React.MouseEvent<HTMLElement>) => void
   message: Translation
   dialog: DialogHandler

@@ -14,7 +14,6 @@ import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import {
   AllocationOrder,
-  AllocationOrderType,
   GeneralSettings,
 } from '../../../../../state/ducks/company/types';
 import SettingsPanel from '../../components/SettingsPanel';
@@ -26,12 +25,7 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
   const hasPermission = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const orderByReleaseDateKey = 'allocationConfig.sortOrderByReleaseDate';
-  const orderByReleaseDateValue = getFieldProps(orderByReleaseDateKey)
-    .value as AllocationOrderType;
-  const isFIFOOrderingEnabled
-    = orderByReleaseDateValue === AllocationOrder.FIFO;
-  const isLIFOOrderingEnabled
-    = orderByReleaseDateValue === AllocationOrder.LIFO;
+  const orderByReleaseDateValue = getFieldProps(orderByReleaseDateKey).value;
 
   const handleFIFOOrderChange = (event: ChangeEvent<{}>, checked: boolean) => {
     if (checked) {
@@ -51,8 +45,8 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
       title={translate(
         'administration.general.settings.lot.auto.allocation.order',
       )}
-      helperText={
-        translate('administration.general.settings.lot.auto.allocation.order.helper.text')
+      info={
+        translate('administration.general.settings.lot.auto.allocation.order.info')
       }
     >
       <List className={classes.list}>
@@ -75,7 +69,7 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
               </Typography>
             }
             onChange={handleFIFOOrderChange}
-            checked={isFIFOOrderingEnabled}
+            checked={orderByReleaseDateValue === AllocationOrder.FIFO}
           />
         </ListItem>
         <Divider />
@@ -98,7 +92,7 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
               </Typography>
             }
             onChange={handleLIFOOrderChange}
-            checked={isLIFOOrderingEnabled}
+            checked={orderByReleaseDateValue === AllocationOrder.LIFO}
           />
         </ListItem>
       </List>
