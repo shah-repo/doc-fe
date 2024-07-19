@@ -1,3 +1,4 @@
+import { Permission } from '../../../state/ducks/auth/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
 import { GroupTag } from '../auth/types';
@@ -91,11 +92,29 @@ export interface CompanyMineRequest {
 export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
+interface AllocationOrderType {
+  fifo: string
+  lifo: string
+}
+interface ExpiredLotType {
+  warning: string
+  error: string
+}
 
 export enum NavigationItems {
   LINK = 'LINK',
   MENU = 'MENU',
   CATEGORY = 'CATEGORY',
+}
+
+export enum AllocationOrder {
+  FIFO = 'fifo',
+  LIFO = 'lifo',
+}
+
+export enum ExpiredLotTypes {
+  WARNING = 'warning',
+  ERROR = 'error',
 }
 
 export interface NavigationItem {
@@ -106,6 +125,7 @@ export interface NavigationItem {
   icon?: string
   category?: string
   restrictedToUsersWithTags?: GroupTag[]
+  restrictedToUserPermissions?: Permission[]
   isOpen?: boolean
 }
 
@@ -168,11 +188,16 @@ interface EquipmentFamilySettings {
   locations: EquipmentLocation[]
 }
 
+interface AllocationConfig {
+  sortOrderByReleaseDate: AllocationOrderType
+  expiredLotsPrompt: ExpiredLotType
+}
 export interface GeneralSettings {
   zebraPrint: ZebraPrintSettings[]
   equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
+  allocationConfig: AllocationConfig
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
