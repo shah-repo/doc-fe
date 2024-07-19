@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import apiClient from '../../../state/apiClient';
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT, UM_AUDIT_URL } from '../../../state/ducks/userManagement/constants';
-import { AuditDetailsProps, UMAuditProps } from '../../../state/ducks/userManagement/types';
+import { AuditDetailsProps, AUDIT_FIELD_PATHS, UMAuditProps } from '../../../state/ducks/userManagement/types';
 import { store } from '../../../state/store';
 import Default from '../../components/common/audit.history/Cards/Default';
 import LoadMoreButton from '../../components/common/load.more.button/LoadMoreButton';
@@ -70,7 +70,19 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
        .request(requestConfig)
        .then((resp) => resp)
        .then(({ data }) => {
-         const cardGroups = getCardGroups(data.results || []);
+         const definedFieldPaths = [
+           AUDIT_FIELD_PATHS.ACTIVE,
+           AUDIT_FIELD_PATHS.NAME,
+           AUDIT_FIELD_PATHS.EMPLOYEES,
+           AUDIT_FIELD_PATHS.AVATAR,
+           AUDIT_FIELD_PATHS.GROUPS,
+           AUDIT_FIELD_PATHS.RESEND_CONFIRMATION_EMAIL_TIMESTAMP,
+           AUDIT_FIELD_PATHS.RESET_PASSWORD_EMAIL_TIMESTAMP,
+         ];
+         const results = (data.results || [])?.filter((data) =>
+           definedFieldPaths.includes(data.fieldPath),
+         );
+         const cardGroups = getCardGroups(results);
          setItems((prevState: AuditDetailsProps[]) => [
            ...prevState,
            ...values(cardGroups),
