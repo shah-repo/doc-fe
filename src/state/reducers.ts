@@ -43,7 +43,7 @@ const documentTypePersistConfig = {
 const tableSearchPersistConfig = {
   key: 'tableSearch',
   storage,
-  version: 2,
+  version: 3,
   whitelist: ['criteria'],
   migrate: createMigrate(tableSearchMigrations),
 };
