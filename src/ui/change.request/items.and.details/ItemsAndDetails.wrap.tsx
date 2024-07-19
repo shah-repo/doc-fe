@@ -110,7 +110,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
       itemsAndDetailsState.setViewItemActionsVisibility(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps, max-len
-  }, [JSON.stringify(changeRequest?.documentRevisions.map((docRev: DocumentRevision) => docRev.id) ?? []), formInput]);
+  }, [JSON.stringify(changeRequest?.documentRevisions.map((docRev: DocumentRevision) => docRev.id) ?? []), formInput, changeRequest]);
 
   const processChangeRequest = () => {
     let currentDocRevPresent = false;
