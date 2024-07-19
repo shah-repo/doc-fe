@@ -19,7 +19,7 @@ import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/d
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
-import HeaderEquipmentStatus from '../../../components/common/header/HeaderEquipmentStatus';
+import HeaderEquipmentStatus, { shouldShowEQStatus } from '../../../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
 import HeaderMenu from '../../../components/common/header/Menu';
@@ -42,7 +42,7 @@ import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
@@ -130,6 +130,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
+  const isEquipment = checkIsDocumentEquipment(values.document?.documentType?.groupOptions);
   const isDirectlyApproved = checkIsDocumentDirectApproved(values.document?.documentType?.groupOptions);
   const isMPIOutput = checkIsDocumentMPIOutput(values.document?.documentType?.groupOptions);
   const isLHR = checkIsDocumentLHR(values.document?.documentType?.groupOptions);
@@ -157,7 +158,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
-  const isEquipment = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.EQUIPMENT;
+  const showEQStatusValue = shouldShowEQStatus(documentRevision);
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -251,13 +252,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       dispatch(companyActions.autosaveConfig());
     }
     setFBValue();
-    if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
-      formik.setFieldValue('attachments', []);
-      formik.setFieldValue('name', 'Void');
-      formik.setFieldValue('description', 'Void');
-      formik.setFieldValue('referenceTo', null);
-      formik.setFieldValue('parentEquipment', null);
-    }
+
     formik.submitForm();
     if (isPOEditState) {
       setDoNotPrompt(true);
@@ -270,7 +265,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   React.useEffect(() => {
     // Autosave when record is updated
-    if (isNewVersion && (isRecord || (isPO && !isUserAdminEnforce))) {
+    if (isNewVersion && (isRecord || isEquipment || (isPO && !isUserAdminEnforce))) {
       onFormClick();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -495,7 +490,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isEquipment && <HeaderEquipmentStatus documentRevision={documentRevision} />}
+      {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isLot && (
         <>
           <IconButton className={classes.printIconContainer} onClick={printDialog.open}>

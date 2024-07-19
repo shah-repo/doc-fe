@@ -12,20 +12,19 @@ import { documentsActions } from '../../../state/ducks/documents';
 import { RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../state/reducers';
 import SummaryField from '../../common/summary/base';
-import Text from '../../components/Text';
 import { FormContext } from '../../components/forms/FormContext';
 import EquipmentSpecification from '../../documentRevision/forms/presenters/EquipmentSpecification';
 import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../documentRevision/forms/presenters/related.equipments';
 import RelatedPartsWrapper from '../../documentRevision/forms/presenters/related.parts/RelatedParts.wrap';
+import RetrainField from '../../documentRevision/forms/presenters/RetrainField';
 import { getHighestRevision } from '../../documentRevision/forms/transform';
-import { checkIsDocumentEB, checkIsDocumentOTHER, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentEB, checkIsDocumentOTHER, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInStatus } from '../../documentRevision/helpers/documentRevisionStatus';
 import { styles as AutoCompleteStyles } from '../../form.builder/styles/FBAutocomplete.styles';
 import { useTraining } from '../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
-import { Translation } from '../../translations/types';
 import Attachment from './attachment';
 import BuildsContainer from './builds.container';
 import styles from './styles';
@@ -158,10 +157,10 @@ const Presenter: React.FunctionComponent<Props> = ({
       <Grid container>
         {
           isTrainingVisible && !isRecord
-          && <SummaryField
-            label="document.revision.trainingRequired"
-            value={<Text translation={`common.${retrain}` as Translation} />}
-            {...summaryStyles}
+          && <RetrainField
+            revisionChangeType={formInput?.revisionChangeType}
+            isDisabled={true}
+            {...{ documentTypeId: docTypeId, isRecord }}
           />
         }
         {formTemplate && outputDocumentTypeName && (

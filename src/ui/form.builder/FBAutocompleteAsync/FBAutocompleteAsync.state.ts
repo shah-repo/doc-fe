@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { filter, find, groupBy, isArray, last, map, some, sortBy, union } from 'lodash';
+import { filter, find, get, groupBy, isArray, last, map, some, sortBy, union } from 'lodash';
 import { action, computed, set } from 'mobx';
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from '..';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
@@ -12,14 +12,12 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];
   private readonly urlValues?: Record<string, any> = {};
-  private readonly documentStatus?: string = '';
-  private readonly skipOptionsFilter?: boolean = false;
+  private readonly includePrevReleaseDoc?: boolean = false;
 
-  public constructor ({ optionId, urlValues, documentStatus, skipOptionsFilter }: FBAutocompleteAsyncConstructor = {}) {
+  public constructor ({ optionId, urlValues, includePrevReleaseDoc }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
-    this.documentStatus = documentStatus;
-    this.skipOptionsFilter = skipOptionsFilter;
+    this.includePrevReleaseDoc = includePrevReleaseDoc;
     this.setOptionId(optionId);
   }
 
@@ -110,7 +108,25 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           docId: data.docId,
         }));
       case FBAutocompleteAsyncOption.releasedParts:
-        return this.skipOptionsFilter ? data : data.filter((item) => item.status === DocumentRevisionStatus.Released);
+        const includePrevReleaseDoc = this.includePrevReleaseDoc && this.additionalData?.length;
+        let prevReleaseDocId = '';
+
+        if (includePrevReleaseDoc) {
+          prevReleaseDocId = get(this.additionalData, '[0].docId');
+        }
+
+        const checkIsItemIsReleased = (status: DocumentRevisionStatus): boolean => {
+          return status === DocumentRevisionStatus.Released;
+        };
+
+        return union(
+          data.filter(
+            (item) => includePrevReleaseDoc
+              ? item.document.docId === prevReleaseDocId || checkIsItemIsReleased(item.status)
+              : checkIsItemIsReleased(item.status),
+          ),
+          this.additionalData ?? [],
+        );
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
       case FBAutocompleteAsyncOption.trainingDocuments:
         return data.map((option) => {
@@ -145,19 +161,15 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   }
 
   protected loadInternal () {
-    if (!this.optionConfig) {
+    const isIncomplete = !this.optionConfig || !this.optionId;
+    if (isIncomplete) {
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    FBAutocompleteAsyncStore.loading.set(this.optionId!, true);
+    FBAutocompleteAsyncStore.loading.set(this.optionId, true);
     const { id, root = '', publicApi } = this.optionConfig;
 
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
-
-    if (id === FBAutocompleteAsyncOption.POList && this.documentStatus?.toUpperCase() === DocumentRevisionStatus.Released) {
-      return;
-    }
 
     if (this.urlValues) {
       this.set({

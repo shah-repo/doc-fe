@@ -26,8 +26,9 @@ import { documentsActions } from '../../state/ducks/documents';
 import { ApprovalStatus } from '../../state/ducks/documents/types';
 import { RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../state/reducers';
+import { store } from '../../state/store';
 import AlertDialog from '../app/alert.dialog/AlertDialog';
-import HeaderEquipmentStatus from '../components/common/header/HeaderEquipmentStatus';
+import HeaderEquipmentStatus, { shouldShowEQStatus } from '../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
@@ -51,6 +52,7 @@ import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDialog from '../hooks/useDialog';
 import Colors from '../layout/theme/utils/colors';
+import { Translation } from '../translations/types';
 import WOClose from './forms/presenters/Close';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
@@ -130,7 +132,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isWORecord = isWO && !hasOutput;
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
-  const isEquipment = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.EQUIPMENT;
 
   const isLastVersionObsolete = () => {
     if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
@@ -433,6 +434,41 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     />
   </>);
 
+  const renderWOWithdrawButton = (renderAsButton: boolean) => {
+    const label: Translation = 'wo.withdraw.button.label';
+    const alertMessage: Translation = 'wo.withdraw.alert';
+    const dataCy = 'wo-withdraw-alert-button';
+
+    return (
+      <>
+        {renderAsButton ? (
+          <StyledButton color="primary" onClick={dialog.open} data-cy={dataCy}>
+            <Text translation={label} />
+          </StyledButton>
+        ) : (
+          <StyledMenuListItem
+            button
+            alignItems="flex-start"
+            onClick={dialog.open}
+          >
+            <StyledMenuListIcon>
+              <WithDrawSubmissionIcon />
+            </StyledMenuListIcon>
+            <StyledMenuListItemText
+              data-cy={dataCy}
+              primary={<Text translation={label} />}
+            />
+          </StyledMenuListItem>
+        )}
+        <AlertDialog
+          confirmAction={withdrawAction}
+          message={alertMessage}
+          {...{ dialog }}
+        />
+      </>
+    );
+  };
+
   const requestAccessSentButton = (renderAsButton) => !hasAccess && !isEmailSent && (
     renderAsButton ? <StyledButton
       color="primary"
@@ -478,6 +514,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (isDirectApproval && isStatusInReview && isUserDocumentOwner && !isWO) {
     accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
+
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && isWORecord) {
+    accessableButtons.push(PreviewControlButtons.WOWithdrawButton);
+  }
+
   if (isLot) {
     accessableButtons.push(PreviewControlButtons.PrintLabelButton);
   }
@@ -553,6 +594,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         && renderWithdrawSubmissionButton()}
       {buttons.includes(PreviewControlButtons.WithdrawSubmission) && isNewLayout
         && newRenderWithdrawSubmissionButton(renderAsButton)}
+      {buttons.includes(PreviewControlButtons.WOWithdrawButton) && isNewLayout
+        && renderWOWithdrawButton(renderAsButton)}
       {buttons.includes(PreviewControlButtons.InspectionControl) && (
         <InspectionControlsContainer {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
@@ -595,6 +638,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     </>
   );
   const isWOCloseEnabled = isWORecord && documentRevision?.approvals?.some((approval) => approval.status === ApprovalStatus.Pending);
+  const loggedInUser = store.getState().auth.user;
+  const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
+  const showEQStatusValue = shouldShowEQStatus(documentRevision);
 
   return (
     <>
@@ -608,8 +654,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
-      {isEquipment && <HeaderEquipmentStatus documentRevision={documentRevision} />}
-      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled} />}
+      {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
+      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled || !isDocOwner} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id

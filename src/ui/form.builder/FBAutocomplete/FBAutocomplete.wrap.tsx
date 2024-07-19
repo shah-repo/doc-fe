@@ -39,6 +39,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     disabled,
     isDocumentLHRT,
     editorProperties,
+    onBlur,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
@@ -146,13 +147,21 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       formState?.validate();
     };
 
+    const handleBlur = (event) => {
+      if (freeSolo) {
+        formState?.setFieldAutosave(name);
+      }
+
+      onBlur?.(event);
+    };
+
     if (!filterOptions) {
       // disable filtering on client
       filterOptions = (options) => options;
     }
 
     const onFilterInputChange = (event, inputValue) => {
-      if(isUndefined(options)) {
+      if (isUndefined(options)) {
         return setModifiedOptions([]);
       }
       if (inputValue && inputValue.length > 2) {
@@ -197,6 +206,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       includeQRScan,
       disabledOptions,
       type: schemaItem?.type,
+      onBlur: handleBlur,
     });
   };
 

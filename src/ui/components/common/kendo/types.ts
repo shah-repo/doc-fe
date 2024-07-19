@@ -15,6 +15,7 @@ export enum KendoCellTemplates {
   ACTIVE='Active',
   USER_AVATAR='UserAvatar',
   STATUS='Status',
+  EQ_STATUS='EQStatus',
   DATE_COMPLETED='DateCompleted',
   DATE_INFO='DateInfo',
   COMMON_CELL='CommonCell',
@@ -23,6 +24,7 @@ export enum KendoCellTemplates {
   DOCUMENT_TYPE='DocumentTypeCellTemplate',
   DURATION='DurationCell',
   OVERFLOW_CELL ='OverflowCell',
+  DOC_ID_LIST_CELL ='DocIdListCell',
 }
 export interface KendoColumn {
   sortable?: ColumnSortSettings

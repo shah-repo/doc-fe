@@ -1,3 +1,4 @@
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { MODE_FIELD } from './components/treelist/constants';
 
 export interface AllocationItem {
@@ -21,6 +22,14 @@ export interface AllocationItem {
   lotDocumentId?: string
   quantityBeforeKitting?: number
   quantityAfterKitting?: number
+  displayRevision?: string
+  lotUsedUnit?: string
+  partRevDisplayRevision?: string
+  revision?: string
+  usedUnit?: string
+  unit?: string
+  quantityShort?: number
+  isUnfulfiled?: boolean
 }
 
 export interface EditableAllocationItem extends AllocationItem {
@@ -43,4 +52,7 @@ export interface LatestPartRevisionInfo {
   name: string
   revision: number
   displayRevision: string
+  status: DocumentRevisionStatus
+  inRestrictedEditMode: boolean
+  docId: string
 }

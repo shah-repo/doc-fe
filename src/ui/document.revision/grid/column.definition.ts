@@ -1,7 +1,7 @@
 import { chain } from 'lodash';
+import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 import { pagerSettings } from '../../components/common/kendo/helpers';
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from '../../components/common/kendo/types';
-import { KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
 
 const columns: KendoColumn[] = [
   {
@@ -14,6 +14,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     showColumnMenu: true,
     orderIndex: 1,
+    showTooltip: true,
     extraFields: ['id', 'document.id'],
   },
   {

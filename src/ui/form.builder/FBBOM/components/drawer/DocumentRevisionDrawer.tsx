@@ -15,12 +15,13 @@ import CloneContainer from '../../../../documentRevision/Clone.container';
 import DocumentRevisionUpdateContainer from '../../../../documentRevision/DocumentRevisionUpdate.container';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import Theme from '../../../../layout/theme/provider';
+import { EditableAllocationItem } from '../../../FBAllocation/interface';
 import FBDataStore from '../../../FBStore/FBDataStore';
 import { EditableBOM } from '../../interface';
 import { SELECTED_PART_KEY_SEPARATOR } from '../treelist/constants';
 import useStyles from './styles';
 interface DocumentRevisionDrawerProps {
-  dataItem?: EditableBOM
+  dataItem?: EditableBOM | EditableAllocationItem
   closeDrawer: () => void
   isSliderView?: boolean
 }

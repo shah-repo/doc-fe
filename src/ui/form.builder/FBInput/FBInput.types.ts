@@ -80,6 +80,7 @@ export type FBInputType =
   | 'lotQuantity'
   | 'lotOnHandQuantity'
   | 'partVendors'
+  | 'traineeList'
   | 'numeric'
   | 'cycleCount'
   | 'workOrderPartDetails'
@@ -261,6 +262,7 @@ export const FBAutosave: FBInputType[] = [
   'texteditor',
   'lotTransfers',
   'partVendors',
+  'traineeList',
   'numeric',
   'cycleCount',
   'workOrderType',

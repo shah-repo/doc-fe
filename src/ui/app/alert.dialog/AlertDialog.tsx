@@ -67,8 +67,8 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               variant="contained"
               className={cx(classes.cancelButton, classes.buttonLabel)}
               onClick={cancelAction}
-              id="AlertDialog-cancelButton"
-              data-cy="AlertDialog-cancelButton"
+              id="dialog-cancel"
+              data-cy="dialog-cancel"
             >
               <Text translation={cancelLabel} />
             </Button>
@@ -76,8 +76,8 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               type="submit"
               variant="contained"
               className={cx(classes.submitButton, classes.buttonLabel)}
-              id="AlertDialog-continueButton"
-              data-cy="AlertDialog-continueButton"
+              id="dialog-continue"
+              data-cy="dialog-continue"
               onClick={confirmAction}
             >
               <Text translation={confirmLabel} />
