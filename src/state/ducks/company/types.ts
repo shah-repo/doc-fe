@@ -91,7 +91,7 @@ export interface CompanyMineRequest {
 export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
-export interface AllocationOrderType {
+interface AllocationOrderType {
   fifo: string
   lifo: string
 }

@@ -1,9 +1,7 @@
 import {
   Divider,
-  FormControlLabel,
   List,
   ListItem,
-  Radio,
   Typography,
 } from '@material-ui/core';
 import { useFormikContext } from 'formik';
@@ -16,6 +14,7 @@ import {
   AllocationOrder,
   GeneralSettings,
 } from '../../../../../state/ducks/company/types';
+import { FormControlLabel, Radio } from '../../../../components/forms/fields-next';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
 import { styles } from './styles';
