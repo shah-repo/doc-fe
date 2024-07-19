@@ -1,7 +1,8 @@
+import { useFormikContext } from 'formik';
 import { kebabCase } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
-import { Autocomplete } from '../../../../../../../components/forms/fields-next';
+import { Autocomplete, FormikField } from '../../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -19,6 +20,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
   ...rest
 }) => {
   const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
+  const { getFieldProps, setFieldValue } = useFormikContext();
 
   const getOptions = () => {
     return field === LCP_KEYS.isAllowedToBuy ? PART_PURCHASE_OPTIONS : DEFAULT_OPTIONS;
@@ -32,7 +34,8 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
     return <td data-cy={datCy}>{value?.label}</td>;
   }
 
-  const handleChange = (e, value) => {
+  const handleChange = (e, value: OptionType) => {
+    setFieldValue(field, value.value);
     onChange?.({
       dataIndex,
       dataItem,
@@ -50,7 +53,11 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
       className={className}
       data-cy={datCy}
     >
+    <FormikField
+      name={field}
+    >
       <Autocomplete
+        {...getFieldProps(field)}
         blurOnSelect
         disabled={Mode.edit === dataItem[MODE_FIELD]}
         disableClearable
@@ -62,6 +69,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
         onChange={handleChange}
         size="small"
       />
+    </FormikField>
     </td>
   );
 };

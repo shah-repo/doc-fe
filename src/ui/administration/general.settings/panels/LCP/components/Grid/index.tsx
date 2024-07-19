@@ -3,7 +3,7 @@ import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { useFormikContext } from 'formik';
+import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { cloneDeep, last, pick, uniq, uniqBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,6 +30,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [resultState, setResultState] = useState<DataResult>();
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const [editGroup, setEditGroup] = useState<string>('');
+  const [addNewPhase, setAddNewPhase] = useState<Partial<LCP>>();
   const classes = useStyles();
 
   const { getFieldProps, setValues, values: formValues } = useFormikContext();
@@ -147,28 +148,41 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const addPhase = (dataItem: LCP) => {
     setPrevData(cloneDeep(data));
+    const newPhase = {
+      id: uuidv4(),
+      group: dataItem.group,
+      category: dataItem.category,
+      documentTypeIdArr: dataItem.documentTypeIdArr,
+      enlilType: '',
+      displayLabel: '',
+      isAllowedOnPO: 'no',
+      isAllowedOnLhrProd: 'no',
+      isAllowedToBuy: 'no',
+      isAddPhase: true,
+      inEdit: false,
+      isUserAdded: true,
+      isUserModified: false,
+    };
     const newData = [
       ...(data ?? []),
-      {
-        id: uuidv4(),
-        group: dataItem.group,
-        category: dataItem.category,
-        documentTypeIdArr: dataItem.documentTypeIdArr,
-        enlilType: '',
-        displayLabel: '',
-        isAllowedOnPO: '',
-        isAllowedOnLhrProd: '',
-        isAllowedToBuy: '',
-        isAddPhase: true,
-        inEdit: false,
-        isUserAdded: true,
-        isUserModified: false,
-      },
+      newPhase,
     ];
 
     setData(newData);
+    setAddNewPhase(newPhase);
     setResultState(processWithGroups(newData, initialDataState));
   };
+
+  const formik = useFormik<Partial<EditableLCP>>({
+    initialValues: {},
+    onSubmit: (values) => {
+    const updatedData = data?.map(phase => (phase.id === values.id) ? { ...phase, isAddPhase: false } : phase);
+    setPrevData(updatedData);
+    setResultState(processWithGroups(updatedData ?? [], initialDataState));
+    },
+  });
+
+  const { submitForm, resetForm } = formik;
 
   const onDiscardPhase = () => {
     setData(prevData);
@@ -177,7 +191,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema({
     actionsClass: classes.actionsCell,
-    onConfirm: () => { console.log('onConfirm'); },
+    onConfirm: submitForm,
     onDiscard: onDiscardPhase,
   });
 
@@ -185,7 +199,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   useEffect(() => {
     setColumns(schema);
-  }, [resultState]);
+  }, [addNewPhase, data]);
+
+  useEffect(() => {
+    resetForm({ values: addNewPhase ?? {} });
+  }, [addNewPhase, resetForm]);
 
   const rowRender: DataGridProps<LCP>['rowRender'] = (row: React.ReactElement, rowProps: GridRowProps) => {
     if (rowProps.rowType === 'groupHeader') {
@@ -220,10 +238,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     const itemCategory = rowProps?.dataItem?.category;
 
     if (rowProps.dataItem.isAddPhase) {
-      return React.cloneElement(row, {
-        ...rowProps,
-        className: cx(row.props.className, 'addingPhaseRow'),
-      });
+      return <FormikProvider value={formik}>
+        {React.cloneElement(row, {
+          ...rowProps,
+          className: cx(row.props.className, 'addingPhaseRow'),
+        })}
+      </FormikProvider>;
     }
 
     if (isLastGroupRow(itemId, itemCategory) && !isGroupUpdating) {

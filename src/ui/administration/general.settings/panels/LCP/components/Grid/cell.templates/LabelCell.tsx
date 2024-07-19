@@ -1,32 +1,42 @@
+import { useFormikContext } from 'formik';
 import { kebabCase } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import OverflowingContent from '../../../../../../../change.request/FBMaterialDisposition/components/commonCells/OveflowContent';
-import { TextField } from '../../../../../../../components/forms/fields-next';
+import { FormikField, TextField } from '../../../../../../../components/forms/fields-next';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { EDIT_FIELD } from '../constants';
 import { LCP } from '../types';
 
 const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, onChange }) => {
+  const { getFieldProps, setFieldValue } = useFormikContext();
+
   const handleChange = (e) => {
+    const value = e.target.value;
+    setFieldValue(field, value);
     onChange?.({
       dataIndex,
       dataItem,
       syntheticEvent: e.syntheticEvent,
       field,
-      value: e.target.value,
+      value,
     });
   };
 
   return (
-    <TextField
-      defaultValue={dataItem[field]}
-      type="text"
-      data-cy={`${kebabCase(field)}-field`}
-      placeholder={translate('lhr.summary.placeholder.enter')}
-      onChange={handleChange}
-      size="small"
-    />
+    <FormikField
+      name={field}
+    >
+      <TextField
+        {...getFieldProps(field)}
+        defaultValue={dataItem[field]}
+        type="text"
+        data-cy={`${kebabCase(field)}-field`}
+        placeholder={translate('lhr.summary.placeholder.enter')}
+        onChange={handleChange}
+        size="small"
+      />
+    </FormikField>
   );
 };
 
