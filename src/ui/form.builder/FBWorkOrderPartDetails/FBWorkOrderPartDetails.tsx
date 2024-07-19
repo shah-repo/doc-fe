@@ -118,6 +118,13 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
     infoLabelString = 'allocation.part.obsolete.revision';
   }
 
+  const onQuanityValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const regex = /^[1-9]\d*$/;
+    if (!regex.test(e.target.value)) {
+      e.target.value = '';
+    }
+  };
+
   return (
     <Grid container spacing={1}>
       {displayInfoIcon && (
@@ -190,6 +197,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           gutter={false}
           showErrorMsg={false}
           placeholder="1"
+          onChange={onQuanityValidate}
         />
       </Grid>
       <Grid item md={3} xs={6}>
