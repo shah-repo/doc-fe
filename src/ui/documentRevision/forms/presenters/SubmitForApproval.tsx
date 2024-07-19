@@ -45,18 +45,14 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const dialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
-  let isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
+  const isEquipment = checkIsDocumentEquipment(currentDocumentType?.groupOptions);
+  const isObsolete = isEquipment ? false : revisionChangeType === RevisionChangeType.Obsolete;
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
-  const isEquipment = checkIsDocumentEquipment(currentDocumentType?.groupOptions);
   let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
 
   if (isWO && !isWOForm) {
     label = 'record.assign';
-  }
-
-  if(isEquipment) {
-    isObsolete = false;
   }
 
   const releaseAsync = useAsync({
