@@ -95,7 +95,7 @@ interface AllocationOrderType {
   fifo: string
   lifo: string
 }
-interface expiredLotType {
+interface ExpiredLotType {
   warning: string
   error: string
 }
@@ -188,7 +188,7 @@ interface EquipmentFamilySettings {
 
 interface AllocationConfig {
   sortOrderByReleaseDate: AllocationOrderType
-  expiredLotsPrompt: expiredLotType
+  expiredLotsPrompt: ExpiredLotType
 }
 export interface GeneralSettings {
   zebraPrint: ZebraPrintSettings[]
