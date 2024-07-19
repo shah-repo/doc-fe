@@ -14,6 +14,7 @@ const Actions: React.FC<ActionsProps> = ({
   onConfirm,
   onDiscard,
   scrollBehavior = 'auto',
+  isActive,
   ...props
 }) => {
   const { dataItem } = props;
@@ -68,6 +69,7 @@ const Actions: React.FC<ActionsProps> = ({
               color="primary"
               ref={saveRef}
               onClick={onEdit}
+              disabled={!isActive}
             >
               <FontAwesomeIcon icon={regular('pen-to-square')} />
             </IconButton>

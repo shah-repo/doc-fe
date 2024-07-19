@@ -15,7 +15,7 @@ interface SchemaOptions {
 }
 
 type schemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableCompanyLocation>>;
-export const buildSchema: schemaBuilder = ({ onDiscard, onConfirm, onRowClick }) => {
+export const buildSchema: schemaBuilder = ({ isActive, onDiscard, onConfirm, onRowClick }) => {
   return [
     {
       id: 'active',
@@ -47,6 +47,7 @@ export const buildSchema: schemaBuilder = ({ onDiscard, onConfirm, onRowClick })
           onClick={onRowClick}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
+          isActive={isActive}
         />
       ),
       width: 100,
