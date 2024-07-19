@@ -188,10 +188,15 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const addPhase = (dataItem: LCP) => {
     setPrevData(cloneDeep(data));
+    const selectedPhaseCategory = data?.filter(phase => phase.category === dataItem.category);
+    const enlilTypeOptions = selectedPhaseCategory?.map(dd => dd.enlilType);
+    const otherLabelOptions = selectedPhaseCategory?.map(dd => dd.enlilType);
     const newPhase = {
       id: uuidv4(),
       group: dataItem.group,
       category: dataItem.category,
+      enlilTypeOptions,
+      otherLabelOptions,
       documentTypeIdArr: dataItem.documentTypeIdArr,
       enlilType: '',
       displayLabel: '',
@@ -216,9 +221,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const formik = useFormik<Partial<EditableLCP>>({
     initialValues: {},
     onSubmit: (values) => {
-    const updatedData = data?.map(phase => (phase.id === values.id) ? { ...phase, isAddPhase: false } : phase);
-    setPrevData(updatedData);
-    setResultState(processWithGroups(updatedData ?? [], initialDataState));
+      const updatedData = data?.map(phase => (phase.id === values.id) ? { ...phase, isAddPhase: false } : phase);
+      setPrevData(updatedData);
+      setResultState(processWithGroups(updatedData ?? [], initialDataState));
     },
   });
 

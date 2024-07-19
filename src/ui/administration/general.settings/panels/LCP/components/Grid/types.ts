@@ -21,6 +21,8 @@ export interface LCP {
   inEdit?: boolean
   isAdd?: boolean
   isAddPhase?: boolean
+  enlilTypeOptions?: string[]
+  otherLabelOptions?: string[]
 }
 
 export interface EditableLCP extends LCP {

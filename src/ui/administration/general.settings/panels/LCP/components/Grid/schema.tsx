@@ -3,8 +3,8 @@ import { translate } from '../../../../../../../common/intl';
 import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCell } from './cell.templates/ActionsCell';
 import { DropdownCell } from './cell.templates/DropdownCell';
+import { EnlilTypeCell } from './cell.templates/EnlilTypeCell';
 import { LabelCell } from './cell.templates/LabelCell';
-import { TextInputCellTemplate } from './cell.templates/TextInputCellTemplate';
 import { LCP, SchemaOptions } from './types';
 
 export const LCPSchema = ({
@@ -20,7 +20,7 @@ export const LCPSchema = ({
       title: translate('administration.general.settings.lcp.enlilType'),
       width: 200,
       locked: false,
-      cell: TextInputCellTemplate,
+      cell: EnlilTypeCell,
       groupable: false,
       sortable: false,
     },
