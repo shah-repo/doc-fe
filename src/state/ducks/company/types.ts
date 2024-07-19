@@ -1,3 +1,4 @@
+import { Permission } from '../../../state/ducks/auth/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
 import { GroupTag } from '../auth/types';
@@ -106,6 +107,7 @@ export interface NavigationItem {
   icon?: string
   category?: string
   restrictedToUsersWithTags?: GroupTag[]
+  restrictedToUserPermissions?: Permission[]
   isOpen?: boolean
 }
 
