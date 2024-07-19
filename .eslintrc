@@ -15,6 +15,7 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "rules": {
+    "data-cy-kebab-case": "warn",
     "operator-linebreak": ["error", "before"],
     "no-multiple-empty-lines": ["error", { "maxBOF": 0, "max": 1, "maxEOF": 0 } ],
     "react/jsx-curly-brace-presence": ["warn"], // @todo: return "error" after react-scripts upgrade
