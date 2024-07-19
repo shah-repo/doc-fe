@@ -2105,6 +2105,7 @@
   "bulkImport.approvals.step1SubTitle": "Please select type of data to import",
   "bulkImport.approvals.viewFolderStructureGuide": "View Folder Structure Guide",
   "bulkImport.approvals.submit": "Submit for approval",
+  "bulkImport.approvals.select.placeholder": "Start typing to see list of users...",
   "bulkImport.uploadData": "Upload Data",
   "bulkImport.mapColumns": "Map Columns",
   "bulkImport.approvals": "Approvals",

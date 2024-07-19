@@ -34,9 +34,9 @@ export const getBaseDocId = (docID: string, docTypes: string[]): string => {
   }
 };
 
-export const getBaseDocIdParts = (docId: string, baseDocId: string): boolean => {
+export const isValidBaseDocIdPart = (docId: string, baseDocId: string): boolean => {
   const partNumber = docId?.replace(`${baseDocId}-`, '');
   // at the end if docId is replaced with baseDocId the last values should be numeric. if they are numeric should be valid
   const isNumeric = /^\d+$/.test(partNumber);
-  return !!(partNumber === baseDocId || partNumber === '00' || isNumeric);
+  return partNumber === baseDocId || partNumber === '00' || isNumeric;
 };

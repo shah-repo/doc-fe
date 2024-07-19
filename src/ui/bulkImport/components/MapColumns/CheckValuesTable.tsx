@@ -15,12 +15,13 @@ import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid
 import Text from '../../../components/Text';
 import { Button, Switch } from '../../../components/forms/fields-next';
 import { toastError } from '../../../components/notifications';
+import { FB } from '../../../form.builder';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
-import { getBaseDocId, getBaseDocIdParts } from './validation';
+import { getBaseDocId, isValidBaseDocIdPart } from './validation';
 
 interface CheckValuesTableProps {
   children?: ReactNode
@@ -63,10 +64,10 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
     if (error?.help?.validate === TableErrorValidation.DOC_ID && error?.help?.data?.length) {
       const docId = valueCheck?.split('.')[0];
       const baseDocId = getBaseDocId(docId, error?.help?.data);
-      isValid = !!baseDocId;
+      isValid = FB.isUUID(baseDocId);
 
-      if (baseDocId) {
-        isValid = getBaseDocIdParts(docId, baseDocId);
+      if (isValid) {
+        isValid = isValidBaseDocIdPart(docId, baseDocId);
       }
     } else {
       // validate if the value is the same as requiered or if have - star with the value
@@ -86,7 +87,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
       }
     }
 
-    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: props.dataIndex, isEdited: !!isValid }));
+    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: props.dataIndex, isEdited: isValid }));
   };
 
   const content = (

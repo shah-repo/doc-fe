@@ -6,6 +6,7 @@ import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { translate } from '../../../../common/intl';
 import { getApprovers, saveApprovals, saveDocumentRevisions, saveDocumentRevisionsInReview, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
 import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
@@ -87,10 +88,10 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
                   name="selectedUser"
                   options={approversOptionList}
                   getOptionLabel={(option) => option.text}
-                  placeholder="Start typing to see list of users..."
-                  onChange={(_, value: ApproverOption) => {
-                    if (value?.value) {
-                      const selectedUser = approversOptionList.find(user => user.value === value.value);
+                  placeholder={translate('bulkImport.approvals.select.placeholder')}
+                  onChange={(_, option: ApproverOption) => {
+                    if (option?.value) {
+                      const selectedUser = approversOptionList.find(user => user.value === option.value);
                       if (selectedUser) {
                         setUsers([selectedUser]);
                         setFieldValue('selectedUser', '');
