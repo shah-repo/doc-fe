@@ -28,6 +28,7 @@ import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOut
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
+import FBLHRSummary from '../../../../ui/form.builder/FBLHRSummary';
 import FBMaterialEqInfoContainer from '../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container';
 import FBDataStore from '../../../../ui/form.builder/FBStore/FBDataStore';
 import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
@@ -96,7 +97,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isCurrentUserOperator = React.useContext(isOperator);
   const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner && !documentRevision.isBeingEditedAfterRelease;
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
-  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && isDocumentRevisionHasOutput(documentRevision);
+  const hasOutput = isDocumentRevisionHasOutput(documentRevision);
+  const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && hasOutput;
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
 
@@ -143,10 +145,19 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 
   if (tabConfig && [DOC_TYPE_GROUP.PART]
     .includes(group as DOC_TYPE_GROUP)) {
-    tabConfig = tabConfig && [...tabConfig, {
+    tabConfig = [...tabConfig, {
       labelId: 'tabId.bom',
       tabId: TabTypeOptions.BOM.toLowerCase(),
       type: TabTypeOptions.BOM,
+    }];
+  }
+
+  if (tabConfig && [DOC_TYPE_GROUP.PAPER_LHR]
+    .includes(group as DOC_TYPE_GROUP)) {
+    tabConfig = [...tabConfig, {
+      labelId: 'tabId.summary',
+      tabId: TabTypeOptions.SUMMARY.toLowerCase(),
+      type: TabTypeOptions.SUMMARY,
     }];
   }
 
@@ -371,6 +382,9 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled || isWO} isShowOnly={isPartForm || (isWO && !isEmpty(documentRevision?.formTemplate))}
                                   isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView} isWO={isWO}
                                 />
+                              )}
+                              {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
+                                <FBLHRSummary isShowOnly={!hasOutput} isDisabled={isDisabledInput} />
                               )}
                               {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
                                 <FBAllocationTreeList documentRevision={documentRevision} isDisabled={isWO && !isEmpty(documentRevision?.formTemplate)} />

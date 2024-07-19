@@ -20,6 +20,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     _textEditorState,
     showToggleButton,
     label,
+    disabled,
     isPreview,
     formValue,
     toolbar,
@@ -111,7 +112,34 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       _textEditorState?.setMasked(masked);
     };
 
+    const onAwayClick = () => {
+      _documentRevisionFormState?.setExpanded(false);
+      _textEditorState?.setPreviewMode(true);
+      showToggleButton?.();
+      const editorState = _textEditorState?.editorState;
+
+      if (!disabled && name && editorState && _documentRevisionFormState?.isDescriptionFocused) {
+        _documentRevisionFormState?.setDescriptionFocused(false);
+        const htmlContent = draftToHtml(
+          convertToRaw(editorState?.getCurrentContent()),
+        ).trim();
+
+        if (_formState?.getValue(name) === htmlContent) {
+          return;
+        }
+
+        formik.setFieldValue(name, htmlContent);
+        _formState?.setValue(name, htmlContent);
+        submitForm?.();
+      }
+    };
+
     onBlur = () => {
+      const isLinkModelOpen = document.querySelector('.rdw-link-modal');
+      if (isLinkModelOpen) {
+        return;
+      }
+
       handleMask?.(true);
       const editorState = _textEditorState?.editorState;
       if (!editorState) { return; }
@@ -139,6 +167,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       label,
       formValue,
       toolbar,
+      onAwayClick,
       showToggleButton,
       isTextClamped,
       _documentRevisionFormState,

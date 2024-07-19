@@ -16,6 +16,7 @@ interface EditableItem {
 export interface ActionsProps {
   dataItem: EditableItem
   isDeleteDisabled?: boolean
+  isSubmitDisabled?: boolean
   deleteTooltipText?: string
   scrollBehavior?: ScrollBehavior
   onConfirm?: () => void
@@ -27,6 +28,7 @@ const Actions: React.FC<ActionsProps> = ({
   dataItem,
   scrollBehavior = 'auto',
   isDeleteDisabled,
+  isSubmitDisabled,
   deleteTooltipText,
   onConfirm,
   onDiscard,
@@ -35,6 +37,8 @@ const Actions: React.FC<ActionsProps> = ({
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const [deleteRef, isHovered] = useHover<HTMLButtonElement>();
+  const saveTooltipContent = isSubmitDisabled ? 'approvalRequest.tasks.list.task.completed.tooltip' : 'common.save';
+  const deleteTooltipContent = isDeleteDisabled ? 'approvalRequest.tasks.list.task.completed.tooltip' : 'common.delete';
 
   const ref = useCallback((node: HTMLDivElement | null) => {
     if (node) {
@@ -54,7 +58,7 @@ const Actions: React.FC<ActionsProps> = ({
     >
       {onDelete && (
         <Tooltip
-          title={deleteTooltipText ?? translate('common.delete')}
+          title={deleteTooltipText ?? translate(deleteTooltipContent)}
           placement="top"
           arrow
         >
@@ -93,7 +97,7 @@ const Actions: React.FC<ActionsProps> = ({
       )}
       {onConfirm && (
         <Tooltip
-          title={translate('common.save')}
+          title={translate(saveTooltipContent)}
           placement="top"
           arrow
         >
@@ -102,6 +106,7 @@ const Actions: React.FC<ActionsProps> = ({
             kind="action"
             size="small"
             onClick={onConfirm}
+            disabled={isSubmitDisabled}
           >
             <FontAwesomeIcon icon={regular('check')} />
           </IconButton>

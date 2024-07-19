@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as NewTabIcon } from '../../../../assets/images/new_tab.svg';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DOCUMENT_REVISION_GET_ASYNC_DRAWER } from '../../../../state/ducks/documentRevisions/constants';
@@ -19,13 +19,14 @@ import { styles } from './DocumentRevisionDialog.styles';
 interface DocumentRevisionDialogProps {
   dialog: DialogHandler
   docRevId?: string
+  parentRevId?: string
 }
 
 const DocumentRevisionDialog: React.FC<
 DocumentRevisionDialogProps
-> = ({ dialog, docRevId }) => {
+> = ({ dialog, docRevId, parentRevId }) => {
   const classes = styles();
-  // const { _documentRevisionFormState } = SM.useStores();
+  const dispatch = useDispatch();
 
   const loadDocumentRevision = useActionCreator(documentRevisionsActions.load);
   const loadAction = () => loadDocumentRevision(docRevId, DOCUMENT_REVISION_GET_ASYNC_DRAWER);
@@ -45,6 +46,11 @@ DocumentRevisionDialogProps
     const newDocumentRevision = documentRevision as DocumentRevision;
     const path = documentVersionPath(newDocumentRevision?.id || '', newDocumentRevision?.document?.id || '');
     window.open(path);
+  };
+
+  const handleCloseDialog = () => {
+    dialog.close();
+    parentRevId && dispatch(documentRevisionsActions.reload(parentRevId));
   };
 
   return (
@@ -76,7 +82,7 @@ DocumentRevisionDialogProps
         <IconButton
           className={classes.close}
           size="small"
-          onClick={dialog.close}
+          onClick={handleCloseDialog}
         >
           <CloseIcon />
         </IconButton>

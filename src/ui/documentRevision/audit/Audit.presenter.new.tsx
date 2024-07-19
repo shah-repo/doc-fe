@@ -11,12 +11,12 @@ import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/type
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { RELATED_TYPE } from '../../../state/ducks/relatedParts/types';
 import { AsyncStatus } from '../../../state/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
-import { EQ_STATUS_KEY, FBApprovalAuditState, FBSchemaProps, FBText } from '../../form.builder';
+import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { isTranslation } from '../../translations/types';
 import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presenters/related.parts/helper';
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
@@ -239,6 +239,18 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           fbLabel = `${fbLabel as string} ${fieldName}`;
         }
       }
+      // TRAINEE LIST
+      if (fbType === 'traineeList') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        if (['id', 'createdAt', 'documentId', 'docRevId'].includes(field)) {
+          return;
+        }
+        if (field !== FBFieldName.GRPTTraineeList) {
+          const fieldName = translate(`form.builder.trainee.list.${field}`);
+          fbLabel = `${fbLabel as string} ${fieldName}`;
+        }
+      }
       // MPIPROCEDURE
       const valueKey = change.field.split('.');
       if (fbType === 'mpiprocedure') {
@@ -432,13 +444,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           fbLabel = 'Note';
         }
 
-        if (change.field.includes(EQ_STATUS_KEY)) {
-          const relatedTypeObj = revIdRelatedTypeObj[change.documentRevisionId];
-          if (relatedTypeObj.relatedType === RELATED_TYPE.PART_RELATED || relatedTypeObj.isWorkOrder) {
-            return;
-          }
-        }
-
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
         const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 
@@ -466,6 +471,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                       nextStatus: change.nextValue,
                       relatedType: getDynamicTextValue(
                         revIdRelatedTypeObj[change.documentRevisionId]?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+                      rowDetails: getLhrSummaryRowIdentifier(change),
                     }}
                   />
                 </Typography>
@@ -592,7 +598,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 const labelToShow = (change: Audit,
   groupKey: number | undefined,
   key: number | undefined,
-  revIdRelatedTypeObj: {[key: string]: IRevIdMapper}) => {
+  revIdRelatedTypeObj: { [key: string]: IRevIdMapper }) => {
   const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId] ?? {};
   return (
     <>
@@ -616,6 +622,44 @@ const labelToShow = (change: Audit,
       />}
     </>
   );
+};
+
+const getLhrSummaryRowIdentifier = (change: Audit): string => {
+  const prevVal: string = change.previousValue as string;
+  const nextVal: string = change.nextValue as string;
+
+  const { step: prevStep, stepOrMpiDetails: prevDetails } = JSON.parse(prevVal);
+  const { step: nextStep, stepOrMpiDetails: nextDetails } = JSON.parse(nextVal);
+  // modify here
+  const prevStepValue = prevDetails?.isExternalItem ? prevDetails.value : prevDetails?.docId;
+  const nextStepValue = nextDetails?.isExternalItem ? nextDetails.value : nextDetails?.docId;
+
+  let stepNumber = '';
+  if (prevStep !== nextStep && nextStep !== undefined) {
+    if (prevStep === undefined) {
+      stepNumber = nextStep;
+    } else {
+      stepNumber = `${prevStep} To ${nextStep}`;
+    }
+  } else {
+    stepNumber = prevStep;
+  }
+
+  let stepDetails = '';
+  const prevStepValueWithRev = getDisplayDocumentByDetailsObj(prevDetails);
+  const nextStepValueWithRev = getDisplayDocumentByDetailsObj(nextDetails);
+
+  if (prevStepValue !== nextStepValue && nextStepValue !== undefined) {
+    if (prevStepValue === undefined) {
+      stepDetails = nextStepValueWithRev;
+    } else {
+      stepDetails = `${prevStepValueWithRev} To ${nextStepValueWithRev}`;
+    }
+  } else {
+    stepDetails = prevStepValueWithRev;
+  }
+
+  return `${stepNumber} / ${stepDetails}`;
 };
 
 export default AuditPresenter;
