@@ -62,6 +62,11 @@ export default makeStyles(theme => ({
     height: 14,
     color: Colors.statusReleased,
   },
+  xmarkRedIcon: {
+    width: 14,
+    height: 14,
+    color: Colors.error,
+  },
   watchLaterIcon: {
     width: 14,
     height: 14,
@@ -117,6 +122,11 @@ export default makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       minWidth: 250,
     },
+  },
+  completedMsgContainer: {
+    display: 'flex',
+    gap: theme.spacing(0.625, 0.625),
+    alignItems: 'center',
   },
   progressBarContainer: {
     display: 'flex',

@@ -1,3 +1,27 @@
+import axios from 'axios';
+import Config from '../../../config';
+import { store } from '../../store';
+import { BULK_DOWNLOAD_FILE_URL } from './constants';
+
+const TEMPLATE_CSV = 'template.xlsx';
+
+export const getDownloadTemplate = async (bulkImportId: string) => await axios({
+  url: `${Config.ApiEndpoint}${BULK_DOWNLOAD_FILE_URL}${bulkImportId}`,
+  method: 'GET',
+  responseType: 'blob',
+  headers: {
+    Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+  },
+}).then(({ data }) => {
+  const url = window.URL.createObjectURL(new Blob([data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', TEMPLATE_CSV);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+});
+
 export const downloadFile = (data: BlobPart, fileName: string) => {
   // Create a blob object from the data
   const file = new Blob([data], {

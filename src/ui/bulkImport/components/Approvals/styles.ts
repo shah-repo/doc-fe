@@ -7,10 +7,6 @@ export default makeStyles(theme => ({
     margin: '0 auto',
     maxWidth: 550,
   },
-  titleContainer: {
-    marginTop: theme.spacing(6.25),
-    textAlign: 'center',
-  },
   title: {
     fontSize: 30,
     fontWeight: 600,
@@ -57,5 +53,10 @@ export default makeStyles(theme => ({
     marginBottom: theme.spacing(2.5),
     fontSize: 17,
     fontWeight: 400,
+  },
+  autocomplete: {
+    '&.MuiAutocomplete-inputRoot': {
+      height: 47,
+    },
   },
 }));
