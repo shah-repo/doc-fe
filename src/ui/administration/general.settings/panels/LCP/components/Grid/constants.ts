@@ -282,3 +282,10 @@ export const realTimeData = {
     },
   ],
 };
+
+export const realTimeData1 = {
+  categories: [{
+    docTypes: [],
+    phases: [],
+  }],
+};

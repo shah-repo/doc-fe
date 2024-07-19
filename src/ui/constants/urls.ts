@@ -70,3 +70,7 @@ export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
 export const BULK_IMPORT_URL = '/bulk_import/create';
 
 export const BULK_IMPORT_PROGRESS_URL = '/bulk_import';
+
+export const LIFE_CYCLE_URL = '/lifecycle';
+export const LIFE_CYCLE_PHASES_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/baseOptions`;
+export const LIFE_CYCLE_DOC_TYPES_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/documentTypeOptions`;
