@@ -27,6 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FB } from '../../..';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
+import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
@@ -34,6 +35,7 @@ import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import ExpiredLOTDialog, { DialogTypes } from '../../../../change.request/dialogs/ExpiredLOTDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
@@ -128,6 +130,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onError: toastError,
   });
   const alertDialog = useDialog();
+  const expiredDialog = useDialog();
 
   const fetchAllocationTreeList = useActionCreator(
     allocationActions.loadAllocationList,
@@ -160,6 +163,15 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const onDeleteLot = (dataItem) => {
     alertDialog.open();
     setSelectedPart(dataItem);
+  };
+
+  const onConfirmLotAddition = () => {
+    expiredDialog.close();
+    if (selectedPart) {
+      createOrUpdateLOT(selectedPart);
+      discardAllocItem(selectedPart);
+      setSelectedPart(undefined);
+    }
   };
 
   const onConfirmDelete = () => {
@@ -285,11 +297,15 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
       );
     }
   };
-
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
     onSubmit: (values: Partial<EditableAllocationItem>) => {
       if (values.lotRevId) {
+        if (values.isExpired) {
+          setSelectedPart(values as EditableAllocationItem);
+          expiredDialog.open();
+          return;
+        }
         createOrUpdateLOT(values);
       } else {
         createOrUpdatePart(values);
@@ -673,12 +689,14 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           quantityOnHand = getFieldValue(part.quantityBeforeKitting);
           qtyOnHandAfter = getFieldValue(part.quantityAfterKitting);
         }
+        const expiryDate = getFormattedDateString(part.expiryDate, MomentFormats.MonthDateYearTwoDigit);
 
         return {
           ...part,
           quantityOnHand,
           quantityNeeded,
           variance,
+          ...(!isEmpty(part.expiryDate) && { expiryDate }),
           issuedQty,
           partRevId: part.docId,
           qtyOnHandAfter,
@@ -934,6 +952,15 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         cancelLabel="common.cancel"
         message="allocation.lot.delete.confirmation"
         dialog={alertDialog}
+      />
+      <ExpiredLOTDialog
+        dialog={expiredDialog}
+        message="allocation.lot.expired.confirm.prompt.message"
+        type={DialogTypes.Warning}
+        title="common.warning"
+        confirmLabel="common.yes.continue"
+        cancelLabel="common.no.go.back"
+        confirmAction={onConfirmLotAddition}
       />
     </>
   );
