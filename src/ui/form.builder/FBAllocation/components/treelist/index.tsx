@@ -206,6 +206,23 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
   }, [documentRevision?.id]);
 
+  const getValueOrDefaultZero = (value?: number | string): number | string => {
+    return value || 0;
+  };
+
+  const isRecordUnchanged = (values: Partial<EditableAllocationItem>): boolean => {
+    if (
+      selectedPart
+      && getValueOrDefaultZero(selectedPart.quantityNeeded) === getValueOrDefaultZero(values.quantityNeeded)
+      && getValueOrDefaultZero(selectedPart.variance) === getValueOrDefaultZero(values.variance)
+    ) {
+      discardAllocItem(selectedPart);
+      setSelectedPart(undefined);
+      return true;
+    }
+    return false;
+  };
+
   const createOrUpdateLOT = (values: Partial<EditableAllocationItem>) => {
     if (values[ADD_FIELD]) {
       const payload = {
@@ -218,6 +235,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
       partAsync.start(createLot, payload, partAsync);
     } else {
+      if (isRecordUnchanged(values)) {
+        return;
+      }
+
       const payload = {
         lotQuantityNeeded: values.quantityNeeded,
         lotVariance: values.variance,
@@ -244,6 +265,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
       partAsync.start(createPart, payload, partAsync);
     } else {
+      if (isRecordUnchanged(values)) {
+        return;
+      }
+
       const payload = {
         partQuantityNeeded: values.quantityNeeded,
         partVariance,
@@ -263,7 +288,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
-    onSubmit: (values) => {
+    onSubmit: (values: Partial<EditableAllocationItem>) => {
       if (values.lotRevId) {
         createOrUpdateLOT(values);
       } else {
@@ -304,6 +329,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter(
           (data) => !data[ADD_FIELD],
         );
+
+        if (isNil(state.data[index][SUB_ITEMS_FIELD])) {
+          state.data[index][SUB_ITEMS_FIELD] = [];
+        }
 
       state.data[index][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
 
