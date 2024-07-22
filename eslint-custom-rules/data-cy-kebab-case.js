@@ -1,3 +1,5 @@
+'use strict';
+
 const toKebabCase = require('lodash/kebabCase');
 const get = require('lodash/get');
 
