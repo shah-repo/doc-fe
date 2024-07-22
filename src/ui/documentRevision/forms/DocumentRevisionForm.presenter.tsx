@@ -30,6 +30,7 @@ import DocumentSecurity from './presenters/DocumentSecurity';
 import DocumentTypeSelect from './presenters/DocumentTypeSelect';
 import EquipmentSpecification from './presenters/EquipmentSpecification';
 import FBActiveNoOutput from './presenters/FBActiveNoOutput';
+import LifecyclePhaseSelect from './presenters/LifecyclePhaseSelect';
 import RetrainField from './presenters/RetrainField';
 import RevisionStage from './presenters/RevisionStage';
 import RevisionTypeChange from './presenters/RevisionTypeChange';
@@ -305,13 +306,21 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          <Grid item xs={6}>
+          {!isPart && !documentRevision?.parentParts && (<Grid item xs={6}>
             <RetrainField
               revisionChangeType={values.revisionChangeType}
               isDisabled={isDisabledInput || inRestrictedEditMode}
               {...{ documentTypeId, isRecord }}
             />
-          </Grid></>)}
+          </Grid>)}
+          {isPart && documentRevision?.parentParts && (<Grid item xs={6}>
+            <LifecyclePhaseSelect
+              isDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
+              {...{
+                isDocRevStatusDraft,
+              }}
+            />
+          </Grid>)}</>)}
           {isEB && (
             <Grid item xs={12}>
               <FBEBPart name="childrenParts">
@@ -355,13 +364,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             </Grid>
           )}
           {isPart && documentRevision?.parentParts && (
-            <Grid item xs={12}>
-              <BuildsContainer
-                dataProp={flatten([documentRevision?.parentParts])}
-                label="common.part.of"
-                isDraft={isDocRevStatusDraft || isRevised}
-              />
-            </Grid>
+            <>
+              <Grid item xs={6}>
+                <BuildsContainer
+                  dataProp={flatten([documentRevision?.parentParts])}
+                  label="common.part.of"
+                  isDraft={isDocRevStatusDraft || isRevised}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <RetrainField
+                  revisionChangeType={values.revisionChangeType}
+                  isDisabled={isDisabledInput || inRestrictedEditMode}
+                  {...{ documentTypeId, isRecord }}
+                />
+              </Grid>
+            </>
           )}
           {(isPart || isPartForm || isOther || isOtherForm)
             && <Grid item xs={12}>
