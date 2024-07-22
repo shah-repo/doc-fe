@@ -7,19 +7,21 @@ import { noop } from 'lodash';
 import React, { ComponentType, ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
+import { validateDateFormats } from '../../../../common/utils/date';
 import { setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
 import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
-import { BulkImport, TableErrorDetail, TableRow } from '../../../../state/ducks/bulkImport/types';
+import { BulkImport, TableErrorDetail, TableErrorValidation, TableRow } from '../../../../state/ducks/bulkImport/types';
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import Text from '../../../components/Text';
 import { Button, Switch } from '../../../components/forms/fields-next';
 import { toastError } from '../../../components/notifications';
+import { FB } from '../../../form.builder';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { NeedHelpButton } from '../ButtonActions';
 import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
+import { getBaseDocId, isValidBaseDocIdPart } from './validation';
 
 interface CheckValuesTableProps {
   children?: ReactNode
@@ -43,9 +45,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
   const classes = useStyles();
   const [isEditing, setIsEditing] = useState(false);
   const [cellValue, setCellValue] = useState(dataItem[field]);
-
-  const normalizedField = field?.replace(/\s/g, '').toLowerCase();
-  const error = dataItem.errors?.find(error => error.column === normalizedField);
+  const error = dataItem.errors?.find(error => error.column === field);
   const isErrorShown = error && !error?.edited;
 
   const handleDoubleClick = () => {
@@ -58,7 +58,36 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
 
   const handleBlur = () => {
     setIsEditing(false);
-    dispatch(updateRowFieldTable({ cellValue: cellValue as string, field, dataIndex: props.dataIndex }));
+    const valueCheck = cellValue as string;
+    let isValid = true;
+
+    if (error?.help?.validate === TableErrorValidation.DOC_ID && error?.help?.data?.length) {
+      const docId = valueCheck?.split('.')[0];
+      const baseDocId = getBaseDocId(docId, error?.help?.data);
+      isValid = FB.isUUID(baseDocId);
+
+      if (isValid) {
+        isValid = isValidBaseDocIdPart(docId, baseDocId);
+      }
+    } else {
+      // validate if the value is the same as requiered or if have - star with the value
+      if (error?.help?.data?.length) {
+        isValid = error?.help?.data.some(entry => entry === valueCheck);
+      }
+
+      // At the moment format is only for dates
+      if (isValid && error?.help?.format?.length) {
+        const dateFormats = error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
+        const datePattern = new RegExp(`^(${dateFormats.join('|')})$`);
+        isValid = datePattern.test(valueCheck);
+
+        if (isValid) {
+          isValid = validateDateFormats(valueCheck, error?.help?.format);
+        }
+      }
+    }
+
+    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: props.dataIndex, isEdited: isValid }));
   };
 
   const content = (
@@ -88,10 +117,11 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
                 {error.message}
                 {error?.help?.message && (
                   <>
+                    <br />
                     {error.help.message}
                     {error?.help?.data?.length && (
                       <>
-                        {translate('common.allowed')}: {error.help.data.join(', ')}
+                        : {error.help.data.join(', ')}
                       </>
                     )}
                   </>
@@ -203,7 +233,6 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
         ))}
       </StyledKendoGrid>
       <Box className={classes.actionsContainer}>
-        <NeedHelpButton />
         <Box className={classes.buttonsFooterContainer}>
           <Button
             onClick={handleBack}
@@ -215,6 +244,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           <Button
             onClick={triggerNext}
             className={classes.button}
+            disabled={tableData.length === 0 || errorCount > 0 }
           >
             <Text translation="common.next" />
           </Button>

@@ -2103,7 +2103,7 @@
   "bulkImport.mapColumns.table.sourceData": "Source Data",
   "bulkImport.mapColumns.table.targetData": "Target Data",
   "bulkImport.mapColumns.table.subTitle": "Please check all issues (if any) highlighted in red. You can edit by clicking on the cell",
-  "bulkImport.uploadData.subtitle": "You can upload .xlsx or .csv file.",
+  "bulkImport.uploadData.subtitle": "You can upload .xlsx file.",
   "bulkImport.uploadData.subtitle2": "You can also download our excel template for format guidance",
   "bulkImport.uploadAttachments.title": "Upload Zip File",
   "bulkImport.uploadAttachments.subTitle": "Uploading a zip file may take several minutes depending on the file size.",
@@ -2114,8 +2114,9 @@
   "bulkImport.approvals.approvers": "Approvers",
   "bulkImport.approvals.step1Title": "Select data type",
   "bulkImport.approvals.step1SubTitle": "Please select type of data to import",
-  "bulkImport.approvals.needHelp": "Need help? Contact Support",
   "bulkImport.approvals.viewFolderStructureGuide": "View Folder Structure Guide",
+  "bulkImport.approvals.submit": "Submit for approval",
+  "bulkImport.approvals.select.placeholder": "Start typing to see list of users...",
   "bulkImport.uploadData": "Upload Data",
   "bulkImport.mapColumns": "Map Columns",
   "bulkImport.approvals": "Approvals",
@@ -2126,6 +2127,8 @@
   "bulkImport.mismatchedStructure": "5 folders have mismatched structure errors.",
   "bulkImport.goBackStep": "Are you sure you want to go back to this step?",
   "bulkImport.tableErrorCountMessage": "Please fix the {error} before continue",
+  "bulkImport.reject.alert": "You are rejecting a Bulk Import\nAre you sure you want to continue?",
+  "common.mapHeaders.noHeaders": "There are no headers in the file. Please upload a new file.",
   "common.importingFiles": "Importing files",
   "common.table.rowsErrors": "rows contain errors.",
   "common.table.noRowsErrors": "Great! All errors have been resolved.",
@@ -2139,5 +2142,8 @@
   "common.template.reUpload": "Re-Upload Template",
   "common.selectOption": "Select an option",
   "common.allowed": "Allowed",
-  "common.dataType": "Data Type"
+  "common.dataType": "Data Type",
+  "common.viewAll": "View All",
+  "common.rejected": "Rejected",
+  "common.status": "Status"
 }

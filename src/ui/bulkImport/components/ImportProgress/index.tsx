@@ -21,11 +21,11 @@ const ImportProgress: React.FC = () => {
 
   const dateTypeOptions = useMemo(() => {
     const uniqueProcessIds = Array.from(new Set(bulkImports.map((item: any) => item.processType)));
-    return [{ value: '', text: translate('common.dataType') }, ...uniqueProcessIds.map(id => ({ value: id, text: id }))];
+    return [{ value: '', text: translate('common.viewAll') }, ...uniqueProcessIds.map(id => ({ value: id, text: id }))];
   }, [bulkImports]);
   const statusesOptions = useMemo(() => {
     const uniqueStatuses = Array.from(new Set(bulkImports.map((item: any) => item.status)));
-    return [{ value: '', text: 'Status' }, ...uniqueStatuses.map(status => ({ value: status, text: status }))];
+    return [{ value: '', text: translate('common.viewAll') }, ...uniqueStatuses.map(status => ({ value: status, text: status }))];
   }, [bulkImports]);
 
   const dataTypeChange = (event) => {
@@ -54,6 +54,7 @@ const ImportProgress: React.FC = () => {
                 options={dateTypeOptions}
                 inputStyleProps={classes.select}
                 inputFieldProps={{ inputProps: { className: classes.selectInput } }}
+                inputLabel="common.dataType"
               />
               <SelectField
                 selectProps={{ id: 'status', onChange: statusesChange }}
@@ -62,6 +63,7 @@ const ImportProgress: React.FC = () => {
                 options={statusesOptions}
                 inputStyleProps={classes.select}
                 inputFieldProps={{ inputProps: { className: classes.selectInput } }}
+                inputLabel="common.status"
               />
             </Form>
           </Formik>
