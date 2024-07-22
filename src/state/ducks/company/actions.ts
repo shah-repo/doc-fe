@@ -1,8 +1,8 @@
 import { omit } from 'lodash';
 import { generatePath } from 'react-router-dom';
-import { GroupDocTypes, LCP } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
+import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
-import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
+import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
@@ -109,6 +109,19 @@ const fetchLCPDocTypes = (
     handlers,
   });
 
+const fetchDocRevOptionsByDocTypeId = (
+  documentTypeId: string,
+  currentPhaseId?: string,
+  handlers: Handlers,
+): ApiAction<LCPDocRevOptions[]> => {
+  const url = currentPhaseId ? `documentTypeId=${documentTypeId}&currentPhaseId=${currentPhaseId}` : `documentTypeId=${documentTypeId}`;
+  return apiActionWithCallbacks({
+    url: `${LIFE_CYCLE_DOC_REV_OPTIONS_URL}?${url}`,
+    method: 'get',
+    handlers,
+  });
+};
+
 export default {
   selectCompany,
   getCompanyMine,
@@ -116,6 +129,7 @@ export default {
   updateNavigationMenuItem,
   autosaveConfig,
   fetchLCPDocTypes,
+  fetchDocRevOptionsByDocTypeId,
   fetchLCPPhasesByGroup,
   setAutosaveConfig,
   redlineConfig,

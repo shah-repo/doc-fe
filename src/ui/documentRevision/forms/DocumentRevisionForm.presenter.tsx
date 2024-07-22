@@ -315,6 +315,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Grid>)}
           {isPart && documentRevision?.parentParts && (<Grid item xs={6}>
             <LifecyclePhaseSelect
+            docTypeId ={docTypeId}
+            lifecyclePhaseId={documentRevision?.lifecyclePhaseId}
               isDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
               {...{
                 isDocRevStatusDraft,

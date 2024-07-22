@@ -60,6 +60,14 @@ export interface GroupDocTypes {
   group: string
 }
 
+export interface LCPDocRevOptions {
+  id: string
+  enlilType: string
+  displayLabel: string
+  displayOrder: number
+  order: number
+}
+
 export interface LCPResponse {
   docTypes: GroupDocTypes[]
   phases: LCP[]

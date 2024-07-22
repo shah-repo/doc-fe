@@ -285,6 +285,8 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
   eqStatus: EquipmentStatus
+  lifecyclePhaseId?: string
+  lifecyclePhase?: string
 }
 
 interface EQ {

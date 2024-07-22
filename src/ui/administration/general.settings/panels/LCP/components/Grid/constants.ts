@@ -40,6 +40,10 @@ export const PART_PURCHASE_OPTIONS = [
   { label: 'No', value: 'no' },
 ];
 
+export const DEFAULT_PART_PURCHASE_OPTIONS = [
+  { label: 'No', value: 'no' },
+];
+
 // LCP table initial data remove at last
 export const initialData = [
   { id: '1', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes', documentTypeIdArr: ['CS'] },
@@ -281,11 +285,4 @@ export const realTimeData = {
       ],
     },
   ],
-};
-
-export const realTimeData1 = {
-  categories: [{
-    docTypes: [],
-    phases: [],
-  }],
 };

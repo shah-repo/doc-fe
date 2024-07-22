@@ -11,11 +11,11 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
 import { FBDAMFields } from '../form.builder';
+import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
-import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -171,7 +171,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         [FBDAMFields.DAM]: approvalMatrix,
       });
     }
-    const redlineDataToSubmit = pick(values, 'schema', 'formInput', 'redline');
+    const redlineDataToSubmit = pick(values, 'schema', 'formInput', 'redline', 'lifecyclePhaseId');
 
     // Receivable: Missing form input data on First time when initial values form input is null and autosave is disabled
     if (isReceivable && isEmpty(dataToSubmit) && isEmpty(values.formInput)) {
@@ -193,6 +193,12 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         redlineDataToSubmit.redline = false;
       }
       return handleSave(redlineDataToSubmit as DocumentRevisionEditRequestBody, helpers);
+    }
+
+    const lifecyclePhaseDataToSubmit = pick(values, 'schema', 'formInput', 'lifecyclePhaseId');
+
+    if (lifecyclePhaseDataToSubmit) {
+      return handleSave(lifecyclePhaseDataToSubmit as DocumentRevisionEditRequestBody, helpers);
     }
 
     if (isEmpty(dataToSubmit)) {

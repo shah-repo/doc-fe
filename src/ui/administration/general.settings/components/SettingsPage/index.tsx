@@ -19,10 +19,6 @@ const GeneralSettingsContainer: React.FC = () => {
   const formik = useFormik<GeneralSettings>({
     initialValues,
     onSubmit: (values) => {
-      if (values.lifecyclePhases) {
-        delete values.lifecyclePhases;
-      }
-
       dispatch(companyActions.updateGeneralSettings(values));
     },
   });

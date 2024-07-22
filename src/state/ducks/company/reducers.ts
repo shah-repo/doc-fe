@@ -46,6 +46,7 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   },
   approvalRequestAdmin: false,
   shouldAutoUpdateLotStatus: false,
+  lifecyclePhases: { categories: [] },
   status: AsyncStatus.Idle,
   message: '',
 };

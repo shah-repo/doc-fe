@@ -22,7 +22,7 @@ import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { AddPhase } from './cell.templates/AddPhase';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, PARTS_GROUP_ID, realTimeData1, REQUEST_PAYLOAD_KEYS } from './constants';
+import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, PARTS_GROUP_ID, REQUEST_PAYLOAD_KEYS } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, GroupDocTypes, LCP, LCPResponse } from './types';
@@ -42,8 +42,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
   const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
   const classes = useStyles();
-  const { getFieldProps, setValues, values: formValues } = useFormikContext();
-  const lifeCycleData = getFieldProps('lifecyclePhases') as unknown as { categories: LCPResponse[] };
+  const { setValues, values: formValues } = useFormikContext();
 
   const fetchLCPDocTypesAsync = useAsync({
     onSuccess: (data?: GroupDocTypes[]) => {
@@ -75,13 +74,13 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   });
 
   useEffect(() => {
-    const data = processRealData(lifeCycleData.categories ?? realTimeData1.categories as unknown as LCPResponse[]);
+    const data = processRealData(formValues?.lifecyclePhases?.categories as unknown as LCPResponse[]);
     updateStateGridData(data.phases);
     fetchLCPDocTypesAsync.start(
       fetchLCPDocTypes,
       fetchLCPDocTypesAsync,
     );
-  }, []);
+  }, [formValues?.lifecyclePhases]);
 
   const onDataStateChange = (event: GridDataStateChangeEvent): State => {
     const newDataState = processWithGroups(data ?? [], event.dataState);
@@ -132,11 +131,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(processWithGroups(updatedData, initialDataState));
   };
 
-  const updateSettingsObj = (updatedData) => {
-    // TODO call API POST HERE
-    const payload = updatedData?.map((item) => pick(item, REQUEST_PAYLOAD_KEYS));
-    console.log('Data Final to save settings ', payload);
-    // updated formik here
+  const updateSettingsObj = (updatedData: LCP[]) => {
+    const payload = updatedData?.map((item) => {
+      return { ...pick(item, REQUEST_PAYLOAD_KEYS), displayOrder: item.order };
+    });
     if (formValues) {
       formValues.lifecyclePhases = payload;
       setValues(formValues);
