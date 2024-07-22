@@ -15,7 +15,6 @@ import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid
 import Text from '../../../components/Text';
 import { Button, Switch } from '../../../components/forms/fields-next';
 import { toastError } from '../../../components/notifications';
-import { FB } from '../../../form.builder';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import MessageInformation from '../MessageInformation';
@@ -64,7 +63,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
     if (error?.help?.validate === TableErrorValidation.DOC_ID && error?.help?.data?.length) {
       const docId = valueCheck?.split('.')[0];
       const baseDocId = getBaseDocId(docId, error?.help?.data);
-      isValid = FB.isUUID(baseDocId);
+      isValid = !!baseDocId?.length;
 
       if (isValid) {
         isValid = isValidBaseDocIdPart(docId, baseDocId);
