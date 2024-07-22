@@ -1,3 +1,5 @@
+const toKebabCase = require('lodash/kebabCase');
+
 module.exports = {
   meta: {
     type: "problem",
@@ -19,16 +21,25 @@ module.exports = {
 
         const value = node.value && node.value.value;
 
-        if (value && !/^[a-z]+(-[a-z]+)*$/.test(value)) {
-          context.report({
-            node,
-            message: 'The value of data-cy/dataCy attribute must be in kebab-case.',
-            fix: function (fixer) {
-              const kebabCaseValue = value.replace(/([A-Z])/g, '-$1').replace(/_/g, '-').toLowerCase();
-              return fixer.replaceText(node.value, `“${kebabCaseValue}“`);
-            }
-          });
+        if (!value) {
+          // expression in property value, no need to check
+          return
         }
+
+        const kebabValue = toKebabCase(value);
+
+        if (value === kebabValue) {
+          // everything is ok
+          return
+        }
+
+        context.report({
+          node,
+          message: 'The value of data-cy/dataCy attribute must be in kebab-case.',
+          fix: function (fixer) {
+            return fixer.replaceText(node.value, `"${kebabValue}"`);
+          }
+        });
       }
     };
   }
