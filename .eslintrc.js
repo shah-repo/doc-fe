@@ -1,4 +1,9 @@
-{
+"use strict";
+
+const rulesDirPlugin = require('eslint-plugin-rulesdir');
+rulesDirPlugin.RULES_DIR = 'eslint-custom-rules';
+
+module.exports = {
   "env": {
     "browser": true,
     "node": true
@@ -12,10 +17,13 @@
     "react-app",
     "standard-with-typescript",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+  ],
+  "plugins": [
+    'rulesdir'
   ],
   "rules": {
-    "data-cy-kebab-case": "warn",
+    "rulesdir/data-cy-kebab-case": "warn",
     "operator-linebreak": ["error", "before"],
     "no-multiple-empty-lines": ["error", { "maxBOF": 0, "max": 1, "maxEOF": 0 } ],
     "react/jsx-curly-brace-presence": ["warn"], // @todo: return "error" after react-scripts upgrade

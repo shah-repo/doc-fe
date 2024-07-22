@@ -3,13 +3,13 @@ const get = require('lodash/get');
 
 module.exports = {
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
-      description: "enforce kebab-case for data-cy attribute values",
-      category: "Best Practices",
+      description: 'enforce kebab-case for data-cy attribute values',
+      category: 'Best Practices',
       recommended: false
     },
-    fixable: "code",
+    fixable: 'code',
     schema: []
   },  
   create: function (context) {
