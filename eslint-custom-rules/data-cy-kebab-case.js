@@ -1,4 +1,5 @@
 const toKebabCase = require('lodash/kebabCase');
+const get = require('lodash/get');
 
 module.exports = {
   meta: {
@@ -15,14 +16,15 @@ module.exports = {
     return {
       JSXAttribute(node) {
         if (!['data-cy', 'dataCy'].includes(node.name.name)) {
-          // no need to check
+          // skip
           return
         }
 
-        const value = node.value && node.value.value;
+        const value = get(node, 'value.value')
+          || get(node, 'value.expression.value');
 
         if (!value) {
-          // expression in property value, no need to check
+          // skip
           return
         }
 
