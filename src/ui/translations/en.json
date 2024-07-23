@@ -1666,6 +1666,7 @@
   "OBSOLETE.SUP": "Void",
   "VOIDED": "Voided",
   "APPROVED": "Approved",
+  "COMPLETED": "Completed",
   "IMPLEMENTATION": "Implementation",
   "CANCELED": "Canceled",
   "CLOSED": "Closed",
