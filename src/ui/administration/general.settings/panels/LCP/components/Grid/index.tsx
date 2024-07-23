@@ -219,8 +219,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const formik = useFormik<Partial<EditableLCP>>({
     initialValues: {},
     onSubmit: (values) => {
-      const updatedData = data?.map(phase => (phase.id === values.id) ? { ...phase, isAddPhase: false } : phase);
+      delete values.enlilTypeOptions;
+      const updatedData = data?.map(phase => (phase.id === values.id) ? { ...values as EditableLCP, isAddPhase: false } : phase);
       setPrevData(updatedData);
+      setAddNewPhase(undefined);
+      setData(updatedData);
       setResultState(processWithGroups(updatedData ?? [], initialDataState));
     },
   });

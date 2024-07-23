@@ -11,8 +11,7 @@ import { LCP } from '../types';
 const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, onChange }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
 
-  const handleChange = (e) => {
-    const value = e.target.value;
+  const handleChange = (e, value: string) => {
     setFieldValue(field, value);
   };
   return (
