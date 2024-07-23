@@ -30,7 +30,7 @@ export const getExcelData = (
   LHRSummaryItemList.map(item => {
     const modifiedItem = {
       ...item,
-      customMpiId: getDipslayStepAndMpiValue(item.step, item?.stepOrMpiDetails),
+      customMpiId: getDisplayStepAndMpiValue(item.step, item?.stepOrMpiDetails),
       plannedDocId: getDisplayDocumentByDetailsObj(item?.plannedDetails),
       actualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       lotOrEqDocId: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
@@ -83,7 +83,7 @@ export const getTypeOptionLabelByValue = (value: string): string | undefined => 
   return TYPE_OPTIONS.find((option) => option.value === value)?.label;
 };
 
-export const getDipslayStepAndMpiValue = (step: string, stepOrMpiDetails: DetailsObj): string => {
+export const getDisplayStepAndMpiValue = (step: string, stepOrMpiDetails: DetailsObj): string => {
   const customMpiIdValue = getDisplayDocumentByDetailsObj(stepOrMpiDetails);
   return (customMpiIdValue === step) ? step : `${step}/${customMpiIdValue}`;
 };
