@@ -247,7 +247,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
       partAsync.start(createLot, payload, partAsync);
     } else {
-      if (isRecordUnchanged(values)) {
+      if (!values.isExpired && isRecordUnchanged(values)) {
         return;
       }
 
