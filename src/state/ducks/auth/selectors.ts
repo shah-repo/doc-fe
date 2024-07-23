@@ -3,7 +3,8 @@ import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/typ
 import { ApplicationState } from '../../reducers';
 import { AsyncState } from '../../types';
 import { Nullable } from '../common/types';
-import { User, Group, GroupTag, IotCredentials, Permission } from './types';
+import { Employee } from '../company/types';
+import { Group, GroupTag, IotCredentials, Permission, User } from './types';
 
 const isAuthenticated = (state: ApplicationState): boolean =>
   Boolean(state.auth.user.sessionId);
@@ -75,7 +76,7 @@ const getHasSlack = createSelector(
   (tags, selectedTag) => tags.includes(selectedTag),
 );
 
-const employees = (state: ApplicationState) => state.auth.user.employees;
+const employees = (state: ApplicationState): Employee[] => state.auth.user.employees;
 
 const hasMultipleCompanies = (state: ApplicationState): boolean => (
   ((state.auth.user.employees).filter((employee) => employee.active)).length > 1

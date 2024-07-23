@@ -7,6 +7,8 @@
   "login.message": "Don't have an account?",
   "login.submit": "Sign in",
   "login.create.account": "Click here to register",
+  "login.logging.in": "Logging in...",
+  "login.error": "Something went wrong",
   "signup.submit": "Sign up",
   "signup.title": "Sign up with a new account",
   "signup.message": "Already have an account?",
