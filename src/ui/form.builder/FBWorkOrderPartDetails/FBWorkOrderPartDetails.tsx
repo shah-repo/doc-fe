@@ -119,7 +119,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   }
 
   const onQuanityValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const regex = /^[1-9]\d*$/;
+    const regex = /^[1-9]\d*(\.\d+)?$/;
     if (!regex.test(e.target.value)) {
       e.target.value = '';
     }
