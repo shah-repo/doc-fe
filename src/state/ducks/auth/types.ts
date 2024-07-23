@@ -7,6 +7,10 @@ export interface LoginRequestBody {
   password: string
 }
 
+export interface LoginSSORequestBody {
+  code: string
+}
+
 export interface ForgotPassword {
   email: string
 }
