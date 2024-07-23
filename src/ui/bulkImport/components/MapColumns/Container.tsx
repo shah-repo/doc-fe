@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBulkImportTableData, setShowTable, setTableData } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImport, getShowTable, getTableData } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport } from '../../../../state/ducks/bulkImport/types';
-import { NeedHelpButton } from '../ButtonActions';
 import CheckValuesTable from './CheckValuesTable';
 import SourceTarget from './SourceTarget';
 import useStyles from './styles';
@@ -27,6 +26,10 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleBac
 
   const handleSourceTarget = () => {
     dispatch(setShowTable(true));
+  };
+
+  const handleBackTable = () => {
+    dispatch(setShowTable(false));
   };
 
   const init = () => {
@@ -60,16 +63,13 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleBac
 
   if (showTable) {
     return (
-      <CheckValuesTable handleNext={handleNext} handleBack={handleBack} bulkImport={bulkImport as BulkImport} />
+      <CheckValuesTable handleNext={handleNext} handleBack={handleBackTable} bulkImport={bulkImport as BulkImport} />
     );
   }
 
   return (
     <SourceTarget handleNext={handleSourceTarget} bulkImport={bulkImport as BulkImport}>
       <Box className={classes.actionContainer}>
-        <Box className={classes.needHelpContainer}>
-          <NeedHelpButton />
-        </Box>
         {children}
       </Box>
     </SourceTarget>

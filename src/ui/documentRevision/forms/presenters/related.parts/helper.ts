@@ -16,7 +16,7 @@ export enum RELATED_TYPE_VALUES_ENUM {
   DOCUMENT= 'document',
   DOCUMENT_CAPS= 'Document',
   SUB_PART= 'sub-part',
-  SUB_PART_CAPS= 'Sub-Part',
+  SUB_PART_CAPS= 'Sub-part',
   SUB_PART_PLURALIZED= 'sub-parts',
   RELATED_DOCUMENTS= 'related documents',
   SUB_DOCUMENT= 'sub-document',
