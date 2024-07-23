@@ -191,12 +191,22 @@ interface AllocationConfig {
   sortOrderByReleaseDate: AllocationOrderType
   expiredLotsPrompt: ExpiredLotType
 }
+
+interface TrainingReminder {
+  trainingAssigned: boolean
+  sevenDays: boolean
+  customDays: { isChecked: boolean, value: number }
+  trainingDueToday: boolean
+  trainingOverdue: boolean
+}
+
 export interface GeneralSettings {
   zebraPrint: ZebraPrintSettings[]
   equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
+  trainingReminder: TrainingReminder
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
