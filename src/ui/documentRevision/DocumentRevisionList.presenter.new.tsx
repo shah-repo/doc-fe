@@ -114,6 +114,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
 
   const docIdLabel = (isRecordOrPO ? 'common.id' : 'common.docId') as Translation;
   let recordOwnerLabel = 'common.owner' as Translation;
+  const userName = ((isRecord && isReleased) ? documentRevision.approvals?.[0]?.approverName : documentRevision.owner.user.name) ?? '';
 
   if (isRecord && (isReleased || isVoided)) {
     recordOwnerLabel = isVoided ? 'record.voided.by' : 'record.released.by';
@@ -179,7 +180,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         )}
         <SummaryInfo
           label={recordOwnerLabel}
-          value={documentRevision.owner.user.name}
+          value={userName}
         />
         <SummaryInfo
           label={isRecord ? recordDateLabel : 'common.effective.date'}

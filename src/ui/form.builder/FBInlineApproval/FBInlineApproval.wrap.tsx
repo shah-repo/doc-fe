@@ -49,7 +49,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     );
 
     isPreview = workspaceState?.mode === 'preview';
-    const fieldApprovals = useMemo(() => filter(docApprovals, { fieldId: name, status: !ApprovalStatus.Abandoned }), [docApprovals, name]);
+    const fieldApprovals = useMemo(
+      () => docApprovals?.filter((approval) => approval.fieldId === name && approval.status !== ApprovalStatus.Abandoned) ?? [],
+      [docApprovals, name],
+    );
 
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
