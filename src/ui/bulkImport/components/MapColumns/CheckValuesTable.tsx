@@ -63,7 +63,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
     if (error?.help?.validate === TableErrorValidation.DOC_ID && error?.help?.data?.length) {
       const docId = valueCheck?.split('.')[0];
       const baseDocId = getBaseDocId(docId, error?.help?.data);
-      isValid = !!baseDocId?.length;
+      isValid = baseDocId?.length > 0;
 
       if (isValid) {
         isValid = isValidBaseDocIdPart(docId, baseDocId);
