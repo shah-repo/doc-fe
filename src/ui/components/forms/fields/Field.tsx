@@ -1,6 +1,6 @@
 import { BoxProps, FormControl, FormHelperText, Typography } from '@material-ui/core';
 import { FormControlProps } from '@material-ui/core/FormControl';
-import { InputLabelProps } from '@material-ui/core/InputLabel';
+import InputLabel, { InputLabelProps } from '@material-ui/core/InputLabel';
 import { FieldProps as FormikFieldProps } from 'formik';
 import { get } from 'lodash';
 import * as React from 'react';
@@ -22,6 +22,7 @@ export interface FieldOwnProps {
   value?: string
   actionsRenderer?: () => any
   labelProps?: BoxProps
+  inputLabel?: Translation
 }
 
 export interface FieldStyleProps {
@@ -44,6 +45,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
   gutter = true,
   actionsRenderer,
   labelProps,
+  inputLabel,
 }) => {
   // storing BE response in status
   const error = get(errors, field.name);
@@ -55,6 +57,16 @@ const Field: React.FunctionComponent<FieldProps> = ({
   if (error && !shouldDisplayError && isSubmitting) {
     form.setFieldTouched(field.name, true);
   }
+
+  const InputLabelComponent = () => {
+    if (!inputLabel) return null;
+
+    return (
+      <InputLabel>
+        <Text translation={inputLabel} />
+      </InputLabel>
+    );
+  };
 
   const LabelComponent = () => {
     if (actionsRenderer) {
@@ -90,12 +102,13 @@ const Field: React.FunctionComponent<FieldProps> = ({
       required={required}
       fullWidth={true}
       error={shouldDisplayError}
-      className={classes.form}
+      className={inputLabel ? classes.formInputLabel : classes.form}
       style={labelProps}
       data-cy={`field-${field.name}`}
       {...formControlProps}
     >
       {LabelComponent()}
+      {InputLabelComponent()}
       {children}
       {ErrorComponent}
     </FormControl>

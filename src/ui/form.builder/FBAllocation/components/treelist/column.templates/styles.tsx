@@ -17,6 +17,10 @@ export const styles = makeStyles((theme) => ({
     color: Colors.lochmara,
     cursor: 'pointer',
   },
+  listItem: {
+    margin: 0,
+    padding: 0,
+  },
   levelWidth: {
     width: '22px !important',
   },
@@ -41,6 +45,9 @@ export const styles = makeStyles((theme) => ({
   lotNameCell: {
     verticalAlign: 'middle',
     marginLeft: 0,
+  },
+  expired: {
+    color: Colors.latest_red_varient,
   },
   GREEN_STATUS: {
     background: Colors.snow_flurry,
