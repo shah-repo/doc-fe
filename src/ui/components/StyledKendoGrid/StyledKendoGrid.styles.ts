@@ -478,6 +478,7 @@ export default makeStyles((theme) => ({
     },
     '.k-animation-container': {
       boxShadow: 'none',
+      width: 'auto !important',
 
       '& > .k-popup': {
         boxShadow: 'none',

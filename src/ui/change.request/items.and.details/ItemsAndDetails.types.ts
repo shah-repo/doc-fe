@@ -40,6 +40,7 @@ export interface FBDocumentRevisionsValue {
 }
 
 export interface ApprovalRequestGridItem {
+  revision: string
   id: string
   docRevId: string
   documentId: string

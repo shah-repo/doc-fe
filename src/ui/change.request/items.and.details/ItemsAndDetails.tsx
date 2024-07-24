@@ -158,6 +158,7 @@ const ItemsAndDetails: React.FunctionComponent<{
           <ApprovalRequestItem
             key={`fb-document-revision-${entry.id}`}
             entry={entry}
+            revision= {documentRevision?.revision}
             {...{ formState }}
             disabledOptions={disabledOptions}
             handleRemove = {handleRemove}

@@ -9,7 +9,7 @@ import { FB, FBInputProps, FBTextField, FBTooltip, FBWorkspaceModeOptions } from
 import { translate } from '../../../common/intl';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
-import { WorkOrderTypes, WO_PART_KEY_NAME, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
+import { WO_PART_KEY_NAME, WO_TYPE_KEY, WorkOrderTypes } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import ErrorBlock from '../../components/forms/fields/ErrorBlock';
@@ -21,7 +21,7 @@ import { Colors } from '../../layout/theme-next';
 import { Translation } from '../../translations/types';
 import { LatestPartRevisionInfo } from '../FBAllocation/interface';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
-import { PART_TO_BE_MADE } from './constants';
+import { PART_TO_BE_MADE, QUANTITY_DEFAULT_VALUE } from './constants';
 import { styles } from './styles';
 
 const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
@@ -60,25 +60,36 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   });
 
   const deleteAllocationAsync = useAsync({
-    onSuccess: dialog.close,
-    onError: dialog.close,
-  });
+    onSuccess: () => {
+      dialog.close();
+      const partId = partsDefaultValue?.id;
+      if (!partId) return;
 
-  useEffect(() => {
-    const partId = partsDefaultValue?.id;
-    if (partId) {
-      setPrevSelectedPartId(partId);
       fetchAvailablePartsAsync.start(
         fetchAvailablePartsAction,
         partId,
         fetchAvailablePartsAsync,
       );
-    } else if (prevSelectedPartId && !partId) {
+    },
+    onError: dialog.close,
+  });
+
+  useEffect(() => {
+    const partId = partsDefaultValue?.id;
+    if (!prevSelectedPartId && partId) {
+      fetchAvailablePartsAsync.start(
+        fetchAvailablePartsAction,
+        partId,
+        fetchAvailablePartsAsync,
+      );
+    } else if (prevSelectedPartId && (!partId || (FB.isUUID(partId) && prevSelectedPartId !== partId))) {
       deleteAllocationAsync.start(deleteAllocation,
         workspaceState?.document?.id,
         deleteAllocationAsync,
       );
     }
+
+    setPrevSelectedPartId(partId);
   }, [partsDefaultValue]);
 
   const onRevChange = async () => {
@@ -106,6 +117,13 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
     displayInfoIcon = isLatestRevisionObsoleted;
     infoLabelString = 'allocation.part.obsolete.revision';
   }
+
+  const onQuanityValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const regex = /^[1-9]\d*(\.\d+)?$/;
+    if (!regex.test(e.target.value)) {
+      e.target.value = '';
+    }
+  };
 
   return (
     <Grid container spacing={1}>
@@ -174,11 +192,12 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           label="form.builder.wo.part.quantity"
           name={`${name}_quantity`}
           type="number"
-          defaultValue={quantityDefaultValue}
+          defaultValue={quantityDefaultValue ?? QUANTITY_DEFAULT_VALUE}
           inputProps={{ min: '1' }}
           gutter={false}
           showErrorMsg={false}
           placeholder="1"
+          onChange={onQuanityValidate}
         />
       </Grid>
       <Grid item md={3} xs={6}>
