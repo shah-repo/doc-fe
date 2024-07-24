@@ -7,6 +7,7 @@ import { translate } from '../../../../../common/intl';
 import { GroupTag } from '../../../../../state/ducks/auth/types';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
 import { Checkbox, TextField } from '../../../../components/forms/fields-next';
+import CheckboxField from '../../../../components/forms/fields/Checkbox';
 import Text from '../../../../components/Text';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
@@ -22,18 +23,20 @@ const TrainingReminder: React.FC<SettingsPanelProps> = (props) => {
       <Text message="administration.general.settings.training.reminder.sub.title" />
       <Grid container className={cx(classes.gridContainer, isCompanyAdmin ? '' : classes.disabledGrid)}>
         <Grid item className={classes.gridItem}>
-          <Checkbox
-            className={classes.marginRight}
+          <CheckboxField
+            name="trainingReminder.trainingAssigned"
             checked={values.trainingReminder.trainingAssigned}
-            {...getFieldProps('trainingReminder.trainingAssigned')} />
-          <Text message="administration.general.settings.training.reminder.training.assigned" />
+            {...getFieldProps('trainingReminder.trainingAssigned')}
+            label={translate('administration.general.settings.training.reminder.training.assigned')}
+            checkboxProps={{ disabled: true, color: 'primary', className: classes.marginRight }} />
         </Grid>
         <Grid item className={classes.gridItem}>
-          <Checkbox
-            className={classes.marginRight}
+          <CheckboxField
+            name="trainingReminder.sevenDays"
             checked={values.trainingReminder.sevenDays}
-            {...getFieldProps('trainingReminder.sevenDays')} />
-          <Text message="administration.general.settings.training.reminder.seven.days" />
+            {...getFieldProps('trainingReminder.sevenDays')}
+            label={translate('administration.general.settings.training.reminder.seven.days')}
+            checkboxProps={{ disabled: true, color: 'primary', className: classes.marginRight }} />
         </Grid>
         <Grid item className={classes.gridItem}>
           <Checkbox
@@ -49,18 +52,12 @@ const TrainingReminder: React.FC<SettingsPanelProps> = (props) => {
           <Text message="administration.general.settings.training.reminder.custom.days" />
         </Grid>
         <Grid item className={classes.gridItem}>
-          <Checkbox
-            className={classes.marginRight}
-            checked={values.trainingReminder.trainingDueToday}
-            {...getFieldProps('trainingReminder.trainingDueToday')} />
-          <Text message="administration.general.settings.training.reminder.training.due.date" />
-        </Grid>
-        <Grid item className={classes.gridItem}>
-          <Checkbox
-            className={classes.marginRight}
+          <CheckboxField
+            name="trainingReminder.trainingOverdue"
             checked={values.trainingReminder.trainingOverdue}
-            {...getFieldProps('trainingReminder.trainingOverdue')} />
-          <Text message="administration.general.settings.training.reminder.training.overdue" />
+            {...getFieldProps('trainingReminder.trainingOverdue')}
+            label={translate('administration.general.settings.training.reminder.training.overdue')}
+            checkboxProps={{ disabled: true, color: 'primary', className: classes.marginRight }} />
         </Grid>
       </Grid>
     </SettingsPanel>

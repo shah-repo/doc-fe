@@ -196,7 +196,6 @@ interface TrainingReminder {
   trainingAssigned: boolean
   sevenDays: boolean
   customDays: { isChecked: boolean, value: number }
-  trainingDueToday: boolean
   trainingOverdue: boolean
 }
 

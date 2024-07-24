@@ -4,6 +4,7 @@ export default makeStyles(theme => ({
   gridContainer: {
     marginTop: theme.spacing(1),
     justifyContent: 'space-between',
+    alignItems: 'baseline',
   },
   gridItem: {
     display: 'flex',

@@ -52,7 +52,6 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
     customDays: { isChecked: false, value: 0 },
     sevenDays: false,
     trainingAssigned: false,
-    trainingDueToday: false,
     trainingOverdue: false,
   },
 };
