@@ -92,7 +92,7 @@ const SearchBar: React.FC = () => {
 
     return [
       option?.document?.typeId,
-      option?.document?.revisionName ? `Rev. ${option?.document?.revisionName}` : undefined,
+      option?.document?.revisionName ? `${translate('common.rev')} ${option?.document?.revisionName}` : undefined,
       option?.document?.title,
       option?.document?.companyName,
     ].filter(Boolean).join(' - ');
