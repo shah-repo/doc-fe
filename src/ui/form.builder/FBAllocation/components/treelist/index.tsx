@@ -301,7 +301,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     initialValues: {},
     onSubmit: (values: Partial<EditableAllocationItem>) => {
       if (values.lotRevId) {
-        if (values.isExpired) {
+        if (values.isExpired && values[ADD_FIELD]) {
           setSelectedPart(values as EditableAllocationItem);
           expiredDialog.open();
           return;
