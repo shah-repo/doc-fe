@@ -1,9 +1,9 @@
-import { ColumnDefinition } from '../KendoDataGrid/KendoDataGrid.types';
-import ActionsCellTemplate from './components/ActionsCellTemplate';
-import { ActiveCellTemplate } from './components/ActiveCellTemplate';
-import { TextCellTemplate } from './components/TextCellTemplate';
-import { EditableCompanyLocation } from '../../user.management/profile/CompanyLocations/types';
 import React from 'react';
+import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { ActiveCellTemplate } from '../../components/LocationsSetting/components/ActiveCellTemplate';
+import EquipmentActionsCellTemplate from '../../components/LocationsSetting/components/EquipmentActionsCellTemplate';
+import { TextCellTemplate } from '../../components/LocationsSetting/components/TextCellTemplate';
+import { EditableCompanyLocation } from '../CompanyLocations/types';
 
 interface SchemaOptions {
   actionsClass: string
@@ -34,7 +34,7 @@ export const buildSchema: schemaBuilder = ({ actionsClass, onDiscard, onConfirm,
       field: 'actions',
       filterable: false,
       className: actionsClass,
-      template: (props) => <ActionsCellTemplate {...props} onDiscard={onDiscard} onConfirm={onConfirm} />,
+      template: (props) => <EquipmentActionsCellTemplate {...props} onDiscard={onDiscard} onConfirm={onConfirm} />,
       hidden: !isActive,
       width: 0,
     },

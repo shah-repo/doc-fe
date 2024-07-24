@@ -1,10 +1,10 @@
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
-import { CellTemplateProps } from '../../KendoDataGrid/KendoDataGrid.types';
-import { FormikField, TextField } from '../../forms/fields-next';
-import { EditableCompanyLocation } from '../../../user.management/profile/CompanyLocations/types';
-import { MODE_FIELD, Mode } from '../../KendoDataGrid/constants';
+import { CellTemplateProps } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
+import { FormikField, TextField } from '../../../../../components/forms/fields-next';
+import { EditableCompanyLocation } from '../../../panels/CompanyLocations/types';
 
 export const TextCellTemplate: React.FC<CellTemplateProps<EditableCompanyLocation>> = ({ dataItem, field }) => {
   const { getFieldProps } = useFormikContext();

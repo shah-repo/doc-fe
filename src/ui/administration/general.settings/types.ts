@@ -7,8 +7,11 @@ export enum GeneralSettingsTabs {
   APITokens = 'API Tokens',
   AR = 'Approval Requests',
   MD = 'Material Disposition',
+  LotAutoAllocationOrder = 'Lot Auto-allocation Order',
+  ExpiredLots = 'Expired Lots',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
+  Locations = 'Locations',
 }
 
 export interface GeneralSettingsProps {
@@ -19,7 +22,8 @@ export interface GeneralSettingsProps {
 
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
-  onToggle: () => void
+  info: string
+  onToggle: (isExpanded?: boolean) => void
   onAddNew?: () => void
 }
 

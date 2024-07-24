@@ -252,13 +252,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       dispatch(companyActions.autosaveConfig());
     }
     setFBValue();
-    if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
-      formik.setFieldValue('attachments', []);
-      formik.setFieldValue('name', 'Void');
-      formik.setFieldValue('description', 'Void');
-      formik.setFieldValue('referenceTo', null);
-      formik.setFieldValue('parentEquipment', null);
-    }
+
     formik.submitForm();
     if (isPOEditState) {
       setDoNotPrompt(true);

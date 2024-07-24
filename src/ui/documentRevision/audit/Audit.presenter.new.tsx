@@ -16,6 +16,7 @@ import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { isTranslation } from '../../translations/types';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
@@ -627,35 +628,42 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
   const prevVal: string = change.previousValue as string;
   const nextVal: string = change.nextValue as string;
 
-  const { step: prevStep, stepOrMpiDetails: prevDetails } = JSON.parse(prevVal);
-  const { step: nextStep, stepOrMpiDetails: nextDetails } = JSON.parse(nextVal);
+  try {
+    const { step: prevStep, stepOrMpiDetails: prevDetails } = JSON.parse(prevVal);
+    const { step: nextStep, stepOrMpiDetails: nextDetails } = JSON.parse(nextVal);
+    // modify here
+    const prevStepValue = prevDetails?.isExternalItem ? prevDetails.value : prevDetails?.docId;
+    const nextStepValue = nextDetails?.isExternalItem ? nextDetails.value : nextDetails?.docId;
 
-  const prevStepValue = prevDetails?.isExternalItem ? prevDetails.value : prevDetails?.docId;
-  const nextStepValue = nextDetails?.isExternalItem ? nextDetails.value : nextDetails?.docId;
-
-  let stepNumber = '';
-  if (prevStep !== nextStep && nextStep !== undefined) {
-    if (prevStep === undefined) {
-      stepNumber = nextStep;
+    let stepNumber = '';
+    if (prevStep !== nextStep && nextStep !== undefined) {
+      if (prevStep === undefined) {
+        stepNumber = nextStep;
+      } else {
+        stepNumber = `${prevStep} To ${nextStep}`;
+      }
     } else {
-      stepNumber = `${prevStep} To ${nextStep}`;
+      stepNumber = prevStep;
     }
-  } else {
-    stepNumber = prevStep;
-  }
 
-  let stepDetails = '';
-  if (prevStepValue !== nextStepValue && nextStepValue !== undefined) {
-    if (prevStepValue === undefined) {
-      stepDetails = nextStepValue;
+    let stepDetails = '';
+    const prevStepValueWithRev = getDisplayDocumentByDetailsObj(prevDetails);
+    const nextStepValueWithRev = getDisplayDocumentByDetailsObj(nextDetails);
+
+    if (prevStepValue !== nextStepValue && nextStepValue !== undefined) {
+      if (prevStepValue === undefined) {
+        stepDetails = nextStepValueWithRev;
+      } else {
+        stepDetails = `${prevStepValueWithRev} To ${nextStepValueWithRev}`;
+      }
     } else {
-      stepDetails = `${prevStepValue} To ${nextStepValue}`;
+      stepDetails = prevStepValueWithRev;
     }
-  } else {
-    stepDetails = prevStepValue;
-  }
 
-  return `${stepNumber}/${stepDetails}`;
+    return `${stepNumber} / ${stepDetails}`;
+  } catch (error) {
+    return '';
+  }
 };
 
 export default AuditPresenter;
