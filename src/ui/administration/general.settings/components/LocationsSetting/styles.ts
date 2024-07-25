@@ -5,28 +5,32 @@ export default makeStyles(theme => ({
   root: {
     margin: theme.spacing(3, 0),
   },
+
   grid: {
     marginTop: theme.spacing(2),
-
-    '& .k-column-title': {
-      fontSize: 12,
-      textTransform: 'uppercase',
+    borderCollapse: 'collapse',
+    width: '100%',
+    '& thead': {
+      display: 'table-header-group',
     },
-    '& td': {
-      height: 42,
-      padding: `${theme.spacing(0.5, 1.5)} !important`,
+    '& tbody': {
+      display: 'table-row-group',
+    },
+    '& .k-grid-content': {
+      overflowY: 'auto',
+      maxHeight: '500px',
+      '&::-webkit-scrollbar': {
+        display: 'none',
+      },
     },
   },
   gridWithButton: {
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     borderBottom: 'none',
-
-    '& .k-grid-content, & .k-grid-container': {
-      overflow: 'visible',
-      overflowX: 'visible',
-      overflowY: 'visible',
-    },
+  },
+  tableContainer: {
+    position: 'relative',
   },
   actionsCell: {
     width: 0,

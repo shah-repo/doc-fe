@@ -39,13 +39,15 @@ const LocationsSetting: React.FC<LocationProps> = ({
   return (
     <Box className={classes.root}>
       <FormikProvider value={formik}>
-        <KendoDataGrid
-          data={locationsList}
-          schema={schema}
-          onRowClick={onRowClick}
-          rowRender={rowRender}
-          className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
-        />
+        <div className={classes.tableContainer}>
+          <KendoDataGrid
+            data={locationsList}
+            schema={schema}
+            onRowClick={onRowClick}
+            rowRender={rowRender}
+            className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+          />
+        </div>
         {isActive && (
           <Button
             attached

@@ -18,16 +18,16 @@ export default makeStyles(theme => ({
     flexDirection: 'row-reverse',
     alignItems: 'center',
     padding: theme.spacing(2, 1.5),
+    position: 'sticky',
+    top: 0,
+    zIndex: 1,
+    backgroundColor: Colors.white,
+    borderTop: `1px solid ${Colors.tableStroke}`,
+    borderRadius: theme.spacing(0.5, 0.5, 0, 0),
 
     '&.Mui-expanded': {
       minHeight: 0,
       color: Colors.primary,
-      position: 'sticky',
-      top: 0,
-      zIndex: 1,
-      backgroundColor: Colors.white,
-      borderTop: `1px solid ${Colors.tableStroke}`,
-      borderRadius: theme.spacing(0.5, 0.5, 0, 0),
     },
   },
   icon: {
