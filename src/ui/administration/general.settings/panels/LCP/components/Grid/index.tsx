@@ -136,7 +136,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       return { ...pick(item, REQUEST_PAYLOAD_KEYS), displayOrder: item.order };
     });
     if (formValues) {
-      formValues.lifecyclePhases = payload;
+      formValues.lifecyclePhasesProcessedPayload = payload;
       setValues(formValues);
     }
   };
