@@ -3,13 +3,11 @@ import { OptionType } from '../../../../../../components/forms/fields/Autocomple
 import { MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-// Remove keys at last
-// id , createdAt, updatedAt, order, enlilType, displayLabel, isAllowedOnPO, isAllowedOnLhrProd, isAllowedToBuy,
 export interface LCP {
   id: string
   category: string
   order?: string
-  enlilType: string
+  internalType: string
   displayLabel: string
   isAllowedOnPO: string
   isAllowedOnLhrProd: string

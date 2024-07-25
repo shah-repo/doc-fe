@@ -15,9 +15,9 @@ export const LCPSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<LCP>> => {
   return [
     {
-      id: 'enlilType',
-      field: 'enlilType',
-      title: translate('administration.general.settings.lcp.enlilType'),
+      id: 'internalType',
+      field: 'internalType',
+      title: translate('administration.general.settings.lcp.internalType'),
       width: 200,
       locked: false,
       cell: EnlilTypeCell,

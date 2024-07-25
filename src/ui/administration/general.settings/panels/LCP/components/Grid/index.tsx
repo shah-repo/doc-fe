@@ -187,8 +187,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const addPhase = (dataItem: LCP) => {
     setPrevData(cloneDeep(data));
     const selectedPhaseCategory = data?.filter(phase => phase.category === dataItem.category);
-    const enlilTypeOptions = selectedPhaseCategory?.map(dd => dd.enlilType);
-    const otherLabelOptions = selectedPhaseCategory?.map(dd => dd.enlilType);
+    const enlilTypeOptions = selectedPhaseCategory?.map(phase => phase.internalType);
+    const otherLabelOptions = selectedPhaseCategory?.map(phase => phase.displayLabel);
     const newPhase = {
       id: uuidv4(),
       group: dataItem.group,
@@ -196,7 +196,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       enlilTypeOptions,
       otherLabelOptions,
       documentTypeIdArr: dataItem.documentTypeIdArr,
-      enlilType: '',
+      internalType: '',
       displayLabel: '',
       isAllowedOnPO: 'no',
       isAllowedOnLhrProd: 'no',
@@ -353,7 +353,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       ...(data ?? []),
       {
         id: uuidv4(),
-        enlilType: '',
+        internalType: '',
         displayLabel: '',
         isAllowedOnPO: '',
         isAllowedOnLhrProd: '',
