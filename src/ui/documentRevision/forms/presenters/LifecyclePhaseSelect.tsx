@@ -34,10 +34,9 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
     onError: toastError,
   });
 
+  const isDisabled = !lifecyclePhaseOptions.length && !fetchLCPDocTypesAsync.isLoading;
+
   useEffect(() => {
-    console.log('docTypeId :', docTypeId);
-    console.log('lifecyclePhaseId :', lifecyclePhaseId);
-    console.log('values,', formik?.values);
     fetchLCPDocTypesAsync.start(
       fetchDocRevOptions,
       docTypeId,
@@ -50,16 +49,13 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
     event: React.ChangeEvent<{ name?: string, value: unknown }>,
   ) => {
     const value = event.target.value as string;
-    console.log({ value }, formik?.values);
     formik.setFieldValue('lifecyclePhaseId', value);
     formik.handleChange(event);
   };
 
-  const isDisabled = !lifecyclePhaseOptions.length;
-
   return (
     <>
-      <InputLabel id="custom-select-label">
+      <InputLabel id="life-cycle-phases-label">
         <Box display="flex" alignItems="center">
           <Typography variant="body1" className={classes.labelStyle} >
             {translate('common.lifecycle.phase')}
@@ -79,7 +75,7 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
         name="lifecyclePhaseId"
         selectProps={{
           inputProps: {
-            labelId: 'custom-select-label',
+            labelId: 'life-cycle-phases-label',
             disabled: isDisabled,
           },
           disabled: isDisabled,
