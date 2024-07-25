@@ -67,7 +67,7 @@ export const LCPSchema = ({
       groupable: false,
       title: translate('administration.general.settings.lcp.isAllowedToBuy'),
       cell: DropdownCell,
-      width: 260,
+      width: 300,
       mainOrderIndex: 5,
     },
     {

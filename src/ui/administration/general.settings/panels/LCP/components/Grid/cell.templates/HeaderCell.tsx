@@ -5,6 +5,7 @@ import { GridHeaderCellProps } from '@progress/kendo-react-grid';
 import { kebabCase } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
+import useStyles from './styles';
 
 interface HeaderCellProps extends GridHeaderCellProps{
   content: string
@@ -15,6 +16,7 @@ export const HeaderCell: React.FC<HeaderCellProps> = ({
   content,
 }) => {
   const translatedContent = translate(content);
+  const classes = useStyles();
 
   return (
     <span className="k-cell-inner">
@@ -23,7 +25,7 @@ export const HeaderCell: React.FC<HeaderCellProps> = ({
           <Tooltip
             arrow
             placement="top"
-            style={{ marginRight: '5px' }}
+            className={classes.headerButton}
             title={translate('administration.general.settings.lcp.not.implemented')}
           >
             <FontAwesomeIcon icon={solid('star-of-life')} />

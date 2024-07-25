@@ -44,4 +44,8 @@ export default makeStyles((theme) => ({
   deleteIcon: {
     color: Colors.error,
   },
+  headerButton: {
+    marginRight: theme.spacing(0.675),
+    color: Colors.primary,
+  },
 }));
