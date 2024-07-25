@@ -710,6 +710,7 @@
   "documentRevision.revise.SUP": "Update Record",
   "documentRevision.form.references": "References",
   "documentRevision.form.release.date": "Release Date",
+  "documentRevision.lcp.configuration.empty": "Please configure Life cycle phases",
   "documentRevision.pmccc.applied.title": "Change Control Config Applied",
   "documentRevision.pmccc.applied.revision": "Rev",
   "documentRevision.change.control.config.title": "Current Change Control Configuration from Form",

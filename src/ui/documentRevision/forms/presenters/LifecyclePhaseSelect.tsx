@@ -1,45 +1,26 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, InputLabel, Typography } from '@material-ui/core';
+import { Box, InputLabel, Tooltip, Typography } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { companyActions } from '../../../../state/ducks/company';
-import { TooltipLabelConfig } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { LCPDocRevOptions } from '../../../administration/general.settings/panels/LCP/components/Grid/types';
 import SelectField from '../../../components/forms/fields/Select';
 import { toastError } from '../../../components/notifications';
 import { styles as FBAutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
-import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { styles } from './styles/DocIdInput.styles';
+import { styles } from './LifecyclePhaseSelect.style';
 
 interface Props {
-  isDocRevStatusDraft: boolean
-  isDisabled: boolean
-  label?: string
   docTypeId?: string
   lifecyclePhaseId?: string
-  tooltipConfig?: TooltipLabelConfig
 }
 
-// const LifecyclePhaseOptions = [
-//   { value: 'Concept', text: 'Concept' },
-//   { value: 'Design', text: 'Design' },
-//   { value: 'Development', text: 'Development' },
-//   { value: 'Production', text: 'Production' },
-//   { value: 'Support & Service', text: 'Support & Service' },
-//   { value: 'Retirement', text: 'Retirement' },
-// ];
-
 const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
-  isDocRevStatusDraft,
-  isDisabled = false,
   docTypeId = '',
   lifecyclePhaseId,
-  label = 'common.lifecycle.phase',
-  tooltipConfig = {},
 }) => {
   const classes = styles();
   const formik = useFormikContext();
@@ -74,25 +55,34 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
     formik.handleChange(event);
   };
 
-  const CustomLabel = () => {
-    return (
-      <Box display="flex" alignItems="center">
-        <Typography variant="body1" style={{ marginRight: 4 }} >
-          {translate(label)}
-        </Typography>
-        <FontAwesomeIcon icon={regular('circle-info')} />
-      </Box>
-    );
-  };
+  const isDisabled = !lifecyclePhaseOptions.length;
 
   return (
-    <CustomLabelTooltip {...{ tooltipConfig }}>
-      <InputLabel id="custom-select-label">{CustomLabel()}</InputLabel>
+    <>
+      <InputLabel id="custom-select-label">
+        <Box display="flex" alignItems="center">
+          <Typography variant="body1" className={classes.labelStyle} >
+            {translate('common.lifecycle.phase')}
+          </Typography>
+          <Tooltip
+            arrow
+            placement="top"
+            title={translate('documentRevision.lcp.configuration.empty')}
+            className={classes.labelStyle}
+            hidden={!isDisabled}
+          >
+            <FontAwesomeIcon className={classes.infoIcon} icon={regular('circle-info')} />
+          </Tooltip>
+        </Box>
+      </InputLabel>
       <SelectField
         name="lifecyclePhaseId"
         selectProps={{
-          inputProps: { labelId: 'custom-select-label', disabled: !lifecyclePhaseOptions.length },
-          disabled: !lifecyclePhaseOptions.length,
+          inputProps: {
+            labelId: 'custom-select-label',
+            disabled: isDisabled,
+          },
+          disabled: isDisabled,
           onChange: handleTypeChange,
         }}
         options={lifecyclePhaseOptions}
@@ -100,7 +90,7 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
         inputStyleProps={classes.input}
         labelProps={FBAutoCompleteStyles.labelStyle}
       />
-    </CustomLabelTooltip>
+    </>
   );
 };
 
