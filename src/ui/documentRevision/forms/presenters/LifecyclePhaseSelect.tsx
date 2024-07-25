@@ -16,11 +16,13 @@ import { styles } from './LifecyclePhaseSelect.style';
 interface Props {
   docTypeId?: string
   lifecyclePhaseId?: string
+  isOptionDisabled?: boolean
 }
 
 const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
   docTypeId = '',
   lifecyclePhaseId,
+  isOptionDisabled,
 }) => {
   const classes = styles();
   const formik = useFormikContext();
