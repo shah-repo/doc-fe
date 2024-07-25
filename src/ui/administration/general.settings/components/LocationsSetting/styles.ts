@@ -5,7 +5,6 @@ export default makeStyles(theme => ({
   root: {
     margin: theme.spacing(3, 0),
   },
-
   grid: {
     marginTop: theme.spacing(2),
     borderCollapse: 'collapse',
@@ -18,19 +17,35 @@ export default makeStyles(theme => ({
     },
     '& .k-grid-content': {
       overflowY: 'auto',
-      maxHeight: '500px',
+      // maxHeight: '500px',
       '&::-webkit-scrollbar': {
         display: 'none',
       },
     },
+    '& .k-grid-header': {
+      position: 'sticky',
+      top: '27px',
+    },
+    '& .k-column-title': {
+      fontSize: 12,
+      textTransform: 'uppercase',
+    },
+    '& td': {
+      height: 42,
+      padding: `${theme.spacing(0.5, 1.5)} !important`,
+    },
   },
+
   gridWithButton: {
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     borderBottom: 'none',
-  },
-  tableContainer: {
-    position: 'relative',
+
+    '& .k-grid-content, & .k-grid-container': {
+      overflow: 'visible',
+      overflowX: 'visible',
+      overflowY: 'visible',
+    },
   },
   actionsCell: {
     width: 0,
