@@ -1,5 +1,9 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, InputLabel, Typography } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { translate } from '../../../../common/intl';
 import { companyActions } from '../../../../state/ducks/company';
 import { TooltipLabelConfig } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { LCPDocRevOptions } from '../../../administration/general.settings/panels/LCP/components/Grid/types';
@@ -52,6 +56,7 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
   useEffect(() => {
     console.log('docTypeId :', docTypeId);
     console.log('lifecyclePhaseId :', lifecyclePhaseId);
+    console.log('values,', formik?.values);
     fetchLCPDocTypesAsync.start(
       fetchDocRevOptions,
       docTypeId,
@@ -64,18 +69,29 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
     event: React.ChangeEvent<{ name?: string, value: unknown }>,
   ) => {
     const value = event.target.value as string;
-    console.log({ value });
-    formik.setFieldValue('lifecyclePhaseId', []);
+    console.log({ value }, formik?.values);
+    formik.setFieldValue('lifecyclePhaseId', value);
     formik.handleChange(event);
+  };
+
+  const CustomLabel = () => {
+    return (
+      <Box display="flex" alignItems="center">
+        <Typography variant="body1" style={{ marginRight: 4 }} >
+          {translate(label)}
+        </Typography>
+        <FontAwesomeIcon icon={regular('circle-info')} />
+      </Box>
+    );
   };
 
   return (
     <CustomLabelTooltip {...{ tooltipConfig }}>
+      <InputLabel id="custom-select-label">{CustomLabel()}</InputLabel>
       <SelectField
         name="lifecyclePhaseId"
-        label={label}
         selectProps={{
-          inputProps: { id: 'lifecyclePhaseId', disabled: !lifecyclePhaseOptions.length },
+          inputProps: { labelId: 'custom-select-label', disabled: !lifecyclePhaseOptions.length },
           disabled: !lifecyclePhaseOptions.length,
           onChange: handleTypeChange,
         }}
