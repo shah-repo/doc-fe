@@ -4,6 +4,7 @@ import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/Ken
 import { ActionsCell } from './cell.templates/ActionsCell';
 import { DropdownCell } from './cell.templates/DropdownCell';
 import { EnlilTypeCell } from './cell.templates/EnlilTypeCell';
+import { HeaderCell } from './cell.templates/HeaderCell';
 import { LabelCell } from './cell.templates/LabelCell';
 import { LCP, SchemaOptions } from './types';
 
@@ -39,7 +40,10 @@ export const LCPSchema = ({
       locked: false,
       groupable: false,
       title: translate('administration.general.settings.lcp.isAllowedOnPO'),
-      width: 200,
+      headerCell: (props) => <HeaderCell
+        {...props}
+        content="administration.general.settings.lcp.isAllowedOnPO" />,
+      width: 250,
       cell: DropdownCell,
       mainOrderIndex: 3,
     },
@@ -50,6 +54,9 @@ export const LCPSchema = ({
       groupable: false,
       title: translate('administration.general.settings.lcp.isAllowedOnLhrProd'),
       width: 200,
+      headerCell: (props) => <HeaderCell
+        {...props}
+        content="administration.general.settings.lcp.isAllowedOnLhrProd" />,
       cell: DropdownCell,
       mainOrderIndex: 4,
     },
@@ -60,7 +67,7 @@ export const LCPSchema = ({
       groupable: false,
       title: translate('administration.general.settings.lcp.isAllowedToBuy'),
       cell: DropdownCell,
-      width: 220,
+      width: 260,
       mainOrderIndex: 5,
     },
     {

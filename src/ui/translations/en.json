@@ -2075,6 +2075,7 @@
   "administration.general.settings.lcp.isAllowedOnPO": "Enforce Approved Supplier on PO",
   "administration.general.settings.lcp.isAllowedOnLhrProd": "Allow on LHR Production",
   "administration.general.settings.lcp.isAllowedToBuy": "Part purchase based on Released Revision",
+  "administration.general.settings.lcp.not.implemented": "Not Implemented",
   "administration.general.settings.integrations": "Integrations",
   "administration.general.settings.lot.auto.allocation.order": "Lot Auto-allocation order",
   "administration.general.settings.lot.auto.allocation.order.info": "Expiry date will override FIFO/LIFO",
