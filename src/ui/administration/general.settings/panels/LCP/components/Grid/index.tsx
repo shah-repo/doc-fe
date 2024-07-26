@@ -76,6 +76,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   useEffect(() => {
     const data = processRealData(formValues?.lifecyclePhases?.categories as unknown as LCPResponse[]);
     updateStateGridData(data.phases);
+    updateSettingsObj(data.phases);
     fetchLCPDocTypesAsync.start(
       fetchLCPDocTypes,
       fetchLCPDocTypesAsync,
@@ -133,7 +134,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const updateSettingsObj = (updatedData: LCP[]) => {
     const payload = updatedData?.map((item) => {
-      return { ...pick(item, REQUEST_PAYLOAD_KEYS), displayOrder: item.order };
+      return { ...pick(item, REQUEST_PAYLOAD_KEYS) };
     });
     if (formValues) {
       formValues.lifecyclePhasesProcessedPayload = payload;
@@ -187,8 +188,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const addPhase = (dataItem: LCP) => {
     setPrevData(cloneDeep(data));
     const selectedPhaseCategory = data?.filter(phase => phase.category === dataItem.category);
-    const enlilTypeOptions = selectedPhaseCategory?.map(phase => phase.internalType);
+    const enlilTypeOptions = uniq(selectedPhaseCategory?.map(phase => phase.internalType));
     const otherLabelOptions = selectedPhaseCategory?.map(phase => phase.displayLabel);
+    const displayOrder = selectedPhaseCategory?.length ?? 0 + 1;
     const newPhase = {
       id: uuidv4(),
       group: dataItem.group,
@@ -198,10 +200,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       documentTypeIdArr: dataItem.documentTypeIdArr,
       internalType: '',
       displayLabel: '',
-      isAllowedOnPO: 'no',
-      isAllowedOnLhrProd: 'no',
-      isAllowedToBuy: 'no',
+      isAllowedOnPO: 'NO',
+      isAllowedOnLhrProd: 'NO',
+      isAllowedToBuy: 'NO',
       isAddPhase: true,
+      displayOrder,
       inEdit: false,
       isUserAdded: true,
       isUserModified: false,
@@ -219,9 +222,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const formik = useFormik<Partial<EditableLCP>>({
     initialValues: {},
     onSubmit: (values) => {
-      const updatedData = data?.map(phase => (phase.id === values.id) ? { ...phase, isAddPhase: false } : phase);
+      const selectedEnlilInternalType = data?.filter(phase => phase.category === values.category && phase.internalType === values.internalType) ?? [{ order: 10 }];
+      const updatedData = data?.map(phase => (phase.id === values.id) ? { ...phase, isAddPhase: false, enlilTypeOptions: null, order: selectedEnlilInternalType[0]?.order } : phase);
       setPrevData(updatedData);
       setResultState(processWithGroups(updatedData ?? [], initialDataState));
+      updatedData && updateSettingsObj(updatedData);
     },
   });
 
@@ -395,6 +400,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         navigatable={true}
         expandField={EXPAND_FIELD}
         rowRender={rowRender}
+        loading={fetchLCPDocTypesAsync.isLoading}
         onItemChange={onItemChange}
       >
         <GridToolbar>

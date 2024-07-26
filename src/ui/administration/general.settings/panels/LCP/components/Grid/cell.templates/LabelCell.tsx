@@ -13,7 +13,9 @@ const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, 
 
   const handleChange = (e) => {
     const value = e.target.value;
-    setFieldValue(field, value);
+    if (dataItem.isAddPhase) {
+      setFieldValue(field, value);
+    }
     onChange?.({
       dataIndex,
       dataItem,

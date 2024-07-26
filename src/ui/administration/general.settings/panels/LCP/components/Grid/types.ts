@@ -7,6 +7,7 @@ export interface LCP {
   id: string
   category: string
   order?: string
+  displayOrder?: number
   internalType: string
   displayLabel: string
   isAllowedOnPO: string

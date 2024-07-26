@@ -12,8 +12,15 @@ const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, 
   const { getFieldProps, setFieldValue } = useFormikContext();
 
   const handleChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.textContent;
     setFieldValue(field, value);
+    onChange?.({
+      dataIndex,
+      dataItem,
+      syntheticEvent: e.syntheticEvent,
+      field,
+      value,
+    });
   };
   return (
     <FormikField

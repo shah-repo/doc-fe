@@ -29,19 +29,19 @@ export const PART_GROUPS = [
 
 // Sample Data for default Dropdown Options
 export const DEFAULT_OPTIONS = [
-  { label: 'Yes', value: 'yes' },
-  { label: 'Allow with warning', value: 'warning' },
-  { label: 'No', value: 'no' },
+  { label: 'Yes', value: 'YES' },
+  { label: 'Allow with warning', value: 'WARNING' },
+  { label: 'No', value: 'NO' },
 ];
 
 // Sample Data for Part purchase based on Released Revision options
 export const PART_PURCHASE_OPTIONS = [
-  { label: 'Yes', value: 'yes' },
-  { label: 'No', value: 'no' },
+  { label: 'Yes', value: 'YES' },
+  { label: 'No', value: 'NO' },
 ];
 
 export const DEFAULT_PART_PURCHASE_OPTIONS = [
-  { label: 'No', value: 'no' },
+  { label: 'No', value: 'NO' },
 ];
 
 // LCP table initial data remove at last
