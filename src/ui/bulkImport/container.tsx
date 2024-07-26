@@ -41,13 +41,13 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
       case 0:
         return (
           <ImportDetailForm handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useHelp />
+            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit />
           </ImportDetailForm>
         );
       case 1:
         return (
           <UploadDataForm handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useHelp />
+            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit />
           </UploadDataForm>
         );
       case 2:
@@ -59,13 +59,13 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
       case 3:
         return (
           <UploadAttachment handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack useHelp />
+            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack />
           </UploadAttachment>
         );
       case 4:
         return (
-          <Approvals handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack useHelp />
+          <Approvals>
+            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextTranslation="bulkImport.approvals.submit" nextSubmit useBack />
           </Approvals>
         );
       default:

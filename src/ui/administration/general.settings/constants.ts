@@ -4,10 +4,12 @@ import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import PrintingSettingsPanel from './panels/Printing';
+import ExpiredLots from './panels/WorkOrder/ExpiredLots';
+import LotAutoAllocationOrder from './panels/WorkOrder/LotAutoAllocationOrder';
 import { GeneralSettingsTabs } from './types';
 
-export const MAX_PANEL_WIDTH = 990;
-export const SIDEBAR_WIDTH = 150;
+export const MAX_PANEL_WIDTH = 660;
+export const SIDEBAR_WIDTH = 180;
 
 export const panels = [
   {
@@ -24,6 +26,16 @@ export const panels = [
     key: GeneralSettingsTabs.MD,
     title: 'administration.general.settings.md',
     component: MaterialDispositionSettings,
+  },
+  {
+    key: GeneralSettingsTabs.LotAutoAllocationOrder,
+    title: 'administration.general.settings.lot.auto.allocation.order',
+    component: LotAutoAllocationOrder,
+  },
+  {
+    key: GeneralSettingsTabs.ExpiredLots,
+    title: 'administration.general.settings.expired.lots',
+    component: ExpiredLots,
   },
   {
     key: GeneralSettingsTabs.Locations,

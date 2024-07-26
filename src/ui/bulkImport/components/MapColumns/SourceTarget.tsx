@@ -2,11 +2,13 @@ import { Box } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { translate } from '../../../../common/intl';
 import { getHeadersToMap, saveHeaderToMap, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
 import { getHeaders } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport, SystemHeaderEntity } from '../../../../state/ducks/bulkImport/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import SelectedBoxes from './SelectedBoxes';
 import useStyles from './styles';
@@ -70,6 +72,7 @@ const SourceTarget: React.FC<SourceTargetProps> = ({ children, handleNext, bulkI
   return (
     <Box key={headers.system ? headers.system[0]?.id : 'no-data'}>
       <StepTitle title="bulkImport.mapColumns.title" subTitle="bulkImport.mapColumns.subTitle" />
+      {headers.custom?.length === 0 && <MessageInformation showError message={translate('common.mapHeaders.noHeaders')} />}
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         <Form className={classes.form}>
           <SelectedBoxes customHeaders={headers.custom} systemHeaders={headers.system} />

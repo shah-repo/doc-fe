@@ -10,4 +10,8 @@ export default {
     ...state,
     criteria: undefined,
   }),
+  3: (state: any) => ({
+    ...state,
+    criteria: undefined,
+  }),
 };

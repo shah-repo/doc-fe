@@ -13,8 +13,8 @@ import {
   EffectiveDateFormValues,
   PasswordFormValues,
 } from '../../../change.request/form/types';
-import { toastSuccess } from '../../../components/notifications';
 import Text from '../../../components/Text';
+import { toastSuccess } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
@@ -71,6 +71,9 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       });
       dispatch(dashboardTodoActions.loadMyFeedsList());
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+    },
+    onError: () => {
+      async.reset();
     },
   });
 
