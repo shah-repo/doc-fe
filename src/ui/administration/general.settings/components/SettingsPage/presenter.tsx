@@ -1,6 +1,6 @@
 import { Box, LinearProgress, MenuItem, MenuList, Typography } from '@material-ui/core';
 import { kebabCase, remove } from 'lodash';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Button } from '../../../../components/forms/fields-next';
 import { withThemeNext } from '../../../../layout/theme-next';
@@ -19,8 +19,10 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
   const [expandedPanels, setExpanedPanels] = useState<GeneralSettingsTabs[]>([]);
   const allPanelsExpaned = expandedPanels.length === panels.length;
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const toggleAllPanels = () => setExpanedPanels(allPanelsExpaned ? [] : panels.map(panel => panel.key));
-  const togglePanel = (key: GeneralSettingsTabs) => (isExpanded: boolean) => setExpanedPanels(state => (
+  const togglePanel = (key: GeneralSettingsTabs) => (isExpanded?: boolean) => setExpanedPanels(state => (
     state.includes(key) ? (!isExpanded ? remove(state, key) : state) : [...state, key]
   ));
   const jumpToPanel = (key: GeneralSettingsTabs) => () => setExpanedPanels([key]);
@@ -77,17 +79,18 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
           {translate(allPanelsExpaned ? 'common.collapse.all' : 'common.expand.all')}
         </Button>
       </Box>
-      <Box className={classes.panels}>
+      <div className={classes.panels} ref={containerRef}>
         {panels.map(panel => (
           <panel.component
             key={panel.key}
             title={panel.title}
+            containerRef={containerRef}
             expanded={expandedPanels.includes(panel.key)}
             onToggle={togglePanel(panel.key)}
             data-cy={kebabCase(panel.title)}
           />
         ))}
-      </Box>
+      </div>
     </Box>
   );
 };

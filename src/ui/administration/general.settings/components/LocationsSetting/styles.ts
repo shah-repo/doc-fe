@@ -19,6 +19,7 @@ export default makeStyles(theme => ({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     borderBottom: 'none',
+  },
   actionsCell: {
     width: 0,
     overflow: 'visible !important',

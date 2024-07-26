@@ -33,6 +33,13 @@ export default makeStyles(theme => ({
       color: Colors.primary,
     },
   },
+  stickySummary: {
+    '&.Mui-expanded': {
+      borderTop: `1px solid ${Colors.stroke}`,
+      borderBottom: `1px solid ${Colors.stroke}`,
+      borderRadius: 0,
+    },
+  },
   icon: {
     marginRight: theme.spacing(1),
 
