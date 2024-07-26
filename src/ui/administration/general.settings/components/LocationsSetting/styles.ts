@@ -8,45 +8,17 @@ export default makeStyles(theme => ({
   grid: {
     marginTop: theme.spacing(2),
     borderCollapse: 'collapse',
-    width: '100%',
-    '& thead': {
-      display: 'table-header-group',
-    },
-    '& tbody': {
-      display: 'table-row-group',
-    },
-    '& .k-grid-content': {
-      overflowY: 'auto',
-      // maxHeight: '500px',
-      '&::-webkit-scrollbar': {
-        display: 'none',
-      },
-    },
+
     '& .k-grid-header': {
       position: 'sticky',
-      top: '27px',
-    },
-    '& .k-column-title': {
-      fontSize: 12,
-      textTransform: 'uppercase',
-    },
-    '& td': {
-      height: 42,
-      padding: `${theme.spacing(0.5, 1.5)} !important`,
+      top: 64,
+      zIndex: 1,
     },
   },
-
   gridWithButton: {
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     borderBottom: 'none',
-
-    '& .k-grid-content, & .k-grid-container': {
-      overflow: 'visible',
-      overflowX: 'visible',
-      overflowY: 'visible',
-    },
-  },
   actionsCell: {
     width: 0,
     overflow: 'visible !important',
