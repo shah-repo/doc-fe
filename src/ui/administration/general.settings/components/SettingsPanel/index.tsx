@@ -25,6 +25,11 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     <ExpansionPanel
       {...props}
       className={classes.root}
+      TransitionProps={{
+        mountOnEnter: true,
+        unmountOnExit: true,
+        ...props.TransitionProps,
+      }}
     >
       <ExpansionPanelSummary
         onClick={() => onToggle()}
