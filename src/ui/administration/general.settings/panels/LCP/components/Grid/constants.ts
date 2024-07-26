@@ -17,7 +17,7 @@ export const initialDataState = {
   skip: 0,
   group: DATA_GROUP,
 };
-export const REQUEST_PAYLOAD_KEYS = ['order', 'enlilType', 'displayLabel', 'isAllowedOnPO', 'isAllowedOnLhrProd', 'isAllowedToBuy', 'documentTypeIdArr'];
+export const REQUEST_PAYLOAD_KEYS = ['order', 'internalType', 'displayLabel', 'isAllowedOnPO', 'isAllowedOnLhrProd', 'isAllowedToBuy', 'documentTypeIdArr'];
 export const EMPTY_VALUE_PLACEHOLDER = '-';
 
 // Sample Data for PART GROUP Options
@@ -29,46 +29,46 @@ export const PART_GROUPS = [
 
 // Sample Data for default Dropdown Options
 export const DEFAULT_OPTIONS = [
-  { label: 'Yes', value: 'yes' },
-  { label: 'Allow with warning', value: 'warning' },
-  { label: 'No', value: 'no' },
+  { label: 'Yes', value: 'YES' },
+  { label: 'Allow with warning', value: 'WARNING' },
+  { label: 'No', value: 'NO' },
 ];
 
 // Sample Data for Part purchase based on Released Revision options
 export const PART_PURCHASE_OPTIONS = [
-  { label: 'Yes', value: 'yes' },
-  { label: 'No', value: 'no' },
+  { label: 'Yes', value: 'YES' },
+  { label: 'No', value: 'NO' },
 ];
 
 export const DEFAULT_PART_PURCHASE_OPTIONS = [
-  { label: 'No', value: 'no' },
+  { label: 'No', value: 'NO' },
 ];
 
 // LCP table initial data remove at last
 export const initialData = [
-  { id: '1', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes', documentTypeIdArr: ['CS'] },
-  { id: '2', enlilType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', documentTypeIdArr: ['CS'] },
-  { id: '3', enlilType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', documentTypeIdArr: ['CS'] },
-  { id: '4', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', documentTypeIdArr: ['CS'] },
-  { id: '5', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes', documentTypeIdArr: ['CS'] },
-  { id: '6', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', documentTypeIdArr: ['CS'] },
+  { id: '1', internalType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes', documentTypeIdArr: ['CS'] },
+  { id: '2', internalType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', documentTypeIdArr: ['CS'] },
+  { id: '3', internalType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', documentTypeIdArr: ['CS'] },
+  { id: '4', internalType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', documentTypeIdArr: ['CS'] },
+  { id: '5', internalType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'Yes', documentTypeIdArr: ['CS'] },
+  { id: '6', internalType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Component Spec (CS)', isAllowedToBuy: 'No', documentTypeIdArr: ['CS'] },
 
-  { id: '7', enlilType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes', documentTypeIdArr: ['FG'] },
-  { id: '8', enlilType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', documentTypeIdArr: ['FG'] },
-  { id: '9', enlilType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', documentTypeIdArr: ['FG'] },
-  { id: '10', enlilType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', documentTypeIdArr: ['FG'] },
-  { id: '11', enlilType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes', documentTypeIdArr: ['FG'] },
-  { id: '12', enlilType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', documentTypeIdArr: ['FG'] },
+  { id: '7', internalType: 'Preliminary', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes', documentTypeIdArr: ['FG'] },
+  { id: '8', internalType: 'Concept', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', documentTypeIdArr: ['FG'] },
+  { id: '9', internalType: 'Planning', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', documentTypeIdArr: ['FG'] },
+  { id: '10', internalType: 'Design & Engineering', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', documentTypeIdArr: ['FG'] },
+  { id: '11', internalType: 'Production', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'Yes', documentTypeIdArr: ['FG'] },
+  { id: '12', internalType: 'Obsolute', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'Finished Goods (FG)', isAllowedToBuy: 'No', documentTypeIdArr: ['FG'] },
 ];
 
 // selected part sample data remove at last
 export const newSelectedOptions = [
-  { id: '13', enlilType: 'Preliminary NW', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes', documentTypeIdArr: ['SA'] },
-  { id: '14', enlilType: 'Concept NW', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', documentTypeIdArr: ['SA'] },
-  { id: '15', enlilType: 'Planning NW', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', documentTypeIdArr: ['SA'] },
-  { id: '16', enlilType: 'Design & Engineering NW', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', documentTypeIdArr: ['SA'] },
-  { id: '17', enlilType: 'Production NW', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes', documentTypeIdArr: ['SA'] },
-  { id: '18', enlilType: 'Obsolute NW', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', documentTypeIdArr: ['SA'] },
+  { id: '13', internalType: 'Preliminary NW', displayLabel: 'Preliminary', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes', documentTypeIdArr: ['SA'] },
+  { id: '14', internalType: 'Concept NW', displayLabel: 'Concept', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', documentTypeIdArr: ['SA'] },
+  { id: '15', internalType: 'Planning NW', displayLabel: 'Planning', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', documentTypeIdArr: ['SA'] },
+  { id: '16', internalType: 'Design & Engineering NW', displayLabel: 'Design & Engineering', isAllowedOnPO: 'Yes', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', documentTypeIdArr: ['SA'] },
+  { id: '17', internalType: 'Production NW', displayLabel: 'Production', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'Yes', documentTypeIdArr: ['SA'] },
+  { id: '18', internalType: 'Obsolute NW', displayLabel: 'Obsolute', isAllowedOnPO: 'No', isAllowedOnLhrProd: 'Yes', category: 'PARTS', isAllowedToBuy: 'No', documentTypeIdArr: ['SA'] },
 ];
 
 // real time data remove at last
@@ -95,7 +95,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:40.870Z',
           id: '47bbea32-075b-457d-8d77-8767bcfc3277',
           order: 1,
-          enlilType: 'Preliminary',
+          internalType: 'Preliminary',
           displayLabel: 'Preliminary',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -110,7 +110,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:40.910Z',
           id: 'ad59dab7-2953-4a2d-9710-8b19dcd6f62d',
           order: 4,
-          enlilType: 'Design & Engineering',
+          internalType: 'Design & Engineering',
           displayLabel: 'V & V',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -125,7 +125,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:40.957Z',
           id: 'dce171dc-c593-4684-93e8-bf91f3829ce5',
           order: 6,
-          enlilType: 'Obsolete',
+          internalType: 'Obsolete',
           displayLabel: 'Retire',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -140,7 +140,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:40.957Z',
           id: '5374ae40-90c4-48c9-adc2-e6b9f0f3d354',
           order: 3,
-          enlilType: 'Planning',
+          internalType: 'Planning',
           displayLabel: 'Planning',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -155,7 +155,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:40.957Z',
           id: 'b2a585b0-9a76-45a4-8b47-5e9d42915749',
           order: 2,
-          enlilType: 'Concept',
+          internalType: 'Concept',
           displayLabel: 'Concept',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -170,7 +170,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:41.015Z',
           id: 'c08433d6-2fdf-43b1-bfd8-9a727943160d',
           order: 5,
-          enlilType: 'Production',
+          internalType: 'Production',
           displayLabel: 'Production',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -197,7 +197,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:41.018Z',
           id: '86c5bb24-9c44-4caf-b6c0-1850a8afbbdb',
           order: 4,
-          enlilType: 'Design & Engineering',
+          internalType: 'Design & Engineering',
           displayLabel: 'V & V',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -212,7 +212,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:41.018Z',
           id: '40507568-0c03-47ca-a09e-aa3421001ccd',
           order: 3,
-          enlilType: 'Planning',
+          internalType: 'Planning',
           displayLabel: 'Planning',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -227,7 +227,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:41.018Z',
           id: '0332c838-20dd-4285-86a1-68ec13ce20bf',
           order: 5,
-          enlilType: 'Production',
+          internalType: 'Production',
           displayLabel: 'Production',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -242,7 +242,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:41.018Z',
           id: 'ad5e9fc5-f034-4957-84d9-76af7b7b85b8',
           order: 1,
-          enlilType: 'Preliminary',
+          internalType: 'Preliminary',
           displayLabel: 'Preliminary',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -257,7 +257,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:41.019Z',
           id: 'f1b90eee-4f27-4ab8-b13e-aa49942e871f',
           order: 6,
-          enlilType: 'Obsolete',
+          internalType: 'Obsolete',
           displayLabel: 'Retire',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',
@@ -272,7 +272,7 @@ export const realTimeData = {
           updatedAt: '2024-07-11T13:18:41.022Z',
           id: '88623c6c-203a-45ce-ac0f-59a435ac7731',
           order: 2,
-          enlilType: 'Concept',
+          internalType: 'Concept',
           displayLabel: 'Concept',
           companyId: 'f818830c-9e7f-4e35-be17-b7fa19412b09',
           companySettingsId: 'e2150256-caa4-4abe-91fc-0e1d21654476',

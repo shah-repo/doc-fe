@@ -171,7 +171,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         [FBDAMFields.DAM]: approvalMatrix,
       });
     }
-    const redlineDataToSubmit = pick(values, 'schema', 'formInput', 'redline', 'lifecyclePhaseId');
+    const redlineDataToSubmit = pick(values, 'schema', 'formInput', 'redline');
 
     // Receivable: Missing form input data on First time when initial values form input is null and autosave is disabled
     if (isReceivable && isEmpty(dataToSubmit) && isEmpty(values.formInput)) {
@@ -195,9 +195,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       return handleSave(redlineDataToSubmit as DocumentRevisionEditRequestBody, helpers);
     }
 
-    const lifecyclePhaseDataToSubmit = pick(values, 'schema', 'formInput', 'lifecyclePhaseId');
+    const lifecyclePhaseDataToSubmit = pick(values, 'lifecyclePhaseId');
 
-    if (lifecyclePhaseDataToSubmit) {
+    if (isEmpty(dataToSubmit) && lifecyclePhaseDataToSubmit) {
       return handleSave(lifecyclePhaseDataToSubmit as DocumentRevisionEditRequestBody, helpers);
     }
 

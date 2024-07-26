@@ -8,6 +8,8 @@ export enum GeneralSettingsTabs {
   AR = 'Approval Requests',
   MD = 'Material Disposition',
   LCP = 'Life Cycle Phases',
+  LotAutoAllocationOrder = 'Lot Auto-allocation Order',
+  ExpiredLots = 'Expired Lots',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
   Locations = 'Locations',
@@ -21,6 +23,7 @@ export interface GeneralSettingsProps {
 
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
+  info: string
   onToggle: (isExpanded?: boolean) => void
   onAddNew?: () => void
 }

@@ -36,7 +36,7 @@ const getValue = (item?: DocumentOption) => {
   };
 };
 
-const getKey = item => item?.id;
+const getKey = item => item?.documentId;
 
 export const RevisionCellTemplate: React.FC<Props> = (props) => {
   const { dataItem, field, fieldToEdit, options, onClick } = props;

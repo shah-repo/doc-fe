@@ -10,10 +10,10 @@ import { authSelectors } from '../../../state/ducks/auth';
 import { DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import FormWrapper from '../../components/forms/FormWrapper';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import ScrollToError from '../../components/forms/ScrollToError';
-import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import AttachmentsField from '../../document.revision/form/attachments';
 import BuildsContainer from '../../document.revision/summary/builds.container';
 import { attachmentsDisabledChangeControl, disableOtherFieldsChangeControl } from '../../document.revision/utils/helpers';
@@ -22,7 +22,7 @@ import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from '../../h
 import { useScrollIntoView } from '../../hooks/useScrollIntoView';
 import { DocumentCloneType, DocumentCloneTypeOptions } from '../Clone.container';
 import { isOperator } from '../DocumentRevisionDisplay.container';
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentOTHER, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentOTHER, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from '../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../helpers/documentRevisionStatus';
 import { getRevisionStageNumber, isDocumentAlphaReleased } from '../helpers/revisionStage';
 import DocIdInput from './presenters/DocIdInput';
@@ -31,11 +31,11 @@ import DocumentTypeSelect from './presenters/DocumentTypeSelect';
 import EquipmentSpecification from './presenters/EquipmentSpecification';
 import FBActiveNoOutput from './presenters/FBActiveNoOutput';
 import LifecyclePhaseSelect from './presenters/LifecyclePhaseSelect';
+import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from './presenters/related.equipments';
+import RelatedPartsWrapper from './presenters/related.parts/RelatedParts.wrap';
 import RetrainField from './presenters/RetrainField';
 import RevisionStage from './presenters/RevisionStage';
 import RevisionTypeChange from './presenters/RevisionTypeChange';
-import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from './presenters/related.equipments';
-import RelatedPartsWrapper from './presenters/related.parts/RelatedParts.wrap';
 import { DocumentRevisionFormValues } from './types';
 
 interface Props extends FormikProps<DocumentRevisionFormValues> {
@@ -315,12 +315,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Grid>)}
           {isPart && documentRevision?.parentParts && (<Grid item xs={6}>
             <LifecyclePhaseSelect
-            docTypeId ={docTypeId}
-            lifecyclePhaseId={documentRevision?.lifecyclePhaseId}
-              isDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
-              {...{
-                isDocRevStatusDraft,
-              }}
+              docTypeId ={docTypeId}
+              lifecyclePhaseId={documentRevision?.lifecyclePhaseId}
+              isOptionDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
             />
           </Grid>)}</>)}
           {isEB && (
