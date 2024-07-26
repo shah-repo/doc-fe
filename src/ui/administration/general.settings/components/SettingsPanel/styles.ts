@@ -21,11 +21,12 @@ export default makeStyles(theme => ({
     flexDirection: 'row-reverse',
     alignItems: 'center',
     padding: theme.spacing(2, 1.5),
+    borderRadius: theme.spacing(0.75),
+    background: Colors.white,
+    border: `1px solid ${Colors.white}`,
     position: 'sticky',
     top: 0,
-    zIndex: 1,
-    backgroundColor: Colors.white,
-    borderRadius: theme.spacing(0.75),
+    zIndex: 2,
 
     '&.Mui-expanded': {
       minHeight: 0,
@@ -67,6 +68,5 @@ export default makeStyles(theme => ({
   details: {
     display: 'block',
     padding: theme.spacing(0, 2, 2, 6.25),
-    overflowY: 'auto',
   },
 }));
