@@ -13,6 +13,9 @@ export default makeStyles(theme => ({
     '&.Mui-expanded': {
       margin: theme.spacing(0, 0, 3.75),
     },
+    '&::before': {
+      display: 'none',
+    },
   },
   summary: {
     flexDirection: 'row-reverse',
@@ -22,8 +25,7 @@ export default makeStyles(theme => ({
     top: 0,
     zIndex: 1,
     backgroundColor: Colors.white,
-    borderTop: `1px solid ${Colors.tableStroke}`,
-    borderRadius: theme.spacing(0.5, 0.5, 0, 0),
+    borderRadius: theme.spacing(0.75),
 
     '&.Mui-expanded': {
       minHeight: 0,
