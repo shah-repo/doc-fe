@@ -1,4 +1,4 @@
-import _, { cloneDeep, debounce, isEmpty } from 'lodash';
+import { cloneDeep, debounce, isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
@@ -66,7 +66,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   const isInReview = changeRequest.state === ChangeRequestStatus.InReview;
 
   useEffect(() => {
-    const isItemRevDataSame = _.isEqual(initialValues?.formInput?.documentRevisions, formState.getValues()?.documentRevisions);
+    const isItemsRevDataSame = isEqual(initialValues?.formInput?.documentRevisions, formState.getValues()?.documentRevisions);
 
     FBDataStore?.setRefreshData({
       ...FBDataStore?.refreshData,
@@ -76,7 +76,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       },
     });
 
-    if (!isItemRevDataSame) {
+    if (!isItemsRevDataSame) {
       formState.setValues(initialValues?.formInput ?? {});
     }
   }, [initialValues.formInput]);
