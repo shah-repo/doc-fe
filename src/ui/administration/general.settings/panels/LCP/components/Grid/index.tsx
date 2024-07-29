@@ -11,12 +11,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
 import { companyActions } from '../../../../../../../state/ducks/company';
 import { DOC_TYPE_GROUP } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import AlertDialog from '../../../../../../app/alert.dialog/AlertDialog';
 import { Button as AddButton } from '../../../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../../../../../components/notifications';
 import useActionCreator from '../../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../../hooks/useAsync';
+import useDialog from '../../../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
@@ -33,10 +35,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [partGroups, setPartGroups] = useState<CustomGroupOptions[]>([]);
   const [data, setData] = useState<LCP[]>();
   const [prevData, setPrevData] = useState<LCP[]>();
+  const [selectedDataItem, setSelectedDataItem] = useState<CustomGroupDataItem>();
   const [resultState, setResultState] = useState<DataResult>();
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const [editGroup, setEditGroup] = useState<string>('');
   const [addNewPhase, setAddNewPhase] = useState<Partial<LCP>>();
+  const confirmationDialog = useDialog();
 
   const [selectedDocTypes, setSelectedDocTypes] = useState<CustomGroupOptions[]>([]);
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
@@ -120,6 +124,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onDiscardGroup = () => {
     setEditGroup('');
     setResultState(processWithGroups(prevData ?? [], initialDataState));
+    setSelectedDataItem(undefined);
   };
 
   const getGroupIdByCategory = (category: string): string => {
@@ -143,9 +148,21 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const onDeleteGroup = (dataItem: CustomGroupDataItem) => {
-    const updatedData = (data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== dataItem.groupId);
+    confirmationDialog.open();
+    setSelectedDataItem(dataItem);
+  };
+
+  const onConfirmDeactivate = () => {
+    const updatedData = (data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== selectedDataItem.groupId);
     updateStateGridData(updatedData);
     updateSettingsObj(updatedData);
+    setSelectedDataItem(undefined);
+    confirmationDialog.close();
+  };
+
+  const onCancelDeactivate = () => {
+    onDiscardGroup();
+    confirmationDialog.close();
   };
 
   const onGroupChange = (options: CustomGroupOptions[], groupId: string) => {
@@ -176,7 +193,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
     setEditGroup('');
-    updateSettingsObj(data);
+    data && updateSettingsObj(data);
   };
 
   const isLastGroupRow = (id: string, category: string) => {
@@ -438,6 +455,13 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       >
         {translate('form.builder.add.item')}
       </AddButton>
+      {
+        confirmationDialog.isOpen && <AlertDialog
+          dialog={confirmationDialog}
+          confirmAction={onConfirmDeactivate}
+          cancelAction={onCancelDeactivate}
+          message="administration.general.settings.lcp.deactivate.message"
+        />}
     </Grid>
   </SettingsPanel>;
 };
