@@ -92,6 +92,7 @@ export type FBInputType =
   | 'workOrderLhrTable'
   | 'woApprovals'
   | 'workOrderType'
+  | 'supplierContacts'
   ;
 
 export type FBInputProps =
@@ -270,6 +271,7 @@ export const FBAutosave: FBInputType[] = [
   'numeric',
   'cycleCount',
   'workOrderType',
+  'supplierContacts',
 ];
 
 export const SectionTypeField: FBInputType[] = [

@@ -60,6 +60,7 @@ import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
 import FBSubsection from '../FBSubsection/FBSubsection';
 import FBSupplier from '../FBSupplier/FBSupplier';
+import FBSupplierContacts from '../FBSupplierContacts';
 import FBTask from '../FBTask/FBTask';
 import FBTextEditor from '../FBTextEditor/FBTextEditor';
 import FBTextField from '../FBTextField/FBTextField';
@@ -158,6 +159,7 @@ class FBSchemaState {
     tasksListTable: FBTasksListTable,
     workOrderType: FBWorkOrderType,
     workOrderLhrTable: FBWorkOrderLHRTable,
+    supplierContacts: FBSupplierContacts,
   };
 
   @observable public schema?: FBSchemaProps[];
