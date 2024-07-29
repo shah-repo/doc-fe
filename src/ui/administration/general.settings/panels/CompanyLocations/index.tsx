@@ -1,5 +1,4 @@
-import { Box } from '@material-ui/core';
-import { useFormik } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import { isEmpty, omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,14 +8,12 @@ import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { CompanyLocation } from '../../../../../state/ducks/company/types';
-import { DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import LocationsSetting from '../../components/LocationsSetting';
-import useStyles from '../../components/LocationsSetting/styles';
 import SettingsPanel from '../../components/SettingsPanel';
+import SettingsTable from '../../components/SettingsTable';
 import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
 import { EditableCompanyLocation } from './types';
@@ -26,9 +23,10 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const locations = companyMine.locations;
 
-  const editLocation = ({ dataItem }: DataGridRowClickEvent<EditableCompanyLocation>) => setEditedLocation(dataItem);
-  const discardLocation = () => setEditedLocation(undefined);
   const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations);
+  const [editedLocation, setEditedLocation] = React.useState<EditableCompanyLocation>();
+
+  const discardLocation = () => setEditedLocation(undefined);
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
 
   const async = useAsync({
@@ -38,7 +36,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     },
   });
 
-  const [editedLocation, setEditedLocation] = React.useState<EditableCompanyLocation>();
   const formik = useFormik<EditableCompanyLocation | Record<string, never>>({
     initialValues: {},
     validate: (values) => {
@@ -59,7 +56,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       async.start(changeCompanyAction, { locations: updatedLocations }, async);
     },
   });
-  const classes = useStyles();
   const { setValues, submitForm } = formik;
 
   useEffect(() => {
@@ -69,6 +65,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   useEffect(() => {
     setLocationsData(locations);
   }, [locations]);
+
   const addLocation = () => {
     setEditedLocation({
       id: uuidv4(),
@@ -92,26 +89,30 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       ? [...mappedLocations, editedLocation]
       : mappedLocations;
 
-  const onRowClick = isActive ? editLocation : undefined;
-
   const schema = buildSchema({
     isActive,
-    actionsClass: classes.actionsCell,
+    onEdit: isActive ? setEditedLocation : undefined,
     onDiscard: discardLocation,
     onConfirm: submitForm,
-    onRowClick: onRowClick,
   });
 
   return (
-    <Box className={classes.root} >
-      <SettingsPanel
-        {...props}
-        title={translate('administration.general.settings.locations.tab')}
-        onAddNew={isActive ? addLocation : undefined}
-      >
-        <LocationsSetting {...{ isActive, formik, locationsList, schema, editedLocation, addLocation, scrollBehavior: 'smooth' }} />
-      </SettingsPanel>
-    </Box>
+    <SettingsPanel
+      {...props}
+      title={translate('administration.general.settings.locations.tab')}
+      onAddNew={isActive ? addLocation : undefined}
+    >
+      <FormikProvider value={formik}>
+        <SettingsTable
+          isActive={isActive}
+          data={locationsList}
+          isEditing={editedLocation !== undefined}
+          schema={schema}
+          addButtonLabel={translate('settings.locations.add')}
+          onAdd={addLocation}
+        />
+      </FormikProvider>
+    </SettingsPanel>
   );
 };
 export default CompanyLocationSettingsPanel;

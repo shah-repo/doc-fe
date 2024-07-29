@@ -1,13 +1,16 @@
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
-import { CellTemplateProps } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { FormikField, TextField } from '../../../../../components/forms/fields-next';
-import { EditableCompanyLocation } from '../../../panels/CompanyLocations/types';
 
-export const TextCellTemplate: React.FC<CellTemplateProps<EditableCompanyLocation>> = ({ dataItem, field }) => {
+function TextCellTemplate<T extends EditableItem> ({
+  dataItem,
+  field,
+}: CellTemplateProps<T>): React.ReactElement {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps } = useFormikContext();
 
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -17,17 +20,20 @@ export const TextCellTemplate: React.FC<CellTemplateProps<EditableCompanyLocatio
     return (
       <FormikField name={field}>
         <TextField
-          {...getFieldProps(field)} />
+          {...getFieldProps(field)}
+        />
       </FormikField>
     );
   }
   return (
     <OverflowTooltip
       title={defaultValue}
-      arrow
       placement="top"
+      arrow
     >
       {defaultValue}
     </OverflowTooltip>
   );
-};
+}
+
+export default TextCellTemplate;

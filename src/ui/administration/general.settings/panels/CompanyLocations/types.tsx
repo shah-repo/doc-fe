@@ -1,6 +1,5 @@
 import { CompanyLocation } from '../../../../../state/ducks/company/types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-export interface EditableCompanyLocation extends CompanyLocation {
-  [MODE_FIELD]: Mode
+export interface EditableCompanyLocation extends CompanyLocation, EditableItem {
 }

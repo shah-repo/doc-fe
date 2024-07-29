@@ -20,26 +20,15 @@ export default makeStyles(theme => ({
     borderBottomRightRadius: 0,
     borderBottom: 'none',
   },
-  actionsCell: {
-    width: 0,
-    overflow: 'visible !important',
-    position: 'sticky',
-    right: 0,
-    padding: '0 !important',
-  },
   updatingRow: {
     position: 'relative',
     zIndex: 3,
     outline: `1px solid ${Colors.primaryLight}`,
     outlineOffset: -1,
   },
-  paper: {
-    pointerEvents: 'auto',
-  },
-  cellStyle: {
-    textAlign: 'center',
+  actions: {
     display: 'flex',
     justifyContent: 'center',
-    gap: theme.spacing(0.5, 0.5),
+    gap: theme.spacing(1, 1),
   },
 }));
