@@ -6,7 +6,7 @@ import { CellTemplateProps } from '../../../../../../components/KendoDataGrid/Ke
 export interface LCP {
   id: string
   category: string
-  order?: string
+  order?: number
   displayOrder?: number
   internalType: string
   displayLabel: string

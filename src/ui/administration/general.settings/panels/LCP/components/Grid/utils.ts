@@ -1,3 +1,4 @@
+import { chain } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { CUSTOM_GROUP_ORDER } from './constants';
 import { CustomGroupDataItem, CustomGroupOptions, GroupDocTypes, LCP, LCPResponse, processLCPType } from './types';
@@ -11,14 +12,16 @@ export const processRealData = (categoriesInfo: LCPResponse[]): processLCPType =
     const documentTypeIdArr = docTypes?.map(data => data.id);
     const group = docTypes?.map(data => data.group);
     const category = uuidv4();
-    data.phases = data.phases.map((phase) => {
-      return {
-        ...phase,
-        group: group[0],
-        category,
-        documentTypeIdArr,
-      };
-    });
+    data.phases = chain(data.phases)
+      .sortBy('displayOrder')
+      .map((phase) => {
+        return {
+          ...phase,
+          group: group[0],
+          category,
+          documentTypeIdArr,
+        };
+      }).value();
     phases = phases.concat(data.phases);
   });
   return {
