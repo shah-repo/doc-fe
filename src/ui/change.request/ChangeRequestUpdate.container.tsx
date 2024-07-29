@@ -73,7 +73,6 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         formInput: initialValues.formInput,
       },
     });
-    formState.setValues(initialValues?.formInput ?? {});
   }, [initialValues.formInput]);
 
   useEffect(() => {

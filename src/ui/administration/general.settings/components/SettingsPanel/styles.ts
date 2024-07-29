@@ -51,6 +51,11 @@ export default makeStyles(theme => ({
     fontWeight: 600,
     fontSize: 16,
   },
+  info: {
+    fontWeight: 400,
+    fontSize: 12,
+    color: Colors.textGray,
+  },
   details: {
     display: 'block',
     padding: theme.spacing(0, 2, 2, 6.25),

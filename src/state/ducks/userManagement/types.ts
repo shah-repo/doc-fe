@@ -98,6 +98,15 @@ export interface AuditDetailsProps {
   ownerDetails: OwnerItemsProp
   timestamp: string
 }
+export enum AUDIT_FIELD_PATHS {
+  NAME = 'name',
+  EMPLOYEES = 'employees',
+  AVATAR = 'avatar',
+  GROUPS='groups',
+  ACTIVE = 'active',
+  RESEND_CONFIRMATION_EMAIL_TIMESTAMP = 'resendConfirmationEmailTimestamp',
+  RESET_PASSWORD_EMAIL_TIMESTAMP = 'resetPasswordEmailTimestamp',
+}
 
 export enum ACTION_TITLE_MAPPING {
   AddedToGroups = 'AddedToGroups',
