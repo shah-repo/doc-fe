@@ -72,7 +72,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
       const updatedData = newPhases?.concat((data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID));
       setEditGroup(getGroupIdByCategory(category));
-      updateStateGridData(updatedData ?? []);
+      updateStateGridData(updatedData ?? [], false);
     },
     onError: toastError,
   });
@@ -123,7 +123,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onDiscardGroup = () => {
     setEditGroup('');
-    setResultState(processWithGroups(prevData ?? [], initialDataState));
+    updateStateGridData(prevData ?? []);
     setSelectedDataItem(undefined);
   };
 
@@ -131,9 +131,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     return `${category}${LCP_KEYS.category}`;
   };
 
-  const updateStateGridData = (updatedData: LCP[]) => {
+  const updateStateGridData = (updatedData: LCP[], isToUpdatePrevData = true) => {
     setData(updatedData);
-    setPrevData(cloneDeep(updatedData));
+    if (isToUpdatePrevData) {
+      setPrevData(updatedData);
+    }
     setResultState(processWithGroups(updatedData, initialDataState));
   };
 
