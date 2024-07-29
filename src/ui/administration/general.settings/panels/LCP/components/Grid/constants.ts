@@ -30,7 +30,7 @@ export const PART_GROUPS = [
 // Sample Data for default Dropdown Options
 export const DEFAULT_OPTIONS = [
   { label: 'Yes', value: 'YES' },
-  { label: 'Allow with warning', value: 'WARNING' },
+  { label: 'Allow with warning', value: 'ALLOW_WITH_WARNING' },
   { label: 'No', value: 'NO' },
 ];
 
