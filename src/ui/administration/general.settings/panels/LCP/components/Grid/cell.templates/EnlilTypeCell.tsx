@@ -1,3 +1,6 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isNil, kebabCase } from 'lodash';
 import React from 'react';
@@ -7,6 +10,11 @@ import { Autocomplete, FormikField } from '../../../../../../../components/forms
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { EDIT_FIELD } from '../constants';
 import { LCP } from '../types';
+import useStyles from './styles';
+
+interface EnlilTypeCellProps extends CellTemplateProps<LCP> {
+  onDeletePhase: (dataItem: LCP) => void
+}
 
 const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, onChange }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
@@ -40,11 +48,12 @@ const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, 
   );
 };
 
-export const EnlilTypeCell: React.FC<CellTemplateProps<LCP>> = (props) => {
-  const { field, dataItem, onClick, colSpan, style, className } = props;
+export const EnlilTypeCell: React.FC<EnlilTypeCellProps> = (props) => {
+  const { field, dataItem, onClick, onDeletePhase, colSpan, style, className } = props;
   const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
   const handleClick = () => onClick?.({ dataItem });
   const datCy = `${kebabCase(field)}-td`;
+  const classes = useStyles();
 
   return <td
     colSpan={colSpan}
@@ -56,6 +65,9 @@ export const EnlilTypeCell: React.FC<CellTemplateProps<LCP>> = (props) => {
     {isEditMode && !isNil(dataItem.enlilTypeOptions) && <Editor {...props} />}
     { isNil(dataItem.enlilTypeOptions) && <OverflowingContent onClick={handleClick} data-cy={datCy}>
       {dataItem[field]}
+      { dataItem.isUserAdded && <Tooltip title={translate('common.delete')} placement="top" arrow>
+        <FontAwesomeIcon icon={regular('trash-can')} className={classes.phaseDeleteButton} onClick={() => onDeletePhase(dataItem)} />
+      </Tooltip>}
     </OverflowingContent>}
   </td>;
 };

@@ -66,7 +66,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
           group: selectedDocTypes[0].category,
           category,
           [EDIT_FIELD]: true,
-          isUserAdded: true,
+          isUserAdded: false,
           isUserModified: false,
         };
       });
@@ -137,7 +137,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(processWithGroups(updatedData, initialDataState));
   };
 
-  const updateSettingsObj = (updatedData: LCP[]) => {
+  const updateSettingsObj = (updatedData?: LCP[]) => {
     const payload = updatedData?.map((item) => {
       return { ...pick(item, REQUEST_PAYLOAD_KEYS) };
     });
@@ -193,7 +193,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
     setEditGroup('');
-    data && updateSettingsObj(data);
+    updateSettingsObj(data);
   };
 
   const isLastGroupRow = (id: string, category: string) => {
@@ -236,6 +236,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(processWithGroups(newData, initialDataState));
   };
 
+  const onDeletePhase = (dataItem) => {
+    const newData = data?.filter((phase) => phase.id !== dataItem.id) ?? [];
+    setData(newData);
+    setResultState(processWithGroups(newData, initialDataState));
+  };
+
   const formik = useFormik<Partial<EditableLCP>>({
     initialValues: {},
     onSubmit: (values) => {
@@ -246,7 +252,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       setAddNewPhase(undefined);
       setData(updatedData);
       setResultState(processWithGroups(updatedData ?? [], initialDataState));
-      updatedData && updateSettingsObj(updatedData);
+      updateSettingsObj(updatedData);
     },
   });
 
@@ -261,6 +267,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     actionsClass: classes.actionsCell,
     onConfirm: submitForm,
     onDiscard: onDiscardPhase,
+    onDeletePhase: onDeletePhase,
   });
 
   const [columns, setColumns] = React.useState<Array<ColumnDefinition<LCP>>>(schema);

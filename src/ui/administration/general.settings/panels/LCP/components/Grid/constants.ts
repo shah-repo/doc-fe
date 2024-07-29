@@ -17,7 +17,7 @@ export const initialDataState = {
   skip: 0,
   group: DATA_GROUP,
 };
-export const REQUEST_PAYLOAD_KEYS = ['order', 'displayOrder', 'internalType', 'displayLabel', 'isAllowedOnPO', 'isAllowedOnLhrProd', 'isAllowedToBuy', 'documentTypeIdArr'];
+export const REQUEST_PAYLOAD_KEYS = ['order', 'displayOrder', 'internalType', 'displayLabel', 'isAllowedOnPO', 'isAllowedOnLhrProd', 'isAllowedToBuy', 'documentTypeIdArr', 'isUserAdded', 'isUserModified'];
 export const EMPTY_VALUE_PLACEHOLDER = '-';
 
 // Sample Data for PART GROUP Options

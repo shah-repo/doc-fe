@@ -5,6 +5,11 @@ export default makeStyles((theme) => ({
   deleteButton: {
     color: Colors.error,
   },
+  phaseDeleteButton: {
+    marginLeft: theme.spacing(1),
+    color: Colors.error,
+    cursor: 'pointer',
+  },
   editButtons: {
     width: 20,
     height: 20,

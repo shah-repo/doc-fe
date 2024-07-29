@@ -82,6 +82,7 @@ export interface SchemaOptions {
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: () => void
+  onDeletePhase: (dataItem: LCP) => void
 }
 
 export type CustomTemplateProps = CellTemplateProps<EditableLCP>;

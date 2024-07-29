@@ -13,6 +13,7 @@ export const LCPSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  onDeletePhase,
 }: SchemaOptions): Array<ColumnDefinition<LCP>> => {
   return [
     {
@@ -21,7 +22,7 @@ export const LCPSchema = ({
       title: translate('administration.general.settings.lcp.internalType'),
       width: 200,
       locked: false,
-      cell: EnlilTypeCell,
+      cell: (props) => <EnlilTypeCell {...props} onDeletePhase={onDeletePhase} />,
       groupable: false,
       sortable: false,
     },
