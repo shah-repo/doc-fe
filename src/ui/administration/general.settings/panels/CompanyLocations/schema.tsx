@@ -32,6 +32,7 @@ export const buildSchema: SchemaBuilder<EditableCompanyLocation> = ({
       field: 'includedInTotalQty',
       title: 'settings.locations.included.total.quantity',
       template: IncludedInTotalQtyCellTemplate,
+      width: 160,
     },
     {
       id: 'actions',
