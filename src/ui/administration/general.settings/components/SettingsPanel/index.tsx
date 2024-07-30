@@ -69,7 +69,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </Button>
         )}
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.details}>
+      <ExpansionPanelDetails className={cx(classes.details, { [classes.detailsWithStickyTitle]: isSticky })}>
         {children}
       </ExpansionPanelDetails>
     </ExpansionPanel>

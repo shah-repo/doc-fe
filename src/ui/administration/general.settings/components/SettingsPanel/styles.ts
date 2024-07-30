@@ -76,4 +76,11 @@ export default makeStyles(theme => ({
     display: 'block',
     padding: theme.spacing(0, 2, 2, 6.25),
   },
+  detailsWithStickyTitle: {
+    '& .k-grid-header': {
+      position: 'sticky',
+      top: 64,
+      zIndex: 1,
+    },
+  },
 }));

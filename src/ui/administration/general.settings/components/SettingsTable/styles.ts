@@ -4,12 +4,6 @@ import { Colors } from '../../../../layout/theme-next';
 export default makeStyles(theme => ({
   grid: {
     borderCollapse: 'collapse',
-
-    '& .k-grid-header': {
-      position: 'sticky',
-      top: 64,
-      zIndex: 1,
-    },
   },
   gridWithButton: {
     borderBottomLeftRadius: 0,
