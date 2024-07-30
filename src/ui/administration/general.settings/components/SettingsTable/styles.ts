@@ -27,4 +27,7 @@ export default makeStyles(theme => ({
     justifyContent: 'center',
     margin: theme.spacing(0, -1.5),
   },
+  actionsEdit: {
+    gap: theme.spacing(0, 0.25),
+  },
 }));

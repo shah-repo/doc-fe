@@ -1,6 +1,7 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
+import cx from 'classnames';
 import React, { useCallback } from 'react';
 import { translate } from '../../../../../../common/intl';
 import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -44,13 +45,13 @@ function ActionsCellTemplate<T extends EditableItem> ({
     <div
       id="row-actions"
       ref={ref}
-      className={classes.actions}
+      className={cx(classes.actions, { [classes.actionsEdit]: isEditMode })}
     >
       {isEditMode ? (
         <>
           <Tooltip title={translate('common.discard')}>
             <IconButton
-              kind="form"
+              kind="simple"
               color="primary"
               ref={discardRef}
               onClick={onDiscard}
@@ -61,7 +62,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
           </Tooltip>
           <Tooltip title={translate('common.save')}>
             <IconButton
-              kind="form"
+              kind="simple"
               color="primary"
               ref={saveRef}
               onClick={onConfirm}
