@@ -18,5 +18,9 @@
   {
     "text": "CAD $",
     "value": "CAD"
+  },
+  {
+    "text": "CHF ₣",
+    "value": "CHF"
   }
 ]
