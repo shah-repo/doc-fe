@@ -2,11 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => ({
-  root: {
-    margin: theme.spacing(3, 0),
-  },
   grid: {
-    marginTop: theme.spacing(2),
     borderCollapse: 'collapse',
 
     '& .k-grid-header': {
@@ -29,6 +25,6 @@ export default makeStyles(theme => ({
   actions: {
     display: 'flex',
     justifyContent: 'center',
-    gap: theme.spacing(1, 1),
+    margin: theme.spacing(0, -1.5),
   },
 }));

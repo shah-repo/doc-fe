@@ -28,6 +28,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
   onDiscard,
 }: Props<T>): React.ReactElement {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
   const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
   const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
 
@@ -49,7 +50,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
         <>
           <Tooltip title={translate('common.discard')}>
             <IconButton
-              kind="simple"
+              kind="form"
               color="primary"
               ref={discardRef}
               onClick={onDiscard}
@@ -60,7 +61,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
           </Tooltip>
           <Tooltip title={translate('common.save')}>
             <IconButton
-              kind="simple"
+              kind="form"
               color="primary"
               ref={saveRef}
               onClick={onConfirm}
@@ -74,7 +75,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
         <>
           <Tooltip title={translate('common.edit')}>
             <IconButton
-              kind="simple"
+              kind="form"
               color="primary"
               onClick={() => onEdit?.(dataItem)}
               disabled={!isActive}
@@ -86,9 +87,10 @@ function ActionsCellTemplate<T extends EditableItem> ({
             <Tooltip title={translate('common.delete')}>
               <IconButton
                 kind="destructive"
+                ref={deleteRef}
                 onClick={() => onDelete?.(dataItem)}
               >
-                <FontAwesomeIcon icon={regular('trash-can')} />
+                <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} />
               </IconButton>
             </Tooltip>
           )}

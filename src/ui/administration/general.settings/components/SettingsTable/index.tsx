@@ -1,4 +1,3 @@
-import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
@@ -37,7 +36,7 @@ function SettingsTable<T extends EditableItem> ({
   const shouldShowAddButton = isActive && addButtonLabel && onAdd;
 
   return (
-    <Box className={classes.root}>
+    <>
       <KendoDataGrid
         data={data}
         schema={schema}
@@ -57,7 +56,7 @@ function SettingsTable<T extends EditableItem> ({
           {addButtonLabel}
         </Button>
       )}
-    </Box>
+    </>
   );
 }
 

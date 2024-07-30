@@ -5,7 +5,7 @@ export interface SettingsTableProps<T extends EditableItem = EditableItem> {
   data: T[]
   schema: Array<ColumnDefinition<T>>
   addButtonLabel?: string
-  onAdd: () => void
+  onAdd?: () => void
   onRowClick?: GridProps['onRowClick']
   getRowProperties?: (item: T) => Record<string, unknown>
   isEditing?: boolean
