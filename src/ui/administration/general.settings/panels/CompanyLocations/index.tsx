@@ -107,9 +107,9 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       <SettingsPanel
         {...props}
         title={translate('administration.general.settings.locations.tab')}
-        onAddNew={addLocation}
+        onAddNew={isActive ? addLocation : undefined}
       >
-        <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation, scrollBehavior: 'smooth' }} />
+        <LocationsSetting {...{ isActive, formik, locationsList, schema, editedLocation, addLocation, scrollBehavior: 'smooth' }} />
       </SettingsPanel>
     </Box>
   );

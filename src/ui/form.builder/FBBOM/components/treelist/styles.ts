@@ -197,7 +197,7 @@ export default makeStyles((theme) => ({
         flexShrink: 1,
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        overflow: 'hidden',
+        overflow: 'visible',
         fontWeight: 600,
         fontSize: 12,
       },

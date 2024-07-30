@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
 import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -18,9 +18,9 @@ import Text from '../../components/Text';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { isTranslation } from '../../translations/types';
-import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presenters/related.parts/helper';
-import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
+import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import { styles } from './Audit.presenter.styles.new';
 
 interface OwnProps {
@@ -628,38 +628,42 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
   const prevVal: string = change.previousValue as string;
   const nextVal: string = change.nextValue as string;
 
-  const { step: prevStep, stepOrMpiDetails: prevDetails } = JSON.parse(prevVal);
-  const { step: nextStep, stepOrMpiDetails: nextDetails } = JSON.parse(nextVal);
-  // modify here
-  const prevStepValue = prevDetails?.isExternalItem ? prevDetails.value : prevDetails?.docId;
-  const nextStepValue = nextDetails?.isExternalItem ? nextDetails.value : nextDetails?.docId;
+  try {
+    const { step: prevStep, stepOrMpiDetails: prevDetails } = JSON.parse(prevVal);
+    const { step: nextStep, stepOrMpiDetails: nextDetails } = JSON.parse(nextVal);
+    // modify here
+    const prevStepValue = prevDetails?.isExternalItem ? prevDetails.value : prevDetails?.docId;
+    const nextStepValue = nextDetails?.isExternalItem ? nextDetails.value : nextDetails?.docId;
 
-  let stepNumber = '';
-  if (prevStep !== nextStep && nextStep !== undefined) {
-    if (prevStep === undefined) {
-      stepNumber = nextStep;
+    let stepNumber = '';
+    if (prevStep !== nextStep && nextStep !== undefined) {
+      if (prevStep === undefined) {
+        stepNumber = nextStep;
+      } else {
+        stepNumber = `${prevStep} To ${nextStep}`;
+      }
     } else {
-      stepNumber = `${prevStep} To ${nextStep}`;
+      stepNumber = prevStep;
     }
-  } else {
-    stepNumber = prevStep;
-  }
 
-  let stepDetails = '';
-  const prevStepValueWithRev = getDisplayDocumentByDetailsObj(prevDetails);
-  const nextStepValueWithRev = getDisplayDocumentByDetailsObj(nextDetails);
+    let stepDetails = '';
+    const prevStepValueWithRev = getDisplayDocumentByDetailsObj(prevDetails);
+    const nextStepValueWithRev = getDisplayDocumentByDetailsObj(nextDetails);
 
-  if (prevStepValue !== nextStepValue && nextStepValue !== undefined) {
-    if (prevStepValue === undefined) {
-      stepDetails = nextStepValueWithRev;
+    if (prevStepValue !== nextStepValue && nextStepValue !== undefined) {
+      if (prevStepValue === undefined) {
+        stepDetails = nextStepValueWithRev;
+      } else {
+        stepDetails = `${prevStepValueWithRev} To ${nextStepValueWithRev}`;
+      }
     } else {
-      stepDetails = `${prevStepValueWithRev} To ${nextStepValueWithRev}`;
+      stepDetails = prevStepValueWithRev;
     }
-  } else {
-    stepDetails = prevStepValueWithRev;
-  }
 
-  return `${stepNumber} / ${stepDetails}`;
+    return `${stepNumber} / ${stepDetails}`;
+  } catch (error) {
+    return '';
+  }
 };
 
 export default AuditPresenter;

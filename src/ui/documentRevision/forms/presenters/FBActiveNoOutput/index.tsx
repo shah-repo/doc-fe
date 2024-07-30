@@ -10,12 +10,12 @@ import { ReactComponent as PreviewIcon } from '../../../../../assets/images/prev
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../../state/ducks/documentRevisions/documentType';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import Text from '../../../../components/Text';
 import AutocompleteField from '../../../../components/forms/fields/Autocomplete/Autocomplete';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { required, validator } from '../../../../components/forms/fields/validators';
-import Text from '../../../../components/Text';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../../constants/urls';
-import { FB, FBDialog, FBDialogState, FBProvider } from '../../../../form.builder';
+import { FB, FBDialog, FBDialogState, FBForm, FBProvider } from '../../../../form.builder';
 import useGetHasPermission from '../../../../hooks/useGetHasPermission';
 import { checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from '../../../helpers/checkDocumentGroup';
 import { isDocumentRevisionInDraft } from '../../../helpers/documentRevisionStatus';
@@ -100,7 +100,9 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
         paper: classes.previewDialog,
       },
       content: (
-        <DocumentPreview docRevId={docRevId} />
+        <FBForm>
+          <DocumentPreview docRevId={docRevId} />
+        </FBForm>
       ),
     });
   };

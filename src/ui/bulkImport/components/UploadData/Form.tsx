@@ -2,13 +2,14 @@ import { Box } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDownloadFile, setIsLoading, setTemplateFile, uploadFileData } from '../../../../state/ducks/bulkImport/actions';
+import { cleanUpMappedHeaders, setIsLoading, setTemplateFile, uploadFileData } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImport, getTemplateFile } from '../../../../state/ducks/bulkImport/selectors';
+import { getDownloadTemplate } from '../../../../state/ducks/bulkImport/utils';
+import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
 import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.types';
 import { DropzoneField } from '../../../components/forms/fields-next/index';
 import { toastError } from '../../../components/notifications';
-import Text from '../../../components/Text';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import ListFiles from '../ListFiles';
@@ -28,7 +29,10 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
   const bulkImport = useSelector(getBulkImport);
 
   const asyncUploadFile = useAsync({
-    onSuccess: () => handleNext(),
+    onSuccess: () => {
+      dispatch(cleanUpMappedHeaders());
+      handleNext();
+    },
   });
 
   const handleFilesDrop = (acceptedFilesWithPreview: FileWithPreview[]) => {
@@ -52,7 +56,7 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
 
   const handleDownloadFile = () => {
     if (bulkImport) {
-      dispatch(getDownloadFile(bulkImport.id));
+      getDownloadTemplate(bulkImport.id);
     }
   };
 

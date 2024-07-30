@@ -17,6 +17,7 @@ import { PreviewDoc } from './PreviewDoc';
 interface CustomOptionType extends OptionType {
   lotStatus?: string
   expiryDate: string
+  documentId?: string
 }
 
 const Editor: React.FC<CustomTemplateProps> = (props) => {
@@ -65,12 +66,14 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
       lotStatus: lot?.lotStatus,
       expiryDate: lot?.formInput?.lot_expiry_date,
       value: lot.id,
+      documentId: lot?.documentId,
     }));
   };
 
   const defaultValue = values[LHR_SUMARY_FIELDS.lotOrEquipment] ?? '';
+  const documentId = values?.lotOrEquipmentDetails?.documentId ?? '';
   const value = FB.isUUID(defaultValue) ? renderOptions().find(
-    (option) => option.value === defaultValue,
+    (option) => option.value === defaultValue || option?.documentId === documentId,
   ) : { label: defaultValue, value: defaultValue };
 
   const onInputChange = (
