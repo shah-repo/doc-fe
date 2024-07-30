@@ -1,13 +1,13 @@
-import { FormikProvider, useFormik } from 'formik';
+import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
-import { CompanyLocation } from '../../../../../state/ducks/company/types';
+import { CompanyLocation, GeneralSettings } from '../../../../../state/ducks/company/types';
 import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -19,6 +19,7 @@ import { buildSchema } from './schema';
 import { EditableCompanyLocation } from './types';
 
 const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
+  const { values } = useFormikContext<GeneralSettings>();
   const companyMine = useSelector(companySelectors.getCompanyMine);
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const locations = companyMine.locations;
@@ -28,6 +29,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const discardLocation = () => setEditedLocation(undefined);
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
+  const dispatch = useDispatch();
 
   const async = useAsync({
     onError: (error) => {
@@ -38,6 +40,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const updateLocations = (updatedLocations: CompanyLocation[]) => {
     setLocationsData(updatedLocations);
+    dispatch(companyActions.updateGeneralSettings(values));
     async.start(changeCompanyAction, { locations: updatedLocations }, async);
   };
 
