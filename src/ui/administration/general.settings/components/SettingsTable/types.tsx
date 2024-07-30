@@ -12,7 +12,7 @@ export interface SettingsTableProps<T extends EditableItem = EditableItem> {
   isActive?: boolean
 }
 
-export interface SettingsSchemaOptions<T extends EditableItem = EditableItem> {
+interface SettingsSchemaOptions<T extends EditableItem = EditableItem> {
   isActive: boolean
   onEdit?: (item: T) => void
   onActiveStateChange?: (item: T, state: boolean) => void
