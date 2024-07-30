@@ -38,7 +38,7 @@ const REDLINE_DEFAULT_STATE = {
   redlineActive: false,
 };
 
-const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
+const GENERAL_SETTINGS_DEFAULT_STATE = ({
   zebraPrint: [],
   equipmentFamily: {
     autoSyncEnabled: false,
@@ -48,7 +48,7 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   shouldAutoUpdateLotStatus: false,
   status: AsyncStatus.Idle,
   message: '',
-};
+}) as unknown as GeneralSettingsState;
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
 
