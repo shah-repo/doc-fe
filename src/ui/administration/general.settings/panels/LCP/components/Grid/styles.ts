@@ -61,7 +61,6 @@ export default makeStyles((theme) => ({
       },
     },
     '& .k-grid-header thead th': {
-      // textTransform: 'uppercase',
       color: Colors.textBlack,
     },
     '& .k-grid-content tr:hover td': {
@@ -104,19 +103,6 @@ export default makeStyles((theme) => ({
   deleteButton: {
     color: Colors.error,
   },
-  // updatingRow: {
-  //   position: 'relative',
-  //   zIndex: 3,
-  //   // outline: `1px solid ${Colors.primaryLight}`,
-  //   outlineOffset: -1,
-  //   '& tr': {
-  //     // backgroundColor: Colors.primaryLight,
-  //   },
-  //   '& td': {
-  //     verticalAlign: 'top !important',
-  //     whiteSpace: 'normal !important' as 'normal',
-  //   },
-  // },
   actionsCell: {
     overflow: 'visible !important',
     position: 'sticky',

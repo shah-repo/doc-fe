@@ -114,7 +114,11 @@ const fetchDocRevOptionsByDocTypeId = (
   currentPhaseId?: string,
   handlers: Handlers,
 ): ApiAction<LCPDocRevOptions[]> => {
-  const url = currentPhaseId ? `documentTypeId=${documentTypeId}&currentPhaseId=${currentPhaseId}` : `documentTypeId=${documentTypeId}`;
+  let url = `documentTypeId=${documentTypeId}`;
+  if (currentPhaseId) {
+    url = `${url}&currentPhaseId=${currentPhaseId}`;
+  }
+
   return apiActionWithCallbacks({
     url: `${LIFE_CYCLE_DOC_REV_OPTIONS_URL}?${url}`,
     method: 'get',

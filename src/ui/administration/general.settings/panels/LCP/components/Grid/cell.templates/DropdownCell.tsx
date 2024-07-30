@@ -53,23 +53,23 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
       className={className}
       data-cy={datCy}
     >
-    <FormikField
-      name={field}
-    >
-      <Autocomplete
-        {...getFieldProps(field)}
-        blurOnSelect
-        disabled={Mode.edit === dataItem[MODE_FIELD]}
-        disableClearable
-        placeholder={translate('common.select')}
-        options={options}
-        data-cy={`${kebabCase(field)}-field`}
-        value={value}
-        getOptionLabel={(option: OptionType) => option.label}
-        onChange={handleChange}
-        size="small"
-      />
-    </FormikField>
+      <FormikField
+        name={field}
+      >
+        <Autocomplete
+          {...getFieldProps(field)}
+          blurOnSelect
+          disabled={Mode.edit === dataItem[MODE_FIELD]}
+          disableClearable
+          placeholder={translate('common.select')}
+          options={options}
+          data-cy={`${kebabCase(field)}-field`}
+          value={value}
+          getOptionLabel={(option: OptionType) => option.label}
+          onChange={handleChange}
+          size="small"
+        />
+      </FormikField>
     </td>
   );
 };

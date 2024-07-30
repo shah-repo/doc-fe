@@ -30,8 +30,8 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
   const fetchDocRevOptions = useActionCreator(companyActions.fetchDocRevOptionsByDocTypeId);
 
   const fetchLCPDocTypesAsync = useAsync({
-    onSuccess: (data?: LCPDocRevOptions[]) => {
-      setLifecyclePhaseOptions(data?.map((docType) => { return { value: docType.id, text: docType.displayLabel }; }) ?? []);
+    onSuccess: (data: LCPDocRevOptions[] = []) => {
+      setLifecyclePhaseOptions(data.map((docType) => { return { value: docType.id, text: docType.displayLabel }; }));
     },
     onError: toastError,
   });

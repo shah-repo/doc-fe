@@ -54,8 +54,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const { setValues, values: formValues } = useFormikContext();
 
   const fetchLCPDocTypesAsync = useAsync({
-    onSuccess: (data?: GroupDocTypes[]) => {
-      data && setPartGroups(processGroups(data));
+    onSuccess: (data: GroupDocTypes[] = []) => {
+      setPartGroups(processGroups(data));
     },
     onError: toastError,
   });
@@ -176,7 +176,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const onConfirmDeactivate = () => {
-    const updatedData = (data ?? []).map((phase) =>
+    const updatedData = (data ?? []).map((phase: LCP) =>
       getGroupIdByCategory(phase.category) === selectedGroup?.groupId
         ? { ...phase, isActive: !selectedGroup.isLCPActive }
         : phase,
@@ -188,7 +188,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const getActiveOrDeactiveMsgByFlag = (isActive?: boolean) => {
-    return isActive ? 'administration.general.settings.lcp.deactivate.dialog.message' : 'administration.general.settings.lcp.activate.dialog.message';
+    return isActive
+      ? 'administration.general.settings.lcp.deactivate.dialog.message'
+      : 'administration.general.settings.lcp.activate.dialog.message';
   };
 
   const getDialogMessage = (): Translation => {
@@ -263,6 +265,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       isAllowedOnLhrProd: 'NO',
       isAllowedToBuy: 'NO',
       isAddPhase: true,
+      isActive: true,
       displayOrder,
       inEdit: false,
       isUserAdded: true,
@@ -339,13 +342,14 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   }, [addNewPhase, resetForm]);
 
   const rowRender: DataGridProps<LCP>['rowRender'] = (row: React.ReactElement, rowProps: GridRowProps) => {
+    const fieldCount = rowProps.dataItem.fieldCount ?? columns?.length;
     if (rowProps.rowType === 'groupHeader') {
       const groupId = rowProps.dataItem.groupId as string;
       return React.cloneElement(row, {
         ...rowProps,
         className: cx(row.props.className, { updatingRow: editGroup === groupId }, { groupLastRow: groupId === ADD_GROUP_ID && rowProps.dataItem.items.length === 1 }),
         children: (
-          <td colSpan={rowProps.dataItem.fieldCount ?? 7} className="groupHeader">
+          <td colSpan={fieldCount} className="groupHeader">
             <GroupHeaderCell
               {...rowProps}
               onExpandChange={onExpandChange}
@@ -385,7 +389,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         React.cloneElement(row, {
           ...rowProps,
           children: (
-            <td colSpan={rowProps.dataItem.fieldCount ?? 7}>
+            <td colSpan={fieldCount}>
               <AddPhase {...rowProps} addPhase={addPhase} />
             </td>
           ),
@@ -512,7 +516,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       </KendoDataGrid>
     </Grid>
     <Grid item>
-      <AddButton
+      {hasEditLCPPermission && <AddButton
         fullWidth
         attached
         kind="add"
@@ -521,7 +525,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         onClick={addLCP}
       >
         {translate('form.builder.add.item')}
-      </AddButton>
+      </AddButton>}
       {
         confirmationDialog.isOpen && <AlertDialog
           dialog={confirmationDialog}

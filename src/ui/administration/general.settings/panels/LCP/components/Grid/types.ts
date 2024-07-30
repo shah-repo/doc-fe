@@ -1,7 +1,5 @@
-import { FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
-import { CellTemplateProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 
 export interface LCP {
   id: string
@@ -27,18 +25,6 @@ export interface LCP {
 
 export interface EditableLCP extends LCP {
   [MODE_FIELD]?: boolean
-}
-
-export interface LCPState {
-  data: LCP[]
-  dataState: DataState
-  expanded: string[]
-  inEdit: Array<{id: string }>
-}
-
-interface DataState {
-  sort?: SortDescriptor[]
-  filter?: FilterDescriptor[]
 }
 
 export interface CustomGroupDataItem {
@@ -86,5 +72,3 @@ export interface SchemaOptions {
   onDelete?: () => void
   onDeletePhase: (dataItem: LCP) => void
 }
-
-export type CustomTemplateProps = CellTemplateProps<EditableLCP>;

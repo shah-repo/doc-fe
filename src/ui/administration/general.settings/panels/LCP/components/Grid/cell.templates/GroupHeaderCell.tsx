@@ -40,18 +40,20 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   const classes = useStyles();
   const groupId = dataItem.groupId;
   const isEditMode = editGroup === groupId;
+  const isEditModeAndHasEditLCPPermission = isEditMode && hasEditLCPPermission;
+  const isReadModeAndHasEditLCPPermission = !isEditMode && hasEditLCPPermission;
 
   const handleGroupChange = (e, value: CustomGroupOptions[]) => {
     onGroupChange(value, groupId);
   };
 
-  const findMostFrequentBoolean = (arr: LCP[] = []) => {
-    const counts = countBy(arr, 'isActive');
+  const findMostFrequentActivePhases = (phases: LCP[] = []) => {
+    const counts = countBy(phases, 'isActive');
     return (counts.true ?? 0) >= (counts.false ?? 0);
   };
 
   const documentTypeIdArr = dataItem.items?.[0].documentTypeIdArr;
-  const isLCPActive = findMostFrequentBoolean(dataItem.items);
+  const isLCPActive = findMostFrequentActivePhases(dataItem.items);
   const defaultValue = partGroups.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
   const displayValue = defaultValue.map(data => data.label).join(', ');
 
@@ -78,7 +80,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             />
             {!isEditMode && displayValue}
           </Grid>
-          {isEditMode && hasEditLCPPermission && (
+          {isEditModeAndHasEditLCPPermission && (
             <Grid item xs={11} className={classes.autocomplete}>
               <Autocomplete
                 options={partGroups}
@@ -96,7 +98,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
         </Grid>
       </Grid>
       <Grid item>
-        {isEditMode && hasEditLCPPermission && (
+        {isEditModeAndHasEditLCPPermission && (
           <Tooltip title={translate('common.discard')} placement="top" arrow>
             <IconButton
               color="primary"
@@ -111,7 +113,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        {isEditMode && hasEditLCPPermission && (
+        {isEditModeAndHasEditLCPPermission && (
           <Tooltip title={translate('common.save')} placement="top" arrow>
             <IconButton
               color="primary"
@@ -126,7 +128,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        {!isEditMode && hasEditLCPPermission && (
+        {isReadModeAndHasEditLCPPermission && (
           <Tooltip title={translate('common.edit')} placement="top" arrow>
             <IconButton
               kind="simple"
@@ -138,7 +140,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        {!isEditMode && hasEditLCPPermission && isLCPActive && (
+        {isReadModeAndHasEditLCPPermission && isLCPActive && (
           <Tooltip title={translate('administration.general.settings.lcp.deactivate.title')} placement="top" arrow>
             <IconButton
               kind="simple"
@@ -149,7 +151,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        {!isEditMode && hasEditLCPPermission && !isLCPActive && (
+        {isReadModeAndHasEditLCPPermission && !isLCPActive && (
           <Tooltip title={translate('administration.general.settings.lcp.activate.title')} placement="top" arrow>
             <IconButton
               kind="simple"

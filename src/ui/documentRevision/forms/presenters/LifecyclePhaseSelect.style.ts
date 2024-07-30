@@ -4,16 +4,16 @@ import { Colors } from '../../../layout/theme-next';
 export const styles = makeStyles((theme) => ({
   input: {
     '&.MuiInputBase-root': {
-      marginTop: 10,
+      marginTop: theme.spacing(1.25),
       padding: 0,
     },
     '& .MuiInputBase-input': {
-      padding: 10,
+      padding: theme.spacing(1.25),
       fontSize: 14,
     },
   },
   labelProps: {
-    marginBottom: 10,
+    marginBottom: theme.spacing(1.25),
     fontWeight: 600,
     fontSize: 12,
     color: Colors.textBlack,
