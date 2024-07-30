@@ -8,6 +8,7 @@ import { EditablePrinter } from './types';
 export const buildSchema: SchemaBuilder<EditablePrinter> = ({
   isActive,
   onEdit,
+  onActiveStateChange,
   onDelete,
   onDiscard,
   onConfirm,
@@ -17,7 +18,12 @@ export const buildSchema: SchemaBuilder<EditablePrinter> = ({
     field: 'active',
     title: 'common.active',
     width: 70,
-    template: ActiveCellTemplate,
+    template: (props) => (
+      <ActiveCellTemplate
+        {...props}
+        onActiveStateChange={onActiveStateChange}
+      />
+    ),
   },
   {
     id: 'sn',

@@ -59,6 +59,14 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     [printersList],
   );
 
+  const updatePrinters = (updatedPrinters: ZebraPrintSettings[]) => {
+    const updatedValues = {
+      ...formValues,
+      [PANEL_FIELD]: updatedPrinters.map(printer => omit(printer, MODE_FIELD, '_id', 'active')),
+    };
+    async.start(updatePrinterSettings, updatedValues, settingsId, 'PUT', async);
+  };
+
   const formik = useFormik<EditablePrinter>({
     initialValues: INITIAL_VALUES,
     onSubmit: (values) => {
@@ -66,14 +74,19 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       const updatedPrinters = isAdding
         ? [...data, values]
         : data.map(printer => printer._id === values._id ? values : printer);
-      const updatedValues = {
-        ...formValues,
-        [PANEL_FIELD]: updatedPrinters.map(printer => omit(printer, MODE_FIELD, '_id', 'active')),
-      };
-      async.start(updatePrinterSettings, updatedValues, settingsId, 'PUT', async);
+      updatePrinters(updatedPrinters);
       editDialog.close();
     },
   });
+
+  const changePrinterActiveState = (printer: EditablePrinter, state: boolean) => {
+    const updatedPrinters = data.map(
+      item => item._id === printer._id
+        ? { ...item, printer: { ...item.printer, isActive: state } }
+        : item,
+    );
+    updatePrinters(updatedPrinters);
+  };
 
   const addNewPrinter = () => {
     formik.resetForm();
@@ -128,6 +141,7 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const schema = buildSchema({
     isActive: true,
     onEdit: editPrinter,
+    onActiveStateChange: changePrinterActiveState,
     onDelete: confirmPrinterDeletion,
     onDiscard: discardEdit,
     onConfirm: savePrinter,

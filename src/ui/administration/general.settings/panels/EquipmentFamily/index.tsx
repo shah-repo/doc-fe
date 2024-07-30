@@ -38,6 +38,12 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   });
   const updateEquipmentLocationAction = useActionCreator(companyActions.updateGeneralSettings);
 
+  const updateLocations = (updatedLocations: EquipmentLocation[]) => {
+    formValues.equipmentFamily.locations = updatedLocations;
+    setLocationsData(updatedLocations);
+    async.start(updateEquipmentLocationAction, formValues, settingsId, 'PUT', async);
+  };
+
   const formik = useFormik<EditableEquipmentLocation | Record<string, never>>({
     initialValues: {},
     validate: (values) => {
@@ -53,10 +59,8 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       const updatedLocations = isAdding
         ? [...locations, omit(values, MODE_FIELD)] // add
         : locations.map(item => item.id === values.id ? { ...item, ...omit(values, MODE_FIELD) } : item); // edit
-      setLocationsData(updatedLocations);
-      formValues.equipmentFamily.locations = updatedLocations;
       discardLocation();
-      async.start(updateEquipmentLocationAction, formValues, settingsId, 'PUT', async);
+      updateLocations(updatedLocations);
     },
   });
 
@@ -67,6 +71,11 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       active: true,
       [MODE_FIELD]: Mode.add,
     });
+  };
+
+  const changeLocationActiveState = (location: EditableEquipmentLocation, state: boolean) => {
+    const updatedLocations = locations.map(item => item.id === location.id ? { ...item, active: state } : item);
+    updateLocations(updatedLocations);
   };
 
   const { setValues, submitForm } = formik;
@@ -82,6 +91,7 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const schema = buildSchema({
     isActive: true,
     onEdit: setEditedLocation,
+    onActiveStateChange: changeLocationActiveState,
     onDiscard: discardLocation,
     onConfirm: submitForm,
   });

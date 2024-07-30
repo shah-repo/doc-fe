@@ -8,6 +8,7 @@ import { EditableEquipmentLocation } from './types';
 export const buildSchema: SchemaBuilder<EditableEquipmentLocation> = ({
   isActive,
   onEdit,
+  onActiveStateChange,
   onDelete,
   onDiscard,
   onConfirm,
@@ -17,7 +18,12 @@ export const buildSchema: SchemaBuilder<EditableEquipmentLocation> = ({
     field: 'active',
     title: 'common.active',
     width: 70,
-    template: ActiveCellTemplate,
+    template: (props) => (
+      <ActiveCellTemplate
+        {...props}
+        onActiveStateChange={onActiveStateChange}
+      />
+    ),
   },
   {
     id: 'name',

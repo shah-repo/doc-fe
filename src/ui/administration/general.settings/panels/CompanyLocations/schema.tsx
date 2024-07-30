@@ -9,6 +9,7 @@ import { EditableCompanyLocation } from './types';
 export const buildSchema: SchemaBuilder<EditableCompanyLocation> = ({
   isActive,
   onEdit,
+  onActiveStateChange,
   onDelete,
   onDiscard,
   onConfirm,
@@ -19,7 +20,12 @@ export const buildSchema: SchemaBuilder<EditableCompanyLocation> = ({
       field: 'active',
       title: 'common.active',
       width: 70,
-      template: ActiveCellTemplate,
+      template: (props) => (
+        <ActiveCellTemplate
+          {...props}
+          onActiveStateChange={onActiveStateChange}
+        />
+      ),
     },
     {
       id: 'name',

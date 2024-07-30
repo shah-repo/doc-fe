@@ -36,6 +36,11 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     },
   });
 
+  const updateLocations = (updatedLocations: CompanyLocation[]) => {
+    setLocationsData(updatedLocations);
+    async.start(changeCompanyAction, { locations: updatedLocations }, async);
+  };
+
   const formik = useFormik<EditableCompanyLocation | Record<string, never>>({
     initialValues: {},
     validate: (values) => {
@@ -51,12 +56,16 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     },
     onSubmit: (values) => {
       const updatedLocations = unionBy([omit(values, MODE_FIELD)], locations, 'id');
-      setLocationsData(updatedLocations);
       discardLocation();
-      async.start(changeCompanyAction, { locations: updatedLocations }, async);
+      updateLocations(updatedLocations);
     },
   });
   const { setValues, submitForm } = formik;
+
+  const changeLocationActiveState = (location: EditableCompanyLocation, state: boolean) => {
+    const updatedLocations = locations.map(it => it.id === location.id ? { ...it, active: state } : it);
+    updateLocations(updatedLocations);
+  };
 
   useEffect(() => {
     setValues(editedLocation ?? {});
@@ -92,6 +101,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const schema = buildSchema({
     isActive,
     onEdit: isActive ? setEditedLocation : undefined,
+    onActiveStateChange: isActive ? changeLocationActiveState : undefined,
     onDiscard: discardLocation,
     onConfirm: submitForm,
   });
