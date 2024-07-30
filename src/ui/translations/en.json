@@ -353,6 +353,7 @@
   "common.save": "Save",
   "common.save.changes": "Save Changes",
   "common.add.printer": "Add Printer",
+  "common.edit.printer": "Edit Printer",
   "common.history": "History",
   "common.type": "Type",
   "common.title": "Title",
@@ -1338,7 +1339,6 @@
   "form.builder.header.po.status.close": "Close",
   "form.builder.header.po.status.void": "Void",
   "documentRevision.audit.lotStatus.STRING_EDITED": "Lot Status updated",
-  "documentRevision.audit.eqStatus.STRING_EDITED": "Equipment Status updated",
   "documentRevision.lot.status.update.alert": "Are you sure you want to update Lot Status to \"{status}\"?",
   "documentRevision.lot.status.update.failed": "Lot Status update failed",
   "form.builder.header.lot.status.label.quarantine": "Quarantine",
@@ -2146,6 +2146,5 @@
   "common.dataType": "Data Type",
   "common.viewAll": "View All",
   "common.rejected": "Rejected",
-  "common.status": "Status",
   "common.rev": "Rev."
 }
