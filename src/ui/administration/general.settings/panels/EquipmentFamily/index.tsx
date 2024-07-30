@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { omit } from 'lodash';
+import { kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -108,6 +108,10 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       ? [...mappedLocations, editedLocation]
       : mappedLocations;
 
+  const dataCyGenerator = (location: EditableEquipmentLocation) => ({
+    'data-cy': `row-${kebabCase(location.name)}`,
+  });
+
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.equipmentFamily.tab')}>
       <SettingsPanelSection>
@@ -129,6 +133,7 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
           schema={schema}
           addButtonLabel={translate('settings.locations.add')}
           onAdd={addLocation}
+          getRowProperties={dataCyGenerator}
         />
       </FormikProvider>
     </SettingsPanel>

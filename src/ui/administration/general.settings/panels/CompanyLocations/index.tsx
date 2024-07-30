@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { isEmpty, omit, unionBy } from 'lodash';
+import { isEmpty, kebabCase, omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -101,6 +101,10 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       ? [...mappedLocations, editedLocation]
       : mappedLocations;
 
+  const dataCyGenerator = (location: EditableCompanyLocation) => ({
+    'data-cy': `row-${kebabCase(location.name)}`,
+  });
+
   const schema = buildSchema({
     isActive,
     onEdit: isActive ? setEditedLocation : undefined,
@@ -123,6 +127,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
           schema={schema}
           addButtonLabel={translate('settings.locations.add')}
           onAdd={addLocation}
+          getRowProperties={dataCyGenerator}
         />
       </FormikProvider>
     </SettingsPanel>
