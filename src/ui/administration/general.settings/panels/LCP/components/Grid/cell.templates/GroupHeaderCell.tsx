@@ -19,6 +19,7 @@ interface GroupHeaderCellProps extends GridRowProps {
   onDeleteGroup: (groupDataItem: CustomGroupDataItem) => void
   onGroupChange: (value: CustomGroupOptions[], groupId: string) => void
   partGroups: CustomGroupOptions[]
+  hasEditLCPPermission?: boolean
   editGroup?: string
 }
 
@@ -32,6 +33,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     onUpdateAddOrEditGroup,
     onGroupChange,
     onDeleteGroup,
+    hasEditLCPPermission,
     partGroups,
   } = props;
   const groupLabel = dataItem.value;
@@ -70,7 +72,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             />
             {!isEditMode && displayValue}
           </Grid>
-          {isEditMode && (
+          {isEditMode && hasEditLCPPermission && (
             <Grid item xs={11} className={classes.autocomplete}>
               <Autocomplete
                 options={partGroups}
@@ -88,7 +90,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
         </Grid>
       </Grid>
       <Grid item>
-        {isEditMode && (
+        {isEditMode && hasEditLCPPermission && (
           <Tooltip title={translate('common.discard')} placement="top" arrow>
             <IconButton
               color="primary"
@@ -103,7 +105,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        {isEditMode && (
+        {isEditMode && hasEditLCPPermission && (
           <Tooltip title={translate('common.save')} placement="top" arrow>
             <IconButton
               color="primary"
@@ -118,7 +120,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        {!isEditMode && (
+        {!isEditMode && hasEditLCPPermission && (
           <Tooltip title={translate('common.edit')} placement="top" arrow>
             <IconButton
               kind="simple"
@@ -130,7 +132,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        {!isEditMode && (
+        {!isEditMode && hasEditLCPPermission && (
           <Tooltip title={translate('common.delete')} placement="top" arrow>
             <IconButton
               kind="simple"

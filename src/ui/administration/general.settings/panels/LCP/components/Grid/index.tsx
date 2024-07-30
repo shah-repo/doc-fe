@@ -7,8 +7,11 @@ import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { cloneDeep, last, pick, uniq } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
+import { getHasPermission } from '../../../../../../../common/utils/selectors';
+import { Permission } from '../../../../../../../state/ducks/auth/types';
 import { companyActions } from '../../../../../../../state/ducks/company';
 import { DOC_TYPE_GROUP } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import AlertDialog from '../../../../../../app/alert.dialog/AlertDialog';
@@ -40,6 +43,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const [editGroup, setEditGroup] = useState<string>('');
   const [addNewPhase, setAddNewPhase] = useState<Partial<LCP>>();
+  const hasEditLCPPermission = useSelector(getHasPermission(Permission.EDIT_LIFE_CYCLE));
   const confirmationDialog = useDialog();
 
   const [selectedDocTypes, setSelectedDocTypes] = useState<CustomGroupOptions[]>([]);
@@ -294,6 +298,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
               {...rowProps}
               onExpandChange={onExpandChange}
               onEditGroup={onEditGroup}
+              hasEditLCPPermission={hasEditLCPPermission}
               editGroup={editGroup}
               partGroups={partGroups}
               onDiscardGroup={onDiscardGroup}
@@ -323,7 +328,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       </FormikProvider>;
     }
 
-    if (isLastGroupRow(itemId, itemCategory) && !isGroupUpdating) {
+    if (isLastGroupRow(itemId, itemCategory) && !isGroupUpdating && hasEditLCPPermission) {
       return [row,
         React.cloneElement(row, {
           ...rowProps,
@@ -410,7 +415,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     collapsedIds: collapsedState,
   });
 
-  return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={addLCP}>
+  return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={hasEditLCPPermission ? addLCP : undefined}>
     <Grid item>
       <KendoDataGrid<EditableLCP>
         {...dataState}
@@ -459,6 +464,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         fullWidth
         attached
         kind="add"
+        disabled={!hasEditLCPPermission}
         data-cy="add-lcp-button"
         onClick={addLCP}
       >
