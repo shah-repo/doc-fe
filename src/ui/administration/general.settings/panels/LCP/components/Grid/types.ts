@@ -20,6 +20,7 @@ export interface LCP {
   inEdit?: boolean
   isAdd?: boolean
   isAddPhase?: boolean
+  isActive?: boolean
   enlilTypeOptions?: string[]
   otherLabelOptions?: string[]
 }
@@ -46,6 +47,7 @@ export interface CustomGroupDataItem {
   field: string
   groupId: string
   expanded: boolean
+  isLCPActive?: boolean
 }
 
 export interface CustomGroupOptions extends OptionType{

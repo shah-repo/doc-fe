@@ -23,6 +23,7 @@ import useActionCreator from '../../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../../hooks/useAsync';
 import useDialog from '../../../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../../../layout/theme-next';
+import { Translation } from '../../../../../../translations/types';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { AddPhase } from './cell.templates/AddPhase';
@@ -38,14 +39,14 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [partGroups, setPartGroups] = useState<CustomGroupOptions[]>([]);
   const [data, setData] = useState<LCP[]>();
   const [prevData, setPrevData] = useState<LCP[]>();
-  const [selectedDataItem, setSelectedDataItem] = useState<CustomGroupDataItem>();
+  const [selectedGroup, setSelectedGroup] = useState<CustomGroupDataItem>();
+  const [selectedPhase, setSelectedPhase] = useState<LCP>();
   const [resultState, setResultState] = useState<DataResult>();
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const [editGroup, setEditGroup] = useState<string>('');
   const [addNewPhase, setAddNewPhase] = useState<Partial<LCP>>();
   const hasEditLCPPermission = useSelector(getHasPermission(Permission.EDIT_LIFE_CYCLE));
   const confirmationDialog = useDialog();
-
   const [selectedDocTypes, setSelectedDocTypes] = useState<CustomGroupOptions[]>([]);
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
   const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
@@ -63,7 +64,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     onSuccess: (newPhases?: LCP[]) => {
       const selectedGroudIds = selectedDocTypes.map(data => data.value);
       const category = uuidv4();
-      newPhases = newPhases?.map(phase => {
+      newPhases = newPhases?.map((phase: LCP) => {
         return {
           ...phase,
           documentTypeIdArr: selectedGroudIds,
@@ -128,7 +129,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onDiscardGroup = () => {
     setEditGroup('');
     updateStateGridData(prevData ?? []);
-    setSelectedDataItem(undefined);
+    setSelectedGroup(undefined);
   };
 
   const getGroupIdByCategory = (category: string): string => {
@@ -155,20 +156,55 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onDeleteGroup = (dataItem: CustomGroupDataItem) => {
     confirmationDialog.open();
-    setSelectedDataItem(dataItem);
+    setSelectedGroup(dataItem);
+  };
+
+  const onConfirmAlertDialog = () => {
+    if (selectedPhase) {
+      onConfirmDeletePhase();
+    } else {
+      onConfirmDeactivate();
+    }
+  };
+
+  const onCancelAlertDialog = () => {
+    if (selectedPhase) {
+      onCancelDeletePhase();
+    } else {
+      onCancelDeactivate();
+    }
   };
 
   const onConfirmDeactivate = () => {
-    const updatedData = (data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== selectedDataItem.groupId);
+    const updatedData = (data ?? []).map((phase) =>
+      getGroupIdByCategory(phase.category) === selectedGroup?.groupId
+        ? { ...phase, isActive: !selectedGroup.isLCPActive }
+        : phase,
+    );
     updateStateGridData(updatedData);
     updateSettingsObj(updatedData);
-    setSelectedDataItem(undefined);
+    setSelectedGroup(undefined);
     confirmationDialog.close();
+  };
+
+  const getActiveOrDeactiveMsgByFlag = (isActive?: boolean) => {
+    return isActive ? 'administration.general.settings.lcp.deactivate.dialog.message' : 'administration.general.settings.lcp.activate.dialog.message';
+  };
+
+  const getDialogMessage = (): Translation => {
+    if (selectedPhase) {
+      return getActiveOrDeactiveMsgByFlag(selectedPhase.isActive);
+    } else if (selectedGroup) {
+      return getActiveOrDeactiveMsgByFlag(selectedGroup.isLCPActive);
+    }
+
+    return getActiveOrDeactiveMsgByFlag(true);
   };
 
   const onCancelDeactivate = () => {
     onDiscardGroup();
     confirmationDialog.close();
+    setSelectedGroup(undefined);
   };
 
   const onGroupChange = (options: CustomGroupOptions[], groupId: string) => {
@@ -242,15 +278,31 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(processWithGroups(newData, initialDataState));
   };
 
-  const onDeletePhase = (dataItem) => {
-    const newData = data?.filter((phase) => phase.id !== dataItem.id) ?? [];
-    setData(newData);
-    setResultState(processWithGroups(newData, initialDataState));
+  const onDeletePhase = (dataItem: LCP) => {
+    setSelectedPhase(dataItem);
+    confirmationDialog.open();
+  };
+
+  const onConfirmDeletePhase = () => {
+    const updatedData = (data ?? []).map((phase: LCP) =>
+      phase.id === selectedPhase?.id
+        ? { ...phase, isActive: !selectedPhase?.isActive }
+        : phase,
+    );
+
+    updateStateGridData(updatedData);
+    updateSettingsObj(updatedData);
+    onCancelDeletePhase();
+  };
+
+  const onCancelDeletePhase = () => {
+    confirmationDialog.close();
+    setSelectedPhase(undefined);
   };
 
   const formik = useFormik<Partial<EditableLCP>>({
     initialValues: {},
-    onSubmit: (values) => {
+    onSubmit: (values: Partial<EditableLCP>) => {
       delete values.enlilTypeOptions;
       const selectedEnlilInternalType = data?.filter(phase => phase.category === values.category && phase.internalType === values.internalType) ?? [{ order: 10 }];
       const updatedData = data?.map(phase => (phase.id === values.id) ? { ...values as EditableLCP, isAddPhase: false, order: selectedEnlilInternalType[0]?.order } : phase);
@@ -473,9 +525,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       {
         confirmationDialog.isOpen && <AlertDialog
           dialog={confirmationDialog}
-          confirmAction={onConfirmDeactivate}
-          cancelAction={onCancelDeactivate}
-          message="administration.general.settings.lcp.deactivate.message"
+          confirmAction={onConfirmAlertDialog}
+          cancelAction={onCancelAlertDialog}
+          message={getDialogMessage()}
         />}
     </Grid>
   </SettingsPanel>;

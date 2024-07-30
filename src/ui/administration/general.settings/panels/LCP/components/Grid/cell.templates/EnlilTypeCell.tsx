@@ -1,4 +1,4 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
@@ -65,9 +65,14 @@ export const EnlilTypeCell: React.FC<EnlilTypeCellProps> = (props) => {
     {isEditMode && !isNil(dataItem.enlilTypeOptions) && <Editor {...props} />}
     { isNil(dataItem.enlilTypeOptions) && <OverflowingContent onClick={handleClick} data-cy={datCy}>
       {dataItem[field]}
-      { dataItem.isUserAdded && <Tooltip title={translate('common.delete')} placement="top" arrow>
+      { dataItem.isUserAdded && dataItem.isActive && <Tooltip title={translate('administration.general.settings.lcp.deactivate.title')} placement="top" arrow>
         <FontAwesomeIcon icon={regular('trash-can')} className={classes.phaseDeleteButton} onClick={() => onDeletePhase(dataItem)} />
       </Tooltip>}
+      { dataItem.isUserAdded && !dataItem.isActive && (
+        <Tooltip title={translate('administration.general.settings.lcp.activate.title')} placement="top" arrow>
+          <FontAwesomeIcon icon={solid('trash-can-undo')} className={classes.activatePhaseButton} onClick={() => onDeletePhase(dataItem)} />
+        </Tooltip>
+      )}
     </OverflowingContent>}
   </td>;
 };

@@ -5,6 +5,14 @@ export default makeStyles((theme) => ({
   deleteButton: {
     color: Colors.error,
   },
+  activateButton: {
+    color: Colors.success,
+  },
+  activatePhaseButton: {
+    marginLeft: theme.spacing(1),
+    color: Colors.success,
+    cursor: 'pointer',
+  },
   phaseDeleteButton: {
     marginLeft: theme.spacing(1),
     color: Colors.error,
