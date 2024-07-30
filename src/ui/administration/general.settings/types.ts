@@ -23,7 +23,7 @@ export interface GeneralSettingsProps {
 
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
-  info: string
+  info?: string
   containerRef?: RefObject<HTMLElement>
   onToggle: (isExpanded?: boolean) => void
   onAddNew?: () => void

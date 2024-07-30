@@ -60,7 +60,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
         {isLoading && <LinearProgress className={classes.progress} data-cy="saving-progress-bar" />}
       </Box>
       <Box className={classes.sidebar}>
-        <MenuList>
+        <MenuList className={classes.list}>
           {panels.map(panel => (
             <MenuItem
               key={panel.key}

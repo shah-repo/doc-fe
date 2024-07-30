@@ -8,8 +8,9 @@ import { Checkbox, FormikField } from '../../../../../components/forms/fields-ne
 import { EditableCompanyLocation } from '../../../panels/CompanyLocations/types';
 
 export const IncludedInTotalQtyCellTemplate: React.FC<CellTemplateProps<EditableCompanyLocation>> = ({ dataItem, field, onClick }) => {
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, getFieldMeta } = useFormikContext();
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   const displayValue = translate(dataItem.includedInTotalQty ? 'common.true' : 'common.false');
 
