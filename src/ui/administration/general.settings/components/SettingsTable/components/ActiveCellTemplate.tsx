@@ -9,10 +9,15 @@ interface EditableItemWithActiveField extends EditableItem {
   active: boolean
 }
 
+interface Props<T extends EditableItemWithActiveField> extends CellTemplateProps<T> {
+  onActiveStateChange?: (item: T, active: boolean) => void
+}
+
 function ActiveCellTemplate<T extends EditableItemWithActiveField> ({
   dataItem,
   field,
-}: CellTemplateProps<T>): React.ReactElement {
+  onActiveStateChange,
+}: Props<T>): React.ReactElement {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, getFieldMeta } = useFormikContext();
 
@@ -31,7 +36,8 @@ function ActiveCellTemplate<T extends EditableItemWithActiveField> ({
       {!isEditMode && (
         <Checkbox
           checked={dataItem.active}
-          disabled
+          onChange={(e, checked) => onActiveStateChange?.(dataItem, checked)}
+          disabled={!onActiveStateChange}
         />
       )}
     </Box>
