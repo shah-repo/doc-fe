@@ -42,7 +42,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
   });
 
   useEffect(() => {
-    if (isEmpty(actualId)) {
+    if (isEmpty(actualId) || !FB.isUUID(actualId)) {
       return;
     }
 
