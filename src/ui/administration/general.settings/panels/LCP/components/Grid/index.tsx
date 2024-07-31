@@ -45,6 +45,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const [editGroup, setEditGroup] = useState<string>('');
   const [addNewPhase, setAddNewPhase] = useState<Partial<LCP>>();
+  const [selectedPartGroups, setSelectedPartGroups] = useState<CustomGroupOptions[]>([]);
   const hasEditLCPPermission = useSelector(getHasPermission(Permission.EDIT_LIFE_CYCLE));
   const confirmationDialog = useDialog();
   const [selectedDocTypes, setSelectedDocTypes] = useState<CustomGroupOptions[]>([]);
@@ -86,6 +87,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     const data = processRealData(formValues?.lifecyclePhases?.categories as unknown as LCPResponse[]);
     updateStateGridData(data.phases);
     updateSettingsObj(data.phases);
+    setSelectedPartGroups(data.groups);
     fetchLCPDocTypesAsync.start(
       fetchLCPDocTypes,
       fetchLCPDocTypesAsync,
@@ -357,6 +359,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
               hasEditLCPPermission={hasEditLCPPermission}
               editGroup={editGroup}
               partGroups={partGroups}
+              selectedPartGroups={selectedPartGroups}
               onDiscardGroup={onDiscardGroup}
               onUpdateAddOrEditGroup={onUpdateAddOrEditGroup}
               onToggleGroupActivation={onToggleGroupActivation}

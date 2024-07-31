@@ -19,6 +19,7 @@ interface GroupHeaderCellProps extends GridRowProps {
   onToggleGroupActivation: (groupDataItem: CustomGroupDataItem) => void
   onGroupChange: (value: CustomGroupOptions[], groupId: string) => void
   partGroups: CustomGroupOptions[]
+  selectedPartGroups: CustomGroupOptions[]
   hasEditLCPPermission?: boolean
   editGroup?: string
 }
@@ -35,6 +36,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     onToggleGroupActivation,
     hasEditLCPPermission,
     partGroups,
+    selectedPartGroups,
   } = props;
   const groupLabel = dataItem.value;
   const classes = useStyles();
@@ -55,8 +57,10 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
 
   const documentTypeIdArr = dataItem.items?.[0].documentTypeIdArr;
   const isLCPActive = checkAllIsActiveTrue(dataItem.items);
-  const defaultValue = partGroups.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
-  const displayValue = defaultValue.map(data => data.label).join(', ');
+  const defaultValue = (partGroups ?? selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
+  const displayValue = defaultValue?.map(data => data.label).join(', ');
+  const selectedIDs = selectedPartGroups?.map((group) => group.value);
+  const options = partGroups?.filter((group) => !selectedIDs.includes(group.value));
 
   const handleChange = (event, checked: boolean) => {
     onToggleGroupActivation({ ...dataItem, isLCPActive: checked });
@@ -94,7 +98,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
           {displayGroupSelection && (
             <Grid item xs={11} className={classes.autocomplete}>
               <Autocomplete
-                options={partGroups}
+                options={options}
                 defaultValue= {defaultValue[0]}
                 getOptionLabel={(option: CustomGroupOptions) => option.label}
                 getOptionSelected={(option, value) =>
