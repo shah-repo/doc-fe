@@ -5,6 +5,7 @@ import React, { useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
+import { Nullable } from '../../../../../state/ducks/common/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings, ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import { AlertDialog } from '../../../../components/dialogs';
@@ -39,7 +40,7 @@ const INITIAL_VALUES = {
 const PrintingSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
-  const printersList = getFieldProps<ZebraPrintSettings[]>(PANEL_FIELD).value;
+  const printersList = getFieldProps<Nullable<ZebraPrintSettings[]>>(PANEL_FIELD).value;
   const settingsId = useSelector(companySelectors.getGeneralSettingsId);
   const printerToDelete = useRef<EditablePrinter>();
 
@@ -50,12 +51,12 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const updatePrinterSettings = useActionCreator(companyActions.updateGeneralSettings);
 
   const data = useMemo(
-    () => printersList.map(printer => ({
+    () => printersList?.map(printer => ({
       ...printer,
       _id: uuidv4(),
       [MODE_FIELD]: Mode.show,
       active: printer.printer.isActive,
-    })),
+    })) ?? [],
     [printersList],
   );
 
