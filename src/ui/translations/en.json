@@ -1991,6 +1991,7 @@
   "bom.treelist.treeColumns.field.quantity.title": "Qty.",
   "bom.treelist.treeColumns.field.unit.title": "Unit",
   "bom.treelist.treeColumns.field.hasChanges.title": "Has Changes",
+  "bom.treelist.treeColumns.field.lifecyclePhaseDisplayLabel.title": "Lifecycle Phase",
   "bom.treelist.treeColumns.field.refDesignator.title": "Ref. Designator",
   "bom.treelist.treeColumns.field.comment.title": "Comments",
   "bom.treelist.treeColumns.field.hasPrimaryAttachment.title": "Primary Attachments",
