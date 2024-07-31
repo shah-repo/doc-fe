@@ -32,6 +32,9 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const dispatch = useDispatch();
 
   const async = useAsync({
+    onSuccess: () => {
+      dispatch(companyActions.updateGeneralSettings(values));
+    },
     onError: (error) => {
       setLocationsData(locations);
       toastError(error);
@@ -40,7 +43,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const updateLocations = (updatedLocations: CompanyLocation[]) => {
     setLocationsData(updatedLocations);
-    dispatch(companyActions.updateGeneralSettings(values));
     async.start(changeCompanyAction, { locations: updatedLocations }, async);
   };
 
