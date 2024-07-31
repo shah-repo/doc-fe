@@ -5,7 +5,7 @@ export const ADD_GROUP_NAME = 'ADD';
 const PARTS_GROUP_NAME = 'PARTS';
 export const LCP_KEYS = {
   isAllowedToBuy: 'isAllowedToBuy',
-  isAllowedOnPO: 'isAllowedOnPO',
+  isApprovedSupplierEnforcedOnPO: 'isApprovedSupplierEnforcedOnPO',
   category: 'category',
 };
 export const ADD_GROUP_ID = `${ADD_GROUP_NAME}${LCP_KEYS.category}`;
@@ -17,7 +17,7 @@ export const initialDataState = {
   skip: 0,
   group: DATA_GROUP,
 };
-export const REQUEST_PAYLOAD_KEYS = ['order', 'displayOrder', 'internalType', 'displayLabel', 'isAllowedOnPO', 'isAllowedOnLhrProd', 'isAllowedToBuy', 'documentTypeIdArr', 'isUserAdded', 'isUserModified', 'isActive'];
+export const REQUEST_PAYLOAD_KEYS = ['order', 'displayOrder', 'internalType', 'displayLabel', 'isApprovedSupplierEnforcedOnPO', 'isAllowedOnLhrProd', 'isAllowedToBuy', 'documentTypeIdArr', 'isUserAdded', 'isUserModified', 'isActive'];
 
 export const DEFAULT_OPTIONS = [
   { label: 'Yes', value: 'YES' },

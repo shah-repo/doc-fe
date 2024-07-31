@@ -48,14 +48,14 @@ export const LCPSchema = ({
       width: 250,
     },
     {
-      id: 'isAllowedOnPO',
-      field: 'isAllowedOnPO',
+      id: 'isApprovedSupplierEnforcedOnPO',
+      field: 'isApprovedSupplierEnforcedOnPO',
       locked: false,
       groupable: false,
-      title: translate('administration.general.settings.lcp.isAllowedOnPO'),
+      title: translate('administration.general.settings.lcp.isApprovedSupplierEnforcedOnPO'),
       headerCell: (props) => <HeaderCell
         {...props}
-        content="administration.general.settings.lcp.isAllowedOnPO" />,
+        content="administration.general.settings.lcp.isApprovedSupplierEnforcedOnPO" />,
       width: 250,
       cell: DropdownCell,
       mainOrderIndex: 3,

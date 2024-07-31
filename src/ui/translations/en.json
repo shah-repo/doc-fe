@@ -2073,7 +2073,7 @@
   "administration.general.settings.lcp.isActive": "Active",
   "administration.general.settings.lcp.internalType": "Enlil Internal",
   "administration.general.settings.lcp.displayLabel": "Customer Label",
-  "administration.general.settings.lcp.isAllowedOnPO": "Enforce Approved Supplier on PO",
+  "administration.general.settings.lcp.isApprovedSupplierEnforcedOnPO": "Enforce Approved Supplier on PO",
   "administration.general.settings.lcp.isAllowedOnLhrProd": "Allow on LHR Production",
   "administration.general.settings.lcp.isAllowedToBuy": "Part purchase based on Released Revision",
   "administration.general.settings.lcp.not.implemented": "Not Implemented",

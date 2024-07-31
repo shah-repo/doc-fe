@@ -8,7 +8,7 @@ export interface LCP {
   displayOrder?: number
   internalType: string
   displayLabel: string
-  isAllowedOnPO: string
+  isApprovedSupplierEnforcedOnPO: string
   isAllowedOnLhrProd: string
   isAllowedToBuy: string
   documentTypeIdArr: string[]
