@@ -34,7 +34,8 @@ export default makeStyles(theme => ({
     gap: theme.spacing(0, 0.25),
   },
   inputRoot: {
-    margin: theme.spacing(0, -1.25),
+    margin: theme.spacing(0, -1.375),
+    width: `calc(100% + ${theme.spacing(2.75)}px)`,
   },
   inputText: {
     padding: theme.spacing(1.25),
