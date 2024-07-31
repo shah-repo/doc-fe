@@ -4,6 +4,15 @@ import { Colors } from '../../../../layout/theme-next';
 export default makeStyles(theme => ({
   grid: {
     borderCollapse: 'collapse',
+
+    '& .k-grid-content': {
+      '& tr': {
+        '& td': {
+          padding: theme.spacing(0.25, 1.5),
+          height: 42,
+        },
+      },
+    },
   },
   gridWithButton: {
     borderBottomLeftRadius: 0,
@@ -23,5 +32,11 @@ export default makeStyles(theme => ({
   },
   actionsEdit: {
     gap: theme.spacing(0, 0.25),
+  },
+  inputRoot: {
+    margin: theme.spacing(0, -1.25),
+  },
+  inputText: {
+    padding: theme.spacing(1.25),
   },
 }));

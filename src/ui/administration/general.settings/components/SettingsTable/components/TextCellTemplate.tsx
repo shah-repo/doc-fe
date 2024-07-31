@@ -5,6 +5,7 @@ import { CellTemplateProps, EditableItem } from '../../../../../components/Kendo
 import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { FormikField, TextField } from '../../../../../components/forms/fields-next';
+import useStyles from '../styles';
 
 function TextCellTemplate<T extends EditableItem> ({
   dataItem,
@@ -12,6 +13,7 @@ function TextCellTemplate<T extends EditableItem> ({
 }: CellTemplateProps<T>): React.ReactElement {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps } = useFormikContext();
+  const classes = useStyles();
 
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const defaultValue = get(dataItem, field, '') as string;
@@ -21,6 +23,10 @@ function TextCellTemplate<T extends EditableItem> ({
       <FormikField name={field}>
         <TextField
           {...getFieldProps(field)}
+          classes={{
+            input: classes.inputText,
+            root: classes.inputRoot,
+          }}
         />
       </FormikField>
     );

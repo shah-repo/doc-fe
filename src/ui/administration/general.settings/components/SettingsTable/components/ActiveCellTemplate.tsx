@@ -28,7 +28,7 @@ function ActiveCellTemplate<T extends EditableItemWithActiveField> ({
       {isEditMode && (
         <FormikField name={field}>
           <Checkbox
-            checked={getFieldMeta<boolean>(field).value}
+            checked={Boolean(getFieldMeta(field).value)}
             {...getFieldProps(field)}
           />
         </FormikField>
