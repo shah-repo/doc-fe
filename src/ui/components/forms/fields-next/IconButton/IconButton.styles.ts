@@ -20,6 +20,7 @@ const SQUARE_BUTTON_FONT_SIZES = {
 interface IconButtonStylesProps {
   iconSize: number
   size: ButtonProps['size']
+  color: ButtonProps['color']
 }
 
 export default makeStyles((theme) => createStyles({
@@ -31,15 +32,15 @@ export default makeStyles((theme) => createStyles({
     padding: 0,
     minWidth: 0,
   }),
-  square: ({ size = 'medium' }: IconButtonStylesProps) => ({
+  square: ({ color, size = 'medium' }: IconButtonStylesProps) => ({
     width: SQUARE_BUTTON_SIZES[size],
     height: SQUARE_BUTTON_SIZES[size],
     minHeight: SQUARE_BUTTON_SIZES[size],
     fontSize: SQUARE_BUTTON_FONT_SIZES[size],
     borderRadius: theme.shape.borderRadius,
-    color: Colors.textGray,
+    color: color ? undefined : Colors.textGray,
     '&:hover': {
-      color: Colors.textBlack,
+      color: color ? undefined : Colors.textBlack,
       background: Colors.hover,
     },
   }),

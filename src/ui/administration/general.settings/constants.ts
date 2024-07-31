@@ -9,6 +9,7 @@ import ExpiredLots from './panels/WorkOrder/ExpiredLots';
 import LotAutoAllocationOrder from './panels/WorkOrder/LotAutoAllocationOrder';
 import { GeneralSettingsTabs } from './types';
 
+export const MAX_PANEL_WIDTH = 990;
 export const SIDEBAR_WIDTH = 180;
 
 export const panels = [

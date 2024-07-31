@@ -2,7 +2,7 @@ import { LCP, LCPResponse } from '../../../ui/administration/general.settings/pa
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
 import { GroupTag, Permission } from '../auth/types';
-import { User } from '../common/types';
+import { Nullable, User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 
@@ -193,7 +193,7 @@ interface AllocationConfig {
   expiredLotsPrompt: ExpiredLotType
 }
 export interface GeneralSettings {
-  zebraPrint: ZebraPrintSettings[]
+  zebraPrint: Nullable<ZebraPrintSettings[]>
   equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean

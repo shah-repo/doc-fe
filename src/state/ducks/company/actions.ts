@@ -4,7 +4,7 @@ import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
 import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
-import { ApiAction, Handlers } from '../../types';
+import { ApiAction, ApiActionMethod, Handlers } from '../../types';
 import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettings, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
@@ -80,7 +80,7 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
-const updateGeneralSettings = (body: GeneralSettings, id: string, method = 'post'): ApiAction<GeneralSettingsState> => apiAction({
+const updateGeneralSettings = (body: GeneralSettings, id?: string, method: ApiActionMethod = 'post'): ApiAction<GeneralSettingsState> => apiAction({
   url: id ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id: id }) : COMPANY_SETTINGS_URL,
   method: method,
   data: omit(body, 'id'),
