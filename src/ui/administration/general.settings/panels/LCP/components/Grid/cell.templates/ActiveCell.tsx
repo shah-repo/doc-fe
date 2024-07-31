@@ -16,8 +16,6 @@ export const ActiveCell: React.FC<CellTemplateProps<LCP>> = ({ dataItem, colSpan
     });
   };
 
-  console.log('dataItem.isActive :', dataItem.isActive, field);
-
   return (
     <td
       colSpan={colSpan}

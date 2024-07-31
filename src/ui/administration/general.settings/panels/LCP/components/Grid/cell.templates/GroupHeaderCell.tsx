@@ -41,10 +41,12 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   const groupId = dataItem.groupId;
   const isEditMode = editGroup === groupId;
   const isEditModeAndHasEditLCPPermission = isEditMode && hasEditLCPPermission;
+  const isEditGroup = isEditMode && dataItem.items.length > 1;
   const isReadModeAndHasEditLCPPermission = !isEditMode && hasEditLCPPermission;
+  const displayGroupSelection = isEditModeAndHasEditLCPPermission && !isEditGroup;
 
-  const handleGroupChange = (e, value: CustomGroupOptions[]) => {
-    onGroupChange(value, groupId);
+  const handleGroupChange = (e, value: CustomGroupOptions) => {
+    onGroupChange([value], groupId);
   };
 
   const checkAllIsActiveTrue = (array) => {
@@ -83,23 +85,23 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             />
             <Checkbox
               checked={isLCPActive}
+              disabled={displayGroupSelection}
               className={classes.groupCheckBox}
               onChange={handleChange}
             />
-            {!isEditMode && displayValue}
+            {!displayGroupSelection && displayValue}
           </Grid>
-          {isEditModeAndHasEditLCPPermission && (
+          {displayGroupSelection && (
             <Grid item xs={11} className={classes.autocomplete}>
               <Autocomplete
                 options={partGroups}
-                defaultValue= {defaultValue}
+                defaultValue= {defaultValue[0]}
                 getOptionLabel={(option: CustomGroupOptions) => option.label}
                 getOptionSelected={(option, value) =>
                     option?.value === value?.value
                 }
                 data-cy={`${kebabCase(groupId)}-field`}
                 onChange={handleGroupChange}
-                multiple
               />
             </Grid>
           )}
