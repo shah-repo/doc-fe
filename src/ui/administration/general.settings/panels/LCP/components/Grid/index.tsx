@@ -163,7 +163,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onConfirmAlertDialog = () => {
     if (selectedPhase) {
-      onConfirmDeletePhase(selectedPhase.isActive);
+      onConfirmDeletePhase();
     } else {
       onConfirmDeactivate();
     }
@@ -180,7 +180,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onConfirmDeactivate = () => {
     const updatedData = (data ?? []).map((phase: LCP) =>
       getGroupIdByCategory(phase.category) === selectedGroup?.groupId
-        ? { ...phase, isActive: selectedGroup.isLCPActive }
+        ? { ...phase, isActive: selectedGroup.isLCPActive, isUserModified: true }
         : phase,
     );
     updateStateGridData(updatedData);
@@ -288,10 +288,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     confirmationDialog.open();
   };
 
-  const onConfirmDeletePhase = (flag?: boolean) => {
+  const onConfirmDeletePhase = () => {
     const updatedData = (data ?? []).map((phase: LCP) =>
       phase.id === selectedPhase?.id
-        ? { ...phase, isActive: flag }
+        ? { ...phase, isActive: !selectedPhase.isActive, isUserModified: true }
         : phase,
     );
 
@@ -433,10 +433,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
       group.items?.forEach((data) => {
         if (data.id === e.dataItem.id) {
-          data.isUserModified = true;
-          data[e.field || ''] = e.value;
           if (e.field === 'isActive') {
-            onConfirmDeletePhase(e.value);
+            onDeletePhase(e.dataItem);
+          } else {
+            data.isUserModified = true;
+            data[e.field || ''] = e.value;
           }
         }
         return data;
