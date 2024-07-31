@@ -75,7 +75,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
           alignItems="center"
           className={classes.editContainer}
         >
-          <Grid item>
+          <Grid item alignItems="center" justify="center">
             <FontAwesomeIcon
               data-cy={`${groupLabel}-toggle-group`}
               size="sm"
