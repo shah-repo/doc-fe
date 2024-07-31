@@ -34,7 +34,7 @@ const Actions: React.FC<ActionsProps> = ({
       <Box className={`${cellStyle} k-command-cell`}>
         {isEditMode && (
           <>
-            <Tooltip title={translate('common.discard')}>
+            <Tooltip title={translate('common.discard')} placement="top" arrow>
               <IconButton
                 kind="simple"
                 color="primary"
@@ -45,7 +45,7 @@ const Actions: React.FC<ActionsProps> = ({
                 <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
               </IconButton>
             </Tooltip>
-            <Tooltip title={translate('common.save')}>
+            <Tooltip title={translate('common.save')} placement="top" arrow>
               <IconButton
                 kind="simple"
                 color="primary"

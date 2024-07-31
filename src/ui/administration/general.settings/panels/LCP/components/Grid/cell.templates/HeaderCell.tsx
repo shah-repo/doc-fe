@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from '@material-ui/core';
+import { Box, Tooltip } from '@material-ui/core';
 import { GridHeaderCellProps } from '@progress/kendo-react-grid';
 import { kebabCase } from 'lodash';
 import React from 'react';
@@ -22,15 +22,24 @@ export const HeaderCell: React.FC<HeaderCellProps> = ({
     <span className="k-cell-inner">
       <span className="k-link">
         <span className="k-column-title" data-cy={`header-cell-${kebabCase(field)}`} >
-          <Tooltip
-            arrow
-            placement="top"
-            className={classes.headerButton}
-            title={translate('administration.general.settings.lcp.not.implemented')}
-          >
-            <FontAwesomeIcon icon={solid('star-of-life')} />
-          </Tooltip>
-          {translatedContent}
+          <Box display="flex" alignItems="center">
+            <Tooltip
+              arrow
+              placement="top"
+              className={classes.headerButton}
+              title={translate('administration.general.settings.lcp.not.implemented')}
+            >
+              <FontAwesomeIcon icon={solid('star-of-life')} />
+            </Tooltip>
+            <Tooltip
+              arrow
+              placement="top"
+              className={classes.headerButton}
+              title={translatedContent}
+            >
+              <div className={classes.headerContent}>{translatedContent}</div>
+            </Tooltip>
+          </Box>
         </span>
       </span>
     </span>

@@ -72,4 +72,10 @@ export default makeStyles((theme) => ({
     justifyContent: 'center',
     gap: theme.spacing(0.5, 0.5),
   },
+  headerContent: {
+    color: Colors.black,
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  },
 }));

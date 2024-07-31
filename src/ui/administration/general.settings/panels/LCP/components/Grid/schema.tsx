@@ -20,7 +20,7 @@ export const LCPSchema = ({
       id: 'isActive',
       field: 'isActive',
       title: translate('administration.general.settings.lcp.isActive'),
-      width: 80,
+      width: 60,
       filterable: false,
       locked: false,
       cell: (props) => <ActiveCell {...props} />,
@@ -55,7 +55,7 @@ export const LCPSchema = ({
       headerCell: (props) => <HeaderCell
         {...props}
         content="administration.general.settings.lcp.isApprovedSupplierEnforcedOnPO" />,
-      width: 250,
+      width: 150,
       cell: DropdownCell,
       mainOrderIndex: 3,
     },
@@ -65,7 +65,7 @@ export const LCPSchema = ({
       locked: false,
       groupable: false,
       title: translate('administration.general.settings.lcp.isAllowedOnLhrProd'),
-      width: 200,
+      width: 150,
       headerCell: (props) => <HeaderCell
         {...props}
         content="administration.general.settings.lcp.isAllowedOnLhrProd" />,
@@ -82,7 +82,7 @@ export const LCPSchema = ({
         {...props}
         content="administration.general.settings.lcp.isAllowedToBuy" />,
       cell: DropdownCell,
-      width: 250,
+      width: 150,
       mainOrderIndex: 5,
     },
     {
