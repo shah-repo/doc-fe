@@ -2,6 +2,7 @@ import React from 'react';
 import { translate } from '../../../../../../../common/intl';
 import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCell } from './cell.templates/ActionsCell';
+import { ActiveCell } from './cell.templates/ActiveCell';
 import { DropdownCell } from './cell.templates/DropdownCell';
 import { EnlilTypeCell } from './cell.templates/EnlilTypeCell';
 import { HeaderCell } from './cell.templates/HeaderCell';
@@ -16,6 +17,17 @@ export const LCPSchema = ({
   onDeletePhase,
 }: SchemaOptions): Array<ColumnDefinition<LCP>> => {
   return [
+    {
+      id: 'isActive',
+      field: 'isActive',
+      title: translate('administration.general.settings.lcp.isActive'),
+      width: 80,
+      filterable: false,
+      locked: false,
+      cell: (props) => <ActiveCell {...props} />,
+      groupable: false,
+      sortable: false,
+    },
     {
       id: 'internalType',
       field: 'internalType',
@@ -83,6 +95,7 @@ export const LCPSchema = ({
       id: 'actions',
       title: 'actions',
       className: actionsClass,
+      filterable: false,
       template: (props) => (
         <ActionsCell
           {...props}

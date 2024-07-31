@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { GridRowProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { countBy, kebabCase } from 'lodash';
+import { every, kebabCase } from 'lodash';
 import * as React from 'react';
 import { translate } from '../../../../../../../../common/intl';
-import { Autocomplete, IconButton } from '../../../../../../../components/forms/fields-next';
+import { Autocomplete, Checkbox, IconButton } from '../../../../../../../components/forms/fields-next';
 import { EXPAND_FIELD } from '../constants';
-import { CustomGroupDataItem, CustomGroupOptions, LCP } from '../types';
+import { CustomGroupDataItem, CustomGroupOptions } from '../types';
 import useStyles from './styles';
 
 interface GroupHeaderCellProps extends GridRowProps {
@@ -16,7 +16,7 @@ interface GroupHeaderCellProps extends GridRowProps {
   onEditGroup: (groupDataItem: CustomGroupDataItem) => void
   onDiscardGroup: (groupDataItem: CustomGroupDataItem) => void
   onUpdateAddOrEditGroup: (groupDataItem: CustomGroupDataItem) => void
-  onDeleteGroup: (groupDataItem: CustomGroupDataItem) => void
+  onToggleGroupActivation: (groupDataItem: CustomGroupDataItem) => void
   onGroupChange: (value: CustomGroupOptions[], groupId: string) => void
   partGroups: CustomGroupOptions[]
   hasEditLCPPermission?: boolean
@@ -32,7 +32,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     onDiscardGroup,
     onUpdateAddOrEditGroup,
     onGroupChange,
-    onDeleteGroup,
+    onToggleGroupActivation,
     hasEditLCPPermission,
     partGroups,
   } = props;
@@ -47,15 +47,18 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     onGroupChange(value, groupId);
   };
 
-  const findMostFrequentActivePhases = (phases: LCP[] = []) => {
-    const counts = countBy(phases, 'isActive');
-    return (counts.true ?? 0) >= (counts.false ?? 0);
+  const checkAllIsActiveTrue = (array) => {
+    return every(array, item => item.isActive === true);
   };
 
   const documentTypeIdArr = dataItem.items?.[0].documentTypeIdArr;
-  const isLCPActive = findMostFrequentActivePhases(dataItem.items);
+  const isLCPActive = checkAllIsActiveTrue(dataItem.items);
   const defaultValue = partGroups.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
   const displayValue = defaultValue.map(data => data.label).join(', ');
+
+  const handleChange = (event, checked: boolean) => {
+    onToggleGroupActivation({ ...dataItem, isLCPActive: checked });
+  };
 
   return (
     <Grid container justify="space-between" alignItems="center">
@@ -77,6 +80,11 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
                   ? regular('square-minus')
                   : solid('square-plus')
               }
+            />
+            <Checkbox
+              checked={isLCPActive}
+              className={classes.groupCheckBox}
+              onChange={handleChange}
             />
             {!isEditMode && displayValue}
           </Grid>
@@ -137,28 +145,6 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               onClick={() => onEditGroup(dataItem)}
             >
               <FontAwesomeIcon icon={regular('pen-to-square')} />
-            </IconButton>
-          </Tooltip>
-        )}
-        {isReadModeAndHasEditLCPPermission && isLCPActive && (
-          <Tooltip title={translate('administration.general.settings.lcp.deactivate.title')} placement="top" arrow>
-            <IconButton
-              kind="simple"
-              onClick={() => onDeleteGroup({ ...dataItem, isLCPActive })}
-              className={classes.deleteButton}
-            >
-              <FontAwesomeIcon icon={solid('trash-can')} />
-            </IconButton>
-          </Tooltip>
-        )}
-        {isReadModeAndHasEditLCPPermission && !isLCPActive && (
-          <Tooltip title={translate('administration.general.settings.lcp.activate.title')} placement="top" arrow>
-            <IconButton
-              kind="simple"
-              onClick={() => onDeleteGroup({ ...dataItem, isLCPActive })}
-              className={classes.activateButton}
-            >
-              <FontAwesomeIcon icon={solid('trash-can-undo')} />
             </IconButton>
           </Tooltip>
         )}

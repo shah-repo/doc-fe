@@ -154,14 +154,14 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     }
   };
 
-  const onDeleteGroup = (dataItem: CustomGroupDataItem) => {
+  const onToggleGroupActivation = (dataItem: CustomGroupDataItem) => {
     confirmationDialog.open();
     setSelectedGroup(dataItem);
   };
 
   const onConfirmAlertDialog = () => {
     if (selectedPhase) {
-      onConfirmDeletePhase();
+      onConfirmDeletePhase(selectedPhase.isActive);
     } else {
       onConfirmDeactivate();
     }
@@ -178,7 +178,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onConfirmDeactivate = () => {
     const updatedData = (data ?? []).map((phase: LCP) =>
       getGroupIdByCategory(phase.category) === selectedGroup?.groupId
-        ? { ...phase, isActive: !selectedGroup.isLCPActive }
+        ? { ...phase, isActive: selectedGroup.isLCPActive }
         : phase,
     );
     updateStateGridData(updatedData);
@@ -197,7 +197,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     if (selectedPhase) {
       return getActiveOrDeactiveMsgByFlag(selectedPhase.isActive);
     } else if (selectedGroup) {
-      return getActiveOrDeactiveMsgByFlag(selectedGroup.isLCPActive);
+      return getActiveOrDeactiveMsgByFlag(!selectedGroup.isLCPActive);
     }
 
     return getActiveOrDeactiveMsgByFlag(true);
@@ -286,10 +286,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     confirmationDialog.open();
   };
 
-  const onConfirmDeletePhase = () => {
+  const onConfirmDeletePhase = (flag?: boolean) => {
     const updatedData = (data ?? []).map((phase: LCP) =>
       phase.id === selectedPhase?.id
-        ? { ...phase, isActive: !selectedPhase?.isActive }
+        ? { ...phase, isActive: flag }
         : phase,
     );
 
@@ -359,7 +359,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
               partGroups={partGroups}
               onDiscardGroup={onDiscardGroup}
               onUpdateAddOrEditGroup={onUpdateAddOrEditGroup}
-              onDeleteGroup={onDeleteGroup}
+              onToggleGroupActivation={onToggleGroupActivation}
               onGroupChange={onGroupChange} />
           </td>
         ),
@@ -432,6 +432,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         if (data.id === e.dataItem.id) {
           data.isUserModified = true;
           data[e.field || ''] = e.value;
+          if (e.field === 'isActive') {
+            onConfirmDeletePhase(e.value);
+          }
         }
         return data;
       });

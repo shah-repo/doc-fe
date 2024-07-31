@@ -8,6 +8,10 @@ export default makeStyles((theme) => ({
   activateButton: {
     color: Colors.success,
   },
+  groupCheckBox: {
+    marginRight: theme.spacing(2.125),
+     marginLeft: theme.spacing(2.875),
+  },
   activatePhaseButton: {
     marginLeft: theme.spacing(1),
     color: Colors.success,
