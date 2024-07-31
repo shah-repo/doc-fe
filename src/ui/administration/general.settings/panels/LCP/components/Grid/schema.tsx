@@ -1,16 +1,15 @@
 import React from 'react';
 import { translate } from '../../../../../../../common/intl';
 import { ColumnDefinition } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { ActionsCell } from './cell.templates/ActionsCell';
 import { ActiveCell } from './cell.templates/ActiveCell';
 import { DropdownCell } from './cell.templates/DropdownCell';
 import { EnlilTypeCell } from './cell.templates/EnlilTypeCell';
 import { HeaderCell } from './cell.templates/HeaderCell';
 import { LabelCell } from './cell.templates/LabelCell';
+import LCPActionsCellTemplate from './cell.templates/LCPActionsCellTemplate';
 import { LCP, SchemaOptions } from './types';
 
 export const LCPSchema = ({
-  actionsClass,
   onConfirm,
   onDiscard,
   onDelete,
@@ -96,18 +95,17 @@ export const LCPSchema = ({
     },
     {
       id: 'actions',
-      title: 'actions',
-      className: actionsClass,
+      field: 'actions',
+      title: 'common.actions',
       filterable: false,
       template: (props) => (
-        <ActionsCell
+        <LCPActionsCellTemplate
           {...props}
-          onConfirm={onConfirm}
           onDiscard={onDiscard}
-          onDelete={onDelete}
+          onConfirm={onConfirm}
         />
       ),
-      width: 1,
+      width: 100,
     },
   ];
 };

@@ -66,9 +66,8 @@ export interface processLCPType {
 }
 
 export interface SchemaOptions {
-  actionsClass: string
-  onConfirm?: () => void
-  onDiscard?: () => void
+  onConfirm: () => void
+  onDiscard: () => void
   onDelete?: () => void
   onDeletePhase: (dataItem: LCP) => void
 }

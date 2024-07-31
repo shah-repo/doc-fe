@@ -10,7 +10,7 @@ export default makeStyles((theme) => ({
   },
   groupCheckBox: {
     marginRight: theme.spacing(2.125),
-    marginLeft: theme.spacing(3.5),
+    marginLeft: theme.spacing(2.875),
   },
   activatePhaseButton: {
     marginLeft: theme.spacing(1),
@@ -65,5 +65,11 @@ export default makeStyles((theme) => ({
   headerButton: {
     marginRight: theme.spacing(0.675),
     color: Colors.primary,
+  },
+  cellStyle: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    gap: theme.spacing(0.5, 0.5),
   },
 }));

@@ -103,12 +103,4 @@ export default makeStyles((theme) => ({
   deleteButton: {
     color: Colors.error,
   },
-  actionsCell: {
-    overflow: 'visible !important',
-    position: 'sticky',
-    right: 0,
-    width: '0 !important',
-    padding: '0 !important',
-    verticalAlign: 'bottom !important',
-  },
 }));

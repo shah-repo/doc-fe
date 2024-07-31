@@ -327,7 +327,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema({
-    actionsClass: classes.actionsCell,
     onConfirm: submitForm,
     onDiscard: onDiscardPhase,
     onDeletePhase: onDeletePhase,
