@@ -1,0 +1,179 @@
+import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+import { translate } from '../../../../../common/intl';
+import { companyActions, companySelectors } from '../../../../../state/ducks/company';
+import { GeneralSettings } from '../../../../../state/ducks/company/types';
+import { materialFlowAction } from '../../../../../state/ducks/materialFlowAcl';
+import { MaterialFlowAclRule } from '../../../../../state/ducks/materialFlowAcl/types';
+import { userManagementSelectors } from '../../../../../state/ducks/userManagement';
+import { AlertDialog } from '../../../../components/dialogs';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../../components/notifications';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
+import SettingsPanel from '../../components/SettingsPanel';
+import SettingsTable from '../../components/SettingsTable';
+import { SettingsPanelProps } from '../../types';
+import { buildSchema } from './schema';
+import { EditableMaterialFlowAclRule } from './types';
+
+const PANEL_FIELD = 'materialFlowAcl';
+
+const INITIAL_VALUES = {
+  groups: [],
+  id: '_initial',
+  [MODE_FIELD]: Mode.show,
+};
+
+const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { getFieldProps, values } = useFormikContext<GeneralSettings>();
+  const rules = getFieldProps<MaterialFlowAclRule[]>(PANEL_FIELD).value;
+  const locations = useSelector(companySelectors.getAllLocations) ?? [];
+  const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
+    id: group.value,
+    name: group.label,
+  }));
+  const [rulesData, setRulesData] = React.useState<MaterialFlowAclRule[]>(rules);
+  const [editedRule, setEditedRule] = React.useState<EditableMaterialFlowAclRule>();
+  const ruleToDelete = useRef<EditableMaterialFlowAclRule>();
+  const addRuleAction = useActionCreator(materialFlowAction.addRule);
+  const updateRuleAction = useActionCreator(materialFlowAction.updateRule);
+  const deleteRuleAction = useActionCreator(materialFlowAction.deleteRule);
+  const dispatch = useDispatch();
+  const deleteConfirmationDialog = useDialog();
+
+  const async = useAsync({
+    onSuccess: () => {
+      dispatch(companyActions.updateGeneralSettings(values));
+      discardRule();
+    },
+    onError: (error) => {
+      setRulesData(rules);
+      toastError(error);
+    },
+  });
+
+  const discardRule = () => {
+    setEditedRule(undefined);
+    formik.resetForm();
+  };
+
+  const formik = useFormik<EditableMaterialFlowAclRule>({
+    initialValues: INITIAL_VALUES,
+    onSubmit: (values) => {
+      const isAdding = values[MODE_FIELD] === Mode.add;
+      if (values.action && values.from && values.groups) {
+        const payload = ({
+          action: values.action,
+          from: values.from.id,
+          to: values.to?.id ?? null,
+          groups: values.groups.map(group => group.id),
+        });
+        isAdding
+          ? async.start(addRuleAction, payload, async)
+          : async.start(updateRuleAction, values.id, payload, async);
+      }
+    },
+  });
+
+  const addRule = () => {
+    const values = {
+      id: uuidv4(),
+      from: undefined,
+      to: undefined,
+      groups: [],
+      action: undefined,
+      [MODE_FIELD]: Mode.add,
+    };
+    setEditedRule(values);
+    formik.setValues(values);
+  };
+
+  useEffect(() => {
+    setRulesData(rules);
+  }, [rules]);
+
+  const confirmRuleDeletion = (rule: EditableMaterialFlowAclRule) => {
+    ruleToDelete.current = rule;
+    deleteConfirmationDialog.open();
+  };
+
+  const deleteRule = () => {
+    deleteConfirmationDialog.close();
+
+    if (!ruleToDelete.current) {
+      return;
+    }
+
+    async.start(deleteRuleAction, ruleToDelete.current.id, async);
+  };
+
+  const discardDelete = () => {
+    ruleToDelete.current = undefined;
+    deleteConfirmationDialog.close();
+  };
+
+  const editRule = (rule: EditableMaterialFlowAclRule) => {
+    formik.setValues({
+      ...rule,
+      [MODE_FIELD]: Mode.edit,
+    });
+    setEditedRule(rule);
+  };
+
+  const schema = buildSchema({
+    isActive: true,
+    onEdit: editRule,
+    onDelete: confirmRuleDeletion,
+    onDiscard: discardRule,
+    onConfirm: formik.submitForm,
+    locations,
+    groups,
+  });
+
+  const mappedRules = rulesData?.map((rule) => {
+    return {
+      ...rule,
+      from: locations.find(it => it.id === rule.from),
+      to: locations.find(it => it.id === rule.to),
+      [MODE_FIELD]: rule.id === editedRule?.id ? Mode.edit : Mode.show,
+    };
+  }) ?? [];
+
+  const rulesList
+    = editedRule?.[MODE_FIELD] === Mode.add
+      ? [...mappedRules, editedRule]
+      : mappedRules;
+
+  return (
+    <SettingsPanel
+      {...props}
+      title={translate('administration.general.settings.material.flow')}
+      onAddNew={addRule}
+    >
+      <FormikProvider value={formik}>
+        <SettingsTable
+          isActive
+          data={rulesList}
+          isEditing={editedRule !== undefined}
+          schema={schema}
+          addButtonLabel={translate('common.add.new')}
+          onAdd={addRule}
+        />
+      </FormikProvider>
+      <AlertDialog
+        handler={deleteConfirmationDialog}
+        onConfirm={deleteRule}
+        onCancel={discardDelete}
+      >
+        {translate('administration.general.settings.material.flow.delete.confirmation')}
+      </AlertDialog>
+    </SettingsPanel>
+  );
+};
+
+export default MaterialFlowSettingsPanel;
