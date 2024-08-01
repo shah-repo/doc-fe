@@ -1,38 +1,32 @@
-import {
-  Divider,
-  List,
-  ListItem,
-  Typography,
-} from '@material-ui/core';
+import { Divider, List, ListItem, Typography } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
-import {
-  AllocationOrder,
-  GeneralSettings,
-} from '../../../../../state/ducks/company/types';
+import { AllocationOrder, GeneralSettings } from '../../../../../state/ducks/company/types';
 import { FormControlLabel, Radio } from '../../../../components/forms/fields-next';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
-import { styles } from './styles';
+import useStyles from './styles';
 
 const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
-  const classes = styles();
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
   const hasPermission = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const orderByReleaseDateKey = 'allocationConfig.sortOrderByReleaseDate';
-  const orderByReleaseDateValue = getFieldProps(orderByReleaseDateKey).value;
+  const orderByReleaseDateValue = getFieldProps<AllocationOrder>(orderByReleaseDateKey).value;
 
-  const handleFIFOOrderChange = (event: ChangeEvent<{}>, checked: boolean) => {
+  const classes = useStyles();
+
+  const handleFIFOOrderChange = (event: ChangeEvent<unknown>, checked: boolean) => {
     if (checked) {
       setFieldValue(orderByReleaseDateKey, AllocationOrder.FIFO);
     }
   };
 
-  const handleLIFOOrderChange = (event: ChangeEvent<{}>, checked: boolean) => {
+  const handleLIFOOrderChange = (event: ChangeEvent<unknown>, checked: boolean) => {
     if (checked) {
       setFieldValue(orderByReleaseDateKey, AllocationOrder.LIFO);
     }

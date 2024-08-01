@@ -1,28 +1,31 @@
 import React from 'react';
-import { ColumnDefinition, DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { ActiveCellTemplate } from '../../components/LocationsSetting/components/ActiveCellTemplate';
-import { IncludedInTotalQtyCellTemplate } from '../../components/LocationsSetting/components/IncludedInTotalQtyCellTemplate';
-import LocationActionsCellTemplate from '../../components/LocationsSetting/components/LocationActionsCellTemplate';
-import { TextCellTemplate } from '../../components/LocationsSetting/components/TextCellTemplate';
+import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
+import ActiveCellTemplate from '../../components/SettingsTable/components/ActiveCellTemplate';
+import TextCellTemplate from '../../components/SettingsTable/components/TextCellTemplate';
+import { SchemaBuilder } from '../../components/SettingsTable/types';
+import { IncludedInTotalQtyCellTemplate } from './components/IncludedInTotalQtyCellTemplate';
 import { EditableCompanyLocation } from './types';
 
-interface SchemaOptions {
-  actionsClass: string
-  isActive: boolean
-  onDiscard: () => void
-  onConfirm: () => unknown
-  onRowClick?: (e: DataGridRowClickEvent<EditableCompanyLocation>) => void
-}
-
-type schemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableCompanyLocation>>;
-export const buildSchema: schemaBuilder = ({ isActive, onDiscard, onConfirm, onRowClick }) => {
+export const buildSchema: SchemaBuilder<EditableCompanyLocation> = ({
+  isActive,
+  onEdit,
+  onActiveStateChange,
+  onDelete,
+  onDiscard,
+  onConfirm,
+}) => {
   return [
     {
       id: 'active',
       field: 'active',
       title: 'common.active',
-      width: 100,
-      template: ActiveCellTemplate,
+      width: 70,
+      template: (props) => (
+        <ActiveCellTemplate
+          {...props}
+          onActiveStateChange={onActiveStateChange}
+        />
+      ),
     },
     {
       id: 'name',
@@ -35,22 +38,23 @@ export const buildSchema: schemaBuilder = ({ isActive, onDiscard, onConfirm, onR
       field: 'includedInTotalQty',
       title: 'settings.locations.included.total.quantity',
       template: IncludedInTotalQtyCellTemplate,
+      width: 160,
     },
     {
       id: 'actions',
       field: 'actions',
       title: 'common.actions',
-      filterable: false,
+      width: 75,
       template: (props) => (
-        <LocationActionsCellTemplate
+        <ActionsCellTemplate
           {...props}
-          onClick={onRowClick as ((e: { dataItem: EditableCompanyLocation }) => void) & ((e: DataGridRowClickEvent<EditableCompanyLocation>) => void)}
+          isActive={isActive}
+          onEdit={onEdit}
+          onDelete={onDelete}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
-          isActive={isActive}
         />
       ),
-      width: 100,
     },
   ];
 };

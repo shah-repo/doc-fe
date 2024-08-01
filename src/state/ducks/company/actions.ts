@@ -1,4 +1,4 @@
-import { isEmpty, omit } from 'lodash';
+import { omit } from 'lodash';
 import { generatePath } from 'react-router-dom';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
 import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
@@ -78,8 +78,8 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
-const updateGeneralSettings = (body: GeneralSettings, id = '', method: ApiActionMethod = 'post'): ApiAction<GeneralSettingsState> => apiAction({
-  url: !isEmpty(id) ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id: id }) : COMPANY_SETTINGS_URL,
+const updateGeneralSettings = (body: GeneralSettings, id?: string, method: ApiActionMethod = 'post'): ApiAction<GeneralSettingsState> => apiAction({
+  url: id ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id }) : COMPANY_SETTINGS_URL,
   method: method,
   data: omit(body, 'id'),
   asyncType: SET_GENERAL_SETTINGS,

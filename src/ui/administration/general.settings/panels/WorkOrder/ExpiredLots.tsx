@@ -10,6 +10,7 @@ import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
 
 const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
   const expiredLotsKey = 'allocationConfig.expiredLotsPrompt';
   const hasPermission = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));

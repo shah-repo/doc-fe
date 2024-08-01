@@ -3,7 +3,7 @@ import { Colors } from '../../../../layout/theme-next';
 import { NextTheme } from '../../../../layout/theme-next/provider';
 import { SIDEBAR_WIDTH } from '../../constants';
 
-export default makeStyles((theme: NextTheme) => ({
+export default makeStyles<NextTheme>(theme => ({
   root: {
     width: '100%',
     height: '100%',
@@ -50,6 +50,9 @@ export default makeStyles((theme: NextTheme) => ({
   sidebar: {
     gridArea: '2 / 1 / 4 / 2',
     paddingBottom: theme.spacing(3),
+  },
+  list: {
+    padding: 0,
   },
   listItem: {
     borderRadius: 4,
