@@ -68,7 +68,9 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { setValues, submitForm } = formik;
 
   const changeLocationActiveState = (location: EditableCompanyLocation, state: boolean) => {
-    const updatedLocations = locations.map(it => it.id === location.id ? { ...it, active: state } : it);
+    const updatedLocations = locations
+      ?.map(it => it.id === location.id ? { ...it, active: state } : it)
+      ?? [];
     updateLocations(updatedLocations);
   };
 

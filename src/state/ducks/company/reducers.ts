@@ -5,7 +5,7 @@ import { AsyncStatus } from '../../types';
 import { LOGOUT_USER } from '../auth/constants';
 import { LogoutUserAction } from '../auth/types';
 import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from './constants';
-import { AutosaveAction, AutosaveState, CompanyMineAction, GeneralSettingsAction, GeneralSettingsState, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, SetAutosaveAction, UpdateNavigationMenuItem } from './types';
+import { AllocationOrder, AutosaveAction, AutosaveState, CompanyMineAction, ExpiredLotTypes, GeneralSettingsAction, GeneralSettingsState, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, SetAutosaveAction, UpdateNavigationMenuItem } from './types';
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   id: '',
@@ -38,17 +38,21 @@ const REDLINE_DEFAULT_STATE = {
   redlineActive: false,
 };
 
-const GENERAL_SETTINGS_DEFAULT_STATE = ({
+const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = ({
   zebraPrint: [],
   equipmentFamily: {
     autoSyncEnabled: false,
     locations: [],
   },
+  allocationConfig: {
+    sortOrderByReleaseDate: AllocationOrder.FIFO,
+    expiredLotsPrompt: ExpiredLotTypes.WARNING,
+  },
   approvalRequestAdmin: false,
   shouldAutoUpdateLotStatus: false,
   status: AsyncStatus.Idle,
   message: '',
-}) as unknown as GeneralSettingsState;
+});
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
 

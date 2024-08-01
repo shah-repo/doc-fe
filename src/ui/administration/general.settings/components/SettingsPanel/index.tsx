@@ -2,7 +2,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from '@material-ui/core';
 import cx from 'classnames';
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, RefObject } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Button, IconButton } from '../../../../components/forms/fields-next';
 import useSticky from '../../../../hooks/useSticky';
@@ -37,7 +37,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       }}
     >
       <ExpansionPanelSummary
-        ref={stickyRef}
+        ref={stickyRef as RefObject<HTMLDivElement>}
         onClick={() => onToggle()}
         classes={{
           root: cx(classes.summary, { [classes.stickySummary]: isSticky }),
