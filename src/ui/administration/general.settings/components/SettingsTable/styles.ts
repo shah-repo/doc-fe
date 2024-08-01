@@ -7,9 +7,14 @@ export default makeStyles(theme => ({
 
     '& .k-grid-content': {
       '& tr': {
+        height: 38,
+
         '& td': {
-          padding: theme.spacing(0.25, 1.5),
-          height: 42,
+          padding: theme.spacing(0.5, 1.5),
+
+          '& .Mui-error': {
+            marginTop: theme.spacing(0.25),
+          },
         },
       },
     },
@@ -24,6 +29,11 @@ export default makeStyles(theme => ({
     zIndex: 3,
     outline: `1px solid ${Colors.primaryLight}`,
     outlineOffset: -1,
+
+    '& td': {
+      verticalAlign: 'top !important',
+      whiteSpace: 'normal !important' as 'normal',
+    },
   },
   actions: {
     display: 'flex',
@@ -31,13 +41,14 @@ export default makeStyles(theme => ({
     margin: theme.spacing(0, -1.5),
   },
   actionsEdit: {
-    gap: theme.spacing(0, 0.25),
+    gap: theme.spacing(0, 1.12),
+    margin: theme.spacing(0.5, 0, 0),
+  },
+  activeCheckbox: {
+    margin: theme.spacing(0.75, 0, 0),
   },
   inputRoot: {
-    margin: theme.spacing(0, -1.375),
-    width: `calc(100% + ${theme.spacing(2.75)}px)`,
-  },
-  inputText: {
-    padding: theme.spacing(1.25),
+    margin: theme.spacing(0, -1.125),
+    width: `calc(100% + ${theme.spacing(2.25)}px)`,
   },
 }));

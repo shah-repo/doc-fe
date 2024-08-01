@@ -24,9 +24,9 @@ function TextCellTemplate<T extends EditableItem> ({
         <TextField
           {...getFieldProps(field)}
           classes={{
-            input: classes.inputText,
             root: classes.inputRoot,
           }}
+          size="small"
         />
       </FormikField>
     );
