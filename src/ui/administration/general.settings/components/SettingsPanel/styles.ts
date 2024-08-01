@@ -13,15 +13,31 @@ export default makeStyles(theme => ({
     '&.Mui-expanded': {
       margin: theme.spacing(0, 0, 3.75),
     },
+    '&::before': {
+      display: 'none',
+    },
   },
   summary: {
     flexDirection: 'row-reverse',
     alignItems: 'center',
     padding: theme.spacing(2, 1.5),
+    borderRadius: theme.spacing(0.75),
+    background: Colors.white,
+    border: `1px solid ${Colors.white}`,
+    position: 'sticky',
+    top: 0,
+    zIndex: 2,
 
     '&.Mui-expanded': {
       minHeight: 0,
       color: Colors.primary,
+    },
+  },
+  stickySummary: {
+    '&.Mui-expanded': {
+      borderTop: `1px solid ${Colors.stroke}`,
+      borderBottom: `1px solid ${Colors.stroke}`,
+      borderRadius: 0,
     },
   },
   icon: {
@@ -59,5 +75,12 @@ export default makeStyles(theme => ({
   details: {
     display: 'block',
     padding: theme.spacing(0, 2, 2, 6.25),
+  },
+  detailsWithStickyTitle: {
+    '& .k-grid-header': {
+      position: 'sticky',
+      top: 64,
+      zIndex: 1,
+    },
   },
 }));
