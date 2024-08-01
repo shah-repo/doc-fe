@@ -33,7 +33,8 @@ export const ActionsCell: React.FC<Props> = ({ popperRef, ...props }) => {
         >
           <Actions
             scrollBehavior="smooth"
-            {...props} />
+            {...props}
+          />
         </Popper>
       )}
     </>

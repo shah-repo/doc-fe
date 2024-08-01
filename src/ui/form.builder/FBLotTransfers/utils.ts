@@ -1,8 +1,14 @@
 import { round, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
+import { useSelector } from 'react-redux';
 import { FB } from '..';
+import { authSelectors } from '../../../state/ducks/auth';
+import { Group } from '../../../state/ducks/auth/types';
+import { companySelectors } from '../../../state/ducks/company';
+import { materialFlowACLSelectors } from '../../../state/ducks/materialFlowAcl';
+import { MaterialFlowAclRule } from '../../../state/ducks/materialFlowAcl/types';
 import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
-import { CalculableLotTransfer, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction } from './types';
+import { AllowedOptions, CalculableLotTransfer, CompanyLocation, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction, SelectedOptions } from './types';
 
 export const getOptionLabel = (option: DocumentRevisionOption): string => {
   const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
@@ -71,4 +77,55 @@ export const useOnHandQuantity = (): UseOnHandQuantityType => {
     onHandQuantityUnit,
     predictOnHandQuantity,
   };
+};
+
+const getAllowedTransferOptions = (
+  rules: MaterialFlowAclRule[],
+  locations: CompanyLocation[],
+  groups: Group[],
+  selectedOptions: SelectedOptions = {},
+) => {
+  const allowedActions = new Set<string>();
+  const allowedFromLocations = new Set<string>();
+  const allowedToLocations = new Set<string>();
+
+  rules.forEach(rule => {
+    const isGroupMatched = rule.groups.some(group => groups.some(it => it.id === group.id));
+    if (isGroupMatched) {
+      if (selectedOptions.type && rule.action !== selectedOptions.type) return;
+      if (selectedOptions.from && rule.from !== selectedOptions.from) return;
+      if (selectedOptions.to && rule.to !== selectedOptions.to) return;
+
+      allowedActions.add(rule.action);
+      allowedFromLocations.add(rule.from);
+      if (rule.to) {
+        allowedToLocations.add(rule.to);
+      } else {
+        locations.forEach((option) => {
+          allowedToLocations.add(option.id);
+        });
+      }
+    }
+  });
+
+  return {
+    type: Array.from(allowedActions),
+    from: Array.from(allowedFromLocations),
+    to: Array.from(allowedToLocations),
+  };
+};
+
+export const useAllowedLotTransferOptions = (
+  selectedOptions: SelectedOptions = {},
+): [boolean, AllowedOptions] => {
+  const locations = useSelector(companySelectors.getAllLocations) ?? [];
+  const rules = useSelector(materialFlowACLSelectors.getRules) ?? [];
+  const userGroups = useSelector(authSelectors.currentUserGroups) ?? [];
+  const isAclEnabled = rules.length > 0;
+
+  if (!isAclEnabled) {
+    return [false, { type: [], from: [], to: [] }];
+  }
+
+  return [true, getAllowedTransferOptions(rules, locations, userGroups, selectedOptions)];
 };

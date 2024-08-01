@@ -20,7 +20,7 @@ import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, EMPTY_VALUE_PLACEHOLDER, FIELD
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
-import { getOptionLabel, useOnHandQuantity } from './utils';
+import { getOptionLabel, useAllowedLotTransferOptions, useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
 
 const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
@@ -123,11 +123,15 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
   const handleRowClick = isActive && !editedLotTransfer ? editLotTransfer : undefined;
 
+  const [isAclEnabled, allowedOptions] = useAllowedLotTransferOptions(formik.values);
+
   const schema = buildSchema({
     locations,
     existingLocations,
     records,
     builds,
+    allowedOptions,
+    isAclEnabled,
     units: onHandQuantityUnit,
     onRowClick: handleRowClick,
   });

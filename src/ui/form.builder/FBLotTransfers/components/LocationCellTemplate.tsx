@@ -10,9 +10,11 @@ import { CompanyLocation, CustomTemplateProps, EditableLotTransfer } from '../ty
 
 interface Props extends CustomTemplateProps {
   options: CompanyLocation[]
+  allowedOptions: string[]
+  isAclEnabled: boolean
 }
 
-export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, onClick }) => {
+export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, isAclEnabled, allowedOptions, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -34,7 +36,7 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
         <Autocomplete
           {...getFieldProps(field)}
           blurOnSelect
-          options={options.filter(loc => loc.active)}
+          options={options.filter(loc => loc.active && (!isAclEnabled || allowedOptions.includes(loc.id)))}
           getOptionLabel={(option: CompanyLocation) => option.name}
           value={value}
           onChange={handleChange}

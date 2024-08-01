@@ -12,6 +12,8 @@ export interface SchemaOptions {
   records: DocumentRevisionOption[]
   units?: string
   onRowClick?: (e: LotTranferEditEvent) => void
+  allowedOptions: AllowedOptions
+  isAclEnabled: boolean
 }
 
 export interface SchemaItem extends ColumnDefinition<EditableLotTransfer> {
@@ -84,4 +86,16 @@ export type PredictQuantityFunction = (args: { skipTransfer?: DraftLotTransfer, 
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableLotTransfer> {
   onClick?: (e: LotTranferEditEvent) => void
+}
+
+export interface SelectedOptions {
+  type?: string
+  from?: string
+  to?: string
+}
+
+export interface AllowedOptions {
+  type: string[]
+  from: string[]
+  to: string[]
 }
