@@ -44,6 +44,7 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
     autoSyncEnabled: false,
     locations: [],
   },
+  materialFlowAcl: [],
   approvalRequestAdmin: false,
   shouldAutoUpdateLotStatus: false,
   status: AsyncStatus.Idle,

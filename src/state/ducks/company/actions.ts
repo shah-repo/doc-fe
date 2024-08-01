@@ -81,7 +81,7 @@ const getGeneralSettings = (): ApiAction => apiAction({
 const updateGeneralSettings = (body: GeneralSettings, id?: string, method: ApiActionMethod = 'post'): ApiAction<GeneralSettingsState> => apiAction({
   url: id ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id: id }) : COMPANY_SETTINGS_URL,
   method: method,
-  data: omit(body, 'id'),
+  data: omit(body, 'id', 'materialFlowAcl'),
   asyncType: SET_GENERAL_SETTINGS,
   onSuccess: (data, dispatch) => {
     dispatch(setGeneralSettings(data));

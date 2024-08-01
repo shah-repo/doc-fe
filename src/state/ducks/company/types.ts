@@ -3,6 +3,7 @@ import { AsyncState } from '../../types';
 import { GroupTag, Permission } from '../auth/types';
 import { Nullable, User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
+import { MaterialFlowAclRule } from '../materialFlowAcl/types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 
 export interface WhiteLabelingColors {
@@ -197,6 +198,7 @@ export interface GeneralSettings {
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
+  materialFlowAcl: MaterialFlowAclRule[]
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
