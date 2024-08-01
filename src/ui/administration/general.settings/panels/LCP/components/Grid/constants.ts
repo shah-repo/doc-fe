@@ -17,7 +17,7 @@ export const initialDataState = {
   skip: 0,
   group: DATA_GROUP,
 };
-export const REQUEST_PAYLOAD_KEYS = ['order', 'displayOrder', 'internalType', 'displayLabel', 'isApprovedSupplierEnforcedOnPO', 'isAllowedOnLhrProd', 'isAllowedToBuy', 'documentTypeIdArr', 'isUserAdded', 'isUserModified', 'isActive'];
+export const REQUEST_PAYLOAD_KEYS = ['id', 'order', 'displayOrder', 'internalType', 'displayLabel', 'isApprovedSupplierEnforcedOnPO', 'isAllowedOnLhrProd', 'isAllowedToBuy', 'documentTypeIdArr', 'isUserAdded', 'isUserModified', 'isActive'];
 
 export const DEFAULT_OPTIONS = [
   { label: 'Yes', value: 'YES' },
