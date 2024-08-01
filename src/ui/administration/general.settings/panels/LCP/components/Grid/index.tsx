@@ -330,6 +330,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     onConfirm: submitForm,
     onDiscard: onDiscardPhase,
     onDeletePhase: onDeletePhase,
+    hasEditLCPPermission,
   });
 
   const [columns, setColumns] = React.useState<Array<ColumnDefinition<LCP>>>(schema);

@@ -57,7 +57,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
 
   const documentTypeIdArr = dataItem.items?.[0].documentTypeIdArr;
   const isLCPActive = checkAllIsActiveTrue(dataItem.items);
-  const defaultValue = (partGroups ?? selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
+  const defaultValue = (partGroups?.length ? partGroups : selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
   const displayValue = defaultValue?.map(data => data.label).join(', ');
   const selectedIDs = selectedPartGroups?.map((group) => group.value);
   const options = partGroups?.filter((group) => !selectedIDs.includes(group.value));
@@ -89,7 +89,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             />
             <Checkbox
               checked={isLCPActive}
-              disabled={displayGroupSelection}
+              disabled={hasEditLCPPermission ? displayGroupSelection : !isEditModeAndHasEditLCPPermission}
               className={classes.groupCheckBox}
               onChange={handleChange}
             />

@@ -70,4 +70,5 @@ export interface SchemaOptions {
   onDiscard: () => void
   onDelete?: () => void
   onDeletePhase: (dataItem: LCP) => void
+  hasEditLCPPermission?: boolean
 }

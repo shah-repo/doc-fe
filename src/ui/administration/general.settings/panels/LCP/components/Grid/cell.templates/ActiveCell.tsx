@@ -5,7 +5,11 @@ import { Checkbox } from '../../../../../../../components/forms/fields-next';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { LCP } from '../types';
 
-export const ActiveCell: React.FC<CellTemplateProps<LCP>> = ({ dataItem, colSpan, style, field, dataIndex, className, onChange }) => {
+interface ActiveCellProps extends CellTemplateProps<LCP> {
+  hasEditLCPPermission?: boolean
+}
+
+export const ActiveCell: React.FC<ActiveCellProps> = ({ dataItem, colSpan, style, field, dataIndex, hasEditLCPPermission, className, onChange }) => {
   const handleChange = (event, checked: boolean) => {
     onChange?.({
       dataIndex,
@@ -27,6 +31,7 @@ export const ActiveCell: React.FC<CellTemplateProps<LCP>> = ({ dataItem, colSpan
       <Box display="flex" justifyContent="center">
         <Checkbox
           checked={dataItem.isActive}
+          disabled={!hasEditLCPPermission}
           onChange={handleChange}
         />
       </Box>

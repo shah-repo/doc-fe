@@ -13,6 +13,7 @@ export const LCPSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  hasEditLCPPermission,
   onDeletePhase,
 }: SchemaOptions): Array<ColumnDefinition<LCP>> => {
   return [
@@ -23,7 +24,7 @@ export const LCPSchema = ({
       width: 60,
       filterable: false,
       locked: false,
-      cell: (props) => <ActiveCell {...props} />,
+      cell: (props) => <ActiveCell {...props} hasEditLCPPermission={hasEditLCPPermission} />,
       groupable: false,
       sortable: false,
     },
