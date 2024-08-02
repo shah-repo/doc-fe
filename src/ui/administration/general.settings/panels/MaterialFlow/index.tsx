@@ -45,6 +45,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const deleteRuleAction = useActionCreator(materialFlowAction.deleteRule);
   const dispatch = useDispatch();
   const deleteConfirmationDialog = useDialog();
+  const isActive = true;
 
   const async = useAsync({
     onSuccess: () => {
@@ -126,9 +127,9 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const schema = buildSchema({
-    isActive: true,
-    onEdit: editRule,
-    onDelete: confirmRuleDeletion,
+    isActive,
+    onEdit: isActive ? editRule : undefined,
+    onDelete: isActive ? confirmRuleDeletion : undefined,
     onDiscard: discardRule,
     onConfirm: formik.submitForm,
     locations,
@@ -153,11 +154,11 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     <SettingsPanel
       {...props}
       title={translate('administration.general.settings.material.flow')}
-      onAddNew={addRule}
+      onAddNew={isActive ? addRule : undefined}
     >
       <FormikProvider value={formik}>
         <SettingsTable
-          isActive
+          isActive={isActive}
           data={rulesList}
           isEditing={editedRule !== undefined}
           schema={schema}
