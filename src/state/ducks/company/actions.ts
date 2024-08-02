@@ -1,4 +1,5 @@
 import { omit } from 'lodash';
+import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
@@ -114,13 +115,10 @@ const fetchDocRevOptionsByDocTypeId = (
   currentPhaseId?: string,
   handlers: Handlers,
 ): ApiAction<LCPDocRevOptions[]> => {
-  let url = `documentTypeId=${documentTypeId}`;
-  if (currentPhaseId) {
-    url = `${url}&currentPhaseId=${currentPhaseId}`;
-  }
+  const params = qs.stringify({ documentTypeId, currentPhaseId });
 
   return apiActionWithCallbacks({
-    url: `${LIFE_CYCLE_DOC_REV_OPTIONS_URL}?${url}`,
+    url: `${LIFE_CYCLE_DOC_REV_OPTIONS_URL}?${params}`,
     method: 'get',
     handlers,
   });

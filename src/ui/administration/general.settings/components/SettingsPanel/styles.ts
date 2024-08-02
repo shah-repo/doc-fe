@@ -3,7 +3,6 @@ import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   root: {
-    maxWidth: '100%',
     margin: theme.spacing(0, 0, 3.75),
     border: `1px solid ${Colors.stroke}`,
     borderRadius: theme.spacing(0.5),
