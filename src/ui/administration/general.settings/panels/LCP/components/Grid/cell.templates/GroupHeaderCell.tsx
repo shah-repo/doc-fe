@@ -1,12 +1,12 @@
-import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { GridRowProps } from '@progress/kendo-react-grid';
-import cx from 'classnames';
 import { every, kebabCase } from 'lodash';
 import * as React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete, Checkbox, IconButton } from '../../../../../../../components/forms/fields-next';
+import useHover from '../../../../../../../hooks/useHover';
 import { EXPAND_FIELD } from '../constants';
 import { CustomGroupDataItem, CustomGroupOptions } from '../types';
 import useStyles from './styles';
@@ -47,6 +47,8 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   const isEditGroup = isEditMode && dataItem.items.length > 1;
   const isReadModeAndHasEditLCPPermission = !isEditMode && hasEditLCPPermission;
   const displayGroupSelection = isEditModeAndHasEditLCPPermission && !isEditGroup;
+  const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
+  const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
 
   const handleGroupChange = (e, value: CustomGroupOptions) => {
     onGroupChange([value], groupId);
@@ -118,11 +120,12 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             <IconButton
               color="primary"
               kind="white"
+              ref={discardRef}
               onClick={() => onDiscardGroup(dataItem)}
-              className={cx(classes.editButtons, classes.buttons)}
+              className={classes.editButtons}
             >
               <FontAwesomeIcon
-                icon={regular('square-xmark')}
+                icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')}
                 className={classes.editButtons}
               />
             </IconButton>
@@ -133,11 +136,12 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             <IconButton
               color="primary"
               kind="white"
+              ref={saveRef}
               className={classes.editButtons}
               onClick={() => onUpdateAddOrEditGroup(dataItem)}
             >
               <FontAwesomeIcon
-                icon={solid('square-check')}
+                icon={isSaveHovered ? solid('square-check') : light('square-check')}
                 className={classes.editButtons}
               />
             </IconButton>
