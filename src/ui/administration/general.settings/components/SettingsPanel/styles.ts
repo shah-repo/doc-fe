@@ -1,10 +1,8 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
-import { MAX_PANEL_WIDTH } from '../../constants';
 
 export default makeStyles(theme => ({
   root: {
-    maxWidth: MAX_PANEL_WIDTH,
     margin: theme.spacing(0, 0, 3.75),
     border: `1px solid ${Colors.stroke}`,
     borderRadius: theme.spacing(0.5),
