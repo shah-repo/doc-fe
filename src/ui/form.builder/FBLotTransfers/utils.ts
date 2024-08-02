@@ -88,24 +88,32 @@ const getAllowedTransferOptions = (
   const allowedActions = new Set<string>();
   const allowedFromLocations = new Set<string>();
   const allowedToLocations = new Set<string>();
+  const allowedRules = rules.filter(
+    rule => rule.groups.some(group => groups.some(it => it.id === group.id)),
+  );
 
-  rules.forEach(rule => {
-    const isGroupMatched = rule.groups.some(group => groups.some(it => it.id === group.id));
-    if (isGroupMatched) {
-      if (selectedOptions.type && rule.action !== selectedOptions.type) return;
-      if (selectedOptions.from && rule.from !== selectedOptions.from) return;
-      if (selectedOptions.to && rule.to !== selectedOptions.to) return;
+  ['type', 'from', 'to'].forEach(field => {
+    allowedRules.forEach(rule => {
+      if (field !== 'type' && selectedOptions.type && rule.action !== selectedOptions.type) return;
+      if (field !== 'from' && selectedOptions.from && rule.from !== selectedOptions.from) return;
+      if (field !== 'to' && selectedOptions.to && rule.to !== selectedOptions.to) return;
 
-      allowedActions.add(rule.action);
-      allowedFromLocations.add(rule.from);
-      if (rule.to) {
-        allowedToLocations.add(rule.to);
-      } else {
-        locations.forEach((option) => {
-          allowedToLocations.add(option.id);
-        });
+      if (field === 'type') {
+        allowedActions.add(rule.action);
       }
-    }
+      if (field === 'from') {
+        allowedFromLocations.add(rule.from);
+      }
+      if (field === 'to') {
+        if (rule.to) {
+          allowedToLocations.add(rule.to);
+        } else {
+          locations.forEach((option) => {
+            allowedToLocations.add(option.id);
+          });
+        }
+      }
+    });
   });
 
   return {
