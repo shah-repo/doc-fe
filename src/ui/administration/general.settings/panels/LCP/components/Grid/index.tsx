@@ -149,6 +149,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const updateSettingsObj = (updatedData?: LCP[]) => {
     const payload = updatedData?.map((item) => {
+      if (item.id?.includes(ADD_GROUP_NAME)) {
+        item.id = undefined;
+      }
       return { ...pick(item, REQUEST_PAYLOAD_KEYS) };
     });
     if (formValues) {
@@ -254,7 +257,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     const otherLabelOptions = selectedPhaseCategory?.map(phase => phase.displayLabel);
     const displayOrder = selectedPhaseCategory?.length ?? 0 + 1;
     const newPhase = {
-      id: uuidv4(),
+      id: `${ADD_GROUP_NAME}${uuidv4()}`,
       group: dataItem.group,
       category: dataItem.category,
       enlilTypeOptions,
