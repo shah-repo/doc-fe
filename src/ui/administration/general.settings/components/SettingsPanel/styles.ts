@@ -81,6 +81,7 @@ export default makeStyles(theme => ({
       position: 'sticky',
       top: 64,
       zIndex: 1,
+      borderRadius: 0,
     },
   },
 }));
