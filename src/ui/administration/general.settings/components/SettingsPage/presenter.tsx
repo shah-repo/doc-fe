@@ -22,8 +22,8 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const toggleAllPanels = () => setExpanedPanels(allPanelsExpaned ? [] : panels.map(panel => panel.key));
-  const togglePanel = (key: GeneralSettingsTabs) => (isExpanded?: boolean) => setExpanedPanels(state => (
-    state.includes(key) ? (!isExpanded ? remove(state, key) : state) : [...state, key]
+  const togglePanel = (key: GeneralSettingsTabs) => () => setExpanedPanels(state => (
+    state.includes(key) ? remove(state, key) : [...state, key]
   ));
   const jumpToPanel = (key: GeneralSettingsTabs) => () => setExpanedPanels([key]);
 

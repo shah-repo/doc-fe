@@ -88,7 +88,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       active: true,
       [MODE_FIELD]: Mode.add,
     });
-    props.onToggle(true);
   };
 
   const mappedLocations = locationsData?.map((location) => {
