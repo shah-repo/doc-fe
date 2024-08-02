@@ -69,6 +69,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       newPhases = newPhases?.map((phase: LCP) => {
         return {
           ...phase,
+          id: `${ADD_GROUP_NAME}${uuidv4()}`,
           documentTypeIdArr: selectedGroudIds,
           group: selectedDocTypes[0].category,
           category,
@@ -148,7 +149,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const updateSettingsObj = (updatedData?: LCP[]) => {
-    const payload = updatedData?.map((item) => {
+    const payload = cloneDeep(updatedData)?.map((item) => {
       if (item.id?.includes(ADD_GROUP_NAME)) {
         item.id = undefined;
       }
