@@ -4,7 +4,6 @@ import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../../components/forms/fields/Autocomplete/types';
-import { Mode, MODE_FIELD } from '../../../../../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { DEFAULT_OPTIONS, EDIT_FIELD, LCP_KEYS, PART_PURCHASE_OPTIONS } from '../constants';
 import { LCP } from '../types';
@@ -28,10 +27,10 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
 
   const options = getOptions();
   const value = options.find((option) => option.value === dataItem[field]) ?? options[0];
-  const datCy = `${kebabCase(field)}-td`;
+  const dataCy = `${kebabCase(field)}-td`;
 
   if (!isEditMode) {
-    return <td data-cy={datCy}>{value?.label}</td>;
+    return <td data-cy={dataCy}>{value?.label}</td>;
   }
 
   const handleChange = (e, value: OptionType) => {
@@ -51,7 +50,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
       style={style}
       role="gridcell"
       className={className}
-      data-cy={datCy}
+      data-cy={dataCy}
     >
       <FormikField
         name={field}
@@ -59,7 +58,6 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
         <Autocomplete
           {...getFieldProps(field)}
           blurOnSelect
-          disabled={Mode.edit === dataItem[MODE_FIELD]}
           disableClearable
           placeholder={translate('common.select')}
           options={options}

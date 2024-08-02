@@ -28,7 +28,7 @@ import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { AddPhase } from './cell.templates/AddPhase';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
-import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, PARTS_GROUP_ID, REQUEST_PAYLOAD_KEYS } from './constants';
+import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, NO, PARTS_GROUP_ID, REQUEST_PAYLOAD_KEYS } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, GroupDocTypes, LCP, LCPResponse } from './types';
@@ -224,16 +224,14 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       );
     } else {
       // Edit case
-      if (data) {
       data?.forEach(data => {
         if (getGroupIdByCategory(data.category) === groupId) {
           data.documentTypeIdArr = selectedGroudIds;
         }
         return data;
       });
-      updateStateGridData(data);
+      updateStateGridData(data ?? []);
       setEditGroup(groupId);
-      }
     }
   };
 
@@ -263,9 +261,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       documentTypeIdArr: dataItem.documentTypeIdArr,
       internalType: '',
       displayLabel: '',
-      isApprovedSupplierEnforcedOnPO: 'NO',
-      isAllowedOnLhrProd: 'NO',
-      isAllowedToBuy: 'NO',
+      isApprovedSupplierEnforcedOnPO: NO,
+      isAllowedOnLhrProd: NO,
+      isAllowedToBuy: NO,
       isAddPhase: true,
       isActive: true,
       displayOrder,
@@ -371,7 +369,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
     if (rowProps.dataItem.isAdd) {
       // hide other elements while adding the row
-      return <></>;
+      return null;
     }
 
     const isGroupUpdating = editGroup === getGroupIdByCategory(rowProps.dataItem.category);
@@ -512,7 +510,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
               justify="center"
             >
               <span onClick={() => onGroupsToggle(true)}>
-                {translate('common.expand.all')} /{' '}
+                {translate('common.expand.all')} {' / '}
               </span>
               <span onClick={() => onGroupsToggle()}>
                 {translate('common.collapse.all')}
@@ -533,13 +531,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       >
         {translate('form.builder.add.item')}
       </AddButton>}
-      {
-        confirmationDialog.isOpen && <AlertDialog
-          dialog={confirmationDialog}
-          confirmAction={onConfirmAlertDialog}
-          cancelAction={onCancelAlertDialog}
-          message={getDialogMessage()}
-        />}
+      {confirmationDialog.isOpen && <AlertDialog
+        dialog={confirmationDialog}
+        confirmAction={onConfirmAlertDialog}
+        cancelAction={onCancelAlertDialog}
+        message={getDialogMessage()}
+      />}
     </Grid>
   </SettingsPanel>;
 };

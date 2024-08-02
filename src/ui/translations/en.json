@@ -2072,6 +2072,7 @@
   "administration.general.settings.lcp.add.phase": "Add Phase",
   "administration.general.settings.lcp.group.select.placeholder": "Select Group",
   "administration.general.settings.lcp.isActive": "Active",
+  "administration.general.settings.lcp.options.allow.with.warning": "Allow with warning",
   "administration.general.settings.lcp.internalType": "Enlil Internal",
   "administration.general.settings.lcp.displayLabel": "Customer Label",
   "administration.general.settings.lcp.isApprovedSupplierEnforcedOnPO": "Enforce Approved Supplier on PO",

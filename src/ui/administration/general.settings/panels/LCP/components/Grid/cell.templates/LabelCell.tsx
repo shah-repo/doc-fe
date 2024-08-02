@@ -46,17 +46,17 @@ export const LabelCell: React.FC<CellTemplateProps<LCP>> = (props) => {
   const { field, dataItem, onClick, colSpan, style, className } = props;
   const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
   const handleClick = () => onClick?.({ dataItem });
-  const datCy = `${kebabCase(field)}-td`;
+  const dataCy = `${kebabCase(field)}-td`;
 
   return <td
     colSpan={colSpan}
     style={style}
     role="gridcell"
     className={className}
-    data-cy={datCy}
+    data-cy={dataCy}
   >
     {isEditMode && <Editor {...props} />}
-    {!isEditMode && <OverflowingContent onClick={handleClick} data-cy={datCy}>
+    {!isEditMode && <OverflowingContent onClick={handleClick} data-cy={dataCy}>
       {dataItem[field]}
     </OverflowingContent>}
   </td>;

@@ -11,12 +11,13 @@ import { EXPAND_FIELD } from '../constants';
 import { CustomGroupDataItem, CustomGroupOptions } from '../types';
 import useStyles from './styles';
 
+type CustomGroupDataItemHandler = (groupDataItem: CustomGroupDataItem) => void;
 interface GroupHeaderCellProps extends GridRowProps {
-  onExpandChange: (groupDataItem: CustomGroupDataItem) => void
-  onEditGroup: (groupDataItem: CustomGroupDataItem) => void
-  onDiscardGroup: (groupDataItem: CustomGroupDataItem) => void
-  onUpdateAddOrEditGroup: (groupDataItem: CustomGroupDataItem) => void
-  onToggleGroupActivation: (groupDataItem: CustomGroupDataItem) => void
+  onExpandChange: CustomGroupDataItemHandler
+  onEditGroup: CustomGroupDataItemHandler
+  onDiscardGroup: CustomGroupDataItemHandler
+  onUpdateAddOrEditGroup: CustomGroupDataItemHandler
+  onToggleGroupActivation: CustomGroupDataItemHandler
   onGroupChange: (value: CustomGroupOptions[], groupId: string) => void
   partGroups: CustomGroupOptions[]
   selectedPartGroups: CustomGroupOptions[]
