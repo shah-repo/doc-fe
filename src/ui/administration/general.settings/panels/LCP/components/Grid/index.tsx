@@ -13,6 +13,7 @@ import { translate } from '../../../../../../../common/intl';
 import { getHasPermission } from '../../../../../../../common/utils/selectors';
 import { Permission } from '../../../../../../../state/ducks/auth/types';
 import { companyActions } from '../../../../../../../state/ducks/company';
+import { GeneralSettings } from '../../../../../../../state/ducks/company/types';
 import { DOC_TYPE_GROUP } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import AlertDialog from '../../../../../../app/alert.dialog/AlertDialog';
 import { Button as AddButton } from '../../../../../../components/forms/fields-next';
@@ -31,7 +32,7 @@ import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
 import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, NO, PARTS_GROUP_ID, REQUEST_PAYLOAD_KEYS } from './constants';
 import { LCPSchema } from './schema';
 import useStyles from './styles';
-import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, GroupDocTypes, LCP, LCPResponse } from './types';
+import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, GroupDocTypes, LCP } from './types';
 import { processGroups, processRealData, sortGroups } from './utils';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
@@ -52,7 +53,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
   const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
   const classes = useStyles();
-  const { setValues, values: formValues } = useFormikContext();
+  const { setValues, values: formValues } = useFormikContext<GeneralSettings>();
 
   const fetchLCPDocTypesAsync = useAsync({
     onSuccess: (data: GroupDocTypes[] = []) => {
@@ -84,7 +85,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   });
 
   useEffect(() => {
-    const data = processRealData(formValues?.lifecyclePhases?.categories as unknown as LCPResponse[]);
+    const data = processRealData(formValues?.lifecyclePhases?.categories);
     updateStateGridData(data.phases);
     updateSettingsObj(data.phases);
     setSelectedPartGroups(data.groups);
@@ -151,7 +152,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       return { ...pick(item, REQUEST_PAYLOAD_KEYS) };
     });
     if (formValues) {
-      formValues.lifecyclePhasesProcessedPayload = payload;
+      formValues.lifecyclePhasesProcessedPayload = payload as LCP[];
       setValues(formValues);
     }
   };
@@ -289,7 +290,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onConfirmDeletePhase = () => {
     const updatedData = (data ?? []).map((phase: LCP) =>
       phase.id === selectedPhase?.id
-        ? { ...phase, isActive: !selectedPhase.isActive, isUserModified: true }
+        ? { ...phase, isActive: !selectedPhase?.isActive, isUserModified: true }
         : phase,
     );
 
@@ -369,7 +370,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
     if (rowProps.dataItem.isAdd) {
       // hide other elements while adding the row
-      return null;
+      return <React.Fragment />;
     }
 
     const isGroupUpdating = editGroup === getGroupIdByCategory(rowProps.dataItem.category);

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CUSTOM_GROUP_ORDER } from './constants';
 import { CustomGroupDataItem, CustomGroupOptions, GroupDocTypes, LCP, LCPResponse, processLCPType } from './types';
 
-export const processRealData = (categoriesInfo: LCPResponse[]): processLCPType => {
+export const processRealData = (categoriesInfo?: LCPResponse[]): processLCPType => {
   let groups: GroupDocTypes[] = [];
   let phases: LCP[] = [];
   categoriesInfo?.forEach((data: LCPResponse) => {

@@ -198,8 +198,8 @@ export interface GeneralSettings {
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
-  lifecyclePhases?: {categories: LCPResponse}
-  lifecyclePhasesProcessedPayload?: LCP[]
+  lifecyclePhases?: {categories: LCPResponse[]}
+  lifecyclePhasesProcessedPayload: LCP[]
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

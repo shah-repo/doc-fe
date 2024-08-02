@@ -2,7 +2,7 @@ import { OptionType } from '../../../../../../components/forms/fields/Autocomple
 import { MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 
 export interface LCP {
-  id: string
+  id?: string
   category: string
   order?: number
   displayOrder?: number
