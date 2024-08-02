@@ -13,6 +13,7 @@ export enum GeneralSettingsTabs {
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
   Locations = 'Locations',
+  TrainingReminder = 'Training Reminder',
 }
 
 export interface GeneralSettingsProps {

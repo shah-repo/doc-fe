@@ -48,6 +48,12 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   shouldAutoUpdateLotStatus: false,
   status: AsyncStatus.Idle,
   message: '',
+  trainingReminder: {
+    customDays: { isChecked: false, value: 0 },
+    sevenDays: false,
+    trainingAssigned: false,
+    trainingOverdue: false,
+  },
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
