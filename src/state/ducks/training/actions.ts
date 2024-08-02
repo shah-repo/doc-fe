@@ -47,8 +47,19 @@ const exportTrainingRecord = (
     handlers,
   });
 
+const getTrainingRecordData = (
+  id: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/training_record/${id}`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   applyTransition,
   completeSelfTaughtTraining,
   exportTrainingRecord,
+  getTrainingRecordData,
 };
