@@ -5,16 +5,16 @@ export const EXPAND_FIELD = 'expanded';
 export const EDIT_FIELD = 'inEdit';
 export const ADD_GROUP_NAME = 'ADD';
 const PARTS_GROUP_NAME = 'PARTS';
-export const LCP_KEYS = {
-  isAllowedToBuy: 'isAllowedToBuy',
-  isApprovedSupplierEnforcedOnPO: 'isApprovedSupplierEnforcedOnPO',
-  isAllowedOnLhrProd: 'isAllowedOnLhrProd',
-  category: 'category',
-  order: 'order',
-  displayOrder: 'displayOrder',
-  internalType: 'internalType',
-  displayLabel: 'displayLabel',
-};
+export enum LCP_KEYS {
+  isAllowedToBuy = 'isAllowedToBuy',
+  isApprovedSupplierEnforcedOnPO = 'isApprovedSupplierEnforcedOnPO',
+  isAllowedOnLhrProd = 'isAllowedOnLhrProd',
+  category = 'category',
+  order = 'order',
+  displayOrder = 'displayOrder',
+  internalType = 'internalType',
+  displayLabel = 'displayLabel',
+}
 export const NO = 'NO';
 const YES = 'YES';
 const yesLabel = translate('common.true');

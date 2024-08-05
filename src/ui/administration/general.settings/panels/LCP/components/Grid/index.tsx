@@ -109,7 +109,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     return newDataState;
   };
 
-  const getColumns = () => {
+  const getColumns = (): Array<ColumnDefinition<LCP>> => {
     return columns.filter(({ isHidden }) => !isHidden) ?? [];
   };
 
@@ -245,7 +245,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     updateSettingsObj(data);
   };
 
-  const isLastGroupRow = (id: string, category: string) => {
+  const isLastGroupRow = (id: string, category: string): boolean => {
     const group = resultState?.data.find((item: CustomGroupDataItem) => item.value === category) as CustomGroupDataItem;
     const lastItem = last(group?.items ?? []) as LCP;
     return lastItem?.id === id;
