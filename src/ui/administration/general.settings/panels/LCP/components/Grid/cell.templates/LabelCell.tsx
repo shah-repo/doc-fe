@@ -11,15 +11,16 @@ import { LCP } from '../types';
 const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, onChange }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
 
-  const handleChange = (e) => {
-    const value = e.target.value;
+  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (event) => {
+    const value = event.target.value;
     if (dataItem.isAddPhase) {
       setFieldValue(field, value);
     }
+
     onChange?.({
       dataIndex,
       dataItem,
-      syntheticEvent: e.syntheticEvent,
+      syntheticEvent: event as unknown as React.SyntheticEvent,
       field,
       value,
     });
