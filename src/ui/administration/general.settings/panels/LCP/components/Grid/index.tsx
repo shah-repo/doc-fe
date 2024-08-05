@@ -33,7 +33,7 @@ import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EX
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, GroupDocTypes, LCP } from './types';
-import { processGroups, processRealData, sortGroups } from './utils';
+import { processGroups, processRealData, sortGroups, sortPhasesByDisplayOrder } from './utils';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [dataState, setDataState] = useState<State>(initialDataState);
@@ -312,13 +312,32 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     initialValues: {},
     onSubmit: (values: Partial<EditableLCP>) => {
       delete values.enlilTypeOptions;
-      const selectedEnlilInternalType = data?.filter(phase => phase.category === values.category && phase.internalType === values.internalType) ?? [{ order: 10 }];
+      const selectedEnlilInternalType = data?.filter(phase => phase.id !== values.id && phase.category === values.category && phase.internalType === values.internalType) ?? [{ order: 10 }];
       const updatedData = data?.map(phase => (phase.id === values.id) ? { ...values as EditableLCP, isAddPhase: false, order: selectedEnlilInternalType[0]?.order } : phase);
-      setPrevData(updatedData);
+      const categoryData = updatedData?.filter(phase => phase.category === values.category);
+      const sortedItems = sortPhasesByDisplayOrder(categoryData);
+
+      sortedItems.forEach((item, index) => {
+        item.displayOrder = index + 1;
+      });
+
+      const displayOrderMap = sortedItems.reduce((acc, item) => {
+        acc[item.id] = item.displayOrder;
+        return acc;
+      }, {});
+
+      const displayOrderUpdatedData = updatedData?.map(phase => ({
+        ...phase,
+        displayOrder: displayOrderMap[phase?.id] ?? phase.displayOrder,
+      }));
+
+      const sortedOrderUpdatedData = sortPhasesByDisplayOrder(displayOrderUpdatedData);
+
+      setPrevData(sortedOrderUpdatedData);
       setAddNewPhase(undefined);
-      setData(updatedData);
-      setResultState(processWithGroups(updatedData ?? [], initialDataState));
-      updateSettingsObj(updatedData);
+      setData(sortedOrderUpdatedData);
+      setResultState(processWithGroups(sortedOrderUpdatedData ?? [], initialDataState));
+      updateSettingsObj(sortedOrderUpdatedData);
     },
   });
 

@@ -1,6 +1,6 @@
-import { chain } from 'lodash';
+import { chain, orderBy } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { CUSTOM_GROUP_ORDER } from './constants';
+import { CUSTOM_GROUP_ORDER, LCP_KEYS } from './constants';
 import { CustomGroupDataItem, CustomGroupOptions, GroupDocTypes, LCP, LCPResponse, processLCPType } from './types';
 
 export const processRealData = (categoriesInfo?: LCPResponse[]): processLCPType => {
@@ -55,4 +55,8 @@ export const processGroups = (groups: GroupDocTypes[]): CustomGroupOptions[] => 
       category: group.group,
     };
   });
+};
+
+export const sortPhasesByDisplayOrder = (phases?: LCP[]): LCP[] => {
+  return orderBy(phases, [LCP_KEYS.order, LCP_KEYS.displayOrder], ['asc', 'asc']);
 };

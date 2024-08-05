@@ -12,6 +12,7 @@ import { CustomGroupDataItem, CustomGroupOptions } from '../types';
 import useStyles from './styles';
 
 type CustomGroupDataItemHandler = (groupDataItem: CustomGroupDataItem) => void;
+
 interface GroupHeaderCellProps extends GridRowProps {
   onExpandChange: CustomGroupDataItemHandler
   onEditGroup: CustomGroupDataItemHandler
@@ -54,12 +55,8 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     onGroupChange([value], groupId);
   };
 
-  const checkAllIsActiveTrue = (array) => {
-    return every(array, item => item.isActive === true);
-  };
-
   const documentTypeIdArr = dataItem.items?.[0].documentTypeIdArr;
-  const isLCPActive = checkAllIsActiveTrue(dataItem.items);
+  const isLCPActive = every(dataItem.items, item => item.isActive === true);
   const defaultValue = (partGroups?.length ? partGroups : selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
   const displayValue = defaultValue?.map(data => data.label).join(', ');
   const selectedIDs = selectedPartGroups?.map((group) => group.value);

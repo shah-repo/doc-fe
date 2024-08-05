@@ -10,6 +10,10 @@ export const LCP_KEYS = {
   isApprovedSupplierEnforcedOnPO: 'isApprovedSupplierEnforcedOnPO',
   isAllowedOnLhrProd: 'isAllowedOnLhrProd',
   category: 'category',
+  order: 'order',
+  displayOrder: 'displayOrder',
+  internalType: 'internalType',
+  displayLabel: 'displayLabel',
 };
 export const NO = 'NO';
 const YES = 'YES';
@@ -25,7 +29,7 @@ export const initialDataState = {
   skip: 0,
   group: DATA_GROUP,
 };
-export const REQUEST_PAYLOAD_KEYS = ['id', 'order', 'displayOrder', 'internalType', 'displayLabel', LCP_KEYS.isApprovedSupplierEnforcedOnPO, LCP_KEYS.isAllowedOnLhrProd, LCP_KEYS.isAllowedToBuy, 'documentTypeIdArr', 'isUserAdded', 'isUserModified', 'isActive'];
+export const REQUEST_PAYLOAD_KEYS = ['id', LCP_KEYS.order, LCP_KEYS.displayOrder, LCP_KEYS.internalType, LCP_KEYS.displayLabel, LCP_KEYS.isApprovedSupplierEnforcedOnPO, LCP_KEYS.isAllowedOnLhrProd, LCP_KEYS.isAllowedToBuy, 'documentTypeIdArr', 'isUserAdded', 'isUserModified', 'isActive'];
 export const DEFAULT_OPTIONS = [
   { label: yesLabel, value: YES },
   { label: allowWithWarningLabel, value: 'ALLOW_WITH_WARNING' },
