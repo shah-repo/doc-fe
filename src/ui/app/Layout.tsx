@@ -1,4 +1,5 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { Widget as AiWidget } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
@@ -79,6 +80,7 @@ const Layout: React.FunctionComponent = () => {
       <WatermarkFooterContainer />
       <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
+        <AiWidget />
         <Switch>
           <Route
             path={DOCUMENT_REVISION_LIST_URL}

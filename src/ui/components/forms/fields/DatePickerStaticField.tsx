@@ -1,5 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
 import moment from 'moment';
@@ -18,7 +18,7 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
-  const muiTheme = createMuiTheme({
+  const muiTheme = createTheme({
     overrides: {},
   });
 
