@@ -2,7 +2,7 @@ import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { GridRowProps } from '@progress/kendo-react-grid';
-import { every, kebabCase } from 'lodash';
+import { kebabCase } from 'lodash';
 import * as React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete, Checkbox, IconButton } from '../../../../../../../components/forms/fields-next';
@@ -56,7 +56,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   };
 
   const documentTypeIdArr = dataItem.items?.[0].documentTypeIdArr;
-  const isLCPActive = every(dataItem.items, item => item.isActive === true);
+  const isLCPActive = dataItem.items?.every(item => item.isActive === true);
   const defaultValue = (partGroups?.length ? partGroups : selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
   const displayValue = defaultValue?.map(data => data.label).join(', ');
   const selectedIDs = selectedPartGroups?.map((group) => group.value);
