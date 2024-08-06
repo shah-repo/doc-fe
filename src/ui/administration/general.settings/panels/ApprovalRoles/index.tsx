@@ -9,7 +9,7 @@ import TextCellTemplate from '../../../../administration/general.settings/compon
 import useStyles from '../../../../administration/general.settings/components/SettingsTable/styles';
 import { Checkbox } from '../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
-import { CellTemplateProps } from "../../../../components/KendoDataGrid/KendoDataGrid.types";
+import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../../../components/notifications';
 import { CompanyLocation } from '../../../../form.builder/FBLotTransfers/types';
 import useActionCreator from '../../../../hooks/useActionCreator';
