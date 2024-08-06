@@ -4,12 +4,12 @@ import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import PrintingSettingsPanel from './panels/Printing';
+import TrainingReminder from './panels/TrainingReminder';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
 import LotAutoAllocationOrder from './panels/WorkOrder/LotAutoAllocationOrder';
-import TrainingReminder from './panels/TrainingReminder';
 import { GeneralSettingsTabs } from './types';
 
-export const MAX_PANEL_WIDTH = 920;
+export const MAX_PANEL_WIDTH = 990;
 export const SIDEBAR_WIDTH = 180;
 
 export const panels = [
