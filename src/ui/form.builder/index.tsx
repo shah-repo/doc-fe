@@ -201,6 +201,7 @@ export { default as FBProcedureFormActions } from './FBProcedureForm/FBProcedure
 export { default as FBProcedureFormState } from './FBProcedureForm/FBProcedureForm.state';
 export * from './FBProcedureForm/FBProcedureForm.types';
 export { default as FBProcedureItem } from './FBProcedureItem/FBProcedureItem';
+export { default as FBProcedureItemState } from './FBProcedureItem/FBProcedureItem.state';
 export * from './FBProcedureItem/FBProcedureItem.types';
 export { default as FBProvider } from './FBProvider/FBProvider';
 export * from './FBProvider/FBProvider.types';
