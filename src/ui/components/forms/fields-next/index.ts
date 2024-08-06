@@ -3,6 +3,8 @@ export { default as Button } from './Button/Button';
 export { default as ButtonGroup } from './ButtonGroup/ButtonGroup';
 export { default as Checkbox } from './Checkbox/Checkbox';
 export { default as DatePicker } from './Datepicker/Datepicker';
+export { default as DropzoneField } from './Dropzone/Dropzone.field';
+export { default as FormControlLabel } from './FormControlLabel/FormControlLabel';
 export { default as FormField } from './FormField/FormField';
 export { default as FormikField } from './FormikField/FormikField';
 export { default as IconButton } from './IconButton/IconButton';

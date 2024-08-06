@@ -61,6 +61,9 @@ export const styles = makeStyles((theme) => ({
     color: Colors.white,
     border: `1px solid ${Colors.navy}`,
   },
+  pHCheckbox: {
+    marginTop: theme.spacing(-2.50),
+  },
 }));
 
 export const qtyLabelStyle = makeStyles({

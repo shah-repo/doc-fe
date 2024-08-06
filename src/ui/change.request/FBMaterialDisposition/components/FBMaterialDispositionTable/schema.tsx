@@ -21,13 +21,14 @@ export const buildSchema = ({
   onRowClick,
   onConfirm,
   onDiscard,
+  onDelete,
   onSelectCell,
 }: SchemaOptions): Array<ColumnDefinition<EditableMDItem>> => {
   return [
     {
       id: 'partDocId',
       field: 'partDocId',
-      title: 'approvalRequest.grid.heading.partId',
+      title: 'approvalRequest.grid.heading.itemId',
       template: (props) => <PartIdCellTemplate {...props} onClick={onRowClick} />,
       show: true,
       selectable: false,
@@ -184,6 +185,7 @@ export const buildSchema = ({
           {...props}
           onConfirm={onConfirm}
           onDiscard={onDiscard}
+          onDelete={onDelete}
         />
       ),
       width: 1,

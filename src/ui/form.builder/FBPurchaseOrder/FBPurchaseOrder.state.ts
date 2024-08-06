@@ -3,8 +3,8 @@ import { action, observable, set } from 'mobx';
 import moment from 'moment';
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 import { TAX_RATE } from '../helpers/constants';
 import { FBCurrency, FBPurchaseOrderValue } from './FBPurchaseOrder.types';
 
@@ -227,13 +227,15 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       if (!item.partNumber) {
         reduced.push({
           ...item,
-          received: this.data[item.id] ?? 0,
+          received: this.data.find(receiving => receiving.key === item.id)?.value ?? 0,
         });
         return reduced;
       }
+
+      const matchingReceived = this.data.find(receiving => receiving.key === item[receiving.keyName]);
       reduced.push({
         ...item,
-        received: this.data[item.partNumber] ?? 0,
+        received: matchingReceived?.value ?? 0,
       });
       return reduced;
     }, []);

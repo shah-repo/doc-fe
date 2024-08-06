@@ -199,6 +199,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
           serial: selectedParams.includes('serial') ? serial : '',
           expireDate: selectedItem?.formInput?.lot_expiry_date ? moment(selectedItem?.formInput?.lot_expiry_date).format('MMM DD, YYYY') : selectedItem?.formInput?.lot_expiry_date,
           printDate: selectedParams.includes('printDate') ? moment(selectedDate).format('MMM DD, YYYY') : null,
+          pH: selectedParams.includes('ph'),
           labelsToPrint: Number(selectedNumberOfLabel),
           quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: isEmpty(item.value) ? null : Number(item.value) }), {}),
           quantityUnits: selectedItem.formInput?.lot_usable_quantity_unit ?? '',

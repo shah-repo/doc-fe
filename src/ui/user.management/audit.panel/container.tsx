@@ -2,12 +2,12 @@ import { each, groupBy, map, pick, sortBy } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { User } from '../../../state/ducks/common/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { Employee } from '../../../state/ducks/company/types';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
-import { ACTION_TITLE_MAPPING, UMAuditGroupProps, UMAuditProps, UM_AUDIT_CONCAT_KEYS } from '../../../state/ducks/userManagement/types';
+import { ACTION_TITLE_MAPPING, AUDIT_FIELD_PATHS, UMAuditGroupProps, UMAuditProps, UM_AUDIT_CONCAT_KEYS } from '../../../state/ducks/userManagement/types';
 import Colors from '../../layout/theme/utils/colors';
 import AuditItemPresenter from './presenter';
 
@@ -81,7 +81,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
       auditType: ACTION_TITLE_MAPPING.Unknown,
       sortedIndex: 0,
     };
-    if (auditRecord.fieldPath === 'employees') {
+    if (auditRecord.fieldPath === AUDIT_FIELD_PATHS.EMPLOYEES) {
       const groupName = getGroupName(
         auditRecord.nextValue === 'undefined'
           ? auditRecord.previousValue
@@ -109,7 +109,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         };
       }
     } else if (
-      auditRecord.fieldPath === 'resendConfirmationEmailTimestamp'
+      auditRecord.fieldPath === AUDIT_FIELD_PATHS.RESEND_CONFIRMATION_EMAIL_TIMESTAMP
       && auditRecord.type === 'OBJECT_EDITED'
     ) {
       actionInfo = {
@@ -122,7 +122,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         sortedIndex: 0,
       };
     } else if (
-      auditRecord.fieldPath === 'resetPasswordEmailTimestamp'
+      auditRecord.fieldPath === AUDIT_FIELD_PATHS.RESET_PASSWORD_EMAIL_TIMESTAMP
       && auditRecord.type === 'OBJECT_EDITED'
     ) {
       actionInfo = {
@@ -134,7 +134,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
         auditType: ACTION_TITLE_MAPPING.ResetPassword,
         sortedIndex: 0,
       };
-    } else if (auditRecord.fieldPath === 'name') {
+    } else if (auditRecord.fieldPath === AUDIT_FIELD_PATHS.NAME) {
       if (auditRecord.type === 'STRING_EDITED') {
         actionInfo = {
           primaryText: getTranslatedText(
@@ -155,7 +155,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           sortedIndex: 4,
         };
       }
-    } else if (auditRecord.fieldPath === 'avatar') {
+    } else if (auditRecord.fieldPath === AUDIT_FIELD_PATHS.AVATAR) {
       if (auditRecord.type === 'STRING_EDITED') {
         actionInfo = {
           primaryText: '',
@@ -166,7 +166,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           sortedIndex: 4,
         };
       }
-    } else if (auditRecord.fieldPath === 'groups') {
+    } else if (auditRecord.fieldPath === AUDIT_FIELD_PATHS.GROUPS) {
       if (auditRecord.type === 'ARRAY_NEW') {
         if (auditRecord.previousValue === 'undefined') {
           actionInfo = {
@@ -190,7 +190,7 @@ const AuditItemsContainer: React.FunctionComponent<Props> = ({
           sortedIndex: 3,
         };
       }
-    } else if (auditRecord.fieldPath === 'active') {
+    } else if (auditRecord.fieldPath === AUDIT_FIELD_PATHS.ACTIVE) {
       if (auditRecord.type === 'BOOLEAN_NEW') {
         actionInfo = {
           primaryText: getTranslatedText(
