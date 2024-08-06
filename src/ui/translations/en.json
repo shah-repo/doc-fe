@@ -2082,6 +2082,8 @@
   "administration.general.settings.lcp.deactivate.message": "Are you sure you want to delete the group",
   "administration.general.settings.lcp.activate.dialog.message": "Are you sure you want to activate the Phase(s)",
   "administration.general.settings.lcp.deactivate.dialog.message": "Are you sure you want to deactivate the Phase(s)",
+  "administration.general.settings.lcp.doc.type.deactivate.dialog.message": "You are <strong>deactivating</strong> this phase\n\nAre you sure you want to continue?",
+  "administration.general.settings.lcp.phase.deactivate.dialog.message": "You are <strong>deactivating</strong> this item\n\nAre you sure you want to continue?",
   "administration.general.settings.lcp.activate.title": "Activate",
   "administration.general.settings.lcp.deactivate.title": "Deactivate",
   "administration.general.settings.integrations": "Integrations",

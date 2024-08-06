@@ -15,7 +15,7 @@ import { Permission } from '../../../../../../../state/ducks/auth/types';
 import { companyActions } from '../../../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../../../state/ducks/company/types';
 import { DOC_TYPE_GROUP } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
-import AlertDialog from '../../../../../../app/alert.dialog/AlertDialog';
+import ExpiredLOTDialog, { DialogTypes } from '../../../../../../change.request/dialogs/ExpiredLOTDialog';
 import { Button as AddButton } from '../../../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -162,15 +162,19 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const onToggleGroupActivation = (dataItem: CustomGroupDataItem) => {
-    confirmationDialog.open();
-    setSelectedGroup(dataItem);
+    if (dataItem.isLCPActive) {
+      onConfirmDeactivate(dataItem);
+    } else {
+      setSelectedGroup(dataItem);
+      confirmationDialog.open();
+    }
   };
 
   const onConfirmAlertDialog = () => {
     if (selectedPhase) {
-      onConfirmDeletePhase();
+      onConfirmDeletePhase(selectedPhase);
     } else {
-      onConfirmDeactivate();
+      onConfirmDeactivate(selectedGroup);
     }
   };
 
@@ -182,10 +186,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     }
   };
 
-  const onConfirmDeactivate = () => {
+  const onConfirmDeactivate = (selectedGroup?: CustomGroupDataItem) => {
     const updatedData = (data ?? []).map((phase: LCP) =>
       getGroupIdByCategory(phase.category) === selectedGroup?.groupId
-        ? { ...phase, isActive: selectedGroup.isLCPActive, isUserModified: true }
+        ? { ...phase, isActive: selectedGroup?.isLCPActive, isUserModified: true }
         : phase,
     );
     updateStateGridData(updatedData);
@@ -194,20 +198,11 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     confirmationDialog.close();
   };
 
-  const getActiveOrDeactiveMsgByFlag = (isActive?: boolean) => {
-    return isActive
-      ? 'administration.general.settings.lcp.deactivate.dialog.message'
-      : 'administration.general.settings.lcp.activate.dialog.message';
-  };
-
   const getDialogMessage = (): Translation => {
     if (selectedPhase) {
-      return getActiveOrDeactiveMsgByFlag(selectedPhase.isActive);
-    } else if (selectedGroup) {
-      return getActiveOrDeactiveMsgByFlag(!selectedGroup.isLCPActive);
+      return 'administration.general.settings.lcp.phase.deactivate.dialog.message';
     }
-
-    return getActiveOrDeactiveMsgByFlag(true);
+    return 'administration.general.settings.lcp.doc.type.deactivate.dialog.message';
   };
 
   const onCancelDeactivate = () => {
@@ -286,15 +281,21 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(processWithGroups(newData, initialDataState));
   };
 
-  const onDeletePhase = (dataItem: LCP) => {
-    setSelectedPhase(dataItem);
-    confirmationDialog.open();
+  const onTogglePhaseItem = (dataItem: LCP) => {
+    if (dataItem.isActive) {
+      setSelectedPhase(dataItem);
+      confirmationDialog.open();
+    } else {
+      setTimeout(() => {
+        onConfirmDeletePhase(dataItem);
+      }, 100);
+    }
   };
 
-  const onConfirmDeletePhase = () => {
+  const onConfirmDeletePhase = (selectedItem?: LCP) => {
     const updatedData = (data ?? []).map((phase: LCP) =>
-      phase.id === selectedPhase?.id
-        ? { ...phase, isActive: !selectedPhase?.isActive, isUserModified: true }
+      phase.id === selectedItem?.id
+        ? { ...phase, isActive: !selectedItem?.isActive, isUserModified: true }
         : phase,
     );
 
@@ -351,7 +352,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema({
     onConfirm: submitForm,
     onDiscard: onDiscardPhase,
-    onDeletePhase: onDeletePhase,
+    onDeletePhase: onTogglePhaseItem,
     hasEditLCPPermission,
   });
 
@@ -456,7 +457,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       group.items?.forEach((data) => {
         if (data.id === e.dataItem.id) {
           if (e.field === 'isActive') {
-            onDeletePhase(e.dataItem);
+            onTogglePhaseItem(e.dataItem);
           } else {
             data.isUserModified = true;
             data[e.field || ''] = e.value;
@@ -555,8 +556,13 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       >
         {translate('form.builder.add.item')}
       </AddButton>}
-      {confirmationDialog.isOpen && <AlertDialog
+      {confirmationDialog.isOpen && <ExpiredLOTDialog
+        type={DialogTypes.Warning}
+        title="common.warning"
+        confirmLabel="common.yes.continue"
+        cancelLabel="common.no.go.back"
         dialog={confirmationDialog}
+        isHTMLIncludedString
         confirmAction={onConfirmAlertDialog}
         cancelAction={onCancelAlertDialog}
         message={getDialogMessage()}

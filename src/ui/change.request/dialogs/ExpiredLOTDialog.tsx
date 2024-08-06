@@ -4,6 +4,7 @@ import { Box, Button, Dialog, DialogContent, DialogContentText, Grid, Typography
 import { isNil } from 'lodash';
 import React from 'react';
 import { ReactComponent as AlertIcon } from '../../../assets/images/alert.svg';
+import { translate } from '../../../common/intl';
 import Text from '../../components/Text';
 import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
@@ -18,6 +19,7 @@ interface Props {
   cancelLabel?: Translation
   type?: DialogTypes
   title?: Translation
+  isHTMLIncludedString?: boolean
 }
 
 export enum DialogTypes {
@@ -33,6 +35,7 @@ const ExpiredLOTDialog: React.FunctionComponent<Props> = ({
   cancelAction = dialog.close,
   confirmLabel = 'common.yes.im.sure',
   cancelLabel = 'common.cancel',
+  isHTMLIncludedString = false,
   type,
   title,
 }) => {
@@ -61,7 +64,8 @@ const ExpiredLOTDialog: React.FunctionComponent<Props> = ({
                     <Text translation={title || 'common.alert'} />{isAlert ? '!' : ''}
                   </Typography>
                   <Typography data-cy="dialog-message" className={classes.contentText}>
-                    <Text translation={message} />
+                    {!isHTMLIncludedString && <Text translation={message} />}
+                    {isHTMLIncludedString && <div dangerouslySetInnerHTML={{ __html: translate(message) }} />}
                   </Typography>
                 </Grid>
               </Grid>
