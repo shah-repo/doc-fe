@@ -1,5 +1,5 @@
 import { Box, LinearProgress, MenuItem, MenuList, Typography } from '@material-ui/core';
-import { kebabCase, remove } from 'lodash';
+import { kebabCase } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Button } from '../../../../components/forms/fields-next';
@@ -23,7 +23,7 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
 
   const toggleAllPanels = () => setExpanedPanels(allPanelsExpaned ? [] : panels.map(panel => panel.key));
   const togglePanel = (key: GeneralSettingsTabs) => () => setExpanedPanels(state => (
-    state.includes(key) ? remove(state, key) : [...state, key]
+    state.includes(key) ? state.filter(it => it !== key) : [...state, key]
   ));
   const jumpToPanel = (key: GeneralSettingsTabs) => () => setExpanedPanels([key]);
 
