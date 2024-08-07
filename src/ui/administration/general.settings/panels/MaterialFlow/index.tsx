@@ -13,16 +13,20 @@ import { userManagementSelectors } from '../../../../../state/ducks/userManageme
 import { AlertDialog } from '../../../../components/dialogs';
 import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import SettingsPanel from '../../components/SettingsPanel';
+import SettingsPanelSection from '../../components/SettingsPanelSection';
 import SettingsTable from '../../components/SettingsTable';
+import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
 import { EditableMaterialFlowAclRule } from './types';
 
 const PANEL_FIELD = 'materialFlowAcl';
+const STATUS_FIELD = 'materialFlowAclEnabled';
 
 const INITIAL_VALUES = {
   groups: [],
@@ -33,6 +37,7 @@ const INITIAL_VALUES = {
 const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, values } = useFormikContext<GeneralSettings>();
+  const switchProps = getFieldProps<boolean>(STATUS_FIELD);
   const rules = getFieldProps<MaterialFlowAclRule[]>(PANEL_FIELD).value;
   const locations = useSelector(companySelectors.getAllLocations) ?? [];
   const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
@@ -158,6 +163,17 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       title={translate('administration.general.settings.material.flow')}
       onAddNew={isActive ? addRule : undefined}
     >
+      <SettingsPanelSection>
+        <Text message="administration.general.settings.material.flow" />
+      </SettingsPanelSection>
+      <SwitchControl
+        {...switchProps}
+        checked={switchProps.value}
+        label={translate('administration.general.settings.material.flow.enabled')}
+      />
+      <SettingsPanelSection>
+        <Text message="administration.general.settings.material.flow.rules" />
+      </SettingsPanelSection>
       <FormikProvider value={formik}>
         <SettingsTable
           isActive={isActive}

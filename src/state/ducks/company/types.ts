@@ -199,6 +199,7 @@ export interface GeneralSettings {
   shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
   materialFlowAcl: MaterialFlowAclRule[]
+  materialFlowAclEnabled: boolean
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
