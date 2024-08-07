@@ -23,7 +23,6 @@ import useActionCreator from '../../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../../hooks/useAsync';
 import useDialog from '../../../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../../../layout/theme-next';
-import { Translation } from '../../../../../../translations/types';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { AddPhase } from './cell.templates/AddPhase';
@@ -63,13 +62,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const fetchLCPPhasesAsync = useAsync({
     onSuccess: (newPhases?: LCP[]) => {
-      const documentTypeId = selectedDocType?.value ?? '';
       const category = uuidv4();
       newPhases = newPhases?.map((phase: LCP) => {
         return {
           ...phase,
           id: `${ADD_GROUP_NAME}${uuidv4()}`,
-          documentTypeId,
+          documentTypeId: selectedDocType?.value ?? '',
           group: selectedDocType?.category,
           category,
           [EDIT_FIELD]: true,
@@ -195,13 +193,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     updateSettingsObj(updatedData);
     setSelectedGroup(undefined);
     confirmationDialog.close();
-  };
-
-  const getDialogMessage = (): Translation => {
-    if (selectedPhase) {
-      return 'administration.general.settings.lcp.phase.deactivate.dialog.message';
-    }
-    return 'administration.general.settings.lcp.doc.type.deactivate.dialog.message';
   };
 
   const onCancelDeactivatePhases = () => {
@@ -552,20 +543,31 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       >
         {translate('form.builder.add.item')}
       </AddButton>}
-      {confirmationDialog.isOpen && <AlertDialog
-        handler={confirmationDialog}
-        onConfirm={onConfirmAlertDialog}
-        onCancel={onCancelAlertDialog}
-        title="common.warning"
-        confirmLabel="common.yes.continue"
-        cancelLabel="common.no.go.back"
-        warning={true}
-      >
-        <Typography data-cy="dialog-message">
-          <div dangerouslySetInnerHTML={{ __html: translate(translate(getDialogMessage())) }} />
-        </Typography>
-      </AlertDialog>}
-
+      {confirmationDialog.isOpen && (
+        <AlertDialog
+          handler={confirmationDialog}
+          onConfirm={onConfirmAlertDialog}
+          onCancel={onCancelAlertDialog}
+          title="common.warning"
+          confirmLabel="common.yes.continue"
+          cancelLabel="common.no.go.back"
+          warning
+        >
+          <Typography data-cy="lcp-dialog-message">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: translate(
+                  translate(
+                    selectedPhase
+                      ? 'administration.general.settings.lcp.phase.deactivate.dialog.message'
+                      : 'administration.general.settings.lcp.doc.type.deactivate.dialog.message',
+                  ),
+                ),
+              }}
+            />
+          </Typography>
+        </AlertDialog>
+      )}
     </Grid>
   </SettingsPanel>;
 };
