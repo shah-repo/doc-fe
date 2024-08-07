@@ -46,6 +46,8 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   },
   approvalRequestAdmin: false,
   shouldAutoUpdateLotStatus: false,
+  lifecyclePhases: { categories: [] },
+  lifecyclePhasesProcessedPayload: [],
   status: AsyncStatus.Idle,
   message: '',
   trainingReminder: {

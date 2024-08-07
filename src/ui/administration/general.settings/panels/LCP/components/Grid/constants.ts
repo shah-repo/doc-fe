@@ -1,0 +1,42 @@
+import { translate } from '../../../../../../../common/intl';
+
+export const DATA_ITEM_KEY = 'id';
+export const EXPAND_FIELD = 'expanded';
+export const EDIT_FIELD = 'inEdit';
+export const ADD_GROUP_NAME = 'ADD';
+const PARTS_GROUP_NAME = 'PARTS';
+export enum LCP_KEYS {
+  isAllowedToBuy = 'isAllowedToBuy',
+  isApprovedSupplierEnforcedOnPO = 'isApprovedSupplierEnforcedOnPO',
+  isAllowedOnLhrProd = 'isAllowedOnLhrProd',
+  category = 'category',
+  order = 'order',
+  displayOrder = 'displayOrder',
+  internalType = 'internalType',
+  displayLabel = 'displayLabel',
+}
+export const NO = 'NO';
+const YES = 'YES';
+const yesLabel = translate('common.true');
+const noLabel = translate('common.false');
+const allowWithWarningLabel = translate('administration.general.settings.lcp.options.allow.with.warning');
+export const ADD_GROUP_ID = `${ADD_GROUP_NAME}${LCP_KEYS.category}`;
+export const PARTS_GROUP_ID = `${PARTS_GROUP_NAME}${LCP_KEYS.category}`;
+export const DATA_GROUP = [{ field: LCP_KEYS.category }];
+export const CUSTOM_GROUP_ORDER = [ADD_GROUP_NAME, PARTS_GROUP_NAME];
+export const initialDataState = {
+  take: 1000,
+  skip: 0,
+  group: DATA_GROUP,
+};
+export const REQUEST_PAYLOAD_KEYS = ['id', LCP_KEYS.order, LCP_KEYS.displayOrder, LCP_KEYS.internalType, LCP_KEYS.displayLabel, LCP_KEYS.isApprovedSupplierEnforcedOnPO, LCP_KEYS.isAllowedOnLhrProd, LCP_KEYS.isAllowedToBuy, 'documentTypeIdArr', 'isUserAdded', 'isUserModified', 'isActive'];
+export const DEFAULT_OPTIONS = [
+  { label: yesLabel, value: YES },
+  { label: allowWithWarningLabel, value: 'ALLOW_WITH_WARNING' },
+  { label: noLabel, value: NO },
+];
+
+export const PART_PURCHASE_OPTIONS = [
+  { label: yesLabel, value: YES },
+  { label: noLabel, value: NO },
+];

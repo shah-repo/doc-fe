@@ -11,11 +11,11 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FormContext } from '../components/forms/FormContext';
 import { compareValuesToSubmit } from '../components/forms/helpers';
 import { FBDAMFields } from '../form.builder';
+import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
-import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -35,6 +35,7 @@ interface Props {
   canChangeOwnerShip?: boolean
   isNewVersion?: boolean
   isSliderView?: boolean
+  inDialog?: boolean
 }
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContextFromCR = React.createContext<DocumentRevisionStatus | undefined>(undefined);
@@ -46,6 +47,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   isNewVersion,
   isSliderView,
+  inDialog,
 }) => {
   const dispatch = useDispatch();
   const redlineActive = useSelector(companySelectors.getRedlineActive);
@@ -86,7 +88,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   }, []);
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator)) && !isPOEditState && !documentRevision?.isBeingEditedAfterRelease) {
     return (
-      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip, isSliderView }} />
+      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip, isSliderView, inDialog }} />
     );
   }
 
@@ -195,6 +197,12 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       return handleSave(redlineDataToSubmit as DocumentRevisionEditRequestBody, helpers);
     }
 
+    const lifecyclePhaseDataToSubmit = pick(values, 'lifecyclePhaseId');
+
+    if (isEmpty(dataToSubmit) && lifecyclePhaseDataToSubmit) {
+      return handleSave(lifecyclePhaseDataToSubmit as DocumentRevisionEditRequestBody, helpers);
+    }
+
     if (isEmpty(dataToSubmit)) {
       helpers.setSubmitting(false);
       return;
@@ -232,6 +240,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         showRevisionTypeChange
         isNewVersion={isNewVersion}
         isSliderView={isSliderView}
+        inDialog={inDialog}
       />
     </FormContext.Provider>
   );
