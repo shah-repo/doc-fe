@@ -9,7 +9,7 @@ export const processRealData = (categoriesInfo?: LCPResponse[]): processLCPType 
   categoriesInfo?.forEach((data: LCPResponse) => {
     const docTypes = data.docTypes;
     groups = groups.concat(docTypes);
-    const documentTypeId = docTypes?.map(data => data.id);
+    const documentTypeIds = docTypes?.map(data => data.id);
     const group = docTypes?.map(data => data.group);
     const category = uuidv4();
     data.phases = chain(data.phases)
@@ -19,7 +19,7 @@ export const processRealData = (categoriesInfo?: LCPResponse[]): processLCPType 
           ...phase,
           group: group[0],
           category,
-          documentTypeId: uniq(documentTypeId).join(''),
+          documentTypeId: uniq(documentTypeIds).join(''),
         };
       }).value();
     phases = phases.concat(data.phases);
