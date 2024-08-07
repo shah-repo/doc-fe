@@ -208,6 +208,7 @@ export interface GeneralSettings {
   allocationConfig: AllocationConfig
   lifecyclePhases?: {categories: LCPResponse[]}
   lifecyclePhasesProcessedPayload: LCP[]
+  trainingReminder: TrainingReminder
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
