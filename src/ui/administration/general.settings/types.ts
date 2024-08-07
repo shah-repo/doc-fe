@@ -8,6 +8,7 @@ export enum GeneralSettingsTabs {
   APITokens = 'API Tokens',
   AR = 'Approval Requests',
   MD = 'Material Disposition',
+  LCP = 'Life Cycle Phases',
   LotAutoAllocationOrder = 'Lot Auto-allocation Order',
   ExpiredLots = 'Expired Lots',
   Integrations = 'Intergrations',
