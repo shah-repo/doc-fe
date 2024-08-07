@@ -172,7 +172,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onConfirmAlertDialog = () => {
     if (selectedPhase) {
-      onConfirmDeletePhase(selectedPhase);
+      onConfirmDeactivatePhase(selectedPhase);
     } else {
       onConfirmDeactivate(selectedGroup);
     }
@@ -180,9 +180,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onCancelAlertDialog = () => {
     if (selectedPhase) {
-      onCancelDeletePhase();
+      onCancelDeactivatePhase();
     } else {
-      onCancelDeactivate();
+      onCancelDeactivatePhases();
     }
   };
 
@@ -205,7 +205,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     return 'administration.general.settings.lcp.doc.type.deactivate.dialog.message';
   };
 
-  const onCancelDeactivate = () => {
+  const onCancelDeactivatePhases = () => {
     onDiscardGroup();
     confirmationDialog.close();
     setSelectedGroup(undefined);
@@ -287,12 +287,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       confirmationDialog.open();
     } else {
       setTimeout(() => {
-        onConfirmDeletePhase(dataItem);
+        onConfirmDeactivatePhase(dataItem);
       }, 100);
     }
   };
 
-  const onConfirmDeletePhase = (selectedItem?: LCP) => {
+  const onConfirmDeactivatePhase = (selectedItem?: LCP) => {
     const updatedData = (data ?? []).map((phase: LCP) =>
       phase.id === selectedItem?.id
         ? { ...phase, isActive: !selectedItem?.isActive, isUserModified: true }
@@ -301,10 +301,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
     updateStateGridData(updatedData);
     updateSettingsObj(updatedData);
-    onCancelDeletePhase();
+    onCancelDeactivatePhase();
   };
 
-  const onCancelDeletePhase = () => {
+  const onCancelDeactivatePhase = () => {
     confirmationDialog.close();
     setSelectedPhase(undefined);
   };
@@ -352,7 +352,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema({
     onConfirm: submitForm,
     onDiscard: onDiscardPhase,
-    onDeletePhase: onTogglePhaseItem,
     hasEditLCPPermission,
   });
 
@@ -456,7 +455,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
       group.items?.forEach((data) => {
         if (data.id === e.dataItem.id) {
-          if (e.field === 'isActive') {
+          if (e.field === LCP_KEYS.isActive) {
             onTogglePhaseItem(e.dataItem);
           } else {
             data.isUserModified = true;

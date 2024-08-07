@@ -11,10 +11,6 @@ import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid
 import { EDIT_FIELD } from '../constants';
 import { LCP } from '../types';
 
-interface EnlilTypeCellProps extends CellTemplateProps<LCP> {
-  onDeletePhase: (dataItem: LCP) => void
-}
-
 const Editor: React.FC<CellTemplateProps<LCP>> = ({
   dataItem,
   dataIndex,
@@ -50,7 +46,7 @@ const Editor: React.FC<CellTemplateProps<LCP>> = ({
   );
 };
 
-export const EnlilTypeCell: React.FC<EnlilTypeCellProps> = (props) => {
+export const EnlilTypeCell: React.FC<CellTemplateProps<LCP>> = (props) => {
   const { field, dataItem, onClick, colSpan, style, className } = props;
   const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
   const handleClick = () => onClick?.({ dataItem });

@@ -68,7 +68,5 @@ export interface processLCPType {
 export interface SchemaOptions {
   onConfirm: () => void
   onDiscard: () => void
-  onDelete?: () => void
-  onDeletePhase: (dataItem: LCP) => void
   hasEditLCPPermission?: boolean
 }
