@@ -48,6 +48,8 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   materialFlowAclEnabled: false,
   approvalRequestAdmin: false,
   shouldAutoUpdateLotStatus: false,
+  lifecyclePhases: { categories: [] },
+  lifecyclePhasesProcessedPayload: [],
   status: AsyncStatus.Idle,
   message: '',
 };

@@ -2,6 +2,7 @@ import ApprovalRequestsSettingsPanel from './panels/ApprovalRequest';
 import CompanyLocationSettingsPanel from './panels/CompanyLocations';
 import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
+import LCPSettings from './panels/LCP';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
@@ -46,6 +47,11 @@ export const panels = [
     key: GeneralSettingsTabs.MaterialFlow,
     title: 'administration.general.settings.material.flow',
     component: MaterialFlowSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.LCP,
+    title: 'administration.general.settings.lcp',
+    component: LCPSettings,
   },
   {
     key: GeneralSettingsTabs.Integrations,

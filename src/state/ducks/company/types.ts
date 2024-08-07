@@ -1,3 +1,4 @@
+import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
 import { GroupTag, Permission } from '../auth/types';
@@ -198,6 +199,8 @@ export interface GeneralSettings {
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
+  lifecyclePhases?: {categories: LCPResponse[]}
+  lifecyclePhasesProcessedPayload: LCP[]
   materialFlowAcl: MaterialFlowAclRule[]
   materialFlowAclEnabled: boolean
 }
