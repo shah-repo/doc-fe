@@ -25,7 +25,6 @@ import {
   FBPOReceiveState,
   FBProcedureDiffState,
   FBProcedureFormState,
-  FBProcedureItemState,
   FBProcedureState,
   FBPurchaseOrderState,
   FBSchemaState,
@@ -67,7 +66,6 @@ export interface FBProviderProps {
   textEditorOptionsState?: FBTextEditorOptionsState
   procedureState?: FBProcedureState
   procedureFormState?: FBProcedureFormState
-  procedureItemState?: FBProcedureItemState
   procedureDiffState?: FBProcedureDiffState
   partsState?: FBPartsState
   eqMaintenanceState?: FBEQMaintenanceState
