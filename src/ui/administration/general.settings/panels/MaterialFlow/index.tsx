@@ -3,6 +3,8 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
+import { getHasPermission } from '../../../../../common/utils/selectors';
+import { Permission } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
 import { materialFlowAction } from '../../../../../state/ducks/materialFlowAcl';
@@ -45,7 +47,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const deleteRuleAction = useActionCreator(materialFlowAction.deleteRule);
   const dispatch = useDispatch();
   const deleteConfirmationDialog = useDialog();
-  const isActive = true;
+  const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
 
   const async = useAsync({
     onSuccess: () => {

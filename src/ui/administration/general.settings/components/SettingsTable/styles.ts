@@ -12,7 +12,7 @@ export default makeStyles(theme => ({
         '& td': {
           padding: theme.spacing(0.5, 1.5),
 
-          '& .Mui-error': {
+          '& .Mui-required.Mui-error': {
             marginTop: theme.spacing(0.25),
           },
         },

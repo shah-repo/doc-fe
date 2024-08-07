@@ -14,10 +14,9 @@ const EMPTY_VALUE_PLACEHOLDER = '-';
 
 interface Props extends CellTemplateProps<EditableMaterialFlowAclRule> {
   options: CompanyLocation[]
-  required?: boolean
 }
 
-export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, required, onClick }) => {
+export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableMaterialFlowAclRule>();
   const classes = useStyles();
@@ -31,10 +30,7 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
 
   if (isEditMode && !isEmpty(values)) {
     return (
-      <FormikField
-        name={field}
-        required={required}
-      >
+      <FormikField name={field}>
         <Autocomplete
           {...getFieldProps(field)}
           blurOnSelect

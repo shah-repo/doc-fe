@@ -79,6 +79,16 @@ export const useOnHandQuantity = (): UseOnHandQuantityType => {
   };
 };
 
+const checkRuleLocations = (rule: MaterialFlowAclRule, field: 'from' | 'to', set: Set<string>, locations: CompanyLocation[]) => {
+  if (rule[field]) {
+    set.add(rule[field]);
+  } else {
+    locations.forEach((option) => {
+      set.add(option.id);
+    });
+  }
+};
+
 const getAllowedTransferOptions = (
   rules: MaterialFlowAclRule[],
   locations: CompanyLocation[],
@@ -89,7 +99,7 @@ const getAllowedTransferOptions = (
   const allowedFromLocations = new Set<string>();
   const allowedToLocations = new Set<string>();
   const allowedRules = rules.filter(
-    rule => rule.groups.some(group => groups.some(it => it.id === group.id)),
+    rule => rule.groups.length === 0 && rule.groups.some(group => groups.some(it => it.id === group.id)),
   );
 
   ['type', 'from', 'to'].forEach(field => {
@@ -101,17 +111,8 @@ const getAllowedTransferOptions = (
       if (field === 'type') {
         allowedActions.add(rule.action);
       }
-      if (field === 'from') {
-        allowedFromLocations.add(rule.from);
-      }
-      if (field === 'to') {
-        if (rule.to) {
-          allowedToLocations.add(rule.to);
-        } else {
-          locations.forEach((option) => {
-            allowedToLocations.add(option.id);
-          });
-        }
+      if (field === 'from' || field === 'to') {
+        checkRuleLocations(rule, field, field === 'from' ? allowedFromLocations : allowedToLocations, locations);
       }
     });
   });

@@ -31,10 +31,7 @@ const GroupsCellTemplate: React.FC<Props> = ({
 
   if (isEditMode) {
     return (
-      <FormikField
-        name={field}
-        required
-      >
+      <FormikField name={field}>
         <Autocomplete
           {...getFieldProps(field)}
           blurOnSelect

@@ -47,7 +47,6 @@ export const buildSchema: SchemaBuilder<EditableMaterialFlowAclRule, SchemaOptio
       <LocationCellTemplate
         {...props}
         options={locations}
-        required
       />
     ),
   },
