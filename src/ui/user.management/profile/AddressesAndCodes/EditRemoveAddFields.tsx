@@ -5,10 +5,10 @@ import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import { ReactComponent as CloseIcon } from '../../../../assets/images/close_delete.svg';
 import { AsyncState } from '../../../../state/types';
+import Text from '../../../components/Text';
 import { FormContext } from '../../../components/forms/FormContext';
 import FormMessage from '../../../components/forms/FormMessage';
 import FormProgress from '../../../components/forms/FormProgress';
-import Text from '../../../components/Text';
 import { Translation } from '../../../translations/types';
 import styles from './EditRemoveAddFields.styles';
 
@@ -137,7 +137,7 @@ const EditRemoveAddFields: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Box>
+    <Box className={classes.fieldMargin}>
       <Box display="inline-flex" >
         <Typography variant="h6" className={classes.title}>
           <Text message={title} />

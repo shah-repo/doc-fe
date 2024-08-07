@@ -3,7 +3,6 @@ import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { FB } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
@@ -12,18 +11,14 @@ import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import {
-  Mode,
-  MODE_FIELD,
+  Mode, MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
-import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import {
-  DocType,
-  EMPTY_PLACEHOLDER,
-  LHR_SUMARY_FIELDS,
+  DocType, LHR_SUMARY_FIELDS,
   LIMIT,
   MIN_SEARCH_TERM_LENGTH,
 } from '../../constants';
@@ -32,7 +27,7 @@ import {
   EditableLHRSummaryItem,
   LHRSummaryOptionsResponse,
 } from '../../types';
-import { getDisplayDocument } from '../../utils';
+import { PreviewDoc } from './PreviewDoc';
 import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({
@@ -137,9 +132,14 @@ const Editor: React.FC<CustomTemplateProps> = ({
     if (!inputVal && inputValue) {
       setFieldValue(LHR_SUMARY_FIELDS.plannedId, '');
     }
+
+    if (inputValue === inputVal && !isEmpty(inputVal)) {
+      return;
+    }
+
     setInputValue(inputVal);
 
-    if (!isOpen) {
+    if (fetchOptionsDataAsync.isLoading) {
       return;
     }
 
@@ -216,9 +216,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   };
 
   useEffect(() => {
-    if (isUpdateAction) {
-      return;
-    } else {
+    if (!isUpdateAction) {
       setInputValue('');
       setFieldValue(LHR_SUMARY_FIELDS.plannedId, '');
     }
@@ -282,27 +280,13 @@ const Editor: React.FC<CustomTemplateProps> = ({
 };
 
 export const PlannedIDCell: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem } = props;
+  const { dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.plannedDetails ?? {};
-  const classes = styles();
+  const detailsObj = dataItem?.plannedDetails;
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  if (documentId) {
-    return (
-      <Link
-        to={documentVersionPath(value, documentId)}
-        target="_blank"
-        data-cy="planned-id-cell"
-        className={classes.link}
-      >
-        {getDisplayDocument(docId, displayRevision)}
-      </Link>
-    );
-  }
-
-  return <>{value || EMPTY_PLACEHOLDER}</>;
+  return <PreviewDoc detailsObj= {detailsObj} isRevRemoved={detailsObj?.isRevRemoved} field={LHR_SUMARY_FIELDS.plannedId} dataItem={dataItem} onClick={onClick} />;
 };

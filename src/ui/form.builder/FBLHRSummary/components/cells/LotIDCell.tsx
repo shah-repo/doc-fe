@@ -1,36 +1,36 @@
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
-import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode,
-  MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
-import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { EMPTY_PLACEHOLDER, LHR_SUMARY_FIELDS } from '../../constants';
+import { FB } from '../../../helpers';
+import { LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
-import { getDisplayDocument } from '../../utils';
-import { styles } from './styles';
+import { PreviewDoc } from './PreviewDoc';
 
 interface CustomOptionType extends OptionType {
   lotStatus: string
   expiryDate: string
+  documentId?: string
 }
 
 const Editor: React.FC<CustomTemplateProps> = (props) => {
   const { values, setFieldValue, getFieldProps, setValues }
     = useFormikContext<EditableLHRSummaryItem>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
+  const [inputValue, setInputValue] = React.useState('');
   const fetchLotsByPartId = useActionCreator(
     lhrSummaryActions.fetchLotsByPartId,
   );
@@ -43,7 +43,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
   });
 
   useEffect(() => {
-    if (isEmpty(actualId)) {
+    if (!FB.isUUID(actualId)) {
       return;
     }
 
@@ -65,7 +65,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
 
   const renderOptions = (): CustomOptionType[] => {
     return lots.map((lot) => ({
-      label: translate('wo.displayRevision', {
+      label: translate('lhr.summary.displayRevision', {
         docId: lot.document.docId,
         displayRevision: lot?.displayRevision,
         name: lot?.name,
@@ -73,13 +73,15 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
       lotStatus: lot?.lotStatus,
       expiryDate: lot?.formInput?.lot_expiry_date,
       value: lot.id,
+      documentId: lot?.documentId,
     }));
   };
 
   const defaultValue = values[LHR_SUMARY_FIELDS.lotOrEquipment] ?? '';
-  const value = renderOptions().find(
-    (option) => option.value === defaultValue,
-  ) ?? { label: defaultValue, value: defaultValue };
+  const documentId = values?.lotOrEquipmentDetails?.documentId ?? '';
+  const value = FB.isUUID(defaultValue) ? renderOptions().find(
+    (option) => option.value === defaultValue || option?.documentId === documentId,
+  ) : { label: defaultValue, value: defaultValue };
 
   const onInputChange = (
     event: React.ChangeEvent<{}>,
@@ -87,6 +89,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
     reason: string,
   ) => {
     if (reason === 'input') {
+      setInputValue(value);
       setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
       setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
       setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, value);
@@ -103,6 +106,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
         freeSolo
         forcePopupIcon
         options={renderOptions()}
+        filterOptions= {(options) => options.filter(opt => opt.label.includes(inputValue))}
         onInputChange={onInputChange}
         value={value}
         getOptionLabel={(option: OptionType) => option.label}
@@ -116,26 +120,14 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
 
 export const LotIDCell: React.FC<CustomTemplateProps> = ({
   dataItem,
+  onClick,
   ...props
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.lotOrEquipmentDetails ?? {};
-  const classes = styles();
 
   if (isEditMode) {
     return <Editor {...props} {...{ dataItem }} />;
   }
 
-  if (value && documentId) {
-    return <Link
-      to={documentVersionPath(value, documentId)}
-      target="_blank"
-      data-cy="lot-id"
-      className={classes.link}
-    >
-      {getDisplayDocument(docId, displayRevision)}
-    </Link>;
-  }
-
-  return <>{value ?? EMPTY_PLACEHOLDER}</>;
+  return <PreviewDoc detailsObj= {dataItem?.lotOrEquipmentDetails} field={LHR_SUMARY_FIELDS.lotOrEquipment} dataItem={dataItem} onClick={onClick} />;
 };

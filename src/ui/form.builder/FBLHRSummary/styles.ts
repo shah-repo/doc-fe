@@ -49,6 +49,9 @@ export default makeStyles((theme) => ({
       whiteSpace: 'normal !important' as 'normal',
     },
   },
+  createdDatePaper: {
+    marginLeft: theme.spacing(-8.75),
+  },
   actionsCell: {
     overflow: 'visible !important',
     position: 'sticky',

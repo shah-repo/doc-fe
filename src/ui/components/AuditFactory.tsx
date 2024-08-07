@@ -3,6 +3,7 @@ import { get, has } from 'lodash';
 import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { SM } from '../../App';
 import { translate } from '../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
@@ -23,6 +24,7 @@ import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
 import { FBPurchaseOrderItemType } from '../form.builder';
+import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
 import AuditAutocomplete from './AuditAutocomplete';
@@ -124,31 +126,32 @@ const AuditFactory: React.FunctionComponent<Props> = ({
     }
   };
 
+  const { _documentRevisionFormState } = SM.useStores();
   if (isFBField) {
     const fbValue = {
-      texteditor() {
+      texteditor () {
         return (
           <div style={{ width: '100%', height: '100%' }} dangerouslySetInnerHTML={{ __html: auditValue as string }} />
         );
       },
-      datepicker() {
+      datepicker () {
         return (
           <Box>
             {getFormattedDateString(auditValue as string, MomentFormats.MonthDateYear)}
           </Box>
         );
       },
-      autocomplete() {
+      autocomplete () {
         return <AuditAutocomplete audit={audit} />;
       },
-      supplier() {
+      supplier () {
         if (audit.fbSchemaItem) {
           audit.fbSchemaItem.optionId = '5';
         }
         return <AuditAutocomplete audit={audit} />;
       },
-      fileupload() { return (<AuditAttachment audit={audit} />); },
-      checkboxgroup() {
+      fileupload () { return (<AuditAttachment audit={audit} />); },
+      checkboxgroup () {
         const arrayValue: string[] = [];
         try {
           arrayValue.push(JSON.parse(auditValue));
@@ -157,31 +160,31 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         }
         return (<div>{arrayValue?.join(', ')}</div>);
       },
-      procedure() {
+      procedure () {
         if (audit.field === 'fileUploadCandidate') {
           return <div data-cy={dataCy}>{get(auditValue, 'name')}</div>;
         }
         return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
       },
-      mpiprocedure() {
+      mpiprocedure () {
         return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
       },
-      lotTransfers() {
+      lotTransfers () {
         return <AuditLotTransfer {...{ audit, dataCy, auditValue }} />;
       },
-      cycleCount() {
+      cycleCount () {
         return <AuditCycleCount {...{ audit, dataCy, auditValue }} />;
       },
-      traineeList() {
+      traineeList () {
         return <AuditTraineeList {...{ audit, dataCy, auditValue }} />;
       },
-      partVendors() {
+      partVendors () {
         return <AuditPartVendors {...{ audit, dataCy, auditValue }} />;
       },
-      quantity() {
+      quantity () {
         return auditValue === 'null' ? '' : auditValue;
       },
-      default() { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
+      default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
     returnValue = (fbValue[type] || fbValue.default)();
   } else {
@@ -241,22 +244,31 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           break;
         }
       // falls through intentionally
-      case 'status':
+      case 'status': {
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
+
+        const groupOptions = _documentRevisionFormState?.documentRevision?.document.documentType?.groupOptions;
+        const isWO = checkIsDocumentWO(groupOptions);
+        let auditNextValue = audit.nextValue;
+        if (isWO) {
+          auditNextValue = (audit.nextValue === STATUS_TYPES_LABEL.APPROVED) ? STATUS_TYPES_LABEL.COMPLETED : audit.nextValue;
+        }
+
         returnValue = (
           <Text
             dataCy={dataCy}
             translation="changeRequest.audit.status.updated.by"
             values={{
-              status: <Text translation={audit.nextValue as Translation} />,
+              status: <Text translation={auditNextValue as Translation} />,
               name: audit.owner?.user.name,
             }}
           />
         );
         break;
+      }
       case 'displayStatus':
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;
@@ -623,7 +635,6 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         }
         break;
       case 'lhrSummary':
-        console.log(audit.type);
         if (audit.type.includes('ARRAY_ADDED')) {
           const nextVal: string = audit.nextValue as string;
           return getLHRSummaryRowAddedDetails(audit, nextVal, dataCy);
@@ -634,11 +645,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           const prevValue: string = audit.previousValue as string;
           try {
             const { type, step, stepOrMpiDetails } = JSON.parse(prevValue);
-            const stepRow = `${step} / ${stepOrMpiDetails?.isExternalItem ? stepOrMpiDetails.value : stepOrMpiDetails?.docId}`;
+            const stepRow = `${step} / ${getDisplayDocumentByDetailsObj(stepOrMpiDetails)}`;
 
             returnValue = (
               getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.row.deleted', {
-                stepDetails: stepRow, type,
+                stepDetails: stepRow, type: getTypeOptionLabelByValue(type),
               })
             );
           } catch (error) {
@@ -887,14 +898,15 @@ const getLHRSummaryRowAddedDetails = (audit: Audit, nextVal: string, dataCy: str
     const {
       type, step, startQuantity, endQuantity, expiryDate, calDueDate, pmDueDate, comments, lotStatus,
       stepOrMpiDetails, plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails, enteredByUserName,
+      recordCreationDate,
     } = JSON.parse(nextVal);
+
     return (
       <>
-        {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.added', { type })}
+        {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.added', { type: getTypeOptionLabelByValue(type) })}
         {startQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.startQuantity.added', { startQuantity })}
         {endQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.endQuantity.added', { endQuantity })}
         {enteredByUserName && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.enteredBy.added', { enteredByUserName })}
-
         {expiryDate && [<Text
           dataCy={dataCy}
           translation="documentRevision.audit.lhrSummary.expiryDate.added"
@@ -903,7 +915,7 @@ const getLHRSummaryRowAddedDetails = (audit: Audit, nextVal: string, dataCy: str
               <DateTime
                 data-cy={`${dataCy}-date-time`}
                 value={expiryDate}
-                format={MomentFormats.BriefDateTime}
+                format={MomentFormats.MonthDateYearTwoDigit}
               />
             ),
           }}
@@ -918,7 +930,7 @@ const getLHRSummaryRowAddedDetails = (audit: Audit, nextVal: string, dataCy: str
               <DateTime
                 data-cy={`${dataCy}-date-time`}
                 value={calDueDate}
-                format={MomentFormats.BriefDateTime}
+                format={MomentFormats.MonthDateYearTwoDigit}
               />
             ),
           }}
@@ -933,7 +945,7 @@ const getLHRSummaryRowAddedDetails = (audit: Audit, nextVal: string, dataCy: str
               <DateTime
                 data-cy={`${dataCy}-date-time`}
                 value={pmDueDate}
-                format={MomentFormats.BriefDateTime}
+                format={MomentFormats.MonthDateYearTwoDigit}
               />
             ),
           }}
@@ -943,25 +955,39 @@ const getLHRSummaryRowAddedDetails = (audit: Audit, nextVal: string, dataCy: str
         {comments && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.comment.added', { comment: comments })}
         {stepOrMpiDetails && stepOrMpiDetails.value
           && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.step.added', {
-            docId: stepOrMpiDetails?.isExternalItem ? stepOrMpiDetails.value : stepOrMpiDetails?.docId, step,
+            docId: getDisplayDocumentByDetailsObj(stepOrMpiDetails), step,
           })}
         {plannedDetails && plannedDetails.value
           && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.planned.added', {
-            docId: plannedDetails?.isExternalItem ? plannedDetails.value : plannedDetails?.docId,
+            docId: getDisplayDocumentByDetailsObj(plannedDetails),
           })}
         {actualDetails && actualDetails.value
           && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.actual.added', {
-            docId: actualDetails?.isExternalItem ? actualDetails.value : actualDetails?.docId,
+            docId: getDisplayDocumentByDetailsObj(actualDetails),
           })}
         {lotOrEquipmentDetails && lotOrEquipmentDetails.value
           && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.lot.added', {
-            docId: lotOrEquipmentDetails?.isExternalItem ? lotOrEquipmentDetails.value : lotOrEquipmentDetails?.docId,
+            docId: getDisplayDocumentByDetailsObj(lotOrEquipmentDetails),
             status: lotStatus ?? 'NA',
           })}
         {issueDetails && issueDetails.value
           && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.issue.added', {
-            docId: issueDetails?.isExternalItem ? issueDetails.value : issueDetails?.docId,
+            docId: getDisplayDocumentByDetailsObj(issueDetails),
           })}
+        {recordCreationDate && [<Text
+          dataCy={dataCy}
+          translation="documentRevision.audit.lhrSummary.date.added"
+          values={{
+            timestamp: (
+              <DateTime
+                data-cy={`${dataCy}-date-time`}
+                value={recordCreationDate}
+                format={MomentFormats.MonthDateYearTwoDigit}
+              />
+            ),
+          }}
+        />,
+        <br />]}
       </>
     );
   } catch (error) {
@@ -974,11 +1000,12 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
     const {
       type, startQuantity, endQuantity, expiryDate, calDueDate, pmDueDate, comments, lotStatus,
       plannedDetails, actualDetails, lotOrEquipmentDetails, issueDetails, enteredByUserName,
+      recordCreationDate,
     } = JSON.parse(nextVal);
 
     return (
       <>
-        {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.updated', { type })}
+        {type && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.type.updated', { type: getTypeOptionLabelByValue(type) })}
         {startQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.startQuantity.updated', { startQuantity })}
         {endQuantity >= 0 && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.endQuantity.updated', { endQuantity })}
 
@@ -992,7 +1019,7 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
               <DateTime
                 data-cy={`${dataCy}-date-time`}
                 value={expiryDate}
-                format={MomentFormats.BriefDateTime}
+                format={MomentFormats.MonthDateYearTwoDigit}
               />
             ),
           }}
@@ -1007,7 +1034,7 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
               <DateTime
                 data-cy={`${dataCy}-date-time`}
                 value={calDueDate}
-                format={MomentFormats.BriefDateTime}
+                format={MomentFormats.MonthDateYearTwoDigit}
               />
             ),
           }}
@@ -1022,7 +1049,7 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
               <DateTime
                 data-cy={`${dataCy}-date-time`}
                 value={pmDueDate}
-                format={MomentFormats.BriefDateTime}
+                format={MomentFormats.MonthDateYearTwoDigit}
               />
             ),
           }}
@@ -1032,21 +1059,35 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
         {comments && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.comment.updated', { comment: comments })}
         {plannedDetails && plannedDetails.value
           && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.planned.updated', {
-            docId: plannedDetails?.isExternalItem ? plannedDetails.value : plannedDetails?.docId,
+            docId: getDisplayDocumentByDetailsObj(plannedDetails),
           })}
         {actualDetails && actualDetails.value
           && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.actual.updated', {
-            docId: actualDetails?.isExternalItem ? actualDetails.value : actualDetails?.docId,
+            docId: getDisplayDocumentByDetailsObj(actualDetails),
           })}
         {lotOrEquipmentDetails && lotOrEquipmentDetails.value
           && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.lot.updated', {
-            docId: lotOrEquipmentDetails?.isExternalItem ? lotOrEquipmentDetails.value : lotOrEquipmentDetails?.docId,
+            docId: getDisplayDocumentByDetailsObj(lotOrEquipmentDetails),
             status: lotStatus ?? 'NA',
           })}
         {issueDetails && issueDetails.value
           && getNewLineItemAuditValue(dataCy, 'documentRevision.audit.lhrSummary.issue.updated', {
-            docId: issueDetails?.isExternalItem ? issueDetails.value : issueDetails?.docId,
+            docId: getDisplayDocumentByDetailsObj(issueDetails),
           })}
+        {recordCreationDate && [<Text
+          dataCy={dataCy}
+          translation="documentRevision.audit.lhrSummary.date.added"
+          values={{
+            timestamp: (
+              <DateTime
+                data-cy={`${dataCy}-date-time`}
+                value={recordCreationDate}
+                format={MomentFormats.MonthDateYearTwoDigit}
+              />
+            ),
+          }}
+        />,
+        <br />]}
       </>
     );
   } catch (error) {

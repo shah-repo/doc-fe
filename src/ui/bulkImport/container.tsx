@@ -5,6 +5,9 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { translate } from '../../common/intl';
 import { setCurrentStep } from '../../state/ducks/bulkImport/actions';
 import { getIsLoading, getStep } from '../../state/ducks/bulkImport/selectors';
+import { Button } from '../components/forms/fields-next';
+import Text from '../components/Text';
+import { BULK_IMPORT_PROGRESS_URL } from '../constants/urls';
 import Approvals from './components/Approvals/Form';
 import ButtonActions from './components/ButtonActions';
 import ImportDetailForm from './components/ImportDetails/Form';
@@ -36,18 +39,22 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
     dispatch(setCurrentStep(0));
   };
 
+  const redirectDashboard = () => {
+    history.push(BULK_IMPORT_PROGRESS_URL);
+  };
+
   const getStepContent = () => {
     switch (activeStep) {
       case 0:
         return (
           <ImportDetailForm handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useHelp />
+            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit />
           </ImportDetailForm>
         );
       case 1:
         return (
           <UploadDataForm handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useHelp />
+            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit />
           </UploadDataForm>
         );
       case 2:
@@ -59,13 +66,13 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
       case 3:
         return (
           <UploadAttachment handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack useHelp />
+            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack />
           </UploadAttachment>
         );
       case 4:
         return (
-          <Approvals handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack useHelp />
+          <Approvals>
+            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextTranslation="bulkImport.approvals.submit" nextSubmit useBack />
           </Approvals>
         );
       default:
@@ -75,6 +82,9 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
 
   return (
     <Box className={classes.root}>
+      <Button onClick={redirectDashboard} className={classes.backToDashboard} kind="outlined" >
+        <Text translation="bulkImport.backToDashbord" />
+      </Button>
       <Steps activeStep={activeStep} steps={steps} />
       {isLoading && <Box className={classes.loadingContainer}>
         <CircularProgress color="primary" size={24} className={classes.loading} />

@@ -3,20 +3,19 @@ import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode, MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
-import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { EMPTY_PLACEHOLDER, LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
+import { LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, RecordsResponse } from '../../types';
-import { getDisplayDocument } from '../../utils';
+import { PreviewDoc } from './PreviewDoc';
 import { styles } from './styles';
 
 const Editor: React.FC<CustomTemplateProps> = ({
@@ -79,9 +78,13 @@ const Editor: React.FC<CustomTemplateProps> = ({
   });
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+    if (inputValue === inputVal && !isEmpty(inputVal)) {
+      return;
+    }
+
     setInputValue(inputVal);
 
-    if (!isOpen) {
+    if (fetchOptionsDataAsync.isLoading) {
       return;
     }
 
@@ -125,9 +128,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   };
 
   useEffect(() => {
-    if (isUpdateAction) {
-      return;
-    } else {
+    if (!isUpdateAction) {
       setInputValue('');
       setFieldValue(LHR_SUMARY_FIELDS.issue, '');
     }
@@ -198,25 +199,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
 };
 
 export const IssuesCell: React.FC<CustomTemplateProps> = (props) => {
-  const classes = styles();
-  const { dataItem } = props;
+  const { dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { docId, documentId, displayRevision, value } = dataItem?.issueDetails ?? {};
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
-  if (value && documentId) {
-    return <Link
-      to={documentVersionPath(value ?? '', documentId)}
-      target="_blank"
-      data-cy="issue-link"
-      className={classes.link}
-    >
-      {getDisplayDocument(docId, displayRevision)}
-    </Link>;
-  }
-
-  return <>{value ?? EMPTY_PLACEHOLDER}</>;
+  return <PreviewDoc detailsObj= {dataItem?.issueDetails} field={LHR_SUMARY_FIELDS.issue} dataItem={dataItem} onClick={onClick} />;
 };

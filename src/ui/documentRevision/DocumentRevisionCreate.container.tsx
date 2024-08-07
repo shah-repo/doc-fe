@@ -55,6 +55,7 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
 
   formTemplate: { outputDocumentTypes: [], schema: [] },
   securityGroups: [],
+  lifecyclePhaseId: '',
   securityEmployees: [],
   operators: [],
 });

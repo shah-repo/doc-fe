@@ -1,8 +1,8 @@
 import { Box } from '@material-ui/core';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import React from 'react';
-import { FBApproversProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBInput, FBMapWrapper, FBRequiredApprover, FBText } from '..';
+import { FBApproversProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBInput, FBMapWrapper, FBRequiredApprover } from '..';
 import Approvers from '../../change.request/summary/approvers';
+import ApprovalApprovedGroup from '../FBApprovals/ApprovalApprovedGroup';
 import { withFBApprovers } from './FBApprovers.wrap';
 
 const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
@@ -17,6 +17,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
   groups = {},
   autosave,
   changeRequestApprovals,
+  approvalApprovedGroup,
 }) => (
   <FBInput {...{ name, gutter, disabled, autosave }} type="approvers">
     <FBAutocompleteAsync
@@ -32,17 +33,25 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       {...{ loading, renderOption, defaultValue, disabled, autosave, onBlur }}
     />
     <Box display="flex" flexDirection="row" flexWrap="wrap">
-      <Box display="flex" flexWrap="wrap" >
-        <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
-          {(group: FBRequiredApprover, id) => (
-            <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5}>
-              <CheckCircleIcon
-                data-cy={`fb-approvers-${group.name}-check-${isIncluded?.(group) ? 'marked' : 'disabled'}`}
-                color={isIncluded?.(group) ? 'primary' : 'disabled'} />
-              <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
-            </Box>
-          )}
-        </FBMapWrapper>
+      <Box display="flex" flexWrap="wrap" mt={1}>
+        {approvalApprovedGroup ? (
+          approvalApprovedGroup.map((groupName: string, index: number) => (
+            <ApprovalApprovedGroup groupName={groupName} key={index} isChecked />
+          ))
+        ) : (
+          <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
+            {(group: FBRequiredApprover, id) => (
+              <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5}>
+                <ApprovalApprovedGroup
+                  groupName={group.name}
+                  key={id}
+                  isChecked={isIncluded?.(group)}
+                  dataCyPrefix="fb-approvers"
+                />
+              </Box>
+            )}
+          </FBMapWrapper>
+        )}
       </Box>
       <Box flexBasis="100%" >
         {changeRequestApprovals && changeRequestApprovals.length > 0 && (
