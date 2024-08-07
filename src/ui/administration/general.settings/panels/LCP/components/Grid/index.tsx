@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
@@ -15,7 +14,7 @@ import { Permission } from '../../../../../../../state/ducks/auth/types';
 import { companyActions } from '../../../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../../../state/ducks/company/types';
 import { DOC_TYPE_GROUP } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
-import ExpiredLOTDialog, { DialogTypes } from '../../../../../../change.request/dialogs/ExpiredLOTDialog';
+import { AlertDialog } from '../../../../../../components/dialogs';
 import { Button as AddButton } from '../../../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -555,17 +554,20 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       >
         {translate('form.builder.add.item')}
       </AddButton>}
-      {confirmationDialog.isOpen && <ExpiredLOTDialog
-        type={DialogTypes.Warning}
+      {confirmationDialog.isOpen && <AlertDialog
+        handler={confirmationDialog}
+        onConfirm={onConfirmAlertDialog}
+        onCancel={onCancelAlertDialog}
         title="common.warning"
         confirmLabel="common.yes.continue"
         cancelLabel="common.no.go.back"
-        dialog={confirmationDialog}
-        isHTMLIncludedString
-        confirmAction={onConfirmAlertDialog}
-        cancelAction={onCancelAlertDialog}
-        message={getDialogMessage()}
-      />}
+        warning={true}
+      >
+        <Typography data-cy="dialog-message">
+          <div dangerouslySetInnerHTML={{ __html: translate(translate(getDialogMessage())) }} />
+        </Typography>
+      </AlertDialog>}
+
     </Grid>
   </SettingsPanel>;
 };
