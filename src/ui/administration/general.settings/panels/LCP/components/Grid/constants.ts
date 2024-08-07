@@ -42,7 +42,7 @@ export const REQUEST_PAYLOAD_KEYS = [
   LCP_KEYS.isAllowedOnLhrProd,
   LCP_KEYS.isAllowedToBuy,
   LCP_KEYS.isActive,
-  'documentTypeIdArr',
+  'documentTypeId',
   'isUserAdded',
   'isUserModified',
 ];

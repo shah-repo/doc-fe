@@ -48,7 +48,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [selectedPartGroups, setSelectedPartGroups] = useState<CustomGroupOptions[]>([]);
   const hasEditLCPPermission = useSelector(getHasPermission(Permission.EDIT_LIFE_CYCLE));
   const confirmationDialog = useDialog();
-  const [selectedDocTypes, setSelectedDocTypes] = useState<CustomGroupOptions[]>([]);
+  const [selectedDocType, setSelectedDocType] = useState<CustomGroupOptions>();
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
   const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
   const classes = useStyles();
@@ -63,14 +63,14 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const fetchLCPPhasesAsync = useAsync({
     onSuccess: (newPhases?: LCP[]) => {
-      const selectedGroudIds = selectedDocTypes.map(data => data.value);
+      const documentTypeId = selectedDocType?.value ?? '';
       const category = uuidv4();
       newPhases = newPhases?.map((phase: LCP) => {
         return {
           ...phase,
           id: `${ADD_GROUP_NAME}${uuidv4()}`,
-          documentTypeIdArr: selectedGroudIds,
-          group: selectedDocTypes[0].category,
+          documentTypeId,
+          group: selectedDocType?.category,
           category,
           [EDIT_FIELD]: true,
           isUserAdded: false,
@@ -210,12 +210,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setSelectedGroup(undefined);
   };
 
-  const onGroupChange = (options: CustomGroupOptions[], groupId: string) => {
-    const selectedGroudIds = options.map(data => data.value);
-
+  const onGroupChange = (selectedDocType: CustomGroupOptions, groupId: string) => {
     if ([PARTS_GROUP_ID, ADD_GROUP_ID].includes(groupId)) {
       // new Add case
-      setSelectedDocTypes(options);
+      setSelectedDocType(selectedDocType);
       fetchLCPPhasesAsync.start(
         fetchLCPPhases,
         DOC_TYPE_GROUP.PART,
@@ -225,7 +223,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       // Edit case
       data?.forEach(data => {
         if (getGroupIdByCategory(data.category) === groupId) {
-          data.documentTypeIdArr = selectedGroudIds;
+          data.documentTypeId = selectedDocType.value;
         }
         return data;
       });
@@ -257,7 +255,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       category: dataItem.category,
       enlilTypeOptions,
       otherLabelOptions,
-      documentTypeIdArr: dataItem.documentTypeIdArr,
+      documentTypeId: dataItem.documentTypeId,
       internalType: '',
       displayLabel: '',
       isApprovedSupplierEnforcedOnPO: NO,
@@ -481,7 +479,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         isApprovedSupplierEnforcedOnPO: '',
         isAllowedOnLhrProd: '',
         category: ADD_GROUP_NAME,
-        documentTypeIdArr: [],
+        documentTypeId: '',
         isAllowedToBuy: '',
         [EDIT_FIELD]: true,
         isAdd: true,

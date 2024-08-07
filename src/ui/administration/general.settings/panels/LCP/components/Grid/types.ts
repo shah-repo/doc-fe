@@ -11,7 +11,7 @@ export interface LCP {
   isApprovedSupplierEnforcedOnPO: string
   isAllowedOnLhrProd: string
   isAllowedToBuy: string
-  documentTypeIdArr: string[]
+  documentTypeId: string
   isUserAdded?: boolean
   group?: string
   isUserModified?: boolean
