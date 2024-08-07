@@ -43,8 +43,7 @@ DocumentRevisionDialogProps
   });
 
   const handleOpenNewTab = () => {
-    const newDocumentRevision = documentRevision as DocumentRevision;
-    const path = documentVersionPath(newDocumentRevision?.id || '', newDocumentRevision?.document?.id || '');
+    const path = documentVersionPath((documentRevision as DocumentRevision)?.id || '', (documentRevision as DocumentRevision)?.document?.id || '');
     window.open(path);
   };
 
@@ -92,7 +91,7 @@ DocumentRevisionDialogProps
       >
         <AsyncGate
           asyncAction={loadAction}
-          startActionOnMount={!!docRevId}
+          startActionOnMount={Boolean(docRevId)}
           asyncState={loadDocumentRevisionAsyncState}
         >
           {documentRevision && (
