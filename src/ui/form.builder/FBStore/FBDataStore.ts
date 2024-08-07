@@ -11,6 +11,7 @@ class FBDataStore {
   @observable public inlineApprovals: FBInlineApprovalBody[] | Approval[] = [];
   @observable public isDraftPartsAdded = false;
   @observable public selectedSliderInfo;
+  @observable public newlyCreatedDocInfo;
   public documentTypes;
 
   @computed public get revisionChangeType () {

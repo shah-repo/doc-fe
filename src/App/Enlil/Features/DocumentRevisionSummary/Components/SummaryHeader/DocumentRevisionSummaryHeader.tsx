@@ -20,12 +20,13 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
   descriptionLabel,
   description,
   isSliderView,
+  inDialog,
 }) => (
   <Observer>
     {() => (
       <Box px={4} paddingBottom={2.5}>
         {isCRLinkVisible && documentRevision.changeRequest && <Box py={0}>
-          <ChangeRequestLink dataProp={documentRevision} isSliderView={isSliderView} />
+          <ChangeRequestLink dataProp={documentRevision} isSliderView={isSliderView} inDialog={inDialog} />
         </Box>}
         <Box paddingBottom={0}>
           {isTitleVisible && (
