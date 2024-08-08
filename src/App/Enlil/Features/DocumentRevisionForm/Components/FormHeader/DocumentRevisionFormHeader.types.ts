@@ -6,6 +6,7 @@ export type DocumentRevisionFormHeaderProps =
 & {
   isDisabledInput?: boolean
   inRestrictedEditMode?: boolean
+  inDialog?: boolean
   type?: DocumentCloneType
   documentTypeId?: string
 };

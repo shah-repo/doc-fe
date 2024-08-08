@@ -19,7 +19,7 @@ interface GroupHeaderCellProps extends GridRowProps {
   onDiscardGroup: CustomGroupDataItemHandler
   onUpdateAddOrEditGroup: CustomGroupDataItemHandler
   onToggleGroupActivation: CustomGroupDataItemHandler
-  onGroupChange: (value: CustomGroupOptions[], groupId: string) => void
+  onGroupChange: (value: CustomGroupOptions, groupId: string) => void
   partGroups: CustomGroupOptions[]
   selectedPartGroups: CustomGroupOptions[]
   hasEditLCPPermission?: boolean
@@ -52,12 +52,12 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
 
   const handleGroupChange = (e, value: CustomGroupOptions) => {
-    onGroupChange([value], groupId);
+    onGroupChange(value, groupId);
   };
 
-  const documentTypeIdArr = dataItem.items?.[0].documentTypeIdArr;
+  const documentTypeId = dataItem.items?.[0].documentTypeId;
   const isLCPActive = dataItem.items?.every(item => item.isActive === true);
-  const defaultValue = (partGroups?.length ? partGroups : selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeIdArr?.includes(groups.value));
+  const defaultValue = (partGroups?.length ? partGroups : selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeId === groups.value);
   const displayValue = defaultValue?.map(data => data.label).join(', ');
   const selectedIDs = selectedPartGroups?.map((group) => group.value);
   const options = partGroups?.filter((group) => !selectedIDs.includes(group.value));

@@ -11,7 +11,7 @@ export interface LCP {
   isApprovedSupplierEnforcedOnPO: string
   isAllowedOnLhrProd: string
   isAllowedToBuy: string
-  documentTypeIdArr: string[]
+  documentTypeId: string
   isUserAdded?: boolean
   group?: string
   isUserModified?: boolean
@@ -68,7 +68,5 @@ export interface processLCPType {
 export interface SchemaOptions {
   onConfirm: () => void
   onDiscard: () => void
-  onDelete?: () => void
-  onDeletePhase: (dataItem: LCP) => void
   hasEditLCPPermission?: boolean
 }
