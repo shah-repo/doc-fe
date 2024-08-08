@@ -163,9 +163,6 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       title={translate('administration.general.settings.material.flow')}
       onAddNew={isActive ? addRule : undefined}
     >
-      <SettingsPanelSection>
-        <Text message="administration.general.settings.material.flow" />
-      </SettingsPanelSection>
       <SwitchControl
         {...switchProps}
         checked={switchProps.value}
