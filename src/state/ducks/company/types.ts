@@ -117,6 +117,12 @@ export enum ExpiredLotTypes {
   ERROR = 'error',
 }
 
+export enum NotifyPartLCP {
+  DO_NOTHING = 'NO',
+  WARNING = 'WARN',
+  ERROR = 'ERROR',
+}
+
 export interface NavigationItem {
   label: string
   type: NavigationItemType
@@ -200,6 +206,7 @@ export interface GeneralSettings {
   allocationConfig: AllocationConfig
   lifecyclePhases?: {categories: LCPResponse[]}
   lifecyclePhasesProcessedPayload: LCP[]
+  shouldNotifyLcpMismatch: NotifyPartLCP
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
