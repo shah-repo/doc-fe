@@ -49,4 +49,18 @@ export const styles = makeStyles((theme) => ({
       textDecoration: 'underline !important',
     },
   },
+  optionWrap: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  paper: {
+    width: 238,
+  },
+  nonEnlilDocInfoIcon: {
+    height: 14,
+    width: 14,
+    cursor: 'pointer',
+    marginLeft: theme.spacing(0.625),
+  },
 }));

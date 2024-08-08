@@ -1,13 +1,16 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, Tooltip } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { isEmpty, kebabCase } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { FB, FBInputProps, FBTextField, FBWorkspaceModeOptions } from '..';
+import { useDispatch } from 'react-redux';
+import { FB, FBInputProps, FBTextField, FBTooltip, FBWorkspaceModeOptions } from '..';
 import { translate } from '../../../common/intl';
 import { allocationActions } from '../../../state/ducks/Allocation';
-import { WorkOrderTypes, WO_PART_KEY_NAME, WO_TYPE_KEY } from '../../../state/ducks/documentRevisions/documentType/types';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { WO_PART_KEY_NAME, WO_TYPE_KEY, WorkOrderTypes } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import ErrorBlock from '../../components/forms/fields/ErrorBlock';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from '../../form.builder';
@@ -18,7 +21,7 @@ import { Colors } from '../../layout/theme-next';
 import { Translation } from '../../translations/types';
 import { LatestPartRevisionInfo } from '../FBAllocation/interface';
 import FBUnitMeasures from '../FBUnitMeasures/FBUnitMeasures';
-import { PART_TO_BE_MADE } from './constants';
+import { PART_TO_BE_MADE, QUANTITY_DEFAULT_VALUE } from './constants';
 import { styles } from './styles';
 
 const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
@@ -42,11 +45,13 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   const [latestRevisionInfo, setLatestRevisionInfo] = useState<LatestPartRevisionInfo>();
   const [prevSelectedPartId, setPrevSelectedPartId] = useState<string>();
   const dialog = useDialog();
+  const dispatch = useDispatch();
   const openRevChangeDialog = () => { !props.disabled && dialog.open(); };
-  const isLatestRevisionAvailable
+  let displayInfoIcon
     = !isEmpty(partsDefaultValue)
     && !isEmpty(latestRevisionInfo)
     && partsDefaultValue?.id !== latestRevisionInfo?.id;
+  const isLatestRevisionObsoleted = latestRevisionInfo?.status === DocumentRevisionStatus.Obsolete;
 
   const fetchAvailablePartsAsync = useAsync({
     onSuccess: (data?: LatestPartRevisionInfo) => {
@@ -55,68 +60,97 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
   });
 
   const deleteAllocationAsync = useAsync({
-    onSuccess: dialog.close,
-    onError: dialog.close,
-  });
+    onSuccess: () => {
+      dialog.close();
+      const partId = partsDefaultValue?.id;
+      if (!partId) return;
 
-  useEffect(() => {
-    const partId = partsDefaultValue?.id;
-    if (partId) {
-      setPrevSelectedPartId(partId);
       fetchAvailablePartsAsync.start(
         fetchAvailablePartsAction,
         partId,
         fetchAvailablePartsAsync,
       );
-    } else if (prevSelectedPartId && !partId) {
+    },
+    onError: dialog.close,
+  });
+
+  useEffect(() => {
+    const partId = partsDefaultValue?.id;
+    if (!prevSelectedPartId && partId) {
+      fetchAvailablePartsAsync.start(
+        fetchAvailablePartsAction,
+        partId,
+        fetchAvailablePartsAsync,
+      );
+    } else if (prevSelectedPartId && (!partId || (FB.isUUID(partId) && prevSelectedPartId !== partId))) {
       deleteAllocationAsync.start(deleteAllocation,
         workspaceState?.document?.id,
         deleteAllocationAsync,
       );
     }
+
+    setPrevSelectedPartId(partId);
   }, [partsDefaultValue]);
 
   const onRevChange = async () => {
     if (latestRevisionInfo?.id) {
+      const docRevId = workspaceState?.document?.id;
       await workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
         [WO_PART_KEY_NAME]: { id: latestRevisionInfo?.id },
       });
-
-      formState?.inputState.get(WO_PART_KEY_NAME)?.setRender();
-      deleteAllocationAsync.start(
+      await deleteAllocationAsync.start(
         deleteAllocation,
-        workspaceState?.document?.id,
+        docRevId,
         deleteAllocationAsync,
       );
+      docRevId && dispatch(documentRevisionsActions.load(docRevId));
+    }
+  };
+  const isLatestRevisionInRestrictedEditMode = latestRevisionInfo?.inRestrictedEditMode;
+  let infoLabelString = 'allocation.part.replace.revision';
+
+  if (isLatestRevisionInRestrictedEditMode) {
+    displayInfoIcon = isLatestRevisionInRestrictedEditMode;
+    infoLabelString = 'allocation.part.restricted.edit';
+  } else if (isLatestRevisionObsoleted) {
+    displayInfoIcon = isLatestRevisionObsoleted;
+    infoLabelString = 'allocation.part.obsolete.revision';
+  }
+
+  const onQuanityValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const regex = /^[1-9]\d*(\.\d+)?$/;
+    if (!regex.test(e.target.value)) {
+      e.target.value = '';
     }
   };
 
   return (
     <Grid container spacing={1}>
-      {isLatestRevisionAvailable && (
+      {displayInfoIcon && (
         <Grid item xs="auto">
-          <span className={classes.defaultIcon} onClick={openRevChangeDialog}>
-            <Tooltip
+          <span className={classes.defaultIcon} onClick={isLatestRevisionObsoleted || isLatestRevisionInRestrictedEditMode ? undefined : openRevChangeDialog}>
+            <FBTooltip
               arrow
-              title={translate('allocation.part.replace.revision', {
+              title={translate(infoLabelString, {
                 revision: latestRevisionInfo?.displayRevision,
+                name: latestRevisionInfo?.name,
+                docId: latestRevisionInfo?.docId,
               })}
               placement="top-start"
-            >
-              <FontAwesomeIcon
+            ><FontAwesomeIcon
                 data-cy="new-revision-available"
-                color={Colors.primaryLight}
+                color={isLatestRevisionObsoleted ? Colors.warning : Colors.primaryLight}
                 className={classes.defaultIcon}
-                icon={solid('circle-exclamation')}
+                icon={isLatestRevisionObsoleted ? solid('triangle-exclamation') : solid('circle-exclamation')}
               />
-            </Tooltip>
+            </FBTooltip>
           </span>
         </Grid>
       )}
       <Grid
         item
-        xs={isLatestRevisionAvailable ? 5 : 6}
+        xs={displayInfoIcon ? 5 : 6}
       >
         <FBAutocompleteAsync
           {...props}
@@ -126,6 +160,15 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           optionId={FBAutocompleteAsyncOption.releasedParts}
           optionValueType="id"
           defaultValue={partsDefaultValue}
+          additionalData={latestRevisionInfo ? [{
+            ...latestRevisionInfo,
+            ...{
+              document: {
+                docId: latestRevisionInfo.docId,
+              },
+            },
+          }] : []}
+          shouldReloadOnInit
           type={type}
           disabled={props.disabled}
           withState={true}
@@ -149,11 +192,12 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           label="form.builder.wo.part.quantity"
           name={`${name}_quantity`}
           type="number"
-          defaultValue={quantityDefaultValue}
+          defaultValue={quantityDefaultValue ?? QUANTITY_DEFAULT_VALUE}
           inputProps={{ min: '1' }}
           gutter={false}
           showErrorMsg={false}
           placeholder="1"
+          onChange={onQuanityValidate}
         />
       </Grid>
       <Grid item md={3} xs={6}>

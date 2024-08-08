@@ -2,12 +2,13 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { cloneDeep, get, isEmpty, kebabCase, set } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { DEFAULT_DATA_STATE, MODE_FIELD, Mode } from '.';
+import { DEFAULT_DATA_STATE, Mode, MODE_FIELD } from '.';
 import { translate } from '../../../../../common/intl';
-import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { Button } from '../../../../components/forms/fields-next';
+import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { withThemeNext } from '../../../../layout/theme-next';
 import Actions from '../../../FBApprovalMatrixRoles/components/Actions';
+import { FB } from '../../../helpers';
 import useStyles from './styles';
 import { GridItem, GridProps } from './types';
 
@@ -31,6 +32,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
 
   const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData));
   const [activeItem, setActiveItem] = useState<GridItem<T>>();
+ const { workspaceState, formState } = FB.useStores();
 
   useEffect(
     () => {
@@ -110,6 +112,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     }
 
     onSave?.(newData);
+    workspaceState?.saveDocRev(formState?.getValues());
     setActiveItem(undefined);
   };
 

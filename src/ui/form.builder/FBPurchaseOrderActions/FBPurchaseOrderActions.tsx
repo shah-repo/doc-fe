@@ -1,9 +1,9 @@
 import { Box } from '@material-ui/core';
 import { Observer } from 'mobx-react';
 import React from 'react';
-import { FormattedNumber } from 'react-intl';
 import { FBPurchaseOrderActionsProps, FBSubmitButton } from '..';
 import AlertDialog from '../../app/alert.dialog/AlertDialog';
+import FormattedNumber from '../../components/FormattedNumber';
 import Text from '../../components/Text';
 import { StyledCancelFBButton } from '../FBButton/StyledCancelFBButton';
 import { withFBPurchaseOrderActions } from './FBPurchaseOrderActions.wrap';

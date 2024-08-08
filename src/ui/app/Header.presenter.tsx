@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
 import cx from 'classnames';
 import React from 'react';
+import { SM } from '../../App';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
 import { SearchBar } from '../../App/Enlil/Features/Search';
 import { ReactComponent as CompanyAvatar } from '../../assets/images/company_avatar.svg';
@@ -17,7 +18,6 @@ import { ThemeEnv } from '../layout/theme/utils/types';
 import styles from './Header.styles';
 import { UserMenuContext } from './NavigationProfile.container';
 import AutosaveToggle from './autosave/autosave';
-
 export interface HeaderPresenterProps {
   name: string
   fullHeight?: boolean
@@ -42,6 +42,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
   const user = store.getState().auth.user;
   const companyName = user.employee.company.name;
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
+  const isComponentHidden = SM.isHomeURL;
   const {
     handleSwitchCompany,
   } = React.useContext(UserMenuContext)! ?? {};
@@ -70,7 +71,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
           )}
         </div>
       </div>
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className={cx(classes.toolbar, { [classes.welcomeHide]: !isComponentHidden })}>
         <Grid
           container
           alignItems="center"
@@ -85,7 +86,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
           </Grid>
           <Grid item>
             {fullHeight && (
-              <Typography variant="caption" className={classes.welcomeText} component="div">
+              <Typography variant="caption" className={cx(classes.welcomeText, classes.welcomeTextResponsive)} component="div">
                 <Text translation="header.welcome.back" />,
                 {' '}
                 <b className={classes.welcomeTextName}>{name}!</b>

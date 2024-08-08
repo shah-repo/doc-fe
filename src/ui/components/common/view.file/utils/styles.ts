@@ -55,6 +55,9 @@ export const styles = makeStyles((theme: NextTheme) => ({
         marginTop: theme.spacing(1.5),
       },
     },
+    content: {
+      width: 340,
+    },
     buttonsContainer: {
       marginRight: theme.spacing(0),
     },

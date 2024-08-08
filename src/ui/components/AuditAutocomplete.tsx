@@ -20,11 +20,13 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
   const autocompleteState = FB.useRef(FBAutocompleteAsyncState);
   const { nextValue, previousValue } = audit;
   let label = '';
-  const { optionId = '', multiple = false } = audit.fbSchemaItem || {};
+  const { optionId = '', multiple: originMultiple, editorProperties } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;
   }
+
+  const multiple = originMultiple ?? editorProperties?.includes('multiple') ?? false;
 
   useObserver(() => {
     loading = FBAutocompleteAsyncStore.loading.get(optionId);
@@ -32,12 +34,22 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
 
   autocompleteState?.setOptionId(optionId);
   const data = FBAutocompleteAsyncStore.data.get(optionId);
+
   if (data) {
-    const { labelKey = 'text', labelPrefixRoot = '' }
-    = autocompleteState?.optionConfig || {};
+    const { labelKey = 'text', labelPrefixRoot = '' } = autocompleteState?.optionConfig || {};
+
+    const getRecordLabel = (recordId: string): string => {
+      const record = data.get(recordId);
+
+      if (!record) {
+        return recordId;
+      }
+
+      return `${get(record, labelPrefixRoot, '')} ${FB.stripTags(get(record, labelKey, ''))}`;
+    };
+
     if (!multiple) {
-      const record = data.get(auditValue);
-      label = get(record, labelPrefixRoot, '') + ' ' + FB.stripTags(get(record, labelKey, ''));
+      label = getRecordLabel(auditValue);
     } else {
       let arrayValue: string[] = [];
       try {
@@ -46,8 +58,7 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
         arrayValue.push(auditValue);
       }
       label = arrayValue.reduce((label, value) => {
-        const record = data.get(value);
-        label += get(record, labelPrefixRoot, '') + ' ' + FB.stripTags(get(record, labelKey, ''));
+        label += getRecordLabel(value);
         return label;
       }, '');
     }

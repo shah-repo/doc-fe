@@ -1,9 +1,9 @@
 import { action, computed, observable, set } from 'mobx';
-import { FBApprovalMatrixFieldData, FBAuditData } from '..';
+import { FBAuditData } from '..';
 import { Approval } from '../../../state/ducks/common/types';
 import { SidebarType } from '../../documentRevision/Sidebar/types';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 
 // TODO: check with Z. Babic if we can avoid global store for reload
 // needs such as audit
@@ -11,10 +11,6 @@ class FBStore {
   @observable public audit = new FBRequest<FBAuditData[], null>(FBEndpoint.DocumentRevisionAudit);
   @observable public selectedTab: SidebarType | undefined;
   @observable purchaseOrderValue;
-  public damData?: FBApprovalMatrixFieldData ={
-    approvalRoles: [],
-    approvalMatrix: [],
-  };
 
   public selectedApprover: Approval[] =[] ;
 

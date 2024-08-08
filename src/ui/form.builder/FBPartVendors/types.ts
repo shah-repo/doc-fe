@@ -29,7 +29,7 @@ export type FBPartVendorsProps =
   statuses: string[]
   suppliers: SupplierOption[]
   updateVendor: (item: Vendor) => void
-  deleteVendor: (item: Vendor) => void
+  deleteVendor: (item: Vendor, id?: string) => void
   setPrimaryVendor: (id: string) => void
 };
 

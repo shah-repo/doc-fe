@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { omit } from 'lodash';
 import { Colors } from '../../../../../../ui/layout/theme-next';
+import { NextTheme } from '../../../../../../ui/layout/theme-next/provider';
 
-export default makeStyles((theme) => ({
+export default makeStyles((theme: NextTheme) => ({
   root: {
     width: 350,
   },
@@ -53,5 +54,10 @@ export default makeStyles((theme) => ({
   },
   iconFocused: {
     color: Colors.textBlack,
+  },
+  searchBarResponsive: {
+    [theme.breakpoints.down('md')]: {
+      marginTop: theme.spacing(-2.6),
+    },
   },
 }));

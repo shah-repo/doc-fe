@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import attachments from './ducks/attachments';
 import auth from './ducks/auth';
 import { CLEAR_NON_AUTH_DATA, LOGOUT_USER } from './ducks/auth/constants';
+import bulkImport from './ducks/bulkImport';
 import changeRequests from './ducks/changeRequest';
 import company from './ducks/company';
 import dashboard from './ducks/dashboard';
@@ -15,7 +16,7 @@ import pageDetails from './ducks/pageDetails';
 import supplierSurvey from './ducks/supplierSurvey';
 import tableSearch from './ducks/tableSearch';
 import userManagement from './ducks/userManagement';
-import migrations from './migrations';
+import { authMigrations, pageDetailsMigrations, tableSearchMigrations } from './migrations';
 import { authTransform } from './transforms';
 
 const authPersistConfig = {
@@ -24,7 +25,7 @@ const authPersistConfig = {
   version: 3,
   whitelist: ['user', 'groups'],
   transforms: [authTransform],
-  migrate: createMigrate(migrations),
+  migrate: createMigrate(authMigrations),
 };
 
 const companyPersistConfig = {
@@ -42,13 +43,17 @@ const documentTypePersistConfig = {
 const tableSearchPersistConfig = {
   key: 'tableSearch',
   storage,
+  version: 3,
   whitelist: ['criteria'],
+  migrate: createMigrate(tableSearchMigrations),
 };
 
 const pageDetailsPersistConfig = {
   key: 'pageDetails',
   storage,
+  version: 1,
   whitelist: ['byCategory'],
+  migrate: createMigrate(pageDetailsMigrations),
 };
 
 const appReducer = combineReducers({
@@ -65,6 +70,7 @@ const appReducer = combineReducers({
   supplierSurvey,
   userManagement,
   pageDetails: persistReducer(pageDetailsPersistConfig, pageDetails),
+  bulkImport,
 });
 
 const rootReducer = (state: any, action: any) => {

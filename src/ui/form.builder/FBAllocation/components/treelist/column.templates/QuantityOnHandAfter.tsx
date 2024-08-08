@@ -3,8 +3,9 @@ import { useFormikContext } from 'formik';
 import { isNil } from 'lodash';
 import React from 'react';
 import { DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import { getDigitsCountAfterDecimal, toFixed } from '../../../../../dashboard.new/line.items/common/Utils';
 import { EditableAllocationItem } from '../../../interface';
-import { CELL_EMPTY_VALUE } from '../constants';
+import { CELL_EMPTY_VALUE, MAX_DECIMALS } from '../constants';
 import { getParsedFieldValue, isEditAllocItem } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
@@ -31,6 +32,12 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
     }
   }
 
+  const getEvaluatedValue = () => {
+    const digitsCountAfterDecimal = getDigitsCountAfterDecimal(dataItem.quantityOnHand ?? 0);
+    const value = (dataItem.quantityOnHand ?? 0) - (quantityNeeded ?? 0);
+    return digitsCountAfterDecimal ? value.toFixed(digitsCountAfterDecimal) : value;
+  };
+
   const renderCellValue = () => {
     if (dataItem.woStatus !== DocumentRevisionStatus.Draft) {
       if (!(dataItem.isLotAddition || dataItem.lotRevId)) {
@@ -43,7 +50,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
 
     return isNil(dataItem.quantityOnHand)
       ? CELL_EMPTY_VALUE
-      : (dataItem.quantityOnHand ?? 0) - (quantityNeeded ?? 0);
+      : getEvaluatedValue();
   };
 
   return (
@@ -60,7 +67,7 @@ const QuantityOnHandAfter: React.ComponentType<CustomTreeListCellProps> = ({
       data-cy={`${field}-cell-quantity`}
     >
       <span className={classes.Cell}>
-        {renderCellValue()}
+        {toFixed(renderCellValue(), MAX_DECIMALS)}
       </span>
     </td>
   );

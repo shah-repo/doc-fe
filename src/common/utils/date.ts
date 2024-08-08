@@ -44,6 +44,10 @@ export enum MomentFormats {
   AsyncTasksDefaultDateTimeFormatter = 'YYYY-MM-DDTHH:mm:ss z',
   YearMonthDateDotNotation = 'YYYY.MM.DD',
   YearMonthDate= 'YYYY-MM-DD',
+  FullDateTime = 'dddd, MMMM DD, YYYY hh:mm A',
 }
 
 export const toValidateIfDate = (value: moment.MomentInput) => moment(value, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
+export const validateDateFormats = (date: string, formats: string[]): boolean => {
+  return formats.some(fmt => moment(date, fmt, true).isValid());
+};

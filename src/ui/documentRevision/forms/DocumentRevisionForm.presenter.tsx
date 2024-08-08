@@ -30,6 +30,7 @@ import DocumentSecurity from './presenters/DocumentSecurity';
 import DocumentTypeSelect from './presenters/DocumentTypeSelect';
 import EquipmentSpecification from './presenters/EquipmentSpecification';
 import FBActiveNoOutput from './presenters/FBActiveNoOutput';
+import LifecyclePhaseSelect from './presenters/LifecyclePhaseSelect';
 import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from './presenters/related.equipments';
 import RelatedPartsWrapper from './presenters/related.parts/RelatedParts.wrap';
 import RetrainField from './presenters/RetrainField';
@@ -82,13 +83,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
   const intl = useIntl();
   const { workspaceState } = FB.useStores();
-  const { revisionChangeType } = values || {};
-  const documentTypeById = documentTypesById[values.document?.documentType?.id || ''];
-  const { schema = [] } = workspaceState || {};
+  const { revisionChangeType } = values ?? {};
+  const docTypeId
+    = documentRevision?.document?.documentType?.id
+      ?? values?.document?.documentType?.id
+      ?? '';
+  const documentTypeById = documentTypesById[docTypeId];
+  const { schema = [] } = workspaceState ?? {};
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [documentTypesById, values.document?.documentType?.id]);
+  , [documentTypeById?.groupOptions]);
 
   const isRecord = useMemo(() =>
     checkIsDocumentRecord(documentTypeById?.groupOptions)
@@ -302,13 +306,20 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          <Grid item xs={6}>
+          {!isPart && !documentRevision?.parentParts && (<Grid item xs={6}>
             <RetrainField
               revisionChangeType={values.revisionChangeType}
               isDisabled={isDisabledInput || inRestrictedEditMode}
               {...{ documentTypeId, isRecord }}
             />
-          </Grid></>)}
+          </Grid>)}
+          {isPart && documentRevision?.parentParts && (<Grid item xs={6}>
+            <LifecyclePhaseSelect
+              docTypeId ={docTypeId}
+              lifecyclePhaseId={documentRevision?.lifecyclePhaseId}
+              isOptionDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
+            />
+          </Grid>)}</>)}
           {isEB && (
             <Grid item xs={12}>
               <FBEBPart name="childrenParts">
@@ -352,13 +363,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             </Grid>
           )}
           {isPart && documentRevision?.parentParts && (
-            <Grid item xs={12}>
-              <BuildsContainer
-                dataProp={flatten([documentRevision?.parentParts])}
-                label="common.part.of"
-                isDraft={isDocRevStatusDraft || isRevised}
-              />
-            </Grid>
+            <>
+              <Grid item xs={6}>
+                <BuildsContainer
+                  dataProp={flatten([documentRevision?.parentParts])}
+                  label="common.part.of"
+                  isDraft={isDocRevStatusDraft || isRevised}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <RetrainField
+                  revisionChangeType={values.revisionChangeType}
+                  isDisabled={isDisabledInput || inRestrictedEditMode}
+                  {...{ documentTypeId, isRecord }}
+                />
+              </Grid>
+            </>
           )}
           {(isPart || isPartForm || isOther || isOtherForm)
             && <Grid item xs={12}>
