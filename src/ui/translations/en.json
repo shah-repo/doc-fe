@@ -1261,6 +1261,7 @@
   "form.builder.view.step": "View Step",
   "form.builder.units.ounce": "ounce",
   "form.builder.currency": "Currency: ",
+  "form.builder.CHF.to.USD": "1 CHF = {rate} USD",
   "form.builder.EUR.to.USD": "1 Euro = {rate} USD",
   "form.builder.CAD.to.USD": "1 CAD = {rate} USD",
   "form.builder.AUD.to.USD": "1 AUD = {rate} USD",
