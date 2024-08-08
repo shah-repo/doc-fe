@@ -1,7 +1,7 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, kebabCase, omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { getHasPermission } from '../../../../../common/utils/selectors';
@@ -19,7 +19,7 @@ import { buildSchema } from './schema';
 import { EditableCompanyLocation } from './types';
 
 const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
-  const { values } = useFormikContext<GeneralSettings>();
+  const { submitForm: submitSettingsForm } = useFormikContext<GeneralSettings>();
   const companyMine = useSelector(companySelectors.getCompanyMine);
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const locations = companyMine.locations;
@@ -29,11 +29,10 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const discardLocation = () => setEditedLocation(undefined);
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
-  const dispatch = useDispatch();
 
   const async = useAsync({
-    onSuccess: () => {
-      dispatch(companyActions.updateGeneralSettings(values));
+    onSuccess: async () => {
+      await submitSettingsForm();
     },
     onError: (error) => {
       setLocationsData(locations);
