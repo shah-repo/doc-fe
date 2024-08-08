@@ -178,6 +178,10 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
 
   const handleDownloadClick = () => {
     setDownloadPdfMobile(true);
+    const delay = async (ms) => await new Promise(resolve => setTimeout(resolve, ms));
+    delay(1000).then(() => {
+      setDownloadPdfMobile(false);
+    });
   };
 
   const handleDownloadClose = () => {
