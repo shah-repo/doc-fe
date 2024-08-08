@@ -7,6 +7,7 @@ import { CellTemplateProps } from '../../../../../components/KendoDataGrid/Kendo
 import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
+import { LotTransferType } from '../../../../../form.builder/FBLotTransfers/types';
 import useStyles from '../styles';
 import { EditableMaterialFlowAclRule } from '../types';
 
@@ -28,6 +29,9 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
 
   const value = (isEditMode ? values[field] : dataItem[field]) as CompanyLocation;
 
+  const isScrapAction = values.action === LotTransferType.Scrap;
+  const isDisabled = field === 'to' && isScrapAction;
+
   if (isEditMode && !isEmpty(values)) {
     return (
       <FormikField name={field}>
@@ -37,9 +41,10 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
           options={options.filter(loc => loc.active)}
           getOptionLabel={(option: CompanyLocation) => option.name}
           getOptionSelected={(option: CompanyLocation, value: CompanyLocation) => option.id === value.id}
-          value={value}
+          value={isDisabled ? null : value}
           onChange={handleChange}
           size="small"
+          disabled={isDisabled}
           classes={{
             root: classes.inputRoot,
           }}

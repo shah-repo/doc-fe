@@ -2093,7 +2093,7 @@
   "administration.general.settings.expired.lots.label": "Allow allocation of expired lots with a warning",
   "administration.general.settings.material.flow": "Material Flow",
   "administration.general.settings.material.flow.enabled": "Enforce Material Flow",
-  "administration.general.settings.material.flow.rules": "Material Flow Rules",
+  "administration.general.settings.material.flow.rules": "Rules",
   "administration.general.settings.material.flow.location.from": "From Location",
   "administration.general.settings.material.flow.location.to": "To Location",
   "administration.general.settings.material.flow.delete.confirmation": "Are you sure you want to delete this rule?",

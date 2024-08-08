@@ -9,5 +9,5 @@ export interface EditableMaterialFlowAclRule extends Omit<MaterialFlowAclRule, '
   action?: MaterialFlowAclRule['action']
   from?: CompanyLocation
   to?: CompanyLocation
-  groups?: GroupOption[]
+  groups: GroupOption[]
 }

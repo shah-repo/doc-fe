@@ -14,6 +14,7 @@ import { AlertDialog } from '../../../../components/dialogs';
 import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import { LotTransferType } from '../../../../form.builder/FBLotTransfers/types';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -74,11 +75,12 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     initialValues: INITIAL_VALUES,
     onSubmit: (values) => {
       const isAdding = values[MODE_FIELD] === Mode.add;
-      if (values.action && values.from && values.groups) {
+      const isScrapAction = values.action === LotTransferType.Scrap;
+      if (values.action) {
         const payload = ({
           action: values.action,
-          from: values.from.id,
-          to: values.to?.id ?? null,
+          from: values.from?.id ?? null,
+          to: isScrapAction ? null : values.to?.id ?? null,
           groups: values.groups.map(group => group.id),
         });
         isAdding

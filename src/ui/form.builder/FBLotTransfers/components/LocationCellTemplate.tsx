@@ -6,7 +6,7 @@ import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { CompanyLocation, CustomTemplateProps, EditableLotTransfer } from '../types';
+import { CompanyLocation, CustomTemplateProps, EditableLotTransfer, LotTransferType } from '../types';
 
 interface Props extends CustomTemplateProps {
   options: CompanyLocation[]
@@ -26,6 +26,9 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
   const defaultValue = (isEditMode ? values[field] : dataItem[field]) as string;
   const value = options.find((loc) => loc.id === defaultValue);
 
+  const isScrapAction = values.type === LotTransferType.Scrap;
+  const isDisabled = field === 'to' && isScrapAction;
+
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
@@ -38,7 +41,8 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
           blurOnSelect
           options={options.filter(loc => loc.active && (!isAclEnabled || allowedOptions.includes(loc.id)))}
           getOptionLabel={(option: CompanyLocation) => option.name}
-          value={value}
+          value={isDisabled ? null : value}
+          disabled={isDisabled}
           onChange={handleChange}
           size="small"
         />
