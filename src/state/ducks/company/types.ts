@@ -118,8 +118,8 @@ export enum ExpiredLotTypes {
 }
 
 export enum NotifyPartLCP {
-  DO_NOTHING = 'DO_NOTHING',
-  WARNING = 'WARNING',
+  DO_NOTHING = 'NO',
+  WARNING = 'WARN',
   ERROR = 'ERROR',
 }
 

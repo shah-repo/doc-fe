@@ -2,12 +2,12 @@ import { Box, List, ListItem, TextField, Typography } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
-import { ExpiredLotTypes, GeneralSettings } from '../../../../../state/ducks/company/types';
+import { ExpiredLotTypes, GeneralSettings, NotifyPartLCP } from '../../../../../state/ducks/company/types';
 import { FormControlLabel } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import SettingsPanel from '../../components/SettingsPanel';
@@ -20,13 +20,18 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
   const expiredLotsKey = 'allocationConfig.expiredLotsPrompt';
-  const partLCPKey = 'allocationConfig.notifyPartLCP';
+  const notifyPartLCPKey = 'shouldNotifyLcpMismatch';
   const hasPermission = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const isExpiredLotsAllowed = getFieldProps(expiredLotsKey).value === ExpiredLotTypes.WARNING;
   const classes = useStyles();
   const [value, setValue] = React.useState(OPTIONS[0]);
-  const defaultOption = OPTIONS[0];
-  console.log(getFieldProps(partLCPKey), getFieldProps(partLCPKey).value);
+
+  useEffect(() => {
+    const value = OPTIONS.find(opt => opt.value === getFieldProps(notifyPartLCPKey).value);
+    if (value) {
+      setValue(value);
+    }
+  }, [getFieldProps(notifyPartLCPKey)]);
 
   const handleExpiredLotChange = (event: ChangeEvent<{}>, checked: boolean) => {
     setFieldValue(expiredLotsKey, checked ? ExpiredLotTypes.WARNING : ExpiredLotTypes.ERROR);
@@ -34,7 +39,7 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
 
   const handleChange = (event: React.ChangeEvent<{}>, value: OptionType) => {
     setValue(value);
-    setFieldValue(partLCPKey, value.value);
+    setFieldValue(notifyPartLCPKey, value.value);
   };
 
   return (
@@ -54,7 +59,8 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
             className={classes.root}
             control={
               <Autocomplete
-                {...getFieldProps(partLCPKey)}
+                {...getFieldProps(notifyPartLCPKey)}
+                key={value.value}
                 className={classes.bomLCPDropdown}
                 disableClearable
                 forcePopupIcon
@@ -77,7 +83,7 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
                           startAdornment: <div>{params.InputProps.startAdornment}</div>,
                           endAdornment: (
                             <>
-                              { defaultOption === value && <span className={classes.defaultOption}>{DEFAULT_OPTION_MARKUP}</span>}
+                              { NotifyPartLCP.DO_NOTHING === value.value && <span className={classes.defaultOption}>{DEFAULT_OPTION_MARKUP}</span>}
                               {params.InputProps.endAdornment}
                             </>
                           ),
@@ -90,10 +96,10 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
                     </Box>
                   </Box>
                 )}
-                renderOption={(option) => {
-                  if (option.label === defaultOption.label) {
+                renderOption={(option: OptionType) => {
+                  if (option.value === NotifyPartLCP.DO_NOTHING) {
                     return (<>
-                      <span>{`${option.label}`}</span>
+                      <span>{option.label}</span>
                       <span className={classes.defaultOption}>&nbsp;{DEFAULT_OPTION_MARKUP}</span>
                     </>);
                   }
