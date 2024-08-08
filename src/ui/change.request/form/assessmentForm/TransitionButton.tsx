@@ -59,6 +59,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
   const [openDependentDialog, setOpenDependentDialog] = useState(false);
   const isNotifyPartLCPWarning = generalSetting.shouldNotifyLcpMismatch === NotifyPartLCP.WARNING;
   const isNotifyPartLCPError = generalSetting.shouldNotifyLcpMismatch === NotifyPartLCP.ERROR;
+
   useEffect(() => {
     const isLCPItemsMismatching = dependentOnDocRevs.itemsLifecycleMismatching > 0 && openDependentDialog;
     if ((dependentOnDocRevs.itemsPending > 0 || dependentOnDocRevs.itemsInDraft > 0 || dependentOnDocRevs.itemsInvalid > 0)
@@ -88,13 +89,17 @@ const TransitionButton: React.FunctionComponent<Props> = ({
     });
   };
 
+  const closePartLCPDialog = () => {
+    partLCPDialog.close();
+  };
+
   const lcpAsync = useAsync<ChangeRequest>({
-    onSuccess: () => partLCPDialog.close(),
+    onSuccess: closePartLCPDialog,
   });
 
   const onConfirmAlertDialog = () => {
     if (isNotifyPartLCPError) {
-      partLCPDialog.close();
+      closePartLCPDialog();
       return;
     }
 
@@ -138,7 +143,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
           <AlertDialog
             handler={partLCPDialog}
             onConfirm={onConfirmAlertDialog}
-            onCancel={() => partLCPDialog.close()}
+            onCancel={closePartLCPDialog}
             hideCancelButton={isNotifyPartLCPError}
             title={isNotifyPartLCPWarning ? 'common.warning' : 'common.alert'}
             confirmLabel={

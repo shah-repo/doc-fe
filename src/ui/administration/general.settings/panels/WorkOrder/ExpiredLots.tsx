@@ -111,9 +111,7 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
             labelPlacement="start"
             label={
               <Typography>
-                {translate(
-                  'administration.general.settings.expired.lots.dropdown.label',
-                )}
+                {translate('administration.general.settings.expired.lots.dropdown.label')}
               </Typography>
             }
           />

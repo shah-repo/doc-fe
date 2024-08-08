@@ -34,7 +34,7 @@ export default makeStyles(theme => ({
     fontSize: 14,
   },
   bomLCPDropdown: {
-    width: '186px',
+    width: 186,
   },
   bomLCPDropdownTextField: {
     '&:hover': {

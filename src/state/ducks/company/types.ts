@@ -197,7 +197,6 @@ interface EquipmentFamilySettings {
 interface AllocationConfig {
   sortOrderByReleaseDate: AllocationOrderType
   expiredLotsPrompt: ExpiredLotType
-  notifyPartLCP: NotifyPartLCP
 }
 export interface GeneralSettings {
   zebraPrint: Nullable<ZebraPrintSettings[]>

@@ -2098,7 +2098,7 @@
   "administration.general.settings.expired.lots.dropdown.option.warning": "Warning",
   "administration.general.settings.expired.lots.dropdown.option.error": "Error",
   "ccc.attribute.changes.tooltip": "All user added controls & pre-defined controls on tabs, except Supplier table.",
-  "ccc.bom.line.changes.tooltip": "This configulabelration (when 'No' is selected) allows users to edit a line item in the BOM without a new revision of the part based on the 'Select the fields that can be edited'",
+  "ccc.bom.line.changes.tooltip": "This configuration (when 'No' is selected) allows users to edit a line item in the BOM without a new revision of the part based on the 'Select the fields that can be edited'",
   "ccc.bom.selected.fields.changes.tooltip": "The selected fields can be edited in the BOM line item without a new revision of the part.",
   "ccc.approved.supplier.list.changes.tooltip": "Supplier list changes CRUD",
   "ccc.changes.to.attachments.tooltip": "Attachments changes means any additions, deletions of attachments",
