@@ -3,10 +3,10 @@ import Divider from '@material-ui/core/Divider';
 import { map, pick } from 'lodash';
 import { reaction } from 'mobx';
 import React, { useEffect } from 'react';
-import { FormattedNumber } from 'react-intl';
 import { FB, FBPurchaseOrderProps, FBText } from '..';
 import SM from '../../../App/Shifamed/Utils/SM/SM';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
+import FormattedNumber from '../../components/FormattedNumber';
 import Colors from '../../layout/theme/utils/colors';
 import FBStore from '../FBStore/FBStore';
 

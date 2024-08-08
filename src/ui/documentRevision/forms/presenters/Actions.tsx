@@ -78,7 +78,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
   // of create button until correct doc id is generated
-  const { isCreateDocumentDisabled, setDoNotPrompt, isSliderView } = props;
+  const { isCreateDocumentDisabled, setDoNotPrompt, isSliderView, inDialog } = props;
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   const printDialog = useDialog();
@@ -414,6 +414,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               owner={documentRevision?.owner}
               renderAsButton={renderAsButton}
               isSliderView={isSliderView}
+              inDialog={inDialog}
               {...{
                 isRecord,
                 documentTypeId,
