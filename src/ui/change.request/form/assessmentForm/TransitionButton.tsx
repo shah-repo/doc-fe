@@ -144,7 +144,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
             handler={partLCPDialog}
             onConfirm={onConfirmAlertDialog}
             onCancel={closePartLCPDialog}
-            hideCancelButton={isNotifyPartLCPError}
+            isCancelButtonHidden={isNotifyPartLCPError}
             title={isNotifyPartLCPWarning ? 'common.warning' : 'common.alert'}
             confirmLabel={
               isNotifyPartLCPWarning ? 'common.yes.continue' : 'common.ok'
@@ -155,13 +155,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
             warning={isNotifyPartLCPWarning}
           >
             <Typography data-cy="part-lcp-dialog-message">
-              {isNotifyPartLCPWarning ? (
-                <span>
-                  {translate('bom.ar.part.lcp.notify.warning.message')}
-                </span>
-              ) : (
-                <span>{translate('bom.ar.part.lcp.notify.alert.message')}</span>
-              )}
+              {translate(isNotifyPartLCPWarning ? 'bom.ar.part.lcp.notify.warning.message' : 'bom.ar.part.lcp.notify.alert.message')}
             </Typography>
           </AlertDialog>
         )}

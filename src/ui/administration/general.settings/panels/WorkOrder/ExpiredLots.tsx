@@ -13,33 +13,31 @@ import { OptionType } from '../../../../components/forms/fields/Autocomplete/typ
 import SettingsPanel from '../../components/SettingsPanel';
 import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
-import { DEFAULT_OPTION_MARKUP, OPTIONS } from './constants';
+import { DEFAULT_OPTION_MARKUP, EXPIRED_LOTS_KEY, NOTIFY_PART_LCP_KEY, OPTIONS } from './constants';
 import useStyles from './styles';
 
 const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
-  const expiredLotsKey = 'allocationConfig.expiredLotsPrompt';
-  const notifyPartLCPKey = 'shouldNotifyLcpMismatch';
+  const { getFieldProps, setFieldValue, values } = useFormikContext<GeneralSettings>();
   const hasPermission = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
-  const isExpiredLotsAllowed = getFieldProps(expiredLotsKey).value === ExpiredLotTypes.WARNING;
+  const isExpiredLotsAllowed = getFieldProps(EXPIRED_LOTS_KEY).value === ExpiredLotTypes.WARNING;
   const classes = useStyles();
   const [value, setValue] = React.useState(OPTIONS[0]);
 
   useEffect(() => {
-    const value = OPTIONS.find(opt => opt.value === getFieldProps(notifyPartLCPKey).value);
+    const value = OPTIONS.find(opt => opt.value === getFieldProps(NOTIFY_PART_LCP_KEY).value);
     if (value) {
       setValue(value);
     }
-  }, [getFieldProps(notifyPartLCPKey)]);
+  }, [values]);
 
   const handleExpiredLotChange = (event: ChangeEvent<{}>, checked: boolean) => {
-    setFieldValue(expiredLotsKey, checked ? ExpiredLotTypes.WARNING : ExpiredLotTypes.ERROR);
+    setFieldValue(EXPIRED_LOTS_KEY, checked ? ExpiredLotTypes.WARNING : ExpiredLotTypes.ERROR);
   };
 
   const handleChange = (event: React.ChangeEvent<{}>, value: OptionType) => {
     setValue(value);
-    setFieldValue(notifyPartLCPKey, value.value);
+    setFieldValue(NOTIFY_PART_LCP_KEY, value.value);
   };
 
   return (
@@ -59,7 +57,7 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
             className={classes.root}
             control={
               <Autocomplete
-                {...getFieldProps(notifyPartLCPKey)}
+                {...getFieldProps(NOTIFY_PART_LCP_KEY)}
                 key={value.value}
                 className={classes.bomLCPDropdown}
                 disableClearable
