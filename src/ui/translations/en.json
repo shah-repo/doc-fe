@@ -2100,6 +2100,8 @@
   "administration.general.settings.material.flow.location.from": "From Location",
   "administration.general.settings.material.flow.location.to": "To Location",
   "administration.general.settings.material.flow.delete.confirmation": "Are you sure you want to delete this rule?",
+  "administration.general.settings.system.transactions": "System Transactions Setup",
+  "administration.general.settings.system.transactions.when": "When",
   "ccc.attribute.changes.tooltip": "All user added controls & pre-defined controls on tabs, except Supplier table.",
   "ccc.bom.line.changes.tooltip": "This configuration (when 'No' is selected) allows users to edit a line item in the BOM without a new revision of the part based on the 'Select the fields that can be edited'",
   "ccc.bom.selected.fields.changes.tooltip": "The selected fields can be edited in the BOM line item without a new revision of the part.",

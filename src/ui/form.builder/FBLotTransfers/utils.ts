@@ -99,8 +99,10 @@ const getAllowedTransferOptions = (
   const allowedFromLocations = new Set<string>();
   const allowedToLocations = new Set<string>();
   const allowedRules = rules.filter(
-    rule => rule.groups.length === 0 && rule.groups.some(group => groups.some(it => it.id === group.id)),
+    rule => rule.groups.length === 0 || rule.groups.some(group => groups.some(it => it.id === group.id)),
   );
+
+  console.log(allowedRules);
 
   ['type', 'from', 'to'].forEach(field => {
     allowedRules.forEach(rule => {
@@ -115,6 +117,12 @@ const getAllowedTransferOptions = (
         checkRuleLocations(rule, field, field === 'from' ? allowedFromLocations : allowedToLocations, locations);
       }
     });
+  });
+
+  console.log({
+    type: Array.from(allowedActions),
+    from: Array.from(allowedFromLocations),
+    to: Array.from(allowedToLocations),
   });
 
   return {
