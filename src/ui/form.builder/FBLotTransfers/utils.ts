@@ -130,7 +130,7 @@ export const useAllowedLotTransferOptions = (
   const locations = useSelector(companySelectors.getAllLocations) ?? [];
   const rules = useSelector(materialFlowACLSelectors.getRules) ?? [];
   const userGroups = useSelector(authSelectors.currentUserGroups) ?? [];
-  const isAclEnabled = rules.length > 0;
+  const isAclEnabled = useSelector(materialFlowACLSelectors.getIsEnabled);
 
   if (!isAclEnabled) {
     return [false, { type: [], from: [], to: [] }];
