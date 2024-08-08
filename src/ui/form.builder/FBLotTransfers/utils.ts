@@ -99,7 +99,7 @@ const getAllowedTransferOptions = (
   const allowedFromLocations = new Set<string>();
   const allowedToLocations = new Set<string>();
   const allowedRules = rules.filter(
-    rule => rule.groups.length === 0 && rule.groups.some(group => groups.some(it => it.id === group.id)),
+    rule => rule.groups.length === 0 || rule.groups.some(group => groups.some(it => it.id === group.id)),
   );
 
   ['type', 'from', 'to'].forEach(field => {
