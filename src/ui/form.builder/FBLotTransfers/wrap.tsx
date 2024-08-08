@@ -64,14 +64,15 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
     const updateLocalTransfers = (updatedTransfers: LotTransfer[]) => setTransfers(prepareTransfers(updatedTransfers));
 
     const updateState = (updatedTransfers: LotTransfer[]) => {
+      updateLocalTransfers(updatedTransfers);
+      formState?.setFieldValue(name, updatedTransfers);
+      formState?.setFieldAutosave(name);
+
       if (disabled && isEditable) {
         _formState?.setLoading(true);
         Promise.resolve(
           workspaceState?.updateDocRevById({ formInput: { [name]: updatedTransfers } }, workspaceState?.id),
         ).then(() => {
-          updateLocalTransfers(updatedTransfers);
-          formState?.setFieldValue(name, updatedTransfers);
-          formState?.setFieldAutosave(name);
           workspaceState?.setFormInputSync(name, updatedTransfers);
           if (workspaceState?.id && FBStore?.isHistoryTabSelected) {
             dispatch(documentRevisionsActions.loadAudit(workspaceState?.id));
