@@ -2,7 +2,7 @@ import { FBTaskItem } from '../../../ui/form.builder';
 import { Attachment } from '../attachments/types';
 import { AuditActionPayload } from '../audit/types';
 import { Approval, Id, Owner, User } from '../common/types';
-import { DocumentType, DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentType } from '../documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, FBDocumentRevisionProps } from '../documentRevisions/types';
 import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET, CHANGE_REQUEST_SET_DEPENDENT_ON_DOC_REVS } from './constants';
 
@@ -164,6 +164,7 @@ export interface ChangeRequestDependentOnDocRevsState {
   itemsInDraft: 0
   itemsPending: 0
   itemsInvalid: 0
+  itemsLifecycleMismatching: number
   draftItemsMap: {[key: string]: DependedDocRevDetails[]}
   blockingItemsMap: {[key: string]: DependedDocRevDetails[]}
   itemsInvalidMap: {[key: string]: DependedDocRevDetails[]}

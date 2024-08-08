@@ -5,6 +5,8 @@ import { SM } from '../../../../App';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { changeRequestsActions, changeRequestsSelectors } from '../../../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestTransition, ChangeRequestTransitionResponse } from '../../../../state/ducks/changeRequest/types';
+import { companySelectors } from '../../../../state/ducks/company';
+import { NotifyPartLCP } from '../../../../state/ducks/company/types';
 import { AsyncStatus } from '../../../../state/types';
 import Text from '../../../components/Text';
 import FormMessage from '../../../components/forms/FormMessage';
@@ -14,6 +16,7 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import DependentOnDocRevsDialog from '../../items.and.details/DependentOnDocRevsDialog';
+import PartLCPDialog from '../../items.and.details/PartLCPDialog';
 
 interface Props {
   transition: ChangeRequestTransition
@@ -37,8 +40,16 @@ const TransitionButton: React.FunctionComponent<Props> = ({
   const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
   const { _formState } = SM.useStores();
   const dependentOnDocRevsDialog = useDialog();
+  const partLCPDialog = useDialog();
+  const generalSetting = useSelector(companySelectors.getGeneralSettings);
+  console.log({ generalSetting });
+
   const openDependentOnDocRevsDialog = () => {
     dependentOnDocRevsDialog.open();
+  };
+
+  const openPartLCPDialog = () => {
+    partLCPDialog.open();
   };
 
   const dependentOnDocRevs = useSelector(changeRequestsSelectors?.getDependentOnDocRevsState);
@@ -47,6 +58,9 @@ const TransitionButton: React.FunctionComponent<Props> = ({
     if ((dependentOnDocRevs.itemsPending > 0 || dependentOnDocRevs.itemsInDraft > 0 || dependentOnDocRevs.itemsInvalid > 0)
       && openDependentDialog) {
       openDependentOnDocRevsDialog();
+    }
+    if (generalSetting.allocationConfig.notifyPartLCP !== NotifyPartLCP.DO_NOTHING && dependentOnDocRevs.itemsLifecycleMismatching > 0 && openDependentDialog) {
+      openPartLCPDialog();
     }
   }, [dependentOnDocRevs]);
 
@@ -91,6 +105,16 @@ const TransitionButton: React.FunctionComponent<Props> = ({
         closeAction={closeDialog}
       />
         }
+        {
+        partLCPDialog?.isOpen
+      && <PartLCPDialog
+        changeRequest={changeRequest}
+        details={dependentOnDocRevs}
+        dialog={partLCPDialog}
+        closeAction={closeDialog}
+        warning={generalSetting.allocationConfig.notifyPartLCP === NotifyPartLCP.WARNING}
+      />
+        }
       </React.Fragment>
     );
   }
@@ -102,7 +126,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
       {isNewLayout ? (
         <StyledButton
           id="transitionButton"
-          data-cy="transitionButton"
+          data-cy="transition-button"
           color="primary"
           onClick={onClick}
           disabled={async.asyncState.status === AsyncStatus.Active}
@@ -113,7 +137,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
       ) : (
         <Button
           id="transitionButton"
-          data-cy="transitionButton"
+          data-cy="transition-button"
           color="secondary"
           variant="outlined"
           onClick={onClick}

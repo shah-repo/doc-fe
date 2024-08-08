@@ -117,6 +117,12 @@ export enum ExpiredLotTypes {
   ERROR = 'error',
 }
 
+export enum NotifyPartLCP {
+  DO_NOTHING = 'DO_NOTHING',
+  WARNING = 'WARNING',
+  ERROR = 'ERROR',
+}
+
 export interface NavigationItem {
   label: string
   type: NavigationItemType
@@ -191,6 +197,7 @@ interface EquipmentFamilySettings {
 interface AllocationConfig {
   sortOrderByReleaseDate: AllocationOrderType
   expiredLotsPrompt: ExpiredLotType
+  notifyPartLCP: NotifyPartLCP
 }
 export interface GeneralSettings {
   zebraPrint: Nullable<ZebraPrintSettings[]>

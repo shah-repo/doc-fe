@@ -20,18 +20,21 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
   const expiredLotsKey = 'allocationConfig.expiredLotsPrompt';
+  const partLCPKey = 'allocationConfig.notifyPartLCP';
   const hasPermission = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const isExpiredLotsAllowed = getFieldProps(expiredLotsKey).value === ExpiredLotTypes.WARNING;
   const classes = useStyles();
   const [value, setValue] = React.useState(OPTIONS[0]);
   const defaultOption = OPTIONS[0];
+  console.log(getFieldProps(partLCPKey), getFieldProps(partLCPKey).value);
 
   const handleExpiredLotChange = (event: ChangeEvent<{}>, checked: boolean) => {
     setFieldValue(expiredLotsKey, checked ? ExpiredLotTypes.WARNING : ExpiredLotTypes.ERROR);
   };
 
-  const handleChange = (event: React.ChangeEvent<{}>, value: any) => {
+  const handleChange = (event: React.ChangeEvent<{}>, value: OptionType) => {
     setValue(value);
+    setFieldValue(partLCPKey, value.value);
   };
 
   return (
@@ -51,6 +54,7 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
             className={classes.root}
             control={
               <Autocomplete
+                {...getFieldProps(partLCPKey)}
                 className={classes.bomLCPDropdown}
                 disableClearable
                 forcePopupIcon

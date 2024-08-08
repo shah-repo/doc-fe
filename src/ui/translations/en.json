@@ -1980,6 +1980,8 @@
   "bom.ar.child.draft.option": "Rev {revision} - {title}",
   "bom.ar.child.draft.add.action.message": "{count, plural, one {Action required on # item} other {Action required on # items}}",
   "bom.ar.child.draft.add.message": "All line items in the BOM should be released before releasing the BOM.\nAdd the following items in this change request or add them separately:",
+  "bom.ar.part.lcp.notify.warnng.message": "Some children in this BOM are at a lower lifecycle phase than the parent. \n\n Are you sure you want to continue?",
+  "bom.ar.part.lcp.notify.alert.message": "Some children in this BOM are at a lower lifecycle phase than the parent.",
   "bom.treelist.treeColumns.field.customDocId.title": "ID",
   "bom.treelist.treeColumns.field.revision.title": "Rev",
   "bom.treelist.treeColumns.field.name.title": "Title",
