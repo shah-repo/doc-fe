@@ -207,6 +207,7 @@ export interface GeneralSettings {
   allocationConfig: AllocationConfig
   lifecyclePhases?: {categories: LCPResponse[]}
   lifecyclePhasesProcessedPayload: LCP[]
+  shouldNotifyLcpMismatch: NotifyPartLCP
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
