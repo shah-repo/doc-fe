@@ -1,11 +1,11 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
-import { companyActions, companySelectors } from '../../../../../state/ducks/company';
+import { companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
 import { materialFlowAction } from '../../../../../state/ducks/materialFlowAcl';
 import { MaterialFlowAclRule } from '../../../../../state/ducks/materialFlowAcl/types';
@@ -37,7 +37,7 @@ const INITIAL_VALUES = {
 
 const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps, values } = useFormikContext<GeneralSettings>();
+  const { submitForm: submitSettingsForm, getFieldProps } = useFormikContext<GeneralSettings>();
   const switchProps = getFieldProps<boolean>(STATUS_FIELD);
   const rules = getFieldProps<MaterialFlowAclRule[]>(PANEL_FIELD).value;
   const locations = useSelector(companySelectors.getAllLocations) ?? [];
@@ -51,13 +51,12 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const addRuleAction = useActionCreator(materialFlowAction.addRule);
   const updateRuleAction = useActionCreator(materialFlowAction.updateRule);
   const deleteRuleAction = useActionCreator(materialFlowAction.deleteRule);
-  const dispatch = useDispatch();
   const deleteConfirmationDialog = useDialog();
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
 
   const async = useAsync({
-    onSuccess: () => {
-      dispatch(companyActions.updateGeneralSettings(values));
+    onSuccess: async () => {
+      await submitSettingsForm();
       discardRule();
     },
     onError: (error) => {
