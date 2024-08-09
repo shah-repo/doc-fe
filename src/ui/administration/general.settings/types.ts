@@ -13,6 +13,7 @@ export enum GeneralSettingsTabs {
   ExpiredLots = 'Expired Lots',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
+  ApprovalRoles = 'Approval Roles',
   Locations = 'Locations',
 }
 

@@ -2069,6 +2069,7 @@
   "administration.general.settings.equipmentFamily.es": "Equipment Specification",
   "administration.general.settings.equipmentFamily.es.autoSync": "Enable Auto-sync between ES and related EQ",
   "administration.general.settings.equipmentFamily.locations": "Locations",
+  "administration.general.settings.approvalRoles.tab": "Approval Roles",
   "administration.general.settings.md": "Material Disposition",
   "administration.general.settings.md.label": "Auto update the LOT status and part rev based on Material Disposition",
   "administration.general.settings.lcp": "Lifecycle Phases",
