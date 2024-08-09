@@ -167,6 +167,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       <SwitchControl
         {...switchProps}
         checked={switchProps.value}
+        disabled={!isActive}
         label={translate('administration.general.settings.material.flow.enabled')}
       />
       <SettingsPanelSection>
