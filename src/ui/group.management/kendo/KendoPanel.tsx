@@ -532,7 +532,7 @@ export function KendoPanel ({
   const tableRenderer = ({ width }: Size) => (
     <>
       <StyledKendoGrid
-        className={`${classes.grid} no-row-pointer`}
+        className={`${classes.UserGroupgrid} no-row-pointer`}
         style={{ width: `${width}px` }}
         rowHeight={40}
         data={result}

@@ -1,4 +1,4 @@
-import { Box, Grid, Tab } from '@material-ui/core';
+import { Grid, Tab } from '@material-ui/core';
 import React, { useCallback, useState } from 'react';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
@@ -37,12 +37,10 @@ const UserGroupManagment: React.FC = () => {
           />
         </StyledTabs>
       </Grid>
-      <Box>
-        <div>
-          {value === UserGroupTabValues.User && <UserManagementKendoContainer />}
-          {value === UserGroupTabValues.Group && <GroupManagementListContainer />}
-        </div>
-      </Box>
+
+      {value === UserGroupTabValues.User && <UserManagementKendoContainer />}
+      {value === UserGroupTabValues.Group && <GroupManagementListContainer />}
+
     </>
   );
 };
