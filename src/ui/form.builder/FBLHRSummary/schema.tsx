@@ -1,5 +1,6 @@
 import React from 'react';
 import { ActionsCellTemplate } from '../../change.request/FBMaterialDisposition/components/commonCells/ActionsCellTemplate';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActualIDCell } from './components/cells/ActualIDCell';
 import { ByCell } from './components/cells/ByCell';
@@ -12,6 +13,7 @@ import { StatusCell } from './components/cells/StatusCell';
 import { StepCell } from './components/cells/StepCell';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { TypeCell } from './components/cells/TypeCell';
+import styles from './styles';
 import { EditableLHRSummaryItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -21,6 +23,7 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
 }: SchemaOptions): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
+  const classes = styles();
   return [
     {
       id: 'type',
@@ -150,7 +153,13 @@ export const buildSchema = ({
       field: 'recordCreationDate',
       title: 'lhr.summary.grid.heading.date',
       show: true,
-      template: (props) => <DateCell {...props} onClick={onRowClick} />,
+      template: (props) => <DateCell {...props}
+        onClick={onRowClick}
+        PopoverProps={{
+          PaperProps: {
+            className: classes.createdDatePaper,
+          },
+        }} />,
       width: 201,
     },
     {
@@ -158,14 +167,16 @@ export const buildSchema = ({
       title: 'actions',
       className: actionsClass,
       show: true,
-      template: (props) => (
-        <ActionsCellTemplate
+      template: (props) => {
+        const isAddition = props?.dataItem?.[MODE_FIELD] === Mode.add;
+        return (<ActionsCellTemplate
           {...props}
           onConfirm={onConfirm}
           onDiscard={onDiscard}
-          onDelete={onDelete}
+          onDelete={isAddition ? undefined : onDelete}
         />
-      ),
+        );
+      },
       width: 1,
     },
   ];

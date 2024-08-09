@@ -17,6 +17,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
   itemsAndDetailsState: ItemsAndDetailsState
   isLineItemPartCanBeSubstituted?: boolean
   isDeletionDisabled?: boolean
+  revision: number
 }> = ({
   entry,
   formState,
@@ -27,6 +28,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
   itemsAndDetailsState,
   isLineItemPartCanBeSubstituted,
   isDeletionDisabled,
+  revision,
 }) => {
   const [isEditMode, setEditMode] = useState(false);
 
@@ -51,6 +53,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
     const values = [
       { key: 'autoUpdate', value: entry.autoUpdate },
       { key: 'proposedDocumentRevision', value: { id: entry.docRevId } },
+      { key: 'revisionFormTo', value: entry.revisionFormTo ?? revision },
       { key: 'descriptionOfChange', value: entry.descriptionOfChange },
       { key: 'justificationOfChange', value: entry.justificationOfChange },
     ];

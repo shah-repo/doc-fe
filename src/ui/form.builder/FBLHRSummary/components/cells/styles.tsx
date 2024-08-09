@@ -70,4 +70,10 @@ export const styles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
+  InvalidDocIndicator: {
+    height: 14,
+    width: 14,
+    cursor: 'pointer',
+    marginLeft: theme.spacing(0.625),
+  },
 }));

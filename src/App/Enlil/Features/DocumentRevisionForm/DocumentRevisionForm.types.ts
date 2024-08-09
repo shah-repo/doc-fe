@@ -52,6 +52,7 @@ export type DocumentRevisionFormProps =
   isDAM?: boolean
   dirty?: boolean
   isSliderView?: boolean
+  inDialog?: boolean
 };
 
 export interface DocumentRevisionFormStateProps {

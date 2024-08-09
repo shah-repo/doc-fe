@@ -28,7 +28,7 @@ const Approvers: React.FunctionComponent<Props> = ({ dataProp }) => {
               }</Box>
             </Typography>
             <Typography id="statusdate" variant="h5" component="span">
-              {isApproved && approval.approverGroups ? ` | ${approval.approverGroups?.join(', ')}` : ''}
+              {isApproved && approval.approverGroups?.length ? ` | ${approval.approverGroups.join(', ')}` : ''}
               {` | ${status}`}
               {isApproved && reviewedAt && (
                 <span>

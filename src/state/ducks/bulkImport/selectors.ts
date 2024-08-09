@@ -1,7 +1,7 @@
 import { translate } from '../../../common/intl';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
-import { ApproverOption, BulkImportCustom } from './types';
+import { ApproverOption, BkStatus, BulkImportCustom } from './types';
 
 // STEPS
 export const getStep = (state: ApplicationState) => state.bulkImport.steps.step;
@@ -47,10 +47,10 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
   const filterDataType = state.bulkImport.main.selectedDataType;
   const filterStatus = state.bulkImport.main.selectedStatus;
   return state.bulkImport.main.bulkImports.reduce<Record<string, BulkImportCustom[]>>((acc, bulkImport) => {
-    const processId = bulkImport.processId;
+    const processType = bulkImport.processType;
     const status = bulkImport.status;
-    const progress = bulkImport?.bulkImportProcess?.process
-      ? bulkImport.bulkImportProcess.process.filter(p => p.status === 'COMPLETED')
+    const progress = bulkImport?.process?.process
+      ? bulkImport.process.process.filter(p => p.status === BkStatus.COMPLETED)
         .reduce((total, current) => total + (current.percentage * 100), 0) : 0;
     const icons = [
       {
@@ -80,8 +80,8 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
       icons,
     };
     // Apply filters before adding to accumulator
-    if ((!filterDataType || processId === filterDataType) && (!filterStatus || status === filterStatus)) {
-      acc[processId] = [...(acc[processId] ?? []), bulkImportWithCustom];
+    if ((!filterDataType || processType === filterDataType) && (!filterStatus || status === filterStatus)) {
+      acc[processType] = [...(acc[processType] ?? []), bulkImportWithCustom];
     }
     return acc;
   }, {});
