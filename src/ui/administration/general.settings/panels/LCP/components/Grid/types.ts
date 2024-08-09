@@ -39,6 +39,7 @@ export interface CustomGroupDataItem {
 
 export interface CustomGroupOptions extends OptionType{
   category: string
+  categoryUniqId?: string
 }
 
 export interface GroupDocTypes {

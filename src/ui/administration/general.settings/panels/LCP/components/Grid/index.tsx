@@ -48,7 +48,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const hasEditLCPPermission = useSelector(getHasPermission(Permission.EDIT_LIFE_CYCLE));
   const confirmationDialog = useDialog();
   const [selectedDocType, setSelectedDocType] = useState<CustomGroupOptions>();
-  const [selectedDocTypeCategory, setSelectedDocTypeCategory] = useState<string>();
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
   const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
   const classes = useStyles();
@@ -66,7 +65,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       const category = uuidv4();
       const documentTypeId = selectedDocType?.value ?? '';
       const group = selectedDocType?.category;
-      setSelectedDocTypeCategory(category);
+      selectedDocType && setSelectedDocType({
+        ...selectedDocType,
+        categoryUniqId: category,
+      });
 
       const processedPhases = newPhases?.map((phase: LCP) => ({
         ...phase,
@@ -137,7 +139,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onDiscardGroup = () => {
     setEditGroup('');
     setSelectedDocType(undefined);
-    setSelectedDocTypeCategory(undefined);
     updateStateGridData(prevData ?? []);
     setSelectedGroup(undefined);
   };
@@ -235,7 +236,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
     setEditGroup('');
     setSelectedDocType(undefined);
-    setSelectedDocTypeCategory(undefined);
     updateSettingsObj(data);
   };
 
@@ -471,7 +471,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
       return group;
     });
-    return sortGroups(resultState?.data ?? [], selectedDocTypeCategory);
+    return sortGroups(resultState?.data ?? [], selectedDocType?.categoryUniqId);
   }, [editGroup, resultState]);
 
   const onItemChange = (e: GridItemChangeEvent) => {
