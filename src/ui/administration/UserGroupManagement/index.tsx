@@ -40,7 +40,7 @@ const UserGroupManagment: React.FC = () => {
       <Box>
         <div>
           {value === UserGroupTabValues.User && <UserManagementKendoContainer />}
-          {value === UserGroupTabValues.Group && <GroupManagementListContainer history={null} location={null} match={null} />}
+          {value === UserGroupTabValues.Group && <GroupManagementListContainer />}
         </div>
       </Box>
     </>

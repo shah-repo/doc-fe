@@ -2,8 +2,6 @@ export enum HelpModule {
   General = 'General',
   Dashboard = 'Dashboard',
   DocumentList = 'Document List',
-  UserManagement = 'User Management',
-  GroupManagement = 'Group Management',
   ApprovalRequests = 'Approval Requests',
   EB = 'EB',
   Lhr = 'Lhr',

@@ -27,14 +27,6 @@ const ROUTES: RouteChecker[] = [
     check: (path) => path.startsWith(URL.CHANGE_REQUEST_LIST_URL),
   },
   {
-    module: HelpModule.GroupManagement,
-    check: (path) => path.startsWith(URL.GROUP_MANAGEMENT_ROOT_URL),
-  },
-  {
-    module: HelpModule.UserManagement,
-    check: (path) => path.startsWith(URL.USER_MANAGEMENT_ROOT_URL),
-  },
-  {
     module: HelpModule.Training,
     check: (path) => path.startsWith(URL.TRAINING_URL),
   },
