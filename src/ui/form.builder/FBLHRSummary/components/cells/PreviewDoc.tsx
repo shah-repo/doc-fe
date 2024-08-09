@@ -49,6 +49,7 @@ export const PreviewDoc: React.FC<props> = ({
     >
       <Link
         to={documentVersionPath(value ?? '', documentId)}
+        onClick={(e) => e.stopPropagation()}
         target="_blank"
         data-cy={dataCy}
         className={classes.link}

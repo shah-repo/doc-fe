@@ -271,6 +271,7 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
             <Box display="flex" justifyContent="space-between">
               <Link
                 to={documentVersionPath(mpiRevId, documentId)}
+                onClick={(e) => e.stopPropagation()}
                 target="_blank"
                 id="step-mpi-field"
                 data-cy="step-mpi-field"
