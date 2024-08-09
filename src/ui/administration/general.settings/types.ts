@@ -24,6 +24,10 @@ export interface GeneralSettingsProps {
   onSave: () => void
 }
 
+export interface BlueTagWithWhiteTextProps {
+  whiteMainText?: string
+}
+
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
   info?: string
