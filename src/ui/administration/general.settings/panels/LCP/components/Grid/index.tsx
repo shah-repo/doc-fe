@@ -63,21 +63,26 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const fetchLCPPhasesAsync = useAsync({
     onSuccess: (newPhases?: LCP[]) => {
       const category = uuidv4();
-      newPhases = newPhases?.map((phase: LCP) => {
-        return {
-          ...phase,
-          id: `${ADD_GROUP_NAME}${uuidv4()}`,
-          documentTypeId: selectedDocType?.value ?? '',
-          group: selectedDocType?.category,
-          category,
-          [EDIT_FIELD]: true,
-          isUserAdded: false,
-          isUserModified: false,
-        };
-      });
-      const updatedData = newPhases?.concat((data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID));
+      const documentTypeId = selectedDocType?.value ?? '';
+      const group = selectedDocType?.category;
+
+      const processedPhases = newPhases?.map((phase: LCP) => ({
+        ...phase,
+        id: `${ADD_GROUP_NAME}${uuidv4()}`,
+        documentTypeId,
+        group,
+        category,
+        [EDIT_FIELD]: true,
+        isUserAdded: false,
+        isUserModified: false,
+      })) ?? [];
+
+      const updatedData = [
+        ...processedPhases,
+        ...(data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID),
+      ];
       setEditGroup(getGroupIdByCategory(category));
-      updateStateGridData(updatedData ?? [], false);
+      updateStateGridData(updatedData, false);
     },
     onError: toastError,
   });
