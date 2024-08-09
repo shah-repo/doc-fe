@@ -48,6 +48,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const hasEditLCPPermission = useSelector(getHasPermission(Permission.EDIT_LIFE_CYCLE));
   const confirmationDialog = useDialog();
   const [selectedDocType, setSelectedDocType] = useState<CustomGroupOptions>();
+  const [selectedDocTypeCategory, setSelectedDocTypeCategory] = useState<string>();
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
   const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
   const classes = useStyles();
@@ -65,6 +66,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       const category = uuidv4();
       const documentTypeId = selectedDocType?.value ?? '';
       const group = selectedDocType?.category;
+      setSelectedDocTypeCategory(category);
 
       const processedPhases = newPhases?.map((phase: LCP) => ({
         ...phase,
@@ -134,6 +136,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onDiscardGroup = () => {
     setEditGroup('');
+    setSelectedDocType(undefined);
+    setSelectedDocTypeCategory(undefined);
     updateStateGridData(prevData ?? []);
     setSelectedGroup(undefined);
   };
@@ -230,6 +234,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
     setEditGroup('');
+    setSelectedDocType(undefined);
+    setSelectedDocTypeCategory(undefined);
     updateSettingsObj(data);
   };
 
@@ -457,7 +463,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     );
   }, [collapsedState, dataState]);
 
-  const getUpdatedStateDataByEditInfo = React.useCallback((resultState?: DataResult) => {
+  const getUpdatedStateDataByEditInfo = useCallback((resultState?: DataResult) => {
     resultState?.data?.forEach((group: CustomGroupDataItem) => {
       group.items?.forEach((data) => {
         data[EDIT_FIELD] = group.groupId === editGroup;
@@ -465,8 +471,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
       return group;
     });
-
-    return sortGroups(resultState?.data ?? []);
+    return sortGroups(resultState?.data ?? [], selectedDocTypeCategory);
   }, [editGroup, resultState]);
 
   const onItemChange = (e: GridItemChangeEvent) => {
