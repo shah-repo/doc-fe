@@ -5,7 +5,7 @@ import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolba
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { cloneDeep, last, pick, uniq } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
@@ -31,7 +31,7 @@ import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EX
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, GroupDocTypes, LCP } from './types';
-import { processGroups, processRealData, sortGroups, sortPhasesByDisplayOrder } from './utils';
+import { isGroupActivateOrDeactivate, processGroups, processRealData, sortGroups, sortPhasesByDisplayOrder } from './utils';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [dataState, setDataState] = useState<State>(initialDataState);
@@ -228,11 +228,31 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     updateSettingsObj(data);
   };
 
-  const isLastGroupRow = (id: string, category: string): boolean => {
-    const group = resultState?.data.find((item: CustomGroupDataItem) => item.value === category) as CustomGroupDataItem;
-    const lastItem = last(group?.items ?? []) as LCP;
-    return lastItem?.id === id;
-  };
+  const getGroupByCategory = useCallback(
+    (category: string): CustomGroupDataItem => {
+      return resultState?.data.find(
+        (item: CustomGroupDataItem) => item.value === category,
+      ) as CustomGroupDataItem;
+    },
+    [resultState],
+  );
+
+  const isLastGroupRow = useCallback(
+    (id: string, category: string): boolean => {
+      const group = getGroupByCategory(category);
+      const lastItem = last(group?.items ?? []) as LCP;
+      return lastItem?.id === id;
+    },
+    [getGroupByCategory],
+  );
+
+  const isGroupPhasesDeactivated = useCallback(
+    (category: string): boolean => {
+      const group = getGroupByCategory(category);
+      return isGroupActivateOrDeactivate(group?.items ?? [], false);
+    },
+    [getGroupByCategory],
+  );
 
   const addPhase = (dataItem: LCP) => {
     setPrevData(cloneDeep(data));
@@ -398,6 +418,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     }
 
     if (isLastGroupRow(itemId, itemCategory) && !isGroupUpdating && hasEditLCPPermission) {
+      if (isGroupPhasesDeactivated(itemCategory)) {
+        return <React.Fragment />;
+      }
+
       return [row,
         React.cloneElement(row, {
           ...rowProps,
@@ -409,6 +433,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         }),
       ];
     }
+
+    rowProps.dataItem.isGroupDeactivated = isGroupPhasesDeactivated(itemCategory);
 
     return React.cloneElement(row, {
       ...rowProps,
@@ -553,19 +579,15 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
           cancelLabel="common.no.go.back"
           warning
         >
-          <Typography data-cy="lcp-dialog-message">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: translate(
-                  translate(
-                    selectedPhase
-                      ? 'administration.general.settings.lcp.phase.deactivate.dialog.message'
-                      : 'administration.general.settings.lcp.doc.type.deactivate.dialog.message',
-                  ),
-                ),
-              }}
-            />
-          </Typography>
+          <Typography data-cy="lcp-dialog-message" dangerouslySetInnerHTML={{
+            __html: translate(
+              translate(
+                selectedPhase
+                  ? 'administration.general.settings.lcp.phase.deactivate.dialog.message'
+                  : 'administration.general.settings.lcp.doc.type.deactivate.dialog.message',
+              ),
+            ),
+          }} />
         </AlertDialog>
       )}
     </Grid>

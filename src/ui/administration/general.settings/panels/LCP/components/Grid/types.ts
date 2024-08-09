@@ -21,6 +21,7 @@ export interface LCP {
   isActive?: boolean
   enlilTypeOptions?: string[]
   otherLabelOptions?: string[]
+  isGroupDeactivated?: boolean
 }
 
 export interface EditableLCP extends LCP {

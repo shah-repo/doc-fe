@@ -1,4 +1,4 @@
-import { chain, orderBy, uniq } from 'lodash';
+import { chain, uniq } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { CUSTOM_GROUP_ORDER, LCP_KEYS } from './constants';
 import { CustomGroupDataItem, CustomGroupOptions, GroupDocTypes, LCP, LCPResponse, processLCPType } from './types';
@@ -58,5 +58,23 @@ export const processGroups = (groups: GroupDocTypes[]): CustomGroupOptions[] => 
 };
 
 export const sortPhasesByDisplayOrder = (phases?: LCP[]): LCP[] => {
-  return orderBy(phases, [LCP_KEYS.order, LCP_KEYS.displayOrder], ['asc', 'asc']);
+  if (!phases?.length) return [];
+
+  return [...phases].sort((a, b) => {
+    const orderComparison = (a[LCP_KEYS.order] ?? 0) - (b[LCP_KEYS.order] ?? 0);
+    if (orderComparison !== 0) return orderComparison;
+
+    return (a[LCP_KEYS.displayOrder] ?? 0) - (b[LCP_KEYS.displayOrder] ?? 0);
+  });
+};
+
+export const isGroupActivateOrDeactivate = (phases: LCP[], activate: boolean): boolean => {
+  if (!phases?.length) return false;
+
+  for (const phase of phases) {
+    if (phase.isActive !== activate) {
+      return false;
+    }
+  }
+  return true;
 };
