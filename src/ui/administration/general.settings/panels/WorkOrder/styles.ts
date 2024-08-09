@@ -33,4 +33,16 @@ export default makeStyles(theme => ({
     fontWeight: 400,
     fontSize: 14,
   },
+  bomLCPDropdown: {
+    width: 186,
+  },
+  bomLCPDropdownTextField: {
+    '&:hover': {
+      borderColor: `${Colors.stroke} !important`,
+    },
+  },
+  defaultOption: {
+    fontSize: 14,
+    color: Colors.textDisabled,
+  },
 }));

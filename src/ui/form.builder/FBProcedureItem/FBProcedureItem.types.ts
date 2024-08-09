@@ -28,6 +28,9 @@ export type FBProcedureItemProps =
   type: FBProcedureItemType
   value?: FBProcedureItemConfig[]
   locked?: boolean
+  item?: FBProcedureItemConfig
+  lotDocId?: string
+  lotId?: string
 };
 
 export interface FBProcedureItemConfig {
