@@ -59,6 +59,8 @@ export const GLOBAL_SEARCH_URL = '/search';
 
 export const GENERAL_SETTINGS_URL = '/general_settings';
 
+export const PREMIUM_FEATURE_URL = '/premium_feature';
+
 export const USER_GROUP_URL = '/user_group';
 export const USER_GROUPS_URL = '/user_group/group';
 

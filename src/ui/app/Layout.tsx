@@ -8,6 +8,7 @@ import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
+import PremiumFeaturePage from '../administration/general.settings/components/PremiumFeaturePage/presenter';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
 import BulkImportProgressPage from '../bulkImport/container.progress';
@@ -33,6 +34,7 @@ import {
   GLOBAL_SEARCH_URL,
   HOME_URL,
   PAGE_DETAILS_MANAGEMENT_URL,
+  PREMIUM_FEATURE_URL,
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
   TRAINING_URL,
@@ -157,6 +159,10 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={GENERAL_SETTINGS_URL}
             component={GeneralSettingsPage}
+          />
+          <Route
+            path={PREMIUM_FEATURE_URL}
+            component={PremiumFeaturePage}
           />
           <Route
             path={BULK_IMPORT_URL}
