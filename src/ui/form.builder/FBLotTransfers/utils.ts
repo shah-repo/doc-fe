@@ -7,6 +7,7 @@ import { Group } from '../../../state/ducks/auth/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { materialFlowACLSelectors } from '../../../state/ducks/materialFlowAcl';
 import { MaterialFlowAclRule } from '../../../state/ducks/materialFlowAcl/types';
+import { LocationField } from '../../administration/general.settings/panels/SystemTransactions/types';
 import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
 import { AllowedOptions, CalculableLotTransfer, CompanyLocation, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction, SelectedOptions } from './types';
 
@@ -79,7 +80,7 @@ export const useOnHandQuantity = (): UseOnHandQuantityType => {
   };
 };
 
-const checkRuleLocations = (rule: MaterialFlowAclRule, field: 'from' | 'to', set: Set<string>, locations: CompanyLocation[]) => {
+const checkRuleLocations = (rule: MaterialFlowAclRule, field: LocationField, set: Set<string>, locations: CompanyLocation[]) => {
   if (rule[field]) {
     set.add(rule[field]);
   } else {

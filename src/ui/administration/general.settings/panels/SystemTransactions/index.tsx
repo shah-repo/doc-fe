@@ -6,93 +6,57 @@ import { translate } from '../../../../../common/intl';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { companySelectors } from '../../../../../state/ducks/company';
-import { GeneralSettings } from '../../../../../state/ducks/company/types';
+import { GeneralSettings, SystemTransactionsRule } from '../../../../../state/ducks/company/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import { CompanyLocation } from '../../../../form.builder/FBLotTransfers/types';
 import SettingsPanel from '../../components/SettingsPanel';
 import SettingsTable from '../../components/SettingsTable';
-import ActiveCellTemplate from '../../components/SettingsTable/components/ActiveCellTemplate';
-import TextCellTemplate from '../../components/SettingsTable/components/TextCellTemplate';
 import { SettingsPanelProps } from '../../types';
-import { LocationCellTemplate } from '../MaterialFlow/components/LocationCellTemplate';
+import { buildSchema } from './schema';
+import { EditableSystemTransactionsRule, LocationField } from './types';
 
-// const PANEL_FIELD = 'materialFlowAcl';
-
-const RULES = [
-  {
-    active: true,
-    id: 'createFromRecieving',
-    from: '8048257c-5f2c-4bf4-ab63-5bce2b33e351',
-    to: '9d82b1f1-db0b-4e9b-93df-bc739272fc62',
-  },
-  {
-    active: false,
-    id: 'scrapFromMd',
-    from: '285b195c-6640-4e65-90a1-e2fee181a760',
-    to: null,
-  },
-];
+const PANEL_FIELD = 'systemTransactions';
 
 const SystemTransactionsSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values } = useFormikContext<GeneralSettings>();
+  const { getFieldProps, setFieldValue } = useFormikContext<GeneralSettings>();
   const locations = useSelector(companySelectors.getAllLocations) ?? [];
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
+  const rules = getFieldProps<SystemTransactionsRule[]>(PANEL_FIELD).value ?? [];
 
-  const schema = [
-    {
-      id: 'active',
-      field: 'active',
-      title: 'common.active',
-      width: 70,
-      template: (props) => (
-        <ActiveCellTemplate
-          {...props}
-          onActiveStateChange={noop}
-        />
-      ),
-    },
-    {
-      id: 'when',
-      field: 'when',
-      title: 'administration.general.settings.system.transactions.when',
-      template: TextCellTemplate,
-    },
-    {
-      id: 'from',
-      field: 'from',
-      title: 'administration.general.settings.material.flow.location.from',
-      template: (props) => (
-        <LocationCellTemplate
-          {...props}
-          options={locations}
-        />
-      ),
-    },
-    {
-      id: 'to',
-      field: 'to',
-      title: 'administration.general.settings.material.flow.location.to',
-      template: (props) => (
-        <LocationCellTemplate
-          {...props}
-          options={locations}
-        />
-      ),
-    },
-  ];
+  const updateRuleActiveState = (rule: EditableSystemTransactionsRule, state: boolean) => {
+    const updatedRules = rules.map(it => ({
+      ...it,
+      isActive: it.id === rule.id ? state : it.isActive,
+    }));
+    setFieldValue(PANEL_FIELD, updatedRules);
+  };
 
-  const data = RULES.map(rule => ({
-    active: rule.active,
-    when: rule.id,
-    from: rule.from,
-    to: rule.to,
+  const updateRuleLocation = (rule: EditableSystemTransactionsRule, field: LocationField, location?: CompanyLocation) => {
+    const locationToSet = location?.id ?? null;
+    const updatedRules = rules.map(it => ({
+      ...it,
+      [field]: it.id === rule.id ? locationToSet : it[field],
+    }));
+    setFieldValue(PANEL_FIELD, updatedRules);
+  };
+
+  const schema = buildSchema({
+    isActive,
+    locations,
+    onActiveStateChange: isActive ? updateRuleActiveState : undefined,
+    onLocationChange: isActive ? updateRuleLocation : undefined,
+    onDiscard: noop,
+    onConfirm: noop,
+  });
+
+  const data = rules.map<EditableSystemTransactionsRule>(rule => ({
+    ...rule,
+    active: rule.isActive,
+    from: locations.find(location => location.id === rule.from),
+    to: locations.find(location => location.id === rule.to),
     [MODE_FIELD]: Mode.show,
   }));
-
-  console.log({
-    locations,
-    values,
-  });
 
   return (
     <SettingsPanel

@@ -4,7 +4,7 @@ import { translate } from '../../../../../../common/intl';
 import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 
-function TextCellTemplate<T extends EditableItem> ({
+function WhenCellTemplate<T extends EditableItem> ({
   dataItem,
   field,
 }: CellTemplateProps<T>): React.ReactElement {
@@ -23,4 +23,4 @@ function TextCellTemplate<T extends EditableItem> ({
   );
 }
 
-export default TextCellTemplate;
+export default WhenCellTemplate;

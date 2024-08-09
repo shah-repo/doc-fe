@@ -1,38 +1,36 @@
-import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { CompanyLocation } from '../../../../../../state/ducks/company/types';
 import { CellTemplateProps } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { LotTransferType } from '../../../../../form.builder/FBLotTransfers/types';
 import useStyles from '../styles';
-import { EditableMaterialFlowAclRule } from '../types';
+import { EditableSystemTransactionsRule, LocationField } from '../types';
 
 const EMPTY_VALUE_PLACEHOLDER = '-';
 
-interface Props extends CellTemplateProps<EditableMaterialFlowAclRule> {
+interface Props extends CellTemplateProps<EditableSystemTransactionsRule> {
   options: CompanyLocation[]
+  isActive: boolean
+  onLocationChange?: (rule: EditableSystemTransactionsRule, field: LocationField, location?: CompanyLocation) => void
 }
 
-export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, onClick }) => {
+export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, isActive, onLocationChange }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableMaterialFlowAclRule>();
+  const { getFieldProps } = useFormikContext<{action: LotTransferType}>();
   const classes = useStyles();
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   const handleChange = (event: ChangeEvent<unknown>, value?: CompanyLocation) => {
-    setFieldValue(field, value);
+    onLocationChange?.(dataItem, field === 'to' ? 'to' : 'from', value);
   };
 
-  const value = (isEditMode ? values[field] : dataItem[field]) as CompanyLocation;
+  const value = dataItem[field] as CompanyLocation;
 
-  const isScrapAction = values.action === LotTransferType.Scrap;
+  const isScrapAction = dataItem.action === LotTransferType.Scrap;
   const isDisabled = field === 'to' && isScrapAction;
 
-  if (isEditMode && !isEmpty(values)) {
+  if (isActive) {
     return (
       <FormikField name={field}>
         <Autocomplete
@@ -56,15 +54,13 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
   const displayValue = value ? value.name : EMPTY_VALUE_PLACEHOLDER;
 
   return (
-    <Box onClick={() => onClick?.({ dataItem })}>
-      <OverflowTooltip
-        title={displayValue}
-        placement="top"
-        interactive
-        arrow
-      >
-        {displayValue}
-      </OverflowTooltip>
-    </Box>
+    <OverflowTooltip
+      title={displayValue}
+      placement="top"
+      interactive
+      arrow
+    >
+      {displayValue}
+    </OverflowTooltip>
   );
 };
