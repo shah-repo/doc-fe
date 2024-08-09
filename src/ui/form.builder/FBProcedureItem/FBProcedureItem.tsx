@@ -9,6 +9,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProcedureItemType, FBProvider, FBText, FBTooltip } from '..';
 import Colors from '../../layout/theme/utils/colors';
 import { withFBProcedureItem } from './FBProcedureItem.wrap';
+import FBProcedureItemDetails from './FBProcedureItemDetails';
 
 const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   onClick,
@@ -73,7 +74,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
           )}
         </Box>
         {type === FBProcedureItemType.attachments && (
-          <Box data-cy="mediaUploadField" mt={2} borderBottom={1}>
+          <Box data-cy="media-upload-field" mt={2} borderBottom={1}>
             <FBMediaAlbumField
               name={`${name}.attachments`}
               isTemplate={false}
@@ -100,19 +101,14 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                   bgcolor={(item.status || 'none') === 'none' ? 'white' : FBPartItemStatusBg[item.status || '']}
                   p={1.5}
                 >
-                  <FBText
-                    locale={`form.builder.procedure.${type}.title`}
-                    values={{
-                      title: getItem?.(item.title),
-                      lot: getLot?.(item.partLot),
-                      quantity: item.quantity || 'form.builder.none',
-                      unit: item.unit,
-                    }}
-                    boxProps={{
-                      color: Colors.black,
-                      flexGrow: 1,
-                    }}
-                  />
+                  <FBProcedureItemDetails
+                    {...{
+                      item,
+                      type,
+                      getItem,
+                      getLot,
+                      lotId: item.partLot,
+                    }} />
                   {!isPreview && (
                     <>
                       <Box>

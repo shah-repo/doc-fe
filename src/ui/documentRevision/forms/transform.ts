@@ -63,6 +63,7 @@ export const toDocumentRevisionFormValues = (
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
+    lifecyclePhaseId: documentRevision.lifecyclePhaseId,
     securityEmployees: get(documentRevision, 'document.securityList.securityEmployees', [])
       .map((employee) => ({ label: employee.name, value: employee.id })),
     securityGroups: get(documentRevision, 'document.securityList.securityGroups', [])
