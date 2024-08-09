@@ -2,8 +2,9 @@ import { Grid } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import useGetHasTag from '../../../../../../src/ui/hooks/useGetHasTag';
+import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
+import { authSelectors } from '../../../../../state/ducks/auth';
 import { GroupTag } from '../../../../../state/ducks/auth/types';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
 import { Checkbox, TextField } from '../../../../components/forms/fields-next';
@@ -16,7 +17,8 @@ import useStyle from './styles';
 const TrainingReminder: React.FC<SettingsPanelProps> = (props) => {
   const classes = useStyle();
   const { getFieldProps, values } = useFormikContext<GeneralSettings>();
-  const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
+  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
+  const isCompanyAdmin = currentUserTags.includes(GroupTag.ADMIN_MANAGEMENT);
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.training.reminder')}>
