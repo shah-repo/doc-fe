@@ -164,6 +164,7 @@ export interface ChangeRequestDependentOnDocRevsState {
   itemsInDraft: 0
   itemsPending: 0
   itemsInvalid: 0
+  itemsLifecycleMismatching: number
   draftItemsMap: {[key: string]: DependedDocRevDetails[]}
   blockingItemsMap: {[key: string]: DependedDocRevDetails[]}
   itemsInvalidMap: {[key: string]: DependedDocRevDetails[]}

@@ -112,6 +112,12 @@ export enum ExpiredLotTypes {
   ERROR = 'error',
 }
 
+export enum NotifyPartLCP {
+  DO_NOTHING = 'NO',
+  WARNING = 'WARN',
+  ERROR = 'ERROR',
+}
+
 export interface NavigationItem {
   label: string
   type: NavigationItemType
@@ -212,6 +218,7 @@ export interface GeneralSettings {
   materialFlowAcl: MaterialFlowAclRule[]
   materialFlowAclEnabled: boolean
   systemTransactions: SystemTransactionsRule[]
+  shouldNotifyLcpMismatch: NotifyPartLCP
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
