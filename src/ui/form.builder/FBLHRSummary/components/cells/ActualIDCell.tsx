@@ -1,4 +1,4 @@
-import { Box, CircularProgress, TextField } from '@material-ui/core';
+import { Box, CircularProgress, Popper, TextField } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
@@ -221,7 +221,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
         size="small"
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
-            <Box width="100%" data-cy="actualId">
+            <Box width="100%" data-cy="actual-id">
               <TextField
                 {...params}
                 fullWidth
@@ -252,6 +252,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
               />
             </Box>
           </Box>
+        )}
+        PopperComponent={({ style, ...props }) => (
+          <Popper
+            {...props}
+            style={{ ...style }}
+          />
         )}
         renderOption={(option) => option.label}
         onInputChange={debounceFunction}
