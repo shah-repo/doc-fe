@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { DataResult, process, State } from '@progress/kendo-data-query';
 import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { cloneDeep, last, pick, uniq } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
@@ -15,7 +14,7 @@ import { Permission } from '../../../../../../../state/ducks/auth/types';
 import { companyActions } from '../../../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../../../state/ducks/company/types';
 import { DOC_TYPE_GROUP } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
-import AlertDialog from '../../../../../../app/alert.dialog/AlertDialog';
+import { AlertDialog } from '../../../../../../components/dialogs';
 import { Button as AddButton } from '../../../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -24,7 +23,6 @@ import useActionCreator from '../../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../../hooks/useAsync';
 import useDialog from '../../../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../../../layout/theme-next';
-import { Translation } from '../../../../../../translations/types';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
 import { AddPhase } from './cell.templates/AddPhase';
@@ -33,7 +31,7 @@ import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EX
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, GroupDocTypes, LCP } from './types';
-import { processGroups, processRealData, sortGroups, sortPhasesByDisplayOrder } from './utils';
+import { isGroupActivateOrDeactivate, processGroups, processRealData, sortGroups, sortPhasesByDisplayOrder } from './utils';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [dataState, setDataState] = useState<State>(initialDataState);
@@ -49,7 +47,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [selectedPartGroups, setSelectedPartGroups] = useState<CustomGroupOptions[]>([]);
   const hasEditLCPPermission = useSelector(getHasPermission(Permission.EDIT_LIFE_CYCLE));
   const confirmationDialog = useDialog();
-  const [selectedDocTypes, setSelectedDocTypes] = useState<CustomGroupOptions[]>([]);
+  const [selectedDocType, setSelectedDocType] = useState<CustomGroupOptions>();
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
   const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
   const classes = useStyles();
@@ -64,23 +62,31 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const fetchLCPPhasesAsync = useAsync({
     onSuccess: (newPhases?: LCP[]) => {
-      const selectedGroudIds = selectedDocTypes.map(data => data.value);
       const category = uuidv4();
-      newPhases = newPhases?.map((phase: LCP) => {
-        return {
-          ...phase,
-          id: `${ADD_GROUP_NAME}${uuidv4()}`,
-          documentTypeIdArr: selectedGroudIds,
-          group: selectedDocTypes[0].category,
-          category,
-          [EDIT_FIELD]: true,
-          isUserAdded: false,
-          isUserModified: false,
-        };
+      const documentTypeId = selectedDocType?.value ?? '';
+      const group = selectedDocType?.category;
+      selectedDocType && setSelectedDocType({
+        ...selectedDocType,
+        categoryUniqId: category,
       });
-      const updatedData = newPhases?.concat((data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID));
+
+      const processedPhases = newPhases?.map((phase: LCP) => ({
+        ...phase,
+        id: `${ADD_GROUP_NAME}${uuidv4()}`,
+        documentTypeId,
+        group,
+        category,
+        [EDIT_FIELD]: true,
+        isUserAdded: false,
+        isUserModified: false,
+      })) ?? [];
+
+      const updatedData = [
+        ...processedPhases,
+        ...(data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID),
+      ];
       setEditGroup(getGroupIdByCategory(category));
-      updateStateGridData(updatedData ?? [], false);
+      updateStateGridData(updatedData, false);
     },
     onError: toastError,
   });
@@ -132,6 +138,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onDiscardGroup = () => {
     setEditGroup('');
+    setSelectedDocType(undefined);
     updateStateGridData(prevData ?? []);
     setSelectedGroup(undefined);
   };
@@ -162,30 +169,34 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const onToggleGroupActivation = (dataItem: CustomGroupDataItem) => {
-    confirmationDialog.open();
-    setSelectedGroup(dataItem);
+    if (dataItem.isLCPActive) {
+      onConfirmDeactivate(dataItem);
+    } else {
+      setSelectedGroup(dataItem);
+      confirmationDialog.open();
+    }
   };
 
   const onConfirmAlertDialog = () => {
     if (selectedPhase) {
-      onConfirmDeletePhase();
+      onConfirmDeactivatePhase(selectedPhase);
     } else {
-      onConfirmDeactivate();
+      onConfirmDeactivate(selectedGroup);
     }
   };
 
   const onCancelAlertDialog = () => {
     if (selectedPhase) {
-      onCancelDeletePhase();
+      onCancelDeactivatePhase();
     } else {
-      onCancelDeactivate();
+      onCancelDeactivatePhases();
     }
   };
 
-  const onConfirmDeactivate = () => {
+  const onConfirmDeactivate = (selectedGroup?: CustomGroupDataItem) => {
     const updatedData = (data ?? []).map((phase: LCP) =>
       getGroupIdByCategory(phase.category) === selectedGroup?.groupId
-        ? { ...phase, isActive: selectedGroup.isLCPActive, isUserModified: true }
+        ? { ...phase, isActive: selectedGroup?.isLCPActive, isUserModified: true }
         : phase,
     );
     updateStateGridData(updatedData);
@@ -194,34 +205,16 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     confirmationDialog.close();
   };
 
-  const getActiveOrDeactiveMsgByFlag = (isActive?: boolean) => {
-    return isActive
-      ? 'administration.general.settings.lcp.deactivate.dialog.message'
-      : 'administration.general.settings.lcp.activate.dialog.message';
-  };
-
-  const getDialogMessage = (): Translation => {
-    if (selectedPhase) {
-      return getActiveOrDeactiveMsgByFlag(selectedPhase.isActive);
-    } else if (selectedGroup) {
-      return getActiveOrDeactiveMsgByFlag(!selectedGroup.isLCPActive);
-    }
-
-    return getActiveOrDeactiveMsgByFlag(true);
-  };
-
-  const onCancelDeactivate = () => {
+  const onCancelDeactivatePhases = () => {
     onDiscardGroup();
     confirmationDialog.close();
     setSelectedGroup(undefined);
   };
 
-  const onGroupChange = (options: CustomGroupOptions[], groupId: string) => {
-    const selectedGroudIds = options.map(data => data.value);
-
+  const onGroupChange = (selectedDocType: CustomGroupOptions, groupId: string) => {
     if ([PARTS_GROUP_ID, ADD_GROUP_ID].includes(groupId)) {
       // new Add case
-      setSelectedDocTypes(options);
+      setSelectedDocType(selectedDocType);
       fetchLCPPhasesAsync.start(
         fetchLCPPhases,
         DOC_TYPE_GROUP.PART,
@@ -231,7 +224,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       // Edit case
       data?.forEach(data => {
         if (getGroupIdByCategory(data.category) === groupId) {
-          data.documentTypeIdArr = selectedGroudIds;
+          data.documentTypeId = selectedDocType.value;
         }
         return data;
       });
@@ -242,14 +235,35 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
     setEditGroup('');
+    setSelectedDocType(undefined);
     updateSettingsObj(data);
   };
 
-  const isLastGroupRow = (id: string, category: string): boolean => {
-    const group = resultState?.data.find((item: CustomGroupDataItem) => item.value === category) as CustomGroupDataItem;
-    const lastItem = last(group?.items ?? []) as LCP;
-    return lastItem?.id === id;
-  };
+  const getGroupByCategory = useCallback(
+    (category: string): CustomGroupDataItem => {
+      return resultState?.data.find(
+        (item: CustomGroupDataItem) => item.value === category,
+      ) as CustomGroupDataItem;
+    },
+    [resultState],
+  );
+
+  const isLastGroupRow = useCallback(
+    (id: string, category: string): boolean => {
+      const group = getGroupByCategory(category);
+      const lastItem = last(group?.items ?? []) as LCP;
+      return lastItem?.id === id;
+    },
+    [getGroupByCategory],
+  );
+
+  const isGroupPhasesDeactivated = useCallback(
+    (category: string): boolean => {
+      const group = getGroupByCategory(category);
+      return isGroupActivateOrDeactivate(group?.items ?? [], false);
+    },
+    [getGroupByCategory],
+  );
 
   const addPhase = (dataItem: LCP) => {
     setPrevData(cloneDeep(data));
@@ -263,7 +277,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       category: dataItem.category,
       enlilTypeOptions,
       otherLabelOptions,
-      documentTypeIdArr: dataItem.documentTypeIdArr,
+      documentTypeId: dataItem.documentTypeId,
       internalType: '',
       displayLabel: '',
       isApprovedSupplierEnforcedOnPO: NO,
@@ -286,24 +300,30 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setResultState(processWithGroups(newData, initialDataState));
   };
 
-  const onDeletePhase = (dataItem: LCP) => {
-    setSelectedPhase(dataItem);
-    confirmationDialog.open();
+  const onTogglePhaseItem = (dataItem: LCP) => {
+    if (dataItem.isActive) {
+      setSelectedPhase(dataItem);
+      confirmationDialog.open();
+    } else {
+      setTimeout(() => {
+        onConfirmDeactivatePhase(dataItem);
+      }, 100);
+    }
   };
 
-  const onConfirmDeletePhase = () => {
+  const onConfirmDeactivatePhase = (selectedItem?: LCP) => {
     const updatedData = (data ?? []).map((phase: LCP) =>
-      phase.id === selectedPhase?.id
-        ? { ...phase, isActive: !selectedPhase?.isActive, isUserModified: true }
+      phase.id === selectedItem?.id
+        ? { ...phase, isActive: !selectedItem?.isActive, isUserModified: true }
         : phase,
     );
 
     updateStateGridData(updatedData);
     updateSettingsObj(updatedData);
-    onCancelDeletePhase();
+    onCancelDeactivatePhase();
   };
 
-  const onCancelDeletePhase = () => {
+  const onCancelDeactivatePhase = () => {
     confirmationDialog.close();
     setSelectedPhase(undefined);
   };
@@ -351,7 +371,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema({
     onConfirm: submitForm,
     onDiscard: onDiscardPhase,
-    onDeletePhase: onDeletePhase,
     hasEditLCPPermission,
   });
 
@@ -410,6 +429,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     }
 
     if (isLastGroupRow(itemId, itemCategory) && !isGroupUpdating && hasEditLCPPermission) {
+      if (isGroupPhasesDeactivated(itemCategory)) {
+        return <React.Fragment />;
+      }
+
       return [row,
         React.cloneElement(row, {
           ...rowProps,
@@ -421,6 +444,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         }),
       ];
     }
+
+    rowProps.dataItem.isGroupDeactivated = isGroupPhasesDeactivated(itemCategory);
 
     return React.cloneElement(row, {
       ...rowProps,
@@ -438,7 +463,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     );
   }, [collapsedState, dataState]);
 
-  const getUpdatedStateDataByEditInfo = React.useCallback((resultState?: DataResult) => {
+  const getUpdatedStateDataByEditInfo = useCallback((resultState?: DataResult) => {
     resultState?.data?.forEach((group: CustomGroupDataItem) => {
       group.items?.forEach((data) => {
         data[EDIT_FIELD] = group.groupId === editGroup;
@@ -446,8 +471,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
       return group;
     });
-
-    return sortGroups(resultState?.data ?? []);
+    return sortGroups(resultState?.data ?? [], selectedDocType?.categoryUniqId);
   }, [editGroup, resultState]);
 
   const onItemChange = (e: GridItemChangeEvent) => {
@@ -455,8 +479,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
       group.items?.forEach((data) => {
         if (data.id === e.dataItem.id) {
-          if (e.field === 'isActive') {
-            onDeletePhase(e.dataItem);
+          if (e.field === LCP_KEYS.isActive) {
+            onTogglePhaseItem(e.dataItem);
           } else {
             data.isUserModified = true;
             data[e.field || ''] = e.value;
@@ -482,7 +506,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         isApprovedSupplierEnforcedOnPO: '',
         isAllowedOnLhrProd: '',
         category: ADD_GROUP_NAME,
-        documentTypeIdArr: [],
+        documentTypeId: '',
         isAllowedToBuy: '',
         [EDIT_FIELD]: true,
         isAdd: true,
@@ -555,12 +579,27 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       >
         {translate('form.builder.add.item')}
       </AddButton>}
-      {confirmationDialog.isOpen && <AlertDialog
-        dialog={confirmationDialog}
-        confirmAction={onConfirmAlertDialog}
-        cancelAction={onCancelAlertDialog}
-        message={getDialogMessage()}
-      />}
+      {confirmationDialog.isOpen && (
+        <AlertDialog
+          handler={confirmationDialog}
+          onConfirm={onConfirmAlertDialog}
+          onCancel={onCancelAlertDialog}
+          title="common.warning"
+          confirmLabel="common.yes.continue"
+          cancelLabel="common.no.go.back"
+          warning
+        >
+          <Typography data-cy="lcp-dialog-message" dangerouslySetInnerHTML={{
+            __html: translate(
+              translate(
+                selectedPhase
+                  ? 'administration.general.settings.lcp.phase.deactivate.dialog.message'
+                  : 'administration.general.settings.lcp.doc.type.deactivate.dialog.message',
+              ),
+            ),
+          }} />
+        </AlertDialog>
+      )}
     </Grid>
   </SettingsPanel>;
 };

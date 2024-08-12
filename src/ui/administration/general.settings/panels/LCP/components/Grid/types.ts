@@ -11,7 +11,7 @@ export interface LCP {
   isApprovedSupplierEnforcedOnPO: string
   isAllowedOnLhrProd: string
   isAllowedToBuy: string
-  documentTypeIdArr: string[]
+  documentTypeId: string
   isUserAdded?: boolean
   group?: string
   isUserModified?: boolean
@@ -21,6 +21,7 @@ export interface LCP {
   isActive?: boolean
   enlilTypeOptions?: string[]
   otherLabelOptions?: string[]
+  isGroupDeactivated?: boolean
 }
 
 export interface EditableLCP extends LCP {
@@ -38,6 +39,7 @@ export interface CustomGroupDataItem {
 
 export interface CustomGroupOptions extends OptionType{
   category: string
+  categoryUniqId?: string
 }
 
 export interface GroupDocTypes {
@@ -68,7 +70,5 @@ export interface processLCPType {
 export interface SchemaOptions {
   onConfirm: () => void
   onDiscard: () => void
-  onDelete?: () => void
-  onDeletePhase: (dataItem: LCP) => void
   hasEditLCPPermission?: boolean
 }
