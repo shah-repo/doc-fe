@@ -5,6 +5,8 @@ import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, REFERENCE_FIELD } from './constants';
 
+export type AclRuleFieldsToCheck = 'from' | 'to' | 'type';
+
 export interface SchemaOptions {
   locations: CompanyLocation[]
   existingLocations: string[]
