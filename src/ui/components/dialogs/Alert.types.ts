@@ -6,4 +6,5 @@ export interface AlertDialogProps extends Omit<DialogProps, 'open'> {
   handler: DialogHandler
   title?: Translation
   warning?: boolean
+  isCancelButtonHidden?: boolean
 }

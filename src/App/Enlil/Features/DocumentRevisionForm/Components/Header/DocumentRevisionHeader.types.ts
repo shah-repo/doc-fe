@@ -7,4 +7,5 @@ export type DocumentRevisionHeaderProps =
   documentRevisionId?: string
   setDoNotPrompt?: (value: boolean) => void
   isSliderView?: boolean
+  inDialog?: boolean
 };
