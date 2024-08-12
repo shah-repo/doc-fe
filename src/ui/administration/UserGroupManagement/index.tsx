@@ -4,6 +4,7 @@ import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import StyledTabs from '../../dashboard.new/tabs/common/StyledTabs';
 import GroupManagementListContainer from '../../group.management/kendo/container';
+import lables from '../../translations/en.json';
 import UserManagementKendoContainer from '../../user.management/kendo/container';
 import { UserGroupTabValues } from './userGroupType';
 
@@ -29,11 +30,11 @@ const UserGroupManagment: React.FC = () => {
           aria-label="dashboard tabs">
           <Tab
             value={UserGroupTabValues.User}
-            label="User Management"
+            label={lables.USERTAB}
           />
           <Tab
             value={UserGroupTabValues.Group}
-            label="Group Management"
+            label={lables.GROUPTAB}
           />
         </StyledTabs>
       </Grid>
