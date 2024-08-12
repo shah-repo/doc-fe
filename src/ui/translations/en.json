@@ -2171,6 +2171,7 @@
   "common.table.onlyShowRowsErrors": "Only show rows with errors",
   "common.viewErrors": "View errors",
   "common.export.csv": "Export CSV",
+  "common.export.xls": "Export XLS",
   "common.folder.errorFound": "Errors found in following folders:",
   "common.folder.structureGuide": "Folder Structure Guide",
   "common.file.reUpload": "Re-upload File",

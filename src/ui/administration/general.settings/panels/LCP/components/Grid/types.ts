@@ -21,6 +21,7 @@ export interface LCP {
   isActive?: boolean
   enlilTypeOptions?: string[]
   otherLabelOptions?: string[]
+  isGroupDeactivated?: boolean
 }
 
 export interface EditableLCP extends LCP {
@@ -38,6 +39,7 @@ export interface CustomGroupDataItem {
 
 export interface CustomGroupOptions extends OptionType{
   category: string
+  categoryUniqId?: string
 }
 
 export interface GroupDocTypes {
