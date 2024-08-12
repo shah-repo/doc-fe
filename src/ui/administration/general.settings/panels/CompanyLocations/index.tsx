@@ -31,9 +31,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
 
   const async = useAsync({
-    onSuccess: async () => {
-      await submitSettingsForm();
-    },
+    onSuccess: submitSettingsForm,
     onError: (error) => {
       setLocationsData(locations);
       toastError(error);
