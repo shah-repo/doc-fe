@@ -9,6 +9,7 @@ import { Autocomplete, Checkbox, IconButton } from '../../../../../../../compone
 import useHover from '../../../../../../../hooks/useHover';
 import { EXPAND_FIELD } from '../constants';
 import { CustomGroupDataItem, CustomGroupOptions } from '../types';
+import { isGroupActivateOrDeactivate } from '../utils';
 import useStyles from './styles';
 
 type CustomGroupDataItemHandler = (groupDataItem: CustomGroupDataItem) => void;
@@ -56,7 +57,8 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   };
 
   const documentTypeId = dataItem.items?.[0].documentTypeId;
-  const isLCPActive = dataItem.items?.every(item => item.isActive === true);
+  const isLCPActive = isGroupActivateOrDeactivate(dataItem.items, true);
+  const isLCPDeactive = isGroupActivateOrDeactivate(dataItem.items, false);
   const defaultValue = (partGroups?.length ? partGroups : selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeId === groups.value);
   const displayValue = defaultValue?.map(data => data.label).join(', ');
   const selectedIDs = selectedPartGroups?.map((group) => group.value);
@@ -144,7 +146,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
             </IconButton>
           </Tooltip>
         )}
-        {isReadModeAndHasEditLCPPermission && (
+        {isReadModeAndHasEditLCPPermission && !isLCPDeactive && (
           <Tooltip title={translate('common.edit')} placement="top" arrow>
             <IconButton
               kind="simple"
