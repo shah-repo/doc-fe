@@ -21,4 +21,4 @@ interface SettingsSchemaOptions<T extends EditableItem = EditableItem> {
   onConfirm: () => unknown
 }
 
-export type SchemaBuilder<T extends EditableItem = EditableItem, O = Record<string, unknown>> = (options: SettingsSchemaOptions<T> & O) => Array<ColumnDefinition<T>>;
+export type SchemaBuilder<T extends EditableItem = EditableItem, O extends Record<string, unknown> = Record<string, unknown>> = (options: SettingsSchemaOptions<T> & O) => Array<ColumnDefinition<T>>;
