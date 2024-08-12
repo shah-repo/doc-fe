@@ -1,10 +1,11 @@
 import { Box, Tooltip, Typography } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridCellProps, GridColumn, GridPageChangeEvent } from '@progress/kendo-react-grid';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { noop } from 'lodash';
-import React, { ComponentType, ReactNode, useEffect, useState } from 'react';
+import React, { ComponentType, ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
 import { validateDateFormats } from '../../../../common/utils/date';
@@ -14,7 +15,6 @@ import { BulkImport, TableErrorDetail, TableErrorValidation, TableRow } from '..
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import Text from '../../../components/Text';
 import { Button, Switch } from '../../../components/forms/fields-next';
-import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import MessageInformation from '../MessageInformation';
@@ -153,6 +153,22 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const tableData = useSelector(getTableDataFiltered);
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
+  const excelExportRef = useRef<ExcelExport | null>(null);
+
+  const exportToExcel = () => {
+    if (excelExportRef.current) {
+      // Retrieve the current workbook options
+      const options = excelExportRef.current.workbookOptions();
+
+      // Modify the sheet name
+      if (options.sheets && options.sheets.length > 0) {
+        options.sheets[0].name = bulkImport?.processType;
+      }
+
+      // Save the Excel file with the modified options
+      excelExportRef.current.save(options);
+    }
+  };
 
   const asyncSetDataTable = useAsync({
     onSuccess: () => {
@@ -168,13 +184,6 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   };
 
   const triggerNext = () => {
-    if (errorCount > 0) {
-      const errorMessage = translate('bulkImport.tableErrorCountMessage', {
-        error: errorCount > 1 ? `${errorCount} errors` : 'error',
-      });
-      toastError(errorMessage, { position: 'top-right' });
-      return;
-    }
     dispatch(setIsLoading(true));
     asyncSetDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTable);
   };
@@ -215,24 +224,36 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           </Button>
         </Box>
       </Box>
-      <StyledKendoGrid
-        data={data}
-        skip={page * pageSize}
-        take={pageSize}
-        total={tableData.length}
-        editField="inEdit"
-        pageable={{
-          buttonCount: BUTTON_COUNT,
-          pageSizes: PAGE_SIZES,
-        }}
-        onPageChange={handlePageChange}
+      <ExcelExport
+        data={tableData}
+        ref={excelExportRef}
+        fileName={`${bulkImport?.processType || 'export'}.xlsx`}
       >
-        {tableDataFiltered.map((key, idx) => (
-          <GridColumn key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
-        ))}
-      </StyledKendoGrid>
+        <StyledKendoGrid
+          data={data}
+          skip={page * pageSize}
+          take={pageSize}
+          total={tableData.length}
+          editField="inEdit"
+          pageable={{
+            buttonCount: BUTTON_COUNT,
+            pageSizes: PAGE_SIZES,
+          }}
+          onPageChange={handlePageChange}
+        >
+          {tableDataFiltered.map((key, idx) => (
+            <GridColumn key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
+          ))}
+        </StyledKendoGrid>
+      </ExcelExport>
       <Box className={classes.actionsContainer}>
         <Box className={classes.buttonsFooterContainer}>
+          <Button
+            onClick={exportToExcel}
+            className={classes.button}
+          >
+            <Text translation="common.export.xls" />
+          </Button>
           <Button
             onClick={handleBack}
             kind="outlined"
@@ -243,7 +264,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           <Button
             onClick={triggerNext}
             className={classes.button}
-            disabled={tableData.length === 0 || errorCount > 0 }
+            disabled={tableData.length === 0 }
           >
             <Text translation="common.next" />
           </Button>
