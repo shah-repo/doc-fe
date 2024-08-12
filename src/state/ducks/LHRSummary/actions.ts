@@ -39,13 +39,20 @@ const fetchRecords = (
   offset = 0,
   handlers: Handlers,
 ): ApiAction => {
-  let filters: FilterDescriptor[] = [];
-  if (searchStr) {
-    filters = [
-      { field: 'document.docId', operator: KendoGridFilterCellOperators.CONTAINS, value: searchStr },
-      { field: 'issue.name', operator: KendoGridFilterCellOperators.CONTAINS, value: searchStr },
-    ];
-  }
+  const filters: FilterDescriptor[] = searchStr
+    ? [
+      {
+        field: 'document.docId',
+        operator: KendoGridFilterCellOperators.CONTAINS,
+        value: searchStr,
+      },
+      {
+        field: 'issue.name',
+        operator: KendoGridFilterCellOperators.CONTAINS,
+        value: searchStr,
+      },
+    ]
+    : [];
 
   return apiActionWithCallbacks({
     url: DOCUMENT_REVISION_SEARCH_ROOT_URL,
