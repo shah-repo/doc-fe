@@ -31,7 +31,7 @@ export const ActiveCell: React.FC<ActiveCellProps> = ({ dataItem, colSpan, style
       <Box display="flex" justifyContent="center">
         <Checkbox
           checked={dataItem.isActive}
-          disabled={!hasEditLCPPermission}
+          disabled={!hasEditLCPPermission || dataItem?.isGroupDeactivated}
           onChange={handleChange}
         />
       </Box>
