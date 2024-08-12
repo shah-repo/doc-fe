@@ -81,4 +81,4 @@ export const getPendingTooltipText = (pendingCount, approvedCount) => {
   };
 };
 
-export const delay = async (ms) => await new Promise(resolve => setTimeout(resolve, ms));
+export const delay = async (ms: number) => await new Promise(resolve => setTimeout(resolve, ms));
