@@ -30,10 +30,6 @@ const Permissions: React.FunctionComponent<Props> = ({
     currentEmployeePermissions.push(Permission.EDIT_BOM);
   }
 
-  if (!currentEmployeePermissions.includes(Permission.EDIT_LIFE_CYCLE)) {
-    currentEmployeePermissions.push(Permission.EDIT_LIFE_CYCLE);
-  }
-
   const permissionsRenderer = () => (
     <Box width={700} mt={5}>
       <Typography variant="h4" style={{ marginBottom: '16px' }}>
