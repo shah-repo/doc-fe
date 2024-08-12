@@ -156,18 +156,20 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const excelExportRef = useRef<ExcelExport | null>(null);
 
   const exportToExcel = () => {
-    if (excelExportRef.current) {
-      // Retrieve the current workbook options
-      const options = excelExportRef.current.workbookOptions();
-
-      // Modify the sheet name
-      if (options.sheets && options.sheets.length > 0) {
-        options.sheets[0].name = bulkImport?.processType;
-      }
-
-      // Save the Excel file with the modified options
-      excelExportRef.current.save(options);
+    if (!excelExportRef.current) {
+      return;
     }
+
+    // Retrieve the current workbook options
+    const options = excelExportRef.current.workbookOptions();
+
+    // Modify the sheet name
+    if (options.sheets && options.sheets.length > 0) {
+      options.sheets[0].name = bulkImport?.processType;
+    }
+
+    // Save the Excel file with the modified options
+    excelExportRef.current.save(options);
   };
 
   const asyncSetDataTable = useAsync({
