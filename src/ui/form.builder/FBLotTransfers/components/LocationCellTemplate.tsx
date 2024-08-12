@@ -2,10 +2,9 @@ import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CompanyLocation, CustomTemplateProps, EditableLotTransfer, LotTransferType } from '../types';
 
 interface Props extends CustomTemplateProps {
