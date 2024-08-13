@@ -7,8 +7,7 @@ import { Group } from '../../../state/ducks/auth/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { materialFlowACLSelectors } from '../../../state/ducks/materialFlowAcl';
 import { MaterialFlowAclRule } from '../../../state/ducks/materialFlowAcl/types';
-import { LocationField } from '../../administration/general.settings/panels/SystemTransactions/types';
-import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
+import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, RULE_FIELDS_TO_CHECK, TRANSFERS_FIELD } from './constants';
 import { AllowedOptions, CalculableLotTransfer, CompanyLocation, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction, SelectedOptions } from './types';
 
 export const getOptionLabel = (option: DocumentRevisionOption): string => {
@@ -80,7 +79,7 @@ export const useOnHandQuantity = (): UseOnHandQuantityType => {
   };
 };
 
-const checkRuleLocations = (rule: MaterialFlowAclRule, field: LocationField, set: Set<string>, locations: CompanyLocation[]) => {
+const checkRuleLocations = (rule: MaterialFlowAclRule, field: 'from' | 'to', set: Set<string>, locations: CompanyLocation[]) => {
   if (rule[field]) {
     set.add(rule[field]);
   } else {
@@ -103,9 +102,7 @@ const getAllowedTransferOptions = (
     rule => rule.groups.length === 0 || rule.groups.some(group => groups.some(it => it.id === group.id)),
   );
 
-  console.log(allowedRules);
-
-  ['type', 'from', 'to'].forEach(field => {
+  RULE_FIELDS_TO_CHECK.forEach(field => {
     allowedRules.forEach(rule => {
       if (field !== 'type' && selectedOptions.type && rule.action !== selectedOptions.type) return;
       if (field !== 'from' && selectedOptions.from && rule.from !== selectedOptions.from) return;
@@ -118,12 +115,6 @@ const getAllowedTransferOptions = (
         checkRuleLocations(rule, field, field === 'from' ? allowedFromLocations : allowedToLocations, locations);
       }
     });
-  });
-
-  console.log({
-    type: Array.from(allowedActions),
-    from: Array.from(allowedFromLocations),
-    to: Array.from(allowedToLocations),
   });
 
   return {

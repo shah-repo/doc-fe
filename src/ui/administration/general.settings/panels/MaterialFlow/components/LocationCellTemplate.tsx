@@ -4,14 +4,12 @@ import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { CompanyLocation } from '../../../../../../state/ducks/company/types';
 import { CellTemplateProps } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
+import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { LotTransferType } from '../../../../../form.builder/FBLotTransfers/types';
 import useStyles from '../styles';
 import { EditableMaterialFlowAclRule } from '../types';
-
-const EMPTY_VALUE_PLACEHOLDER = '-';
 
 interface Props extends CellTemplateProps<EditableMaterialFlowAclRule> {
   options: CompanyLocation[]

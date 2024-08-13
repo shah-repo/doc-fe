@@ -81,15 +81,25 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
-const updateGeneralSettings = (body: GeneralSettings, id?: string, method: ApiActionMethod = 'post'): ApiAction<GeneralSettingsState> => apiAction({
-  url: id ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id: id }) : COMPANY_SETTINGS_URL,
-  method: method,
-  data: omit(body, 'id', 'materialFlowAcl'),
-  asyncType: SET_GENERAL_SETTINGS,
-  onSuccess: (data, dispatch) => {
-    dispatch(setGeneralSettings(data));
-  },
-});
+const updateGeneralSettings = (
+  body: GeneralSettings,
+  id?: string,
+  method: ApiActionMethod = 'post',
+): ApiAction<GeneralSettingsState> => {
+  const { lifecyclePhasesProcessedPayload, ...rest } = body;
+  const payload = { ...rest, lifecyclePhases: lifecyclePhasesProcessedPayload };
+  const url = id ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id }) : COMPANY_SETTINGS_URL;
+
+  return apiAction({
+    url,
+    method,
+    data: omit(payload, 'id', 'materialFlowAcl'),
+    asyncType: SET_GENERAL_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(setGeneralSettings(data));
+    },
+  });
+};
 
 const fetchLCPPhasesByGroup = (
   type = DOC_TYPE_GROUP.PART,

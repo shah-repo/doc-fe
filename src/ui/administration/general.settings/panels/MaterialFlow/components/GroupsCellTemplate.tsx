@@ -49,6 +49,7 @@ const GroupsCellTemplate: React.FC<Props> = ({
       </FormikField>
     );
   }
+
   return (
     <Box className={classes.chips} onClick={() => onClick?.({ dataItem })}>
       {value.map((group) => (

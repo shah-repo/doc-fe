@@ -1,9 +1,10 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../../components/OverflowTooltip';
 import { documentPreviewPath } from '../../../../../../document.revision/utils/paths';
-import { EMPTY_DROPDOWN_PLACEHOLDER, EMPTY_VALUE_PLACEHOLDER } from '../../constants';
+import { EMPTY_DROPDOWN_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 import { isEditMode } from '../../utils';
 import { styles } from './styles';

@@ -68,6 +68,8 @@ export interface LotTransfer {
   comments?: string
 }
 
+export type AclRuleFieldsToCheck = keyof LotTransfer;
+
 export interface EditableLotTransfer extends LotTransfer {
   [MODE_FIELD]: Mode
   [EMPLOYEE_FIELD]: string

@@ -100,6 +100,14 @@ export const buildSchema = ({
       width: 180,
     },
     {
+      id: 'quantity',
+      field: 'quantity',
+      filterCell: InputFilter,
+      title: quantityTitle,
+      template: (props) => <QuantityCellTemplate {...props} onClick={onRowClick} />,
+      width: 150,
+    },
+    {
       id: 'build',
       field: BUILD_FIELD,
       title: 'form.builder.lot.transfers.build',
@@ -114,14 +122,6 @@ export const buildSchema = ({
       filterCell: InputFilter,
       template: (props) => <RevisionCellTemplate {...props} options={records} onClick={onRowClick} fieldToEdit="reference" />,
       width: 350,
-    },
-    {
-      id: 'quantity',
-      field: 'quantity',
-      filterCell: InputFilter,
-      title: quantityTitle,
-      template: (props) => <QuantityCellTemplate {...props} onClick={onRowClick} />,
-      width: 150,
     },
     {
       id: 'date',
