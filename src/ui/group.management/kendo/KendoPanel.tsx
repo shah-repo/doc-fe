@@ -47,6 +47,7 @@ import { TablePanelStateProps } from '../../components/table/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDidMount from '../../hooks/useDidMount';
+import KendoPanelStyles from '../../user.management/kendo/KendoPanel.styles';
 import AddGroupContainer from '../add.group/AddGroup.container';
 import { DEFAULT_ACTIVE_EMPLOYEES } from '../utils/types';
 import { CommandCell } from './cell.template/CommandCell';
@@ -81,6 +82,7 @@ export function KendoPanel ({
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
+  const panelClasses = KendoPanelStyles();
   const [Official, setOfficial] = useState(false);
   const { columnConfig, kendoConfig } = tableCriteria;
   if (columnConfig && JSON.parse(columnConfig).length) {
@@ -532,7 +534,7 @@ export function KendoPanel ({
   const tableRenderer = ({ width }: Size) => (
     <>
       <StyledKendoGrid
-        className={`${classes.UserGroupgrid} no-row-pointer`}
+        className={`${panelClasses.userGroupGrid} no-row-pointer`}
         style={{ width: `${width}px` }}
         rowHeight={40}
         data={result}

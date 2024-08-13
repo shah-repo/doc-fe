@@ -159,6 +159,7 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={BULK_IMPORT_URL}
             component={BulkImportPage}
+            exact
           />
           <Route
             path={USER_GROUP_URL}
@@ -167,6 +168,7 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={BULK_IMPORT_PROGRESS_URL}
             component={BulkImportProgressPage}
+            exact
           />
           <Redirect to={HOME_URL} />
         </Switch>

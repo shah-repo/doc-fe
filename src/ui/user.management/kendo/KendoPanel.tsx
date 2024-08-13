@@ -41,6 +41,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDidMount from '../../hooks/useDidMount';
 import AddEmployeeContainer from '../add.employee/container';
+import KendoPanelStyles from './KendoPanel.styles';
 import UMExport from './UMExport';
 import { CommandCell } from './cell.template/CommandCell';
 import { DropdownFilterCell } from './cell.template/DropdownFilterCell';
@@ -69,6 +70,7 @@ export function KendoPanel ({
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
+  const panelClasses = KendoPanelStyles();
   const { columnConfig, kendoConfig } = tableCriteria;
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
@@ -493,7 +495,7 @@ export function KendoPanel ({
   const tableRenderer = ({ width }: Size) => (
     <>
       <StyledKendoGrid
-        className={`${classes.UserGroupgrid} no-row-pointer`}
+        className={`${panelClasses.userGroupGrid} no-row-pointer`}
         style={{ width: `${width}px` }}
         rowHeight={40}
         data={result}

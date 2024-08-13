@@ -15,8 +15,5 @@ const KendoGridStyles = makeStyles((theme) => ({
   kendoGridContainer: {
     position: 'inherit !important' as 'inherit',
   },
-  UserGroupgrid: {
-    height: 'calc(90vh - 144px)',
-  },
 }));
 export default KendoGridStyles;
