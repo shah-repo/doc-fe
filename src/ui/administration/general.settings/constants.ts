@@ -2,13 +2,13 @@ import ApprovalRequestsSettingsPanel from './panels/ApprovalRequest';
 import CompanyLocationSettingsPanel from './panels/CompanyLocations';
 import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
+import LCPSettings from './panels/LCP';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import PrintingSettingsPanel from './panels/Printing';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
 import LotAutoAllocationOrder from './panels/WorkOrder/LotAutoAllocationOrder';
 import { GeneralSettingsTabs } from './types';
 
-export const MAX_PANEL_WIDTH = 660;
 export const SIDEBAR_WIDTH = 180;
 
 export const panels = [
@@ -41,6 +41,11 @@ export const panels = [
     key: GeneralSettingsTabs.Locations,
     title: 'administration.general.settings.locations.tab',
     component: CompanyLocationSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.LCP,
+    title: 'administration.general.settings.lcp',
+    component: LCPSettings,
   },
   {
     key: GeneralSettingsTabs.Integrations,

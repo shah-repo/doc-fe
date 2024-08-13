@@ -18,7 +18,7 @@ const GeneralSettingsContainer: React.FC = () => {
 
   const formik = useFormik<GeneralSettings>({
     initialValues,
-    onSubmit: (values) => {
+    onSubmit: (values: GeneralSettings) => {
       dispatch(companyActions.updateGeneralSettings(values));
     },
   });

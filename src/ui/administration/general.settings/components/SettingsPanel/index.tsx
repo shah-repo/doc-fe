@@ -1,9 +1,11 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import React, { MouseEventHandler } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Button, IconButton } from '../../../../components/forms/fields-next';
+import useSticky from '../../../../hooks/useSticky';
 import { SettingsPanelProps } from '../../types';
 import useStyles from './styles';
 
@@ -11,11 +13,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   title,
   info,
   children,
+  containerRef,
   onToggle,
   onAddNew,
   ...props
 }) => {
   const classes = useStyles();
+  const [stickyRef, isSticky] = useSticky(containerRef);
 
   const handleAddNew: MouseEventHandler = (e) => {
     e.stopPropagation();
@@ -26,11 +30,17 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     <ExpansionPanel
       {...props}
       className={classes.root}
+      TransitionProps={{
+        mountOnEnter: true,
+        unmountOnExit: true,
+        ...props.TransitionProps,
+      }}
     >
       <ExpansionPanelSummary
+        ref={stickyRef}
         onClick={() => onToggle()}
         classes={{
-          root: classes.summary,
+          root: cx(classes.summary, { [classes.stickySummary]: isSticky }),
           content: classes.content,
           expandIcon: classes.icon,
         }}
@@ -59,7 +69,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </Button>
         )}
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.details}>
+      <ExpansionPanelDetails className={cx(classes.details, { [classes.detailsWithStickyTitle]: isSticky })}>
         {children}
       </ExpansionPanelDetails>
     </ExpansionPanel>

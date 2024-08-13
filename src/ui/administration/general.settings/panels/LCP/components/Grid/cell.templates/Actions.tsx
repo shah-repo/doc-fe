@@ -1,25 +1,22 @@
-import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { light, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Tooltip } from '@material-ui/core';
 import React, { useCallback } from 'react';
-import { translate } from '../../../../../../common/intl';
-import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
-import { IconButton } from '../../../../../components/forms/fields-next';
-import useHover from '../../../../../hooks/useHover';
-import useStyles from '../styles';
-import { ActionsProps } from './LocationActionsCellTemplate';
+import { translate } from '../../../../../../../../common/intl';
+import { IconButton } from '../../../../../../../components/forms/fields-next';
+import useHover from '../../../../../../../hooks/useHover';
+import { ActionsProps } from './LCPActionsCellTemplate';
+import useStyles from './styles';
 
 const Actions: React.FC<ActionsProps> = ({
-  onClick,
   onConfirm,
   onDiscard,
   scrollBehavior = 'auto',
-  isActive,
+  dataItem,
   ...props
 }) => {
-  const { dataItem } = props;
-  const { cellStyle } = useStyles({ isActive: dataItem?.isActive });
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const { cellStyle } = useStyles();
+  const isEditMode = dataItem.isAddPhase;
   const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
   const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
 
@@ -29,17 +26,15 @@ const Actions: React.FC<ActionsProps> = ({
     }
   }, [scrollBehavior]);
 
-  const onEdit = () => onClick?.({ dataItem });
-
   return (
     <div
       id="row-actions"
       ref={ref}
     >
       <Box className={`${cellStyle} k-command-cell`}>
-        {isEditMode ? (
+        {isEditMode && (
           <>
-            <Tooltip title={translate('common.discard')}>
+            <Tooltip title={translate('common.discard')} placement="top" arrow>
               <IconButton
                 kind="simple"
                 color="primary"
@@ -50,7 +45,7 @@ const Actions: React.FC<ActionsProps> = ({
                 <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
               </IconButton>
             </Tooltip>
-            <Tooltip title={translate('common.save')}>
+            <Tooltip title={translate('common.save')} placement="top" arrow>
               <IconButton
                 kind="simple"
                 color="primary"
@@ -62,18 +57,6 @@ const Actions: React.FC<ActionsProps> = ({
               </IconButton>
             </Tooltip>
           </>
-        ) : (
-          <Tooltip title={translate('common.edit')}>
-            <IconButton
-              kind="simple"
-              color="primary"
-              ref={saveRef}
-              onClick={onEdit}
-              disabled={!isActive}
-            >
-              <FontAwesomeIcon icon={regular('pen-to-square')} />
-            </IconButton>
-          </Tooltip>
         )}
       </Box>
     </div>

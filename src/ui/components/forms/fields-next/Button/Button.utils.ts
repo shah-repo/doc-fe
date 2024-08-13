@@ -10,7 +10,7 @@ const STYLE_PROPS: ButtonKindToVariantMap<BasicButtonKinds> = {
 const DEFAULT_PROPS: ButtonVariantProps = ['contained', 'primary'];
 
 export const useButtonType = <T extends string | undefined>(kind?: string, additional?: ButtonKindToVariantMap<Exclude<T, undefined>>): ButtonVariantProps => {
-  const allKinds = {
+  const allKinds: Record<string, ButtonVariantProps> = {
     ...STYLE_PROPS,
     ...additional,
   };
