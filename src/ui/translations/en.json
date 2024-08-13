@@ -292,6 +292,7 @@
   "documentRevision.audit.formInput.wo_part_quantity.NUMBER_EDITED": "Part Quantity updated",
   "documentRevision.audit.formInput.wo_part.id.STRING_NEW": "Work Order Part added",
   "documentRevision.audit.formInput.wo_part.id.STRING_EDITED": "Work Order Part updated",
+  "documentRevision.audit.formInput.wo_part.id.STRING_DELETED": "Work Order Part removed",
   "documentRevision.audit.formInput.work_order_type.STRING_NEW": "Work Order Type added",
   "documentRevision.audit.formInput.work_order_type.STRING_EDITED": "Work Order Type updated",
   "documentRevision.audit.inventoryTask.ARRAY_ADDED": "Task Added",
