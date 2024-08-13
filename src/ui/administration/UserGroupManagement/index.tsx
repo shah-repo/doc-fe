@@ -27,7 +27,8 @@ const UserGroupManagment: React.FC = () => {
         <StyledTabs
           value={value}
           onChange={handleChange}
-          aria-label="dashboard tabs">
+          aria-label="dashboard tabs"
+        >
           <Tab
             value={UserGroupTabValues.User}
             label={lables.USERTAB}
