@@ -3505,7 +3505,7 @@ aggregate-error@^3.0.0:
 
 "ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git":
   version "0.0.1"
-  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#06038bb760c438923ef14ce56cac6dbee8b77eee"
+  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#c7f4eae6de51414864861e50fc13c423c5456bf9"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "6.5.2"
     "@fortawesome/free-regular-svg-icons" "6.5.2"
