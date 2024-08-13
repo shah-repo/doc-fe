@@ -23,16 +23,16 @@ const ROUTES: RouteChecker[] = [
     check: (path) => path === URL.DOCUMENT_REVISION_LIST_URL,
   },
   {
+    module: HelpModule.ApprovalRequests,
+    check: (path) => path.startsWith(URL.CHANGE_REQUEST_LIST_URL),
+  },
+  {
     module: HelpModule.GroupManagement,
     check: (path) => path.startsWith(URL.USER_GROUPS_URL),
   },
   {
     module: HelpModule.UserManagement,
     check: (path) => path.startsWith(URL.USER_GROUP_URL),
-  },
-  {
-    module: HelpModule.ApprovalRequests,
-    check: (path) => path.startsWith(URL.CHANGE_REQUEST_LIST_URL),
   },
   {
     module: HelpModule.Training,
