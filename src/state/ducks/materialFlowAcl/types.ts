@@ -1,4 +1,5 @@
 import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
+import { ApiAction } from '../../types';
 import { Group } from '../auth/types';
 
 export interface MaterialFlowAclRule {
@@ -10,3 +11,5 @@ export interface MaterialFlowAclRule {
 }
 
 export type MaterialFlowAclRulePayload = Omit<MaterialFlowAclRule, 'id'>;
+
+export type ApiReturnType = ApiAction<MaterialFlowAclRule, MaterialFlowAclRulePayload>;

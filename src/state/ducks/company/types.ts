@@ -207,7 +207,7 @@ export interface GeneralSettings {
   allocationConfig: AllocationConfig
   lifecyclePhases?: {categories: LCPResponse[]}
   lifecyclePhasesProcessedPayload: LCP[]
-  materialFlowAcl: MaterialFlowAclRule[]
+  materialFlowACLs: MaterialFlowAclRule[]
   materialFlowAclEnabled: boolean
   shouldNotifyLcpMismatch: NotifyPartLCP
 }
