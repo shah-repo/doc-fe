@@ -15,6 +15,7 @@ export enum HelpModule {
   WorkOrder = 'Work Order',
   PurchaseOrder = 'Purchase Order',
   TrainingCurriculums = 'Training Curriculums',
+  UserGroupManagment = 'User/Group Managment',
 }
 
 export enum HelpCenterItemType {

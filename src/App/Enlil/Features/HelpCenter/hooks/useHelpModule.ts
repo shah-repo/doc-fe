@@ -30,6 +30,10 @@ const ROUTES: RouteChecker[] = [
     module: HelpModule.Training,
     check: (path) => path.startsWith(URL.TRAINING_URL),
   },
+  {
+    module: HelpModule.UserGroupManagment,
+    check: (path) => path.startsWith(URL.USER_GROUP_URL),
+  },
 ];
 
 export default function useHelpModule (): HelpModule {

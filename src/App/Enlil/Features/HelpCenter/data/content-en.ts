@@ -193,8 +193,8 @@ const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
       },
     ],
   },
-  [HelpModule.UserManagement]: {
-    title: 'User Management Help',
+  [HelpModule.UserGroupManagment]: {
+    title: 'User/Group Management Help',
     url: '//help.{env}enlil.io/user_mgmt_help.html',
     items: [
       {
@@ -207,12 +207,6 @@ const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
         title: 'User Addition workflow',
         url: '//help.{env}enlil.io/user_mgmt_workflow.html',
       },
-    ],
-  },
-  [HelpModule.GroupManagement]: {
-    title: 'Group Management Help',
-    url: '//help.{env}enlil.io/group_mgmt_help.html',
-    items: [
       {
         type: HelpCenterItemType.HowTo,
         title: 'How to create Groups?',
@@ -225,6 +219,7 @@ const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
       },
     ],
   },
+
   [HelpModule.Dashboard]: {
     title: 'Dashboard Help',
     url: '//help.{env}enlil.io/dashboard_help.html',
