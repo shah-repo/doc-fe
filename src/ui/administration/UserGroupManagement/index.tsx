@@ -1,20 +1,18 @@
 import { Grid, Tab } from '@material-ui/core';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import { USER_GROUPS_URL, USER_GROUP_URL } from '../../constants/urls';
 import StyledTabs from '../../dashboard.new/tabs/common/StyledTabs';
 import GroupManagementListContainer from '../../group.management/kendo/container';
-import lables from '../../translations/en.json';
+import LABELS from '../../translations/en.json';
 import UserManagementKendoContainer from '../../user.management/kendo/container';
 import { UserGroupTabValues } from './userGroupType';
 
 const UserGroupManagment: React.FC = () => {
-  const [value, setValue] = useState<UserGroupTabValues>(UserGroupTabValues.User);
+  const match = useRouteMatch(USER_GROUPS_URL);
   const classes = KendoGridStyles();
-  const handleChange = useCallback(
-    (event: any, newValue: UserGroupTabValues) => setValue(newValue),
-    [],
-  );
 
   return (
     <>
@@ -24,25 +22,25 @@ const UserGroupManagment: React.FC = () => {
             <GridTitle translation="navigation.userGroup.management" />
           </Grid>
         </Grid>
-        <StyledTabs
-          value={value}
-          onChange={handleChange}
-          aria-label="dashboard tabs"
-        >
+        <StyledTabs value={match ? UserGroupTabValues.Group : UserGroupTabValues.User}>
           <Tab
+            component={Link}
+            to={USER_GROUP_URL}
             value={UserGroupTabValues.User}
-            label={lables.USERTAB}
+            label={LABELS.USERTAB}
           />
           <Tab
+            component={Link}
+            to={USER_GROUPS_URL}
             value={UserGroupTabValues.Group}
-            label={lables.GROUPTAB}
+            label={LABELS.GROUPTAB}
           />
         </StyledTabs>
       </Grid>
-
-      {value === UserGroupTabValues.User && <UserManagementKendoContainer />}
-      {value === UserGroupTabValues.Group && <GroupManagementListContainer />}
-
+      <Switch>
+        <Route path={USER_GROUPS_URL} component={GroupManagementListContainer} />
+        <Route component={UserManagementKendoContainer} />
+      </Switch>
     </>
   );
 };
