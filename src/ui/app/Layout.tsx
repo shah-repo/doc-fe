@@ -5,6 +5,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
+import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
@@ -29,13 +30,12 @@ import {
   DOCUMENT_TYPE_MANAGEMENT_URL,
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
-  GROUP_MANAGEMENT_ROOT_URL,
   HOME_URL,
   PAGE_DETAILS_MANAGEMENT_URL,
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
   TRAINING_URL,
-  USER_MANAGEMENT_ROOT_URL,
+  USER_GROUP_URL,
 } from '../constants/urls';
 import DashboardLayout from '../dashboard.new/Dashboard.layout';
 import DashboardContainer from '../dashboard/Dashboard.container';
@@ -45,13 +45,11 @@ import { DocumentTypeManagementContainer } from '../document.type.management/ken
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
-import GroupManagementListContainer from '../group.management/kendo/container';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
 import SlackContainer from '../slack/Container';
 import TrainingDetailContainer from '../training/TrainingDetail.container';
 import TrainingListContainer from '../training/grid/container';
-import UserManagementListContainer from '../user.management/kendo/container';
 import DataFetcherContainer from './DataFetcher.container';
 import HeaderContainer from './Header.container';
 import useStyles from './Layout.styles';
@@ -127,14 +125,6 @@ const Layout: React.FunctionComponent = () => {
             component={TrainingListContainer}
           />
           <Route
-            path={USER_MANAGEMENT_ROOT_URL}
-            component={UserManagementListContainer}
-          />
-          <Route
-            path={GROUP_MANAGEMENT_ROOT_URL}
-            component={GroupManagementListContainer}
-          />
-          <Route
             path={SLACK_ROOT_URL}
             component={SlackContainer}
           />
@@ -170,6 +160,10 @@ const Layout: React.FunctionComponent = () => {
             path={BULK_IMPORT_URL}
             component={BulkImportPage}
             exact
+          />
+          <Route
+            path={USER_GROUP_URL}
+            component={UserGroupManagment}
           />
           <Route
             path={BULK_IMPORT_PROGRESS_URL}
