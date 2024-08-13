@@ -2,17 +2,12 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Divider,
   Typography,
 } from '@material-ui/core';
 import { History } from 'history';
 import moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
@@ -44,7 +39,6 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const history = useHistory() as History;
   const dispatch = useDispatch();
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
-  const [confirmOpen, setConfirmOpen] = useState(false);
   const approvalId = item?.documentRevision?.approvals[0]?.id;
   const approverId = item?.documentRevision?.approvals[0]?.approverId;
   const transitionDialog = useDialog();
@@ -87,20 +81,11 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     openRejectDialog();
   };
 
-  const handleConfirmOpen = () => {
-    setConfirmOpen(true);
-  };
-
-  const handleConfirmClose = () => {
-    setConfirmOpen(false);
-  };
-
   const handleDownloadFile = () => {
     dispatch(getReportsExcelFile(item.id));
   };
 
-  const handleConfirmYes = () => {
-    setConfirmOpen(false);
+  const handleReturnToStep = () => {
     dispatch(setBulkImport(item));
     dispatch(setCurrentStep(currentProgressStep.current));
     history.push(BULK_IMPORT_URL);
@@ -194,7 +179,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
               />
             </StyleTooltip>
           </Box>}
-          {showButtonView && <Button className={!item?.completedAt ? classes.viewButton : classes.downloadLogs} kind="outlined" color={item?.completedAt ? 'primary' : 'inherit'} onClick={!item?.completedAt ? handleConfirmOpen : handleDownloadFile}>
+          {showButtonView && <Button className={!item?.completedAt ? classes.viewButton : classes.downloadLogs} kind="outlined" color={item?.completedAt ? 'primary' : 'inherit'} onClick={!item?.completedAt ? handleReturnToStep : handleDownloadFile}>
             <Text translation={!item?.completedAt ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
           </Button>}
         </Box>
@@ -218,27 +203,6 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           />
         </>
       }
-      <Dialog
-        open={confirmOpen}
-        onClose={handleConfirmClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Confirm Action</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {translate('bulkImport.goBackStep')}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions style={{ marginRight: 10 }}>
-          <Button onClick={handleConfirmClose} color="primary">
-            {translate('common.false')}
-          </Button>
-          <Button onClick={handleConfirmYes} color="primary" autoFocus>
-            {translate('common.true')}
-          </Button>
-        </DialogActions>
-      </Dialog>
     </React.Fragment>
   );
 };
