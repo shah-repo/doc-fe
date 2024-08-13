@@ -2,6 +2,8 @@ export enum HelpModule {
   General = 'General',
   Dashboard = 'Dashboard',
   DocumentList = 'Document List',
+  UserManagement = 'User Management',
+  GroupManagement = 'Group Management',
   ApprovalRequests = 'Approval Requests',
   EB = 'EB',
   Lhr = 'Lhr',
@@ -15,7 +17,6 @@ export enum HelpModule {
   WorkOrder = 'Work Order',
   PurchaseOrder = 'Purchase Order',
   TrainingCurriculums = 'Training Curriculums',
-  UserGroupManagment = 'User/Group Managment',
 }
 
 export enum HelpCenterItemType {
