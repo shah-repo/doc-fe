@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 import {
   getTableCriteria,
   getTableData,
@@ -23,7 +23,7 @@ import {
 import { DEFAULT_SELECTED_GROUP } from '../utils/types';
 import KendoPresenter from './presenter';
 
-const KendoContainer: React.FC = () => {
+const KendoContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const dispatch = useDispatch();
   const editGroupsDialog = useDialog();
   const previewGroupsDialog = useDialog();
