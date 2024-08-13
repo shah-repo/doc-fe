@@ -225,7 +225,6 @@ const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
       },
     ],
   },
-
   [HelpModule.Dashboard]: {
     title: 'Dashboard Help',
     url: '//help.{env}enlil.io/dashboard_help.html',
