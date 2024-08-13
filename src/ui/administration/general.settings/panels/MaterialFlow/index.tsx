@@ -26,7 +26,7 @@ import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
 import { EditableMaterialFlowAclRule } from './types';
 
-const PANEL_FIELD = 'materialFlowAcl';
+const PANEL_FIELD = 'materialFlowACLs';
 const STATUS_FIELD = 'materialFlowAclEnabled';
 
 const INITIAL_VALUES = {
