@@ -160,7 +160,6 @@ const Layout: React.FunctionComponent = () => {
             path={BULK_IMPORT_URL}
             component={BulkImportPage}
           />
-
           <Route
             path={USER_GROUP_URL}
             component={UserGroupManagment}

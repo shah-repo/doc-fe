@@ -128,7 +128,6 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     ],
     restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
   },
-
   {
     label: 'Document Type Management',
     type: 'LINK',
