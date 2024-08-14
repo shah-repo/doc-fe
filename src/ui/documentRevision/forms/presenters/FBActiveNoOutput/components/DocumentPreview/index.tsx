@@ -27,6 +27,7 @@ import { isOperator } from '../../../../../DocumentRevisionDisplay.container';
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentOTHER, checkIsDocumentPart, checkIsDocumentWO } from '../../../../../helpers/checkDocumentGroup';
 import DocumentRevisionFormPresenter from '../../../../DocumentRevisionForm.presenter';
 import { DocumentRevisionFormValues } from '../../../../types';
+import LifecyclePhaseSelect from '../../../LifecyclePhaseSelect';
 import RelatedEquipments, { shouldShowRelatedEquipmentsTable } from '../../../related.equipments';
 import RelatedPartsWrapper from '../../../related.parts/RelatedParts.wrap';
 import styles from './styles';
@@ -262,6 +263,17 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
+                        {(isPart || isPartForm) && formPreview && (
+                          <Grid item xs={12}>
+                            <LifecyclePhaseSelect
+                              docTypeId={docTypeId}
+                              lifecyclePhaseId={
+                                  documentRevision?.lifecyclePhaseId
+                              }
+                              isPartForm={isPartForm}
+                            />
+                          </Grid>
+                        )}
                         {((isPart || isPartForm || isOther || isOtherForm) && formPreview) && (
                           <Grid item xs={12}>
                             <RelatedPartsWrapper

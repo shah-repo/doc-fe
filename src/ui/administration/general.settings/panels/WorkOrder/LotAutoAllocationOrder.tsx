@@ -54,6 +54,7 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
               />
             }
             labelPlacement="start"
+            key={orderByReleaseDateValue}
             label={
               <Typography variant="body2" className={classes.radioLabel}>
                 {translate(
@@ -77,6 +78,7 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
               />
             }
             labelPlacement="start"
+            key={orderByReleaseDateValue}
             label={
               <Typography variant="body2" className={classes.radioLabel}>
                 {translate(
