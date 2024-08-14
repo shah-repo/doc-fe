@@ -140,6 +140,11 @@ export const toDocumentRevisionEditRequestBody = (
   if (!values.document?.documentType?.isQms) {
     data.description = data.description || data.name;
   }
+
+  if (values.lifecyclePhaseId) {
+    data.lifecyclePhaseId = values.lifecyclePhaseId;
+  }
+
   return data;
 };
 
