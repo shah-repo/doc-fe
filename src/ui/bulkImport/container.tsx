@@ -78,12 +78,14 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
 
   return (
     <Box className={classes.root}>
-      <Box className={classes.backToDashboardContainer}>
-        <Button component={Link} to={BULK_IMPORT_PROGRESS_URL} className={classes.backToDashboard} kind="outlined" >
-          <Text translation="bulkImport.backToDashbord" />
-        </Button>
+      <Box className={classes.headerContainer}>
+        <Box className={classes.backToDashboard}>
+          <Button component={Link} to={BULK_IMPORT_PROGRESS_URL} kind="outlined" >
+            <Text translation="bulkImport.backToDashbord" />
+          </Button>
+        </Box>
+        <Steps activeStep={activeStep} steps={steps} />
       </Box>
-      <Steps activeStep={activeStep} steps={steps} />
       {isLoading && <Box className={classes.loadingContainer}>
         <CircularProgress color="primary" size={24} className={classes.loading} />
       </Box>}

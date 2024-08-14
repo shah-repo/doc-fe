@@ -1,7 +1,8 @@
 import { Box, Tooltip, Typography } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+import { CompositeFilterDescriptor, filterBy } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
-import { GridCellProps, GridColumn, GridPageChangeEvent } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumn, GridFilterChangeEvent, GridPageChangeEvent } from '@progress/kendo-react-grid';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { noop } from 'lodash';
@@ -154,6 +155,13 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
   const excelExportRef = useRef<ExcelExport | null>(null);
+  const [filter, setFilter] = React.useState<CompositeFilterDescriptor>();
+
+  const filterChange = (event: GridFilterChangeEvent) => {
+    const newData = filterBy(tableData, event.filter);
+    setFilter(event.filter);
+    setData(newData.slice(page * pageSize, (page + 1) * pageSize));
+  };
 
   const exportToExcel = () => {
     if (!excelExportRef.current) {
@@ -242,9 +250,14 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
             pageSizes: PAGE_SIZES,
           }}
           onPageChange={handlePageChange}
+          sortable
+          resizable
+          filterable
+          filter={filter}
+          onFilterChange={filterChange}
         >
           {tableDataFiltered.map((key, idx) => (
-            <GridColumn key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
+            <GridColumn filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
           ))}
         </StyledKendoGrid>
       </ExcelExport>

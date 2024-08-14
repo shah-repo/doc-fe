@@ -288,6 +288,7 @@ export const saveApprovals = (
   },
   onSuccess: (data, dispatch) => {
     dispatch(setApproval(data));
+    return data;
   },
   onFailure: (err, dispatch) => {
     dispatch(setIsLoading(false));

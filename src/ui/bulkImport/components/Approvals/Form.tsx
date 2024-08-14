@@ -1,9 +1,10 @@
+/* eslint-disable */
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Box, FormControl, IconButton, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import { Form, Formik } from 'formik';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
@@ -27,12 +28,30 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [users, setUsers] = useState<ApproverOption[]>([]);
+  const completedRevisions = useRef(0);
   const classes = useStyles();
   const bulkImport = useSelector(getBulkImport);
   const approversOptionList = useSelector(getApproversSelectList);
   const saveApprovalsAction = useActionCreator(saveApprovals);
   const saveDocumentRevisionsAction = useActionCreator(saveDocumentRevisions);
   const saveDocumentRevisionsInReviewAction = useActionCreator(saveDocumentRevisionsInReview);
+  const availableOptions: ApproverOption[] = approversOptionList.filter(option =>
+    !users.some(user => user.value === option.value),
+  );
+
+  const checkToRun = () => {
+    completedRevisions.current += 1;
+
+    // If all users have been processed, start the final revision in review
+    if (completedRevisions.current === users.length) {
+      dispatch(setIsLoading(true));
+      asyncDocumentRevisionInReview.start(
+        saveDocumentRevisionsInReviewAction,
+        { documentRevisionId: bulkImport?.documentRevisionId },
+        asyncDocumentRevisionInReview
+      );
+    }
+  }
   const asyncDocumentRevisionInReview = useAsync({
     onSuccess: () => {
       history.push({
@@ -41,10 +60,8 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
     },
   });
   const asyncDocumentRevision = useAsync({
-    onSuccess: () => {
-      dispatch(setIsLoading(true));
-      asyncDocumentRevisionInReview.start(saveDocumentRevisionsInReviewAction, { documentRevisionId: bulkImport?.documentRevisionId }, asyncDocumentRevisionInReview);
-    },
+    onSuccess: () => checkToRun(),
+    onError: () => checkToRun(),
   });
   const asyncApprovals = useAsync({
     onSuccess: (approval?: Approval) => {
@@ -59,7 +76,19 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
     // Handle form submission and file processing
     if (users && users.length > 0) {
       dispatch(setIsLoading(true));
-      asyncApprovals.start(saveApprovalsAction, { approval: users[0].value, documentRevisionId: bulkImport?.documentRevisionId }, asyncApprovals);
+      const approvalPromises = users.map(user =>
+      asyncApprovals.start(
+        saveApprovalsAction,
+        {
+          approval: user.value,
+          documentRevisionId: bulkImport?.documentRevisionId,
+        },
+        asyncApprovals
+      )
+    );
+
+    // Use Promise.all to wait for all promises to resolve
+    Promise.all(approvalPromises)
     }
   };
 
@@ -86,14 +115,14 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
               <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
                 <Autocomplete
                   name="selectedUser"
-                  options={approversOptionList}
+                  options={availableOptions}
                   getOptionLabel={(option) => option.text}
                   placeholder={translate('bulkImport.approvals.select.placeholder')}
                   onChange={(_, option: ApproverOption) => {
                     if (option?.value) {
                       const selectedUser = approversOptionList.find(user => user.value === option.value);
                       if (selectedUser) {
-                        setUsers([selectedUser]);
+                        setUsers([...users, selectedUser]);
                         setFieldValue('selectedUser', '');
                       }
                     }
