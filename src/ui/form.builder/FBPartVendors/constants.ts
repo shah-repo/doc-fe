@@ -3,8 +3,6 @@ import { Currency } from './types';
 
 export const DEFAULT_CURRENCY = Currency.USD;
 
-export const EMPTY_VALUE_PLACEHOLDER = '-';
-
 export const SUPPLIER_FIELD = 'supplierName';
 export const SUPPLIER_STATUS_FIELD = 'supplierStatus';
 

@@ -7,7 +7,12 @@ import { OptionType } from '../../../components/forms/fields/Autocomplete/types'
 import { TRANSFER_TYPE_OPTIONS } from '../constants';
 import { CustomTemplateProps, EditableLotTransfer } from '../types';
 
-export const TransferTypeCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
+interface Props extends CustomTemplateProps {
+  allowedOptions: string[]
+  isAclEnabled: boolean
+}
+
+export const TransferTypeCellTemplate: React.FC<Props> = ({ dataItem, field, isAclEnabled, allowedOptions }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -30,7 +35,7 @@ export const TransferTypeCellTemplate: React.FC<CustomTemplateProps> = ({ dataIt
           {...getFieldProps(field)}
           blurOnSelect
           disableClearable
-          options={TRANSFER_TYPE_OPTIONS}
+          options={TRANSFER_TYPE_OPTIONS.filter(it => !isAclEnabled || allowedOptions.includes(it.value))}
           value={value}
           getOptionLabel={(option: OptionType) => option.label}
           onChange={handleChange}
