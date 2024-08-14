@@ -29,8 +29,8 @@ import { DocumentCloneType } from '../Clone.container';
 import { checkIsDocumentDAM, checkIsDocumentEditableSchema, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord } from '../helpers/checkDocumentGroup';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval } from '../helpers/records';
 import { isDocumentAlphaReleased } from '../helpers/revisionStage';
-import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from './types';
 import { shouldShowSyncForRelatedEquipment } from './presenters/related.equipments';
+import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from './types';
 
 export interface FormHeaderContext {
   documentRevision: DocumentRevision
@@ -66,6 +66,7 @@ interface OwnProps {
   type?: DocumentCloneType
   isNewVersion?: boolean
   isSliderView?: boolean
+  inDialog?: boolean
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
@@ -89,6 +90,7 @@ DocumentRevisionFormContainerProps
   type,
   isNewVersion,
   isSliderView,
+  inDialog,
 }) => {
   const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
@@ -148,7 +150,10 @@ DocumentRevisionFormContainerProps
   }, [canUpdateHTML, initialValues, groupOptions, FBDataStore?.refreshData]);
 
   useObserver(() => {
-    cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
+    if (documentRevision?.id === FBDataStore?.refreshData?.id) {
+      cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
+    }
+
     if (didMount) {
       if (
         documentRevision?.updatedAt
@@ -281,6 +286,7 @@ DocumentRevisionFormContainerProps
         canChangeOwnerShip,
         isNewVersion,
         isSliderView,
+        inDialog,
         showAdministrativeAndVoidChange,
         document,
         redlineActive,

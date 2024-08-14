@@ -1,6 +1,6 @@
 import React from 'react';
-import { FormattedNumber } from 'react-intl';
 import { defaultCurrency } from '../../../../../common/intl';
+import FormattedNumber from '../../../../components/FormattedNumber';
 import { CellComponent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { FBPurchaseOrderItem } from '../../../FBPurchaseOrder/FBPurchaseOrder.types';
 import ContentCell from './ContentCell';

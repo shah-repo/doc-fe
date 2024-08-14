@@ -34,6 +34,7 @@ export const SET_IS_LOADING = 'bulkImport/SET_IS_LOADING';
 export const SET_IS_LOADING_MAIN = 'bulkImport/SET_IS_LOADING_MAIN';
 export const SET_DATA_TYPE_FILTER = 'bulkImport/SET_DATA_TYPE_FILTER';
 export const SET_STATUS_FILTER = 'bulkImport/SET_STATUS_FILTER';
+export const CLEAN_UP_MAPPED_HEADERS = 'bulkImport/CLEAN_UP_MAPPED_HEADERS';
 
 export const documentRevisionFormInput = 'fb-approvals-fb-approvals-kn7izlov';
 export const approvalFieldId = 'fb-approvals-kn7izl3v';

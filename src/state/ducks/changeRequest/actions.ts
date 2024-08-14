@@ -115,6 +115,29 @@ const applyTransition = (
   handlers,
 });
 
+const applyTransitionWithIgnoreWarning = (
+  id: string,
+  body: ChangeRequestTransitionRequestBody,
+  transition: ChangeRequestTransition,
+  handlers: Handlers<ChangeRequestTransitionResponse>,
+): ApiAction<ChangeRequestTransitionResponse, ChangeRequestTransitionRequestBody> => apiActionWithCallbacks({
+  url: `${CHANGE_REQUEST_ROOT_URL}/${id}/${transition}?isIgnoreWarning=true`,
+  method: 'post',
+  data: body,
+  password: body.password,
+  onSuccess: (d, dispatch) => {
+    if ('canBeReleased' in d) {
+      dispatch(setDependentOnDocRevs(d));
+      return;
+    }
+    dispatch(load(id));
+    if (transition === 'reject' || transition === 'approve') {
+      dispatch(dashboardActions.loadPendingActionsList());
+    }
+  },
+  handlers,
+});
+
 const auditSet = (audit: AuditActionPayload): ChangeRequestAuditSetAction => ({
   type: CHANGE_REQUEST_AUDIT_SET,
   payload: audit,
@@ -165,6 +188,7 @@ export default {
   create,
   save,
   applyTransition,
+  applyTransitionWithIgnoreWarning,
   loadAvailableApprovers,
   availableApproversList,
   auditSet,

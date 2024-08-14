@@ -32,6 +32,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
   const { values, setFieldValue, getFieldProps, setValues }
     = useFormikContext<EditableLHRSummaryItem>();
   const [lots, setLots] = React.useState<DocumentRevision[]>([]);
+  const [inputValue, setInputValue] = React.useState('');
   const fetchLotsByPartId = useActionCreator(
     lhrSummaryActions.fetchLotsByPartId,
   );
@@ -58,7 +59,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
     setIsOpen(false);
   };
   useEffect(() => {
-    if (isEmpty(actualId)) {
+    if (!FB.isUUID(actualId)) {
       return;
     }
 
@@ -105,6 +106,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
     reason: string,
   ) => {
     if (reason === 'input') {
+      setInputValue(value);
       setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
       setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
       setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, value);
@@ -120,7 +122,6 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
         value={value}
         options={renderOptions()}
         getOptionLabel={(option) => option.label ?? ''}
-        filterOptions={(x) => x}
         size="small"
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
@@ -153,6 +154,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
           </Box>
         )}
         renderOption={(option) => option.label}
+        filterOptions= {(options) => options.filter(opt => opt.label.includes(inputValue))}
         onInputChange={onInputChange}
         onChange={handleChange}
         open={isOpen}

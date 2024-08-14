@@ -214,6 +214,7 @@ interface DocumentsInLHRS {
   docRevId?: string
   docRevTitle?: string
   documentId?: string
+  isExpired?: boolean
 }
 
 export interface UsedDocumentsInLHRS {
@@ -285,6 +286,10 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
   eqStatus: EquipmentStatus
+  lifecyclePhaseId?: string
+  lifecyclePhase?: string
+  isExpired?: boolean
+  expiryDate?: string
 }
 
 interface EQ {

@@ -5,10 +5,7 @@ import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
-import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../components/KendoDataGrid/constants';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { toastError } from '../../../../components/notifications';
@@ -222,7 +219,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
         size="small"
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
-            <Box width="100%" data-cy="actualId">
+            <Box width="100%" data-cy="actual-id">
               <TextField
                 {...params}
                 fullWidth

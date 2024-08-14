@@ -1,25 +1,26 @@
 import { Box, Tooltip, Typography } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridCellProps, GridColumn, GridPageChangeEvent } from '@progress/kendo-react-grid';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { noop } from 'lodash';
-import React, { ComponentType, ReactNode, useEffect, useState } from 'react';
+import React, { ComponentType, ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
+import { validateDateFormats } from '../../../../common/utils/date';
 import { setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
 import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
-import { BulkImport, TableErrorDetail, TableRow } from '../../../../state/ducks/bulkImport/types';
+import { BulkImport, TableErrorDetail, TableErrorValidation, TableRow } from '../../../../state/ducks/bulkImport/types';
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import Text from '../../../components/Text';
 import { Button, Switch } from '../../../components/forms/fields-next';
-import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { NeedHelpButton } from '../ButtonActions';
 import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
+import { getBaseDocId, isValidBaseDocIdPart } from './validation';
 
 interface CheckValuesTableProps {
   children?: ReactNode
@@ -43,9 +44,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
   const classes = useStyles();
   const [isEditing, setIsEditing] = useState(false);
   const [cellValue, setCellValue] = useState(dataItem[field]);
-
-  const normalizedField = field?.replace(/\s/g, '').toLowerCase();
-  const error = dataItem.errors?.find(error => error.column === normalizedField);
+  const error = dataItem.errors?.find(error => error.column === field);
   const isErrorShown = error && !error?.edited;
 
   const handleDoubleClick = () => {
@@ -58,7 +57,36 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
 
   const handleBlur = () => {
     setIsEditing(false);
-    dispatch(updateRowFieldTable({ cellValue: cellValue as string, field, dataIndex: props.dataIndex }));
+    const valueCheck = cellValue as string;
+    let isValid = true;
+
+    if (error?.help?.validate === TableErrorValidation.DOC_ID && error?.help?.data?.length) {
+      const docId = valueCheck?.split('.')[0];
+      const baseDocId = getBaseDocId(docId, error?.help?.data);
+      isValid = baseDocId?.length > 0;
+
+      if (isValid) {
+        isValid = isValidBaseDocIdPart(docId, baseDocId);
+      }
+    } else {
+      // validate if the value is the same as requiered or if have - star with the value
+      if (error?.help?.data?.length) {
+        isValid = error?.help?.data.some(entry => entry === valueCheck);
+      }
+
+      // At the moment format is only for dates
+      if (isValid && error?.help?.format?.length) {
+        const dateFormats = error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
+        const datePattern = new RegExp(`^(${dateFormats.join('|')})$`);
+        isValid = datePattern.test(valueCheck);
+
+        if (isValid) {
+          isValid = validateDateFormats(valueCheck, error?.help?.format);
+        }
+      }
+    }
+
+    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: props.dataIndex, isEdited: isValid }));
   };
 
   const content = (
@@ -88,10 +116,11 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
                 {error.message}
                 {error?.help?.message && (
                   <>
+                    <br />
                     {error.help.message}
                     {error?.help?.data?.length && (
                       <>
-                        {translate('common.allowed')}: {error.help.data.join(', ')}
+                        : {error.help.data.join(', ')}
                       </>
                     )}
                   </>
@@ -124,6 +153,24 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const tableData = useSelector(getTableDataFiltered);
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
+  const excelExportRef = useRef<ExcelExport | null>(null);
+
+  const exportToExcel = () => {
+    if (!excelExportRef.current) {
+      return;
+    }
+
+    // Retrieve the current workbook options
+    const options = excelExportRef.current.workbookOptions();
+
+    // Modify the sheet name
+    if (options.sheets && options.sheets.length > 0) {
+      options.sheets[0].name = bulkImport?.processType;
+    }
+
+    // Save the Excel file with the modified options
+    excelExportRef.current.save(options);
+  };
 
   const asyncSetDataTable = useAsync({
     onSuccess: () => {
@@ -139,13 +186,6 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   };
 
   const triggerNext = () => {
-    if (errorCount > 0) {
-      const errorMessage = translate('bulkImport.tableErrorCountMessage', {
-        error: errorCount > 1 ? `${errorCount} errors` : 'error',
-      });
-      toastError(errorMessage, { position: 'top-right' });
-      return;
-    }
     dispatch(setIsLoading(true));
     asyncSetDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTable);
   };
@@ -186,25 +226,36 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           </Button>
         </Box>
       </Box>
-      <StyledKendoGrid
-        data={data}
-        skip={page * pageSize}
-        take={pageSize}
-        total={tableData.length}
-        editField="inEdit"
-        pageable={{
-          buttonCount: BUTTON_COUNT,
-          pageSizes: PAGE_SIZES,
-        }}
-        onPageChange={handlePageChange}
+      <ExcelExport
+        data={tableData}
+        ref={excelExportRef}
+        fileName={`${bulkImport?.processType || 'export'}.xlsx`}
       >
-        {tableDataFiltered.map((key, idx) => (
-          <GridColumn key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
-        ))}
-      </StyledKendoGrid>
+        <StyledKendoGrid
+          data={data}
+          skip={page * pageSize}
+          take={pageSize}
+          total={tableData.length}
+          editField="inEdit"
+          pageable={{
+            buttonCount: BUTTON_COUNT,
+            pageSizes: PAGE_SIZES,
+          }}
+          onPageChange={handlePageChange}
+        >
+          {tableDataFiltered.map((key, idx) => (
+            <GridColumn key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
+          ))}
+        </StyledKendoGrid>
+      </ExcelExport>
       <Box className={classes.actionsContainer}>
-        <NeedHelpButton />
         <Box className={classes.buttonsFooterContainer}>
+          <Button
+            onClick={exportToExcel}
+            className={classes.button}
+          >
+            <Text translation="common.export.xls" />
+          </Button>
           <Button
             onClick={handleBack}
             kind="outlined"
@@ -215,6 +266,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           <Button
             onClick={triggerNext}
             className={classes.button}
+            disabled={tableData.length === 0 }
           >
             <Text translation="common.next" />
           </Button>

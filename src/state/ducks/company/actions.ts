@@ -1,9 +1,12 @@
 import { omit } from 'lodash';
+import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
+import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
-import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
+import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
-import { ApiAction, Handlers } from '../../types';
+import { ApiAction, ApiActionMethod, Handlers } from '../../types';
+import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettings, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
 
@@ -78,15 +81,57 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
-const updateGeneralSettings = (body: GeneralSettings, id: string, method = 'post'): ApiAction<GeneralSettingsState> => apiAction({
-  url: id ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id: id }) : COMPANY_SETTINGS_URL,
-  method: method,
-  data: omit(body, 'id'),
-  asyncType: SET_GENERAL_SETTINGS,
-  onSuccess: (data, dispatch) => {
-    dispatch(setGeneralSettings(data));
-  },
-});
+const updateGeneralSettings = (
+  body: GeneralSettings,
+  id?: string,
+  method: ApiActionMethod = 'post',
+): ApiAction<GeneralSettingsState> => {
+  const { lifecyclePhases, ...rest } = body;
+  const payload = { ...rest, lifecyclePhases: Array.isArray(lifecyclePhases) ? lifecyclePhases : [] };
+  const url = id ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id }) : COMPANY_SETTINGS_URL;
+  return apiAction({
+    url,
+    method,
+    data: omit(payload, 'id'),
+    asyncType: SET_GENERAL_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(setGeneralSettings(data));
+    },
+  });
+};
+
+const fetchLCPPhasesByGroup = (
+  type = DOC_TYPE_GROUP.PART,
+  handlers: Handlers,
+): ApiAction<LCP[]> =>
+  apiActionWithCallbacks({
+    url: `${LIFE_CYCLE_PHASES_URL}?group=${type}`,
+    method: 'get',
+    handlers,
+  });
+
+const fetchLCPDocTypes = (
+  handlers: Handlers,
+): ApiAction<GroupDocTypes[]> =>
+  apiActionWithCallbacks({
+    url: LIFE_CYCLE_DOC_TYPES_URL,
+    method: 'get',
+    handlers,
+  });
+
+const fetchDocRevOptionsByDocTypeId = (
+  documentTypeId: string,
+  currentPhaseId?: string,
+  handlers: Handlers,
+): ApiAction<LCPDocRevOptions[]> => {
+  const params = qs.stringify({ documentTypeId, currentPhaseId });
+
+  return apiActionWithCallbacks({
+    url: `${LIFE_CYCLE_DOC_REV_OPTIONS_URL}?${params}`,
+    method: 'get',
+    handlers,
+  });
+};
 
 export default {
   selectCompany,
@@ -94,6 +139,9 @@ export default {
   updateCompanyMine,
   updateNavigationMenuItem,
   autosaveConfig,
+  fetchLCPDocTypes,
+  fetchDocRevOptionsByDocTypeId,
+  fetchLCPPhasesByGroup,
   setAutosaveConfig,
   redlineConfig,
   getGeneralSettings,

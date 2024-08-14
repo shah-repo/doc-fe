@@ -14,7 +14,6 @@ import { Button } from '../../../components/forms/fields-next';
 import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.types';
 import { DropzoneField } from '../../../components/forms/fields-next/index';
 import InputField from '../../../components/forms/fields/Input';
-import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
@@ -49,8 +48,10 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   };
 
   const handleSubmit = (values: { files: FileWithPreview[], link: string }) => {
+    // if the user wants to skip the step
     if (values.files.length === 0 && !values.link) {
-      toastError('Please select a file or link to continue', { position: 'top-right' });
+      handleNext();
+      return;
     }
     // Handle form submission and file processing
     dispatch(setIsLoading(true));
