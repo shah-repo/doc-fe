@@ -110,6 +110,7 @@ export const toDocumentRevisionFormValues = (
 
 export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
+  isNewRev: boolean,
 ): DocumentRevisionEditRequestBody => {
   const data = {
     ...pick(values, [
@@ -141,7 +142,7 @@ export const toDocumentRevisionEditRequestBody = (
     data.description = data.description || data.name;
   }
 
-  if (values.lifecyclePhaseId) {
+  if (values.lifecyclePhaseId && !isNewRev) {
     data.lifecyclePhaseId = values.lifecyclePhaseId;
   }
 
@@ -151,7 +152,7 @@ export const toDocumentRevisionEditRequestBody = (
 export const toNewVersionRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
-  const newValues = toDocumentRevisionEditRequestBody(values);
+  const newValues = toDocumentRevisionEditRequestBody(values, true);
   newValues.revisionChangeType = values.revisionChangeType;
 
   if (values.document) {
