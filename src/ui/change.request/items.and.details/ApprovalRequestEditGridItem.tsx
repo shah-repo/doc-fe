@@ -1,4 +1,4 @@
-import { Button, Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
+import { Button, FormControlLabel, Checkbox as MuiCheckbox } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import cx from 'classnames';
@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../components/KendoDataGrid/constants';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
-import { EMPTY_VALUE_PLACEHOLDER } from '../FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import useStyles from './ApprovalRequestGrid.styles';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 import KendoTextEditor from './KendoTextEditor';
@@ -81,7 +81,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
           <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
-            {entry?.revisionFormTo ?? (documentRevision?.revision || EMPTY_VALUE_PLACEHOLDER)}
+            {entry?.revisionFormTo ?? (documentRevision?.revision ?? EMPTY_VALUE_PLACEHOLDER)}
           </div>
           <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
@@ -113,10 +113,10 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
                 handleRemove?.(entry?.docRevId as string);
               }} />
           </Button> }
-          <Button data-cy="clearRecord" className={classes.actionButton} onClick = {resetAndCancelEdit}>
+          <Button data-cy="clear-record" className={classes.actionButton} onClick = {resetAndCancelEdit}>
             <ClearIcon className={classes.iconButton} />
           </Button>
-          <Button data-cy="doneRecord"
+          <Button data-cy="done-record"
             className={cx(classes.actionButton, classes.actionButtonDone)} onClick = {addRevisionToChangeRequest}>
             <DoneIcon className={classes.iconButton} />
           </Button>

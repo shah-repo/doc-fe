@@ -1,8 +1,14 @@
 import { round, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
+import { useSelector } from 'react-redux';
 import { FB } from '..';
-import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, TRANSFERS_FIELD } from './constants';
-import { CalculableLotTransfer, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction } from './types';
+import { authSelectors } from '../../../state/ducks/auth';
+import { Group } from '../../../state/ducks/auth/types';
+import { companySelectors } from '../../../state/ducks/company';
+import { materialFlowACLSelectors } from '../../../state/ducks/materialFlowAcl';
+import { MaterialFlowAclRule } from '../../../state/ducks/materialFlowAcl/types';
+import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, RULE_FIELDS_TO_CHECK, TRANSFERS_FIELD } from './constants';
+import { AllowedOptions, CalculableLotTransfer, CompanyLocation, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction, SelectedOptions } from './types';
 
 export const getOptionLabel = (option: DocumentRevisionOption): string => {
   const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
@@ -71,4 +77,64 @@ export const useOnHandQuantity = (): UseOnHandQuantityType => {
     onHandQuantityUnit,
     predictOnHandQuantity,
   };
+};
+
+const checkRuleLocations = (rule: MaterialFlowAclRule, field: 'from' | 'to', set: Set<string>, locations: CompanyLocation[]) => {
+  if (rule[field]) {
+    set.add(rule[field]);
+  } else {
+    locations.forEach((option) => {
+      set.add(option.id);
+    });
+  }
+};
+
+const getAllowedTransferOptions = (
+  rules: MaterialFlowAclRule[],
+  locations: CompanyLocation[],
+  groups: Group[],
+  selectedOptions: SelectedOptions = {},
+) => {
+  const allowedActions = new Set<string>();
+  const allowedFromLocations = new Set<string>();
+  const allowedToLocations = new Set<string>();
+  const allowedRules = rules.filter(
+    rule => rule.groups.length === 0 || rule.groups.some(group => groups.some(it => it.id === group.id)),
+  );
+
+  RULE_FIELDS_TO_CHECK.forEach(field => {
+    allowedRules.forEach(rule => {
+      if (field !== 'type' && selectedOptions.type && rule.action !== selectedOptions.type) return;
+      if (field !== 'from' && selectedOptions.from && rule.from !== selectedOptions.from) return;
+      if (field !== 'to' && selectedOptions.to && rule.to !== selectedOptions.to) return;
+
+      if (field === 'type') {
+        allowedActions.add(rule.action);
+      }
+      if (field === 'from' || field === 'to') {
+        checkRuleLocations(rule, field, field === 'from' ? allowedFromLocations : allowedToLocations, locations);
+      }
+    });
+  });
+
+  return {
+    type: Array.from(allowedActions),
+    from: Array.from(allowedFromLocations),
+    to: Array.from(allowedToLocations),
+  };
+};
+
+export const useAllowedLotTransferOptions = (
+  selectedOptions: SelectedOptions = {},
+): [boolean, AllowedOptions] => {
+  const locations = useSelector(companySelectors.getAllLocations) ?? [];
+  const rules = useSelector(materialFlowACLSelectors.getRules) ?? [];
+  const userGroups = useSelector(authSelectors.currentUserGroups) ?? [];
+  const isAclEnabled = useSelector(materialFlowACLSelectors.getIsEnabled);
+
+  if (!isAclEnabled) {
+    return [false, { type: [], from: [], to: [] }];
+  }
+
+  return [true, getAllowedTransferOptions(rules, locations, userGroups, selectedOptions)];
 };

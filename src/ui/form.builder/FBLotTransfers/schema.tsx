@@ -17,6 +17,8 @@ import { SchemaItem, SchemaOptions } from './types';
 export const buildSchema = ({
   locations,
   existingLocations = [],
+  allowedOptions,
+  isAclEnabled,
   builds,
   records,
   units,
@@ -56,7 +58,13 @@ export const buildSchema = ({
       field: 'type',
       title: 'form.builder.lot.transfers.type',
       filterCell: TransferTypeFilter,
-      template: TransferTypeCellTemplate,
+      template: (props) => (
+        <TransferTypeCellTemplate
+          {...props}
+          allowedOptions={allowedOptions.type}
+          isAclEnabled={isAclEnabled}
+        />
+      ),
       width: 140,
     },
     {
@@ -64,7 +72,15 @@ export const buildSchema = ({
       field: 'from',
       title: 'form.builder.lot.transfers.from',
       filterCell: LocationFilter,
-      template: (props) => <LocationCellTemplate {...props} options={locations} onClick={onRowClick} />,
+      template: (props) => (
+        <LocationCellTemplate
+          {...props}
+          options={locations}
+          onClick={onRowClick}
+          allowedOptions={allowedOptions.from}
+          isAclEnabled={isAclEnabled}
+        />
+      ),
       width: 180,
     },
     {
@@ -72,8 +88,24 @@ export const buildSchema = ({
       field: 'to',
       title: 'form.builder.lot.transfers.to',
       filterCell: LocationFilter,
-      template: (props) => <LocationCellTemplate {...props} options={locations} onClick={onRowClick} />,
+      template: (props) => (
+        <LocationCellTemplate
+          {...props}
+          options={locations}
+          onClick={onRowClick}
+          allowedOptions={allowedOptions.to}
+          isAclEnabled={isAclEnabled}
+        />
+      ),
       width: 180,
+    },
+    {
+      id: 'quantity',
+      field: 'quantity',
+      filterCell: InputFilter,
+      title: quantityTitle,
+      template: (props) => <QuantityCellTemplate {...props} onClick={onRowClick} />,
+      width: 150,
     },
     {
       id: 'build',
@@ -90,14 +122,6 @@ export const buildSchema = ({
       filterCell: InputFilter,
       template: (props) => <RevisionCellTemplate {...props} options={records} onClick={onRowClick} fieldToEdit="reference" />,
       width: 350,
-    },
-    {
-      id: 'quantity',
-      field: 'quantity',
-      filterCell: InputFilter,
-      title: quantityTitle,
-      template: (props) => <QuantityCellTemplate {...props} onClick={onRowClick} />,
-      width: 150,
     },
     {
       id: 'date',

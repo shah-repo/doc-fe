@@ -1,11 +1,10 @@
 import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { CustomTemplateProps, EditableVendor } from '../types';
+import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../components/OverflowContent';
+import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
+import { CustomTemplateProps, EditableVendor } from '../types';
 
 interface Props extends CustomTemplateProps {
   options: string[]
