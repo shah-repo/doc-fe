@@ -14,6 +14,7 @@ export enum GeneralSettingsTabs {
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
   Locations = 'Locations',
+  MaterialFlow = 'Material Flow',
   TrainingReminder = 'Training Reminder',
 }
 
@@ -27,7 +28,7 @@ export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
   info?: string
   containerRef?: RefObject<HTMLElement>
-  onToggle: (isExpanded?: boolean) => void
+  onToggle: () => void
   onAddNew?: () => void
 }
 

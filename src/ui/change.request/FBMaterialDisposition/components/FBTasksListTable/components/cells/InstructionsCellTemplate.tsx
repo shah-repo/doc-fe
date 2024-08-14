@@ -4,9 +4,8 @@ import { get } from 'lodash';
 import React from 'react';
 import Tooltip from '../../../../../../components/common/kendo/Tooltip';
 import { FormikField, TextField } from '../../../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
+import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 import { styles } from './styles';
 

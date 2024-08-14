@@ -4,6 +4,7 @@ import EquipmentFamilySettingsPanel from './panels/EquipmentFamily';
 import IntegrationsSettings from './panels/Integrations';
 import LCPSettings from './panels/LCP';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
+import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
 import TrainingReminder from './panels/TrainingReminder';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
@@ -47,6 +48,11 @@ export const panels = [
     key: GeneralSettingsTabs.Locations,
     title: 'administration.general.settings.locations.tab',
     component: CompanyLocationSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.MaterialFlow,
+    title: 'administration.general.settings.material.flow',
+    component: MaterialFlowSettingsPanel,
   },
   {
     key: GeneralSettingsTabs.LCP,
