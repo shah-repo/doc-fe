@@ -92,7 +92,7 @@ const updateGeneralSettings = (
   return apiAction({
     url,
     method,
-    data: omit(payload, 'id', 'materialFlowACLs'),
+    data: omit(payload, 'id'),
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
       dispatch(setGeneralSettings(data));
