@@ -86,10 +86,9 @@ const updateGeneralSettings = (
   id?: string,
   method: ApiActionMethod = 'post',
 ): ApiAction<GeneralSettingsState> => {
-  const { lifecyclePhasesProcessedPayload, ...rest } = body;
-  const payload = { ...rest, lifecyclePhases: lifecyclePhasesProcessedPayload };
+  const { lifecyclePhases, ...rest } = body;
+  const payload = { ...rest, lifecyclePhases: Array.isArray(lifecyclePhases) ? lifecyclePhases : [] };
   const url = id ? generatePath(UPDATE_COMPANY_SETTINGS_URL, { id }) : COMPANY_SETTINGS_URL;
-
   return apiAction({
     url,
     method,
