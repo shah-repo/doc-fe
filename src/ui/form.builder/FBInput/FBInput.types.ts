@@ -93,6 +93,9 @@ export type FBInputType =
   | 'woApprovals'
   | 'workOrderType'
   | 'supplierContacts'
+  | 'supplierOfferingList'
+  | 'supplierSupportingDocs'
+  | 'supplierReferences'
   ;
 
 export type FBInputProps =
@@ -272,6 +275,9 @@ export const FBAutosave: FBInputType[] = [
   'cycleCount',
   'workOrderType',
   'supplierContacts',
+  'supplierOfferingList',
+  'supplierSupportingDocs',
+  'supplierReferences',
 ];
 
 export const SectionTypeField: FBInputType[] = [

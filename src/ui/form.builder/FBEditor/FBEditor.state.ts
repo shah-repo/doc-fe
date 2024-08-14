@@ -177,6 +177,9 @@ class FBEditorState {
     workOrderType: FBEditorLabel,
     workOrderLhrTable: FBEditorLabel,
     supplierContacts: FBEditorLabel,
+    supplierOfferingList: FBEditorLabel,
+    supplierSupportingDocs: FBEditorLabel,
+    supplierReferences: FBEditorLabel,
   };
 
   public static editorTypeIconMapping = {

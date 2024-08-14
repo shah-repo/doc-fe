@@ -18,6 +18,7 @@ import FBApprovals from '../FBApprovals/FBApprovals';
 import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBButton from '../FBButton/FBButton';
+import FBCertifications from '../FBCertifications';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
 import FBCycleCount from '../FBCycleCount';
 import FBDatePicker from '../FBDatePicker/FBDatePicker';
@@ -47,12 +48,14 @@ import FBPOApprovals from '../FBPOApprovals/FBPOApprovals';
 import FBPOReceive from '../FBPOReceive/FBPOReceive';
 import FBProcedure from '../FBProcedure/FBProcedure';
 import FBProcedureDiff from '../FBProcedureDiff/FBProcedureDiff';
+import FBProductOrService from '../FBProductOrService';
 import FBPurchaseOrder from '../FBPurchaseOrder/FBPurchaseOrder';
 import FBPurchaseOrderSummary from '../FBPurchaseOrder/FBPurchaseOrderSummary';
 import FBQuantityField from '../FBQuantityField/FBQuantityField';
 import FBQuantityUnitField from '../FBQuantityUnitField/FBQuantityUnitField';
 import FBRadio from '../FBRadio/FBRadio';
 import FBRadioGroup from '../FBRadioGroup/FBRadioGroup';
+import FBReferences from '../FBReferences';
 import FBRequestApproval from '../FBRequestApproval/FBRequestApproval';
 import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
@@ -160,6 +163,9 @@ class FBSchemaState {
     workOrderType: FBWorkOrderType,
     workOrderLhrTable: FBWorkOrderLHRTable,
     supplierContacts: FBSupplierContacts,
+    supplierOfferingList: FBProductOrService,
+    supplierSupportingDocs: FBCertifications,
+    supplierReferences: FBReferences,
   };
 
   @observable public schema?: FBSchemaProps[];
