@@ -212,8 +212,7 @@ export interface GeneralSettings {
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
-  lifecyclePhases?: {categories: LCPResponse[]}
-  lifecyclePhasesProcessedPayload: LCP[]
+  lifecyclePhases?: {categories: LCPResponse[]} | LCP[]
   shouldNotifyLcpMismatch: NotifyPartLCP
   trainingReminder: TrainingReminder
 }
