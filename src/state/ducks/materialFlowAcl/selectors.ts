@@ -3,7 +3,7 @@ import { MaterialFlowAclRule } from './types';
 
 const getRules = (state: ApplicationState): MaterialFlowAclRule[] => state.company.generalSettings.materialFlowACLs ?? [];
 
-const getIsEnabled = (state: ApplicationState): boolean => state.company.generalSettings.materialFlowAclEnabled;
+const getIsEnabled = (state: ApplicationState): boolean => state.company.generalSettings.isMaterialFlowAclEnabled;
 
 export default {
   getRules,

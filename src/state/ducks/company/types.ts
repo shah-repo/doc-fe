@@ -93,14 +93,6 @@ export interface CompanyMineRequest {
 export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
-interface AllocationOrderType {
-  fifo: string
-  lifo: string
-}
-interface ExpiredLotType {
-  warning: string
-  error: string
-}
 
 export enum NavigationItems {
   LINK = 'LINK',
@@ -196,8 +188,8 @@ interface EquipmentFamilySettings {
 }
 
 interface AllocationConfig {
-  sortOrderByReleaseDate: AllocationOrderType
-  expiredLotsPrompt: ExpiredLotType
+  sortOrderByReleaseDate: AllocationOrder
+  expiredLotsPrompt: ExpiredLotTypes
 }
 export interface GeneralSettings {
   zebraPrint: Nullable<ZebraPrintSettings[]>
@@ -205,10 +197,9 @@ export interface GeneralSettings {
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
-  lifecyclePhases?: {categories: LCPResponse[]}
-  lifecyclePhasesProcessedPayload: LCP[]
+  lifecyclePhases?: {categories: LCPResponse[]} | LCP[]
   materialFlowACLs: MaterialFlowAclRule[]
-  materialFlowAclEnabled: boolean
+  isMaterialFlowAclEnabled: boolean
   shouldNotifyLcpMismatch: NotifyPartLCP
 }
 

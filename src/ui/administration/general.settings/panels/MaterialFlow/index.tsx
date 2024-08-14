@@ -27,7 +27,7 @@ import { buildSchema } from './schema';
 import { EditableMaterialFlowAclRule } from './types';
 
 const PANEL_FIELD = 'materialFlowACLs';
-const STATUS_FIELD = 'materialFlowAclEnabled';
+const STATUS_FIELD = 'isMaterialFlowAclEnabled';
 
 const INITIAL_VALUES = {
   groups: [],
