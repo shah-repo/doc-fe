@@ -17,7 +17,7 @@ interface Props extends CellTemplateProps<EditableSystemTransactionsRule> {
 
 export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, isActive, onLocationChange }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps } = useFormikContext<{action: LotTransferType}>();
+  const { getFieldProps } = useFormikContext<EditableSystemTransactionsRule>();
   const classes = useStyles();
 
   const handleChange = (event: ChangeEvent<unknown>, value?: CompanyLocation) => {
