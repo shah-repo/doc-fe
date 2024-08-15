@@ -1,8 +1,8 @@
 import { Box, Tooltip, Typography } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
-import { CompositeFilterDescriptor, filterBy } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, filterBy, process, State } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
-import { GridCellProps, GridColumn, GridFilterChangeEvent, GridPageChangeEvent } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumn, GridDataStateChangeEvent, GridFilterChangeEvent, GridPageChangeEvent } from '@progress/kendo-react-grid';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
 import { noop } from 'lodash';
@@ -48,7 +48,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
   const error = dataItem.errors?.find(error => error.column === field);
   const isErrorShown = error && !error?.edited;
 
-  const handleDoubleClick = () => {
+  const handleErrorField = () => {
     setIsEditing(true);
   };
 
@@ -105,7 +105,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
       style={props?.style}
       role="gridcell"
       className={props?.className}
-      onDoubleClick={error ? handleDoubleClick : undefined}
+      onClick={error ? handleErrorField : undefined}
     >
       {isEditing ? (
         <Input value={cellValue as string} onChange={handleChange} onBlur={handleBlur} autoFocus />
@@ -149,6 +149,11 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
+  const [dataState, setDataState] = useState<State>({
+    skip: 0,
+    take: pageSize,
+    sort: [],
+  });
   const [data, setData] = useState<TableRow[]>([]);
   const [errorCount, setErrorCount] = useState(0);
   const tableData = useSelector(getTableDataFiltered);
@@ -156,6 +161,12 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const uploadFileDataAction = useActionCreator(setDataTable);
   const excelExportRef = useRef<ExcelExport | null>(null);
   const [filter, setFilter] = React.useState<CompositeFilterDescriptor>();
+
+  const dataStateChange = (event: GridDataStateChangeEvent) => {
+    setDataState(event.dataState);
+    const processedData = process(tableData, event.dataState);
+    setData(processedData.data);
+  };
 
   const filterChange = (event: GridFilterChangeEvent) => {
     const newData = filterBy(tableData, event.filter);
@@ -241,23 +252,26 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
       >
         <StyledKendoGrid
           data={data}
+          {...dataState}
           skip={page * pageSize}
           take={pageSize}
-          total={tableData.length}
+          total={data.length}
           editField="inEdit"
           pageable={{
             buttonCount: BUTTON_COUNT,
             pageSizes: PAGE_SIZES,
           }}
-          onPageChange={handlePageChange}
           sortable
           resizable
+          reorderable
           filterable
           filter={filter}
+          onPageChange={handlePageChange}
+          onDataStateChange={dataStateChange}
           onFilterChange={filterChange}
         >
           {tableDataFiltered.map((key, idx) => (
-            <GridColumn filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
+            <GridColumn width={150} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
           ))}
         </StyledKendoGrid>
       </ExcelExport>

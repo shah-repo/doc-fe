@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Config from '../../../config';
 import { store } from '../../store';
-import { BULK_DOWNLOAD_FILE_URL } from './constants';
+import { approvalFieldId, APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, documentRevisionFormInput } from './constants';
 
 const TEMPLATE_CSV = 'template.xlsx';
 
@@ -21,6 +21,71 @@ export const getDownloadTemplate = async (bulkImportId: string) => await axios({
   link.click();
   link.remove();
 });
+
+export const postApprovals = async (approvalId, documentRevisionId) => {
+  try {
+    const response = await axios({
+      url: `${Config.ApiEndpoint}${APPROVALS_URL}`,
+      method: 'POST',
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      data: {
+        assigned: {
+          id: approvalId,
+        },
+        type: 'MASTER',
+        fieldId: approvalFieldId,
+        partOf: {
+          id: documentRevisionId,
+        },
+      },
+    });
+    // Handle success
+    return response.data;
+  } catch (error) {
+    // Handle failure
+    return null;
+  }
+};
+
+export const patchDocumentRevisions = async (approvalId, documentRevisionId) => {
+  try {
+    const response = await axios({
+      url: `${Config.ApiEndpoint}${DOCUMENT_REVISION_URL}${documentRevisionId}`,
+      method: 'PATCH',
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      data: {
+        formInput: {
+          [documentRevisionFormInput]: [approvalId],
+        },
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to save document revisions:', error);
+    return null;
+  }
+};
+
+export const postDocumentRevisionsInReview = async (documentRevisionId) => {
+  try {
+    const response = await axios({
+      url: `${Config.ApiEndpoint}${DOCUMENT_REVISION_IN_REVIEW_URL}${documentRevisionId}`,
+      method: 'POST',
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Failed to save document revisions in review:', error);
+    return null;
+  }
+};
 
 export const downloadFile = (data: BlobPart, fileName: string) => {
   // Create a blob object from the data
