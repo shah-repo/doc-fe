@@ -3,7 +3,7 @@ import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
 import { GroupTag, Permission } from '../auth/types';
-import { Nullable, User } from '../common/types';
+import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
 import { LotStatus } from '../documentRevisions/types';
 import { MaterialFlowAclRule } from '../materialFlowAcl/types';
@@ -208,17 +208,16 @@ interface AllocationConfig {
   expiredLotsPrompt: ExpiredLotTypes
 }
 export interface GeneralSettings {
-  zebraPrint: Nullable<ZebraPrintSettings[]>
-  equipmentFamily: EquipmentFamilySettings
-  approvalRequestAdmin: boolean
-  shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
-  lifecyclePhases?: {categories: LCPResponse[]}
-  lifecyclePhasesProcessedPayload: LCP[]
-  materialFlowAcl: MaterialFlowAclRule[]
-  materialFlowAclEnabled: boolean
-  systemTransactions: SystemTransactionsRule[]
+  approvalRequestAdmin: boolean
+  equipmentFamily: EquipmentFamilySettings
+  isMaterialFlowAclEnabled: boolean
+  lifecyclePhases?: { categories: LCPResponse[] } | LCP[]
+  materialFlowACLs: MaterialFlowAclRule[]
+  shouldAutoUpdateLotStatus: boolean
   shouldNotifyLcpMismatch: NotifyPartLCP
+  systemTransactions: SystemTransactionsRule[]
+  zebraPrint: ZebraPrintSettings[] | null
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

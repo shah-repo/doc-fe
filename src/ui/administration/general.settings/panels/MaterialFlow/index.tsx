@@ -26,8 +26,8 @@ import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
 import { EditableMaterialFlowAclRule } from './types';
 
-const PANEL_FIELD = 'materialFlowAcl';
-const STATUS_FIELD = 'materialFlowAclEnabled';
+const PANEL_FIELD = 'materialFlowACLs';
+const STATUS_FIELD = 'isMaterialFlowAclEnabled';
 
 const INITIAL_VALUES = {
   groups: [],
@@ -75,6 +75,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     onSubmit: (values) => {
       const isAdding = values[MODE_FIELD] === Mode.add;
       const isScrapAction = values.action === LotTransferType.Scrap;
+
       if (values.action) {
         const payload = ({
           action: values.action,
@@ -82,6 +83,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
           to: isScrapAction ? null : values.to?.id ?? null,
           groups: values.groups.map(group => group.id),
         });
+
         isAdding
           ? async.start(addRuleAction, payload, async)
           : async.start(updateRuleAction, values.id, payload, async);
