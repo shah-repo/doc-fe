@@ -94,7 +94,27 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
     <Box className={cx(classes.cell, { [classes.errorCell]: isErrorShown })}>
       {cellValue}
       {isErrorShown && (
-        <ReportProblemOutlinedIcon className={classes.warningIcon} />
+        <Tooltip
+          title={
+            <span className={classes.tooltipContent}>
+              {error.message}
+              {error?.help?.message && (
+                <>
+                  <br />
+                  {error.help.message}
+                  {error?.help?.data?.length && (
+                    <>
+                      : {error.help.data.join(', ')}
+                    </>
+                  )}
+                </>
+              )}
+            </span>
+          }
+          placement="top"
+        >
+          <ReportProblemOutlinedIcon className={classes.warningIcon} />
+        </Tooltip>
       )}
     </Box>
   );
@@ -109,33 +129,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
     >
       {isEditing ? (
         <Input value={cellValue as string} onChange={handleChange} onBlur={handleBlur} autoFocus />
-      ) : (
-        isErrorShown ? (
-          <Tooltip
-            title={
-              <span className={classes.tooltipContent}>
-                {error.message}
-                {error?.help?.message && (
-                  <>
-                    <br />
-                    {error.help.message}
-                    {error?.help?.data?.length && (
-                      <>
-                        : {error.help.data.join(', ')}
-                      </>
-                    )}
-                  </>
-                )}
-              </span>
-            }
-            placement="top"
-          >
-            {content}
-          </Tooltip>
-        ) : (
-          content
-        )
-      )}
+      ) : content}
     </td>
   );
 };
