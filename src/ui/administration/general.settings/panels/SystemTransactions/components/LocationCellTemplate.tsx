@@ -2,13 +2,12 @@ import { useFormikContext } from 'formik';
 import React, { ChangeEvent } from 'react';
 import { CompanyLocation } from '../../../../../../state/ducks/company/types';
 import { CellTemplateProps } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { LotTransferType } from '../../../../../form.builder/FBLotTransfers/types';
 import useStyles from '../styles';
 import { EditableSystemTransactionsRule, LocationField } from '../types';
-
-const EMPTY_VALUE_PLACEHOLDER = '-';
 
 interface Props extends CellTemplateProps<EditableSystemTransactionsRule> {
   options: CompanyLocation[]
