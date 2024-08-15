@@ -49,9 +49,7 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
     locations: [],
   },
   isMaterialFlowAclEnabled: false,
-  lifecyclePhases: {
-    categories: [],
-  },
+  lifecyclePhases: { categories: [] },
   materialFlowACLs: [],
   shouldAutoUpdateLotStatus: false,
   shouldNotifyLcpMismatch: NotifyPartLCP.DO_NOTHING,
