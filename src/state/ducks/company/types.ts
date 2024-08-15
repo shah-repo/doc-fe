@@ -189,7 +189,7 @@ interface EquipmentFamilySettings {
   locations: EquipmentLocation[]
 }
 
-export enum SystemTransactionsEvent {
+enum SystemTransactionsEvent {
   CreateFromReceiving='createFromReceiving',
 }
 
