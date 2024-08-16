@@ -1,6 +1,6 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { kebabCase, omit } from 'lodash';
-import { default as React, default as React, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
@@ -15,9 +15,9 @@ import SettingsPanel from '../../components/SettingsPanel';
 import SettingsPanelSection from '../../components/SettingsPanelSection';
 import SettingsTable from '../../components/SettingsTable';
 import SwitchControl from '../../components/SwitchControl';
-import { EquipmentFamily } from '../../constants';
+// import { EquipmentFamily } from '../../constants';
 import { SettingsPanelProps } from '../../types';
-import DataTable from './DataTable';
+// import DataTable from './DataTable';
 import { buildSchema } from './schema';
 import { EditableEquipmentLocation } from './types';
 
@@ -124,10 +124,6 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
         checked={fieldProps.value}
         label={translate('administration.general.settings.equipmentFamily.es.autoSync')}
       />
-      <SettingsPanelSection>
-        <Text message="administration.general.settings.equipmentFamily.equipmentStatuses" />
-      </SettingsPanelSection>
-      <DataTable data={statuses ?? []} field={EquipmentFamily.Statuses} />
       <SettingsPanelSection>
         <Text message="administration.general.settings.equipmentFamily.locations" />
       </SettingsPanelSection>
