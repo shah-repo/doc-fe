@@ -17,12 +17,16 @@ interface Props {
   docTypeId?: string
   lifecyclePhaseId?: string
   isOptionDisabled?: boolean
+  isPartForm?: boolean
+  isInfoIconHidden?: boolean
 }
 
 const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
   docTypeId = '',
   lifecyclePhaseId,
   isOptionDisabled,
+  isPartForm,
+  isInfoIconHidden,
 }) => {
   const classes = styles();
   const formik = useFormikContext();
@@ -50,6 +54,7 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string, value: unknown }>,
   ) => {
+    if (isPartForm) { return; }
     const value = event.target.value as string;
     formik.setFieldValue('lifecyclePhaseId', value);
     formik.handleChange(event);
@@ -67,7 +72,7 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
             placement="top"
             title={translate('documentRevision.lcp.configuration.empty')}
             className={classes.labelStyle}
-            hidden={!isDisabled}
+            hidden={!isDisabled || isInfoIconHidden}
           >
             <FontAwesomeIcon className={classes.infoIcon} icon={regular('circle-info')} />
           </Tooltip>
@@ -78,9 +83,9 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
         selectProps={{
           inputProps: {
             labelId: 'life-cycle-phases-label',
-            disabled: isDisabled,
+            disabled: isDisabled || isPartForm,
           },
-          disabled: isDisabled,
+          disabled: isDisabled || isPartForm,
           onChange: handleTypeChange,
         }}
         options={lifecyclePhaseOptions}

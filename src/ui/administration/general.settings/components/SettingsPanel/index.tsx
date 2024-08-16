@@ -2,7 +2,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from '@material-ui/core';
 import cx from 'classnames';
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, useRef } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Button, IconButton } from '../../../../components/forms/fields-next';
 import useSticky from '../../../../hooks/useSticky';
@@ -14,31 +14,47 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   info,
   children,
   containerRef,
+  expanded,
   onToggle,
   onAddNew,
   ...props
 }) => {
   const classes = useStyles();
   const [stickyRef, isSticky] = useSticky(containerRef);
+  const isAddPending = useRef(false);
 
   const handleAddNew: MouseEventHandler = (e) => {
     e.stopPropagation();
-    onAddNew?.();
+    if (expanded) {
+      onAddNew?.();
+      return;
+    }
+    onToggle();
+    isAddPending.current = true;
+  };
+
+  const handleOnEntered = () => {
+    if (isAddPending.current) {
+      isAddPending.current = false;
+      onAddNew?.();
+    }
   };
 
   return (
     <ExpansionPanel
       {...props}
+      expanded={expanded}
       className={classes.root}
       TransitionProps={{
         mountOnEnter: true,
         unmountOnExit: true,
+        onEntered: handleOnEntered,
         ...props.TransitionProps,
       }}
     >
       <ExpansionPanelSummary
         ref={stickyRef}
-        onClick={() => onToggle()}
+        onClick={onToggle}
         classes={{
           root: cx(classes.summary, { [classes.stickySummary]: isSticky }),
           content: classes.content,

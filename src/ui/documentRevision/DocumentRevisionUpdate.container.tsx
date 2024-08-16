@@ -197,12 +197,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       return handleSave(redlineDataToSubmit as DocumentRevisionEditRequestBody, helpers);
     }
 
-    const lifecyclePhaseDataToSubmit = pick(values, 'lifecyclePhaseId');
-
-    if (isEmpty(dataToSubmit) && lifecyclePhaseDataToSubmit) {
-      return handleSave(lifecyclePhaseDataToSubmit as DocumentRevisionEditRequestBody, helpers);
-    }
-
     if (isEmpty(dataToSubmit)) {
       helpers.setSubmitting(false);
       return;

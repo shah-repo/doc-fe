@@ -35,7 +35,7 @@ import DocTitle from '../../common/DocTitle/presenter';
 import DownloadHtmlPreview from '../../common/DownloadHtmlPreview';
 import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
-import { formatCurrency } from '../../common/Utils';
+import { delay, formatCurrency } from '../../common/Utils';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
 
@@ -194,9 +194,12 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     setDownloadPdfHover(true);
   };
 
-  const handleDownloadClick = () => {
+  const handleDownloadClick = async () => {
     setDownloadPdfMobile(true);
+    await delay(1000);
+    setDownloadPdfMobile(false);
   };
+
   const handleDownloadClose = () => {
     setDownloadPdfMobile(false);
   };

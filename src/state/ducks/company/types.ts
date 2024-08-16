@@ -4,6 +4,7 @@ import { AsyncState } from '../../types';
 import { GroupTag, Permission } from '../auth/types';
 import { Nullable, User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
+import { MaterialFlowAclRule } from '../materialFlowAcl/types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 
 export interface WhiteLabelingColors {
@@ -92,14 +93,6 @@ export interface CompanyMineRequest {
 export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
-interface AllocationOrderType {
-  fifo: string
-  lifo: string
-}
-interface ExpiredLotType {
-  warning: string
-  error: string
-}
 
 export enum NavigationItems {
   LINK = 'LINK',
@@ -201,8 +194,8 @@ interface EquipmentFamilySettings {
 }
 
 interface AllocationConfig {
-  sortOrderByReleaseDate: AllocationOrderType
-  expiredLotsPrompt: ExpiredLotType
+  sortOrderByReleaseDate: AllocationOrder
+  expiredLotsPrompt: ExpiredLotTypes
 }
 export interface GeneralSettings {
   zebraPrint: Nullable<ZebraPrintSettings[]>
@@ -211,8 +204,9 @@ export interface GeneralSettings {
   shouldAutoUpdateLotStatus: boolean
   approvalRoles: ApprovalRoles[]
   allocationConfig: AllocationConfig
-  lifecyclePhases?: {categories: LCPResponse[]}
-  lifecyclePhasesProcessedPayload: LCP[]
+  lifecyclePhases?: {categories: LCPResponse[]} | LCP[]
+  materialFlowACLs: MaterialFlowAclRule[]
+  isMaterialFlowAclEnabled: boolean
   shouldNotifyLcpMismatch: NotifyPartLCP
 }
 
