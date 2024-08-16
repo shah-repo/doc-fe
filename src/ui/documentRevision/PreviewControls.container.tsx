@@ -59,6 +59,7 @@ import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
+import { useIsLatestLotRevision } from './helpers/useIsLatestLotRevision';
 import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
 import { PreviewControlButtons } from './PreviewControls.container.types';
 
@@ -225,7 +226,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         color="primary"
         onClick={setDocRevToDraft}
         id="PreviewControlsContainer-revise"
-        data-cy="updateRecord"
+        data-cy="update-record"
       >
         <Text message="controlConfig.editPart.button.text" />
       </StyledButton>
@@ -241,7 +242,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               color="primary"
               onClick={cloneDocument}
               id="PreviewControlsContainer-revise"
-              data-cy="updateRecord"
+              data-cy="update-record"
             >
               <Text message={reviseLabel} />
             </StyledButton>
@@ -249,7 +250,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
                 <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
                 <StyledMenuListItemText
                   id="PreviewControlsContainer-revise"
-                  data-cy="updateRecord"
+                  data-cy="update-record"
                   primary={<Text message={reviseLabel} />}
                 />
               </StyledMenuListItem>
@@ -259,7 +260,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               variant="outlined"
               onClick={cloneDocument}
               id="PreviewControlsContainer-revise"
-              data-cy="updateRecord" >
+              data-cy="update-record" >
               <Text message={reviseLabel} />
             </Button>
           )}
@@ -277,7 +278,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
                 color="primary"
                 onClick={clonePODocument}
                 id="PreviewControlsContainer-revise"
-                data-cy="updateRecord"
+                data-cy="update-record"
               >
                 <Text message={updateLabel} />
               </StyledButton>
@@ -288,7 +289,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
                 </StyledMenuListIcon>
                 <StyledMenuListItemText
                   id="PreviewControlsContainer-revise"
-                  data-cy="updateRecord"
+                  data-cy="update-record"
                   primary={<Text message={updateLabel} />}
 
                 />
@@ -300,7 +301,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               variant="outlined"
               onClick={cloneDocument}
               id="PreviewControlsContainer-revise"
-              data-cy="updateRecord"
+              data-cy="update-record"
             >
               <Text message={updateLabel} />
             </Button>
@@ -325,13 +326,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           color="primary"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
-          data-cy="PreviewControlsContainer-createNew"
+          data-cy="preview-controls-container-create-new"
         >
           <Text translation="common.create.new" />
         </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={cloneOutputDocument}>
           <StyledMenuListItemText
             id="PreviewControlsContainer-createNew"
-            data-cy="PreviewControlsContainer-createNew"
+            data-cy="preview-controls-container-create-new"
             primary={<Text translation="common.create.new" />}
 
           />
@@ -342,7 +343,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           variant="outlined"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
-          data-cy="PreviewControlsContainer-createNew"
+          data-cy="preview-controls-container-create-new"
         >
           <Text translation="common.create.new" />
         </Button>
@@ -402,7 +403,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         color="secondary"
         variant="outlined"
         onClick={dialog.open}
-        data-cy="document.revision.withdraw.alert"
+        data-cy="document-revision-withdraw-alert"
       >
         <Text message="withdraw submission" />
       </Button>
@@ -417,13 +418,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     {renderAsButton ? <StyledButton
       color="primary"
       onClick={dialog.open}
-      data-cy="document.revision.withdraw.alert"
+      data-cy="document-revision-withdraw-alert"
     >
       <Text translation="changeRequest.transition.withdrawn" />
     </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
       <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
       <StyledMenuListItemText
-        data-cy="document.revision.withdraw.alert"
+        data-cy="document-revision-withdraw-alert"
         primary={<Text translation="changeRequest.transition.withdrawn" />}
       />
     </StyledMenuListItem>}
@@ -474,13 +475,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       color="primary"
       onClick={onSubmit}
       id="PreviewControlsContainer-access"
-      data-cy="PreviewControlsContainer-access"
+      data-cy="preview-controls-container-access"
     >
       <Text translation="document.request.access" />
     </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={onSubmit}>
       <StyledMenuListItemText
         id="PreviewControlsContainer-access"
-        data-cy="PreviewControlsContainer-access"
+        data-cy="preview-controls-container-access"
         primary={<Text translation="document.request.access" />}
       />
     </StyledMenuListItem>
@@ -641,6 +642,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const loggedInUser = store.getState().auth.user;
   const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
+  const isLatestLotRevision = useIsLatestLotRevision(documentRevision);
 
   return (
     <>
@@ -653,7 +655,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
         )}
       </>
-      {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isLot && isLatestLotRevision && <HeaderLotStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled || !isDocOwner} />}
       <>
