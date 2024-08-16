@@ -209,7 +209,7 @@ export interface GeneralSettings {
   equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
-  approvalRoles: ApprovalRoles
+  approvalRoles: ApprovalRoles[]
   allocationConfig: AllocationConfig
   lifecyclePhases?: {categories: LCPResponse[]}
   lifecyclePhasesProcessedPayload: LCP[]
