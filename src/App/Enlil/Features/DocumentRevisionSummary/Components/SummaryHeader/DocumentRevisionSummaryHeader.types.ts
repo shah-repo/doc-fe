@@ -14,4 +14,5 @@ export type DocumentRevisionSummaryHeaderProps =
   descriptionLabel?: string
   description?: string
   isSliderView?: boolean
+  inDialog?: boolean
 };

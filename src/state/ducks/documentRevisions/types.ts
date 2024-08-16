@@ -193,7 +193,7 @@ export interface LSHS {
   part: Part
 }
 
-interface Precalc {
+export interface Precalc {
   formDocId: string
   revision: number
   po_amount?: string
@@ -214,6 +214,7 @@ interface DocumentsInLHRS {
   docRevId?: string
   docRevTitle?: string
   documentId?: string
+  isExpired?: boolean
 }
 
 export interface UsedDocumentsInLHRS {
@@ -285,6 +286,32 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
   eqStatus: EquipmentStatus
+  lifecyclePhaseId?: string
+  lifecyclePhase?: string
+  isExpired?: boolean
+  expiryDate?: string
+}
+
+interface EQ {
+  docId: string
+  docRevId: string
+  nextCalibration: string
+  nextPm: string
+  title: string
+}
+
+interface Material {
+  docId: string
+  docRevId: string
+  quantity?: string
+  revision: string
+  title: string
+  unit: string
+}
+
+export interface MeqResponse {
+  equipment: EQ[]
+  materials: Material[]
 }
 
 export interface SmartReference {
@@ -321,7 +348,7 @@ export enum SmartReferenceType {
   LotSoruce = 'LOT_SOURCE',
 }
 
-interface InputOwner {
+export interface InputOwner {
   [key: string]: string
 }
 
@@ -356,6 +383,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   name: string
   docId?: string
   description: string
+  lifecyclePhaseId?: string
   attachments: Attachment[]
   type?: string
   referenceTo: ReferenceToEditRequest[]
@@ -485,7 +513,7 @@ export interface UpdateFormRequestBody {
   formToBeUsed: Id
 }
 
-interface TypeSpecificConfig {
+export interface TypeSpecificConfig {
   eqProdEnforceConfig: {
     date: string
     value: boolean

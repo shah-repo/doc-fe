@@ -28,11 +28,11 @@ const ROUTES: RouteChecker[] = [
   },
   {
     module: HelpModule.GroupManagement,
-    check: (path) => path.startsWith(URL.GROUP_MANAGEMENT_ROOT_URL),
+    check: (path) => path.startsWith(URL.USER_GROUPS_URL),
   },
   {
     module: HelpModule.UserManagement,
-    check: (path) => path.startsWith(URL.USER_MANAGEMENT_ROOT_URL),
+    check: (path) => path.startsWith(URL.USER_GROUP_URL),
   },
   {
     module: HelpModule.Training,

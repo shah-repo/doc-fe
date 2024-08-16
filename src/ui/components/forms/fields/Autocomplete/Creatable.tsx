@@ -93,9 +93,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
 
   return (
     <Field {...fieldProps} label={undefined} labelProps={labelProps}>
-      <ClickAwayListener onClickAway={onAway}>
-        <div id="doc-header-title">
-          {showOnlyText
+      <div id="doc-header-title">
+        {showOnlyText
         && <Box
           alignItems="center"
           display="flex"
@@ -113,7 +112,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
           onClick={() => { setShowOnlyText(false); }}
         >{inputValue || titlePlaceholder}
         </Box>}
-          {!showOnlyText && <AsyncCreatableSelect
+        {!showOnlyText && <ClickAwayListener onClickAway={onAway}>
+          <AsyncCreatableSelect
             inputValue={inputValue}
             value={value}
             styles={{
@@ -158,9 +158,9 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
             {...{ isDisabled, filterOption, onChange, onInputChange, onBlur }}
             {...creatableProps}
             options={options}
-          />}
-        </div>
-      </ClickAwayListener>
+          />
+        </ClickAwayListener>}
+      </div>
     </Field>
   );
 };

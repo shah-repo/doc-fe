@@ -1,35 +1,62 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from '@material-ui/core';
-import React, { MouseEventHandler } from 'react';
+import cx from 'classnames';
+import React, { MouseEventHandler, useRef } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Button, IconButton } from '../../../../components/forms/fields-next';
+import useSticky from '../../../../hooks/useSticky';
 import { SettingsPanelProps } from '../../types';
 import useStyles from './styles';
 
 const SettingsPanel: React.FC<SettingsPanelProps> = ({
   title,
+  info,
   children,
+  containerRef,
+  expanded,
   onToggle,
   onAddNew,
   ...props
 }) => {
   const classes = useStyles();
+  const [stickyRef, isSticky] = useSticky(containerRef);
+  const isAddPending = useRef(false);
 
   const handleAddNew: MouseEventHandler = (e) => {
     e.stopPropagation();
-    onAddNew?.();
+    if (expanded) {
+      onAddNew?.();
+      return;
+    }
+    onToggle();
+    isAddPending.current = true;
+  };
+
+  const handleOnEntered = () => {
+    if (isAddPending.current) {
+      isAddPending.current = false;
+      onAddNew?.();
+    }
   };
 
   return (
     <ExpansionPanel
       {...props}
+      expanded={expanded}
       className={classes.root}
+      TransitionProps={{
+        mountOnEnter: true,
+        unmountOnExit: true,
+        onEntered: handleOnEntered,
+        ...props.TransitionProps,
+      }}
     >
       <ExpansionPanelSummary
+        ref={stickyRef}
         onClick={onToggle}
         classes={{
-          root: classes.summary,
+          root: cx(classes.summary, { [classes.stickySummary]: isSticky }),
           content: classes.content,
           expandIcon: classes.icon,
         }}
@@ -45,6 +72,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         )}
       >
         <Typography variant="h2" className={classes.title}>{title}</Typography>
+        {info && <Typography className={classes.info}>{info}</Typography>}
         {onAddNew && (
           <Button
             kind="ghost"
@@ -57,7 +85,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </Button>
         )}
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.details}>
+      <ExpansionPanelDetails className={cx(classes.details, { [classes.detailsWithStickyTitle]: isSticky })}>
         {children}
       </ExpansionPanelDetails>
     </ExpansionPanel>

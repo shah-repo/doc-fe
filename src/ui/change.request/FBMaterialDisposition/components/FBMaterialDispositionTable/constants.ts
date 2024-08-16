@@ -1,6 +1,5 @@
 import { translate } from '../../../../../common/intl';
 
-export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const EMPTY_DROPDOWN_PLACEHOLDER = 'N/A';
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
@@ -25,6 +24,8 @@ export const MD_LOCATION_KEYS_MAPPING = {
 export const DROPDOWN_FIELDS = ['onOrderPOAction', 'inInspectionAction', 'inInventoryAction', 'inWipAction', 'asFinishedGoodsAction', 'usedLocation'];
 export const ON_ORDER_PO_ACTION_COLUMN = 'onOrderPOAction';
 export const FIELDS_TO_PICK = [...DROPDOWN_FIELDS, 'comment'];
+export const EXISTING_DOC_FIELDS_TO_PICK = [...FIELDS_TO_PICK, 'docId', 'docRevId', 'displayRevision'];
+export const NON_EXISTING_DOC_FIELDS_TO_PICK = [...FIELDS_TO_PICK, 'text'];
 export const SELECTER_MARGIN_BOTTOM = 8;
 export const SELECTER_MARGIN_TOP = 5;
 

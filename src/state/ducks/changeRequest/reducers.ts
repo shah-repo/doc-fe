@@ -120,6 +120,7 @@ const dependentOnDocRevs = (
     itemsInDraft: 0,
     itemsPending: 0,
     itemsInvalid: 0,
+    itemsLifecycleMismatching: 0,
     draftItemsMap: {},
     blockingItemsMap: {},
     itemsInvalidMap: {},

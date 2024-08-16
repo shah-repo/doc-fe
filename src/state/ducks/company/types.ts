@@ -1,8 +1,10 @@
+import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
-import { GroupTag } from '../auth/types';
-import { User } from '../common/types';
+import { GroupTag, Permission } from '../auth/types';
+import { Nullable, User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
+import { MaterialFlowAclRule } from '../materialFlowAcl/types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 
 export interface WhiteLabelingColors {
@@ -38,6 +40,7 @@ export interface CompanyLocation {
   id: string
   name: string
   active: boolean
+  includedInTotalQty: boolean
 }
 
 export interface Company {
@@ -97,6 +100,22 @@ export enum NavigationItems {
   CATEGORY = 'CATEGORY',
 }
 
+export enum AllocationOrder {
+  FIFO = 'fifo',
+  LIFO = 'lifo',
+}
+
+export enum ExpiredLotTypes {
+  WARNING = 'warning',
+  ERROR = 'error',
+}
+
+export enum NotifyPartLCP {
+  DO_NOTHING = 'NO',
+  WARNING = 'WARN',
+  ERROR = 'ERROR',
+}
+
 export interface NavigationItem {
   label: string
   type: NavigationItemType
@@ -105,6 +124,7 @@ export interface NavigationItem {
   icon?: string
   category?: string
   restrictedToUsersWithTags?: GroupTag[]
+  restrictedToUserPermissions?: Permission[]
   isOpen?: boolean
 }
 
@@ -174,11 +194,20 @@ interface EquipmentFamilySettings {
   statuses: EquipmentStatuses[]
 }
 
+interface AllocationConfig {
+  sortOrderByReleaseDate: AllocationOrder
+  expiredLotsPrompt: ExpiredLotTypes
+}
 export interface GeneralSettings {
-  zebraPrint: ZebraPrintSettings[]
+  zebraPrint: Nullable<ZebraPrintSettings[]>
   equipmentFamily: EquipmentFamilySettings
   approvalRequestAdmin: boolean
   shouldAutoUpdateLotStatus: boolean
+  allocationConfig: AllocationConfig
+  lifecyclePhases?: {categories: LCPResponse[]} | LCP[]
+  materialFlowACLs: MaterialFlowAclRule[]
+  isMaterialFlowAclEnabled: boolean
+  shouldNotifyLcpMismatch: NotifyPartLCP
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

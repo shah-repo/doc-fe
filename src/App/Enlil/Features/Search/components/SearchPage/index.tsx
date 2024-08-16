@@ -1,31 +1,31 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Dialog } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { State } from '@progress/kendo-data-query';
 import { GridDataStateChangeEvent, GridProps } from '@progress/kendo-react-grid';
+import { History } from 'history';
 import { kebabCase, map, startCase } from 'lodash';
+import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { History } from 'history';
+import { translate } from '../../../../../../common/intl';
+import { TrainingRecordQuery } from '../../../../../../state/ducks/training/types';
+import { changeRequestPreviewPath } from '../../../../../../ui/change.request/utils/paths';
+import KendoDataGrid from '../../../../../../ui/components/KendoDataGrid/KendoDataGrid';
 import Text from '../../../../../../ui/components/Text';
 import { pagerSettings } from '../../../../../../ui/components/common/kendo/helpers';
-import KendoDataGrid from '../../../../../../ui/components/KendoDataGrid/KendoDataGrid';
 import ExportListDialog from '../../../../../../ui/document.revision/list/ExportListDialog/ExportListDialog';
+import { documentVersionPath } from '../../../../../../ui/document.revision/utils/paths';
+import { FB } from '../../../../../../ui/form.builder';
 import useDialog from '../../../../../../ui/hooks/useDialog';
 import { withThemeNext } from '../../../../../../ui/layout/theme-next';
+import TrainingDialog from '../../../../../../ui/training/details/TrainingDialog';
 import { PAGE_SIZE, useSearchQuery } from '../../helpers';
+import SearchState from '../../state';
+import { Document, Facet, FacetCategoryId } from '../../types';
+import FacetsList, { FacetOnChangeHandler, MappedFacet } from './components/FacetsList';
 import schema from './schema';
 import useStyles from './styles';
-import { FB } from '../../../../../../ui/form.builder';
-import SearchState from '../../state';
-import { observer } from 'mobx-react';
-import { translate } from '../../../../../../common/intl';
-import { Facet, Document, FacetCategoryId } from '../../types';
-import FacetsList, { FacetOnChangeHandler, MappedFacet } from './components/FacetsList';
-import { TrainingRecordQuery } from '../../../../../../state/ducks/training/types';
-import TrainingDetails from '../../../../../../ui/training/details/TrainingDetails';
-import { changeRequestPreviewPath } from '../../../../../../ui/change.request/utils/paths';
-import { documentVersionPath } from '../../../../../../ui/document.revision/utils/paths';
 
 const SearchPage: React.FC = () => {
   const history = useHistory() as History;
@@ -242,18 +242,10 @@ const SearchPage: React.FC = () => {
         {...{ dialog, headers }}
         customFileName="DocumentList"
       />
-      <Dialog
-        open={trainingDetailsDialog.isOpen}
-        maxWidth="md"
-        fullWidth
-        onEscapeKeyDown={trainingDetailsDialog.close}
-        onBackdropClick={trainingDetailsDialog.close}
-      >
-        <TrainingDetails
-          dialog={trainingDetailsDialog}
-          training={trainingRecordData as TrainingRecordQuery}
-        />
-      </Dialog>
+      <TrainingDialog
+        dialog={trainingDetailsDialog}
+        training={trainingRecordData as TrainingRecordQuery}
+      />
     </Box>
   );
 };
