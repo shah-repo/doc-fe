@@ -7,7 +7,6 @@ import { translate } from '../../../../../common/intl';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { ApprovalRoles, GeneralSettings } from '../../../../../state/ducks/company/types';
 import TextCellTemplate from '../../../../administration/general.settings/components/SettingsTable/components/TextCellTemplate';
-// import useStyles from '../../../../administration/general.settings/components/SettingsTable/styles';
 import { Checkbox } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { CellTemplateProps, ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -75,7 +74,6 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
 
   const discardApprovalRoles = () => setEditedApprovalRoles(undefined);
   const onChange = ({ dataItem }) => {
-    console.log('--dataItem---', { dataItem, values });
     if(dataItem[MODE_FIELD] === Mode.add) {
       return setEditedApprovalRoles(prevValue => ({ ...prevValue, active: !editedApprovalRoles?.active, name: values.name }));
     }
