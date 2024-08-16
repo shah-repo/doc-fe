@@ -15,6 +15,7 @@ export enum GeneralSettingsTabs {
   EF = 'Equipment Family',
   Locations = 'Locations',
   MaterialFlow = 'Material Flow',
+  SystemTransactions = 'System Transactions Setup',
   TrainingReminder = 'Training Reminder',
 }
 

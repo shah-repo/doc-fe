@@ -306,7 +306,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          {!isPart && !documentRevision?.parentParts && (<Grid item xs={6}>
+          {!isPart && (<Grid item xs={6}>
             <RetrainField
               revisionChangeType={values.revisionChangeType}
               isDisabled={isDisabledInput || inRestrictedEditMode}
