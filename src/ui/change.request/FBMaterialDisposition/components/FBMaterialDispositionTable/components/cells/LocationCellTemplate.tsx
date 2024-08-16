@@ -1,7 +1,8 @@
 import React from 'react';
 import { translate } from '../../../../../../../common/intl';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { EMPTY_VALUE_PLACEHOLDER, MD_LOCATION_KEYS_MAPPING } from '../../constants';
+import { MD_LOCATION_KEYS_MAPPING } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 import { isEditMode } from '../../utils';
 

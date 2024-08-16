@@ -1,39 +1,60 @@
-import { chain, orderBy, uniq } from 'lodash';
+import { uniq } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { CUSTOM_GROUP_ORDER, LCP_KEYS } from './constants';
-import { CustomGroupDataItem, CustomGroupOptions, GroupDocTypes, LCP, LCPResponse, processLCPType } from './types';
+import {
+  CustomGroupDataItem,
+  CustomGroupOptions,
+  GroupDocTypes,
+  LCP,
+  LCPResponse,
+  processLCPType,
+} from './types';
 
-export const processRealData = (categoriesInfo?: LCPResponse[]): processLCPType => {
-  let groups: GroupDocTypes[] = [];
-  let phases: LCP[] = [];
-  categoriesInfo?.forEach((data: LCPResponse) => {
-    const docTypes = data.docTypes;
-    groups = groups.concat(docTypes);
-    const documentTypeIds = docTypes?.map(data => data.id);
-    const group = docTypes?.map(data => data.group);
-    const category = uuidv4();
-    data.phases = chain(data.phases)
-      .sortBy(LCP_KEYS.displayOrder)
-      .map((phase) => {
-        return {
+export const processRealData = (
+  categoriesInfo?: LCPResponse[],
+): processLCPType => {
+  const groups: GroupDocTypes[] = [];
+  const phases: LCP[] = [];
+
+  if (categoriesInfo) {
+    categoriesInfo.forEach((data: LCPResponse) => {
+      const { docTypes = [], phases: dataPhases = [] } = data;
+      groups.push(...docTypes);
+      const documentTypeIds = docTypes.map((docType) => docType.id);
+      const group = docTypes.length > 0 ? docTypes[0].group : '';
+      const uniqueDocumentTypeId = uniq(documentTypeIds).join('');
+      const category = uuidv4();
+      const sortedPhases = dataPhases
+        .sort(
+          (phase1, phase2) =>
+            (phase1[LCP_KEYS.displayOrder] ?? 0)
+            - (phase2[LCP_KEYS.displayOrder] ?? 0),
+        )
+        .map((phase) => ({
           ...phase,
-          group: group[0],
+          group,
           category,
-          documentTypeId: uniq(documentTypeIds).join(''),
-        };
-      }).value();
-    phases = phases.concat(data.phases);
-  });
+          documentTypeId: uniqueDocumentTypeId,
+        }));
+      phases.push(...sortedPhases);
+    });
+  }
+
   return {
     groups: processGroups(groups),
     phases,
   };
 };
 
-export const sortGroups = (groups: CustomGroupDataItem[]) => {
+export const sortGroups = (
+  groups: CustomGroupDataItem[],
+  selectedOrder?: string,
+): CustomGroupDataItem[] => {
+  const sortOrder = [...(selectedOrder ? [selectedOrder] : []), ...CUSTOM_GROUP_ORDER];
+
   return groups.sort((a, b) => {
-    const aIndex = CUSTOM_GROUP_ORDER.indexOf(a.value);
-    const bIndex = CUSTOM_GROUP_ORDER.indexOf(b.value);
+    const aIndex = sortOrder.indexOf(a.value);
+    const bIndex = sortOrder.indexOf(b.value);
     if (aIndex === -1 && bIndex === -1) {
       return a.value.localeCompare(b.value);
     }
@@ -47,16 +68,41 @@ export const sortGroups = (groups: CustomGroupDataItem[]) => {
   });
 };
 
-export const processGroups = (groups: GroupDocTypes[]): CustomGroupOptions[] => {
-  return groups.map((group) => {
-    return {
-      label: `${group.documentTypeName} (${group.documentTypeAcronym.replace('-', '')})`,
-      value: group.id,
-      category: group.group,
-    };
-  });
+export const processGroups = (
+  groups: GroupDocTypes[],
+): CustomGroupOptions[] => {
+  return groups.map(({ id, documentTypeName, documentTypeAcronym, group }) => ({
+    label: `${documentTypeName} (${documentTypeAcronym.replace('-', '')})`,
+    value: id,
+    category: group,
+  }));
 };
 
 export const sortPhasesByDisplayOrder = (phases?: LCP[]): LCP[] => {
-  return orderBy(phases, [LCP_KEYS.order, LCP_KEYS.displayOrder], ['asc', 'asc']);
+  if (!phases?.length) return [];
+
+  return [...phases].sort((phase1, phase2) => {
+    const orderComparison
+      = (phase1[LCP_KEYS.order] ?? 0) - (phase2[LCP_KEYS.order] ?? 0);
+    if (orderComparison !== 0) return orderComparison;
+
+    return (
+      (phase1[LCP_KEYS.displayOrder] ?? 0)
+      - (phase2[LCP_KEYS.displayOrder] ?? 0)
+    );
+  });
+};
+
+export const isGroupActivateOrDeactivate = (
+  phases: LCP[],
+  activate: boolean,
+): boolean => {
+  if (!phases?.length) return false;
+
+  for (const phase of phases) {
+    if (phase.isActive !== activate) {
+      return false;
+    }
+  }
+  return true;
 };

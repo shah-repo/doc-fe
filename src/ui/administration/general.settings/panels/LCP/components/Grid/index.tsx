@@ -4,9 +4,9 @@ import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-reac
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { cloneDeep, last, pick, uniq } from 'lodash';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { cloneDeep, last, pick, uniq, uniqBy } from 'lodash';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
 import { getHasPermission } from '../../../../../../../common/utils/selectors';
@@ -31,7 +31,7 @@ import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EX
 import { LCPSchema } from './schema';
 import useStyles from './styles';
 import { CustomGroupDataItem, CustomGroupOptions, EditableLCP, GroupDocTypes, LCP } from './types';
-import { processGroups, processRealData, sortGroups, sortPhasesByDisplayOrder } from './utils';
+import { isGroupActivateOrDeactivate, processGroups, processRealData, sortGroups, sortPhasesByDisplayOrder } from './utils';
 
 const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const [dataState, setDataState] = useState<State>(initialDataState);
@@ -51,7 +51,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
   const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
   const classes = useStyles();
-  const { setValues, values: formValues } = useFormikContext<GeneralSettings>();
+  const dispatch = useDispatch();
+  const updateLCPSettings = useActionCreator(companyActions.updateGeneralSettings);
+  const { values: formValues } = useFormikContext<GeneralSettings>();
 
   const fetchLCPDocTypesAsync = useAsync({
     onSuccess: (data: GroupDocTypes[] = []) => {
@@ -60,24 +62,40 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     onError: toastError,
   });
 
+  const async = useAsync({
+    onSuccess: () => {
+      dispatch(companyActions.getGeneralSettings());
+    },
+    onError: toastError,
+  });
+
   const fetchLCPPhasesAsync = useAsync({
     onSuccess: (newPhases?: LCP[]) => {
       const category = uuidv4();
-      newPhases = newPhases?.map((phase: LCP) => {
-        return {
-          ...phase,
-          id: `${ADD_GROUP_NAME}${uuidv4()}`,
-          documentTypeId: selectedDocType?.value ?? '',
-          group: selectedDocType?.category,
-          category,
-          [EDIT_FIELD]: true,
-          isUserAdded: false,
-          isUserModified: false,
-        };
+      const documentTypeId = selectedDocType?.value ?? '';
+      const group = selectedDocType?.category;
+      selectedDocType && setSelectedDocType({
+        ...selectedDocType,
+        categoryUniqId: category,
       });
-      const updatedData = newPhases?.concat((data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID));
+
+      const processedPhases = newPhases?.map((phase: LCP) => ({
+        ...phase,
+        id: `${ADD_GROUP_NAME}${uuidv4()}`,
+        documentTypeId,
+        group,
+        category,
+        [EDIT_FIELD]: true,
+        isUserAdded: false,
+        isUserModified: false,
+      })) ?? [];
+
+      const updatedData = [
+        ...processedPhases,
+        ...(data ?? []).filter((data: LCP) => getGroupIdByCategory(data.category) !== ADD_GROUP_ID),
+      ];
       setEditGroup(getGroupIdByCategory(category));
-      updateStateGridData(updatedData ?? [], false);
+      updateStateGridData(updatedData, false);
     },
     onError: toastError,
   });
@@ -85,7 +103,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   useEffect(() => {
     const data = processRealData(formValues?.lifecyclePhases?.categories);
     updateStateGridData(data.phases);
-    updateSettingsObj(data.phases);
     setSelectedPartGroups(data.groups);
     fetchLCPDocTypesAsync.start(
       fetchLCPDocTypes,
@@ -129,6 +146,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onDiscardGroup = () => {
     setEditGroup('');
+    setSelectedDocType(undefined);
     updateStateGridData(prevData ?? []);
     setSelectedGroup(undefined);
   };
@@ -146,15 +164,14 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const updateSettingsObj = (updatedData?: LCP[]) => {
-    const payload = cloneDeep(updatedData)?.map((item) => {
+    const payload = uniqBy(cloneDeep(updatedData), 'id')?.map((item) => {
       if (item.id?.includes(ADD_GROUP_NAME)) {
         item.id = undefined;
       }
       return { ...pick(item, REQUEST_PAYLOAD_KEYS) };
     });
     if (formValues) {
-      formValues.lifecyclePhasesProcessedPayload = payload as LCP[];
-      setValues(formValues);
+      async.start(updateLCPSettings, { ...formValues, lifecyclePhases: payload }, '', 'POST', async);
     }
   };
 
@@ -225,14 +242,35 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
     setEditGroup('');
+    setSelectedDocType(undefined);
     updateSettingsObj(data);
   };
 
-  const isLastGroupRow = (id: string, category: string): boolean => {
-    const group = resultState?.data.find((item: CustomGroupDataItem) => item.value === category) as CustomGroupDataItem;
-    const lastItem = last(group?.items ?? []) as LCP;
-    return lastItem?.id === id;
-  };
+  const getGroupByCategory = useCallback(
+    (category: string): CustomGroupDataItem => {
+      return resultState?.data.find(
+        (item: CustomGroupDataItem) => item.value === category,
+      ) as CustomGroupDataItem;
+    },
+    [resultState],
+  );
+
+  const isLastGroupRow = useCallback(
+    (id: string, category: string): boolean => {
+      const group = getGroupByCategory(category);
+      const lastItem = last(group?.items ?? []) as LCP;
+      return lastItem?.id === id;
+    },
+    [getGroupByCategory],
+  );
+
+  const isGroupPhasesDeactivated = useCallback(
+    (category: string): boolean => {
+      const group = getGroupByCategory(category);
+      return isGroupActivateOrDeactivate(group?.items ?? [], false);
+    },
+    [getGroupByCategory],
+  );
 
   const addPhase = (dataItem: LCP) => {
     setPrevData(cloneDeep(data));
@@ -398,6 +436,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     }
 
     if (isLastGroupRow(itemId, itemCategory) && !isGroupUpdating && hasEditLCPPermission) {
+      if (isGroupPhasesDeactivated(itemCategory)) {
+        return <React.Fragment />;
+      }
+
       return [row,
         React.cloneElement(row, {
           ...rowProps,
@@ -409,6 +451,8 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         }),
       ];
     }
+
+    rowProps.dataItem.isGroupDeactivated = isGroupPhasesDeactivated(itemCategory);
 
     return React.cloneElement(row, {
       ...rowProps,
@@ -426,7 +470,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     );
   }, [collapsedState, dataState]);
 
-  const getUpdatedStateDataByEditInfo = React.useCallback((resultState?: DataResult) => {
+  const getUpdatedStateDataByEditInfo = useCallback((resultState?: DataResult) => {
     resultState?.data?.forEach((group: CustomGroupDataItem) => {
       group.items?.forEach((data) => {
         data[EDIT_FIELD] = group.groupId === editGroup;
@@ -434,8 +478,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
       return group;
     });
-
-    return sortGroups(resultState?.data ?? []);
+    return sortGroups(resultState?.data ?? [], selectedDocType?.categoryUniqId);
   }, [editGroup, resultState]);
 
   const onItemChange = (e: GridItemChangeEvent) => {
@@ -553,19 +596,15 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
           cancelLabel="common.no.go.back"
           warning
         >
-          <Typography data-cy="lcp-dialog-message">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: translate(
-                  translate(
-                    selectedPhase
-                      ? 'administration.general.settings.lcp.phase.deactivate.dialog.message'
-                      : 'administration.general.settings.lcp.doc.type.deactivate.dialog.message',
-                  ),
-                ),
-              }}
-            />
-          </Typography>
+          <Typography data-cy="lcp-dialog-message" dangerouslySetInnerHTML={{
+            __html: translate(
+              translate(
+                selectedPhase
+                  ? 'administration.general.settings.lcp.phase.deactivate.dialog.message'
+                  : 'administration.general.settings.lcp.doc.type.deactivate.dialog.message',
+              ),
+            ),
+          }} />
         </AlertDialog>
       )}
     </Grid>
