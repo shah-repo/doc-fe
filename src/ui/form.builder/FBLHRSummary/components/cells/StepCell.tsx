@@ -276,7 +276,15 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
                 data-cy="step-mpi-field"
                 className={classes.link}
               >
-                {getDisplayDocument(docId, displayRevision)}
+                <OverflowTooltip
+                  title={getDisplayDocument(docId, displayRevision)}
+                  placement="top"
+                  interactive
+                  arrow
+                  data-cy="mpi-field"
+                >
+                  {getDisplayDocument(docId, displayRevision)}
+                </OverflowTooltip>
               </Link>
               <InvalidDocIndicator status={displayStatus} dataCy="step-mpi-invalid-indicator" />
             </Box>
