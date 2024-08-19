@@ -4,7 +4,7 @@ import { reaction } from 'mobx';
 import React from 'react';
 import { FB, FBFileField, FBFileUploadState, FBProvider } from '../..';
 import { Attachment } from '../../../../state/ducks/attachments/types';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableCertification } from '../types';
 import FBAttachmentNamePresenter from './FBAttachmentNamePresenter';
@@ -21,6 +21,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, previousAttachments }) => {
   const { id } = dataItem ?? values;
 
   React.useEffect(() => {
+    console.log('previousAttachments :', previousAttachments);
     if (!isEmpty(previousAttachments)) {
       fileUploadState?.setAttachments(previousAttachments);
     }
