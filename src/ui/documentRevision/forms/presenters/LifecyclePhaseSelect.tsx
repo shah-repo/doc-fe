@@ -87,6 +87,11 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
           },
           disabled: isDisabled || isPartForm,
           onChange: handleTypeChange,
+          displayEmpty: true,
+          renderValue: value => lifecyclePhaseOptions.find(item => item.value === value)?.text ?? (
+            <span className={classes.placeholderStyle}>
+              {translate('common.select.placeholder')}
+            </span>),
         }}
         options={lifecyclePhaseOptions}
         includeEmpty={false}

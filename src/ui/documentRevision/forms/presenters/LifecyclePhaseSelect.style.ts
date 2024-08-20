@@ -12,6 +12,11 @@ export const styles = makeStyles((theme) => ({
       fontSize: 14,
     },
   },
+  placeholderStyle: {
+    color: Colors.textDisabled,
+    fontSize: 14,
+    fontWeight: 400,
+  },
   labelProps: {
     marginBottom: theme.spacing(1.25),
     fontWeight: 600,
