@@ -105,8 +105,8 @@ const getAllowedTransferOptions = (
   RULE_FIELDS_TO_CHECK.forEach(field => {
     allowedRules.forEach(rule => {
       if (field !== 'type' && selectedOptions.type && rule.action !== selectedOptions.type) return;
-      if (field !== 'from' && selectedOptions.from && rule.from !== selectedOptions.from) return;
-      if (field !== 'to' && selectedOptions.to && rule.to !== selectedOptions.to) return;
+      if (field !== 'from' && selectedOptions.from && rule.from?.length && rule.from !== selectedOptions.from) return;
+      if (field !== 'to' && selectedOptions.to && rule.to?.length && rule.to !== selectedOptions.to) return;
       if (field === 'to' && rule.action === LotTransferType.Scrap) return;
 
       if (field === 'type') {
