@@ -51,6 +51,7 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
                 classes={{ root: classes.radio, checked: classes.checked, disabled: classes.disabled }}
                 size="small"
                 disabled={!hasPermission}
+                data-cy="lot-allocation-fifo"
               />
             }
             labelPlacement="start"
@@ -75,6 +76,7 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
                 classes={{ root: classes.radio, checked: classes.checked, disabled: classes.disabled }}
                 disabled={!hasPermission}
                 size="small"
+                data-cy="lot-allocation-lifo"
               />
             }
             labelPlacement="start"
