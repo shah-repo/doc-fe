@@ -8,7 +8,7 @@ import { companySelectors } from '../../../state/ducks/company';
 import { materialFlowACLSelectors } from '../../../state/ducks/materialFlowAcl';
 import { MaterialFlowAclRule } from '../../../state/ducks/materialFlowAcl/types';
 import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, RULE_FIELDS_TO_CHECK, TRANSFERS_FIELD } from './constants';
-import { AllowedOptions, CalculableLotTransfer, CompanyLocation, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction, SelectedOptions } from './types';
+import { AclRuleFieldsToCheck, AllowedOptions, CalculableLotTransfer, CompanyLocation, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction, SelectedOptions } from './types';
 
 export const getOptionLabel = (option: DocumentRevisionOption): string => {
   const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
@@ -138,4 +138,33 @@ export const useAllowedLotTransferOptions = (
   }
 
   return [true, getAllowedTransferOptions(rules, locations, userGroups, selectedOptions)];
+};
+
+export const useIsTransferAllowed = (
+  selectedOptions: SelectedOptions = {},
+): [boolean, AclRuleFieldsToCheck[]] => {
+  const locations = useSelector(companySelectors.getAllLocations) ?? [];
+  const rules = useSelector(materialFlowACLSelectors.getRules) ?? [];
+  const userGroups = useSelector(authSelectors.currentUserGroups) ?? [];
+  const isAclEnabled = useSelector(materialFlowACLSelectors.getIsEnabled);
+
+  if (!isAclEnabled) {
+    return [true, []];
+  }
+
+  const allowedTransactions = getAllowedTransferOptions(rules, locations, userGroups, selectedOptions);
+
+  return RULE_FIELDS_TO_CHECK.reduce<[boolean, AclRuleFieldsToCheck[]]>(([result, errors], field) => {
+    const selectedOption = String(selectedOptions[field]);
+    switch (field) {
+      case 'from':
+      case 'to': {
+        const isAllLocationsAllowed = allowedTransactions[field].length === locations.length;
+        const isValid = allowedTransactions[field].includes(selectedOption) || isAllLocationsAllowed;
+        return [result && isValid, isValid ? errors : [...errors, field]];
+      }
+      default:
+        return [result, errors];
+    }
+  }, [true, []]);
 };
