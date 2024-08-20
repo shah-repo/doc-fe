@@ -1,6 +1,7 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, InputLabel, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../common/intl';
@@ -31,6 +32,7 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const formik = useFormikContext();
+  const { values } = formik;
   const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<Array<{value: string, text: string}>>([]);
   const fetchDocRevOptions = useActionCreator(companyActions.fetchDocRevOptionsByDocTypeId);
 
@@ -90,7 +92,7 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
         }}
         options={lifecyclePhaseOptions}
         includeEmpty={false}
-        inputStyleProps={classes.input}
+        inputStyleProps={cx(classes.input, { [classes.placeholderStyle]: !values.lifecyclePhaseId })}
         labelProps={FBAutoCompleteStyles.labelStyle}
       />
     </>
