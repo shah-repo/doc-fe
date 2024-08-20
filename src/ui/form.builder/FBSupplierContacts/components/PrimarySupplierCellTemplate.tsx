@@ -22,7 +22,7 @@ const Editor: React.FC<Props> = ({ field }) => {
   return (
     <Box display="flex" justifyContent="center" mt={0.75}>
       <Radio
-        checked={values.primary}
+        checked={values.isPrimary}
         color="primary"
         size="small"
         value={values.id}
@@ -55,7 +55,7 @@ export const PrimarySupplierCellTemplate: React.FC<Props> = (props) => {
   return (
     <Box display="flex" justifyContent="center">
       <Radio
-        checked={dataItem.primary}
+        checked={dataItem.isPrimary}
         color="primary"
         size="small"
         value={dataItem.id}

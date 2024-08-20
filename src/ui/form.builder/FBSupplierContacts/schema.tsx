@@ -18,8 +18,8 @@ export const buildSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<EditableSupplierContact>> => {
   return [
     {
-      id: 'primary',
-      field: 'primary',
+      id: 'isPrimary',
+      field: 'isPrimary',
       filterable: false,
       headerCell: PrimarySupplier,
       template: (props) => (
@@ -57,8 +57,8 @@ export const buildSchema = ({
       width: 200,
     },
     {
-      id: 'number',
-      field: 'number',
+      id: 'phoneNumber',
+      field: 'phoneNumber',
       title: 'form.builder.supplier.contacts.grid.heading.phone.number',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,

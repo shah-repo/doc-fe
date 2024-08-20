@@ -8,7 +8,7 @@ export interface SchemaOptions {
   actionsClass: string
   onConfirm?: () => void
   onDiscard?: () => void
-  onDelete?: () => void
+  onDelete?: (dataItem: EditableSupplierContact) => void
   onRowClick?: (e: SupplierContactEditEvent) => void
   onPrimaryChange?: (id: string) => void
 }
@@ -19,12 +19,13 @@ export type FBSupplierContactsProps =
   contacts: SupplierContact[]
   deleteContact: (item: SupplierContact) => void
   updateContact: (item: SupplierContact, id?: string) => void
+  setContacts: React.Dispatch<React.SetStateAction<SupplierContact[]>>
   setPrimaryContact: (id: string) => void
 };
 
 export interface SupplierContact {
   id: string
-  primary: boolean
+  isPrimary: boolean
   name: string
   title?: string
   email?: string

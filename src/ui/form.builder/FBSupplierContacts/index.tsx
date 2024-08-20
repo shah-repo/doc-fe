@@ -7,13 +7,14 @@ import { omit } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import { Button } from '../../components/forms/fields-next';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
+import FB from '../helpers/FB';
 import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -25,12 +26,12 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
   name = '',
   disabled,
   contacts = [],
-  deleteContact,
-  updateContact,
   setPrimaryContact,
+  setContacts,
   ...props
 }) => {
   const classes = useStyles();
+  const { formState, workspaceState } = FB.useStores();
   const isActive = !disabled;
   const [editedContact, setEditedContact] = useState<Partial<EditableSupplierContact>>();
 
@@ -41,11 +42,27 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
 
   const formik = useFormik<Partial<EditableSupplierContact>>({
     initialValues: {},
-    onSubmit: (values) => {
-      const contactToSave = omit(values, FIELDS_TO_OMIT);
-      console.log({ contactToSave });
-      // TO DO Save/Update
+    onSubmit: (values: Partial<EditableSupplierContact>) => {
+      const isAddition = values[MODE_FIELD] === Mode.add;
+      const supplierContacts: EditableSupplierContact[]
+        = workspaceState?.formInput?.[name] ?? [];
+      const updatedContact = omit(values, FIELDS_TO_OMIT);
 
+      const updatedContacts = isAddition
+        ? [...supplierContacts, updatedContact]
+        : supplierContacts.map((contact) =>
+          contact.id === values.id
+            ? updatedContact
+            : updatedContact.isPrimary
+              ? { ...contact, isPrimary: false }
+              : contact,
+        );
+
+      formState?.setFieldValue(name, updatedContacts);
+      workspaceState?.saveDocRev({
+        ...workspaceState?.formInput,
+        [name]: updatedContacts,
+      });
       discardContact();
     },
   });
@@ -58,16 +75,24 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
 
   const createDraftContact = () => setEditedContact({
     id: uuidv4(),
-    primary: contacts.length === 0,
+    isPrimary: contacts.length === 0,
     [MODE_FIELD]: Mode.add,
   });
 
   const discardContact = () => setEditedContact(undefined);
 
-  const removeContact = () => {
+  const onDeleteContact = (dataItem: EditableSupplierContact) => {
     if (!editedContact) return;
-    // TO DO DELETE the contact
-    discardContact();
+    const updatedContacts = contacts.filter((contact) =>
+      contact.id !== dataItem.id,
+    );
+    setContacts(updatedContacts);
+  formState?.setFieldValue(name, updatedContacts);
+  workspaceState?.saveDocRev({
+    ...workspaceState?.formInput,
+    [name]: updatedContacts,
+  });
+  discardContact();
   };
 
   const rowRender: DataGridProps<EditableSupplierContact>['rowRender'] = (row, { dataItem }) => {
@@ -98,7 +123,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardContact,
-    onDelete: removeContact,
+    onDelete: onDeleteContact,
     onPrimaryChange: setPrimaryContact,
   });
 
