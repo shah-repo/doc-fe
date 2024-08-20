@@ -383,6 +383,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   name: string
   docId?: string
   description: string
+  lifecyclePhaseId?: string
   attachments: Attachment[]
   type?: string
   referenceTo: ReferenceToEditRequest[]

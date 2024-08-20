@@ -11,16 +11,16 @@ import { translate } from '../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Button } from '../../components/forms/fields-next';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
+import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import FBInput from '../FBInput/FBInput';
 import { ActionsCell } from './components/ActionsCell';
-import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, EMPTY_VALUE_PLACEHOLDER, FIELDS_TO_OMIT, REFERENCE_FIELD, SERVER_AUTOMATION_LOT_TRANSFER_BY } from './constants';
+import { BUILD_FIELD, DATE_FIELD, EMPLOYEE_FIELD, FIELDS_TO_OMIT, REFERENCE_FIELD, SERVER_AUTOMATION_LOT_TRANSFER_BY } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { DraftLotTransfer, EditableLotTransfer, FBLotTransactionsProps, LotTranferEditEvent, LotTransfer } from './types';
-import { getOptionLabel, useOnHandQuantity } from './utils';
+import { getOptionLabel, useAllowedLotTransferOptions, useOnHandQuantity } from './utils';
 import { withFBLotTransactions } from './wrap';
 
 const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
@@ -123,11 +123,15 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
 
   const handleRowClick = isActive && !editedLotTransfer ? editLotTransfer : undefined;
 
+  const [isAclEnabled, allowedOptions] = useAllowedLotTransferOptions(formik.values);
+
   const schema = buildSchema({
     locations,
     existingLocations,
     records,
     builds,
+    allowedOptions,
+    isAclEnabled,
     units: onHandQuantityUnit,
     onRowClick: handleRowClick,
   });

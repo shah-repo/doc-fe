@@ -3,10 +3,9 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { translate } from '../../../../common/intl';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import useStyles from '../styles';
 import { CustomTemplateProps, EditableLotTransfer } from '../types';
 
