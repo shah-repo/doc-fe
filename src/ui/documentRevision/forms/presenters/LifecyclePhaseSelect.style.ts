@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core';
-import { translate } from '../../../../common/intl';
 import { Colors } from '../../../layout/theme-next';
 
 export const styles = makeStyles((theme) => ({
@@ -14,12 +13,9 @@ export const styles = makeStyles((theme) => ({
     },
   },
   placeholderStyle: {
-    '& .MuiSelect-select span::before': {
-      content: `"${translate('common.select.placeholder')}"`,
-      color: Colors.textDisabled,
-      fontSize: 14,
-      fontWeight: 400,
-    },
+    color: Colors.textDisabled,
+    fontSize: 14,
+    fontWeight: 400,
   },
   labelProps: {
     marginBottom: theme.spacing(1.25),
