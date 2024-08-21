@@ -139,4 +139,5 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     </SettingsPanel>
   );
 };
+
 export default EquipmentFamilySettingsPanel;

@@ -1,4 +1,5 @@
 import cx from 'classnames';
+import { kebabCase } from 'lodash';
 import React from 'react';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -49,7 +50,7 @@ function SettingsTable<T extends EditableItem> ({
           attached
           fullWidth
           kind="add"
-          data-cy="form-builder-add-another-location"
+          data-cy={kebabCase(addButtonLabel)}
           disabled={isEditing}
           onClick={onAdd}
         >

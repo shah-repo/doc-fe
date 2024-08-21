@@ -1,5 +1,7 @@
 export const MODE_FIELD = '_mode';
 
+export const EMPTY_VALUE_PLACEHOLDER = '-';
+
 export enum Mode {
   show = 'show',
   add = 'add',
