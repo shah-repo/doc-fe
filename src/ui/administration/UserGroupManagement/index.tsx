@@ -4,7 +4,7 @@ import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
-import { USER_GROUPS_URL, USER_GROUP_URL } from '../../constants/urls';
+import { USER_GROUPS_URL, USER_URL } from '../../constants/urls';
 import StyledTabs from '../../dashboard.new/tabs/common/StyledTabs';
 import GroupManagementListContainer from '../../group.management/kendo/container';
 import useGetHasTag from '../../hooks/useGetHasTag';
@@ -29,7 +29,7 @@ const UserGroupManagment: React.FC = () => {
         <StyledTabs value={match ? UserGroupTabValues.Group : UserGroupTabValues.User}>
           {canManageUser && (<Tab
             component={Link}
-            to={USER_GROUP_URL}
+            to={USER_URL}
             value={UserGroupTabValues.User}
             label={LABELS.USERTAB}
           />
@@ -46,7 +46,7 @@ const UserGroupManagment: React.FC = () => {
       </Grid>
       <Switch>
         <Route path={USER_GROUPS_URL} component={GroupManagementListContainer} />
-        <Route component={UserManagementKendoContainer} />
+        <Route path={USER_URL} component={UserManagementKendoContainer} />
       </Switch>
     </>
   );
