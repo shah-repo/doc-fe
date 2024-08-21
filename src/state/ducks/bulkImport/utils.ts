@@ -1,4 +1,4 @@
-import axiosApi from "../../../App/Shifamed/API/axiosConfig";
+import axiosApi from '../../../App/Shifamed/API/axiosConfig';
 import { approvalFieldId, APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, documentRevisionFormInput } from './constants';
 
 const TEMPLATE_CSV = 'template.xlsx';
