@@ -48,12 +48,8 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
 
   data = data.map((item) => ({
     ...item,
-    ...(item.poStatus === POStatusType.OPENED && {
-      poStatus: POStatusLabelMapping.OPENED,
-    }),
-    ...(item.displayStatus === DocumentRevisionStatusDisplay.Released && {
-      displayStatus: DocumentRevisionStatusDisplay.Approved,
-    }),
+    poStatus: item.poStatus === POStatusType.OPENED ? POStatusLabelMapping.OPENED : item.poStatus,
+    displayStatus: item.displayStatus === DocumentRevisionStatusDisplay.Released ? DocumentRevisionStatusDisplay.Approved : item.displayStatus,
   }));
 
   return (
