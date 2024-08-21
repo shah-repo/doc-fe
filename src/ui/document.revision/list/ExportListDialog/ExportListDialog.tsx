@@ -55,7 +55,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
       displayStatus: DocumentRevisionStatusDisplay.Approved,
     }),
   }));
-  
+
   return (
     <>
       {
