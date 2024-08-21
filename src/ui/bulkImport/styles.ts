@@ -27,13 +27,13 @@ export default makeStyles(theme => ({
   loading: {
     margin: 'auto',
   },
-  backToDashboardContainer: {
+  headerContainer: {
     position: 'relative',
   },
   backToDashboard: {
     position: 'absolute',
     top: theme.spacing(2.5),
-    left: theme.spacing(3.125),
+    left: theme.spacing(1),
   },
   [theme.breakpoints.down('md')]: {
     backToDashboard: {
