@@ -56,6 +56,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
               ref={discardRef}
               onClick={onDiscard}
               iconSize={22}
+              data-cy="action-discard"
             >
               <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
             </IconButton>
@@ -67,6 +68,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
               ref={saveRef}
               onClick={onConfirm}
               iconSize={22}
+              data-cy="action-save"
             >
               <FontAwesomeIcon icon={isSaveHovered ? solid('square-check') : light('square-check')} />
             </IconButton>
@@ -80,6 +82,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
               color="primary"
               onClick={() => onEdit?.(dataItem)}
               disabled={!isActive}
+              data-cy="action-edit"
             >
               <FontAwesomeIcon icon={regular('pen-to-square')} />
             </IconButton>
@@ -90,6 +93,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
                 kind="destructive"
                 ref={deleteRef}
                 onClick={() => onDelete?.(dataItem)}
+                data-cy="action-delete"
               >
                 <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} />
               </IconButton>
