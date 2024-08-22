@@ -86,15 +86,7 @@ const UserGroupManagment: React.FC = () => {
         {canManageUser && (
           <Route path={USER_GROUP_URL} component={UserManagementKendoContainer} />
         )}
-        <Route
-          render={() =>
-            canManageUser ? (
-              <UserManagementKendoContainer />
-            ) : (
-              <GroupManagementListContainer />
-            )
-          }
-        />
+        <Route component={canManageUser ? UserManagementKendoContainer : GroupManagementListContainer} />
       </Switch>
     </>
   );
