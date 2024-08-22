@@ -2125,7 +2125,7 @@
   "dropzone.noDrag.text": "Drag and drop files here",
   "dropzone.noDrag.subText": "Click here to browse",
   "dropzone.noDrag.textOr": "Drag and drop files here or ",
-  "bulkImport.progress.title": "Bulk Import",
+  "bulkImport.progress.title": "Bulk Import Dashboard",
   "bulkImport.progress.subtitle": "Manage your documents and records imports",
   "bulkImport.progress.header.newOCR": "+  New OCR",
   "bulkImport.progress.header.newImport": "+  New Import",
