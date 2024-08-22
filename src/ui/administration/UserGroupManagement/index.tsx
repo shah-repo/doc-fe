@@ -5,7 +5,7 @@ import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom
 import { GroupTag } from '../../../state/ducks/auth/types';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
-import { USER_GROUP_URL, USER_GROUPS_URL } from '../../constants/urls';
+import { HOME_URL, USER_GROUP_URL, USER_GROUPS_URL } from '../../constants/urls';
 import StyledTabs from '../../dashboard.new/tabs/common/StyledTabs';
 import GroupManagementListContainer from '../../group.management/kendo/container';
 import useGetHasTag from '../../hooks/useGetHasTag';
@@ -25,6 +25,8 @@ const UserGroupManagment: React.FC = () => {
       history.push(USER_GROUPS_URL);
     } else if (!canManageGroups && canManageUser) {
       history.push(USER_GROUP_URL);
+    } else if (!canManageGroups && !canManageUser) {
+      history.push(HOME_URL);
     }
   }, [canManageUser, canManageGroups, history]);
 
