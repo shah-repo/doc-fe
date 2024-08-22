@@ -26,10 +26,6 @@ const UserManagementKendoContainer: React.FunctionComponent = () => {
     );
   }
 
-  // if (!canManageUsers) {
-  //   return <Redirect to={HOME_URL} />;
-  // }
-
   return (
     <KendoPresenter
       tableName={TABLE_NAME}
