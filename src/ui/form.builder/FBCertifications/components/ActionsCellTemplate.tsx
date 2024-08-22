@@ -1,5 +1,5 @@
 import React from 'react';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps, SchemaOptions } from '../types';
 import { ActionsCell } from './ActionsCell';
 
@@ -18,7 +18,7 @@ export const ActionsCellTemplate: React.FC<Props> = (props) => {
       dataItem={dataItem}
       onConfirm={onConfirm}
       onDiscard={onDiscard}
-      onDelete={onDelete}
+      onDelete={() => onDelete?.(dataItem)}
     />
   );
 };

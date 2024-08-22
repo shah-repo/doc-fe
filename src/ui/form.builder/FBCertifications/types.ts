@@ -9,7 +9,7 @@ export interface SchemaOptions {
   actionsClass: string
   onConfirm?: () => void
   onDiscard?: () => void
-  onDelete?: () => void
+  onDelete?: (dataItem: EditableCertification) => void
   onRowClick?: (e: CertificationEditEvent) => void
 }
 
@@ -17,15 +17,14 @@ export type FBCertificationProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>
 & {
   certifications: Certification[]
-  deleteCertification: (item: Certification) => void
-  updateCertification: (item: Certification, id?: string) => void
+  setCertifications: React.Dispatch<React.SetStateAction<Certification[]>>
 };
 
 export interface Certification {
   id: string
   certificateId?: string
   phoneNumber?: string
-  attachments: Attachment[]
+  attachmentIds: Attachment[]
   uploadedBy: string
   expiryDate: string
 }

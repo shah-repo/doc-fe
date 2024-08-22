@@ -1,9 +1,9 @@
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import OverflowContent from '../../../components/OverflowContent';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowContent from '../../../components/OverflowContent';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 

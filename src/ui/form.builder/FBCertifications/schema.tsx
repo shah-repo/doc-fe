@@ -2,6 +2,7 @@ import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { AttachmentCell } from './components/AttachmentCell';
+import { ExpiryDateCell } from './components/ExpiryDateCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { UploadedByCell } from './components/UploadedByCell';
 import { EditableCertification, SchemaOptions } from './types';
@@ -17,7 +18,7 @@ export const buildSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<EditableCertification>> => {
   return [
     {
-      id: 'certificate',
+      id: 'certificateId',
       field: 'certificateId',
       title: 'form.builder.supplier.certifications.grid.heading.iso.certificate',
       filterable: false,
@@ -26,7 +27,7 @@ export const buildSchema = ({
     },
     {
       id: 'attachments',
-      field: 'attachments',
+      field: 'attachmentIds',
       title: 'form.builder.supplier.certifications.grid.heading.attachments',
       filterable: false,
       template: (props) => <AttachmentCell {...props} onClick={onRowClick} />,
@@ -45,7 +46,7 @@ export const buildSchema = ({
       field: 'expiryDate',
       title: 'form.builder.supplier.certifications.grid.heading.expiry.date',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <ExpiryDateCell {...props} onClick={onRowClick} />,
       width: 140,
     },
     {

@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { get, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import { reaction } from 'mobx';
 import React from 'react';
 import { FB, FBFileField, FBFileUploadState, FBProvider } from '../..';
@@ -52,19 +52,17 @@ const Editor: React.FC<Props> = ({ field, dataItem, previousAttachments }) => {
 export const AttachmentCell: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem = {}, field } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const { values } = useFormikContext<EditableCertification>();
   const classes = styles();
   const defaultAttachments = dataItem[field] as Attachment[];
-  const attachments = defaultAttachments ?? get(values, field, []);
   const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
 
   return (<>
     <div>
       <FBProvider {...{ fileUploadState }}>
         {isEditMode && (
-          <Editor {...props} {...{ previousAttachments: attachments } } />
+          <Editor {...props} {...{ previousAttachments: defaultAttachments } } />
         )}
-        { isEmpty(attachments) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: attachments, fileUploadState }} boxProps={{ className: classes.attachmentsContainer }} />}
+        { isEmpty(defaultAttachments) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: defaultAttachments, fileUploadState }} boxProps={{ className: classes.attachmentsContainer }} />}
       </FBProvider>
     </div>
   </>);

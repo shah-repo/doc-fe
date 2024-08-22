@@ -7,17 +7,18 @@ import { omit } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import { Button } from '../../components/forms/fields-next';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
+import FB from '../helpers/FB';
 import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { CertificationEditEvent, EditableCertification, FBCertificationProps } from './types';
+import { Certification, CertificationEditEvent, EditableCertification, FBCertificationProps } from './types';
 import { withFBCertifications } from './wrap';
 
 const FBCertifications: React.FC<FBCertificationProps> = ({
@@ -25,12 +26,12 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
   name = '',
   disabled,
   certifications = [],
-  deleteCertification,
-  updateCertification,
+  setCertifications,
   ...props
 }) => {
   const classes = useStyles();
   const isActive = !disabled;
+  const { formState, workspaceState } = FB.useStores();
   const [editedCertification, setEditedCertification] = useState<Partial<EditableCertification>>();
 
   const isCertificationAdded = editedCertification?.[MODE_FIELD] === Mode.add;
@@ -40,10 +41,25 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
 
   const formik = useFormik<Partial<EditableCertification>>({
     initialValues: {},
-    onSubmit: (values) => {
-      const certificationToSave = omit(values, FIELDS_TO_OMIT);
-      console.log({ certificationToSave });
-      // TO DO Save/Update
+    onSubmit: (values: Partial<EditableCertification>) => {
+      const updatedCertification = omit(values, FIELDS_TO_OMIT);
+      const isAddition = values[MODE_FIELD] === Mode.add;
+      const certifications: EditableCertification[]
+        = workspaceState?.formInput?.[name] ?? [];
+      console.log({ updatedCertification });
+      const updatedCertifications = isAddition
+        ? [...certifications, updatedCertification]
+        : certifications.map((certification) =>
+          certification.id === values.id
+            ? updatedCertification
+            : certification,
+        );
+      formState?.setFieldValue(name, updatedCertifications);
+      workspaceState?.saveDocRev({
+        ...workspaceState?.formInput,
+        [name]: updatedCertifications,
+      });
+      setCertifications(updatedCertifications as Certification[]);
 
       discardCertification();
     },
@@ -57,14 +73,24 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
 
   const createDraftCertification = () => setEditedCertification({
     id: uuidv4(),
+    expiryDate: null,
     [MODE_FIELD]: Mode.add,
   });
 
   const discardCertification = () => setEditedCertification(undefined);
 
-  const removeCertification = () => {
+  const removeCertification = (dataItem: EditableCertification) => {
     if (!editedCertification) return;
-    // TO DO DELETE the certification
+
+    const updatedCertifications = certifications.filter((contact) =>
+      contact.id !== dataItem.id,
+    );
+    setCertifications(updatedCertifications);
+    formState?.setFieldValue(name, updatedCertifications);
+    workspaceState?.saveDocRev({
+      ...workspaceState?.formInput,
+      [name]: updatedCertifications,
+    });
     discardCertification();
   };
 
