@@ -13,6 +13,7 @@ import {
 import { DOCUMENT_BY_CATEGORY_ROOT_URL } from '../constants/urls';
 import { SIDE_BAR_TAB_INDEX } from '../documentRevision/Sidebar/constants';
 import styles from './NavigationLink.styles';
+import BlueTagWithWhiteText from '../administration/general.settings/components/BlueTagWithWhiteText/BlueTagWithWhiteText';
 
 interface NavigationLinkPresenterProps extends NavigationItem {
   ActionIcon?: ReactNode
@@ -23,6 +24,7 @@ interface NavigationLinkPresenterProps extends NavigationItem {
   currentPath: string
   open: boolean
   menu?: NavigationItem[]
+  showLabelNew?: boolean
   checkIfItemIsActive: (
     type: NavigationItemType,
     currentPath: string,
@@ -49,6 +51,7 @@ NavigationLinkPresenterProps
   currentPath,
   open,
   checkIfItemIsActive,
+  showLabelNew,
 }) => {
   const isMenu = type === NavigationItems.MENU;
   const classes = styles({
@@ -98,14 +101,17 @@ NavigationLinkPresenterProps
       {open && (
         <ListItemText
           primary={
-            <Typography
-              component="span"
-              className={classNames(classes.itemText, {
-                [classes.childTextItem]: isChild && open,
-              })}
-            >
-              {label}
-            </Typography>
+            <>
+              <Typography
+                component="span"
+                className={classNames(classes.itemText, {
+                  [classes.childTextItem]: isChild && open,
+                })}
+              >
+                {label}
+              </Typography>
+              {showLabelNew && <BlueTagWithWhiteText />}
+            </>
           }
           onClick={toggleChildren}
         />
