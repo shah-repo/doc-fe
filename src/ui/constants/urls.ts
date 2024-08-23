@@ -61,7 +61,6 @@ export const GENERAL_SETTINGS_URL = '/general_settings';
 
 export const USER_GROUP_URL = '/user_group';
 export const USER_GROUPS_URL = '/user_group/group';
-export const USER_URL = '/user_group/user';
 
 export const COMPANY_SETTINGS_URL = '/company/settings';
 
