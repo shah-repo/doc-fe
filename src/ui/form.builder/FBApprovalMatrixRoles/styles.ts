@@ -29,6 +29,9 @@ export default makeStyles(theme => ({
       height: 42,
       padding: `${theme.spacing(0.5, 1.5)} !important`,
     },
+    '& .k-grid-content tr td': {
+      borderBottom: '1px solid #DBE0EB',
+    },
   },
   gridWithButton: {
     borderBottomLeftRadius: 0,
