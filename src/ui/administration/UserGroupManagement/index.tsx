@@ -30,10 +30,6 @@ const UserGroupManagment: React.FC = () => {
     }
   }, [canManageUser, canManageGroups, history]);
 
-  const showUserTab = canManageUser && !canManageGroups;
-  const showGroupTab = canManageGroups && !canManageUser;
-  const showBothTabs = canManageUser && canManageGroups;
-
   return (
     <>
       <Grid item xs={12} className={classes.headerGridItem}>
@@ -44,7 +40,7 @@ const UserGroupManagment: React.FC = () => {
         </Grid>
 
         <StyledTabs value={match ? UserGroupTabValues.Group : UserGroupTabValues.User}>
-          {showUserTab && (
+          {canManageUser && (
             <Tab
               component={Link}
               to={USER_GROUP_URL}
@@ -52,29 +48,13 @@ const UserGroupManagment: React.FC = () => {
               label={LABELS.USERTAB}
             />
           )}
-          {showGroupTab && (
+          {canManageGroups && (
             <Tab
               component={Link}
               to={USER_GROUPS_URL}
               value={UserGroupTabValues.Group}
               label={LABELS.GROUPTAB}
             />
-          )}
-          {showBothTabs && (
-            <>
-              <Tab
-                component={Link}
-                to={USER_GROUP_URL}
-                value={UserGroupTabValues.User}
-                label={LABELS.USERTAB}
-              />
-              <Tab
-                component={Link}
-                to={USER_GROUPS_URL}
-                value={UserGroupTabValues.Group}
-                label={LABELS.GROUPTAB}
-              />
-            </>
           )}
         </StyledTabs>
       </Grid>
