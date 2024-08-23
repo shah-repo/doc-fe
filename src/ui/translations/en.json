@@ -1482,6 +1482,7 @@
   "form.builder.supplier.references.add": "Add Reference",
   "form.builder.supplier.references.grid.heading.reference.id": "Id",
   "form.builder.supplier.references.grid.heading.revision": "Revision",
+  "form.builder.supplier.references.grid.heading.comments": "Comments",
   "form.builder.supplier.references.grid.heading.title": "Title",
   "form.builder.supplier.references.grid.heading.status": "Status",
   "form.builder.supplier.references.grid.heading.owner": "Owner",

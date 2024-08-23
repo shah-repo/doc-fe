@@ -2,8 +2,9 @@ import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { DateCell } from './components/DateCell';
-import { IDCell } from './components/IDCell';
 import { OwnerCell } from './components/OwnerCell';
+import { ReadOnlyCell } from './components/ReadOnlyCell';
+import { RefIDcell } from './components/RefIDcell';
 import { StatusCell } from './components/StatusCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableReference, SchemaOptions } from './types';
@@ -23,7 +24,7 @@ export const buildSchema = ({
       field: 'referenceId',
       title: 'form.builder.supplier.references.grid.heading.reference.id',
       filterable: false,
-      template: (props) => <IDCell {...props} onClick={onRowClick} />,
+      template: (props) => <RefIDcell {...props} onClick={onRowClick} />,
       width: 140,
     },
     {
@@ -31,7 +32,7 @@ export const buildSchema = ({
       field: 'revision',
       title: 'form.builder.supplier.references.grid.heading.revision',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <ReadOnlyCell {...props} onClick={onRowClick} />,
       width: 80,
     },
     {
@@ -39,7 +40,7 @@ export const buildSchema = ({
       field: 'title',
       title: 'form.builder.supplier.references.grid.heading.title',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <ReadOnlyCell {...props} onClick={onRowClick} />,
       width: 310,
     },
     {
@@ -56,7 +57,7 @@ export const buildSchema = ({
       title: 'form.builder.supplier.references.grid.heading.created.date',
       filterable: false,
       template: (props) => <DateCell {...props} onClick={onRowClick} />,
-      width: 140,
+      width: 200,
     },
     {
       id: 'owner',
@@ -65,6 +66,14 @@ export const buildSchema = ({
       filterable: false,
       template: (props) => <OwnerCell {...props} onClick={onRowClick} />,
       width: 140,
+    },
+    {
+      id: 'comments',
+      field: 'comments',
+      title: 'form.builder.supplier.references.grid.heading.comments',
+      filterable: false,
+      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      width: 250,
     },
     {
       id: 'actions',

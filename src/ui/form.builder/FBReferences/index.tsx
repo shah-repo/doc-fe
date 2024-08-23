@@ -3,18 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { omit } from 'lodash';
+import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import { Button } from '../../components/forms/fields-next';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
-import { FIELDS_TO_OMIT } from './constants';
+import { FIELDS_TO_PICK } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableReference, FBReferenceProps, ReferenceEditEvent } from './types';
@@ -41,7 +41,7 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   const formik = useFormik<Partial<EditableReference>>({
     initialValues: {},
     onSubmit: (values) => {
-      const referenceToSave = omit(values, FIELDS_TO_OMIT);
+      const referenceToSave = pick(values, FIELDS_TO_PICK);
       console.log({ referenceToSave });
       // TO DO Save/Update
 
