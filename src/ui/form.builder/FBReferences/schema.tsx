@@ -25,7 +25,7 @@ export const buildSchema = ({
       title: 'form.builder.supplier.references.grid.heading.reference.id',
       filterable: false,
       template: (props) => <RefIDcell {...props} onClick={onRowClick} />,
-      width: 140,
+      width: 310,
     },
     {
       id: 'revision',

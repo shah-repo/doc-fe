@@ -4,17 +4,25 @@ import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../common/intl';
-import { lhrSummaryActions } from '../../../../state/ducks/LHRSummary';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus, SearchRecordsResponse } from '../../../../state/ducks/documentRevisions/types';
 import { FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { RecordsResponse } from '../../FBLHRSummary/types';
 import { CustomTemplateProps } from '../types';
 
 const LIMIT = 25;
 const MIN_SEARCH_TERM_LENGTH = 3;
+
+interface CustomOptionType extends OptionType{
+  revision: string
+  title: string
+  status: DocumentRevisionStatus
+  createdDate?: string
+  owner: string
+}
 
 const Editor: React.FC<CustomTemplateProps> = ({
   dataItem,
@@ -24,7 +32,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   // const classes = styles();
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const [inputValue, setInputValue] = useState('');
-  const [items, setItems] = useState<OptionType[]>([]);
+  const [items, setItems] = useState<CustomOptionType[]>([]);
   const [offset, setOffset] = React.useState(0);
 
   // useEffect(() => {
@@ -39,8 +47,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   //     setInputValue(docId ?? dataItem[LHR_SUMARY_FIELDS.issue] ?? '');
   //   }
   // }, [values?.issueDetails]);
-
-  const fetchLHRSummaryByOptionId = useActionCreator(lhrSummaryActions.fetchRecords);
+  const fetchReferences = useActionCreator(documentRevisionsActions.fetchReferences);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -52,19 +59,25 @@ const Editor: React.FC<CustomTemplateProps> = ({
   };
 
   const fetchOptionsDataAsync = useAsync({
-    onSuccess: (data?: RecordsResponse) => {
+    onSuccess: (data?: SearchRecordsResponse) => {
       // if (!isUpdateAction && !selectedObj?.value) {
       //   setFieldValue(LHR_SUMARY_FIELDS.issue, inputValue);
       // }
 
-      const modifiedItems = data?.results?.map((item) => ({
+      const modifiedItems = data?.items?.map((item) => ({
         label: translate('lhr.summary.displayRevision',
           {
             docId: item.document?.docId,
-            displayRevision: item.precalc?.revision,
+            displayRevision: item.displayRevision,
             name: item?.name,
+            status: item.status,
           }),
         value: item.id,
+        revision: item.displayRevision,
+        title: item?.name,
+        status: item.status,
+        createdDate: item.createdAt,
+        owner: item.owner.user.id,
       })) ?? [];
 
       if (isEmpty(inputValue)) {
@@ -95,9 +108,14 @@ const Editor: React.FC<CustomTemplateProps> = ({
     }
   };
 
-  const onChange = (event: React.ChangeEvent<{}>, value: OptionType) => {
+  const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
     setInputValue(value?.label);
     setFieldValue(field, value?.value);
+    setFieldValue('revision', value?.revision);
+    setFieldValue('title', value?.title);
+    setFieldValue('status', value?.status);
+    setFieldValue('createdDate', value?.createdDate);
+    setFieldValue('owner', value?.owner);
   };
 
   const debounceFunction = debounce(onInputChange, 1000, {
@@ -117,7 +135,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
 
   const queryApi = (offset: number, searchText?: string) => {
     fetchOptionsDataAsync.start(
-      fetchLHRSummaryByOptionId,
+      fetchReferences,
       searchText ?? '',
       offset,
       fetchOptionsDataAsync,

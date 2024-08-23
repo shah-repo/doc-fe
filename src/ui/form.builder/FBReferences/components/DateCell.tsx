@@ -13,11 +13,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const formik = useFormikContext<EditableReference>();
-  let fieldValue = dataItem[field];
-
-  if (isEditMode) {
-    fieldValue = formik?.values.status || fieldValue;
-  }
+  const fieldValue = isEditMode ? formik?.values[field] || dataItem[field] : dataItem[field];
 
   const value = fieldValue && getFormattedDateString(
     fieldValue,

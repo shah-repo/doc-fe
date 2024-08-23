@@ -221,6 +221,11 @@ export interface UsedDocumentsInLHRS {
   [key: string]: DocumentsInLHRS
 }
 
+export interface SearchRecordsResponse {
+  items: DocumentRevision[]
+  totalCount: number
+}
+
 export interface DocumentRevision extends FBDocumentRevisionProps {
   displayStatus: DocumentRevisionStatus
   children?: DocumentRevision[]
