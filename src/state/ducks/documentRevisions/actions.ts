@@ -730,7 +730,20 @@ const fetchReferences = (
   const params = qs.stringify({ searchQuery, offset, limit: 25 });
 
   return apiActionWithCallbacks({
-    url: `document_revisions/references_for_supplier/search?${params}`,
+    url: `${DOCUMENT_REVISION_ROOT_URL}/references_for_supplier/search?${params}`,
+    method: 'get',
+    handlers,
+  });
+};
+
+const fetchReferencesTableData = (
+  revId: string,
+  ids: string[],
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> => {
+  const params = qs.stringify({ ids });
+  return apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${revId}/details_for_suppliers?${params}`,
     method: 'get',
     handlers,
   });
@@ -798,4 +811,5 @@ export default {
   getAllApprovalRequests,
   updateEquipmentStatus,
   fetchReferences,
+  fetchReferencesTableData,
 };

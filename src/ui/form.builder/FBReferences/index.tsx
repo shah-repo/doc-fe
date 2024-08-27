@@ -42,23 +42,25 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   const formik = useFormik<Partial<EditableReference>>({
     initialValues: {},
     onSubmit: (values) => {
-      const selectedReference = pick(values, FIELDS_TO_PICK);
+      // const selectedReference = pick(values, FIELDS_TO_PICK);
       const isAddition = values[MODE_FIELD] === Mode.add;
-      const references: EditableReference[]
-      = workspaceState?.formInput?.[name] ?? [];
-      console.log({ selectedReference });
+      console.log({ values });
       // TO DO Save/Update
       const updatedReferences = isAddition
-        ? [...references, selectedReference]
+        ? [...references, values]
         : references.map((reference) =>
           reference.id === values.id
-            ? selectedReference
+            ? values
             : reference,
         );
+
+      const payload = updatedReferences
+        .map((contact) => pick(contact, FIELDS_TO_PICK));
+
     formState?.setFieldValue(name, updatedReferences);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
-      [name]: updatedReferences,
+      [name]: payload,
     });
     setReferences(updatedReferences as Reference[]);
     discardReference();
@@ -81,11 +83,14 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   const removeReference = (dataItem: EditableReference) => {
     if (!editedReference) return;
 
-    const updatedReferences = references.filter((contact) =>
-      contact.id !== dataItem.id,
-    );
+    const referenceWithCompleteData = references
+      .filter((contact) =>
+        contact.id !== dataItem.id,
+      );
+    const updatedReferences = referenceWithCompleteData
+      .map((contact) => pick(contact, FIELDS_TO_PICK));
 
-    setReferences(updatedReferences);
+    setReferences(referenceWithCompleteData);
     formState?.setFieldValue(name, updatedReferences);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,

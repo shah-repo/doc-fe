@@ -22,6 +22,7 @@ export type FBReferenceProps =
 export interface Reference {
   id: string
   referenceRevId: string
+  referenceDisplayName?: string
   revision: string
   title: string
   status: string

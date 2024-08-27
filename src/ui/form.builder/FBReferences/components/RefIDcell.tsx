@@ -5,16 +5,20 @@ import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DocumentRevisionStatus, SearchRecordsResponse } from '../../../../state/ducks/documentRevisions/types';
+import {
+  DocumentRevisionStatus,
+  SearchRecordsResponse,
+} from '../../../../state/ducks/documentRevisions/types';
 import { FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowContent from '../../../components/OverflowContent';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { LIMIT, MIN_SEARCH_TERM_LENGTH } from '../constants';
 import { CustomTemplateProps } from '../types';
 
-interface CustomOptionType extends OptionType{
+interface CustomOptionType extends OptionType {
   revision: string
   title: string
   status: DocumentRevisionStatus
@@ -22,30 +26,15 @@ interface CustomOptionType extends OptionType{
   owner: string
 }
 
-const Editor: React.FC<CustomTemplateProps> = ({
-  dataItem,
-  field,
-}) => {
-  const { setFieldValue } = useFormikContext<any>();
-  // const classes = styles();
+const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
+  const { setFieldValue } = useFormikContext();
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const [inputValue, setInputValue] = useState('');
   const [items, setItems] = useState<CustomOptionType[]>([]);
   const [offset, setOffset] = React.useState(0);
-
-  // useEffect(() => {
-  //   const issueDetails = values[field];
-  //   const docId = issueDetails?.docId;
-
-  //   if (isEmpty(issueDetails)) {
-  //     return;
-  //   }
-
-  //   if (isUpdateAction && !inputValue) {
-  //     setInputValue(docId ?? dataItem[LHR_SUMARY_FIELDS.issue] ?? '');
-  //   }
-  // }, [values?.issueDetails]);
-  const fetchReferences = useActionCreator(documentRevisionsActions.fetchReferences);
+  const fetchReferences = useActionCreator(
+    documentRevisionsActions.fetchReferences,
+  );
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -58,28 +47,32 @@ const Editor: React.FC<CustomTemplateProps> = ({
 
   const fetchOptionsDataAsync = useAsync({
     onSuccess: (data?: SearchRecordsResponse) => {
-      // if (!isUpdateAction && !selectedObj?.value) {
-      //   setFieldValue(LHR_SUMARY_FIELDS.issue, inputValue);
-      // }
+      const modifiedItems
+        = data?.items?.map((item) => {
+          const label = translate(
+            'form.builder.supplier.references.displayRevision',
+            {
+              docId: item.document?.docId,
+              displayRevision: item.displayRevision,
+              name: item?.name,
+              status: item.status,
+            },
+          );
 
-      const modifiedItems = data?.items?.map((item) => ({
-        label: translate('lhr.summary.displayRevision',
-          {
-            docId: item.document?.docId,
-            displayRevision: item.displayRevision,
-            name: item?.name,
+          return {
+            label,
+            referenceDisplayName: label,
+            value: item.id,
+            revision: item.displayRevision,
+            title: item?.name,
             status: item.status,
-          }),
-        value: item.id,
-        revision: item.displayRevision,
-        title: item?.name,
-        status: item.status,
-        createdDate: item.createdAt,
-        owner: item.owner.user.id,
-      })) ?? [];
+            createdDate: item.createdAt,
+            owner: item.owner.user.id,
+          };
+        }) ?? [];
 
       if (isEmpty(inputValue)) {
-        setItems(prev => [...prev, ...modifiedItems]);
+        setItems((prev) => [...prev, ...modifiedItems]);
       } else {
         setItems(modifiedItems);
       }
@@ -109,6 +102,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
   const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
     setInputValue(value?.label);
     setFieldValue(field, value?.value);
+    setFieldValue('referenceDisplayName', value?.label);
     setFieldValue('revision', value?.revision);
     setFieldValue('title', value?.title);
     setFieldValue('status', value?.status);
@@ -124,7 +118,10 @@ const Editor: React.FC<CustomTemplateProps> = ({
   const onScroll = (event: React.SyntheticEvent) => {
     const listboxNode = event.currentTarget;
 
-    if (Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) === listboxNode.clientHeight) {
+    if (
+      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop)
+      === listboxNode.clientHeight
+    ) {
       const nextOffset = offset + LIMIT;
       setOffset(nextOffset);
       queryApi(nextOffset, inputValue);
@@ -141,17 +138,18 @@ const Editor: React.FC<CustomTemplateProps> = ({
   };
 
   useEffect(() => {
-    if (!isUpdateAction) {
+    if (isUpdateAction) {
+      dataItem.referenceDisplayName
+        && setInputValue(dataItem.referenceDisplayName);
+    } else {
       setInputValue('');
-      // setFieldValue(LHR_SUMARY_FIELDS.issue, '');
-    }
+      if (fetchOptionsDataAsync.isLoading) {
+        return;
+      }
 
-    if (fetchOptionsDataAsync.isLoading) {
-      return;
+      setItems([]);
+      queryApi(0);
     }
-
-    setItems([]);
-    queryApi(0);
   }, [dataItem[MODE_FIELD]]);
 
   return (
@@ -161,8 +159,9 @@ const Editor: React.FC<CustomTemplateProps> = ({
         key={isEmpty(items) ? 'disabled' : 'enabled'}
         value={{ label: inputValue }}
         options={items}
-        getOptionLabel={(option) => option.label ?? '' }
+        getOptionLabel={(option) => option.label ?? ''}
         filterOptions={(x) => x}
+        disabled={isUpdateAction}
         size="small"
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
@@ -175,14 +174,10 @@ const Editor: React.FC<CustomTemplateProps> = ({
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
-                  startAdornment: (
-                    <div>
-                      {params.InputProps.startAdornment}
-                    </div>
-                  ),
+                  startAdornment: <div>{params.InputProps.startAdornment}</div>,
                   endAdornment: (
                     <>
-                      { fetchOptionsDataAsync.isLoading && (
+                      {fetchOptionsDataAsync.isLoading && (
                         <CircularProgress color="inherit" size={16} />
                       )}
                       {params.InputProps.endAdornment}
@@ -211,12 +206,17 @@ const Editor: React.FC<CustomTemplateProps> = ({
 };
 
 export const RefIDcell: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem, field } = props;
+  const { dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
+  const handleClick = () => onClick?.({ dataItem });
 
-  return <>{dataItem[field]}</>;
+  return (
+    <OverflowContent onClick={handleClick}>
+      {dataItem.referenceDisplayName}
+    </OverflowContent>
+  );
 };
