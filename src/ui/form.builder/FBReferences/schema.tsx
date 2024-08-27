@@ -20,9 +20,9 @@ export const buildSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<EditableReference>> => {
   return [
     {
-      id: 'reference',
-      field: 'referenceId',
-      title: 'form.builder.supplier.references.grid.heading.reference.id',
+      id: 'referenceRevId',
+      field: 'referenceRevId',
+      title: 'form.builder.supplier.references.grid.heading.reference.rev.id',
       filterable: false,
       template: (props) => <RefIDcell {...props} onClick={onRowClick} />,
       width: 310,
@@ -68,8 +68,8 @@ export const buildSchema = ({
       width: 140,
     },
     {
-      id: 'comments',
-      field: 'comments',
+      id: 'comment',
+      field: 'comment',
       title: 'form.builder.supplier.references.grid.heading.comments',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,

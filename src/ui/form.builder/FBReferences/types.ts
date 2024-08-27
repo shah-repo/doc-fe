@@ -8,7 +8,7 @@ export interface SchemaOptions {
   actionsClass: string
   onConfirm?: () => void
   onDiscard?: () => void
-  onDelete?: () => void
+  onDelete?: (dataItem: EditableReference) => void
   onRowClick?: (e: ReferenceEditEvent) => void
 }
 
@@ -16,13 +16,12 @@ export type FBReferenceProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>
 & {
   references: Reference[]
-  deleteReference: (item: Reference) => void
-  updateReference: (item: Reference, id?: string) => void
+  setReferences: React.Dispatch<React.SetStateAction<Reference[]>>
 };
 
 export interface Reference {
   id: string
-  referenceId: string
+  referenceRevId: string
   revision: string
   title: string
   status: string

@@ -13,6 +13,7 @@ export default makeStyles(theme => ({
     '& td': {
       height: ROW_HEIGHT,
       boxSizing: 'border-box',
+      verticalAlign: 'middle !important',
 
       '& a': {
         color: Colors.textBlack,
@@ -35,7 +36,6 @@ export default makeStyles(theme => ({
     outlineOffset: -1,
 
     '& td': {
-      verticalAlign: 'top !important',
       whiteSpace: 'normal !important' as 'normal',
     },
   },

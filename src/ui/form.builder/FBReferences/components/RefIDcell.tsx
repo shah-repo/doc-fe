@@ -11,10 +11,8 @@ import { OptionType } from '../../../components/forms/fields/Autocomplete/types'
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import { LIMIT, MIN_SEARCH_TERM_LENGTH } from '../constants';
 import { CustomTemplateProps } from '../types';
-
-const LIMIT = 25;
-const MIN_SEARCH_TERM_LENGTH = 3;
 
 interface CustomOptionType extends OptionType{
   revision: string

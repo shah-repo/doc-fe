@@ -14,10 +14,11 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
+import { FB } from '../helpers';
 import { FIELDS_TO_PICK } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableReference, FBReferenceProps, ReferenceEditEvent } from './types';
+import { EditableReference, FBReferenceProps, Reference, ReferenceEditEvent } from './types';
 import { withFBReferences } from './wrap';
 
 const FBReferences: React.FC<FBReferenceProps> = ({
@@ -25,11 +26,11 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   name = '',
   disabled,
   references = [],
-  deleteReference,
-  updateReference,
+  setReferences,
   ...props
 }) => {
   const classes = useStyles();
+  const { formState, workspaceState } = FB.useStores();
   const isActive = !disabled;
   const [editedReference, setEditedReference] = useState<Partial<EditableReference>>();
 
@@ -41,11 +42,26 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   const formik = useFormik<Partial<EditableReference>>({
     initialValues: {},
     onSubmit: (values) => {
-      const referenceToSave = pick(values, FIELDS_TO_PICK);
-      console.log({ referenceToSave });
+      const selectedReference = pick(values, FIELDS_TO_PICK);
+      const isAddition = values[MODE_FIELD] === Mode.add;
+      const references: EditableReference[]
+      = workspaceState?.formInput?.[name] ?? [];
+      console.log({ selectedReference });
       // TO DO Save/Update
-
-      discardReference();
+      const updatedReferences = isAddition
+        ? [...references, selectedReference]
+        : references.map((reference) =>
+          reference.id === values.id
+            ? selectedReference
+            : reference,
+        );
+    formState?.setFieldValue(name, updatedReferences);
+    workspaceState?.saveDocRev({
+      ...workspaceState?.formInput,
+      [name]: updatedReferences,
+    });
+    setReferences(updatedReferences as Reference[]);
+    discardReference();
     },
   });
 
@@ -62,9 +78,20 @@ const FBReferences: React.FC<FBReferenceProps> = ({
 
   const discardReference = () => setEditedReference(undefined);
 
-  const removeReference = () => {
+  const removeReference = (dataItem: EditableReference) => {
     if (!editedReference) return;
-    // TO DO DELETE the Reference
+
+    const updatedReferences = references.filter((contact) =>
+      contact.id !== dataItem.id,
+    );
+
+    setReferences(updatedReferences);
+    formState?.setFieldValue(name, updatedReferences);
+    workspaceState?.saveDocRev({
+      ...workspaceState?.formInput,
+      [name]: updatedReferences,
+    });
+
     discardReference();
   };
 
