@@ -8,7 +8,7 @@ import { companySelectors } from '../../../state/ducks/company';
 import { materialFlowACLSelectors } from '../../../state/ducks/materialFlowAcl';
 import { MaterialFlowAclRule } from '../../../state/ducks/materialFlowAcl/types';
 import { DEDUCTABLE_TRANSFER_TYPES, INCREMENTABLE_LOT_TRANSFER_TYPES, INITIAL_QUANTITY_FIELD, MAX_DECIMALS, RULE_FIELDS_TO_CHECK, TRANSFERS_FIELD } from './constants';
-import { AllowedOptions, CalculableLotTransfer, CompanyLocation, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction, SelectedOptions } from './types';
+import { AclRuleFieldsToCheck, AllowedOptions, CalculableLotTransfer, CompanyLocation, DocumentRevisionOption, LotTransfer, LotTransferType, PredictQuantityFunction, SelectedOptions } from './types';
 
 export const getOptionLabel = (option: DocumentRevisionOption): string => {
   const baseLabel = `${option.document?.docId} - rev ${option.displayRevision}`;
@@ -105,8 +105,8 @@ const getAllowedTransferOptions = (
   RULE_FIELDS_TO_CHECK.forEach(field => {
     allowedRules.forEach(rule => {
       if (field !== 'type' && selectedOptions.type && rule.action !== selectedOptions.type) return;
-      if (field !== 'from' && selectedOptions.from && rule.from !== selectedOptions.from) return;
-      if (field !== 'to' && selectedOptions.to && rule.to !== selectedOptions.to) return;
+      if (field !== 'from' && selectedOptions.from && rule.from?.length && rule.from !== selectedOptions.from) return;
+      if (field !== 'to' && selectedOptions.to && rule.to?.length && rule.to !== selectedOptions.to) return;
       if (field === 'to' && rule.action === LotTransferType.Scrap) return;
 
       if (field === 'type') {
@@ -138,4 +138,33 @@ export const useAllowedLotTransferOptions = (
   }
 
   return [true, getAllowedTransferOptions(rules, locations, userGroups, selectedOptions)];
+};
+
+export const useIsTransferAllowed = (
+  selectedOptions: SelectedOptions = {},
+): [boolean, AclRuleFieldsToCheck[]] => {
+  const locations = useSelector(companySelectors.getAllLocations) ?? [];
+  const rules = useSelector(materialFlowACLSelectors.getRules) ?? [];
+  const userGroups = useSelector(authSelectors.currentUserGroups) ?? [];
+  const isAclEnabled = useSelector(materialFlowACLSelectors.getIsEnabled);
+
+  if (!isAclEnabled) {
+    return [true, []];
+  }
+
+  const allowedTransactions = getAllowedTransferOptions(rules, locations, userGroups, selectedOptions);
+
+  return RULE_FIELDS_TO_CHECK.reduce<[boolean, AclRuleFieldsToCheck[]]>(([result, errors], field) => {
+    const selectedOption = String(selectedOptions[field]);
+    switch (field) {
+      case 'from':
+      case 'to': {
+        const isAllLocationsAllowed = allowedTransactions[field].length === locations.length;
+        const isValid = allowedTransactions[field].includes(selectedOption) || isAllLocationsAllowed;
+        return [result && isValid, isValid ? errors : [...errors, field]];
+      }
+      default:
+        return [result, errors];
+    }
+  }, [true, []]);
 };

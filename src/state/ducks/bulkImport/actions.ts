@@ -3,8 +3,7 @@ import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzo
 import { toastError } from '../../../ui/components/notifications';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { Approval } from '../common/types';
-import { approvalFieldId, APPROVALS_URL, BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, documentRevisionFormInput, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, RESET_STEPS, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 import { Approver, BKAttachmentFile, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
 import { downloadFile } from './utils';
 
@@ -73,11 +72,6 @@ export const updateRowFieldTable = (payload: UpdateRowFieldTablePayload): { type
 
 const setApprovers = (payload: Approver[]): { type: string, payload: Approver[] } => ({
   type: SET_APPROVALS,
-  payload,
-});
-
-const setApproval = (payload: Approval): { type: string, payload: Approval } => ({
-  type: SET_APPROVAL,
   payload,
 });
 
@@ -261,61 +255,6 @@ export const setDataTable = (
   onSuccess: (data, dispatch) => {
     dispatch(setBulkImport(data));
   },
-  onCompleted: (dispatch) => {
-    dispatch(setIsLoading(false));
-  },
-  handlers,
-  onFailure: (err: string) => {
-    toastError(err);
-  },
-});
-
-export const saveApprovals = (
-  body: { approval: string, documentRevisionId: string },
-  handlers: Handlers,
-): ApiAction => apiActionWithCallbacks({
-  url: `${APPROVALS_URL}`,
-  method: 'post',
-  data: {
-    assigned: {
-      id: body.approval,
-    },
-    type: 'MASTER',
-    fieldId: approvalFieldId,
-    partOf: {
-      id: body.documentRevisionId,
-    },
-  },
-  onSuccess: (data, dispatch) => {
-    dispatch(setApproval(data));
-  },
-  onFailure: (err, dispatch) => {
-    dispatch(setIsLoading(false));
-    toastError(err);
-  },
-  handlers,
-});
-
-export const saveDocumentRevisions = (
-  body: { approvalId: string, documentRevisionId: string },
-  handlers: Handlers,
-): ApiAction => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_URL}${body.documentRevisionId}`,
-  method: 'patch',
-  data: { formInput: { [documentRevisionFormInput]: [body.approvalId] } },
-  onFailure: (err, dispatch) => {
-    dispatch(setIsLoading(false));
-    toastError(err);
-  },
-  handlers,
-});
-
-export const saveDocumentRevisionsInReview = (
-  body: { documentRevisionId: string },
-  handlers: Handlers,
-): ApiAction => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_IN_REVIEW_URL}${body.documentRevisionId}`,
-  method: 'post',
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },

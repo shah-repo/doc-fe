@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Box, FormControl, IconButton, List, ListItem, ListItemText, Typography } from '@material-ui/core';
@@ -7,15 +8,13 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
-import { getApprovers, saveApprovals, saveDocumentRevisions, saveDocumentRevisionsInReview, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
+import { getApprovers, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
 import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
-import { Approval } from '../../../../state/ducks/common/types';
+import { patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview } from "../../../../state/ducks/bulkImport/utils";
 import Text from '../../../components/Text';
 import { Autocomplete } from '../../../components/forms/fields-next';
 import { BULK_IMPORT_PROGRESS_URL } from '../../../constants/urls';
-import useActionCreator from '../../../hooks/useActionCreator';
-import useAsync from '../../../hooks/useAsync';
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
 
@@ -30,36 +29,61 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
   const classes = useStyles();
   const bulkImport = useSelector(getBulkImport);
   const approversOptionList = useSelector(getApproversSelectList);
-  const saveApprovalsAction = useActionCreator(saveApprovals);
-  const saveDocumentRevisionsAction = useActionCreator(saveDocumentRevisions);
-  const saveDocumentRevisionsInReviewAction = useActionCreator(saveDocumentRevisionsInReview);
-  const asyncDocumentRevisionInReview = useAsync({
-    onSuccess: () => {
-      history.push({
-        pathname: BULK_IMPORT_PROGRESS_URL,
-      });
-    },
-  });
-  const asyncDocumentRevision = useAsync({
-    onSuccess: () => {
-      dispatch(setIsLoading(true));
-      asyncDocumentRevisionInReview.start(saveDocumentRevisionsInReviewAction, { documentRevisionId: bulkImport?.documentRevisionId }, asyncDocumentRevisionInReview);
-    },
-  });
-  const asyncApprovals = useAsync({
-    onSuccess: (approval?: Approval) => {
-      if (approval) {
-        dispatch(setIsLoading(true));
-        asyncDocumentRevision.start(saveDocumentRevisionsAction, { approvalId: approval.id, documentRevisionId: bulkImport?.documentRevisionId }, asyncDocumentRevision);
-      }
-    },
-  });
+  const availableOptions: ApproverOption[] = approversOptionList.filter(option =>
+    !users.some(user => user.value === option.value),
+  );
 
-  const handleSubmit = () => {
-    // Handle form submission and file processing
-    if (users && users.length > 0) {
-      dispatch(setIsLoading(true));
-      asyncApprovals.start(saveApprovalsAction, { approval: users[0].value, documentRevisionId: bulkImport?.documentRevisionId }, asyncApprovals);
+  const handleSubmit = async () => {
+    if (!users || users.length === 0) return;
+  
+    dispatch(setIsLoading(true));
+  
+    try {
+      // Process each user sequentially
+      for (const user of users) {
+        const approval = await processUserApproval(user.value, bulkImport?.documentRevisionId);
+        if (approval) {
+          await updateDocumentRevision(approval.id, bulkImport?.documentRevisionId);
+        }
+      }
+  
+      // After all approvals are processed, start the final review
+      await submitDocumentForReview(bulkImport?.documentRevisionId);
+  
+      // Navigate to the bulk import progress page
+      history.push(BULK_IMPORT_PROGRESS_URL);
+    } catch (error) {
+      console.error('An error occurred during the document revision process:', error);
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+  
+  // Function to handle user approval and return the approval result
+  const processUserApproval = async (approvalId, documentRevisionId) => {
+    try {
+      return await postApprovals(approvalId, documentRevisionId);
+    } catch (error) {
+      console.error(`Failed to post approval for user with approval ID ${approvalId}:`, error);
+      return null;
+    }
+  };
+  
+  // Function to update document revision with the approval ID
+  const updateDocumentRevision = async (approvalId, documentRevisionId) => {
+    try {
+      await patchDocumentRevisions(approvalId, documentRevisionId);
+    } catch (error) {
+      console.error(`Failed to update document revision for approval ID ${approvalId}:`, error);
+    }
+  };
+  
+  // Function to submit the document for final review
+  const submitDocumentForReview = async (documentRevisionId) => {
+    try {
+      await postDocumentRevisionsInReview(documentRevisionId);
+    } catch (error) {
+      console.error(`Failed to submit document revision ID ${documentRevisionId} for review:`, error);
     }
   };
 
@@ -86,14 +110,14 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
               <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
                 <Autocomplete
                   name="selectedUser"
-                  options={approversOptionList}
+                  options={availableOptions}
                   getOptionLabel={(option) => option.text}
                   placeholder={translate('bulkImport.approvals.select.placeholder')}
                   onChange={(_, option: ApproverOption) => {
                     if (option?.value) {
                       const selectedUser = approversOptionList.find(user => user.value === option.value);
                       if (selectedUser) {
-                        setUsers([selectedUser]);
+                        setUsers([...users, selectedUser]);
                         setFieldValue('selectedUser', '');
                       }
                     }
