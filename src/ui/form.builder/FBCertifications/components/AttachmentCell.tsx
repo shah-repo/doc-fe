@@ -31,7 +31,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, previousAttachments }) => {
     const disposer = reaction(
       () => fileUploadState?.attachments,
       (attachments) => {
-        if (attachments?.length !== previousAttachments.length) {
+        if (attachments?.length !== previousAttachments?.length) {
           setFieldValue(field, attachments);
         }
       },
@@ -53,7 +53,8 @@ export const AttachmentCell: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem = {}, field } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const classes = styles();
-  const defaultAttachments = dataItem[field] as Attachment[];
+  const { values } = useFormikContext<EditableCertification>();
+  const defaultAttachments = isEditMode ? values[field] ?? dataItem[field] : dataItem[field] as Attachment[];
   const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
 
   return (<>
