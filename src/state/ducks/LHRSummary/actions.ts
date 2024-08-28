@@ -48,6 +48,7 @@ const fetchRecords = (
       offset: offset,
       filters: [
         { field: 'document.docId', operator: KendoGridFilterCellOperators.CONTAINS, value: searchStr },
+        { field: 'issue.name', operator: KendoGridFilterCellOperators.CONTAINS, value: searchStr },
       ],
       sort: [],
       schema: [

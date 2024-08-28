@@ -7,6 +7,7 @@ import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
 
 const ApprovalRequestsSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, values } = useFormikContext<GeneralSettings>();
 
   return (

@@ -1,6 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormControlLabel, Checkbox as MuiCheckbox } from '@material-ui/core';
+import { Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
@@ -10,17 +10,17 @@ import { Link } from 'react-router-dom';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_ROOT_URL } from '../../../state/ducks/relatedParts/constants';
-import { RELATED_PARTS_STATUS, RelatedPartsListItem } from '../../../state/ducks/relatedParts/types';
+import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import Tooltip from '../../components/common/kendo/Tooltip';
 import WhereUsedDialog, { WhereUsedType } from '../../components/whereUsed/WhereUsedDialog';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../form.builder';
-import FBRequest from '../../form.builder/FBApi/FBApi.request';
 import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
+import FBRequest from '../../form.builder/FBApi/FBApi.request';
 import useDialog from '../../hooks/useDialog';
 import useStyles from './ApprovalRequestGrid.styles';
-import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
 import { generateDocTitleText } from './helpers';
+import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
 
 interface IDocRelatedPart {
   revId: string
@@ -78,6 +78,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
             documentId: part.documentId,
             titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
             revisionChangeType: part.revisionChangeType,
+            revisionFormTo: part.revisionFormTo,
             whereUsedCount: part.whereUsedCount,
           }
         ));
