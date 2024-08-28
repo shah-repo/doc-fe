@@ -1,222 +1,219 @@
-// import { Box, CircularProgress, TextField } from '@material-ui/core';
-// import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
-// import { useFormikContext } from 'formik';
-// import { debounce, isEmpty } from 'lodash';
-// import React, { useEffect, useState } from 'react';
-// import { translate } from '../../../../common/intl';
-// import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-// import {
-//   DocumentRevisionStatus,
-//   SearchRecordsResponse,
-// } from '../../../../state/ducks/documentRevisions/types';
-// import { FormikField } from '../../../components/forms/fields-next';
-// import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
-// import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
-// import OverflowContent from '../../../components/OverflowContent';
-// import useActionCreator from '../../../hooks/useActionCreator';
-// import useAsync from '../../../hooks/useAsync';
-// import { LIMIT, MIN_SEARCH_TERM_LENGTH } from '../constants';
-// import { CustomTemplateProps } from '../types';
+import { Box, CircularProgress, TextField } from '@material-ui/core';
+import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
+import { useFormikContext } from 'formik';
+import { debounce, isEmpty } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { translate } from '../../../../common/intl';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
+import {
+  DocumentRevisionStatus,
+  SearchRecordsResponse,
+} from '../../../../state/ducks/documentRevisions/types';
+import { FormikField } from '../../../components/forms/fields-next';
+import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowContent from '../../../components/OverflowContent';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { LIMIT, MIN_SEARCH_TERM_LENGTH } from '../constants';
+import { CustomTemplateProps } from '../types';
 
-// interface CustomOptionType extends OptionType {
-//   revision: string
-//   title: string
-//   status: DocumentRevisionStatus
-//   createdDate?: string
-//   owner: string
-// }
+interface CustomOptionType extends OptionType {
+  revision: string
+  title: string
+  status: DocumentRevisionStatus
+  createdDate?: string
+  owner: string
+}
 
-// const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
-//   const { setFieldValue } = useFormikContext();
-//   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
-//   const [inputValue, setInputValue] = useState('');
-//   const [items, setItems] = useState<CustomOptionType[]>([]);
-//   const [offset, setOffset] = React.useState(0);
-//   const fetchReferences = useActionCreator(
-//     documentRevisionsActions.fetchReferences,
-//   );
-//   const [isOpen, setIsOpen] = useState(false);
+const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
+  const { setFieldValue } = useFormikContext();
+  const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
+  const [inputValue, setInputValue] = useState('');
+  const [items, setItems] = useState<CustomOptionType[]>([]);
+  const [offset, setOffset] = React.useState(0);
+  const fetchReferences = useActionCreator(
+    documentRevisionsActions.fetchReferences,
+  );
+  const [isOpen, setIsOpen] = useState(false);
 
-//   const handleOpen = () => {
-//     setIsOpen(true);
-//   };
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
 
-//   const handleClose = () => {
-//     setIsOpen(false);
-//   };
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
-//   const fetchOptionsDataAsync = useAsync({
-//     onSuccess: (data?: SearchRecordsResponse) => {
-//       const modifiedItems
-//         = data?.items?.map((item) => {
-//           const label = translate(
-//             'form.builder.supplier.references.displayRevision',
-//             {
-//               docId: item.document?.docId,
-//               displayRevision: item.displayRevision,
-//               name: item?.name,
-//               status: item.status,
-//             },
-//           );
+  const fetchOptionsDataAsync = useAsync({
+    onSuccess: (data?: SearchRecordsResponse) => {
+      const modifiedItems
+        = data?.items?.map((item) => {
+          const label = translate(
+            'form.builder.supplier.references.displayRevision',
+            {
+              docId: item.document?.docId,
+              displayRevision: item.displayRevision,
+              name: item?.name,
+              status: item.status,
+            },
+          );
 
-//           return {
-//             label,
-//             referenceDisplayName: label,
-//             value: item.id,
-//             revision: item.displayRevision,
-//             title: item?.name,
-//             status: item.status,
-//             createdDate: item.createdAt,
-//             owner: item.owner.user.id,
-//           };
-//         }) ?? [];
+          return {
+            label,
+            itemDisplayName: label,
+            value: item.id,
+            revision: item.displayRevision,
+            title: item?.name,
+            status: item.status,
+            createdDate: item.createdAt,
+            owner: item.owner.user.id,
+          };
+        }) ?? [];
 
-//       if (isEmpty(inputValue)) {
-//         setItems((prev) => [...prev, ...modifiedItems]);
-//       } else {
-//         setItems(modifiedItems);
-//       }
-//     },
-//   });
+      if (isEmpty(inputValue)) {
+        setItems((prev) => [...prev, ...modifiedItems]);
+      } else {
+        setItems(modifiedItems);
+      }
+    },
+  });
 
-//   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
-//     if (inputValue === inputVal && !isEmpty(inputVal)) {
-//       return;
-//     }
+  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+    if (inputValue === inputVal && !isEmpty(inputVal)) {
+      return;
+    }
 
-//     setInputValue(inputVal);
+    setInputValue(inputVal);
 
-//     if (fetchOptionsDataAsync.isLoading) {
-//       return;
-//     }
+    if (fetchOptionsDataAsync.isLoading) {
+      return;
+    }
 
-//     if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
-//       setOffset(0);
-//       queryApi(0, inputVal);
-//     } else if (!inputVal) {
-//       setOffset(0);
-//       queryApi(0);
-//     }
-//   };
+    if (inputVal && inputVal.length >= MIN_SEARCH_TERM_LENGTH) {
+      setOffset(0);
+      queryApi(0, inputVal);
+    } else if (!inputVal) {
+      setOffset(0);
+      queryApi(0);
+    }
+  };
 
-//   const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
-//     setInputValue(value?.label);
-//     setFieldValue(field, value?.value);
-//     setFieldValue('referenceDisplayName', value?.label);
-//     setFieldValue('revision', value?.revision);
-//     setFieldValue('title', value?.title);
-//     setFieldValue('status', value?.status);
-//     setFieldValue('createdDate', value?.createdDate);
-//     setFieldValue('owner', value?.owner);
-//   };
+  const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
+    setInputValue(value?.label);
+    setFieldValue(field, value?.value);
+    setFieldValue('itemDisplayName', value?.label);
+    setFieldValue('status', value?.status);
+    // Add required fields here
+  };
 
-//   const debounceFunction = debounce(onInputChange, 1000, {
-//     leading: true,
-//     trailing: true,
-//   });
+  const debounceFunction = debounce(onInputChange, 1000, {
+    leading: true,
+    trailing: true,
+  });
 
-//   const onScroll = (event: React.SyntheticEvent) => {
-//     const listboxNode = event.currentTarget;
+  const onScroll = (event: React.SyntheticEvent) => {
+    const listboxNode = event.currentTarget;
 
-//     if (
-//       Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop)
-//       === listboxNode.clientHeight
-//     ) {
-//       const nextOffset = offset + LIMIT;
-//       setOffset(nextOffset);
-//       queryApi(nextOffset, inputValue);
-//     }
-//   };
+    if (
+      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop)
+      === listboxNode.clientHeight
+    ) {
+      const nextOffset = offset + LIMIT;
+      setOffset(nextOffset);
+      queryApi(nextOffset, inputValue);
+    }
+  };
 
-//   const queryApi = (offset: number, searchText?: string) => {
-//     fetchOptionsDataAsync.start(
-//       fetchReferences,
-//       searchText ?? '',
-//       offset,
-//       fetchOptionsDataAsync,
-//     );
-//   };
+  const queryApi = (offset: number, searchText?: string) => {
+    fetchOptionsDataAsync.start(
+      fetchReferences,
+      searchText ?? '',
+      offset,
+      fetchOptionsDataAsync,
+    );
+  };
 
-//   useEffect(() => {
-//     if (isUpdateAction) {
-//       dataItem.referenceDisplayName
-//         && setInputValue(dataItem.referenceDisplayName);
-//     } else {
-//       setInputValue('');
-//       if (fetchOptionsDataAsync.isLoading) {
-//         return;
-//       }
+  useEffect(() => {
+    if (isUpdateAction) {
+      dataItem.itemDisplayName
+        && setInputValue(dataItem.itemDisplayName);
+    } else {
+      setInputValue('');
+      if (fetchOptionsDataAsync.isLoading) {
+        return;
+      }
 
-//       setItems([]);
-//       queryApi(0);
-//     }
-//   }, [dataItem[MODE_FIELD]]);
+      setItems([]);
+      queryApi(0);
+    }
+  }, [dataItem[MODE_FIELD]]);
 
-//   return (
-//     <FormikField name={field}>
-//       <Autocomplete
-//         {...{ onChange }}
-//         key={isEmpty(items) ? 'disabled' : 'enabled'}
-//         value={{ label: inputValue }}
-//         options={items}
-//         getOptionLabel={(option) => option.label ?? ''}
-//         filterOptions={(x) => x}
-//         disabled={isUpdateAction}
-//         size="small"
-//         renderInput={(params: RenderInputParams) => (
-//           <Box display="flex">
-//             <Box width="100%" data-cy="records">
-//               <TextField
-//                 {...params}
-//                 fullWidth
-//                 variant="outlined"
-//                 placeholder={translate('common.select')}
-//                 InputProps={{
-//                   ...params.InputProps,
-//                   style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
-//                   startAdornment: <div>{params.InputProps.startAdornment}</div>,
-//                   endAdornment: (
-//                     <>
-//                       {fetchOptionsDataAsync.isLoading && (
-//                         <CircularProgress color="inherit" size={16} />
-//                       )}
-//                       {params.InputProps.endAdornment}
-//                     </>
-//                   ),
-//                 }}
-//                 inputProps={{
-//                   ...params.inputProps,
-//                   style: { padding: '4.5px 0' },
-//                 }}
-//               />
-//             </Box>
-//           </Box>
-//         )}
-//         renderOption={(option) => option.label}
-//         onInputChange={debounceFunction}
-//         disableClearable
-//         open={isOpen}
-//         onOpen={handleOpen}
-//         onClose={handleClose}
-//         ListboxProps={{ onScroll }}
-//         loading={fetchOptionsDataAsync.isLoading}
-//       />
-//     </FormikField>
-//   );
-// };
+  return (
+    <FormikField name={field}>
+      <Autocomplete
+        {...{ onChange }}
+        key={isEmpty(items) ? 'disabled' : 'enabled'}
+        value={{ label: inputValue }}
+        options={items}
+        getOptionLabel={(option) => option.label ?? ''}
+        filterOptions={(x) => x}
+        disabled={isUpdateAction}
+        size="small"
+        renderInput={(params: RenderInputParams) => (
+          <Box display="flex">
+            <Box width="100%" data-cy="records">
+              <TextField
+                {...params}
+                fullWidth
+                variant="outlined"
+                placeholder={translate('common.select')}
+                InputProps={{
+                  ...params.InputProps,
+                  style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
+                  startAdornment: <div>{params.InputProps.startAdornment}</div>,
+                  endAdornment: (
+                    <>
+                      {fetchOptionsDataAsync.isLoading && (
+                        <CircularProgress color="inherit" size={16} />
+                      )}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                }}
+                inputProps={{
+                  ...params.inputProps,
+                  style: { padding: '4.5px 0' },
+                }}
+              />
+            </Box>
+          </Box>
+        )}
+        renderOption={(option) => option.label}
+        onInputChange={debounceFunction}
+        disableClearable
+        open={isOpen}
+        onOpen={handleOpen}
+        onClose={handleClose}
+        ListboxProps={{ onScroll }}
+        loading={fetchOptionsDataAsync.isLoading}
+      />
+    </FormikField>
+  );
+};
 
-// export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
-//   const { dataItem, onClick, field } = props;
-//   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
+  const { dataItem, onClick, field } = props;
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-//   if (isEditMode) {
-//     return <Editor {...props} />;
-//   }
-//   const handleClick = () => onClick?.({ dataItem });
+  if (isEditMode) {
+    return <Editor {...props} />;
+  }
+  const handleClick = () => onClick?.({ dataItem });
 
-//   return (
-//     <OverflowContent onClick={handleClick}>
-//       {dataItem[field]}
-//     </OverflowContent>
-//   );
-// };
+  return (
+    <OverflowContent onClick={handleClick}>
+      {dataItem[field]}
+    </OverflowContent>
+  );
+};

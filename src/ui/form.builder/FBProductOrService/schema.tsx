@@ -2,7 +2,7 @@ import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { ASLCell } from './components/ASLCell';
-import { IDCell } from './components/IDCell';
+import { ItemCell } from './components/ItemCell';
 import { StatusCell } from './components/StatusCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableProductORService, SchemaOptions } from './types';
@@ -22,7 +22,7 @@ export const buildSchema = ({
       field: 'itemId',
       title: 'form.builder.supplier.produc.or.service.grid.heading.item',
       filterable: false,
-      template: (props) => <IDCell {...props} onClick={onRowClick} />,
+      template: (props) => <ItemCell {...props} onClick={onRowClick} />,
       width: 300,
     },
     {
