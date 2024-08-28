@@ -286,6 +286,8 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
   eqStatus: EquipmentStatus
+  lifecyclePhaseId?: string
+  lifecyclePhase?: string
   isExpired?: boolean
   expiryDate?: string
 }
@@ -381,6 +383,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   name: string
   docId?: string
   description: string
+  lifecyclePhaseId?: string
   attachments: Attachment[]
   type?: string
   referenceTo: ReferenceToEditRequest[]

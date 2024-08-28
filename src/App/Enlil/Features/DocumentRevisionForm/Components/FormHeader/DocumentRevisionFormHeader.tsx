@@ -14,6 +14,7 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
   inRestrictedEditMode,
   documentTypeId,
   type,
+  inDialog,
 }) => (
   <Observer>
     {() => (
@@ -26,7 +27,7 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
       >
         {
           type !== 'newOutput' && _documentRevisionFormState?.documentRevision
-            && <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
+            && <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} inDialog={inDialog} />
         }
         <Title
           name="name"

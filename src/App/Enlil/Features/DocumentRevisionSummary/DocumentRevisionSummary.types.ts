@@ -14,4 +14,5 @@ export type DocumentRevisionSummaryProps =
   isFB?: boolean
   isSideBarHidden?: boolean
   isSliderView?: boolean
+  inDialog?: boolean
 };

@@ -1,10 +1,13 @@
 import { Box, CircularProgress } from '@material-ui/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { translate } from '../../common/intl';
 import { setCurrentStep } from '../../state/ducks/bulkImport/actions';
 import { getIsLoading, getStep } from '../../state/ducks/bulkImport/selectors';
+import { Button } from '../components/forms/fields-next';
+import Text from '../components/Text';
+import { BULK_IMPORT_PROGRESS_URL } from '../constants/urls';
 import Approvals from './components/Approvals/Form';
 import ButtonActions from './components/ButtonActions';
 import ImportDetailForm from './components/ImportDetails/Form';
@@ -75,7 +78,14 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
 
   return (
     <Box className={classes.root}>
-      <Steps activeStep={activeStep} steps={steps} />
+      <Box className={classes.headerContainer}>
+        <Box className={classes.backToDashboard}>
+          <Button component={Link} to={BULK_IMPORT_PROGRESS_URL} kind="outlined" >
+            <Text translation="bulkImport.backToDashbord" />
+          </Button>
+        </Box>
+        <Steps activeStep={activeStep} steps={steps} />
+      </Box>
       {isLoading && <Box className={classes.loadingContainer}>
         <CircularProgress color="primary" size={24} className={classes.loading} />
       </Box>}

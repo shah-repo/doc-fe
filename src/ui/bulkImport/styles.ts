@@ -27,4 +27,17 @@ export default makeStyles(theme => ({
   loading: {
     margin: 'auto',
   },
+  headerContainer: {
+    position: 'relative',
+  },
+  backToDashboard: {
+    position: 'absolute',
+    top: theme.spacing(2.5),
+    left: theme.spacing(1),
+  },
+  [theme.breakpoints.down('md')]: {
+    backToDashboard: {
+      display: 'none',
+    },
+  },
 }));
