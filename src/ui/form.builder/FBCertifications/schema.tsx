@@ -27,7 +27,7 @@ export const buildSchema = ({
     },
     {
       id: 'attachments',
-      field: 'attachmentIds',
+      field: 'attachments',
       title: 'form.builder.supplier.certifications.grid.heading.attachments',
       filterable: false,
       template: (props) => <AttachmentCell {...props} onClick={onRowClick} />,

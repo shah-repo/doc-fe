@@ -7,6 +7,7 @@ import { omit } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import { Attachment } from '../../../state/ducks/attachments/types';
 import { Button } from '../../components/forms/fields-next';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
@@ -15,7 +16,7 @@ import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.type
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import FB from '../helpers/FB';
-import { FIELDS_TO_OMIT } from './constants';
+import { ATTACHMENT_FIELDS_TO_OMIT, FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { Certification, CertificationEditEvent, EditableCertification, FBCertificationProps } from './types';
@@ -43,9 +44,12 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
     initialValues: {},
     onSubmit: (values: Partial<EditableCertification>) => {
       const updatedCertification = omit(values, FIELDS_TO_OMIT);
+      if (updatedCertification.attachments) {
+        updatedCertification.attachments = updatedCertification.attachments?.map(attachment =>
+          omit(attachment, ATTACHMENT_FIELDS_TO_OMIT) as Attachment,
+        );
+      }
       const isAddition = values[MODE_FIELD] === Mode.add;
-      const certifications: EditableCertification[]
-        = workspaceState?.formInput?.[name] ?? [];
       console.log({ updatedCertification });
       const updatedCertifications = isAddition
         ? [...certifications, updatedCertification]
