@@ -13,10 +13,12 @@ export const BULK_GET_REPORTS_EXCEL_URL = '/bulk_import/get_bulk_import_reports_
 export const APPROVALS_URL = '/approvals';
 export const DOCUMENT_REVISION_URL = '/document_revisions/';
 export const DOCUMENT_REVISION_IN_REVIEW_URL = '/document_revisions/in_review/';
+export const BULK_IMPORT_DELETE_URL = '/bulk_import/delete/';
 
 export const RESET_STEPS = 'bulkImport/RESET_STEPS';
 export const CURRENT_STEP = 'bulkImport/CURRENT_STEP';
 export const SET_BULK_IMPORT = 'bulkImport/SET_BULK_IMPORT';
+export const DELETE_BULK_IMPORT = 'bulkImport/DELETE_BULK_IMPORT';
 export const SET_BULK_IMPORTS = 'bulkImport/SET_BULK_IMPORTS';
 export const SET_SELECTED_TYPE = 'bulkImport/SET_SELECTED_TYPE';
 export const SET_DATA_TYPES = 'bulkImport/SET_DATA_TYPES';
@@ -36,5 +38,4 @@ export const SET_DATA_TYPE_FILTER = 'bulkImport/SET_DATA_TYPE_FILTER';
 export const SET_STATUS_FILTER = 'bulkImport/SET_STATUS_FILTER';
 export const CLEAN_UP_MAPPED_HEADERS = 'bulkImport/CLEAN_UP_MAPPED_HEADERS';
 
-export const documentRevisionFormInput = 'fb-approvals-fb-approvals-kn7izlov';
-export const approvalFieldId = 'fb-approvals-kn7izl3v';
+export const baseApprovalFieldId = 'fb-approvals-';

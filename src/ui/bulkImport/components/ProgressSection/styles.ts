@@ -87,6 +87,8 @@ export default makeStyles(theme => ({
     right: 0,
     top: 14,
     marginLeft: 'auto',
+    display: 'flex',
+    alignItems: 'center',
     [theme.breakpoints.down('xs')]: {
       margin: 'auto',
       marginTop: theme.spacing(2.5),
@@ -109,6 +111,9 @@ export default makeStyles(theme => ({
     paddingBottom: theme.spacing(2.5),
     [theme.breakpoints.down('xl')]: {
       gridTemplateColumns: '3fr 5fr 1fr',
+    },
+    [theme.breakpoints.down('lg')]: {
+      gridTemplateColumns: '2fr 5fr 1fr',
     },
     [theme.breakpoints.down('xs')]: {
       display: 'block',
@@ -191,6 +196,16 @@ export default makeStyles(theme => ({
   },
   cursorPointer: {
     cursor: 'pointer',
+  },
+  deleteIcon: {
+    cursor: 'pointer',
+    color: Colors.error,
+    width: 14,
+    height: 16,
+    marginLeft: 15,
+    '&:hover': {
+      color: Colors.reject,
+    },
   },
   rejectIcon: {
     cursor: 'pointer',

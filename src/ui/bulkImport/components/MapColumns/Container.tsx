@@ -13,10 +13,10 @@ import useStyles from './styles';
 interface MapColumnsProps {
   children?: ReactNode
   handleNext: () => void
-  handleBack: () => void
+  handleCancel: () => void
 }
 
-const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleBack }) => {
+const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCancel }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const showTable = useSelector(getShowTable);
@@ -33,11 +33,14 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleBac
   };
 
   const init = () => {
-    // before it starts checking the table data we clean it up to be sure the data is new
-    dispatch(setTableData([]));
+    if (!showTable) {
+      // before it starts checking the table data we clean it up to be sure the data is new
+      dispatch(setTableData([]));
 
-    if (bulkImport?.id) {
-      dispatch(getBulkImportTableData(bulkImport.id));
+      console.log('🚀 ~ init ~ bulkImport:', bulkImport);
+      if (bulkImport?.id) {
+        dispatch(getBulkImportTableData(bulkImport.id));
+      }
     }
   };
 
@@ -63,7 +66,7 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleBac
 
   if (showTable) {
     return (
-      <CheckValuesTable handleNext={handleNext} handleBack={handleBackTable} bulkImport={bulkImport as BulkImport} />
+      <CheckValuesTable handleNext={handleNext} handleBack={handleBackTable} handleCancel={handleCancel} bulkImport={bulkImport as BulkImport} />
     );
   }
 

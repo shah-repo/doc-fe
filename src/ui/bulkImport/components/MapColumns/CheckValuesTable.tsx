@@ -28,6 +28,7 @@ interface CheckValuesTableProps {
   bulkImport?: BulkImport
   handleNext: () => void
   handleBack: () => void
+  handleCancel: () => void
 }
 
 interface CustomDataItem {
@@ -138,7 +139,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
 const PAGE_SIZES = [12, 24, 50, 100];
 const BUTTON_COUNT = 4;
 
-const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleBack, bulkImport }) => {
+const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleBack, handleCancel, bulkImport }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -270,6 +271,13 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
         </StyledKendoGrid>
       </ExcelExport>
       <Box className={classes.actionsContainer}>
+        <Button
+          kind="secondary"
+          className={classes.buttonsCancel}
+          onClick={handleCancel}
+        >
+          <Text translation="bulkImport.delete" />
+        </Button>
         <Box className={classes.buttonsFooterContainer}>
           <Button
             onClick={exportToExcel}

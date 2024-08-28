@@ -1,11 +1,10 @@
-import { orderBy } from 'lodash';
 import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.types';
 import { toastError } from '../../../ui/components/notifications';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, RESET_STEPS, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_DELETE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 import { Approver, BKAttachmentFile, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
-import { downloadFile } from './utils';
+import { downloadFile, orderBkData } from './utils';
 
 const REPORT_CSV = 'report.csv';
 
@@ -77,6 +76,11 @@ const setApprovers = (payload: Approver[]): { type: string, payload: Approver[] 
 
 const setBulkImports = (payload: BulkImport[]): { type: string, payload: BulkImport[] } => ({
   type: SET_BULK_IMPORTS,
+  payload,
+});
+
+const deleteBulkImportSuccess = (payload: string): { type: string, payload: string } => ({
+  type: DELETE_BULK_IMPORT,
   payload,
 });
 
@@ -178,6 +182,26 @@ export const getApprovers = (): ApiAction<Approver[]> => apiAction({
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
+  onFailure: (err: string) => {
+    toastError(err);
+  },
+});
+
+export const deleteBulkImport = (
+  body: {bulkImportId: string},
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${BULK_IMPORT_DELETE_URL}${body.bulkImportId}`,
+  method: 'post',
+  onSuccess: (data, dispatch) => {
+    if (data?.id) {
+      dispatch(deleteBulkImportSuccess(data.id));
+    }
+  },
+  onCompleted: (dispatch) => {
+    dispatch(setIsLoading(false));
+  },
+  handlers,
   onFailure: (err: string) => {
     toastError(err);
   },
@@ -302,7 +326,7 @@ export const getBulkImports = (): ApiAction<BulkImport[]> => apiAction({
   url: BULK_IMPORT_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
-    const bulkImportDataSorted = orderBy(data, 'createdAt', 'desc');
+    const bulkImportDataSorted = orderBkData(data);
     dispatch(setBulkImports(bulkImportDataSorted));
   },
   onCompleted: (dispatch) => {

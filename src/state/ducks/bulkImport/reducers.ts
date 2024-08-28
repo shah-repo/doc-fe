@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
-import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 import { BulkImport, BulkImportActions, BulkImportState, BulkImportStepsActions, BulkImportStepsState } from './types';
+import { orderBkData } from './utils';
 
 const BULK_IMPORT_DEFAULT_STEPS = {
   step: 0,
@@ -147,6 +148,11 @@ const main = (
       return {
         ...state,
         isLoading: action.payload,
+      };
+    case DELETE_BULK_IMPORT:
+      return {
+        ...state,
+        bulkImports: orderBkData(state.bulkImports.filter(importItem => importItem.id !== action.payload)),
       };
     case SET_DATA_TYPE_FILTER:
       return {

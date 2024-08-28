@@ -6,13 +6,14 @@ import {
   Typography,
 } from '@material-ui/core';
 import { History } from 'history';
+import _ from 'lodash';
 import moment from 'moment';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
 import { MomentFormats } from '../../../../common/utils/date';
-import { getReportsExcelFile, setBulkImport, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
+import { deleteBulkImport, getReportsExcelFile, setBulkImport, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
 import { BkStatus, BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
 import { ChangeRequestTransitionResponse } from '../../../../state/ducks/changeRequest/types';
@@ -22,8 +23,10 @@ import { Button } from '../../../components/forms/fields-next';
 import { BULK_IMPORT_URL } from '../../../constants/urls';
 import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTooltip';
 import ApproveDialogueContainer from '../../../dashboard.new/line.items/purchase.order/task.approval/POApprovalDialogContainer';
+import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
+import DeleteDialog from '../Dialogs/DeleteDialog';
 import ProgressIcons, { iconStatuses } from './ProgressIcons';
 import useStyles, { CustomLinearProgress } from './styles';
 
@@ -39,15 +42,18 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const history = useHistory() as History;
   const dispatch = useDispatch();
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
+  const deleteBulkImportAction = useActionCreator(deleteBulkImport);
   const approvalId = item?.documentRevision?.approvals[0]?.id;
   const approverId = item?.documentRevision?.approvals[0]?.approverId;
   const transitionDialog = useDialog();
   const transitionDialog1 = useDialog();
-  const showApproverButtons = approvalId && approverId === currentEmployeeId;
+  const showApproverButtons = approvalId && approverId === currentEmployeeId && _.isEmpty(item.process);
   const showApprovals = item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending && showApproverButtons;
+  const showDeleteButton = _.isEmpty(item.process);
   const currentProgressStep = useRef(0);
   const isRejected = item?.status === BkStatus.CANCELLED;
-  const showButtonView = (!isRejected && !showApproverButtons && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports && item?.completedAt);
+  const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt && _.isEmpty(item.process)) || (item?.reports));
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   let rejectedDate;
 
   if (item?.documentRevision?.approvals?.length) {
@@ -60,6 +66,11 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     },
     onError: () => {
       transitionDialog.close();
+    },
+  });
+  const asyncDeleteBk = useAsync({
+    onSuccess: () => {
+      handleCloseDelete();
     },
   });
 
@@ -81,6 +92,17 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     openRejectDialog();
   };
 
+  const handleOpenDetele = () => {
+    setOpenDeleteDialog(true);
+  };
+  const handleCloseDelete = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleDeleteClick = () => {
+    asyncDeleteBk.start(deleteBulkImportAction, { bulkImportId: item.id }, asyncDeleteBk);
+  };
+
   const handleDownloadFile = () => {
     dispatch(getReportsExcelFile(item.id));
   };
@@ -96,6 +118,9 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
       const firstBlankIcon = item.icons.find(icon => (!iconStatuses[icon.icon] || icon.icon === 'blank'));
       if (firstBlankIcon) {
         currentProgressStep.current = firstBlankIcon.step;
+      } else if (item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending) {
+        // if we don't find any blank icon is because we already finish and is on the last step
+        currentProgressStep.current = 4;
       }
     }
   }, [item]);
@@ -179,9 +204,20 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
               />
             </StyleTooltip>
           </Box>}
-          {showButtonView && <Button className={!item?.completedAt ? classes.viewButton : classes.downloadLogs} kind="outlined" color={item?.completedAt ? 'primary' : 'inherit'} onClick={!item?.completedAt ? handleReturnToStep : handleDownloadFile}>
-            <Text translation={!item?.completedAt ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
+          {showButtonView && <Button className={_.isEmpty(item?.reports) ? classes.viewButton : classes.downloadLogs} kind="outlined" color={!_.isEmpty(item?.reports) ? 'primary' : 'inherit'} onClick={_.isEmpty(item?.reports) ? handleReturnToStep : handleDownloadFile}>
+            <Text translation={_.isEmpty(item?.reports) ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
           </Button>}
+          {showDeleteButton && <StyleTooltip
+            title={<Text translation="bulkImport.delete" />}
+            placement="top"
+            arrow
+          >
+            <FontAwesomeIcon
+              onClick={handleOpenDetele}
+              className={classes.deleteIcon}
+              icon={regular('trash-can')}
+            />
+          </StyleTooltip>}
         </Box>
       </Box>
       {idx !== bulkImportsGroupByProcess[valKey].length - 1 && <Divider className={classes.divider} />}
@@ -203,6 +239,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           />
         </>
       }
+      <DeleteDialog open={openDeleteDialog} handleClose={handleCloseDelete} handleConfirm={handleDeleteClick} />
     </React.Fragment>
   );
 };

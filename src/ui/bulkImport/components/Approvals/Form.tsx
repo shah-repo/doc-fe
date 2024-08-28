@@ -9,12 +9,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
 import { getApprovers, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
+import { baseApprovalFieldId } from "../../../../state/ducks/bulkImport/constants";
 import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
 import { patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview } from "../../../../state/ducks/bulkImport/utils";
 import Text from '../../../components/Text';
 import { Autocomplete } from '../../../components/forms/fields-next';
 import { BULK_IMPORT_PROGRESS_URL } from '../../../constants/urls';
+import { FB } from "../../../form.builder";
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
 
@@ -41,9 +43,10 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
     try {
       // Process each user sequentially
       for (const user of users) {
-        const approval = await processUserApproval(user.value, bulkImport?.documentRevisionId);
+        const approvalFieldId = `${baseApprovalFieldId}${FB.uniqid}`
+        const approval = await processUserApproval(user.value, bulkImport?.documentRevisionId, approvalFieldId);
         if (approval) {
-          await updateDocumentRevision(approval.id, bulkImport?.documentRevisionId);
+          await updateDocumentRevision(approval.id, bulkImport?.documentRevisionId, approvalFieldId);
         }
       }
   
@@ -60,9 +63,9 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
   };
   
   // Function to handle user approval and return the approval result
-  const processUserApproval = async (approvalId, documentRevisionId) => {
+  const processUserApproval = async (approvalId, documentRevisionId, approvalFieldId) => {
     try {
-      return await postApprovals(approvalId, documentRevisionId);
+      return await postApprovals(approvalId, documentRevisionId, approvalFieldId);
     } catch (error) {
       console.error(`Failed to post approval for user with approval ID ${approvalId}:`, error);
       return null;
@@ -70,9 +73,9 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
   };
   
   // Function to update document revision with the approval ID
-  const updateDocumentRevision = async (approvalId, documentRevisionId) => {
+  const updateDocumentRevision = async (approvalId, documentRevisionId, approvalFieldId) => {
     try {
-      await patchDocumentRevisions(approvalId, documentRevisionId);
+      await patchDocumentRevisions(approvalId, documentRevisionId, approvalFieldId);
     } catch (error) {
       console.error(`Failed to update document revision for approval ID ${approvalId}:`, error);
     }

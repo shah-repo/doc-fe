@@ -1,15 +1,18 @@
 import { Box, CircularProgress } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { translate } from '../../common/intl';
-import { setCurrentStep } from '../../state/ducks/bulkImport/actions';
-import { getIsLoading, getStep } from '../../state/ducks/bulkImport/selectors';
+import { deleteBulkImport, setCurrentStep, setIsLoading } from '../../state/ducks/bulkImport/actions';
+import { getBulkImport, getIsLoading, getStep } from '../../state/ducks/bulkImport/selectors';
 import { Button } from '../components/forms/fields-next';
 import Text from '../components/Text';
 import { BULK_IMPORT_PROGRESS_URL } from '../constants/urls';
+import useActionCreator from '../hooks/useActionCreator';
+import useAsync from '../hooks/useAsync';
 import Approvals from './components/Approvals/Form';
 import ButtonActions from './components/ButtonActions';
+import DeleteDialog from './components/Dialogs/DeleteDialog';
 import ImportDetailForm from './components/ImportDetails/Form';
 import MapColumns from './components/MapColumns/Container';
 import Steps from './components/Steps';
@@ -26,6 +29,23 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
   const classes = useStyles();
   const activeStep = useSelector(getStep);
   const isLoading = useSelector(getIsLoading);
+  const bulkImport = useSelector(getBulkImport);
+  const deleteBulkImportAction = useActionCreator(deleteBulkImport);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  const asyncDeleteBk = useAsync({
+    onSuccess: () => {
+      history.push(BULK_IMPORT_PROGRESS_URL);
+    },
+  });
+
+  const handleCloseDelete = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleOpenDelete = () => {
+    setOpenDeleteDialog(true);
+  };
 
   const handleNext = () => {
     dispatch(setCurrentStep(activeStep + 1));
@@ -39,6 +59,13 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
     dispatch(setCurrentStep(0));
   };
 
+  const handleCancel = () => {
+    if (bulkImport?.id) {
+      dispatch(setIsLoading(true));
+      asyncDeleteBk.start(deleteBulkImportAction, { bulkImportId: bulkImport.id }, asyncDeleteBk);
+    }
+  };
+
   const getStepContent = () => {
     switch (activeStep) {
       case 0:
@@ -50,25 +77,25 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
       case 1:
         return (
           <UploadDataForm handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit />
+            <ButtonActions activeStep={activeStep} steps={steps} handleCancel={handleOpenDelete} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useCancel />
           </UploadDataForm>
         );
       case 2:
         return (
-          <MapColumns handleNext={handleNext} handleBack={handleBack}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack />
+          <MapColumns handleNext={handleNext} handleCancel={handleCancel}>
+            <ButtonActions activeStep={activeStep} steps={steps} handleCancel={handleOpenDelete} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack useCancel />
           </MapColumns>
         );
       case 3:
         return (
           <UploadAttachment handleNext={handleNext}>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack />
+            <ButtonActions activeStep={activeStep} steps={steps} handleCancel={handleOpenDelete} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextSubmit useBack useCancel />
           </UploadAttachment>
         );
       case 4:
         return (
           <Approvals>
-            <ButtonActions activeStep={activeStep} steps={steps} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextTranslation="bulkImport.approvals.submit" nextSubmit useBack />
+            <ButtonActions activeStep={activeStep} steps={steps} handleCancel={handleOpenDelete} handleNext={handleNext} handleBack={handleBack} handleReset={handleReset} nextTranslation="bulkImport.approvals.submit" nextSubmit useBack useCancel />
           </Approvals>
         );
       default:
@@ -90,6 +117,7 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
         <CircularProgress color="primary" size={24} className={classes.loading} />
       </Box>}
       {getStepContent()}
+      <DeleteDialog open={openDeleteDialog} handleClose={handleCloseDelete} handleConfirm={handleCancel} />
     </Box>
   );
 };

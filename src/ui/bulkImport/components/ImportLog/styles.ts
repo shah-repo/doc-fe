@@ -6,6 +6,9 @@ export default makeStyles(theme => ({
     flex: '0 0 35%',
     borderRadius: 4,
     padding: theme.spacing(2.5),
+    [theme.breakpoints.down('lg')]: {
+      flex: '0 0 30%',
+    },
   },
   backgroundItems: {
     borderRadius: 8,
