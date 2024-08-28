@@ -1,6 +1,7 @@
 import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
+import { ASLCell } from './components/ASLCell';
 import { IDCell } from './components/IDCell';
 import { StatusCell } from './components/StatusCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
@@ -47,6 +48,14 @@ export const buildSchema = ({
       filterable: false,
       template: (props) => <StatusCell {...props} onClick={onRowClick} />,
       width: 140,
+    },
+    {
+      id: 'asl-status',
+      field: 'aslStatus',
+      title: 'form.builder.supplier.produc.or.service.grid.heading.asl.status',
+      filterable: false,
+      template: (props) => <ASLCell {...props} onClick={onRowClick} />,
+      width: 280,
     },
     {
       id: 'comments',

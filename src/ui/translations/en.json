@@ -1493,6 +1493,7 @@
   "form.builder.supplier.produc.or.service.grid.heading.supplier.part.number": "Supplier Part Number",
   "form.builder.supplier.produc.or.service.grid.heading.lifecycle.phase": "Lifecycle Phase",
   "form.builder.supplier.produc.or.service.grid.heading.status": "Status",
+  "form.builder.supplier.produc.or.service.grid.heading.asl.status": "ASL Status",
   "form.builder.supplier.produc.or.service.grid.heading.comments": "Comments",
   "form.builder.wo.part.selector": "Item Selection",
   "form.builder.wo.part.quantity": "Quantity",
