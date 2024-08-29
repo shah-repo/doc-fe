@@ -6,7 +6,7 @@ import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../components/notifications';
-import { APPROVAL_MATRIX_ROLE_TABLE_NAME, ErrorField, ERROR_FIELD, Mode, MODE_FIELD, SEARCHABLE_GROUPS_FIELD } from './constants';
+import { APPROVAL_MATRIX_ROLE_TABLE_NAME, ERROR_FIELD, ErrorField, Mode, MODE_FIELD, SEARCHABLE_GROUPS_FIELD } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
 import { EditableRole, FBApprovalMatrixRolesProps, RoleEditEvent } from './types';
@@ -17,7 +17,6 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   approvalRoles = [],
   groups,
   disabled,
-  addRole,
   updateRole,
 }) => {
   const classes = useStyles();
@@ -44,11 +43,6 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
       return false;
     }
 
-    if (role[MODE_FIELD] === Mode.add && approvalRoles.some(({ name }) => name === role.name)) {
-      toastError(translate('form.builder.approvalRoles.error.exists', { name: role.name }));
-      setFieldError(ErrorField.name);
-      return false;
-    }
     return true;
   };
 
@@ -57,7 +51,8 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
       return;
     }
     const roleToSave = omit(editedRole, MODE_FIELD, SEARCHABLE_GROUPS_FIELD);
-    isNewRoleAdded ? addRole(roleToSave) : updateRole(roleToSave);
+
+    updateRole(roleToSave);
 
     discardRole();
   };
@@ -73,9 +68,8 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   };
 
   const isActive = !disabled;
-  const isNewRoleAdded = editedRole?.[MODE_FIELD] === Mode.add;
 
-  const existingRoles = approvalRoles.map((role) => {
+  const roles = approvalRoles.map((role) => {
     const isRoleEdited = editedRole && editedRole.id === role.id;
     return {
       ...(isRoleEdited ? editedRole : role),
@@ -83,7 +77,6 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
       [SEARCHABLE_GROUPS_FIELD]: role.groups.map(({ name }) => name).join(' '),
     };
   });
-  const roles = isNewRoleAdded ? [...existingRoles, editedRole] : existingRoles;
 
   const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_ROLE_TABLE_NAME);
 
@@ -97,7 +90,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
 
   const rowRender: DataGridProps<EditableRole>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableRole;
-    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
+    const isUpdating = item[MODE_FIELD] === Mode.edit;
     const dataCy = `row-${kebabCase(item.name)}`;
 
     return React.cloneElement(
@@ -118,7 +111,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
         onDataStateChange={dataStateChange}
         rowRender={rowRender}
         onItemChange={updateEditedRole}
-        className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
+        className={classes.grid}
         onRowClick={isActive ? editRole : undefined}
         filterable
       />
