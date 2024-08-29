@@ -3,6 +3,7 @@ import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.t
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { ASLCell } from './components/ASLCell';
 import { ItemCell } from './components/ItemCell';
+import { LifeCyclePhaseCell } from './components/LifeCyclePhaseCell';
 import { StatusCell } from './components/StatusCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableProductORService, SchemaOptions } from './types';
@@ -18,8 +19,8 @@ export const buildSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<EditableProductORService>> => {
   return [
     {
-      id: 'item',
-      field: 'itemId',
+      id: 'rev-id',
+      field: 'revId',
       title: 'form.builder.supplier.produc.or.service.grid.heading.item',
       filterable: false,
       template: (props) => <ItemCell {...props} onClick={onRowClick} />,
@@ -38,7 +39,7 @@ export const buildSchema = ({
       field: 'lifecyclePhase',
       title: 'form.builder.supplier.produc.or.service.grid.heading.lifecycle.phase',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <LifeCyclePhaseCell {...props} onClick={onRowClick} />,
       width: 140,
     },
     {
@@ -47,7 +48,7 @@ export const buildSchema = ({
       title: 'form.builder.supplier.produc.or.service.grid.heading.status',
       filterable: false,
       template: (props) => <StatusCell {...props} onClick={onRowClick} />,
-      width: 140,
+      width: 180,
     },
     {
       id: 'asl-status',

@@ -42,10 +42,7 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   const formik = useFormik<Partial<EditableReference>>({
     initialValues: {},
     onSubmit: (values) => {
-      // const selectedReference = pick(values, FIELDS_TO_PICK);
       const isAddition = values[MODE_FIELD] === Mode.add;
-      console.log({ values });
-      // TO DO Save/Update
       const updatedReferences = isAddition
         ? [...references, values]
         : references.map((reference) =>

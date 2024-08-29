@@ -1,19 +1,12 @@
-import { differenceBy, orderBy, unionBy } from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FB } from '..';
+import { translate } from '../../../common/intl';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import { FBProductORServiceProps, ProductORService } from './types';
 
-const prepareData = (list: ProductORService[] = []) => orderBy(list, 'primary', 'desc');
-
-const demoItems = [
-  {
-    itemId: 'ABC',
-    lifecyclePhase: 'DEVELOPMENT',
-    status: 'APPROVED',
-    supplierPartNumber: '1530013213RPB87',
-    comment: 'Hello world',
-  },
-];
 export const withFBProductORService = <T extends FBProductORServiceProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
@@ -22,32 +15,59 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     disabled,
     ...props
   }: T) => {
-    const { formState, workspaceState } = FB.useStores();
-    const [items, setItems] = useState<ProductORService[]>(prepareData(workspaceState?.formInputSync.get(name) ?? demoItems));
+    const { workspaceState } = FB.useStores();
+    const [productOrServices, setProductOrServices] = useState<ProductORService[]>();
+    const fetchReferences = useActionCreator(documentRevisionsActions.fetchReferencesTableData);
+    const referenceFormInput = workspaceState?.formInputSync.get(name) ?? [];
 
-    const updateState = (state: ProductORService[]) => {
-      setItems(prepareData(state));
-      formState?.setFieldValue(name, state);
-      formState?.setFieldAutosave(name);
+    const mergeArrays = (references: ProductORService[], selectedProductOrServices?: DocumentRevision[]) => {
+      const map = new Map();
+
+      references.forEach((item) => {
+        map.set(item.revId, { ...item });
+      });
+
+      selectedProductOrServices?.forEach((item) => {
+        const refObj = {
+          itemDisplayName: translate('form.builder.supplier.references.displayRevision', {
+            docId: item.document?.docId,
+            displayRevision: item.displayRevision,
+            name: item?.name,
+            status: item.status,
+          }),
+          status: item.status,
+        };
+        // TODO add life cycle phase column
+
+        map.set(item.id, { ...map.get(item.id), ...refObj });
+      });
+
+      return Array.from(map.values());
     };
 
-    const deleteItem = (item: ProductORService) => {
-      const filteredItems = differenceBy(items, [item], 'id');
-      updateState(filteredItems);
-    };
+    const fetchOptionsDataAsync = useAsync<DocumentRevision[]>({
+      onSuccess: (data) => {
+        setProductOrServices(mergeArrays(referenceFormInput, data));
+      },
+    });
 
-    const updateItem = (item: ProductORService) => {
-      const newItem = unionBy([item], items, 'id');
-      updateState(newItem);
-    };
+    useEffect(() => {
+      const { documentId, formInputSync } = workspaceState ?? {};
+
+      if (!documentId && !formInputSync?.get(name)) {
+        return;
+      }
+
+      const revIds = (formInputSync?.get(name) ?? []).map((data) => data.revId);
+      fetchOptionsDataAsync.start(fetchReferences, documentId, revIds);
+    }, [workspaceState?.documentId, workspaceState?.formInputSync?.[name]]);
 
     return Component({
       ...props as T,
       name,
       disabled: disabled ?? workspaceState?.isPreview,
-      items,
-      deleteItem,
-      updateItem,
+      productOrServices,
+      setProductOrServices,
     });
   };
 

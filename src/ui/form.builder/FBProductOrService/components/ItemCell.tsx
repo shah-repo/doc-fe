@@ -203,7 +203,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
 };
 
 export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem, onClick, field } = props;
+  const { dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
@@ -213,7 +213,7 @@ export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
 
   return (
     <OverflowContent onClick={handleClick}>
-      {dataItem[field]}
+      {dataItem.itemDisplayName}
     </OverflowContent>
   );
 };

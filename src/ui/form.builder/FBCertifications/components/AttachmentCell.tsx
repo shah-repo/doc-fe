@@ -21,7 +21,6 @@ const Editor: React.FC<Props> = ({ field, dataItem, previousAttachments }) => {
   const { id } = dataItem ?? values;
 
   React.useEffect(() => {
-    console.log('previousAttachments :', previousAttachments);
     if (!isEmpty(previousAttachments)) {
       fileUploadState?.setAttachments(previousAttachments);
     }
@@ -53,8 +52,8 @@ export const AttachmentCell: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem = {}, field } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const classes = styles();
-  const { values } = useFormikContext<EditableCertification>();
-  const defaultAttachments = isEditMode ? values[field] ?? dataItem[field] : dataItem[field] as Attachment[];
+  const formik = useFormikContext<EditableCertification>();
+  const defaultAttachments = isEditMode ? formik?.values?.[field] ?? dataItem[field] : dataItem[field] as Attachment[];
   const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
 
   return (<>
@@ -63,7 +62,7 @@ export const AttachmentCell: React.FC<CustomTemplateProps> = (props) => {
         {isEditMode && (
           <Editor {...props} {...{ previousAttachments: defaultAttachments } } />
         )}
-        { isEmpty(defaultAttachments) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: defaultAttachments, fileUploadState }} boxProps={{ className: classes.attachmentsContainer }} />}
+        { isEmpty(defaultAttachments) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: defaultAttachments, fileUploadState, isDisabled: isEditMode }} boxProps={{ className: classes.attachmentsContainer }} />}
       </FBProvider>
     </div>
   </>);

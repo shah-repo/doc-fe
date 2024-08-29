@@ -8,21 +8,20 @@ export interface SchemaOptions {
   actionsClass: string
   onConfirm?: () => void
   onDiscard?: () => void
-  onDelete?: () => void
+  onDelete?: (item: ProductORService) => void
   onRowClick?: (e: ProductORServiceEditEvent) => void
 }
 
 export type FBProductORServiceProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>
 & {
-  items: ProductORService[]
-  deleteItem: (item: ProductORService) => void
-  updateItem: (item: ProductORService, id?: string) => void
+  productOrServices: ProductORService[]
+  setProductOrServices: React.Dispatch<React.SetStateAction<ProductORService[]>>
 };
 
 export interface ProductORService {
   id: string
-  itemId: string
+  revId: string
   itemDisplayName?: string
   supplierPartNumber: string
   lifecyclePhase: string

@@ -3,36 +3,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { omit } from 'lodash';
+import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import { Button } from '../../components/forms/fields-next';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
-import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Button } from '../../components/forms/fields-next';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
-import { FIELDS_TO_OMIT } from './constants';
+import FB from '../helpers/FB';
+import { FIELDS_TO_PICK } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableProductORService, FBProductORServiceProps, ProductORServiceEditEvent } from './types';
+import { EditableProductORService, FBProductORServiceProps, ProductORService, ProductORServiceEditEvent } from './types';
 import { withFBProductORService } from './wrap';
 
 const FBProductORService: React.FC<FBProductORServiceProps> = ({
   label = 'form.builder.supplier.produc.or.service.title',
   name = '',
   disabled,
-  items = [],
-  deleteItem,
-  updateItem,
+  productOrServices = [],
+  setProductOrServices,
   ...props
 }) => {
   const classes = useStyles();
+  const { formState, workspaceState } = FB.useStores();
   const isActive = !disabled;
   const [editedItem, setEditedItem] = useState<Partial<EditableProductORService>>();
-
   const isItemAdded = editedItem?.[MODE_FIELD] === Mode.add;
   const editItem = ({ dataItem }: ProductORServiceEditEvent) => setEditedItem(dataItem);
   const isInEditMode = editedItem !== undefined;
@@ -41,11 +41,25 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
   const formik = useFormik<Partial<EditableProductORService>>({
     initialValues: {},
     onSubmit: (values) => {
-      const itemToSave = omit(values, FIELDS_TO_OMIT);
-      console.log({ itemToSave });
-      // TO DO Save/Update
+      const isAddition = values[MODE_FIELD] === Mode.add;
+      const updatedProductOrServices = isAddition
+        ? [...productOrServices, values]
+        : productOrServices.map((reference) =>
+          reference.id === values.id
+            ? values
+            : reference,
+        );
 
-      discardItem();
+      const payload = updatedProductOrServices
+        .map((productOrService) => pick(productOrService, FIELDS_TO_PICK));
+
+    formState?.setFieldValue(name, updatedProductOrServices);
+    workspaceState?.saveDocRev({
+      ...workspaceState?.formInput,
+      [name]: payload,
+    });
+    setProductOrServices(updatedProductOrServices as ProductORService[]);
+    discardItem();
     },
   });
 
@@ -62,9 +76,21 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
 
   const discardItem = () => setEditedItem(undefined);
 
-  const removeItem = () => {
+  const removeItem = (dataItem: ProductORService) => {
     if (!editedItem) return;
-    // TO DO DELETE
+    const updatedProductOrServices = productOrServices
+      .filter((productOrService) =>
+        productOrService.id !== dataItem.id,
+      );
+    const payload = updatedProductOrServices
+      .map((productOrService) => pick(productOrService, FIELDS_TO_PICK));
+
+    setProductOrServices(updatedProductOrServices);
+    formState?.setFieldValue(name, updatedProductOrServices);
+    workspaceState?.saveDocRev({
+      ...workspaceState?.formInput,
+      [name]: payload,
+    });
     discardItem();
   };
 
@@ -99,7 +125,7 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
     onDelete: removeItem,
   });
 
-  const itemsList = items.reduce((list, item) => {
+  const itemsList = productOrServices.reduce((list, item) => {
     const isItemEdited = editedItem && editedItem.id === item.id;
 
     return [
