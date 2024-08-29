@@ -13,6 +13,7 @@ export default makeStyles(theme => ({
     '& td': {
       height: ROW_HEIGHT,
       boxSizing: 'border-box',
+      verticalAlign: 'middle !important',
 
       '& a': {
         color: Colors.textBlack,
@@ -35,7 +36,6 @@ export default makeStyles(theme => ({
     outlineOffset: -1,
 
     '& td': {
-      verticalAlign: 'top !important',
       whiteSpace: 'normal !important' as 'normal',
     },
   },
@@ -45,7 +45,6 @@ export default makeStyles(theme => ({
     right: 0,
     width: '0 !important',
     padding: '0 !important',
-    verticalAlign: 'bottom !important',
 
     '& > div': {
       borderLeft: `1px solid ${Colors.primaryLight} !important`,

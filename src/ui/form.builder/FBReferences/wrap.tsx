@@ -58,7 +58,6 @@ export const withFBReferences = <T extends FBReferenceProps>(
       if (!workspaceState?.documentId && !workspaceState?.formInputSync.get(name)) {
         return;
       }
-      console.log('FETCH data called');
       fetchOptionsDataAsync.start(
         fetchReferences,
         workspaceState?.documentId,

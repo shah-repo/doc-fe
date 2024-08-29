@@ -52,15 +52,16 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     });
 
     useEffect(() => {
-      const { documentId, formInputSync } = workspaceState ?? {};
-
-      if (!documentId && !formInputSync?.get(name)) {
+      if (!workspaceState?.documentId && !workspaceState?.formInputSync.get(name)) {
         return;
       }
-
-      const revIds = (formInputSync?.get(name) ?? []).map((data) => data.revId);
-      fetchOptionsDataAsync.start(fetchReferences, documentId, revIds);
-    }, [workspaceState?.documentId, workspaceState?.formInputSync?.[name]]);
+      fetchOptionsDataAsync.start(
+        fetchReferences,
+        workspaceState?.documentId,
+        (workspaceState?.formInputSync.get(name) ?? []).map((data) => data.revId),
+        fetchOptionsDataAsync,
+      );
+    }, [workspaceState?.documentId, workspaceState?.formInput?.[name]]);
 
     return Component({
       ...props as T,

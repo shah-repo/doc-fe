@@ -7,11 +7,11 @@ import { translate } from '../../../../common/intl';
 import Tooltip from '../../../components/common/kendo/Tooltip';
 import {
   Autocomplete,
-  FormikField
+  FormikField,
 } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import {
-  Mode, MODE_FIELD
+  Mode, MODE_FIELD,
 } from '../../../components/KendoDataGrid/constants';
 import { ASL_STATUS_CLASS_MAPPING, ASL_STATUS_OPTIONS, EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableProductORService } from '../types';
