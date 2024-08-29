@@ -31,6 +31,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const [inputValue, setInputValue] = useState('');
   const [items, setItems] = useState<CustomOptionType[]>([]);
+  const [selectedObj, setSelectedObj] = useState<OptionType>();
   const [offset, setOffset] = React.useState(0);
   const fetchReferences = useActionCreator(
     documentRevisionsActions.fetchReferences,
@@ -47,6 +48,10 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
 
   const fetchOptionsDataAsync = useAsync({
     onSuccess: (data?: SearchRecordsResponse) => {
+      if (!isUpdateAction && !selectedObj?.value) {
+        setFieldValue(field, inputValue);
+      }
+
       const modifiedItems
         = data?.items?.map((item) => {
           const label = translate(
@@ -100,6 +105,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
   };
 
   const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
+    setSelectedObj(value);
     setInputValue(value?.label);
     setFieldValue(field, value?.value);
     setFieldValue('itemDisplayName', value?.label);
