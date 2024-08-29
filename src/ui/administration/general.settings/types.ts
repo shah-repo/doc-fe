@@ -16,6 +16,7 @@ export enum GeneralSettingsTabs {
   ApprovalRoles = 'Approval Roles',
   Locations = 'Locations',
   MaterialFlow = 'Material Flow',
+  SystemTransactions = 'System Transactions Setup',
 }
 
 export interface GeneralSettingsProps {

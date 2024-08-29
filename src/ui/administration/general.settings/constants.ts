@@ -7,6 +7,7 @@ import LCPSettings from './panels/LCP';
 import MaterialDispositionSettings from './panels/MaterialDisposition';
 import MaterialFlowSettingsPanel from './panels/MaterialFlow';
 import PrintingSettingsPanel from './panels/Printing';
+import SystemTransactionsSettingsPanel from './panels/SystemTransactions';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
 import LotAutoAllocationOrder from './panels/WorkOrder/LotAutoAllocationOrder';
 import { GeneralSettingsTabs } from './types';
@@ -48,6 +49,11 @@ export const panels = [
     key: GeneralSettingsTabs.MaterialFlow,
     title: 'administration.general.settings.material.flow',
     component: MaterialFlowSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.SystemTransactions,
+    title: 'administration.general.settings.system.transactions',
+    component: SystemTransactionsSettingsPanel,
   },
   {
     key: GeneralSettingsTabs.LCP,
