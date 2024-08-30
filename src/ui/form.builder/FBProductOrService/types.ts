@@ -21,6 +21,7 @@ export type FBProductORServiceProps =
 export interface ProductORService {
   id: string
   revId: string
+  title?: string
   itemDisplayName?: string
   supplierPartNumber: string
   lifecyclePhase: string

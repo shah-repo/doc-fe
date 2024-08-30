@@ -54,7 +54,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
   const fetchOptionsDataAsync = useAsync({
     onSuccess: (data?: SearchRecordsResponse) => {
       if (!isUpdateAction && !selectedObj?.value) {
-        setFieldValue(field, inputValue);
+        setFieldValue('title', inputValue);
       }
 
       const modifiedItems
@@ -148,8 +148,11 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
 
   useEffect(() => {
     if (isUpdateAction) {
-      dataItem.itemDisplayName
-        && setInputValue(dataItem.itemDisplayName);
+      if (dataItem.title) {
+        setInputValue(dataItem.title);
+      } else if (dataItem.itemDisplayName) {
+        setInputValue(dataItem.itemDisplayName);
+      }
     } else {
       setInputValue('');
       if (fetchOptionsDataAsync.isLoading) {
@@ -162,7 +165,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
   }, [dataItem[MODE_FIELD]]);
 
   return (
-    <FormikField name={field}>
+    <FormikField name={dataItem.title ? 'title' : field}>
       <Autocomplete
         {...{ onChange }}
         key={isEmpty(items) ? 'disabled' : 'enabled'}
@@ -233,12 +236,12 @@ export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
     container
     onClick={handleClick}
   >
-    <Grid item xs={10}>
+    <Grid item xs={dataItem.title ? 12 : 10}>
       <OverflowContent data-cy="selected-product-or-service">
-        {dataItem.itemDisplayName}
+        {dataItem.itemDisplayName ?? dataItem.title}
       </OverflowContent>
     </Grid>
-    <Grid item xs={2}>
+    {!dataItem.title && <Grid item xs={2}>
       <span ref={viewIconRef} onClick={openQuickView}>
         <Tooltip arrow title={translate('common.quick.view')} placement="top">
           <FontAwesomeIcon
@@ -248,7 +251,7 @@ export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
           />
         </Tooltip>
       </span>
-    </Grid>
+    </Grid>}
   </Grid>
   );
 };

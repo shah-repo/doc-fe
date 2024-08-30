@@ -1,7 +1,7 @@
 export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const LIMIT = 25;
 export const MIN_SEARCH_TERM_LENGTH = 3;
-export const FIELDS_TO_PICK = ['id', 'revId', 'supplierPartNumber', 'aslStatus', 'comment'];
+export const FIELDS_TO_PICK = ['id', 'revId', 'supplierPartNumber', 'aslStatus', 'comment', 'title'];
 
 export enum SUPPLIER_OFFERING_ASL_STATUS {
   PENDING_EVALUATION = 'PENDING EVALUATION',

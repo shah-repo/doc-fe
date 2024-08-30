@@ -55,7 +55,13 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
         );
 
       const payload = updatedProductOrServices
-        .map((productOrService) => pick(productOrService, FIELDS_TO_PICK));
+        .map((productOrService) => {
+          const obj = pick(productOrService, FIELDS_TO_PICK);
+          if (obj.revId) {
+            obj.title = '';
+          }
+          return obj;
+        });
 
     formState?.setFieldValue(name, updatedProductOrServices);
     workspaceState?.saveDocRev({
