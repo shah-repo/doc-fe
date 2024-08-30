@@ -49,8 +49,6 @@ const attachments = [
 const AttachmentsPanel = () => {
   const classes = useStyles();
   const [file, setFile] = useState<FBAttachment>();
-  const [attachmentsList, setAttachmentsList] = useState<FBAttachment[]>(attachments);
-
   const docPreview = useDialog();
 
   const showDocPreview = (file: FBAttachment) => {
@@ -75,11 +73,9 @@ const AttachmentsPanel = () => {
           </Typography>
         </Box>
         <SMBox>
-          <ListPanel {...{ showDocPreview, attachments: attachmentsList }} />
+          <ListPanel {...{ showDocPreview, attachments }} />
           <Box paddingX={1.875} pt={2.5}>
-            <Button variant="contained" color="primary" fullWidth
-              onClick={() => setAttachmentsList(prev => ([...prev, { name: 'abcd.xlsx' } as FBAttachment]))}
-            >
+            <Button variant="contained" color="primary" fullWidth >
               <Text translation="ocr.submit.button" />
             </Button>
           </Box>
@@ -96,14 +92,14 @@ const AttachmentsPanel = () => {
             justifyContent="space-between"
           >
             <Typography variant="h6" className={classes.titleText}>
-              <Text translation="form.builder.ocr.document.preview" />
+              <Text translation="ocr.document.preview.title" />
             </Typography>
             <Button variant="text"
               startIcon={<FontAwesomeIcon icon={solid('arrow-left')} />}
               className={classes.hidePreviewButton}
               onClick={docPreview.close}
             >
-              <Text translation="form.builder.ocr.hide.preview" />
+              <Text translation="ocr.hide.preview.button" />
             </Button>
           </Box>
           <Box className={classes.previewContainer}>
