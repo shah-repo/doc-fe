@@ -1770,6 +1770,8 @@
   "exportFileDownload.error": "There was an error processing your request.",
   "ocr.sub.title.msg": "Select files below to run OCR",
   "ocr.submit.button": "Run OCR",
+  "ocr.document.preview.title": "Document Preview",
+  "ocr.hide.preview.button": "Hide Preview",
   "documenttype.management": "Document type management",
   "documenttype.edit.schema": "Edit schema",
   "documenttype.view.schema": "View schema",
