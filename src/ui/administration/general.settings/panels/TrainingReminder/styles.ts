@@ -12,8 +12,8 @@ export default makeStyles(theme => ({
     marginTop: theme.spacing(1),
   },
   textArea: {
-    width: '80px',
-    height: '35px',
+    width: 80,
+    height: 35,
     marginRight: theme.spacing(0.5),
   },
   marginRight: {

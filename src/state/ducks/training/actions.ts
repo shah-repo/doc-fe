@@ -52,7 +52,7 @@ const getTrainingRecordData = (
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `/training_record/${id}`,
+    url: `${TRAINING_RECORD_ROOT_URL}/${id}`,
     method: 'get',
     handlers,
   });
