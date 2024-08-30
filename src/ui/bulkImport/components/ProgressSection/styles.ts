@@ -191,6 +191,11 @@ export default makeStyles(theme => ({
     minHeight: 14,
     color: Colors.stroke,
   },
+  skipIcon: {
+    minWidth: 14,
+    minHeight: 14,
+    color: Colors.textGray,
+  },
   divider: {
     backgroundColor: '#DDDEE3',
   },

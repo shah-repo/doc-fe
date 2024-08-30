@@ -1,13 +1,18 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
+import { importLogDown } from '../../styles';
 
 export default makeStyles(theme => ({
   container: {
     flex: '0 0 35%',
     borderRadius: 4,
     padding: theme.spacing(2.5),
+    paddingRight: 0,
+    [theme.breakpoints.down(importLogDown)]: {
+      paddingLeft: 0,
+    },
     [theme.breakpoints.down('lg')]: {
-      flex: '0 0 30%',
+      flex: '0 0 25%',
     },
   },
   backgroundItems: {

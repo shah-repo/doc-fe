@@ -3,6 +3,7 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Box, FormControl, IconButton, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import cx from 'classnames';
 import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,17 +15,17 @@ import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/b
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
 import { patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview } from "../../../../state/ducks/bulkImport/utils";
 import Text from '../../../components/Text';
-import { Autocomplete } from '../../../components/forms/fields-next';
+import { Autocomplete, Button } from '../../../components/forms/fields-next';
 import { BULK_IMPORT_PROGRESS_URL } from '../../../constants/urls';
 import { FB } from "../../../form.builder";
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
 
-interface UploadDataProps {
+interface ApprovalsFormProps {
   children?: ReactNode
 }
 
-const UploadData: React.FC<UploadDataProps> = ({ children }) => {
+const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [users, setUsers] = useState<ApproverOption[]>([]);
@@ -34,6 +35,7 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
   const availableOptions: ApproverOption[] = approversOptionList.filter(option =>
     !users.some(user => user.value === option.value),
   );
+  const haveApprovers = bulkImport?.documentRevision?.approvals && bulkImport?.documentRevision?.approvals.length > 0;
 
   const handleSubmit = async () => {
     if (!users || users.length === 0) return;
@@ -94,11 +96,23 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
     setUsers(currentUsers => currentUsers.filter((_, i) => i !== index));
   };
 
+  const handleWithdrawSubmission = () => {};
+
   const init = () => {
     dispatch(getApprovers());
   };
 
   useEffect(init, []);
+
+  useEffect(() => {
+    if (haveApprovers) {
+      const matchedApprovers = bulkImport.documentRevision.approvals
+        .map(approval => approversOptionList.find(option => option.value === approval.approverId))
+        .filter(Boolean) as ApproverOption[]; // Filter out any undefined values
+      
+      setUsers(matchedApprovers);
+    }
+  }, [haveApprovers, bulkImport, approversOptionList]);
 
   return (
     <>
@@ -107,10 +121,15 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
         <Formik initialValues={{}} onSubmit={handleSubmit}>
           {({ setFieldValue }) => (
             <Form>
-              <Typography variant="h4" className={classes.selectLabel}>
+              <Typography
+                variant="h4"
+                className={cx(classes.selectLabel, {
+                  [classes.noMarginBottom]: haveApprovers,
+                })}
+              >
                 <Text translation="bulkImport.approvals.approvers" />
               </Typography>
-              <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
+              {!haveApprovers && <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
                 <Autocomplete
                   name="selectedUser"
                   options={availableOptions}
@@ -125,7 +144,7 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
                       }
                     }
                   }} />
-              </FormControl>
+              </FormControl>}
               {users && <List className={classes.listContainer}>
                 {users.map((user, index) => (
                   <ListItem key={index} className={classes.listItem}>
@@ -140,13 +159,18 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
                       />}
                       <ListItemText primary={user.text} secondary={user.email} />
                     </Box>
-                    <IconButton onClick={() => handleRemoveUser(index)} className={classes.removeIcon}>
+                    {!haveApprovers && <IconButton onClick={() => handleRemoveUser(index)} className={classes.removeIcon}>
                       <RemoveCircleOutlineIcon />
-                    </IconButton>
+                    </IconButton>}
                   </ListItem>
                 ))}
               </List>}
-              {children}
+              {!haveApprovers && children}
+              {haveApprovers && (
+                <Button kind="outlined" className={classes.withdrawSubmission} onClick={handleWithdrawSubmission}>
+                  <Text translation="bulkImport.withdrawSubmission" />
+                </Button>
+              )}
             </Form>
           )}
         </Formik>
@@ -155,4 +179,4 @@ const UploadData: React.FC<UploadDataProps> = ({ children }) => {
   );
 };
 
-export default UploadData;
+export default ApprovalsForm;

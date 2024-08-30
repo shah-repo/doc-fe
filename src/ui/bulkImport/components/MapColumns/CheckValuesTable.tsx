@@ -5,7 +5,7 @@ import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridCellProps, GridColumn, GridDataStateChangeEvent, GridFilterChangeEvent, GridPageChangeEvent } from '@progress/kendo-react-grid';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
-import { noop } from 'lodash';
+import { debounce, noop } from 'lodash';
 import React, { ComponentType, ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
@@ -193,6 +193,8 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     },
   });
 
+  const asyncSaveDataTable = useAsync();
+
   const handlePageChange = (event: GridPageChangeEvent) => {
     setPage(event.page.skip / event.page.take);
     setPageSize(event.page.take);
@@ -204,9 +206,16 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     asyncSetDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTable);
   };
 
+  const debouncedSaveTableData = debounce(() => {
+    asyncSaveDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSaveDataTable);
+  }, 500);
+
   const updateShowErrorOnly = () => dispatch(setOnlyErrorsTable(!showErrorsOnly));
 
   useEffect(() => {
+    if (tableData.length && data.length) {
+      debouncedSaveTableData();
+    }
     setData(tableData.slice(page, pageSize));
     const count = tableData.reduce((acc, item) => {
       // Check if item has errors and it's an array

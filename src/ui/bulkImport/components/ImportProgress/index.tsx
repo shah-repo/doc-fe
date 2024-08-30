@@ -8,6 +8,7 @@ import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
 import { setDataTypeFilter, setStatusFilter } from '../../../../state/ducks/bulkImport/actions';
+import { bkStatusTextMap } from '../../../../state/ducks/bulkImport/constants';
 import { getBulkImports } from '../../../../state/ducks/bulkImport/selectors';
 import SelectField from '../../../components/forms/fields/Select';
 import Text from '../../../components/Text';
@@ -25,7 +26,7 @@ const ImportProgress: React.FC = () => {
   }, [bulkImports]);
   const statusesOptions = useMemo(() => {
     const uniqueStatuses = Array.from(new Set(bulkImports.map((item: any) => item.status)));
-    return [{ value: '', text: translate('common.viewAll') }, ...uniqueStatuses.map(status => ({ value: status, text: status }))];
+    return [{ value: '', text: translate('common.viewAll') }, ...uniqueStatuses.map(status => ({ value: status, text: bkStatusTextMap[status] || status }))];
   }, [bulkImports]);
 
   const dataTypeChange = (event) => {

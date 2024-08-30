@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { translate } from '../../../common/intl';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
@@ -52,6 +53,7 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
     const progress = bulkImport?.process?.process
       ? bulkImport.process.process.filter(p => p.status === BkStatus.COMPLETED)
         .reduce((total, current) => total + (current.percentage * 100), 0) : 0;
+    const approvalCheck = bulkImport?.documentRevision?.approvals && bulkImport?.documentRevision?.approvals.length > 0;
     const icons = [
       {
         icon: bulkImport?.xlsx && bulkImport?.xlsx.length > 0 ? 'check' : 'blank',
@@ -64,14 +66,19 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         step: 2,
       },
       {
-        icon: bulkImport?.attachmentId ? 'check' : 'blank',
+        icon: bulkImport?.attachmentId ? 'check' : approvalCheck ? 'skip' : 'blank',
         text: translate('common.attachments'),
         step: 3,
       },
       {
-        icon: bulkImport?.documentRevision?.approvals && bulkImport?.documentRevision?.approvals.length > 0 ? 'check' : 'blank',
+        icon: approvalCheck ? 'check' : 'blank',
         text: translate('bulkImport.approvals'),
         step: 4,
+      },
+      {
+        icon: !_.isEmpty(bulkImport.process) ? 'check' : 'blank',
+        text: translate('bulkImport.importing'),
+        step: 5,
       },
     ];
     const bulkImportWithCustom: BulkImportCustom = {
@@ -81,7 +88,7 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
     };
     // Apply filters before adding to accumulator
     if ((!filterDataType || processType === filterDataType) && (!filterStatus || status === filterStatus)) {
-      acc[processType] = [...(acc[processType] ?? []), bulkImportWithCustom];
+      acc[status] = [...(acc[status] ?? []), bulkImportWithCustom];
     }
     return acc;
   }, {});

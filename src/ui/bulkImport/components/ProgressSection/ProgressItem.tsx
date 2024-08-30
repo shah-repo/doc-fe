@@ -52,7 +52,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const showDeleteButton = _.isEmpty(item.process);
   const currentProgressStep = useRef(0);
   const isRejected = item?.status === BkStatus.CANCELLED;
-  const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt && _.isEmpty(item.process)) || (item?.reports));
+  const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports));
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   let rejectedDate;
 
@@ -109,6 +109,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
 
   const handleReturnToStep = () => {
     dispatch(setBulkImport(item));
+    // if the process is not empty is because is importing
     dispatch(setCurrentStep(currentProgressStep.current));
     history.push(BULK_IMPORT_URL);
   };
@@ -120,7 +121,9 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
         currentProgressStep.current = firstBlankIcon.step;
       } else if (item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending) {
         // if we don't find any blank icon is because we already finish and is on the last step
-        currentProgressStep.current = 4;
+        currentProgressStep.current = 4; // approver step
+      } else if (!_.isEmpty(item.process)) {
+        currentProgressStep.current = 5; // importing step
       }
     }
   }, [item]);

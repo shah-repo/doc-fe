@@ -1,3 +1,5 @@
+import { BkStatus } from './types';
+
 export const BULK_IMPORT_URL = '/bulk_import';
 export const BULK_IMPORT_TYPE_DATA_URL = '/bulk_import/get_bulk_import_type_data';
 export const BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL = '/bulk_import/get_forms_for_document_type_group';
@@ -39,3 +41,13 @@ export const SET_STATUS_FILTER = 'bulkImport/SET_STATUS_FILTER';
 export const CLEAN_UP_MAPPED_HEADERS = 'bulkImport/CLEAN_UP_MAPPED_HEADERS';
 
 export const baseApprovalFieldId = 'fb-approvals-';
+
+export const bkStatusTextMap: { [key in BkStatus]: string } = {
+  [BkStatus.STARTED]: 'Started',
+  [BkStatus.IN_PROGRESS]: 'In progress',
+  [BkStatus.SUCCESS]: 'Success',
+  [BkStatus.FAILED]: 'Failed',
+  [BkStatus.CANCELLED]: 'Cancelled',
+  [BkStatus.COMPLETED]: 'Completed',
+  [BkStatus.DELETED]: 'Deleted',
+};
