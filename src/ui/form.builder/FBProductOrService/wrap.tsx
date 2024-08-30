@@ -36,6 +36,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
             status: item.status,
           }),
           status: item.status,
+          lifecyclePhase: item?.lifecyclePhase?.displayLabel,
         };
         // TODO add life cycle phase column
 

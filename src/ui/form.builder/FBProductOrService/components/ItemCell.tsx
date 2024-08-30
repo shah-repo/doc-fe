@@ -28,6 +28,7 @@ interface CustomOptionType extends OptionType {
   status: DocumentRevisionStatus
   createdDate?: string
   owner: string
+  lifecyclePhase?: string
 }
 
 const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
@@ -77,6 +78,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
             status: item.status,
             createdDate: item.createdAt,
             owner: item.owner.user.id,
+            lifecyclePhase: item?.lifecyclePhase?.displayLabel,
           };
         }) ?? [];
 
@@ -114,7 +116,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
     setFieldValue(field, value?.value);
     setFieldValue('itemDisplayName', value?.label);
     setFieldValue('status', value?.status);
-    // Add required fields here
+    setFieldValue('lifecyclePhase', value?.lifecyclePhase);
   };
 
   const debounceFunction = debounce(onInputChange, 1000, {

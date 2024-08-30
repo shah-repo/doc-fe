@@ -226,6 +226,22 @@ export interface SearchRecordsResponse {
   totalCount: number
 }
 
+interface lifecyclePhase {
+  displayLabel: string
+  displayOrder: number
+  documentTypeId: string
+  groupType: string
+  id: string
+  internalType: string
+  isActive: false
+  isAllowedOnLhrProd: string
+  isAllowedToBuy: string
+  isApprovedSupplierEnforcedOnPO: string
+  isUserAdded: false
+  isUserModified: true
+  order: number
+}
+
 export interface DocumentRevision extends FBDocumentRevisionProps {
   displayStatus: DocumentRevisionStatus
   children?: DocumentRevision[]
@@ -292,7 +308,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   needSyncedSuccessNotify?: boolean
   eqStatus: EquipmentStatus
   lifecyclePhaseId?: string
-  lifecyclePhase?: string
+  lifecyclePhase?: lifecyclePhase
   isExpired?: boolean
   expiryDate?: string
 }
