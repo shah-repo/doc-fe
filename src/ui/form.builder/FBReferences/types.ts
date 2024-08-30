@@ -3,13 +3,12 @@ import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.
 import { FBInputProps } from '../FBInput/FBInput.types';
 
 export interface SchemaOptions {
-  isActive: boolean
-  isInEditMode: boolean
   actionsClass: string
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: (dataItem: EditableReference) => void
   onRowClick?: (e: ReferenceEditEvent) => void
+  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableReference) => void
 }
 
 export type FBReferenceProps =
@@ -40,4 +39,5 @@ export interface ReferenceEditEvent {
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableReference> {
   onClick?: (e: ReferenceEditEvent) => void
+  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableReference) => void
 }

@@ -62,7 +62,7 @@ export const AttachmentCell: React.FC<CustomTemplateProps> = (props) => {
         {isEditMode && (
           <Editor {...props} {...{ previousAttachments: defaultAttachments } } />
         )}
-        { isEmpty(defaultAttachments) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: defaultAttachments, fileUploadState, isDisabled: isEditMode }} boxProps={{ className: classes.attachmentsContainer }} />}
+        { isEmpty(defaultAttachments) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: defaultAttachments, fileUploadState, isDisabled: !isEditMode }} boxProps={{ className: classes.attachmentsContainer }} />}
       </FBProvider>
     </div>
   </>);

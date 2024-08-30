@@ -10,13 +10,12 @@ import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableReference, SchemaOptions } from './types';
 
 export const buildSchema = ({
-  isActive,
-  isInEditMode,
   actionsClass,
   onRowClick,
   onConfirm,
   onDiscard,
   onDelete,
+  onOpenQuickView,
 }: SchemaOptions): Array<ColumnDefinition<EditableReference>> => {
   return [
     {
@@ -24,7 +23,7 @@ export const buildSchema = ({
       field: 'referenceRevId',
       title: 'form.builder.supplier.references.grid.heading.reference.rev.id',
       filterable: false,
-      template: (props) => <RefIDcell {...props} onClick={onRowClick} />,
+      template: (props) => <RefIDcell {...props} onClick={onRowClick} onOpenQuickView={onOpenQuickView} />,
       width: 310,
     },
     {

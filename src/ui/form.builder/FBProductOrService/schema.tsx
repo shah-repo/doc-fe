@@ -9,13 +9,12 @@ import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableProductORService, SchemaOptions } from './types';
 
 export const buildSchema = ({
-  isActive,
-  isInEditMode,
   actionsClass,
   onRowClick,
   onConfirm,
   onDiscard,
   onDelete,
+  onOpenQuickView,
 }: SchemaOptions): Array<ColumnDefinition<EditableProductORService>> => {
   return [
     {
@@ -23,7 +22,7 @@ export const buildSchema = ({
       field: 'revId',
       title: 'form.builder.supplier.produc.or.service.grid.heading.item',
       filterable: false,
-      template: (props) => <ItemCell {...props} onClick={onRowClick} />,
+      template: (props) => <ItemCell {...props} onClick={onRowClick} onOpenQuickView={onOpenQuickView} />,
       width: 300,
     },
     {

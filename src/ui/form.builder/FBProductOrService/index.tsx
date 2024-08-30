@@ -7,11 +7,13 @@ import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import DocumentRevisionDialog from '../../components/common/dialogs/DocumentRevisionDialog';
 import { Button } from '../../components/forms/fields-next';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import useDialog from '../../hooks/useDialog';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import FB from '../helpers/FB';
@@ -31,6 +33,8 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
 }) => {
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
+  const [selectedDataItem, setSelectedDataItem] = useState<EditableProductORService>();
+  const quickViewDialog = useDialog();
   const isActive = !disabled;
   const [editedItem, setEditedItem] = useState<Partial<EditableProductORService>>();
   const isItemAdded = editedItem?.[MODE_FIELD] === Mode.add;
@@ -94,6 +98,13 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
     discardItem();
   };
 
+  const openQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableProductORService) => {
+    setSelectedDataItem(dataItem);
+    quickViewDialog.open();
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   const rowRender: DataGridProps<EditableProductORService>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableProductORService;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
@@ -116,13 +127,12 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
   };
 
   const schema = buildSchema({
-    isActive,
-    isInEditMode,
     actionsClass: classes.actionsCell,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardItem,
     onDelete: removeItem,
+    onOpenQuickView: openQuickView,
   });
 
   const itemsList = productOrServices.reduce((list, item) => {
@@ -180,6 +190,7 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
           {translate('form.builder.add.item')}
         </Button>
       )}
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: selectedDataItem?.revId, parentRevId: workspaceState?.id }} />
     </Box>
   );
 };

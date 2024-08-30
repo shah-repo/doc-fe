@@ -3,13 +3,12 @@ import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.
 import { FBInputProps } from '../FBInput/FBInput.types';
 
 export interface SchemaOptions {
-  isActive: boolean
-  isInEditMode: boolean
   actionsClass: string
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: (item: ProductORService) => void
   onRowClick?: (e: ProductORServiceEditEvent) => void
+  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableProductORService) => void
 }
 
 export type FBProductORServiceProps =
@@ -39,4 +38,5 @@ export interface ProductORServiceEditEvent {
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableProductORService> {
   onClick?: (e: ProductORServiceEditEvent) => void
+  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableProductORService) => void
 }

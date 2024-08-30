@@ -7,11 +7,13 @@ import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import DocumentRevisionDialog from '../../components/common/dialogs/DocumentRevisionDialog';
 import { Button } from '../../components/forms/fields-next';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import useDialog from '../../hooks/useDialog';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import { FB } from '../helpers';
@@ -33,7 +35,8 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   const { formState, workspaceState } = FB.useStores();
   const isActive = !disabled;
   const [editedReference, setEditedReference] = useState<Partial<EditableReference>>();
-
+  const [selectedDataItem, setSelectedDataItem] = useState<EditableReference>();
+  const quickViewDialog = useDialog();
   const isReferenceAdded = editedReference?.[MODE_FIELD] === Mode.add;
   const editReference = ({ dataItem }: ReferenceEditEvent) => setEditedReference(dataItem);
   const isInEditMode = editedReference !== undefined;
@@ -97,6 +100,13 @@ const FBReferences: React.FC<FBReferenceProps> = ({
     discardReference();
   };
 
+  const openQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableReference) => {
+    setSelectedDataItem(dataItem);
+    quickViewDialog.open();
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   const rowRender: DataGridProps<EditableReference>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableReference;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
@@ -119,13 +129,12 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   };
 
   const schema = buildSchema({
-    isActive,
-    isInEditMode,
     actionsClass: classes.actionsCell,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardReference,
     onDelete: removeReference,
+    onOpenQuickView: openQuickView,
   });
 
   const referencesList = references.reduce((list, item) => {
@@ -183,6 +192,7 @@ const FBReferences: React.FC<FBReferenceProps> = ({
           {translate('form.builder.supplier.references.add')}
         </Button>
       )}
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: selectedDataItem?.referenceRevId, parentRevId: workspaceState?.id }} />
     </Box>
   );
 };

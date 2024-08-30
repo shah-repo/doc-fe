@@ -1,4 +1,6 @@
-import { Box, CircularProgress, TextField } from '@material-ui/core';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, CircularProgress, Grid, TextField, Tooltip } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
@@ -15,6 +17,8 @@ import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../components/OverflowContent';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import useHover from '../../../hooks/useHover';
+import { Colors } from '../../../layout/theme-next';
 import { LIMIT, MIN_SEARCH_TERM_LENGTH } from '../constants';
 import { CustomTemplateProps } from '../types';
 
@@ -209,17 +213,40 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
 };
 
 export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem, onClick } = props;
+  const { dataItem, onClick, onOpenQuickView } = props;
+  const [viewIconRef, isHovered] = useHover<HTMLButtonElement>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
   const handleClick = () => onClick?.({ dataItem });
+  const openQuickView = (
+    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => onOpenQuickView?.(evt, dataItem);
 
-  return (
-    <OverflowContent onClick={handleClick}>
-      {dataItem.itemDisplayName}
-    </OverflowContent>
+  return (<Grid
+    justify="space-between"
+    alignItems="center"
+    container
+    onClick={handleClick}
+  >
+    <Grid item xs={10}>
+      <OverflowContent data-cy="selected-product-or-service">
+        {dataItem.itemDisplayName}
+      </OverflowContent>
+    </Grid>
+    <Grid item xs={2}>
+      <span ref={viewIconRef} onClick={openQuickView}>
+        <Tooltip arrow title={translate('common.quick.view')} placement="top">
+          <FontAwesomeIcon
+            data-cy="quick-view"
+            icon={isHovered ? solid('eye') : regular('eye')}
+            color={isHovered ? Colors.navigationBg : Colors.textGray}
+          />
+        </Tooltip>
+      </span>
+    </Grid>
+  </Grid>
   );
 };
