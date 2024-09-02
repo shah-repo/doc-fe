@@ -16,6 +16,7 @@ export enum KendoCellTemplates {
   USER_AVATAR='UserAvatar',
   STATUS='Status',
   EQ_STATUS='EQStatus',
+  ATTACHMENT_COUNT='AttachmentCount',
   DATE_COMPLETED='DateCompleted',
   DATE_INFO='DateInfo',
   COMMON_CELL='CommonCell',
