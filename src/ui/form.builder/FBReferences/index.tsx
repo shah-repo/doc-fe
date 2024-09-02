@@ -13,6 +13,7 @@ import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
@@ -45,6 +46,11 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   const formik = useFormik<Partial<EditableReference>>({
     initialValues: {},
     onSubmit: (values) => {
+      if (values.id) {
+        toastError(translate('form.builder.supplier.references.empty.error.message'));
+        return;
+      }
+
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedReferences = isAddition
         ? [...references, values]

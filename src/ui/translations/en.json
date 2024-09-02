@@ -1486,6 +1486,7 @@
   "form.builder.supplier.references.grid.heading.title": "Title",
   "form.builder.supplier.references.grid.heading.status": "Status",
   "form.builder.supplier.references.grid.heading.owner": "Owner",
+  "form.builder.supplier.references.empty.error.message": "Please select Reference",
   "form.builder.supplier.references.grid.heading.created.date": "Created on",
   "form.builder.supplier.references.displayRevision": "{docId} Rev {displayRevision} - {name}",
   "form.builder.supplier.produc.or.service.title": "Product or Service Provided",
