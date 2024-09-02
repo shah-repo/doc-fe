@@ -22,6 +22,7 @@ export interface ProductORService {
   id: string
   revId: string
   title?: string
+  documentId?: string
   itemDisplayName?: string
   supplierPartNumber: string
   lifecyclePhase: string

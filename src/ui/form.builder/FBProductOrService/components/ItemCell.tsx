@@ -11,16 +11,18 @@ import {
   DocumentRevisionStatus,
   SearchRecordsResponse,
 } from '../../../../state/ducks/documentRevisions/types';
+import StyledLink from '../../../components/common/kendo/StyledLink';
 import { FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
-import OverflowContent from '../../../components/OverflowContent';
+import { documentVersionPath } from '../../../document.revision/utils/paths';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useHover from '../../../hooks/useHover';
 import { Colors } from '../../../layout/theme-next';
 import { LIMIT, MIN_SEARCH_TERM_LENGTH } from '../constants';
 import { CustomTemplateProps } from '../types';
+import { styles } from './styles';
 
 interface CustomOptionType extends OptionType {
   revision: string
@@ -220,6 +222,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
 export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem, onClick, onOpenQuickView } = props;
   const [viewIconRef, isHovered] = useHover<HTMLButtonElement>();
+  const classes = styles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
@@ -231,15 +234,22 @@ export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
   ) => onOpenQuickView?.(evt, dataItem);
 
   return (<Grid
-    justify="space-between"
+    justify="flex-start"
     alignItems="center"
     container
     onClick={handleClick}
   >
-    <Grid item xs={dataItem.title ? 12 : 10}>
-      <OverflowContent data-cy="selected-product-or-service">
-        {dataItem.itemDisplayName ?? dataItem.title}
-      </OverflowContent>
+    <Grid item xs={dataItem.title ? 12 : 10} className={classes.grid}>
+      <span data-cy="selected-product-or-service">
+        {dataItem.title && dataItem.title}
+        {!dataItem.title && dataItem.itemDisplayName && <StyledLink
+          to={dataItem?.documentId ? documentVersionPath(dataItem?.revId, dataItem?.documentId) : '#'}
+          onClick={e => { e.preventDefault(); }}
+          data-cy="selected-product-or-service-link"
+        >
+          {dataItem.itemDisplayName}
+        </StyledLink>}
+      </span>
     </Grid>
     {!dataItem.title && <Grid item xs={2}>
       <span ref={viewIconRef} onClick={openQuickView}>

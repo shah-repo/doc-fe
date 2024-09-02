@@ -27,6 +27,7 @@ export interface Reference {
   status: string
   owner: string
   createdDate: string
+  documentId?: string
 }
 
 export interface EditableReference extends Reference {

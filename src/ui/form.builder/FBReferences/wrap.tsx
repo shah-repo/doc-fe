@@ -39,6 +39,7 @@ export const withFBReferences = <T extends FBReferenceProps>(
           title: item?.name,
           status: item.status,
           createdDate: item.createdAt,
+          documentId: item.documentId,
           owner: item.owner.user.id,
         };
 
