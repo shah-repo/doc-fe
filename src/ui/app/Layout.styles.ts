@@ -1,23 +1,31 @@
 import { createStyles, makeStyles } from '@material-ui/core';
+import { Colors } from '../layout/theme-next';
 import { NextTheme } from '../layout/theme-next/provider';
-import Colors from '../layout/theme/utils/colors';
-import { COLLAPSE_BAR_SPACE, HEADER_GAP, HEADER_HEIGHT, MOBILECOLLAPSE_BAR_SPACE } from './Header.styles';
-import { DRAWER_WIDTH, MOBILE_DRAWER_WIDTH } from './Navigation.styles';
+import { HEADER_HEIGHT, MOBILE_HEADER_HEIGHT } from './Header.styles';
+import { SIDEBAR_COLLAPSED_WIDTH, SIDEBAR_WIDTH } from './Navigation.styles';
 
-export default makeStyles((theme: NextTheme) => createStyles({
-  root: ({ isDashboard, isOpened }: {isDashboard: boolean, isOpened: boolean}) => ({
-    position: isDashboard ? 'absolute' : 'fixed',
-    top: isDashboard ? HEADER_GAP : HEADER_HEIGHT,
+export default makeStyles<NextTheme>(theme => createStyles({
+  root: {
+    position: 'fixed',
+    top: HEADER_HEIGHT,
     right: 0,
     bottom: 0,
-    left: isOpened ? DRAWER_WIDTH : COLLAPSE_BAR_SPACE,
-    backgroundColor: Colors.alabaster,
-  }),
-  [theme.media.mobile]: {
-    mobileLayout: {
-      left: ({ isOpened }) => isOpened ? MOBILE_DRAWER_WIDTH : MOBILECOLLAPSE_BAR_SPACE,
-      marginLeft: 5,
-      minWidth: 370,
+    left: SIDEBAR_COLLAPSED_WIDTH,
+    backgroundColor: Colors.background,
+
+    [theme.media.mobile]: {
+      top: MOBILE_HEADER_HEIGHT,
+      left: 0,
+      transition: theme.transitions.create('transform', { duration: 200 }),
+      willChange: 'transform',
+    },
+  },
+  withSidebarExpanded: {
+    left: SIDEBAR_WIDTH,
+
+    [theme.media.mobile]: {
+      left: 0,
+      transform: `translateX(${SIDEBAR_WIDTH}px)`,
     },
   },
 }));

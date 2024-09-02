@@ -3,7 +3,6 @@ import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
@@ -58,12 +57,13 @@ import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
 
 const Layout: React.FunctionComponent = () => {
-  const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
-  const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
-  const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
-  const handleDrawerOpen = () => {
-    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
-    setOpen(!isOpened);
+  const isMobileView = isMobile();
+  const defaultSidebarExpandedValue = isMobileView ? false : localStorage.getItem(IS_SIDEBAR_EXPANDED) === '1';
+  const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(defaultSidebarExpandedValue);
+  const classes = useStyles();
+  const toggleSidebar = () => {
+    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isSidebarExpanded ? '1' : '0');
+    setIsSidebarExpanded(prev => !prev);
   };
 
   return (
@@ -71,11 +71,11 @@ const Layout: React.FunctionComponent = () => {
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer className={classes.mobileLayout} isOpened={isOpened} handleDrawerOpen={handleDrawerOpen} />
-      <Navigation handleDrawerOpen={handleDrawerOpen} open={isOpened} />
+      <HeaderContainer isSidebarExpanded={isSidebarExpanded} onSidebarToggle={toggleSidebar} />
+      <Navigation isOpen={isSidebarExpanded || isMobileView} onSidebarToggle={toggleSidebar} />
       <SocketsContainer />
       <WatermarkFooterContainer />
-      <main className={cx(classes.root, classes.mobileLayout)} >
+      <main className={cx(classes.root, { [classes.withSidebarExpanded]: isSidebarExpanded })} >
         <DataFetcherContainer />
         <Switch>
           <Route

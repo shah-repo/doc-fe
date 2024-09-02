@@ -1,111 +1,132 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormControlLabel, Grid, Switch, Toolbar, Typography } from '@material-ui/core';
+import { Grid, Toolbar, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import { WithStyles, withStyles } from '@material-ui/core/styles';
 import cx from 'classnames';
 import React from 'react';
-import { SM } from '../../App';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
 import { SearchBar } from '../../App/Enlil/Features/Search';
 import { ReactComponent as CompanyAvatar } from '../../assets/images/company_avatar.svg';
 import { ReactComponent as MobileLogo } from '../../assets/images/enlil_white_logo.svg';
-import Config from '../../config';
-import { WhiteLabelingEnv } from '../../state/ducks/company/types';
-import { store } from '../../state/store';
+import { translate } from '../../common/intl';
 import Text from '../components/Text';
-import { ThemeEnv } from '../layout/theme/utils/types';
-import styles from './Header.styles';
-import { UserMenuContext } from './NavigationProfile.container';
-import AutosaveToggle from './autosave/autosave';
+import AppSwitcher from './AppSwitcher';
+import useStyles from './Header.styles';
+import Toggler from './Toggler';
+
 export interface HeaderPresenterProps {
-  name: string
-  fullHeight?: boolean
-  toggleCustomLabels: () => void
-  customLabelsValue: boolean
+  companyName: string
+  companyAvatar?: string
+  isFullHeight: boolean
+  isSidebarExpanded: boolean
+  isCustomLabelsEnabled: boolean
+  isAutosaveEnabled: boolean
   canToggleCustomLabels: boolean
-  isOpened: boolean
-  handleDrawerOpen: () => void
-  className: string
+  canToggleAutosave: boolean
+  className?: string
+  onSidebarToggle: () => void
+  onAutosaveToggle: () => void
+  onCustomLabelsToggle: () => void
+  onCompanyAvatarClick?: () => void
 }
 
-const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof styles>> = ({
-  classes,
-  name,
-  fullHeight,
-  toggleCustomLabels,
-  customLabelsValue,
-  canToggleCustomLabels,
-  handleDrawerOpen,
+const Header: React.FunctionComponent<HeaderPresenterProps> = ({
+  companyName,
+  companyAvatar,
   className,
+  isSidebarExpanded,
+  isCustomLabelsEnabled,
+  isAutosaveEnabled,
+  canToggleCustomLabels,
+  canToggleAutosave,
+  onSidebarToggle,
+  onAutosaveToggle,
+  onCustomLabelsToggle,
+  onCompanyAvatarClick,
 }) => {
-  const user = store.getState().auth.user;
-  const companyName = user.employee.company.name;
-  const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
-  const isComponentHidden = SM.isHomeURL;
-  const {
-    handleSwitchCompany,
-  } = React.useContext(UserMenuContext)! ?? {};
+  const classes = useStyles();
 
   return (
-    <AppBar className={cx(classes.appBar, className)}>
-      <div className={classes.mobileMake}>
-        <div>
-          <FontAwesomeIcon icon={solid('bars-sort')} className={classes.mobileSide} onClick={handleDrawerOpen} />
-          <MobileLogo className={classes.logoMobile} />
-          <Typography variant="caption" className={classes.mobileLogoText} component="div">
-            <Text translation="header.design.make" />
-          </Typography>
-        </div>
-        <div>
-          {whiteLabeling.avatar ? (
-            <img
-              id="logo"
-              className={classes.mobileAvatar}
-              src={whiteLabeling.avatar}
-              alt={companyName}
-              onClick={handleSwitchCompany}
+    <AppBar className={cx(classes.root, className, { [classes.withSidebarExpanded]: isSidebarExpanded })}>
+      {false && (
+        <div className={classes.mobileMake}>
+          <div>
+            <FontAwesomeIcon
+              icon={solid('bars-sort')}
+              className={classes.mobileSide}
+              onClick={onSidebarToggle}
             />
-          ) : (
-            <CompanyAvatar className={classes.mobileAvatar} onClick={handleSwitchCompany} />
-          )}
+            <MobileLogo className={classes.logoMobile} />
+            <Typography variant="caption" className={classes.mobileLogoText} component="div">
+              <Text translation="header.design.make" />
+            </Typography>
+          </div>
+
         </div>
-      </div>
-      <Toolbar className={cx(classes.toolbar, { [classes.welcomeHide]: !isComponentHidden })}>
+      )}
+      <Toolbar className={classes.toolbar}>
         <Grid
           container
           alignItems="center"
           justify="space-between"
           wrap="nowrap"
-          spacing={2}
         >
-          <Grid item xs className={classes.mobileGrwFlex}>
-            {!fullHeight && (
-              <SearchBar />
-            )}
+          <Grid item className={classes.menu}>
+            <FontAwesomeIcon
+              className={classes.menuIcon}
+              icon={isSidebarExpanded ? solid('xmark') : solid('bars-sort')}
+              onClick={onSidebarToggle}
+            />
           </Grid>
-          <Grid item>
-            {fullHeight && (
-              <Typography variant="caption" className={cx(classes.welcomeText, classes.welcomeTextResponsive)} component="div">
-                <Text translation="header.welcome.back" />,
-                {' '}
-                <b className={classes.welcomeTextName}>{name}!</b>
-              </Typography>
-            )}
+          <Grid item className={classes.switch}>
+            <AppSwitcher />
+          </Grid>
+          <Grid item xs className={cx(classes.search, classes.hideOnMobile)}>
+            <SearchBar />
+          </Grid>
+          <Grid item className={cx(classes.controls, classes.hideOnMobile)}>
             {canToggleCustomLabels && (
-              <FormControlLabel
-                className={cx(classes.mobileStyle,
-                  { [classes.toggleCustomLabels]: fullHeight, [classes.toggleCustomLabelsSm]: !fullHeight })}
-                control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
-                label={<Text translation="form.builder.header.control.label" />}
+              <Toggler
+                className={classes.toggler}
+                isChecked={isCustomLabelsEnabled}
+                onChange={onCustomLabelsToggle}
+                name="toggleCustomLabels"
+              >
+                {translate('form.builder.header.control.label')}
+              </Toggler>
+            )}
+            {canToggleAutosave && (
+              <Toggler
+                className={classes.toggler}
+                isChecked={isAutosaveEnabled}
+                onChange={onAutosaveToggle}
+                name="toggleCustomLabels"
+              >
+                {translate('header.toggle.autosave')}
+              </Toggler>
+            )}
+            <HelpCenter className={classes.help} />
+          </Grid>
+          <Grid item className={classes.company}>
+            {companyAvatar ? (
+              <img
+                id="logo"
+                className={classes.companyAvatar}
+                src={companyAvatar}
+                alt={companyName}
+                onClick={onCompanyAvatarClick}
+              />
+            ) : (
+              <CompanyAvatar
+                className={classes.mobileAvatar}
+                onClick={onCompanyAvatarClick}
               />
             )}
-            <AutosaveToggle className={cx(classes.mobileStyle, classes.autosaveToggle)} />
-            <HelpCenter className={cx(classes.mobileStyle, classes.autosaveToggle)} />
           </Grid>
         </Grid>
       </Toolbar>
     </AppBar>
   );
 };
-export default withStyles(styles)(Header);
+
+export default Header;

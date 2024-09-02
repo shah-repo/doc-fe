@@ -188,7 +188,7 @@ const SearchBar: React.FC = () => {
       filterOptions={(options: Option[]) => options}
       ref={fieldRef}
       placeholder={translate(isFocused ? 'keyword.to.search' : 'common.search')}
-      className={cx(classes.root, classes.searchBarResponsive, { [classes.rootFocused]: isFocused })}
+      className={cx(classes.root, { [classes.rootFocused]: isFocused })}
       onFocus={handleFocus}
       onBlur={handleBlur}
       noOptionsText={translate('nothing.found')}
@@ -215,6 +215,7 @@ const SearchBar: React.FC = () => {
       }}
       onChange={handleSearch}
       value=""
+      size="small"
     />
   );
 };
