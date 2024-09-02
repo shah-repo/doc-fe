@@ -2,12 +2,12 @@ import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { GridRowProps } from '@progress/kendo-react-grid';
-import { kebabCase } from 'lodash';
+import { kebabCase, replace, startsWith } from 'lodash';
 import * as React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete, Checkbox, IconButton } from '../../../../../../../components/forms/fields-next';
 import useHover from '../../../../../../../hooks/useHover';
-import { EXPAND_FIELD } from '../constants';
+import { ADD_GROUP_ID, ADD_GROUP_NAME, EXPAND_FIELD } from '../constants';
 import { CustomGroupDataItem, CustomGroupOptions } from '../types';
 import { isGroupActivateOrDeactivate } from '../utils';
 import useStyles from './styles';
@@ -63,6 +63,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   const displayValue = defaultValue?.map(data => data.label).join(', ');
   const selectedIDs = selectedPartGroups?.map((group) => group.value);
   const options = partGroups?.filter((group) => !selectedIDs.includes(group.value));
+  const updatedGroupId = (startsWith(groupId, ADD_GROUP_ID) ? replace(groupId, ADD_GROUP_NAME, 'ADD_') : groupId) as string;
 
   const handleChange = (event, checked: boolean) => {
     onToggleGroupActivation({ ...dataItem, isLCPActive: checked });
@@ -106,7 +107,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
                 getOptionSelected={(option, value) =>
                     option?.value === value?.value
                 }
-                data-cy={`${kebabCase(groupId)}-field`}
+                data-cy={`${kebabCase(updatedGroupId)}-field`}
                 onChange={handleGroupChange}
               />
             </Grid>
@@ -122,6 +123,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               ref={discardRef}
               onClick={() => onDiscardGroup(dataItem)}
               className={classes.editButtons}
+              data-cy="discard-group-btn"
             >
               <FontAwesomeIcon
                 icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')}
@@ -138,6 +140,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               ref={saveRef}
               className={classes.editButtons}
               onClick={() => onUpdateAddOrEditGroup(dataItem)}
+              data-cy="save-group-btn"
             >
               <FontAwesomeIcon
                 icon={isSaveHovered ? solid('square-check') : light('square-check')}
