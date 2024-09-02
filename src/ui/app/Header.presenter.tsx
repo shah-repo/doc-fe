@@ -14,7 +14,7 @@ import AppSwitcher from './AppSwitcher';
 import useStyles from './Header.styles';
 import Toggler from './Toggler';
 
-export interface HeaderPresenterProps {
+interface HeaderPresenterProps {
   companyName: string
   companyAvatar?: string
   isFullHeight: boolean
