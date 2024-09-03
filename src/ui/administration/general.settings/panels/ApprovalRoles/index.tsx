@@ -9,28 +9,20 @@ import { ApprovalRole, GeneralSettings } from '../../../../../state/ducks/compan
 import TextCellTemplate from '../../../../administration/general.settings/components/SettingsTable/components/TextCellTemplate';
 import { Checkbox } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { CellTemplateProps, ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import SettingsPanel from '../../components/SettingsPanel';
 import SettingsTable from '../../components/SettingsTable';
 import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
-import { EditableApprovalRoles } from './types';
+import { EditableApprovalRoles, SchemaBuilder } from './types';
 
-interface SchemaOptions {
-  onChange: () => void
-  onConfirm: () => void
-  onDiscard: () => void
-}
-
-type SchemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<ApprovalRole>>;
-
-const ActiveCellTemplate: React.FC<CellTemplateProps<ApprovalRole>> = ({ dataItem, onChange }) => {
+const ActiveCellTemplate: React.FC<CellTemplateProps<EditableApprovalRoles>> = ({ dataItem, dataIndex, onChange }) => {
   return (
     <Checkbox
       checked={dataItem.isActive}
-      onChange={() => onChange?.({ dataItem })}
+      onChange={(event) => onChange?.({ dataItem, dataIndex, syntheticEvent: event })}
     />
   );
 };
@@ -42,7 +34,12 @@ const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard }) => {
       field: 'isActive',
       title: 'common.active',
       width: 80,
-      template: (props) => <ActiveCellTemplate {...props} onChange={onChange} />,
+      template: (props) => (
+        <ActiveCellTemplate
+          {...props}
+          onChange={onChange}
+        />
+      ),
     },
     {
       id: 'name',
@@ -52,7 +49,6 @@ const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard }) => {
     },
     {
       id: 'actions',
-      title: 'actions',
       template: (props) => (
         <ActionsCellTemplate
           {...props}
