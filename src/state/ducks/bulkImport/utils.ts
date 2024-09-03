@@ -2,7 +2,7 @@ import axios from 'axios';
 import { orderBy } from 'lodash';
 import Config from '../../../config';
 import { store } from '../../store';
-import { APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL } from './constants';
+import { APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, DOCUMENT_REVISION_WITHDRAWN_URL } from './constants';
 
 const TEMPLATE_CSV = 'template.xlsx';
 
@@ -50,6 +50,23 @@ export const postApprovals = async (approvalId, documentRevisionId, approvalFiel
   }
 };
 
+export const abandonApproval = async (approvalId) => {
+  try {
+    await axios({
+      url: `${Config.ApiEndpoint}${APPROVALS_URL}/${approvalId}/abandon`,
+      method: 'POST',
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    });
+    // Handle success
+    return true;
+  } catch (error) {
+    // Handle failure
+    return false;
+  }
+};
+
 export const patchDocumentRevisions = async (approvalId, documentRevisionId, approvalFieldId) => {
   try {
     const response = await axios({
@@ -75,6 +92,23 @@ export const postDocumentRevisionsInReview = async (documentRevisionId) => {
   try {
     const response = await axios({
       url: `${Config.ApiEndpoint}${DOCUMENT_REVISION_IN_REVIEW_URL}${documentRevisionId}`,
+      method: 'POST',
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Failed to save document revisions in review:', error);
+    return null;
+  }
+};
+
+export const postDocumentRevisionsWithdrawn = async (documentRevisionId) => {
+  try {
+    const response = await axios({
+      url: `${Config.ApiEndpoint}${DOCUMENT_REVISION_WITHDRAWN_URL}${documentRevisionId}`,
       method: 'POST',
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,

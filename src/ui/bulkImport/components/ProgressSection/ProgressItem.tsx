@@ -119,10 +119,14 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
       const firstBlankIcon = item.icons.find(icon => (!iconStatuses[icon.icon] || icon.icon === 'blank'));
       if (firstBlankIcon) {
         currentProgressStep.current = firstBlankIcon.step;
-      } else if (item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending) {
+      }
+      if (item?.documentRevision?.approvals
+        && item.documentRevision.approvals.some(approval => approval.status === ApprovalStatus.Pending)
+        && item.documentRevision.approvals.some(approval => approval.status !== ApprovalStatus.Approved)) {
         // if we don't find any blank icon is because we already finish and is on the last step
         currentProgressStep.current = 4; // approver step
-      } else if (!_.isEmpty(item.process)) {
+      }
+      if (!_.isEmpty(item.process)) {
         currentProgressStep.current = 5; // importing step
       }
     }

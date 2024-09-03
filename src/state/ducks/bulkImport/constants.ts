@@ -1,6 +1,7 @@
 import { BkStatus } from './types';
 
 export const BULK_IMPORT_URL = '/bulk_import';
+export const BULK_IMPORT_ONE_URL = '/bulk_import/one/';
 export const BULK_IMPORT_TYPE_DATA_URL = '/bulk_import/get_bulk_import_type_data';
 export const BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL = '/bulk_import/get_forms_for_document_type_group';
 export const BULK_IMPORT_CREATE_URL = '/bulk_import/create';
@@ -15,6 +16,7 @@ export const BULK_GET_REPORTS_EXCEL_URL = '/bulk_import/get_bulk_import_reports_
 export const APPROVALS_URL = '/approvals';
 export const DOCUMENT_REVISION_URL = '/document_revisions/';
 export const DOCUMENT_REVISION_IN_REVIEW_URL = '/document_revisions/in_review/';
+export const DOCUMENT_REVISION_WITHDRAWN_URL = '/document_revisions/withdrawn/';
 export const BULK_IMPORT_DELETE_URL = '/bulk_import/delete/';
 
 export const RESET_STEPS = 'bulkImport/RESET_STEPS';

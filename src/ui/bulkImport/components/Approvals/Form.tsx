@@ -9,13 +9,15 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
-import { getApprovers, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
+import { getApprovers, getOneBulkImport, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
 import { baseApprovalFieldId } from "../../../../state/ducks/bulkImport/constants";
 import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
-import { patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview } from "../../../../state/ducks/bulkImport/utils";
+import { abandonApproval, patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview, postDocumentRevisionsWithdrawn } from "../../../../state/ducks/bulkImport/utils";
+import { ApprovalStatus } from "../../../../state/ducks/common/types";
 import Text from '../../../components/Text';
 import { Autocomplete, Button } from '../../../components/forms/fields-next';
+import { toastError } from "../../../components/notifications";
 import { BULK_IMPORT_PROGRESS_URL } from '../../../constants/urls';
 import { FB } from "../../../form.builder";
 import StepTitle from '../StepTitle';
@@ -35,25 +37,40 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   const availableOptions: ApproverOption[] = approversOptionList.filter(option =>
     !users.some(user => user.value === option.value),
   );
-  const haveApprovers = bulkImport?.documentRevision?.approvals && bulkImport?.documentRevision?.approvals.length > 0;
+  const haveApprovers = bulkImport?.documentRevision?.approvals
+    && bulkImport.documentRevision.approvals.some(approval => approval.status === ApprovalStatus.Pending);
 
   const handleSubmit = async () => {
     if (!users || users.length === 0) return;
   
     dispatch(setIsLoading(true));
+    let hasError = false;
   
     try {
       // Process each user sequentially
       for (const user of users) {
         const approvalFieldId = `${baseApprovalFieldId}${FB.uniqid}`
-        const approval = await processUserApproval(user.value, bulkImport?.documentRevisionId, approvalFieldId);
+        const approval = await postApprovals(user.value, bulkImport?.documentRevisionId, approvalFieldId);
         if (approval) {
-          await updateDocumentRevision(approval.id, bulkImport?.documentRevisionId, approvalFieldId);
+          const documentRevision = await patchDocumentRevisions(approval.id, bulkImport?.documentRevisionId, approvalFieldId);
+          if (!documentRevision) {
+            hasError = true;
+            await abandonApproval(approval.id)
+            break;
+          }
+        } else {
+          hasError = true;
+          break;
         }
+      }
+
+      if (hasError) {
+        toastError('An error occurred during the approval process.');
+        return;
       }
   
       // After all approvals are processed, start the final review
-      await submitDocumentForReview(bulkImport?.documentRevisionId);
+      await postDocumentRevisionsInReview(bulkImport?.documentRevisionId);
   
       // Navigate to the bulk import progress page
       history.push(BULK_IMPORT_PROGRESS_URL);
@@ -63,40 +80,31 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
       dispatch(setIsLoading(false));
     }
   };
-  
-  // Function to handle user approval and return the approval result
-  const processUserApproval = async (approvalId, documentRevisionId, approvalFieldId) => {
-    try {
-      return await postApprovals(approvalId, documentRevisionId, approvalFieldId);
-    } catch (error) {
-      console.error(`Failed to post approval for user with approval ID ${approvalId}:`, error);
-      return null;
-    }
-  };
-  
-  // Function to update document revision with the approval ID
-  const updateDocumentRevision = async (approvalId, documentRevisionId, approvalFieldId) => {
-    try {
-      await patchDocumentRevisions(approvalId, documentRevisionId, approvalFieldId);
-    } catch (error) {
-      console.error(`Failed to update document revision for approval ID ${approvalId}:`, error);
-    }
-  };
-  
-  // Function to submit the document for final review
-  const submitDocumentForReview = async (documentRevisionId) => {
-    try {
-      await postDocumentRevisionsInReview(documentRevisionId);
-    } catch (error) {
-      console.error(`Failed to submit document revision ID ${documentRevisionId} for review:`, error);
-    }
-  };
 
   const handleRemoveUser = (index: number) => {
     setUsers(currentUsers => currentUsers.filter((_, i) => i !== index));
   };
 
-  const handleWithdrawSubmission = () => {};
+  const handleWithdrawSubmission = async () => {
+    if (bulkImport?.documentRevision?.approvals) {
+      const pendingApprovals = bulkImport.documentRevision.approvals.filter(
+        approval => approval.status === ApprovalStatus.Pending
+      );
+  
+      const results = await Promise.all(
+        pendingApprovals.map(approval => abandonApproval(approval.id))
+      );
+  
+      const allSuccessful = results.every(result => result === true);
+  
+      if (allSuccessful) {
+        await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id);
+      } else {
+        toastError('One or more approvals could not be abandoned.');
+      }
+      dispatch(getOneBulkImport(bulkImport.id));
+    }
+  };
 
   const init = () => {
     dispatch(getApprovers());
@@ -107,6 +115,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   useEffect(() => {
     if (haveApprovers) {
       const matchedApprovers = bulkImport.documentRevision.approvals
+        .filter(approval => approval.status === ApprovalStatus.Pending)
         .map(approval => approversOptionList.find(option => option.value === approval.approverId))
         .filter(Boolean) as ApproverOption[]; // Filter out any undefined values
       

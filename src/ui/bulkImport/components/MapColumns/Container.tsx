@@ -37,7 +37,6 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCan
       // before it starts checking the table data we clean it up to be sure the data is new
       dispatch(setTableData([]));
 
-      console.log('🚀 ~ init ~ bulkImport:', bulkImport);
       if (bulkImport?.id) {
         dispatch(getBulkImportTableData(bulkImport.id));
       }

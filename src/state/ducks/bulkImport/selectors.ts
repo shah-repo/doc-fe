@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { translate } from '../../../common/intl';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
+import { ApprovalStatus } from '../common/types';
 import { ApproverOption, BkStatus, BulkImportCustom } from './types';
 
 // STEPS
@@ -53,7 +54,9 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
     const progress = bulkImport?.process?.process
       ? bulkImport.process.process.filter(p => p.status === BkStatus.COMPLETED)
         .reduce((total, current) => total + (current.percentage * 100), 0) : 0;
-    const approvalCheck = bulkImport?.documentRevision?.approvals && bulkImport?.documentRevision?.approvals.length > 0;
+    const approvalCheck = bulkImport?.documentRevision?.approvals && bulkImport?.documentRevision?.approvals.length > 0
+      && bulkImport.documentRevision.approvals.some(approval => approval.status !== ApprovalStatus.Abandoned);
+
     const icons = [
       {
         icon: bulkImport?.xlsx && bulkImport?.xlsx.length > 0 ? 'check' : 'blank',
