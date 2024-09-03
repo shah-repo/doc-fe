@@ -3,13 +3,17 @@ import { kebabCase } from 'lodash';
 import React from 'react';
 import { Checkbox } from '../../../../../../../components/forms/fields-next';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { LCP } from '../types';
+import { CustomGroupOptions, LCP } from '../types';
 
 interface ActiveCellProps extends CellTemplateProps<LCP> {
   hasEditLCPPermission?: boolean
+  selectedPartGroups: CustomGroupOptions[]
 }
 
-export const ActiveCell: React.FC<ActiveCellProps> = ({ dataItem, colSpan, style, field, dataIndex, hasEditLCPPermission, className, onChange }) => {
+export const ActiveCell: React.FC<ActiveCellProps> = ({ dataItem, colSpan, style, field, dataIndex, hasEditLCPPermission, selectedPartGroups, className, onChange }) => {
+  const selectedGroup = selectedPartGroups?.find((group: CustomGroupOptions) => dataItem.documentTypeId === group.value);
+  const dataCy = `${selectedGroup?.docTypeAcronym}${dataItem?.internalType}-select`;
+
   const handleChange = (event, checked: boolean) => {
     onChange?.({
       dataIndex,
@@ -33,6 +37,7 @@ export const ActiveCell: React.FC<ActiveCellProps> = ({ dataItem, colSpan, style
           checked={dataItem.isActive}
           disabled={!hasEditLCPPermission || dataItem?.isGroupDeactivated}
           onChange={handleChange}
+          data-cy={dataCy}
         />
       </Box>
     </td>

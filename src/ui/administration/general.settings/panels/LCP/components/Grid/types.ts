@@ -40,6 +40,7 @@ export interface CustomGroupDataItem {
 export interface CustomGroupOptions extends OptionType{
   category: string
   categoryUniqId?: string
+  docTypeAcronym: string
 }
 
 export interface GroupDocTypes {
@@ -70,5 +71,6 @@ export interface processLCPType {
 export interface SchemaOptions {
   onConfirm: () => void
   onDiscard: () => void
+  selectedPartGroups: CustomGroupOptions[]
   hasEditLCPPermission?: boolean
 }

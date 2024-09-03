@@ -95,6 +95,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               disabled={hasEditLCPPermission ? displayGroupSelection : !isEditModeAndHasEditLCPPermission}
               className={classes.groupCheckBox}
               onChange={handleChange}
+              data-cy={`${defaultValue[0]?.docTypeAcronym}select`}
             />
             {!displayGroupSelection && displayValue}
           </Grid>
@@ -156,6 +157,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               color="primary"
               className={classes.buttons}
               onClick={() => onEditGroup(dataItem)}
+              data-cy={`${defaultValue[0]?.docTypeAcronym}edit-phase`}
             >
               <FontAwesomeIcon icon={regular('pen-to-square')} />
             </IconButton>

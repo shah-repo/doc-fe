@@ -75,6 +75,7 @@ export const processGroups = (
     label: `${documentTypeName} (${documentTypeAcronym.replace('-', '')})`,
     value: id,
     category: group,
+    docTypeAcronym: documentTypeAcronym,
   }));
 };
 

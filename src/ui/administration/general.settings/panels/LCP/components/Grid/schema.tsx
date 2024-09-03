@@ -12,6 +12,7 @@ import { LCP, SchemaOptions } from './types';
 export const LCPSchema = ({
   onConfirm,
   onDiscard,
+  selectedPartGroups,
   hasEditLCPPermission,
 }: SchemaOptions): Array<ColumnDefinition<LCP>> => {
   return [
@@ -22,7 +23,7 @@ export const LCPSchema = ({
       width: 60,
       filterable: false,
       locked: false,
-      cell: (props) => <ActiveCell {...props} hasEditLCPPermission={hasEditLCPPermission} />,
+      cell: (props) => <ActiveCell {...props} hasEditLCPPermission={hasEditLCPPermission} selectedPartGroups={selectedPartGroups} />,
       groupable: false,
       sortable: false,
     },
@@ -102,6 +103,7 @@ export const LCPSchema = ({
           {...props}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
+          selectedPartGroups={selectedPartGroups}
         />
       ),
       width: 100,
