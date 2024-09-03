@@ -16,7 +16,7 @@ import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { ApplicationState } from '../../../state/reducers';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
 import { KendoCellTemplates, KendoColumn } from '../../components/common/kendo/types';
-import { DataStateProps, KendoGridFilterCell } from '../../components/KendoGrid/interfaces';
+import { DataStateProps, KendoGridFilterCell, KendoGridHeaderCell } from '../../components/KendoGrid/interfaces';
 import { TableColumnProps } from '../../components/table/column/types';
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from '../../constants/urls';
 import { canEditDocumentRevision, documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
@@ -138,6 +138,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: string | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
+    let dynamicHeaderCellTemplate;
     let dynamicCellGroupable = true;
     let upDateField = !columns.length ? columnDetails.searchOptions?.dataKey || columnDetails.key : columnDetails.key;
     if (columnDetails.searchOptions?.dateFilter) {
@@ -166,6 +167,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT;
     } else if (upDateField === 'precalc.supplierAttachmentsCount') {
       dynamicCellTemplate = KendoCellTemplates.ATTACHMENT_COUNT;
+      dynamicHeaderCellTemplate = KendoGridHeaderCell.ATTACHMENT_COUNT;
     } else if (overflowCellFields.includes(upDateField)) {
       dynamicCellTemplate = KendoCellTemplates.OVERFLOW_CELL;
     } else {
@@ -182,6 +184,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       width: 15,
       groupable: dynamicCellGroupable,
       cell: dynamicCellTemplate,
+      headerCell: dynamicHeaderCellTemplate,
       locked: false,
       show: true,
       showColumnMenu: true,

@@ -81,6 +81,10 @@ export enum KendoGridFilterCell {
   ASYNC_CREATED_AT = 'createdAtt',
 }
 
+export enum KendoGridHeaderCell {
+  ATTACHMENT_COUNT='AttachmentCount',
+}
+
 export enum KendoGridFilterCellOperators {
   CONTAINS = 'contains',
   DOES_NOT_CONTAIN = 'doesnotcontain',

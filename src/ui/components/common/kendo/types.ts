@@ -28,6 +28,7 @@ export enum KendoCellTemplates {
   DOC_ID_LIST_CELL ='DocIdListCell',
 }
 export interface KendoColumn {
+  headerCell: string
   sortable?: ColumnSortSettings
   field: string
   title: string
