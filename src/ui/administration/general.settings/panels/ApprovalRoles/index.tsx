@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
-import { ApprovalRoles, GeneralSettings } from '../../../../../state/ducks/company/types';
+import { ApprovalRole, GeneralSettings } from '../../../../../state/ducks/company/types';
 import TextCellTemplate from '../../../../administration/general.settings/components/SettingsTable/components/TextCellTemplate';
 import { Checkbox } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
@@ -24,22 +24,22 @@ interface SchemaOptions {
   onDiscard: () => void
 }
 
-type schemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<ApprovalRoles>>;
+type SchemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<ApprovalRole>>;
 
-const ActiveCellTemplate: React.FC<CellTemplateProps> = ({ dataItem, onChange }) => {
+const ActiveCellTemplate: React.FC<CellTemplateProps<ApprovalRole>> = ({ dataItem, onChange }) => {
   return (
     <Checkbox
-      checked={dataItem.active}
+      checked={dataItem.isActive}
       onChange={() => onChange?.({ dataItem })}
     />
   );
 };
 
-const buildSchema: schemaBuilder = ({ onChange, onConfirm, onDiscard }) => {
+const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard }) => {
   return [
     {
       id: 'active',
-      field: 'active',
+      field: 'isActive',
       title: 'common.active',
       width: 80,
       template: (props) => <ActiveCellTemplate {...props} onChange={onChange} />,
@@ -67,17 +67,17 @@ const buildSchema: schemaBuilder = ({ onChange, onConfirm, onDiscard }) => {
 
 const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
-  const approvalRoles = getFieldProps('approvalRoles').value as ApprovalRoles[];
+  const approvalRoles = getFieldProps('approvalRoles').value as ApprovalRole[];
   const settingsId = useSelector(companySelectors.getGeneralSettingsId);
   const [approvalRolesData, setApprovalRolesData] = React.useState(approvalRoles);
   const [editedApprovalRoles, setEditedApprovalRoles] = React.useState<EditableApprovalRoles>();
 
   const discardApprovalRoles = () => setEditedApprovalRoles(undefined);
   const onChange = ({ dataItem }) => {
-    if(dataItem[MODE_FIELD] === Mode.add) {
-      return setEditedApprovalRoles(prevValue => ({ ...prevValue, active: !editedApprovalRoles?.active, name: values.name }));
+    if (dataItem[MODE_FIELD] === Mode.add) {
+      return setEditedApprovalRoles(prevValue => ({ ...prevValue, isActive: !editedApprovalRoles?.active, name: values.name }));
     }
-    const updatedApprovalRoles = approvalRolesData?.map(item => item.id === dataItem.id ? { ...dataItem, active: !dataItem.active } : item);
+    const updatedApprovalRoles = approvalRolesData?.map(item => item.id === dataItem.id ? { ...dataItem, isActive: !dataItem.isActive } : item);
     formValues.approvalRoles = updatedApprovalRoles;
     setApprovalRolesData(updatedApprovalRoles);
     async.start(updateApprovalRolesAction, formValues, settingsId, 'PUT', async);
@@ -99,10 +99,10 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
       const updatedApprovalRoles = isAdding
         ? [...newApprovalRoles, omit(values, MODE_FIELD)]
         : newApprovalRoles?.map(item => item.id === values.id ? { ...item, ...omit(values, MODE_FIELD) } : item);
-        discardApprovalRoles();
-        formValues.approvalRoles = updatedApprovalRoles;
-        setApprovalRolesData(updatedApprovalRoles);
-        async.start(updateApprovalRolesAction, formValues, settingsId, 'PUT', async);
+      discardApprovalRoles();
+      formValues.approvalRoles = updatedApprovalRoles;
+      setApprovalRolesData(updatedApprovalRoles);
+      async.start(updateApprovalRolesAction, formValues, settingsId, 'PUT', async);
     },
   });
 
@@ -120,7 +120,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
     setEditedApprovalRoles({
       id: uuidv4(),
       name: '',
-      active: true,
+      isActive: true,
       [MODE_FIELD]: Mode.add,
     });
   };
@@ -153,7 +153,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')}>
       <FormikProvider value={formik}>
-      <SettingsTable
+        <SettingsTable
           isActive
           data={approvalRoleList}
           isEditing={editedApprovalRoles !== undefined}

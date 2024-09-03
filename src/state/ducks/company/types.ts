@@ -184,10 +184,10 @@ export interface EquipmentLocation {
   active: boolean
 }
 
-export interface ApprovalRoles {
+export interface ApprovalRole {
   id: string
   name: string
-  active: boolean
+  isActive: boolean
 }
 
 interface EquipmentFamilySettings {
@@ -224,7 +224,7 @@ export interface GeneralSettings {
   shouldNotifyLcpMismatch: NotifyPartLCP
   systemTransactions: SystemTransactionsRule[]
   zebraPrint: ZebraPrintSettings[] | null
-  approvalRoles: ApprovalRoles[]
+  approvalRoles: ApprovalRole[]
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
