@@ -12,6 +12,7 @@ import { OverflowCell } from './OverflowCell';
 import { POAmount } from './POAmount';
 import { POAmountWithCurrency } from './POAmountWithCurrency';
 import { Status } from './Status';
+import { SupplierStatus } from './SupplierStatus';
 import { UserAvatar } from './UserAvatar';
 
 export const cellTemplateMapping: Record<KendoCellTemplates, (props: CustomGridCellProps) => JSX.Element | null> = {
@@ -19,6 +20,7 @@ export const cellTemplateMapping: Record<KendoCellTemplates, (props: CustomGridC
   UserAvatar,
   Status,
   EQStatus,
+  SupplierStatus,
   AttachmentCount,
   DateCompleted,
   DateInfo,

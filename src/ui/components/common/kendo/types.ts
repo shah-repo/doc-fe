@@ -26,6 +26,7 @@ export enum KendoCellTemplates {
   DURATION='DurationCell',
   OVERFLOW_CELL ='OverflowCell',
   DOC_ID_LIST_CELL ='DocIdListCell',
+  SUPPLIER_STATUS='SupplierStatus',
 }
 export interface KendoColumn {
   headerCell: string

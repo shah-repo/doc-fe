@@ -22,6 +22,7 @@ import { ApplicationState } from '../../../../state/reducers';
 import HeaderEquipmentStatus, { shouldShowEQStatus } from '../../../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
+import HeaderSupplierStatus from '../../../components/common/header/HeaderSupplierStatus';
 import HeaderMenu from '../../../components/common/header/Menu';
 import OwnerChangerContainer from '../../../components/common/owner.changer/container';
 import { RequestType } from '../../../components/common/owner.changer/helpers/types';
@@ -145,6 +146,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isPart = checkIsDocumentPart(documentRevision?.document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(documentRevision?.document?.documentType?.groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
+  const isSupplier = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.SUPPLIER;
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision?.status);
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
@@ -491,6 +493,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isSupplier && <HeaderSupplierStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isLot && (
         <>
@@ -522,7 +525,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               label={isDisabled ? 'common.save' : 'navigation.createDocument'}
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
-              data-cy="DocumentRevisionForm-submit"
+              data-cy="document-revision-form-submit"
               disabled={
                 isCreateDocumentDisabled
                   || _documentRevisionFormState?.disabledAction

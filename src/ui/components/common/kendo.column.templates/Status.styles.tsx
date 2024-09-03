@@ -42,4 +42,16 @@ export default makeStyles((theme) => ({
     color: Colors.latest_red_varient,
     border: `1px solid ${Colors.latest_red_varient}`,
   },
+  statusIcon: {
+    height: 7,
+    width: 7,
+    marginRight: theme.spacing(1),
+    borderRadius: '50%',
+  },
+  Active: {
+    backgroundColor: Colors.green,
+  },
+  Inactive: {
+    backgroundColor: Colors.font_gray,
+  },
 }));

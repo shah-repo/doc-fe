@@ -165,6 +165,8 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT_WITH_CURRENCY;
     } else if (upDateField === 'precalc.po_amount') {
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT;
+    } else if (upDateField === 'supplierStatus') {
+      dynamicCellTemplate = KendoCellTemplates.SUPPLIER_STATUS;
     } else if (upDateField === 'precalc.supplierAttachmentsCount') {
       dynamicCellTemplate = KendoCellTemplates.ATTACHMENT_COUNT;
       dynamicHeaderCellTemplate = KendoGridHeaderCell.ATTACHMENT_COUNT;

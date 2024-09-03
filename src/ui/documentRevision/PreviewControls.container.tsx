@@ -32,6 +32,7 @@ import HeaderEquipmentStatus, { shouldShowEQStatus } from '../components/common/
 import HeaderLotStatus from '../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../components/common/header/HeaderPOStatus';
 import HeaderPOStatusOptions from '../components/common/header/HeaderPOStatusOptions';
+import HeaderSupplierStatus from '../components/common/header/HeaderSupplierStatus';
 import HeaderMenu from '../components/common/header/Menu';
 import OwnerChangerContainer from '../components/common/owner.changer/container';
 import { RequestType } from '../components/common/owner.changer/helpers/types';
@@ -126,6 +127,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isPO = checkIsDocumentPO(groupOptions);
   const isPart = checkIsDocumentPart(groupOptions);
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
+  const isSupplier = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.SUPPLIER;
   const isEB = checkIsDocumentEB(groupOptions);
   const isWO = checkIsDocumentWO(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
@@ -225,7 +227,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         color="primary"
         onClick={setDocRevToDraft}
         id="PreviewControlsContainer-revise"
-        data-cy="updateRecord"
+        data-cy="update-record"
       >
         <Text message="controlConfig.editPart.button.text" />
       </StyledButton>
@@ -241,7 +243,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               color="primary"
               onClick={cloneDocument}
               id="PreviewControlsContainer-revise"
-              data-cy="updateRecord"
+              data-cy="update-record"
             >
               <Text message={reviseLabel} />
             </StyledButton>
@@ -249,7 +251,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
                 <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
                 <StyledMenuListItemText
                   id="PreviewControlsContainer-revise"
-                  data-cy="updateRecord"
+                  data-cy="update-record"
                   primary={<Text message={reviseLabel} />}
                 />
               </StyledMenuListItem>
@@ -259,7 +261,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               variant="outlined"
               onClick={cloneDocument}
               id="PreviewControlsContainer-revise"
-              data-cy="updateRecord" >
+              data-cy="update-record" >
               <Text message={reviseLabel} />
             </Button>
           )}
@@ -277,7 +279,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
                 color="primary"
                 onClick={clonePODocument}
                 id="PreviewControlsContainer-revise"
-                data-cy="updateRecord"
+                data-cy="update-record"
               >
                 <Text message={updateLabel} />
               </StyledButton>
@@ -288,7 +290,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
                 </StyledMenuListIcon>
                 <StyledMenuListItemText
                   id="PreviewControlsContainer-revise"
-                  data-cy="updateRecord"
+                  data-cy="update-record"
                   primary={<Text message={updateLabel} />}
 
                 />
@@ -300,7 +302,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               variant="outlined"
               onClick={cloneDocument}
               id="PreviewControlsContainer-revise"
-              data-cy="updateRecord"
+              data-cy="update-record"
             >
               <Text message={updateLabel} />
             </Button>
@@ -325,13 +327,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           color="primary"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
-          data-cy="PreviewControlsContainer-createNew"
+          data-cy="preview-controls-container-create-new"
         >
           <Text translation="common.create.new" />
         </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={cloneOutputDocument}>
           <StyledMenuListItemText
             id="PreviewControlsContainer-createNew"
-            data-cy="PreviewControlsContainer-createNew"
+            data-cy="preview-controls-container-create-new"
             primary={<Text translation="common.create.new" />}
 
           />
@@ -342,7 +344,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           variant="outlined"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
-          data-cy="PreviewControlsContainer-createNew"
+          data-cy="preview-controls-container-create-new"
         >
           <Text translation="common.create.new" />
         </Button>
@@ -402,7 +404,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         color="secondary"
         variant="outlined"
         onClick={dialog.open}
-        data-cy="document.revision.withdraw.alert"
+        data-cy="document-revision-withdraw-alert"
       >
         <Text message="withdraw submission" />
       </Button>
@@ -417,13 +419,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     {renderAsButton ? <StyledButton
       color="primary"
       onClick={dialog.open}
-      data-cy="document.revision.withdraw.alert"
+      data-cy="document-revision-withdraw-alert"
     >
       <Text translation="changeRequest.transition.withdrawn" />
     </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={dialog.open}>
       <StyledMenuListIcon><WithDrawSubmissionIcon /></StyledMenuListIcon>
       <StyledMenuListItemText
-        data-cy="document.revision.withdraw.alert"
+        data-cy="document-revision-withdraw-alert"
         primary={<Text translation="changeRequest.transition.withdrawn" />}
       />
     </StyledMenuListItem>}
@@ -474,13 +476,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       color="primary"
       onClick={onSubmit}
       id="PreviewControlsContainer-access"
-      data-cy="PreviewControlsContainer-access"
+      data-cy="preview-controls-container-access"
     >
       <Text translation="document.request.access" />
     </StyledButton> : <StyledMenuListItem button alignItems="flex-start" onClick={onSubmit}>
       <StyledMenuListItemText
         id="PreviewControlsContainer-access"
-        data-cy="PreviewControlsContainer-access"
+        data-cy="preview-controls-container-access"
         primary={<Text translation="document.request.access" />}
       />
     </StyledMenuListItem>
@@ -654,6 +656,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         )}
       </>
       {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isSupplier && <HeaderSupplierStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled || !isDocOwner} />}
       <>

@@ -75,6 +75,12 @@ export enum LotStatus {
   VOIDED = 'VOIDED',
 }
 
+// Supplier Status
+export enum SupplierStatus {
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive',
+}
+
 export enum POStatusLabelMapping {
   OPENED = 'Open',
   CLOSED = 'Closed',
@@ -311,6 +317,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   lifecyclePhase?: lifecyclePhase
   isExpired?: boolean
   expiryDate?: string
+  supplierStatus?: SupplierStatus
 }
 
 interface EQ {
