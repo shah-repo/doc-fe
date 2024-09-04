@@ -14,7 +14,7 @@ source "${ENVIRONMENT_DIR}/test.env"
 set +o allexport
 
 echo "-------- Generate fake server info -------"
-cat >> "${BITBUCKET_CLONE_DIR}/src/data/buildInfo.json" <<EOF 
+cat >> "${BITBUCKET_CLONE_DIR}/src/data/buildInfo.json" <<EOF
 {
 "Repository": "sample",
 "Branch": "sample",
@@ -33,6 +33,8 @@ mkdir -p "${TEST_RESULTS_DIR}"
 mkdir -p "${JEST_CONFIG_LOG_DIR}"
 export JEST_JUNIT_OUTPUT_DIR="${TEST_RESULTS_DIR}"
 export CI=false
+
+NODE_ENV=development yarn install --frozen-lockfile
 
 yarn test \
   --reporters="default" \
