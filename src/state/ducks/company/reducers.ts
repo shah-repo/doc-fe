@@ -57,11 +57,11 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   zebraPrint: [],
   status: AsyncStatus.Idle,
   message: '',
-  trainingReminder: {
-    customDays: { isChecked: false, value: 14 },
-    sevenDays: true,
-    trainingAssigned: true,
-    trainingOverdue: true,
+  trainingReminders: {
+    customDaysDueOn: { isActive: false, days: 14 },
+    isSevenDaysDueOnCountdownActive: true,
+    isAssignedActive: true,
+    isOverdueActive: true,
   },
 };
 

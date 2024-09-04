@@ -208,11 +208,11 @@ interface AllocationConfig {
   expiredLotsPrompt: ExpiredLotTypes
 }
 
-interface TrainingReminder {
-  trainingAssigned: boolean
-  sevenDays: boolean
-  customDays: { isChecked: boolean, value: number }
-  trainingOverdue: boolean
+interface TrainingReminders {
+  customDaysDueOn: { isActive: boolean, days: number }
+  isSevenDaysDueOnCountdownActive: boolean
+  isAssignedActive: boolean
+  isOverdueActive: boolean
 }
 
 export interface GeneralSettings {
@@ -226,7 +226,7 @@ export interface GeneralSettings {
   shouldNotifyLcpMismatch: NotifyPartLCP
   systemTransactions: SystemTransactionsRule[]
   zebraPrint: ZebraPrintSettings[] | null
-  trainingReminder: TrainingReminder
+  trainingReminders: TrainingReminders
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
