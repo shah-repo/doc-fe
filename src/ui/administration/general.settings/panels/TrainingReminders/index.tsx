@@ -31,7 +31,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
       <Text message="administration.general.settings.training.reminders.sub.title" />
       <Grid
         container
-        className={cx(classes.gridContainer, { [classes.disabledGrid]: isCompanyAdmin })}
+        className={cx(classes.gridContainer, { [classes.disabledGrid]: !isCompanyAdmin })}
       >
         <Grid item className={classes.gridItem}>
           <CheckboxField

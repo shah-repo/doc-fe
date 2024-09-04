@@ -2,14 +2,17 @@ import { makeStyles } from '@material-ui/core';
 
 export default makeStyles(theme => ({
   gridContainer: {
-    marginTop: theme.spacing(1),
+    margin: theme.spacing(3, 0, 2),
     justifyContent: 'space-between',
-    alignItems: 'baseline',
+    alignItems: 'center',
   },
   gridItem: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: theme.spacing(1),
+
+    '& > div': {
+      marginBottom: 0,
+    },
   },
   textArea: {
     width: 80,
