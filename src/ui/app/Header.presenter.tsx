@@ -100,7 +100,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps> = ({
                 className={classes.toggler}
                 isChecked={isAutosaveEnabled}
                 onChange={onAutosaveToggle}
-                name="toggleCustomLabels"
+                name="toggleAutosave"
               >
                 {translate('header.toggle.autosave')}
               </Toggler>
