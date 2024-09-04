@@ -2,9 +2,8 @@ import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
 import { FormikField, TextField } from '../../../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
+import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {

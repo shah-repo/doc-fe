@@ -145,7 +145,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
             onConfirm={onConfirmAlertDialog}
             onCancel={closePartLCPDialog}
             isCancelButtonHidden={isNotifyPartLCPError}
-            title={isNotifyPartLCPWarning ? 'common.warning' : 'common.alert'}
+            title={isNotifyPartLCPWarning ? 'common.warning' : 'common.error'}
             confirmLabel={
               isNotifyPartLCPWarning ? 'common.yes.continue' : 'common.ok'
             }

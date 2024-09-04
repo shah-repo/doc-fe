@@ -4,9 +4,9 @@ import { getGroupIds, setExpandedState, setGroupIds } from '@progress/kendo-reac
 import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { cloneDeep, last, pick, uniq } from 'lodash';
+import { cloneDeep, last, pick, uniq, uniqBy } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
 import { getHasPermission } from '../../../../../../../common/utils/selectors';
@@ -51,11 +51,20 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const fetchLCPDocTypes = useActionCreator(companyActions.fetchLCPDocTypes);
   const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
   const classes = useStyles();
-  const { setValues, values: formValues } = useFormikContext<GeneralSettings>();
+  const dispatch = useDispatch();
+  const updateLCPSettings = useActionCreator(companyActions.updateGeneralSettings);
+  const { values: formValues } = useFormikContext<GeneralSettings>();
 
   const fetchLCPDocTypesAsync = useAsync({
     onSuccess: (data: GroupDocTypes[] = []) => {
       setPartGroups(processGroups(data));
+    },
+    onError: toastError,
+  });
+
+  const async = useAsync({
+    onSuccess: () => {
+      dispatch(companyActions.getGeneralSettings());
     },
     onError: toastError,
   });
@@ -94,7 +103,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   useEffect(() => {
     const data = processRealData(formValues?.lifecyclePhases?.categories);
     updateStateGridData(data.phases);
-    updateSettingsObj(data.phases);
     setSelectedPartGroups(data.groups);
     fetchLCPDocTypesAsync.start(
       fetchLCPDocTypes,
@@ -156,15 +164,14 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const updateSettingsObj = (updatedData?: LCP[]) => {
-    const payload = cloneDeep(updatedData)?.map((item) => {
+    const payload = uniqBy(cloneDeep(updatedData), 'id')?.map((item) => {
       if (item.id?.includes(ADD_GROUP_NAME)) {
         item.id = undefined;
       }
       return { ...pick(item, REQUEST_PAYLOAD_KEYS) };
     });
     if (formValues) {
-      formValues.lifecyclePhasesProcessedPayload = payload as LCP[];
-      setValues(formValues);
+      async.start(updateLCPSettings, { ...formValues, lifecyclePhases: payload }, '', 'POST', async);
     }
   };
 

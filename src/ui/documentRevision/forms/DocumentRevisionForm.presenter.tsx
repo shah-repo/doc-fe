@@ -306,18 +306,19 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          {!isPart && !documentRevision?.parentParts && (<Grid item xs={6}>
+          {!isPart && (<Grid item xs={6}>
             <RetrainField
               revisionChangeType={values.revisionChangeType}
               isDisabled={isDisabledInput || inRestrictedEditMode}
               {...{ documentTypeId, isRecord }}
             />
           </Grid>)}
-          {isPart && documentRevision?.parentParts && (<Grid item xs={6}>
+          {(isPart || isPartForm) && (<Grid item xs={6}>
             <LifecyclePhaseSelect
               docTypeId ={docTypeId}
               lifecyclePhaseId={documentRevision?.lifecyclePhaseId}
-              isOptionDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
+              isDisabled={isDisabledInput || inRestrictedEditMode || isPartForm}
+              isInfoIconHidden={isPartForm}
             />
           </Grid>)}</>)}
           {isEB && (

@@ -51,9 +51,11 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
                 classes={{ root: classes.radio, checked: classes.checked, disabled: classes.disabled }}
                 size="small"
                 disabled={!hasPermission}
+                data-cy="lot-allocation-fifo"
               />
             }
             labelPlacement="start"
+            key={orderByReleaseDateValue}
             label={
               <Typography variant="body2" className={classes.radioLabel}>
                 {translate(
@@ -74,9 +76,11 @@ const LotAutoAllocationOrder: React.FC<SettingsPanelProps> = (props) => {
                 classes={{ root: classes.radio, checked: classes.checked, disabled: classes.disabled }}
                 disabled={!hasPermission}
                 size="small"
+                data-cy="lot-allocation-lifo"
               />
             }
             labelPlacement="start"
+            key={orderByReleaseDateValue}
             label={
               <Typography variant="body2" className={classes.radioLabel}>
                 {translate(
