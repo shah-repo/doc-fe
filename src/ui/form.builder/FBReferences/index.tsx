@@ -46,7 +46,7 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   const formik = useFormik<Partial<EditableReference>>({
     initialValues: {},
     onSubmit: (values) => {
-      if (values.id) {
+      if (!values.id) {
         toastError(translate('form.builder.supplier.references.empty.error.message'));
         return;
       }

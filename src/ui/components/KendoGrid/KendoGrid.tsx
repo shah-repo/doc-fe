@@ -12,7 +12,7 @@ import { AutoSizer, Size } from 'react-virtualized';
 import { translate } from '../../../common/intl';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../state/ducks/company';
-import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, EquipmentStatus, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, EquipmentStatus, LotStatus, POStatusLabelMapping, SupplierStatus } from '../../../state/ducks/documentRevisions/types';
 import { printLabelsActions } from '../../../state/ducks/printLabels';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
@@ -211,6 +211,16 @@ export function KendoGrid<T extends any> ({
     />
   );
 
+  const SupplierStatusFilter = (props: GridFilterCellProps) => (
+    <StatusFilterTemplate
+      {...props}
+      data={Object.values(SupplierStatus)}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+
   const eqStatuses = Object.values(EquipmentStatus);
 
   const EQStatusFilter = (props: GridFilterCellProps) => (
@@ -310,6 +320,7 @@ export function KendoGrid<T extends any> ({
     [KendoGridFilterCell.ACTIVE]: ActiveFilter,
     [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
     [KendoGridFilterCell.PO_STATUS]: POStatusFilter,
+    [KendoGridFilterCell.SUPPLIER_STATUS]: SupplierStatusFilter,
     [KendoGridFilterCell.EQ_STATUS]: EQStatusFilter,
     [KendoGridFilterCell.LOT_STATUS]: LotStatusFilter,
     [KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM]: TypeFilter,
