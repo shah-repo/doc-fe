@@ -1,6 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Grid, Link, ListSubheader, Menu, MenuItem, useMediaQuery, useTheme } from '@material-ui/core';
+import { Box, Grid, ListSubheader, Menu, MenuItem, useMediaQuery, useTheme } from '@material-ui/core';
 import cx from 'classnames';
 import React, { useEffect } from 'react';
 import { ReactComponent as EnlilLogo } from '../../../assets/images/app_switcher_logo.svg';
@@ -10,15 +10,20 @@ import { IconButton } from '../../components/forms/fields-next';
 import useMenu from '../../hooks/useMenu';
 import { withThemeNext } from '../../layout/theme-next';
 import useStyles from './styles';
+import { App } from './types';
 
 const AppSwitcher: React.FunctionComponent = () => {
   const classes = useStyles();
   const switchMenu = useMenu();
   const theme = useTheme();
   const isSmBreakpoint = useMediaQuery(theme.breakpoints.down('sm'));
-  const [isCurrentApp, setIsCurrentApp] = React.useState(false);
+  const [currentApp, setCurrentApp] = React.useState<App>(App.D2M);
+  const isD2M = currentApp === App.D2M;
 
-  const handleClick = (value: boolean) => () => setIsCurrentApp(value);
+  const switchApp = (app: App) => () => {
+    setCurrentApp(app);
+    window.location.href = Config.TMUrl;
+  };
 
   useEffect(() => {
     if (!isSmBreakpoint && switchMenu.isOpen) {
@@ -42,15 +47,15 @@ const AppSwitcher: React.FunctionComponent = () => {
         >
           <span
             data-cy="selected-app-switcher"
-            className={classes.optionItemText}
+            className={cx(classes.label, { [classes.link]: !isD2M })}
           >
             {translate('header.design.make')}
           </span>
-          <span className={classes.toggler}>
+          <span className={classes.toggler} onClick={switchApp(App.TM)}>
             <FontAwesomeIcon
               icon={regular('toggle-large-on')}
               size="2xl"
-              flip={!isCurrentApp ? 'horizontal' : undefined}
+              flip={isD2M ? 'horizontal' : undefined}
             />
           </span>
           <IconButton
@@ -82,22 +87,19 @@ const AppSwitcher: React.FunctionComponent = () => {
             {translate('header.switch.to')}
           </ListSubheader>
           <MenuItem
-            component={Link}
-            href={Config.TMUrl}
+            onClick={switchApp(App.TM)}
             className={classes.menuLink}
           >
             {translate('header.trace.matrix')}
           </MenuItem>
         </Menu>
-        <Link href={Config.TMUrl} className={classes.link}>
-          <span
-            data-cy="tm-app-switcher"
-            className={cx(classes.optionItemText, { [classes.options]: !isCurrentApp })}
-            onClick={handleClick(true)}
-          >
-            {translate('header.trace.matrix')}
-          </span>
-        </Link>
+        <span
+          data-cy="tm-app-switcher"
+          className={cx(classes.label, { [classes.link]: isD2M })}
+          onClick={switchApp(App.TM)}
+        >
+          {translate('header.trace.matrix')}
+        </span>
       </Grid>
     </Box>
   );

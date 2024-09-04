@@ -20,29 +20,24 @@ export default makeStyles(theme => ({
   toggler: {
     height: 30,
     margin: theme.spacing(0, 1.25),
+    cursor: 'pointer',
 
     [theme.breakpoints.down('sm')]: {
       display: 'none',
     },
   },
   link: {
-    textDecoration: 'none !important',
-
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    },
-  },
-  options: {
     opacity: 0.5,
     cursor: 'pointer',
     borderRadius: theme.shape.borderRadius,
+    fontWeight: 600,
 
     '&:hover': {
       opacity: 1,
       backgroundColor: Colors.primaryDark,
     },
   },
-  optionItemText: {
+  label: {
     padding: theme.spacing(0.625),
     fontWeight: 600,
     fontSize: 15,
