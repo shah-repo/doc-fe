@@ -17,7 +17,7 @@ interface Props {
   documentRevision: DocumentRevision
 }
 
-export const getSupplierStatusLable = (status?: SupplierStatus): string =>
+const getSupplierStatusLable = (status?: SupplierStatus): string =>
   translate(`form.builder.header.supplier.status.label.${kebabCase(status)}`);
 
 const options = Object.values(SupplierStatus).map(value => ({
