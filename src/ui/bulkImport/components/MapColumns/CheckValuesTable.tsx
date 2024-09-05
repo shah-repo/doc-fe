@@ -155,6 +155,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
   const excelExportRef = useRef<ExcelExport | null>(null);
+  const firstLoad = useRef<boolean>(true);
   const [filter, setFilter] = React.useState<CompositeFilterDescriptor>();
 
   const dataStateChange = (event: GridDataStateChangeEvent) => {
@@ -213,9 +214,6 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const updateShowErrorOnly = () => dispatch(setOnlyErrorsTable(!showErrorsOnly));
 
   useEffect(() => {
-    if (tableData.length && data.length) {
-      debouncedSaveTableData();
-    }
     setData(tableData.slice(page, pageSize));
     const count = tableData.reduce((acc, item) => {
       // Check if item has errors and it's an array
@@ -227,6 +225,11 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
       return acc;
     }, 0);
     setErrorCount(count);
+    if (count !== errorCount && !firstLoad.current) {
+      debouncedSaveTableData();
+    }
+    // we first load to avoid saving the first load of the page.
+    firstLoad.current = false;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData]);
 
