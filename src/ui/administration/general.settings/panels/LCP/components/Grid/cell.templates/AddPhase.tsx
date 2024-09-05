@@ -4,6 +4,7 @@ import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Button } from '../../../../../../../components/forms/fields-next';
 import { CustomGroupOptions, LCP } from '../types';
+import { getCellDataCyBasedOnParentDocType } from '../utils';
 import useStyles from './styles';
 
 interface AddPhaseProps {
@@ -16,7 +17,7 @@ export const AddPhase: React.FC<AddPhaseProps> = (props) => {
   const { dataItem, selectedPartGroups, addPhase } = props;
   const handleClick = () => addPhase?.(dataItem);
   const classes = useStyles();
-  const selectedGroup = selectedPartGroups?.find((group: CustomGroupOptions) => dataItem.documentTypeId === group.value);
+  const dataCy = getCellDataCyBasedOnParentDocType(selectedPartGroups, dataItem.documentTypeId, 'add-phase', '');
 
   return (<Button
     kind="ghost"
@@ -24,7 +25,7 @@ export const AddPhase: React.FC<AddPhaseProps> = (props) => {
     className={classes.addPhaseButton}
     startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
     onClick={handleClick}
-    data-cy={ `${selectedGroup?.docTypeAcronym}add-phase`}
+    data-cy={`${dataCy}button`}
   >
     {translate('administration.general.settings.lcp.add.phase')}
   </Button>);

@@ -1,9 +1,9 @@
 import { Box } from '@material-ui/core';
-import { kebabCase } from 'lodash';
 import React from 'react';
 import { Checkbox } from '../../../../../../../components/forms/fields-next';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { CustomGroupOptions, LCP } from '../types';
+import { getCellDataCyBasedOnParentDocType } from '../utils';
 
 interface ActiveCellProps extends CellTemplateProps<LCP> {
   hasEditLCPPermission?: boolean
@@ -11,8 +11,7 @@ interface ActiveCellProps extends CellTemplateProps<LCP> {
 }
 
 export const ActiveCell: React.FC<ActiveCellProps> = ({ dataItem, colSpan, style, field, dataIndex, hasEditLCPPermission, selectedPartGroups, className, onChange }) => {
-  const selectedGroup = selectedPartGroups?.find((group: CustomGroupOptions) => dataItem.documentTypeId === group.value);
-  const dataCy = `${selectedGroup?.docTypeAcronym}${dataItem?.internalType}-select`;
+  const dataCy = getCellDataCyBasedOnParentDocType(selectedPartGroups, dataItem.documentTypeId, field, dataItem.internalType);
 
   const handleChange = (event, checked: boolean) => {
     onChange?.({
@@ -30,14 +29,14 @@ export const ActiveCell: React.FC<ActiveCellProps> = ({ dataItem, colSpan, style
       style={style}
       role="gridcell"
       className={className}
-      data-cy={`${kebabCase(field)}-td`}
+      data-cy={`${dataCy}td`}
     >
       <Box display="flex" justifyContent="center">
         <Checkbox
           checked={dataItem.isActive}
           disabled={!hasEditLCPPermission || dataItem?.isGroupDeactivated}
           onChange={handleChange}
-          data-cy={dataCy}
+          data-cy={`${dataCy}field`}
         />
       </Box>
     </td>

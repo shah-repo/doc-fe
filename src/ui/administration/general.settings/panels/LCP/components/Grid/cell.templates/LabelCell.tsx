@@ -1,15 +1,15 @@
 import { useFormikContext } from 'formik';
-import { kebabCase } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import OverflowingContent from '../../../../../../../change.request/FBMaterialDisposition/components/commonCells/OveflowContent';
 import { FormikField, TextField } from '../../../../../../../components/forms/fields-next';
-import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { EDIT_FIELD } from '../constants';
-import { LCP } from '../types';
+import { CustomCellProps } from '../types';
+import { getCellDataCyBasedOnParentDocType } from '../utils';
 
-const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, onChange }) => {
+const Editor: React.FC<CustomCellProps> = ({ dataItem, partGroups, dataIndex, field, onChange }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
+  const dataCy = getCellDataCyBasedOnParentDocType(partGroups, dataItem.documentTypeId, field, dataItem.internalType);
 
   const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (event) => {
     const value = event.target.value;
@@ -34,7 +34,7 @@ const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, 
         {...getFieldProps(field)}
         defaultValue={dataItem[field]}
         type="text"
-        data-cy={`${kebabCase(field)}-field`}
+        data-cy={`${dataCy}field`}
         placeholder={translate('lhr.summary.placeholder.enter')}
         onChange={handleChange}
         size="small"
@@ -43,21 +43,21 @@ const Editor: React.FC<CellTemplateProps<LCP>> = ({ dataItem, dataIndex, field, 
   );
 };
 
-export const LabelCell: React.FC<CellTemplateProps<LCP>> = (props) => {
-  const { field, dataItem, onClick, colSpan, style, className } = props;
+export const LabelCell: React.FC<CustomCellProps> = (props) => {
+  const { field, dataItem, onClick, colSpan, partGroups, style, className } = props;
   const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
   const handleClick = () => onClick?.({ dataItem });
-  const dataCy = `${kebabCase(field)}-td`;
+  const dataCy = getCellDataCyBasedOnParentDocType(partGroups, dataItem.documentTypeId, field, dataItem.internalType);
 
   return <td
     colSpan={colSpan}
     style={style}
     role="gridcell"
     className={className}
-    data-cy={dataCy}
+    data-cy={`${dataCy}td`}
   >
     {isEditMode && <Editor {...props} />}
-    {!isEditMode && <OverflowingContent onClick={handleClick} data-cy={dataCy}>
+    {!isEditMode && <OverflowingContent onClick={handleClick} data-cy={`${dataCy}value`}>
       {dataItem[field]}
     </OverflowingContent>}
   </td>;

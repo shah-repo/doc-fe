@@ -1,4 +1,4 @@
-import { uniq } from 'lodash';
+import { kebabCase, uniq } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { CUSTOM_GROUP_ORDER, LCP_KEYS } from './constants';
 import {
@@ -106,4 +106,14 @@ export const isGroupActivateOrDeactivate = (
     }
   }
   return true;
+};
+
+export const getCellDataCyBasedOnParentDocType = (
+  partGroups: CustomGroupOptions[],
+  documentTypeId: string,
+  field: string,
+  internalType: string,
+): string => {
+  const parentGroup = partGroups?.find(group => group.value === documentTypeId);
+  return `${parentGroup?.docTypeAcronym}${kebabCase(field)}-${kebabCase(internalType)}-`;
 };

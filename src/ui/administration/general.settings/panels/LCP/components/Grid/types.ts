@@ -1,5 +1,6 @@
 import { OptionType } from '../../../../../../components/forms/fields/Autocomplete/types';
 import { MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
+import { CellTemplateProps } from '../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 
 export interface LCP {
   id?: string
@@ -73,4 +74,8 @@ export interface SchemaOptions {
   onDiscard: () => void
   selectedPartGroups: CustomGroupOptions[]
   hasEditLCPPermission?: boolean
+}
+
+export interface CustomCellProps extends CellTemplateProps<LCP>{
+  partGroups: CustomGroupOptions[]
 }

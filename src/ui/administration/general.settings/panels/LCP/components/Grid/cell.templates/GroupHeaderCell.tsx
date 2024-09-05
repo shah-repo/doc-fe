@@ -41,7 +41,6 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     partGroups,
     selectedPartGroups,
   } = props;
-  const groupLabel = dataItem.value;
   const classes = useStyles();
   const groupId = dataItem.groupId;
   const isEditMode = editGroup === groupId;
@@ -64,6 +63,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   const selectedIDs = selectedPartGroups?.map((group) => group.value);
   const options = partGroups?.filter((group) => !selectedIDs.includes(group.value));
   const updatedGroupId = (startsWith(groupId, ADD_GROUP_ID) ? replace(groupId, ADD_GROUP_NAME, 'ADD_') : groupId) as string;
+  const groupTypeAcronym = defaultValue[0]?.docTypeAcronym;
 
   const handleChange = (event, checked: boolean) => {
     onToggleGroupActivation({ ...dataItem, isLCPActive: checked });
@@ -78,9 +78,9 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
           alignItems="center"
           className={classes.editContainer}
         >
-          <Grid item alignItems="center" justify="center">
+          <Grid item alignItems="center" justify="center" data-cy={`${groupTypeAcronym}value`}>
             <FontAwesomeIcon
-              data-cy={`${groupLabel}-toggle-group`}
+              data-cy={`${groupTypeAcronym}toggle-group`}
               size="sm"
               className={classes.toggleExpandCollapse}
               onClick={() => onExpandChange(dataItem)}
@@ -95,7 +95,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               disabled={hasEditLCPPermission ? displayGroupSelection : !isEditModeAndHasEditLCPPermission}
               className={classes.groupCheckBox}
               onChange={handleChange}
-              data-cy={`${defaultValue[0]?.docTypeAcronym}select`}
+              data-cy={`${groupTypeAcronym}select`}
             />
             {!displayGroupSelection && displayValue}
           </Grid>
@@ -124,7 +124,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               ref={discardRef}
               onClick={() => onDiscardGroup(dataItem)}
               className={classes.editButtons}
-              data-cy="discard-group-btn"
+              data-cy={`${groupTypeAcronym}discard-group`}
             >
               <FontAwesomeIcon
                 icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')}
@@ -141,7 +141,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               ref={saveRef}
               className={classes.editButtons}
               onClick={() => onUpdateAddOrEditGroup(dataItem)}
-              data-cy="save-group-btn"
+              data-cy={`${groupTypeAcronym}save-group`}
             >
               <FontAwesomeIcon
                 icon={isSaveHovered ? solid('square-check') : light('square-check')}
@@ -157,7 +157,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               color="primary"
               className={classes.buttons}
               onClick={() => onEditGroup(dataItem)}
-              data-cy={`${defaultValue[0]?.docTypeAcronym}edit-phase`}
+              data-cy={`${groupTypeAcronym}edit-phase`}
             >
               <FontAwesomeIcon icon={regular('pen-to-square')} />
             </IconButton>
