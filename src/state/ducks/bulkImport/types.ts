@@ -419,7 +419,7 @@ enum FieldType {
   BOOLEAN = 'BOOLEAN',
 }
 
-interface LogEntry extends Partial<Audit> {
+export interface LogEntry extends Partial<Audit> {
   createdAt: string
   updatedAt: string
   changeRequestId: string | null
