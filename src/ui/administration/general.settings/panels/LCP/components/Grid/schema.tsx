@@ -100,6 +100,9 @@ export const LCPSchema = ({
       field: 'actions',
       title: 'common.actions',
       filterable: false,
+      headerCell: (props) => <HeaderCell
+        {...props}
+        content="common.actions" isShowIcon={false} />,
       template: (props) => (
         <LCPActionsCellTemplate
           {...props}
@@ -107,7 +110,7 @@ export const LCPSchema = ({
           onConfirm={onConfirm}
         />
       ),
-      width: 90,
+      width: 70,
     },
   ];
 };
