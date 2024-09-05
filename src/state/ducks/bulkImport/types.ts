@@ -234,6 +234,7 @@ export interface TableErrorDetail {
   message: string
   row: number
   edited?: boolean
+  idx?: number
   help?: {
     message: string
     data?: string[]

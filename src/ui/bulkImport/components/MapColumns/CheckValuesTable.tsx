@@ -88,7 +88,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
       }
     }
 
-    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: props.dataIndex, isEdited: isValid }));
+    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: dataItem.idx as number, isEdited: isValid }));
   };
 
   const content = (
@@ -230,7 +230,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData]);
 
-  const tableDataFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors') : [];
+  const tableHeadersFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors') : [];
 
   return (
     <>
@@ -259,7 +259,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           {...dataState}
           skip={page * pageSize}
           take={pageSize}
-          total={data.length}
+          total={tableData.length}
           editField="inEdit"
           pageable={{
             buttonCount: BUTTON_COUNT,
@@ -274,7 +274,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           onDataStateChange={dataStateChange}
           onFilterChange={filterChange}
         >
-          {tableDataFiltered.map((key, idx) => (
+          {tableHeadersFiltered.map((key, idx) => (
             <GridColumn width={150} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
           ))}
         </StyledKendoGrid>

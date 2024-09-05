@@ -27,13 +27,14 @@ export const getTableData = (state: ApplicationState) => state.bulkImport.steps.
 export const getShowErrorsOnly = (state: ApplicationState) => state.bulkImport.steps.showErrorsOnly;
 export const getTableDataFiltered = (state: ApplicationState) => {
   const showErrorsOnly = state.bulkImport.steps.showErrorsOnly;
-  const tableData = state.bulkImport.steps.tableData;
+  const tableData = state.bulkImport.steps.tableData || [];
+  const newTableData = tableData.map((table, idx) => ({ ...table, idx }));
 
   if (showErrorsOnly) {
-    return tableData.filter((item) => item.errors && item.errors.length > 0);
+    return newTableData.filter((item) => item.errors && item.errors.length > 0 && item.errors.some(err => !err.edited));
   }
 
-  return tableData || [];
+  return newTableData || [];
 };
 export const getIsLoading = (state: ApplicationState) => state.bulkImport.steps.isLoading;
 export const getApproversSelectList = (state: ApplicationState): ApproverOption[] =>
