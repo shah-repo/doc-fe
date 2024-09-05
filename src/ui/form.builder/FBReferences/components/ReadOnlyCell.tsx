@@ -19,7 +19,7 @@ export const ReadOnlyCell: React.FC<CustomTemplateProps> = ({
   const handleClick = () => onClick?.({ dataItem });
 
   return (
-    <OverflowContent onClick={handleClick}>
+    <OverflowContent onClick={handleClick} data-cy={`${field}-value`}>
       {displayValue ?? EMPTY_VALUE_PLACEHOLDER}
     </OverflowContent>
   );

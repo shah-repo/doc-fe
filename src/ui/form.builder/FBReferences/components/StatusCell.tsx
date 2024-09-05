@@ -32,6 +32,7 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
       childrenElement={
         <Chip
           size="small"
+          data-cy="status-value"
           className={cx(
             classes.chip,
             classes[statusClassMapping[displayStatus]],

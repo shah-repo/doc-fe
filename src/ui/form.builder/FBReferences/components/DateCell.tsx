@@ -20,5 +20,5 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     MomentFormats.MonthDateYearTwoDigit,
   );
 
-  return <>{value}</>;
+  return <span data-cy={`${field}-value`}>{value}</span>;
 };

@@ -18,6 +18,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
       <TextField
         {...getFieldProps(field)}
         defaultValue={undefined}
+        data-cy="text-field"
         type="text"
         size="small"
       />

@@ -22,7 +22,7 @@ export const OwnerCell: React.FC<CustomTemplateProps> = ({
   const label = user?.label;
 
   return (
-    <Box onClick={() => onClick?.({ dataItem })}>
+    <Box onClick={() => onClick?.({ dataItem })} data-cy={`${field}-value`}>
       <OverflowTooltip title={label} placement="top" interactive arrow>
         {label}
       </OverflowTooltip>

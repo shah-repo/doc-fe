@@ -238,6 +238,7 @@ export const RefIDcell: React.FC<CustomTemplateProps> = (props) => {
       alignItems="center"
       container
       onClick={handleClick}
+      data-cy="reference-cell"
     >
       <Grid item xs={10} className={classes.grid}>
         <StyledLink
