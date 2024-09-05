@@ -12,7 +12,7 @@ import { translate } from '../../../../common/intl';
 import { validateDateFormats } from '../../../../common/utils/date';
 import { setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
 import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
-import { BulkImport, TableErrorDetail, TableErrorValidation, TableRow } from '../../../../state/ducks/bulkImport/types';
+import { BulkImport, TableErrorDetail, TableErrorValidation, TableRowWithIdx } from '../../../../state/ducks/bulkImport/types';
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import Text from '../../../components/Text';
 import { Button, Switch } from '../../../components/forms/fields-next';
@@ -149,9 +149,9 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     take: pageSize,
     sort: [],
   });
-  const [data, setData] = useState<TableRow[]>([]);
+  const [data, setData] = useState<TableRowWithIdx[]>([]);
   const [errorCount, setErrorCount] = useState(0);
-  const tableData = useSelector(getTableDataFiltered);
+  const tableData: TableRowWithIdx[] = useSelector(getTableDataFiltered);
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
   const excelExportRef = useRef<ExcelExport | null>(null);
@@ -164,7 +164,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   };
 
   const filterChange = (event: GridFilterChangeEvent) => {
-    const newData = filterBy(tableData, event.filter);
+    const newData: TableRowWithIdx[] = filterBy(tableData, event.filter);
     setFilter(event.filter);
     setData(newData.slice(page * pageSize, (page + 1) * pageSize));
   };

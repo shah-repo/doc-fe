@@ -3,7 +3,7 @@ import { translate } from '../../../common/intl';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
 import { ApprovalStatus } from '../common/types';
-import { ApproverOption, BkStatus, BulkImportCustom } from './types';
+import { ApproverOption, BkStatus, BulkImportCustom, TableRow, TableRowWithIdx } from './types';
 
 // STEPS
 export const getStep = (state: ApplicationState) => state.bulkImport.steps.step;
@@ -27,8 +27,8 @@ export const getTableData = (state: ApplicationState) => state.bulkImport.steps.
 export const getShowErrorsOnly = (state: ApplicationState) => state.bulkImport.steps.showErrorsOnly;
 export const getTableDataFiltered = (state: ApplicationState) => {
   const showErrorsOnly = state.bulkImport.steps.showErrorsOnly;
-  const tableData = state.bulkImport.steps.tableData || [];
-  const newTableData = tableData.map((table, idx) => ({ ...table, idx }));
+  const tableData: TableRow[] = state.bulkImport.steps.tableData || [];
+  const newTableData: TableRowWithIdx[] = tableData.map((table, idx) => ({ ...table, idx }));
 
   if (showErrorsOnly) {
     return newTableData.filter((item) => item.errors && item.errors.length > 0 && item.errors.some(err => !err.edited));

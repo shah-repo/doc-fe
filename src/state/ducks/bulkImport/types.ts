@@ -234,7 +234,6 @@ export interface TableErrorDetail {
   message: string
   row: number
   edited?: boolean
-  idx?: number
   help?: {
     message: string
     data?: string[]
@@ -243,8 +242,12 @@ export interface TableErrorDetail {
   }
 }
 
-export interface TableRow extends Record<string, string | TableErrorDetail[] | undefined> {
+export interface TableRow extends Record<string, string | number | TableErrorDetail[] | undefined> {
   errors?: TableErrorDetail[]
+}
+
+export interface TableRowWithIdx extends TableRow {
+  idx: number
 }
 
 interface EmployeeGroup extends Pick<Group, 'id' | 'name' | 'permissions' | 'type' | 'tags'> {
