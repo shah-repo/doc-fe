@@ -15,9 +15,7 @@ import SettingsPanel from '../../components/SettingsPanel';
 import SettingsPanelSection from '../../components/SettingsPanelSection';
 import SettingsTable from '../../components/SettingsTable';
 import SwitchControl from '../../components/SwitchControl';
-// import { EquipmentFamily } from '../../constants';
 import { SettingsPanelProps } from '../../types';
-// import DataTable from './DataTable';
 import { buildSchema } from './schema';
 import { EditableEquipmentLocation } from './types';
 

@@ -70,8 +70,3 @@ export const panels = [
     component: EquipmentFamilySettingsPanel,
   },
 ];
-
-export enum EquipmentFamily {
-  Locations = 'locations',
-  Statuses = 'statuses',
-}
