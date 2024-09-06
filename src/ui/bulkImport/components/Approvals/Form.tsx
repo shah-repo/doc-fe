@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
 import { getApprovers, getOneBulkImport, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
-import { baseApprovalFieldId } from "../../../../state/ducks/bulkImport/constants";
+import { approvalFieldPrefix } from "../../../../state/ducks/bulkImport/constants";
 import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
 import { abandonApproval, patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview, postDocumentRevisionsWithdrawn } from "../../../../state/ducks/bulkImport/utils";
@@ -49,7 +49,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
     try {
       // Process each user sequentially
       for (const user of users) {
-        const approvalFieldId = `${baseApprovalFieldId}${FB.uniqid}`
+        const approvalFieldId = `${approvalFieldPrefix}${FB.uniqid}`
         const approval = await postApprovals(user.value, bulkImport?.documentRevisionId, approvalFieldId);
         if (approval) {
           const documentRevision = await patchDocumentRevisions(approval.id, bulkImport?.documentRevisionId, approvalFieldId);

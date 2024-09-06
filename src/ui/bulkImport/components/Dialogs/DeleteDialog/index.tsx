@@ -40,32 +40,32 @@ const DeleteDialog: React.FC<BulkImportProgressProps> = ({
 
   return (
     <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        maxWidth="xs"
-      >
-        <DialogTitle id="alert-dialog-title" className={classes.headerContainer}>
-          <FontAwesomeIcon
-            className={classes.exclamationIcon}
-            icon={regular('triangle-exclamation')}
-          />
-          {translate('common.alert')}
-        </DialogTitle>
-        <DialogContent className={classes.bodyContainer}>
-            <p>{translate('bulkImport.deleteDialogDescription')}</p>
-            <p>{translate('bulkImport.areYouSureWantToContinue')}</p>
-        </DialogContent>
-        <DialogActions className={classes.buttonsContainer}>
-          <Button onClick={handleClose} color="primary" kind="ghost">
-            {translate('common.no.go.back')}
-          </Button>
-          <Button onClick={onConfirm} color="primary" autoFocus disabled={isLoading}>
-            {translate('common.yes.im.sure')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      maxWidth="xs"
+    >
+      <DialogTitle id="alert-dialog-title" className={classes.headerContainer}>
+        <FontAwesomeIcon
+          className={classes.exclamationIcon}
+          icon={regular('triangle-exclamation')}
+        />
+        {translate('common.alert')}
+      </DialogTitle>
+      <DialogContent className={classes.bodyContainer}>
+          <p>{translate('bulkImport.deleteDialogDescription')}</p>
+          <p>{translate('bulkImport.areYouSureWantToContinue')}</p>
+      </DialogContent>
+      <DialogActions className={classes.buttonsContainer}>
+        <Button onClick={handleClose} color="primary" kind="ghost">
+          {translate('common.no.go.back')}
+        </Button>
+        <Button onClick={onConfirm} color="primary" autoFocus disabled={isLoading}>
+          {translate('common.yes.im.sure')}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
