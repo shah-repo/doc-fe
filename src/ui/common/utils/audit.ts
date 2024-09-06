@@ -1,7 +1,7 @@
 import { get, isString } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { translate } from '../../../common/intl';
-import { Audit } from '../../../state/ducks/audit/types';
+import { Audit, LifecyclePahseOptionPayload } from '../../../state/ducks/audit/types';
 import { WorkOrderTypesValues } from '../../../state/ducks/documentRevisions/documentType/types';
 import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '../../form.builder';
 import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
@@ -54,4 +54,9 @@ export const getWOAuditDefaultValue = (audit: Audit): string => {
   } else {
     return auditValue;
   }
+};
+
+export const getLCPAuditDefaultValue = (audit: Audit, lifecyclePhaseOptions: LifecyclePahseOptionPayload[]): string => {
+  const lifecyclePahse = lifecyclePhaseOptions.find(data => data.id === audit.nextValue);
+  return lifecyclePahse ? lifecyclePahse.text : 'N/A';
 };
