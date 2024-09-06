@@ -40,10 +40,8 @@ const attachments = [
     },
     isComplete: true,
   },
-  { name: 'Manufaturing Process Instructions.pdf' },
-  { name: 'Linear Platform Subassembly_LHR.pdf' },
-  { name: 'Inspection Instructions.docx' },
-  { name: 'Inspection results spreadsheet.xlsx' },
+  { name: 'Inspection Instructions.docx', type: 'docx' },
+  { name: 'Inspection results spreadsheet.xlsx', type: 'xlsx' },
 ];
 
 const AttachmentsPanel = () => {

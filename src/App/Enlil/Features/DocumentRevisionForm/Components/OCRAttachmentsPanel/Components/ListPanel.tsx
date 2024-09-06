@@ -26,7 +26,7 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview }) =>
           >
             <ListItemIcon className={classes.listItemIcon} >
               <Checkbox
-                checked={(index % 2 === 0)}
+                checked={(index === 1)}
                 tabIndex={-1}
                 disableRipple
               />

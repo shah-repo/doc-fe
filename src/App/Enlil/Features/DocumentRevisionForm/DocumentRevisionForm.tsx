@@ -24,7 +24,7 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -35,6 +35,7 @@ import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMTabs } from '../../../Shifamed/Components/SMTabs/SMTabs.hoc';
 import FBTrainingInfoContainer from '../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container';
+import AttachmentsPanel from './Components/OCRAttachmentsPanel/AttachmentsPanel';
 import { withDocumentRevisionFormWrap } from './DocumentRevisionForm.wrap';
 
 const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> = ({
@@ -78,6 +79,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isPaperLHR = checkIsDocumentPaperLHR(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
   const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = checkIsDocumentPart(
@@ -190,12 +192,20 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     [_tabsState],
   );
 
+  const getLeftSidePanel = () => {
+    if (isPaperLHR) {
+      return AttachmentsPanel;
+    }
+
+    return DocumentRevisionLeftPanel;
+  };
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: '100%', width: '100%' }}
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={formValues.values}
-      leftSidebar={DocumentRevisionLeftPanel}
+      leftSidebar={getLeftSidePanel()}
       header= {
         <DocumentRevisionHeader
           {...{ bannerPortal, shouldShowUpgrade, setDoNotPrompt }}
