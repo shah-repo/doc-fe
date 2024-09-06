@@ -2,9 +2,11 @@ import { kebabCase, noop } from 'lodash';
 import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
+import { getHasPermission } from '../../../../common/utils/selectors';
 import { authSelectors } from '../../../../state/ducks/auth';
+import { Permission } from '../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DocumentRevision, SupplierStatus } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus, SupplierStatus } from '../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../app/alert.dialog/AlertDialog';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -24,6 +26,7 @@ const options = Object.values(SupplierStatus).map(value => ({
   value,
   label: getSupplierStatusLable(value),
 }));
+const disabledStatuses = [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided];
 
 const HeaderSupplierStatus: React.FC<Props> = ({ documentRevision }) => {
   const confirmationDialog = useDialog();
@@ -34,7 +37,8 @@ const HeaderSupplierStatus: React.FC<Props> = ({ documentRevision }) => {
 
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
-  const isSupplierStatusEditable = isOwner;
+  const hasPermissionToUpdateSupplierStatus = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_STATUS));
+  const isSupplierStatusEditable = (isOwner || hasPermissionToUpdateSupplierStatus) && (!disabledStatuses.includes(documentRevision.status));
 
   const statusLabel = getSupplierStatusLable(documentRevision.supplierStatus);
 
