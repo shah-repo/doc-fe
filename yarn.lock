@@ -1925,13 +1925,6 @@
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-free/-/5.15.4/fontawesome-free-5.15.4.tgz#ecda5712b61ac852c760d8b3c79c96adca5554e5"
   integrity sha512-eYm8vijH/hpzr/6/1CJ/V/Eb1xQFW2nnUKArb3z+yUWv7HTwj6M7SP957oMjfZjAHU6qpoNc2wQvIxBLWYa/Jg==
 
-"@fortawesome/fontawesome-svg-core@6.5.2":
-  version "6.5.2"
-  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-svg-core/-/6.5.2/fontawesome-svg-core-6.5.2.tgz#4b42de71e196039b0d5ccf88559b8044e3296c21"
-  integrity sha512-5CdaCBGl8Rh9ohNdxeeTMxIj8oc3KNBgIeLMvJosBMdslK/UnEB8rzyDRrbKdL1kDweqBPo4GT9wvnakHWucZw==
-  dependencies:
-    "@fortawesome/fontawesome-common-types" "6.5.2"
-
 "@fortawesome/fontawesome-svg-core@^1.2.26":
   version "1.3.0"
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-svg-core/-/1.3.0/fontawesome-svg-core-1.3.0.tgz#343fac91fa87daa630d26420bfedfba560f85885"
@@ -3559,20 +3552,11 @@ aggregate-error@^3.0.0:
 
 "ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git":
   version "0.0.1"
-  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#1f9a95c117b10eee9da9aafd0ef20f21e3653316"
+  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#2517e05e685a4a903e4360d39102b6f38d0d84b4"
   dependencies:
     "@chatscope/chat-ui-kit-react" "^2.0.3"
     "@chatscope/chat-ui-kit-styles" "^1.4.0"
-    "@fortawesome/fontawesome-svg-core" "6.5.2"
-    "@fortawesome/free-regular-svg-icons" "6.5.2"
-    "@fortawesome/free-solid-svg-icons" "6.5.2"
-    "@fortawesome/pro-light-svg-icons" "6.5.2"
-    "@fortawesome/pro-regular-svg-icons" "6.5.2"
-    "@fortawesome/pro-solid-svg-icons" "6.5.2"
-    "@fortawesome/react-fontawesome" "^0.2.0"
     "@material-ui/core" "4.12.4"
-    babel-plugin-macros "^3.1.0"
-    lodash "^4.17.21"
 
 airbnb-prop-types@^2.15.0:
   version "2.15.0"
@@ -10639,11 +10623,6 @@ lodash@4.17.15, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
-
-lodash@^4.17.21:
-  version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 loglevel@^1.6.4:
   version "1.6.6"
