@@ -1,11 +1,10 @@
 import React from 'react';
 import ActionsCellTemplate from '../../../components/SettingsTable/components/ActionsCellTemplate';
-import ActiveCellTemplate from '../../../components/SettingsTable/components/ActiveCellTemplate';
-import TextCellTemplate from '../../../components/SettingsTable/components/TextCellTemplate';
 import { SchemaBuilder } from '../../../components/SettingsTable/types';
-import { EditableASLStatus } from './types';
+import { SupplierDropDownCell } from './components/SupplierDropDownCell';
+import { EditableSupplierConfig } from './types';
 
-export const buildSchema: SchemaBuilder<EditableASLStatus> = ({
+export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
   isActive,
   onEdit,
   onActiveStateChange,
@@ -15,28 +14,22 @@ export const buildSchema: SchemaBuilder<EditableASLStatus> = ({
 }) => {
   return [
     {
-      id: 'active',
-      field: 'active',
-      title: 'common.active',
-      width: 70,
-      template: (props) => (
-        <ActiveCellTemplate
-          {...props}
-          onActiveStateChange={onActiveStateChange}
-        />
-      ),
+      id: 'supplierType',
+      field: 'supplierType',
+      title: 'administration.general.settings.suppliers.enlil.supplier.type',
+      template: (props) => <SupplierDropDownCell {...props} dataOptions={[]} />,
     },
     {
-      id: 'internalType',
-      field: 'internalType',
-      title: 'administration.general.settings.suppliers.enlil.internet',
-      template: TextCellTemplate,
+      id: 'supplierCapabilities',
+      field: 'supplierCapabilities',
+      title: 'administration.general.settings.suppliers.enlil.supplier.capabilities',
+      template: (props) => <SupplierDropDownCell {...props} dataOptions={[]} />,
     },
     {
-      id: 'displayLabel',
-      field: 'displayLabel',
-      title: 'administration.general.settings.suppliers.customer.label',
-      template: TextCellTemplate,
+      id: 'supplierServices',
+      field: 'supplierServices',
+      title: 'administration.general.settings.suppliers.enlil.supplier.services',
+      template: (props) => <SupplierDropDownCell {...props} dataOptions={[]} />,
     },
     {
       id: 'actions',

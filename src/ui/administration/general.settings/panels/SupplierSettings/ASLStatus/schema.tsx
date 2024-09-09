@@ -29,7 +29,7 @@ export const buildSchema: SchemaBuilder<EditableASLStatus> = ({
     {
       id: 'internalType',
       field: 'internalType',
-      title: 'administration.general.settings.suppliers.enlil.internet',
+      title: 'administration.general.settings.suppliers.enlil.internal',
       template: TextCellTemplate,
     },
     {
