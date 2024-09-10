@@ -25,6 +25,12 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   const [editedSupplierConfiguration, setEditedSupplierConfiguration] = React.useState<EditableSupplierConfig>();
 
   const discardSupplierConfiguration = () => setEditedSupplierConfiguration(undefined);
+
+  const deleteSupplierConfiguration = (dataItem: EditableSupplierConfig) => {
+    const updateSupplierConfiguration = supplierConfiguration.filter((config) => { return config.id !== dataItem.id; });
+    setSupplierConfiguration(updateSupplierConfiguration);
+  };
+
   // const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
 
   // const async = useAsync({
@@ -101,6 +107,7 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     onEdit: isActive ? setEditedSupplierConfiguration : undefined,
     onActiveStateChange: isActive ? changeLocationActiveState : undefined,
     onDiscard: discardSupplierConfiguration,
+    onDelete: deleteSupplierConfiguration,
     onConfirm: submitForm,
   });
 

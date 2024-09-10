@@ -3,12 +3,12 @@ import { useFormikContext } from 'formik';
 import { kebabCase } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../../../common/intl';
-import OverflowingContent from '../../../../../../change.request/FBMaterialDisposition/components/commonCells/OveflowContent';
 import {
   Autocomplete,
   FormikField,
 } from '../../../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../../../components/OverflowTooltip';
 import { CustomCellProps } from '../types';
 
 const Editor: React.FC<CustomCellProps> = ({
@@ -51,16 +51,22 @@ export const SupplierDropDownCell: React.FC<CustomCellProps> = (props) => {
   const { field, dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
-  const dataCy = `${kebabCase(field)}-td`;
-  console.log('dataItem :', dataItem, field);
+  const dataCy = kebabCase(field);
+  const displayValue = dataItem[field].map(item => item.text).join(', ');
 
   return (
-    <Box display="flex" justifyContent="start" data-cy={dataCy} onClick={handleClick}>
+    <Box display="flex" justifyContent="start" data-cy={`${dataCy}-td`} onClick={handleClick}>
       {isEditMode && <Editor {...props} />}
       {!isEditMode && (
-        <OverflowingContent onClick={handleClick} data-cy={dataCy}>
-          {dataItem[field].map(item => item.text).join(', ')}
-        </OverflowingContent>
+        <OverflowTooltip
+          arrow
+          placement="top"
+          title={displayValue}
+          onClick={handleClick}
+          data-cy={`${dataCy}-value`}
+        >
+          {displayValue}
+        </OverflowTooltip>
       )}
     </Box>
   );
