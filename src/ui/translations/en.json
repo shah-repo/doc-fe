@@ -1772,6 +1772,7 @@
   "ocr.submit.button": "Run OCR",
   "ocr.document.preview.title": "Document Preview",
   "ocr.hide.preview.button": "Hide Preview",
+  "ocr.file.preview.not.support.message": "Preview not available for this file type.",
   "documenttype.management": "Document type management",
   "documenttype.edit.schema": "Edit schema",
   "documenttype.view.schema": "View schema",
