@@ -2,13 +2,17 @@ import React from 'react';
 import ActionsCellTemplate from '../../../components/SettingsTable/components/ActionsCellTemplate';
 import { SchemaBuilder } from '../../../components/SettingsTable/types';
 import { SupplierDropDownCell } from './components/SupplierDropDownCell';
-import { EditableSupplierConfig } from './types';
+import { TypeCell } from './components/TypeCell';
+import { EditableSupplierConfig, OptionType } from './types';
 
 export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
   isActive,
   onEdit,
   onActiveStateChange,
   onDelete,
+  capabilities,
+  services,
+  types,
   onDiscard,
   onConfirm,
 }) => {
@@ -17,19 +21,19 @@ export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
       id: 'supplierType',
       field: 'supplierType',
       title: 'administration.general.settings.suppliers.enlil.supplier.type',
-      template: (props) => <SupplierDropDownCell {...props} dataOptions={[]} />,
+      template: (props) => <TypeCell {...props} dataOptions={types as OptionType[]} />,
     },
     {
-      id: 'supplierCapabilities',
-      field: 'supplierCapabilities',
+      id: 'capabilities',
+      field: 'capabilities',
       title: 'administration.general.settings.suppliers.enlil.supplier.capabilities',
-      template: (props) => <SupplierDropDownCell {...props} dataOptions={[]} />,
+      template: (props) => <SupplierDropDownCell {...props} dataOptions={capabilities as OptionType[]} />,
     },
     {
-      id: 'supplierServices',
-      field: 'supplierServices',
+      id: 'services',
+      field: 'services',
       title: 'administration.general.settings.suppliers.enlil.supplier.services',
-      template: (props) => <SupplierDropDownCell {...props} dataOptions={[]} />,
+      template: (props) => <SupplierDropDownCell {...props} dataOptions={services as OptionType[]} />,
     },
     {
       id: 'actions',

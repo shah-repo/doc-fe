@@ -9,7 +9,7 @@ import {
 } from '../../../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../../components/OverflowTooltip';
-import { CustomCellProps } from '../types';
+import { CustomCellProps, OptionType } from '../types';
 
 const Editor: React.FC<CustomCellProps> = ({
   dataItem,
@@ -37,6 +37,9 @@ const Editor: React.FC<CustomCellProps> = ({
         {...getFieldProps(field)}
         blurOnSelect
         disableClearable
+        multiple
+        getOptionLabel={(option: OptionType) => option.text}
+        getOptionSelected={(option: OptionType, value: OptionType) => option.id === value.id}
         placeholder={translate('common.select')}
         options={dataOptions}
         data-cy={`${kebabCase(field)}-field`}

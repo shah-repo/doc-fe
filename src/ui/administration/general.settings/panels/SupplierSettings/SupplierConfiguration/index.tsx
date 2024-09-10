@@ -3,25 +3,33 @@ import { isEmpty, kebabCase, omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../common/intl';
+import { companyActions } from '../../../../../../state/ducks/company';
 import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../../../components/notifications';
+import useActionCreator from '../../../../../hooks/useActionCreator';
+import useAsync from '../../../../../hooks/useAsync';
 import SettingsPanel from '../../../components/SettingsPanel';
 import SettingsTable from '../../../components/SettingsTable';
 import { SettingsPanelProps } from '../../../types';
 import { buildSchema } from './schema';
-import { EditableSupplierConfig, SupplierConfig, SupplierTypes } from './types';
+import { EditableSupplierConfig, OptionType, SupplierConfig, SUPPLIER_FIELDS } from './types';
 
 const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   // const { submitForm: submitSettingsForm } = useFormikContext<GeneralSettings>();
   const isActive = true; // useSelector(getHasPermission(Permission.EDIT_SUPPLIER_STATUS));
-  // const fetchLCPPhases = useActionCreator(companyActions.fetchLCPPhasesByGroup);
+  const fetchSupplierConfig = useActionCreator(companyActions.fetchSupplierConfigs);
+
   const supplierConfigurationSampleData = [
-    { id: '1', supplierType: [{ id: '12', text: SupplierTypes.ConsultantContractors }], supplierCapabilities: [{ id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }], supplierServices: [{ id: '12', text: 'Approved' }] },
-    { id: '2', supplierType: [{ id: '12', text: SupplierTypes.ConsultantContractors }], supplierCapabilities: [{ id: '12', text: 'Approved' }], supplierServices: [{ id: '12', text: 'Approved' }] },
-    { id: '3', supplierType: [{ id: '12', text: SupplierTypes.ConsultantContractors }], supplierCapabilities: [{ id: '12', text: 'Approved' }], supplierServices: [{ id: '12', text: 'Approved' }] },
-    { id: '4', supplierType: [{ id: '12', text: SupplierTypes.ConsultantContractors }], supplierCapabilities: [{ id: '12', text: 'Approved' }], supplierServices: [{ id: '12', text: 'Approved' }] },
+    { id: '1', supplierType: [{ id: '12', text: 'ConsultantContractors' }], capabilities: [{ id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }], services: [{ id: '12', text: 'Approved' }] },
+    { id: '2', supplierType: [{ id: '12', text: 'ConsultantContractors' }], capabilities: [{ id: '12', text: 'Approved' }], services: [{ id: '12', text: 'Approved' }] },
+    { id: '3', supplierType: [{ id: '12', text: 'ConsultantContractors' }], capabilities: [{ id: '12', text: 'Approved' }], services: [{ id: '12', text: 'Approved' }] },
+    { id: '4', supplierType: [{ id: '12', text: 'ConsultantContractors' }], capabilities: [{ id: '12', text: 'Approved' }], services: [{ id: '12', text: 'Approved' }] },
   ];
 
   const [supplierConfiguration, setSupplierConfiguration] = React.useState<SupplierConfig[]>(supplierConfigurationSampleData);
+  const [capabilities, setCapabilities] = React.useState<OptionType[]>();
+  const [services, setServices] = React.useState<OptionType[]>();
+  const [types, setTypes] = React.useState<OptionType[]>();
   const [editedSupplierConfiguration, setEditedSupplierConfiguration] = React.useState<EditableSupplierConfig>();
 
   const discardSupplierConfiguration = () => setEditedSupplierConfiguration(undefined);
@@ -40,6 +48,33 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   //     toastError(error);
   //   },
   // });
+
+  const capabilitiesAsync = useAsync<OptionType[]>({
+    onSuccess: (data) => {
+      setCapabilities(data);
+    },
+    onError: toastError,
+  });
+
+  const supplierServiesAsync = useAsync<OptionType[]>({
+    onSuccess: (data) => {
+      setServices(data);
+    },
+    onError: toastError,
+  });
+
+  const supplierTypesAsync = useAsync<OptionType[]>({
+    onSuccess: (data) => {
+      setTypes(data);
+    },
+    onError: toastError,
+  });
+
+  useEffect(() => {
+    capabilitiesAsync.start(fetchSupplierConfig, SUPPLIER_FIELDS.capabilities, capabilitiesAsync);
+    supplierServiesAsync.start(fetchSupplierConfig, SUPPLIER_FIELDS.services, supplierServiesAsync);
+    supplierTypesAsync.start(fetchSupplierConfig, SUPPLIER_FIELDS.type, supplierTypesAsync);
+  }, []);
 
   const updateLocations = (updatedLocations: SupplierConfig[]) => {
     setSupplierConfiguration(updatedLocations);
@@ -80,8 +115,8 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     setEditedSupplierConfiguration({
       id: uuidv4(),
       supplierType: [],
-      supplierCapabilities: [],
-      supplierServices: [],
+      capabilities: [],
+      services: [],
       [MODE_FIELD]: Mode.add,
     });
   };
@@ -108,6 +143,9 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     onActiveStateChange: isActive ? changeLocationActiveState : undefined,
     onDiscard: discardSupplierConfiguration,
     onDelete: deleteSupplierConfiguration,
+    capabilities,
+    services,
+    types,
     onConfirm: submitForm,
   });
 
