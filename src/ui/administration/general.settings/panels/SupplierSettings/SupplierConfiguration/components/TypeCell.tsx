@@ -54,7 +54,8 @@ export const TypeCell: React.FC<CustomCellProps> = (props) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = kebabCase(field);
-  const displayValue = dataItem[field]?.text;
+  const displayValue = dataItem[field];
+  console.log('dataItem :', dataItem, dataItem[field]);
 
   return (
     <Box display="flex" justifyContent="start" data-cy={`${dataCy}-td`} onClick={handleClick}>

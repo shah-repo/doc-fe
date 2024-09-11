@@ -18,8 +18,8 @@ export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
 }) => {
   return [
     {
-      id: 'supplierType',
-      field: 'supplierType',
+      id: 'text',
+      field: 'text',
       title: 'administration.general.settings.suppliers.enlil.supplier.type',
       template: (props) => <TypeCell {...props} dataOptions={types as OptionType[]} />,
     },

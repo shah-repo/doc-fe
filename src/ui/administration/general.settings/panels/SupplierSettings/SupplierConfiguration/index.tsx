@@ -1,9 +1,10 @@
-import { FormikProvider, useFormik } from 'formik';
+import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, kebabCase, omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../common/intl';
 import { companyActions } from '../../../../../../state/ducks/company';
+import { GeneralSettings } from '../../../../../../state/ducks/company/types';
 import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../../components/notifications';
 import useActionCreator from '../../../../../hooks/useActionCreator';
@@ -15,18 +16,10 @@ import { buildSchema } from './schema';
 import { EditableSupplierConfig, OptionType, SupplierConfig, SUPPLIER_FIELDS } from './types';
 
 const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
-  // const { submitForm: submitSettingsForm } = useFormikContext<GeneralSettings>();
   const isActive = true; // useSelector(getHasPermission(Permission.EDIT_SUPPLIER_STATUS));
   const fetchSupplierConfig = useActionCreator(companyActions.fetchSupplierConfigs);
-
-  const supplierConfigurationSampleData = [
-    { id: '1', supplierType: [{ id: '12', text: 'ConsultantContractors' }], capabilities: [{ id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }, { id: '12', text: 'Approved' }], services: [{ id: '12', text: 'Approved' }] },
-    { id: '2', supplierType: [{ id: '12', text: 'ConsultantContractors' }], capabilities: [{ id: '12', text: 'Approved' }], services: [{ id: '12', text: 'Approved' }] },
-    { id: '3', supplierType: [{ id: '12', text: 'ConsultantContractors' }], capabilities: [{ id: '12', text: 'Approved' }], services: [{ id: '12', text: 'Approved' }] },
-    { id: '4', supplierType: [{ id: '12', text: 'ConsultantContractors' }], capabilities: [{ id: '12', text: 'Approved' }], services: [{ id: '12', text: 'Approved' }] },
-  ];
-
-  const [supplierConfiguration, setSupplierConfiguration] = React.useState<SupplierConfig[]>(supplierConfigurationSampleData);
+  const { values: formValues } = useFormikContext<GeneralSettings>();
+  const [supplierConfiguration, setSupplierConfiguration] = React.useState<SupplierConfig[]>();
   const [capabilities, setCapabilities] = React.useState<OptionType[]>();
   const [services, setServices] = React.useState<OptionType[]>();
   const [types, setTypes] = React.useState<OptionType[]>();
@@ -35,7 +28,7 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   const discardSupplierConfiguration = () => setEditedSupplierConfiguration(undefined);
 
   const deleteSupplierConfiguration = (dataItem: EditableSupplierConfig) => {
-    const updateSupplierConfiguration = supplierConfiguration.filter((config) => { return config.id !== dataItem.id; });
+    const updateSupplierConfiguration = supplierConfiguration?.filter((config) => { return config.id !== dataItem.id; });
     setSupplierConfiguration(updateSupplierConfiguration);
   };
 
@@ -76,6 +69,10 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     supplierTypesAsync.start(fetchSupplierConfig, SUPPLIER_FIELDS.type, supplierTypesAsync);
   }, []);
 
+  useEffect(() => {
+    setSupplierConfiguration(formValues?.supplierConfig);
+  }, [formValues?.supplierConfig]);
+
   const updateLocations = (updatedLocations: SupplierConfig[]) => {
     setSupplierConfiguration(updatedLocations);
     // async.start(changeCompanyAction, { locations: updatedLocations }, async);
@@ -99,17 +96,13 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   const { setValues, submitForm } = formik;
 
   const changeLocationActiveState = (location: EditableSupplierConfig, state: boolean) => {
-    const updatedLocations = supplierConfiguration.map(it => it.id === location.id ? { ...it, active: state } : it);
-    updateLocations(updatedLocations);
+    const updatedLocations = supplierConfiguration?.map(it => it.id === location.id ? { ...it, active: state } : it);
+    updateLocations(updatedLocations ?? []);
   };
 
   useEffect(() => {
     setValues(editedSupplierConfiguration ?? {});
   }, [editedSupplierConfiguration, setValues]);
-
-  // useEffect(() => {
-  //   setSupplierConfiguration(locations);
-  // }, [locations]);
 
   const addSupplierConfig = () => {
     setEditedSupplierConfiguration({
@@ -134,8 +127,9 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       : mappedLocations;
 
   const dataCyGenerator = (SupplierConfig: EditableSupplierConfig) => ({
-    'data-cy': `row-${kebabCase(SupplierConfig.supplierType[0]?.id)}`,
+    'data-cy': `row-${kebabCase(SupplierConfig.id)}`,
   });
+  // 'data-cy': `row-${kebabCase(SupplierConfig.supplierType[0]?.id)}`,
 
   const schema = buildSchema({
     isActive,
