@@ -19,9 +19,11 @@ const Editor: React.FC<CustomCellProps> = ({
   onChange,
 }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
+  const value = dataOptions?.find((data) => data.text === dataItem[field]);
+  const isEditMode = Mode.edit === dataItem[MODE_FIELD];
 
-  const handleChange = (e, value: string) => {
-    setFieldValue(field, value);
+  const handleChange = (e, value: OptionType) => {
+    setFieldValue(field, value.text);
     onChange?.({
       dataIndex,
       dataItem,
@@ -37,10 +39,12 @@ const Editor: React.FC<CustomCellProps> = ({
         {...getFieldProps(field)}
         blurOnSelect
         disableClearable
+        disabled={isEditMode}
         getOptionLabel={(option: OptionType) => option.text}
-        getOptionSelected={(option: OptionType, value: OptionType) => option.id === value.id}
+        getOptionSelected={(option: OptionType, value) => option.text === value}
         placeholder={translate('common.select')}
         options={dataOptions}
+        value = {value}
         data-cy={`${kebabCase(field)}-field`}
         onChange={handleChange}
         size="small"
@@ -55,7 +59,6 @@ export const TypeCell: React.FC<CustomCellProps> = (props) => {
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = kebabCase(field);
   const displayValue = dataItem[field];
-  console.log('dataItem :', dataItem, dataItem[field]);
 
   return (
     <Box display="flex" justifyContent="start" data-cy={`${dataCy}-td`} onClick={handleClick}>

@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { isEmpty, kebabCase, omit, unionBy } from 'lodash';
+import { isEmpty, kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../common/intl';
@@ -32,15 +32,9 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     setSupplierConfiguration(updateSupplierConfiguration);
   };
 
-  // const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
-
-  // const async = useAsync({
-  //   onSuccess: submitSettingsForm,
-  //   onError: (error) => {
-  //     setSupplierConfiguration(supplierConfiguration);
-  //     toastError(error);
-  //   },
-  // });
+  const updateASLStatusSettings = useActionCreator(
+    companyActions.updateGeneralSettings,
+  );
 
   const capabilitiesAsync = useAsync<OptionType[]>({
     onSuccess: (data) => {
@@ -63,6 +57,13 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     onError: toastError,
   });
 
+  const async = useAsync({
+    onError: (error) => {
+      setSupplierConfiguration(supplierConfiguration);
+      toastError(error);
+    },
+  });
+
   useEffect(() => {
     capabilitiesAsync.start(fetchSupplierConfig, SUPPLIER_FIELDS.capabilities, capabilitiesAsync);
     supplierServiesAsync.start(fetchSupplierConfig, SUPPLIER_FIELDS.services, supplierServiesAsync);
@@ -73,31 +74,46 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     setSupplierConfiguration(formValues?.supplierConfig);
   }, [formValues?.supplierConfig]);
 
-  const updateLocations = (updatedLocations: SupplierConfig[]) => {
-    setSupplierConfiguration(updatedLocations);
-    // async.start(changeCompanyAction, { locations: updatedLocations }, async);
+  const updateSupplierConfiguration = (updatedSupplierConfig: SupplierConfig[]) => {
+    setSupplierConfiguration(updatedSupplierConfig);
+    if (formValues) {
+      async.start(
+        updateASLStatusSettings,
+        { ...formValues, supplierConfig: updatedSupplierConfig },
+        '',
+        'POST',
+        async,
+      );
+    }
   };
 
   const formik = useFormik<EditableSupplierConfig | Record<string, never>>({
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
-      if (isEmpty(values.supplierType)) {
+      if (isEmpty(values.text)) {
         error.name = 'validators.required';
       }
       return error;
     },
     onSubmit: (values) => {
-      const updatedLocations = unionBy([omit(values, MODE_FIELD)], supplierConfiguration, 'id');
+      const isAddition = values[MODE_FIELD] === Mode.add;
+      const updatedValues = omit(values, MODE_FIELD);
+      const updatedSupplierConfig = isAddition
+        ? [...(supplierConfiguration ?? []), updatedValues]
+        : supplierConfiguration?.map((aslStatus) =>
+          aslStatus.id === values.id ? updatedValues : aslStatus,
+        );
+
       discardSupplierConfiguration();
-      updateLocations(updatedLocations);
+      updateSupplierConfiguration(updatedSupplierConfig ?? []);
     },
   });
   const { setValues, submitForm } = formik;
 
-  const changeLocationActiveState = (location: EditableSupplierConfig, state: boolean) => {
-    const updatedLocations = supplierConfiguration?.map(it => it.id === location.id ? { ...it, active: state } : it);
-    updateLocations(updatedLocations ?? []);
+  const changeLocationActiveState = (supplierConfiguration: EditableSupplierConfig, state: boolean) => {
+    const updatedSupplierConfig = supplierConfiguration?.map(it => it.id === supplierConfiguration.id ? { ...it, active: state } : it);
+    updateSupplierConfiguration(updatedSupplierConfig ?? []);
   };
 
   useEffect(() => {
@@ -107,17 +123,17 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   const addSupplierConfig = () => {
     setEditedSupplierConfiguration({
       id: uuidv4(),
-      supplierType: [],
+      text: '',
       capabilities: [],
       services: [],
       [MODE_FIELD]: Mode.add,
     });
   };
 
-  const mappedLocations = supplierConfiguration?.map((location) => {
+  const mappedLocations = supplierConfiguration?.map((supplierConfiguration) => {
     return {
-      ...location,
-      [MODE_FIELD]: location.id === editedSupplierConfiguration?.id ? Mode.edit : Mode.show,
+      ...supplierConfiguration,
+      [MODE_FIELD]: supplierConfiguration.id === editedSupplierConfiguration?.id ? Mode.edit : Mode.show,
     };
   }) ?? [];
 
