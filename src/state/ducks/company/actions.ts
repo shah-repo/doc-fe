@@ -4,7 +4,7 @@ import { generatePath } from 'react-router-dom';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { OptionType } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
-import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, SUPPLIERS_OPTIONS_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
+import { ASL_OPTIONS_OPTIONS_URL, COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, SUPPLIERS_OPTIONS_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, ApiActionMethod, Handlers } from '../../types';
 import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
@@ -121,6 +121,15 @@ const fetchSupplierConfigs = (
     handlers,
   });
 
+const fetchASLOptions = (
+  handlers: Handlers,
+): ApiAction<OptionType> =>
+  apiActionWithCallbacks({
+    url: `${ASL_OPTIONS_OPTIONS_URL}`,
+    method: 'get',
+    handlers,
+  });
+
 const fetchLCPDocTypes = (
   handlers: Handlers,
 ): ApiAction<GroupDocTypes[]> =>
@@ -157,5 +166,6 @@ export default {
   redlineConfig,
   getGeneralSettings,
   fetchSupplierConfigs,
+  fetchASLOptions,
   updateGeneralSettings,
 };

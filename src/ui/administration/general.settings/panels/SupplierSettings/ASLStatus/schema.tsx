@@ -1,8 +1,10 @@
 import React from 'react';
 import ActionsCellTemplate from '../../../components/SettingsTable/components/ActionsCellTemplate';
-import ActiveCellTemplate from '../../../components/SettingsTable/components/ActiveCellTemplate';
 import TextCellTemplate from '../../../components/SettingsTable/components/TextCellTemplate';
 import { SchemaBuilder } from '../../../components/SettingsTable/types';
+import { OptionType } from '../SupplierConfiguration/types';
+import ActiveCell from './components/ActiveCell';
+import { ASLTypeCell } from './components/ASLTypeCell';
 import { EditableASLStatus } from './types';
 
 export const buildSchema: SchemaBuilder<EditableASLStatus> = ({
@@ -11,26 +13,26 @@ export const buildSchema: SchemaBuilder<EditableASLStatus> = ({
   onActiveStateChange,
   onDelete,
   onDiscard,
+  types,
   onConfirm,
 }) => {
   return [
     {
-      id: 'active',
-      field: 'active',
+      id: 'isActive',
+      field: 'isActive',
       title: 'common.active',
       width: 70,
       template: (props) => (
-        <ActiveCellTemplate
-          {...props}
-          onActiveStateChange={onActiveStateChange}
-        />
+        <ActiveCell {...props} onActiveStateChange={onActiveStateChange} />
       ),
     },
     {
       id: 'internalType',
       field: 'internalType',
       title: 'administration.general.settings.suppliers.enlil.internal',
-      template: TextCellTemplate,
+      template: (props) => (
+        <ASLTypeCell {...props} dataOptions={types as OptionType[]} />
+      ),
     },
     {
       id: 'displayLabel',

@@ -1,42 +1,89 @@
-import { FormikProvider, useFormik } from 'formik';
-import { isEmpty, kebabCase, omit, unionBy } from 'lodash';
+import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import { isEmpty, kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../common/intl';
-import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
+import { getHasPermission } from '../../../../../../common/utils/selectors';
+import { Permission } from '../../../../../../state/ducks/auth/types';
+import { companyActions } from '../../../../../../state/ducks/company';
+import { GeneralSettings } from '../../../../../../state/ducks/company/types';
+import {
+  Mode,
+  MODE_FIELD,
+} from '../../../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../../../components/notifications';
+import useActionCreator from '../../../../../hooks/useActionCreator';
+import useAsync from '../../../../../hooks/useAsync';
 import SettingsPanel from '../../../components/SettingsPanel';
 import SettingsTable from '../../../components/SettingsTable';
 import { SettingsPanelProps } from '../../../types';
 import { buildSchema } from './schema';
-import { ASLInternalType, ASLStatus, EditableASLStatus } from './types';
+import { ASLStatus, ASLSTATUS_KEYS, EditableASLStatus } from './types';
 
 const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
-  // const { submitForm: submitSettingsForm } = useFormikContext<GeneralSettings>();
-  const isActive = true; // useSelector(getHasPermission(Permission.EDIT_SUPPLIER_STATUS));
-  const ASLStastusListSampleData = [
-    { id: '1', internalType: ASLInternalType.Approved, displayLabel: 'Approved', active: true },
-    { id: '2', internalType: ASLInternalType.PendingEvaluation, displayLabel: 'Pending Evalution', active: true },
-    { id: '3', internalType: ASLInternalType.Disqualify, displayLabel: 'Disqualify', active: true },
-    { id: '4', internalType: ASLInternalType.Inactive, displayLabel: 'Inactive', active: true },
-  ];
+  const isActive
+    = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_STATUS));
+  const [ASLStastusList, setASLStastusList] = React.useState<ASLStatus[]>();
+  const [editedASLStatus, setEditedASLStatus]
+    = React.useState<EditableASLStatus>();
+  const discardASLStatus = () => setEditedASLStatus(undefined);
+  const { values: formValues } = useFormikContext<GeneralSettings>();
+  const [types, setTypes] = React.useState<ASLStatus[]>();
+  const fetchASLTypes = useActionCreator(companyActions.fetchASLOptions);
+  const updateASLStatusSettings = useActionCreator(
+    companyActions.updateGeneralSettings,
+  );
 
-  const [ASLStastusList, setASLStastusList] = React.useState<ASLStatus[]>(ASLStastusListSampleData);
-  const [editedLocation, setEditedLocation] = React.useState<EditableASLStatus>();
+  const supplierTypesAsync = useAsync<ASLStatus[]>({
+    onSuccess: (aslStatusList) => {
+      setTypes(aslStatusList);
+    },
+    onError: toastError,
+  });
 
-  const discardLocation = () => setEditedLocation(undefined);
-  // const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
+  useEffect(() => {
+    setASLStastusList(sortStatusByDisplayOrder(formValues?.aslStatusConfig));
+  }, [formValues?.aslStatusConfig]);
 
-  // const async = useAsync({
-  //   onSuccess: submitSettingsForm,
-  //   onError: (error) => {
-  //     setASLStastusList(ASLStastusList);
-  //     toastError(error);
-  //   },
-  // });
+  useEffect(() => {
+    supplierTypesAsync.start(fetchASLTypes, supplierTypesAsync);
+  }, []);
 
-  const updateLocations = (updatedLocations: ASLStatus[]) => {
-    setASLStastusList(updatedLocations);
-    // async.start(changeCompanyAction, { locations: updatedLocations }, async);
+  const sortStatusByDisplayOrder = (statusList?: ASLStatus[]): ASLStatus[] => {
+    if (!statusList?.length) return [];
+
+    return [...statusList].sort((status1, status2) => {
+      const orderComparison
+        = (status1[ASLSTATUS_KEYS.order] ?? 0)
+        - (status2[ASLSTATUS_KEYS.order] ?? 0);
+      if (orderComparison !== 0) return orderComparison;
+
+      return (
+        (status1[ASLSTATUS_KEYS.displayOrder] ?? 0)
+        - (status2[ASLSTATUS_KEYS.displayOrder] ?? 0)
+      );
+    });
+  };
+
+  const async = useAsync({
+    onError: (error) => {
+      setASLStastusList(ASLStastusList);
+      toastError(error);
+    },
+  });
+
+  const updateASLStatusList = (updatedASLStatusList: ASLStatus[]) => {
+    setASLStastusList(updatedASLStatusList);
+    if (formValues) {
+      async.start(
+        updateASLStatusSettings,
+        { ...formValues, aslStatusConfig: updatedASLStatusList },
+        '',
+        'POST',
+        async,
+      );
+    }
   };
 
   const formik = useFormik<EditableASLStatus | Record<string, never>>({
@@ -49,57 +96,91 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
       return error;
     },
     onSubmit: (values) => {
-      const updatedLocations = unionBy([omit(values, MODE_FIELD)], ASLStastusList, 'id');
-      discardLocation();
-      updateLocations(updatedLocations);
+      const isAddition = values[MODE_FIELD] === Mode.add;
+      const updatedValues = omit(values, MODE_FIELD);
+      const updatedData = isAddition
+        ? [...(ASLStastusList ?? []), updatedValues]
+        : ASLStastusList?.map((aslStatus) =>
+          aslStatus.id === values.id ? updatedValues : aslStatus,
+        );
+
+      const sortedItems = updatedData?.sort(
+        (status1, status2) =>
+          status1[ASLSTATUS_KEYS.order] - status2[ASLSTATUS_KEYS.order],
+      );
+
+      sortedItems?.forEach((item, index) => {
+        item[ASLSTATUS_KEYS.displayOrder] = index + 1;
+      });
+
+      const displayOrderMap = sortedItems?.reduce((acc, item) => {
+        acc[item.id] = item[ASLSTATUS_KEYS.displayOrder];
+        return acc;
+      }, {});
+
+      const displayOrderUpdatedData = updatedData?.map((status) => ({
+        ...status,
+        displayOrder: displayOrderMap?.[status?.id] ?? status.displayOrder,
+      }));
+
+      discardASLStatus();
+      updateASLStatusList(sortStatusByDisplayOrder(displayOrderUpdatedData));
     },
   });
   const { setValues, submitForm } = formik;
 
-  const changeLocationActiveState = (location: EditableASLStatus, state: boolean) => {
-    const updatedLocations = ASLStastusList.map(it => it.id === location.id ? { ...it, active: state } : it);
-    updateLocations(updatedLocations);
+  const changeASLActiveState = (
+    aslStatus: EditableASLStatus,
+    state: boolean,
+  ) => {
+    const updatedList = ASLStastusList?.map((item) =>
+      item.id === aslStatus.id ? { ...item, isActive: state } : item,
+    );
+    updateASLStatusList(updatedList ?? []);
   };
 
   useEffect(() => {
-    setValues(editedLocation ?? {});
-  }, [editedLocation, setValues]);
-
-  // useEffect(() => {
-  //   setASLStastusList(locations);
-  // }, [locations]);
+    setValues(editedASLStatus ?? {});
+  }, [editedASLStatus, setValues]);
 
   const addASLStatus = () => {
-    setEditedLocation({
+    setEditedASLStatus({
       id: uuidv4(),
-      internalType: undefined,
+      internalType: '',
       displayLabel: '',
-      active: true,
+      isActive: true,
+      order: 10,
+      displayOrder: 10,
       [MODE_FIELD]: Mode.add,
     });
   };
 
-  const mappedLocations = ASLStastusList?.map((location) => {
-    return {
-      ...location,
-      [MODE_FIELD]: location.id === editedLocation?.id ? Mode.edit : Mode.show,
-    };
-  }) ?? [];
+  const mappedASLStatusList
+    = ASLStastusList?.map((aslStatus) => {
+      return {
+        ...aslStatus,
+        [MODE_FIELD]:
+          aslStatus.id === editedASLStatus?.id ? Mode.edit : Mode.show,
+      };
+    }) ?? [];
 
-  const locationsList
-    = editedLocation?.[MODE_FIELD] === Mode.add
-      ? [...mappedLocations, editedLocation]
-      : mappedLocations;
+  const aslList
+    = editedASLStatus?.[MODE_FIELD] === Mode.add
+      ? [...mappedASLStatusList, editedASLStatus]
+      : mappedASLStatusList;
 
   const dataCyGenerator = (aslStatus: EditableASLStatus) => ({
-    'data-cy': `row-${kebabCase(aslStatus.internalType)}`,
+    'data-cy': `row-${kebabCase(aslStatus.internalType)}-${
+      aslStatus.displayOrder
+    }`,
   });
 
   const schema = buildSchema({
     isActive,
-    onEdit: isActive ? setEditedLocation : undefined,
-    onActiveStateChange: isActive ? changeLocationActiveState : undefined,
-    onDiscard: discardLocation,
+    onEdit: isActive ? setEditedASLStatus : undefined,
+    onActiveStateChange: isActive ? changeASLActiveState : undefined,
+    onDiscard: discardASLStatus,
+    types,
     onConfirm: submitForm,
   });
 
@@ -112,8 +193,8 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
       <FormikProvider value={formik}>
         <SettingsTable
           isActive={isActive}
-          data={locationsList}
-          isEditing={editedLocation !== undefined}
+          data={aslList}
+          isEditing={editedASLStatus !== undefined}
           schema={schema}
           addButtonLabel={translate('common.add.new')}
           onAdd={addASLStatus}

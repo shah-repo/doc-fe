@@ -1,18 +1,29 @@
-import { EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import {
+  CellTemplateProps,
+  EditableItem,
+} from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { OptionType } from '../SupplierConfiguration/types';
 
-export interface EditableASLStatus extends ASLStatus, EditableItem {
-}
+export interface EditableASLStatus extends ASLStatus, EditableItem {}
 
-export enum ASLInternalType {
-  Approved = 'Approved',
-  PendingEvaluation = 'Pending Evaluation',
-  Inactive = 'Inactive',
-  Disqualify = 'Disqualify',
+export enum ASLSTATUS_KEYS {
+  id = 'id',
+  order = 'order',
+  internalType = 'internalType',
+  displayOrder = 'displayOrder',
+  displayLabel = 'displayLabel',
+  isActive = 'isActive',
 }
 
 export interface ASLStatus {
   id: string
-  internalType?: ASLInternalType
+  internalType: string
+  displayOrder: number
+  order: number
   displayLabel: string
-  active: boolean
+  isActive: boolean
+}
+export interface CustomCellProps extends CellTemplateProps<EditableASLStatus> {
+  dataOptions?: OptionType[] | ASLStatus[]
+  onActiveStateChange?: (item: EditableASLStatus, isActive: boolean) => void
 }

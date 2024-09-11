@@ -1,4 +1,5 @@
 import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
+import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
@@ -207,12 +208,14 @@ interface AllocationConfig {
   sortOrderByReleaseDate: AllocationOrder
   expiredLotsPrompt: ExpiredLotTypes
 }
+
 export interface GeneralSettings {
   allocationConfig: AllocationConfig
   approvalRequestAdmin: boolean
   equipmentFamily: EquipmentFamilySettings
   isMaterialFlowAclEnabled: boolean
   lifecyclePhases?: { categories: LCPResponse[] } | LCP[]
+  aslStatusConfig: ASLStatus[]
   materialFlowACLs: MaterialFlowAclRule[]
   shouldAutoUpdateLotStatus: boolean
   shouldNotifyLcpMismatch: NotifyPartLCP
