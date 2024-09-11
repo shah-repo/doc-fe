@@ -1,8 +1,11 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../common/intl';
+import { getHasPermission } from '../../../../../../common/utils/selectors';
+import { Permission } from '../../../../../../state/ducks/auth/types';
 import { companyActions } from '../../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../../state/ducks/company/types';
 import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
@@ -16,7 +19,7 @@ import { buildSchema } from './schema';
 import { EditableSupplierConfig, OptionType, SupplierConfig, SUPPLIER_FIELDS } from './types';
 
 const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
-  const isActive = true; // useSelector(getHasPermission(Permission.EDIT_SUPPLIER_STATUS));
+  const isActive = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_CONFIG));
   const fetchSupplierConfig = useActionCreator(companyActions.fetchSupplierConfigs);
   const { values: formValues } = useFormikContext<GeneralSettings>();
   const [supplierConfiguration, setSupplierConfiguration] = React.useState<SupplierConfig[]>();
@@ -143,16 +146,15 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       : mappedLocations;
 
   const dataCyGenerator = (SupplierConfig: EditableSupplierConfig) => ({
-    'data-cy': `row-${kebabCase(SupplierConfig.id)}`,
+    'data-cy': `row-${kebabCase(SupplierConfig.text)}`,
   });
-  // 'data-cy': `row-${kebabCase(SupplierConfig.supplierType[0]?.id)}`,
 
   const schema = buildSchema({
     isActive,
     onEdit: isActive ? setEditedSupplierConfiguration : undefined,
     onActiveStateChange: isActive ? changeLocationActiveState : undefined,
     onDiscard: discardSupplierConfiguration,
-    onDelete: deleteSupplierConfiguration,
+    onDelete: isActive ? deleteSupplierConfiguration : undefined,
     capabilities,
     services,
     types,

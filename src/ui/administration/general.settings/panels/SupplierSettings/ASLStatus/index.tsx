@@ -22,8 +22,7 @@ import { buildSchema } from './schema';
 import { ASLStatus, ASLSTATUS_KEYS, EditableASLStatus } from './types';
 
 const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
-  const isActive
-    = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_STATUS));
+  const isActive = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_CONFIG));
   const [ASLStastusList, setASLStastusList] = React.useState<ASLStatus[]>();
   const [editedASLStatus, setEditedASLStatus]
     = React.useState<EditableASLStatus>();
