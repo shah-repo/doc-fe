@@ -5,7 +5,7 @@ import { Avatar, Box, FormControl, IconButton, List, ListItem, ListItemText, Typ
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import cx from 'classnames';
 import { Form, Formik } from 'formik';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
@@ -15,6 +15,7 @@ import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/b
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
 import { abandonApproval, patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview, postDocumentRevisionsWithdrawn } from "../../../../state/ducks/bulkImport/utils";
 import { ApprovalStatus } from "../../../../state/ducks/common/types";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import Text from '../../../components/Text';
 import { Autocomplete, Button } from '../../../components/forms/fields-next';
 import { toastError } from "../../../components/notifications";
@@ -27,6 +28,8 @@ interface ApprovalsFormProps {
   children?: ReactNode
 }
 
+const APPROVAL_FIELD_ID = `${approvalFieldPrefix}${FB.uniqid}`;
+
 const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -37,38 +40,18 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   const availableOptions: ApproverOption[] = approversOptionList.filter(option =>
     !users.some(user => user.value === option.value),
   );
-  const haveApprovers = bulkImport?.documentRevision?.approvals
-    && bulkImport.documentRevision.approvals.some(approval => approval.status === ApprovalStatus.Pending);
+  const haveApprovers = bulkImport?.documentRevision && bulkImport?.documentRevision?.status !== DocumentRevisionStatus.Draft;
+  const approvalFieldId = useRef(bulkImport?.documentRevision?.approvals?.[0]?.fieldId || APPROVAL_FIELD_ID);
 
   const handleSubmit = async () => {
-    if (!users || users.length === 0) return;
+    if (!users || users.length === 0) {
+      toastError('At least you should select one approver');
+      return;
+    }
   
     dispatch(setIsLoading(true));
-    let hasError = false;
   
     try {
-      // Process each user sequentially
-      for (const user of users) {
-        const approvalFieldId = `${approvalFieldPrefix}${FB.uniqid}`
-        const approval = await postApprovals(user.value, bulkImport?.documentRevisionId, approvalFieldId);
-        if (approval) {
-          const documentRevision = await patchDocumentRevisions(approval.id, bulkImport?.documentRevisionId, approvalFieldId);
-          if (!documentRevision) {
-            hasError = true;
-            await abandonApproval(approval.id)
-            break;
-          }
-        } else {
-          hasError = true;
-          break;
-        }
-      }
-
-      if (hasError) {
-        toastError('An error occurred during the approval process.');
-        return;
-      }
-  
       // After all approvals are processed, start the final review
       await postDocumentRevisionsInReview(bulkImport?.documentRevisionId);
   
@@ -76,35 +59,74 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
       history.push(BULK_IMPORT_PROGRESS_URL);
     } catch (error) {
       console.error('An error occurred during the document revision process:', error);
+      toastError('An error occurred during the document revision process.');
     } finally {
       dispatch(setIsLoading(false));
     }
   };
 
-  const handleRemoveUser = (index: number) => {
-    setUsers(currentUsers => currentUsers.filter((_, i) => i !== index));
+  const handleRemoveUser = async (index: number) => {
+    dispatch(setIsLoading(true));
+    // Get the current user based on the index
+    const currentUser = users[index];
+
+    if (currentUser) {
+      try {
+        const response = await abandonApproval(currentUser.approvalId);
+        if (response) {
+          const newUsers = users.filter((_, i) => i !== index);
+          setUsers(newUsers);
+    
+          // Create an array of the remaining users' values (after removal)
+          const approvalIds = newUsers.map(user => user.value);
+    
+          // Patch the document revisions with the updated list of approvers
+          await patchDocumentRevisions(approvalIds, bulkImport?.documentRevisionId, approvalFieldId.current);
+          getBulkImportData();
+        }
+      } catch (error) {
+        console.error('An error occurred while removing the user and updating the document revisions:', error);
+        toastError('An error occurred during the removal process.');
+      } finally {
+        dispatch(setIsLoading(false)); // Stop loading
+      }
+    }
+  };
+
+  const addNewUser = async (selectedUser: ApproverOption) => {
+    dispatch(setIsLoading(true));
+  
+    try {
+      const newUsers = [...users, selectedUser];
+      
+      const approval = await postApprovals(selectedUser.value, bulkImport?.documentRevisionId, approvalFieldId.current);
+      
+      if (approval) {
+        // Create an array of users' ids to patch the document revision
+        const approvalIds = newUsers.map(val => val.value);
+        
+        // Patch document revisions with the updated list of approvers
+        await patchDocumentRevisions(approvalIds, bulkImport?.documentRevisionId, approvalFieldId.current);
+      }
+      getBulkImportData();
+    } catch (error) {
+      console.error('An error occurred while adding a new user and updating the document revisions:', error);
+      toastError('An error occurred while adding the new user.');
+    } finally {
+      dispatch(setIsLoading(false));
+    }
   };
 
   const handleWithdrawSubmission = async () => {
-    if (bulkImport?.documentRevision?.approvals) {
-      const pendingApprovals = bulkImport.documentRevision.approvals.filter(
-        approval => approval.status === ApprovalStatus.Pending
-      );
-  
-      const results = await Promise.all(
-        pendingApprovals.map(approval => abandonApproval(approval.id))
-      );
-  
-      const allSuccessful = results.every(result => result === true);
-  
-      if (allSuccessful) {
-        await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id);
-      } else {
-        toastError('One or more approvals could not be abandoned.');
-      }
+      await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id);
+      getBulkImportData();
+  };
+
+  const getBulkImportData = () => {
+    if (bulkImport?.id) {
       dispatch(getOneBulkImport(bulkImport.id));
     }
-  };
+  }
 
   const init = () => {
     dispatch(getApprovers());
@@ -113,15 +135,25 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   useEffect(init, []);
 
   useEffect(() => {
-    if (haveApprovers) {
+    if (bulkImport?.id) {
       const matchedApprovers = bulkImport.documentRevision.approvals
-        .filter(approval => approval.status === ApprovalStatus.Pending)
-        .map(approval => approversOptionList.find(option => option.value === approval.approverId))
+        .filter(approval => approval.status === ApprovalStatus.Pending || approval.status === ApprovalStatus.Draft)
+        .map(approval => {
+          const approverOption = approversOptionList.find(option => option.value === approval.approverId);
+  
+          if (approverOption) {
+            return {
+              ...approverOption,
+              approvalId: approval.id,
+            };
+          }
+          return null;
+        })
         .filter(Boolean) as ApproverOption[]; // Filter out any undefined values
       
       setUsers(matchedApprovers);
     }
-  }, [haveApprovers, bulkImport, approversOptionList]);
+  }, [bulkImport, approversOptionList]);
 
   return (
     <>
@@ -146,10 +178,13 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
                   placeholder={translate('bulkImport.approvals.select.placeholder')}
                   onChange={(_, option: ApproverOption) => {
                     if (option?.value) {
-                      const selectedUser = approversOptionList.find(user => user.value === option.value);
-                      if (selectedUser) {
-                        setUsers([...users, selectedUser]);
-                        setFieldValue('selectedUser', '');
+                      const isAlreadySelected = users.some(user => user.value === option.value);
+                      if (!isAlreadySelected) {
+                        const selectedUser = approversOptionList.find(user => user.value === option.value);
+                        if (selectedUser) {
+                          addNewUser(selectedUser);
+                          setFieldValue('selectedUser', '');
+                        }
                       }
                     }
                   }} />

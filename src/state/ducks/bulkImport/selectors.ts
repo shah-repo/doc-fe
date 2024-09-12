@@ -80,7 +80,7 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         step: 4,
       },
       {
-        icon: !_.isEmpty(bulkImport.process) ? 'check' : 'blank',
+        icon: !_.isEmpty(bulkImport.process) && progress > 99 ? 'check' : 'blank',
         text: translate('bulkImport.importing'),
         step: 5,
       },

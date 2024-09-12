@@ -42,7 +42,7 @@ export const SET_DATA_TYPE_FILTER = 'bulkImport/SET_DATA_TYPE_FILTER';
 export const SET_STATUS_FILTER = 'bulkImport/SET_STATUS_FILTER';
 export const CLEAN_UP_MAPPED_HEADERS = 'bulkImport/CLEAN_UP_MAPPED_HEADERS';
 
-export const approvalFieldPrefix = 'fb-approvals-';
+export const approvalFieldPrefix = 'fb-approvals-fb-approvals-';
 
 export const bkStatusTextMap: { [key in BkStatus]: string } = {
   [BkStatus.STARTED]: 'Started',

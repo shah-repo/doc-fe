@@ -120,14 +120,16 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
       if (firstBlankIcon) {
         currentProgressStep.current = firstBlankIcon.step;
       }
-      if (item?.documentRevision?.approvals
+      if ((item?.documentRevision?.approvals
         && item.documentRevision.approvals.some(approval => approval.status === ApprovalStatus.Pending)
-        && item.documentRevision.approvals.some(approval => approval.status !== ApprovalStatus.Approved)) {
+        && item.documentRevision.approvals.some(approval => approval.status !== ApprovalStatus.Approved))) {
         // if we don't find any blank icon is because we already finish and is on the last step
         currentProgressStep.current = 4; // approver step
       }
       if (!_.isEmpty(item.process)) {
         currentProgressStep.current = 5; // importing step
+      } else if (currentProgressStep.current === 5) {
+        currentProgressStep.current = 4; // approver step
       }
     }
   }, [item]);
@@ -214,17 +216,19 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           {showButtonView && <Button className={_.isEmpty(item?.reports) ? classes.viewButton : classes.downloadLogs} kind="outlined" color={!_.isEmpty(item?.reports) ? 'primary' : 'inherit'} onClick={_.isEmpty(item?.reports) ? handleReturnToStep : handleDownloadFile}>
             <Text translation={_.isEmpty(item?.reports) ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
           </Button>}
-          {showDeleteButton && <StyleTooltip
-            title={<Text translation="bulkImport.delete" />}
-            placement="top"
-            arrow
-          >
-            <FontAwesomeIcon
-              onClick={handleOpenDetele}
-              className={classes.deleteIcon}
-              icon={regular('trash-can')}
-            />
-          </StyleTooltip>}
+          {_.isEmpty(item?.reports) && <Box width={29}>
+            {showDeleteButton && <StyleTooltip
+              title={<Text translation="bulkImport.delete" />}
+              placement="top"
+              arrow
+            >
+              <FontAwesomeIcon
+                onClick={handleOpenDetele}
+                className={classes.deleteIcon}
+                icon={regular('trash-can')}
+              />
+            </StyleTooltip>}
+          </Box>}
         </Box>
       </Box>
       {idx !== bulkImportsGroupByProcess[valKey].length - 1 && <Divider className={classes.divider} />}

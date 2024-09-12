@@ -67,7 +67,7 @@ export const abandonApproval = async (approvalId) => {
   }
 };
 
-export const patchDocumentRevisions = async (approvalId, documentRevisionId, approvalFieldId) => {
+export const patchDocumentRevisions = async (approvalIds, documentRevisionId, approvalFieldId) => {
   try {
     const response = await axios({
       url: `${Config.ApiEndpoint}${DOCUMENT_REVISION_URL}${documentRevisionId}`,
@@ -77,7 +77,7 @@ export const patchDocumentRevisions = async (approvalId, documentRevisionId, app
       },
       data: {
         formInput: {
-          [approvalFieldId]: [approvalId],
+          [approvalFieldId]: approvalIds,
         },
       },
     });
