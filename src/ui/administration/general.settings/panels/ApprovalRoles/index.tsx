@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { omit } from 'lodash';
 import React, { useEffect } from 'react';
@@ -19,15 +20,18 @@ import ActionsCellTemplate from '../../components/SettingsTable/components/Actio
 import { EditableApprovalRoles, SchemaBuilder } from './types';
 
 const ActiveCellTemplate: React.FC<CellTemplateProps<EditableApprovalRoles>> = ({ dataItem, dataIndex, onChange }) => {
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   return (
-    <Checkbox
-      checked={dataItem.isActive}
-      onChange={(event) => onChange?.({ dataItem, dataIndex, syntheticEvent: event })}
-    />
+    <Box display="flex" justifyContent="center" marginTop={ isEditMode ? '4px' : '' }>
+      <Checkbox
+        checked={dataItem.isActive}
+        onChange={(event) => onChange?.({ dataItem, dataIndex, syntheticEvent: event })}
+      />
+    </Box>
   );
 };
 
-const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard }) => {
+const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, editedApprovalRoles }) => {
   return [
     {
       id: 'active',
@@ -54,9 +58,10 @@ const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard }) => {
           {...props}
           onConfirm={onConfirm}
           onDiscard={onDiscard}
+          hideEditButton
         />
       ),
-      width: 75,
+      width: editedApprovalRoles?.[MODE_FIELD] === Mode.add ? 75 : 0,
     },
   ];
 };
@@ -76,7 +81,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
     const updatedApprovalRoles = approvalRolesData?.map(item => item.id === dataItem.id ? { ...dataItem, isActive: !dataItem.isActive } : item);
     formValues.approvalRoles = updatedApprovalRoles;
     setApprovalRolesData(updatedApprovalRoles);
-    async.start(updateApprovalRolesAction, formValues, settingsId, 'PUT', async);
+    async.start(updateApprovalRolesAction, { isActive: !dataItem.isActive, formValues: formValues }, dataItem.id, 'PATCH', async);
   };
 
   const formik = useFormik<EditableApprovalRoles | Record<string, never>>({
@@ -98,7 +103,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
       discardApprovalRoles();
       formValues.approvalRoles = updatedApprovalRoles;
       setApprovalRolesData(updatedApprovalRoles);
-      async.start(updateApprovalRolesAction, formValues, settingsId, 'PUT', async);
+      async.start(createApprovalRolesAction, values, settingsId, 'POST', async);
     },
   });
 
@@ -131,7 +136,8 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
       toastError(error);
     },
   });
-  const updateApprovalRolesAction = useActionCreator(companyActions.updateGeneralSettings);
+  const updateApprovalRolesAction = useActionCreator(companyActions.updateApprovalRoles);
+  const createApprovalRolesAction = useActionCreator(companyActions.createApprovalRoles);
 
   const mappedApprovalRoles = approvalRolesData?.map((approvalRoles) => {
     return {
@@ -144,7 +150,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
   = editedApprovalRoles?.[MODE_FIELD] === Mode.add
     ? [...mappedApprovalRoles, editedApprovalRoles]
     : mappedApprovalRoles;
-  const schema = buildSchema({ onChange: onChange, onConfirm: submitForm, onDiscard: onDiscard });
+  const schema = buildSchema({ onChange, onDiscard, editedApprovalRoles, onConfirm: submitForm });
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')}>
