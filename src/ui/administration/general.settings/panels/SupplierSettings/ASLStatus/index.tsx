@@ -22,7 +22,7 @@ import { buildSchema } from './schema';
 import { ASLStatus, ASLSTATUS_KEYS, EditableASLStatus } from './types';
 
 const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
-  const isActive = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_CONFIG));
+  const isActive = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_CONFIG)) || true;
   const [ASLStastusList, setASLStastusList] = React.useState<ASLStatus[]>();
   const [editedASLStatus, setEditedASLStatus]
     = React.useState<EditableASLStatus>();
@@ -98,9 +98,9 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedValues = omit(values, MODE_FIELD);
       const updatedData = isAddition
-        ? [...(ASLStastusList ?? []), updatedValues]
+        ? [...(ASLStastusList ?? []), { ...updatedValues, isUserAdded: true }]
         : ASLStastusList?.map((aslStatus) =>
-          aslStatus.id === values.id ? updatedValues : aslStatus,
+          aslStatus.id === values.id ? { ...updatedValues, isUserModified: true } : aslStatus,
         );
 
       const sortedItems = updatedData?.sort(
@@ -133,7 +133,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
     state: boolean,
   ) => {
     const updatedList = ASLStastusList?.map((item) =>
-      item.id === aslStatus.id ? { ...item, isActive: state } : item,
+      item.id === aslStatus.id ? { ...item, isActive: state, isUserModified: true } : item,
     );
     updateASLStatusList(updatedList ?? []);
   };
