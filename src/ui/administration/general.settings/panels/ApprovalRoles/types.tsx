@@ -7,6 +7,7 @@ interface SchemaOptions {
   onChange: () => void
   onConfirm: () => void
   onDiscard: () => void
+  editedApprovalRoles: EditableApprovalRoles
 }
 
 export type SchemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableApprovalRoles>>;

@@ -4,15 +4,16 @@ import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React, { useCallback } from 'react';
 import { translate } from '../../../../../../common/intl';
-import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
 import { IconButton } from '../../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
+import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import useHover from '../../../../../hooks/useHover';
 import useStyles from '../styles';
 
 interface Props<T extends EditableItem> extends CellTemplateProps<T> {
   scrollBehavior?: ScrollBehavior
   isActive?: boolean
+  hideEditButton?: boolean
   onEdit?: (item: T) => void
   onConfirm: () => void
   onDiscard: () => void
@@ -27,6 +28,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
   onDelete,
   onConfirm,
   onDiscard,
+  hideEditButton = false,
 }: Props<T>): React.ReactElement {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const [deleteRef, isDeleteHovered] = useHover<HTMLButtonElement>();
@@ -40,6 +42,10 @@ function ActionsCellTemplate<T extends EditableItem> ({
       requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'center' }));
     }
   }, [scrollBehavior]);
+
+  if(hideEditButton && dataItem[MODE_FIELD] === Mode.show) {
+    return <></>;
+  }
 
   return (
     <div

@@ -3,7 +3,7 @@ import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
-import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
+import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, CREATE_APPROVAL_ROLES_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, UPDATE_APPROVAL_ROLES_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, ApiActionMethod, Handlers } from '../../types';
 import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
@@ -100,6 +100,45 @@ const updateGeneralSettings = (
   });
 };
 
+const createApprovalRoles = (
+  body: GeneralSettings,
+  id?: string,
+  method: ApiActionMethod = 'post',
+): ApiAction<GeneralSettingsState> => {
+  const { lifecyclePhases, ...rest } = body;
+  const payload = { ...rest, lifecyclePhases: Array.isArray(lifecyclePhases) ? lifecyclePhases : [] };
+  const url = CREATE_APPROVAL_ROLES_URL;
+  return apiAction({
+    url,
+    method,
+    data: omit(payload, 'id', 'materialFlowACLs', 'lifecyclePhases', '_mode'),
+    asyncType: SET_GENERAL_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(setGeneralSettings(data));
+    },
+  });
+};
+
+const updateApprovalRoles = (
+  body: any,
+  id?: string,
+  method: ApiActionMethod = 'patch',
+  ): ApiAction<GeneralSettingsState> => {
+  const { lifecyclePhases, ...rest } = body;
+  const payload = { ...rest, lifecyclePhases: Array.isArray(lifecyclePhases) ? lifecyclePhases : [] };
+  const { formValues } = body;
+  const url = generatePath(UPDATE_APPROVAL_ROLES_URL, { id });
+  return apiAction({
+    url,
+    method,
+    data: omit(payload, 'id', 'materialFlowACLs', 'lifecyclePhases', '_mode', 'formValues'),
+    asyncType: SET_GENERAL_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(setGeneralSettings(formValues));
+    },
+  });
+};
+
 const fetchLCPPhasesByGroup = (
   type = DOC_TYPE_GROUP.PART,
   handlers: Handlers,
@@ -146,4 +185,6 @@ export default {
   redlineConfig,
   getGeneralSettings,
   updateGeneralSettings,
+  createApprovalRoles,
+  updateApprovalRoles,
 };
