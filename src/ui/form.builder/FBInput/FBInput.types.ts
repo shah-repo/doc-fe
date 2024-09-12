@@ -14,6 +14,7 @@ export type FBInputType =
   | 'textfield'
   | 'checkbox'
   | 'checkboxgroup'
+  | 'checkboxgroupasync'
   | 'section'
   | 'subsection'
   | 'datepicker'

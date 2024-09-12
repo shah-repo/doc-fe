@@ -20,6 +20,7 @@ import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBButton from '../FBButton/FBButton';
 import FBCertifications from '../FBCertifications';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
+import FBCheckboxGroupAsync from '../FBCheckboxGroupAsync/FBCheckboxGroupAsync';
 import FBCycleCount from '../FBCycleCount';
 import FBDatePicker from '../FBDatePicker/FBDatePicker';
 import FBDocumentRevisions from '../FBDocumentRevisions/FBDocumentRevisions';
@@ -99,6 +100,7 @@ class FBSchemaState {
     textfield: FBTextField,
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
+    checkboxgroupasync: FBCheckboxGroupAsync,
     autocomplete: FBAutocompleteAsync,
     autocompleteasync: FBAutocompleteAsync,
     texteditor: FBTextEditor,
