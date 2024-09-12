@@ -200,13 +200,18 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       ...this.value,
       taxRate,
       subTotal: this.formatCost(sum.subTotal),
-      tax: this.formatCost(tax, 6),
+      tax: this.formatCost(tax, this.getDecimalLength(taxRate)),
       shippingCost: this.formatCost(shippingCost),
       totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),
     };
 
     return value;
+  };
+
+  private readonly getDecimalLength = (value: number) => {
+    const numStr = value.toString();
+    return numStr.includes('.') ? numStr.split('.')[1].length : 0;
   };
 
   public reCalculateValue = () => {

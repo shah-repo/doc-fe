@@ -112,10 +112,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       purchaseOrderState?.setTax(getDecimalValue(ev, 6));
     };
     handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
-      if (isPOEditState && !isTotalAmountUnderThreshold(null, null, getDecimalValue(ev, 6))) {
+      const { target: { value = 0 } = {} } = ev || {};
+      const decimalLength = getDecimalLength(value);
+      if (isPOEditState && !isTotalAmountUnderThreshold(null, null, getDecimalValue(ev, decimalLength))) {
         return;
       }
-      purchaseOrderState?.setTaxRate(getDecimalValue(ev, 6));
+      purchaseOrderState?.setTaxRate(getDecimalValue(ev, decimalLength));
     };
     handleShippingCostChange = (ev: React.ChangeEvent<any>) => {
       if (isPOEditState && !isTotalAmountUnderThreshold(getDecimalValue(ev), null, null)) {
@@ -132,6 +134,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
 
       return val.toFixed(fixedDecimal || 2).toString();
+    };
+
+    const getDecimalLength = (value: number) => {
+      const numStr = value.toString();
+      return numStr.includes('.') ? numStr.split('.')[1].length : 0;
     };
 
     reCalculateValueOnBlur = () => purchaseOrderState?.reCalculateValue();
