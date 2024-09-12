@@ -128,6 +128,7 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       id: uuidv4(),
       text: '',
       capabilities: [],
+      supplierTypeId: '',
       services: [],
       [MODE_FIELD]: Mode.add,
     });

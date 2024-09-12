@@ -17,6 +17,7 @@ export interface OptionType {
 export interface SupplierConfig {
   id: string
   text: string
+  supplierTypeId: string
   capabilities?: OptionType[]
   services?: OptionType[]
 }

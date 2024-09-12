@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl';
 import { FB } from '..';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { OptionType } from '../../administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
+import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -44,9 +45,10 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     const fetchSupplierConfigOptions = useActionCreator(documentRevisionsActions.fetchSupplierConfigurationOptions);
 
     const async = useAsync<OptionType[]>({
-      onSuccess: (aslStatusList) => {
-        setOptions(aslStatusList?.map((dd) => { return { ...dd, value: dd.id }; }));
+      onSuccess: (list) => {
+        setOptions(list?.map((item) => { return { ...item, value: item.id }; }));
       },
+      onError: toastError,
     });
 
     useEffect(() => {

@@ -24,6 +24,8 @@ const Editor: React.FC<CustomCellProps> = ({
 
   const handleChange = (e, value: OptionType) => {
     setFieldValue(field, value.text);
+    setFieldValue('supplierTypeId', value.id);
+
     onChange?.({
       dataIndex,
       dataItem,
