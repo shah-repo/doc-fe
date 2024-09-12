@@ -43,7 +43,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
     }
   }, [scrollBehavior]);
 
-  if(hideEditButton && dataItem[MODE_FIELD] === Mode.show) {
+  if (hideEditButton && dataItem[MODE_FIELD] === Mode.show) {
     return <></>;
   }
 

@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { omit, pick } from 'lodash';
 import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
@@ -111,7 +111,7 @@ const createApprovalRoles = (
   return apiAction({
     url,
     method,
-    data: omit(payload, 'id', 'materialFlowACLs', 'lifecyclePhases', '_mode'),
+    data: pick(payload, 'name', 'isActive'),
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
       dispatch(setGeneralSettings(data));
@@ -131,7 +131,7 @@ const updateApprovalRoles = (
   return apiAction({
     url,
     method,
-    data: omit(payload, 'id', 'materialFlowACLs', 'lifecyclePhases', '_mode', 'formValues'),
+    data: pick(payload, 'isActive'),
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
       dispatch(setGeneralSettings(formValues));

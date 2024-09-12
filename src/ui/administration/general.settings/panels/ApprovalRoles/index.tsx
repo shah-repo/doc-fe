@@ -58,7 +58,7 @@ const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, editedAppr
           {...props}
           onConfirm={onConfirm}
           onDiscard={onDiscard}
-          hideEditButton={true}
+          hideEditButton
         />
       ),
       width: editedApprovalRoles?.[MODE_FIELD] === Mode.add ? 75 : 0,
@@ -150,7 +150,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
   = editedApprovalRoles?.[MODE_FIELD] === Mode.add
     ? [...mappedApprovalRoles, editedApprovalRoles]
     : mappedApprovalRoles;
-  const schema = buildSchema({ onChange: onChange, onConfirm: submitForm, onDiscard: onDiscard, editedApprovalRoles: editedApprovalRoles });
+  const schema = buildSchema({ onChange, onDiscard, editedApprovalRoles, onConfirm: submitForm });
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')}>
