@@ -17,6 +17,7 @@ import ExportToEmailModal from '../../documentRevision/forms/presenters/export.t
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
+import { Colors } from '../../layout/theme-next';
 
 interface Props {
   id: string
@@ -29,6 +30,34 @@ const style = makeStyles((theme) => ({
   },
   loader: {
     gap: '10px',
+  },
+  popup: {
+    borderRadius: '6px',
+    border: `1px solid ${Colors.primaryLight} !important`,
+    borderLeft: `7px solid ${Colors.primaryLight} !important`,
+    background: `${Colors.primaryHighlight} !important`,
+    padding: theme.spacing(1.875),
+    height: '97px',
+    '& .Toastify__close-button': {
+      margin: theme.spacing(0),
+      alignSelf: 'flex-start !important',
+      color: `${Colors.primaryLight} !important`,
+    },
+  },
+  popupBody: {
+    display: 'flex',
+    padding: theme.spacing(0),
+    gap: '15px',
+    width: '720px',
+  },
+  popupTitle: {
+    fontSize: 14,
+    fontWeight: 700,
+    marginBottom: theme.spacing(1.25),
+  },
+  popupInfoIcon: {
+    marginTop: theme.spacing(1.375),
+    color: Colors.primaryLight,
   },
 }));
 
@@ -48,16 +77,25 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
     onSuccess: () => {
       emailDialog.close();
       toastSuccess(
-        <Box>
-          <Typography
-            variant="h2"
-            component="h2"
-          >
-            <Text translation="share.downloading.started.popup.title" />
-          </Typography>
-          {intl.formatMessage({ id: 'share.downloading.popup.desc' })}
-        </Box>,
-        { autoClose: 15000000 });
+        <>
+          <FontAwesomeIcon icon={regular('circle-info')} size="xl" className={classes.popupInfoIcon} />
+          <Box>
+            <Typography
+              variant="h5"
+              component="h5"
+              className={classes.popupTitle}
+            >
+              <Text translation="share.downloading.started.popup.title" />
+            </Typography>
+            <Typography
+              variant="subtitle2"
+              component="span"
+            >
+              <Text translation="share.downloading.popup.desc" />
+            </Typography>
+          </Box>
+        </>,
+        { autoClose: 150000, className: classes.popup, bodyClassName: classes.popupBody, progressClassName: 'progressClassName' });
     },
     onError: () => {
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
