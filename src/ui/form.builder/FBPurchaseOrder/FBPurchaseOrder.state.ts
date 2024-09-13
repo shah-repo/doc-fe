@@ -126,7 +126,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     }
     const taxRate = this.getTaxRateByTax(tax);
     if (isNumber(taxRate)) {
-      set(this.value, 'taxRate', Number(this.formatCost(taxRate, 6)));
+      set(this.value, 'taxRate', Number(this.formatCost(taxRate, this.getDecimalLength(tax))));
     }
     set(this.value, 'tax', tax);
   };
@@ -209,8 +209,8 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     return value;
   };
 
-  private readonly getDecimalLength = (value: number) => {
-    const numStr = value.toString();
+  private readonly getDecimalLength = (value: number|string) => {
+    const numStr = (typeof (value) === 'number') ? value.toString() : value;
     return numStr.includes('.') ? numStr.split('.')[1].length : 0;
   };
 

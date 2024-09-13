@@ -106,10 +106,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     handleTaxChange = (ev: React.ChangeEvent<any>) => {
-      if (isPOEditState && !isTotalAmountUnderThreshold(null, getDecimalValue(ev, 6), null)) {
+      const { target: { value = 0 } = {} } = ev || {};
+      const decimalLength = getDecimalLength(value);
+      if (isPOEditState && !isTotalAmountUnderThreshold(null, getDecimalValue(ev, decimalLength), null)) {
         return;
       }
-      purchaseOrderState?.setTax(getDecimalValue(ev, 6));
+      purchaseOrderState?.setTax(getDecimalValue(ev, decimalLength));
     };
     handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
       const { target: { value = 0 } = {} } = ev || {};
@@ -136,8 +138,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       return val.toFixed(fixedDecimal || 2).toString();
     };
 
-    const getDecimalLength = (value: number) => {
-      const numStr = value.toString();
+    const getDecimalLength = (value: number|string) => {
+      const numStr = (typeof (value) === 'number') ? value.toString() : value;
       return numStr.includes('.') ? numStr.split('.')[1].length : 0;
     };
 
