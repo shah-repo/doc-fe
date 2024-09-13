@@ -95,7 +95,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
             </Typography>
           </Box>
         </>,
-        { autoClose: 150000, className: classes.popup, bodyClassName: classes.popupBody, progressClassName: 'progressClassName' });
+        { className: classes.popup, bodyClassName: classes.popupBody, progressClassName: 'progressClassName' });
     },
     onError: () => {
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
