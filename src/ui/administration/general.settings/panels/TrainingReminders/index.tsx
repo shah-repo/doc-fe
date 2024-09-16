@@ -80,7 +80,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
           <CheckboxField
             {...getFieldProps('trainingReminders.isAssignedCcActive')}
             checked={values.trainingReminders.isAssignedCcActive}
-            label={translate('administration.general.settings.training.reminders.cc.training.assigned')}
+            label={translate('administration.general.settings.training.reminders.training.assigned')}
             checkboxProps={disabledCheckboxProps}
           />
         </Grid>
@@ -88,7 +88,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
           <CheckboxField
             {...getFieldProps('trainingReminders.isSevenDaysDueOnCountdownCcActive')}
             checked={values.trainingReminders.isSevenDaysDueOnCountdownCcActive}
-            label={translate('administration.general.settings.training.reminders.cc.training.seven.days')}
+            label={translate('administration.general.settings.training.reminders.seven.days')}
             checkboxProps={disabledCheckboxProps}
           />
         </Grid>
@@ -104,7 +104,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
           <CheckboxField
             {...getFieldProps('trainingReminders.isOverdueCcActive')}
             checked={values.trainingReminders.isOverdueCcActive}
-            label={translate('administration.general.settings.training.reminders.cc.training.overdue')}
+            label={translate('administration.general.settings.training.reminders.training.overdue')}
             checkboxProps={disabledCheckboxProps}
           />
         </Grid>

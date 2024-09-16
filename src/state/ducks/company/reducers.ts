@@ -62,9 +62,9 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
     isSevenDaysDueOnCountdownActive: true,
     isAssignedActive: true,
     isOverdueActive: true,
-    isAssignedCcActive: true,
-    isSevenDaysDueOnCountdownCcActive: true,
-    isOverdueCcActive: true,
+    isAssignedCcActive: false,
+    isSevenDaysDueOnCountdownCcActive: false,
+    isOverdueCcActive: false,
   },
 };
 
