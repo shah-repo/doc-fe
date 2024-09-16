@@ -17,6 +17,7 @@ function SettingsTable<T extends EditableItem> ({
   onAdd,
   onRowClick,
   getRowProperties,
+  ...props
 }: SettingsTableProps<T>): React.ReactElement {
   const classes = useStyles();
 
@@ -39,6 +40,7 @@ function SettingsTable<T extends EditableItem> ({
   return (
     <>
       <KendoDataGrid
+        {...props}
         data={data}
         schema={schema}
         onRowClick={onRowClick}

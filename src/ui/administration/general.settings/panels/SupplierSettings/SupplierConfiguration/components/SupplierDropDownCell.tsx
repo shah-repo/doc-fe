@@ -19,9 +19,10 @@ const Editor: React.FC<CustomCellProps> = ({
   onChange,
 }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
+  const editField = `${field}_edit`;
 
   const handleChange = (e, value: string) => {
-    setFieldValue(field, value);
+    setFieldValue(editField, value);
     onChange?.({
       dataIndex,
       dataItem,
@@ -32,9 +33,9 @@ const Editor: React.FC<CustomCellProps> = ({
   };
 
   return (
-    <FormikField name={field}>
+    <FormikField name={editField}>
       <Autocomplete
-        {...getFieldProps(field)}
+        {...getFieldProps(editField)}
         blurOnSelect
         disableClearable
         multiple
@@ -42,7 +43,7 @@ const Editor: React.FC<CustomCellProps> = ({
         getOptionSelected={(option: OptionType, value: OptionType) => option.id === value.id}
         placeholder={translate('common.select')}
         options={dataOptions}
-        defaultValue={dataItem[field]}
+        defaultValue={dataItem[editField]}
         data-cy={`${kebabCase(field)}-field`}
         onChange={handleChange}
         size="small"
@@ -56,7 +57,7 @@ export const SupplierDropDownCell: React.FC<CustomCellProps> = (props) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = kebabCase(field);
-  const displayValue = dataItem[field]?.map(item => item.text).join(', ');
+  const displayValue = dataItem[field];
 
   return (
     <Box display="flex" justifyContent="start" data-cy={`${dataCy}-td`} onClick={handleClick}>

@@ -40,6 +40,7 @@ export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
       field: 'actions',
       title: 'common.actions',
       width: 75,
+      filterable: false,
       template: (props) => (
         <ActionsCellTemplate
           {...props}

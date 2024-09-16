@@ -1,7 +1,8 @@
 import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 
 export interface EditableSupplierConfig extends SupplierConfig, EditableItem {
-
+  services_edit: string
+  capabilities_edit: string
 }
 
 export const SUPPLIER_FIELDS = {

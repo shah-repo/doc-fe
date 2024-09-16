@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { isEmpty, kebabCase, omit } from 'lodash';
+import { isArray, isEmpty, kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,8 +15,9 @@ import useAsync from '../../../../../hooks/useAsync';
 import SettingsPanel from '../../../components/SettingsPanel';
 import SettingsTable from '../../../components/SettingsTable';
 import { SettingsPanelProps } from '../../../types';
+import { EDIT_FIELDS } from './constants';
 import { buildSchema } from './schema';
-import { EditableSupplierConfig, OptionType, SupplierConfig, SUPPLIER_FIELDS } from './types';
+import { EditableSupplierConfig, OptionType, SUPPLIER_FIELDS, SupplierConfig } from './types';
 
 const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   const isActive = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_CONFIG));
@@ -101,7 +102,11 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     },
     onSubmit: (values) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
-      const updatedValues = omit(values, MODE_FIELD);
+      const updatedValues = {
+        ...omit(values, [MODE_FIELD, ...EDIT_FIELDS]),
+        capabilities: values.capabilities_edit,
+        services: values.services_edit,
+      };
       const updatedSupplierConfig = isAddition
         ? [...(supplierConfiguration ?? []), updatedValues]
         : supplierConfiguration?.map((aslStatus) =>
@@ -142,9 +147,19 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   }) ?? [];
 
   const locationsList
-    = editedSupplierConfiguration?.[MODE_FIELD] === Mode.add
+    = (editedSupplierConfiguration?.[MODE_FIELD] === Mode.add
       ? [...mappedLocations, editedSupplierConfiguration]
-      : mappedLocations;
+      : mappedLocations).map((location) => {
+      const { capabilities, services } = location;
+
+      return {
+        ...location,
+        ...(isArray(capabilities) && { capabilities: capabilities?.map(item => item.text).join(', ') }),
+        ...(isArray(services) && { services: services?.map(item => item.text).join(', ') }),
+        capabilities_edit: capabilities,
+        services_edit: services,
+      };
+    });
 
   const dataCyGenerator = (SupplierConfig: EditableSupplierConfig) => ({
     'data-cy': `row-${kebabCase(SupplierConfig.text)}`,
@@ -177,6 +192,7 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
           addButtonLabel={translate('common.add.new')}
           onAdd={addSupplierConfig}
           getRowProperties={dataCyGenerator}
+          filterable={true}
         />
       </FormikProvider>
     </SettingsPanel>
