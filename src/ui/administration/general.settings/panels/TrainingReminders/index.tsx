@@ -31,7 +31,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
       <Text message="administration.general.settings.training.reminders.sub.title" />
       <Grid
         container
-        className={cx(classes.gridContainer, { [classes.disabledGrid]: !isCompanyAdmin })}
+        className={cx(classes.gridContainer, classes.marginBottom, { [classes.disabledGrid]: !isCompanyAdmin })}
       >
         <Grid item className={classes.gridItem}>
           <CheckboxField
@@ -67,6 +67,43 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
           <CheckboxField
             {...getFieldProps('trainingReminders.isOverdueActive')}
             checked={values.trainingReminders.isOverdueActive}
+            label={translate('administration.general.settings.training.reminders.training.overdue')}
+            checkboxProps={disabledCheckboxProps}
+          />
+        </Grid>
+      </Grid>
+      <Text message="administration.general.settings.training.reminders.cc.training.notifications" />
+      <Grid
+        container
+        className={cx(classes.gridContainer, { [classes.disabledGrid]: !isCompanyAdmin })}>
+        <Grid item className={classes.gridItem}>
+          <CheckboxField
+            {...getFieldProps('trainingReminders.isAssignedCcActive')}
+            checked={values.trainingReminders.isAssignedCcActive}
+            label={translate('administration.general.settings.training.reminders.training.assigned')}
+            checkboxProps={disabledCheckboxProps}
+          />
+        </Grid>
+        <Grid item className={classes.gridItem}>
+          <CheckboxField
+            {...getFieldProps('trainingReminders.isSevenDaysDueOnCountdownCcActive')}
+            checked={values.trainingReminders.isSevenDaysDueOnCountdownCcActive}
+            label={translate('administration.general.settings.training.reminders.seven.days')}
+            checkboxProps={disabledCheckboxProps}
+          />
+        </Grid>
+        <Grid item className={classes.gridItem}>
+          <CheckboxField
+            {...getFieldProps('trainingReminders.customDaysDueOn.isCcActive')}
+            checked={values.trainingReminders.customDaysDueOn.isCcActive}
+            label={`${values.trainingReminders.customDaysDueOn.days} ${translate('administration.general.settings.training.reminders.custom.days')}`}
+            checkboxProps={disabledCheckboxProps}
+          />
+        </Grid>
+        <Grid item className={classes.gridItem}>
+          <CheckboxField
+            {...getFieldProps('trainingReminders.isOverdueCcActive')}
+            checked={values.trainingReminders.isOverdueCcActive}
             label={translate('administration.general.settings.training.reminders.training.overdue')}
             checkboxProps={disabledCheckboxProps}
           />

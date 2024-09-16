@@ -2072,6 +2072,7 @@
   "administration.general.settings.training.reminders.seven.days": "7 days",
   "administration.general.settings.training.reminders.custom.days": "days",
   "administration.general.settings.training.reminders.training.overdue": "Training overdue",
+  "administration.general.settings.training.reminders.cc.training.notifications": "CC training notifications",
   "administration.general.settings.ar": "Approval Requests",
   "administration.general.settings.ar.allow.edit": "Allow AR admin edit while AR is in In Review",
   "administration.general.settings.equipmentFamily.tab": "Equipment Family",
