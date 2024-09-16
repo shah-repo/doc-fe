@@ -15,6 +15,7 @@ import StyledLink from '../../../components/common/kendo/StyledLink';
 import { FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../components/notifications';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -90,6 +91,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
         setItems(modifiedItems);
       }
     },
+    onError: toastError,
   });
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {

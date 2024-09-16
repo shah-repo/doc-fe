@@ -43,6 +43,7 @@ export const THRESHOLD_KEY = 'threshold';
 export const PO_ROOT_URL = '/purchase_order';
 export const LOT_ROOT_URL = '/lot';
 export const SUPPLIER_ROOT_URL = '/document_revisions/supplier_status';
+export const ASL_SUPPLIER_LIST_URL = '/document_revisions/supplier/asl_configured';
 export const EQUIPMENT_ROOT_URL = '/equipment_status';
 export const LOT_OF_PARTS = '/document_revisions/lots_of_part';
 export const SUPPLIER_CONFIGURATION_OPTIONS_URL = '/document_revisions/supplier/get_selection_options';

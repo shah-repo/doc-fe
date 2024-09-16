@@ -7,12 +7,17 @@ import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import DocumentRevisionDialog from '../../components/common/dialogs/DocumentRevisionDialog';
 import { Button } from '../../components/forms/fields-next';
 import PromptIfDirty from '../../components/forms/PromptIfDirty';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { toastError } from '../../components/notifications';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
@@ -34,6 +39,8 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableProductORService>();
+  const [aslItems, setAslItems] = useState<ASLStatus[]>();
+  const fetchASLItems = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
   const quickViewDialog = useDialog();
   const isActive = !disabled;
   const [editedItem, setEditedItem] = useState<Partial<EditableProductORService>>();
@@ -41,6 +48,20 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
   const editItem = ({ dataItem }: ProductORServiceEditEvent) => setEditedItem(dataItem);
   const isInEditMode = editedItem !== undefined;
   const handleRowClick = isActive && !isInEditMode ? editItem : undefined;
+
+  const fetchOptionsDataAsync = useAsync<ASLStatus[]>({
+    onSuccess: (data) => {
+      setAslItems(data);
+    },
+    onError: toastError,
+  });
+
+  useEffect(() => {
+    fetchOptionsDataAsync.start(
+      fetchASLItems,
+      fetchOptionsDataAsync,
+    );
+  }, []);
 
   const formik = useFormik<Partial<EditableProductORService>>({
     initialValues: {},
@@ -138,6 +159,7 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
     onConfirm: submitForm,
     onDiscard: discardItem,
     onDelete: removeItem,
+    aslItems,
     onOpenQuickView: openQuickView,
   });
 

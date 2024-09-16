@@ -15,6 +15,7 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
   onOpenQuickView,
+  aslItems,
 }: SchemaOptions): Array<ColumnDefinition<EditableProductORService>> => {
   return [
     {
@@ -54,7 +55,7 @@ export const buildSchema = ({
       field: 'aslStatus',
       title: 'form.builder.supplier.produc.or.service.grid.heading.asl.status',
       filterable: false,
-      template: (props) => <ASLCell {...props} onClick={onRowClick} />,
+      template: (props) => <ASLCell {...props} onClick={onRowClick} aslItems={aslItems} />,
       width: 280,
     },
     {

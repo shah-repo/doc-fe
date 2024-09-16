@@ -13,14 +13,15 @@ import { OptionType } from '../../../components/forms/fields/Autocomplete/types'
 import {
   Mode, MODE_FIELD,
 } from '../../../components/KendoDataGrid/constants';
-import { ASL_STATUS_CLASS_MAPPING, ASL_STATUS_OPTIONS, EMPTY_VALUE_PLACEHOLDER } from '../constants';
+import { ASL_STATUS_CLASS_MAPPING, EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableProductORService } from '../types';
 import useStyles from './Status.styles';
 
-const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
-  let value = ASL_STATUS_OPTIONS.find((option) => option.value === dataItem[field]);
+const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, aslItems }) => {
+  const aslOptions = aslItems?.map((data) => { return { value: data.id, label: data.displayLabel }; });
+  let value = aslOptions?.find((option) => option.value === dataItem[field]);
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableProductORService>();
-  value = ASL_STATUS_OPTIONS.find((option) => option.value === values[field]);
+  value = aslOptions?.find((option) => option.value === values[field]);
   const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
     setFieldValue(field, value?.value ?? '');
   };
@@ -33,7 +34,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
         blurOnSelect
         disableClearable
         placeholder={translate('common.select')}
-        options={ASL_STATUS_OPTIONS}
+        options={aslOptions}
         value={value}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}

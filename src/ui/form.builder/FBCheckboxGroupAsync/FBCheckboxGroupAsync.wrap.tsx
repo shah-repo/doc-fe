@@ -74,7 +74,7 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
 
     controls = map(options, (option, index) => {
       const [value, message] = at(option, [optionValueKey, optionLabelKey]);
-      const defaultChecked = formValue.some((vv) => vv.id === value);
+      const defaultChecked = formValue?.some((item) => item.id === value);
       let attr = message;
       if (isTranslation(attr)) {
         attr = intl.formatMessage({ id: message });

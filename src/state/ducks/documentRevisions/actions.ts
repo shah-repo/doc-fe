@@ -18,7 +18,7 @@ import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
 import { MATERIAL_DISPOSITION_WHERE_USED_URL } from '../materialDisposition/constants';
-import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_ASYNC_DRAWER, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, EQUIPMENT_ROOT_URL, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_OF_PARTS, LOT_ROOT_URL, PO_ROOT_URL, SUPPLIER_CONFIGURATION_OPTIONS_URL, SUPPLIER_ROOT_URL, UPDATE_BOM_BRANCH } from './constants';
+import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, ASL_SUPPLIER_LIST_URL, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_ASYNC_DRAWER, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, EQUIPMENT_ROOT_URL, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_OF_PARTS, LOT_ROOT_URL, PO_ROOT_URL, SUPPLIER_CONFIGURATION_OPTIONS_URL, SUPPLIER_ROOT_URL, UPDATE_BOM_BRANCH } from './constants';
 import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from './documentType/types';
 import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, EquipmentStatus, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, MeqResponse, POStatusType, SearchRecordsResponse, SecurityList, UpdateFormRequestBody } from './types';
 
@@ -774,6 +774,16 @@ const fetchReferencesTableData = (
   });
 };
 
+const fetchASLSuppliersListData = (
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> => {
+  return apiActionWithCallbacks({
+    url: `${ASL_SUPPLIER_LIST_URL}`,
+    method: 'get',
+    handlers,
+  });
+};
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -839,4 +849,5 @@ export default {
   updateEquipmentStatus,
   fetchReferences,
   fetchReferencesTableData,
+  fetchASLSuppliersListData,
 };

@@ -1,3 +1,4 @@
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FBInputProps } from '../FBInput/FBInput.types';
@@ -8,6 +9,7 @@ export interface SchemaOptions {
   onDiscard?: () => void
   onDelete?: (item: ProductORService) => void
   onRowClick?: (e: ProductORServiceEditEvent) => void
+  aslItems?: ASLStatus[]
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableProductORService) => void
 }
 
@@ -40,5 +42,6 @@ export interface ProductORServiceEditEvent {
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableProductORService> {
   onClick?: (e: ProductORServiceEditEvent) => void
+  aslItems?: ASLStatus[]
   onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableProductORService) => void
 }
