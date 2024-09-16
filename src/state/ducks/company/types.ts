@@ -213,6 +213,11 @@ interface TrainingReminders {
   isSevenDaysDueOnCountdownActive: boolean
   isAssignedActive: boolean
   isOverdueActive: boolean
+  isAssignedCcActive: boolean
+  isSevenDaysDueOnCountdownCcActive: boolean
+  isThreeDaysDueOnCountdownCcActive: boolean
+  isDueTodayCcActive: boolean
+  isOverdueCcActive: boolean
 }
 
 export interface GeneralSettings {

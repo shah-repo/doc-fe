@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 
 export default makeStyles(theme => ({
   gridContainer: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(3, 1.2, 2),
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -25,5 +25,8 @@ export default makeStyles(theme => ({
   disabledGrid: {
     opacity: 0.5,
     pointerEvents: 'none',
+  },
+  marginBottom: {
+    marginBottom: theme.spacing(4),
   },
 }));
