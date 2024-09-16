@@ -83,6 +83,9 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
           <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
             {entry?.revisionFormTo ?? (documentRevision?.revision ?? EMPTY_VALUE_PLACEHOLDER)}
           </div>
+          <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
+            {entry?.attachments ?? (documentRevision?.attachments ?? EMPTY_VALUE_PLACEHOLDER)}
+          </div>
           <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
             <KendoTextEditor

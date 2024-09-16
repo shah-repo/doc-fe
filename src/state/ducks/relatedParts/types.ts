@@ -42,6 +42,7 @@ export interface RelatedPartsListItem {
   revision?: number
   displayRevision?: string
   revisionFormTo?: string
+  attachments: string
   revisionChangeType?: RevisionChangeType
   whereUsedCount: number
 }

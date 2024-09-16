@@ -51,7 +51,7 @@ const TopSection: React.FunctionComponent<{
         <Grid item>
           <Typography>
             <Button
-              data-cy="approvalRequest.items.button.addText"
+              data-cy="approval-request-items-button-add-text"
               className={classes.btnMargin}
               disabled={!isButtonShown}
               color="primary"
@@ -120,17 +120,17 @@ const ItemsAndDetails: React.FunctionComponent<{
   }
 
   const removePrePopulatedField = () => {
-    const removeKeys = ['proposedDocumentRevision', 'descriptionOfChange', 'justificationOfChange', 'autoUpdate'];
+    const removeKeys = ['proposedDocumentRevision', 'descriptionOfChange', 'justificationOfChange', 'autoUpdate', 'attachments'];
     removeKeys.forEach((item) => {
       formState.setFieldValue(item, undefined);
     });
   };
 
   function addRevisionToChangeRequest () {
-    const { proposedDocumentRevision, justificationOfChange, descriptionOfChange }
+    const { proposedDocumentRevision, justificationOfChange, descriptionOfChange, attachments }
       = formState?.getValues() as FBDocumentRevisionsValue;
 
-    if (some([justificationOfChange, descriptionOfChange, proposedDocumentRevision], isEmpty)) {
+    if (some([justificationOfChange, descriptionOfChange, proposedDocumentRevision, attachments], isEmpty)) {
       return;
     }
 

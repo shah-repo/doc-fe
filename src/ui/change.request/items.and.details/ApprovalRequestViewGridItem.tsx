@@ -1,23 +1,26 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Checkbox as MuiCheckbox, FormControlLabel } from '@material-ui/core';
+import { FormControlLabel, Checkbox as MuiCheckbox } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
 import cx from 'classnames';
 import React, { MouseEvent, MouseEventHandler, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_ROOT_URL } from '../../../state/ducks/relatedParts/constants';
-import { RelatedPartsListItem, RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
+import { RELATED_PARTS_STATUS, RelatedPartsListItem } from '../../../state/ducks/relatedParts/types';
 import Tooltip from '../../components/common/kendo/Tooltip';
+import { Button } from '../../components/forms/fields-next';
 import WhereUsedDialog, { WhereUsedType } from '../../components/whereUsed/WhereUsedDialog';
 import { documentVersionPath } from '../../document.revision/utils/paths';
-import { FBAutocompleteAsyncOption } from '../../form.builder';
+import { FB, FBAutocompleteAsyncOption, FBFileUploadState, FBProvider } from '../../form.builder';
 import { FBEndpoint } from '../../form.builder/defaults/FBEndpoint';
 import FBRequest from '../../form.builder/FBApi/FBApi.request';
 import useDialog from '../../hooks/useDialog';
+import FBAttachmentNamePresenter from '../FBMaterialDisposition/components/FBTasksListTable/components/FBAttachmentNamePresenter';
 import useStyles from './ApprovalRequestGrid.styles';
 import { generateDocTitleText } from './helpers';
 import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from './ItemsAndDetails.types';
@@ -46,9 +49,8 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   const classes = useStyles();
 
   const {
-    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate, revisionFormTo, whereUsedView,
+    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange, autoUpdate, revisionFormTo, attachments, whereUsedView,
   } = entry;
-
   const isWhereUsedTreeExist = (whereUsedView ?? []).length > 1;
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRevDocumentId, setDocRevDocumentId] = useState(documentId);
@@ -79,6 +81,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
             titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
             revisionChangeType: part.revisionChangeType,
             revisionFormTo: part.revisionFormTo,
+            attchments: part.attachments,
             whereUsedCount: part.whereUsedCount,
           }
         ));
@@ -134,6 +137,21 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     whereUsedDialog.close();
     e.stopPropagation();
   };
+  const intl = useIntl();
+  const MAX_VISIBLE_ATTACHMENTS = 3;
+  const [showAll, setShowAll] = useState(false);
+  const toggleShowAll = () => setShowAll((prevState) => !prevState);
+  const viewMore = intl.formatMessage({ id: 'document.revision.view.more' });
+  const viewLess = intl.formatMessage({ id: 'document.revision.view.less' });
+
+  const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
+  const sortedAttachments = (attachments || []).sort((a, b) => {
+    if (a.lineType === 'RED_LINE' && b.lineType !== 'RED_LINE') return -1;
+    if (a.lineType !== 'RED_LINE' && b.lineType === 'RED_LINE') return 1;
+    return 0;
+  });
+
+  const visibleAttachments = showAll ? sortedAttachments : sortedAttachments.slice(0, MAX_VISIBLE_ATTACHMENTS);
 
   return (
     <div onClick={() => viewItemActionsVisible && editItem()}
@@ -177,6 +195,38 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         </div>
         <div className={cx(classes.cellRev, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={revisionFormTo as string} childrenElement={getTableElementData(revisionFormTo, 'rev-from-to')} />
+        </div>
+        <div className={cx(classes.cellRev, classes.itemLeftPadding)}>
+          <FBProvider {...{ fileUploadState }}>
+            <div className={classes.attachmentsList}>
+              {visibleAttachments?.map((attachment) => (
+                <FBAttachmentNamePresenter
+                  key={attachment.id}
+                  boxProps={{ className: classes.attachmentsContainer }}
+                  attachments={[attachment]}
+                  fileUploadState={fileUploadState}
+                  isDisabled={true}
+                />
+              ))}
+            </div>
+
+            {/* Show More or Less button if attachments exceed the limit */}
+            {visibleAttachments.length > MAX_VISIBLE_ATTACHMENTS ? (
+              <Button
+                variant="text"
+                onClick={toggleShowAll}
+                className={classes.moreOrLess}>
+                {viewLess}
+              </Button>
+            ) : (
+              <Button
+                variant="text"
+                onClick={toggleShowAll}
+                className={classes.moreOrLess}>
+                {`...${viewMore}`}
+              </Button>
+            )}
+          </FBProvider>
         </div>
         <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther, classes.itemLeftPadding)}>
           <Tooltip customTooltipClass={classes.tooltipBox} showTooltip={true} data={descriptionOfChange} childrenElement={getTableElementData(descriptionOfChange, 'description-of-change')} />

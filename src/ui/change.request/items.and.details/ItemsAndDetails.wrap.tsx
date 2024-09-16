@@ -57,7 +57,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
   };
 
   const handleUpdate = () => {
-    const { justificationOfChange, descriptionOfChange, proposedDocumentRevision, autoUpdate, revisionFormTo }
+    const { justificationOfChange, descriptionOfChange, proposedDocumentRevision, autoUpdate, revisionFormTo, attachments }
       = formState?.getValues() as FBDocumentRevisionsValue;
     const orderItemsUpdated = itemsAndDetailsState.approvalRequestItemsList
       .map((item: ApprovalRequestGridItem) => {
@@ -65,7 +65,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
           return item;
         }
 
-        return { ...item, justificationOfChange, descriptionOfChange, revisionFormTo, autoUpdate };
+        return { ...item, justificationOfChange, descriptionOfChange, revisionFormTo, autoUpdate, attachments };
       });
 
     const dataToSend: FBDocumentRevisionsValue[]

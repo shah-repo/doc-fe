@@ -54,6 +54,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
       { key: 'autoUpdate', value: entry.autoUpdate },
       { key: 'proposedDocumentRevision', value: { id: entry.docRevId } },
       { key: 'revisionFormTo', value: entry.revisionFormTo ?? revision },
+      { key: 'attachments', value: entry.attachments },
       { key: 'descriptionOfChange', value: entry.descriptionOfChange },
       { key: 'justificationOfChange', value: entry.justificationOfChange },
     ];
@@ -67,7 +68,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
   return useObserver(() => (
     <>
       {
-        isEditMode
+        isEditMode && <>nnnnnnnnnnnnnn</>
           && <ApprovalRequestEditGridItem {...{ formState }}
             disabledOptions={disabledOptions()}
             addRevisionToChangeRequest={addRevisionToChangeRequest}

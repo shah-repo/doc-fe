@@ -29,6 +29,11 @@ const ApprovalRequestGridHeader: React.FunctionComponent<{
       </div>
       <div className={classes.cellOther}>
         <span className={classes.verticalDivider}>
+          <Text translation="common.attachments" />
+        </span>
+      </div>
+      <div className={classes.cellOther}>
+        <span className={classes.verticalDivider}>
           <Text translation="approvalRequest.grid.heading.description.of.change" />
         </span>
       </div>

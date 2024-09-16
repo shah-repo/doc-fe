@@ -1,3 +1,4 @@
+import { Attachment } from '../../../state/ducks/attachments/types';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { AsyncActionPayload } from '../../../state/types';
@@ -36,6 +37,7 @@ export interface FBDocumentRevisionsValue {
   justificationOfChange: string
   descriptionOfChange: string
   revisionFormTo?: string
+  attachments?: Attachment[] | undefined
   whereUsedView?: WhereUsed[]
 }
 
@@ -51,6 +53,7 @@ export interface ApprovalRequestGridItem {
   displayRevision: string
   isPart: boolean
   revisionFormTo?: string
+  attachments?: Attachment[] | undefined
   whereUsedView?: WhereUsed[]
 }
 

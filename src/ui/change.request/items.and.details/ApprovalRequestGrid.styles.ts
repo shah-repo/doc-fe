@@ -327,5 +327,36 @@ export default makeStyles((theme) =>
     customArrow: {
       color: Colors.black,
     },
+    attachmentsList: {
+      '& > * + *': {
+        marginTop: `${theme.spacing(1.25)}px !important`,
+      },
+    },
+    attachmentsContainer: {
+      color: Colors.navy,
+      fontSize: 12,
+      overflow: 'auto',
+      width: 'fit-content',
+      '& > *': {
+        display: 'flex',
+        alignItems: 'center',
+      },
+      '& span': {
+        cursor: 'pointer',
+      },
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+    moreOrLess: {
+      color: Colors.dodger_blue,
+      padding: theme.spacing(0, 0.25),
+      margin: theme.spacing(0, 0.5),
+      fontSize: 14,
+      textTransform: 'lowercase',
+      '&:hover': {
+        background: 'unset',
+      },
+    },
   }),
 );
