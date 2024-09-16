@@ -58,7 +58,7 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   status: AsyncStatus.Idle,
   message: '',
   trainingReminders: {
-    customDaysDueOn: { isActive: false, days: 14 },
+    customDaysDueOn: { isActive: false, days: 14, isCcActive: false },
     isSevenDaysDueOnCountdownActive: true,
     isAssignedActive: true,
     isOverdueActive: true,
