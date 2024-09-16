@@ -25,7 +25,6 @@ const doApiRequest = async (name: string, args: any[]) => {
 
     const requestPromise = apiClient.request(requestConfig)
       .then(({ data }) => {
-        console.log('Fetching data', data);
         return data;
       })
       .catch(error => {
