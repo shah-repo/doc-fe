@@ -215,8 +215,6 @@ interface TrainingReminders {
   isOverdueActive: boolean
   isAssignedCcActive: boolean
   isSevenDaysDueOnCountdownCcActive: boolean
-  isThreeDaysDueOnCountdownCcActive: boolean
-  isDueTodayCcActive: boolean
   isOverdueCcActive: boolean
 }
 
