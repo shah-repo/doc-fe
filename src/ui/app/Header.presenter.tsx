@@ -1,15 +1,13 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, Toolbar, Typography } from '@material-ui/core';
+import { Grid, Toolbar } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import cx from 'classnames';
 import React from 'react';
 import HelpCenter from '../../App/Enlil/Features/HelpCenter/HelpCenter';
 import { SearchBar } from '../../App/Enlil/Features/Search';
 import { ReactComponent as CompanyAvatar } from '../../assets/images/company_avatar.svg';
-import { ReactComponent as MobileLogo } from '../../assets/images/enlil_white_logo.svg';
 import { translate } from '../../common/intl';
-import Text from '../components/Text';
 import AppSwitcher from './AppSwitcher';
 import useStyles from './Header.styles';
 import Toggler from './Toggler';
@@ -23,6 +21,7 @@ interface HeaderPresenterProps {
   isAutosaveEnabled: boolean
   canToggleCustomLabels: boolean
   canToggleAutosave: boolean
+  canAccessNavigation: boolean
   className?: string
   onSidebarToggle: () => void
   onAutosaveToggle: () => void
@@ -39,6 +38,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps> = ({
   isAutosaveEnabled,
   canToggleCustomLabels,
   canToggleAutosave,
+  canAccessNavigation,
   onSidebarToggle,
   onAutosaveToggle,
   onCustomLabelsToggle,
@@ -48,22 +48,6 @@ const Header: React.FunctionComponent<HeaderPresenterProps> = ({
 
   return (
     <AppBar className={cx(classes.root, className, { [classes.withSidebarExpanded]: isSidebarExpanded })}>
-      {false && (
-        <div className={classes.mobileMake}>
-          <div>
-            <FontAwesomeIcon
-              icon={solid('bars-sort')}
-              className={classes.mobileSide}
-              onClick={onSidebarToggle}
-            />
-            <MobileLogo className={classes.logoMobile} />
-            <Typography variant="caption" className={classes.mobileLogoText} component="div">
-              <Text translation="header.design.make" />
-            </Typography>
-          </div>
-
-        </div>
-      )}
       <Toolbar className={classes.toolbar}>
         <Grid
           container
@@ -73,16 +57,16 @@ const Header: React.FunctionComponent<HeaderPresenterProps> = ({
         >
           <Grid item className={classes.menu}>
             <FontAwesomeIcon
-              className={classes.menuIcon}
+              className={cx(classes.menuIcon, { [classes.menuIconDisabled]: !canAccessNavigation })}
               icon={isSidebarExpanded ? solid('xmark') : solid('bars-sort')}
-              onClick={onSidebarToggle}
+              onClick={canAccessNavigation ? onSidebarToggle : undefined}
             />
           </Grid>
           <Grid item className={classes.switch}>
             <AppSwitcher />
           </Grid>
           <Grid item xs className={cx(classes.search, classes.hideOnMobile)}>
-            <SearchBar />
+            <SearchBar canSearch={canAccessNavigation} />
           </Grid>
           <Grid item className={cx(classes.controls, classes.hideOnMobile)}>
             {canToggleCustomLabels && (
@@ -114,12 +98,12 @@ const Header: React.FunctionComponent<HeaderPresenterProps> = ({
                 className={classes.companyAvatar}
                 src={companyAvatar}
                 alt={companyName}
-                onClick={onCompanyAvatarClick}
+                onClick={canAccessNavigation ? onCompanyAvatarClick : undefined}
               />
             ) : (
               <CompanyAvatar
-                className={classes.mobileAvatar}
-                onClick={onCompanyAvatarClick}
+                className={classes.companyAvatar}
+                onClick={canAccessNavigation ? onCompanyAvatarClick : undefined}
               />
             )}
           </Grid>

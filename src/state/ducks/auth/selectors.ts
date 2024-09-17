@@ -81,6 +81,9 @@ const employees = (state: ApplicationState): Employee[] => state.auth.user.emplo
 const hasMultipleCompanies = (state: ApplicationState): boolean => (
   ((state.auth.user.employees).filter((employee) => employee.active)).length > 1
 );
+const hasCompanies = (state: ApplicationState): boolean => (
+  ((state.auth.user.employees).filter((employee) => employee.active)).length > 0
+);
 const getIsScheduledForDeletion = (state: ApplicationState): boolean => (
   state.auth.user.employee.company.scheduledForDeletion || false
 );
@@ -118,6 +121,7 @@ export default {
   getPingServerAsyncState,
   employees,
   hasMultipleCompanies,
+  hasCompanies,
   currentEmployeeAvatar,
   getHasSlack,
   getCurrentUserGroups,

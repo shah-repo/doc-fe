@@ -32,6 +32,10 @@ export default makeStyles(theme => ({
     borderRadius: theme.shape.borderRadius,
     fontWeight: 600,
 
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+
     '&:hover': {
       opacity: 1,
       backgroundColor: Colors.primaryDark,

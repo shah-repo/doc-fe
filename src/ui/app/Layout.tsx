@@ -2,8 +2,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
+import { authSelectors } from '../../state/ducks/auth';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import AsyncTasksContainer from '../async.tasks/grid/container';
@@ -30,6 +32,7 @@ import {
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
   HOME_URL,
+  NO_ACCESS,
   PAGE_DETAILS_MANAGEMENT_URL,
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
@@ -44,6 +47,7 @@ import { DocumentTypeManagementContainer } from '../document.type.management/ken
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
+import NoAccessScreen from '../noAccessScreen';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
 import SlackContainer from '../slack/Container';
@@ -65,17 +69,30 @@ const Layout: React.FunctionComponent = () => {
     localStorage.setItem(IS_SIDEBAR_EXPANDED, !isSidebarExpanded ? '1' : '0');
     setIsSidebarExpanded(prev => !prev);
   };
+  const canAccessNavigation = useSelector(authSelectors.hasCompanies);
 
   return (
     <>
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer isSidebarExpanded={isSidebarExpanded} onSidebarToggle={toggleSidebar} />
-      <Navigation isOpen={isSidebarExpanded || isMobileView} onSidebarToggle={toggleSidebar} />
+      <HeaderContainer
+        isSidebarExpanded={isSidebarExpanded}
+        onSidebarToggle={toggleSidebar}
+        canAccessNavigation={canAccessNavigation}
+      />
+      {canAccessNavigation && (
+        <Navigation isOpen={isSidebarExpanded || isMobileView} onSidebarToggle={toggleSidebar} />
+      )}
       <SocketsContainer />
       <WatermarkFooterContainer />
-      <main className={cx(classes.root, { [classes.withSidebarExpanded]: isSidebarExpanded })} >
+      <main className={cx(
+        classes.root,
+        {
+          [classes.withSidebarExpanded]: isSidebarExpanded,
+          [classes.fullWidth]: !canAccessNavigation,
+        },
+      )} >
         <DataFetcherContainer />
         <Switch>
           <Route
@@ -168,6 +185,11 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={BULK_IMPORT_PROGRESS_URL}
             component={BulkImportProgressPage}
+            exact
+          />
+          <Route
+            path={NO_ACCESS}
+            component={NoAccessScreen}
             exact
           />
           <Redirect to={HOME_URL} />

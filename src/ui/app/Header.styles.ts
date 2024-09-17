@@ -68,6 +68,10 @@ export default makeStyles<NextTheme>(theme => createStyles({
     background: fade(Colors.white, 0.1),
     cursor: 'pointer',
   },
+  menuIconDisabled: {
+    color: fade(Colors.white, 0.5),
+    cursor: 'default',
+  },
   switch: {
     minWidth: theme.spacing(30),
     marginRight: theme.spacing(2),

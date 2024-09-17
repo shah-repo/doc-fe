@@ -23,7 +23,13 @@ import useStyles from './styles';
 
 const MIN_QUERY_LENGTH = 3;
 
-const SearchBar: React.FC = () => {
+interface Props {
+  canSearch: boolean
+}
+
+const SearchBar: React.FC<Props> = ({
+  canSearch,
+}) => {
   const history = useHistory() as History;
   const classes = useStyles();
   const fieldRef = useRef<HTMLDivElement>();
@@ -184,6 +190,7 @@ const SearchBar: React.FC = () => {
     <Autocomplete
       loading={isLoading}
       disablePortal
+      disabled={!canSearch}
       options={options}
       filterOptions={(options: Option[]) => options}
       ref={fieldRef}

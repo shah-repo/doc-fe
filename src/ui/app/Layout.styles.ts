@@ -28,4 +28,7 @@ export default makeStyles<NextTheme>(theme => createStyles({
       transform: `translateX(${SIDEBAR_WIDTH}px)`,
     },
   },
+  fullWidth: {
+    left: 0,
+  },
 }));

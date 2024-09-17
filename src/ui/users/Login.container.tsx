@@ -11,7 +11,7 @@ import { Employee } from '../../state/ducks/company/types';
 import { ApplicationState } from '../../state/reducers';
 import { Button } from '../components/forms/fields-next';
 import { toastError, toastInfo, toastSuccess } from '../components/notifications';
-import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from '../constants/urls';
+import { COMPANY_EMAIL, HOME_URL, NO_ACCESS, RESET_PASSWORD_URL } from '../constants/urls';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
 import SwitchCompanyContainer from './SwitchCompany/SwitchCompany.container';
@@ -19,6 +19,7 @@ import SwitchCompanyContainer from './SwitchCompany/SwitchCompany.container';
 interface StateProps {
   isUserAuthenticated: boolean
   employees: Employee[]
+  hasCompanies: boolean
   hasMultipleCompanies: boolean
   passwordSoonToExpire: boolean
   daysUntilPasswordExpires: number
@@ -72,6 +73,10 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
       );
     }
 
+    if (!props.hasCompanies) {
+      return <Redirect to={NO_ACCESS} />;
+    }
+
     props.passwordSoonToExpire && toastInfo(
       <div>
         Your password will expire in {props.daysUntilPasswordExpires} days.&nbsp;
@@ -107,6 +112,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   isUserAuthenticated: authSelectors.isAuthenticated(state),
   employees: authSelectors.employees(state),
   hasMultipleCompanies: authSelectors.hasMultipleCompanies(state),
+  hasCompanies: authSelectors.hasCompanies(state),
   passwordSoonToExpire: authSelectors.getPasswordSoonToExpire(state),
   daysUntilPasswordExpires: authSelectors.getDaysUntilPasswordExpires(state),
   isScheduledForDeletion: authSelectors.getIsScheduledForDeletion(state),

@@ -11,10 +11,11 @@ import { UserMenuContext } from './NavigationProfile.container';
 
 interface HeaderContainerProps {
   onSidebarToggle: () => void
+  canAccessNavigation: boolean
   isSidebarExpanded: boolean
 }
 
-const HeaderContainer: React.FC<HeaderContainerProps> = ({ isSidebarExpanded, onSidebarToggle }) => {
+const HeaderContainer: React.FC<HeaderContainerProps> = ({ isSidebarExpanded, canAccessNavigation, onSidebarToggle }) => {
   const dispatch = useDispatch();
   const companyName = useSelector(companySelectors.companyNameSelector);
   const companyAvatar = useSelector(companySelectors.getWhiteLabeling).avatar;
@@ -41,6 +42,7 @@ const HeaderContainer: React.FC<HeaderContainerProps> = ({ isSidebarExpanded, on
         isAutosaveEnabled,
         canToggleCustomLabels,
         canToggleAutosave,
+        canAccessNavigation,
         onSidebarToggle,
         onAutosaveToggle,
         onCustomLabelsToggle,
