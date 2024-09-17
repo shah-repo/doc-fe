@@ -2,6 +2,8 @@ import { PasswordType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import axios from 'axios';
 import qs from 'query-string';
 import { intl, translate } from '../../../common/intl';
+import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
+import { OptionType } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { toastError } from '../../../ui/components/notifications';
 import { IWhereUsedRequest } from '../../../ui/components/whereUsed/WhereUsed.interface';
 import { documentVersionPath } from '../../../ui/document.revision/utils/paths';
@@ -706,7 +708,7 @@ const fetchSupplierConfigurationOptions = (
   optionId: string,
   ids: string[],
   handlers: Handlers,
-): ApiAction => {
+): ApiAction<OptionType[]> => {
   const params = qs.stringify({ supplierTypeIds: ids });
   return apiActionWithCallbacks({
     url: `${SUPPLIER_CONFIGURATION_OPTIONS_URL}/${optionId}?${params}`,
@@ -776,7 +778,7 @@ const fetchReferencesTableData = (
 
 const fetchASLSuppliersListData = (
   handlers: Handlers,
-): ApiAction<DocumentRevision[]> => {
+): ApiAction<ASLStatus[]> => {
   return apiActionWithCallbacks({
     url: `${ASL_SUPPLIER_LIST_URL}`,
     method: 'get',

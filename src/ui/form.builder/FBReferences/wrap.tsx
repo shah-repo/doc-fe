@@ -61,7 +61,7 @@ export const withFBReferences = <T extends FBReferenceProps>(
       }
       fetchOptionsDataAsync.start(
         fetchReferences,
-        workspaceState?.documentId,
+        workspaceState?.id,
         (workspaceState?.formInputSync.get(name) ?? []).map((data) => data.referenceRevId),
         fetchOptionsDataAsync,
       );

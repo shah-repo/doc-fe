@@ -1,3 +1,4 @@
+import { ASLStatus } from '../../../ui/administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/types';
 import { TableColumnActionType } from '../../../ui/components/table/column/types';
 import { FBNoteItem, FBSchemaProps, FBTaskItem } from '../../../ui/form.builder';
@@ -318,6 +319,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   isExpired?: boolean
   expiryDate?: string
   supplierStatus?: SupplierStatus
+  mappedConfigDetails?: {[key: string]: ASLStatus}
 }
 
 interface EQ {

@@ -30,6 +30,7 @@ export interface ProductORService {
   lifecyclePhase: string
   status: string
   comment: string
+  aslDisplayLabel?: string
 }
 
 export interface EditableProductORService extends ProductORService {

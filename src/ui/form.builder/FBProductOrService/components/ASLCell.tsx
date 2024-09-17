@@ -17,13 +17,18 @@ import { ASL_STATUS_CLASS_MAPPING, EMPTY_VALUE_PLACEHOLDER } from '../constants'
 import { CustomTemplateProps, EditableProductORService } from '../types';
 import useStyles from './Status.styles';
 
+interface CustomOptionType extends OptionType{
+  aslStatusId: string
+}
+
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, aslItems }) => {
-  const aslOptions = aslItems?.map((data) => { return { value: data.id, label: data.displayLabel }; });
+  const aslOptions = aslItems?.map((data) => { return { value: data.internalType, label: data.displayLabel, aslStatusId: data.id }; });
   let value = aslOptions?.find((option) => option.value === dataItem[field]);
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableProductORService>();
   value = aslOptions?.find((option) => option.value === values[field]);
-  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+  const handleChange = (event: ChangeEvent<unknown>, value?: CustomOptionType) => {
     setFieldValue(field, value?.value ?? '');
+    setFieldValue('aslStatusId', value?.aslStatusId ?? '');
   };
 
   return (
@@ -36,7 +41,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, aslItems }) =>
         placeholder={translate('common.select')}
         options={aslOptions}
         value={value}
-        getOptionLabel={(option: OptionType) => option.label}
+        getOptionLabel={(option: CustomOptionType) => option.label}
         onChange={handleChange}
         size="small"
       />
@@ -46,7 +51,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, aslItems }) =>
 
 export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
   const { field, dataItem } = props;
-  const defaultValue = dataItem[field];
+  const defaultValue = dataItem?.aslDisplayLabel ?? dataItem[field];
   const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 

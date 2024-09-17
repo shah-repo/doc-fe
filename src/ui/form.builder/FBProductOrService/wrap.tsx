@@ -28,6 +28,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
       });
 
       selectedProductOrServices?.forEach((item) => {
+        const selectedProduct = map.get(item.id);
         const refObj = {
           itemDisplayName: translate('form.builder.supplier.references.displayRevision', {
             docId: item.document?.docId,
@@ -38,10 +39,11 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
           status: item.status,
           lifecyclePhase: item?.lifecyclePhase?.displayLabel,
           documentId: item.documentId,
+          aslDisplayLabel: item?.mappedConfigDetails?.[selectedProduct.id]?.displayLabel,
         };
         // TODO add life cycle phase column
 
-        map.set(item.id, { ...map.get(item.id), ...refObj });
+        map.set(item.id, { ...selectedProduct, ...refObj });
       });
 
       return Array.from(map.values());
@@ -57,9 +59,10 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
       if (!workspaceState?.documentId && !workspaceState?.formInputSync.get(name)) {
         return;
       }
+
       fetchOptionsDataAsync.start(
         fetchReferences,
-        workspaceState?.documentId,
+        workspaceState?.id,
         (workspaceState?.formInputSync.get(name) ?? []).map((data) => data.revId),
         fetchOptionsDataAsync,
       );
