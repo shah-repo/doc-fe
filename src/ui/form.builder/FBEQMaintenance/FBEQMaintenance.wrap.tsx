@@ -5,14 +5,10 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from '..';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import {
-  DocumentRevision,
-  DocumentRevisionStatus, FBOutputDocumentType,
-  RevisionChangeType,
-} from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { toastError } from '../../components/notifications';
 import { documentVersionPath } from '../../document.revision/utils/paths';
@@ -46,7 +42,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const { id: docRevId, document: { status = '', document = null } = {} } = workspaceState || {};
     const isEqStatusReleased = status === DocumentRevisionStatus.Released;
     const isTypePM = editorConfig.type?.includes('preventativeMaintenance');
-    const complianceStatus = formState?.getFieldValue(`${name}.status`);
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
     const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYearAlt);
     availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
@@ -200,7 +195,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       ...(props as T),
       handleAdd,
       complianceDueDate,
-      complianceStatus,
       isNewPMDisabled,
       isNewPMLoading,
       name,
