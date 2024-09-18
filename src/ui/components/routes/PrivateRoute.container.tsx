@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, RouteProps, useHistory, useLocation } from 'react-router-dom';
 import { authActions, authSelectors } from '../../../state/ducks/auth';
 import { companyActions } from '../../../state/ducks/company';
-import { NO_ACCESS } from '../../constants/urls';
+import { HOME_URL, NO_ACCESS } from '../../constants/urls';
 import PrivateRoutePresenter from './PrivateRoute.presenter';
 
 interface OwnProps extends RouteProps {
@@ -28,10 +28,14 @@ const PrivateRouteContainer: React.FunctionComponent<Props> = ({
     <PrivateRoutePresenter {...props} component={Component} isAuthenticated={isUserAuthenticated} />
   );
 
-  const shouldRedirectToNoAccess = !hasCompanies && location !== NO_ACCESS;
+  const shouldRedirectToNoAccess = isUserAuthenticated && !hasCompanies && location.pathname !== NO_ACCESS;
+  const shouldRedirectToHome = isUserAuthenticated && hasCompanies && location.pathname === NO_ACCESS;
 
-  if (!shouldRedirectToNoAccess) {
+  if (shouldRedirectToNoAccess) {
     return <Redirect to={NO_ACCESS} />;
+  }
+  if (shouldRedirectToHome) {
+    return <Redirect to={HOME_URL} />;
   }
 
   if (companyId) {
