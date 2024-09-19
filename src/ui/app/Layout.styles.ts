@@ -30,5 +30,6 @@ export default makeStyles<NextTheme>(theme => createStyles({
   },
   fullWidth: {
     left: 0,
+    transform: 'none',
   },
 }));

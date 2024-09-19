@@ -77,12 +77,12 @@ const Layout: React.FunctionComponent = () => {
       <PingServer />
       <CssBaseline />
       <HeaderContainer
-        isSidebarExpanded={isSidebarExpanded}
+        isSidebarExpanded={isSidebarExpanded && canAccessNavigation}
         onSidebarToggle={toggleSidebar}
         canAccessNavigation={canAccessNavigation}
       />
       {canAccessNavigation && (
-        <Navigation isOpen={isSidebarExpanded || isMobileView} onSidebarToggle={toggleSidebar} />
+        <Navigation isOpen={(isSidebarExpanded || isMobileView) && canAccessNavigation} onSidebarToggle={toggleSidebar} />
       )}
       <SocketsContainer />
       <WatermarkFooterContainer />
