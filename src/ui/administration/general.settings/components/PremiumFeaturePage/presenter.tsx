@@ -1,32 +1,56 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { withThemeNext } from '../../../../layout/theme-next';
 import SwitchControl from '../../components/SwitchControl';
 import BlueTagWithWhiteTextProps from '../BlueTagWithWhiteText/BlueTagWithWhiteText';
 import useStyles from './styles';
-const PremiumFeaturePage: React.FC = () => {
+import { Button } from '../../../../components/forms/fields-next';
+import { PremiumFeaturesProps } from '../../types';
+import HeaderLastSaved from '../HeaderLastSaved';
+
+const PremiumFeaturesPage: React.FC<PremiumFeaturesProps> = ({
+  isLoading,
+  updatedAt,
+  onSave,
+  onChange,
+  values,
+}) => {
   const classes = useStyles();
-  const [checked, setChecked] = useState<boolean>(false);
+
   return (
     <Box className={classes.root}>
       <Box className={classes.header}>
-        <Typography
-          variant="h1"
-          className={classes.title}
-        >
-          {translate('administration.premium.feature.title')} <BlueTagWithWhiteTextProps />
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          className={classes.subtitle}
-        >
-          {translate('administration.premium.feature.subtitle')}
-        </Typography>
-        <br className={classes.spaceTitle} />
+        <Box>
+          <Typography
+            variant="h1"
+            className={classes.title}
+          >
+            {translate('administration.premium.feature.title')} <BlueTagWithWhiteTextProps />
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            className={classes.subtitle}
+          >
+            {translate('administration.premium.feature.subtitle')}
+          </Typography>
+          <br className={classes.spaceTitle} />
+        </Box>
+        <Box className={classes.actions}>
+          {updatedAt && (
+            <HeaderLastSaved
+              timestamp={updatedAt}
+              loading={isLoading}
+            />
+          )}
+          <Box className={classes.buttons}>
+            <Button kind="outlined" data-cy="settings-history" disabled>{translate('common.history')}</Button>
+            <Button onClick={onSave} data-cy="settings-save">{translate('common.save.changes')}</Button>
+          </Box>
+        </Box>
       </Box>
       <Box>
         <Box className={classes.description}>
@@ -41,8 +65,9 @@ const PremiumFeaturePage: React.FC = () => {
           </Typography>
           <Box className={classes.togglerContainer}>
             <SwitchControl
-              onChange = {() => setChecked(!checked)}
-              checked={checked}
+              id="isAIEnabled"
+              onChange = {onChange}
+              checked={values.isAIEnabled}
               label="AI Enablement"
             />
             <Typography
@@ -57,4 +82,4 @@ const PremiumFeaturePage: React.FC = () => {
     </Box>
   );
 };
-export default withThemeNext(PremiumFeaturePage);
+export default withThemeNext(PremiumFeaturesPage);

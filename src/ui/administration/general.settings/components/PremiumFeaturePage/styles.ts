@@ -11,13 +11,25 @@ export default makeStyles((theme: NextTheme) => ({
     padding: theme.spacing(3, 3, 0),
     gridTemplate: 'min-content min-content auto / 800px auto',
   },
+  actions: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    whiteSpace: 'nowrap',
+    flexWrap: 'wrap',
+    gap: theme.spacing(1, 1.25),
+  },
+  buttons: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(0.5, 1.25),
+  },
   header: {
     gridArea: '1 / 1 / 2 / 3',
     borderBottom: `1px solid ${Colors.stroke}`,
     position: 'relative',
     display: 'flex',
     justifyContent: 'space-between',
-    flexDirection: 'column',
     gap: '5px',
   },
   title: {

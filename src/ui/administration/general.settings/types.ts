@@ -1,5 +1,6 @@
 import { ExpansionPanelProps, SwitchProps } from '@material-ui/core';
 import { RefObject } from 'react';
+import { PremiumFeatures } from '../../../state/ducks/company/types';
 
 export enum GeneralSettingsTabs {
   Printing = 'Printing',
@@ -22,6 +23,14 @@ export interface GeneralSettingsProps {
   isLoading: boolean
   updatedAt?: string
   onSave: () => void
+}
+
+export interface PremiumFeaturesProps {
+  isLoading: boolean
+  updatedAt?: string
+  onSave: () => void
+  onChange: (event: any) => void
+  values: PremiumFeatures
 }
 
 export interface BlueTagWithWhiteTextProps {

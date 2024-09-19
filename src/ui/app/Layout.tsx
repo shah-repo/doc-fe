@@ -8,7 +8,7 @@ import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
-import PremiumFeaturePage from '../administration/general.settings/components/PremiumFeaturePage/presenter';
+import PremiumFeaturesPage from '../administration/general.settings/components/PremiumFeaturePage';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
 import BulkImportProgressPage from '../bulkImport/container.progress';
@@ -162,7 +162,7 @@ const Layout: React.FunctionComponent = () => {
           />
           <Route
             path={PREMIUM_FEATURE_URL}
-            component={PremiumFeaturePage}
+            component={PremiumFeaturesPage}
           />
           <Route
             path={BULK_IMPORT_URL}
