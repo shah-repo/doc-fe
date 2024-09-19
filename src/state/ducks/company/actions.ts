@@ -3,12 +3,42 @@ import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
-import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
+import {
+  COMPANY_MINE_URL,
+  COMPANY_SETTINGS_URL,
+  LIFE_CYCLE_DOC_REV_OPTIONS_URL,
+  LIFE_CYCLE_DOC_TYPES_URL,
+  LIFE_CYCLE_PHASES_URL,
+  PREMIUM_FEATURES_URL,
+  UPDATE_COMPANY_SETTINGS_URL,
+} from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, ApiActionMethod, Handlers } from '../../types';
 import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
-import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettings, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
+import {
+  AUTOSAVE_CONFIG,
+  REDLINE_CONFIG,
+  SELECT_COMPANY,
+  SET_AUTOSAVE_CONFIG,
+  SET_COMPANY_MINE,
+  SET_GENERAL_SETTINGS,
+  SET_PREMIUM_FEATURES_SETTINGS,
+  UPDATE_NAVIGATION_ITEM,
+} from './constants';
+import {
+  Company,
+  CompanyMineAction,
+  CompanyMineRequest,
+  GeneralSettings,
+  GeneralSettingsAction,
+  GeneralSettingsState,
+  NavigationMenu,
+  PremiumFeatures,
+  PremiumFeaturesAction,
+  PremiumFeaturesState,
+  SelectCompanyAction,
+  UpdateNavigationMenuItem,
+} from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
   type: SELECT_COMPANY,
@@ -81,6 +111,20 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
+const setPremiumFeatures = (premiumFeatures: PremiumFeaturesState,
+): PremiumFeaturesAction => ({
+  type: SET_PREMIUM_FEATURES_SETTINGS,
+  payload: premiumFeatures,
+});
+
+const getPremiumFeatures = (): ApiAction => apiAction({
+  url: PREMIUM_FEATURES_URL,
+  method: 'get',
+  onSuccess: (data, dispatch) => {
+    dispatch(setPremiumFeatures(data));
+  },
+});
+
 const updateGeneralSettings = (
   body: GeneralSettings,
   id?: string,
@@ -96,6 +140,21 @@ const updateGeneralSettings = (
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
       dispatch(setGeneralSettings(data));
+    },
+  });
+};
+
+const updatePremiumFeatures = (
+  body: PremiumFeatures,
+  method: ApiActionMethod = 'put',
+): ApiAction<PremiumFeaturesState> => {
+  return apiAction({
+    url: PREMIUM_FEATURES_URL,
+    method,
+    data: body,
+    asyncType: SET_PREMIUM_FEATURES_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(setPremiumFeatures(data));
     },
   });
 };
@@ -146,4 +205,6 @@ export default {
   redlineConfig,
   getGeneralSettings,
   updateGeneralSettings,
+  getPremiumFeatures,
+  updatePremiumFeatures,
 };

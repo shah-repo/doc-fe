@@ -76,6 +76,11 @@ const getGeneralSettings = (state: ApplicationState) => omit(
   ['id', 'companyId', 'createdAt', 'updatedAt', 'status', 'message'],
 );
 
+const getPremiumFeatures = (state: ApplicationState) => omit(
+  state.company.premiumFeatures,
+  ['status', 'message', 'updatedAt'],
+);
+
 const getGeneralSettingsId = (state: ApplicationState) => state.company.generalSettings.id;
 
 const getZebraPrintSettings = (state: ApplicationState) => state.company.generalSettings.zebraPrint;
@@ -84,9 +89,16 @@ const isAprovalRequestEditingEnabled = (state: ApplicationState) => state.compan
 
 const getGeneralSettingsUpdatedAt = (state: ApplicationState) => state.company.generalSettings.updatedAt;
 
+const getPremiumFeaturesUpdatedAt = (state: ApplicationState) => state.company.premiumFeatures.updatedAt;
+
 const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
   status: state.company.generalSettings.status,
   message: state.company.generalSettings.message,
+});
+
+const getPremiumFeatureAsyncState = (state: ApplicationState) => ({
+  status: state.company.premiumFeatures.status,
+  message: state.company.premiumFeatures.message,
 });
 
 export default {
@@ -114,6 +126,9 @@ export default {
   getGeneralSettingsId,
   getGeneralSettingsAsyncState,
   getGeneralSettingsUpdatedAt,
+  getPremiumFeaturesUpdatedAt,
   getZebraPrintSettings,
   isAprovalRequestEditingEnabled,
+  getPremiumFeatures,
+  getPremiumFeatureAsyncState,
 };
