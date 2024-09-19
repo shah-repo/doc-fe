@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, ButtonProps, ListItemText, MenuItem } from '@material-ui/core';
 import { kebabCase } from 'lodash';
 import React from 'react';
-import { EquipmentStatus, LotStatus, SupplierStatus } from '../../../../state/ducks/documentRevisions/types';
+import { EquipmentStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
 import useMenu from '../../../hooks/useMenu';
 import { Button, SplitButtonMenu } from '../../forms/fields-next';
 import useStyles from './HeaderStatusButton.styles';
 
-type StatusValue = LotStatus | EquipmentStatus | SupplierStatus;
+type StatusValue = LotStatus | EquipmentStatus | string;
 
 interface StatusOption {
   value: StatusValue

@@ -67,7 +67,6 @@ export enum KendoGridFilterCell {
   ACTIVE='active',
   DISPLAY_STATUS='displayStatus',
   PO_STATUS='poStatus',
-  SUPPLIER_STATUS='supplierStatus',
   LOT_STATUS='lotStatus',
   DOCUMENT_TYPE_ACRONYM= 'document.documentType.documentTypeAcronym',
   EFFECTIVE_DATE='effectiveDate',

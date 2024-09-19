@@ -318,7 +318,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   lifecyclePhase?: lifecyclePhase
   isExpired?: boolean
   expiryDate?: string
-  supplierStatus?: SupplierStatus
+  supplierStatus?: string
   mappedConfigDetails?: {[key: string]: ASLStatus}
 }
 

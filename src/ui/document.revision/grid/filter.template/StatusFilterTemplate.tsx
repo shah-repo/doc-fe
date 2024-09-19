@@ -6,12 +6,12 @@ import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
-import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, EquipmentStatus, POStatusLabelMapping, SupplierStatus } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, EquipmentStatus, POStatusLabelMapping } from '../../../../state/ducks/documentRevisions/types';
 import { DisplayText, TranslatedText } from '../../../components/common/kendo/helpers';
 
 interface Props extends GridFilterCellProps {
   defaultItem: string
-  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[] | EquipmentStatus[] | SupplierStatus[]
+  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[] | EquipmentStatus[]
   documentTypeCategory?: string
 }
 
