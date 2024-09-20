@@ -1,12 +1,14 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@material-ui/core';
-import * as React from 'react';
+import { omit } from 'lodash';
+import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { StyledButton } from '../../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListIcon } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
-import { ReactComponent as SendToEmail } from '../../../../../assets/images/send_to_email.svg';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { Dialog } from '../../../../components/dialogs';
 import { toastError, toastSuccess } from '../../../../components/notifications';
@@ -21,15 +23,20 @@ interface Props {
   renderAsButton?: boolean
 }
 
-const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, renderAsButton }) => {
+export interface attachmentsInfo {
+  id: string
+  name: string
+  type: string
+}
+
+const ExportToEmail: React.FunctionComponent<Props> = ({
+  revisionId,
+  canAccess,
+  renderAsButton,
+}) => {
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const emailDialog = useDialog();
-  const [value, setValue] = React.useState(false);
-
-  const handleChange = (event) => {
-    setValue(event.target.value === 'true');
-  };
 
   const async = useAsync({
     onSuccess: () => {
@@ -38,28 +45,47 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
     },
     onError: () => {
       if (!canAccess) {
-        toastError(intl.formatMessage({ id: 'common.send.to.email.no.access' }));
+        toastError(
+          intl.formatMessage({ id: 'common.send.to.email.no.access' }),
+        );
         return;
       }
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
     },
   });
 
-  const exportToEmail = useActionCreator(documentRevisionsActions.exportToEmail);
+  const exportToEmail = useActionCreator(
+    documentRevisionsActions.exportToEmail,
+  );
+  const childFormRef = useRef();
 
-  const runExport = () => {
-    async.start(exportToEmail, revisionId, { includeAuditLogs: value }, async);
+  const runExportWithChildren = () => {
+    if (childFormRef.current) {
+      const values = omit(childFormRef.current.getValues(), 'includeDate');
+      async.start(
+        exportToEmail,
+        revisionId,
+        { ...values, includeAuditLogs: Boolean(values?.includeAuditLogs) },
+        async,
+      );
+    }
   };
 
   const getUpdatedButton = () => {
     if (isNewLayout) {
       if (!renderAsButton) {
         return (
-          <StyledMenuListItem button alignItems="flex-start" onClick={emailDialog.open}>
-            <StyledMenuListIcon><SendToEmail /></StyledMenuListIcon>
+          <StyledMenuListItem
+            button
+            alignItems="flex-start"
+            onClick={emailDialog.open}
+          >
+            <StyledMenuListIcon>
+              <FontAwesomeIcon icon={regular('share')} size="lg" />
+            </StyledMenuListIcon>
             <StyledMenuListItemText
-              data-cy="exportToEmail"
-              primary={<Text translation="common.send.to.email" />}
+              data-cy="export-to-email"
+              primary={<Text translation="common.share" />}
             />
           </StyledMenuListItem>
         );
@@ -67,17 +93,22 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
       return (
         <StyledButton
           color="primary"
-          data-cy="exportToEmail"
+          data-cy="export-to-email"
           onClick={emailDialog.open}
         >
-          <Text translation="common.send.to.email" />
+          <Text translation="common.share" />
         </StyledButton>
       );
     }
 
     return (
       <>
-        <Button data-cy="exportToEmail" variant="outlined" color="secondary" onClick={emailDialog.open}>
+        <Button
+          data-cy="export-to-email"
+          variant="outlined"
+          color="secondary"
+          onClick={emailDialog.open}
+        >
           <Text translation="common.send.to.email" />
         </Button>
       </>
@@ -94,11 +125,9 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess, 
         confirmLabel="common.confirm"
         cancelLabel="common.cancel"
         onClose={emailDialog.close}
-        onConfirm={runExport}
+        onConfirm={runExportWithChildren}
       >
-        <ExportToEmailModal
-          {...{ value, handleChange }}
-        />
+        <ExportToEmailModal ref={childFormRef} {...{ revisionId }} />
       </Dialog>
     </>
   );
