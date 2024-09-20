@@ -255,6 +255,7 @@
   "documentRevision.audit.formInput.po-items-built-in.totalAmount.STRING_EDITED": "Grand Total Amount Updated",
   "documentRevision.audit.formInput.po-items-built-in.totalInUSD.STRING_EDITED": "Total Amount in USD Updated",
   "documentRevision.audit.formInput.po-items-built-in.tax.STRING_EDITED": "Tax Updated",
+  "documentRevision.audit.supplierStatus.STRING_EDITED": "Supplier Status Updated",
   "documentRevision.audit.formInput.po-items-built-in.currency.STRING_EDITED": "Currency Updated",
   "documentRevision.audit.formInput.po-items-built-in.shippingCost.STRING_EDITED": "Shipping cost Updated",
   "documentRevision.audit.formInput.po-items-built-in.dateOfExchangeRate.STRING_EDITED": "Exchange Rate Date Updated",
