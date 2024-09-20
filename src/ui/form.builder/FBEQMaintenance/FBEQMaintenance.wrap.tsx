@@ -5,6 +5,7 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from '..';
+import { translate } from '../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
@@ -111,7 +112,12 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         return;
       }
 
-      const title = `${workspaceState?.document?.document?.docId} ${workspaceState?.document?.name} - ${isTypePM ? 'PM' : 'CAL'} ${formState?.getFieldValue(`${name}.frequency`)} days`;
+      const title = translate('document.equipment.cal.pm.name', {
+        docId: workspaceState?.document?.document?.docId,
+        title: workspaceState?.document?.name,
+        type: isTypePM ? 'PM' : 'CAL',
+        frequency: formState?.getFieldValue(`${name}.frequency`),
+      });
       eqMaintenanceState?.setNewPMLoading(true);
 
       const values: DocumentRevisionFormValues = {
