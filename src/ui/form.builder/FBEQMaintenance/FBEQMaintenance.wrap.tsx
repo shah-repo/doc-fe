@@ -115,7 +115,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       const title = translate('document.equipment.cal.pm.name', {
         docId: workspaceState?.document?.document?.docId,
         title: workspaceState?.document?.name,
-        type: isTypePM ? translate('form.builder.pm') : translate('form.builder.cal'),
+        type: translate(isTypePM ? 'form.builder.pm' : 'form.builder.cal'),
         frequency: formState?.getFieldValue(`${name}.frequency`),
       });
       eqMaintenanceState?.setNewPMLoading(true);
