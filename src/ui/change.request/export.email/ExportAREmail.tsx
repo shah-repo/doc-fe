@@ -1,7 +1,8 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, makeStyles, Typography } from '@material-ui/core';
-import * as React from 'react';
+import { omit } from 'lodash';
+import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { SM } from '../../../App';
 import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
@@ -67,7 +68,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   const intl = useIntl();
   const classes = style();
   const emailDialog = useDialog();
-  const [value, setValue] = React.useState(false);
+  const [value, setValue] = useState(false);
   const handleChange = (event) => {
     setValue(event.target.value === 'true');
   };
@@ -101,9 +102,18 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
     },
   });
+  const childFormRef = useRef();
 
   const handleAREmail = () => {
-    async.start(exportTrainingRecordEmail, id, { includeAuditLogs: value }, async);
+    if (childFormRef.current) {
+      const values = omit(childFormRef.current.getValues(), 'includeDate');
+      async.start(
+        exportTrainingRecordEmail,
+        id,
+        { ...values, includeAuditLogs: Boolean(values?.includeAuditLogs) },
+        async,
+      );
+    }
   };
 
   const getUpdatedButton = () => {
@@ -161,7 +171,8 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         actionsProps={{ className: classes.dialogAction }}
       >
         <ExportToEmailModal
-          {...{ value, handleChange }}
+          ref={childFormRef}
+          {...{ value, handleChange, revisionId: id }}
         />
       </Dialog>
     </>
