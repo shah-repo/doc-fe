@@ -60,6 +60,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
         itemOnly: false,
         includeAttachments: false,
         includeDate: false,
+        sendEmail: true,
         includeAuditLogs: false,
         watermarkAttachments: [] as string[],
       },
@@ -98,10 +99,6 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
                   name="itemOnly"
                   type="checkbox"
                   as={Checkbox}
-                  classes={{
-                    root: 'classes.checkbox',
-                    checked: 'classes.checked',
-                  }}
                   className={classes.check}
                   data-cy="select-item-only"
                 />
@@ -115,10 +112,6 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
                   name="includeAttachments"
                   type="checkbox"
                   as={Checkbox}
-                  classes={{
-                    root: 'classes.checkbox',
-                    checked: 'classes.checked',
-                  }}
                   className={classes.check}
                   data-cy="select-attachments"
                 />
@@ -132,10 +125,6 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
                   name="includeDate"
                   type="checkbox"
                   as={Checkbox}
-                  classes={{
-                    root: 'classes.checkbox',
-                    checked: 'classes.checked',
-                  }}
                   className={classes.check}
                   data-cy="select-include-date"
                 />
@@ -246,15 +235,12 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
                   type="checkbox"
                   as={Checkbox}
                   disabled
-                  classes={{
-                    root: 'classes.checkbox',
-                    checked: 'classes.checked',
-                  }}
                   checked={true}
                   className={classes.check}
                   data-cy="select-send-email"
                 />
               }
+              value={true}
               className={classes.checkboxContainer}
               label={translate('common.send.to.email')}
             />
