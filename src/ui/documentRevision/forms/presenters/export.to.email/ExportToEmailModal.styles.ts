@@ -78,6 +78,7 @@ export const styles = makeStyles((theme: Theme) =>
       flexDirection: 'row',
     },
     auditContenttitle: {
+      marginTop: theme.spacing(3.75),
       marginBottom: theme.spacing(0.5),
     },
     radioContainer: {

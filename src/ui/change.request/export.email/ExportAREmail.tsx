@@ -69,6 +69,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   const classes = style();
   const emailDialog = useDialog();
   const [value, setValue] = useState(false);
+  const [isNoOptionSelected, setNoOptionSelected] = useState(false);
   const handleChange = (event) => {
     setValue(event.target.value === 'true');
   };
@@ -165,14 +166,14 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
             ? <Box display="flex" className={classes.loader} ><FontAwesomeIcon icon={regular('loader')} size="lg" /><Text translation="share.downloading" /></Box>
             : <Box>
               <Button variant="text" onClick={emailDialog.close}><Text translation="common.cancel" /></Button>
-              <Button variant="contained" onClick={handleAREmail}><Text translation="common.confirm" /></Button>
+              <Button disabled={isNoOptionSelected} variant="contained" onClick={handleAREmail}><Text translation="common.confirm" /></Button>
             </Box>}
         </>}
         actionsProps={{ className: classes.dialogAction }}
       >
         <ExportToEmailModal
           ref={childFormRef}
-          {...{ value, handleChange, revisionId: id }}
+          {...{ value, handleChange, setNoOptionSelected, isNoOptionSelected, revisionId: id }}
         />
       </Dialog>
     </>

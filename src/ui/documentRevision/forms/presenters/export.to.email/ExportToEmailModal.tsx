@@ -31,10 +31,12 @@ import { styles } from './ExportToEmailModal.styles';
 interface ExportToEmailModalProps {
   value?: boolean
   revisionId?: string
+  isNoOptionSelected?: boolean
+  setNoOptionSelected?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
-  = React.forwardRef(({ revisionId }, ref) => {
+  = React.forwardRef(({ revisionId, isNoOptionSelected, setNoOptionSelected }, ref) => {
     const classes = styles();
     const fetchAttachments = useActionCreator(
       documentRevisionsActions.getAttachmentsByDocRevId,
@@ -57,15 +59,28 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
 
     const formik = useFormik({
       initialValues: {
-        itemOnly: false,
-        includeAttachments: false,
-        includeDate: false,
+        itemOnly: true,
+        includeAttachments: true,
+        includeDate: true,
         includeAuditLogs: false,
         watermarkAttachments: [] as string[],
       },
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onSubmit: (values) => {},
     });
+
+    const { values } = formik;
+
+    useEffect(() => {
+      const { itemOnly, includeDate, includeAttachments } = values;
+      if (!itemOnly && !includeDate && !includeAttachments) {
+        setNoOptionSelected?.(true);
+      } else {
+        if (isNoOptionSelected) {
+          setNoOptionSelected?.(false);
+        }
+      }
+    }, [values]);
 
     useImperativeHandle(ref, () => ({
       getValues: () => {
@@ -145,7 +160,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
             />
           </Box>
 
-          {formik.values.includeDate && <Box className={classes.attachmentsContainer} my={3.75}>
+          {formik.values.includeDate && <Box className={classes.attachmentsContainer} mt={3.75}>
             <Typography
               variant="h2"
               component="h2"
