@@ -233,7 +233,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData]);
 
-  const tableHeadersFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors') : [];
+  const tableHeadersFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors' && key !== 'idx') : [];
 
   return (
     <>
