@@ -1,8 +1,8 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import { omit } from 'lodash';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { StyledButton } from '../../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListIcon } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
@@ -16,6 +16,7 @@ import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
+import ExportToEmailDialogActions from './ExportToEmailDialogActions';
 import ExportToEmailModal from './ExportToEmailModal';
 interface Props {
   revisionId: string
@@ -29,6 +30,12 @@ export interface attachmentsInfo {
   type: string
 }
 
+const style = makeStyles((theme) => ({
+  dialogAction: {
+    justifyContent: 'space-between',
+  },
+}));
+
 const ExportToEmail: React.FunctionComponent<Props> = ({
   revisionId,
   canAccess,
@@ -37,6 +44,8 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const emailDialog = useDialog();
+  const classes = style();
+  const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
 
   const async = useAsync({
     onSuccess: () => {
@@ -122,12 +131,11 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
         title="common.send.to.email"
         open={emailDialog.isOpen}
         loading={async.isLoading}
-        confirmLabel="common.confirm"
-        cancelLabel="common.cancel"
         onClose={emailDialog.close}
-        onConfirm={runExportWithChildren}
+        actionsProps={{ className: classes.dialogAction }}
+        actions={ <ExportToEmailDialogActions {...{ handleEmail: runExportWithChildren, emailDialog, isLoading: async.isLoading, isNoOptionSelected }} />}
       >
-        <ExportToEmailModal ref={childFormRef} {...{ revisionId }} />
+        <ExportToEmailModal ref={childFormRef} {...{ setNoOptionSelected, isNoOptionSelected, revisionId }} />
       </Dialog>
     </>
   );

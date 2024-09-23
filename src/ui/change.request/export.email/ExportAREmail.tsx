@@ -14,6 +14,7 @@ import { Dialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { toastError, toastSuccess } from '../../components/notifications';
 import Text from '../../components/Text';
+import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
 import ExportToEmailModal from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -28,9 +29,6 @@ interface Props {
 const style = makeStyles((theme) => ({
   dialogAction: {
     justifyContent: 'space-between',
-  },
-  loader: {
-    gap: '10px',
   },
   popup: {
     borderRadius: '6px',
@@ -160,15 +158,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         open={emailDialog.isOpen}
         loading={async.isLoading}
         onClose={emailDialog.close}
-        actions={ <>
-          <Button kind="secondary" startIcon={<FontAwesomeIcon icon={regular('link')} data-cy="copy-link" />} ><Text translation="share.copy.link" /></Button>
-          {async.isLoading
-            ? <Box display="flex" className={classes.loader} ><FontAwesomeIcon icon={regular('loader')} size="lg" /><Text translation="share.downloading" /></Box>
-            : <Box>
-              <Button variant="text" onClick={emailDialog.close}><Text translation="common.cancel" /></Button>
-              <Button disabled={isNoOptionSelected} variant="contained" onClick={handleAREmail}><Text translation="common.confirm" /></Button>
-            </Box>}
-        </>}
+        actions={ <ExportToEmailDialogActions {...{ handleEmail: handleAREmail, emailDialog, isLoading: async.isLoading, isNoOptionSelected }} />}
         actionsProps={{ className: classes.dialogAction }}
       >
         <ExportToEmailModal

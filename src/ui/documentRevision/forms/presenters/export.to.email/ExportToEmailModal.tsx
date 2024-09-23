@@ -155,7 +155,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
               component="h2"
               className={classes.attachmentsContainerTitle}
             >
-              <Text translation="share.select.attachment.with.effective.date" />
+              <Text translation={attachments?.length ? 'share.select.attachment.with.effective.date' : 'common.no.attachments'} />
             </Typography>
             <List className={classes.attachmenstList}>
               {attachments?.map((attachment, index) => (
