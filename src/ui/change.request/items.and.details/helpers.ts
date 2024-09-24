@@ -27,7 +27,6 @@ export const formDataToStoreData = (
   documentRevisionsAssigned: FBDocumentRevisionsValue[], documentRevisionsData?: any[]) =>
 
   documentRevisionsAssigned.map((item: FBDocumentRevisionsValue) => {
-    console.log({ item });
     const entryInfo = {
       justificationOfChange: item.justificationOfChange,
       descriptionOfChange: item.descriptionOfChange,

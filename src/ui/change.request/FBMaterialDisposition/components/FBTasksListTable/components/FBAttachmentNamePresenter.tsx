@@ -1,8 +1,10 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
-import { AttachFile } from '@material-ui/icons';
 import React from 'react';
 import { ReactComponent as CloseIcon } from '../../../../../../assets/images/trash.svg';
 import { attachmentsActions } from '../../../../../../state/ducks/attachments';
+import { LINE_TYPES } from '../../../../../../state/ducks/attachments/constants';
 import { AttachmentDownloadResponse } from '../../../../../../state/ducks/attachments/types';
 import ViewFile from '../../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../../components/common/view.file/utils/helpers';
@@ -66,10 +68,14 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
     >
       <FBMapWrapper<FBAttachment[]> collection={attachments}>
         {(file: FBAttachment) => {
-          const { name, type, id } = file;
+          const { name, type, id, lineType } = file;
+          const isRedline = lineType === LINE_TYPES.RED_LINE;
           return (
             <div className={classes.attachmentName}>
-              <AttachFile />
+              <div className={isRedline ? classes.arAttchmentList : ''}>
+                <FontAwesomeIcon icon={regular('paperclip-vertical')} className={isRedline ? classes.paperClip : ''} />
+                <span className={isRedline ? classes.redLine : ''} />
+              </div>
               <Box
                 width={235}
                 marginLeft={0.75}

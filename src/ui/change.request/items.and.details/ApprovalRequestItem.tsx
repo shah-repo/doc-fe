@@ -68,7 +68,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
   return useObserver(() => (
     <>
       {
-        isEditMode && <>nnnnnnnnnnnnnn</>
+        isEditMode
           && <ApprovalRequestEditGridItem {...{ formState }}
             disabledOptions={disabledOptions()}
             addRevisionToChangeRequest={addRevisionToChangeRequest}

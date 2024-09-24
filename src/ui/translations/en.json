@@ -850,6 +850,7 @@
   "documentRevision.po.open.alert": "Are you sure you want to open this PO?",
   "documentRevision.po.status.update.failed": "PO Status update failed",
   "documentRevision.releasing": "Releasing {docId}, {title}",
+  "ar.attachment.dialog.title": "{titleId} - Attachments",
   "transition.action.confirm": "Confirm",
   "transition.action.close.now": "Close Now",
   "transition.action.cancel": "Cancel",

@@ -9,6 +9,7 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { EMPTY_VALUE_PLACEHOLDER } from '../../components/KendoDataGrid/constants';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
 import useStyles from './ApprovalRequestGrid.styles';
+import ARAttachmentsList from './ARAttachmentsList';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 import KendoTextEditor from './KendoTextEditor';
 
@@ -83,8 +84,9 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
           <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
             {entry?.revisionFormTo ?? (documentRevision?.revision ?? EMPTY_VALUE_PLACEHOLDER)}
           </div>
-          <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
-            {entry?.attachments ?? (documentRevision?.attachments ?? EMPTY_VALUE_PLACEHOLDER)}
+          <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
+            classes.itemLeftPadding, classes.hiddenLegend)}>
+            {entry?.attachments ? <ARAttachmentsList attachments={entry?.attachments} /> : EMPTY_VALUE_PLACEHOLDER}
           </div>
           <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
