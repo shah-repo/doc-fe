@@ -187,7 +187,6 @@ export default makeStyles((theme) =>
       width: '100%',
       border: `1px solid ${Colors.dodger_blue}`,
       position: 'relative',
-      flexWrap: 'wrap',
       '& div div.MuiBox-root': {
         marginBottom: 0,
       },
@@ -344,18 +343,17 @@ export default makeStyles((theme) =>
       '& span': {
         cursor: 'pointer',
       },
-      '&:hover': {
-        textDecoration: 'underline',
-      },
     },
     moreOrLess: {
-      color: Colors.dodger_blue,
+      color: Colors.navy,
       padding: theme.spacing(0, 0.25),
       margin: theme.spacing(0, 0.5),
-      fontSize: 14,
-      textTransform: 'lowercase',
+      fontSize: 12,
+      fontWeight: 400,
+      textDecoration: 'underline',
       '&:hover': {
         background: 'unset',
+        textDecoration: 'underline',
       },
     },
   }),

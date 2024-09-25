@@ -48,7 +48,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   isNewVersion,
   documentRevision,
   docRevId,
-  fromARAttachment,
+  isARAttachment,
   ...other
 }) => {
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
@@ -342,7 +342,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       const canViewRedlineInDraftMode = isOwnerOfFile && !isReleasedOrApproved;
       const canViewRedline = hasPermissionToRedlineFiles && isReleasedOrApproved;
 
-      if (fromARAttachment) {
+      if (isARAttachment) {
         return true;
       } else {
         if (canViewRedline || canViewRedlineInDraftMode) {
@@ -353,7 +353,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       }
     });
 
-    return fromARAttachment
+    return isARAttachment
       ? filteredAttachments.sort((a, b) => {
         if (a.lineType === LINE_TYPES.RED_LINE && b.lineType !== LINE_TYPES.RED_LINE) return -1;
         if (a.lineType !== LINE_TYPES.RED_LINE && b.lineType === LINE_TYPES.RED_LINE) return 1;
@@ -361,10 +361,10 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       })
       : filteredAttachments.sort((a) => (a.lineType === LINE_TYPES.CLEAN_COPY ? -1 : 0))
         .sort((a) => (a.id === documentRevision?.primaryAttachment?.id ? -1 : 0));
-  }, [attachments, documentRevision, fromARAttachment]);
+  }, [attachments, documentRevision, isARAttachment]);
   const attachmentsRenderer = sortedAttachments.map((attachment) => {
     let showAttachment = true;
-    let canDeleteFile = !fromARAttachment;
+    let canDeleteFile = !isARAttachment;
     if (isCurrentUserOperator && (documentType === 'LOT' || documentType === 'EB')) {
       const isOwnerOfFile = attachment.owner?.id === currentEmployeeId;
       showAttachment = isOwnerOfFile;
