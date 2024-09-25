@@ -25,6 +25,8 @@ const fieldTypeConditions = {
   originalHeaders: 'OBJECT_EDITED',
   dataId: 'STRING_EDITED',
   attachmentId: 'STRING_EDITED',
+  status: 'STRING_EDITED',
+  approver: 'STRING_NEW',
 };
 
 interface OwnProps {
@@ -34,6 +36,7 @@ interface OwnProps {
 
 interface MergedLog extends LogEntry {
   jobId: string
+  approvalId?: string
 }
 
 const AuditHistory: React.FunctionComponent<OwnProps> = ({
@@ -73,11 +76,31 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
 
   // Merges all logs from each bulkImport and sorts by timestamp (most recent first)
   const mergeAndSortLogs = (bulkImports): MergedLog[] => {
-    // Merge all logs from each bulkImport
-    const mergedLogs: MergedLog[] = flatten(bulkImports.map((importItem) => importItem.logs.map((log) => ({
-      ...log,
-      jobId: importItem.jobId,
-    }))));
+  // Merge all logs from each bulkImport
+    const mergedLogs: MergedLog[] = flatten(bulkImports.map((importItem) => {
+    // Extract logs from the main logs array
+      const mainLogs = importItem.logs.map((log) => ({
+        ...log,
+        jobId: importItem.jobId,
+      }));
+
+      // Extract logs from the documentRevision approvals
+      const approvalLogs = importItem?.documentRevision?.approvals
+        ? flatten(
+          importItem.documentRevision.approvals.map((approval) =>
+            approval.auditLogs.map((log) => ({
+              ...log,
+              jobId: importItem.jobId,
+              approverName: approval.approverName, // Add additional info if needed
+              approverEmail: approval.approverEmail,
+            })),
+          ),
+        )
+        : [];
+
+      // Combine main logs and approval logs
+      return [...mainLogs, ...approvalLogs];
+    }));
 
     return mergedLogs.sort((a: MergedLog, b: MergedLog) => {
       const dateA = new Date(a.timestamp ?? 0);
@@ -126,6 +149,24 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
         if (log.type === 'STRING_EDITED') {
           secondaryText = `Upload zip file id: ${log.nextValue}`;
           stepChange = 'Step 4 Upload Attachment';
+        }
+        break;
+      case 'status':
+        if (log.type === 'STRING_EDITED') {
+          // Check if approvalId exists
+          if (log.approvalId) {
+            secondaryText = `Approval ${log.approvalId} status changed from ${log.previousValue} to ${log.nextValue}`;
+            stepChange = 'Approver update';
+          } else {
+            secondaryText = `Bulk import status changed from ${log.previousValue} to ${log.nextValue}`;
+            stepChange = 'Bulk import update';
+          }
+        }
+        break;
+      case 'approver':
+        if (log.type === 'STRING_NEW') {
+          secondaryText = `Assigned approver ${log.nextValue}`;
+          stepChange = 'Approver Assigned';
         }
         break;
     }

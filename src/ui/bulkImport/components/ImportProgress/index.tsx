@@ -10,6 +10,7 @@ import { translate } from '../../../../common/intl';
 import { setDataTypeFilter, setStatusFilter } from '../../../../state/ducks/bulkImport/actions';
 import { bkStatusTextMap } from '../../../../state/ducks/bulkImport/constants';
 import { getBulkImports } from '../../../../state/ducks/bulkImport/selectors';
+import { BkStatus } from '../../../../state/ducks/bulkImport/types';
 import SelectField from '../../../components/forms/fields/Select';
 import Text from '../../../components/Text';
 import ProgressSection from '../ProgressSection';
@@ -25,7 +26,7 @@ const ImportProgress: React.FC = () => {
     return [{ value: '', text: translate('common.viewAll') }, ...uniqueProcessIds.map(id => ({ value: id, text: id }))];
   }, [bulkImports]);
   const statusesOptions = useMemo(() => {
-    const uniqueStatuses = Array.from(new Set(bulkImports.map((item: any) => item.status)));
+    const uniqueStatuses = Array.from(new Set(bulkImports.map((item: any) => item.status))).filter(status => status !== BkStatus.DELETED);
     return [{ value: '', text: translate('common.viewAll') }, ...uniqueStatuses.map(status => ({ value: status, text: bkStatusTextMap[status] || status }))];
   }, [bulkImports]);
 

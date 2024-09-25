@@ -37,7 +37,7 @@ interface ProgressItemProps {
   currentEmployeeId: string
 }
 
-const statusesToHideDeleteButton = [BkStatus.IN_PROGRESS, BkStatus.COMPLETED, BkStatus.SUCCESS];
+const STATUSES_HIDE_DELETE = [BkStatus.IN_PROGRESS, BkStatus.COMPLETED, BkStatus.SUCCESS, BkStatus.CANCELLED];
 
 const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentEmployeeId }) => {
   const classes = useStyles();
@@ -53,7 +53,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const showApprovals = item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending && showApproverButtons;
   const currentProgressStep = useRef(0);
   const isRejected = item?.status === BkStatus.CANCELLED;
-  const showDeleteButton = _.isEmpty(item.process) && !statusesToHideDeleteButton.includes(item?.status as BkStatus);
+  const showDeleteButton = _.isEmpty(item.process) && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
   const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports));
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   let rejectedDate;

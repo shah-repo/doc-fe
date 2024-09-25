@@ -50,6 +50,11 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
   const filterDataType = state.bulkImport.main.selectedDataType;
   const filterStatus = state.bulkImport.main.selectedStatus;
   return state.bulkImport.main.bulkImports.reduce<Record<string, BulkImportCustom[]>>((acc, bulkImport) => {
+    // Skip bulk imports with status DELETED
+    if (bulkImport.status === BkStatus.DELETED) {
+      return acc;
+    }
+
     const processType = bulkImport.processType;
     const status = bulkImport.status;
     const progress = bulkImport?.process?.process
