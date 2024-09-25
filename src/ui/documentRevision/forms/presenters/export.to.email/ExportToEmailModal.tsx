@@ -17,6 +17,7 @@ import { ReactComponent as Active } from '../../../../../assets/images/radioActi
 import { ReactComponent as InActive } from '../../../../../assets/images/radioInActive.svg';
 import { translate } from '../../../../../common/intl';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { PDF } from '../../../../components/common/view.file/utils/constants';
 import {
   Checkbox,
   FormControlLabel,
@@ -31,22 +32,27 @@ import { styles } from './ExportToEmailModal.styles';
 interface ExportToEmailModalProps {
   value?: boolean
   revisionId?: string
+  arId?: string
   isNoOptionSelected?: boolean
   setNoOptionSelected?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
-  = React.forwardRef(({ revisionId, isNoOptionSelected, setNoOptionSelected }, ref) => {
+  = React.forwardRef(({ revisionId, isNoOptionSelected, arId, setNoOptionSelected }, ref) => {
     const classes = styles();
     const fetchAttachments = useActionCreator(
       documentRevisionsActions.getAttachmentsByDocRevId,
+    );
+    const fetchArAttachments = useActionCreator(
+      documentRevisionsActions.getAttachmentsByARId,
     );
     const [attachments, setAttachments] = useState<attachmentsInfo[]>();
     const [watermarkAttachments, setWatermarkAttachments]
       = useState<string[]>();
     const attachmentsAsync = useAsync<attachmentsInfo[]>({
       onSuccess: (attachments) => {
-        setAttachments(attachments);
+        setAttachments(attachments?.filter(attach => attach.type === PDF));
+        setWatermarkAttachments(attachments?.filter(attach => attach.type === PDF && attach.isPrimaryAttachment).map(attach => attach.id));
       },
       onError: () => {
         toastError(translate('common.send.to.email.error'));
@@ -54,7 +60,11 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
     });
 
     useEffect(() => {
-      attachmentsAsync.start(fetchAttachments, revisionId, attachmentsAsync);
+      if (arId) {
+        attachmentsAsync.start(fetchArAttachments, arId, attachmentsAsync);
+      } else {
+        attachmentsAsync.start(fetchAttachments, revisionId, attachmentsAsync);
+      }
     }, []);
 
     const formik = useFormik({
@@ -168,6 +178,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
                   <ListItemIcon className={classes.listItemIcon}>
                     <Box>
                       <Field
+                        key={watermarkAttachments?.includes(attachment.id)}
                         name="watermarkAttachments"
                         as={Checkbox}
                         checked={watermarkAttachments?.includes(attachment.id)}

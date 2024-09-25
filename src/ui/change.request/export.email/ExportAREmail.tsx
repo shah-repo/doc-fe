@@ -163,7 +163,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
       >
         <ExportToEmailModal
           ref={childFormRef}
-          {...{ value, handleChange, setNoOptionSelected, isNoOptionSelected, revisionId: id }}
+          {...{ value, handleChange, setNoOptionSelected, isNoOptionSelected, arId: id }}
         />
       </Dialog>
     </>

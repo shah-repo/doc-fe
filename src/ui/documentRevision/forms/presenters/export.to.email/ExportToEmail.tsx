@@ -28,6 +28,7 @@ export interface attachmentsInfo {
   id: string
   name: string
   type: string
+  isPrimaryAttachment: boolean
 }
 
 const style = makeStyles((theme) => ({
