@@ -37,7 +37,8 @@ const ARAttachmentDialog: React.FC<Props> = ({
     >
       <AttachmentField
         value={attachments}
-        name="attachments"
+        name="arAttachments"
+        isARAttachment={true}
       />
     </Dialog>
   );

@@ -38,7 +38,7 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isRedLine?: boolean
   isPrimary?: boolean
   isTransferred?: boolean
-  fromARAttachment?: boolean
+  isARAttachment?: boolean
   handleIconClick?: (attachment: Attachment) => any
   docRevId?: string
 }
