@@ -2,7 +2,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, makeStyles } from '@material-ui/core';
 import { omit } from 'lodash';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { StyledButton } from '../../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListIcon } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
@@ -11,11 +11,12 @@ import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/f
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { Dialog } from '../../../../components/dialogs';
-import { toastError, toastSuccess } from '../../../../components/notifications';
+import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
+import useMqttSubscription from '../../../../hooks/useMqttSubscription';
 import ExportToEmailDialogActions from './ExportToEmailDialogActions';
 import ExportToEmailModal from './ExportToEmailModal';
 interface Props {
@@ -47,13 +48,16 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const emailDialog = useDialog();
   const classes = style();
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
+  const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
+
+  const handleDownloadComplete = (isComplete: boolean) => {
+    setIsDownloadInprogress(!isComplete);
+    emailDialog.close();
+  };
 
   const async = useAsync({
-    onSuccess: () => {
-      emailDialog.close();
-      toastSuccess(intl.formatMessage({ id: 'common.send.to.email.success' }));
-    },
     onError: () => {
+      setIsDownloadInprogress(false);
       if (!canAccess) {
         toastError(
           intl.formatMessage({ id: 'common.send.to.email.no.access' }),
@@ -64,6 +68,12 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
     },
   });
 
+  const isAttachmentReady = useCallback((data) => {
+    handleDownloadComplete(true);
+  }, []);
+
+  useMqttSubscription('+/external_export_email/+/pdf', isAttachmentReady);
+
   const exportToEmail = useActionCreator(
     documentRevisionsActions.exportToEmail,
   );
@@ -72,6 +82,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const runExportWithChildren = () => {
     if (childFormRef.current) {
       const values = omit(childFormRef.current.getValues(), 'includeDate');
+      setIsDownloadInprogress(true);
       async.start(
         exportToEmail,
         revisionId,
@@ -131,10 +142,10 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
       <Dialog
         title="common.send.to.email"
         open={emailDialog.isOpen}
-        loading={async.isLoading}
+        loading={isDownloadInprogress}
         onClose={emailDialog.close}
         actionsProps={{ className: classes.dialogAction }}
-        actions={ <ExportToEmailDialogActions {...{ handleEmail: runExportWithChildren, emailDialog, isLoading: async.isLoading, isNoOptionSelected }} />}
+        actions={ <ExportToEmailDialogActions {...{ handleEmail: runExportWithChildren, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
       >
         <ExportToEmailModal ref={childFormRef} {...{ setNoOptionSelected, isNoOptionSelected, revisionId }} />
       </Dialog>
