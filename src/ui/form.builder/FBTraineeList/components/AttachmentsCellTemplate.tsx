@@ -15,6 +15,50 @@ interface Props extends CustomTemplateProps {
   onUpdate: (attachments: TraineeAttachment[]) => void
 }
 
+export const AttachmentsCellTemplate: React.FC<CustomTemplateProps> = (props) => {
+  const { dataItem, column, field } = props;
+  const { editable } = column;
+
+  const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
+  const classes = styles();
+  const { values, setFieldValue } = useFormikContext<EditableTrainee>() ?? {};
+
+  const handleUpdate = (attachments) => {
+    setFieldValue('attachmentIds', attachments?.map(item => item.id) ?? []);
+    setFieldValue(field, attachments ?? []);
+  };
+
+  const mode = get(dataItem, MODE_FIELD);
+  const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
+  const attachments = get(canBeModified ? values : dataItem, field, []) as TraineeAttachment[];
+
+  return (
+    <FBProvider {...{ fileUploadState }}>
+      <div className={classes.attachmentsList}>
+        {canBeModified && (
+          <Editor
+            {...props}
+            previousAttachments={attachments}
+            onUpdate={handleUpdate}
+          />
+        )}
+        {attachments?.map((attachment) => {
+          return (
+            <FBAttachmentNamePresenter
+              key={attachment.id}
+              boxProps={{ className: classes.attachmentsContainer }}
+              attachments={[attachment]}
+              fileUploadState={fileUploadState}
+              isDisabled={!canBeModified}
+            />
+          );
+        })}
+
+      </div>
+    </FBProvider>
+  );
+};
+
 const Editor: React.FC<Props> = ({ dataItem, field, previousAttachments, onUpdate }) => {
   const classes = styles();
   const { fileUploadState } = FB.useStores();
@@ -45,48 +89,5 @@ const Editor: React.FC<Props> = ({ dataItem, field, previousAttachments, onUpdat
       iconClassName={classes.uploadFieldIcon}
       name={id}
     />
-  );
-};
-
-export const AttachmentsCellTemplate: React.FC<CustomTemplateProps> = (props) => {
-  const { dataItem, column, field } = props;
-  const { editable } = column;
-
-  const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
-  const classes = styles();
-  const { values, setFieldValue } = useFormikContext<EditableTrainee>() ?? {};
-
-  const handleUpdate = (attachments) => {
-    setFieldValue('attachmentIds', attachments?.map(item => item.id) ?? []);
-    setFieldValue(field, attachments ?? []);
-  };
-
-  const mode = get(dataItem, MODE_FIELD);
-  const canBeModified = (Boolean(editable) && mode === Mode.edit) || mode === Mode.add;
-  const attachments = get(canBeModified ? values : dataItem, field, []) as TraineeAttachment[];
-
-  return (
-    <FBProvider {...{ fileUploadState }}>
-      <div className={classes.attachmentsList}>
-        {attachments?.map((attachment) => {
-          return (
-            <FBAttachmentNamePresenter
-              key={attachment.id}
-              boxProps={{ className: classes.attachmentsContainer }}
-              attachments={[attachment]}
-              fileUploadState={fileUploadState}
-              isDisabled={!canBeModified}
-            />
-          );
-        })}
-        {canBeModified && (
-          <Editor
-            {...props}
-            previousAttachments={attachments}
-            onUpdate={handleUpdate}
-          />
-        )}
-      </div>
-    </FBProvider>
   );
 };
