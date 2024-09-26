@@ -41,7 +41,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   const classes = useStyles();
   const location = useLocation();
   const showDeleteButton = !location.pathname.includes(entry?.docRevId) && !isDeletionDisabled;
-
+  const titleId = titleText?.split('•')[0].trim();
   const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
 
   return (
@@ -86,7 +86,7 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
           </div>
           <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
-            {entry?.attachments ? <ARAttachmentsList attachments={entry?.attachments} /> : EMPTY_VALUE_PLACEHOLDER}
+            {entry?.attachments ? <ARAttachmentsList attachments={entry?.attachments} titleId={titleId} /> : EMPTY_VALUE_PLACEHOLDER}
           </div>
           <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
             classes.itemLeftPadding, classes.hiddenLegend)}>
