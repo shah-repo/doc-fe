@@ -53,7 +53,6 @@ export const AttachmentsCellTemplate: React.FC<CustomTemplateProps> = (props) =>
             />
           );
         })}
-
       </div>
     </FBProvider>
   );
