@@ -231,6 +231,8 @@ export enum Permission {
   EDIT_EQ_STATUS = 'EDIT_EQ_STATUS',
   // BULK_IMPORT
   BULK_IMPORT = 'BULK_IMPORT',
+  // TRAINING
+  GROUP_TRAINING_CREATE = 'GROUP_TRAINING_CREATE',
 }
 
 export enum GroupTag {

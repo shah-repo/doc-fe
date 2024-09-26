@@ -56,7 +56,7 @@ import { Translation } from '../translations/types';
 import WOClose from './forms/presenters/Close';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentGRPT, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
@@ -95,6 +95,10 @@ const styles = makeStyles(() => ({
 const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, canChangeOwnerShip, isSliderView,
 }) => {
+  const isGRPT = checkIsDocumentGRPT(documentRevision?.document?.documentType?.groupOptions);
+  const isDocumentOwner = useSelector(getHasPermission(Permission.DOCUMENT_OWNER_CHANGE));
+  const isGroupCreate = useSelector(getHasPermission(Permission.GROUP_TRAINING_CREATE));
+  canChangeOwnerShip = isGRPT ? isDocumentOwner && isGroupCreate : canChangeOwnerShip;
   const isNewLayout = SM.isNewLayout;
   const handleCreateDocument = useHandleCreateDoc();
   const {
