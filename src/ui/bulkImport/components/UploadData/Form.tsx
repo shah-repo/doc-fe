@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { cleanUpMappedHeaders, setIsLoading, setTemplateFile, uploadFileData } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImport, getTemplateFile } from '../../../../state/ducks/bulkImport/selectors';
 import { getDownloadTemplate } from '../../../../state/ducks/bulkImport/utils';
+import { store } from '../../../../state/store';
 import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
 import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.types';
@@ -54,9 +55,10 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
     dispatch(setTemplateFile(files.filter((_, i) => i !== index)));
   };
 
-  const handleDownloadFile = () => {
+  const handleDownloadFile = async () => {
     if (bulkImport) {
-      getDownloadTemplate(bulkImport.id);
+      const { employeeId, sessionId } = store.getState().auth.user;
+      await getDownloadTemplate(bulkImport.id, { employeeId, sessionId });
     }
   };
 

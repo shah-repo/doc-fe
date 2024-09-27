@@ -1,17 +1,22 @@
 import axios from 'axios';
 import { orderBy } from 'lodash';
 import Config from '../../../config';
-import { store } from '../../store';
 import { APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, DOCUMENT_REVISION_WITHDRAWN_URL } from './constants';
 
 const TEMPLATE_CSV = 'template.xlsx';
 
-export const getDownloadTemplate = async (bulkImportId: string) => await axios({
+export interface UserState {
+  employeeId: string
+  sessionId: string
+}
+
+export const getDownloadTemplate = async (bulkImportId: string, userState: UserState): Promise<void> => await axios({
   url: `${Config.ApiEndpoint}${BULK_DOWNLOAD_FILE_URL}${bulkImportId}`,
   method: 'GET',
   responseType: 'blob',
   headers: {
-    Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+    Authorization: `bearer ${userState.employeeId}:${userState.sessionId}`,
+    // Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
   },
 }).then(({ data }) => {
   const url = window.URL.createObjectURL(new Blob([data]));
@@ -23,13 +28,13 @@ export const getDownloadTemplate = async (bulkImportId: string) => await axios({
   link.remove();
 });
 
-export const postApprovals = async (approvalId, documentRevisionId, approvalFieldId) => {
+export const postApprovals = async (approvalId: string | number, documentRevisionId: string, approvalFieldId: string, userState: UserState) => {
   try {
     const response = await axios({
       url: `${Config.ApiEndpoint}${APPROVALS_URL}`,
       method: 'POST',
       headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+        Authorization: `bearer ${userState.employeeId}:${userState.sessionId}`,
       },
       data: {
         assigned: {
@@ -50,13 +55,13 @@ export const postApprovals = async (approvalId, documentRevisionId, approvalFiel
   }
 };
 
-export const abandonApproval = async (approvalId) => {
+export const abandonApproval = async (approvalId: string, userState: UserState): Promise<boolean> => {
   try {
     await axios({
       url: `${Config.ApiEndpoint}${APPROVALS_URL}/${approvalId}/abandon`,
       method: 'POST',
       headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+        Authorization: `bearer ${userState.employeeId}:${userState.sessionId}`,
       },
     });
     // Handle success
@@ -67,13 +72,13 @@ export const abandonApproval = async (approvalId) => {
   }
 };
 
-export const patchDocumentRevisions = async (approvalIds, documentRevisionId, approvalFieldId) => {
+export const patchDocumentRevisions = async (approvalIds, documentRevisionId, approvalFieldId, userState: UserState) => {
   try {
     const response = await axios({
       url: `${Config.ApiEndpoint}${DOCUMENT_REVISION_URL}${documentRevisionId}`,
       method: 'PATCH',
       headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+        Authorization: `bearer ${userState.employeeId}:${userState.sessionId}`,
       },
       data: {
         formInput: {
@@ -88,13 +93,13 @@ export const patchDocumentRevisions = async (approvalIds, documentRevisionId, ap
   }
 };
 
-export const postDocumentRevisionsInReview = async (documentRevisionId) => {
+export const postDocumentRevisionsInReview = async (documentRevisionId, userState: UserState) => {
   try {
     const response = await axios({
       url: `${Config.ApiEndpoint}${DOCUMENT_REVISION_IN_REVIEW_URL}${documentRevisionId}`,
       method: 'POST',
       headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+        Authorization: `bearer ${userState.employeeId}:${userState.sessionId}`,
       },
     });
 
@@ -105,13 +110,13 @@ export const postDocumentRevisionsInReview = async (documentRevisionId) => {
   }
 };
 
-export const postDocumentRevisionsWithdrawn = async (documentRevisionId) => {
+export const postDocumentRevisionsWithdrawn = async (documentRevisionId, userState: UserState) => {
   try {
     const response = await axios({
       url: `${Config.ApiEndpoint}${DOCUMENT_REVISION_WITHDRAWN_URL}${documentRevisionId}`,
       method: 'POST',
       headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+        Authorization: `bearer ${userState.employeeId}:${userState.sessionId}`,
       },
     });
 

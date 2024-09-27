@@ -345,6 +345,7 @@ export const getOneBulkImport = (bulkImportId: string): ApiAction<BulkImport> =>
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoadingMain(false));
+    dispatch(setIsLoading(false));
   },
   onFailure: (err: string) => {
     toastError(err);

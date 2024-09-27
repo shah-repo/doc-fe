@@ -45,12 +45,13 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const dispatch = useDispatch();
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
   const deleteBulkImportAction = useActionCreator(deleteBulkImport);
-  const approvalId = item?.documentRevision?.approvals[0]?.id;
-  const approverId = item?.documentRevision?.approvals[0]?.approverId;
+  const currentApproval = item?.documentRevision?.approvals.find(
+    approval => approval.status === ApprovalStatus.Pending && approval.approverId === currentEmployeeId,
+  );
   const transitionDialog = useDialog();
   const transitionDialog1 = useDialog();
-  const showApproverButtons = approvalId && approverId === currentEmployeeId && _.isEmpty(item.process);
-  const showApprovals = item?.documentRevision?.approvals[0]?.status === ApprovalStatus.Pending && showApproverButtons;
+  const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && _.isEmpty(item.process);
+  const showApprovals = !!currentApproval && showApproverButtons;
   const currentProgressStep = useRef(0);
   const isRejected = item?.status === BkStatus.CANCELLED;
   const showDeleteButton = _.isEmpty(item.process) && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
@@ -239,14 +240,14 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           <ApproveDialogueContainer
             transition="reject"
             type="reject"
-            approvalId={approvalId}
+            approvalId={currentApproval?.id}
             transitionDialog={transitionDialog1}
             label="transition.action.reject"
             translationRejectMsg="bulkImport.reject.alert"
           />
           <ApproveDialogueContainer
             transition="approve"
-            approvalId={approvalId}
+            approvalId={currentApproval?.id}
             transitionDialog={transitionDialog}
             label="transition.action.approve"
           />

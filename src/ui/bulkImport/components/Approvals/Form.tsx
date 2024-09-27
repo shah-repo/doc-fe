@@ -13,9 +13,10 @@ import { getApprovers, getOneBulkImport, setIsLoading } from '../../../../state/
 import { approvalFieldPrefix } from "../../../../state/ducks/bulkImport/constants";
 import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
-import { abandonApproval, patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview, postDocumentRevisionsWithdrawn } from "../../../../state/ducks/bulkImport/utils";
+import { abandonApproval, patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview, postDocumentRevisionsWithdrawn, UserState } from "../../../../state/ducks/bulkImport/utils";
 import { ApprovalStatus } from "../../../../state/ducks/common/types";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
+import { store } from "../../../../state/store";
 import Text from '../../../components/Text';
 import { Autocomplete, Button } from '../../../components/forms/fields-next';
 import { toastError } from "../../../components/notifications";
@@ -42,6 +43,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   );
   const haveApprovers = bulkImport?.documentRevision && bulkImport?.documentRevision?.status !== DocumentRevisionStatus.Draft;
   const approvalFieldId = useRef(bulkImport?.documentRevision?.approvals?.[0]?.fieldId || APPROVAL_FIELD_ID);
+  const userState = useRef<UserState>({ employeeId: '', sessionId: '' });
 
   const handleSubmit = async () => {
     if (!users || users.length === 0) {
@@ -53,7 +55,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   
     try {
       // After all approvals are processed, start the final review
-      await postDocumentRevisionsInReview(bulkImport?.documentRevisionId);
+      await postDocumentRevisionsInReview(bulkImport?.documentRevisionId, userState.current);
   
       // Navigate to the bulk import progress page
       history.push(BULK_IMPORT_PROGRESS_URL);
@@ -70,9 +72,9 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
     // Get the current user based on the index
     const currentUser = users[index];
 
-    if (currentUser) {
+    if (currentUser && currentUser.approvalId) {
       try {
-        const response = await abandonApproval(currentUser.approvalId);
+        const response = await abandonApproval(currentUser.approvalId, userState.current);
         if (response) {
           const newUsers = users.filter((_, i) => i !== index);
           setUsers(newUsers);
@@ -81,14 +83,13 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
           const approvalIds = newUsers.map(user => user.value);
     
           // Patch the document revisions with the updated list of approvers
-          await patchDocumentRevisions(approvalIds, bulkImport?.documentRevisionId, approvalFieldId.current);
+          await patchDocumentRevisions(approvalIds, bulkImport?.documentRevisionId, approvalFieldId.current, userState.current);
           getBulkImportData();
         }
       } catch (error) {
         console.error('An error occurred while removing the user and updating the document revisions:', error);
         toastError('An error occurred during the removal process.');
-      } finally {
-        dispatch(setIsLoading(false)); // Stop loading
+        dispatch(setIsLoading(false));
       }
     }
   };
@@ -97,28 +98,28 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
     dispatch(setIsLoading(true));
   
     try {
+      if (!bulkImport?.documentRevisionId) return;
       const newUsers = [...users, selectedUser];
       
-      const approval = await postApprovals(selectedUser.value, bulkImport?.documentRevisionId, approvalFieldId.current);
-      
+      const approval = await postApprovals(selectedUser.value, bulkImport?.documentRevisionId, approvalFieldId.current, userState.current);
+
       if (approval) {
         // Create an array of users' ids to patch the document revision
         const approvalIds = newUsers.map(val => val.value);
         
         // Patch document revisions with the updated list of approvers
-        await patchDocumentRevisions(approvalIds, bulkImport?.documentRevisionId, approvalFieldId.current);
+        await patchDocumentRevisions(approvalIds, bulkImport?.documentRevisionId, approvalFieldId.current, userState.current);
       }
       getBulkImportData();
     } catch (error) {
       console.error('An error occurred while adding a new user and updating the document revisions:', error);
       toastError('An error occurred while adding the new user.');
-    } finally {
       dispatch(setIsLoading(false));
     }
   };
 
   const handleWithdrawSubmission = async () => {
-      await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id);
+      await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id, userState.current);
       getBulkImportData();
   };
 
@@ -130,6 +131,8 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
 
   const init = () => {
     dispatch(getApprovers());
+    const { employeeId, sessionId } = store.getState().auth.user;
+    userState.current = { employeeId, sessionId };
   };
 
   useEffect(init, []);
