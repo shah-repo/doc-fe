@@ -1,7 +1,15 @@
 import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../state/ducks/auth';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 const DownloadPDFSockets: React.FC = () => {
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
+
+  const topic = React.useMemo(() =>
+    `${employeeId}/external_export_email/+/pdf`
+  , [employeeId]);
+
   const loadData = useCallback((data) => {
     try {
       const parsedData = JSON.parse(data);
@@ -16,7 +24,7 @@ const DownloadPDFSockets: React.FC = () => {
     }
   }, []);
 
-  useMqttSubscription('+/external_export_email/+/pdf', loadData);
+  useMqttSubscription(topic, loadData);
   return null;
 };
 

@@ -4,11 +4,13 @@ import { Button, makeStyles } from '@material-ui/core';
 import { omit } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { StyledButton } from '../../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListIcon } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
+import { authSelectors } from '../../../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { Dialog } from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
@@ -49,6 +51,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const classes = style();
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
 
   const handleDownloadComplete = (isComplete: boolean) => {
     setIsDownloadInprogress(!isComplete);
@@ -68,11 +71,15 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
     },
   });
 
-  const isAttachmentReady = useCallback((data) => {
+  const topic = React.useMemo(() =>
+    `${employeeId}/external_export_email/${revisionId}/pdf`
+  , [employeeId, revisionId]);
+
+  const callBack = useCallback(() => {
     handleDownloadComplete(true);
   }, []);
 
-  useMqttSubscription('+/external_export_email/+/pdf', isAttachmentReady);
+  useMqttSubscription(topic, callBack);
 
   const exportToEmail = useActionCreator(
     documentRevisionsActions.exportToEmail,
