@@ -120,17 +120,17 @@ const ItemsAndDetails: React.FunctionComponent<{
   }
 
   const removePrePopulatedField = () => {
-    const removeKeys = ['proposedDocumentRevision', 'descriptionOfChange', 'justificationOfChange', 'autoUpdate', 'attachments'];
+    const removeKeys = ['proposedDocumentRevision', 'descriptionOfChange', 'justificationOfChange', 'autoUpdate'];
     removeKeys.forEach((item) => {
       formState.setFieldValue(item, undefined);
     });
   };
 
   function addRevisionToChangeRequest () {
-    const { proposedDocumentRevision, justificationOfChange, descriptionOfChange, attachments }
+    const { proposedDocumentRevision, justificationOfChange, descriptionOfChange }
       = formState?.getValues() as FBDocumentRevisionsValue;
 
-    if (some([justificationOfChange, descriptionOfChange, proposedDocumentRevision, attachments], isEmpty)) {
+    if (some([justificationOfChange, descriptionOfChange, proposedDocumentRevision], isEmpty)) {
       return;
     }
 

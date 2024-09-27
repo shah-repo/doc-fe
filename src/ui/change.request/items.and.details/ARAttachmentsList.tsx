@@ -24,7 +24,10 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
   const viewMore = intl.formatMessage({ id: 'document.revision.view.more' });
   const title = intl.formatMessage({ id: 'ar.attachment.dialog.title' }, { titleId });
   const arAttachmentDialog = useDialog();
-  const toggleShowAll = () => arAttachmentDialog.open();
+  const toggleShowAll = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    arAttachmentDialog.open();
+  };
 
   const sortedAttachments = (attachments || []).sort((a, b) => {
     if (a.lineType === LINE_TYPES.RED_LINE && b.lineType !== LINE_TYPES.RED_LINE) return -1;
@@ -37,22 +40,24 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
   const exceedsMaxAttachments = sortedAttachments.length > MAX_VISIBLE_ATTACHMENTS;
 
   return (
-    <FBProvider {...{ fileUploadState }}>
-      <div className={classes.attachmentsList}>
-        {visibleAttachments?.map((attachment) => (
-          <FBAttachmentNamePresenter
-            key={attachment.id}
-            boxProps={{ className: classes.attachmentsContainer }}
-            attachments={[attachment]}
-            fileUploadState={fileUploadState}
-            isDisabled={true}
-          />
-        ))}
-      </div>
+    <>
+      <FBProvider {...{ fileUploadState }}>
+        <div className={classes.attachmentsList}>
+          {visibleAttachments?.map((attachment) => (
+            <FBAttachmentNamePresenter
+              key={attachment.id}
+              boxProps={{ className: classes.attachmentsContainer }}
+              attachments={[attachment]}
+              fileUploadState={fileUploadState}
+              isDisabled={true}
+            />
+          ))}
+        </div>
+      </FBProvider>
       {exceedsMaxAttachments && (
         <Button
           variant="text"
-          onClick={toggleShowAll}
+          onClick={e => toggleShowAll(e)}
           className={classes.moreOrLess}>
           {`${viewMore} (${remainingAttachmentCount})`}
         </Button>
@@ -62,7 +67,7 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
         handler={arAttachmentDialog}
         loading={false}
         attachments={sortedAttachments} />
-    </FBProvider>
+    </>
   );
 };
 
