@@ -101,20 +101,19 @@ const updateGeneralSettings = (
 };
 
 const createApprovalRoles = (
-  body: GeneralSettings,
+  body: any,
   id?: string,
   method: ApiActionMethod = 'post',
 ): ApiAction<GeneralSettingsState> => {
-  const { lifecyclePhases, ...rest } = body;
-  const payload = { ...rest, lifecyclePhases: Array.isArray(lifecyclePhases) ? lifecyclePhases : [] };
+  const { formValues, values } = body;
   const url = CREATE_APPROVAL_ROLES_URL;
   return apiAction({
     url,
     method,
-    data: pick(payload, 'name', 'isActive'),
+    data: pick(values, 'name', 'isActive'),
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
-      dispatch(setGeneralSettings(data));
+      dispatch(setGeneralSettings(formValues));
     },
   });
 };
