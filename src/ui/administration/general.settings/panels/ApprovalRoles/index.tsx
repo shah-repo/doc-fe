@@ -103,7 +103,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
       discardApprovalRoles();
       formValues.approvalRoles = updatedApprovalRoles;
       setApprovalRolesData(updatedApprovalRoles);
-      async.start(createApprovalRolesAction, values, settingsId, 'POST', async);
+      async.start(createApprovalRolesAction, { values, formValues }, settingsId, 'POST', async);
     },
   });
 
