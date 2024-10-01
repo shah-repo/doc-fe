@@ -34,11 +34,12 @@ interface ExportToEmailModalProps {
   revisionId?: string
   arId?: string
   isNoOptionSelected?: boolean
+  hideEffectiveDateOption?: boolean
   setNoOptionSelected?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
-  = React.forwardRef(({ revisionId, isNoOptionSelected, arId, setNoOptionSelected }, ref) => {
+  = React.forwardRef(({ revisionId, isNoOptionSelected, arId, setNoOptionSelected, hideEffectiveDateOption }, ref) => {
     const classes = styles();
     const fetchAttachments = useActionCreator(
       documentRevisionsActions.getAttachmentsByDocRevId,
@@ -60,6 +61,10 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
     });
 
     useEffect(() => {
+      if (hideEffectiveDateOption) {
+        return;
+      }
+
       if (arId) {
         attachmentsAsync.start(fetchArAttachments, arId, attachmentsAsync);
       } else {
@@ -117,7 +122,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
             <Text translation="common.download.pdf" />
           </Typography>
 
-          <Box display="flex" justifyContent="space-between">
+          <Box display="flex" justifyContent={hideEffectiveDateOption ? 'start' : 'space-between'}>
             <FormControlLabel
               control={
                 <Field
@@ -144,7 +149,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
               className={classes.checkboxContainer}
               label={translate('share.attachments')}
             />
-            <FormControlLabel
+            {!hideEffectiveDateOption && <FormControlLabel
               control={
                 <Field
                   name="includeDate"
@@ -156,10 +161,10 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
               }
               className={classes.checkboxContainer}
               label={translate('share.include.effective.date')}
-            />
+            />}
           </Box>
 
-          {formik.values.includeDate && <Box className={classes.attachmentsContainer} mt={3.75}>
+          {formik.values.includeDate && !hideEffectiveDateOption && <Box className={classes.attachmentsContainer} mt={3.75}>
             <Typography
               variant="h2"
               component="h2"
