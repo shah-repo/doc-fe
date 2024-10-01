@@ -1,10 +1,10 @@
 import cx from 'classnames';
 import { kebabCase } from 'lodash';
 import React from 'react';
+import { Button } from '../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import { Button } from '../../../../components/forms/fields-next';
 import useStyles from './styles';
 import { SettingsTableProps } from './types';
 
@@ -29,6 +29,7 @@ function SettingsTable<T extends EditableItem> ({
       row,
       {
         className: cx(row.props.className, { [classes.updatingRow]: isUpdating }),
+        key: dataItem.id,
         ...additionalProps,
       },
     );
