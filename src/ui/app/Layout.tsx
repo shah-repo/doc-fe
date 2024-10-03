@@ -3,6 +3,7 @@ import { Widget as AiWidget } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
+import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
@@ -59,8 +60,9 @@ import useStyles from './Layout.styles';
 import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
+import { ApplicationState } from '../../state/reducers';
 
-const Layout: React.FunctionComponent = () => {
+const Layout: React.FunctionComponent<{ isAIEnabled: boolean }> = ({ isAIEnabled }) => {
   const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
   const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
   const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
@@ -80,7 +82,7 @@ const Layout: React.FunctionComponent = () => {
       <WatermarkFooterContainer />
       <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
-        <AiWidget />
+        {isAIEnabled && <AiWidget />}
         <Switch>
           <Route
             path={DOCUMENT_REVISION_LIST_URL}
@@ -185,4 +187,10 @@ const Layout: React.FunctionComponent = () => {
   );
 };
 
-export default Layout;
+const mapStateToProps = (state: ApplicationState) => {
+  return {
+    isAIEnabled: state.company.premiumFeatures.isAIEnabled,
+  };
+};
+
+export default connect(mapStateToProps)(Layout);
