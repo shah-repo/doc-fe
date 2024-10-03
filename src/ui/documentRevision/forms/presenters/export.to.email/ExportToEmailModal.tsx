@@ -26,7 +26,7 @@ import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { attachmentsInfo } from './ExportToEmail';
+import { AttachmentsInfo } from './ExportToEmail';
 import { styles } from './ExportToEmailModal.styles';
 
 interface ExportToEmailModalProps {
@@ -38,6 +38,11 @@ interface ExportToEmailModalProps {
   setNoOptionSelected?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+interface AttachmentPayload {
+  id: string
+  name: string
+}
+
 const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
   = React.forwardRef(({ revisionId, isNoOptionSelected, arId, setNoOptionSelected, hideEffectiveDateOption }, ref) => {
     const classes = styles();
@@ -47,13 +52,14 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
     const fetchArAttachments = useActionCreator(
       documentRevisionsActions.getAttachmentsByARId,
     );
-    const [attachments, setAttachments] = useState<attachmentsInfo[]>();
+    const [attachments, setAttachments] = useState<AttachmentsInfo[]>();
     const [watermarkAttachments, setWatermarkAttachments]
-      = useState<string[]>();
-    const attachmentsAsync = useAsync<attachmentsInfo[]>({
+      = useState<AttachmentPayload[]>();
+    const getUpdatedAttchmentPayload = (attachments?: AttachmentsInfo[]) => attachments?.map(({ id, name, type }) => ({ id, name: `${name}.${type}` }));
+    const attachmentsAsync = useAsync<AttachmentsInfo[]>({
       onSuccess: (attachments) => {
-        setAttachments(attachments?.filter(attach => attach.type === PDF));
-        setWatermarkAttachments(attachments?.filter(attach => attach.type === PDF && attach.isPrimaryAttachment).map(attach => attach.id));
+        setAttachments(attachments?.filter(attachment => attachment.type === PDF));
+        setWatermarkAttachments(getUpdatedAttchmentPayload(attachments?.filter(attachment => attachment.type === PDF && attachment.isPrimaryAttachment)));
       },
       onError: () => {
         toastError(translate('common.send.to.email.error'));
@@ -79,7 +85,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
         includeDate: true,
         sendEmail: true,
         includeAuditLogs: false,
-        watermarkAttachments: [] as string[],
+        watermarkAttachments: [] as AttachmentPayload[],
       },
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onSubmit: (values) => {},
@@ -104,11 +110,15 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
       },
     }));
 
-    const handleAttachmentToggle = (attachmentId: string) => {
-      const updatedAttachments = watermarkAttachments?.includes(attachmentId)
-        ? watermarkAttachments.filter((i) => i !== attachmentId)
-        : [...(watermarkAttachments ?? []), attachmentId];
-      setWatermarkAttachments(updatedAttachments);
+    const isCurrentAttachmentExists = (attachment: AttachmentsInfo) => {
+      return watermarkAttachments?.some((i) => i.id !== attachment.id);
+    };
+
+    const handleAttachmentToggle = (attachment: AttachmentsInfo) => {
+      const updatedAttachments = isCurrentAttachmentExists(attachment)
+        ? watermarkAttachments?.filter((i) => i.id !== attachment.id)
+        : [...(watermarkAttachments ?? []), getUpdatedAttchmentPayload([attachment])];
+      setWatermarkAttachments(updatedAttachments as AttachmentPayload[]);
     };
 
     return (
@@ -178,15 +188,15 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
                   key={index}
                   className={classes.attachmentListItem}
                   button
-                  onClick={() => handleAttachmentToggle(attachment.id)}
+                  onClick={() => handleAttachmentToggle(attachment)}
                 >
                   <ListItemIcon className={classes.listItemIcon}>
                     <Box>
                       <Field
-                        key={watermarkAttachments?.includes(attachment.id)}
+                        key={isCurrentAttachmentExists(attachment)}
                         name="watermarkAttachments"
                         as={Checkbox}
-                        checked={watermarkAttachments?.includes(attachment.id)}
+                        checked={isCurrentAttachmentExists(attachment)}
                         tabIndex={-1}
                         disableRipple
                         data-cy={`select-attachment-${index}`}

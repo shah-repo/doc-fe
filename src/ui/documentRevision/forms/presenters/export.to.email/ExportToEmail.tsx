@@ -27,7 +27,7 @@ interface Props {
   renderAsButton?: boolean
 }
 
-export interface attachmentsInfo {
+export interface AttachmentsInfo {
   id: string
   name: string
   type: string
