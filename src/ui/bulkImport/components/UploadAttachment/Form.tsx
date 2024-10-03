@@ -113,7 +113,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
             name="link"
             size="sm"
             label="bulkImport.uploadFromLink"
-            inputProps={{ id: 'link', placeholder: 's3://bulk-import-test/eco.zip' }}
+            inputProps={{ id: 'link', placeholder: 's3://bulk-import-test/eco' }}
             inputStyleProps={classes.linkInput}
             labelProps={{ color: 'black', fontSize: 14, fontWeight: 600 }}
           />

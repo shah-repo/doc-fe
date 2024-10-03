@@ -122,7 +122,7 @@ BulkImportContainerProps
         );
       case 2:
         return (
-          <MapColumns handleNext={handleNext} handleCancel={handleCancel}>
+          <MapColumns handleNext={handleNext} handleCancel={handleOpenDelete}>
             <ButtonActions
               activeStep={activeStep}
               steps={steps}

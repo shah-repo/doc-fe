@@ -7,7 +7,7 @@ import { Group } from '../auth/types';
 import { Approval } from '../common/types';
 import { Employee as EmployeeCompany } from '../company/types';
 import { DocumentRevisionStatus, EquipmentStatus, InputOwner, LotStatus, POStatusType, Precalc, TypeSpecificConfig, UsedDocumentsInLHRS } from '../documentRevisions/types';
-import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 
 export interface DataType {
   [key: string]: string
@@ -45,7 +45,6 @@ SetDataTypes |
 SetFormDocumentsTypeGroup |
 SetBulkImport |
 SetTemplateFIle |
-SetXlsxFile |
 SetShowTable |
 SetOnlyErrorsTable |
 SetHeaders |
@@ -101,11 +100,6 @@ interface DeleteBulkImportSuccess {
 interface SetTemplateFIle {
   type: typeof SET_TEMPLATE_FILE
   payload: FileWithPreview[]
-}
-
-interface SetXlsxFile {
-  type: typeof SET_XLSX_FILE
-  payload: BKAttachmentFile
 }
 
 interface SetShowTable {

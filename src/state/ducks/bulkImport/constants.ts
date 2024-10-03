@@ -28,7 +28,6 @@ export const SET_SELECTED_TYPE = 'bulkImport/SET_SELECTED_TYPE';
 export const SET_DATA_TYPES = 'bulkImport/SET_DATA_TYPES';
 export const SET_FORM_DOCUMENTS_TYPE_GROUP = 'bulkImport/SET_FORM_DOCUMENTS_TYPE_GROUP';
 export const SET_TEMPLATE_FILE = 'bulkImport/SET_TEMPLATE_FILE';
-export const SET_XLSX_FILE = 'bulkImport/SET_XLSX_FILE';
 export const SET_SHOW_TABLE = 'bulkImport/SET_SHOW_TABLE';
 export const SET_ONLY_ERRORS_TABLE = 'bulkImport/SET_ONLY_ERRORS_TABLE';
 export const SET_HEADERS = 'bulkImport/SET_HEADERS';
