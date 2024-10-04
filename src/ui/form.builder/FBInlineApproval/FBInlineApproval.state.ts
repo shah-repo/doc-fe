@@ -131,7 +131,6 @@ class FBInlineApprovalState {
   });
 
   public getDocument = (id?: string) => {
-    console.log('Fetch document ', id);
     if (!id) { return; }
     this.documentApi.set({
       url: FBEndpoint.Document,
