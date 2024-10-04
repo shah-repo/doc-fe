@@ -7,7 +7,7 @@ import { SM } from '../../../App';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
-let apiTriggered = false;
+let invokeVersionCheck = false;
 
 const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = ({
   name,
@@ -17,9 +17,14 @@ const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = (
   const { _documentRevisionFormState } = SM.useStores();
 
   useObserver(() => {
-    if (!(workspaceState?.documentRevApi.loading || _documentRevisionFormState?.loading)) {
-      console.log('making false again');
-      apiTriggered = false;
+    const isLoading = workspaceState?.documentRevApi.loading || _documentRevisionFormState?.loading;
+
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        invokeVersionCheck = false;
+      }, 10000);
+
+      return () => clearTimeout(timer);
     }
   },
   );
@@ -43,9 +48,8 @@ const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = (
   ), []);
 
   const callback = useCallback(() => {
-    console.log('Triggerring ', documentId, name);
-    if (!apiTriggered) {
-      apiTriggered = true;
+    if (!invokeVersionCheck) {
+      invokeVersionCheck = true;
     inlineApprovalState?.getDocument(documentId);
     }
   }
