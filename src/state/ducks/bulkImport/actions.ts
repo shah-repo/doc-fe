@@ -154,11 +154,11 @@ export const getBulkImportTableData = (bulkImportId: string): ApiAction<TableRow
   },
 });
 
-export const getReportsExcelFile = (bulkImportId: string): ApiAction<Blob> => apiAction({
+export const getReportsExcelFile = (bulkImportId: string, jobId: string): ApiAction<Blob> => apiAction({
   url: `${BULK_GET_REPORTS_EXCEL_URL}${bulkImportId}`,
   method: 'get',
   onSuccess: (data, _) => {
-    downloadFile(data, REPORT_CSV);
+    downloadFile(data, `${jobId}-${REPORT_CSV}`);
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));

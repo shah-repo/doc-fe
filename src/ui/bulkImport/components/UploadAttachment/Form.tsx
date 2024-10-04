@@ -1,6 +1,6 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Dialog, Typography } from '@material-ui/core';
+import { Box, Dialog, Divider, Typography } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { Form, Formik } from 'formik';
 import React, { ReactNode, useState } from 'react';
@@ -22,6 +22,7 @@ import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import Tree from './Tree';
 import useStyles from './styles';
+import { validationSchema } from './validation';
 
 const errorsList = ['ECO-00100', 'ECO-00121', 'ECO-00124', 'ECO-00198', 'ECO-00201'];
 
@@ -107,7 +108,9 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
       <Formik initialValues={{
         files: [],
         link: '',
-      }} onSubmit={handleSubmit}>
+      }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}>
         <Form>
           <InputField
             name="link"
@@ -117,6 +120,13 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
             inputStyleProps={classes.linkInput}
             labelProps={{ color: 'black', fontSize: 14, fontWeight: 600 }}
           />
+          <Box my={2} display="flex" alignItems="center">
+            <Divider style={{ flex: 1 }} />
+            <Typography variant="h6" className={classes.or}>
+              <Text translation="common.or" />
+            </Typography>
+            <Divider style={{ flex: 1 }} />
+          </Box>
           <Typography className={classes.dropzoneLabel}><Text translation="common.file.OrUploadFromFiles" /></Typography>
           <DropzoneField name="files" onDropCallback={handleFilesDrop} className={classes.dropzopne} accept={{ 'application/zip': ['.zip'] }}>
             <Typography variant="body2" className={classes.textDropZone}>

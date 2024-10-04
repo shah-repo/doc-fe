@@ -38,6 +38,7 @@ interface ProgressItemProps {
 }
 
 const STATUSES_HIDE_DELETE = [BkStatus.IN_PROGRESS, BkStatus.COMPLETED, BkStatus.SUCCESS, BkStatus.CANCELLED];
+const STATUSES_CANCELED = [BkStatus.CANCELLED, BkStatus.FAILED];
 
 const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentEmployeeId }) => {
   const classes = useStyles();
@@ -53,7 +54,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && _.isEmpty(item.process);
   const showApprovals = !!currentApproval && showApproverButtons;
   const currentProgressStep = useRef(0);
-  const isRejected = item?.status === BkStatus.CANCELLED;
+  const isRejected = STATUSES_CANCELED.includes(item?.status as BkStatus);
   const showDeleteButton = _.isEmpty(item.process) && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
   const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports));
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -107,7 +108,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   };
 
   const handleDownloadFile = () => {
-    dispatch(getReportsExcelFile(item.id));
+    dispatch(getReportsExcelFile(item.id, item.jobId));
   };
 
   const handleReturnToStep = () => {
@@ -162,7 +163,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
               icon={solid('circle-xmark')}
             />
             <Typography className={classes.completedText}>
-              {translate('common.rejected')} {rejectedDate ? `(${moment(rejectedDate).format(MomentFormats.FullDateTime)})` : null}
+              {item.status === BkStatus.CANCELLED ? translate('common.rejected') : translate('common.failed')} {rejectedDate && item.status === BkStatus.CANCELLED ? `(${moment(rejectedDate).format(MomentFormats.FullDateTime)})` : null}
             </Typography>
           </Box> : item?.completedAt ? (
             <Box className={classes.completedMsgContainer}>
