@@ -17,6 +17,7 @@ import useAsync from '../../../../hooks/useAsync';
 import SettingsPanel from '../../components/SettingsPanel';
 import SettingsTable from '../../components/SettingsTable';
 import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
+import SyncMessageDialog from './SyncMessageDialog';
 import { EditableApprovalRoles, SchemaBuilder } from './types';
 
 const ActiveCellTemplate: React.FC<CellTemplateProps<EditableApprovalRoles>> = ({ dataItem, dataIndex, onChange }) => {
@@ -72,11 +73,16 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
   const settingsId = useSelector(companySelectors.getGeneralSettingsId);
   const [approvalRolesData, setApprovalRolesData] = React.useState(approvalRoles);
   const [editedApprovalRoles, setEditedApprovalRoles] = React.useState<EditableApprovalRoles>();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const isSettingNotSynced = true; // Need change when BE work is done for ENC-21753
 
   const discardApprovalRoles = () => setEditedApprovalRoles(undefined);
   const onChange = ({ dataItem }) => {
     if (dataItem[MODE_FIELD] === Mode.add) {
       return setEditedApprovalRoles(prevValue => ({ ...prevValue, isActive: !editedApprovalRoles?.active, name: values.name }));
+    }
+    if(isSettingNotSynced) {
+      return setIsOpen(true);
     }
     const updatedApprovalRoles = approvalRolesData?.map(item => item.id === dataItem.id ? { ...dataItem, isActive: !dataItem.isActive } : item);
     formValues.approvalRoles = updatedApprovalRoles;
@@ -153,7 +159,8 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
   const schema = buildSchema({ onChange, onDiscard, editedApprovalRoles, onConfirm: submitForm });
 
   return (
-    <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')}>
+    <>
+    <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')} isOutOfSync={isSettingNotSynced}>
       <FormikProvider value={formik}>
         <SettingsTable
           isActive
@@ -165,6 +172,11 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
         />
       </FormikProvider>
     </SettingsPanel>
+    <SyncMessageDialog
+      { ...{ isOpen } }
+      closeDialog={() => setIsOpen(false)}
+    />
+    </>
   );
 };
 
