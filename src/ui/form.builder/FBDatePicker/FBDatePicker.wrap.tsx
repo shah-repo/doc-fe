@@ -43,7 +43,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       if (workspaceState?.isChangeRequest) {
         submitForm();
       }
-    }, 300);
+    }, 100);
 
     SM.reaction(
       () => workspaceState?.changeRequest,
