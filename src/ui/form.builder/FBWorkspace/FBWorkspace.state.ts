@@ -257,6 +257,7 @@ class FBWorkspaceState extends FBSchemaState {
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
     const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
+    console.log('Workspace state savedocrev called');
     return this.documentRevApi.set({
       url,
       urlValues: { id },
