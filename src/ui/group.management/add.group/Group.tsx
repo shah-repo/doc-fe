@@ -1,16 +1,12 @@
 import { Dialog } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTableCriteria } from '../../../common/utils/selectors';
 import { authSelectors } from '../../../state/ducks/auth';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
-import { userManagementActions } from '../../../state/ducks/userManagement';
 import { GetEmployeeResponse, LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
-import useActionCreator from '../../hooks/useActionCreator';
-import useAsync from '../../hooks/useAsync';
 import DialogTitle from '../dialog/DialogTitle';
 import { getHasOfficialPermissions } from '../utils/helpers';
-import { DEFAULT_ACTIVE_EMPLOYEES } from '../utils/types';
 import GroupContentContainer from './GroupContent.container';
 
 interface Props {
@@ -19,6 +15,7 @@ interface Props {
   selectedGroup?: LoadCompanyGroup
   title: any
   isCreateMode?: boolean
+  activeEmployees?: GetEmployeeResponse[]
 }
 
 const AddGroup: React.FunctionComponent<Props> = ({
@@ -27,6 +24,7 @@ const AddGroup: React.FunctionComponent<Props> = ({
   selectedGroup,
   title,
   isCreateMode,
+  activeEmployees,
 }) => {
   const dispatch = useDispatch();
 
@@ -38,25 +36,6 @@ const AddGroup: React.FunctionComponent<Props> = ({
   const hasOfficialPermission = getHasOfficialPermissions(
     currentEmployeePermissions,
   );
-  const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
-    DEFAULT_ACTIVE_EMPLOYEES,
-  );
-
-  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
-  const asyncGetActiveEmployees = useAsync<GetEmployeeResponse[]>({
-    onSuccess: (data: GetEmployeeResponse[] = []) => {
-      setActiveEmployees(data);
-    },
-  });
-
-  useEffect(() => {
-    asyncGetActiveEmployees.start(
-      getEmployeeAction,
-      { active: true },
-      asyncGetActiveEmployees,
-    );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleTableRefresh = () => {
     dispatch(
