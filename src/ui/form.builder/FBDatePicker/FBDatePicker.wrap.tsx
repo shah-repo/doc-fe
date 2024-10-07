@@ -1,5 +1,5 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import { isEmpty } from 'lodash';
+import { debounce, isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FB } from '..';
@@ -32,20 +32,18 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const { id, isOutput } = workspaceState || {};
     const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
 
-    function save (date?: string) {
+    const save = debounce((date?: string) => {
       if (!date) { return; }
       formState?.setFieldValue(name, date);
       formState?.validate();
+
       const isUnderWorkspace = workspaceState?.getSchemaItem(name);
       if (!isUnderWorkspace) { return; }
 
       if (workspaceState?.isChangeRequest) {
         submitForm();
-        return;
       }
-
-      workspaceState?.saveDocRev(formState?.getValues());
-    }
+    }, 100);
 
     SM.reaction(
       () => workspaceState?.changeRequest,
@@ -68,7 +66,19 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       if (isUnderDefault) {
         const nowDate = (new Date()).toISOString();
         datePickerState?.setValue(nowDate);
-        save(nowDate);
+        if (nowDate) {
+          formState?.setFieldValue(name, nowDate);
+          formState?.validate();
+
+          const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+          if (isUnderWorkspace) {
+            if (workspaceState?.isChangeRequest) {
+              submitForm();
+            } else {
+              workspaceState?.saveDocRev(formState?.getValues());
+            }
+          }
+        }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [approvalRequest]);
