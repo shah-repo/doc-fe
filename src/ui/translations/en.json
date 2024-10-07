@@ -71,6 +71,7 @@
   "validators.greater.than.zero": "Must be greater than zero",
   "validators.positive.number": "Must be greater than zero",
   "validator.location.same.name.exist": "Choose a different location as same location already exists (ignoring lower/upper case)",
+  "validator.asl.status.displayLabel.char.limit": "Custom label exceed the limit of 255 char",
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",
   "errors.fetch.tryAgain": "Try again",

@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { get } from 'lodash';
+import { get, has } from 'lodash';
 import React from 'react';
 import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
@@ -12,7 +12,7 @@ function TextCellTemplate<T extends EditableItem> ({
   field,
 }: CellTemplateProps<T>): React.ReactElement {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getFieldProps } = useFormikContext();
+  const { getFieldProps, errors } = useFormikContext();
   const classes = useStyles();
 
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -20,7 +20,7 @@ function TextCellTemplate<T extends EditableItem> ({
 
   if (isEditMode) {
     return (
-      <FormikField name={field}>
+      <FormikField name={field} error={has(errors, 'displayLabel')}>
         <TextField
           {...getFieldProps(field)}
           classes={{

@@ -92,6 +92,10 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
       if (isEmpty(values.internalType)) {
         error.name = 'validators.required';
       }
+      if (values.displayLabel.length > 255) {
+        error.displayLabel = 'validator.asl.status.displayLabel.char.limit';
+      }
+      console.log('error', error);
       return error;
     },
     onSubmit: (values) => {
