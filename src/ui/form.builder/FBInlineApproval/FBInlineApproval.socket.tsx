@@ -1,34 +1,15 @@
 import { get, maxBy } from 'lodash';
 import { reaction } from 'mobx';
-import { useObserver } from 'mobx-react';
 import React, { useCallback, useMemo } from 'react';
 import { FB, FBApprovalSocketProps, FBFieldName, FBInlineApprovalState } from '..';
-import { SM } from '../../../App';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
-
-let invokeVersionCheck = false;
 
 const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = ({
   name,
 }) => {
   const { workspaceState } = FB.useStores();
   const { id, documentId } = workspaceState || {};
-  const { _documentRevisionFormState } = SM.useStores();
-
-  useObserver(() => {
-    const isLoading = workspaceState?.documentRevApi.loading || _documentRevisionFormState?.loading;
-
-    if (!isLoading) {
-      const timer = setTimeout(() => {
-        invokeVersionCheck = false;
-      }, 10000);
-
-      return () => clearTimeout(timer);
-    }
-  },
-  );
-
   const inlineApprovalState: FBInlineApprovalState = get(FB.useStores(), `${FBFieldName.ApprovalState}-${name}`);
 
   React.useEffect(() => reaction(
@@ -46,12 +27,8 @@ const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = (
     },
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
-
   const callback = useCallback(() => {
-    if (!invokeVersionCheck) {
-      invokeVersionCheck = true;
-    inlineApprovalState?.getDocument(documentId);
-    }
+      inlineApprovalState?.getDocument(documentId);
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   , []);
