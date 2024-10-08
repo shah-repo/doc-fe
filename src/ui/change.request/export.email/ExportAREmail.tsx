@@ -31,12 +31,12 @@ const style = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   popup: {
-    borderRadius: '6px',
+    borderRadius: theme.spacing(0.75),
     border: `1px solid ${Colors.primaryLight} !important`,
     borderLeft: `7px solid ${Colors.primaryLight} !important`,
     background: `${Colors.primaryHighlight} !important`,
     padding: theme.spacing(1.875),
-    height: '97px',
+    height: 97,
     '& .Toastify__close-button': {
       margin: theme.spacing(0),
       alignSelf: 'flex-start !important',
@@ -46,8 +46,8 @@ const style = makeStyles((theme) => ({
   popupBody: {
     display: 'flex',
     padding: theme.spacing(0),
-    gap: '15px',
-    width: '720px',
+    gap: theme.spacing(1.875),
+    width: 720,
   },
   popupTitle: {
     fontSize: 14,

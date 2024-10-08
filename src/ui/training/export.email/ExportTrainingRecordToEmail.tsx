@@ -48,13 +48,12 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
 
   const runExportWithChildren = () => {
     if (childFormRef.current) {
-      const values = omit(childFormRef.current.getValues(), 'includeDate', 'eff');
+      const values = omit(childFormRef.current.getValues(), 'includeDate');
       setIsDownloadInprogress(true);
-      console.log('Final payload :', { ...values, includeAuditLogs: Boolean(values?.includeAuditLogs) });
       async.start(
         exportTrainingRecordEmail,
         id,
-        // { ...values, includeAuditLogs: Boolean(values?.includeAuditLogs) },
+        { ...values, includeAuditLogs: Boolean(values?.includeAuditLogs) },
         async,
       );
     }

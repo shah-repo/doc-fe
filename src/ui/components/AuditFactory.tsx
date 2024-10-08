@@ -323,11 +323,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
 
           returnValue = (
             <>
-            <div data-cy={dataCy}> Item Only: {translate(emailObj.itemOnly === true ? 'common.true' : 'common.false')}</div>
-            <div data-cy={dataCy}> Attachments: {translate(emailObj.includeAttachments === true ? 'common.true' : 'common.false')}</div>
-            <div data-cy={dataCy}> Include effective date: {translate(includeEffectiveDate === true ? 'common.true' : 'common.false')}</div>
-            { includeEffectiveDate && <div data-cy={dataCy}> Watermark Attachments Names: {watermarkAttachmentsList}</div>
-            }
+              <div data-cy={dataCy}> {translate('share.item.only')}: {translate(emailObj.itemOnly === true ? 'common.true' : 'common.false')}</div>
+              <div data-cy={dataCy}> {translate('share.attachments')}: {translate(emailObj.includeAttachments === true ? 'common.true' : 'common.false')}</div>
+              <div data-cy={dataCy}> {translate('share.include.effective.date')}: {translate(includeEffectiveDate ? 'common.true' : 'common.false')}</div>
+              { includeEffectiveDate && <div data-cy={dataCy}> {translate('share.selected.watermark.attachment.names')}: {watermarkAttachmentsList}</div>
+              }
             </>
           );
         } catch (e) {

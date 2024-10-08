@@ -1735,6 +1735,7 @@
   "share.item.only": "Item only",
   "share.attachments": "Attachments",
   "share.include.effective.date": "Include effective date",
+  "share.selected.watermark.attachment.names": "Watermark Attachments Names",
   "share.downloading": "Your download will begin shortly ...",
   "share.downloading.started.popup.title": "Your download has started",
   "share.downloading.popup.desc": "Check progress in your browser's download icon. You can continue using Enlil while your files\n\nare being downloaded",

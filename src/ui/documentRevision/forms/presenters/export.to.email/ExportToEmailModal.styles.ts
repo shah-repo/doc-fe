@@ -14,7 +14,7 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.textBlack,
     },
     radioGroup: {
-      gap: '30px',
+      gap: theme.spacing(3.75),
       flexDirection: 'row',
       marginBottom: theme.spacing(4.5),
     },
@@ -62,7 +62,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     attachmentListItem: {
       paddingLeft: theme.spacing(0),
-      height: '35px',
+      height: 35,
     },
     listItemIcon: {
       marginRight: '0px !important',

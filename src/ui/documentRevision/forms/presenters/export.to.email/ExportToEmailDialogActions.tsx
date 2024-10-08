@@ -8,7 +8,7 @@ import { Dialog } from '../../../../hooks/useDialog';
 
 const style = makeStyles((theme) => ({
   loader: {
-    gap: '10px',
+    gap: theme.spacing(1.25),
   },
 }));
 
