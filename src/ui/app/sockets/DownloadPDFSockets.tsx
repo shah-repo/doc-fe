@@ -11,12 +11,13 @@ const DownloadPDFSockets: React.FC = () => {
   , [employeeId]);
 
   const loadData = useCallback((data) => {
+    const clientUserAgent = navigator.userAgent;
     try {
       const parsedData = JSON.parse(data);
       const messageData = parsedData?.data?.message;
       const parsedMessage = typeof messageData === 'string' ? JSON.parse(messageData) : messageData;
 
-      if (parsedMessage?.url) {
+      if (parsedMessage.userAgent === clientUserAgent && parsedMessage?.url) {
         window.open(parsedMessage.url, '_parent');
       }
     } catch (error) {
