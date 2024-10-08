@@ -316,18 +316,34 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         }
         break;
       case 'EMAIL_SENT':
-        returnValue = (
-          <>
-            <Text
-              dataCy={dataCy}
-              translation="documentRevision.audit.send.to.email"
-              values={{
-                name: audit.ownerName,
-                docId: audit?.docId ?? audit?.crId,
-              }}
-            />
-          </>
-        );
+        try {
+          const emailObj = JSON.parse(audit.nextValue as string);
+          const includeEffectiveDate = emailObj?.watermarkAttachments.length > 0;
+          const watermarkAttachmentsList = emailObj?.watermarkAttachments.join(', ');
+
+          returnValue = (
+            <>
+            <div data-cy={dataCy}> Item Only: {translate(emailObj.itemOnly === true ? 'common.true' : 'common.false')}</div>
+            <div data-cy={dataCy}> Attachments: {translate(emailObj.includeAttachments === true ? 'common.true' : 'common.false')}</div>
+            <div data-cy={dataCy}> Include effective date: {translate(includeEffectiveDate === true ? 'common.true' : 'common.false')}</div>
+            { includeEffectiveDate && <div data-cy={dataCy}> Watermark Attachments Names: {watermarkAttachmentsList}</div>
+            }
+            </>
+          );
+        } catch (e) {
+          returnValue = (
+            <>
+              <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.send.to.email"
+                values={{
+                  name: audit.ownerName,
+                  docId: audit?.docId ?? audit?.crId,
+                }}
+              />
+            </>
+          );
+        }
         break;
       case 'VIEW_PDF':
         returnValue = (
