@@ -111,13 +111,13 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
     }));
 
     const isCurrentAttachmentExists = (attachment: AttachmentsInfo) => {
-      return watermarkAttachments?.some((i) => i.id !== attachment.id);
+      return watermarkAttachments?.some((i) => i.id === attachment.id);
     };
 
     const handleAttachmentToggle = (attachment: AttachmentsInfo) => {
       const updatedAttachments = isCurrentAttachmentExists(attachment)
         ? watermarkAttachments?.filter((i) => i.id !== attachment.id)
-        : [...(watermarkAttachments ?? []), getUpdatedAttchmentPayload([attachment])];
+        : [...(watermarkAttachments ?? []), ...(getUpdatedAttchmentPayload([attachment]) ?? [])];
       setWatermarkAttachments(updatedAttachments as AttachmentPayload[]);
     };
 
