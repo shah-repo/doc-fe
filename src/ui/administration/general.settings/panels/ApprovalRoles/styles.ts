@@ -24,4 +24,8 @@ export default makeStyles(theme => ({
   bottomText: {
     marginTop: theme.spacing(2),
   },
+  link: {
+    textDecoration: 'unset',
+    color: Colors.primary,
+  },
 }));
