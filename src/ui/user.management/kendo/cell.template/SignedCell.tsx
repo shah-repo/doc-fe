@@ -1,5 +1,8 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from '@material-ui/core';
 import { GridCellProps } from '@progress/kendo-react-grid';
+import cx from 'classnames';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { authActions } from '../../../../state/ducks/auth';
@@ -58,25 +61,39 @@ export const SignedCell = ({
   if (rowType === 'groupHeader') {
     return null;
   }
+
+  const isLocked = Boolean(dataItem?.user?.locked);
+  const isConfirmed = dataItem?.user?.confirmed && !isLocked;
+
   const getChildrenElement = (
-    <span>
-      {dataItem?.user?.confirmed && !dataItem?.user?.locked ? (
-        <Text translation="user.management.signed.up" />
-      ) : (
-        <Link
-          component="button"
-          variant="body2"
-          onClick={() => handleResendEmail(dataItem)}
-        >
-          <span className={classes.link}>
-            <Text translation={!dataItem?.user?.confirmed
-              ? 'user.management.resend.signup.email'
-              : 'reset.password'
-            } />
-          </span>
-        </Link>
-      )}
-    </span>
+    <div className={classes.statusContainer}>
+      <Link
+        component="button"
+        variant="body2"
+        onClick={() => handleResendEmail(dataItem)}
+      >
+        <span className={classes.link}>
+          <Text translation={dataItem?.user?.confirmed
+            ? 'reset.password'
+            : 'user.management.resend.signup.email'
+          } />
+        </span>
+      </Link>
+      <FontAwesomeIcon
+        className={cx(classes.statusIcon, {
+          [classes.confirmedIcon]: isConfirmed,
+          [classes.unconfirmedIcon]: !isConfirmed,
+          [classes.lockedIcon]: isLocked,
+        })}
+        icon={
+          isLocked
+            ? solid('lock')
+            : isConfirmed
+              ? solid('check')
+              : solid('clock')
+        }
+      />
+    </div>
   );
   return (
     <td
@@ -89,10 +106,9 @@ export const SignedCell = ({
       {!dataItem.inEdit && (
         <Tooltip
           data={
-            dataItem?.user?.confirmed && !dataItem?.user?.locked
-              ? getTranslatedText('user.management.signed.up')
-              : !dataItem?.user?.confirmed ? getTranslatedText('user.management.resend.signup.email')
-                : getTranslatedText('reset.password')
+            dataItem?.user?.confirmed
+              ? getTranslatedText('reset.password')
+              : getTranslatedText('user.management.resend.signup.email')
           }
           childrenElement={getChildrenElement}
         />
