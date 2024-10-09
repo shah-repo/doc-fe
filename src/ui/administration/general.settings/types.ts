@@ -29,6 +29,7 @@ export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
   info?: string
   containerRef?: RefObject<HTMLElement>
+  isOutOfSync?: boolean
   onToggle: () => void
   onAddNew?: () => void
 }

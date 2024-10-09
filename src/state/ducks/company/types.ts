@@ -190,6 +190,29 @@ export interface ApprovalRole {
   isActive: boolean
 }
 
+interface AddToDam {
+  id: string
+  name: string
+}
+
+interface removeFromDam {
+  id: string
+  name: string
+}
+
+export interface Dam {
+  documentRevision: {
+    id: string
+    displayRevision: string
+    displayStatus: string
+  }
+  document: {
+    id: string
+    docId: string
+  }
+  isSynced: boolean
+}
+
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
@@ -224,7 +247,7 @@ export interface GeneralSettings {
   shouldNotifyLcpMismatch: NotifyPartLCP
   systemTransactions: SystemTransactionsRule[]
   zebraPrint: ZebraPrintSettings[] | null
-  approvalRoles: ApprovalRole[]
+  approvalRoles: { approvalRoles: ApprovalRole[], addToDam: AddToDam[], removeFromDam: removeFromDam[], dam: Dam }
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

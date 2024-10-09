@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
-import { ApprovalRole, GeneralSettings } from '../../../../../state/ducks/company/types';
+import { ApprovalRole, Dam, GeneralSettings } from '../../../../../state/ducks/company/types';
 import TextCellTemplate from '../../../../administration/general.settings/components/SettingsTable/components/TextCellTemplate';
 import { Checkbox } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
@@ -17,6 +17,7 @@ import useAsync from '../../../../hooks/useAsync';
 import SettingsPanel from '../../components/SettingsPanel';
 import SettingsTable from '../../components/SettingsTable';
 import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
+import SyncMessageDialog from './SyncMessageDialog';
 import { EditableApprovalRoles, SchemaBuilder } from './types';
 
 const ActiveCellTemplate: React.FC<CellTemplateProps<EditableApprovalRoles>> = ({ dataItem, dataIndex, onChange }) => {
@@ -68,18 +69,24 @@ const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, editedAppr
 
 const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
-  const approvalRoles = getFieldProps('approvalRoles').value as ApprovalRole[];
+  const approvalRoles = getFieldProps('approvalRoles.approvalRoles').value as ApprovalRole[];
+  const dam = getFieldProps('approvalRoles.dam').value as Dam;
   const settingsId = useSelector(companySelectors.getGeneralSettingsId);
   const [approvalRolesData, setApprovalRolesData] = React.useState(approvalRoles);
   const [editedApprovalRoles, setEditedApprovalRoles] = React.useState<EditableApprovalRoles>();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const isSettingNotSynced = !dam?.isSynced;
 
   const discardApprovalRoles = () => setEditedApprovalRoles(undefined);
   const onChange = ({ dataItem }) => {
     if (dataItem[MODE_FIELD] === Mode.add) {
       return setEditedApprovalRoles(prevValue => ({ ...prevValue, isActive: !editedApprovalRoles?.active, name: values.name }));
     }
+    if(isSettingNotSynced) {
+      setIsOpen(true);
+    }
     const updatedApprovalRoles = approvalRolesData?.map(item => item.id === dataItem.id ? { ...dataItem, isActive: !dataItem.isActive } : item);
-    formValues.approvalRoles = updatedApprovalRoles;
+    formValues.approvalRoles.approvalRoles = updatedApprovalRoles;
     setApprovalRolesData(updatedApprovalRoles);
     async.start(updateApprovalRolesAction, { isActive: !dataItem.isActive, formValues: formValues }, dataItem.id, 'PATCH', async);
   };
@@ -101,7 +108,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
         ? [...newApprovalRoles, omit(values, MODE_FIELD)]
         : newApprovalRoles?.map(item => item.id === values.id ? { ...item, ...omit(values, MODE_FIELD) } : item);
       discardApprovalRoles();
-      formValues.approvalRoles = updatedApprovalRoles;
+      formValues.approvalRoles.approvalRoles = updatedApprovalRoles;
       setApprovalRolesData(updatedApprovalRoles);
       async.start(createApprovalRolesAction, { values, formValues }, settingsId, 'POST', async);
     },
@@ -153,7 +160,8 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
   const schema = buildSchema({ onChange, onDiscard, editedApprovalRoles, onConfirm: submitForm });
 
   return (
-    <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')}>
+    <>
+    <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')} isOutOfSync={isSettingNotSynced}>
       <FormikProvider value={formik}>
         <SettingsTable
           isActive
@@ -165,6 +173,13 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
         />
       </FormikProvider>
     </SettingsPanel>
+    {isOpen && (
+    <SyncMessageDialog
+      { ...{ isOpen, dam } }
+      closeDialog={() => setIsOpen(false)}
+    />
+    )}
+    </>
   );
 };
 

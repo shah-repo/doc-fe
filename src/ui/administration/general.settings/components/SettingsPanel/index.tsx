@@ -1,6 +1,6 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Tooltip, Typography } from '@material-ui/core';
 import cx from 'classnames';
 import React, { MouseEventHandler, useRef } from 'react';
 import { translate } from '../../../../../common/intl';
@@ -17,6 +17,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   expanded,
   onToggle,
   onAddNew,
+  isOutOfSync,
   ...props
 }) => {
   const classes = useStyles();
@@ -57,7 +58,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         onClick={onToggle}
         classes={{
           root: cx(classes.summary, { [classes.stickySummary]: isSticky }),
-          content: classes.content,
+          content: cx(classes.content, { [classes.settingOutOfSync]: isOutOfSync }),
           expandIcon: classes.icon,
         }}
         expandIcon={(
@@ -72,6 +73,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         )}
       >
         <Typography variant="h2" className={classes.title}>{title}</Typography>
+        {isOutOfSync && (
+          <Tooltip title={translate('administration.general.settings.approvalRoles.sync.message.dialog.out.of.sync.with.dam')}>
+            <div className={classes.outOfSyncBox}>
+              <FontAwesomeIcon className={classes.outOfSyncIcon} icon={regular('rotate-exclamation')} />
+            </div>
+          </Tooltip>
+        )}
         {info && <Typography className={classes.info}>{info}</Typography>}
         {onAddNew && (
           <Button
