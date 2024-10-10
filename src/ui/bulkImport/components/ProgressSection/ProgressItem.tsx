@@ -130,7 +130,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
         // if we don't find any blank icon is because we already finish and is on the last step
         currentProgressStep.current = 4; // approver step
       }
-      if (!_.isEmpty(item.process)) {
+      if (!_.isEmpty(item.process) || item.status === BkStatus.IN_PROGRESS) {
         currentProgressStep.current = 5; // importing step
       } else if (currentProgressStep.current === 5) {
         currentProgressStep.current = 4; // approver step

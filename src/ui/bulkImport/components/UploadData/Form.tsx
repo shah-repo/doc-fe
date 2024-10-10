@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import { Form, Formik } from 'formik';
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cleanUpMappedHeaders, setIsLoading, setTemplateFile, uploadFileData } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImport, getTemplateFile } from '../../../../state/ducks/bulkImport/selectors';
@@ -28,6 +28,7 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
   const uploadFileDataAction = useActionCreator(uploadFileData);
   const files = useSelector(getTemplateFile);
   const bulkImport = useSelector(getBulkImport);
+  const loadFromBk = useRef<boolean>(false);
 
   const asyncUploadFile = useAsync({
     onSuccess: () => {
@@ -66,7 +67,7 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
 
   useEffect(() => {
     // If the user already upload the excelFile we are going to show a preview of it.
-    if (bulkImport?.excelFile && files.length === 0) {
+    if (bulkImport?.excelFile && files.length === 0 && !loadFromBk.current) {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       const initialFile = {
         name: `${bulkImport.excelFile.name}.${bulkImport.excelFile.type}`,
@@ -76,11 +77,14 @@ const UploadData: React.FC<UploadDataProps> = ({ children, handleNext }) => {
         lastModified: new Date(bulkImport.excelFile.updatedAt).getTime(),
       } as FileWithPreview;
       dispatch(setTemplateFile([initialFile]));
+      loadFromBk.current = true;
     }
   }, [bulkImport, files, dispatch]);
 
   useEffect(() => {
-    dispatch(setTemplateFile([]));
+    if (!bulkImport?.excelFile && files.length > 0) {
+      dispatch(setTemplateFile([]));
+    }
   }, []);
 
   return (

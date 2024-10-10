@@ -119,8 +119,8 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   };
 
   const handleWithdrawSubmission = async () => {
-      await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id, userState.current);
-      getBulkImportData();
+    await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id, userState.current);
+    getBulkImportData();
   };
 
   const getBulkImportData = () => {
