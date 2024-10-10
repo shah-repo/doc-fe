@@ -56,7 +56,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const currentProgressStep = useRef(0);
   const isRejected = STATUSES_CANCELED.includes(item?.status as BkStatus);
   const showDeleteButton = _.isEmpty(item.process) && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
-  const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports));
+  const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   let rejectedDate;
 
@@ -217,8 +217,8 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
               />
             </StyleTooltip>
           </Box>}
-          {showButtonView && <Button className={_.isEmpty(item?.reports) ? classes.viewButton : classes.downloadLogs} kind="outlined" color={!_.isEmpty(item?.reports) ? 'primary' : 'inherit'} onClick={_.isEmpty(item?.reports) ? handleReturnToStep : handleDownloadFile}>
-            <Text translation={_.isEmpty(item?.reports) ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
+          {showButtonView && <Button className={_.isEmpty(item?.reports) || item.status === BkStatus.CANCELLED ? classes.viewButton : classes.downloadLogs} kind="outlined" color={!_.isEmpty(item?.reports) ? 'primary' : 'inherit'} onClick={_.isEmpty(item?.reports) ? handleReturnToStep : handleDownloadFile}>
+            <Text translation={_.isEmpty(item?.reports) || item.status === BkStatus.CANCELLED ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
           </Button>}
           {_.isEmpty(item?.reports) && <Box width={29}>
             {showDeleteButton && <StyleTooltip
