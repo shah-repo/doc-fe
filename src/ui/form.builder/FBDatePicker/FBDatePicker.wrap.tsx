@@ -43,6 +43,8 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       if (workspaceState?.isChangeRequest) {
         submitForm();
       }
+
+      workspaceState?.saveDocRev(formState?.getValues());
     }, 100);
 
     SM.reaction(
@@ -66,19 +68,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       if (isUnderDefault) {
         const nowDate = (new Date()).toISOString();
         datePickerState?.setValue(nowDate);
-        if (nowDate) {
-          formState?.setFieldValue(name, nowDate);
-          formState?.validate();
-
-          const isUnderWorkspace = workspaceState?.getSchemaItem(name);
-          if (isUnderWorkspace) {
-            if (workspaceState?.isChangeRequest) {
-              submitForm();
-            } else {
-              workspaceState?.saveDocRev(formState?.getValues());
-            }
-          }
-        }
+        save(nowDate);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [approvalRequest]);
