@@ -12,8 +12,8 @@ import { translate } from '../../../../common/intl';
 import { getApprovers, getOneBulkImport, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
 import { approvalFieldPrefix } from "../../../../state/ducks/bulkImport/constants";
 import { getApproversSelectList, getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
-import { ApproverOption } from '../../../../state/ducks/bulkImport/types';
-import { abandonApproval, patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview, postDocumentRevisionsWithdrawn, UserState } from "../../../../state/ducks/bulkImport/utils";
+import { ApproverOption, BkStatus } from '../../../../state/ducks/bulkImport/types';
+import { abandonApproval, patchDocumentRevisions, postApprovals, postDocumentRevisionsInReview, postDocumentRevisionsWithdrawn, updateBulkImportStatus, UserState } from "../../../../state/ducks/bulkImport/utils";
 import { ApprovalStatus } from "../../../../state/ducks/common/types";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { store } from "../../../../state/store";
@@ -119,6 +119,9 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   };
 
   const handleWithdrawSubmission = async () => {
+    if (bulkImport?.id && bulkImport.status === BkStatus.CANCELLED) {
+      await updateBulkImportStatus(bulkImport?.id, BkStatus.STARTED, userState.current);
+    }
     await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id, userState.current);
     getBulkImportData();
   };

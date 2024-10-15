@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { orderBy } from 'lodash';
 import Config from '../../../config';
-import { APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, DOCUMENT_REVISION_WITHDRAWN_URL } from './constants';
+import { APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_UPDATE_STATUS_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, DOCUMENT_REVISION_WITHDRAWN_URL } from './constants';
+import { BkStatus } from './types';
 
 const TEMPLATE_CSV = 'template.xlsx';
 
@@ -117,6 +118,26 @@ export const postDocumentRevisionsWithdrawn = async (documentRevisionId, userSta
       method: 'POST',
       headers: {
         Authorization: `bearer ${userState.employeeId}:${userState.sessionId}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Failed to save document revisions in review:', error);
+    return null;
+  }
+};
+
+export const updateBulkImportStatus = async (bulkImportId: string, status: BkStatus, userState: UserState) => {
+  try {
+    const response = await axios({
+      url: `${Config.ApiEndpoint}${BULK_UPDATE_STATUS_URL}${bulkImportId}`,
+      method: 'POST',
+      headers: {
+        Authorization: `bearer ${userState.employeeId}:${userState.sessionId}`,
+      },
+      data: {
+        status,
       },
     });
 
