@@ -57,7 +57,7 @@ export const SignedCell = ({
     if (isConfirmed) {
       asyncResetPasswordEmail.start(
         getSendPasswordResetEmailAction,
-        dataItem.user.id,
+        dataItem.id,
         asyncResetPasswordEmail,
       );
       return;
