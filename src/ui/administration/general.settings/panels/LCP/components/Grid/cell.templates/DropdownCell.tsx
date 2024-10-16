@@ -34,7 +34,10 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
   }
 
   const handleChange = (e, value: OptionType) => {
-    setFieldValue(field, value.value);
+    if (dataItem.isAddPhase) {
+      setFieldValue(field, value.value);
+      return;
+    }
     onChange?.({
       dataIndex,
       dataItem,
