@@ -16,13 +16,6 @@ export interface CustomGridColumnMenuColumnProps extends GridColumnMenuColumnPro
   locked: boolean
 }
 
-interface ColumnMenuContextProps {
-  columns: Array<ColumnDefinition<EditableLCP>>
-  onLock: (params) => void
-}
-
-export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} as ColumnMenuContextProps);
-
 export const CustomColumnMenu: React.ComponentType<CustomColumnMenuProps> = (props) => {
   const { column, onLock, columns } = props;
   const selectedColumn = columns.find(c => c.field === column.field);
