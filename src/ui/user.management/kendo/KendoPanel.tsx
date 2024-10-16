@@ -25,6 +25,7 @@ import { userManagementActions, userManagementSelectors } from '../../../state/d
 import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
 import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
 import { store } from '../../../state/store';
+import { KendoGridFilterCellOperators } from '../../components/KendoGrid/interfaces';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import CellRender from '../../components/common/kendo.column.templates/CellRender';
 import { DropdownFilterTemplate } from '../../components/common/kendo.column.templates/DropdownFilterTemplate';
@@ -394,6 +395,7 @@ export function KendoPanel ({
         translate('user.unconfirmed'),
         translate('user.locked'),
       ]}
+      operator={KendoGridFilterCellOperators.EQ}
       defaultItem={translate(TranslatedText[DisplayText.ALL])}
     />
   );
