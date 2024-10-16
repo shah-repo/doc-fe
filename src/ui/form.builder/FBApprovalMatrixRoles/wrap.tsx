@@ -1,7 +1,7 @@
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { FB, FBApprovalRole } from '..';
+import { FB, FBApprovalMatrixFieldModes, FBApprovalRole } from '..';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { FBApprovalMatrixRolesProps } from './types';
 
@@ -35,6 +35,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
 
     const addRole = (role: FBApprovalRole) => {
       const groups = role.groups.map(({ id }) => ({ id }));
+      approvalMatrixFieldState?.setMode(FBApprovalMatrixFieldModes.NONE);
       approvalMatrixFieldState?.addApprovalRole({
         ...role,
         employees: [],
@@ -48,6 +49,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
         ...targetRole,
         groups: targetRole.id === role.id ? groups : targetRole.groups,
       }));
+      approvalMatrixFieldState?.setMode(FBApprovalMatrixFieldModes.NONE);
       approvalMatrixFieldState?.setApprovalRoles(updatedRoles);
     };
 

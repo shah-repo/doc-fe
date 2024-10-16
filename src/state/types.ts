@@ -20,6 +20,7 @@ export interface ApiAction<Response = any, Body = any> extends Action {
   cancelToken?: CancelTokenSource
   sendNoResponseHeader?: boolean
   normalizeResponseHeader?: boolean
+  responseType?: ResponseType
 }
 
 interface ActionWithPayload<P> extends Action {

@@ -26,7 +26,6 @@ const UserProfileContainer: React.FunctionComponent<Props> = ({
 
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
-  const canUpdateLocations = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPERS));
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
@@ -69,7 +68,6 @@ const UserProfileContainer: React.FunctionComponent<Props> = ({
       close={closeUserProfile}
       canManageUsers={canManageUsers}
       canUpdateCompany={canUpdateCompany}
-      canUpdateLocations={canUpdateLocations}
       employeeGroups={groups}
       name={name}
       avatar={avatar}

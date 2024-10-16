@@ -123,7 +123,7 @@ const apiMiddleware: Middleware = ({
       default: {
         const {
           data: { message },
-        } = exception.response as AsyncActionErrorResponse;
+        } = exception?.response as AsyncActionErrorResponse;
         if (isArray(message) && has(first(message), 'message')) {
           responseMessage = join(get(first(message), 'message'), '\n');
         } else {
@@ -133,7 +133,7 @@ const apiMiddleware: Middleware = ({
       }
     }
 
-    const errorMessage: string = responseMessage || exception.message;
+    const errorMessage: string = responseMessage || exception?.message;
 
     action.onFailure(errorMessage, dispatch);
     dispatchAsyncStatusAction(

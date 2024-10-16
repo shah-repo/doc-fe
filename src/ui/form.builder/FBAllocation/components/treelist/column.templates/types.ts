@@ -7,6 +7,7 @@ export interface CustomTreeListCellProps extends TreeListCellProps {
   addLot?: IAllocationCallback
   deleteLot?: IAllocationCallback
   deletePart?: IAllocationCallback
+  parentRevId?: string
 }
 
 export interface AllocItemActionsProps<EditableAllocationItem> {
@@ -21,6 +22,13 @@ export interface AllocItemActionsProps<EditableAllocationItem> {
   onChildPartAdd?: IAllocationCallback
   onRestore?: IAllocationCallback
   onReorder?: () => void
+}
+
+export interface LotAutoCompleteOptions {
+  label: string
+  value: string
+  isExpired?: boolean
+  expiryDate?: string
 }
 
 type IAllocationCallback = (dataItem: EditableAllocationItem) => void;

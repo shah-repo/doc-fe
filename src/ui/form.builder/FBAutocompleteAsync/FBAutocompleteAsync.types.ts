@@ -81,5 +81,5 @@ export interface FBAutocompleteAsyncConstructor {
   optionId?: string
   urlValues?: Record<string, any>
   documentStatus?: string
-  skipOptionsFilter?: boolean
+  includePrevReleaseDoc?: boolean
 }

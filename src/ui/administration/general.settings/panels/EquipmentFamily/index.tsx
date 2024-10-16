@@ -1,35 +1,34 @@
-import { useFormik, useFormikContext } from 'formik';
-import { omit } from 'lodash';
+import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import { kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { EquipmentLocation, GeneralSettings } from '../../../../../state/ducks/company/types';
-import { DataGridRowClickEvent } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import LocationsSetting from '../../../../components/LocationsSetting';
-import useStyles from '../../../../components/LocationsSetting/styles';
-import { EditableLocation } from '../../../../components/LocationsSetting/types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import Text from '../../../../components/Text';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
-import { buildSchema } from '../../../../components/LocationsSetting/schema';
 import SettingsPanel from '../../components/SettingsPanel';
+import SettingsPanelSection from '../../components/SettingsPanelSection';
+import SettingsTable from '../../components/SettingsTable';
 import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import Text from '../../../../components/Text';
-import SettingsPanelSection from '../../components/SettingsPanelSection';
+import { buildSchema } from './schema';
+import { EditableEquipmentLocation } from './types';
 
 const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
-  const classes = useStyles();
-  const locations = getFieldProps('equipmentFamily.locations').value as EquipmentLocation[];
-  const fieldProps = getFieldProps('equipmentFamily.autoSyncEnabled');
+  const locations = getFieldProps<EquipmentLocation[]>('equipmentFamily.locations').value;
+  const fieldProps = getFieldProps<boolean>('equipmentFamily.autoSyncEnabled');
   const settingsId = useSelector(companySelectors.getGeneralSettingsId);
-  const onRowClick = ({ dataItem }: DataGridRowClickEvent<EditableLocation>) => setEditedLocation(dataItem);
-  const discardLocation = () => setEditedLocation(undefined);
   const [locationsData, setLocationsData] = React.useState<EquipmentLocation[]>(locations);
+  const [editedLocation, setEditedLocation] = React.useState<EditableEquipmentLocation>();
+
+  const discardLocation = () => setEditedLocation(undefined);
 
   const async = useAsync({
     onError: (error) => {
@@ -38,8 +37,14 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     },
   });
   const updateEquipmentLocationAction = useActionCreator(companyActions.updateGeneralSettings);
-  const [editedLocation, setEditedLocation] = React.useState<EditableLocation>();
-  const formik = useFormik<EditableLocation | Record<string, never>>({
+
+  const updateLocations = (updatedLocations: EquipmentLocation[]) => {
+    formValues.equipmentFamily.locations = updatedLocations;
+    setLocationsData(updatedLocations);
+    async.start(updateEquipmentLocationAction, formValues, settingsId, 'PUT', async);
+  };
+
+  const formik = useFormik<EditableEquipmentLocation | Record<string, never>>({
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
@@ -54,10 +59,8 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       const updatedLocations = isAdding
         ? [...locations, omit(values, MODE_FIELD)] // add
         : locations.map(item => item.id === values.id ? { ...item, ...omit(values, MODE_FIELD) } : item); // edit
-      setLocationsData(updatedLocations);
-      formValues.equipmentFamily.locations = updatedLocations;
       discardLocation();
-      async.start(updateEquipmentLocationAction, formValues, settingsId, 'PUT', async);
+      updateLocations(updatedLocations);
     },
   });
 
@@ -68,6 +71,11 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       active: true,
       [MODE_FIELD]: Mode.add,
     });
+  };
+
+  const changeLocationActiveState = (location: EditableEquipmentLocation, state: boolean) => {
+    const updatedLocations = locations.map(item => item.id === location.id ? { ...item, active: state } : item);
+    updateLocations(updatedLocations);
   };
 
   const { setValues, submitForm } = formik;
@@ -82,7 +90,8 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const schema = buildSchema({
     isActive: true,
-    actionsClass: classes.actionsCell,
+    onEdit: setEditedLocation,
+    onActiveStateChange: changeLocationActiveState,
     onDiscard: discardLocation,
     onConfirm: submitForm,
   });
@@ -99,6 +108,10 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       ? [...mappedLocations, editedLocation]
       : mappedLocations;
 
+  const dataCyGenerator = (location: EditableEquipmentLocation) => ({
+    'data-cy': `row-${kebabCase(location.name)}`,
+  });
+
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.equipmentFamily.tab')}>
       <SettingsPanelSection>
@@ -112,8 +125,19 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       <SettingsPanelSection>
         <Text message="administration.general.settings.equipmentFamily.locations" />
       </SettingsPanelSection>
-      <LocationsSetting {...{ formik, locationsList, schema, editedLocation, addLocation, onRowClick }} />
+      <FormikProvider value={formik}>
+        <SettingsTable
+          isActive
+          data={locationsList}
+          isEditing={editedLocation !== undefined}
+          schema={schema}
+          addButtonLabel={translate('settings.locations.add')}
+          onAdd={addLocation}
+          getRowProperties={dataCyGenerator}
+        />
+      </FormikProvider>
     </SettingsPanel>
   );
 };
+
 export default EquipmentFamilySettingsPanel;

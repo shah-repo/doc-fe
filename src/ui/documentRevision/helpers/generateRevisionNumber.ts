@@ -4,11 +4,10 @@ import { isDocumentRevisionInDraft } from './documentRevisionStatus';
 const getAlphabetFromNumber = (num: number) => {
   let str = '';
 
-  const multiples = Math.ceil(num / 26);
-  const charAtCode = num - (multiples - 1) * 26;
-
-  for (let i = 0; i < multiples; i++) {
-    str += String.fromCharCode(charAtCode + 64);
+  while (num > 0) {
+    const remainder = (num - 1) % 26;
+    str = String.fromCharCode(remainder + 65) + str;
+    num = Math.floor((num - 1) / 26);
   }
 
   return str;

@@ -17,7 +17,7 @@ import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import {
-  chain, get, isEmpty, isNil, map, replace, uniq,
+  chain, isEmpty, isNil, map, replace, uniq,
 } from 'lodash';
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
@@ -27,12 +27,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { FB } from '../../..';
 import { SM } from '../../../../../App';
 import { translate } from '../../../../../common/intl';
+import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { getTableCriteria } from '../../../../../common/utils/selectors';
 import { allocationActions } from '../../../../../state/ducks/Allocation';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { WO_PART_KEY_NAME } from '../../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import ExpiredLOTDialog, { DialogTypes } from '../../../../change.request/dialogs/ExpiredLOTDialog';
 import Loader from '../../../../components/common/kendo/Loader';
 import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
@@ -41,10 +44,14 @@ import { CustomTreeListColumnProps } from '../../../../components/common/treelis
 import { Button as AddButton } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
+import { toFixed } from '../../../../dashboard.new/line.items/common/Utils';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../layout/theme-next';
+import FBBOMDetailDrawer from '../../../FBBOM/components/drawer/AlternateParts';
+import DocumentRevisionDrawer from '../../../FBBOM/components/drawer/DocumentRevisionDrawer';
+import FBDataStore from '../../../FBStore/FBDataStore';
 import { AllocationItem, AllocationItemEditEvent, EditableAllocationItem } from '../../interface';
 import AutoOptions from './AutoOptions';
 import {
@@ -56,6 +63,7 @@ import {
   EXCEL_FILE_NAME,
   EXPAND_FIELD,
   ID_FIELD,
+  MAX_DECIMALS,
   MODE_FIELD, SUB_ITEMS_FIELD,
   TREELIST_CONFIG,
 } from './constants';
@@ -81,9 +89,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   const isDocument = !isEmpty(documentRevision?.formTemplate);
-  const partRevIdSelected = isDisabled
+  const partRevIdSelected: string = isDisabled
     ? documentRevision?.formInput?.[WO_PART_KEY_NAME]?.id
     : workspaceState?.formInputSync?.get(WO_PART_KEY_NAME)?.id ?? '';
+  const [isPartsDrawerOpened, setIsPartsDrawerOpened] = React.useState(false);
 
   const classes = useStyles({ size });
 
@@ -121,6 +130,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     onError: toastError,
   });
   const alertDialog = useDialog();
+  const expiredDialog = useDialog();
 
   const fetchAllocationTreeList = useActionCreator(
     allocationActions.loadAllocationList,
@@ -153,6 +163,15 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const onDeleteLot = (dataItem) => {
     alertDialog.open();
     setSelectedPart(dataItem);
+  };
+
+  const onConfirmLotAddition = () => {
+    expiredDialog.close();
+    if (selectedPart) {
+      createOrUpdateLOT(selectedPart);
+      discardAllocItem(selectedPart);
+      setSelectedPart(undefined);
+    }
   };
 
   const onConfirmDelete = () => {
@@ -199,7 +218,24 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     };
   }, [documentRevision?.id]);
 
-  const createOrUpdateLOT = (values) => {
+  const getValueOrDefaultZero = (value?: number | string): number | string => {
+    return value || 0;
+  };
+
+  const isRecordUnchanged = (values: Partial<EditableAllocationItem>): boolean => {
+    if (
+      selectedPart
+      && getValueOrDefaultZero(selectedPart.quantityNeeded) === getValueOrDefaultZero(values.quantityNeeded)
+      && getValueOrDefaultZero(selectedPart.variance) === getValueOrDefaultZero(values.variance)
+    ) {
+      discardAllocItem(selectedPart);
+      setSelectedPart(undefined);
+      return true;
+    }
+    return false;
+  };
+
+  const createOrUpdateLOT = (values: Partial<EditableAllocationItem>) => {
     if (values[ADD_FIELD]) {
       const payload = {
         workOrderId: documentRevision?.id,
@@ -211,6 +247,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
       partAsync.start(createLot, payload, partAsync);
     } else {
+      if (!values.isExpired && isRecordUnchanged(values)) {
+        return;
+      }
+
       const payload = {
         lotQuantityNeeded: values.quantityNeeded,
         lotVariance: values.variance,
@@ -224,33 +264,48 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     }
   };
 
-  const createOrUpdatePart = (values) => {
+  const createOrUpdatePart = (values: Partial<EditableAllocationItem>) => {
+    const partVariance = values.variance || undefined;
     if (values[ADD_FIELD]) {
       const payload = {
         workOrderId: documentRevision?.id,
         workOrderPartRevId: partRevIdSelected,
         partRevId: values.partRevId,
         partQuantityNeeded: values.quantityNeeded,
-        partVariance: values.variance,
+        partVariance,
       };
 
       partAsync.start(createPart, payload, partAsync);
     } else {
+      if (isRecordUnchanged(values)) {
+        return;
+      }
+
       const payload = {
         partQuantityNeeded: values.quantityNeeded,
-        partVariance: values.variance,
+        partVariance,
       };
-
-      partAsync.start(updatePart, documentRevision?.id, get(values.partRevId, 'value'),
-        workspaceState?.formInputSync?.get(AllocationCheckBoxOptions.AUTO_ASSIGN),
-        payload, partAsync);
+      partAsync.start(
+        updatePart,
+        documentRevision?.id,
+        values.id,
+        workspaceState?.formInputSync?.get(
+          AllocationCheckBoxOptions.AUTO_ASSIGN,
+        ),
+        payload,
+        partAsync,
+      );
     }
   };
-
   const formik = useFormik<Partial<EditableAllocationItem>>({
     initialValues: {},
-    onSubmit: (values) => {
+    onSubmit: (values: Partial<EditableAllocationItem>) => {
       if (values.lotRevId) {
+        if (values.isExpired && values[ADD_FIELD]) {
+          setSelectedPart(values as EditableAllocationItem);
+          expiredDialog.open();
+          return;
+        }
         createOrUpdateLOT(values);
       } else {
         createOrUpdatePart(values);
@@ -290,6 +345,10 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         state.data[index][SUB_ITEMS_FIELD] = state.data[index][SUB_ITEMS_FIELD]?.filter(
           (data) => !data[ADD_FIELD],
         );
+
+        if (isNil(state.data[index][SUB_ITEMS_FIELD])) {
+          state.data[index][SUB_ITEMS_FIELD] = [];
+        }
 
       state.data[index][SUB_ITEMS_FIELD]?.unshift(newAllocItem);
 
@@ -337,10 +396,17 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
     setSelectedPart(dataItem);
   };
 
+  const openDetailDrawer = (dataItem: EditableAllocationItem) => {
+    setIsPartsDrawerOpened(true);
+    setSelectedPart(dataItem);
+  };
+
   const schema: CustomTreeListColumnProps[] = TreeListSchema({
     addLot,
     actionsClass: classes.actionsCell,
     popperHolder: classes.popperHolder,
+    openDetailDrawer,
+    parentRevId: documentRevision?.id,
     onConfirm: formik.submitForm,
     onDiscard: discardAllocItem,
     onDelete: removeAllocItem,
@@ -536,8 +602,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
 
     const modifiedProps = {
       className: cx(replace(row?.props?.className, 'k-alt', ''), {
-        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]),
-        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD]),
+        [classes.WhiteBg]: isEmpty(item[SUB_ITEMS_FIELD]) && !item.isUnfulfiled,
+        [classes.grayBg]: !isEmpty(item[SUB_ITEMS_FIELD] && !item.isUnfulfiled),
+        [classes.errorBg]: item.isUnfulfiled,
       }),
     };
 
@@ -599,23 +666,37 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   };
 
   const getFieldValue = (value) => {
-    return isNil(value) ? CELL_EMPTY_VALUE : value;
+    return isNil(value) ? CELL_EMPTY_VALUE : toFixed(value, MAX_DECIMALS);
   };
 
   const exportToExcel = () => {
-    const data = treeToFlat(processData(), EXPAND_FIELD, SUB_ITEMS_FIELD).map(
-      (part) => {
-        const qtyOnHandAfter = isNil(part.quantityOnHand) ? CELL_EMPTY_VALUE : (part.quantityNeeded ?? 0) - (part.quantityOnHand ?? 0);
-        const quantityOnHand = getFieldValue(part.quantityOnHand);
-        const issuedQty = getFieldValue(part.issuedQty);
-        const variance = getFieldValue(part.variance);
+    const exportData = processData().map((data) => {
+      data[EXPAND_FIELD] = true;
+      return data;
+    });
+
+    const data = treeToFlat(exportData, EXPAND_FIELD, SUB_ITEMS_FIELD).map(
+      (part: EditableAllocationItem) => {
+        const isLotRecord = Boolean(part.isLotAddition || part.lotRevId);
+        const isPartRecord = !isLotRecord;
         const quantityNeeded = getFieldValue(part.quantityNeeded);
+        let qtyOnHandAfter = isPartRecord ? CELL_EMPTY_VALUE : (part.quantityOnHand ?? 0) - (part.quantityNeeded ?? 0);
+        let quantityOnHand = isPartRecord ? CELL_EMPTY_VALUE : getFieldValue(part.quantityOnHand);
+        const variance = isLotRecord ? CELL_EMPTY_VALUE : getFieldValue(part.variance);
+        const issuedQty = isLotRecord ? CELL_EMPTY_VALUE : getFieldValue((part.variance ?? 0) + part.quantityNeeded);
+
+        if (documentRevision.status !== DocumentRevisionStatus.Draft && !isPartRecord) {
+          quantityOnHand = getFieldValue(part.quantityBeforeKitting);
+          qtyOnHandAfter = getFieldValue(part.quantityAfterKitting);
+        }
+        const expiryDate = getFormattedDateString(part.expiryDate, MomentFormats.MonthDateYearTwoDigit);
 
         return {
           ...part,
           quantityOnHand,
           quantityNeeded,
           variance,
+          ...(!isEmpty(part.expiryDate) && { expiryDate }),
           issuedQty,
           partRevId: part.docId,
           qtyOnHandAfter,
@@ -677,7 +758,7 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
               className={cx({ [classes.disabled]: isShowOnly })}
             >
               <ColumnShowHideTreeMenu
-                columnDefinition={columns}
+                columnDefinition={columns.filter(item => item.id !== 'actions')}
                 onChange={onColumnShowHide}
               />
             </Grid>
@@ -762,6 +843,13 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
   const sortedColumnDefinitions = orderByLockedState(getColumns());
   const isLoading = treeListAsync.isLoading || partAsync.isLoading || deleteLotAsync.isLoading;
 
+  const closeDetailDrawer = () => {
+    FBDataStore.selectedSliderInfo = undefined;
+    setIsPartsDrawerOpened(false);
+    setSelectedPart(undefined);
+    dispatch(documentRevisionsActions.reload(documentRevision?.id));
+  };
+
   return (
     <>
       <AutoOptions documentRevision={documentRevision} onAutoAssign={handleAutoAssignLot} isDisabled={isDisabled || isDocument} />
@@ -840,6 +928,9 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
           </ColumnMenuContext.Provider>
         </FormikProvider>
       </Grid>
+      <FBBOMDetailDrawer {...{ isDrawerOpened: isPartsDrawerOpened, closeDrawer: closeDetailDrawer, dataItem: selectedPart }} >
+        <DocumentRevisionDrawer {...{ dataItem: selectedPart, closeDrawer: closeDetailDrawer, isSliderView: isPartsDrawerOpened }} />
+      </FBBOMDetailDrawer>
       <Grid item>
         {!isDisabled && !isDocument && (
           <AddButton
@@ -861,6 +952,15 @@ const FBAllocationTreeList: React.FC<FBAllocationProps> = ({
         cancelLabel="common.cancel"
         message="allocation.lot.delete.confirmation"
         dialog={alertDialog}
+      />
+      <ExpiredLOTDialog
+        dialog={expiredDialog}
+        message="allocation.lot.expired.confirm.prompt.message"
+        type={DialogTypes.Warning}
+        title="common.warning"
+        confirmLabel="common.yes.continue"
+        cancelLabel="common.no.go.back"
+        confirmAction={onConfirmLotAddition}
       />
     </>
   );

@@ -2,12 +2,16 @@ import { TreeListTextFilter } from '@progress/kendo-react-treelist';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { ActionsCell } from './column.templates/Actions';
+import ExpiryDateCellTemplate from './column.templates/ExpiryDateCell';
 import IDCell from './column.templates/IDCell';
 import IssuedQtyCell from './column.templates/IssuedQtyCell';
 import LotAllocatedCell from './column.templates/LotAllocatedCell';
 import QuantityCell from './column.templates/QuantityCell';
 import QuantityOnHandAfter from './column.templates/QuantityOnHandAfter';
 import QuantityOnHandBefore from './column.templates/QuantityOnHandBefore';
+import { RevHeaderCell } from './column.templates/RevHeader';
+import UnitDropDownFilter from './column.templates/UnitDropDownFilter';
+import UnitCell from './column.templates/UnitsCell';
 import VarianceCell from './column.templates/VarianceCell';
 
 export const TreeListSchema = ({
@@ -17,19 +21,21 @@ export const TreeListSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  parentRevId,
+  openDetailDrawer,
   onDeleteLot,
 }) => {
   return [
     {
       field: 'partRevId',
       title: translate('allocation.treelist.treeColumns.field.itemId.title'),
-      width: 140,
+      width: 200,
       filter: TreeListTextFilter,
       expandable: true,
       locked: false,
       mainOrderIndex: 1,
       disableShowOrHideSelection: true,
-      cell: IDCell,
+      cell: (props) => <IDCell {...props} openDetailDrawer={openDetailDrawer} />,
       sortable: false,
     },
     {
@@ -39,7 +45,25 @@ export const TreeListSchema = ({
       width: 228,
       filter: TreeListTextFilter,
       mainOrderIndex: 2,
-      cell: (props) => <LotAllocatedCell {...props} addLot={addLot} deleteLot={onDeleteLot} />,
+      cell: (props) => <LotAllocatedCell {...props} addLot={addLot} parentRevId={parentRevId} deleteLot={onDeleteLot} />,
+    },
+    {
+      field: 'expiryDate',
+      locked: false,
+      title: translate('allocation.treelist.treeColumns.field.expiry.date.title'),
+      width: 228,
+      filter: TreeListTextFilter,
+      mainOrderIndex: 2,
+      cell: (props) => <ExpiryDateCellTemplate {...props} />,
+    },
+    {
+      field: 'partRevDisplayRevision',
+      locked: false,
+      title: translate('allocation.treelist.treeColumns.field.revision.title'),
+      width: 228,
+      filter: TreeListTextFilter,
+      headerCell: RevHeaderCell,
+      mainOrderIndex: 3,
     },
     {
       field: 'quantityNeeded',
@@ -47,8 +71,17 @@ export const TreeListSchema = ({
       title: translate('allocation.treelist.treeColumns.field.quantityNeeded.title'),
       width: 180,
       filter: TreeListTextFilter,
-      mainOrderIndex: 3,
+      mainOrderIndex: 4,
       cell: QuantityCell,
+    },
+    {
+      field: 'lotUsedUnit',
+      locked: false,
+      title: translate('allocation.treelist.treeColumns.field.unit.title'),
+      width: 228,
+      filter: UnitDropDownFilter,
+      mainOrderIndex: 5,
+      cell: UnitCell,
     },
     {
       field: 'variance',
@@ -56,7 +89,7 @@ export const TreeListSchema = ({
       width: 180,
       locked: false,
       filter: TreeListTextFilter,
-      mainOrderIndex: 4,
+      mainOrderIndex: 6,
       cell: VarianceCell,
     },
     {
@@ -65,7 +98,7 @@ export const TreeListSchema = ({
       title: translate('allocation.treelist.treeColumns.field.issuedQty.title'),
       width: 180,
       filter: TreeListTextFilter,
-      mainOrderIndex: 5,
+      mainOrderIndex: 7,
       cell: IssuedQtyCell,
     },
     {
@@ -74,7 +107,7 @@ export const TreeListSchema = ({
       title: translate('allocation.treelist.treeColumns.field.qtyOnHandBefore.title'),
       width: 250,
       filter: TreeListTextFilter,
-      mainOrderIndex: 6,
+      mainOrderIndex: 8,
       cell: QuantityOnHandBefore,
     },
     {
@@ -83,7 +116,7 @@ export const TreeListSchema = ({
       title: translate('allocation.treelist.treeColumns.field.qtyOnHandAfter.title'),
       width: 250,
       filter: TreeListTextFilter,
-      mainOrderIndex: 7,
+      mainOrderIndex: 9,
       cell: QuantityOnHandAfter,
     },
     {

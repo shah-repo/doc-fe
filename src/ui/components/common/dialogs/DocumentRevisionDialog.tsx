@@ -1,15 +1,12 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { Observer } from 'mobx-react';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { SM } from '../../../../App';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as NewTabIcon } from '../../../../assets/images/new_tab.svg';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DOCUMENT_REVISION_GET_ASYNC_DRAWER } from '../../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
-import { AsyncStatus } from '../../../../state/types';
 import AsyncGate from '../../../components/AsyncGate';
 import Text from '../../../components/Text';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
@@ -22,13 +19,14 @@ import { styles } from './DocumentRevisionDialog.styles';
 interface DocumentRevisionDialogProps {
   dialog: DialogHandler
   docRevId?: string
+  parentRevId?: string
 }
 
 const DocumentRevisionDialog: React.FC<
 DocumentRevisionDialogProps
-> = ({ dialog, docRevId }) => {
+> = ({ dialog, docRevId, parentRevId }) => {
   const classes = styles();
-  const { _documentRevisionFormState } = SM.useStores();
+  const dispatch = useDispatch();
 
   const loadDocumentRevision = useActionCreator(documentRevisionsActions.load);
   const loadAction = () => loadDocumentRevision(docRevId, DOCUMENT_REVISION_GET_ASYNC_DRAWER);
@@ -45,9 +43,13 @@ DocumentRevisionDialogProps
   });
 
   const handleOpenNewTab = () => {
-    const newDocumentRevision = (documentRevision ?? _documentRevisionFormState?.newlyCreatedDocumentRevision) as DocumentRevision;
-    const path = documentVersionPath(newDocumentRevision?.id || '', newDocumentRevision?.document?.id || '');
+    const path = documentVersionPath((documentRevision as DocumentRevision)?.id || '', (documentRevision as DocumentRevision)?.document?.id || '');
     window.open(path);
+  };
+
+  const handleCloseDialog = () => {
+    dialog.close();
+    parentRevId && dispatch(documentRevisionsActions.reload(parentRevId));
   };
 
   return (
@@ -79,7 +81,7 @@ DocumentRevisionDialogProps
         <IconButton
           className={classes.close}
           size="small"
-          onClick={dialog.close}
+          onClick={handleCloseDialog}
         >
           <CloseIcon />
         </IconButton>
@@ -87,28 +89,23 @@ DocumentRevisionDialogProps
       <DialogContent dividers
         id="DocumentRevision-content"
       >
-        <Observer>
-          {() => (
-            <>
-              <AsyncGate
-                asyncAction={loadAction}
-                startActionOnMount
-                asyncState={docRevId ? loadDocumentRevisionAsyncState : (_documentRevisionFormState?.newlyCreatedDocumentRevision ? { status: AsyncStatus.Success } : { status: '' })}
-              >
-                {(_documentRevisionFormState?.newlyCreatedDocumentRevision || documentRevision) && (
-                  <Theme>
-                    <DocumentRevisionUpdateContainer
-                      documentRevision={(documentRevision ?? _documentRevisionFormState?.newlyCreatedDocumentRevision) as DocumentRevision}
-                      documentId={(docRevId ? (documentRevision as DocumentRevision)?.documentId : _documentRevisionFormState?.documentId) as string}
-                      canChangeOwnerShip={false}
-                      isNewVersion={false}
-                    />
-                  </Theme>
-                )}
-              </AsyncGate>
-            </>
+        <AsyncGate
+          asyncAction={loadAction}
+          startActionOnMount={Boolean(docRevId)}
+          asyncState={loadDocumentRevisionAsyncState}
+        >
+          {documentRevision && (
+            <Theme>
+              <DocumentRevisionUpdateContainer
+                documentRevision={documentRevision }
+                documentId={((documentRevision)?.documentId) as string}
+                canChangeOwnerShip={false}
+                isNewVersion={false}
+                inDialog={true}
+              />
+            </Theme>
           )}
-        </Observer>
+        </AsyncGate>
       </DialogContent>
     </Dialog>
   );
