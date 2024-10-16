@@ -27,6 +27,7 @@ export const buildSchema: SchemaBuilder<EditableMaterialFlowAclRule, SchemaOptio
     title: 'common.token.action',
     template: TransferTypeCellTemplate,
     width: 150,
+    sortable: true,
   },
   {
     id: 'groups',
@@ -38,6 +39,7 @@ export const buildSchema: SchemaBuilder<EditableMaterialFlowAclRule, SchemaOptio
         options={groups}
       />
     ),
+    sortable: true,
   },
   {
     id: 'from',
@@ -47,8 +49,10 @@ export const buildSchema: SchemaBuilder<EditableMaterialFlowAclRule, SchemaOptio
       <LocationCellTemplate
         {...props}
         options={locations}
+        required
       />
     ),
+    sortable: true,
   },
   {
     id: 'to',
@@ -60,6 +64,7 @@ export const buildSchema: SchemaBuilder<EditableMaterialFlowAclRule, SchemaOptio
         options={locations}
       />
     ),
+    sortable: true,
   },
   {
     id: 'actions',
