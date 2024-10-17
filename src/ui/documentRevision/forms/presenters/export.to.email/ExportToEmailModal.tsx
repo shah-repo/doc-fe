@@ -91,7 +91,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
       onSubmit: (values) => {},
     });
 
-    const { values } = formik;
+    const { values, setFieldValue } = formik;
 
     useEffect(() => {
       const { itemOnly, includeDate, includeAttachments } = values;
@@ -101,6 +101,10 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
         if (isNoOptionSelected) {
           setNoOptionSelected?.(false);
         }
+      }
+
+      if (!includeAttachments) {
+        setFieldValue('includeDate', false);
       }
     }, [values]);
 
@@ -151,6 +155,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
                 <Field
                   name="includeAttachments"
                   type="checkbox"
+                  checked={values.includeAttachments}
                   as={Checkbox}
                   className={classes.check}
                   data-cy="select-attachments"
@@ -165,6 +170,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
                   name="includeDate"
                   type="checkbox"
                   as={Checkbox}
+                  disabled={!values.includeAttachments}
                   className={classes.check}
                   data-cy="select-include-date"
                 />
