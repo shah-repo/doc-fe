@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
-import { authActions } from '../../../state/ducks/auth';
+import { authActions, authSelectors } from '../../../state/ducks/auth';
 import { RESET_PASSWORD_SUCCESSFUL_URL } from '../../constants/urls';
 import FBStore from '../../form.builder/stores/ui/FBStore';
 import useAsync from '../../hooks/useAsync';
@@ -15,6 +15,7 @@ const ResetPassword: React.FunctionComponent<Props> = ({
 }) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const isUserAuthenticated = useSelector(authSelectors.isAuthenticated);
 
   const async = useAsync({
     onSuccess: () => {
@@ -23,6 +24,10 @@ const ResetPassword: React.FunctionComponent<Props> = ({
       history.push(RESET_PASSWORD_SUCCESSFUL_URL);
     },
   });
+
+  if (!isUserAuthenticated) {
+    history.replace('/');
+  }
 
   const onSubmit = (values: ResetPasswordValues): void => {
     dispatch(
