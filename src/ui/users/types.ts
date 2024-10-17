@@ -10,7 +10,6 @@ export interface PasswordValues {
 }
 
 export interface ResetPasswordValues {
-  email: string
   currentPassword: string
   newPassword: string
   newPasswordConfirmation: string

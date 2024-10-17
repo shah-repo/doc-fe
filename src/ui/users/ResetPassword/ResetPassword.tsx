@@ -32,7 +32,6 @@ const ResetPassword: React.FunctionComponent<Props> = ({
   const onSubmit = (values: ResetPasswordValues): void => {
     dispatch(
       authActions.resetPassword({
-        email: values.email,
         currentPassword: values.currentPassword,
         newPassword: values.newPassword,
         newPasswordConfirmation: values.newPasswordConfirmation,
