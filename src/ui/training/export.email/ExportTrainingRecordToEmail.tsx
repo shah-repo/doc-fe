@@ -7,6 +7,8 @@ import Text from '../../components/Text';
 import Dialog from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { toastError, toastSuccess } from '../../components/notifications';
+import { ExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
+import { exportPDFToastrStyles } from '../../components/notifications/ExportPDFToastr.styles';
 import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
 import ExportToEmailModal from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -34,12 +36,17 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
   const emailDialog = useDialog();
+  const pdfToastrStyles = exportPDFToastrStyles();
 
   const async = useAsync({
     onSuccess: () => {
       setIsDownloadInprogress(false);
       emailDialog.close();
-      toastSuccess(intl.formatMessage({ id: 'common.send.to.email.success' }));
+      toastSuccess(<ExportPDFToastr />, {
+        className: pdfToastrStyles.popup,
+        bodyClassName: pdfToastrStyles.popupBody,
+        progressClassName: 'progressClassName',
+      });
     },
     onError: () => {
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));

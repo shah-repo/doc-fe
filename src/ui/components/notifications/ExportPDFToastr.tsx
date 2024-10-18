@@ -2,12 +2,11 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
-import { toastSuccess } from '.';
 import Text from '../Text';
-import styles from './ExportPDFToastr.styles';
+import { exportPDFToastrStyles } from './ExportPDFToastr.styles';
 
-const ExportPDFToastr = () => {
-  const classes = styles();
+export const ExportPDFToastr: React.FC = () => {
+  const classes = exportPDFToastrStyles();
 
   return (
     <>
@@ -29,14 +28,4 @@ const ExportPDFToastr = () => {
       </Box>
     </>
   );
-};
-
-export const showExportPDFToastr = () => {
-  const classes = styles();
-
-  toastSuccess(<ExportPDFToastr />, {
-    className: classes.popup,
-    bodyClassName: classes.popupBody,
-    progressClassName: 'progressClassName',
-  });
 };

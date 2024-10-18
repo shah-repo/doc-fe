@@ -13,7 +13,9 @@ import SM from '../../../../../App/Shifamed/Utils/SM/SM';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { Dialog } from '../../../../components/dialogs';
-import { toastError } from '../../../../components/notifications';
+import { toastError, toastSuccess } from '../../../../components/notifications';
+import { ExportPDFToastr } from '../../../../components/notifications/ExportPDFToastr';
+import { exportPDFToastrStyles } from '../../../../components/notifications/ExportPDFToastr.styles';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -52,6 +54,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
   const employeeId = useSelector(authSelectors.currentEmployeeId);
+  const pdfToastrStyles = exportPDFToastrStyles();
 
   const handleDownloadComplete = (isComplete: boolean) => {
     setIsDownloadInprogress(!isComplete);
@@ -77,6 +80,11 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
 
   const callBack = useCallback(() => {
     handleDownloadComplete(true);
+    toastSuccess(<ExportPDFToastr />, {
+      className: pdfToastrStyles.popup,
+      bodyClassName: pdfToastrStyles.popupBody,
+      progressClassName: 'progressClassName',
+    });
   }, []);
 
   useMqttSubscription(topic, callBack);

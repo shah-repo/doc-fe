@@ -12,15 +12,15 @@ import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/p
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
 import { Dialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
-import { toastError } from '../../components/notifications';
-import { showExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
+import { toastError, toastSuccess } from '../../components/notifications';
+import { ExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
+import { exportPDFToastrStyles } from '../../components/notifications/ExportPDFToastr.styles';
 import Text from '../../components/Text';
 import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
 import ExportToEmailModal from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
-import { Colors } from '../../layout/theme-next';
 
 interface Props {
   id: string
@@ -31,34 +31,6 @@ const style = makeStyles((theme) => ({
   dialogAction: {
     justifyContent: 'space-between',
   },
-  popup: {
-    borderRadius: theme.spacing(0.75),
-    border: `1px solid ${Colors.primaryLight} !important`,
-    borderLeft: `7px solid ${Colors.primaryLight} !important`,
-    background: `${Colors.primaryHighlight} !important`,
-    padding: theme.spacing(1.875),
-    height: 97,
-    '& .Toastify__close-button': {
-      margin: theme.spacing(0),
-      alignSelf: 'flex-start !important',
-      color: `${Colors.primaryLight} !important`,
-    },
-  },
-  popupBody: {
-    display: 'flex',
-    padding: theme.spacing(0),
-    gap: theme.spacing(1.875),
-    width: 720,
-  },
-  popupTitle: {
-    fontSize: 14,
-    fontWeight: 700,
-    marginBottom: theme.spacing(1.25),
-  },
-  popupInfoIcon: {
-    marginTop: theme.spacing(1.375),
-    color: Colors.primaryLight,
-  },
 }));
 
 const ExportARToEmail: React.FunctionComponent<Props> = ({
@@ -66,6 +38,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const classes = style();
+  const pdfToastrStyles = exportPDFToastrStyles();
   const emailDialog = useDialog();
   const [value, setValue] = useState(false);
   const [isNoOptionSelected, setNoOptionSelected] = useState(false);
@@ -77,27 +50,11 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   const async = useAsync({
     onSuccess: () => {
       emailDialog.close();
-      showExportPDFToastr();
-      // toastSuccess(
-      //   <>
-      //     <FontAwesomeIcon icon={regular('circle-info')} size="xl" className={classes.popupInfoIcon} />
-      //     <Box>
-      //       <Typography
-      //         variant="h5"
-      //         component="h5"
-      //         className={classes.popupTitle}
-      //       >
-      //         <Text translation="share.downloading.started.popup.title" />
-      //       </Typography>
-      //       <Typography
-      //         variant="subtitle2"
-      //         component="span"
-      //       >
-      //         <Text translation="share.downloading.popup.desc" />
-      //       </Typography>
-      //     </Box>
-      //   </>,
-      //   { className: classes.popup, bodyClassName: classes.popupBody, progressClassName: 'progressClassName' });
+      toastSuccess(<ExportPDFToastr />, {
+        className: pdfToastrStyles.popup,
+        bodyClassName: pdfToastrStyles.popupBody,
+        progressClassName: 'progressClassName',
+      });
     },
     onError: () => {
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
