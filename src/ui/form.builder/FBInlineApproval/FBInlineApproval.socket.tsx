@@ -23,11 +23,9 @@ const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = (
       const timer = setTimeout(() => {
         invokeVersionCheck = false;
       }, 10000);
-
       return () => clearTimeout(timer);
     }
-  },
-  );
+  });
 
   const inlineApprovalState: FBInlineApprovalState = get(FB.useStores(), `${FBFieldName.ApprovalState}-${name}`);
 
