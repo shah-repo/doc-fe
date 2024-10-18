@@ -48,7 +48,7 @@ const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = (
   const callback = useCallback(() => {
     if (!invokeVersionCheck) {
       invokeVersionCheck = true;
-    inlineApprovalState?.getDocument(documentId);
+      inlineApprovalState?.getDocument(documentId);
     }
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
