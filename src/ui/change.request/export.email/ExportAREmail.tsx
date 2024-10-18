@@ -1,6 +1,6 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, makeStyles, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { omit } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -12,7 +12,8 @@ import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/p
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
 import { Dialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
-import { toastError, toastSuccess } from '../../components/notifications';
+import { toastError } from '../../components/notifications';
+import { showExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
 import Text from '../../components/Text';
 import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
 import ExportToEmailModal from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
@@ -76,26 +77,27 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   const async = useAsync({
     onSuccess: () => {
       emailDialog.close();
-      toastSuccess(
-        <>
-          <FontAwesomeIcon icon={regular('circle-info')} size="xl" className={classes.popupInfoIcon} />
-          <Box>
-            <Typography
-              variant="h5"
-              component="h5"
-              className={classes.popupTitle}
-            >
-              <Text translation="share.downloading.started.popup.title" />
-            </Typography>
-            <Typography
-              variant="subtitle2"
-              component="span"
-            >
-              <Text translation="share.downloading.popup.desc" />
-            </Typography>
-          </Box>
-        </>,
-        { className: classes.popup, bodyClassName: classes.popupBody, progressClassName: 'progressClassName' });
+      showExportPDFToastr();
+      // toastSuccess(
+      //   <>
+      //     <FontAwesomeIcon icon={regular('circle-info')} size="xl" className={classes.popupInfoIcon} />
+      //     <Box>
+      //       <Typography
+      //         variant="h5"
+      //         component="h5"
+      //         className={classes.popupTitle}
+      //       >
+      //         <Text translation="share.downloading.started.popup.title" />
+      //       </Typography>
+      //       <Typography
+      //         variant="subtitle2"
+      //         component="span"
+      //       >
+      //         <Text translation="share.downloading.popup.desc" />
+      //       </Typography>
+      //     </Box>
+      //   </>,
+      //   { className: classes.popup, bodyClassName: classes.popupBody, progressClassName: 'progressClassName' });
     },
     onError: () => {
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));

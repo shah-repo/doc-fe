@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../state/ducks/auth';
-import { exportPDFInfoToastr } from '../../components/notifications/ExportPDFInfo';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 const DownloadPDFSockets: React.FC = () => {
@@ -19,7 +18,6 @@ const DownloadPDFSockets: React.FC = () => {
       const parsedMessage = typeof messageData === 'string' ? JSON.parse(messageData) : messageData;
 
       if (parsedMessage.userAgent === clientUserAgent && parsedMessage?.url) {
-        exportPDFInfoToastr('');
         window.open(parsedMessage.url, '_parent');
       }
     } catch (error) {
