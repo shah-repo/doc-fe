@@ -1,19 +1,21 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeStyles } from '@material-ui/core';
-import { omit } from 'lodash';
-import React, { useRef, useState } from 'react';
+import { debounce, omit } from 'lodash';
+import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { SM } from '../../../App';
 import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListIcon } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { authSelectors } from '../../../state/ducks/auth';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
 import { Dialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { toastError, toastSuccess } from '../../components/notifications';
-import { ExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
+import { ExportPDFCloseButton, ExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
 import { exportPDFToastrStyles } from '../../components/notifications/ExportPDFToastr.styles';
 import Text from '../../components/Text';
 import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
@@ -21,6 +23,7 @@ import ExportToEmailModal from '../../documentRevision/forms/presenters/export.t
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
+import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 interface Props {
   id: string
@@ -42,29 +45,41 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   const emailDialog = useDialog();
   const [value, setValue] = useState(false);
   const [isNoOptionSelected, setNoOptionSelected] = useState(false);
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
+  const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
   const handleChange = (event) => {
     setValue(event.target.value === 'true');
   };
   const exportTrainingRecordEmail = useActionCreator(changeRequestsActions.exportAR);
   const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
   const async = useAsync({
-    onSuccess: () => {
-      emailDialog.close();
-      toastSuccess(<ExportPDFToastr />, {
-        className: pdfToastrStyles.popup,
-        bodyClassName: pdfToastrStyles.popupBody,
-        progressClassName: 'progressClassName',
-        autoClose: false,
-      });
-    },
     onError: () => {
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
     },
   });
   const childFormRef = useRef();
 
+  const topic = React.useMemo(() =>
+    `${employeeId}/external_export_email/${id}/pdf`
+  , [employeeId, id]);
+
+  const callBack = useCallback(debounce((data) => {
+    setIsDownloadInprogress(false);
+    emailDialog.close();
+    toastSuccess(<ExportPDFToastr />, {
+      className: pdfToastrStyles.popup,
+      bodyClassName: pdfToastrStyles.popupBody,
+      progressClassName: 'progressClassName',
+      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
+      autoClose: false,
+    });
+  }, 1000), []);
+
+  useMqttSubscription(topic, callBack);
+
   const handleAREmail = () => {
     if (childFormRef.current) {
+      setIsDownloadInprogress(true);
       const values = omit(childFormRef.current.getValues(), 'includeDate');
       async.start(
         exportTrainingRecordEmail,
@@ -116,9 +131,9 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
       <Dialog
         title="common.share"
         open={emailDialog.isOpen}
-        loading={async.isLoading}
+        loading={isDownloadInprogress}
         onClose={emailDialog.close}
-        actions={ <ExportToEmailDialogActions {...{ handleEmail: handleAREmail, emailDialog, isLoading: async.isLoading, isNoOptionSelected }} />}
+        actions={ <ExportToEmailDialogActions {...{ handleEmail: handleAREmail, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
         actionsProps={{ className: classes.dialogAction }}
       >
         <ExportToEmailModal

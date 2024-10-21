@@ -1,19 +1,22 @@
 import { makeStyles } from '@material-ui/core';
-import { omit } from 'lodash';
-import React, { useRef, useState } from 'react';
+import { debounce, omit } from 'lodash';
+import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../state/ducks/auth';
 import { trainingActions } from '../../../state/ducks/training';
 import Text from '../../components/Text';
 import Dialog from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { toastError, toastSuccess } from '../../components/notifications';
-import { ExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
+import { ExportPDFCloseButton, ExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
 import { exportPDFToastrStyles } from '../../components/notifications/ExportPDFToastr.styles';
 import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
 import ExportToEmailModal from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
+import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 interface Props {
   id: string
@@ -35,24 +38,33 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   const [value, setValue] = useState(false);
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
-  const emailDialog = useDialog();
   const pdfToastrStyles = exportPDFToastrStyles();
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
+  const emailDialog = useDialog();
 
   const async = useAsync({
-    onSuccess: () => {
-      setIsDownloadInprogress(false);
-      emailDialog.close();
-      toastSuccess(<ExportPDFToastr />, {
-        className: pdfToastrStyles.popup,
-        bodyClassName: pdfToastrStyles.popupBody,
-        progressClassName: 'progressClassName',
-        autoClose: false,
-      });
-    },
     onError: () => {
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
     },
   });
+
+  const topic = React.useMemo(() =>
+    `${employeeId}/external_export_email/+/pdf`
+  , [employeeId]);
+
+  const callBack = useCallback(debounce((data) => {
+    setIsDownloadInprogress(false);
+    emailDialog.close();
+    toastSuccess(<ExportPDFToastr />, {
+      className: pdfToastrStyles.popup,
+      bodyClassName: pdfToastrStyles.popupBody,
+      progressClassName: 'progressClassName',
+      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
+      autoClose: false,
+    });
+  }, 1000), []);
+
+  useMqttSubscription(topic, callBack);
 
   const runExportWithChildren = () => {
     if (childFormRef.current) {
