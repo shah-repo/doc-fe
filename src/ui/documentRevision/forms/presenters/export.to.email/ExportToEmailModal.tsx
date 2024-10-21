@@ -155,7 +155,7 @@ const ExportToEmailModal: React.FunctionComponent<ExportToEmailModalProps>
                 <Field
                   name="includeAttachments"
                   type="checkbox"
-                  checked={values.includeAttachments}
+                  checked={formik.values.includeAttachments}
                   as={Checkbox}
                   className={classes.check}
                   data-cy="select-attachments"
