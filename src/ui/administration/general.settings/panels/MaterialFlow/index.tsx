@@ -1,3 +1,4 @@
+import { GridSortChangeEvent } from '@progress/kendo-react-grid';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -47,6 +48,9 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   }));
   const [rulesData, setRulesData] = React.useState<MaterialFlowAclRule[]>(rules);
   const [editedRule, setEditedRule] = React.useState<EditableMaterialFlowAclRule>();
+  const [sort, setSort] = React.useState<Array<{ field: string, dir: 'asc' | 'desc' }>>([
+    { field: 'action', dir: 'asc' }, // Default sort by 'action'
+  ]);
   const ruleToDelete = useRef<EditableMaterialFlowAclRule>();
   const addRuleAction = useActionCreator(materialFlowAction.addRule);
   const updateRuleAction = useActionCreator(materialFlowAction.updateRule);
@@ -155,10 +159,53 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     };
   }) ?? [];
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const rulesList
     = editedRule?.[MODE_FIELD] === Mode.add
       ? [...mappedRules, editedRule]
       : mappedRules;
+
+  const handleSortChange = (event: GridSortChangeEvent) => {
+    const newSort = event.sort
+      .map(({ field, dir }) => ({
+        field,
+        dir: dir || 'asc',
+      }));
+    setSort(newSort);
+  };
+
+  const getValue = (obj: any, field: string) => {
+    switch (field) {
+      case 'action':
+        return obj.action?.toLowerCase() || '';
+      case 'from':
+      case 'to':
+        return obj[field]?.name?.toLowerCase() || '';
+      case 'groups':
+        return obj.groups?.[0]?.name?.toLowerCase() || '';
+      default:
+        return '';
+    }
+  };
+
+  const sortedData = React.useMemo(() => {
+    if (sort.length === 0) {
+      return rulesList.slice().sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    }
+    const [{ field, dir }] = sort;
+    const direction = dir === 'asc' ? 1 : -1;
+
+    return rulesList.slice().sort((a, b) => {
+      const valueA = getValue(a, field);
+      const valueB = getValue(b, field);
+
+      if (a[MODE_FIELD] === Mode.add) return 1;
+
+      if (valueA > valueB) return direction;
+      if (valueA < valueB) return -direction;
+      return 0;
+    });
+  }, [rulesList, sort]);
 
   return (
     <SettingsPanel
@@ -178,11 +225,14 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       <FormikProvider value={formik}>
         <SettingsTable
           isActive={isActive}
-          data={rulesList}
+          data={sortedData}
+          onDataSortChange={handleSortChange}
+          sort={sort}
           isEditing={editedRule !== undefined}
           schema={schema}
           addButtonLabel={translate('common.add.new')}
           onAdd={addRule}
+          skipDataProcessing
         />
       </FormikProvider>
       <AlertDialog

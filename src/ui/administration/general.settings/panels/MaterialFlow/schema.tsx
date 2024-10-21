@@ -49,7 +49,6 @@ export const buildSchema: SchemaBuilder<EditableMaterialFlowAclRule, SchemaOptio
       <LocationCellTemplate
         {...props}
         options={locations}
-        required
       />
     ),
     sortable: true,
@@ -81,5 +80,6 @@ export const buildSchema: SchemaBuilder<EditableMaterialFlowAclRule, SchemaOptio
         isActive={isActive}
       />
     ),
+    sortable: false,
   },
 ]);
