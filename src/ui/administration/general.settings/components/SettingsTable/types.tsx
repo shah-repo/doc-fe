@@ -1,17 +1,11 @@
-import { GridProps, GridSortChangeEvent } from '@progress/kendo-react-grid';
 import { ColumnDefinition, DataGridProps, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-export interface SettingsTableProps<T extends EditableItem = EditableItem> extends DataGridProps<T>{
-  data: T[]
-  schema: Array<ColumnDefinition<T>>
+export interface SettingsTableProps<T extends EditableItem = EditableItem> extends DataGridProps<T> {
   addButtonLabel?: string
   onAdd?: () => void
-  onRowClick?: GridProps['onRowClick']
   getRowProperties?: (item: T) => Record<string, unknown>
   isEditing?: boolean
   isActive?: boolean
-  sort?: Array<{ field: string, dir: 'asc' | 'desc' }>
-  onDataSortChange?: (event: GridSortChangeEvent) => void
 }
 
 interface SettingsSchemaOptions<T extends EditableItem = EditableItem> {
