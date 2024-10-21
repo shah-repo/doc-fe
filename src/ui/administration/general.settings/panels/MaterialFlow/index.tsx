@@ -1,6 +1,7 @@
 import { SortDescriptor } from '@progress/kendo-data-query';
 import { GridSortChangeEvent } from '@progress/kendo-react-grid';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import { noop } from 'lodash';
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -49,7 +50,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     id: group.value,
     name: group.label,
   }));
-  const [rulesData, setRulesData] = React.useState<MaterialFlowAclRule[]>(rules);
+  const [rulesData, setRulesData] = React.useState<MaterialFlowAclRule[]>(rules ?? []);
   const [editedRule, setEditedRule] = React.useState<EditableMaterialFlowAclRule>();
   const [sort, setSort] = React.useState<SortDescriptor[]>(DEFAULT_SORT);
   const ruleToDelete = useRef<EditableMaterialFlowAclRule>();
@@ -146,25 +147,19 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     onEdit: isActive ? editRule : undefined,
     onDelete: isActive ? confirmRuleDeletion : undefined,
     onDiscard: discardRule,
-    onConfirm: formik.submitForm,
+    onConfirm: async.isLoading ? noop : formik.submitForm,
     locations,
     groups,
   });
 
-  const mappedRules = rulesData?.map((rule) => {
+  const mappedRules = rulesData.map((rule) => {
     return {
       ...rule,
       from: locations.find(it => it.id === rule.from),
       to: locations.find(it => it.id === rule.to),
       [MODE_FIELD]: rule.id === editedRule?.id ? Mode.edit : Mode.show,
     };
-  }) ?? [];
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const rulesList
-    = editedRule?.[MODE_FIELD] === Mode.add
-      ? [...mappedRules, editedRule]
-      : mappedRules;
+  });
 
   const handleSortChange = (event: GridSortChangeEvent) => {
     const nextSortValue = event.sort.map(({ field, dir = 'asc' }) => ({ field, dir }));
@@ -177,9 +172,9 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
         return rule.action?.toLowerCase() ?? '';
       case 'from':
       case 'to':
-        return rule[field]?.name?.toLowerCase() ?? '';
+        return rule[field]?.name.toLowerCase() ?? '';
       case 'groups':
-        return rule.groups?.[0]?.name?.toLowerCase() ?? '';
+        return rule.groups?.[0].name.toLowerCase() ?? '';
       default:
         return '';
     }
@@ -189,17 +184,11 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     const [{ field, dir }] = sort;
     const direction = dir === 'asc' ? 1 : -1;
 
-    return rulesList.slice().sort((a, b) => {
-      const valueA = getRuleValue(a, field);
-      const valueB = getRuleValue(b, field);
-
-      if (a[MODE_FIELD] === Mode.add) return 1;
-
-      if (valueA > valueB) return direction;
-      if (valueA < valueB) return -direction;
-      return 0;
-    });
-  }, [rulesList, sort]);
+    const sortedRules = mappedRules.slice().sort((a, b) =>
+      getRuleValue(a, field) > getRuleValue(b, field) ? direction : -direction,
+    );
+    return editedRule?.[MODE_FIELD] === Mode.add ? [...sortedRules, editedRule] : sortedRules;
+  }, [mappedRules, sort, editedRule]);
 
   return (
     <SettingsPanel
