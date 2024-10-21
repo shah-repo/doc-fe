@@ -3,7 +3,7 @@ import { Colors } from '../../layout/theme-next';
 
 export const exportPDFToastrStyles = makeStyles((theme) => ({
   dialogAction: {
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   popup: {
     borderRadius: theme.spacing(0.75),

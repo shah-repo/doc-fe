@@ -1,6 +1,6 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, makeStyles } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { debounce, omit } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -36,12 +36,6 @@ export interface AttachmentsInfo {
   isPrimaryAttachment: boolean
 }
 
-const style = makeStyles((theme) => ({
-  dialogAction: {
-    justifyContent: 'fle-end',
-  },
-}));
-
 const ExportToEmail: React.FunctionComponent<Props> = ({
   revisionId,
   canAccess,
@@ -50,11 +44,10 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const emailDialog = useDialog();
-  const classes = style();
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
   const employeeId = useSelector(authSelectors.currentEmployeeId);
-  const pdfToastrStyles = exportPDFToastrStyles();
+  const classes = exportPDFToastrStyles();
 
   const handleDownloadComplete = (isComplete: boolean) => {
     setIsDownloadInprogress(!isComplete);
@@ -81,8 +74,8 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const callBack = useCallback(debounce((data) => {
     handleDownloadComplete(true);
     toastSuccess(<ExportPDFToastr />, {
-      className: pdfToastrStyles.popup,
-      bodyClassName: pdfToastrStyles.popupBody,
+      className: classes.popup,
+      bodyClassName: classes.popupBody,
       progressClassName: 'progressClassName',
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
       autoClose: false,

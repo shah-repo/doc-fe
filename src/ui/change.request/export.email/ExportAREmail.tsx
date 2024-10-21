@@ -1,6 +1,5 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { makeStyles } from '@material-ui/core';
 import { debounce, omit } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -30,18 +29,11 @@ interface Props {
   renderAsButton?: boolean
 }
 
-const style = makeStyles((theme) => ({
-  dialogAction: {
-    justifyContent: 'flex-end',
-  },
-}));
-
 const ExportARToEmail: React.FunctionComponent<Props> = ({
   id, renderAsButton,
 }) => {
   const intl = useIntl();
-  const classes = style();
-  const pdfToastrStyles = exportPDFToastrStyles();
+  const classes = exportPDFToastrStyles();
   const emailDialog = useDialog();
   const [value, setValue] = useState(false);
   const [isNoOptionSelected, setNoOptionSelected] = useState(false);
@@ -67,8 +59,8 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
     setIsDownloadInprogress(false);
     emailDialog.close();
     toastSuccess(<ExportPDFToastr />, {
-      className: pdfToastrStyles.popup,
-      bodyClassName: pdfToastrStyles.popupBody,
+      className: classes.popup,
+      bodyClassName: classes.popupBody,
       progressClassName: 'progressClassName',
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
       autoClose: false,

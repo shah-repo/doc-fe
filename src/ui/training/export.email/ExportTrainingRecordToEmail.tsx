@@ -1,4 +1,3 @@
-import { makeStyles } from '@material-ui/core';
 import { debounce, omit } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -22,23 +21,16 @@ interface Props {
   id: string
 }
 
-const style = makeStyles((theme) => ({
-  dialogAction: {
-    justifyContent: 'flex-end',
-  },
-}));
-
 const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   id,
 }) => {
   const intl = useIntl();
-  const classes = style();
   const exportTrainingRecordEmail = useActionCreator(trainingActions.exportTrainingRecord);
   const childFormRef = useRef();
   const [value, setValue] = useState(false);
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
-  const pdfToastrStyles = exportPDFToastrStyles();
+  const classes = exportPDFToastrStyles();
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const emailDialog = useDialog();
 
@@ -56,8 +48,8 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
     setIsDownloadInprogress(false);
     emailDialog.close();
     toastSuccess(<ExportPDFToastr />, {
-      className: pdfToastrStyles.popup,
-      bodyClassName: pdfToastrStyles.popupBody,
+      className: classes.popup,
+      bodyClassName: classes.popupBody,
       progressClassName: 'progressClassName',
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
       autoClose: false,
