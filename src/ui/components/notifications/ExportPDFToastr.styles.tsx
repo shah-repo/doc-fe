@@ -31,6 +31,16 @@ export const exportPDFToastrStyles = makeStyles((theme) => ({
   },
   popupInfoIcon: {
     marginTop: theme.spacing(1.375),
+    marginRight: theme.spacing(1.875),
+    color: Colors.primaryLight,
+  },
+  closeIcon: {
+    color: Colors.primaryLight,
+  },
+  closeText: {
+    fontSize: 12,
+    fontWeight: 600,
+    cursor: 'pointer',
     color: Colors.primaryLight,
   },
 }));

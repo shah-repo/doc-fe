@@ -19,18 +19,35 @@ interface ExportToEmailDialogActionsProps {
   isNoOptionSelected?: boolean
 }
 
-const ExportToEmailDialogActions: React.FC<ExportToEmailDialogActionsProps> = ({ isLoading, isNoOptionSelected, emailDialog, handleEmail }) => {
+const ExportToEmailDialogActions: React.FC<ExportToEmailDialogActionsProps> = ({
+  isLoading,
+  isNoOptionSelected,
+  emailDialog,
+  handleEmail,
+}) => {
   const classes = style();
 
   return (
     <>
-      <Button kind="secondary" startIcon={<FontAwesomeIcon icon={regular('link')} data-cy="copy-link" />} ><Text translation="share.copy.link" /></Button>
-      {isLoading
-        ? <Box display="flex" className={classes.loader} ><FontAwesomeIcon icon={regular('loader')} size="lg" /><Text translation="share.downloading" /></Box>
-        : <Box>
-          <Button variant="text" onClick={emailDialog.close}><Text translation="common.cancel" /></Button>
-          <Button disabled={isNoOptionSelected} variant="contained" onClick={handleEmail}><Text translation="common.confirm" /></Button>
-        </Box>}
+      {isLoading ? (
+        <Box display="flex" className={classes.loader}>
+          <FontAwesomeIcon icon={regular('loader')} size="lg" />
+          <Text translation="share.downloading" />
+        </Box>
+      ) : (
+        <Box>
+          <Button variant="text" onClick={emailDialog.close}>
+            <Text translation="common.cancel" />
+          </Button>
+          <Button
+            disabled={isNoOptionSelected}
+            variant="contained"
+            onClick={handleEmail}
+          >
+            <Text translation="common.confirm" />
+          </Button>
+        </Box>
+      )}
     </>
   );
 };

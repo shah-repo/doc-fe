@@ -1,7 +1,7 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, makeStyles } from '@material-ui/core';
-import { omit } from 'lodash';
+import { debounce, omit } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ import { authSelectors } from '../../../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { Dialog } from '../../../../components/dialogs';
 import { toastError, toastSuccess } from '../../../../components/notifications';
-import { ExportPDFToastr } from '../../../../components/notifications/ExportPDFToastr';
+import { ExportPDFCloseButton, ExportPDFToastr } from '../../../../components/notifications/ExportPDFToastr';
 import { exportPDFToastrStyles } from '../../../../components/notifications/ExportPDFToastr.styles';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -38,7 +38,7 @@ export interface AttachmentsInfo {
 
 const style = makeStyles((theme) => ({
   dialogAction: {
-    justifyContent: 'space-between',
+    justifyContent: 'fle-end',
   },
 }));
 
@@ -78,14 +78,16 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
     `${employeeId}/external_export_email/${revisionId}/pdf`
   , [employeeId, revisionId]);
 
-  const callBack = useCallback(() => {
+  const callBack = useCallback(debounce((data) => {
+    console.log('Daata ::', data);
     handleDownloadComplete(true);
     toastSuccess(<ExportPDFToastr />, {
       className: pdfToastrStyles.popup,
       bodyClassName: pdfToastrStyles.popupBody,
       progressClassName: 'progressClassName',
+      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
     });
-  }, []);
+  }, 1000), []);
 
   useMqttSubscription(topic, callBack);
 

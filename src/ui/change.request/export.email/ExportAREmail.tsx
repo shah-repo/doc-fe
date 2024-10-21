@@ -29,7 +29,7 @@ interface Props {
 
 const style = makeStyles((theme) => ({
   dialogAction: {
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
 }));
 
