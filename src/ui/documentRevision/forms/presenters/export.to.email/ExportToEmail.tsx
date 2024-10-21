@@ -79,13 +79,13 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   , [employeeId, revisionId]);
 
   const callBack = useCallback(debounce((data) => {
-    console.log('Daata ::', data);
     handleDownloadComplete(true);
     toastSuccess(<ExportPDFToastr />, {
       className: pdfToastrStyles.popup,
       bodyClassName: pdfToastrStyles.popupBody,
       progressClassName: 'progressClassName',
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
+      autoClose: false,
     });
   }, 1000), []);
 

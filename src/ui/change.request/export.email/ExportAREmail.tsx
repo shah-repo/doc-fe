@@ -54,6 +54,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         className: pdfToastrStyles.popup,
         bodyClassName: pdfToastrStyles.popupBody,
         progressClassName: 'progressClassName',
+        autoClose: false,
       });
     },
     onError: () => {
