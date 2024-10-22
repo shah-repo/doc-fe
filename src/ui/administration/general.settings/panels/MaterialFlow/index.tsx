@@ -66,7 +66,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const async = useAsync<MaterialFlowAclRule>({
     onSuccess: async (data) => {
       if (editedRule?.[MODE_FIELD] === Mode.add) {
-        newRuleId.current = data?.id;  
+        newRuleId.current = data?.id;
       }
       await submitSettingsForm();
       discardRule();
