@@ -27,9 +27,6 @@ export const getHumanizedFormat = (dateString: string) => moment.utc(dateString)
 
 export const getCurrentDate = (format: string) => moment().tz(TIME_ZONE).format(format);
 
-export const getFormattedUTCDate = (date: DateTypes, format = '') =>
-  moment(date).format(format);
-
 export enum MomentFormats {
   MonthDateYear = 'M/D/YYYY',
   MonthDateYearTwoDigit = 'MM/DD/YYYY',

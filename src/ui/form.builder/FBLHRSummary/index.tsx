@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
-import { getFormattedUTCDate, MomentFormats } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -265,10 +265,10 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         {
           ...(isLHRSummaryItemEdited ? editedLHRSummaryItem : item),
           [MODE_FIELD]: isLHRSummaryItemEdited ? Mode.edit : Mode.show,
-          ...(expiryDate && { expiryDate: getFormattedUTCDate(expiryDate, MomentFormats.MonthDateYearTwoDigit) }),
-          ...(calDueDate && { calDueDate: getFormattedUTCDate(calDueDate, MomentFormats.MonthDateYearTwoDigit) }),
-          ...(pmDueDate && { pmDueDate: getFormattedUTCDate(pmDueDate, MomentFormats.MonthDateYearTwoDigit) }),
-          ...(recordCreationDate && { recordCreationDate: getFormattedUTCDate(recordCreationDate, MomentFormats.MonthDateYearTwoDigit) }),
+          ...(expiryDate && { expiryDate: getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit) }),
+          ...(calDueDate && { calDueDate: getFormattedDateString(calDueDate, MomentFormats.MonthDateYearTwoDigit) }),
+          ...(pmDueDate && { pmDueDate: getFormattedDateString(pmDueDate, MomentFormats.MonthDateYearTwoDigit) }),
+          ...(recordCreationDate && { recordCreationDate: getFormattedDateString(recordCreationDate, MomentFormats.MonthDateYearTwoDigit) }),
         },
       ];
     },
