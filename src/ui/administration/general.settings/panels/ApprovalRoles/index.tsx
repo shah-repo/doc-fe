@@ -75,14 +75,13 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
   const [approvalRolesData, setApprovalRolesData] = React.useState(approvalRoles);
   const [editedApprovalRoles, setEditedApprovalRoles] = React.useState<EditableApprovalRoles>();
   const [isOpen, setIsOpen] = React.useState(false);
-  const isSettingNotSynced = !dam?.isSynced;
 
   const discardApprovalRoles = () => setEditedApprovalRoles(undefined);
   const onChange = ({ dataItem }) => {
     if (dataItem[MODE_FIELD] === Mode.add) {
       return setEditedApprovalRoles(prevValue => ({ ...prevValue, isActive: !editedApprovalRoles?.active, name: values.name }));
     }
-    if(isSettingNotSynced) {
+    if(!dam?.isSynced) {
       setIsOpen(true);
     }
     const updatedApprovalRoles = approvalRolesData?.map(item => item.id === dataItem.id ? { ...dataItem, isActive: !dataItem.isActive } : item);
@@ -161,7 +160,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
 
   return (
     <>
-    <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')} isOutOfSync={isSettingNotSynced}>
+    <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')} isOutOfSync={!dam?.isSynced}>
       <FormikProvider value={formik}>
         <SettingsTable
           isActive

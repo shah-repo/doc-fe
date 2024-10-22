@@ -9,10 +9,11 @@ import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
+import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/SyncMessageDialog.container';
 import FBMaterialDisposition from '../../../../ui/change.request/FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
@@ -24,7 +25,7 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentPart, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -83,11 +84,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isPartForm = checkIsDocumentPart(
     (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
   const isARForm = checkIsDocumentChangeRequest(
-      (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
+    (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
-      && schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
+    && schema.map((el) => el.name).filter((el) => el?.includes(ref.metadata.fieldId)));
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   const isWO = checkIsDocumentWOByGroupOrOptions(group, groupOptions);
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
@@ -191,232 +192,235 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   );
 
   return (
-    <SMForm
-      templateBoxProps={{ stretchY: '100%', width: '100%' }}
-      contentBoxProps={{ bgcolor: Colors.alabaster }}
-      values={formValues.values}
-      leftSidebar={DocumentRevisionLeftPanel}
-      header= {
-        <DocumentRevisionHeader
-          {...{ bannerPortal, shouldShowUpgrade, setDoNotPrompt }}
-          documentRevisionId={documentRevision?.id}
-          isSliderView={isSliderView}
-          inDialog={inDialog}
-        />
-      }
-    >
-      <PromptIfDirty
-        dirty={dirty}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-        onConfirm={async () => {
-          setDoNotPrompt?.(true);
-          if (isPOEditState) {
-            const prevPODoc = await getPOSavedInfo();
-
-            if (!prevPODoc.length) {
-              return;
-            }
-
-            await workspaceState?.undoPO(prevPODoc[0]);
-            await clearPOSavedInfo();
-            FBDataStore.setRefreshData(undefined);
-          }
-        }}
-        isDialog={isPOEditState}
-        message={isPOEditState ? 'common.navigate.away.po.prompt' : undefined}
-      />
-      <SMTemplate
-        boxProps={{ className: 'hide-scroll' }}
-        templateBoxProps={{ stretchY: '100%' }}
-        contentBoxProps={{ stretchY: '100%' }}
-        rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
-          rightSidebar: (
-            <Observer>
-              {() => (
-                <DocumentRevisionSidebar
-                  canEdit={isPart ? !referencesDisabledChangeControl(documentRevision) : true}
-                  isSliderView={isSliderView}
-                  tabConfig={tabConfig}
-                />
-              )}
-            </Observer>
-          ),
-        }}
+    <>
+      <SMForm
+        templateBoxProps={{ stretchY: '100%', width: '100%' }}
+        contentBoxProps={{ bgcolor: Colors.alabaster }}
+        values={formValues.values}
+        leftSidebar={DocumentRevisionLeftPanel}
+        header={
+          <DocumentRevisionHeader
+            {...{ bannerPortal, shouldShowUpgrade, setDoNotPrompt }}
+            documentRevisionId={documentRevision?.id}
+            isSliderView={isSliderView}
+            inDialog={inDialog}
+          />
+        }
       >
-        <Observer>
-          {() => (
-            <SMTemplate
-              templateBoxProps={{ stretchY: '100%' }}
-              contentBoxProps={{
-                overflow: _documentRevisionFormState?.expanded ? 'unset' : 'auto',
-              }}
-              banner={
-                <>
-                  <RedlineBanner />
-                  <UpgradeToLatestContainer
-                    type="banner"
-                    docRevId={documentRevision?.id}
-                    {...{
-                      documentRevision,
-                      bannerPortal,
-                      shouldShowUpgrade,
-                      shouldShowSyncForRelatedEquipment,
-                    }}
-                  />
-                  {documentRevision && <LHRBanner documentRevision={documentRevision} />}
-                </>
+        <PromptIfDirty
+          dirty={dirty}
+          doNotPrompt={doNotPrompt}
+          onDirtyFlagChange={onDirtyFlagChange}
+          onConfirm={async () => {
+            setDoNotPrompt?.(true);
+            if (isPOEditState) {
+              const prevPODoc = await getPOSavedInfo();
+
+              if (!prevPODoc.length) {
+                return;
               }
-              header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
-                type={type}
-                inRestrictedEditMode={inRestrictedEditMode}
-                documentTypeId={formValues.values.document?.documentType?.id}
-                inDialog={inDialog}
-              />}
-              lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
-            >
+
+              await workspaceState?.undoPO(prevPODoc[0]);
+              await clearPOSavedInfo();
+              FBDataStore.setRefreshData(undefined);
+            }
+          }}
+          isDialog={isPOEditState}
+          message={isPOEditState ? 'common.navigate.away.po.prompt' : undefined}
+        />
+        <SMTemplate
+          boxProps={{ className: 'hide-scroll' }}
+          templateBoxProps={{ stretchY: '100%' }}
+          contentBoxProps={{ stretchY: '100%' }}
+          rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
+          {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
+            rightSidebar: (
               <Observer>
                 {() => (
-                  <SMTabs
-                    tabs={tabConfig}
-                    boxProps={{ px: 3.75, stretchY: '100%', display: 'flex', flexDirection: 'column' }}
-                    panelProps={{ flex: 1 }}
-                    isCreateUrl={isCreateUrl}
-                  >
-                    {map(tabConfig, (tabInfo: TabInfo, index: number) => {
-                      const tabType = tabInfo.type;
-                      const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
+                  <DocumentRevisionSidebar
+                    canEdit={isPart ? !referencesDisabledChangeControl(documentRevision) : true}
+                    isSliderView={isSliderView}
+                    tabConfig={tabConfig}
+                  />
+                )}
+              </Observer>
+            ),
+          }}
+        >
+          <Observer>
+            {() => (
+              <SMTemplate
+                templateBoxProps={{ stretchY: '100%' }}
+                contentBoxProps={{
+                  overflow: _documentRevisionFormState?.expanded ? 'unset' : 'auto',
+                }}
+                banner={
+                  <>
+                    <RedlineBanner />
+                    <UpgradeToLatestContainer
+                      type="banner"
+                      docRevId={documentRevision?.id}
+                      {...{
+                        documentRevision,
+                        bannerPortal,
+                        shouldShowUpgrade,
+                        shouldShowSyncForRelatedEquipment,
+                      }}
+                    />
+                    {documentRevision && <LHRBanner documentRevision={documentRevision} />}
+                  </>
+                }
+                header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
+                  type={type}
+                  inRestrictedEditMode={inRestrictedEditMode}
+                  documentTypeId={formValues.values.document?.documentType?.id}
+                  inDialog={inDialog}
+                />}
+                lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
+              >
+                <Observer>
+                  {() => (
+                    <SMTabs
+                      tabs={tabConfig}
+                      boxProps={{ px: 3.75, stretchY: '100%', display: 'flex', flexDirection: 'column' }}
+                      panelProps={{ flex: 1 }}
+                      isCreateUrl={isCreateUrl}
+                    >
+                      {map(tabConfig, (tabInfo: TabInfo, index: number) => {
+                        const tabType = tabInfo.type;
+                        const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
-                      return (
-                        <AutoSizer onResize={handleResize}>
-                          {({ width }) => (
-                            <SMBox key={index} style={{ width }} pb={2}>
-                              {tabType === 'MIXED' && (
-                                <>
-                                  <DocumentRevisionFormPresenter
-                                    {...formValues}
-                                    releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                                    {...{
-                                      documentRevisions,
-                                      documentRevision,
-                                      showRevisionTypeChange,
-                                      proposedDocId,
-                                      setDocId,
-                                      doNotPrompt,
-                                      onDirtyFlagChange,
-                                      documentTypesById,
-                                      canChangeOwnerShip,
-                                      type,
-                                      isNewVersion,
-                                      bannerPortal,
-                                      showAdministrativeAndVoidChange,
-                                      redlineActive,
-                                      isOutput,
-                                      isDisabled,
-                                      email,
-                                      isOwner,
-                                      mode,
-                                    }}
-                                  />
-                                  {documentRevision && showTabContent && (
+                        return (
+                          <AutoSizer onResize={handleResize}>
+                            {({ width }) => (
+                              <SMBox key={index} style={{ width }} pb={2}>
+                                {tabType === 'MIXED' && (
+                                  <>
+                                    <DocumentRevisionFormPresenter
+                                      {...formValues}
+                                      releasedDocRev={_documentRevisionFormState?.releasedDocRev}
+                                      {...{
+                                        documentRevisions,
+                                        documentRevision,
+                                        showRevisionTypeChange,
+                                        proposedDocId,
+                                        setDocId,
+                                        doNotPrompt,
+                                        onDirtyFlagChange,
+                                        documentTypesById,
+                                        canChangeOwnerShip,
+                                        type,
+                                        isNewVersion,
+                                        bannerPortal,
+                                        showAdministrativeAndVoidChange,
+                                        redlineActive,
+                                        isOutput,
+                                        isDisabled,
+                                        email,
+                                        isOwner,
+                                        mode,
+                                      }}
+                                    />
+                                    {documentRevision && showTabContent && (
+                                      <FBWorkspace
+                                        isPortal={false}
+                                        document={{
+                                          ...documentRevision as unknown as DocumentRevision,
+                                          ...formValues.values as unknown as DocumentRevision,
+                                        }}
+                                        {... { autosaveEnabled, workspaceState }}
+                                        initialValues={formInput}
+                                        schema={schema}
+                                      />
+                                    )}
+                                  </>
+                                )}
+                                {tabType === 'DYNAMIC' && showTabContent && _formState?.mode !== 'none' && (
+                                  <>
+                                    {tabInfo.tabId === 'lineitems' && (
+                                      <Box pb={3.75}>
+                                        <FBSection
+                                          name="fb-po-section-po-items-built-in"
+                                          label="form.builder.po.details"
+                                        />
+                                        <AttachmentsField
+                                          isDisabled={isDisabledInput}
+                                          isNewVersion={false}
+                                          docRevId={docRevId}
+                                          isAttachmentEmpty={isAttachmentEmpty}
+                                          containsRedline={false}
+                                          docRevStatus={documentRevision?.status}
+                                          documentRevision={documentRevision}
+                                          documentTypeId={documentTypeId || ''}
+                                          labeld="Supporting Documents"
+                                        />
+                                      </Box>
+                                    )}
                                     <FBWorkspace
                                       isPortal={false}
                                       document={{
-                                        ...documentRevision as unknown as DocumentRevision,
                                         ...formValues.values as unknown as DocumentRevision,
+                                        ...documentRevision as unknown as DocumentRevision,
                                       }}
                                       {... { autosaveEnabled, workspaceState }}
                                       initialValues={formInput}
                                       schema={schema}
                                     />
-                                  )}
-                                </>
-                              )}
-                              {tabType === 'DYNAMIC' && showTabContent && _formState?.mode !== 'none' && (
-                                <>
-                                  {tabInfo.tabId === 'lineitems' && (
-                                    <Box pb={3.75}>
-                                      <FBSection
-                                        name="fb-po-section-po-items-built-in"
-                                        label="form.builder.po.details"
-                                      />
-                                      <AttachmentsField
-                                        isDisabled={isDisabledInput}
-                                        isNewVersion={false}
-                                        docRevId={docRevId}
-                                        isAttachmentEmpty={isAttachmentEmpty}
-                                        containsRedline={false}
-                                        docRevStatus={documentRevision?.status}
-                                        documentRevision={documentRevision}
-                                        documentTypeId={documentTypeId || ''}
-                                        labeld="Supporting Documents"
-                                      />
-                                    </Box>
-                                  )}
-                                  <FBWorkspace
-                                    isPortal={false}
-                                    document={{
-                                      ...formValues.values as unknown as DocumentRevision,
-                                      ...documentRevision as unknown as DocumentRevision,
-                                    }}
-                                    {... { autosaveEnabled, workspaceState }}
-                                    initialValues={formInput}
-                                    schema={schema}
+                                  </>
+                                )}
+                                {tabType === TabTypeOptions.TABS_MEQ && (
+                                  <FBMaterialEqInfoContainer
+                                    documentRevision={documentRevision}
+                                    inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
                                   />
-                                </>
-                              )}
-                              {tabType === TabTypeOptions.TABS_MEQ && (
-                                <FBMaterialEqInfoContainer
-                                  documentRevision={documentRevision}
-                                  inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
-                                />
-                              )}
-                              {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
-                                <FBTrainingInfoContainer
-                                  documentRevisionId={documentRevision?.id}
-                                  docRevStatus={documentRevision?.status}
-                                />
-                              )}
-                              {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
-                                <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled || isWO} isShowOnly={isPartForm || (isWO && !isEmpty(documentRevision?.formTemplate))}
-                                  isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView} isWO={isWO}
-                                />
-                              )}
-                              {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
-                                <FBLHRSummary isShowOnly={!hasOutput} isDisabled={isDisabledInput} />
-                              )}
-                              {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
-                                <FBAllocationTreeList documentRevision={documentRevision} isDisabled={isWO && !isEmpty(documentRevision?.formTemplate)} />
-                              )}
-                              {tabType === TabTypeOptions.ITEMS && (
-                                <ItemsAndDetailsWrapper
-                                  currentDocRevId={documentRevision?.id}
-                                  initialValues={formInput ?? {}}
-                                  autosave={autosaveEnabled}
-                                  mode={FBWorkspaceModeOptions.PREVIEW}
-                                />
-                              )}
-                              {tabType
-                                === TabTypeOptions.MATERIAL_DISPOSITION
-                                && _tabsState?.isTabActive(
-                                  TabTypeOptions.MATERIAL_DISPOSITION,
-                                ) && (
-                                <FBMaterialDisposition isShowOnly={true} />
-                              )}
-                            </SMBox>
-                          )}
-                        </AutoSizer>
-                      );
-                    })}
-                  </SMTabs>
-                )}
-              </Observer>
-            </SMTemplate>
-          )}
-        </Observer>
-      </SMTemplate>
-    </SMForm>
+                                )}
+                                {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
+                                  <FBTrainingInfoContainer
+                                    documentRevisionId={documentRevision?.id}
+                                    docRevStatus={documentRevision?.status}
+                                  />
+                                )}
+                                {tabType === TabTypeOptions.BOM && _tabsState?.isTabActive(TabTypeOptions.BOM) && (
+                                  <FBBOM documentRevision={documentRevision} isDisabled={isBomDisabled || isWO} isShowOnly={isPartForm || (isWO && !isEmpty(documentRevision?.formTemplate))}
+                                    isUpgradeDisabled={isRelatedTogetherPart} isSliderView={isSliderView} isWO={isWO}
+                                  />
+                                )}
+                                {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
+                                  <FBLHRSummary isShowOnly={!hasOutput} isDisabled={isDisabledInput} />
+                                )}
+                                {tabType === TabTypeOptions.ALLOCATION && _tabsState?.isTabActive(TabTypeOptions.ALLOCATION) && (
+                                  <FBAllocationTreeList documentRevision={documentRevision} isDisabled={isWO && !isEmpty(documentRevision?.formTemplate)} />
+                                )}
+                                {tabType === TabTypeOptions.ITEMS && (
+                                  <ItemsAndDetailsWrapper
+                                    currentDocRevId={documentRevision?.id}
+                                    initialValues={formInput ?? {}}
+                                    autosave={autosaveEnabled}
+                                    mode={FBWorkspaceModeOptions.PREVIEW}
+                                  />
+                                )}
+                                {tabType
+                                  === TabTypeOptions.MATERIAL_DISPOSITION
+                                  && _tabsState?.isTabActive(
+                                    TabTypeOptions.MATERIAL_DISPOSITION,
+                                  ) && (
+                                    <FBMaterialDisposition isShowOnly={true} />
+                                  )}
+                              </SMBox>
+                            )}
+                          </AutoSizer>
+                        );
+                      })}
+                    </SMTabs>
+                  )}
+                </Observer>
+              </SMTemplate>
+            )}
+          </Observer>
+        </SMTemplate>
+      </SMForm>
+      <SyncMessageDialogContainer {...{ documentRevision }} />
+    </>
   );
 };
 
