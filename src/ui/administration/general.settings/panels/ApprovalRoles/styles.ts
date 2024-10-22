@@ -42,8 +42,8 @@ export default makeStyles(theme => createStyles({
     backgroundColor: Colors.primary,
     color: Colors.white,
     borderRadius: 25,
-    height: '36px',
-    width: '100px',
+    height: 36,
+    width: 100,
     '&:hover': {
       backgroundColor: Colors.primaryDark,
     },
@@ -75,7 +75,7 @@ export default makeStyles(theme => createStyles({
   alertPaper: {
     backgroundColor: Colors.errorHighlight,
     border: `1px solid ${Colors.error}`,
-    borderLeftWidth: '7px',
+    borderLeftWidth: 7,
     position: 'absolute',
     top: 20,
   },

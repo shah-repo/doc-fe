@@ -28,8 +28,8 @@ const SyncMessageAlert: React.FC<Props> = ({
       maxWidth="sm"
       open={isOpen}
       scroll="paper">
-        <DialogTitle className={classes.alertTitle}>
-          <FontAwesomeIcon className={classes.alertIcon} icon={regular('triangle-exclamation')} />
+      <DialogTitle className={classes.alertTitle}>
+        <FontAwesomeIcon className={classes.alertIcon} icon={regular('triangle-exclamation')} />
         <Typography className={classes.titleText}>
           <Text translation="dam.sync.message.out.of.sync" />
         </Typography>
