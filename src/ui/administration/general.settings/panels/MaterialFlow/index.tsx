@@ -65,7 +65,9 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const async = useAsync<MaterialFlowAclRule>({
     onSuccess: async (data) => {
-      newRuleId.current = data?.id;
+      if (editedRule?.[MODE_FIELD] === Mode.add) {
+        newRuleId.current = data?.id;  
+      }
       await submitSettingsForm();
       discardRule();
     },
@@ -144,6 +146,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       ...rule,
       [MODE_FIELD]: Mode.edit,
     });
+    newRuleId.current = undefined;
     setEditedRule(rule);
   };
 
@@ -168,6 +171,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   });
 
   const handleSortChange = (event: GridSortChangeEvent) => {
+    newRuleId.current = undefined;
     const nextSortValue = event.sort.map(({ field, dir = 'asc' }) => ({ field, dir }));
     setSort(nextSortValue.length > 0 ? nextSortValue : DEFAULT_SORT);
   };
