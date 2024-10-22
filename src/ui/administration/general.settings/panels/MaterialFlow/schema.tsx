@@ -16,6 +16,7 @@ export const buildSchema: SchemaBuilder<EditableMaterialFlowAclRule, SchemaOptio
   groups,
   locations,
   isActive,
+  isLoading,
   onEdit,
   onDelete,
   onDiscard,
@@ -78,6 +79,7 @@ export const buildSchema: SchemaBuilder<EditableMaterialFlowAclRule, SchemaOptio
         onDiscard={onDiscard}
         onConfirm={onConfirm}
         isActive={isActive}
+        isLoading={isLoading}
       />
     ),
     sortable: false,

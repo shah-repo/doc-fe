@@ -24,12 +24,13 @@ function SettingsTable<T extends EditableItem> ({
     const item = dataItem as EditableItem;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
     const additionalProps = getRowProperties?.(dataItem) ?? {};
+    const { className, ...propsToAdd } = additionalProps;
 
     return React.cloneElement(
       row,
       {
-        className: cx(row.props.className, { [classes.updatingRow]: isUpdating }),
-        ...additionalProps,
+        className: cx(row.props.className, className, { [classes.updatingRow]: isUpdating }),
+        ...propsToAdd,
       },
     );
   };

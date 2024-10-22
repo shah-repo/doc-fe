@@ -1,7 +1,7 @@
 import { SortDescriptor } from '@progress/kendo-data-query';
 import { GridSortChangeEvent } from '@progress/kendo-react-grid';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { noop } from 'lodash';
+import { get } from 'lodash';
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,6 +27,7 @@ import SettingsTable from '../../components/SettingsTable';
 import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
 import { buildSchema } from './schema';
+import useStyles from './styles';
 import { EditableMaterialFlowAclRule } from './types';
 
 const PANEL_FIELD = 'materialFlowACLs';
@@ -57,11 +58,14 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const addRuleAction = useActionCreator(materialFlowAction.addRule);
   const updateRuleAction = useActionCreator(materialFlowAction.updateRule);
   const deleteRuleAction = useActionCreator(materialFlowAction.deleteRule);
+  const newRuleId = useRef<string>();
   const deleteConfirmationDialog = useDialog();
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
+  const classes = useStyles();
 
-  const async = useAsync({
-    onSuccess: async () => {
+  const async = useAsync<MaterialFlowAclRule>({
+    onSuccess: async (data) => {
+      newRuleId.current = data?.id;
       await submitSettingsForm();
       discardRule();
     },
@@ -106,6 +110,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       action: undefined,
       [MODE_FIELD]: Mode.add,
     };
+    newRuleId.current = undefined;
     setEditedRule(values);
     formik.setValues(values);
   };
@@ -144,10 +149,11 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
 
   const schema = buildSchema({
     isActive,
+    isLoading: async.isLoading,
     onEdit: isActive ? editRule : undefined,
     onDelete: isActive ? confirmRuleDeletion : undefined,
     onDiscard: discardRule,
-    onConfirm: async.isLoading ? noop : formik.submitForm,
+    onConfirm: formik.submitForm,
     locations,
     groups,
   });
@@ -169,12 +175,12 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const getRuleValue = (rule: EditableMaterialFlowAclRule, field: string) => {
     switch (field) {
       case 'action':
-        return rule.action?.toLowerCase() ?? '';
+        return get(rule, 'action', '').toLowerCase();
       case 'from':
       case 'to':
-        return rule[field]?.name.toLowerCase() ?? '';
+        return get(rule, [field, 'name'], '').toLowerCase();
       case 'groups':
-        return rule.groups?.[0].name.toLowerCase() ?? '';
+        return get(rule, ['groups', 0, 'name'], '').toLowerCase();
       default:
         return '';
     }
@@ -189,6 +195,23 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     );
     return editedRule?.[MODE_FIELD] === Mode.add ? [...sortedRules, editedRule] : sortedRules;
   }, [mappedRules, sort, editedRule]);
+
+  const newRuleRowRef = (node: HTMLDivElement | null) => {
+    if (node) {
+      setTimeout(() => {
+        requestAnimationFrame(() => node.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+      }, 0);
+    }
+  };
+
+  const addNewRowAnimation = (rule: EditableMaterialFlowAclRule) => {
+    if (rule.id === newRuleId.current) {
+      return {
+        className: classes.newRow,
+        ref: newRuleRowRef,
+      };
+    }
+  };
 
   return (
     <SettingsPanel
@@ -215,6 +238,7 @@ const MaterialFlowSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
           schema={schema}
           addButtonLabel={translate('common.add.new')}
           onAdd={addRule}
+          getRowProperties={addNewRowAnimation}
           skipDataProcessing
           sortable
         />
