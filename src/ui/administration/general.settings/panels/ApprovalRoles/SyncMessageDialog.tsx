@@ -13,12 +13,14 @@ interface Props {
   isOpen: boolean
   dam: Dam
   closeDialog: () => void
+  dialogContent?: JSX.Element
 }
 
 const SyncMessageDialog: React.FC<Props> = ({
   isOpen,
   dam,
   closeDialog,
+  dialogContent,
 }) => {
   const classes = useStyles();
   const url = documentVersionPath(dam?.documentRevision?.id ?? '', dam?.document?.id ?? '');
@@ -36,7 +38,10 @@ const SyncMessageDialog: React.FC<Props> = ({
         </Typography>
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
-        <Text translation="administration.general.settings.approvalRoles.sync.message.dialog.content" />
+        {(
+          dialogContent
+          ?? <>
+          <Text translation="administration.general.settings.approvalRoles.sync.message.dialog.content" />
         <Link
         to={url}
         className={classes.link}>
@@ -45,13 +50,14 @@ const SyncMessageDialog: React.FC<Props> = ({
         <div className={classes.bottomText}>
         <Text translation="administration.general.settings.approvalRoles.sync.message.dialog.content.bottom" />
         </div>
+        </>
+        )}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={closeDialog}>
+      <DialogActions className={classes.dialogAction}>
+        <Button onClick={closeDialog} className={classes.okBtn}>
           <Text translation="common.ok" />
         </Button>
       </DialogActions>
-
     </Dialog>
   );
 };
