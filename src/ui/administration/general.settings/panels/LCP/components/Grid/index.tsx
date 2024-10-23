@@ -379,6 +379,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema({
     onConfirm: submitForm,
     onDiscard: onDiscardPhase,
+    selectedPartGroups,
     hasEditLCPPermission,
   });
 
@@ -446,7 +447,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
           ...rowProps,
           children: (
             <td colSpan={fieldCount}>
-              <AddPhase {...rowProps} addPhase={addPhase} />
+              <AddPhase {...rowProps} addPhase={addPhase} selectedPartGroups={selectedPartGroups} />
             </td>
           ),
         }),
