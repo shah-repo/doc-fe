@@ -3,10 +3,10 @@ import { useFormikContext } from 'formik';
 import React from 'react';
 import SwitchControl from '../../../administration/general.settings/components/SwitchControl';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import { CustomTemplateProps, EditableSupplierContact } from '../types';
+import { CustomSiteTemplateProps, EditableSite } from '../types';
 import styles from './styles';
 
-interface Props extends CustomTemplateProps {
+interface Props extends CustomSiteTemplateProps {
   isActive: boolean
   isInEditMode: boolean
   onPrimaryChange?: (id: string) => void
@@ -14,7 +14,7 @@ interface Props extends CustomTemplateProps {
 
 const Editor: React.FC<Props> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, setFieldValue } = useFormikContext<EditableSupplierContact>();
+  const { values, setFieldValue } = useFormikContext<EditableSite>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(field, true);
@@ -23,7 +23,7 @@ const Editor: React.FC<Props> = ({ field }) => {
   return (
     <Box display="flex" justifyContent="center" mt={0.75}>
       <SwitchControl
-        checked={values.isPrimary}
+        checked={values.sameAsHQ}
         onChange={handleChange}
         label="" />
     </Box>
@@ -54,7 +54,7 @@ export const SameAsHQCellCellTemplate: React.FC<Props> = (props) => {
   return (
     <Box display="flex" justifyContent="center">
       <SwitchControl
-        checked={dataItem.isPrimary}
+        checked={dataItem.sameAsHQ}
         onChange={handleChange}
         classes={{ root: classes.root }}
         name={`primary-supplier-${dataIndex}`}

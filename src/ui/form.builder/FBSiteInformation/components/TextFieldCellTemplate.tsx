@@ -5,9 +5,9 @@ import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../components/OverflowContent';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { CustomTemplateProps } from '../types';
+import { CustomSiteTemplateProps } from '../types';
 
-const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
+const Editor: React.FC<CustomSiteTemplateProps> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps } = useFormikContext();
 
@@ -25,7 +25,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   );
 };
 
-export const TextFieldCellTemplate: React.FC<CustomTemplateProps> = (props) => {
+export const TextFieldCellTemplate: React.FC<CustomSiteTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 

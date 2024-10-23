@@ -3,7 +3,7 @@ import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.t
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { SameAsHQCellCellTemplate } from './components/SameAsHQCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
-import { EditableSupplierContact, SchemaOptions } from './types';
+import { EditableSite, SchemaOptions } from './types';
 
 export const buildSchema = ({
   isActive,
@@ -13,18 +13,16 @@ export const buildSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
-  onPrimaryChange,
-}: SchemaOptions): Array<ColumnDefinition<EditableSupplierContact>> => {
+}: SchemaOptions): Array<ColumnDefinition<EditableSite>> => {
   return [
     {
-      id: 'isPrimary',
-      field: 'isPrimary',
+      id: 'sameAsHQ',
+      field: 'sameAsHQ',
       filterable: false,
       title: 'form.builder.site.inforation.grid.heading.same.as.hq',
       template: (props) => (
         <SameAsHQCellCellTemplate
           {...props}
-          onPrimaryChange={onPrimaryChange}
           isActive={isActive}
           isInEditMode={isInEditMode}
         />

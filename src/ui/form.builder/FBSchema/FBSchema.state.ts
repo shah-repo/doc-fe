@@ -48,7 +48,6 @@ import FBPOReceive from '../FBPOReceive/FBPOReceive';
 import FBProcedure from '../FBProcedure/FBProcedure';
 import FBProcedureDiff from '../FBProcedureDiff/FBProcedureDiff';
 import FBPurchaseOrder from '../FBPurchaseOrder/FBPurchaseOrder';
-import FBPurchaseOrderSummary from '../FBPurchaseOrder/FBPurchaseOrderSummary';
 import FBQuantityField from '../FBQuantityField/FBQuantityField';
 import FBQuantityUnitField from '../FBQuantityUnitField/FBQuantityUnitField';
 import FBRadio from '../FBRadio/FBRadio';
@@ -58,6 +57,7 @@ import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
 import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
+import FBSiteInformation from '../FBSiteInformation';
 import FBSubsection from '../FBSubsection/FBSubsection';
 import FBSupplier from '../FBSupplier/FBSupplier';
 import FBTask from '../FBTask/FBTask';
@@ -112,7 +112,8 @@ class FBSchemaState {
     timer: FBTimerField,
     traineeList: FBTraineeList,
     purchaseorder: FBPurchaseOrder,
-    purchaseordersummary: FBPurchaseOrderSummary,
+    // purchaseordersummary: FBPurchaseOrderSummary,
+    purchaseordersummary: FBSiteInformation,
     poreceive: FBPOReceive,
     documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,

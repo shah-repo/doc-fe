@@ -8,31 +8,19 @@ export interface SchemaOptions {
   actionsClass: string
   onConfirm?: () => void
   onDiscard?: () => void
-  onDelete?: (dataItem: EditableSupplierContact) => void
-  onRowClick?: (e: SupplierContactEditEvent) => void
+  onDelete?: (dataItem: EditableSite) => void
+  onRowClick?: (e: SiteEditEvent) => void
   onPrimaryChange?: (id: string) => void
 }
 
-export type FBSupplierContactsProps =
+export type FBSiteProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled'>
 & {
-  contacts: SupplierContact[]
-  deleteContact: (item: SupplierContact) => void
-  updateContact: (item: SupplierContact, id?: string) => void
-  setContacts: React.Dispatch<React.SetStateAction<SupplierContact[]>>
-  setPrimaryContact: (id: string) => void
+  sites: Site[]
+  deleteContact: (item: EditableSite) => void
+  updateContact: (item: EditableSite, id?: string) => void
+  setSites: React.Dispatch<React.SetStateAction<EditableSite[]>>
 };
-
-export interface SupplierContact {
-  id: string
-  isPrimary: boolean
-  name: string
-  title?: string
-  email?: string
-  phoneNumber?: string
-  address?: string
-  comments?: string
-}
 
 export interface siteContact {
   id: string
@@ -45,14 +33,15 @@ export interface siteContact {
   other: string
 }
 
-export interface SiteInformation {
+export interface Site {
   id: string
+  sameAsHQ: boolean
   siteName: string
   siteAddress: string
   city: string
   zipCode: string
   country: string
-  approvedToReceive: string // Yes or No
+  approvedToReceive: string
   siteContact: siteContact[]
 
 }
@@ -61,34 +50,22 @@ export interface EditableSiteContact extends siteContact {
   [MODE_FIELD]: Mode
 }
 
-export interface siteContactEditEvent {
-  dataItem: EditableSupplierContact
-}
-
-export interface CustomSiteContactTemplateProps extends CellTemplateProps<EditableSiteContact> {
-  onClick?: (e: siteContactEditEvent) => void
-}
-
-export interface EditableSiteInformation extends SiteInformation {
-  [MODE_FIELD]: Mode
-}
-
-export interface EditableSiteContactEditEvent {
+export interface SiteContactEditEvent {
   dataItem: EditableSiteContact
 }
 
-export interface CustomSiteInformationTemplateProps extends CellTemplateProps<EditableSiteInformation> {
-  onClick?: (e: EditableSiteContactEditEvent) => void
+export interface CustomSiteContactTemplateProps extends CellTemplateProps<EditableSiteContact> {
+  onClick?: (e: SiteContactEditEvent) => void
 }
 
-export interface EditableSupplierContact extends SupplierContact {
+export interface EditableSite extends Site {
   [MODE_FIELD]: Mode
 }
 
-export interface SupplierContactEditEvent {
-  dataItem: EditableSupplierContact
+export interface SiteEditEvent {
+  dataItem: EditableSite
 }
 
-export interface CustomTemplateProps extends CellTemplateProps<EditableSupplierContact> {
-  onClick?: (e: SupplierContactEditEvent) => void
+export interface CustomSiteTemplateProps extends CellTemplateProps<EditableSite> {
+  onClick?: (e: SiteEditEvent) => void
 }

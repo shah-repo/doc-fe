@@ -16,85 +16,81 @@ import FB from '../helpers/FB';
 import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableSupplierContact, FBSupplierContactsProps, SupplierContactEditEvent } from './types';
+import { EditableSite, FBSiteProps, SiteEditEvent } from './types';
 import { withFBSiteInformation } from './wrap';
 
-const FBSiteInformation: React.FC<FBSupplierContactsProps> = ({
+const FBSiteInformation: React.FC<FBSiteProps> = ({
   label = 'form.builder.customer.site.information',
   name = '',
   disabled,
-  contacts = [],
-  setPrimaryContact,
-  setContacts,
+  sites = [],
+  setSites,
   ...props
 }) => {
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
   const isActive = !disabled;
-  const [editedContact, setEditedContact] = useState<Partial<EditableSupplierContact>>();
+  const [editedSite, setEditedSite] = useState<Partial<EditableSite>>();
 
-  const isContactAdded = editedContact?.[MODE_FIELD] === Mode.add;
-  const editContact = ({ dataItem }: SupplierContactEditEvent) => setEditedContact(dataItem);
-  const isInEditMode = editedContact !== undefined;
+  const isSiteAdded = editedSite?.[MODE_FIELD] === Mode.add;
+  const editContact = ({ dataItem }: SiteEditEvent) => setEditedSite(dataItem);
+  const isInEditMode = editedSite !== undefined;
   const handleRowClick = isActive && !isInEditMode ? editContact : undefined;
 
-  const formik = useFormik<Partial<EditableSupplierContact>>({
+  const formik = useFormik<Partial<EditableSite>>({
     initialValues: {},
-    onSubmit: (values: Partial<EditableSupplierContact>) => {
+    onSubmit: (values: Partial<EditableSite>) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
-      const supplierContacts: EditableSupplierContact[]
+      const sites: EditableSite[]
         = workspaceState?.formInput?.[name] ?? [];
-      const updatedContact = omit(values, FIELDS_TO_OMIT);
+      const updatedSite = omit(values, FIELDS_TO_OMIT);
 
-      const updatedContacts = isAddition
-        ? [...supplierContacts, updatedContact]
-        : supplierContacts.map((contact) =>
-          contact.id === values.id
-            ? updatedContact
-            : updatedContact.isPrimary
-              ? { ...contact, isPrimary: false }
-              : contact,
+      const updatedSites = isAddition
+        ? [...sites, updatedSite]
+        : sites.map((site) =>
+          site.id === values.id
+            ? updatedSite
+            : site,
         );
 
-      formState?.setFieldValue(name, updatedContacts);
+      formState?.setFieldValue(name, updatedSites);
       workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
-        [name]: updatedContacts,
+        [name]: updatedSites,
       });
-      discardContact();
+      onDiscardSite();
     },
   });
 
   const { submitForm, resetForm, setValues, dirty } = formik;
 
   useEffect(() => {
-    resetForm({ values: editedContact ?? {} });
-  }, [editedContact, setValues, resetForm]);
+    resetForm({ values: editedSite ?? {} });
+  }, [editedSite, setValues, resetForm]);
 
-  const createDraftContact = () => setEditedContact({
+  const createSite = () => setEditedSite({
     id: uuidv4(),
-    isPrimary: contacts.length === 0,
     [MODE_FIELD]: Mode.add,
   });
 
-  const discardContact = () => setEditedContact(undefined);
+  const onDiscardSite = () => setEditedSite(undefined);
 
-  const onDeleteContact = (dataItem: EditableSupplierContact) => {
-    if (!editedContact) return;
-    const updatedContacts = contacts.filter((contact) =>
-      contact.id !== dataItem.id,
+  const onDeleteSite = (dataItem: EditableSite) => {
+    if (!editedSite) return;
+    const updatedSites = sites.filter((site) =>
+      site.id !== dataItem.id,
     );
-    setContacts(updatedContacts);
-  formState?.setFieldValue(name, updatedContacts);
+    setSites(updatedSites);
+  formState?.setFieldValue(name, updatedSites);
   workspaceState?.saveDocRev({
     ...workspaceState?.formInput,
-    [name]: updatedContacts,
+    [name]: updatedSites,
   });
-  discardContact();
+  onDiscardSite();
   };
 
-  const rowRender: DataGridProps<EditableSupplierContact>['rowRender'] = (row, { dataItem }) => {
-    const item = dataItem as EditableSupplierContact;
+  const rowRender: DataGridProps<EditableSite>['rowRender'] = (row, { dataItem }) => {
+    const item = dataItem as EditableSite;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
     if (!isUpdating) {
       return row;
@@ -120,22 +116,21 @@ const FBSiteInformation: React.FC<FBSupplierContactsProps> = ({
     actionsClass: classes.actionsCell,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
-    onDiscard: discardContact,
-    onDelete: onDeleteContact,
-    onPrimaryChange: setPrimaryContact,
+    onDiscard: onDiscardSite,
+    onDelete: onDeleteSite,
   });
 
-  const contactsList = contacts.reduce((list, item) => {
-    const isContactEdited = editedContact && editedContact.id === item.id;
+  const siteList = sites.reduce((list, item) => {
+    const isSiteEdited = editedSite && editedSite.id === item.id;
 
     return [
       ...list,
       {
-        ...(isContactEdited ? editedContact : item),
-        [MODE_FIELD]: isContactEdited ? Mode.edit : Mode.show,
+        ...(isSiteEdited ? editedSite : item),
+        [MODE_FIELD]: isSiteEdited ? Mode.edit : Mode.show,
       },
     ];
-  }, isContactAdded ? [editedContact] : []);
+  }, isSiteAdded ? [editedSite] : []);
 
   return (
     <Box className={classes.root} data-cy="site-information">
@@ -145,12 +140,12 @@ const FBSiteInformation: React.FC<FBSupplierContactsProps> = ({
       <FBInput {...props} type="siteInformation" name={name}>
         <FBSection label={label} />
       </FBInput>
-      <KendoDataGrid<EditableSupplierContact>
+      <KendoDataGrid<EditableSite>
         className={cx(classes.grid, { [classes.gridWithButton]: isActive })}
         fullWidth
         hasBoxScrollbars
         schema={schema}
-        data={contactsList as EditableSupplierContact[]}
+        data={siteList as EditableSite[]}
         onRowClick={handleRowClick}
         rowRender={rowRender}
       />
@@ -160,7 +155,7 @@ const FBSiteInformation: React.FC<FBSupplierContactsProps> = ({
           fullWidth
           attached
           disabled={isInEditMode}
-          onClick={createDraftContact}
+          onClick={createSite}
           data-cy="add-button"
         >
           {translate('form.builder.customer.site.add.site')}
