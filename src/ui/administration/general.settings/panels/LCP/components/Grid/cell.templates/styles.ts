@@ -75,7 +75,7 @@ export default makeStyles((theme) => ({
   headerContent: {
     color: Colors.black,
     overflow: 'hidden',
-    whiteSpace: 'nowrap',
+    whiteSpace: 'normal',
     textOverflow: 'ellipsis',
   },
 }));
