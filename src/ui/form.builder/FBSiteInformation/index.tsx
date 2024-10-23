@@ -1,4 +1,5 @@
 import { Box } from '@material-ui/core';
+import { GridDetailRowProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
@@ -13,8 +14,9 @@ import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.type
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import FB from '../helpers/FB';
-import { FIELDS_TO_OMIT } from './constants';
+import { EXPAND_FIELD, FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
+import SiteContact from './SiteContact';
 import useStyles from './styles';
 import { EditableSite, FBSiteProps, SiteEditEvent } from './types';
 import { withFBSiteInformation } from './wrap';
@@ -128,9 +130,20 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       {
         ...(isSiteEdited ? editedSite : item),
         [MODE_FIELD]: isSiteEdited ? Mode.edit : Mode.show,
+        [EXPAND_FIELD]: true,
       },
     ];
   }, isSiteAdded ? [editedSite] : []);
+
+  const DetailComponent = (props: GridDetailRowProps) => {
+    const dataItem = props.dataItem;
+    console.log('dataItem0', dataItem);
+    return (
+      <section>
+        <SiteContact />
+      </section>
+    );
+  };
 
   return (
     <Box className={classes.root} data-cy="site-information">
@@ -145,6 +158,12 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
         fullWidth
         hasBoxScrollbars
         schema={schema}
+        detail={(props) => (
+          <DetailComponent
+            {...props}
+          />
+        )}
+        expandField={EXPAND_FIELD}
         data={siteList as EditableSite[]}
         onRowClick={handleRowClick}
         rowRender={rowRender}
