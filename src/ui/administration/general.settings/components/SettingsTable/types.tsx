@@ -1,9 +1,13 @@
 import { ColumnDefinition, DataGridProps, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
+interface CustomRowProperties extends Record<string, unknown> {
+  className?: string
+}
+
 export interface SettingsTableProps<T extends EditableItem = EditableItem> extends DataGridProps<T> {
   addButtonLabel?: string
   onAdd?: () => void
-  getRowProperties?: (item: T) => Record<string, unknown> & { className?: string } | void
+  getRowProperties?: (item: T) => CustomRowProperties | undefined
   isEditing?: boolean
   isActive?: boolean
 }
