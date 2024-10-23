@@ -2157,6 +2157,8 @@
   "bulkImport.uploadAttachments.subTitleError": "Uploading a zip file may take several minutes depending on the file size.",
   "bulkImport.approvals.title": "Submit for Approval",
   "bulkImport.approvals.subTitle": "Select the approvers below",
+  "bulkImport.approvals.pending.title": "Pending Approvals",
+  "bulkImport.approvals.pending.subTitle": "Importing will begin once all approvals are received",
   "bulkImport.approvals.approvers": "Approvers",
   "bulkImport.approvals.step1Title": "Select data type",
   "bulkImport.approvals.step1SubTitle": "Please select type of data to import",

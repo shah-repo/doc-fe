@@ -119,11 +119,16 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   };
 
   const handleWithdrawSubmission = async () => {
-    if (bulkImport?.id && bulkImport.status === BkStatus.CANCELLED) {
-      await updateBulkImportStatus(bulkImport?.id, BkStatus.STARTED, userState.current);
+    try {
+      dispatch(setIsLoading(true));
+      if (bulkImport?.id && bulkImport.status === BkStatus.CANCELLED) {
+        await updateBulkImportStatus(bulkImport?.id, BkStatus.STARTED, userState.current);
+      }
+      await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id, userState.current);
+      getBulkImportData();
+    } catch (error) {
+      dispatch(setIsLoading(false));
     }
-    await postDocumentRevisionsWithdrawn(bulkImport?.documentRevision?.id, userState.current);
-    getBulkImportData();
   };
 
   const getBulkImportData = () => {
@@ -163,7 +168,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
 
   return (
     <>
-      <StepTitle title="bulkImport.approvals.title" subTitle="bulkImport.approvals.subTitle" />
+      <StepTitle title={haveApprovers ? "bulkImport.approvals.pending.title" : "bulkImport.approvals.title"} subTitle={haveApprovers ? "bulkImport.approvals.pending.subTitle" : "bulkImport.approvals.subTitle"} />
       <Box className={classes.container}>
         <Formik initialValues={{}} onSubmit={handleSubmit}>
           {({ setFieldValue }) => (
