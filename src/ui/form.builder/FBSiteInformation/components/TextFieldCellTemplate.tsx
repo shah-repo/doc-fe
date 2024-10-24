@@ -27,7 +27,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field }) => {
 
 export const TextFieldCellTemplate: React.FC<CustomSiteTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const isEditMode = dataItem[MODE_FIELD] && [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
     return <Editor {...props} />;

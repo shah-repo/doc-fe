@@ -1,9 +1,9 @@
 import React from 'react';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { CustomSiteTemplateProps, SchemaOptions } from '../types';
+import { CustomSiteContactTemplateProps, SchemaOptions } from '../types';
 import { ActionsCell } from './ActionsCell';
 
-type Props = CustomSiteTemplateProps & Pick<SchemaOptions, 'onConfirm' | 'onDiscard' | 'onDelete'>;
+type Props = CustomSiteContactTemplateProps & Pick<SchemaOptions, 'onConfirm' | 'onDiscard' | 'onDelete'>;
 
 export const ActionsCellTemplate: React.FC<Props> = (props) => {
   const { dataItem, onConfirm, onDiscard, onDelete } = props;

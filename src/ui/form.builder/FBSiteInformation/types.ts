@@ -1,6 +1,7 @@
 import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FBInputProps } from '../FBInput/FBInput.types';
+import { siteContact } from './SiteContact/types';
 
 export interface SchemaOptions {
   isActive: boolean
@@ -22,17 +23,6 @@ export type FBSiteProps =
   setSites: React.Dispatch<React.SetStateAction<EditableSite[]>>
 };
 
-export interface siteContact {
-  id: string
-  primary: boolean
-  shipping: boolean
-  attention: boolean
-  name: string
-  email: string
-  phoneNumber: string
-  other: string
-}
-
 export interface Site {
   id: string
   sameAsHQ: boolean
@@ -46,20 +36,8 @@ export interface Site {
 
 }
 
-export interface EditableSiteContact extends siteContact {
-  [MODE_FIELD]: Mode
-}
-
-export interface SiteContactEditEvent {
-  dataItem: EditableSiteContact
-}
-
-export interface CustomSiteContactTemplateProps extends CellTemplateProps<EditableSiteContact> {
-  onClick?: (e: SiteContactEditEvent) => void
-}
-
 export interface EditableSite extends Site {
-  [MODE_FIELD]: Mode
+  [MODE_FIELD]?: Mode
 }
 
 export interface SiteEditEvent {

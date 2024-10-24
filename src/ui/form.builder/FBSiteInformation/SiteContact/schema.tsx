@@ -3,7 +3,7 @@ import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGri
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { PrimaryCell } from './components/PrimaryCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
-import { EditableSite, SchemaOptions } from './types';
+import { EditableSiteContact, SchemaOptions } from './types';
 
 export const buildSchema = ({
   isActive,
@@ -13,7 +13,7 @@ export const buildSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
-}: SchemaOptions): Array<ColumnDefinition<EditableSite>> => {
+}: SchemaOptions): Array<ColumnDefinition<EditableSiteContact>> => {
   return [
     {
       id: 'primary',

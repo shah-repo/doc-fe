@@ -7,7 +7,7 @@ type Props = CustomSiteTemplateProps & Pick<SchemaOptions, 'onConfirm' | 'onDisc
 
 export const ActionsCellTemplate: React.FC<Props> = (props) => {
   const { dataItem, onConfirm, onDiscard, onDelete } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const isEditMode = dataItem[MODE_FIELD] && [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const isAddition = Mode.add === dataItem[MODE_FIELD];
 
   if (!isEditMode) {

@@ -3,8 +3,8 @@ import { useFormikContext } from 'formik';
 import React from 'react';
 import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { Radio } from '../../../../components/forms/fields-next';
-import { CustomSiteTemplateProps, EditableSite } from '../types';
-interface Props extends CustomSiteTemplateProps {
+import { CustomSiteContactTemplateProps, EditableSiteContact } from '../types';
+interface Props extends CustomSiteContactTemplateProps{
   isActive: boolean
   isInEditMode: boolean
   onPrimaryChange?: (id: string) => void
@@ -12,7 +12,7 @@ interface Props extends CustomSiteTemplateProps {
 
 const Editor: React.FC<Props> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { values, setFieldValue } = useFormikContext<EditableSite>();
+  const { values, setFieldValue } = useFormikContext<EditableSiteContact>();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(field, true);
   };

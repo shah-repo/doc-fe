@@ -93,7 +93,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const rowRender: DataGridProps<EditableSite>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableSite;
-    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
+    const isUpdating = item[MODE_FIELD] && [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
     if (!isUpdating) {
       return row;
     }
@@ -140,7 +140,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     console.log('dataItem0', dataItem);
     return (
       <section>
-        <SiteContact />
+        <SiteContact dataItem={dataItem} name={name} />
       </section>
     );
   };
@@ -150,7 +150,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       <PromptIfDirty
         dirty={dirty}
       />
-      <FBInput {...props} type="siteInformation" name={name}>
+      <FBInput {...props} type="siteInformations" name={name}>
         <FBSection label={label} />
       </FBInput>
       <KendoDataGrid<EditableSite>
