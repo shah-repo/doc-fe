@@ -75,6 +75,7 @@ export type FBInputType =
   | 'poapprovals'
   | 'lhrbuild'
   | 'purchaseordersummary'
+  | 'siteInformations'
   | 'downloadsheet'
   | 'lotTransfers'
   | 'lotQuantity'

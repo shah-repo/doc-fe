@@ -114,6 +114,7 @@ class FBSchemaState {
     purchaseorder: FBPurchaseOrder,
     // purchaseordersummary: FBPurchaseOrderSummary,
     purchaseordersummary: FBSiteInformation,
+    siteInformations: FBSiteInformation,
     poreceive: FBPOReceive,
     documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,
