@@ -42,13 +42,11 @@ const HeaderEquipmentStatus: React.FC<Props> = ({ documentRevision }) => {
   const isEquipmentStatusEditable = canChangeEquipmentStatus && !isVoidedOrObsolete;
   const statusLabel = documentRevision.eqStatus || EquipmentStatus.Inactive;
   const [draftEquipmentStatus, setDraftEquipmentStatus] = React.useState(statusLabel);
-  const { equipmentFamily: { statuses } } = useSelector(companySelectors.getGeneralSettings);
+  const { equipmentFamily: { equipmentStatuses } } = useSelector(companySelectors.getGeneralSettings);
 
-  const options = statuses?.filter(value => value.active)
-  .map(value => ({
-    value: value.name,
-    label: value.name,
-  }));
+  const options = (equipmentStatuses ?? Object.values(EquipmentStatus))
+    .filter(value => value.isActive)
+    .map(status => ({ value: status.name, label: status.name }));
 
   const handleEqStatusChange = (equipmentStatus) => {
     if (equipmentStatus === statusLabel) {

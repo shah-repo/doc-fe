@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "Document Management - Frontend Application",
-  "version": "24.2.5",
+  "version": "24.3",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": ">1.12.7",

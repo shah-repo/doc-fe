@@ -1,9 +1,11 @@
 import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
+import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
 import { GroupTag, Permission } from '../auth/types';
-import { Nullable, User } from '../common/types';
+import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
+import { EquipmentStatus, LotStatus } from '../documentRevisions/types';
 import { MaterialFlowAclRule } from '../materialFlowAcl/types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 
@@ -182,16 +184,29 @@ export interface EquipmentLocation {
   active: boolean
 }
 
-export interface EquipmentStatuses {
-  id: string
-  name: string
-  active: boolean
+interface EquipmentFamilyEquipmentStatus {
+  name: EquipmentStatus
+  isActive: boolean
 }
 
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
-  statuses: EquipmentStatuses[]
+  equipmentStatuses: EquipmentFamilyEquipmentStatus[]
+}
+
+enum SystemTransactionsEvent {
+  CreateFromReceiving='createFromReceiving',
+}
+
+export interface SystemTransactionsRule {
+  id: string
+  isActive: boolean
+  event: SystemTransactionsEvent
+  action: LotTransferType
+  from: string
+  to: string | null
+  lotStatus: LotStatus | null
 }
 
 interface AllocationConfig {
@@ -199,15 +214,16 @@ interface AllocationConfig {
   expiredLotsPrompt: ExpiredLotTypes
 }
 export interface GeneralSettings {
-  zebraPrint: Nullable<ZebraPrintSettings[]>
-  equipmentFamily: EquipmentFamilySettings
-  approvalRequestAdmin: boolean
-  shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
-  lifecyclePhases?: {categories: LCPResponse[]} | LCP[]
-  materialFlowACLs: MaterialFlowAclRule[]
+  approvalRequestAdmin: boolean
+  equipmentFamily: EquipmentFamilySettings
   isMaterialFlowAclEnabled: boolean
+  lifecyclePhases?: { categories: LCPResponse[] } | LCP[]
+  materialFlowACLs: MaterialFlowAclRule[]
+  shouldAutoUpdateLotStatus: boolean
   shouldNotifyLcpMismatch: NotifyPartLCP
+  systemTransactions: SystemTransactionsRule[]
+  zebraPrint: ZebraPrintSettings[] | null
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

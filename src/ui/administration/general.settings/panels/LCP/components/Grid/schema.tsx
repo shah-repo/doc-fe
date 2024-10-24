@@ -12,6 +12,7 @@ import { LCP, SchemaOptions } from './types';
 export const LCPSchema = ({
   onConfirm,
   onDiscard,
+  selectedPartGroups,
   hasEditLCPPermission,
 }: SchemaOptions): Array<ColumnDefinition<LCP>> => {
   return [
@@ -22,7 +23,7 @@ export const LCPSchema = ({
       width: 60,
       filterable: false,
       locked: false,
-      cell: (props) => <ActiveCell {...props} hasEditLCPPermission={hasEditLCPPermission} />,
+      cell: (props) => <ActiveCell {...props} hasEditLCPPermission={hasEditLCPPermission} selectedPartGroups={selectedPartGroups} />,
       groupable: false,
       sortable: false,
     },
@@ -32,7 +33,7 @@ export const LCPSchema = ({
       title: translate('administration.general.settings.lcp.internalType'),
       width: 200,
       locked: false,
-      cell: (props) => <EnlilTypeCell {...props} />,
+      cell: (props) => <EnlilTypeCell {...props} partGroups={selectedPartGroups} />,
       groupable: false,
       sortable: false,
     },
@@ -41,7 +42,7 @@ export const LCPSchema = ({
       field: 'displayLabel',
       locked: false,
       groupable: false,
-      cell: LabelCell,
+      cell: (props) => <LabelCell {...props} partGroups={selectedPartGroups} />,
       title: translate('administration.general.settings.lcp.displayLabel'),
       width: 250,
     },
@@ -55,7 +56,7 @@ export const LCPSchema = ({
         {...props}
         content="administration.general.settings.lcp.isApprovedSupplierEnforcedOnPO" />,
       width: 150,
-      cell: DropdownCell,
+      cell: (props) => <DropdownCell {...props} partGroups={selectedPartGroups} />,
       mainOrderIndex: 3,
     },
     {
@@ -68,7 +69,7 @@ export const LCPSchema = ({
       headerCell: (props) => <HeaderCell
         {...props}
         content="administration.general.settings.lcp.isAllowedOnLhrProd" />,
-      cell: DropdownCell,
+      cell: (props) => <DropdownCell {...props} partGroups={selectedPartGroups} />,
       mainOrderIndex: 4,
     },
     {
@@ -80,7 +81,7 @@ export const LCPSchema = ({
       headerCell: (props) => <HeaderCell
         {...props}
         content="administration.general.settings.lcp.isAllowedToBuy" />,
-      cell: DropdownCell,
+      cell: (props) => <DropdownCell {...props} partGroups={selectedPartGroups} />,
       width: 150,
       mainOrderIndex: 5,
     },
@@ -102,6 +103,7 @@ export const LCPSchema = ({
           {...props}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
+          selectedPartGroups={selectedPartGroups}
         />
       ),
       width: 100,
