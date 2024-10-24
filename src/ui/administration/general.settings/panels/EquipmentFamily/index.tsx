@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
-import { EquipmentLocation, EquipmentStatuses, GeneralSettings } from '../../../../../state/ducks/company/types';
+import { EquipmentFamilyEquipmentStatus, EquipmentLocation, GeneralSettings } from '../../../../../state/ducks/company/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
@@ -23,12 +23,12 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
   const locations = getFieldProps<EquipmentLocation[]>('equipmentFamily.locations').value;
-  const statuses = getFieldProps<EquipmentStatuses[]>('equipmentFamily.equipmentStatuses').value;
+  const statuses = getFieldProps<EquipmentFamilyEquipmentStatus[]>('equipmentFamily.equipmentStatuses').value;
   const fieldProps = getFieldProps<boolean>('equipmentFamily.autoSyncEnabled');
   const settingsId = useSelector(companySelectors.getGeneralSettingsId);
   const [locationsData, setLocationsData] = React.useState<EquipmentLocation[]>(locations);
   const [editedLocation, setEditedLocation] = React.useState<EditableEquipmentLocation>();
-  const [statusesData, setStatusesData] = React.useState<EquipmentStatuses[]>(statuses);
+  const [statusesData, setStatusesData] = React.useState<EquipmentFamilyEquipmentStatus[]>(statuses);
 
   const discardLocation = () => setEditedLocation(undefined);
 

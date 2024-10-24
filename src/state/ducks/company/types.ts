@@ -184,7 +184,7 @@ export interface EquipmentLocation {
   active: boolean
 }
 
-interface EquipmentFamilyEquipmentStatus {
+export interface EquipmentFamilyEquipmentStatus {
   name: EquipmentStatus
   isActive: boolean
 }
