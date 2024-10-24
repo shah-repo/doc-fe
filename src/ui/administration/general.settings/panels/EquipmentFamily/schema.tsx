@@ -5,7 +5,7 @@ import TextCellTemplate from '../../components/SettingsTable/components/TextCell
 import { SchemaBuilder } from '../../components/SettingsTable/types';
 import { EditableEquipmentLocation, EditableEquipmentStatuses } from './types';
 
-export const buildSchema: SchemaBuilder<EditableEquipmentLocation> = ({
+export const buildEQLocationsSchema: SchemaBuilder<EditableEquipmentLocation> = ({
   isActive,
   onEdit,
   onActiveStateChange,
@@ -49,7 +49,7 @@ export const buildSchema: SchemaBuilder<EditableEquipmentLocation> = ({
   },
 ]);
 
-export const statusBuildSchema: SchemaBuilder<EditableEquipmentStatuses> = ({
+export const buildEQStatusesSchema: SchemaBuilder<EditableEquipmentStatuses> = ({
   onActiveStateChange,
 }) => ([
   {

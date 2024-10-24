@@ -16,7 +16,7 @@ import SettingsPanelSection from '../../components/SettingsPanelSection';
 import SettingsTable from '../../components/SettingsTable';
 import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
-import { buildSchema, statusBuildSchema } from './schema';
+import { buildEQLocationsSchema, buildEQStatusesSchema } from './schema';
 import { EditableEquipmentLocation, EditableEquipmentStatuses } from './types';
 
 const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
@@ -102,7 +102,7 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     setStatusesData(statuses);
   }, [statuses]);
 
-  const schema = buildSchema({
+  const schema = buildEQLocationsSchema({
     isActive: true,
     onEdit: setEditedLocation,
     onActiveStateChange: changeLocationActiveState,
@@ -110,7 +110,7 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     onConfirm: submitForm,
   });
 
-  const statusSchema = statusBuildSchema({
+  const statusSchema = buildEQStatusesSchema({
     onActiveStateChange: changeStatusActiveState,
   });
 
