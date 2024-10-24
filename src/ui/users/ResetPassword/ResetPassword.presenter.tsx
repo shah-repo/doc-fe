@@ -9,6 +9,7 @@ import { FormikFieldProps } from '../../components/forms/fields-next/FormikField
 import { TextFieldProps } from '../../components/forms/fields-next/TextField/TextField.types';
 import FormMessage from '../../components/forms/FormMessage';
 import { HOME_URL } from '../../constants/urls';
+import { withThemeNext } from '../../layout/theme-next';
 import useStyles from './ResetPassword.styles';
 
 interface Props {
@@ -16,13 +17,13 @@ interface Props {
   logo: string
 }
 
-const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
+const ResetPasswordPresenter: React.FC<Props> = ({
   asyncState,
   logo,
 }) => {
-  const classes = useStyles();
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps } = useFormikContext();
+  const classes = useStyles();
 
   const sharedFieldProps: Partial<FormikFieldProps> = {
     required: true,
@@ -34,13 +35,13 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
     },
   };
 
-  const sharedInputProps: Partial<TextFieldProps> = {
+  const getSharedInputProps = (autocomplete = 'new-password'): Partial<TextFieldProps> => ({
     type: 'password',
     inputProps: {
       className: classes.field,
-      autocomplete: 'current-password',
+      autocomplete,
     },
-  };
+  });
 
   return (
     <div className={classes.root}>
@@ -51,15 +52,15 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
           className={classes.logo}
         />
       </div>
-      <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+      <div className={classes.content}>
         <div className={classes.formTitle}>
           <div data-cy="reset-password-title">
-            <Typography variant="h4" className={classes.title}>
+            <Typography variant="h1" className={classes.title}>
               {translate('reset.password')}
             </Typography>
           </div>
           <div data-cy="reset-password-subtitle">
-            <Typography variant="h5" className={classes.subtitle} >
+            <Typography variant="h4" className={classes.subtitle} >
               {translate('reset.choose.new.password')}
             </Typography>
           </div>
@@ -73,7 +74,7 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
           >
             <TextField
               {...getFieldProps('currentPassword')}
-              {...sharedInputProps}
+              {...getSharedInputProps('current-password')}
               placeholder={translate('reset.enter.current.password')}
               data-cy="current-password"
             />
@@ -85,7 +86,7 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
           >
             <TextField
               {...getFieldProps('newPassword')}
-              {...sharedInputProps}
+              {...getSharedInputProps()}
               placeholder={translate('reset.enter.new.password')}
               data-cy="new-password-first-input"
             />
@@ -97,7 +98,7 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
           >
             <TextField
               {...getFieldProps('newPasswordConfirmation')}
-              {...sharedInputProps}
+              {...getSharedInputProps()}
               placeholder={translate('reset.enter.new.password')}
               data-cy="new-password-confirmation"
             />
@@ -105,7 +106,7 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
           <Button
             type="submit"
             data-cy="reset-button-submit"
-            className={classes.submit}
+            className={classes.submitButton}
           >
             {translate('reset.password')}
           </Button>
@@ -118,4 +119,4 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default ResetPasswordPresenter;
+export default withThemeNext(ResetPasswordPresenter);

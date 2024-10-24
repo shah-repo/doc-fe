@@ -4,25 +4,24 @@ import * as Yup from 'yup';
 import { logo } from '../../../common/utils/helpers';
 import { AsyncState } from '../../../state/types';
 import { confirmResetPasswordSchema, requiredSchema } from '../../components/forms/fields/validators';
-import { FormContext } from '../../components/forms/FormContext';
 import { ResetPasswordValues } from '../types';
 import ResetPasswordPresenter from './ResetPassword.presenter';
+
+const initialValues: ResetPasswordValues = {
+  currentPassword: '',
+  newPassword: '',
+  newPasswordConfirmation: '',
+};
 
 interface Props {
   asyncState: AsyncState
   onSubmit: (confirmValues: ResetPasswordValues) => void
 }
 
-const ResetPasswordContainer: React.FunctionComponent<Props> = ({
+const ResetPasswordContainer: React.FC<Props> = ({
   asyncState,
   onSubmit,
 }) => {
-  const initialValues: ResetPasswordValues = {
-    currentPassword: '',
-    newPassword: '',
-    newPasswordConfirmation: '',
-  };
-
   const render = (props: FormikProps<ResetPasswordValues>) => (
     <ResetPasswordPresenter
       logo={logo}
@@ -37,15 +36,13 @@ const ResetPasswordContainer: React.FunctionComponent<Props> = ({
   });
 
   return (
-    <FormContext.Provider value={{ submitOnChange: false }}>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-      >
-        {render}
-      </Formik>
-    </FormContext.Provider>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
+      {render}
+    </Formik>
   );
 };
 

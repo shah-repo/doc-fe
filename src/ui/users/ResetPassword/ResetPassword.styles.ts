@@ -1,6 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
 import { NextTheme } from '../../layout/theme-next/provider';
+import { REDIRECT_DELAY } from './ResetPasswordSuccessful';
 
 export default makeStyles<NextTheme>(theme => createStyles({
   root: {
@@ -16,6 +17,13 @@ export default makeStyles<NextTheme>(theme => createStyles({
     [theme.media.mobile]: {
       padding: theme.spacing(2.5, 0),
     },
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexGrow: 1,
   },
   logo: {
     display: 'block',
@@ -36,9 +44,16 @@ export default makeStyles<NextTheme>(theme => createStyles({
   subtitle: {
     color: Colors.textGray,
     fontSize: 12,
-    marginTop: 4,
+    marginTop: theme.spacing(0.5),
     padding: 0,
     fontWeight: 400,
+  },
+  info: {
+    color: Colors.textGray,
+    fontSize: 16,
+    lineHeight: 1.2,
+    fontWeight: 400,
+    marginTop: theme.spacing(1),
   },
   form: {
     width: '100%',
@@ -59,12 +74,35 @@ export default makeStyles<NextTheme>(theme => createStyles({
     position: 'absolute',
     top: '100%',
   },
-  submit: {
+  submitButton: {
     width: '100%',
     padding: theme.spacing(2.5),
     margin: theme.spacing(2, 0),
     fontSize: 14,
     fontWeight: 500,
+  },
+  '@keyframes redirectAnimation': {
+    '0%': {
+      transform: 'translate(-100%, 0)',
+    },
+    '100%': {
+      transform: 'translate(0, 0)',
+    },
+  },
+  redirectButton: {
+    position: 'relative',
+    overflow: 'hidden',
+
+    '&:before': {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      background: Colors.primaryDark,
+      animation: `$redirectAnimation ${REDIRECT_DELAY}ms ${theme.transitions.easing.easeOut}`,
+    },
+    '& span': {
+      position: 'relative',
+    },
   },
   actions: {
     margin: theme.spacing(3, 0, 2),
