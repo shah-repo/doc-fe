@@ -3,7 +3,7 @@ import ActionsCellTemplate from '../../components/SettingsTable/components/Actio
 import ActiveCellTemplate from '../../components/SettingsTable/components/ActiveCellTemplate';
 import TextCellTemplate from '../../components/SettingsTable/components/TextCellTemplate';
 import { SchemaBuilder } from '../../components/SettingsTable/types';
-import { EditableEquipmentLocation } from './types';
+import { EditableEquipmentLocation, EditableEquipmentStatuses } from './types';
 
 export const buildSchema: SchemaBuilder<EditableEquipmentLocation> = ({
   isActive,
@@ -46,5 +46,28 @@ export const buildSchema: SchemaBuilder<EditableEquipmentLocation> = ({
         isActive={isActive}
       />
     ),
+  },
+]);
+
+export const statusBuildSchema: SchemaBuilder<EditableEquipmentStatuses> = ({
+  onActiveStateChange,
+}) => ([
+  {
+    id: 'isActive',
+    field: 'isActive',
+    title: 'common.active',
+    width: 70,
+    template: (props) => (
+      <ActiveCellTemplate
+        {...props}
+        onActiveStateChange={onActiveStateChange}
+      />
+    ),
+  },
+  {
+    id: 'name',
+    field: 'name',
+    title: 'common.name',
+    template: TextCellTemplate,
   },
 ]);

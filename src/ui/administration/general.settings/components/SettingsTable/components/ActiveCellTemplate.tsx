@@ -1,9 +1,9 @@
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
 import { Checkbox, FormikField } from '../../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
+import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import useStyles from '../styles';
 
 interface EditableItemWithActiveField extends EditableItem {
@@ -41,7 +41,7 @@ function ActiveCellTemplate<T extends EditableItemWithActiveField> ({
       )}
       {!isEditMode && (
         <Checkbox
-          checked={dataItem.active}
+          checked={dataItem.active ?? dataItem?.isActive}
           onChange={(e, checked) => onActiveStateChange?.(dataItem, checked)}
           disabled={!onActiveStateChange}
         />
