@@ -1,61 +1,77 @@
 import { createStyles, makeStyles } from '@material-ui/core';
-import Colors from '../../layout/theme/utils/colors';
+import { Colors } from '../../layout/theme-next';
 import { NextTheme } from '../../layout/theme-next/provider';
 
-export const styles = makeStyles((theme: NextTheme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-      backgroundColor: theme.palette.common.white,
-    },
-    paper: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      display: 'flex',
-      flexDirection: 'column',
-      boxShadow: 'none',
-      width: '500px',
-    },
-    logo: {
-      margin: '10px 0 100px 0',
-    },
-    title: {
-      fontWeight: 'bold',
-      color: Colors.black,
-      fontSize: '2rem',
-    },
-    subtitle: {
-      color: Colors.dark_gray,
-    },
-    status: {
-      marginTop: theme.spacing(3),
-    },
-    submit: {
-      marginTop: theme.spacing(3),
-      marginBottom: theme.spacing(3),
-      marginLeft: 0,
-      width: 'inherit',
-      borderRadius: '50px',
-      height: '50px',
-    },
-    formStyle: {
-      width: '500px',
-    },
+export default makeStyles<NextTheme>(theme => createStyles({
+  root: {
+    height: '100dvh',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+    padding: theme.spacing(0, 4),
+  },
+  header: {
+    padding: theme.spacing(8, 0, 2.5),
+
     [theme.media.mobile]: {
-      formStyle: {
-        width: '100%',
-        padding: theme.spacing(2),
-      },
-      logo: {
-        margin: theme.spacing(4),
-      },
+      padding: theme.spacing(2.5, 0),
     },
-  }),
-);
+  },
+  logo: {
+    display: 'block',
+    margin: '0 auto',
+    transform: 'translate(-20%, 0)',
+  },
+  formTitle: {
+    textAlign: 'center',
+    margin: theme.spacing(2.5, 0, 6.25),
+  },
+  title: {
+    fontWeight: 'bold',
+    color: Colors.textBlack,
+    fontSize: 31,
+    margin: 0,
+    padding: 0,
+  },
+  subtitle: {
+    color: Colors.textGray,
+    fontSize: 12,
+    marginTop: 4,
+    padding: 0,
+    fontWeight: 400,
+  },
+  form: {
+    width: '100%',
+    maxWidth: 500,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(4.25, 3),
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: 600,
+  },
+  field: {
+    fontSize: 16,
+    padding: theme.spacing(2.25, 2),
+  },
+  helper: {
+    position: 'absolute',
+    top: '100%',
+  },
+  submit: {
+    width: '100%',
+    padding: theme.spacing(2.5),
+    margin: theme.spacing(2, 0),
+    fontSize: 14,
+    fontWeight: 500,
+  },
+  actions: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  link: {
+    textDecoration: 'none',
+    color: Colors.primary,
+    fontSize: 16,
+  },
+}));

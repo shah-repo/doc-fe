@@ -10,6 +10,7 @@ import useStyles from '../styles';
 
 interface Props {
   isActive?: boolean
+  isLoading?: boolean
   isEditMode?: boolean
   onEdit?: () => void
   onConfirm?: () => void
@@ -19,6 +20,7 @@ interface Props {
 
 const ActionsButtons: React.FC<Props> = ({
   isActive,
+  isLoading,
   isEditMode,
   onEdit,
   onDelete,
@@ -58,6 +60,7 @@ const ActionsButtons: React.FC<Props> = ({
               ref={saveRef}
               onClick={onConfirm}
               iconSize={22}
+              disabled={isLoading}
               data-cy="action-save"
             >
               <FontAwesomeIcon icon={isSaveHovered ? solid('square-check') : light('square-check')} />
@@ -83,6 +86,7 @@ const ActionsButtons: React.FC<Props> = ({
                 kind="destructive"
                 ref={deleteRef}
                 onClick={onDelete}
+                disabled={isLoading}
                 data-cy="action-delete"
               >
                 <FontAwesomeIcon icon={isDeleteHovered ? solid('trash-can') : regular('trash-can')} />
