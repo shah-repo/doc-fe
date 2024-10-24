@@ -79,7 +79,7 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         step: 2,
       },
       {
-        icon: bulkImport?.attachmentId ? 'check' : approvalCheck ? 'skip' : 'blank',
+        icon: bulkImport?.attachmentId ? 'check' : approvalCheck || bulkImport.attachmentLink === 'skipped' ? 'skip' : 'blank',
         text: translate('common.attachments'),
         step: 3,
       },

@@ -3,9 +3,11 @@ import { Box } from '@material-ui/core';
 import _ from 'lodash';
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBulkImportTableData, setShowTable, setTableData } from '../../../../state/ducks/bulkImport/actions';
+import { getBulkImportTableData, saveHeaderToMap, setIsLoading, setShowTable, setTableData } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImport, getShowTable, getTableData } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport } from '../../../../state/ducks/bulkImport/types';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
 import CheckValuesTable from './CheckValuesTable';
 import SourceTarget from './SourceTarget';
 import useStyles from './styles';
@@ -23,6 +25,14 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCan
   const bulkImport = useSelector(getBulkImport);
   const TableData = useSelector(getTableData);
   const alreadyCheckValues = useRef<boolean>(false);
+
+  const uploadFileDataAction = useActionCreator(saveHeaderToMap);
+
+  const asyncHeadersToMap = useAsync({
+    onSuccess: () => {
+      handleSourceTarget();
+    },
+  });
 
   const handleSourceTarget = () => {
     dispatch(setShowTable(true));
@@ -45,7 +55,10 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCan
     // Check conditions under which to handle source and target.
     const validation = checkIfIsTable();
 
-    if (!showTable || validation) {
+    if (validation && !_.isEmpty(bulkImport?.mappedHeaders) && bulkImport?.id) {
+      dispatch(setIsLoading(true));
+      asyncHeadersToMap.start(uploadFileDataAction, { headers: bulkImport?.mappedHeaders, bulkImportId: bulkImport.id }, asyncHeadersToMap);
+    } else if (!showTable) {
       // before it starts checking the table data we clean it up to be sure the data is new
       dispatch(setTableData([]));
 
