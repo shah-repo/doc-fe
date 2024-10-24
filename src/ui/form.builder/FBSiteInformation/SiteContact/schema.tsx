@@ -1,7 +1,7 @@
 import React from 'react';
 import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
-import { SameAsHQCellCellTemplate } from './components/SameAsHQCell';
+import { PrimaryCell } from './components/PrimaryCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableSite, SchemaOptions } from './types';
 
@@ -21,29 +21,41 @@ export const buildSchema = ({
       filterable: false,
       title: 'form.builder.contact.grid.heading.primary',
       template: (props) => (
-        <SameAsHQCellCellTemplate
+        <PrimaryCell
           {...props}
           isActive={isActive}
           isInEditMode={isInEditMode}
         />
       ),
-      width: 110,
+      width: 60,
     },
     {
       id: 'shipping',
       field: 'shipping',
       title: 'form.builder.contact.grid.heading.shipping',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
-      width: 200,
+      template: (props) => (
+        <PrimaryCell
+          {...props}
+          isActive={isActive}
+          isInEditMode={isInEditMode}
+        />
+      ),
+      width: 60,
     },
     {
       id: 'attention',
       field: 'attention',
       title: 'form.builder.contact.grid.heading.attention',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
-      width: 120,
+      template: (props) => (
+        <PrimaryCell
+          {...props}
+          isActive={isActive}
+          isInEditMode={isInEditMode}
+        />
+      ),
+      width: 60,
     },
     {
       id: 'email',
