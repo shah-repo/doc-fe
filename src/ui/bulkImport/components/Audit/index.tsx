@@ -5,8 +5,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { intl } from '../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
-import { getBulkImports } from '../../../../state/ducks/bulkImport/selectors';
-import { LogEntry } from '../../../../state/ducks/bulkImport/types';
+import { getBulkImports, getBulkImportsMap } from '../../../../state/ducks/bulkImport/selectors';
+import { BkStatus, LogEntry } from '../../../../state/ducks/bulkImport/types';
 import { companySelectors } from '../../../../state/ducks/company';
 import { AuditDetailsProps } from '../../../../state/ducks/userManagement/types';
 import Default from '../../../components/common/audit.history/Cards/Default';
@@ -39,12 +39,23 @@ interface MergedLog extends LogEntry {
   approvalId?: string
 }
 
+const humanReadableBkStatus = {
+  [BkStatus.STARTED]: 'Started',
+  [BkStatus.IN_PROGRESS]: 'In Progress',
+  [BkStatus.SUCCESS]: 'Success',
+  [BkStatus.FAILED]: 'Failed',
+  [BkStatus.CANCELLED]: 'Rejected',
+  [BkStatus.COMPLETED]: 'Completed',
+  [BkStatus.DELETED]: 'Deleted',
+};
+
 const AuditHistory: React.FunctionComponent<OwnProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
 }) => {
   const classes = styles();
   const bulkImports = useSelector(getBulkImports);
+  const bulkImportsMaps = useSelector(getBulkImportsMap);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const [isLoading, setIsLoading] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ right: openHistoryPanel });
@@ -68,6 +79,9 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
 
       // If there's a specific type requirement, check if the log type matches
       if (requiredType && log.type !== requiredType) return false;
+
+      // filter specific types
+      if (log?.approvalId && log?.type === 'STRING_EDITED' && log?.fieldPath === 'status') return false;
 
       // If there's no type requirement, or if type matches, include the log
       return true;
@@ -110,6 +124,7 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
   };
 
   const getDescription = (log: MergedLog): Array<{ primaryText: string, secondaryText: string }> => {
+    const currentBulkImport = bulkImportsMaps[log.jobId];
     let secondaryText = `Changed from ${log.previousValue} to ${log.nextValue}`; // Default secondary text
     let stepChange = '';
 
@@ -129,7 +144,10 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
       case 'xlsx':
         if (log.type === 'ARRAY_NEW') {
           const xlsxData = JSON.parse(log?.nextValue as string);
-          secondaryText = `Upload a xlsx file, field id: ${xlsxData.fileId}`;
+          const matchedExcelFile = currentBulkImport.excelFile && currentBulkImport.excelFile.id === xlsxData.fileId;
+          secondaryText = matchedExcelFile
+            ? `Uploaded Excel file: ${currentBulkImport.excelFile.name}.${currentBulkImport.excelFile.type}`
+            : `Upload a old xlsx file, field id: ${xlsxData.fileId}`;
           stepChange = 'Step 2 Upload Data';
         }
         break;
@@ -147,25 +165,27 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
         break;
       case 'attachmentId':
         if (log.type === 'STRING_EDITED') {
-          secondaryText = `Upload zip file id: ${log.nextValue}`;
+          const matchedZipFile = currentBulkImport.zipFile && currentBulkImport.zipFile.id === log.nextValue;
+          secondaryText = matchedZipFile
+            ? `Uploaded zip file: ${currentBulkImport.zipFile.name}.${currentBulkImport.zipFile.type}`
+            : `Upload zip file id: ${log.nextValue}`;
           stepChange = 'Step 4 Upload Attachment';
         }
         break;
       case 'status':
         if (log.type === 'STRING_EDITED') {
-          // Check if approvalId exists
-          if (log.approvalId) {
-            secondaryText = `Approval ${log.approvalId} status changed from ${log.previousValue} to ${log.nextValue}`;
-            stepChange = 'Approver update';
-          } else {
-            secondaryText = `Bulk import status changed from ${log.previousValue} to ${log.nextValue}`;
-            stepChange = 'Bulk import update';
-          }
+          const previousStatus = humanReadableBkStatus[log.previousValue as BkStatus] || log.previousValue;
+          const nextStatus = humanReadableBkStatus[log.nextValue as BkStatus] || log.nextValue;
+          secondaryText = `Bulk import status changed from ${previousStatus} to ${nextStatus}`;
+          stepChange = 'Bulk import update';
         }
         break;
       case 'approver':
         if (log.type === 'STRING_NEW') {
-          secondaryText = `Assigned approver ${log.nextValue}`;
+          const approverDetails = getUserDetails(log.nextValue as string);
+          secondaryText = approverDetails
+            ? `Assigned approver: ${approverDetails?.user?.name}`
+            : `Assigned approver ID: ${log.nextValue}`;
           stepChange = 'Approver Assigned';
         }
         break;

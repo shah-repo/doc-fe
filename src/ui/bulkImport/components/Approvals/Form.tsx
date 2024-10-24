@@ -56,6 +56,10 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
     try {
       // After all approvals are processed, start the final review
       await postDocumentRevisionsInReview(bulkImport?.documentRevisionId, userState.current);
+
+      if (bulkImport?.id && bulkImport.status === BkStatus.CANCELLED) {
+        await updateBulkImportStatus(bulkImport?.id, BkStatus.STARTED, userState.current);
+      }
   
       // Navigate to the bulk import progress page
       history.push(BULK_IMPORT_PROGRESS_URL);

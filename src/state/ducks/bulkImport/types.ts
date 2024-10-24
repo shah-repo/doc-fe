@@ -303,6 +303,7 @@ export interface BulkImport {
   process: BkProcess
   excelFile: BulkImportFile | null
   zipFile: BulkImportFile | null
+  s3Link?: string | null
 }
 
 export interface BulkImportFile {

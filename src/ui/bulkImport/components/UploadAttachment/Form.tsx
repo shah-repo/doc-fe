@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Dialog, Divider, Typography } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { Form, Formik } from 'formik';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
 import { setIsLoading, uploadS3 } from '../../../../state/ducks/bulkImport/actions';
@@ -39,6 +39,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const dialog = useDialog();
   const showErrors = false;
+  const loadFromBk = useRef<boolean>(false);
 
   const asyncUploadFile = useAsync({
     onSuccess: () => handleNext(),
@@ -50,7 +51,8 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
 
   const handleSubmit = (values: { files: FileWithPreview[], link: string }) => {
     // if the user wants to skip the step
-    if (values.files.length === 0 && !values.link) {
+    // eslint-disable-next-line no-mixed-operators
+    if ((values.files.length === 0 && !values.link) || (values.link === bulkImport?.s3Link || bulkImport?.attachmentId && files.length === 0)) {
       handleNext();
       return;
     }
@@ -70,6 +72,27 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const handleConfirmClose = () => {
     dialog.close();
   };
+
+  useEffect(() => {
+    if (bulkImport?.zipFile && files.length === 0 && !loadFromBk.current) {
+      const initialFile = {
+        name: `${bulkImport.zipFile.name}.${bulkImport.zipFile.type}`,
+        preview: bulkImport.zipFile.s3link,
+        size: bulkImport.zipFile.fileSizeS3Link,
+        type: 'application/zip',
+        lastModified: new Date(bulkImport.zipFile.updatedAt).getTime(),
+      } as FileWithPreview;
+      setFiles([initialFile]);
+      loadFromBk.current = true;
+    }
+  }, [bulkImport, files]);
+
+  // Reset files state if no zip file is available
+  useEffect(() => {
+    if (!bulkImport?.zipFile && files.length > 0) {
+      setFiles([]);
+    }
+  }, [bulkImport]);
 
   const renderMessage = (showError = false) => {
     if (!showErrors) return null;

@@ -46,6 +46,10 @@ export const getApproversSelectList = (state: ApplicationState): ApproverOption[
   }));
 // MAIN
 export const getBulkImports = (state: ApplicationState) => state.bulkImport.main.bulkImports;
+export const getBulkImportsMap = (state: ApplicationState) => state.bulkImport.main.bulkImports.reduce((acc, importItem) => {
+  acc[importItem.jobId] = importItem;
+  return acc;
+}, {});
 export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<string, BulkImportCustom[]> => {
   const filterDataType = state.bulkImport.main.selectedDataType;
   const filterStatus = state.bulkImport.main.selectedStatus;

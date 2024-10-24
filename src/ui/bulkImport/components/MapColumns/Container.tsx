@@ -32,8 +32,20 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCan
     dispatch(setShowTable(false));
   };
 
+  const checkIfIsTable = () => {
+    if (!showTable && !_.isEmpty(bulkImport?.mappedHeaders)) {
+      handleSourceTarget();
+      return true;
+    }
+
+    return false;
+  };
+
   const init = () => {
-    if (!showTable) {
+    // Check conditions under which to handle source and target.
+    const validation = checkIfIsTable();
+
+    if (!showTable || validation) {
       // before it starts checking the table data we clean it up to be sure the data is new
       dispatch(setTableData([]));
 
@@ -49,9 +61,7 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCan
       alreadyCheckValues.current = true; // Mark as checked to prevent duplicate processing.
 
       // Check conditions under which to handle source and target.
-      if (!showTable && !_.isEmpty(bulkImport?.mappedHeaders)) {
-        handleSourceTarget();
-      }
+      checkIfIsTable();
     }
   };
 
