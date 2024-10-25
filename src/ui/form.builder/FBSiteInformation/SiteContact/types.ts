@@ -17,6 +17,7 @@ export interface SiteContactProps {
   dataItem: Site
   disabled?: boolean
   name: string
+  sites: Site[]
 }
 
 export interface siteContact {

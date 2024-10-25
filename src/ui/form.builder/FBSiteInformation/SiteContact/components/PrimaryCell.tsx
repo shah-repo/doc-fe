@@ -1,36 +1,48 @@
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import React from 'react';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import React, { useEffect, useState } from 'react';
+import {
+  MODE_FIELD,
+  Mode,
+} from '../../../../components/KendoDataGrid/constants';
 import { Radio } from '../../../../components/forms/fields-next';
 import { CustomSiteContactTemplateProps, EditableSiteContact } from '../types';
-interface Props extends CustomSiteContactTemplateProps{
+interface Props extends CustomSiteContactTemplateProps {
   isActive: boolean
   isInEditMode: boolean
   onPrimaryChange?: (id: string) => void
 }
 
-const Editor: React.FC<Props> = ({ field }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
+const Editor: React.FC<Props> = ({ field, dataIndex }) => {
   const { values, setFieldValue } = useFormikContext<EditableSiteContact>();
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldValue(field, true);
+  const [selected, setSelected] = useState(false);
+
+  const handleChange = () => {
+    setSelected((prevSelected) => !prevSelected);
+    setFieldValue(field, !selected);
   };
+
+  useEffect(() => {
+    setSelected(values[field]);
+  }, [values[field]]);
+
   return (
     <Box display="flex" justifyContent="center" mt={0.75}>
       <Radio
-        checked={values[field]}
+        checked={selected}
         color="primary"
         size="small"
-        value={values.id}
-        onChange={handleChange}
+        name={`${field}-edit-${dataIndex}`}
+        onClick={handleChange}
       />
     </Box>
   );
 };
+
 export const PrimaryCell: React.FC<Props> = (props) => {
-  const { dataIndex, dataItem, isActive, isInEditMode, onPrimaryChange, field } = props;
-  const isEditMode = dataItem[MODE_FIELD] === Mode.add || dataItem[MODE_FIELD] === Mode.edit;
+  const { dataIndex, dataItem, isInEditMode, onPrimaryChange, field } = props;
+  const isEditMode
+    = dataItem[MODE_FIELD] === Mode.add || dataItem[MODE_FIELD] === Mode.edit;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (isEditMode) {
       return;
@@ -43,7 +55,7 @@ export const PrimaryCell: React.FC<Props> = (props) => {
   if (isEditMode) {
     return <Editor {...props} />;
   }
-  const shouldDisable = !isActive || isInEditMode;
+  const shouldDisable = isInEditMode;
   return (
     <Box display="flex" justifyContent="center">
       <Radio
@@ -51,7 +63,7 @@ export const PrimaryCell: React.FC<Props> = (props) => {
         color="primary"
         size="small"
         value={dataItem.id}
-        name={`primary-supplier-${dataIndex}`}
+        name={`${field}-${dataIndex}`}
         onChange={handleChange}
         disabled={shouldDisable}
       />

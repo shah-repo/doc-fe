@@ -3,7 +3,7 @@ import { GridDetailRowProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
 import { Button } from '../../components/forms/fields-next';
@@ -135,15 +135,11 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     ];
   }, isSiteAdded ? [editedSite] : []);
 
-  const DetailComponent = (props: GridDetailRowProps) => {
-    const dataItem = props.dataItem;
-    console.log('dataItem0', dataItem);
+  const DetailComponent = memo((props: GridDetailRowProps) => {
     return (
-      <section>
-        <SiteContact dataItem={dataItem} name={name} />
-      </section>
+      <SiteContact dataItem={props.dataItem} name={name} sites={sites} />
     );
-  };
+  });
 
   return (
     <Box className={classes.root} data-cy="site-information">

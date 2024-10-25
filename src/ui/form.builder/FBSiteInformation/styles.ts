@@ -22,6 +22,19 @@ export default makeStyles(theme => ({
         },
       },
     },
+    '& tr': {
+      '&:last-child td': {
+        borderBottom: '1px solid #DBE0EB',
+        '&:not(.k-grid-content-sticky) + .k-grid-content-sticky': {
+          boxShadow: '-5px -12px 10px 2px rgba(0, 0, 0, .1)',
+        },
+        '&.k-grid-content-sticky': {
+          '&:has(+ :not(.k-grid-content-sticky))': {
+            boxShadow: '5px -12px 10px 2px rgba(0, 0, 0, .1)',
+          },
+        },
+      },
+    },
   },
   gridWithButton: {
     borderBottomLeftRadius: 0,
