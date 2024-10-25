@@ -5,7 +5,7 @@ import { translate } from '../../../../../common/intl';
 import { Button } from '../../../../components/forms/fields-next';
 import { withThemeNext } from '../../../../layout/theme-next';
 import { panels } from '../../constants';
-import { GeneralSettingsProps, GeneralSettingsTabs, SettingsPanelProps } from '../../types';
+import { GeneralSettingsProps, GeneralSettingsTabs } from '../../types';
 import HeaderLastSaved from '../HeaderLastSaved';
 import useStyles from './styles';
 
@@ -79,22 +79,18 @@ const GeneralSettingsPage: React.FC<GeneralSettingsProps> = ({
           {translate(allPanelsExpaned ? 'common.collapse.all' : 'common.expand.all')}
         </Button>
       </Box>
-      <Box className={classes.panels}>
-        {panels.map(panel => {
-          const PanelComponent = panel.component as React.FC<SettingsPanelProps>;
-
-          return (
-            <PanelComponent
-              key={panel.key}
-              title={panel.title}
-              expanded={expandedPanels.includes(panel.key)}
-              onToggle={togglePanel(panel.key)}
-              data-cy={kebabCase(panel.title)}
-              containerRef={containerRef}
-            />
-          );
-        })}
-      </Box>
+      <div className={classes.panels} ref={containerRef}>
+        {panels.map(panel => (
+          <panel.component
+            key={panel.key}
+            title={panel.title}
+            containerRef={containerRef}
+            expanded={expandedPanels.includes(panel.key)}
+            onToggle={togglePanel(panel.key)}
+            data-cy={kebabCase(panel.title)}
+          />
+        ))}
+      </div>
     </Box>
   );
 };

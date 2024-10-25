@@ -10,11 +10,11 @@ export interface Attachment {
   s3linkCleanCopy?: string
   isLoading?: boolean
   owner?: User
-  lineType?: string
+  lineType: string
   documentRevision?: DocumentRevision
-  fileSizeS3Link?: number
-  fileSizeS3LinkCleanCopy?: number
-  hasWatermarks?: boolean
+  fileSizeS3Link: number
+  fileSizeS3LinkCleanCopy: number
+  hasWatermarks: boolean
   url?: string
 }
 

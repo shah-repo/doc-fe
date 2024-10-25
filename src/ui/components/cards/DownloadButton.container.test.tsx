@@ -4,9 +4,20 @@ import { Attachment } from '../../../state/ducks/attachments/types';
 import { Async } from '../../hooks/useAsync';
 import { DownloadButtonContainer, DownloadButtonContainerProps } from './DownloadButton.container';
 import DownloadButtonPresenter from './DownloadButton.presenter';
+import { LINE_TYPES } from '../../../state/ducks/attachments/constants';
 
 describe('DownloadButtonContainer tests', () => {
-  const attachment: Attachment = { id: 'DASfjsak', name: 'Test', type: 'txt', s3link: '', isLoading: false };
+  const attachment: Attachment = {
+    id: 'DASfjsak',
+    name: 'Test',
+    type: 'txt',
+    s3link: '',
+    isLoading: false,
+    fileSizeS3Link: 1,
+    fileSizeS3LinkCleanCopy: 1,
+    hasWatermarks: false,
+    lineType: LINE_TYPES.CLEAN_COPY,
+  };
   const defaultProps: DownloadButtonContainerProps = {
     attachment,
     download: jest.fn(),

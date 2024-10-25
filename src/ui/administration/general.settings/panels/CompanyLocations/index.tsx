@@ -24,7 +24,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const locations = companyMine.locations;
 
-  const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations);
+  const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations ?? []);
   const [editedLocation, setEditedLocation] = React.useState<EditableCompanyLocation>();
 
   const discardLocation = () => setEditedLocation(undefined);
@@ -65,7 +65,9 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { setValues, submitForm } = formik;
 
   const changeLocationActiveState = (location: EditableCompanyLocation, state: boolean) => {
-    const updatedLocations = locations.map(it => it.id === location.id ? { ...it, active: state } : it);
+    const updatedLocations = locations
+      ?.map(it => it.id === location.id ? { ...it, active: state } : it)
+      ?? [];
     updateLocations(updatedLocations);
   };
 

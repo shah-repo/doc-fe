@@ -87,7 +87,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
       }, 2000);
     } else {
       // Edit the itemsAndDetailsState & set the approvalRequestItemsList to dataToSend
-      const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions);
+      const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions) as ApprovalRequestGridItem[];
       itemsAndDetailsState.setApprovalRequestItemsList(entries);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
     }
@@ -124,7 +124,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
         currentDocRevPresent = documentRevisionsAssigned.some(docRev => docRev.proposedDocumentRevision.id === currentDocRevId);
       }
 
-      entries = formDataToStoreData(documentRevisionsAssigned, documentRevisionsData);
+      entries = formDataToStoreData(documentRevisionsAssigned, documentRevisionsData) as ApprovalRequestGridItem[];
     }
 
     if (changeRequest && !currentDocRevPresent && currentDocRevId) {

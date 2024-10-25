@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import faker from 'faker';
-import React, { JSXElementConstructor, ReactElement } from 'react';
+import React from 'react';
 import { DocumentInfo, Props } from '../DocumentInfo';
 
 describe('DocumentInfo tests', () => {
@@ -15,6 +15,6 @@ describe('DocumentInfo tests', () => {
   it('Renders correctly', () => {
     const wrapper = getWrapper();
 
-    expect(wrapper.find('span').contains(defaultProps.numberOfRecords as unknown as string | ReactElement<any, string | JSXElementConstructor<any>> | ReactElement<any, string | JSXElementConstructor<any>>[])).toBe(true);
+    expect(wrapper.find('span').contains(defaultProps.numberOfRecords as unknown as string)).toBe(true);
   });
 });

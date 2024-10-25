@@ -17,6 +17,6 @@ describe('SummaryInfo tests', () => {
     const wrapper = getWrapper();
 
     expect(wrapper.find(Text).prop('translation')).toEqual(defaultProps.label);
-    expect(wrapper.contains(defaultProps.value as any)).toBe(true);
+    expect(wrapper.contains(defaultProps.value as string)).toBe(true);
   });
 });

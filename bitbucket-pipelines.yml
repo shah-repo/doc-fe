@@ -51,7 +51,7 @@ definitions:
           - typecheck-results/**
         script:
           - NODE_ENV=development yarn install --frozen-lockfile
-          - ./aws/bash_scripts/runTypecheck.sh
+          - yarn lint:tsc
 
     - step: &RUN_LINTER
         <<: *COMMON
