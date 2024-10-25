@@ -102,7 +102,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   });
 
   useEffect(() => {
-    const data = processRealData(formValues?.lifecyclePhases?.categories);
+    const data = processRealData((formValues?.lifecyclePhases as any)?.categories);
     updateStateGridData(data.phases);
     setSelectedPartGroups(data.groups);
     fetchLCPDocTypesAsync.start(
@@ -350,7 +350,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
 
       const displayOrderMap = sortedItems?.reduce((acc, item: LCP) => {
-        if(item?.id) {
+        if (item?.id) {
           acc[item?.id] = item.displayOrder;
         }
         return acc;
@@ -488,17 +488,17 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onItemChange = (e: GridItemChangeEvent) => {
     resultState?.data?.forEach((group: CustomGroupDataItem) => {
       if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
-      group.items?.forEach((data) => {
-        if (data.id === e.dataItem.id) {
-          if (e.field === LCP_KEYS.isActive) {
-            onTogglePhaseItem(e.dataItem);
-          } else {
-            data.isUserModified = true;
-            data[e.field || ''] = e.value;
+        group.items?.forEach((data) => {
+          if (data.id === e.dataItem.id) {
+            if (e.field === LCP_KEYS.isActive) {
+              onTogglePhaseItem(e.dataItem);
+            } else {
+              data.isUserModified = true;
+              data[e.field || ''] = e.value;
+            }
           }
-        }
-        return data;
-      });
+          return data;
+        });
       }
       return group;
     });
