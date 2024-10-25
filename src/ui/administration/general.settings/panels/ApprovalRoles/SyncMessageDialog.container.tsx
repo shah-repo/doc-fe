@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import { isEmptyArray } from 'formik';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, pullAt, sortBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SM } from '../../../../../App';
@@ -30,10 +30,10 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const [isSyncMessageOpen, setIsSyncMessageOpen] = React.useState(false);
   const { formInput } = documentRevision;
   const generalSettings = useSelector(companySelectors.getGeneralSettings);
-  const { addToDam, removeFromDam } = generalSettings?.approvalRoles;
+  const { addToDam = [], removeFromDam = [] } = generalSettings?.approvalRoles ?? {};
   const dam = generalSettings?.approvalRoles?.dam;
-  let updatedDAR = cloneDeep(formInput[FBDAMFields.DAR]) as FBApprovalRole[];
-  const updatedDAM = cloneDeep(formInput[FBDAMFields.DAM]) as FBApprovalMatrixItem[];
+  let updatedDAR = cloneDeep(formInput?.[FBDAMFields.DAR] ?? []) as FBApprovalRole[];
+  const updatedDAM = cloneDeep(formInput?.[FBDAMFields.DAM] ?? []) as FBApprovalMatrixItem[];
   const showAlertDialog = localStorage.getItem(OUT_OF_SYNC_ALERT_DATA_KEY) as Dam;
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
@@ -45,9 +45,9 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     && isOwner;
 
   const removeItemsAtIndices = (items, indices) => {
-    const sortedIndices = _.sortBy(indices).reverse();
+    const sortedIndices = sortBy(indices).reverse();
     const newItems = [...items];
-    _.pullAt(newItems, sortedIndices);
+    pullAt(newItems, sortedIndices);
     return newItems;
   };
 
@@ -63,11 +63,11 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   };
 
   const getSyncMessageTranslation = (isSubLabel = false) => {
-    const addToDam = generalSettings?.approvalRoles?.addToDam;
+    const addToDam = generalSettings?.approvalRoles?.addToDam ?? [];
     const removeFromDam = generalSettings?.approvalRoles?.removeFromDam;
     const roleAddedList = addToDam?.map(item => item.name).join(', ');
     const roleRemovedList = removeFromDam?.map(item => item.name).join(', ');
-    if (addToDam.length > 0 && removeFromDam.length > 0) {
+    if (addToDam?.length > 0 && removeFromDam.length > 0) {
       if (isSubLabel) {
         return translate('dam.sync.message.role.added.removed.sub.label', {
           addedList: roleAddedList,
@@ -81,8 +81,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
         roleRemoved: removeFromDam?.length,
         removedlist: roleRemovedList,
       });
-    }
-    else if (addToDam.length > 0 && isEmptyArray(removeFromDam)) {
+    } else if (addToDam?.length > 0 && isEmptyArray(removeFromDam)) {
       if (isSubLabel) {
         return translate('dam.sync.message.role.added.sub.label', {
           addedList: roleAddedList,
@@ -93,8 +92,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
         rolesCount: addToDam?.length,
         addedList: roleAddedList,
       });
-    }
-    else if (isEmptyArray(addToDam) && removeFromDam.length > 0) {
+    } else if (isEmptyArray(addToDam) && removeFromDam.length > 0) {
       if (isSubLabel) {
         return translate('dam.sync.message.role.removed.sub.label', {
           rolesCount: removeFromDam?.length,
@@ -112,12 +110,10 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     if ([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)) {
       return (<SyncLabelElement label={getSyncMessageTranslation()}
         subLabel={getSyncMessageTranslation(true)} />);
-    }
-    else if ([DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved].includes(documentRevision.status)) {
+    } else if ([DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved].includes(documentRevision.status)) {
       return (<SyncLabelElement label={getSyncMessageTranslation()}
         subLabel={translate('dam.sync.message.in.review.role.sub.label', { docId: dam.document.docId, rev: dam.documentRevision.displayRevision })} />);
-    }
-    else if (documentRevision.status === DocumentRevisionStatus.Released) {
+    } else if (documentRevision.status === DocumentRevisionStatus.Released) {
       return (<SyncLabelElement label={getSyncMessageTranslation()}
         subLabel="dam.sync.message.released.role.sub.label" />);
     }
@@ -133,7 +129,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
 
   if (!isEmptyArray(addToDam)) {
     const lastIndex = Math.max(...updatedDAR.map(item => item.index));
-    addToDam.forEach((item, index) => {
+    addToDam?.forEach((item, index) => {
       const newDarValue = {
         id: item.id,
         name: item.name,
@@ -144,7 +140,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       updatedDAR.push(newDarValue);
     });
     updatedDAM.forEach(item => {
-      for (let index = 0; index < addToDam.length; index++) {
+      for (let index = 0; index < addToDam?.length; index++) {
         item.approvalRoles.admStage.push(false);
         item.approvalRoles.stage1.push(false);
         item.approvalRoles.stage2.push(false);
@@ -173,8 +169,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       _documentRevisionFormState?.setDocumentRevision(documentRevision);
       localStorage.removeItem(OUT_OF_SYNC_ALERT_DATA_KEY);
       async.start(setDocumentRevision, documentRevision.id, { formInput: documentRevision.formInput }, async);
-    }
-    else {
+    } else {
       localStorage.setItem(OUT_OF_SYNC_ALERT_DATA_KEY, JSON.stringify(dam));
     }
   };
@@ -183,7 +178,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const setDocumentRevision = useActionCreator(documentRevisionsActions.save);
 
   if (showAlertDialog && !showAlertDialog?.isSynced && isOwner && ![DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)) {
-    return <SyncMessageAlert isOpen={showAlertDialog} dialogContent={getSyncLabel()} />;
+    return <SyncMessageAlert isOpen dialogContent={getSyncLabel()} />;
   }
 
   return (
