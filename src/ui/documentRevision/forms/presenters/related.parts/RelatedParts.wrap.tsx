@@ -7,18 +7,18 @@ import { useDispatch } from 'react-redux';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { relatedPartsActions } from '../../../../../state/ducks/relatedParts';
-import { RELATED_PARTS_STATUS, RELATED_TYPE, RelatedPartsListItem } from '../../../../../state/ducks/relatedParts/types';
-import Text from '../../../../components/Text';
+import { RelatedPartsListItem, RELATED_PARTS_STATUS, RELATED_TYPE } from '../../../../../state/ducks/relatedParts/types';
 import { toastError, toastSuccess } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { documentPreviewPath } from '../../../../document.revision/utils/paths';
 import { FB } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { getRelatedType } from '../../../helpers/checkDocumentGroup';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from './helper';
 import useStyles from './RelatedPart.styles';
 import RelatedParts from './RelatedParts';
 import RelatedPartsState from './RelatedParts.state';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from './helper';
 interface Props {
   viewOnly: boolean
   documentRevision: DocumentRevision
@@ -222,6 +222,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       docDto = Object.assign(docDto, {
         revision: documentRevision.revision,
         changeRequestId: documentRevision.changeRequest?.id ?? null,
+        lifecyclePhaseId: documentRevision.lifecyclePhaseId ?? null,
         status: documentRevision.status,
         name: `${documentRevision.name}-${relatedPartDetails?.name}`,
         suffixName: relatedPartDetails?.name,

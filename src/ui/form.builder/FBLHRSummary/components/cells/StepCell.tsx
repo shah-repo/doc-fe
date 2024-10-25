@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid, TextField as MuiTextField } from '@material-ui/core';
+import { Box, CircularProgress, Grid, TextField as MuiTextField, Popper } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
@@ -215,6 +215,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
                   </Box>
                 </Box>
               )}
+              PopperComponent={({ style, ...props }) => (
+                <Popper
+                  {...props}
+                  style={{ ...style }}
+                />
+              )}
               renderOption={(option) => option.label}
               onInputChange={debounceFunction}
               open={isOpen}
@@ -270,7 +276,15 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
                 data-cy="step-mpi-field"
                 className={classes.link}
               >
-                {getDisplayDocument(docId, displayRevision)}
+                <OverflowTooltip
+                  title={getDisplayDocument(docId, displayRevision)}
+                  placement="top"
+                  interactive
+                  arrow
+                  data-cy="mpi-field"
+                >
+                  {getDisplayDocument(docId, displayRevision)}
+                </OverflowTooltip>
               </Link>
               <InvalidDocIndicator status={displayStatus} dataCy="step-mpi-invalid-indicator" />
             </Box>

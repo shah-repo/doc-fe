@@ -41,12 +41,13 @@ import { GroupsCell } from './cell.template/GroupsCell';
 import { NameCell } from './cell.template/NameCell';
 import { SignedCell } from './cell.template/SignedCell';
 import { enterUserInfo } from './column.definition';
+import KendoPanelStyles from './KendoPanel.styles';
 import { AddUserManage, UserManage, UserManagementProps } from './types';
 import UMExport from './UMExport';
 
 let call: CancelTokenSource;
 
-export function KendoPanel({
+export function KendoPanel ({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
   gridData,
@@ -61,6 +62,7 @@ export function KendoPanel({
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
+  const panelClasses = KendoPanelStyles();
   const { columnConfig, kendoConfig } = tableCriteria;
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
@@ -79,7 +81,7 @@ export function KendoPanel({
       ),
     );
   };
-  const processWithGroups = (data: Partial<GetEmployeeResponse>[], dataState: State) => {
+  const processWithGroups = (data: Array<Partial<GetEmployeeResponse>>, dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
@@ -405,8 +407,8 @@ export function KendoPanel({
   const fieldToCellMapping = {
     'user.name': NameCell,
     'user.email': EmailCell,
-    'groups': userGroups,
-    'status': SignedCell,
+    groups: userGroups,
+    status: SignedCell,
     '': commandCell,
   };
 
@@ -485,7 +487,7 @@ export function KendoPanel({
   const tableRenderer = ({ width }: Size) => (
     <>
       <StyledKendoGrid
-        className={`${classes.grid} no-row-pointer`}
+        className={`${panelClasses.userGroupGrid} no-row-pointer`}
         style={{ width: `${width}px` }}
         rowHeight={40}
         data={result}

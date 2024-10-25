@@ -80,3 +80,5 @@ export const getPendingTooltipText = (pendingCount, approvedCount) => {
     secondaryText: secondaryText as Translation,
   };
 };
+
+export const delay = async (ms: number) => await new Promise(resolve => setTimeout(resolve, ms));

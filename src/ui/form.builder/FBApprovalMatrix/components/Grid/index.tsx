@@ -8,6 +8,7 @@ import { Button } from '../../../../components/forms/fields-next';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { withThemeNext } from '../../../../layout/theme-next';
 import Actions from '../../../FBApprovalMatrixRoles/components/Actions';
+import { FB } from '../../../helpers';
 import useStyles from './styles';
 import { GridItem, GridProps } from './types';
 
@@ -30,6 +31,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   const classes = useStyles();
   const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData) as GridItem<T>[]);
   const [activeItem, setActiveItem] = useState<GridItem<T>>();
+ const { workspaceState, formState } = FB.useStores();
 
   useEffect(
     () => {
@@ -109,6 +111,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     }
 
     onSave?.(newData);
+    workspaceState?.saveDocRev(formState?.getValues());
     setActiveItem(undefined);
   };
 

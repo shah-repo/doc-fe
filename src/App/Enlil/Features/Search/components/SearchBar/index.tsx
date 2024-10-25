@@ -89,8 +89,10 @@ const SearchBar: React.FC = () => {
     if (option?.query) {
       return option.query;
     }
+
     return [
       option?.document?.typeId,
+      option?.document?.revisionName ? `${translate('common.rev')} ${option?.document?.revisionName}` : undefined,
       option?.document?.title,
       option?.document?.companyName,
     ].filter(Boolean).join(' - ');

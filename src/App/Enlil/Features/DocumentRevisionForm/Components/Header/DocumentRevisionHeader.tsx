@@ -14,6 +14,7 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
   shouldShowUpgrade,
   setDoNotPrompt,
   isSliderView,
+  inDialog,
 }) => {
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   return (
@@ -24,6 +25,7 @@ const DocumentRevisionHeader: React.FunctionComponent<DocumentRevisionHeaderProp
             isCreateDocumentDisabled={_documentRevisionFormState?.createDocumentDisabled || false}
             {...{ setDoNotPrompt }}
             isSliderView={isSliderView}
+            inDialog={inDialog}
           />
         )}
       </Observer>

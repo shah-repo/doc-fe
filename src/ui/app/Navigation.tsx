@@ -15,7 +15,7 @@ import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { translate } from '../../common/intl';
 import { getCurrentUserTags } from '../../common/utils/selectors';
 import { authSelectors } from '../../state/ducks/auth';
-import { GroupTag } from '../../state/ducks/auth/types';
+import { GroupTag, Permission } from '../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../state/ducks/company';
 import { NavigationItem, NavigationItems } from '../../state/ducks/company/types';
 import Logo from '../components/icons/Logo.container';
@@ -32,9 +32,14 @@ type NavigationProps = WithStyles<typeof styles> & RouteComponentProps & {
   open: boolean
 };
 
-function itemAllowedForUser (item: NavigationItem, userTags: GroupTag[]): boolean {
+function isChildAllowedByUserTags (item: NavigationItem, userTags: GroupTag[]): boolean {
   return !item.restrictedToUsersWithTags?.length
         || item.restrictedToUsersWithTags.some((tag) => userTags.includes(tag));
+}
+
+function isChildAllowedByUserPermissions (item: NavigationItem, userPermissions: Permission[]): boolean {
+  return !item.restrictedToUserPermissions?.length
+        || item.restrictedToUserPermissions.some((permission) => userPermissions.includes(permission));
 }
 
 const Navigation: React.FunctionComponent<NavigationProps> = ({
@@ -44,6 +49,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   handleDrawerOpen,
 }) => {
   const userTags = useSelector(getCurrentUserTags());
+  const currentEmployeePermissions = useSelector(authSelectors.currentEmployeePermissions);
   const async = useAsync({
     onSuccess: () => {
       setIsLoading(false);
@@ -56,9 +62,15 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
 
   const navigationItems = (navigationSelectorItems)
     .reduce<NavigationItem[]>((acc, item) => {
-    if (itemAllowedForUser(item, userTags)) {
+    const isChildAllowedByTag = isChildAllowedByUserTags(item, userTags);
+    const isChildAllowedByPermission = isChildAllowedByUserPermissions(item, currentEmployeePermissions);
+
+    if (isChildAllowedByTag && isChildAllowedByPermission) {
       if (item.type === NavigationItems.MENU) {
-        item.menu = (item.menu || []).filter((menuItem) => itemAllowedForUser(menuItem, userTags));
+        item.menu = (item.menu ?? []).filter((menuItem) =>
+          (isChildAllowedByTag && isChildAllowedByUserTags(menuItem, userTags))
+                  && (isChildAllowedByPermission && isChildAllowedByUserPermissions(menuItem, currentEmployeePermissions)),
+        );
       }
       acc.push(item);
     }

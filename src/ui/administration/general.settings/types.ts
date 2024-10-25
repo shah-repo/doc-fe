@@ -1,4 +1,5 @@
 import { ExpansionPanelProps, SwitchProps } from '@material-ui/core';
+import { RefObject } from 'react';
 
 export enum GeneralSettingsTabs {
   Printing = 'Printing',
@@ -7,9 +8,14 @@ export enum GeneralSettingsTabs {
   APITokens = 'API Tokens',
   AR = 'Approval Requests',
   MD = 'Material Disposition',
+  LCP = 'Life Cycle Phases',
+  LotAutoAllocationOrder = 'Lot Auto-allocation Order',
+  ExpiredLots = 'Expired Lots',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
   Locations = 'Locations',
+  MaterialFlow = 'Material Flow',
+  SystemTransactions = 'System Transactions Setup',
 }
 
 export interface GeneralSettingsProps {
@@ -20,7 +26,9 @@ export interface GeneralSettingsProps {
 
 export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
-  onToggle: (isExpanded?: boolean) => void
+  info?: string
+  containerRef?: RefObject<HTMLElement>
+  onToggle: () => void
   onAddNew?: () => void
 }
 

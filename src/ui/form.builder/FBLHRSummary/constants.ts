@@ -1,4 +1,3 @@
-export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
 export const STEP_FIELD = 'step';
@@ -29,6 +28,7 @@ export const LHR_SUMARY_FIELDS = {
 };
 export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment', 'recordCreationDate'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex', 'show'];
+export const DATE_FIELDS_TO_PICK = ['calDueDate', 'pmDueDate', 'expiryDate', 'recordCreationDate'];
 
 export enum DocType {
   equipment = 'equipment',

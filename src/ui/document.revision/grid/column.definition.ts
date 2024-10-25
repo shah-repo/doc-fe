@@ -14,6 +14,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     showColumnMenu: true,
     orderIndex: 1,
+    showTooltip: true,
     extraFields: ['id', 'document.id'],
   },
   {

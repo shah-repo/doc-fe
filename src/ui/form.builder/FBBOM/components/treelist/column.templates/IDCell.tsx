@@ -4,8 +4,8 @@ import { Grid, Tooltip } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { Formik, FormikProps, useFormikContext } from 'formik';
-import { isEmpty } from 'lodash';
-import { Observer } from 'mobx-react';
+import { cloneDeep, isEmpty } from 'lodash';
+import { Observer, useObserver } from 'mobx-react';
 import React, { ChangeEvent, ComponentType, memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -31,9 +31,10 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import { Colors } from '../../../../../layout/theme-next';
+import FBDataStore from '../../../../FBStore/FBDataStore';
 import { EditableBOM } from '../../../interface';
 import { ADD_FIELD, SELECTED_PART_KEY_SEPARATOR } from '../constants';
-import { isEditBOM } from '../utils';
+import { isAddOnly, isEditBOM } from '../utils';
 import { styles } from './styles';
 import { CustomTreeListCellProps } from './types';
 
@@ -155,11 +156,11 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
     if (!dataItem[ADD_FIELD]) {
       fieldValue = `${dataItem.id?.split(SELECTED_PART_KEY_SEPARATOR)[0]}${SELECTED_PART_KEY_SEPARATOR}${dataItem?.documentId}`;
     } else {
-      const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
-      if (!isEmpty(part) && showFormDialog.isOpen) {
+      const part = cloneDeep(updatedNewlyCreatedDocumentRevision);
+      if (!isEmpty(part)) {
         const {
           displayRevision, displayStatus, name,
-        } = part as DocumentRevision;
+        } = part;
         fieldValue = `${part?.id}${SELECTED_PART_KEY_SEPARATOR}${part?.document.id}`;
         setFieldValue('childNodeRevId', part?.id);
         setFieldValue('childNodeDocumentId', part?.document?.id);
@@ -202,6 +203,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
         value={value}
         disableOpenOnFocus={true}
         blurOnSelect
+        disabled={fetchAvailablePartsAsync.isLoading}
         ListboxComponent={({ children, ...otherProps }) => {
           return (<>
             <ul {...otherProps} >
@@ -240,6 +242,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
   const handleCreateDocument = useHandleCreateDoc();
+  const newlyCreatedDocumentRevisionId = useObserver(() => FBDataStore.newlyCreatedDocInfo?.docRevId);
+  const updatedNewlyCreatedDocumentRevision = useSelector((state: ApplicationState) => {
+    return (
+      newlyCreatedDocumentRevisionId
+        && documentRevisionsSelectors.getDocumentRevision(state, newlyCreatedDocumentRevisionId)
+    );
+  });
 
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: () => {
@@ -257,14 +266,23 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
   });
 
   useEffect(() => {
-    const part = _documentRevisionFormState?.newlyCreatedDocumentRevision;
-    if (!isEmpty(part) && showFormDialog.isOpen) {
-      fetchAvailablePartsAsync.start(
-        fetchAvailablePartsAction,
-        fetchAvailablePartsAsync,
-      );
+    if (showFormDialog.isOpen || !isAddOnly(dataItem) || isEmpty(newlyCreatedDocumentRevisionId)) {
+      return;
     }
-  }, [_documentRevisionFormState?.newlyCreatedDocumentRevision]);
+
+    fetchAvailablePartsAsync.start(
+      fetchAvailablePartsAction,
+      fetchAvailablePartsAsync,
+    );
+  }, [showFormDialog.isOpen]);
+
+  useEffect(() => {
+    if (isEditMode || isEmpty(newlyCreatedDocumentRevisionId) || !_documentRevisionFormState?.showPartInDialog) {
+      return;
+    }
+
+    FBDataStore.newlyCreatedDocInfo = undefined;
+  }, [isEditMode]);
 
   const categoryAsync = useAsync<DocumentType[]>({
     onSuccess: () => {
@@ -477,7 +495,11 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
           {renderFormTemplateDialog}
         </Formik>
       </FormContext.Provider>
-      <DocumentRevisionDialog dialog={showFormDialog} />
+      <Observer>
+        {() => (
+          <DocumentRevisionDialog key={FBDataStore.newlyCreatedDocInfo?.reRender ?? false} dialog={showFormDialog} docRevId={newlyCreatedDocumentRevisionId} />
+        )}
+      </Observer>
     </td>
   );
 };

@@ -55,6 +55,7 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
 
   formTemplate: { outputDocumentTypes: [], schema: [] },
   securityGroups: [],
+  lifecyclePhaseId: '',
   securityEmployees: [],
   operators: [],
 });
@@ -105,7 +106,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    if(isEquipment && documentRevision?.status === DocumentRevisionStatus.Released) {
+    if (isEquipment && documentRevision?.status === DocumentRevisionStatus.Released) {
       values.formInput = documentRevision.formInput;
     }
     const promise = async.start(create, toNewVersionRequestBody(values), async);

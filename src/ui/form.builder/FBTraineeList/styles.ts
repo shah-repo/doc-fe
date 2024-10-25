@@ -70,4 +70,7 @@ export default makeStyles(theme => ({
   dialogContent: {
     padding: theme.spacing(3.125),
   },
+  fitContent: {
+    maxWidth: 'fit-content',
+  },
 }));

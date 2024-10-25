@@ -24,6 +24,7 @@ interface Props {
   transitionDialog: any
   onSuccess?: () => void
   type?: string
+  translationRejectMsg?: Translation
 }
 
 interface ResponseProps {
@@ -37,6 +38,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   label,
   type,
   transitionDialog,
+  translationRejectMsg = 'dashboard.po.reject.alert',
   onSuccess,
 }) => {
   const dispatch = useDispatch();
@@ -63,6 +65,9 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       dispatch(dashboardTodoActions.loadMyFeedsList());
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
+    onError: () => {
+      async.reset();
+    },
   });
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const onSubmit = (props: PasswordFormValues) => {
@@ -75,7 +80,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
     <>
       { type && <PoRejectDialog
         dialog={transitionDialog}
-        message="dashboard.po.reject.alert"
+        message={translationRejectMsg}
         onSubmit={onReject}
         cancelAction={transitionDialog.close}
       />}

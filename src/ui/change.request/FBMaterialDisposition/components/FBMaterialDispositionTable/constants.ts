@@ -1,6 +1,5 @@
 import { translate } from '../../../../../common/intl';
 
-export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const EMPTY_DROPDOWN_PLACEHOLDER = 'N/A';
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';

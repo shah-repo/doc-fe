@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { first, get, has, isArray, join } from 'lodash';
 import { Action, Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import { intl } from '../../../common/intl';
@@ -128,7 +128,7 @@ const apiMiddleware: Middleware = ({
       default: {
         const {
           data: { message },
-        } = response as AsyncActionErrorResponse;
+        } = exception?.response as AsyncActionErrorResponse;
         if (isArray(message) && has(first(message), 'message')) {
           responseMessage = join(get(first(message), 'message'), '\n');
         } else {

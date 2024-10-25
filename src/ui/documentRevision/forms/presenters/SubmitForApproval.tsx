@@ -2,21 +2,21 @@ import { Button } from '@material-ui/core';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
-import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
+import { StyledMenuListItemText } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../App/Shifamed/Utils/SM/SM';
 import { translate } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
-import Text from '../../../components/Text';
 import { toastError } from '../../../components/notifications';
+import Text from '../../../components/Text';
 import FBStore from '../../../form.builder/FBStore/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../helpers/checkDocumentGroup';
+import { checkIsDocumentEquipment, checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../helpers/checkDocumentGroup';
 
 interface Props {
   documentRevision: DocumentRevision
@@ -45,7 +45,8 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const dialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
-  const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
+  const isEquipment = checkIsDocumentEquipment(currentDocumentType?.groupOptions);
+  const isObsolete = isEquipment ? false : revisionChangeType === RevisionChangeType.Obsolete;
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
   let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';

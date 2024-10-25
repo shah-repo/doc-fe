@@ -163,6 +163,12 @@ const Presenter: React.FunctionComponent<Props> = ({
             {...{ documentTypeId: docTypeId, isRecord }}
           />
         }
+        {(isPart || isPartForm) && (
+          <SummaryField
+            label="common.lifecycle.phase"
+            value={dataProp?.lifecyclePhase?.displayLabel}
+            {...summaryStyles}
+          />)}
         {formTemplate && outputDocumentTypeName && (
           <SummaryField
             label="document.output.type"
