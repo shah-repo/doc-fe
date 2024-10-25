@@ -2,7 +2,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from '@material-ui/core';
 import cx from 'classnames';
-import { default as React, default as React, MouseEventHandler, RefObject, useRef } from 'react';
+import React, { MouseEventHandler, RefObject, useRef } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Button, IconButton } from '../../../../components/forms/fields-next';
 import useSticky from '../../../../hooks/useSticky';
