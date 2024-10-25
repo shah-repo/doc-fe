@@ -349,14 +349,16 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         item.displayOrder = index + 1;
       });
 
-      const displayOrderMap = sortedItems.reduce((acc, item) => {
-        acc[item.id] = item.displayOrder;
+      const displayOrderMap = sortedItems?.reduce((acc, item: LCP) => {
+        if(item?.id) {
+          acc[item?.id] = item.displayOrder;
+        }
         return acc;
       }, {});
 
-      const displayOrderUpdatedData = updatedData?.map(phase => ({
+      const displayOrderUpdatedData = updatedData?.map((phase: LCP) => ({
         ...phase,
-        displayOrder: displayOrderMap[phase?.id] ?? phase.displayOrder,
+        displayOrder: phase?.id ? displayOrderMap[phase?.id] : phase.displayOrder,
       }));
 
       const sortedOrderUpdatedData = sortPhasesByDisplayOrder(displayOrderUpdatedData);
