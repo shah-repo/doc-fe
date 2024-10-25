@@ -237,7 +237,6 @@ export const withFBInput = <T extends FBInputProps>(
           || validationValue === ''
           || validationValue === null
           || (isArray(validationValue) && size(validationValue) === 0)
-          || (name === 'wo_part_quantity' && validationValue === 1)
         )
       );
 
