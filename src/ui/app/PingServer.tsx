@@ -1,12 +1,13 @@
 import { throttle } from 'lodash';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import IdleTimer from 'react-idle-timer';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions, authSelectors } from '../../state/ducks/auth';
 
+const DEBOUNCE_EVENT_TIMEOUT = 250;
 const IDLE_TIMEOUT = 1000 * 60 * 10;
 
-const PingServer: React.FunctionComponent = () => {
+const PingServer: React.FC = () => {
   const dispatch = useDispatch();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
 
@@ -16,18 +17,18 @@ const PingServer: React.FunctionComponent = () => {
     }
   }, [dispatch, currentEmployeeId]);
 
-  useEffect(pingServer, [pingServer]);
-
-  const handleActivity = useCallback(
+  const handleActivity = useMemo(
     () => throttle(pingServer, IDLE_TIMEOUT),
     [pingServer],
   );
 
+  useEffect(handleActivity, [handleActivity]);
+
   return (
     <IdleTimer
       element={document}
-      debounce={250}
       timeout={IDLE_TIMEOUT}
+      debounce={DEBOUNCE_EVENT_TIMEOUT}
       onActive={handleActivity}
       onAction={handleActivity}
     />
