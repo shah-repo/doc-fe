@@ -21,6 +21,7 @@ import { DocumentTypeById } from '../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus, RevisionChangeType } from '../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../state/reducers';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import GRPTWarningDialog from '../../../../app/alert.dialog/GRPTWarningDialog';
 import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from '../../../../change.request/form/transform';
 import { ApproverPayload, InDraftAROption, TemplateOption } from '../../../../change.request/form/types';
@@ -37,7 +38,7 @@ import { useApproveAndRelease } from '../../../../hooks/docCustomization/useCust
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
-import { checkIsDocumentES, checkIsDocumentPO, checkIsDocumentWO } from '../../../helpers/checkDocumentGroup';
+import { checkIsDocumentES, checkIsDocumentGRPT, checkIsDocumentPO, checkIsDocumentWO } from '../../../helpers/checkDocumentGroup';
 import { ApproveAndReleaseFormValues } from '../../types';
 import useStyles from './ApproveAndRelease.styles';
 import ApproveAndReleaseForm from './ApproveAndReleaseForm';
@@ -61,6 +62,7 @@ interface Props {
   isBOMExists?: boolean
   isPart?: boolean
   isSliderView?: boolean
+  inDialog?: boolean
 }
 
 const OBSOLETE_RELATED_EQ_KEY = 'fb-is-obsolete-related-eq';
@@ -81,6 +83,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isBOMExists = false,
   isPart = false,
   isSliderView,
+  inDialog,
 }) => {
   // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
@@ -108,6 +111,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const title = documentRevision?.name;
   const isDocumentPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const isWO = checkIsDocumentWO(documentRevision?.document?.documentType?.groupOptions);
+  const isGRPT = checkIsDocumentGRPT(documentRevision?.document?.documentType?.groupOptions);
+  const isRecordBehaviour = isRecord || isGRPT;
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
   const classes = useStyles();
@@ -120,6 +125,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const approvalRequestDialog = useDialog();
 
   const alertDialog = useDialog();
+  const GRPTDialog = useDialog();
 
   const dispatch = useDispatch();
 
@@ -405,6 +411,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const closeCRDialog = () => {
     approvalRequestDialog.close();
+    if (inDialog) {
+      FBDataStore.newlyCreatedDocInfo = { ...FBDataStore.newlyCreatedDocInfo, reRender: true };
+      return;
+    }
+
     if (isSliderView) {
       FBDataStore.selectedSliderInfo = { documentId: documentRevision.document.id, documentRevision: documentRevision, reRender: true };
     } else {
@@ -451,7 +462,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       );
       return;
     }
-    if (isRecord) {
+    if (isRecordBehaviour) {
       async.start(
         finalizeAction,
         id,
@@ -473,6 +484,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       },
       password,
       isSliderView,
+      inDialog,
       async,
     );
   };
@@ -492,7 +504,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   return (
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
-        {isNewLayout && !isRecord ? (
+        {isNewLayout && !isRecordBehaviour ? (
           renderAsButton
             ? (
               <SplitReleaseButton
@@ -515,7 +527,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           <Button
             kind="white"
             className={classes.button}
-            onClick={() => isRecord ? alertDialog.open() : openDialog()}
+            onClick={() => isRecord ? alertDialog.open() : isGRPT ? GRPTDialog.open() : openDialog()}
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
           >
@@ -591,6 +603,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         message="record.release.alert"
         dialog={alertDialog}
         confirmAction={onSubmit}
+      />
+      <GRPTWarningDialog
+        async={async}
+        dialog={GRPTDialog}
+        onConfirm={onSubmit}
       />
     </>
   );

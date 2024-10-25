@@ -38,7 +38,8 @@ export const toFixedDecimals = (value: string | number, precision = DEFAULT_PREC
   const arr = value?.toString()?.split('.');
   return `${arr[0]}.${arr[1].slice(0, precision)}`;
 };
-export const isMoreDigitsAfterDecimal = (value: string | number, length: number) => value?.toString()?.split('.')[1]?.length > length;
+export const isMoreDigitsAfterDecimal = (value: string | number, length: number) => getDigitsCountAfterDecimal(value) > length;
+export const getDigitsCountAfterDecimal = (value: string | number) => value?.toString()?.split('.')[1]?.length;
 export const linearScale = (domain: number[], range: number[]) => {
   const scale = (value: number) => {
     const [minValue, maxValue] = [...domain];
@@ -79,3 +80,5 @@ export const getPendingTooltipText = (pendingCount, approvedCount) => {
     secondaryText: secondaryText as Translation,
   };
 };
+
+export const delay = async (ms: number) => await new Promise(resolve => setTimeout(resolve, ms));

@@ -1,9 +1,11 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { MouseEventHandler } from 'react';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../../components/KendoDataGrid/constants';
 import WhereUsedDialog, { WhereUsedType } from '../../../../../../components/whereUsed/WhereUsedDialog';
 import useDialog from '../../../../../../hooks/useDialog';
 import { CustomTemplateProps } from '../../types';
+import { isEditMode } from '../../utils';
 import { styles } from './styles';
 
 export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem }) => {
@@ -21,6 +23,10 @@ export const WhereUsedCellTemplate: React.FC<CustomTemplateProps> = ({ dataItem 
     whereUsedDialog.close();
     e.stopPropagation();
   };
+
+  if (isEditMode(dataItem)) {
+    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
+  }
 
   return (
     <>

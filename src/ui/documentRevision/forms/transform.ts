@@ -63,6 +63,7 @@ export const toDocumentRevisionFormValues = (
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
+    lifecyclePhaseId: documentRevision.lifecyclePhaseId,
     securityEmployees: get(documentRevision, 'document.securityList.securityEmployees', [])
       .map((employee) => ({ label: employee.name, value: employee.id })),
     securityGroups: get(documentRevision, 'document.securityList.securityGroups', [])
@@ -109,6 +110,7 @@ export const toDocumentRevisionFormValues = (
 
 export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
+  isNewRev: boolean,
 ): DocumentRevisionEditRequestBody => {
   const data = {
     ...pick(values, [
@@ -139,13 +141,18 @@ export const toDocumentRevisionEditRequestBody = (
   if (!values.document?.documentType?.isQms) {
     data.description = data.description || data.name;
   }
+
+  if (values.lifecyclePhaseId && !isNewRev) {
+    data.lifecyclePhaseId = values.lifecyclePhaseId;
+  }
+
   return data;
 };
 
 export const toNewVersionRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
-  const newValues = toDocumentRevisionEditRequestBody(values);
+  const newValues = toDocumentRevisionEditRequestBody(values, true);
   newValues.revisionChangeType = values.revisionChangeType;
 
   if (values.document) {

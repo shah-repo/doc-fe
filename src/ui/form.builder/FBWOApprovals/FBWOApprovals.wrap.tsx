@@ -157,6 +157,9 @@ export const withFBWOApprovals = <T extends FBWOApprovalsProps>(
     React.useEffect(() => reaction(
       () => formState?.newValues.get(name),
       (fieldValue: string[]) => {
+        if (workspaceState?.isPreview) {
+          return;
+        }
         const formValue: string[] = get(formState?.oldValues, name);
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));

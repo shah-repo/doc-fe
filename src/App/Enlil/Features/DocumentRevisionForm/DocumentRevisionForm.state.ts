@@ -1,14 +1,14 @@
 import { action, computed, observable, set } from 'mobx';
 import { DocumentInfo, DocumentRevisionFormStateProps, SMStore } from '../../..';
 import { Id } from '../../../../state/ducks/common/types';
-import { DocumentType, DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP_OPTION, DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionDocument, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { toastError } from '../../../../ui/components/notifications';
 import { FBInputType, FBSchemaProps, FBWorkspaceMode } from '../../../../ui/form.builder';
-import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
 import { AllocationState } from '../../../../ui/form.builder/FBAllocation/components/treelist/interface';
 import { BOMState } from '../../../../ui/form.builder/FBBOM/components/treelist/interface';
 import { EditableBOM } from '../../../../ui/form.builder/FBBOM/interface';
+import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
 
 export default class DocumentRevisionFormState implements DocumentRevisionFormStateProps {
   // MARK: @config
@@ -32,7 +32,6 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public isMaximizedView = false;
   @observable public selectedSliderInfo: {documentId: string, documentRevision?: DocumentRevision} = { documentId: '' };
   @observable public showPartInDialog = false;
-  @observable public newlyCreatedDocumentRevision?: DocumentRevision;
   @observable public childPartInfo = { dataItem: {}, level: [] };
   @observable public bomChangesInProgress = false;
   @observable public restorePartInfo = { dataItem: {}, level: [] };
@@ -256,10 +255,6 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // MARK: @helpers
   public setDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
     this.documentRevision = documentRevision;
-  };
-
-  public setNewlyCreatedDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
-    this.newlyCreatedDocumentRevision = documentRevision;
   };
 
   public setScrollOffset = (offset: number) => {

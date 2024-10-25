@@ -1,12 +1,14 @@
 import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from '@material-ui/core';
+import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { useTableKeyboardNavigation } from '@progress/kendo-react-data-tools';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../../../common/intl';
+import { getFormattedDateString, MomentFormats } from '../../../../../../common/utils/date';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../../../state/ducks/documentRevisions/types';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
@@ -18,13 +20,14 @@ import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import useHover from '../../../../../hooks/useHover';
+import { Colors } from '../../../../../layout/theme-next';
 import { EditableAllocationItem } from '../../../interface';
 import { ADD_FIELD, MODE_FIELD } from '../constants';
 import { isEditAllocItem } from '../utils';
 import { styles } from './styles';
-import { CustomTreeListCellProps } from './types';
+import { CustomTreeListCellProps, LotAutoCompleteOptions } from './types';
 
-const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot }) => {
+const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, parentRevId, onExpandChange, addLot, expanded, ariaColumnIndex, colIndex, className, deleteLot }) => {
   const isEditMode = isEditAllocItem(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
   const navigationAttributes = useTableKeyboardNavigation(id);
@@ -73,11 +76,16 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     }
   }, [lots]);
 
-  const renderOptions = () => {
-    return lots.map((lot) => ({
-      label: translate('wo.displayRevision', { docId: lot.document.docId, displayRevision: lot?.displayRevision, name: lot?.name }),
-      value: lot.id,
-    }));
+  const renderOptions = (): LotAutoCompleteOptions[] => {
+    return lots.map((lot) => {
+      const expiryDate = lot.isExpired ? getFormattedDateString(lot.expiryDate, MomentFormats.MonthDateYearTwoDigit) : '';
+      return {
+        label: lot.document.docId,
+        value: lot.id,
+        expiryDate,
+        isExpired: lot.isExpired,
+      };
+    });
   };
 
   const handleChange = (event: ChangeEvent<unknown>, option?: OptionType) => {
@@ -87,6 +95,8 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
     field && setFieldValue(field, option?.value);
     setFieldValue('quantityOnHand', selectedLOT?.precalc?.lot_on_hand_quantity);
     setFieldValue('parentPartRevId', dataItem.parentPartRevId);
+    setFieldValue('isExpired', selectedLOT?.isExpired);
+    setFieldValue('expiryDate', selectedLOT?.expiryDate);
     setFieldValue(ADD_FIELD, dataItem[ADD_FIELD]);
   };
 
@@ -111,19 +121,33 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
         }}
         options={renderOptions()}
         placeholder={translate('common.select')}
-        getOptionLabel={(option: OptionType) => option.label}
+        getOptionLabel={(option: LotAutoCompleteOptions) => option.label}
+        renderOption={(option: LotAutoCompleteOptions, props) => {
+          return (
+            <ListItem sx={{ display: 'flex', justifyContent: 'space-between' }} className={classes.listItem} disableGutters>
+              <ListItemText primary={option.label} />
+              {option.isExpired && <ListItemIcon>
+                <StyleTooltip
+                  title={translate('allocation.lot.expired.tooltip.message', { expiryDate: option.expiryDate })}
+                  placement="top"
+                  arrow
+                >
+                  <FontAwesomeIcon
+                    size="sm"
+                    data-cy={`expired-lot-${option.label}`}
+                    color={Colors.error}
+                    icon={regular('circle-exclamation')}
+                  />
+                </StyleTooltip>
+              </ListItemIcon>}
+            </ListItem>
+          );
+        }}
         onChange={handleChange}
         size="small"
       />
     </FormikField>
   );
-
-  const handleOpenNewTab = () => {
-    if (dataItem.lotRevId && dataItem.lotDocumentId) {
-      const path = documentVersionPath(dataItem.lotRevId, dataItem.lotDocumentId);
-      window.open(path);
-    }
-  };
 
   return (
     <td
@@ -174,7 +198,10 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           </div>}
           {!isEditMode && (dataItem.isLotAddition || dataItem.lotRevId) && (<div className={classes.lotInfoWrapper}>
             <span className={classes.lotInfoId}>
-              <Link onClick={handleOpenNewTab} className={classes.link}>
+              <Link
+                to={(dataItem.lotRevId && dataItem.lotDocumentId) ? documentVersionPath(dataItem.lotRevId, dataItem.lotDocumentId) : '#'}
+                className={classes.link}
+                target="_blank">
                 {dataItem.lotDocId}
               </Link>
             </span>
@@ -235,7 +262,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
           }
         </span>
       }
-      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: dataItem.lotRevId }} />
+      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: dataItem.lotRevId, parentRevId }} />
     </td>
   );
 };

@@ -12,11 +12,11 @@ import { Attachment } from '../../../../../state/ducks/attachments/types';
 import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
-import { Button } from '../../../../components/forms/fields-next';
-import { useFormContext } from '../../../../components/forms/FormContext';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { useFormContext } from '../../../../components/forms/FormContext';
+import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBSection } from '../../../../form.builder';
@@ -26,7 +26,7 @@ import { changeRequestPreviewPath } from '../../../utils/paths';
 import { COMMENTS_FIELD, EmployeeStatus } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './types';
+import { EditableTLItem, EmployeeResponse, TLItemEditEvent, TasksListItem } from './types';
 import { updateData } from './utils';
 
 interface props {
@@ -50,7 +50,10 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const increasedBy = isTasksListAdded ? 2 : 1;
   const [data, setData] = React.useState<EditableTLItem[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const discardTLItem = () => setEditedTLItem(undefined);
+  const discardTLItem = () => {
+    setEditedTLItem(undefined);
+    setIsActionsDisabled(false);
+  };
   const fetchTasksList = useActionCreator(taskActions.fetchTasksList);
   const addTask = useActionCreator(taskActions.addTask);
   const updateTask = useActionCreator(taskActions.updateTask);
@@ -61,6 +64,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
   const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
   const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
+  const [isActionsDisabled, setIsActionsDisabled] = React.useState<boolean>(false);
 
   if (enbleTasksAdditionalColumns) {
     isAdditionalColumnsShown = true;
@@ -70,7 +74,9 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     if (isShowOnly || formik.dirty) {
       return;
     }
+
     setEditedTLItem(dataItem);
+    setIsActionsDisabled(dataItem.isCompleted);
   };
 
   const loadTasksTableData = () => {
@@ -225,6 +231,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
       return;
     }
     deleteTaskAsync.start(deleteTask, editedTLItem?.taskId, deleteTaskAsync);
+    discardTLItem();
   };
 
   const employeeStatusUpdates = (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => {
@@ -273,7 +280,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
 
   const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
   const isWOReleased = isWORecord && DocumentRevisionStatus.Released === workspaceState?.document?.status;
-  const isClosed = isWORecord ? isWOReleased : [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state);
+  const isWOVoided = isWORecord && DocumentRevisionStatus.Voided === workspaceState?.document?.status;
+  const isClosed = isWORecord ? (isWOReleased || isWOVoided) : [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state);
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
     onRowClick: editTLItem,
@@ -283,6 +291,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
     employeeStatusUpdates: employeeStatusUpdates,
     employeeEvidenceUpdates: debounceEmployeeEvidenceUpdates,
     isDisabled: isWORecord ? isWOReleased : ChangeRequestStatus.Closed === state,
+    isActionsDisabled,
     isClosed,
   });
 

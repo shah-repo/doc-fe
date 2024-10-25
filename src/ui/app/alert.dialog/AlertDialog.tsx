@@ -14,6 +14,7 @@ interface Props {
   dialog: DialogHandler
   confirmLabel?: Translation
   cancelLabel?: Translation
+  title?: Translation
 }
 
 /** Dialog with Confirm and Cancel buttons.
@@ -25,6 +26,7 @@ interface Props {
  * @param cancelLabel Cancel button text (optional).
  */
 const AlertDialog: React.FunctionComponent<Props> = ({
+  title = 'common.alert',
   dialog,
   message,
   confirmAction,
@@ -51,7 +53,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item >
                   <Typography data-cy="dialog-header" className={classes.alertTitle}>
-                    <Text translation="common.alert" />!
+                    <Text translation={title} />!
                   </Typography>
                   <Typography data-cy="dialog-message" className={classes.contentText}>
                     <Text translation={message} />
@@ -65,8 +67,8 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               variant="contained"
               className={cx(classes.cancelButton, classes.buttonLabel)}
               onClick={cancelAction}
-              id="AlertDialog-cancelButton"
-              data-cy="AlertDialog-cancelButton"
+              id="dialog-cancel"
+              data-cy="dialog-cancel"
             >
               <Text translation={cancelLabel} />
             </Button>
@@ -74,8 +76,8 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               type="submit"
               variant="contained"
               className={cx(classes.submitButton, classes.buttonLabel)}
-              id="AlertDialog-continueButton"
-              data-cy="AlertDialog-continueButton"
+              id="dialog-continue"
+              data-cy="dialog-continue"
               onClick={confirmAction}
             >
               <Text translation={confirmLabel} />
