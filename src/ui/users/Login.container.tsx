@@ -103,7 +103,7 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
   return (
     <Box top={0} left={0} right={0} bottom={0} display="flex" alignItems="center" justifyContent="center" flexDirection="column" position="fixed">
       <CircularProgress size={20} />
-      <Box mt={2}>{translate('login.logging.in')}</Box>
+      {code && <Box mt={2}>{translate('login.logging.in')}</Box>}
     </Box>
   );
 };
