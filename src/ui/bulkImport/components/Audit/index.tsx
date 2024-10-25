@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { intl } from '../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
+import { bkStatusTextMap } from '../../../../state/ducks/bulkImport/constants';
 import { getBulkImports, getBulkImportsMap } from '../../../../state/ducks/bulkImport/selectors';
 import { BkStatus, LogEntry } from '../../../../state/ducks/bulkImport/types';
 import { companySelectors } from '../../../../state/ducks/company';
@@ -39,16 +40,6 @@ interface MergedLog extends LogEntry {
   approvalId?: string
 }
 
-const humanReadableBkStatus = {
-  [BkStatus.STARTED]: 'Started',
-  [BkStatus.IN_PROGRESS]: 'In Progress',
-  [BkStatus.SUCCESS]: 'Success',
-  [BkStatus.FAILED]: 'Failed',
-  [BkStatus.CANCELLED]: 'Rejected',
-  [BkStatus.COMPLETED]: 'Completed',
-  [BkStatus.DELETED]: 'Deleted',
-};
-
 const AuditHistory: React.FunctionComponent<OwnProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
@@ -70,8 +61,10 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
     closeHistoryPanel(openDrawer.right);
   };
 
-  const filterLogs = (logs: MergedLog[]): MergedLog[] => {
-    return logs.filter((log) => {
+  const filterAndSortLogs = (logs: MergedLog[]): MergedLog[] => {
+    const oldestXlsxLogs: Record<string, MergedLog> = {};
+
+    const processedLogs = logs.filter((log) => {
       const requiredType = fieldTypeConditions[log.fieldPath];
 
       // If the fieldPath doesn't exist in fieldTypeConditions, skip this log
@@ -82,14 +75,49 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
 
       // filter specific types
       if (log?.approvalId && log?.type === 'STRING_EDITED' && log?.fieldPath === 'status') return false;
+      if (log?.fieldPath === 'documentRevisionId') return false;
+
+      // Handle `xlsx` field logs by keeping only the oldest log per unique fileId (Because logs give a lot without upload a file, we use only the oldest one per file id)
+      if (log.fieldPath === 'xlsx' && log.type === 'ARRAY_NEW') {
+        try {
+          const xlsxData = JSON.parse(log.nextValue as string);
+          const fileId = xlsxData?.fileId;
+
+          // Continue only if fileId exists
+          if (fileId) {
+            // Store the log if it is the first log for this fileId or if it's older than the stored log
+            if (
+              !oldestXlsxLogs[fileId]
+              || (log.timestamp && oldestXlsxLogs[fileId].timestamp && new Date(log.timestamp).getTime() < new Date(oldestXlsxLogs[fileId].timestamp).getTime())
+            ) {
+              oldestXlsxLogs[fileId] = log; // Update the oldest log for this fileId
+            }
+          }
+        } catch (error) {
+          console.error('Failed to parse xlsx log data:', error);
+          return false; // Skip invalid entries
+        }
+
+        return false;
+      }
 
       // If there's no type requirement, or if type matches, include the log
       return true;
     });
+
+    // Add the upload data values
+    const filteredLogs = [...processedLogs, ...Object.values(oldestXlsxLogs)];
+
+    // sort the logs to have the order per timestamp
+    return filteredLogs.sort((a: MergedLog, b: MergedLog) => {
+      const dateA = new Date(a.timestamp ?? 0);
+      const dateB = new Date(b.timestamp ?? 0);
+      return dateB.getTime() - dateA.getTime();
+    });
   };
 
   // Merges all logs from each bulkImport and sorts by timestamp (most recent first)
-  const mergeAndSortLogs = (bulkImports): MergedLog[] => {
+  const mergeLogs = (bulkImports): MergedLog[] => {
   // Merge all logs from each bulkImport
     const mergedLogs: MergedLog[] = flatten(bulkImports.map((importItem) => {
     // Extract logs from the main logs array
@@ -116,11 +144,7 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
       return [...mainLogs, ...approvalLogs];
     }));
 
-    return mergedLogs.sort((a: MergedLog, b: MergedLog) => {
-      const dateA = new Date(a.timestamp ?? 0);
-      const dateB = new Date(b.timestamp ?? 0);
-      return dateB.getTime() - dateA.getTime();
-    });
+    return mergedLogs;
   };
 
   const getDescription = (log: MergedLog): Array<{ primaryText: string, secondaryText: string }> => {
@@ -136,10 +160,6 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
       case 'jobId':
         secondaryText = `Created the bulk import job id: ${log.nextValue}`;
         stepChange = 'Bulk Import Created';
-        break;
-      case 'documentRevisionId':
-        secondaryText = `Created a document Revision Id: ${log.nextValue}`;
-        stepChange = 'Document Revision Created';
         break;
       case 'xlsx':
         if (log.type === 'ARRAY_NEW') {
@@ -174,8 +194,8 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
         break;
       case 'status':
         if (log.type === 'STRING_EDITED') {
-          const previousStatus = humanReadableBkStatus[log.previousValue as BkStatus] || log.previousValue;
-          const nextStatus = humanReadableBkStatus[log.nextValue as BkStatus] || log.nextValue;
+          const previousStatus = bkStatusTextMap[log.previousValue as BkStatus] || log.previousValue;
+          const nextStatus = bkStatusTextMap[log.nextValue as BkStatus] || log.nextValue;
           secondaryText = `Bulk import status changed from ${previousStatus} to ${nextStatus}`;
           stepChange = 'Bulk import update';
         }
@@ -224,10 +244,10 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
     const end = start + PER_PAGE;
 
     // Get merged and sorted logs
-    mergedLogsData.current = mergeAndSortLogs(bulkImports);
+    mergedLogsData.current = mergeLogs(bulkImports);
 
     // Filter logs based on allowed fieldPaths and specific types
-    const filteredLogs = filterLogs(mergedLogsData.current);
+    const filteredLogs = filterAndSortLogs(mergedLogsData.current);
 
     // Paginate the logs by slicing the merged and sorted logs
     const nextLogs = slice(processLogs(filteredLogs), start, end);

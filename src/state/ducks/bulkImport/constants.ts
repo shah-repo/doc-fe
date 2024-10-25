@@ -50,7 +50,7 @@ export const bkStatusTextMap: { [key in BkStatus]: string } = {
   [BkStatus.IN_PROGRESS]: 'In progress',
   [BkStatus.SUCCESS]: 'Success',
   [BkStatus.FAILED]: 'Failed',
-  [BkStatus.CANCELLED]: 'Cancelled',
+  [BkStatus.CANCELLED]: 'Rejected',
   [BkStatus.COMPLETED]: 'Completed',
   [BkStatus.DELETED]: 'Deleted',
 };
