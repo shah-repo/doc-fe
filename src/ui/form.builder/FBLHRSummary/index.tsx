@@ -167,7 +167,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     setEditedLHRSummaryItem({
       ...dataItem,
       ...pick(rowData, DATE_FIELDS_TO_PICK),
-      step,
+      step: step as string,
       mpiId,
     });
   };
@@ -360,9 +360,9 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
             }
             loading={
               LHRSummaryAsync.isLoading
-            || addLHRSummaryAsync.isLoading
-            || deleteLHRSummaryAsync.isLoading
-            || updateLHRSummaryAsync.isLoading
+              || addLHRSummaryAsync.isLoading
+              || deleteLHRSummaryAsync.isLoading
+              || updateLHRSummaryAsync.isLoading
             }
             resizable={true}
           >
