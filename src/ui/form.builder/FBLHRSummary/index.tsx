@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -21,7 +22,7 @@ import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
 import { KendoColumn } from '../../components/common/kendo/types';
 import { Button } from '../../components/forms/fields-next';
@@ -37,6 +38,7 @@ import {
 import {
   COLUMN_LOCK_FIELDS,
   DATA_ITEM_KEY,
+  DATE_FIELDS_TO_PICK,
   EXCEL_FILE_NAME,
   FIELDS_TO_PICK,
   SELECTED_FIELD,
@@ -176,11 +178,13 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     }
 
     const { stepOrMPI } = dataItem;
+    const rowData = data.find(val => val.id === dataItem.id);
     const step = stepOrMPI?.split('/')?.[0];
     const mpiId = stepOrMPI?.split('/')?.[1];
 
     setEditedLHRSummaryItem({
       ...dataItem,
+      ...pick(rowData, DATE_FIELDS_TO_PICK),
       step,
       mpiId,
     });
@@ -254,12 +258,17 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     (list, item) => {
       const isLHRSummaryItemEdited
         = editedLHRSummaryItem && editedLHRSummaryItem?.id === item.id;
+      const { recordCreationDate, expiryDate, calDueDate, pmDueDate } = item;
 
       return [
         ...list,
         {
           ...(isLHRSummaryItemEdited ? editedLHRSummaryItem : item),
           [MODE_FIELD]: isLHRSummaryItemEdited ? Mode.edit : Mode.show,
+          ...(expiryDate && { expiryDate: getFormattedDateString(expiryDate, MomentFormats.MonthDateYearTwoDigit) }),
+          ...(calDueDate && { calDueDate: getFormattedDateString(calDueDate, MomentFormats.MonthDateYearTwoDigit) }),
+          ...(pmDueDate && { pmDueDate: getFormattedDateString(pmDueDate, MomentFormats.MonthDateYearTwoDigit) }),
+          ...(recordCreationDate && { recordCreationDate: getFormattedDateString(recordCreationDate, MomentFormats.MonthDateYearTwoDigit) }),
         },
       ];
     },
