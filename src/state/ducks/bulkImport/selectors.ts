@@ -3,6 +3,7 @@ import { translate } from '../../../common/intl';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
 import { ApprovalStatus } from '../common/types';
+import { skippedAttachmentFile } from './constants';
 import { ApproverOption, BkStatus, BulkImportCustom, TableRow, TableRowWithIdx } from './types';
 
 // STEPS
@@ -79,7 +80,7 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         step: 2,
       },
       {
-        icon: bulkImport?.attachmentId ? 'check' : approvalCheck || bulkImport.attachmentLink === 'skipped' ? 'skip' : 'blank',
+        icon: bulkImport?.attachmentId || (bulkImport?.attachmentLink && bulkImport?.attachmentLink !== skippedAttachmentFile) ? 'check' : approvalCheck || bulkImport.attachmentLink === skippedAttachmentFile ? 'skip' : 'blank',
         text: translate('common.attachments'),
         step: 3,
       },

@@ -42,8 +42,10 @@ export const SET_IS_LOADING_MAIN = 'bulkImport/SET_IS_LOADING_MAIN';
 export const SET_DATA_TYPE_FILTER = 'bulkImport/SET_DATA_TYPE_FILTER';
 export const SET_STATUS_FILTER = 'bulkImport/SET_STATUS_FILTER';
 export const CLEAN_UP_MAPPED_HEADERS = 'bulkImport/CLEAN_UP_MAPPED_HEADERS';
+export const SET_BULK_IMPORTS_STATUS = 'bulkImport/SET_BULK_IMPORTS_STATUS';
 
 export const approvalFieldPrefix = 'fb-approvals-fb-approvals-';
+export const skippedAttachmentFile = 'skipped';
 
 export const bkStatusTextMap: { [key in BkStatus]: string } = {
   [BkStatus.STARTED]: 'Started',

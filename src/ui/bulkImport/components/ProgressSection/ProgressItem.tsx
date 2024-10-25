@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
 import { MomentFormats } from '../../../../common/utils/date';
-import { deleteBulkImport, getReportsExcelFile, setBulkImport, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
+import { deleteBulkImport, getReportsExcelFile, setBulkImport, setBulkImportsStatus, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
 import { BkStatus, BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
 import { ChangeRequestTransitionResponse } from '../../../../state/ducks/changeRequest/types';
@@ -51,7 +51,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   );
   const transitionDialog = useDialog();
   const transitionDialog1 = useDialog();
-  const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && _.isEmpty(item.process);
+  const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && _.isEmpty(item.process) && item.status === BkStatus.STARTED;
   const showApprovals = !!currentApproval && showApproverButtons;
   const currentProgressStep = useRef(0);
   const isRejected = STATUSES_CANCELED.includes(item?.status as BkStatus);
@@ -116,6 +116,14 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     // if the process is not empty is because is importing
     dispatch(setCurrentStep(currentProgressStep.current));
     history.push(BULK_IMPORT_URL);
+  };
+
+  const handleRejectedBulkImport = () => {
+    dispatch(setBulkImportsStatus(item.id, BkStatus.CANCELLED));
+  };
+
+  const handleApproveBulkImport = () => {
+    dispatch(setBulkImportsStatus(item.id, BkStatus.IN_PROGRESS));
   };
 
   useEffect(() => {
@@ -245,12 +253,14 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
             transitionDialog={transitionDialog1}
             label="transition.action.reject"
             translationRejectMsg="bulkImport.reject.alert"
+            onSuccess={handleRejectedBulkImport}
           />
           <ApproveDialogueContainer
             transition="approve"
             approvalId={currentApproval?.id}
             transitionDialog={transitionDialog}
             label="transition.action.approve"
+            onSuccess={handleApproveBulkImport}
           />
         </>
       }

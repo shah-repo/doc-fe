@@ -58,8 +58,13 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         </>, {
           closeButton: true,
         });
-      dispatch(dashboardTodoActions.loadMyFeedsList());
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        dispatch(dashboardTodoActions.loadMyFeedsList());
+        dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      }
     },
     onError: () => {
       async.reset();
