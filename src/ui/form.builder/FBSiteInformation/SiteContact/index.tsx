@@ -142,7 +142,7 @@ const SiteContact: React.FC<SiteContactProps> = ({
     onDelete: onDeleteSiteContact,
   });
 
-  const siteContactList = siteContact.reduce(
+  const siteContactList = siteContact?.reduce(
     (list, item) => {
       const isSiteEdited
         = editedSiteContact && editedSiteContact.id === item.id;

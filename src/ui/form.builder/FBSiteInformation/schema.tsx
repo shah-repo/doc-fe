@@ -1,6 +1,7 @@
 import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
+import { PrimaryCell } from './components/PrimaryCell';
 import { SameAsHQCellCellTemplate } from './components/SameAsHQCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableSite, SchemaOptions } from './types';
@@ -15,6 +16,19 @@ export const buildSchema = ({
   onDelete,
 }: SchemaOptions): Array<ColumnDefinition<EditableSite>> => {
   return [
+    {
+      id: 'primary',
+      field: 'primary',
+      filterable: false,
+      title: 'form.builder.site.inforation.grid.heading.primary',
+      template: (props) => (
+        <PrimaryCell
+          isActive={false}
+          {...props}
+          isInEditMode={isInEditMode} />
+      ),
+      width: 80,
+    },
     {
       id: 'sameAsHQ',
       field: 'sameAsHQ',

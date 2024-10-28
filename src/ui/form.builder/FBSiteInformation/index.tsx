@@ -47,12 +47,19 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
         = workspaceState?.formInput?.[name] ?? [];
       const updatedSite = omit(values, FIELDS_TO_OMIT);
 
+      const toggleExclusiveFields = (
+        contact: EditableSite,
+      ) => ({
+        ...contact,
+        primary: updatedSite.primary ? false : contact.primary,
+      });
+
       const updatedSites = isAddition
-        ? [...sites, updatedSite]
+        ? [...sites.map(toggleExclusiveFields), updatedSite]
         : sites.map((site) =>
           site.id === values.id
             ? updatedSite
-            : site,
+            : toggleExclusiveFields(site),
         );
 
       formState?.setFieldValue(name, updatedSites);
