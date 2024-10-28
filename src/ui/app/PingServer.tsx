@@ -18,7 +18,7 @@ const PingServer: React.FC = () => {
   }, [dispatch, currentEmployeeId]);
 
   const handleActivity = useMemo(
-    () => throttle(pingServer, IDLE_TIMEOUT),
+    () => throttle(pingServer, IDLE_TIMEOUT, { trailing: false }),
     [pingServer],
   );
 
