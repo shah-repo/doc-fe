@@ -1,6 +1,6 @@
 export const dropDownOptions = [
   { value: 'TIME_TRAVEL_USER_SESSION', text: 'TIME_TRAVEL_USER_SESSION' },
-  { value: 'TIME_TRAVEL_USER', text: 'TIME_TRAVEL_USER' },
+  // { value: 'TIME_TRAVEL_USER', text: 'TIME_TRAVEL_USER' },
   { value: 'TIME_TRAVEL_COMPANY', text: 'TIME_TRAVEL_COMPANY' },
   {
     value: 'UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE',
