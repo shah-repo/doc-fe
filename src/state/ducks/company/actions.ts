@@ -105,7 +105,7 @@ const createApprovalRoles = (
   id?: string,
   method: ApiActionMethod = 'post',
 ): ApiAction<GeneralSettingsState> => {
-  const { formValues, values } = body;
+  const { values } = body;
   const url = CREATE_APPROVAL_ROLES_URL;
   return apiAction({
     url,
@@ -113,7 +113,7 @@ const createApprovalRoles = (
     data: pick(values, 'name', 'isActive'),
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
-      dispatch(setGeneralSettings(formValues));
+      dispatch(getGeneralSettings());
     },
   });
 };
@@ -122,10 +122,9 @@ const updateApprovalRoles = (
   body: any,
   id?: string,
   method: ApiActionMethod = 'patch',
-  ): ApiAction<GeneralSettingsState> => {
+): ApiAction<GeneralSettingsState> => {
   const { lifecyclePhases, ...rest } = body;
   const payload = { ...rest, lifecyclePhases: Array.isArray(lifecyclePhases) ? lifecyclePhases : [] };
-  const { formValues } = body;
   const url = generatePath(UPDATE_APPROVAL_ROLES_URL, { id });
   return apiAction({
     url,
@@ -133,7 +132,7 @@ const updateApprovalRoles = (
     data: pick(payload, 'isActive'),
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
-      dispatch(setGeneralSettings(formValues));
+      dispatch(getGeneralSettings());
     },
   });
 };

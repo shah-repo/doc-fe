@@ -19,6 +19,18 @@ import SyncMessageAlert from './SyncMessageAlert';
 import SyncMessageDialog from './SyncMessageDialog';
 
 const OUT_OF_SYNC_ALERT_DATA_KEY = 'outOfSyncAlertData';
+
+const SyncLabelElement: React.FC<{ label, subLabel }> = ({ label, subLabel }) => {
+  return (
+    <>
+      <Text translation={label} />
+      <Box marginTop={2} >
+        <Text translation={subLabel} />
+      </Box>
+    </>
+  );
+};
+
 interface Props {
   documentRevision: DocumentRevision
 }
@@ -49,17 +61,6 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     const newItems = [...items];
     pullAt(newItems, sortedIndices);
     return newItems;
-  };
-
-  const SyncLabelElement: React.FC<{ label, subLabel }> = ({ label, subLabel }) => {
-    return (
-      <>
-        <Text translation={label} />
-        <Box marginTop={2} >
-          <Text translation={subLabel} />
-        </Box>
-      </>
-    );
   };
 
   const getSyncMessageTranslation = (isSubLabel = false) => {
@@ -108,14 +109,33 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
 
   const getSyncLabel = () => {
     if ([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)) {
-      return (<SyncLabelElement label={getSyncMessageTranslation()}
-        subLabel={getSyncMessageTranslation(true)} />);
-    } else if ([DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved].includes(documentRevision.status)) {
-      return (<SyncLabelElement label={getSyncMessageTranslation()}
-        subLabel={translate('dam.sync.message.in.review.role.sub.label', { docId: dam.document.docId, rev: dam.documentRevision.displayRevision })} />);
-    } else if (documentRevision.status === DocumentRevisionStatus.Released) {
-      return (<SyncLabelElement label={getSyncMessageTranslation()}
-        subLabel="dam.sync.message.released.role.sub.label" />);
+      return (
+        <SyncLabelElement
+          label={getSyncMessageTranslation()}
+          subLabel={getSyncMessageTranslation(true)}
+        />
+      );
+    }
+
+    if ([DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved].includes(documentRevision.status)) {
+      return (
+        <SyncLabelElement
+          label={getSyncMessageTranslation()}
+          subLabel={translate('dam.sync.message.in.review.role.sub.label', {
+            docId: dam.document.docId,
+            rev: dam.documentRevision.displayRevision,
+          })}
+        />
+      );
+    }
+
+    if (documentRevision.status === DocumentRevisionStatus.Released) {
+      return (
+        <SyncLabelElement
+          label={getSyncMessageTranslation()}
+          subLabel="dam.sync.message.released.role.sub.label"
+        />
+      );
     }
   };
 
@@ -148,6 +168,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       }
     });
   }
+
   if (!isEmptyArray(removeFromDam)) {
     const removingARIndexes = removeFromDam.map(ar => {
       const removingAR = updatedDAR.findIndex(dar => dar.id === ar.id);
