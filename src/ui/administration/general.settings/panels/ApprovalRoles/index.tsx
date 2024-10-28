@@ -1,4 +1,3 @@
-import { Box } from '@material-ui/core';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { omit } from 'lodash';
 import React, { useEffect } from 'react';
@@ -7,67 +6,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { ApprovalRole, Dam, GeneralSettings } from '../../../../../state/ducks/company/types';
-import TextCellTemplate from '../../../../administration/general.settings/components/SettingsTable/components/TextCellTemplate';
-import { Checkbox } from '../../../../components/forms/fields-next';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import SettingsPanel from '../../components/SettingsPanel';
 import SettingsTable from '../../components/SettingsTable';
-import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
-import SyncMessageDialog from './SyncMessageDialog';
-import { EditableApprovalRoles, SchemaBuilder } from './types';
+import { SettingsPanelProps } from '../../types';
+import SyncMessageDialog from './components/SyncMessageDialog';
+import { buildSchema } from './schema';
+import { EditableApprovalRoles } from './types';
 
-const ActiveCellTemplate: React.FC<CellTemplateProps<EditableApprovalRoles>> = ({ dataItem, dataIndex, onChange }) => {
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  return (
-    <Box display="flex" justifyContent="center" marginTop={ isEditMode ? '4px' : '' }>
-      <Checkbox
-        checked={dataItem.isActive}
-        onChange={(event) => onChange?.({ dataItem, dataIndex, syntheticEvent: event })}
-      />
-    </Box>
-  );
-};
-
-const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, editedApprovalRoles }) => {
-  return [
-    {
-      id: 'active',
-      field: 'isActive',
-      title: 'common.active',
-      width: 80,
-      template: (props) => (
-        <ActiveCellTemplate
-          {...props}
-          onChange={onChange}
-        />
-      ),
-    },
-    {
-      id: 'name',
-      field: 'name',
-      title: 'common.name',
-      template: TextCellTemplate,
-    },
-    {
-      id: 'actions',
-      template: (props) => (
-        <ActionsCellTemplate
-          {...props}
-          onConfirm={onConfirm}
-          onDiscard={onDiscard}
-          hideEditButton
-        />
-      ),
-      width: editedApprovalRoles?.[MODE_FIELD] === Mode.add ? 75 : 0,
-    },
-  ];
-};
-
-const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
+const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
   const approvalRoles = getFieldProps('approvalRoles.approvalRoles').value as ApprovalRole[];
   const dam = getFieldProps('approvalRoles.dam').value as Dam;
@@ -81,7 +31,7 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
     if (dataItem[MODE_FIELD] === Mode.add) {
       return setEditedApprovalRoles(prevValue => ({ ...prevValue, isActive: !editedApprovalRoles?.active, name: values.name }));
     }
-    if(!dam?.isSynced) {
+    if (!dam?.isSynced) {
       setIsOpen(true);
     }
     const updatedApprovalRoles = approvalRolesData?.map(item => item.id === dataItem.id ? { ...dataItem, isActive: !dataItem.isActive } : item);
@@ -160,24 +110,28 @@ const ApprovalRolesSettingsPanel: React.FC<> = (props) => {
 
   return (
     <>
-    <SettingsPanel {...props} title={translate('administration.general.settings.approvalRoles.tab')} isOutOfSync={!dam?.isSynced}>
-      <FormikProvider value={formik}>
-        <SettingsTable
-          isActive
-          data={approvalRoleList}
-          isEditing={editedApprovalRoles !== undefined}
-          schema={schema}
-          addButtonLabel={translate('administration.general.settings.approvalRoles.add')}
-          onAdd={addApprovalRole}
+      <SettingsPanel
+        {...props}
+        title={translate('administration.general.settings.approvalRoles.tab')}
+        isOutOfSync={!dam?.isSynced}
+      >
+        <FormikProvider value={formik}>
+          <SettingsTable
+            isActive
+            data={approvalRoleList}
+            isEditing={editedApprovalRoles !== undefined}
+            schema={schema}
+            addButtonLabel={translate('administration.general.settings.approvalRoles.add')}
+            onAdd={addApprovalRole}
+          />
+        </FormikProvider>
+      </SettingsPanel>
+      {isOpen && (
+        <SyncMessageDialog
+          { ...{ isOpen, dam } }
+          closeDialog={() => setIsOpen(false)}
         />
-      </FormikProvider>
-    </SettingsPanel>
-    {isOpen && (
-    <SyncMessageDialog
-      { ...{ isOpen, dam } }
-      closeDialog={() => setIsOpen(false)}
-    />
-    )}
+      )}
     </>
   );
 };

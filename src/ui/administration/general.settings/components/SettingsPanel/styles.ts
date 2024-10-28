@@ -89,7 +89,7 @@ export default makeStyles(theme => ({
     cursor: 'default',
   },
   outOfSyncIcon: {
-    marginLeft: theme.spacing(2),
+    margin: theme.spacing(0.5, 0, 0, 1),
     color: Colors.error,
     width: 20,
     height: 20,

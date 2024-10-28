@@ -9,11 +9,11 @@ import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
-import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/SyncMessageDialog.container';
+import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/components/SyncMessageDialog.container';
 import FBMaterialDisposition from '../../../../ui/change.request/FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
 import PromptIfDirty from '../../../../ui/components/forms/PromptIfDirty';
@@ -25,7 +25,7 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentChangeRequest, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -79,6 +79,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isDAM = checkIsDocumentDAM(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
   const isPart = checkIsDocumentPart(groupOptions);
   const isPartForm = checkIsDocumentPart(
@@ -404,8 +405,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                   && _tabsState?.isTabActive(
                                     TabTypeOptions.MATERIAL_DISPOSITION,
                                   ) && (
-                                    <FBMaterialDisposition isShowOnly={true} />
-                                  )}
+                                  <FBMaterialDisposition isShowOnly={true} />
+                                )}
                               </SMBox>
                             )}
                           </AutoSizer>
@@ -419,7 +420,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           </Observer>
         </SMTemplate>
       </SMForm>
-      <SyncMessageDialogContainer {...{ documentRevision }} />
+      {isDAM && <SyncMessageDialogContainer documentRevision={documentRevision} />}
     </>
   );
 };

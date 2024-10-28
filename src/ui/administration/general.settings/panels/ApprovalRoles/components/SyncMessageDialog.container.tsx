@@ -3,18 +3,18 @@ import { isEmptyArray } from 'formik';
 import { cloneDeep, pullAt, sortBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SM } from '../../../../../App';
-import { translate } from '../../../../../common/intl';
-import { authSelectors } from '../../../../../state/ducks/auth';
-import { companyActions, companySelectors } from '../../../../../state/ducks/company';
-import { Dam } from '../../../../../state/ducks/company/types';
-import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
-import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
-import Text from '../../../../components/Text';
-import { FBDAMFields } from '../../../../form.builder';
-import { FBApprovalMatrixItem, FBApprovalRole } from '../../../../form.builder/FBApprovalMatrixField/FBApprovalMatrixField.types';
-import useActionCreator from '../../../../hooks/useActionCreator';
-import useAsync from '../../../../hooks/useAsync';
+import { SM } from '../../../../../../App';
+import { translate } from '../../../../../../common/intl';
+import { authSelectors } from '../../../../../../state/ducks/auth';
+import { companyActions, companySelectors } from '../../../../../../state/ducks/company';
+import { Dam } from '../../../../../../state/ducks/company/types';
+import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
+import Text from '../../../../../components/Text';
+import { FBDAMFields } from '../../../../../form.builder';
+import { FBApprovalMatrixItem, FBApprovalRole } from '../../../../../form.builder/FBApprovalMatrixField/FBApprovalMatrixField.types';
+import useActionCreator from '../../../../../hooks/useActionCreator';
+import useAsync from '../../../../../hooks/useAsync';
 import SyncMessageAlert from './SyncMessageAlert';
 import SyncMessageDialog from './SyncMessageDialog';
 
@@ -181,10 +181,17 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     return <SyncMessageAlert isOpen dialogContent={getSyncLabel()} />;
   }
 
+  if (!showAsyncMessage) {
+    return null;
+  }
+
   return (
-    <>
-      {showAsyncMessage && <SyncMessageDialog {...{ dam }} isOpen={isSyncMessageOpen} closeDialog={() => onCloseDialogClick()} dialogContent={getSyncLabel()} />}
-    </>
+    <SyncMessageDialog
+      isOpen={isSyncMessageOpen}
+      closeDialog={() => onCloseDialogClick()}
+      dialogContent={getSyncLabel()}
+      dam={dam}
+    />
   );
 };
 

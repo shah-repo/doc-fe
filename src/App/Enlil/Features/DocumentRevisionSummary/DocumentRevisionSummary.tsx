@@ -6,10 +6,10 @@ import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevisionStatus, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
-import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/SyncMessageDialog.container';
+import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/components/SyncMessageDialog.container';
 import FBMaterialDisposition from '../../../../ui/change.request/FBMaterialDisposition';
 import ItemsAndDetailsWrapper from '../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap';
 import { FormContext } from '../../../../ui/components/forms/FormContext';
@@ -18,7 +18,7 @@ import SummaryHeader from '../../../../ui/document.revision/header/SummaryHeader
 import Attachment from '../../../../ui/document.revision/summary/attachment';
 import SummaryPresenter from '../../../../ui/document.revision/summary/presenter';
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
-import { checkIsDocumentChangeRequest, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentDAM, checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -46,6 +46,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isDAM = checkIsDocumentDAM(groupOptions);
   const hasOutput = isDocumentRevisionHasOutput(documentRevision);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
@@ -279,8 +280,8 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                   && _tabsState?.isTabActive(
                                     TabTypeOptions.MATERIAL_DISPOSITION,
                                   ) && (
-                                    <FBMaterialDisposition isShowOnly={true} />
-                                  )}
+                                  <FBMaterialDisposition isShowOnly={true} />
+                                )}
                                 {tabType === TabTypeOptions.SUMMARY && _tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
                                   <FBLHRSummary isShowOnly={!hasOutput} isDisabled={true} />
                                 )}
@@ -304,7 +305,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           </Observer>
         </SMTemplate>
       </SMForm>
-      <SyncMessageDialogContainer {...{ documentRevision }} />
+      {isDAM && <SyncMessageDialogContainer documentRevision={documentRevision} />}
     </>
   );
 };

@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { translate } from '../../../../../common/intl';
-import { Dam } from '../../../../../state/ducks/company/types';
-import Text from '../../../../components/Text';
-import { documentVersionPath } from '../../../../document.revision/utils/paths';
-import useStyles from './styles';
+import { translate } from '../../../../../../common/intl';
+import { Dam } from '../../../../../../state/ducks/company/types';
+import Text from '../../../../../components/Text';
+import { documentVersionPath } from '../../../../../document.revision/utils/paths';
+import useStyles from '../styles';
 
 interface Props {
   isOpen: boolean
@@ -30,7 +30,8 @@ const SyncMessageDialog: React.FC<Props> = ({
   return (
     <Dialog
       open={isOpen}
-      scroll="paper">
+      scroll="paper"
+    >
       <DialogTitle className={classes.dialogTitle}>
         <FontAwesomeIcon className={classes.infoIcon} icon={regular('circle-info')} />
         <Typography className={classes.titleText}>
@@ -38,13 +39,13 @@ const SyncMessageDialog: React.FC<Props> = ({
         </Typography>
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
-        {(
-          dialogContent
-          ?? <>
+        {dialogContent && (
+          <>
             <Text translation="administration.general.settings.approvalRoles.sync.message.dialog.content" />
             <Link
               to={url}
-              className={classes.link}>
+              className={classes.link}
+            >
               &nbsp;{label}
             </Link>
             <div className={classes.bottomText}>
