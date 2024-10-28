@@ -167,7 +167,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     setEditedLHRSummaryItem({
       ...dataItem,
       ...pick(rowData, DATE_FIELDS_TO_PICK),
-      step: step as string,
+      step: step ?? '',
       mpiId,
     });
   };
