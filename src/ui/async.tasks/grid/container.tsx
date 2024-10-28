@@ -112,7 +112,7 @@ RouteComponentProps
     } else if ([SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS].includes(SQS_TYPES[type])) {
       setPayload(JSON.stringify({
         taskType: type,
-        processedAtTimestamp: selectedDate,
+        // processedAtTimestamp: selectedDate,
       }));
     } else {
       setPayload(JSON.stringify({
@@ -134,7 +134,7 @@ RouteComponentProps
   const handlePasswordExpirationEmailSpecificFormSubmit = (data: any) => {
     setPayload(JSON.stringify({
       taskType: type,
-      processedAtTimestamp: data?.processedAtTimestamp,
+      // processedAtTimestamp: data?.processedAtTimestamp,
       userEmails: data?.userEmails ? data.userEmails.split(',') : [],
     }));
     openApproveDialog();
