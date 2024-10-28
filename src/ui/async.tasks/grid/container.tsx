@@ -131,14 +131,6 @@ RouteComponentProps
     }));
     openApproveDialog();
   };
-  const handlePasswordExpirationEmailSpecificFormSubmit = (data: any) => {
-    setPayload(JSON.stringify({
-      taskType: type,
-      // processedAtTimestamp: data?.processedAtTimestamp,
-      userEmails: data?.userEmails ? data.userEmails.split(',') : [],
-    }));
-    openApproveDialog();
-  };
   const handleuuidFormSubmit = (uuid: string) => {
     setPayload(JSON.stringify([SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE].includes(SQS_TYPES[type]) ? {
       taskType: type,
@@ -164,17 +156,6 @@ RouteComponentProps
   };
   const handleTimeTravelCompany = (values: TimeTravelProps) => {
     if ([SQS_TYPES.TIME_TRAVEL_COMPANY].includes(SQS_TYPES[type])) {
-      setPayload(
-        JSON.stringify({
-          taskType: type,
-          timeTravel: values,
-        }),
-      );
-    }
-    openApproveDialog();
-  };
-  const handleTimeTravelUser = (values: TimeTravelProps) => {
-    if ([SQS_TYPES.TIME_TRAVEL_USER].includes(SQS_TYPES[type])) {
       setPayload(
         JSON.stringify({
           taskType: type,
@@ -212,12 +193,10 @@ RouteComponentProps
       handleEmptyFormSubmit={handleEmptyFormSubmit}
       handleDateFormSubmit={handleDateFormSubmit}
       handlePasswordExpirationFormSubmit={handlePasswordExpirationFormSubmit}
-      handlePasswordExpirationEmailSpecificFormSubmit={handlePasswordExpirationEmailSpecificFormSubmit}
       handleuuidFormSubmit={handleuuidFormSubmit}
       handleEmailFormSubmit={handleEmailFormSubmit}
       handleTimeTravelFormSubmit={handleTimeTravelFormSubmit}
       handleTimeTravelCompany={handleTimeTravelCompany}
-      handleTimeTravelUser={handleTimeTravelUser}
       onSubmit={onSubmit}
     />
   );
