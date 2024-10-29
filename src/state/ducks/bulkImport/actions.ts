@@ -282,12 +282,10 @@ export const setDataTable = (
   onSuccess: (data, dispatch) => {
     dispatch(setBulkImport(data));
   },
-  onCompleted: (dispatch) => {
-    dispatch(setIsLoading(false));
-  },
   handlers,
-  onFailure: (err: string) => {
+  onFailure: (err: string, dispatch) => {
     toastError(err);
+    dispatch(setIsLoading(false));
   },
 });
 
@@ -309,6 +307,9 @@ export const uploadS3 = (
     url: `${BULK_IMPORT_UPLOAD_S3_URL}${body.bulkImportId}`,
     method: 'post',
     data: formData,
+    onSuccess: (data, dispatch) => {
+      dispatch(setBulkImport(data));
+    },
     onCompleted: (dispatch) => {
       dispatch(setIsLoading(false));
     },
@@ -365,6 +366,25 @@ export const getOneBulkImport = (bulkImportId: string): ApiAction<BulkImport> =>
     dispatch(setIsLoadingMain(false));
     dispatch(setIsLoading(false));
   },
+  onFailure: (err: string) => {
+    toastError(err);
+  },
+});
+
+export const patchBulkImport = (
+  body: {bulkImportId: string, data: Partial<BulkImport>},
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${BULK_IMPORT_URL}${body.bulkImportId}`,
+  method: 'patch',
+  data: body.data,
+  onSuccess: (data, dispatch) => {
+    dispatch(setBulkImport(data));
+  },
+  onCompleted: (dispatch) => {
+    dispatch(setIsLoading(false));
+  },
+  handlers,
   onFailure: (err: string) => {
     toastError(err);
   },

@@ -10,7 +10,7 @@ import React, { ComponentType, ReactNode, useEffect, useRef, useState } from 're
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
 import { validateDateFormats } from '../../../../common/utils/date';
-import { setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
+import { patchBulkImport, setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
 import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport, TableErrorDetail, TableErrorValidation, TableRowWithIdx } from '../../../../state/ducks/bulkImport/types';
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
@@ -154,6 +154,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const tableData: TableRowWithIdx[] = useSelector(getTableDataFiltered);
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
+  const triggerNextClick = useActionCreator(patchBulkImport);
   const excelExportRef = useRef<ExcelExport | null>(null);
   const firstLoad = useRef<boolean>(true);
   const [filter, setFilter] = React.useState<CompositeFilterDescriptor>();
@@ -187,10 +188,16 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     excelExportRef.current.save(options);
   };
 
-  const asyncSetDataTable = useAsync({
+  const asyncNextClick = useAsync({
     onSuccess: () => {
       dispatch(setShowTable(false));
       handleNext();
+    },
+  });
+
+  const asyncSetDataTable = useAsync({
+    onSuccess: () => {
+      asyncNextClick.start(triggerNextClick, { bulkImportId: bulkImport?.id, data: { process: { step: 3 } } }, asyncNextClick);
     },
   });
 

@@ -52,18 +52,20 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCan
   };
 
   const init = () => {
-    // Check conditions under which to handle source and target.
-    const validation = checkIfIsTable();
-
-    if (validation && !_.isEmpty(bulkImport?.mappedHeaders) && bulkImport?.id) {
-      dispatch(setIsLoading(true));
-      asyncHeadersToMap.start(uploadFileDataAction, { headers: bulkImport?.mappedHeaders, bulkImportId: bulkImport.id }, asyncHeadersToMap);
-    } else if (!showTable) {
+    if (bulkImport?.id) {
+      // Check conditions under which to handle source and target.
+      const validation = checkIfIsTable();
       // before it starts checking the table data we clean it up to be sure the data is new
       dispatch(setTableData([]));
 
-      if (bulkImport?.id) {
-        dispatch(getBulkImportTableData(bulkImport.id));
+      if (validation) {
+        dispatch(setIsLoading(true));
+        // If the user already have data saved, get the data, if not just bring all again
+        if (bulkImport?.dataId) {
+          dispatch(getBulkImportTableData(bulkImport.id));
+        } else {
+          asyncHeadersToMap.start(uploadFileDataAction, { headers: bulkImport?.mappedHeaders, bulkImportId: bulkImport.id }, asyncHeadersToMap);
+        }
       }
     }
   };

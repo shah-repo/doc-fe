@@ -1,6 +1,6 @@
 import { BkStatus } from './types';
 
-export const BULK_IMPORT_URL = '/bulk_import';
+export const BULK_IMPORT_URL = '/bulk_import/';
 export const BULK_IMPORT_ONE_URL = '/bulk_import/one/';
 export const BULK_IMPORT_TYPE_DATA_URL = '/bulk_import/get_bulk_import_type_data';
 export const BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL = '/bulk_import/get_forms_for_document_type_group';

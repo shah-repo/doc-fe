@@ -51,11 +51,11 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   );
   const transitionDialog = useDialog();
   const transitionDialog1 = useDialog();
-  const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && _.isEmpty(item.process) && item.status === BkStatus.STARTED;
+  const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && _.isEmpty(item.process?.process) && item.status === BkStatus.STARTED;
   const showApprovals = !!currentApproval && showApproverButtons;
   const currentProgressStep = useRef(0);
   const isRejected = STATUSES_CANCELED.includes(item?.status as BkStatus);
-  const showDeleteButton = _.isEmpty(item.process) && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
+  const showDeleteButton = _.isEmpty(item.process?.process) && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
   const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   let rejectedDate;
@@ -138,7 +138,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
         // if we don't find any blank icon is because we already finish and is on the last step
         currentProgressStep.current = 4; // approver step
       }
-      if (!_.isEmpty(item.process) || item.status === BkStatus.IN_PROGRESS) {
+      if (!_.isEmpty(item.process?.process) || item.status === BkStatus.IN_PROGRESS) {
         currentProgressStep.current = 5; // importing step
       } else if (currentProgressStep.current === 5) {
         currentProgressStep.current = 4; // approver step

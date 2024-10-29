@@ -74,8 +74,8 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         text: translate('bulkImport.uploadData'),
         step: 1,
       },
-      {
-        icon: bulkImport?.dataId ? 'check' : 'blank',
+      { // we valid if the next step is already done "attachmentId" because process.step can be deleted on Bulk import process after the approve
+        icon: bulkImport?.attachmentId || (bulkImport.process?.step && bulkImport.process?.step <= 3) ? 'check' : 'blank',
         text: translate('bulkImport.mapColumns'),
         step: 2,
       },
@@ -90,7 +90,7 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         step: 4,
       },
       {
-        icon: !_.isEmpty(bulkImport.process) && progress > 99 ? 'check' : 'blank',
+        icon: !_.isEmpty(bulkImport.process?.process) && progress > 99 ? 'check' : 'blank',
         text: translate('bulkImport.importing'),
         step: 5,
       },

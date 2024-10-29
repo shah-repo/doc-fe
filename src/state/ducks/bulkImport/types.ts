@@ -354,6 +354,7 @@ interface Process {
 interface BkProcess {
   process: Process[]
   totalSteps: number
+  step?: number
 }
 
 interface OriginalHeader {
