@@ -48,13 +48,13 @@ export const SignedCell = ({
   const isLocked = Boolean(dataItem.user?.locked);
   const isConfirmed = Boolean(dataItem.user?.confirmed);
 
-  const linkMessage = isConfirmed ? 'reset.password' : 'user.management.resend.signup.email';
+  const linkMessage = isConfirmed || isLocked ? 'reset.password' : 'user.management.resend.signup.email';
   const linkText = translate(linkMessage);
   const statusMessage = isLocked ? 'user.locked' : isConfirmed ? 'user.confirmed' : 'user.unconfirmed';
   const statusText = translate(statusMessage);
 
   const sendEmail = () => {
-    if (isConfirmed) {
+    if (isConfirmed || isLocked) {
       asyncResetPasswordEmail.start(
         getSendPasswordResetEmailAction,
         dataItem.id,

@@ -5,6 +5,7 @@ import ActionsButtons from './ActionButtons';
 
 interface Props<T extends EditableItem> extends CellTemplateProps<T> {
   scrollBehavior?: ScrollBehavior
+  isLoading?: boolean
   isActive?: boolean
   onEdit?: (item: T) => void
   onConfirm: () => void
@@ -15,6 +16,7 @@ interface Props<T extends EditableItem> extends CellTemplateProps<T> {
 function ActionsCellTemplate<T extends EditableItem> ({
   dataItem,
   scrollBehavior = 'auto',
+  isLoading,
   isActive,
   onEdit,
   onDelete,
@@ -35,6 +37,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
         ref={ref}
         isEditMode={isEditMode}
         isActive={isActive}
+        isLoading={isLoading}
         onConfirm={onConfirm}
         onDiscard={onDiscard}
         onEdit={() => onEdit?.(dataItem)}
