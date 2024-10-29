@@ -128,7 +128,7 @@ const apiMiddleware: Middleware = ({
       default: {
         const {
           data: { message },
-        } = exception?.response as unknown as AsyncActionErrorResponse;
+        } = exception?.response as AsyncActionErrorResponse;
         if (isArray(message) && has(first(message), 'message')) {
           responseMessage = join(get(first(message), 'message'), '\n');
         } else {
