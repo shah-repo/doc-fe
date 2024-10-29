@@ -6,9 +6,9 @@ import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/consta
 import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import useStyles from '../styles';
 
-interface EditableItemWithActiveField extends EditableItem {
-  active: boolean
-}
+type EditableItemWithActiveField =
+  EditableItem & { active: boolean, isActive?: never }
+  | EditableItem & { isActive: boolean, active?: never };
 
 interface Props<T extends EditableItemWithActiveField> extends CellTemplateProps<T> {
   onActiveStateChange?: (item: T, active: boolean) => void
@@ -41,7 +41,7 @@ function ActiveCellTemplate<T extends EditableItemWithActiveField> ({
       )}
       {!isEditMode && (
         <Checkbox
-          checked={dataItem.active ?? dataItem?.isActive}
+          checked={dataItem.active ?? dataItem.isActive}
           onChange={(e, checked) => onActiveStateChange?.(dataItem, checked)}
           disabled={!onActiveStateChange}
         />
