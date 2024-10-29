@@ -58,6 +58,14 @@ export const buildSchema = ({
       width: 60,
     },
     {
+      id: 'name',
+      field: 'name',
+      title: 'form.builder.contact.grid.heading.name',
+      filterable: false,
+      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      width: 200,
+    },
+    {
       id: 'email',
       field: 'email',
       title: 'form.builder.contact.grid.heading.email',

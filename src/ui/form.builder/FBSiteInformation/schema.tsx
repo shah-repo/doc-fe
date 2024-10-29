@@ -2,7 +2,6 @@ import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { PrimaryCell } from './components/PrimaryCell';
-import { SameAsHQCellCellTemplate } from './components/SameAsHQCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableSite, SchemaOptions } from './types';
 
@@ -29,20 +28,20 @@ export const buildSchema = ({
       ),
       width: 80,
     },
-    {
-      id: 'sameAsHQ',
-      field: 'sameAsHQ',
-      filterable: false,
-      title: 'form.builder.site.inforation.grid.heading.same.as.hq',
-      template: (props) => (
-        <SameAsHQCellCellTemplate
-          {...props}
-          isActive={isActive}
-          isInEditMode={isInEditMode}
-        />
-      ),
-      width: 110,
-    },
+    // {
+    //   id: 'sameAsHQ',
+    //   field: 'sameAsHQ',
+    //   filterable: false,
+    //   title: 'form.builder.site.inforation.grid.heading.same.as.hq',
+    //   template: (props) => (
+    //     <SameAsHQCellCellTemplate
+    //       {...props}
+    //       isActive={isActive}
+    //       isInEditMode={isInEditMode}
+    //     />
+    //   ),
+    //   width: 110,
+    // },
     {
       id: 'siteName',
       field: 'siteName',

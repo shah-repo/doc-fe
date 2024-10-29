@@ -10,6 +10,7 @@ import { CustomSiteTemplateProps } from '../types';
 const Editor: React.FC<CustomSiteTemplateProps> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps } = useFormikContext();
+  const isNumberField = field === 'zipCode';
 
   return (
     <FormikField
@@ -18,7 +19,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field }) => {
       <TextField
         {...getFieldProps(field)}
         defaultValue={undefined}
-        type="text"
+        type={isNumberField ? 'number' : 'text'}
         size="small"
       />
     </FormikField>

@@ -10,6 +10,7 @@ import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import FB from '../../helpers/FB';
+import { setPrimaryFieldDefaultValue } from '../utils';
 import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
@@ -46,6 +47,9 @@ const SiteContact: React.FC<SiteContactProps> = ({
     onSubmit: (values: Partial<EditableSiteContact>) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedSite = omit(values, FIELDS_TO_OMIT);
+      updatedSite.primary = setPrimaryFieldDefaultValue(updatedSite.primary);
+      updatedSite.attention = setPrimaryFieldDefaultValue(updatedSite.attention);
+      updatedSite.shipping = setPrimaryFieldDefaultValue(updatedSite.shipping);
 
       const toggleExclusiveFields = (
         contact: EditableSiteContact | siteContact,
