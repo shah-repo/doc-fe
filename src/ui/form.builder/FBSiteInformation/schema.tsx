@@ -1,6 +1,7 @@
 import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
+import { ApprovedToReceiveCell } from './components/ApprovedToReceiveCell';
 import { PrimaryCell } from './components/PrimaryCell';
 import { SiteAddressCell } from './components/SiteAddressCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
@@ -74,7 +75,7 @@ export const buildSchema = ({
       field: 'approvedToReceive',
       title: 'form.builder.site.inforation.grid.heading.approved.to.receive',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <ApprovedToReceiveCell {...props} onClick={onRowClick} />,
       width: 150,
     },
     {
