@@ -1,11 +1,10 @@
 import { makeStyles } from '@material-ui/core';
 
 export default makeStyles(theme => ({
-  root: {
-    width: 38,
-    margin: 0,
-    padding: 0,
-    justifyContent: 'center',
-    gap: theme.spacing(1.25, 1.25),
+  sideAddress: {
+    flex: 1,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
 }));

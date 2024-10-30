@@ -27,7 +27,7 @@ export const buildSchema = ({
           isInEditMode={isInEditMode}
         />
       ),
-      width: 60,
+      width: 80,
     },
     {
       id: 'shipping',
@@ -41,7 +41,7 @@ export const buildSchema = ({
           isInEditMode={isInEditMode}
         />
       ),
-      width: 60,
+      width: 80,
     },
     {
       id: 'attention',
@@ -55,7 +55,7 @@ export const buildSchema = ({
           isInEditMode={isInEditMode}
         />
       ),
-      width: 60,
+      width: 80,
     },
     {
       id: 'name',
