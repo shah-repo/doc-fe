@@ -1,4 +1,4 @@
-import { round, unionBy } from 'lodash';
+import { isEmpty, round, unionBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { useSelector } from 'react-redux';
 import { FB } from '..';
@@ -155,13 +155,19 @@ export const useIsTransferAllowed = (
   const allowedTransactions = getAllowedTransferOptions(rules, locations, userGroups, selectedOptions);
 
   return RULE_FIELDS_TO_CHECK.reduce<[boolean, AclRuleFieldsToCheck[]]>(([result, errors], field) => {
-    const selectedOption = String(selectedOptions[field]);
+    const isOptionEmpty = isEmpty(selectedOptions[field]);
+    const selectedOption = !isOptionEmpty ? String(selectedOptions[field]) : '';
+
     switch (field) {
       case 'from':
       case 'to': {
         const isAllLocationsAllowed = allowedTransactions[field].length === locations.length;
-        const isValid = allowedTransactions[field].includes(selectedOption) || isAllLocationsAllowed;
-        return [result && isValid, isValid ? errors : [...errors, field]];
+        const isEmptyLocationAllowed = isOptionEmpty && allowedTransactions[field].length === 0;
+        const isLocationAllowed = !isOptionEmpty && allowedTransactions[field].includes(selectedOption);
+
+        const isFieldValid = isAllLocationsAllowed || isEmptyLocationAllowed || isLocationAllowed;
+
+        return [result && isFieldValid, isFieldValid ? errors : [...errors, field]];
       }
       default:
         return [result, errors];
