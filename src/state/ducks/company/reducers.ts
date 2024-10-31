@@ -47,6 +47,7 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   equipmentFamily: {
     autoSyncEnabled: false,
     locations: [],
+    equipmentStatuses: [],
   },
   isMaterialFlowAclEnabled: false,
   lifecyclePhases: { categories: [] },
