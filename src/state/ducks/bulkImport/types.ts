@@ -194,7 +194,7 @@ interface Company {
   id: string
 }
 
-export interface BKAttachmentFile extends Partial<Attachment> {
+interface BKAttachmentFile extends Partial<Attachment> {
   company: Company
   isCleanCopyRequired: boolean
   cleanCopyStatus: string
