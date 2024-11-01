@@ -108,7 +108,8 @@ const PremiumFeaturesPage: React.FC<PremiumFeaturesPageProps> = ({
                 className={classes.togglerIcon}
                 icon={hover ? solid('circle-info') : regular('circle-info')}
                 onMouseEnter={() => { setHover(true); }}
-                onMouseLeave={() => { setHover(false); }} />
+                onMouseLeave={() => { setHover(false); }}
+              />
             </Tooltip>
           </Box>
           <Typography className={classes.descriptionPlaceholder}>[Description of the service goes here]</Typography>

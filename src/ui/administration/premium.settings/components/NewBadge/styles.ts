@@ -4,9 +4,9 @@ import { NextTheme } from '../../../../layout/theme-next/provider';
 
 export default makeStyles((theme: NextTheme) => ({
   container: {
-    padding: theme.spacing(0.5),
+    padding: theme.spacing(0.2, 0.5, 0.1),
     background: `linear-gradient(270deg, ${Colors.primaryLight} 0%, ${Colors.secondary} 127.78%)`,
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: 4,
     fontSize: 9,
     fontWeight: 700,
     textTransform: 'uppercase',
