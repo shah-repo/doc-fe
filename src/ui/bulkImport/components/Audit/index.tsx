@@ -88,7 +88,7 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
             // Store the log if it is the first log for this fileId or if it's older than the stored log
             if (
               !oldestXlsxLogs[fileId]
-              || (log.timestamp && oldestXlsxLogs[fileId].timestamp && new Date(log.timestamp).getTime() < new Date(oldestXlsxLogs[fileId].timestamp).getTime())
+              || (log.timestamp && oldestXlsxLogs[fileId].timestamp && new Date(log.timestamp ?? 0).getTime() < new Date(oldestXlsxLogs[fileId].timestamp ?? 0).getTime())
             ) {
               oldestXlsxLogs[fileId] = log; // Update the oldest log for this fileId
             }
