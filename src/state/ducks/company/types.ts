@@ -42,7 +42,7 @@ export interface CompanyLocation {
   id: string
   name: string
   active: boolean
-  includedInTotalQty: boolean
+  includedInTotalQty?: boolean
 }
 
 export interface Company {
@@ -58,7 +58,7 @@ export interface Company {
   teamId: string
   addresses: string[]
   acctCodes: string[]
-  locations: CompanyLocation[]
+  locations?: CompanyLocation[]
   navigation: NavigationItem[]
   employees?: Employee[]
   scheduledForDeletion: boolean

@@ -10,23 +10,13 @@ import { MeqResponse } from '../../../../../state/ducks/documentRevisions/types'
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
-import {
-  Mode, MODE_FIELD,
-} from '../../../../components/KendoDataGrid/constants';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FBAutocompleteAsyncOption } from '../../../FBAutocompleteAsync/FBAutocompleteAsync.types';
-import {
-  DocType, LHR_SUMARY_FIELDS,
-  LIMIT,
-  MIN_SEARCH_TERM_LENGTH,
-} from '../../constants';
-import {
-  CustomTemplateProps,
-  EditableLHRSummaryItem,
-  LHRSummaryOptionsResponse,
-} from '../../types';
+import { DocType, LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH } from '../../constants';
+import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { PreviewDoc } from './PreviewDoc';
 import { styles } from './styles';
 

@@ -102,7 +102,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   });
 
   useEffect(() => {
-    const data = processRealData(formValues?.lifecyclePhases?.categories);
+    const data = processRealData((formValues?.lifecyclePhases as any)?.categories);
     updateStateGridData(data.phases);
     setSelectedPartGroups(data.groups);
     fetchLCPDocTypesAsync.start(
@@ -349,14 +349,16 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         item.displayOrder = index + 1;
       });
 
-      const displayOrderMap = sortedItems.reduce((acc, item) => {
-        acc[item.id] = item.displayOrder;
+      const displayOrderMap = sortedItems?.reduce((acc, item: LCP) => {
+        if (item?.id) {
+          acc[item?.id] = item.displayOrder;
+        }
         return acc;
       }, {});
 
-      const displayOrderUpdatedData = updatedData?.map(phase => ({
+      const displayOrderUpdatedData = updatedData?.map((phase: LCP) => ({
         ...phase,
-        displayOrder: displayOrderMap[phase?.id] ?? phase.displayOrder,
+        displayOrder: phase?.id ? displayOrderMap[phase?.id] : phase.displayOrder,
       }));
 
       const sortedOrderUpdatedData = sortPhasesByDisplayOrder(displayOrderUpdatedData);
@@ -486,17 +488,17 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onItemChange = (e: GridItemChangeEvent) => {
     resultState?.data?.forEach((group: CustomGroupDataItem) => {
       if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
-      group.items?.forEach((data) => {
-        if (data.id === e.dataItem.id) {
-          if (e.field === LCP_KEYS.isActive) {
-            onTogglePhaseItem(e.dataItem);
-          } else {
-            data.isUserModified = true;
-            data[e.field || ''] = e.value;
+        group.items?.forEach((data) => {
+          if (data.id === e.dataItem.id) {
+            if (e.field === LCP_KEYS.isActive) {
+              onTogglePhaseItem(e.dataItem);
+            } else {
+              data.isUserModified = true;
+              data[e.field || ''] = e.value;
+            }
           }
-        }
-        return data;
-      });
+          return data;
+        });
       }
       return group;
     });

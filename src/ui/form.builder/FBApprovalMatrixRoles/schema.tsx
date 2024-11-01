@@ -38,7 +38,7 @@ export default function createSchema ({
       template: (props) => (
         <GroupsCellTemplate
           {...props}
-          groups={groups}
+          groups={groups ?? []}
           updateField="groups"
           onClick={onRowClick}
         />

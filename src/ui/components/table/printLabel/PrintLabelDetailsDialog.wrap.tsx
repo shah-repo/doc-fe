@@ -16,8 +16,9 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { getLotStatusLabel } from '../../common/header/HeaderLotStatus';
 import { KendoColumn as KendoColumnProps } from '../../common/kendo/types';
+import { SelectOption } from '../../forms/fields/Select';
 import { toastError, toastSuccess } from '../../notifications';
-import { PrintLabelDetailsDialogProps } from './PrintLabelDetailsDialog.types';
+import { PrintLabelDetailsDialogProps, ResponseData } from './PrintLabelDetailsDialog.types';
 
 export const PRINTER_NAME_KEY = 'printerName';
 export const PRINTER_LABEL_TYPE_KEY = 'printerLabelType';
@@ -52,23 +53,23 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const [qtyUnits, setQtyUnits] = useState([initialValues?.qtyUnits]);
     const [serial, setSerial] = useState('');
     const [description, setDescription] = useState('');
-    const [data, setData] = useState({});
+    const [data, setData] = useState<ResponseData>({} as ResponseData);
     const [selectedParams, setSelectedParams] = useState(initialSelectedParams);
-    const [labelTypeData, setLabelTypeData] = useState([]);
+    const [labelTypeData, setLabelTypeData] = useState<LabelTemplatesProps[]>([]);
     const [printerSerial, setPrinterSerial] = useState('');
     const [labelTemplate, setLabelTemplate] = useState('');
     const executeDocumentRevisionAsyncTask = useActionCreator(documentRevisionsActions.loadWithCallback);
     const executePrintLotLabelAsyncTask = useActionCreator(printLabelsActions.postPrintLotLabelAsyncTask);
     const [showError, setShowError] = useState(false);
     const async = useAsync({
-      onSuccess: (data) => {
+      onSuccess: (data?: ResponseData) => {
         const referenceTo = (data?.referenceTo as Reference[]).filter(item => item.docId === initialValues.partId);
         if (!isEmptyArray(referenceTo)) {
           const documentRevision = referenceTo[0].documentRevisions as DocumentRevision[];
           const description = documentRevision.find(item => item.displayRevision === selectedItem?.precalc?.lot_part_revision)?.name;
-          setDescription(description);
+          setDescription(description ?? '');
         }
-        setData(data);
+        setData(data ?? {} as ResponseData);
       },
     });
 
@@ -88,12 +89,12 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         selectedItem?.id,
         async,
       );
-      const recentPrinter: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY));
+      const recentPrinter: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY) ?? '');
       const isRecentPrinterExist = zebraPrint?.find(item => item.printer.name === recentPrinter?.printer?.name && item.printer.isActive);
       if (isRecentPrinterExist) {
         setPrinterSerial(recentPrinter?.printer?.sn);
         setLabelTypeData(recentPrinter?.printer?.labelTemplates);
-        const recentPrinterLabelType: LabelTemplatesProps = JSON.parse(localStorage.getItem(PRINTER_LABEL_TYPE_KEY));
+        const recentPrinterLabelType: LabelTemplatesProps = JSON.parse(localStorage.getItem(PRINTER_LABEL_TYPE_KEY) ?? '');
         setLabelTemplate(recentPrinterLabelType?.id);
       }
     }, []);
@@ -109,7 +110,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         }
       }).filter(Boolean);
       if (activeEmployees) {
-        setEmployees(activeEmployees);
+        setEmployees(activeEmployees as SelectOption[]);
       }
 
       const defaultEmployee = activeEmployees.find(item => item?.email === authUser.email);
@@ -119,10 +120,12 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     }, [companyEmployees]);
 
     const handleDateChange = (date: MaterialUiPickersDate) => {
-      setSelectedDate(new Date(date?.toISOString()));
+      if(date) {
+        setSelectedDate(new Date(date?.toISOString()));
+      }
     };
 
-    const onQtyUnitsChange = (event: React.ChangeEventHandler<HTMLInputElement>, index: number) => {
+    const onQtyUnitsChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
       if (Number(event?.target?.value) < 0) {
         return;
       }
@@ -202,7 +205,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
           pH: selectedParams.includes('ph'),
           labelsToPrint: Number(selectedNumberOfLabel),
           quantity: quantity.reduce((obj, item) => ({ ...obj, [item.key]: isEmpty(item.value) ? null : Number(item.value) }), {}),
-          quantityUnits: selectedItem.formInput?.lot_usable_quantity_unit ?? '',
+          quantityUnits: selectedItem?.formInput?.lot_usable_quantity_unit ?? '',
         },
       };
       asyncPrintLabel.start(
