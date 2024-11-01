@@ -9,7 +9,7 @@ export default makeStyles((theme: NextTheme) => ({
     display: 'grid',
     gridGap: theme.spacing(2.5, 3),
     padding: theme.spacing(3, 3, 0),
-    gridTemplate: 'min-content min-content auto / 800px auto',
+    gridTemplate: 'min-content min-content auto / 850px auto',
   },
   actions: {
     display: 'flex',
@@ -43,12 +43,18 @@ export default makeStyles((theme: NextTheme) => ({
     color: Colors.textGray,
   },
   description: {
-    alignItems: 'center',
     display: 'flex',
+    backgroundColor: Colors.primaryBg,
+    borderRadius: theme.spacing(1),
     fontSize: '12px',
-    gap: '5px',
+    gap: '8px',
     fontWeight: 400,
-    paddingBottom: theme.spacing(2.5),
+    padding: theme.spacing(1.5, 1.5, 1.5),
+    marginBottom: theme.spacing(2.5),
+  },
+  descriptionIcon: {
+    paddingTop: theme.spacing(0.3),
+    color: Colors.primaryLight,
   },
   togglerBox: {
     padding: theme.spacing(2.5, 2.5, 2.5),
@@ -82,9 +88,26 @@ export default makeStyles((theme: NextTheme) => ({
       display: 'block',
       paddingTop: theme.spacing(2.5),
     },
+    togglerContainer: {
+      marginTop: theme.spacing(2.5),
+      marginLeft: 0,
+      display: 'flex',
+      alignItems: 'center',
+    },
   },
-  togglerContainer: {
-    marginTop: theme.spacing(2.5),
-    marginLeft: 0,
+  togglerIcon: {
+    color: Colors.primaryLight,
+    marginLeft: theme.spacing(1),
+    fontSize: '20px',
+  },
+  dialogIcon: {
+    color: Colors.primaryLight,
+  },
+  descriptionPlaceholder: {
+    fontSize: '12px',
+    fontWeight: 400,
+    lineHeight: '15px',
+    color: Colors.textGray,
+    marginTop: theme.spacing(0.5),
   },
 }));

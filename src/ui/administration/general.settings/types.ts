@@ -29,7 +29,7 @@ export interface PremiumFeaturesProps {
   isLoading: boolean
   updatedAt?: string
   onSave: () => void
-  onChange: (event: any) => void
+  setValue: (field: string, value: boolean, shouldValidate?: boolean | undefined) => any
   values: PremiumFeatures
 }
 

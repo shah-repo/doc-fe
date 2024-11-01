@@ -1,7 +1,7 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Typography } from '@material-ui/core';
-import React from 'react';
+import { Box, Tooltip, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../../common/intl';
 import { withThemeNext } from '../../../../layout/theme-next';
@@ -11,18 +11,38 @@ import useStyles from './styles';
 import { Button } from '../../../../components/forms/fields-next';
 import { PremiumFeaturesProps } from '../../types';
 import HeaderLastSaved from '../HeaderLastSaved';
+import AlertDialog from '../../../../components/dialogs/Alert';
+import useDialog from '../../../../hooks/useDialog';
 
 const PremiumFeaturesPage: React.FC<PremiumFeaturesProps> = ({
   isLoading,
   updatedAt,
   onSave,
-  onChange,
+  setValue,
   values,
 }) => {
   const classes = useStyles();
+  const GRPTDialog = useDialog();
+  const [hover, setHover] = useState(false);
 
   return (
     <Box className={classes.root}>
+      <AlertDialog
+        handler={GRPTDialog}
+        onConfirm={() => {
+          GRPTDialog.close();
+          setValue('isAIEnabled', !values.isAIEnabled);
+          onSave();
+        }}
+        title="administration.premium.feature.table.popup.title"
+        confirmLabel="Confirm"
+        icon={regular('wand-magic-sparkles')}
+        iconClass={classes.dialogIcon}
+      >
+        <Typography data-cy="dialog-message" className={classes.contentText}>
+          {translate('administration.premium.feature.table.description1')}
+        </Typography>
+      </AlertDialog>
       <Box className={classes.header}>
         <Box>
           <Typography
@@ -48,13 +68,15 @@ const PremiumFeaturesPage: React.FC<PremiumFeaturesProps> = ({
           )}
           <Box className={classes.buttons}>
             <Button kind="outlined" data-cy="settings-history" disabled>{translate('common.history')}</Button>
-            <Button onClick={onSave} data-cy="settings-save">{translate('common.save.changes')}</Button>
           </Box>
         </Box>
       </Box>
       <Box>
         <Box className={classes.description}>
-          <FontAwesomeIcon icon={regular('circle-info')} /> {translate('administration.premium.feature.description1')} <Link to="/group_management">group management</Link> {translate('administration.premium.feature.description2')}
+          <FontAwesomeIcon className={classes.descriptionIcon} icon={solid('circle-info')} />
+          <Box>
+            {translate('administration.premium.feature.description1')} <Link to="/group_management">group management</Link> {translate('administration.premium.feature.description2')}
+          </Box>
         </Box>
         <Box className={classes.togglerBox}>
           <Typography
@@ -66,17 +88,22 @@ const PremiumFeaturesPage: React.FC<PremiumFeaturesProps> = ({
           <Box className={classes.togglerContainer}>
             <SwitchControl
               id="isAIEnabled"
-              onChange = {onChange}
+              onChange={() => {
+                GRPTDialog.open();
+              }}
               checked={values.isAIEnabled}
               label="AI Enablement"
+              disabled={values.isAIEnabled}
             />
-            <Typography
-              variant="body1"
-              className={classes.togglerDescription}
-            >
-              {translate('administration.premium.feature.table.description1')} <a href="#">feedback@enlil.com</a>
-            </Typography>
+            <Tooltip title={translate('administration.premium.feature.table.description1')} arrow placement="right">
+              <FontAwesomeIcon
+                className={classes.togglerIcon}
+                icon={hover ? solid('circle-info') : regular('circle-info')}
+                onMouseEnter={() => { setHover(true); }}
+                onMouseLeave={() => { setHover(false); }} />
+            </Tooltip>
           </Box>
+          <Typography className={classes.descriptionPlaceholder}>[Description of the service goes here]</Typography>
         </Box>
       </Box>
     </Box>

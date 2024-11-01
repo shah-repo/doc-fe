@@ -62,7 +62,7 @@ const PremiumFeaturesContainer: React.FC = () => {
       />
       <PremiumFeaturesPresenter
         onSave={formik.submitForm}
-        onChange={formik.handleChange}
+        setValue={formik.setFieldValue}
         values={formik.values}
         updatedAt={updatedAt}
         isLoading={isLoading}
