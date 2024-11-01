@@ -17,7 +17,6 @@ export const getDownloadTemplate = async (bulkImportId: string, userState: UserS
   responseType: 'blob',
   headers: {
     Authorization: `bearer ${userState.employeeId}:${userState.sessionId}`,
-    // Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
   },
 }).then(({ data }) => {
   const url = window.URL.createObjectURL(new Blob([data]));

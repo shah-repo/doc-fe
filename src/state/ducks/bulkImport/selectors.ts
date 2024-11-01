@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { translate } from '../../../common/intl';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
@@ -61,16 +61,14 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
     }
 
     const processType = bulkImport.processType;
-    let status = bulkImport.status;
     // As we need the rejected status as a started we change internally the group.
-    if (status === BkStatus.CANCELLED) {
-      status = BkStatus.STARTED;
-    }
+    const status = bulkImport?.status === BkStatus.CANCELLED
+      ? BkStatus.STARTED
+      : bulkImport.status;
     const progress = bulkImport?.process?.process
       ? bulkImport.process.process.filter(p => p.status === BkStatus.COMPLETED)
         .reduce((total, current) => total + (current.percentage * 100), 0) : 0;
-    const approvalCheck = bulkImport?.documentRevision?.approvals && bulkImport?.documentRevision?.approvals.length > 0
-      && bulkImport.documentRevision.approvals.some(approval => approval.status !== ApprovalStatus.Abandoned);
+    const approvalCheck = bulkImport?.documentRevision?.approvals?.some(approval => approval.status !== ApprovalStatus.Abandoned) ?? false;
 
     const icons = [
       {
@@ -79,7 +77,7 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         step: 1,
       },
       { // we valid if the next step is already done "attachmentId" because process.step can be deleted on Bulk import process after the approve
-        icon: bulkImport?.attachmentId || (bulkImport.process?.step && bulkImport.process?.step <= 3) ? 'check' : 'blank',
+        icon: bulkImport?.attachmentId || Number(bulkImport.process?.step) <= 3 ? 'check' : 'blank',
         text: translate('bulkImport.mapColumns'),
         step: 2,
       },
@@ -94,7 +92,7 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         step: 4,
       },
       {
-        icon: !_.isEmpty(bulkImport.process?.process) && progress > 99 ? 'check' : 'blank',
+        icon: !isEmpty(bulkImport.process?.process) && progress > 99 ? 'check' : 'blank',
         text: translate('bulkImport.importing'),
         step: 5,
       },

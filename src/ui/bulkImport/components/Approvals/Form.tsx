@@ -47,7 +47,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
 
   const handleSubmit = async () => {
     if (!users || users.length === 0) {
-      toastError('At least you should select one approver');
+      toastError(translate('bulkImport.approval.select.error'));
       return;
     }
   
@@ -65,7 +65,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
       history.push(BULK_IMPORT_PROGRESS_URL);
     } catch (error) {
       console.error('An error occurred during the document revision process:', error);
-      toastError('An error occurred during the document revision process.');
+      toastError(translate('bulkImport.approval.process.error'));
     } finally {
       dispatch(setIsLoading(false));
     }
@@ -92,7 +92,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
         }
       } catch (error) {
         console.error('An error occurred while removing the user and updating the document revisions:', error);
-        toastError('An error occurred during the removal process.');
+        toastError(translate('bulkImport.approval.remove.error'));
         dispatch(setIsLoading(false));
       }
     }

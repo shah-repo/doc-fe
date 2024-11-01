@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { History } from 'history';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -51,11 +51,13 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   );
   const transitionDialog = useDialog();
   const transitionDialog1 = useDialog();
-  const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && _.isEmpty(item.process?.process) && item.status === BkStatus.STARTED;
+  const isProcessEmpty = isEmpty(item.process?.process);
+  const isReportEmpty = isEmpty(item?.reports);
+  const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && isProcessEmpty && item.status === BkStatus.STARTED;
   const showApprovals = !!currentApproval && showApproverButtons;
   const currentProgressStep = useRef(0);
   const isRejected = STATUSES_CANCELED.includes(item?.status as BkStatus);
-  const showDeleteButton = _.isEmpty(item.process?.process) && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
+  const showDeleteButton = isProcessEmpty && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
   const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
   const openDeleteDialog = useDialog();
 
@@ -133,7 +135,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
         // if we don't find any blank icon is because we already finish and is on the last step
         currentProgressStep.current = 4; // approver step
       }
-      if (!_.isEmpty(item.process?.process) || item.status === BkStatus.IN_PROGRESS) {
+      if (!isProcessEmpty || item.status === BkStatus.IN_PROGRESS) {
         currentProgressStep.current = 5; // importing step
       } else if (currentProgressStep.current === 5) {
         currentProgressStep.current = 4; // approver step
@@ -218,10 +220,10 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
               />
             </StyleTooltip>
           </Box>}
-          {showButtonView && <Button className={_.isEmpty(item?.reports) || item.status === BkStatus.CANCELLED ? classes.viewButton : classes.downloadLogs} kind="outlined" color={!_.isEmpty(item?.reports) ? 'primary' : 'inherit'} onClick={_.isEmpty(item?.reports) ? handleReturnToStep : handleDownloadFile}>
-            <Text translation={_.isEmpty(item?.reports) || item.status === BkStatus.CANCELLED ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
+          {showButtonView && <Button className={isReportEmpty || item.status === BkStatus.CANCELLED ? classes.viewButton : classes.downloadLogs} kind="outlined" color={!isReportEmpty ? 'primary' : 'inherit'} onClick={isReportEmpty ? handleReturnToStep : handleDownloadFile}>
+            <Text translation={isReportEmpty || item.status === BkStatus.CANCELLED ? 'bulkImport.progress.view' : 'bulkImport.progress.downloadLogs' } />
           </Button>}
-          {_.isEmpty(item?.reports) && <Box width={29}>
+          {isReportEmpty && <Box width={29}>
             {showDeleteButton && <StyleTooltip
               title={<Text translation="bulkImport.delete" />}
               placement="top"
