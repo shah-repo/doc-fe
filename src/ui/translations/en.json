@@ -2183,6 +2183,7 @@
   "bulkImport.reject.alert": "You are rejecting a Bulk Import\nAre you sure you want to continue?",
   "bulkImport.delete": "Cancel Import",
   "bulkImport.withdrawSubmission": "Withdraw Submission",
+  "bulkImport.approval.rejected.error": "Approval was rejected. Please resubmit for approval",
   "common.mapHeaders.noHeaders": "There are no headers in the file. Please upload a new file.",
   "common.importingFiles": "Importing files",
   "common.table.rowsErrors": "rows contain errors.",

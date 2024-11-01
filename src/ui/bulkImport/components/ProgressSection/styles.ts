@@ -43,6 +43,19 @@ export default makeStyles(theme => ({
       justifyContent: 'center',
     },
   },
+  itemErrorMessage: {
+    backgroundColor: Colors.errorHighlight,
+    borderColor: Colors.error,
+    border: '1px solid',
+    borderRadius: 4,
+    padding: theme.spacing(1),
+    width: 'fit-content',
+    margin: theme.spacing(1),
+  },
+  itemErrorMessageText: {
+    fontWeight: 400,
+    fontSize: 12,
+  },
   completedText: {
     fontWeight: 400,
     fontSize: 12,

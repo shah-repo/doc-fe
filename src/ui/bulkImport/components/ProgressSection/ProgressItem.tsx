@@ -8,7 +8,7 @@ import {
 import { History } from 'history';
 import _ from 'lodash';
 import moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
@@ -57,12 +57,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const isRejected = STATUSES_CANCELED.includes(item?.status as BkStatus);
   const showDeleteButton = _.isEmpty(item.process?.process) && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
   const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  let rejectedDate;
-
-  if (item?.documentRevision?.approvals?.length) {
-    rejectedDate = item?.documentRevision?.approvals.find(approval => approval.status === ApprovalStatus.Rejected)?.updatedAt;
-  }
+  const openDeleteDialog = useDialog();
 
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
@@ -97,10 +92,10 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   };
 
   const handleOpenDetele = () => {
-    setOpenDeleteDialog(true);
+    openDeleteDialog.open();
   };
   const handleCloseDelete = () => {
-    setOpenDeleteDialog(false);
+    openDeleteDialog.close();
   };
 
   const handleDeleteClick = () => {
@@ -149,31 +144,29 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   return (
     <React.Fragment key={idx}>
       <Box className={classes.itemContainer}>
-        <Box className={classes.titleContainer}>
-          {isRejected ? <FontAwesomeIcon
-            className={classes.xmarkRedIcon}
-            icon={solid('circle-xmark')}
-          /> : item.completedAt ? <FontAwesomeIcon
-            className={classes.checkGreenIcon}
-            icon={solid('circle-check')}
-          /> : <FontAwesomeIcon
-            className={classes.watchLaterIcon}
-            icon={solid('clock-three')}
-          />}
-          <Typography className={classes.itemTitle}>
-            {item.jobId}
-          </Typography>
+        <Box>
+          <Box className={classes.titleContainer}>
+            {item.completedAt ? <FontAwesomeIcon
+              className={classes.checkGreenIcon}
+              icon={solid('circle-check')}
+            /> : <FontAwesomeIcon
+              className={classes.watchLaterIcon}
+              icon={solid('clock-three')}
+            />}
+            <Typography className={classes.itemTitle}>
+              {item.jobId}
+            </Typography>
+          </Box>
+          {isRejected && (
+            <Box className={classes.itemErrorMessage}>
+              <Typography className={classes.itemErrorMessageText}>
+                {translate('bulkImport.approval.rejected.error')}
+              </Typography>
+            </Box>
+          )}
         </Box>
         <Box className={classes.progressBarIconsContainer}>
-          {isRejected ? <Box className={classes.completedMsgContainer}>
-            <FontAwesomeIcon
-              className={classes.xmarkRedIcon}
-              icon={solid('circle-xmark')}
-            />
-            <Typography className={classes.completedText}>
-              {item.status === BkStatus.CANCELLED ? translate('common.rejected') : translate('common.failed')} {rejectedDate && item.status === BkStatus.CANCELLED ? `(${moment(rejectedDate).format(MomentFormats.FullDateTime)})` : null}
-            </Typography>
-          </Box> : item?.completedAt ? (
+          {item?.completedAt ? (
             <Box className={classes.completedMsgContainer}>
               <FontAwesomeIcon
                 className={classes.checkGreenIcon}
@@ -186,7 +179,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           ) : (
             <>
               <ProgressIcons item={item} />
-              <Box className={classes.progressBarContainer}>
+              {!isRejected && <Box className={classes.progressBarContainer}>
                 <Typography className={classes.progressBarTitle}>
                   {translate('common.importingFiles')}
                 </Typography>
@@ -194,7 +187,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
                 <Typography className={classes.progressBarText}>
                   {`${item.progress}% completed`}
                 </Typography>
-              </Box>
+              </Box>}
             </>
           )}
         </Box>
@@ -264,7 +257,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           />
         </>
       }
-      <DeleteDialog open={openDeleteDialog} handleClose={handleCloseDelete} handleConfirm={handleDeleteClick} />
+      <DeleteDialog handler={openDeleteDialog} handleClose={handleCloseDelete} handleConfirm={handleDeleteClick} />
     </React.Fragment>
   );
 };

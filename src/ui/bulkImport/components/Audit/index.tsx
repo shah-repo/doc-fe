@@ -1,5 +1,6 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, CircularProgress, Drawer, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
 import { flatten, map, slice } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -13,7 +14,6 @@ import { AuditDetailsProps } from '../../../../state/ducks/userManagement/types'
 import Default from '../../../components/common/audit.history/Cards/Default';
 import LoadMoreButton from '../../../components/common/load.more.button/LoadMoreButton';
 import Text from '../../../components/Text';
-import Colors from '../../../layout/theme/utils/colors';
 import styles from './styles';
 
 const PER_PAGE = 30;
@@ -261,7 +261,7 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
   useEffect(() => {
     // On initial load, fetch the first page of audit records
     fetchAuditRecords();
-  }, []);
+  }, [fetchAuditRecords]);
 
   const renderAuditRecords = () => (
     <>
@@ -272,7 +272,6 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
           </div>
           <div className={classes.iconContainer} >
             <IconButton
-              style={{ width: '23px' }}
               color="default"
               onClick={closeDrawer}
               aria-label="Close"
@@ -281,7 +280,7 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
               disableTouchRipple
               data-cy="um-close-history-panel"
             >
-              <CloseIcon style={{ color: Colors.gray }} />
+              <FontAwesomeIcon icon={regular('xmark')} className={classes.closeIcon} />
             </IconButton>
           </div>
         </div>

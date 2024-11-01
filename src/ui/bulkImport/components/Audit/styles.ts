@@ -43,4 +43,8 @@ export default makeStyles((theme) => ({
     alignSelf: 'flex-start',
     margin: theme.spacing(0.75, 1.5),
   },
+  closeIcon: {
+    color: Colors.gray,
+    width: 23,
+  },
 }));

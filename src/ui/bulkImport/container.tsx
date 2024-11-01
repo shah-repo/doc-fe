@@ -1,7 +1,7 @@
 import { light } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, CircularProgress } from '@material-ui/core';
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { translate } from '../../common/intl';
@@ -20,6 +20,7 @@ import Text from '../components/Text';
 import { BULK_IMPORT_PROGRESS_URL } from '../constants/urls';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
+import useDialog from '../hooks/useDialog';
 import ApprovalsForm from './components/Approvals/Form';
 import ButtonActions from './components/ButtonActions';
 import DeleteDialog from './components/Dialogs/DeleteDialog';
@@ -51,7 +52,7 @@ BulkImportContainerProps
   const isLoading = useSelector(getIsLoading);
   const bulkImport = useSelector(getBulkImport);
   const deleteBulkImportAction = useActionCreator(deleteBulkImport);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const openDeleteDialog = useDialog();
 
   const asyncDeleteBk = useAsync({
     onSuccess: () => {
@@ -60,11 +61,11 @@ BulkImportContainerProps
   });
 
   const handleCloseDelete = () => {
-    setOpenDeleteDialog(false);
+    openDeleteDialog.close();
   };
 
   const handleOpenDelete = () => {
-    setOpenDeleteDialog(true);
+    openDeleteDialog.open();
   };
 
   const handleNext = () => {
@@ -205,9 +206,9 @@ BulkImportContainerProps
       )}
       {getStepContent()}
       <DeleteDialog
-        open={openDeleteDialog}
         handleClose={handleCloseDelete}
         handleConfirm={handleCancel}
+        handler={openDeleteDialog}
       />
     </Box>
   );

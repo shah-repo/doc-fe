@@ -61,7 +61,11 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
     }
 
     const processType = bulkImport.processType;
-    const status = bulkImport.status;
+    let status = bulkImport.status;
+    // As we need the rejected status as a started we change internally the group.
+    if (status === BkStatus.CANCELLED) {
+      status = BkStatus.STARTED;
+    }
     const progress = bulkImport?.process?.process
       ? bulkImport.process.process.filter(p => p.status === BkStatus.COMPLETED)
         .reduce((total, current) => total + (current.percentage * 100), 0) : 0;
