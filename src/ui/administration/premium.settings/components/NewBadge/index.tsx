@@ -2,19 +2,22 @@ import { Badge } from '@material-ui/core';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
 import { withThemeNext } from '../../../../layout/theme-next';
-import { BlueTagWithWhiteTextProps } from '../../types';
 import useStyles from './styles';
 
-const BlueTagWithWhiteText: React.FC<BlueTagWithWhiteTextProps> = ({
-  whiteMainText = translate('administration.blueTagWithWhiteText.whiteText'),
+interface NewBadgeProps {
+  label?: string
+}
+
+const NewBadge: React.FC<NewBadgeProps> = ({
+  label = translate('administration.new'),
 }) => {
   const classes = useStyles();
 
   return (
     <Badge className={classes.container}>
-      {whiteMainText}
+      {label}
     </Badge>
   );
 };
 
-export default withThemeNext(BlueTagWithWhiteText);
+export default withThemeNext(NewBadge);

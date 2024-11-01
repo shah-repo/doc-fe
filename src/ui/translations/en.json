@@ -2056,7 +2056,7 @@
   "print.label.dialog.field.label.type": "Label Type",
   "printer.delete.alert": "Are you sure you want to delete this printer?",
   "printer.not.configured": "Zebra Cloud Print is not configured. Please contact your company administrator.",
-  "administration.blueTagWithWhiteText.whiteText": "New",
+  "administration.new": "New",
   "administration.premium.feature.title": "Premium Feature Opt-in Test",
   "administration.premium.feature.subtitle": "Manage opting in to latest premium features offered by Enlil.",
   "administration.premium.feature.description1": "All subscription charges are in addition to your terms of service contract. These premium features are activated based on the selections below. To grant access to these features, add users in the  ",

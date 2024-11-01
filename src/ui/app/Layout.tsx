@@ -7,9 +7,10 @@ import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
+import { ApplicationState } from '../../state/reducers';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
-import PremiumFeaturesPage from '../administration/general.settings/components/PremiumFeaturePage';
+import PremiumFeaturesPage from '../administration/premium.settings';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
 import BulkImportProgressPage from '../bulkImport/container.progress';
@@ -60,7 +61,6 @@ import useStyles from './Layout.styles';
 import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
-import { ApplicationState } from '../../state/reducers';
 
 const Layout: React.FunctionComponent<{ isAIEnabled: boolean }> = ({ isAIEnabled }) => {
   const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;

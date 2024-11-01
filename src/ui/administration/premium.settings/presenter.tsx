@@ -3,18 +3,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Tooltip, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { translate } from '../../../../../common/intl';
-import { withThemeNext } from '../../../../layout/theme-next';
-import SwitchControl from '../../components/SwitchControl';
-import BlueTagWithWhiteTextProps from '../BlueTagWithWhiteText/BlueTagWithWhiteText';
+import { translate } from '../../../common/intl';
+import { PremiumFeatures } from '../../../state/ducks/company/types';
+import AlertDialog from '../../components/dialogs/Alert';
+import { Button } from '../../components/forms/fields-next';
+import useDialog from '../../hooks/useDialog';
+import { withThemeNext } from '../../layout/theme-next';
+import HeaderLastSaved from '../general.settings/components/HeaderLastSaved';
+import SwitchControl from '../general.settings/components/SwitchControl';
+import NewBadge from './components/NewBadge';
 import useStyles from './styles';
-import { Button } from '../../../../components/forms/fields-next';
-import { PremiumFeaturesProps } from '../../types';
-import HeaderLastSaved from '../HeaderLastSaved';
-import AlertDialog from '../../../../components/dialogs/Alert';
-import useDialog from '../../../../hooks/useDialog';
 
-const PremiumFeaturesPage: React.FC<PremiumFeaturesProps> = ({
+interface PremiumFeaturesPageProps {
+  isLoading: boolean
+  updatedAt?: string
+  onSave: () => void
+  setValue: (field: string, value: boolean, shouldValidate?: boolean | undefined) => any
+  values: PremiumFeatures
+}
+
+const PremiumFeaturesPage: React.FC<PremiumFeaturesPageProps> = ({
   isLoading,
   updatedAt,
   onSave,
@@ -49,7 +57,7 @@ const PremiumFeaturesPage: React.FC<PremiumFeaturesProps> = ({
             variant="h1"
             className={classes.title}
           >
-            {translate('administration.premium.feature.title')} <BlueTagWithWhiteTextProps />
+            {translate('administration.premium.feature.title')} <NewBadge />
           </Typography>
           <Typography
             variant="subtitle1"

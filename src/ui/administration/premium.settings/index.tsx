@@ -2,14 +2,14 @@ import { FormikProvider, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { GroupTag } from '../../../../../state/ducks/auth/types';
-import { companyActions, companySelectors } from '../../../../../state/ducks/company';
-import { PremiumFeatures } from '../../../../../state/ducks/company/types';
-import { AsyncStatus } from '../../../../../state/types';
-import PromptIfDirty from '../../../../components/forms/PromptIfDirty';
-import { toastError } from '../../../../components/notifications';
-import { HOME_URL } from '../../../../constants/urls';
-import useGetHasTag from '../../../../hooks/useGetHasTag';
+import { GroupTag } from '../../../state/ducks/auth/types';
+import { companyActions, companySelectors } from '../../../state/ducks/company';
+import { PremiumFeatures } from '../../../state/ducks/company/types';
+import { AsyncStatus } from '../../../state/types';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { toastError } from '../../components/notifications';
+import { HOME_URL } from '../../constants/urls';
+import useGetHasTag from '../../hooks/useGetHasTag';
 import PremiumFeaturesPresenter from './presenter';
 
 const PremiumFeaturesContainer: React.FC = () => {

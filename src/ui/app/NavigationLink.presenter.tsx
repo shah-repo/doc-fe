@@ -10,10 +10,10 @@ import {
   NavigationItems,
   NavigationItemType,
 } from '../../state/ducks/company/types';
+import NewBadge from '../administration/premium.settings/components/NewBadge';
 import { DOCUMENT_BY_CATEGORY_ROOT_URL } from '../constants/urls';
 import { SIDE_BAR_TAB_INDEX } from '../documentRevision/Sidebar/constants';
 import styles from './NavigationLink.styles';
-import BlueTagWithWhiteText from '../administration/general.settings/components/BlueTagWithWhiteText/BlueTagWithWhiteText';
 
 interface NavigationLinkPresenterProps extends NavigationItem {
   ActionIcon?: ReactNode
@@ -110,7 +110,7 @@ NavigationLinkPresenterProps
               >
                 {label}
               </Typography>
-              {showLabelNew && <BlueTagWithWhiteText />}
+              {showLabelNew && <NewBadge />}
             </>
           }
           onClick={toggleChildren}
