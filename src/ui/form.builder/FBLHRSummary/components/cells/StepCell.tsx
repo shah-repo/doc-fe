@@ -7,16 +7,10 @@ import { Link } from 'react-router-dom';
 import { FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
-import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../../components/OverflowTooltip';
-import {
-  FormikField,
-  TextField,
-} from '../../../../components/forms/fields-next';
+import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -276,7 +270,7 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
           <span className={classes.mpi}>
             <Box display="flex" justifyContent="space-between">
               <Link
-                to={documentVersionPath(mpiRevId, documentId)}
+                to={documentVersionPath(mpiRevId ?? '', documentId)}
                 target="_blank"
                 id="step-mpi-field"
                 data-cy="step-mpi-field"

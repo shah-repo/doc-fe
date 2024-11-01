@@ -48,7 +48,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const intl = useIntl();
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
-  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
 
   const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
 
@@ -470,7 +470,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                     values={{
                       nextStatus: change.nextValue,
                       relatedType: getDynamicTextValue(
-                        revIdRelatedTypeObj[change.documentRevisionId]?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+                        revIdRelatedTypeObj[change.documentRevisionId ?? '']?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
                       rowDetails: getLhrSummaryRowIdentifier(change),
                     }}
                   />
@@ -543,7 +543,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const isRemovingApproverAction = (
       auditGroup[0].field === 'approvals.status' && auditGroup[0].nextValue === ApprovalStatus.Abandoned
     );
-    const isWorkOrder = revIdRelatedTypeObj[auditGroup[0].documentRevisionId]?.isWorkOrder;
+    const isWorkOrder = revIdRelatedTypeObj[auditGroup[0].documentRevisionId ?? '']?.isWorkOrder;
 
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
@@ -599,7 +599,7 @@ const labelToShow = (change: Audit,
   groupKey: number | undefined,
   key: number | undefined,
   revIdRelatedTypeObj: { [key: string]: IRevIdMapper }) => {
-  const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId] ?? {};
+  const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId ?? ''] ?? {};
   return (
     <>
       {change.field === 'relatedPartsStatus' && <Text

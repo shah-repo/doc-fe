@@ -6,11 +6,11 @@ import { cleanUpMappedHeaders, setIsLoading, setTemplateFile, uploadFileData } f
 import { getBulkImport, getTemplateFile } from '../../../../state/ducks/bulkImport/selectors';
 import { getDownloadTemplate } from '../../../../state/ducks/bulkImport/utils';
 import { store } from '../../../../state/store';
-import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
 import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.types';
 import { DropzoneField } from '../../../components/forms/fields-next/index';
 import { toastError } from '../../../components/notifications';
+import Text from '../../../components/Text';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import ListFiles from '../ListFiles';

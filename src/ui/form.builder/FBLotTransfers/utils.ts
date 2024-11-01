@@ -81,7 +81,7 @@ export const useOnHandQuantity = (): UseOnHandQuantityType => {
 
 const checkRuleLocations = (rule: MaterialFlowAclRule, field: 'from' | 'to', set: Set<string>, locations: CompanyLocation[]) => {
   if (rule[field]) {
-    set.add(rule[field]);
+    set.add(rule[field] as string);
   } else {
     locations.forEach((option) => {
       set.add(option.id);

@@ -124,7 +124,7 @@ const LotAllocatedCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChi
         getOptionLabel={(option: LotAutoCompleteOptions) => option.label}
         renderOption={(option: LotAutoCompleteOptions, props) => {
           return (
-            <ListItem sx={{ display: 'flex', justifyContent: 'space-between' }} className={classes.listItem} disableGutters>
+            <ListItem style={{ display: 'flex', justifyContent: 'space-between' }} className={classes.listItem} disableGutters>
               <ListItemText primary={option.label} />
               {option.isExpired && <ListItemIcon>
                 <StyleTooltip
