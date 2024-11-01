@@ -13,7 +13,7 @@ class FBFormState extends FBSchemaState {
   public values: Dictionary<any> = {};
   public validationValues: Dictionary<any> = {};
   private finalValidationRulse: Dictionary<string> = {};
-  public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
+  @observable public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
   public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
   public includeLocking = false;
   public expireLocks: Record<string, string> = {};

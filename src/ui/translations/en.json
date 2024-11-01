@@ -2094,6 +2094,7 @@
   "administration.general.settings.lcp.activate.title": "Activate",
   "administration.general.settings.lcp.deactivate.title": "Deactivate",
   "administration.general.settings.integrations": "Integrations",
+  "administration.general.settings.equipmentFamily.equipmentStatuses": "Equipment Statuses",
   "administration.general.settings.lot.auto.allocation.order": "Lot Auto-allocation order",
   "administration.general.settings.lot.auto.allocation.order.info": "Expiry date will override FIFO/LIFO",
   "administration.general.settings.lot.auto.allocation.order.fifo.label": "FIFO (First In First Out)",

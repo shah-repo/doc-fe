@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
-import { EquipmentLocation, GeneralSettings } from '../../../../../state/ducks/company/types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import Text from '../../../../components/Text';
+import { EquipmentFamilyEquipmentStatus, EquipmentLocation, GeneralSettings } from '../../../../../state/ducks/company/types';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import SettingsPanel from '../../components/SettingsPanel';
@@ -16,23 +16,26 @@ import SettingsPanelSection from '../../components/SettingsPanelSection';
 import SettingsTable from '../../components/SettingsTable';
 import SwitchControl from '../../components/SwitchControl';
 import { SettingsPanelProps } from '../../types';
-import { buildSchema } from './schema';
-import { EditableEquipmentLocation } from './types';
+import { buildEQLocationsSchema, buildEQStatusesSchema } from './schema';
+import { EditableEquipmentLocation, EditableEquipmentStatuses } from './types';
 
 const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
   const locations = getFieldProps<EquipmentLocation[]>('equipmentFamily.locations').value;
+  const statuses = getFieldProps<EquipmentFamilyEquipmentStatus[]>('equipmentFamily.equipmentStatuses').value;
   const fieldProps = getFieldProps<boolean>('equipmentFamily.autoSyncEnabled');
   const settingsId = useSelector(companySelectors.getGeneralSettingsId);
   const [locationsData, setLocationsData] = React.useState<EquipmentLocation[]>(locations);
   const [editedLocation, setEditedLocation] = React.useState<EditableEquipmentLocation>();
+  const [statusesData, setStatusesData] = React.useState<EquipmentFamilyEquipmentStatus[]>(statuses);
 
   const discardLocation = () => setEditedLocation(undefined);
 
   const async = useAsync({
     onError: (error) => {
       setLocationsData(locations);
+      setStatusesData(statuses);
       toastError(error);
     },
   });
@@ -78,6 +81,13 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     updateLocations(updatedLocations);
   };
 
+  const changeStatusActiveState = (status: EditableEquipmentStatuses, state: boolean) => {
+    const updatedStatuses = statuses.map(item => item.name === status.name ? { ...item, isActive: !item.isActive } : item);
+    formValues.equipmentFamily.equipmentStatuses = updatedStatuses;
+    setStatusesData(updatedStatuses);
+    async.start(updateEquipmentLocationAction, formValues, settingsId, 'PUT', async);
+  };
+
   const { setValues, submitForm } = formik;
 
   useEffect(() => {
@@ -88,12 +98,20 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     setLocationsData(locations);
   }, [locations]);
 
-  const schema = buildSchema({
+  useEffect(() => {
+    setStatusesData(statuses);
+  }, [statuses]);
+
+  const schema = buildEQLocationsSchema({
     isActive: true,
     onEdit: setEditedLocation,
     onActiveStateChange: changeLocationActiveState,
     onDiscard: discardLocation,
     onConfirm: submitForm,
+  });
+
+  const statusSchema = buildEQStatusesSchema({
+    onActiveStateChange: changeStatusActiveState,
   });
 
   const mappedLocations = locationsData?.map((location) => {
@@ -133,6 +151,16 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
           schema={schema}
           addButtonLabel={translate('settings.locations.add')}
           onAdd={addLocation}
+          getRowProperties={dataCyGenerator}
+        />
+      </FormikProvider>
+      <SettingsPanelSection>
+        <Text message="administration.general.settings.equipmentFamily.equipmentStatuses" />
+      </SettingsPanelSection>
+      <FormikProvider value={formik}>
+        <SettingsTable
+          data={statusesData}
+          schema={statusSchema}
           getRowProperties={dataCyGenerator}
         />
       </FormikProvider>
