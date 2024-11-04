@@ -15,7 +15,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     handleSave,
     disabled,
     name = '',
-    mode = 'none',
+    mode = FBApprovalMatrixFieldModes.NONE,
     isInputOwner,
     data,
     withoutStatus,

@@ -37,7 +37,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startActionOnMount]);
 
-  if (passive && didMount && [AsyncStatus.Active, AsyncStatus.Success].includes(asyncState.status)) {
+  if (passive && didMount && asyncState?.status && [AsyncStatus.Active, AsyncStatus.Success].includes(asyncState?.status)) {
     return (
       <div className={classes.passiveContainer}>
         {asyncState.status === AsyncStatus.Active && (

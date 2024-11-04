@@ -163,7 +163,7 @@ export const withOnChange = <T extends FBInputProps>(
         if (isArray(value)) {
           if (optionValueType === 'object') {
             return optionObjectKeys
-              ? map(value, (v) => pick(v, optionObjectKeys as string[]))
+              ? map(value, (v) => pick(v, optionObjectKeys))
               : value;
           }
           return map(value, (v) => (lodashIsString(v) ? v : get(v, optionValueKey)));

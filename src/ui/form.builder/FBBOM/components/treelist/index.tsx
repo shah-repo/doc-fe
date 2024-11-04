@@ -1,39 +1,14 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  IconButton,
-} from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, Grid, IconButton } from '@material-ui/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
-import {
-  extendDataItem,
-  filterBy,
-  mapTree,
-  orderBy, TreeList,
-  TreeListCellProps,
-  TreeListColumnReorderEvent,
-  TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat,
-} from '@progress/kendo-react-treelist';
+import { extendDataItem, filterBy, mapTree, orderBy, TreeList, TreeListCellProps, TreeListColumnReorderEvent, TreeListDataStateChangeEvent, TreeListDraggableRow, TreeListFilterChangeEvent, TreeListRowDragEvent, treeToFlat } from '@progress/kendo-react-treelist';
 import { ScrollMode } from '@progress/kendo-react-treelist/dist/npm/ScrollMode';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import {
-  chain,
-  get,
-  isEmpty,
-  isObject,
-  map,
-  omit,
-  replace,
-  tail,
-  take,
-  uniq,
-} from 'lodash';
+import { chain, get, isEmpty, isObject, map, omit, replace, tail, take, uniq } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -51,10 +26,7 @@ import { tableSearchActions } from '../../../../../state/ducks/tableSearch';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import ChangeRequestEditDialog from '../../../../change.request/dialogs/ChangeRequestEditDialog';
 import Loader from '../../../../components/common/kendo/Loader';
-import {
-  ColumnMenuContext,
-  CustomColumnMenu,
-} from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
+import { ColumnMenuContext, CustomColumnMenu } from '../../../../components/common/treelist/column.templates/CustomColumnMenu';
 import ColumnShowHideTreeMenu from '../../../../components/common/treelist/ColumnShowHideTreeMenu';
 import ExportTreeListDialog from '../../../../components/common/treelist/ExportTreeListDialog/ExportTreeListDialog';
 import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
@@ -75,35 +47,11 @@ import { BOM, BOMEditEvent, EditableBOM } from '../../interface';
 import FBBOMDetailDrawer from '../drawer/AlternateParts';
 import DocumentRevisionDrawer from '../drawer/DocumentRevisionDrawer';
 import { ActionsCell } from './column.templates/Actions';
-import {
-  ADD_FIELD,
-  BOM_TABLE_NAME,
-  CELL_EMPTY_VALUE,
-  DATA_ITEM_KEY,
-  DOC_ID_FIELD,
-  EXCEL_FILE_NAME,
-  EXPAND_FIELD,
-  ID_FIELD,
-  MODE_FIELD,
-  SELECTED_PART_KEY_SEPARATOR,
-  SUB_ITEMS_FIELD,
-  TREELIST_CONFIG,
-} from './constants';
-import {
-  BOMResponse,
-  BOMState,
-  CustomTreeListExpandChangeEvent,
-  CustomTreeListRowProps,
-  FBBOMProps,
-} from './interface';
+import { ADD_FIELD, BOM_TABLE_NAME, CELL_EMPTY_VALUE, DATA_ITEM_KEY, DOC_ID_FIELD, EXCEL_FILE_NAME, EXPAND_FIELD, ID_FIELD, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD, TREELIST_CONFIG } from './constants';
+import { BOMResponse, BOMState, CustomTreeListExpandChangeEvent, CustomTreeListRowProps, FBBOMProps } from './interface';
 import { TreeListSchema } from './schema';
 import useStyles from './styles';
-import {
-  getExcelColumns,
-  hasSameParent,
-  processBOMData,
-  updateDataAtLevels,
-} from './utils';
+import { getExcelColumns, hasSameParent, processBOMData, updateDataAtLevels } from './utils';
 
 const FBBOMTreeList: React.FC<FBBOMProps> = ({
   documentRevision,
@@ -683,11 +631,11 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
         inEdit: [newBOM],
       });
       formik.setValues(newBOM);
-      const treeList: HTMLElement = treeListRef.current;
+      const treeList: HTMLElement = treeListRef.current as any;
       if (!treeList && !dataItem) return;
       setTimeout(() => {
         const id = dataItem[SUB_ITEMS_FIELD]?.length
-          ? dataItem[SUB_ITEMS_FIELD][dataItem[SUB_ITEMS_FIELD]?.length - 1].id
+          ? dataItem[SUB_ITEMS_FIELD]?.[Number(dataItem[SUB_ITEMS_FIELD]?.length) - 1]?.id
           : dataItem.id;
         const rowElement = treeList?.querySelector(`[id^="_${id}"]`);
         if (rowElement) {
@@ -800,13 +748,13 @@ const FBBOMTreeList: React.FC<FBBOMProps> = ({
     );
   };
 
-  const getAllItemIds = (items: BOM[]) => {
+  const getAllItemIds = (items?: BOM[]) => {
     if (!items) return [];
     const ids: string[] = [];
     items.forEach((item) => {
       ids.push(item.id);
       if (item[SUB_ITEMS_FIELD] && !isEmpty(item[SUB_ITEMS_FIELD])) {
-        ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD] as BOM[]));
+        ids.push(...getAllItemIds(item[SUB_ITEMS_FIELD]));
       }
     });
     return uniq(ids);

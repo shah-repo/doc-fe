@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
 
-type UseStickyType<T> = [RefObject<T>, boolean];
+type UseStickyType<T> = readonly [RefObject<T>, boolean];
 
 function useSticky<T extends HTMLElement, C extends HTMLElement> (containerRef?: RefObject<C>): UseStickyType<T> {
   const stickyRef = useRef<T>(null);

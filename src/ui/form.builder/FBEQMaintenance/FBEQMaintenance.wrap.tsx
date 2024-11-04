@@ -142,7 +142,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
             documentType,
           };
         } catch (error) {
-          return async.errorHandler.execute(error);
+          return async.errorHandler.execute(error as string);
         }
 
         values.securityGroups = filterSecurityGroupsForQms(documentType.isQms, groupOptions);
