@@ -64,7 +64,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
   const fetchLCPDocTypesAsync = useAsync({
     onSuccess: (data: LCPDocRevOptions[] = []) => {
-      console.log('data', data);
       setLifecyclePhaseOptions(data.map((docType) => ({ id: docType.id, text: docType.displayLabel })));
     },
     onError: toastError,
