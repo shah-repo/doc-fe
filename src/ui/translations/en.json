@@ -692,6 +692,7 @@
   "document.revision.type.of.update": "Type of Update",
   "document.revision.cr.history": "Revision History",
   "document.revision.tpl.invalid": "Approval Request has additional fields to fill in.\nClick on Confirm to Create Approval Request for the document.",
+  "document.equipment.cal.pm.name": "{docId} {title} - {type} {frequency} days",
   "document.equipment.specification": "Equipment Specification",
   "document.equipment.specification.relatedParts.obsolete.message1": "You will be obsoleting equipment spec {esId} that has related equipment:",
   "document.equipment.specification.relatedParts.obsolete.message2": "Do you want to automatically obsolete the related equipment?",
