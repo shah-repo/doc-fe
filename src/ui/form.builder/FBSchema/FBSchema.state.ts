@@ -19,6 +19,7 @@ import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBButton from '../FBButton/FBButton';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
+import FBCustomerHeaderQuaterAddress from '../FBCustomerHeaderQuaterAddress/FBCustomerHeaderQuaterAddress';
 import FBCycleCount from '../FBCycleCount';
 import FBDatePicker from '../FBDatePicker/FBDatePicker';
 import FBDocumentRevisions from '../FBDocumentRevisions/FBDocumentRevisions';
@@ -48,6 +49,7 @@ import FBPOReceive from '../FBPOReceive/FBPOReceive';
 import FBProcedure from '../FBProcedure/FBProcedure';
 import FBProcedureDiff from '../FBProcedureDiff/FBProcedureDiff';
 import FBPurchaseOrder from '../FBPurchaseOrder/FBPurchaseOrder';
+import FBPurchaseOrderSummary from '../FBPurchaseOrder/FBPurchaseOrderSummary';
 import FBQuantityField from '../FBQuantityField/FBQuantityField';
 import FBQuantityUnitField from '../FBQuantityUnitField/FBQuantityUnitField';
 import FBRadio from '../FBRadio/FBRadio';
@@ -112,8 +114,8 @@ class FBSchemaState {
     timer: FBTimerField,
     traineeList: FBTraineeList,
     purchaseorder: FBPurchaseOrder,
-    // purchaseordersummary: FBPurchaseOrderSummary,
-    purchaseordersummary: FBSiteInformation,
+    purchaseordersummary: FBPurchaseOrderSummary,
+    headquarterAddress: FBCustomerHeaderQuaterAddress,
     siteInformations: FBSiteInformation,
     poreceive: FBPOReceive,
     documentRevisions: FBDocumentRevisions,

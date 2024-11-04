@@ -70,7 +70,8 @@ export const ApprovedToReceiveCell: React.FC<CustomSiteTemplateProps> = (
 
   return (
     <Box display="flex" justifyContent="center" onClick={handleClick} data-cy={dataCy}>
-      {displayValue?.label}
+      {isEditMode && <Editor {...props} />}
+      {!isEditMode && displayValue?.label}
     </Box>
   );
 };
