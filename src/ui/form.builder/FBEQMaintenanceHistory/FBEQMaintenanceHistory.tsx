@@ -5,6 +5,7 @@ import React from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Link } from 'react-router-dom';
 import { FBMapWrapper, FBText } from '..';
+import { translate } from '../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { documentVersionPath } from '../../document.revision/utils/paths';
@@ -25,7 +26,8 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
     </Box>
     <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
       {(item: DocumentRevision, index) => {
-        const showDate = get(item.formInput, 'fb-equipment_due_date') || item.releasedAt;
+        const releaseDate = get(item.formInput, 'fb-equipment_due_date') || item.releasedAt;
+        const areTasksCompleted = get(item.formInput, 'fb-eq-task-completion-status') === 'Yes';
         const isReleased = item.status === DocumentRevisionStatus.Released;
 
         return (
@@ -40,8 +42,9 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
             </Box>
             <Box fontWeight="fontWeightRegular">
               {`| ${item.owner.user.name} | ${item.status}`}
-              {isReleased && showDate && ` | ${getFormattedDateString(showDate, MomentFormats.MonthDateYearAlt)}`}
+              {isReleased && releaseDate && ` | ${getFormattedDateString(releaseDate, MomentFormats.MonthDateYearAlt)}`}
               {!isReleased && item.createdAt && ` | ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
+              {isReleased && areTasksCompleted && ` | ${translate('document.equipment.cal.pm.tasks.completed')}`}
             </Box>
           </Box>
         );

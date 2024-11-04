@@ -95,7 +95,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
           &nbsp;
           <FBText
             boxProps={{ display: 'inline-flex' }}
-            locale="common.cal.pm.up.to.date.next.date"
+            locale="document.equipment.cal.pm.up.to.date.next.date"
           />
           <span>: </span>
           {complianceDueDate}
