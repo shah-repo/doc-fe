@@ -1029,7 +1029,6 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
           }}
         />,
         <br />]}
-
         {calDueDate && [<Text
           dataCy={dataCy}
           translation="documentRevision.audit.lhrSummary.calDueDate.updated"
