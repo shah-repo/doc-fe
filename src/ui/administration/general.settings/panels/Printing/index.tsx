@@ -9,6 +9,7 @@ import { Nullable } from '../../../../../state/ducks/common/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings, ZebraPrintSettings } from '../../../../../state/ducks/company/types';
 import { AlertDialog } from '../../../../components/dialogs';
+import PromptIfDirty from '../../../../components/forms/PromptIfDirty';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -170,6 +171,12 @@ const PrintingSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       >
         {translate('printer.delete.alert')}
       </AlertDialog>
+      <PromptIfDirty
+        isDialog
+        dirty={formik.dirty}
+        doNotPrompt={!editDialog.isOpen}
+        onConfirm={discardEdit}
+      />
       <FormikProvider value={formik}>
         <PrinterEditDialog
           disableBackdropClick

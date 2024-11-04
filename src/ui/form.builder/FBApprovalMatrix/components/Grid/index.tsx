@@ -29,14 +29,13 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
     ...restProps
   } = props;
   const classes = useStyles();
-
-  const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData));
+  const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData) as GridItem<T>[]);
   const [activeItem, setActiveItem] = useState<GridItem<T>>();
  const { workspaceState, formState } = FB.useStores();
 
   useEffect(
     () => {
-      setData(normalizeData(originData));
+      setData(normalizeData(originData) as GridItem<T>[]);
     },
     [originData],
   );

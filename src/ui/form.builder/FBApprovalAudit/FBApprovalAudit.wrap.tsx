@@ -2,7 +2,7 @@ import { compact, filter, get, groupBy, isEmpty, last, map, range, sortBy, toNum
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import moment from 'moment';
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBAuditPOCalculation, FBAuditPOItem, FBFieldName, FBInputType } from '..';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
@@ -34,6 +34,8 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       isOutput,
     });
     const intl = useIntl();
+    const previousAuditsRef = useRef<FBAuditData[] | undefined>([]);
+    const previousUpdatedAuditsRef = useRef<FBAuditData[] | undefined>([]);
 
     function underApproval (): string[] | undefined {
       if (!name) { return; }
@@ -49,7 +51,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       return underApprovalField;
     }
 
-    function formInputAudit (audits?: FBAuditData[]): FBAuditData[] | undefined {
+    const formInputAudit = useCallback((audits?: FBAuditData[]): FBAuditData[] | undefined => {
       if (!audits || !isApproved()) { return; }
       const underApprovalFields = underApproval();
       const grouped = groupBy(audits, (audit) => {
@@ -290,7 +292,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         && new Date(cm.timestamp) <= new Date(endDate)
       ));
       return filteredMapped as FBAuditData[];
-    }
+    }, [isApproved, workspaceState, intl, createdAt, releasedAt, FBStore.audit.data]);
 
     function isApproved (): boolean {
       let hasValue = type === 'inlineapproval'
@@ -301,8 +303,11 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     }
 
     useObserver(() => {
-      audits = FBStore.audit.data;
-      audits = formInputAudit(audits);
+      if (FBStore.audit.data !== previousAuditsRef.current) {
+        previousAuditsRef.current = FBStore.audit.data;
+        previousUpdatedAuditsRef.current = formInputAudit(FBStore.audit.data);
+      }
+      audits = previousUpdatedAuditsRef.current;
       loading = approvalAuditState?.loading;
     });
 

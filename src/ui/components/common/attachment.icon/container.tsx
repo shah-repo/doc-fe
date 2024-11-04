@@ -14,8 +14,8 @@ import { ApplicationState } from '../../../../state/reducers';
 import { AsyncStatus } from '../../../../state/types';
 import { FormHeaderSummaryContext } from '../../../document.revision/header/SummaryHeader';
 import { isOperator } from '../../../documentRevision/DocumentRevisionDisplay.container';
-import { documentRevisionStatusContextFromCR } from '../../../documentRevision/DocumentRevisionUpdate.container';
 import { documentRevisionStatusContextFromDocList } from '../../../documentRevision/DocumentRevisionsManager.container';
+import { documentRevisionStatusContextFromCR } from '../../../documentRevision/DocumentRevisionUpdate.container';
 import { documentTypeContext, isOwnerContext } from '../../../documentRevision/forms/DocumentRevisionForm.container';
 import FBDynamicValidatorStore from '../../../form.builder/stores/ui/FBDynamicValidatorStore';
 import FBStore from '../../../form.builder/stores/ui/FBStore';
@@ -150,7 +150,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
 
   const handleRemove = (attachment: Attachment) => () => {
     if (!form && !field) { return; }
-    const filtered = (field.value as Attachment[]).filter((a) => a.id !== attachment.id);
+    const filtered = (field?.value as Attachment[]).filter((a) => a.id !== attachment.id);
 
     if (FBStore.mode === 'form') {
       let values = {
@@ -165,7 +165,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       FBStore.setValues(values);
       FBDynamicValidatorStore.validate();
     }
-    form.setFieldValue(name, filtered);
+    form?.setFieldValue(name, filtered);
     submitForm();
   };
 

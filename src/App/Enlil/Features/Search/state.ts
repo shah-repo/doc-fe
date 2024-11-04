@@ -1,9 +1,9 @@
 import { action } from 'mobx';
-import FBRequest from '../../../../ui/form.builder/FBApi/FBApi.request';
+import { TrainingRecordQuery } from '../../../../state/ducks/training/types';
 import { FBEndpoint } from '../../../../ui/form.builder/defaults/FBEndpoint';
+import FBRequest from '../../../../ui/form.builder/FBApi/FBApi.request';
 import { PAGE_SIZE } from './helpers';
 import { SearchRequestBody, SearchRequestResponse } from './types';
-import { TrainingRecordQuery } from '../../../../state/ducks/training/types';
 
 export default class SearchState {
   public searchApi = new FBRequest<SearchRequestResponse, SearchRequestBody>(FBEndpoint.GlobalSearch);
