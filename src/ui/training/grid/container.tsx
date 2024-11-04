@@ -48,11 +48,13 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
 
   const trainingRecordDataById = useActionCreator(trainingActions.getTrainingRecordData);
   const async = useAsync({
-    onSuccess: (data?: { dataItem?: TrainingRecordQuery }) => {
-      if(data) {
-        trainingDetailsDialog.open();
-        setTraining(data);
+    onSuccess: (data?: TrainingRecordQuery) => {
+      if (!data) {
+        return;
       }
+
+      trainingDetailsDialog.open();
+      setTraining(data);
     },
     onError: () => {
       toastError(intl.formatMessage({ id: 'common.training.released.state.doc.not.found' }));
@@ -63,7 +65,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
     const pathname = location?.pathname;
     const params = pathname.split('/');
     const id = params[params.length - 1];
-    if(!id.includes('training')) {
+    if (!id.includes('training')) {
       async.start(trainingRecordDataById, id, async);
     }
   }, []);
