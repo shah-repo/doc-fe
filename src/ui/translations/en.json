@@ -636,6 +636,7 @@
   "common.send.to.print.success": "Print Sent Successfully!",
   "common.logout": "Logout",
   "common.field.required": "The {label} is a required field",
+  "common.cal.pm.up.to.date.next.date": "is up to date and next due date is",
   "search.recent": "Recent Searches",
   "search.facets.header": "Refine By",
   "search.result": "Search Result",

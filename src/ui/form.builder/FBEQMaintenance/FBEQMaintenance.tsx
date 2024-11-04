@@ -94,11 +94,9 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
           locale={isTypePM ? 'form.builder.pm' : 'form.builder.cal'}
         />
         &nbsp;
-        {complianceStatus}
-        <span> - </span>
         <FBText
           boxProps={{ display: 'inline-flex' }}
-          locale="common.due.date"
+          locale="common.cal.pm.up.to.date.next.date"
         />
         <span>: </span>
         {complianceDueDate}

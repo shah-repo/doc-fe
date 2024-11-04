@@ -42,7 +42,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const { id: docRevId, document: { status = '', document = null } = {} } = workspaceState || {};
     const isEqStatusReleased = status === DocumentRevisionStatus.Released;
     const isTypePM = editorConfig.type?.includes('preventativeMaintenance');
-    const complianceStatus = formState?.getFieldValue(`${name}.status`);
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
     const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYearAlt);
     availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
@@ -196,7 +195,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       ...(props as T),
       handleAdd,
       complianceDueDate,
-      complianceStatus,
       isNewPMDisabled,
       isNewPMLoading,
       name,
