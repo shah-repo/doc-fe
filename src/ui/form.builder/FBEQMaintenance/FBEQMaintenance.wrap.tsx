@@ -111,12 +111,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         return;
       }
 
-      const title = translate('document.equipment.cal.pm.name', {
-        docId: workspaceState?.document?.document?.docId,
-        title: workspaceState?.document?.name,
-        type: translate(isTypePM ? 'form.builder.pm' : 'form.builder.cal'),
-        frequency: formState?.getFieldValue(`${name}.frequency`),
-      });
       eqMaintenanceState?.setNewPMLoading(true);
 
       const values: DocumentRevisionFormValues = {
@@ -124,7 +118,12 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         parentEquipment: { id: docRevId },
         equipmentSection: name,
         revisionChangeType: RevisionChangeType.NextRevision,
-        name: title,
+        name: translate('document.equipment.cal.pm.name', {
+          docId: workspaceState?.document?.document?.docId,
+          title: workspaceState?.document?.name,
+          type: translate(isTypePM ? 'form.builder.pm' : 'form.builder.cal'),
+          frequency: formState?.getFieldValue(`${name}.frequency`),
+        }),
         description: '',
         revisionStage: 3,
         retrain: false,
