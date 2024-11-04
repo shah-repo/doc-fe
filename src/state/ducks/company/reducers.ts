@@ -39,11 +39,6 @@ const REDLINE_DEFAULT_STATE = {
 };
 
 const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
-  allocationConfig: {
-    sortOrderByReleaseDate: AllocationOrder.FIFO,
-    expiredLotsPrompt: ExpiredLotTypes.WARNING,
-  },
-  approvalRequestAdmin: false,
   equipmentFamily: {
     autoSyncEnabled: false,
     locations: [],
@@ -52,6 +47,11 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   isMaterialFlowAclEnabled: false,
   lifecyclePhases: { categories: [] },
   materialFlowACLs: [],
+  allocationConfig: {
+    sortOrderByReleaseDate: AllocationOrder.FIFO,
+    expiredLotsPrompt: ExpiredLotTypes.WARNING,
+  },
+  approvalRequestAdmin: false,
   shouldAutoUpdateLotStatus: false,
   shouldNotifyLcpMismatch: NotifyPartLCP.DO_NOTHING,
   systemTransactions: [],

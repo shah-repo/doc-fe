@@ -60,4 +60,5 @@ export interface ItemsAndDetailsWrapperProps {
   autosave?: boolean
   mode: FBWorkspaceMode
   asyncState?: AsyncActionPayload
+  initialValues?: Record<string, any>
 }
