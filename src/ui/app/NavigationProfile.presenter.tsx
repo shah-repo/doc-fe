@@ -1,20 +1,10 @@
 import { light } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Button,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Typography,
-} from '@material-ui/core';
+import { Button, Divider, Grid, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, MenuItem, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import { WithStyles, withStyles } from '@material-ui/core/styles';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import { Styles } from '@material-ui/core/styles/withStyles';
 import cx from 'classnames';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -156,4 +146,4 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
   </Box>);
 };
 
-export default withStyles(styles)(NavigationProfilePresenter);
+export default withStyles(styles as Styles<Theme, {}, string>)(NavigationProfilePresenter);

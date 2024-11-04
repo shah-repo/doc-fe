@@ -53,7 +53,7 @@ interface Props {
 
 type DocCreator = (form: DocumentRevision) => void;
 
-export const useHandleCreateDoc = (selectedDocumentTypeId: string): DocCreator => {
+export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const history = useHistory();

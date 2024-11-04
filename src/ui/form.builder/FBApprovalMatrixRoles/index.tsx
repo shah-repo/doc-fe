@@ -3,12 +3,12 @@ import cx from 'classnames';
 import { kebabCase, omit } from 'lodash';
 import React from 'react';
 import { translate } from '../../../common/intl';
+import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import Text from '../../components/Text';
-import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
-import { APPROVAL_MATRIX_ROLE_TABLE_NAME, ERROR_FIELD, ErrorField, MODE_FIELD, Mode, SEARCHABLE_GROUPS_FIELD } from './constants';
+import Text from '../../components/Text';
+import { APPROVAL_MATRIX_ROLE_TABLE_NAME, ErrorField, ERROR_FIELD, Mode, MODE_FIELD, SEARCHABLE_GROUPS_FIELD } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
 import { EditableRole, FBApprovalMatrixRolesProps, RoleEditEvent } from './types';
@@ -69,7 +69,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
       return;
     }
     const roleToSave = omit(editedRole, MODE_FIELD, SEARCHABLE_GROUPS_FIELD);
-    isNewRoleAdded ? addRole(roleToSave) : updateRole(roleToSave);
+    isNewRoleAdded ? addRole?.(roleToSave) : updateRole?.(roleToSave);
 
     discardRole();
   };

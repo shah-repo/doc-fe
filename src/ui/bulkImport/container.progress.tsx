@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { getBulkImports, resetSteps, setIsLoadingMain } from '../../state/ducks/bulkImport/actions';
 import { getIsLoadingMain } from '../../state/ducks/bulkImport/selectors';
 import { BULK_IMPORT_URL } from '../constants/urls';
+import AuditHistory from './components/Audit';
 import Header from './components/Header';
 import ImportLog from './components/ImportLog';
 import ImportProgress from './components/ImportProgress';
@@ -18,6 +19,9 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
   const isLoading = useSelector(getIsLoadingMain);
   const firstLoad = useRef(false);
   const showLoadingComponent = !firstLoad.current && isLoading;
+  const [openHistoryPanel, setHistoryPanel] = React.useState<boolean>(false);
+
+  const onHistoryPanelClick = () => { setHistoryPanel(!openHistoryPanel); };
 
   const fetchBulkImportData = useCallback(() => {
     dispatch(setIsLoadingMain(true));
@@ -49,11 +53,17 @@ const BulkImportContainer: React.FunctionComponent<BulkImportContainerProps> = (
       {showLoadingComponent && <Box className={classes.loadingContainer}>
         <CircularProgress color="primary" size={24} className={classes.loading} />
       </Box>}
-      <Header onNewImport={onNewImport} />
+      <Header onNewImport={onNewImport} onHistory={onHistoryPanelClick} />
       <Box className={classes.importContainer}>
         <ImportProgress />
         <ImportLog />
       </Box>
+      {openHistoryPanel
+        && <AuditHistory
+          openHistoryPanel={openHistoryPanel}
+          closeHistoryPanel={onHistoryPanelClick}
+        />
+      }
     </Box>
   );
 };

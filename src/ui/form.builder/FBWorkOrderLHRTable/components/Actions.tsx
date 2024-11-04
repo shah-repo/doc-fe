@@ -18,8 +18,8 @@ interface ActionsProps {
   isDeleteDisabled?: boolean
   deleteTooltipText?: string
   scrollBehavior?: ScrollBehavior
-  onConfirm: () => void
-  onDiscard: () => void
+  onConfirm?: () => void
+  onDiscard?: () => void
   onDelete?: () => void
 }
 

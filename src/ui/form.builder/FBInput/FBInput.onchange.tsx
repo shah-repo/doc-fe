@@ -96,11 +96,11 @@ export const withFBOnChange = <T extends FBInputProps>(
     function checkboxGroupValue (ev: React.ChangeEvent<HTMLInputElement>) {
       const [valueName, checked] = at(ev.target, ['value', 'checked']);
       const checkedValue = formState?.getFieldValue(name, []);
-      const groupValue: string[] = checked
+      const groupValue = checked
         ? union(checkedValue, [valueName])
         : remove(checkedValue, (cv) => cv !== valueName);
 
-      contextValue(groupValue);
+      contextValue(groupValue as string | string[] | boolean);
       setValue(groupValue);
     }
 
