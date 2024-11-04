@@ -1,10 +1,12 @@
 import { Box } from '@material-ui/core';
-import { has } from 'lodash';
+import { get, has } from 'lodash';
 import React, { Fragment, ReactNode } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../App';
+import { translate } from '../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifecyclePahseOptionPayload, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
@@ -17,6 +19,7 @@ import { DocumentType } from '../../state/ducks/documentRevisions/documentType/t
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
+import { getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
@@ -32,13 +35,14 @@ import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
 import AuditTraineeList from './AuditTraineeList';
 import DateTime from './DateTime';
+import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
   audit: Audit
   dataCy?: string
-  revIdRelatedTypeObj: { [key: string]: IRevIdMapper }
-  lifecyclePhaseOptions: LifecyclePahseOptionPayload
+  revIdRelatedTypeObj?: { [key: string]: IRevIdMapper }
+  lifecyclePhaseOptions: LifecyclePahseOptionPayload[]
 }
 
 type Props = OwnProps;
@@ -53,7 +57,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
 
-  const relatedType = revIdRelatedTypeObj?.[audit.documentRevisionId]?.relatedType;
+  const relatedType = revIdRelatedTypeObj?.[audit?.documentRevisionId ?? '']?.relatedType;
 
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;
@@ -1025,6 +1029,7 @@ const getLHRSummaryRowEditedDetails = (audit: Audit, nextVal: string, dataCy: st
           }}
         />,
         <br />]}
+
         {calDueDate && [<Text
           dataCy={dataCy}
           translation="documentRevision.audit.lhrSummary.calDueDate.updated"
