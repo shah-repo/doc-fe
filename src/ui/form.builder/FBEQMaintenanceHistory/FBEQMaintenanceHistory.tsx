@@ -26,6 +26,8 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
     <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
       {(item: DocumentRevision, index) => {
         const showDate = get(item.formInput, 'fb-equipment_due_date') || item.releasedAt;
+        const isReleased = item.status === DocumentRevisionStatus.Released;
+
         return (
           <Box data-cy="maintenance-history" display="flex" flexDirection="row" key={`fb-eq-${index}`}>
             <Box mr={0.5}>
@@ -38,12 +40,8 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
             </Box>
             <Box fontWeight="fontWeightRegular">
               {`| ${item.owner.user.name} | ${item.status}`}
-              {showDate && item.status === DocumentRevisionStatus.Released && (
-                ` | ${getFormattedDateString(showDate, MomentFormats.MonthDateYearAlt)}`
-              )}
-              {item.createdAt && item.status !== DocumentRevisionStatus.Released && (
-                ` | ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`
-              )}
+              {isReleased && showDate && ` | ${getFormattedDateString(showDate, MomentFormats.MonthDateYearAlt)}`}
+              {!isReleased && item.createdAt && ` | ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
             </Box>
           </Box>
         );
