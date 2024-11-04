@@ -139,8 +139,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     const getDecimalLength = (value: number|string) => {
-      const numStr = (typeof (value) === 'number') ? value.toString() : value;
-      return numStr.includes('.') ? numStr.split('.')[1].length : 0;
+      return value.toString().split('.')[1]?.length ?? 0;
     };
 
     reCalculateValueOnBlur = () => purchaseOrderState?.reCalculateValue();
