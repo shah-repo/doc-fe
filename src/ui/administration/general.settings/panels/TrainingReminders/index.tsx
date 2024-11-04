@@ -20,11 +20,11 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, values } = useFormikContext<GeneralSettings>();
   const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
   const isCompanyAdmin = currentUserTags.includes(GroupTag.ADMIN_MANAGEMENT);
-  const disabledCheckboxProps: MuiCheckboxProps = {
-    disabled: true,
+  const checkboxProps: MuiCheckboxProps = {
     color: 'primary',
     className: classes.marginRight,
   };
+  const disabledCheckboxProps = { ...checkboxProps, disabled: true };
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.training.reminders')}>
@@ -75,13 +75,14 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
       <Text message="administration.general.settings.training.reminders.cc.training.notifications" />
       <Grid
         container
-        className={cx(classes.gridContainer, { [classes.disabledGrid]: !isCompanyAdmin })}>
+        className={cx(classes.gridContainer, { [classes.disabledGrid]: !isCompanyAdmin })}
+      >
         <Grid item className={classes.gridItem}>
           <CheckboxField
             {...getFieldProps('trainingReminders.isAssignedCcActive')}
             checked={values.trainingReminders.isAssignedCcActive}
             label={translate('administration.general.settings.training.reminders.training.assigned')}
-            checkboxProps={disabledCheckboxProps}
+            checkboxProps={checkboxProps}
           />
         </Grid>
         <Grid item className={classes.gridItem}>
@@ -89,7 +90,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
             {...getFieldProps('trainingReminders.isSevenDaysDueOnCountdownCcActive')}
             checked={values.trainingReminders.isSevenDaysDueOnCountdownCcActive}
             label={translate('administration.general.settings.training.reminders.seven.days')}
-            checkboxProps={disabledCheckboxProps}
+            checkboxProps={checkboxProps}
           />
         </Grid>
         <Grid item className={classes.gridItem}>
@@ -97,7 +98,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
             {...getFieldProps('trainingReminders.customDaysDueOn.isCcActive')}
             checked={values.trainingReminders.customDaysDueOn.isCcActive}
             label={`${values.trainingReminders.customDaysDueOn.days} ${translate('administration.general.settings.training.reminders.custom.days')}`}
-            checkboxProps={disabledCheckboxProps}
+            checkboxProps={checkboxProps}
           />
         </Grid>
         <Grid item className={classes.gridItem}>
@@ -105,7 +106,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
             {...getFieldProps('trainingReminders.isOverdueCcActive')}
             checked={values.trainingReminders.isOverdueCcActive}
             label={translate('administration.general.settings.training.reminders.training.overdue')}
-            checkboxProps={disabledCheckboxProps}
+            checkboxProps={checkboxProps}
           />
         </Grid>
       </Grid>
