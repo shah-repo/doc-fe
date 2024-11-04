@@ -39,7 +39,7 @@ const SyncMessageDialog: React.FC<Props> = ({
         </Typography>
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
-        {dialogContent && (
+        {dialogContent ?? (
           <>
             <Text translation="administration.general.settings.approvalRoles.sync.message.dialog.content" />
             <Link
