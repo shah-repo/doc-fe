@@ -8,7 +8,7 @@ import { translate } from '../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
-import { Audit, POLineItem } from '../../state/ducks/audit/types';
+import { Audit, LifecyclePahseOptionPayload, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
@@ -42,12 +42,13 @@ interface OwnProps {
   audit: Audit
   dataCy?: string
   revIdRelatedTypeObj: { [key: string]: IRevIdMapper }
+  lifecyclePhaseOptions: LifecyclePahseOptionPayload
 }
 
 type Props = OwnProps;
 
 const AuditFactory: React.FunctionComponent<Props> = ({
-  audit, dataCy, revIdRelatedTypeObj,
+  audit, dataCy, revIdRelatedTypeObj, lifecyclePhaseOptions,
 }) => {
   let returnValue;
   const intl = useIntl();
