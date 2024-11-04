@@ -59,14 +59,14 @@ export const GLOBAL_SEARCH_URL = '/search';
 
 export const GENERAL_SETTINGS_URL = '/general_settings';
 
-export const PREMIUM_FEATURE_URL = '/premium_feature';
+export const PREMIUM_FEATURES_URL = '/premium_feature';
 
 export const USER_GROUP_URL = '/user_group';
 export const USER_GROUPS_URL = '/user_group/group';
 
 export const COMPANY_SETTINGS_URL = '/company/settings';
 
-export const PREMIUM_FEATURES_URL = '/company/subscriptions';
+export const SUBSCRIPTIONS_URL = '/company/subscriptions';
 
 export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
 

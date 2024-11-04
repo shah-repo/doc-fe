@@ -36,7 +36,7 @@ import {
   GLOBAL_SEARCH_URL,
   HOME_URL,
   PAGE_DETAILS_MANAGEMENT_URL,
-  PREMIUM_FEATURE_URL,
+  PREMIUM_FEATURES_URL,
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
   TRAINING_URL,
@@ -163,7 +163,7 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean }> = ({ isAIEnabled
             component={GeneralSettingsPage}
           />
           <Route
-            path={PREMIUM_FEATURE_URL}
+            path={PREMIUM_FEATURES_URL}
             component={PremiumFeaturesPage}
           />
           <Route

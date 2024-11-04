@@ -73,7 +73,7 @@ export default makeStyles((theme: NextTheme) => ({
   },
   togglerContainer: {
     marginTop: theme.spacing(2.5),
-    marginLeft: theme.spacing(2.5),
+    display: 'flex',
   },
   [theme.media.mobile]: {
     header: {

@@ -30,15 +30,15 @@ const PremiumFeaturesPage: React.FC<PremiumFeaturesPageProps> = ({
   values,
 }) => {
   const classes = useStyles();
-  const GRPTDialog = useDialog();
+  const SubscriptionsDialog = useDialog();
   const [hover, setHover] = useState(false);
 
   return (
     <Box className={classes.root}>
       <AlertDialog
-        handler={GRPTDialog}
+        handler={SubscriptionsDialog}
         onConfirm={() => {
-          GRPTDialog.close();
+          SubscriptionsDialog.close();
           setValue('isAIEnabled', !values.isAIEnabled);
           onSave();
         }}
@@ -48,7 +48,7 @@ const PremiumFeaturesPage: React.FC<PremiumFeaturesPageProps> = ({
         iconClass={classes.dialogIcon}
       >
         <Typography data-cy="dialog-message" className={classes.contentText}>
-          {translate('administration.premium.feature.table.description1')}
+          {translate('administration.premium.features.info')}
         </Typography>
       </AlertDialog>
       <Box className={classes.header}>
@@ -97,13 +97,13 @@ const PremiumFeaturesPage: React.FC<PremiumFeaturesPageProps> = ({
             <SwitchControl
               id="isAIEnabled"
               onChange={() => {
-                GRPTDialog.open();
+                SubscriptionsDialog.open();
               }}
               checked={values.isAIEnabled}
-              label="AI Enablement"
+              label={translate('administration.premium.features.ai.title')}
               disabled={values.isAIEnabled}
             />
-            <Tooltip title={translate('administration.premium.feature.table.description1')} arrow placement="right">
+            <Tooltip title={translate('administration.premium.features.info')} arrow placement="right">
               <FontAwesomeIcon
                 className={classes.togglerIcon}
                 icon={hover ? solid('circle-info') : regular('circle-info')}
@@ -112,7 +112,7 @@ const PremiumFeaturesPage: React.FC<PremiumFeaturesPageProps> = ({
               />
             </Tooltip>
           </Box>
-          <Typography className={classes.descriptionPlaceholder}>[Description of the service goes here]</Typography>
+          <Typography className={classes.descriptionPlaceholder}>{translate('administration.premium.features.ai.description')}</Typography>
         </Box>
       </Box>
     </Box>

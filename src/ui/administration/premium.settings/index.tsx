@@ -24,14 +24,14 @@ const PremiumFeaturesContainer: React.FC = () => {
   const formik = useFormik<PremiumFeatures>({
     initialValues,
     onSubmit: (values: PremiumFeatures) => {
-      dispatch(companyActions.updatePremiumFeatures(values));
+      dispatch(companyActions.updateSubscriptions(values));
     },
   });
 
   const { dirty, setValues } = formik;
 
   useEffect(() => {
-    dispatch(companyActions.getPremiumFeatures());
+    dispatch(companyActions.getSubscriptions());
   }, [dispatch]);
 
   useEffect(() => {

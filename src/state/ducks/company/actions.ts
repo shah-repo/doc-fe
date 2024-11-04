@@ -9,7 +9,7 @@ import {
   LIFE_CYCLE_DOC_REV_OPTIONS_URL,
   LIFE_CYCLE_DOC_TYPES_URL,
   LIFE_CYCLE_PHASES_URL,
-  PREMIUM_FEATURES_URL,
+  SUBSCRIPTIONS_URL,
   UPDATE_COMPANY_SETTINGS_URL,
 } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
@@ -117,8 +117,8 @@ const setPremiumFeatures = (premiumFeatures: PremiumFeaturesState,
   payload: premiumFeatures,
 });
 
-const getPremiumFeatures = (): ApiAction => apiAction({
-  url: PREMIUM_FEATURES_URL,
+const getSubscriptions = (): ApiAction => apiAction({
+  url: SUBSCRIPTIONS_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
     dispatch(setPremiumFeatures(data));
@@ -144,12 +144,12 @@ const updateGeneralSettings = (
   });
 };
 
-const updatePremiumFeatures = (
+const updateSubscriptions = (
   body: PremiumFeatures,
   method: ApiActionMethod = 'put',
 ): ApiAction<PremiumFeaturesState> => {
   return apiAction({
-    url: PREMIUM_FEATURES_URL,
+    url: SUBSCRIPTIONS_URL,
     method,
     data: body,
     asyncType: SET_PREMIUM_FEATURES_SETTINGS,
@@ -205,6 +205,6 @@ export default {
   redlineConfig,
   getGeneralSettings,
   updateGeneralSettings,
-  getPremiumFeatures,
-  updatePremiumFeatures,
+  getSubscriptions,
+  updateSubscriptions,
 };
