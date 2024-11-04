@@ -48,7 +48,7 @@ interface OwnProps {
 type Props = OwnProps;
 
 const AuditFactory: React.FunctionComponent<Props> = ({
-  audit, dataCy, revIdRelatedTypeObj, lifecyclePhaseOptions,
+  audit, dataCy, revIdRelatedTypeObj,
 }) => {
   let returnValue;
   const intl = useIntl();
