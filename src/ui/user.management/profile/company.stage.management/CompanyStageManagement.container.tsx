@@ -11,6 +11,7 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import useGetHasTag from '../../../hooks/useGetHasTag';
+import { Translation } from '../../../translations/types';
 import { toNumRevisionStageBodyValues, toNumRevisionStageInitialValues } from '../../utils/transform';
 import CompanyStageManagementPresenter from './CompanyStageManagement.presenter';
 
@@ -48,6 +49,7 @@ const CompanyStageManagementContainer: React.FC<{}> = () => {
     dialog.close();
     async.start(changeCompanyAction, toNumRevisionStageBodyValues({ numOfRevStages: updatingStage }), async);
   };
+  const msg = translate('user.management.profile.companyStage.alert', { revStage: updatingStage }) as Translation;
 
   return (
     <Box>
@@ -56,7 +58,7 @@ const CompanyStageManagementContainer: React.FC<{}> = () => {
           dialog={dialog}
           confirmAction={handleYes}
           cancelAction={dialog.close}
-          message={translate('user.management.profile.companyStage.alert', { revStage: updatingStage })}
+          message={msg}
         />
       )}
       <Formik

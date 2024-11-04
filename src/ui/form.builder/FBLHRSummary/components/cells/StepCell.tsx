@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid, TextField as MuiTextField } from '@material-ui/core';
+import { Box, CircularProgress, Grid, TextField as MuiTextField, Popper } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
@@ -7,16 +7,10 @@ import { Link } from 'react-router-dom';
 import { FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
-import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../../components/OverflowTooltip';
-import {
-  FormikField,
-  TextField,
-} from '../../../../components/forms/fields-next';
+import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -221,6 +215,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
                   </Box>
                 </Box>
               )}
+              PopperComponent={({ style, ...props }) => (
+                <Popper
+                  {...props}
+                  style={{ ...style }}
+                />
+              )}
               renderOption={(option) => option.label}
               onInputChange={debounceFunction}
               open={isOpen}
@@ -270,13 +270,21 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
           <span className={classes.mpi}>
             <Box display="flex" justifyContent="space-between">
               <Link
-                to={documentVersionPath(mpiRevId, documentId)}
+                to={documentVersionPath(mpiRevId ?? '', documentId)}
                 target="_blank"
                 id="step-mpi-field"
                 data-cy="step-mpi-field"
                 className={classes.link}
               >
-                {getDisplayDocument(docId, displayRevision)}
+                <OverflowTooltip
+                  title={getDisplayDocument(docId, displayRevision)}
+                  placement="top"
+                  interactive
+                  arrow
+                  data-cy="mpi-field"
+                >
+                  {getDisplayDocument(docId, displayRevision)}
+                </OverflowTooltip>
               </Link>
               <InvalidDocIndicator status={displayStatus} dataCy="step-mpi-invalid-indicator" />
             </Box>

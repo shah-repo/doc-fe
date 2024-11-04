@@ -15,7 +15,7 @@ export enum WhereUsedType {
 interface Props {
   revId: string
   whereUsedDialog: DialogHandler
-  closeDialog: () => void
+  closeDialog: React.MouseEventHandler<Element>
   type: WhereUsedType
 }
 

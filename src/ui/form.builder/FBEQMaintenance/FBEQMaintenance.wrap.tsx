@@ -5,14 +5,10 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from '..';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import {
-  DocumentRevision,
-  DocumentRevisionStatus, FBOutputDocumentType,
-  RevisionChangeType,
-} from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { toastError } from '../../components/notifications';
 import { documentVersionPath } from '../../document.revision/utils/paths';
@@ -147,7 +143,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
             documentType,
           };
         } catch (error) {
-          return async.errorHandler.execute(error);
+          return async.errorHandler.execute(error as string);
         }
 
         values.securityGroups = filterSecurityGroupsForQms(documentType.isQms, groupOptions);
