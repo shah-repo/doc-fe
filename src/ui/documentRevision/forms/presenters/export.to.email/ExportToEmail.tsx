@@ -22,7 +22,7 @@ import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import useMqttSubscription from '../../../../hooks/useMqttSubscription';
 import ExportToEmailDialogActions from './ExportToEmailDialogActions';
-import ExportToEmailModal from './ExportToEmailModal';
+import ExportToEmailModal, { ExportToEmailDialogRefType } from './ExportToEmailModal';
 interface Props {
   revisionId: string
   canAccess: boolean
@@ -87,7 +87,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const exportToEmail = useActionCreator(
     documentRevisionsActions.exportToEmail,
   );
-  const childFormRef = useRef();
+  const childFormRef = useRef<ExportToEmailDialogRefType>();
 
   const runExportWithChildren = () => {
     if (childFormRef.current) {

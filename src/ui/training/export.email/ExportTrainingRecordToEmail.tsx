@@ -11,7 +11,7 @@ import { toastError, toastSuccess } from '../../components/notifications';
 import { ExportPDFCloseButton, ExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
 import { exportPDFToastrStyles } from '../../components/notifications/ExportPDFToastr.styles';
 import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
-import ExportToEmailModal from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
+import ExportToEmailModal, { ExportToEmailDialogRefType } from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
@@ -26,7 +26,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const exportTrainingRecordEmail = useActionCreator(trainingActions.exportTrainingRecord);
-  const childFormRef = useRef();
+  const childFormRef = useRef<ExportToEmailDialogRefType>();
   const [value, setValue] = useState(false);
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);

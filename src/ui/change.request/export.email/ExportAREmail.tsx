@@ -18,7 +18,7 @@ import { ExportPDFCloseButton, ExportPDFToastr } from '../../components/notifica
 import { exportPDFToastrStyles } from '../../components/notifications/ExportPDFToastr.styles';
 import Text from '../../components/Text';
 import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
-import ExportToEmailModal from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
+import ExportToEmailModal, { ExportToEmailDialogRefType } from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
@@ -49,7 +49,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
     },
   });
-  const childFormRef = useRef();
+  const childFormRef = useRef<ExportToEmailDialogRefType>();
 
   const topic = React.useMemo(() =>
     `${employeeId}/external_export_email/${id}/pdf`
