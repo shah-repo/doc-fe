@@ -1,11 +1,12 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import FBButton, { Props } from './FBButton';
+import { FBButtonProps } from '../../types/button';
+import FBButton from './FBButton';
 
 jest.mock('../../../components/Text');
 
 describe('FBButton component tests', () => {
-  const getWrapper = (props: Props) => mount(<FBButton {...props} />);
+  const getWrapper = (props: FBButtonProps) => mount(<FBButton {...props} />);
 
   it('displays button component by default', () => {
     const wrapper = getWrapper({});

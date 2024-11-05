@@ -41,7 +41,7 @@ import DialogOpener from './textDiff/DialogOpener';
 interface OwnProps {
   audit: Audit
   dataCy?: string
-  revIdRelatedTypeObj: { [key: string]: IRevIdMapper }
+  revIdRelatedTypeObj?: { [key: string]: IRevIdMapper }
 }
 
 type Props = OwnProps;
@@ -56,7 +56,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
   const { type = '' } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
 
-  const relatedType = revIdRelatedTypeObj?.[audit.documentRevisionId]?.relatedType;
+  const relatedType = revIdRelatedTypeObj?.[audit?.documentRevisionId ?? '']?.relatedType;
 
   if (!auditValue || auditValue === 'undefined') {
     auditValue = previousValue;
