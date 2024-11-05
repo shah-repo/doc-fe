@@ -210,11 +210,6 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     return value;
   };
 
-  /* private readonly getDecimalLength = (value: number|string) => {
-    const numStr = (typeof (value) === 'number') ? value.toString() : value;
-    return numStr.includes('.') ? numStr.split('.')[1].length : 0;
-  }; */
-
   public reCalculateValue = () => {
     const value = this.calculateCost();
     this.setValue(value);
