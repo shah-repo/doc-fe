@@ -195,7 +195,11 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     }
   };
 
-  const async = useAsync();
+  const async = useAsync({
+    onSuccess: () => {
+      dispatch(companyActions.getGeneralSettings());
+    },
+  });
   const setDocumentRevision = useActionCreator(documentRevisionsActions.save);
 
   if (showAlertDialog && !showAlertDialog?.isSynced && isOwner && ![DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)) {
