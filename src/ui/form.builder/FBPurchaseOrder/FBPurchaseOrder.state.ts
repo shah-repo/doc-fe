@@ -4,6 +4,7 @@ import moment from 'moment';
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import FBRequest from '../FBApi/FBApi.request';
+import { getDecimalLength } from '../FBPurchaseOrderTable/helpers';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import { TAX_RATE } from '../helpers/constants';
 import { FBCurrency, FBPurchaseOrderValue } from './FBPurchaseOrder.types';
@@ -126,7 +127,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     }
     const taxRate = this.getTaxRateByTax(tax);
     if (isNumber(taxRate)) {
-      set(this.value, 'taxRate', Number(this.formatCost(taxRate, this.getDecimalLength(tax))));
+      set(this.value, 'taxRate', Number(this.formatCost(taxRate, getDecimalLength(tax))));
     }
     set(this.value, 'tax', tax);
   };
@@ -200,7 +201,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       ...this.value,
       taxRate,
       subTotal: this.formatCost(sum.subTotal),
-      tax: this.formatCost(tax, this.getDecimalLength(taxRate)),
+      tax: this.formatCost(tax, getDecimalLength(taxRate)),
       shippingCost: this.formatCost(shippingCost),
       totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),
@@ -209,10 +210,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     return value;
   };
 
-  private readonly getDecimalLength = (value: number|string) => {
+  /* private readonly getDecimalLength = (value: number|string) => {
     const numStr = (typeof (value) === 'number') ? value.toString() : value;
     return numStr.includes('.') ? numStr.split('.')[1].length : 0;
-  };
+  }; */
 
   public reCalculateValue = () => {
     const value = this.calculateCost();

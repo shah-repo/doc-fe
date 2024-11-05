@@ -25,7 +25,7 @@ import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import { TAX_RATE } from '../helpers/constants';
-import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from './helpers';
+import { checkServiceOrProductPartExists, formatCost, getDecimalLength, getPOLineItemsTotalAndForTaxAmount } from './helpers';
 import { FBPurchaseOrderTableProps } from './types';
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
@@ -138,9 +138,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       return val.toFixed(fixedDecimal || 2).toString();
     };
 
-    const getDecimalLength = (value: number|string) => {
+    /* const getDecimalLength = (value: number|string) => {
       return value.toString().split('.')[1]?.length ?? 0;
-    };
+    }; */
 
     reCalculateValueOnBlur = () => purchaseOrderState?.reCalculateValue();
 
