@@ -58,5 +58,5 @@ export const getWOAuditDefaultValue = (audit: Audit): string => {
 
 export const getLCPAuditDefaultValue = (audit: Audit, lifecyclePhaseOptions: LifecyclePahseOptionPayload[]): string => {
   const lifecyclePahse = lifecyclePhaseOptions.find(data => data.id === audit.nextValue);
-  return lifecyclePahse ? lifecyclePahse.text : 'N/A';
+  return lifecyclePahse?.text ?? translate('common.not.applicable');
 };
