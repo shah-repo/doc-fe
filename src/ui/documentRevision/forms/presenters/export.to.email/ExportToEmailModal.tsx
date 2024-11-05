@@ -43,7 +43,7 @@ interface AttachmentPayload {
   name: string
 }
 
-export interface ExportToEmailDialogProps {
+interface ExportToEmailDialogProps {
   itemOnly: boolean
   includeAttachments: boolean
   includeDate: boolean
