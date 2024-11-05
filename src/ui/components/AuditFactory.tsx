@@ -42,7 +42,7 @@ interface OwnProps {
   audit: Audit
   dataCy?: string
   revIdRelatedTypeObj?: { [key: string]: IRevIdMapper }
-  lifecyclePhaseOptions: LifecyclePahseOptionPayload[]
+  lifecyclePhaseOptions?: LifecyclePahseOptionPayload[]
 }
 
 type Props = OwnProps;
