@@ -69,7 +69,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
       </Typography>
       <SummaryInfo
         label="record.released.by"
-        value={documentInfo?.releasedBy ? documentInfo?.releasedBy?.user.name : documentInfo?.owner ? documentInfo?.owner?.user.name : ''}
+        value={documentInfo?.releasedBy?.user?.name ?? documentInfo?.owner?.user?.name ?? ''}
         dataCy="released-by"
       />
       <SummaryInfo
