@@ -91,6 +91,11 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       setApprovalRolesData(approvalRoles);
       toastError(error);
     },
+    onSuccess: () => {
+      if (dam?.isSynced) {
+        setIsOpen(true);
+      }
+    },
   });
   const updateApprovalRolesAction = useActionCreator(companyActions.updateApprovalRoles);
   const createApprovalRolesAction = useActionCreator(companyActions.createApprovalRoles);
@@ -103,9 +108,9 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   }) ?? [];
 
   const approvalRoleList
-  = editedApprovalRoles?.[MODE_FIELD] === Mode.add
-    ? [...mappedApprovalRoles, editedApprovalRoles]
-    : mappedApprovalRoles;
+    = editedApprovalRoles?.[MODE_FIELD] === Mode.add
+      ? [...mappedApprovalRoles, editedApprovalRoles]
+      : mappedApprovalRoles;
   const schema = buildSchema({ onChange, onDiscard, editedApprovalRoles, onConfirm: submitForm });
 
   return (
@@ -128,7 +133,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       </SettingsPanel>
       {isOpen && (
         <SyncMessageDialog
-          { ...{ isOpen, dam } }
+          {...{ isOpen, dam }}
           closeDialog={() => setIsOpen(false)}
         />
       )}

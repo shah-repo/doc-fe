@@ -122,11 +122,12 @@ const updateApprovalRoles = (
   body: any,
   id?: string,
   method: ApiActionMethod = 'patch',
+  handlers?: Handlers,
 ): ApiAction<GeneralSettingsState> => {
   const { lifecyclePhases, ...rest } = body;
   const payload = { ...rest, lifecyclePhases: Array.isArray(lifecyclePhases) ? lifecyclePhases : [] };
   const url = generatePath(UPDATE_APPROVAL_ROLES_URL, { id });
-  return apiAction({
+  return apiActionWithCallbacks({
     url,
     method,
     data: pick(payload, 'isActive'),
@@ -134,6 +135,7 @@ const updateApprovalRoles = (
     onSuccess: (data, dispatch) => {
       dispatch(getGeneralSettings());
     },
+    handlers,
   });
 };
 
