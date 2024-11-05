@@ -1,5 +1,5 @@
 import { InputAdornment } from '@material-ui/core';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FB, FBInputProps, FBTextField } from '..';
 
 const ADDITIONAL_SETTINGS = 'editor-additions';
@@ -22,8 +22,8 @@ const FBNumericField: React.FunctionComponent<Props> = ({
       min: props[ADDITIONAL_SETTINGS].min,
       step: props[ADDITIONAL_SETTINGS].step,
     },
-    startAdornment: prefix ? <InputAdornment position="start">{prefix}</InputAdornment> : undefined,
-    endAdornment: suffix ? <InputAdornment position="end">{suffix}</InputAdornment> : undefined,
+    startAdornment: prefix ? <InputAdornment position="start">{prefix as ReactNode}</InputAdornment> : undefined,
+    endAdornment: suffix ? <InputAdornment position="end">{suffix as ReactNode}</InputAdornment> : undefined,
   };
   return <FBTextField {...props} type="number" InputProps={InputProps} defaultValue={defaultValue} />;
 };

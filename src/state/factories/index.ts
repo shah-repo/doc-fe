@@ -39,7 +39,7 @@ ApiAction<R, B> => {
     handlers.errorHandler.execute(message);
   };
 
-  apiDefinition.cancelToken && handlers.setCancelToken(apiDefinition.cancelToken);
+  apiDefinition.cancelToken && handlers?.setCancelToken?.(apiDefinition.cancelToken);
 
   return action;
 };

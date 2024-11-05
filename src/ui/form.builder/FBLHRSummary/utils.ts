@@ -83,7 +83,7 @@ export const getTypeOptionLabelByValue = (value: string): string | undefined => 
   return TYPE_OPTIONS.find((option) => option.value === value)?.label;
 };
 
-const getDisplayStepAndMpiValue = (step: string, stepOrMpiDetails: DetailsObj): string => {
+const getDisplayStepAndMpiValue = (step: string, stepOrMpiDetails?: DetailsObj): string => {
   const customMpiIdValue = getDisplayDocumentByDetailsObj(stepOrMpiDetails);
   return (customMpiIdValue === step) ? step : `${step}/${customMpiIdValue}`;
 };

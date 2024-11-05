@@ -17,21 +17,19 @@ import { styles } from './LifecyclePhaseSelect.style';
 interface Props {
   docTypeId?: string
   lifecyclePhaseId?: string
-  isOptionDisabled?: boolean
-  isPartForm?: boolean
+  isDisabled?: boolean
   isInfoIconHidden?: boolean
 }
 
 const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
   docTypeId = '',
   lifecyclePhaseId,
-  isOptionDisabled,
-  isPartForm,
+  isDisabled,
   isInfoIconHidden,
 }) => {
   const classes = styles();
   const formik = useFormikContext();
-  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<Array<{value: string, text: string}>>([]);
+  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<Array<{ value: string, text: string }>>([]);
   const fetchDocRevOptions = useActionCreator(companyActions.fetchDocRevOptionsByDocTypeId);
 
   const fetchLCPDocTypesAsync = useAsync({
@@ -41,21 +39,21 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
     onError: toastError,
   });
 
-  const isDisabled = !lifecyclePhaseOptions.length && !fetchLCPDocTypesAsync.isLoading;
+  const isDisabledFieldBasedOnLCPConfig = !lifecyclePhaseOptions.length && !fetchLCPDocTypesAsync.isLoading;
 
   useEffect(() => {
     fetchLCPDocTypesAsync.start(
       fetchDocRevOptions,
       docTypeId,
-      lifecyclePhaseId ?? undefined,
       fetchLCPDocTypesAsync,
+      lifecyclePhaseId ?? undefined,
     );
   }, []);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string, value: unknown }>,
   ) => {
-    if (isPartForm) { return; }
+    if (isDisabled) { return; }
     const value = event.target.value as string;
     formik.setFieldValue('lifecyclePhaseId', value);
     formik.handleChange(event);
@@ -72,7 +70,7 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
             arrow
             placement="top"
             title={translate('documentRevision.lcp.configuration.empty')}
-            hidden={!isDisabled || isInfoIconHidden}
+            hidden={!isDisabledFieldBasedOnLCPConfig || isInfoIconHidden}
           >
             <FontAwesomeIcon className={classes.infoIcon} icon={regular('circle-info')} />
           </StyleTooltip>
@@ -83,9 +81,9 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
         selectProps={{
           inputProps: {
             labelId: 'life-cycle-phases-label',
-            disabled: isDisabled || isPartForm,
+            disabled: isDisabledFieldBasedOnLCPConfig || isDisabled,
           },
-          disabled: isDisabled || isPartForm,
+          disabled: isDisabledFieldBasedOnLCPConfig || isDisabled,
           onChange: handleTypeChange,
           displayEmpty: true,
           renderValue: value => lifecyclePhaseOptions.find(item => item.value === value)?.text ?? (

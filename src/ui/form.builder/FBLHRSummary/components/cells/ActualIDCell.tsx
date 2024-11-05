@@ -1,13 +1,13 @@
-import { Box, CircularProgress, TextField } from '@material-ui/core';
+import { Box, CircularProgress, Popper, TextField } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
 import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -250,6 +250,12 @@ const Editor: React.FC<CustomTemplateProps> = ({
               />
             </Box>
           </Box>
+        )}
+        PopperComponent={({ style, ...props }) => (
+          <Popper
+            {...props}
+            style={{ ...style }}
+          />
         )}
         renderOption={(option) => option.label}
         onInputChange={debounceFunction}

@@ -281,12 +281,12 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   relatedParentPartDetails?: RelatedParentPartDetails
   changeControlOptions?: ChangeControlOptions
   isBeingEditedAfterRelease?: boolean
-  lotStatus: LotStatus
+  lotStatus?: LotStatus
   hasAttachments?: boolean
   hasPrimaryAttachment?: boolean
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
-  eqStatus: EquipmentStatus
+  eqStatus?: EquipmentStatus
   lifecyclePhaseId?: string
   lifecyclePhase?: string
   isExpired?: boolean

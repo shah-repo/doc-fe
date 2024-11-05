@@ -3,8 +3,8 @@ import { action, observable, set } from 'mobx';
 import moment from 'moment';
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import FBRequest from '../FBApi/FBApi.request';
 import { FBEndpoint } from '../defaults/FBEndpoint';
+import FBRequest from '../FBApi/FBApi.request';
 import { TAX_RATE } from '../helpers/constants';
 import { FBCurrency, FBPurchaseOrderValue } from './FBPurchaseOrder.types';
 

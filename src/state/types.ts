@@ -35,8 +35,8 @@ export enum AsyncStatus {
 }
 
 export interface AsyncActionPayload {
-  status: AsyncStatus
-  message: string
+  status?: AsyncStatus
+  message?: string
 }
 
 export type AsyncReducerState = AsyncActionPayload;
@@ -50,5 +50,5 @@ export interface LoadAsyncState {
 export interface Handlers<S = any, E = string> {
   successHandler: CallbackHandler<S>
   errorHandler: CallbackHandler<E>
-  setCancelToken: (token?: CancelTokenSource) => void
+  setCancelToken?: (token?: CancelTokenSource) => void
 }
