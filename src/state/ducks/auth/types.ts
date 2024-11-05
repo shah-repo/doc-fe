@@ -231,6 +231,8 @@ export enum Permission {
   EDIT_EQ_STATUS = 'EDIT_EQ_STATUS',
   // BULK_IMPORT
   BULK_IMPORT = 'BULK_IMPORT',
+  // SUBSCRIPTIONS
+  AI_SUBSCRIPTION = 'AI_SUBSCRIPTION',
 }
 
 export enum GroupTag {
