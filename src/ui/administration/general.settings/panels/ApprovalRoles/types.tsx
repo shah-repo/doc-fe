@@ -4,10 +4,10 @@ import { ColumnDefinition, EditableItem } from '../../../../components/KendoData
 export interface EditableApprovalRole extends ApprovalRole, EditableItem {}
 
 interface SchemaOptions {
-  onChange: () => void
+  onChange: (e: { dataItem: EditableApprovalRole }) => void
   onConfirm: () => void
   onDiscard: () => void
-  editedApprovalRoles?: EditableApprovalRole
+  editedApprovalRole?: EditableApprovalRole
 }
 
 export type SchemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableApprovalRole>>;

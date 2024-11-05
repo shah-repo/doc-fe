@@ -5,10 +5,10 @@ import TextCellTemplate from '../../components/SettingsTable/components/TextCell
 import ActiveCellTemplate from './components/ActiveCellTemplate';
 import { SchemaBuilder } from './types';
 
-export const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, editedApprovalRoles }) => {
+export const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, editedApprovalRole }) => {
   return [
     {
-      id: 'active',
+      id: 'isActive',
       field: 'isActive',
       title: 'common.active',
       width: 80,
@@ -35,7 +35,7 @@ export const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, edi
           hideEditButton
         />
       ),
-      width: editedApprovalRoles?.[MODE_FIELD] === Mode.add ? 75 : 0,
+      width: editedApprovalRole?.[MODE_FIELD] === Mode.add ? 75 : 0,
     },
   ];
 };

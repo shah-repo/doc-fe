@@ -29,7 +29,12 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const discardApprovalRoles = () => setEditedApprovalRole(undefined);
   const onChange = ({ dataItem }) => {
     if (dataItem[MODE_FIELD] === Mode.add) {
-      return setEditedApprovalRole(prevValue => ({ ...prevValue, isActive: !editedApprovalRole?.active, name: values.name }));
+      setEditedApprovalRole(prevValue => Object.assign(
+        {},
+        prevValue,
+        { isActive: !editedApprovalRole?.isActive, name: values.name },
+      ));
+      return;
     }
     if (!dam?.isSynced) {
       setIsOpen(true);
