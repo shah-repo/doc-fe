@@ -93,7 +93,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     },
     onSuccess: () => {
       if (dam?.isSynced) {
-        setIsOpen(dam?.isSynced);
+        setIsOpen(true);
       }
     },
   });
