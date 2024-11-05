@@ -52,7 +52,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
     }
     const roleToSave = omit(editedRole, MODE_FIELD, SEARCHABLE_GROUPS_FIELD);
 
-    updateRole(roleToSave);
+    updateRole?.(roleToSave);
 
     discardRole();
   };

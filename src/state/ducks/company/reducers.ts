@@ -56,6 +56,23 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = ({
   shouldNotifyLcpMismatch: NotifyPartLCP.DO_NOTHING,
   systemTransactions: [],
   zebraPrint: [],
+  approvalRoles: {
+    approvalRoles: [],
+    addToDam: [],
+    removeFromDam: [],
+    dam: {
+      documentRevision: {
+        id: '',
+        displayRevision: '',
+        displayStatus: '',
+      },
+      document: {
+        id: '',
+        docId: '',
+      },
+      isSynced: true,
+    },
+  },
   status: AsyncStatus.Idle,
   message: '',
 });

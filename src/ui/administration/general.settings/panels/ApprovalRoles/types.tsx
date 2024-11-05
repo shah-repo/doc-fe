@@ -1,13 +1,13 @@
 import { ApprovalRole } from '../../../../../state/ducks/company/types';
 import { ColumnDefinition, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-export interface EditableApprovalRoles extends ApprovalRole, EditableItem {}
+export interface EditableApprovalRole extends ApprovalRole, EditableItem {}
 
 interface SchemaOptions {
   onChange: () => void
   onConfirm: () => void
   onDiscard: () => void
-  editedApprovalRoles: EditableApprovalRoles
+  editedApprovalRoles?: EditableApprovalRole
 }
 
-export type SchemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableApprovalRoles>>;
+export type SchemaBuilder = (options: SchemaOptions) => Array<ColumnDefinition<EditableApprovalRole>>;

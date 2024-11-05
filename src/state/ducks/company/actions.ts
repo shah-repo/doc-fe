@@ -119,10 +119,10 @@ const createApprovalRoles = (
 };
 
 const updateApprovalRoles = (
+  id: string,
   body: any,
-  id?: string,
+  handlers: Handlers,
   method: ApiActionMethod = 'patch',
-  handlers?: Handlers,
 ): ApiAction<GeneralSettingsState> => {
   const { lifecyclePhases, ...rest } = body;
   const payload = { ...rest, lifecyclePhases: Array.isArray(lifecyclePhases) ? lifecyclePhases : [] };
