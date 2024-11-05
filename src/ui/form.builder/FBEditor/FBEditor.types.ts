@@ -1,3 +1,4 @@
+import { MouseEventHandler } from 'react';
 import { FBEditorState, FBFormProps, FBInputProps, FBProviderProps } from '..';
 import { TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
 
@@ -25,5 +26,5 @@ export type FBEditorProps =
 };
 
 export interface FBEditorHelperProps {
-  openEditor?: (props?: Partial<FBInputProps>) => void
+  openEditor?: (props?: Partial<FBInputProps>) => MouseEventHandler<HTMLElement> | undefined
 }
