@@ -25,7 +25,7 @@ export interface LHRSummaryItem {
   equipmentId?: string
   mpiId?: string
   issue?: string
-  stepOrMPI: string
+  stepOrMPI?: string
   expiryDate?: null | string
   startQuantity: number
   endQuantity: number
@@ -46,11 +46,11 @@ export interface LHRSummaryItem {
   issueDocumentId?: string
   stepOrMpiDocId?: string
   stepOrMpiDocumentId?: string
-  stepOrMpiDetails: DetailsObj
-  issueDetails: DetailsObj
-  lotOrEquipmentDetails: DetailsObj
-  plannedDetails: DetailsObj
-  actualDetails: DetailsObj
+  stepOrMpiDetails?: DetailsObj
+  issueDetails?: DetailsObj
+  lotOrEquipmentDetails?: DetailsObj
+  plannedDetails?: DetailsObj
+  actualDetails?: DetailsObj
   isRevRemoved?: boolean
 }
 

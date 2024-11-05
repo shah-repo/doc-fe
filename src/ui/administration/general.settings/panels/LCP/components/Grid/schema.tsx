@@ -12,6 +12,7 @@ import { LCP, SchemaOptions } from './types';
 export const LCPSchema = ({
   onConfirm,
   onDiscard,
+  selectedPartGroups,
   hasEditLCPPermission,
 }: SchemaOptions): Array<ColumnDefinition<LCP>> => {
   return [
@@ -19,10 +20,13 @@ export const LCPSchema = ({
       id: 'isActive',
       field: 'isActive',
       title: translate('administration.general.settings.lcp.isActive'),
-      width: 60,
+      headerCell: (props) => <HeaderCell
+        {...props}
+        content="administration.general.settings.lcp.isActive" isShowIcon={false} />,
+      width: 70,
       filterable: false,
       locked: false,
-      cell: (props) => <ActiveCell {...props} hasEditLCPPermission={hasEditLCPPermission} />,
+      cell: (props) => <ActiveCell {...props} hasEditLCPPermission={hasEditLCPPermission} selectedPartGroups={selectedPartGroups} />,
       groupable: false,
       sortable: false,
     },
@@ -30,9 +34,9 @@ export const LCPSchema = ({
       id: 'internalType',
       field: 'internalType',
       title: translate('administration.general.settings.lcp.internalType'),
-      width: 200,
+      width: 180,
       locked: false,
-      cell: (props) => <EnlilTypeCell {...props} />,
+      cell: (props) => <EnlilTypeCell {...props} partGroups={selectedPartGroups} />,
       groupable: false,
       sortable: false,
     },
@@ -41,9 +45,9 @@ export const LCPSchema = ({
       field: 'displayLabel',
       locked: false,
       groupable: false,
-      cell: LabelCell,
+      cell: (props) => <LabelCell {...props} partGroups={selectedPartGroups} />,
       title: translate('administration.general.settings.lcp.displayLabel'),
-      width: 250,
+      width: 150,
     },
     {
       id: 'isApprovedSupplierEnforcedOnPO',
@@ -54,8 +58,8 @@ export const LCPSchema = ({
       headerCell: (props) => <HeaderCell
         {...props}
         content="administration.general.settings.lcp.isApprovedSupplierEnforcedOnPO" />,
-      width: 150,
-      cell: DropdownCell,
+      cell: (props) => <DropdownCell {...props} partGroups={selectedPartGroups} />,
+      width: 200,
       mainOrderIndex: 3,
     },
     {
@@ -64,11 +68,11 @@ export const LCPSchema = ({
       locked: false,
       groupable: false,
       title: translate('administration.general.settings.lcp.isAllowedOnLhrProd'),
-      width: 150,
+      width: 200,
       headerCell: (props) => <HeaderCell
         {...props}
         content="administration.general.settings.lcp.isAllowedOnLhrProd" />,
-      cell: DropdownCell,
+      cell: (props) => <DropdownCell {...props} partGroups={selectedPartGroups} />,
       mainOrderIndex: 4,
     },
     {
@@ -80,8 +84,8 @@ export const LCPSchema = ({
       headerCell: (props) => <HeaderCell
         {...props}
         content="administration.general.settings.lcp.isAllowedToBuy" />,
-      cell: DropdownCell,
-      width: 150,
+      cell: (props) => <DropdownCell {...props} partGroups={selectedPartGroups} />,
+      width: 200,
       mainOrderIndex: 5,
     },
     {
@@ -97,14 +101,18 @@ export const LCPSchema = ({
       field: 'actions',
       title: 'common.actions',
       filterable: false,
+      headerCell: (props) => <HeaderCell
+        {...props}
+        content="common.actions" isShowIcon={false} />,
       template: (props) => (
         <LCPActionsCellTemplate
           {...props}
           onDiscard={onDiscard}
           onConfirm={onConfirm}
+          selectedPartGroups={selectedPartGroups}
         />
       ),
-      width: 100,
+      width: 70,
     },
   ];
 };

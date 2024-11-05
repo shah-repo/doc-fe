@@ -5,6 +5,7 @@ import moment from 'moment';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { MomentFormats } from '../../../../common/utils/date';
+import { bkStatusTextMap } from '../../../../state/ducks/bulkImport/constants';
 import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImportCustom, BulkImportFile } from '../../../../state/ducks/bulkImport/types';
 import Text from '../../../components/Text';
@@ -44,7 +45,7 @@ const ImportLog: React.FC = () => {
                 className={classes.chevronRightIcon}
                 icon={solid('chevron-right')}
               />
-              <Typography className={classes.categoryTitle} variant="subtitle1">{key}</Typography>
+              <Typography className={classes.categoryTitle} variant="subtitle1">{bkStatusTextMap[key] || ''}</Typography>
             </Box>
             <List className={classes.listCategory}>
               {bulkImportsGroupByProcess[key]?.map((item: BulkImportCustom, idx: number) => {

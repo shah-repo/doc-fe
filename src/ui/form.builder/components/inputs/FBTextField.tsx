@@ -33,7 +33,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
         variant="outlined"
         label=""
         id="FBTextField-input"
-        {...{ rows, placeholder, id, InputLabelProps, InputProps, inputProps }}
+        {...{ rows, placeholder, InputLabelProps, InputProps, inputProps }}
       />
     </FBInput>
   );
