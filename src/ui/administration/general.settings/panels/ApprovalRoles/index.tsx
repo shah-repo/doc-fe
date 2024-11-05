@@ -92,9 +92,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       toastError(error);
     },
     onSuccess: () => {
-      if (dam?.isSynced) {
-        setIsOpen(true);
-      }
+      setIsOpen(dam?.isSynced);
     },
   });
   const updateApprovalRolesAction = useActionCreator(companyActions.updateApprovalRoles);
