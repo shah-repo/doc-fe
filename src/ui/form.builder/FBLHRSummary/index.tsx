@@ -13,44 +13,26 @@ import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
-import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
-import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
-import {
-  ColumnDefinition,
-  DataGridProps,
-} from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
+import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
 import { KendoColumn } from '../../components/common/kendo/types';
 import { Button } from '../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
+import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
+import { ColumnDefinition, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../components/notifications';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
 import { FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
-import {
-  ColumnMenuContext,
-  CustomColumnMenu,
-} from './components/cells/CustomColumnMenu';
-import {
-  COLUMN_LOCK_FIELDS,
-  DATA_ITEM_KEY,
-  DATE_FIELDS_TO_PICK,
-  EXCEL_FILE_NAME,
-  FIELDS_TO_PICK,
-  SELECTED_FIELD,
-} from './constants';
+import { ColumnMenuContext, CustomColumnMenu } from './components/cells/CustomColumnMenu';
+import { COLUMN_LOCK_FIELDS, DATA_ITEM_KEY, DATE_FIELDS_TO_PICK, EXCEL_FILE_NAME, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import {
-  CustomTreeListColumnProps,
-  EditableLHRSummaryItem,
-  EditableLHRSummaryItemEditEvent,
-  LHRSummaryItem,
-} from './types';
+import { CustomTreeListColumnProps, EditableLHRSummaryItem, EditableLHRSummaryItemEditEvent, LHRSummaryItem } from './types';
 import { getExcelColumns, getExcelData, processData } from './utils';
 
 interface props {
@@ -185,7 +167,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     setEditedLHRSummaryItem({
       ...dataItem,
       ...pick(rowData, DATE_FIELDS_TO_PICK),
-      step,
+      step: step ?? '',
       mpiId,
     });
   };
@@ -378,9 +360,9 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
             }
             loading={
               LHRSummaryAsync.isLoading
-            || addLHRSummaryAsync.isLoading
-            || deleteLHRSummaryAsync.isLoading
-            || updateLHRSummaryAsync.isLoading
+              || addLHRSummaryAsync.isLoading
+              || deleteLHRSummaryAsync.isLoading
+              || updateLHRSummaryAsync.isLoading
             }
             resizable={true}
           >

@@ -160,8 +160,8 @@ const fetchLCPDocTypes = (
 
 const fetchDocRevOptionsByDocTypeId = (
   documentTypeId: string,
-  currentPhaseId?: string,
   handlers: Handlers,
+  currentPhaseId?: string,
 ): ApiAction<LCPDocRevOptions[]> => {
   const params = qs.stringify({ documentTypeId, currentPhaseId });
 

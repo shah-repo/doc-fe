@@ -12,7 +12,7 @@ export const withFBValidation = <T extends FBValidationProps>(
     function valueByType (value: any, key: string, validator: string): any {
       switch (true) {
         case isArray(value): return validator === 'required_if_in' ? JSON.stringify({ ...value }) : value;
-        case isDate(value): return (value as string);
+        case isDate(value): return value;
         case isObject(value): return get(value, key);
         default: return value;
       }

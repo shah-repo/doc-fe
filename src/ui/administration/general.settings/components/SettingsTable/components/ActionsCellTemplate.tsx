@@ -13,6 +13,7 @@ import useStyles from '../styles';
 interface Props<T extends EditableItem> extends CellTemplateProps<T> {
   scrollBehavior?: ScrollBehavior
   isActive?: boolean
+  isLoading?: boolean
   hideEditButton?: boolean
   onEdit?: (item: T) => void
   onConfirm: () => void
@@ -24,6 +25,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
   dataItem,
   scrollBehavior = 'auto',
   isActive,
+  isLoading,
   onEdit,
   onDelete,
   onConfirm,
@@ -63,6 +65,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
               onClick={onDiscard}
               iconSize={22}
               data-cy="action-discard"
+              disabled={isLoading}
             >
               <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
             </IconButton>
@@ -75,6 +78,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
               onClick={onConfirm}
               iconSize={22}
               data-cy="action-save"
+              disabled={isLoading}
             >
               <FontAwesomeIcon icon={isSaveHovered ? solid('square-check') : light('square-check')} />
             </IconButton>
