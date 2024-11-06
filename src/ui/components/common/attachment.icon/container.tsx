@@ -38,8 +38,6 @@ import PresenterFactory from './presenter.factory';
 import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from './utils/types';
 import WatermarkContainer from './watermark/container';
 
-type DispatchProps = AttachmentIconDispatchProps;
-
 const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name = '',
   form,
@@ -48,7 +46,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   isNewVersion,
   documentRevision,
   docRevId,
-  isARAttachment,
+  isRedlineForced,
+  isRedlineFirst,
   ...other
 }) => {
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
@@ -342,7 +341,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       const canViewRedlineInDraftMode = isOwnerOfFile && !isReleasedOrApproved;
       const canViewRedline = hasPermissionToRedlineFiles && isReleasedOrApproved;
 
-      if (isARAttachment) {
+      if (isRedlineForced) {
         return true;
       } else {
         if (canViewRedline || canViewRedlineInDraftMode) {
@@ -353,18 +352,14 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       }
     });
 
-    return isARAttachment
-      ? filteredAttachments.sort((a, b) => {
-        if (a.lineType === LINE_TYPES.RED_LINE && b.lineType !== LINE_TYPES.RED_LINE) return -1;
-        if (a.lineType !== LINE_TYPES.RED_LINE && b.lineType === LINE_TYPES.RED_LINE) return 1;
-        return 0;
-      })
-      : filteredAttachments.sort((a) => (a.lineType === LINE_TYPES.CLEAN_COPY ? -1 : 0))
-        .sort((a) => (a.id === documentRevision?.primaryAttachment?.id ? -1 : 0));
-  }, [attachments, documentRevision, isARAttachment]);
+    return filteredAttachments
+      .sort((a) => (a.lineType === (isRedlineFirst ? LINE_TYPES.RED_LINE : LINE_TYPES.CLEAN_COPY) ? -1 : 0))
+      .sort((a) => (a.id === documentRevision?.primaryAttachment?.id ? -1 : 0));
+  }, [attachments, documentRevision, isRedlineFirst]);
+
   const attachmentsRenderer = sortedAttachments.map((attachment) => {
     let showAttachment = true;
-    let canDeleteFile = !isARAttachment;
+    let canDeleteFile = false;
     if (isCurrentUserOperator && (documentType === 'LOT' || documentType === 'EB')) {
       const isOwnerOfFile = attachment.owner?.id === currentEmployeeId;
       showAttachment = isOwnerOfFile;
@@ -449,6 +444,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   );
 };
 
-export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
+export default connect<{}, AttachmentIconDispatchProps, {}, ApplicationState>(null, {
   download: attachmentsActions.download,
 })(withFormik(AttachmentIconContainer));
