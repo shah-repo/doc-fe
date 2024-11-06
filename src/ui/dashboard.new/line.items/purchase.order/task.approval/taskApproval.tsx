@@ -18,6 +18,7 @@ import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/t
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import { toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import { BULK_IMPORT_PROGRESS_URL } from '../../../../constants/urls';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -164,6 +165,8 @@ const TaskApprovalPresenter: React.FC<Props> = ({
 
   const isPinShown = pinLineItem && !pinned;
   const isUnpinShown = unPinLineItem && pinned;
+  const isBulkImport = docId.startsWith('BULKIMPORT-');
+  const redirectUrl = isBulkImport ? BULK_IMPORT_PROGRESS_URL : docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#';
 
   return (
     <>
@@ -234,11 +237,11 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <DocId
-                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                    url={redirectUrl}
                     docId={docId}
                   />
                   <DocTitle
-                    url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                    url={redirectUrl}
                     docRevVersion={docRevVersion}
                     docRevName={docRevName}
                   />
