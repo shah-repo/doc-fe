@@ -73,6 +73,7 @@ enum Colors {
   latest_red_varient = '#EC2B00',
   trinary_red = '#F14822',
   mandy = '#EB4770',
+  error_bg = '#ef9f87',
   dawn='#A2A2A2',
   seashell='#FCF0ED',
   errorHighlight='#FEF4F2',

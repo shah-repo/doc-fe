@@ -17,6 +17,14 @@ export const SET_AUTOSAVE_CONFIG = 'company/SET_AUTOSAVE_CONFIG';
 export const REDLINE_CONFIG = 'company/REDLINE_CONFIG';
 export const SET_GENERAL_SETTINGS = 'company/SET_GENERAL_SETTINGS';
 
+export const SUPPLIER_MIGRATION_GET_FORM_DETAILS = 'supplier/migration/getSupplierFormDetails';
+export const SUPPLIER_MIGRATION_UPGRADE_FORM = 'supplier/migration/releaseFormNewRevision';
+export const SUPPLIER_MIGRATION_REGISTER_SCAN = 'supplier/migration/registerScan';
+export const SUPPLIER_MIGRATION_CANCEL_SCAN = 'supplier/migration/cancelScan';
+export const SUPPLIER_MIGRATION_GET_LATEST_COMPLETED_SCAN = 'supplier/migration/getLatestCompletedScan';
+export const SUPPLIER_MIGRATION_GET_SCAN_RESULTS = 'supplier/migration/getScanRevisions';
+export const SUPPLIER_MIGRATION_START_REVS_MIGRATION = 'supplier/migration';
+
 export const WHITE_LABEL_DEFAULT = {
   logo: '',
   avatar: '',

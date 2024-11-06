@@ -1,0 +1,62 @@
+import { Employee } from '../../../state/ducks/company/types';
+
+export interface ISupplierScanDetails {
+  suppliersCount: number
+  completedAt: string
+  id: string
+  status: MIGRATION_STATUS_ENUM
+}
+
+export interface ISupplierScanResultRev {
+  id: string
+  documentId: string
+  docId: string
+  docRevId: string
+  docRevName: string
+  displayRevision: string
+  displayStatus: string
+  owner: Employee
+  originalFormInput: {[key: string]: string}
+  newFormInput: {[key: string]: string}
+  proposedAction: REV_ACTION_OPTIONS
+  fieldNamesUnmatched: {[key: string]: string}
+  runDetails: Array<{runAt: string, status: MIGRATION_STATUS_ENUM, completedAt: string, failureReason?: any}>
+  status: MIGRATION_STATUS_ENUM
+  isSelected?: boolean // UI only
+  approvalStatus: SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM
+  name: string
+  email: string
+  ownerId: string
+}
+
+export enum SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM {
+  DEFAULT = 'DEFAULT',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
+export enum REV_ACTION_OPTIONS {
+  REVISE_AND_MIGRATE = 'REVISE_AND_MIGRATE',
+  MIGRATE_ONLY = 'MIGRATE_ONLY',
+  CHECK_FORM_INPUT_ONLY = 'Check Form Input Only',
+  RECOVER_ERROR = 'RECOVER_ERROR',
+  RECOVER_ERROR_AND_RELEASE = 'RECOVER_ERROR_AND_RELEASE',
+}
+
+export enum MIGRATION_STATUS_ENUM {
+  STARTED = 'STARTED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  FAILED = 'FAILED',
+  CANCELLED = 'CANCELLED',
+  COMPLETED = 'COMPLETED',
+}
+
+export interface ISelectedDetails {
+  id: string
+  action: REV_ACTION_OPTIONS
+}
+
+export interface ISearchDetails {
+  id: string
+  value: string
+}

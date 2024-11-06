@@ -77,6 +77,7 @@
     "react-idle-timer": "4.2.12",
     "react-image": "2.4.0",
     "react-intl": "3.9.3",
+    "react-json-view": "^1.21.3",
     "react-lazy-load": "3.0.13",
     "react-moment": "0.9.7",
     "react-prismazoom": "1.1.3",

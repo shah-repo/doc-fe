@@ -67,6 +67,7 @@ export const COMPANY_SETTINGS_URL = '/company/settings';
 export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
 
 export const BULK_IMPORT_URL = '/bulk_import/create';
+export const SUPPLIER_MIGRATION_URL = '/supplier_migration';
 
 export const BULK_IMPORT_PROGRESS_URL = '/bulk_import';
 

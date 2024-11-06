@@ -7,6 +7,7 @@ import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
+import SupplierMigrationPage from '../administration/supplierMigration';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
 import BulkImportProgressPage from '../bulkImport/container.progress';
@@ -33,6 +34,7 @@ import {
   HOME_URL,
   PAGE_DETAILS_MANAGEMENT_URL,
   SLACK_ROOT_URL,
+  SUPPLIER_MIGRATION_URL,
   TRAINING_DETAIL_URL,
   TRAINING_URL,
   USER_GROUP_URL,
@@ -160,6 +162,10 @@ const Layout: React.FunctionComponent = () => {
             path={BULK_IMPORT_URL}
             component={BulkImportPage}
             exact
+          />
+          <Route
+            path={SUPPLIER_MIGRATION_URL}
+            component={SupplierMigrationPage}
           />
           <Route
             path={USER_GROUP_URL}
