@@ -61,8 +61,9 @@ import useStyles from './Layout.styles';
 import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
+import { Permission } from '../../state/ducks/auth/types';
 
-const Layout: React.FunctionComponent<{ isAIEnabled: boolean }> = ({ isAIEnabled }) => {
+const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePermissions: Permission[] }> = ({ isAIEnabled, currentEmployeePermissions }) => {
   const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
   const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
   const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
@@ -70,6 +71,7 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean }> = ({ isAIEnabled
     localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
     setOpen(!isOpened);
   };
+  const isAIPermissionEnabled = currentEmployeePermissions.includes(Permission.AI_SUBSCRIPTION);
 
   return (
     <>
@@ -82,7 +84,7 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean }> = ({ isAIEnabled
       <WatermarkFooterContainer />
       <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
-        {isAIEnabled && <AiWidget />}
+        {isAIEnabled && isAIPermissionEnabled && <AiWidget />}
         <Switch>
           <Route
             path={DOCUMENT_REVISION_LIST_URL}
@@ -190,6 +192,7 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean }> = ({ isAIEnabled
 const mapStateToProps = (state: ApplicationState) => {
   return {
     isAIEnabled: state.company.premiumFeatures.isAIEnabled,
+    currentEmployeePermissions: state.auth.groups.permissions,
   };
 };
 
