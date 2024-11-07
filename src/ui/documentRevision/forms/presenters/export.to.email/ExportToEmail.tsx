@@ -1,7 +1,7 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@material-ui/core';
-import { debounce, omit } from 'lodash';
+import { omit } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -71,7 +71,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
     `${employeeId}/external_export_email/${revisionId}/pdf`
   , [employeeId, revisionId]);
 
-  const callBack = useCallback(debounce((data) => {
+  const callBack = useCallback((data) => {
     handleDownloadComplete(true);
     toastSuccess(<ExportPDFToastr />, {
       className: classes.popup,
@@ -80,7 +80,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
       autoClose: false,
     });
-  }, 1000), []);
+  }, []);
 
   useMqttSubscription(topic, callBack);
 

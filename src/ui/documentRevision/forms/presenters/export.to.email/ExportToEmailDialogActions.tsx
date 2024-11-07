@@ -32,7 +32,7 @@ const ExportToEmailDialogActions: React.FC<ExportToEmailDialogActionsProps> = ({
       {isLoading ? (
         <Box display="flex" className={classes.loader}>
           <FontAwesomeIcon icon={regular('loader')} size="lg" />
-          <Text translation="share.downloading" />
+          <Text translation="share.download.message" />
         </Box>
       ) : (
         <Box>

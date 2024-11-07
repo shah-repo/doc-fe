@@ -18,10 +18,10 @@ export const ExportPDFToastr: React.FC = () => {
       />
       <Box>
         <Typography variant="h5" component="h5" className={classes.popupTitle}>
-          <Text translation="share.downloading.started.popup.title" />
+          <Text translation="share.download.popup.title" />
         </Typography>
         <Typography variant="subtitle2" component="span">
-          <Text translation="share.downloading.popup.desc" />
+          <Text translation="share.download.popup.desc" />
         </Typography>
       </Box>
     </>

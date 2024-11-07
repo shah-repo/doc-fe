@@ -1,7 +1,8 @@
-import { debounce } from 'lodash';
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import { translate } from '../../../common/intl';
 import { authSelectors } from '../../../state/ducks/auth';
+import { toastError } from '../../components/notifications';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 const DownloadPDFSockets: React.FC = () => {
@@ -9,7 +10,7 @@ const DownloadPDFSockets: React.FC = () => {
 
   const topic = React.useMemo(() => `${employeeId}/external_export_email/+/pdf`, [employeeId]);
 
-  const loadData = useCallback(debounce((data) => {
+  const loadData = useCallback((data) => {
     const clientUserAgent = navigator.userAgent;
     try {
       const parsedData = JSON.parse(data);
@@ -20,9 +21,9 @@ const DownloadPDFSockets: React.FC = () => {
         window.open(parsedMessage.url, '_parent');
       }
     } catch (error) {
-      console.error('An error occurred during the attachment download', error);
+      toastError(translate('share.download.fail.error'));
     }
-  }, 1000), [employeeId]);
+  }, [employeeId]);
 
   useMqttSubscription(topic, loadData);
   return null;

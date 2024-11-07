@@ -1,4 +1,4 @@
-import { debounce, omit } from 'lodash';
+import { omit } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -44,7 +44,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
     `${employeeId}/external_export_email/+/pdf`
   , [employeeId]);
 
-  const callBack = useCallback(debounce((data) => {
+  const callBack = useCallback((data) => {
     setIsDownloadInprogress(false);
     emailDialog.close();
     toastSuccess(<ExportPDFToastr />, {
@@ -54,7 +54,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
       autoClose: false,
     });
-  }, 1000), []);
+  }, []);
 
   useMqttSubscription(topic, callBack);
 
