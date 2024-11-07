@@ -17,7 +17,6 @@ export const APPROVALS_URL = '/approvals';
 export const DOCUMENT_REVISION_URL = '/document_revisions/';
 export const DOCUMENT_REVISION_IN_REVIEW_URL = '/document_revisions/in_review/';
 export const DOCUMENT_REVISION_WITHDRAWN_URL = '/document_revisions/withdrawn/';
-export const BULK_IMPORT_DELETE_URL = '/bulk_import/cancel/';
 
 export const RESET_STEPS = 'bulkImport/RESET_STEPS';
 export const CURRENT_STEP = 'bulkImport/CURRENT_STEP';
