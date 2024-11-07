@@ -25,7 +25,7 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
       })) : approvalMatrixFieldState;
 
     handleAdd = () => {
-      approvalMatrixFieldState && (approvalMatrixFieldState.mode = 'add');
+      approvalMatrixFieldState && (approvalMatrixFieldState.mode = FBApprovalMatrixFieldModes.ADD);
     };
 
     React.useEffect(() => {

@@ -32,7 +32,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Grid container>
-      <KendoPanel<GetEmployeeResponse>
+      <KendoPanel
         gridConfiguration={gridConfiguration}
         queryUrl={EMPLOYEES_URL}
         rerender={!showUserProfile}

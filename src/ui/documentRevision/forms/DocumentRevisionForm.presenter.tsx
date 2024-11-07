@@ -317,9 +317,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <LifecyclePhaseSelect
               docTypeId ={docTypeId}
               lifecyclePhaseId={documentRevision?.lifecyclePhaseId}
-              isPartForm={isPartForm}
+              isDisabled={isDisabledInput || inRestrictedEditMode || isPartForm}
               isInfoIconHidden={isPartForm}
-              isOptionDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
             />
           </Grid>)}</>)}
           {isEB && (

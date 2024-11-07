@@ -9,11 +9,13 @@ import useStyles from './styles';
 
 interface HeaderCellProps extends GridHeaderCellProps{
   content: string
+  isShowIcon?: boolean
 }
 
 export const HeaderCell: React.FC<HeaderCellProps> = ({
   field,
   content,
+  isShowIcon = true,
 }) => {
   const translatedContent = translate(content);
   const classes = useStyles();
@@ -23,14 +25,14 @@ export const HeaderCell: React.FC<HeaderCellProps> = ({
       <span className="k-link">
         <span className="k-column-title" data-cy={`header-cell-${kebabCase(field)}`} >
           <Box display="flex" alignItems="center">
-            <Tooltip
+            {isShowIcon && <Tooltip
               arrow
               placement="top"
               className={classes.headerButton}
               title={translate('administration.general.settings.lcp.not.implemented')}
             >
               <FontAwesomeIcon icon={solid('star-of-life')} />
-            </Tooltip>
+            </Tooltip>}
             <Tooltip
               arrow
               placement="top"

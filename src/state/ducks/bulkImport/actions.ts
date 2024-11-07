@@ -1,12 +1,10 @@
-import { orderBy } from 'lodash';
 import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzone/Dropzone.types';
 import { toastError } from '../../../ui/components/notifications';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { Approval } from '../common/types';
-import { approvalFieldId, APPROVALS_URL, BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, documentRevisionFormInput, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
-import { Approver, BKAttachmentFile, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
-import { downloadFile } from './utils';
+import { BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_DELETE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_ONE_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_BULK_IMPORTS_STATUS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { Approver, BkStatus, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
+import { downloadFile, orderBkData } from './utils';
 
 const REPORT_CSV = 'report.csv';
 
@@ -41,11 +39,6 @@ export const setTemplateFile = (file: File[]): { type: string, payload: File[] }
   payload: file,
 });
 
-const setXlsxFile = (attachment: BKAttachmentFile): { type: string, payload: BKAttachmentFile } => ({
-  type: SET_XLSX_FILE,
-  payload: attachment,
-});
-
 export const setShowTable = (payload: boolean): { type: string, payload: boolean } => ({
   type: SET_SHOW_TABLE,
   payload,
@@ -76,13 +69,21 @@ const setApprovers = (payload: Approver[]): { type: string, payload: Approver[] 
   payload,
 });
 
-const setApproval = (payload: Approval): { type: string, payload: Approval } => ({
-  type: SET_APPROVAL,
+const setBulkImports = (payload: BulkImport[]): { type: string, payload: BulkImport[] } => ({
+  type: SET_BULK_IMPORTS,
   payload,
 });
 
-const setBulkImports = (payload: BulkImport[]): { type: string, payload: BulkImport[] } => ({
-  type: SET_BULK_IMPORTS,
+export const setBulkImportsStatus = (bulkImportId: string, status: BkStatus): { type: string, payload: {bulkImportId: string, status: BkStatus}} => ({
+  type: SET_BULK_IMPORTS_STATUS,
+  payload: {
+    bulkImportId,
+    status,
+  },
+});
+
+const deleteBulkImportSuccess = (payload: string): { type: string, payload: string } => ({
+  type: DELETE_BULK_IMPORT,
   payload,
 });
 
@@ -161,11 +162,11 @@ export const getBulkImportTableData = (bulkImportId: string): ApiAction<TableRow
   },
 });
 
-export const getReportsExcelFile = (bulkImportId: string): ApiAction<Blob> => apiAction({
+export const getReportsExcelFile = (bulkImportId: string, jobId: string): ApiAction<Blob> => apiAction({
   url: `${BULK_GET_REPORTS_EXCEL_URL}${bulkImportId}`,
   method: 'get',
   onSuccess: (data, _) => {
-    downloadFile(data, REPORT_CSV);
+    downloadFile(data, `${jobId}-${REPORT_CSV}`);
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
@@ -184,6 +185,26 @@ export const getApprovers = (): ApiAction<Approver[]> => apiAction({
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
+  onFailure: (err: string) => {
+    toastError(err);
+  },
+});
+
+export const deleteBulkImport = (
+  body: {bulkImportId: string},
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${BULK_IMPORT_DELETE_URL}${body.bulkImportId}`,
+  method: 'post',
+  onSuccess: (data, dispatch) => {
+    if (data?.id) {
+      dispatch(deleteBulkImportSuccess(data.id));
+    }
+  },
+  onCompleted: (dispatch) => {
+    dispatch(setIsLoading(false));
+  },
+  handlers,
   onFailure: (err: string) => {
     toastError(err);
   },
@@ -220,7 +241,7 @@ export const uploadFileData = (
     method: 'post',
     data: formData,
     onSuccess: (data, dispatch) => {
-      dispatch(setXlsxFile(data));
+      dispatch(setBulkImport(data));
     },
     onCompleted: (dispatch) => {
       dispatch(setIsLoading(false));
@@ -261,67 +282,10 @@ export const setDataTable = (
   onSuccess: (data, dispatch) => {
     dispatch(setBulkImport(data));
   },
-  onCompleted: (dispatch) => {
-    dispatch(setIsLoading(false));
-  },
   handlers,
-  onFailure: (err: string) => {
+  onFailure: (err: string, dispatch) => {
     toastError(err);
-  },
-});
-
-export const saveApprovals = (
-  body: { approval: string, documentRevisionId: string },
-  handlers: Handlers,
-): ApiAction => apiActionWithCallbacks({
-  url: `${APPROVALS_URL}`,
-  method: 'post',
-  data: {
-    assigned: {
-      id: body.approval,
-    },
-    type: 'MASTER',
-    fieldId: approvalFieldId,
-    partOf: {
-      id: body.documentRevisionId,
-    },
-  },
-  onSuccess: (data, dispatch) => {
-    dispatch(setApproval(data));
-  },
-  onFailure: (err, dispatch) => {
     dispatch(setIsLoading(false));
-    toastError(err);
-  },
-  handlers,
-});
-
-export const saveDocumentRevisions = (
-  body: { approvalId: string, documentRevisionId: string },
-  handlers: Handlers,
-): ApiAction => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_URL}${body.documentRevisionId}`,
-  method: 'patch',
-  data: { formInput: { [documentRevisionFormInput]: [body.approvalId] } },
-  onFailure: (err, dispatch) => {
-    dispatch(setIsLoading(false));
-    toastError(err);
-  },
-  handlers,
-});
-
-export const saveDocumentRevisionsInReview = (
-  body: { documentRevisionId: string },
-  handlers: Handlers,
-): ApiAction => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_IN_REVIEW_URL}${body.documentRevisionId}`,
-  method: 'post',
-  onCompleted: (dispatch) => {
-    dispatch(setIsLoading(false));
-  },
-  handlers,
-  onFailure: (err: string) => {
-    toastError(err);
   },
 });
 
@@ -343,6 +307,9 @@ export const uploadS3 = (
     url: `${BULK_IMPORT_UPLOAD_S3_URL}${body.bulkImportId}`,
     method: 'post',
     data: formData,
+    onSuccess: (data, dispatch) => {
+      dispatch(setBulkImport(data));
+    },
     onCompleted: (dispatch) => {
       dispatch(setIsLoading(false));
     },
@@ -363,12 +330,46 @@ export const getBulkImports = (): ApiAction<BulkImport[]> => apiAction({
   url: BULK_IMPORT_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
-    const bulkImportDataSorted = orderBy(data, 'createdAt', 'desc');
+    const bulkImportDataSorted = orderBkData(data);
     dispatch(setBulkImports(bulkImportDataSorted));
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoadingMain(false));
   },
+  onFailure: (err: string) => {
+    toastError(err);
+  },
+});
+
+export const getOneBulkImport = (bulkImportId: string): ApiAction<BulkImport> => apiAction({
+  url: `${BULK_IMPORT_ONE_URL}${bulkImportId}`,
+  method: 'get',
+  onSuccess: (data, dispatch) => {
+    dispatch(setBulkImport(data));
+  },
+  onCompleted: (dispatch) => {
+    dispatch(setIsLoadingMain(false));
+    dispatch(setIsLoading(false));
+  },
+  onFailure: (err: string) => {
+    toastError(err);
+  },
+});
+
+export const patchBulkImport = (
+  body: {bulkImportId: string, data: Partial<BulkImport>},
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${BULK_IMPORT_URL}${body.bulkImportId}`,
+  method: 'patch',
+  data: body.data,
+  onSuccess: (data, dispatch) => {
+    dispatch(setBulkImport(data));
+  },
+  onCompleted: (dispatch) => {
+    dispatch(setIsLoading(false));
+  },
+  handlers,
   onFailure: (err: string) => {
     toastError(err);
   },

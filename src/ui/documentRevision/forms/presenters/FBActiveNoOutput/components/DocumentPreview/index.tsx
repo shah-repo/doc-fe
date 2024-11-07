@@ -270,7 +270,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                               lifecyclePhaseId={
                                   documentRevision?.lifecyclePhaseId
                               }
-                              isPartForm={isPartForm}
+                              isDisabled={isPartForm}
                             />
                           </Grid>
                         )}
