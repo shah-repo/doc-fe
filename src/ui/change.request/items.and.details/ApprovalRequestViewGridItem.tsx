@@ -94,7 +94,6 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
           titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
           revisionChangeType: part.revisionChangeType,
           revisionFormTo: part.revisionFormTo,
-          attchments: part.attachments,
           whereUsedCount: part.whereUsedCount,
         }));
       setDocRelatedParts(childrenDetails);
