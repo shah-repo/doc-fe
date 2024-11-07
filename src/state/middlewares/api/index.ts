@@ -23,12 +23,13 @@ const dispatchAsyncStatusAction = (
   type: string | undefined,
   status: AsyncStatus,
   message = '',
+  statusCode = 200,
 ): void => {
   if (!type) {
     return;
   }
 
-  const action: AsyncAction = { type, payload: { status, message } };
+  const action: AsyncAction = { type, payload: { status, message, statusCode } };
   dispatch(action);
 };
 
@@ -132,7 +133,7 @@ const apiMiddleware: Middleware = ({
         break;
       }
     }
-
+    const statusCode = exception?.response?.status;
     const errorMessage: string = responseMessage || exception?.message;
 
     action.onFailure(errorMessage, dispatch);
@@ -141,6 +142,7 @@ const apiMiddleware: Middleware = ({
       action.asyncType,
       AsyncStatus.Error,
       errorMessage,
+      statusCode,
     );
   } finally {
     action.onCompleted(dispatch);

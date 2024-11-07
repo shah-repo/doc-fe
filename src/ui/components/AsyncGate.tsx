@@ -6,7 +6,6 @@ import useDidMount from '../hooks/useDidMount';
 import styles from './AsyncGate.styles';
 import Text from './Text';
 
-const ACCESS_DENIED = 'To access previous revision(s) you need special permission granted by company administrator.';
 export interface AsyncGateProps {
   asyncState: AsyncState
   asyncAction?: (...args: any[]) => any
@@ -58,7 +57,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
     );
   }
 
-  if (asyncState.status === AsyncStatus.Error && asyncState.message === ACCESS_DENIED) {
+  if (asyncState.status === AsyncStatus.Error && asyncState.statusCode === 403) {
     return (
       <div className={classes.errorAccessDeniedContainer}>
         <NoAccessIcon />
