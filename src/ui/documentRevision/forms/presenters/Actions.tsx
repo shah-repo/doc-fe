@@ -46,7 +46,7 @@ import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectAp
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
-import { useIsLatestLotRevision } from '../../helpers/useIsLatestLotRevision';
+import { useIsLatestRevision } from '../../helpers/useIsLatestRevision';
 import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
 import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
@@ -160,7 +160,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
-  const isLatestLotRevision = useIsLatestLotRevision(documentRevision);
+  const isLatestRevision = useIsLatestRevision(documentRevision);
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -492,7 +492,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {isPO && documentRevision.poStatus && (
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
-      {isLot && isLatestLotRevision && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isLot && (
         <>
