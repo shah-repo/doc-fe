@@ -114,7 +114,9 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
 
   const docIdLabel = (isRecordOrPO ? 'common.id' : 'common.docId') as Translation;
   let recordOwnerLabel = 'common.owner' as Translation;
-  const userName = ((isRecord && isReleased) ? documentRevision.approvals?.[0]?.approverName : documentRevision.owner.user.name) ?? '';
+  const userName = ((isRecord && isReleased)
+    ? documentRevision?.releasedBy?.user.name ?? documentRevision.owner.user.name
+    : documentRevision.owner.user.name) ?? '';
 
   if (isRecord && (isReleased || isVoided)) {
     recordOwnerLabel = isVoided ? 'record.voided.by' : 'record.released.by';
@@ -135,7 +137,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       className={_documentRevisionSidebarState?.open ? classNames(classes.linkContainer, {
         [classes.selected]: isSelected,
       }) : classes.container}
-      data-cy="DocumentRevisionList-item"
+      data-cy="document-revision-list-item"
     >
       <div
         className={isSelected ? classes.activeLinkBox : classes.inActiveLinkBox}
@@ -171,7 +173,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         onClick={handleClick}
       >
         <SummaryInfo
-          dataCy="common.docId"
+          dataCy="common-doc-id"
           label={docIdLabel}
           value={docId}
         />
