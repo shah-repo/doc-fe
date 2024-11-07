@@ -165,8 +165,11 @@ export default makeStyles((theme) =>
       alignItems: 'center',
       columnGap: theme.spacing(0.75),
       whiteSpace: 'nowrap',
+    },
+    wideItemCell: {
+      gridColumnEnd: 'span 3',
 
-      '& > .MuiBox-root': {
+      '& > div': {
         width: '100%',
       },
     },
@@ -186,6 +189,9 @@ export default makeStyles((theme) =>
     },
     textCellEditing: {
       padding: theme.spacing(0.625, 0.25),
+    },
+    textCellAdding: {
+      padding: theme.spacing(2, 0.25, 0.5),
     },
     whereUsedCell: {
       textAlign: 'center',

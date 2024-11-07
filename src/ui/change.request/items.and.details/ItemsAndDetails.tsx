@@ -173,7 +173,7 @@ const ItemsAndDetails: React.FunctionComponent<{
                     resetAndCancelEdit={resetAndCancelEdit}
                     isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
                     documentRevision={documentRevision}
-                    showAutoComplete
+                    isAddingNewItem
                   />
                 )}
                 {itemsAndDetailsState.approvalRequestItemsList.map((entry: ApprovalRequestGridItem) => (

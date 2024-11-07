@@ -1,6 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconButton, Popper } from '@material-ui/core';
+import { Popper } from '@material-ui/core';
 import cx from 'classnames';
 import React, { useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -20,7 +20,7 @@ interface Props {
   formState: FBFormState
   addRevisionToChangeRequest: () => void
   resetAndCancelEdit?: () => void
-  showAutoComplete?: boolean
+  isAddingNewItem?: boolean
   handleRemove?: (docRevId: string) => void
   entry?: ApprovalRequestGridItem
   isLineItemPartCanBeSubstituted?: boolean
@@ -33,7 +33,7 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
   formState,
   addRevisionToChangeRequest,
   resetAndCancelEdit,
-  showAutoComplete,
+  isAddingNewItem,
   handleRemove,
   isLineItemPartCanBeSubstituted,
   entry,
@@ -46,7 +46,6 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
   const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
   const rowRef = useRef<HTMLDivElement>(null);
 
-  const hasRelatedParts = false;
   const isWhereUsedTreeExist = (entry?.whereUsedView ?? []).length > 1;
 
   return (
@@ -72,8 +71,16 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
               />
             </div>
           )}
-          <div className={cx(classes.contentCell, classes.itemCell)}>
-            {showAutoComplete ? (
+          <div
+            className={cx(
+              classes.contentCell,
+              classes.itemCell,
+              {
+                [classes.wideItemCell]: isAddingNewItem,
+              },
+            )}
+          >
+            {isAddingNewItem ? (
               <FBAutocompleteAsync
                 name="proposedDocumentRevision"
                 label="form.builder.document"
@@ -86,35 +93,36 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
                 autoCompleteClasses={{ option: classes.autocompleteOption }}
               />
             ) : (
-              <>
-                {hasRelatedParts && (
-                  <IconButton
-                    kind="secondary"
-                    size="small"
-                    iconSize={12}
-                    className={cx(classes.expandIcon, classes.iconDisabled)}
-                  >
-                    <FontAwesomeIcon icon={regular('chevron-right')} />
-                  </IconButton>
+              <span>{entry?.titleText}</span>
+            )}
+          </div>
+          {!isAddingNewItem && (
+            <>
+              <div className={classes.contentCell}>
+                {entry?.revisionFormTo ?? documentRevision?.revision ?? EMPTY_VALUE_PLACEHOLDER}
+              </div>
+              <div className={classes.contentCell}>
+                {entry?.attachments ? (
+                  <ARAttachmentsList
+                    attachments={entry?.attachments}
+                    titleId={entry?.titleText}
+                  />
+                ) : (
+                  EMPTY_VALUE_PLACEHOLDER
                 )}
-                <span>{entry?.titleText}</span>
-              </>
+              </div>
+            </>
+          )}
+          <div
+            className={cx(
+              classes.contentCell,
+              classes.textCell,
+              classes.textCellEditing,
+              {
+                [classes.textCellAdding]: isAddingNewItem,
+              },
             )}
-          </div>
-          <div className={classes.contentCell}>
-            {entry?.revisionFormTo ?? documentRevision?.revision ?? EMPTY_VALUE_PLACEHOLDER}
-          </div>
-          <div className={classes.contentCell}>
-            {entry?.attachments ? (
-              <ARAttachmentsList
-                attachments={entry?.attachments}
-                titleId={entry?.titleText}
-              />
-            ) : (
-              EMPTY_VALUE_PLACEHOLDER
-            )}
-          </div>
-          <div className={cx(classes.contentCell, classes.textCell, classes.textCellEditing)}>
+          >
             <KendoTextEditor
               name="descriptionOfChange"
               label="form.builder.description.of.change"
@@ -122,7 +130,16 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
               rules="required"
             />
           </div>
-          <div className={cx(classes.contentCell, classes.textCell, classes.textCellEditing)}>
+          <div
+            className={cx(
+              classes.contentCell,
+              classes.textCell,
+              classes.textCellEditing,
+              {
+                [classes.textCellAdding]: isAddingNewItem,
+              },
+            )}
+          >
             <KendoTextEditor
               name="justificationOfChange"
               label="form.builder.justification.of.change"

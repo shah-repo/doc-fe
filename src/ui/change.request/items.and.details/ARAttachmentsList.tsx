@@ -4,6 +4,7 @@ import { LINE_TYPES } from '../../../state/ducks/attachments/constants';
 import { Attachment } from '../../../state/ducks/attachments/types';
 import AttachmentField from '../../../ui/components/common/attachment.icon/container';
 import Dialog from '../../components/dialogs';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../components/KendoDataGrid/constants';
 import useDialog from '../../hooks/useDialog';
 import LegacyThemeWrapper from '../../layout/theme/wrapper';
 import FBAttachmentNamePresenter from '../FBMaterialDisposition/components/FBTasksListTable/components/FBAttachmentNamePresenter';
@@ -34,6 +35,10 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
   const visibleAttachments = sortedAttachments.slice(0, MAX_VISIBLE_ATTACHMENTS);
   const remainingAttachmentCount = sortedAttachments.length - visibleAttachments.length;
   const isExceedsMaxAttachments = sortedAttachments.length > MAX_VISIBLE_ATTACHMENTS;
+
+  if (!visibleAttachments.length) {
+    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
+  }
 
   return (
     <div onClick={blockEditing}>
