@@ -2191,5 +2191,6 @@
   "common.viewAll": "View All",
   "common.rejected": "Rejected",
   "common.rev": "Rev.",
+  "async.state.message.previous.revision.access.denied": "To access previous revision(s) you need special permission granted by company administrator.",
   "async.state.message.access.denied": "Access Denied"
 }

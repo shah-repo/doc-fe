@@ -60,7 +60,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
 
   if (asyncState.status === AsyncStatus.Error && asyncState.message === translate('async.state.message.previous.revision.access.denied')) {
     return (
-      <div className={classes.errorContainer}>
+      <div className={classes.errorAccessDeniedContainer}>
         <NoAccessIcon />
         <Box className={classes.accessDeniedText}>
           <Text translation="async.state.message.access.denied" />

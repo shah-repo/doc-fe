@@ -4,11 +4,10 @@ import Colors from '../layout/theme/utils/colors';
 export default (theme: Theme) =>
   createStyles({
     errorContainer: {
-      marginTop: theme.spacing(8),
+      marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
       display: 'flex',
       alignItems: 'center',
-      flexDirection: 'column',
     },
     tryAgainButton: {
       marginLeft: theme.spacing(1),
@@ -25,6 +24,13 @@ export default (theme: Theme) =>
       marginTop: theme.spacing(1),
       position: 'absolute',
       zIndex: 2,
+    },
+    errorAccessDeniedContainer: {
+      marginTop: theme.spacing(8),
+      marginBottom: theme.spacing(1),
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'column',
     },
     accessDeniedText: {
       marginTop: theme.spacing(2),
