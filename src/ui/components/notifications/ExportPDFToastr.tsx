@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Typography } from '@material-ui/core';
 import copy from 'copy-to-clipboard';
 import React from 'react';
+import { safeParse } from '../../document.revision/utils/paths';
 import Text from '../Text';
 import { exportPDFToastrStyles } from './ExportPDFToastr.styles';
 
@@ -31,19 +32,15 @@ export const ExportPDFToastr: React.FC = () => {
 export const ExportPDFCloseButton = ({ closeToast, linkInfo }) => {
   const classes = exportPDFToastrStyles();
 
-  const copyLinkAddress = (event) => {
+  const copyLinkAddress = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
-    try {
-      const parsedData = JSON.parse(linkInfo);
-      const messageData = parsedData?.data?.message;
-      const parsedMessage
-        = typeof messageData === 'string' ? JSON.parse(messageData) : messageData;
-      const link = parsedMessage?.url;
-      if (link) {
-        copy(link);
-      }
-    } catch (error) {
-      console.error('An error occurred during the link copy', error);
+    const parsedData = safeParse(linkInfo);
+    const messageData = parsedData?.data?.message;
+    const parsedMessage
+        = typeof messageData === 'string' ? safeParse(messageData) : messageData;
+    const link = parsedMessage?.url;
+    if (link) {
+      copy(link);
     }
   };
 
