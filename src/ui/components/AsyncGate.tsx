@@ -1,12 +1,12 @@
 import { Box, Button, LinearProgress, Typography, WithStyles, withStyles } from '@material-ui/core';
 import React, { useCallback, useEffect } from 'react';
 import { ReactComponent as NoAccessIcon } from '../../assets/images/NoAccess_Image.svg';
-import { translate } from '../../common/intl';
 import { AsyncState, AsyncStatus } from '../../state/types';
 import useDidMount from '../hooks/useDidMount';
 import styles from './AsyncGate.styles';
 import Text from './Text';
 
+const ACCESS_DENIED = 'To access previous revision(s) you need special permission granted by company administrator.';
 export interface AsyncGateProps {
   asyncState: AsyncState
   asyncAction?: (...args: any[]) => any
@@ -58,7 +58,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
     );
   }
 
-  if (asyncState.status === AsyncStatus.Error && asyncState.message === translate('async.state.message.previous.revision.access.denied')) {
+  if (asyncState.status === AsyncStatus.Error && asyncState.message === ACCESS_DENIED) {
     return (
       <div className={classes.errorAccessDeniedContainer}>
         <NoAccessIcon />
