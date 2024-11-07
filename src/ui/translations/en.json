@@ -1301,6 +1301,7 @@
   "form.builder.rev": "Rev (From-To)",
   "form.builder.description.of.change": "Description of change",
   "form.builder.justification.of.change": "Justification of change",
+  "form.builder.related.parts": "Related Parts",
   "form.builder.where.used": "Where-Used",
   "form.builder.enter.text": "Enter text",
   "form.builder.closing.note.title": "Implementation Task Closing Note",

@@ -67,28 +67,25 @@ const ApprovalRequestItem: React.FunctionComponent<{
 
   return useObserver(() => (
     <>
-      {
-        isEditMode
-          && <ApprovalRequestEditGridItem {...{ formState }}
-            disabledOptions={disabledOptions()}
-            addRevisionToChangeRequest={addRevisionToChangeRequest}
-            resetAndCancelEdit={resetAndCancelEdit}
-            showAutoComplete={false}
-            titleText={entry.titleText}
-            handleRemove={handleRemove}
-            entry={entry}
-            isLineItemPartCanBeSubstituted={isLineItemPartCanBeSubstituted}
-            isDeletionDisabled={isDeletionDisabled}
-          />
-      }
-      { !isEditMode
-        && <ApprovalRequestViewGridItem
+      {isEditMode ? (
+        <ApprovalRequestEditGridItem
+          {...{ formState }}
+          entry={entry}
+          addRevisionToChangeRequest={addRevisionToChangeRequest}
+          resetAndCancelEdit={resetAndCancelEdit}
+          handleRemove={handleRemove}
+          isLineItemPartCanBeSubstituted={isLineItemPartCanBeSubstituted}
+          isDeletionDisabled={isDeletionDisabled}
+        />
+      ) : (
+        <ApprovalRequestViewGridItem
           entry={entry}
           editItem={editItem}
           handleRemove={handleRemove}
           viewItemActionsVisible={viewItemActionsVisible}
           isLineItemPartCanBeSubstituted={isLineItemPartCanBeSubstituted}
-        /> }
+        />
+      )}
     </>
   ));
 };
