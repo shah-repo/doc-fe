@@ -168,7 +168,6 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     const onPrinterChange = (event: React.ChangeEvent<HTMLSelectElement>, value: ZebraPrintSettings) => {
       setPrinterSerial(value.printer.sn);
       setLabelTypeData(value?.printer?.labelTemplates);
-      console.log('value', value);
       localStorage.setItem(PRINTER_NAME_KEY, JSON.stringify(value));
     };
 
