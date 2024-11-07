@@ -2190,5 +2190,6 @@
   "common.dataType": "Data Type",
   "common.viewAll": "View All",
   "common.rejected": "Rejected",
-  "common.rev": "Rev."
+  "common.rev": "Rev.",
+  "async.state.message.access.denied": "Access Denied"
 }
