@@ -38,7 +38,7 @@ const REDLINE_DEFAULT_STATE = {
   redlineActive: false,
 };
 
-const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = ({
+const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   equipmentFamily: {
     autoSyncEnabled: false,
     locations: [],
@@ -58,7 +58,16 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = ({
   zebraPrint: [],
   status: AsyncStatus.Idle,
   message: '',
-});
+  trainingReminders: {
+    customDaysDueOn: { isActive: false, days: 14, isCcActive: false },
+    isSevenDaysDueOnCountdownActive: true,
+    isAssignedActive: true,
+    isOverdueActive: true,
+    isAssignedCcActive: false,
+    isSevenDaysDueOnCountdownCcActive: false,
+    isOverdueCcActive: false,
+  },
+};
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
 
