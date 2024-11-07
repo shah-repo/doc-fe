@@ -1,12 +1,10 @@
 import { isEmpty, omit } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import { getHasPermission } from '../../../../common/utils/selectors';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
 import { Attachment, AttachmentDownloadResponse, AttachmentType, WatermarkRequest, WatermarkRequestBody } from '../../../../state/ducks/attachments/types';
 import { authSelectors } from '../../../../state/ducks/auth';
-import { Permission } from '../../../../state/ducks/auth/types';
 import { Id, Nullable } from '../../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
@@ -46,7 +44,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   isNewVersion,
   documentRevision,
   docRevId,
-  isRedlineForced,
   isRedlineFirst,
   ...other
 }) => {
@@ -329,30 +326,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const openWarningDialog = () => redlineWarningDialogHandler.open();
   const openFileView = () => dialogHandler.open();
 
-  const hasPermissionToRedlineFiles = useSelector(getHasPermission(Permission.CAN_ACCESS_REDLINE_ATTACHMENTS));
-  const isDocumentReleasedOrApproved = (status: DocumentRevisionStatus) => {
-    return status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Approved;
-  };
-
   const sortedAttachments = useMemo(() => {
-    const filteredAttachments = attachments.filter((attachment) => {
-      const isOwnerOfFile = attachment.owner?.id === currentEmployeeId;
-      const isReleasedOrApproved = isDocumentReleasedOrApproved(documentRevision?.status);
-      const canViewRedlineInDraftMode = isOwnerOfFile && !isReleasedOrApproved;
-      const canViewRedline = hasPermissionToRedlineFiles && isReleasedOrApproved;
-
-      if (isRedlineForced) {
-        return true;
-      } else {
-        if (canViewRedline || canViewRedlineInDraftMode) {
-          return true;
-        } else {
-          return attachment.lineType === LINE_TYPES.CLEAN_COPY;
-        }
-      }
-    });
-
-    return filteredAttachments
+    return attachments
       .sort((a) => (a.lineType === (isRedlineFirst ? LINE_TYPES.RED_LINE : LINE_TYPES.CLEAN_COPY) ? -1 : 0))
       .sort((a) => (a.id === documentRevision?.primaryAttachment?.id ? -1 : 0));
   }, [attachments, documentRevision, isRedlineFirst]);

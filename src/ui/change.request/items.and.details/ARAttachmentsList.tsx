@@ -65,7 +65,6 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
             <AttachmentField
               value={attachments}
               name="arAttachments"
-              isRedlineForced
               isRedlineFirst
             />
           </LegacyThemeWrapper>
