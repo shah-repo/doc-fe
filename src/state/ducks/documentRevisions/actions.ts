@@ -649,7 +649,7 @@ const getAttachmentsByDocRevId = (
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `/attachments/${revisionId}/getall`,
+    url: `/attachments/document_revisions/${revisionId}/all`,
     method: 'get',
     handlers,
   });
@@ -659,7 +659,7 @@ const getAttachmentsByARId = (
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `/attachments/change_requests/${arId}/getall`,
+    url: `/attachments/change_requests/${arId}/all`,
     method: 'get',
     handlers,
   });
