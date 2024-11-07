@@ -51,12 +51,18 @@ export default makeStyles(theme => ({
   },
   selectLabel: {
     marginBottom: theme.spacing(2.5),
-    fontSize: 17,
-    fontWeight: 400,
+    fontSize: 14,
+    fontWeight: 600,
+  },
+  noMarginBottom: {
+    marginBottom: 0,
   },
   autocomplete: {
     '&.MuiAutocomplete-inputRoot': {
       height: 47,
     },
+  },
+  withdrawSubmission: {
+    float: 'inline-end',
   },
 }));

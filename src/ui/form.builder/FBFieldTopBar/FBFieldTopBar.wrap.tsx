@@ -14,7 +14,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     inputProps: { type } = {},
     ...props
   }: T) => {
-    const { fieldWrapperState, workspaceState, bookmarkState } = FB.useStores();
+    const { workspaceState, bookmarkState } = FB.useStores();
     const { documentId, document } = workspaceState || {};
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
@@ -26,7 +26,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     };
 
     const editSchemaItem = () => {
-      openEditor && type && openEditor(inputProps)();
+      openEditor && type && openEditor(inputProps);
     };
 
     const removeSchemaItem = () => {
@@ -42,9 +42,6 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       }
       workspaceState?.removeSchemaItem(inputProps);
     };
-
-    const markDownSchemaItem = () =>
-      fieldWrapperState?.setMarkDownActive(!fieldWrapperState.markDownVisible);
 
     // MARK: @helpers
     function hasValidationRelation (fieldName: string, fieldRules: string): boolean {
@@ -79,7 +76,6 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       ...(props as T),
       editSchemaItem,
       removeSchemaItem,
-      markDownSchemaItem,
       inputProps,
     });
   };

@@ -1,12 +1,13 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Dialog, Typography } from '@material-ui/core';
+import { Box, Dialog, Divider, Typography } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { Form, Formik } from 'formik';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
-import { setIsLoading, uploadS3 } from '../../../../state/ducks/bulkImport/actions';
+import { patchBulkImport, setIsLoading, uploadS3 } from '../../../../state/ducks/bulkImport/actions';
+import { skippedAttachmentFile } from '../../../../state/ducks/bulkImport/constants';
 import { getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport } from '../../../../state/ducks/bulkImport/types';
 import Text from '../../../components/Text';
@@ -22,6 +23,7 @@ import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import Tree from './Tree';
 import useStyles from './styles';
+import { validationSchema } from './validation';
 
 const errorsList = ['ECO-00100', 'ECO-00121', 'ECO-00124', 'ECO-00198', 'ECO-00201'];
 
@@ -35,11 +37,17 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const dispatch = useDispatch();
   const bulkImport = useSelector(getBulkImport);
   const uploadFileDataAction = useActionCreator(uploadS3);
+  const patchBkSkipAttachment = useActionCreator(patchBulkImport);
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const dialog = useDialog();
   const showErrors = false;
+  const loadFromBk = useRef<boolean>(false);
 
   const asyncUploadFile = useAsync({
+    onSuccess: () => handleNext(),
+  });
+
+  const asyncSkipAttachment = useAsync({
     onSuccess: () => handleNext(),
   });
 
@@ -49,8 +57,10 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
 
   const handleSubmit = (values: { files: FileWithPreview[], link: string }) => {
     // if the user wants to skip the step
-    if (values.files.length === 0 && !values.link) {
-      handleNext();
+    // eslint-disable-next-line no-mixed-operators
+    if ((values.files.length === 0 && !values.link) || (values.link === bulkImport?.s3Link || bulkImport?.attachmentId && files.length === 0)) {
+      dispatch(setIsLoading(true));
+      asyncSkipAttachment.start(patchBkSkipAttachment, { bulkImportId: bulkImport?.id, data: { attachmentLink: skippedAttachmentFile } }, asyncSkipAttachment);
       return;
     }
     // Handle form submission and file processing
@@ -69,6 +79,27 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const handleConfirmClose = () => {
     dialog.close();
   };
+
+  useEffect(() => {
+    if (bulkImport?.zipFile && files.length === 0 && !loadFromBk.current) {
+      const initialFile = {
+        name: `${bulkImport.zipFile.name}.${bulkImport.zipFile.type}`,
+        preview: bulkImport.zipFile.s3link,
+        size: bulkImport.zipFile.fileSizeS3Link,
+        type: 'application/zip',
+        lastModified: new Date(bulkImport.zipFile.updatedAt).getTime(),
+      } as FileWithPreview;
+      setFiles([initialFile]);
+      loadFromBk.current = true;
+    }
+  }, [bulkImport, files]);
+
+  // Reset files state if no zip file is available
+  useEffect(() => {
+    if (!bulkImport?.zipFile && files.length > 0) {
+      setFiles([]);
+    }
+  }, [bulkImport]);
 
   const renderMessage = (showError = false) => {
     if (!showErrors) return null;
@@ -107,16 +138,25 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
       <Formik initialValues={{
         files: [],
         link: '',
-      }} onSubmit={handleSubmit}>
+      }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}>
         <Form>
           <InputField
             name="link"
             size="sm"
             label="bulkImport.uploadFromLink"
-            inputProps={{ id: 'link', placeholder: 's3://bulk-import-test/eco.zip' }}
+            inputProps={{ id: 'link', placeholder: 's3://bulk-import-test/eco' }}
             inputStyleProps={classes.linkInput}
             labelProps={{ color: 'black', fontSize: 14, fontWeight: 600 }}
           />
+          <Box my={2} display="flex" alignItems="center">
+            <Divider style={{ flex: 1 }} />
+            <Typography variant="h6" className={classes.or}>
+              <Text translation="common.or" />
+            </Typography>
+            <Divider style={{ flex: 1 }} />
+          </Box>
           <Typography className={classes.dropzoneLabel}><Text translation="common.file.OrUploadFromFiles" /></Typography>
           <DropzoneField name="files" onDropCallback={handleFilesDrop} className={classes.dropzopne} accept={{ 'application/zip': ['.zip'] }}>
             <Typography variant="body2" className={classes.textDropZone}>

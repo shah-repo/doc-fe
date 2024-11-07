@@ -7,7 +7,7 @@ import { Group } from '../auth/types';
 import { Approval } from '../common/types';
 import { Employee as EmployeeCompany } from '../company/types';
 import { DocumentRevisionStatus, EquipmentStatus, InputOwner, LotStatus, POStatusType, Precalc, TypeSpecificConfig, UsedDocumentsInLHRS } from '../documentRevisions/types';
-import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_BULK_IMPORTS_STATUS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 
 export interface DataType {
   [key: string]: string
@@ -45,7 +45,6 @@ SetDataTypes |
 SetFormDocumentsTypeGroup |
 SetBulkImport |
 SetTemplateFIle |
-SetXlsxFile |
 SetShowTable |
 SetOnlyErrorsTable |
 SetHeaders |
@@ -58,6 +57,8 @@ SetIsLoading;
 
 export type BulkImportActions =
 SetBulkImports |
+SetBulkImportsStatus |
+DeleteBulkImportSuccess |
 SetDataTypeFilter |
 SetStatusFilter |
 SetIsLoadingMain;
@@ -92,14 +93,14 @@ interface SetBulkImport {
   payload: BulkImport
 }
 
+interface DeleteBulkImportSuccess {
+  type: typeof DELETE_BULK_IMPORT
+  payload: string
+}
+
 interface SetTemplateFIle {
   type: typeof SET_TEMPLATE_FILE
   payload: FileWithPreview[]
-}
-
-interface SetXlsxFile {
-  type: typeof SET_XLSX_FILE
-  payload: BKAttachmentFile
 }
 
 interface SetShowTable {
@@ -152,6 +153,14 @@ interface SetBulkImports {
   payload: BulkImport[]
 }
 
+interface SetBulkImportsStatus {
+  type: typeof SET_BULK_IMPORTS_STATUS
+  payload: {
+    bulkImportId: string
+    status: BkStatus
+  }
+}
+
 interface SetIsLoadingMain {
   type: typeof SET_IS_LOADING_MAIN
   payload: boolean
@@ -185,7 +194,7 @@ interface Company {
   id: string
 }
 
-export interface BKAttachmentFile extends Partial<Attachment> {
+interface BKAttachmentFile extends Partial<Attachment> {
   company: Company
   isCleanCopyRequired: boolean
   cleanCopyStatus: string
@@ -236,8 +245,12 @@ export interface TableErrorDetail {
   }
 }
 
-export interface TableRow extends Record<string, string | TableErrorDetail[] | undefined> {
+export interface TableRow extends Record<string, string | number | TableErrorDetail[] | undefined> {
   errors?: TableErrorDetail[]
+}
+
+export interface TableRowWithIdx extends TableRow {
+  idx: number
 }
 
 interface EmployeeGroup extends Pick<Group, 'id' | 'name' | 'permissions' | 'type' | 'tags'> {
@@ -257,6 +270,7 @@ export interface Approver extends EmployeeCompany {
 export interface ApproverOption extends SelectOption {
   email?: string
   avatar?: string | null
+  approvalId?: string
 }
 
 interface IconsBk {
@@ -298,6 +312,7 @@ export interface BulkImport {
   process: BkProcess
   excelFile: BulkImportFile | null
   zipFile: BulkImportFile | null
+  s3Link?: string | null
 }
 
 export interface BulkImportFile {
@@ -325,6 +340,7 @@ export enum BkStatus {
   FAILED = 'FAILED',
   CANCELLED = 'CANCELLED',
   COMPLETED = 'COMPLETED',
+  DELETED = 'DELETED',
 }
 
 interface Process {
@@ -338,6 +354,7 @@ interface Process {
 interface BkProcess {
   process: Process[]
   totalSteps: number
+  step?: number
 }
 
 interface OriginalHeader {
@@ -412,7 +429,7 @@ enum FieldType {
   BOOLEAN = 'BOOLEAN',
 }
 
-interface LogEntry extends Partial<Audit> {
+export interface LogEntry extends Partial<Audit> {
   createdAt: string
   updatedAt: string
   changeRequestId: string | null

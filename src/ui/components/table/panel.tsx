@@ -282,7 +282,7 @@ export function TablePanel<T extends any> ({
     </Table>
   );
 
-  const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
+  const sort = ({ sortBy, sortDirection }: TableSortProps) => {
     const sortedTableData = processData(
       tableData,
       sortBy,
