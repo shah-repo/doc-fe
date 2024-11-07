@@ -4,7 +4,7 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../state/reducers';
 import { getLatestRevisionId } from '../../document.revision/utils/helpers';
 
-export const useIsLatestRevision = (documentRevision: DocumentRevision): boolean => {
+export const useIsLatestRevision = (documentRevision?: DocumentRevision): boolean => {
   const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
   const { documentId } = documentRevision ?? {};
 
