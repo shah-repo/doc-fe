@@ -146,6 +146,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
         handleUpdate,
         itemsAndDetailsState,
       }}
+      itemToAdd={itemsAndDetailsState.approvalRequstItemInEditMode}
     />
   ));
 };

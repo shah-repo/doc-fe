@@ -73,20 +73,24 @@ const TopSection: React.FunctionComponent<{
   );
 };
 
-const ItemsAndDetails: React.FunctionComponent<{
+interface Props {
   changeRequest?: ChangeRequest
   formState: FBFormState
   handleAdd: () => void
   handleRemove: (docRevId: string) => void
   handleUpdate: () => void
   itemsAndDetailsState: ItemsAndDetailsState
-}> = ({
+  itemToAdd?: string
+}
+
+const ItemsAndDetails: React.FC<Props> = ({
   changeRequest,
   formState,
   handleAdd,
   handleRemove,
   handleUpdate,
   itemsAndDetailsState,
+  itemToAdd,
 }) => {
   const classes = useStyles();
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
@@ -97,17 +101,20 @@ const ItemsAndDetails: React.FunctionComponent<{
   );
 
   useEffect(() => {
-    if (itemsAndDetailsState.approvalRequstItemInEditMode !== '') {
-      formState.setFieldValue('proposedDocumentRevision', { id: itemsAndDetailsState.approvalRequstItemInEditMode });
+    if (itemToAdd !== '') {
+      formState.setFieldValue(
+        'proposedDocumentRevision',
+        { id: itemToAdd },
+      );
       showEditRow();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemsAndDetailsState.approvalRequstItemInEditMode]);
+  }, [itemToAdd]);
 
   const showEditRow = () => {
     setIsEditRowVisible(true);
     itemsAndDetailsState.setViewItemActionsVisibility(false);
-    if (itemsAndDetailsState.approvalRequstItemInEditMode === '') {
+    if (itemToAdd === '') {
       removePrePopulatedField();
     }
   };
