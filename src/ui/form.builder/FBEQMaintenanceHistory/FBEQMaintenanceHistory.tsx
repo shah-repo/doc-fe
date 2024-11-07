@@ -27,7 +27,7 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
     <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
       {(item: DocumentRevision, index) => {
         const releaseDate = get(item.formInput, 'fb-equipment_due_date') || item.releasedAt;
-        const areTasksCompleted = get(item.formInput, 'fb-eq-task-completion-status') === 'Yes';
+        const areTasksCompleted = get(item.formInput, 'fb-maintenance-all-tasks-completed') === 'Yes';
         const isReleased = item.status === DocumentRevisionStatus.Released;
 
         return (
