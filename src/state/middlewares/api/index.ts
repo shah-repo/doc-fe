@@ -140,7 +140,7 @@ const apiMiddleware: Middleware = ({
     }
 
     const errorMessage: string = responseMessage || (exception as AxiosError)?.message;
-    const statusCode = exception?.response?.status;
+    const statusCode = (exception as AxiosError)?.response?.status;
     action.onFailure(errorMessage, dispatch);
     dispatchAsyncStatusAction(
       dispatch,
