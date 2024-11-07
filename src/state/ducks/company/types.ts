@@ -213,6 +213,17 @@ interface AllocationConfig {
   sortOrderByReleaseDate: AllocationOrder
   expiredLotsPrompt: ExpiredLotTypes
 }
+
+interface TrainingReminders {
+  customDaysDueOn: { isActive: boolean, days: number, isCcActive: boolean }
+  isSevenDaysDueOnCountdownActive: boolean
+  isAssignedActive: boolean
+  isOverdueActive: boolean
+  isAssignedCcActive: boolean
+  isSevenDaysDueOnCountdownCcActive: boolean
+  isOverdueCcActive: boolean
+}
+
 export interface GeneralSettings {
   allocationConfig: AllocationConfig
   approvalRequestAdmin: boolean
@@ -224,6 +235,7 @@ export interface GeneralSettings {
   shouldNotifyLcpMismatch: NotifyPartLCP
   systemTransactions: SystemTransactionsRule[]
   zebraPrint: ZebraPrintSettings[] | null
+  trainingReminders: TrainingReminders
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
