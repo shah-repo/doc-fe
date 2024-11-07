@@ -17,12 +17,12 @@ import { DocumentTypeById } from '../../../../../../state/ducks/documentRevision
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../state/reducers';
 import AlertDialog from '../../../../../app/alert.dialog/AlertDialog';
-import Text from '../../../../../components/Text';
 import DocumentRevisionDialog from '../../../../../components/common/dialogs/DocumentRevisionDialog';
-import { FormContext } from '../../../../../components/forms/FormContext';
 import { Autocomplete, FormikField } from '../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
+import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
+import Text from '../../../../../components/Text';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import { isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
@@ -296,9 +296,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
     onError: (msg) => toastError(msg),
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAddButtonClick = () => {
-    // commented create new part temporarily
     categoryAsync.start(getDocTypesByCategory, { category: 'Parts' }, categoryAsync);
   };
 
@@ -413,14 +411,17 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && <div className={classes.idCellEditWrapper}>
-          { getFieldInfo()}
-          <Tooltip
-            title={translate('form.builder.create.new.part')}
-            placement="top"
-            arrow
-          >
-            <FontAwesomeIcon onClick={handleAddButtonClick} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
-          </Tooltip>
+          {getFieldInfo()}
+          {/* Commented functional */}
+          {false && (
+            <Tooltip
+              title={translate('form.builder.create.new.part')}
+              placement="top"
+              arrow
+            >
+              <FontAwesomeIcon onClick={handleAddButtonClick} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
+            </Tooltip>
+          )}
         </div>}
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId

@@ -25,6 +25,7 @@ import useDialog from '../../../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
+import { CustomColumnMenu, CustomGridColumnMenuColumnProps } from '../CustomColumnMenu';
 import { AddPhase } from './cell.templates/AddPhase';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
 import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, NO, PARTS_GROUP_ID, REQUEST_PAYLOAD_KEYS } from './constants';
@@ -101,7 +102,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   });
 
   useEffect(() => {
-    const data = processRealData(formValues?.lifecyclePhases?.categories);
+    const data = processRealData((formValues?.lifecyclePhases as any)?.categories);
     updateStateGridData(data.phases);
     setSelectedPartGroups(data.groups);
     fetchLCPDocTypesAsync.start(
@@ -348,14 +349,16 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         item.displayOrder = index + 1;
       });
 
-      const displayOrderMap = sortedItems.reduce((acc, item) => {
-        acc[item.id] = item.displayOrder;
+      const displayOrderMap = sortedItems?.reduce((acc, item: LCP) => {
+        if (item?.id) {
+          acc[item?.id] = item.displayOrder;
+        }
         return acc;
       }, {});
 
-      const displayOrderUpdatedData = updatedData?.map(phase => ({
+      const displayOrderUpdatedData = updatedData?.map((phase: LCP) => ({
         ...phase,
-        displayOrder: displayOrderMap[phase?.id] ?? phase.displayOrder,
+        displayOrder: phase?.id ? displayOrderMap[phase?.id] : phase.displayOrder,
       }));
 
       const sortedOrderUpdatedData = sortPhasesByDisplayOrder(displayOrderUpdatedData);
@@ -378,6 +381,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema({
     onConfirm: submitForm,
     onDiscard: onDiscardPhase,
+    selectedPartGroups,
     hasEditLCPPermission,
   });
 
@@ -445,7 +449,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
           ...rowProps,
           children: (
             <td colSpan={fieldCount}>
-              <AddPhase {...rowProps} addPhase={addPhase} />
+              <AddPhase {...rowProps} addPhase={addPhase} selectedPartGroups={selectedPartGroups} />
             </td>
           ),
         }),
@@ -484,17 +488,17 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const onItemChange = (e: GridItemChangeEvent) => {
     resultState?.data?.forEach((group: CustomGroupDataItem) => {
       if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
-      group.items?.forEach((data) => {
-        if (data.id === e.dataItem.id) {
-          if (e.field === LCP_KEYS.isActive) {
-            onTogglePhaseItem(e.dataItem);
-          } else {
-            data.isUserModified = true;
-            data[e.field || ''] = e.value;
+        group.items?.forEach((data) => {
+          if (data.id === e.dataItem.id) {
+            if (e.field === LCP_KEYS.isActive) {
+              onTogglePhaseItem(e.dataItem);
+            } else {
+              data.isUserModified = true;
+              data[e.field || ''] = e.value;
+            }
           }
-        }
-        return data;
-      });
+          return data;
+        });
       }
       return group;
     });
@@ -531,6 +535,25 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     collapsedIds: collapsedState,
   });
 
+  const onLock = React.useCallback(
+    ({ field, locked }: CustomGridColumnMenuColumnProps) => {
+      const index = columns.findIndex((c) => c.field === field);
+      const column = columns[index];
+
+      if (column) {
+        const newColumns = [...columns];
+        newColumns.splice(index, 1, {
+          ...column,
+          locked: !locked,
+          reorderable: locked,
+          orderIndex: !locked ? 0 : undefined,
+        });
+        setColumns(newColumns);
+      }
+    },
+    [columns],
+  );
+
   return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={hasEditLCPPermission ? addLCP : undefined}>
     <Grid item>
       <KendoDataGrid<EditableLCP>
@@ -547,6 +570,14 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         skipDataProcessing
         filterable={true}
         groupable={true}
+        columnMenu={(props) => (
+          <CustomColumnMenu
+            {...props}
+            columns={getColumns()}
+            {...{
+              onLock,
+            }}
+          />)}
         navigatable={true}
         expandField={EXPAND_FIELD}
         rowRender={rowRender}
