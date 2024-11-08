@@ -1,10 +1,9 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { omit } from 'lodash';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
-import { companyActions, companySelectors } from '../../../../../state/ducks/company';
+import { companyActions } from '../../../../../state/ducks/company';
 import { ApprovalRole, Dam, GeneralSettings } from '../../../../../state/ducks/company/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
@@ -21,11 +20,9 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
   const approvalRoles = getFieldProps('approvalRoles.approvalRoles').value as ApprovalRole[];
   const dam = getFieldProps('approvalRoles.dam').value as Dam;
-  const settingsId = useSelector(companySelectors.getGeneralSettingsId);
   const [approvalRolesData, setApprovalRolesData] = React.useState(approvalRoles);
   const [editedApprovalRole, setEditedApprovalRole] = React.useState<EditableApprovalRole>();
   const [isOpen, setIsOpen] = React.useState(false);
-
   const discardApprovalRoles = () => setEditedApprovalRole(undefined);
   const onChange = ({ dataItem }) => {
     if (dataItem[MODE_FIELD] === Mode.add) {
@@ -35,9 +32,6 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
         { isActive: !editedApprovalRole?.isActive, name: values.name },
       ));
       return;
-    }
-    if (!dam?.isSynced) {
-      setIsOpen(true);
     }
     const updatedApprovalRoles = approvalRolesData?.map(item => item.id === dataItem.id ? { ...dataItem, isActive: !dataItem.isActive } : item);
     formValues.approvalRoles.approvalRoles = updatedApprovalRoles;
@@ -64,7 +58,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       discardApprovalRoles();
       formValues.approvalRoles.approvalRoles = updatedApprovalRoles;
       setApprovalRolesData(updatedApprovalRoles);
-      async.start(createApprovalRolesAction, { values, formValues }, settingsId, 'POST', async);
+      async.start(createApprovalRolesAction, { values, formValues }, async);
     },
   });
 
@@ -97,9 +91,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       toastError(error);
     },
     onSuccess: () => {
-      if (dam?.isSynced) {
-        setIsOpen(true);
-      }
+      setIsOpen(true);
     },
   });
   const updateApprovalRolesAction = useActionCreator(companyActions.updateApprovalRoles);

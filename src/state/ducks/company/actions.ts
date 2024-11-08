@@ -102,12 +102,12 @@ const updateGeneralSettings = (
 
 const createApprovalRoles = (
   body: any,
-  id?: string,
+  handlers: Handlers,
   method: ApiActionMethod = 'post',
 ): ApiAction<GeneralSettingsState> => {
   const { values } = body;
   const url = CREATE_APPROVAL_ROLES_URL;
-  return apiAction({
+  return apiActionWithCallbacks({
     url,
     method,
     data: pick(values, 'name', 'isActive'),
@@ -115,6 +115,7 @@ const createApprovalRoles = (
     onSuccess: (data, dispatch) => {
       dispatch(getGeneralSettings());
     },
+    handlers,
   });
 };
 
