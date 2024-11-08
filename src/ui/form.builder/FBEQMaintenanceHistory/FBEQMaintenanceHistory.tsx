@@ -31,7 +31,7 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
         const isReleased = item.status === DocumentRevisionStatus.Released;
 
         return (
-          <Box data-cy="maintenance-history" display="flex" flexDirection="row" key={`fb-eq-${index}`}>
+          <Box data-cy="maintenanceHistory" display="flex" flexDirection="row" key={`fb-eq-${index}`}>
             <Box mr={0.5}>
               <Link
                 to={documentVersionPath(item.id, item.document?.id)}
