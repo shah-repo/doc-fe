@@ -2213,6 +2213,7 @@
   "common.dataType": "Data Type",
   "common.viewAll": "View All",
   "common.rejected": "Rejected",
+  "async.state.message.access.denied": "Access Denied",
   "common.failed": "Failed",
   "common.or": "OR",
   "common.rev": "Rev."
