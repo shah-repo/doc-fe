@@ -8,7 +8,7 @@ import { translate } from '../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
-import { Audit, POLineItem } from '../../state/ducks/audit/types';
+import { Audit, LifecyclePahseOptionPayload, POLineItem } from '../../state/ducks/audit/types';
 import { Group } from '../../state/ducks/auth/types';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
 import { Approval, ApprovalStatus, Owner } from '../../state/ducks/common/types';
@@ -19,7 +19,7 @@ import { DocumentType } from '../../state/ducks/documentRevisions/documentType/t
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
-import { getAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
+import { getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
@@ -42,12 +42,13 @@ interface OwnProps {
   audit: Audit
   dataCy?: string
   revIdRelatedTypeObj?: { [key: string]: IRevIdMapper }
+  lifecyclePhaseOptions?: LifecyclePahseOptionPayload[]
 }
 
 type Props = OwnProps;
 
 const AuditFactory: React.FunctionComponent<Props> = ({
-  audit, dataCy, revIdRelatedTypeObj,
+  audit, dataCy, revIdRelatedTypeObj, lifecyclePhaseOptions,
 }) => {
   let returnValue;
   const intl = useIntl();
@@ -316,18 +317,34 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         }
         break;
       case 'EMAIL_SENT':
-        returnValue = (
-          <>
-            <Text
-              dataCy={dataCy}
-              translation="documentRevision.audit.send.to.email"
-              values={{
-                name: audit.ownerName,
-                docId: audit?.docId ?? audit?.crId,
-              }}
-            />
-          </>
-        );
+        try {
+          const emailObj = JSON.parse(audit.nextValue as string);
+          const includeEffectiveDate = emailObj?.watermarkAttachments.length > 0;
+          const watermarkAttachmentsList = emailObj?.watermarkAttachments.join(', ');
+
+          returnValue = (
+            <>
+              <div data-cy={dataCy}> {translate('share.item.only')}: {translate(emailObj.itemOnly === true ? 'common.true' : 'common.false')}</div>
+              <div data-cy={dataCy}> {translate('share.attachments')}: {translate(emailObj.includeAttachments === true ? 'common.true' : 'common.false')}</div>
+              <div data-cy={dataCy}> {translate('share.include.effective.date')}: {translate(includeEffectiveDate ? 'common.true' : 'common.false')}</div>
+              { includeEffectiveDate && <div data-cy={dataCy}> {translate('share.selected.watermark.attachment.names')}: {watermarkAttachmentsList}</div>
+              }
+            </>
+          );
+        } catch (e) {
+          returnValue = (
+            <>
+              <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.send.to.email"
+                values={{
+                  name: audit.ownerName,
+                  docId: audit?.docId ?? audit?.crId,
+                }}
+              />
+            </>
+          );
+        }
         break;
       case 'VIEW_PDF':
         returnValue = (
@@ -874,6 +891,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             );
           }
         }
+        break;
+      case 'lifecyclePhaseId':
+        returnValue = (<div data-cy={dataCy}>{getLCPAuditDefaultValue(audit, lifecyclePhaseOptions)}</div>);
         break;
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
