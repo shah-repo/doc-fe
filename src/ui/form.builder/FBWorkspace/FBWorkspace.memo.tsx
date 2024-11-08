@@ -70,12 +70,12 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
       <SummaryInfo
         label="record.released.by"
         value={documentInfo?.releasedBy?.user?.name ?? documentInfo?.owner?.user?.name ?? ''}
-        dataCy="released-by"
+        dataCy="releasedBy"
       />
       <SummaryInfo
         label="document.revision.released.date"
         value={getFormattedDateString(documentInfo?.releasedAt, MomentFormats.MonthDateYear)}
-        dataCy="released-date"
+        dataCy="releasedDate"
       />
     </Box>
   );
@@ -123,7 +123,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
                 onClick={() => {
                   addLHRStep();
                 }}
-                data-cy="form-builder-add-step"
+                data-cy="form.builder.add.step"
                 style={{
                   background: Colors.navy,
                   color: Colors.white,

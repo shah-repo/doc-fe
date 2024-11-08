@@ -137,7 +137,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       className={_documentRevisionSidebarState?.open ? classNames(classes.linkContainer, {
         [classes.selected]: isSelected,
       }) : classes.container}
-      data-cy="document-revision-list-item"
+      data-cy="DocumentRevisionList-item"
     >
       <div
         className={isSelected ? classes.activeLinkBox : classes.inActiveLinkBox}
@@ -173,7 +173,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         onClick={handleClick}
       >
         <SummaryInfo
-          dataCy="common-doc-id"
+          dataCy="common.docId"
           label={docIdLabel}
           value={docId}
         />
