@@ -39,7 +39,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemCl
       {SM.isNewLayout || SM.isNewCRLayout ? (
         <IconButton
           onClick={handleClick}
-          data-cy="HeaderMenuButton"
+          data-cy="header-menu-button"
           id="HeaderMenuButton"
           className={menuIconButtonClass ?? classes.iconButton}
           disableRipple
@@ -49,10 +49,10 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemCl
       ) : (
         <IconButton
           onClick={handleClick}
-          data-cy="HeaderMenuButton"
+          data-cy="header-menu-button"
           id="HeaderMenuButton"
         >
-          <MoreVertIcon />
+          {icon ?? <MoreVertIcon />}
         </IconButton>
       )}
 
