@@ -2085,7 +2085,7 @@
   "dam.sync.message.role.added.label": "The {rolesCount, plural, one {role} other {roles}} {addedList} {rolesCount, plural, one {was} other {were}} added from the General Settings/Approval Roles section.",
   "dam.sync.message.role.removed.label": "The {rolesCount, plural, one {role} other {roles}} {removedlist} {rolesCount, plural, one {was} other {were}} removed from the General Settings/Approval Roles section.",
   "dam.sync.message.role.added.removed.sub.label": "Enlil will add {addedList} and remove {removedlist} {rolesCount, plural, one {role} other {roles}} from the DAM.",
-  "dam.sync.message.role.added.sub.label": "Enlil will add the {rolesCount, plural, one {role} other {roles}} {addedList} from the DAM.",
+  "dam.sync.message.role.added.sub.label": "Enlil will add the {rolesCount, plural, one {role} other {roles}} {addedList} to the DAM.",
   "dam.sync.message.role.removed.sub.label": "Enlil will remove the {rolesCount, plural, one {role} other {roles}} {removedlist} from the DAM.",
   "dam.sync.message.in.review.role.sub.label": "The changes will only be applied when you put the {docId}.{rev} to DRAFT mode and then release it.",
   "dam.sync.message.released.role.sub.label": "Please revise and release your DAM to have Approval Roles match the General Settings/Approved Roles section",
