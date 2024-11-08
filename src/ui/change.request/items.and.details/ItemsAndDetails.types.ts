@@ -37,7 +37,7 @@ export interface FBDocumentRevisionsValue {
   justificationOfChange: string
   descriptionOfChange: string
   revisionFormTo?: string
-  attachments?: Attachment[] | undefined
+  attachments?: Attachment[]
   whereUsedView?: WhereUsed[]
 }
 
@@ -53,7 +53,7 @@ export interface ApprovalRequestGridItem {
   displayRevision: string
   isPart: boolean
   revisionFormTo?: string
-  attachments?: Attachment[] | undefined
+  attachments?: Attachment[]
   whereUsedView?: WhereUsed[]
 }
 
