@@ -741,6 +741,7 @@
   "documentRevision.audit.approvals.status.ARRAY_DELETED": "{approverText} Removed",
   "documentRevision.audit.name.STRING_EDITED": "Name changed",
   "documentRevision.audit.description.STRING_EDITED": "Description changed",
+  "documentRevision.audit.lifecyclePhaseId.STRING_EDITED": "Lifecycle Phase changed",
   "documentRevision.audit.attachments.ARRAY_NEW": "Attachment added",
   "documentRevision.audit.attachments.ARRAY_DELETED": "Attachments removed",
   "documentRevision.audit.attachments.OBJECT_DELETED": "Attachment removed",
