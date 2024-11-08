@@ -11,15 +11,12 @@ export const BULK_HEADERS_TO_MAP_URL = '/bulk_import/headers_to_map/';
 export const BULK_TABLE_DATA = '/bulk_import/bulk_import_data/';
 export const BULK_DOWNLOAD_FILE_URL = '/bulk_import/download_file/';
 export const BULK_SET_DATA_URL = '/bulk_import/set_data/';
-export const BULK_SET_SKIP_ATTACHMENT_URL = '/bulk_import/skip-attachment/';
 export const BULK_GET_APPROVERS_URL = '/bulk_import/bulk_import_approvers/';
 export const BULK_GET_REPORTS_EXCEL_URL = '/bulk_import/get_bulk_import_reports_in_excel/';
-export const BULK_UPDATE_STATUS_URL = '/bulk_import/status/';
 export const APPROVALS_URL = '/approvals';
 export const DOCUMENT_REVISION_URL = '/document_revisions/';
 export const DOCUMENT_REVISION_IN_REVIEW_URL = '/document_revisions/in_review/';
 export const DOCUMENT_REVISION_WITHDRAWN_URL = '/document_revisions/withdrawn/';
-export const BULK_IMPORT_DELETE_URL = '/bulk_import/delete/';
 
 export const RESET_STEPS = 'bulkImport/RESET_STEPS';
 export const CURRENT_STEP = 'bulkImport/CURRENT_STEP';
