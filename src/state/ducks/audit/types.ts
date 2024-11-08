@@ -88,3 +88,8 @@ export interface POLineItem {
   tax: boolean
   capitalEquipment?: boolean
 }
+
+export interface LifecyclePahseOptionPayload {
+  id: string
+  text: string
+}
