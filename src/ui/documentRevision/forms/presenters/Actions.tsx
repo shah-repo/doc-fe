@@ -524,7 +524,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               label={isDisabled ? 'common.save' : 'navigation.createDocument'}
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
-              data-cy="document-revision-form-submit"
+              data-cy="DocumentRevisionForm-submit"
               disabled={
                 isCreateDocumentDisabled
                   || _documentRevisionFormState?.disabledAction
