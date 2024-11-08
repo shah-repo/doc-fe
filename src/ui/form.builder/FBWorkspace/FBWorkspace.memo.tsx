@@ -6,7 +6,9 @@ import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceModeOptions, 
 import { ReactComponent as AddIcon } from '../../../assets/images/formBuilder/add_icon.svg';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import {
-  DocumentGroupType, DOC_TYPE_GROUP, WO_TYPE_KEY,
+  DOC_TYPE_GROUP,
+  DocumentGroupType,
+  WO_TYPE_KEY,
 } from '../../../state/ducks/documentRevisions/documentType/types';
 import SummaryInfo from '../../common/summary/SummaryInfo';
 import Text from '../../components/Text';
@@ -67,13 +69,13 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
       </Typography>
       <SummaryInfo
         label="record.released.by"
-        value={documentInfo?.owner?.user.name || ''}
-        dataCy="releasedBy"
+        value={documentInfo?.releasedBy?.user?.name ?? documentInfo?.owner?.user?.name ?? ''}
+        dataCy="released-by"
       />
       <SummaryInfo
         label="document.revision.released.date"
         value={getFormattedDateString(documentInfo?.releasedAt, MomentFormats.MonthDateYear)}
-        dataCy="releasedDate"
+        dataCy="released-date"
       />
     </Box>
   );
@@ -121,7 +123,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
                 onClick={() => {
                   addLHRStep();
                 }}
-                data-cy="form.builder.add.step"
+                data-cy="form-builder-add-step"
                 style={{
                   background: Colors.navy,
                   color: Colors.white,

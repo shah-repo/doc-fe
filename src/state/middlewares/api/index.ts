@@ -23,12 +23,13 @@ const dispatchAsyncStatusAction = (
   type: string | undefined,
   status: AsyncStatus,
   message = '',
+  statusCode = 200,
 ): void => {
   if (!type) {
     return;
   }
 
-  const action: AsyncAction = { type, payload: { status, message } };
+  const action: AsyncAction = { type, payload: { status, message, statusCode } };
   dispatch(action);
 };
 
@@ -139,13 +140,14 @@ const apiMiddleware: Middleware = ({
     }
 
     const errorMessage: string = responseMessage || (exception as AxiosError)?.message;
-
+    const statusCode = (exception as AxiosError)?.response?.status;
     action.onFailure(errorMessage, dispatch);
     dispatchAsyncStatusAction(
       dispatch,
       action.asyncType,
       AsyncStatus.Error,
       errorMessage,
+      statusCode,
     );
   } finally {
     action.onCompleted(dispatch);

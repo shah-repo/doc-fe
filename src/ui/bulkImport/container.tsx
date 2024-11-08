@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { translate } from '../../common/intl';
 import {
-  deleteBulkImport,
+  deleteBulkImportSuccess,
+  patchBulkImport,
   setCurrentStep,
   setIsLoading,
 } from '../../state/ducks/bulkImport/actions';
@@ -15,6 +16,7 @@ import {
   getIsLoading,
   getStep,
 } from '../../state/ducks/bulkImport/selectors';
+import { BkStatus } from '../../state/ducks/bulkImport/types';
 import { Button } from '../components/forms/fields-next';
 import Text from '../components/Text';
 import { BULK_IMPORT_PROGRESS_URL } from '../constants/urls';
@@ -51,7 +53,7 @@ BulkImportContainerProps
   const activeStep = useSelector(getStep);
   const isLoading = useSelector(getIsLoading);
   const bulkImport = useSelector(getBulkImport);
-  const deleteBulkImportAction = useActionCreator(deleteBulkImport);
+  const deleteBulkImportAction = useActionCreator(patchBulkImport);
   const openDeleteDialog = useDialog();
 
   const asyncDeleteBk = useAsync({
@@ -80,12 +82,16 @@ BulkImportContainerProps
     dispatch(setCurrentStep(0));
   };
 
+  const afterDeleteBk = (bulkImportId: string) => {
+    dispatch(deleteBulkImportSuccess(bulkImportId));
+  };
+
   const handleCancel = () => {
     if (bulkImport?.id) {
       dispatch(setIsLoading(true));
       asyncDeleteBk.start(
         deleteBulkImportAction,
-        { bulkImportId: bulkImport.id },
+        { bulkImportId: bulkImport.id, data: { status: BkStatus.DELETED }, callback: afterDeleteBk },
         asyncDeleteBk,
       );
     }
