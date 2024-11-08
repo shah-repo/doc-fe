@@ -2,13 +2,18 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
 export default makeStyles(theme => ({
+  container: {
+    display: 'flex',
+    marginTop: theme.spacing(2.5),
+    width: '100%',
+  },
   buttonsContainer: {
     display: 'grid',
-    marginTop: theme.spacing(2.5),
+    marginLeft: 'auto',
   },
   buttonsContainerMultiBtn: {
     display: 'flex',
-    marginTop: theme.spacing(2.5),
+    marginLeft: 'auto',
   },
   buttonsNext: {
     justifySelf: 'right',
@@ -21,6 +26,11 @@ export default makeStyles(theme => ({
     fontWeight: 700,
     marginLeft: 'auto',
     marginRight: theme.spacing(2.5),
+  },
+  buttonsCancel: {
+    justifySelf: 'left',
+    minWidth: 140,
+    fontWeight: 700,
   },
   helpContainer: {
     display: 'flex',

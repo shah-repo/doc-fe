@@ -1,4 +1,7 @@
 import { makeStyles } from '@material-ui/core';
+import { Colors } from '../layout/theme-next';
+
+export const importLogDown = 1620;
 
 export default makeStyles(theme => ({
   root: {
@@ -8,8 +11,11 @@ export default makeStyles(theme => ({
   },
   importContainer: {
     display: 'flex',
-    padding: theme.spacing(2.5),
-    [theme.breakpoints.down('md')]: {
+    paddingTop: theme.spacing(2.5),
+    paddingBottom: theme.spacing(2.5),
+    paddingLeft: 0,
+    paddingRight: 0,
+    [theme.breakpoints.down(importLogDown)]: {
       display: 'block',
       marginBottom: theme.spacing(6.25),
     },
@@ -39,5 +45,11 @@ export default makeStyles(theme => ({
     backToDashboard: {
       display: 'none',
     },
+  },
+  arrowLeftIcon: {
+    width: 15,
+    height: 15,
+    color: Colors.primary,
+    marginRight: theme.spacing(1.2),
   },
 }));

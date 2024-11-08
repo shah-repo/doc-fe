@@ -6,6 +6,7 @@ export default makeStyles(theme => ({
     flex: 1,
     borderRadius: 4,
     padding: theme.spacing(2.5),
+    paddingLeft: 0,
   },
   title: {
     fontSize: 18,

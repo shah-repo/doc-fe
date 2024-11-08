@@ -20,3 +20,7 @@ export const getPOLineItemsTotalAndForTaxAmount = (poLineItems: FBPurchaseOrderI
     return agg;
   }, { subTotal: 0, forTax: 0 },
 );
+
+export const getDecimalLength = (value: number|string): number => {
+  return value.toString().split('.')[1]?.length ?? 0;
+};
