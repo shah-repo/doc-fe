@@ -5,6 +5,7 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from '..';
+import { translate } from '../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
@@ -42,7 +43,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const { id: docRevId, document: { status = '', document = null } = {} } = workspaceState || {};
     const isEqStatusReleased = status === DocumentRevisionStatus.Released;
     const isTypePM = editorConfig.type?.includes('preventativeMaintenance');
-    const complianceStatus = formState?.getFieldValue(`${name}.status`);
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
     const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYearAlt);
     availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
@@ -118,7 +118,12 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         parentEquipment: { id: docRevId },
         equipmentSection: name,
         revisionChangeType: RevisionChangeType.NextRevision,
-        name: '',
+        name: translate('document.equipment.cal.pm.name', {
+          docId: workspaceState?.document?.document?.docId,
+          title: workspaceState?.document?.name,
+          type: translate(isTypePM ? 'form.builder.pm' : 'form.builder.cal'),
+          frequency: formState?.getFieldValue(`${name}.frequency`),
+        }),
         description: '',
         revisionStage: 3,
         retrain: false,
@@ -196,7 +201,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       ...(props as T),
       handleAdd,
       complianceDueDate,
-      complianceStatus,
       isNewPMDisabled,
       isNewPMLoading,
       name,

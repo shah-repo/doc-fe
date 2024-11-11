@@ -6,7 +6,8 @@ import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { translate } from '../../../../common/intl';
-import { setIsLoading, skipAttachment, uploadS3 } from '../../../../state/ducks/bulkImport/actions';
+import { patchBulkImport, setIsLoading, uploadS3 } from '../../../../state/ducks/bulkImport/actions';
+import { skippedAttachmentFile } from '../../../../state/ducks/bulkImport/constants';
 import { getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport } from '../../../../state/ducks/bulkImport/types';
 import Text from '../../../components/Text';
@@ -36,7 +37,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const dispatch = useDispatch();
   const bulkImport = useSelector(getBulkImport);
   const uploadFileDataAction = useActionCreator(uploadS3);
-  const uploadSkipAttachment = useActionCreator(skipAttachment);
+  const patchBkSkipAttachment = useActionCreator(patchBulkImport);
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const dialog = useDialog();
   const showErrors = false;
@@ -59,7 +60,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
     // eslint-disable-next-line no-mixed-operators
     if ((values.files.length === 0 && !values.link) || (values.link === bulkImport?.s3Link || bulkImport?.attachmentId && files.length === 0)) {
       dispatch(setIsLoading(true));
-      asyncSkipAttachment.start(uploadSkipAttachment, { bulkImportId: bulkImport?.id }, asyncSkipAttachment);
+      asyncSkipAttachment.start(patchBkSkipAttachment, { bulkImportId: bulkImport?.id, data: { attachmentLink: skippedAttachmentFile } }, asyncSkipAttachment);
       return;
     }
     // Handle form submission and file processing

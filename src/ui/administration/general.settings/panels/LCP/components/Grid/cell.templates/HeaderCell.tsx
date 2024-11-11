@@ -5,17 +5,20 @@ import { GridHeaderCellProps } from '@progress/kendo-react-grid';
 import { kebabCase } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
+import { CustomColumnMenu } from '../../CustomColumnMenu';
 import useStyles from './styles';
 
 interface HeaderCellProps extends GridHeaderCellProps{
   content: string
   isShowIcon?: boolean
+  isShowMenu?: boolean
 }
 
 export const HeaderCell: React.FC<HeaderCellProps> = ({
   field,
   content,
   isShowIcon = true,
+  isShowMenu = true,
 }) => {
   const translatedContent = translate(content);
   const classes = useStyles();
@@ -44,6 +47,11 @@ export const HeaderCell: React.FC<HeaderCellProps> = ({
           </Box>
         </span>
       </span>
+      {isShowMenu && <CustomColumnMenu
+        {...{
+          field: field as string,
+        }}
+      />}
     </span>
   );
 };
