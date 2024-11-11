@@ -29,6 +29,13 @@ export default makeStyles<NextTheme>(theme => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingBottom: theme.spacing(2.5),
+    width: '100%',
+  },
+  boxForSelection: {
+    width: '40%',
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '16px',
   },
   title: {
     fontSize: 21,
@@ -106,5 +113,12 @@ export default makeStyles<NextTheme>(theme => ({
   },
   marginBottom: {
     marginBottom: theme.spacing(1),
+  },
+  formControl: {
+    marginTop: theme.spacing(2),
+  },
+  popoverPaper: {
+    padding: theme.spacing(1),
+    maxWidth: '340px',
   },
 }));

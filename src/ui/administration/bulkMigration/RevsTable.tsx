@@ -24,7 +24,7 @@ import ReactJson from 'react-json-view';
 import { intl } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import apiClient from '../../../state/apiClient';
-import { SUPPLIER_MIGRATION_GET_SCAN_RESULTS, SUPPLIER_MIGRATION_START_REVS_MIGRATION } from '../../../state/ducks/company/constants';
+import { BULK_MIGRATION_GET_SCAN_RESULTS, BULK_MIGRATION_START_REVS_MIGRATION } from '../../../state/ducks/company/constants';
 import { store } from '../../../state/store';
 import DateTime from '../../components/DateTime';
 import { toastError, toastSuccess } from '../../components/notifications';
@@ -395,7 +395,7 @@ const RevsTable: React.FC<{
 
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
-      url: `${SUPPLIER_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}&sortOrder=${(order as string).toLocaleUpperCase()}`,
+      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}&sortOrder=${(order as string).toLocaleUpperCase()}`,
       data: {
         searchQueries,
       },
@@ -489,7 +489,7 @@ const RevsTable: React.FC<{
 
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
-      url: `${SUPPLIER_MIGRATION_START_REVS_MIGRATION}`,
+      url: `${BULK_MIGRATION_START_REVS_MIGRATION}`,
       data: {
         revIds: selected.map(entry => entry.id),
       },

@@ -1,4 +1,14 @@
+import { Permission } from '../../../state/ducks/auth/types';
 import { Employee } from '../../../state/ducks/company/types';
+import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
+
+export interface IBulkMigrationDocumentType {
+  id: string
+  documentTypeName: string
+  documentTypeAcronym: string
+  group: string
+  category: string
+}
 
 export interface ISupplierScanDetails {
   suppliersCount: number
@@ -59,4 +69,17 @@ export interface ISelectedDetails {
 export interface ISearchDetails {
   id: string
   value: string
+}
+
+export interface IApprovalRequirements {
+  email: string
+  requiredGroups: IApprovalRequirementGroup[]
+  missingGroups: IApprovalRequirementGroup[]
+  docFormWithAvailableForms: DocumentTypeById
+}
+
+export interface IApprovalRequirementGroup {
+  id: string
+  name: string
+  permissions: Permission[]
 }

@@ -17,13 +17,16 @@ export const SET_AUTOSAVE_CONFIG = 'company/SET_AUTOSAVE_CONFIG';
 export const REDLINE_CONFIG = 'company/REDLINE_CONFIG';
 export const SET_GENERAL_SETTINGS = 'company/SET_GENERAL_SETTINGS';
 
-export const SUPPLIER_MIGRATION_GET_FORM_DETAILS = 'supplier/migration/getSupplierFormDetails';
-export const SUPPLIER_MIGRATION_UPGRADE_FORM = 'supplier/migration/releaseFormNewRevision';
-export const SUPPLIER_MIGRATION_REGISTER_SCAN = 'supplier/migration/registerScan';
-export const SUPPLIER_MIGRATION_CANCEL_SCAN = 'supplier/migration/cancelScan';
-export const SUPPLIER_MIGRATION_GET_LATEST_COMPLETED_SCAN = 'supplier/migration/getLatestCompletedScan';
-export const SUPPLIER_MIGRATION_GET_SCAN_RESULTS = 'supplier/migration/getScanRevisions';
-export const SUPPLIER_MIGRATION_START_REVS_MIGRATION = 'supplier/migration';
+export const BULK_MIGRATION_GET_DOCUMENT_TYPES = 'bulk_migration/getDocumentTypes';
+export const BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS = 'bulk_migration/getDocumentTypeFormDetails';
+export const BULK_MIGRATION_GET_ELIGIBLE_REV_COUNT = 'bulk_migration/getEligibleRevs';
+export const BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS = 'bulk_migration/getDocumentTypeApprovalRequirements';
+export const BULK_MIGRATION_UPGRADE_FORM = 'bulk_migration/releaseFormNewRevision';
+export const BULK_MIGRATION_REGISTER_SCAN = 'bulk_migration/registerScan';
+export const BULK_MIGRATION_CANCEL_SCAN = 'bulk_migration/cancelScan';
+export const BULK_MIGRATION_GET_LATEST_COMPLETED_SCAN = 'bulk_migration/getLatestCompletedScan';
+export const BULK_MIGRATION_GET_SCAN_RESULTS = 'bulk_migration/getScanRevisions';
+export const BULK_MIGRATION_START_REVS_MIGRATION = 'bulk_migration';
 
 export const WHITE_LABEL_DEFAULT = {
   logo: '',
