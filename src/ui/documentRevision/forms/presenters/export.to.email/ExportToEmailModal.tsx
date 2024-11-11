@@ -89,7 +89,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
     if (arId) {
       attachmentsAsync.start(fetchArAttachments, arId, attachmentsAsync);
     } else {
-      attachmentsAsync.start(fetchAttachments, revisionId, attachmentsAsync);
+      attachmentsAsync.start(fetchAttachments, revisionId, attachmentsAsync, true);
     }
   }, []);
 
