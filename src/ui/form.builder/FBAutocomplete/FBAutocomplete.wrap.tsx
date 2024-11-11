@@ -12,6 +12,13 @@ import { isDocumentRevisionReleased } from '../../documentRevision/helpers/docum
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { isTranslation } from '../../translations/types';
 
+const VIABLE_TEMPLATE_STATUSES = [
+  DocumentRevisionStatus.Draft,
+  DocumentRevisionStatus.Released,
+  DocumentRevisionStatus.InReview,
+  DocumentRevisionStatus.Deprecated,
+];
+
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>,
 ) => {
@@ -74,8 +81,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     && workspaceState?.document?.status === DocumentRevisionStatus.InReview) {
       disabled = true;
     }
-    const isTemplate = isEmpty(defaultValue) && workspaceState?.document?.status && disabled
-      && [DocumentRevisionStatus.Draft, DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Deprecated].includes(workspaceState?.document?.status);
+    const hasViableTemplateStatus = workspaceState?.document?.status && VIABLE_TEMPLATE_STATUSES.includes(workspaceState?.document?.status);
+    const isTemplate = isEmpty(defaultValue) && workspaceState?.document?.status && disabled && hasViableTemplateStatus;
     const multiple = !isTemplate && (editorProperties?.includes('multiple') || props.multiple);
 
     useEffect(() => {
