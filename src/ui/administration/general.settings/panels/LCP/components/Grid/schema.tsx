@@ -22,7 +22,7 @@ export const LCPSchema = ({
       title: translate('administration.general.settings.lcp.isActive'),
       headerCell: (props) => <HeaderCell
         {...props}
-        content="administration.general.settings.lcp.isActive" isShowIcon={false} />,
+        content="administration.general.settings.lcp.isActive" isShowIcon={false} isShowMenu={false} />,
       width: 70,
       filterable: false,
       locked: false,
@@ -34,6 +34,9 @@ export const LCPSchema = ({
       id: 'internalType',
       field: 'internalType',
       title: translate('administration.general.settings.lcp.internalType'),
+      headerCell: (props) => <HeaderCell
+        {...props}
+        content="administration.general.settings.lcp.internalType" isShowIcon={false} />,
       width: 180,
       locked: false,
       cell: (props) => <EnlilTypeCell {...props} partGroups={selectedPartGroups} />,
@@ -47,6 +50,9 @@ export const LCPSchema = ({
       groupable: false,
       cell: (props) => <LabelCell {...props} partGroups={selectedPartGroups} />,
       title: translate('administration.general.settings.lcp.displayLabel'),
+      headerCell: (props) => <HeaderCell
+        {...props}
+        content="administration.general.settings.lcp.displayLabel" isShowIcon={false} />,
       width: 150,
     },
     {
@@ -103,7 +109,7 @@ export const LCPSchema = ({
       filterable: false,
       headerCell: (props) => <HeaderCell
         {...props}
-        content="common.actions" isShowIcon={false} />,
+        content="common.actions" isShowIcon={false} isShowMenu={false} />,
       template: (props) => (
         <LCPActionsCellTemplate
           {...props}

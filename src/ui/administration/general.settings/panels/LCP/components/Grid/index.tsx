@@ -25,7 +25,7 @@ import useDialog from '../../../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
-import { CustomColumnMenu, CustomGridColumnMenuColumnProps } from '../CustomColumnMenu';
+import { ColumnMenuContext, CustomGridColumnMenuColumnProps } from '../CustomColumnMenu';
 import { AddPhase } from './cell.templates/AddPhase';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
 import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, NO, PARTS_GROUP_ID, REQUEST_PAYLOAD_KEYS } from './constants';
@@ -556,55 +556,54 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
 
   return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={hasEditLCPPermission ? addLCP : undefined}>
     <Grid item>
-      <KendoDataGrid<EditableLCP>
-        {...dataState}
-        data={newData}
-        schema={getColumns()}
-        onDataStateChange={onDataStateChange}
-        total={resultState?.total}
-        group={DATA_GROUP}
-        fullWidth
-        className={classes.rootMDTable}
-        hasBoxScrollbars
-        dataItemKey={DATA_ITEM_KEY}
-        skipDataProcessing
-        filterable={true}
-        groupable={true}
-        columnMenu={(props) => (
-          <CustomColumnMenu
-            {...props}
-            columns={getColumns()}
-            {...{
-              onLock,
-            }}
-          />)}
-        navigatable={true}
-        expandField={EXPAND_FIELD}
-        rowRender={rowRender}
-        loading={fetchLCPDocTypesAsync.isLoading}
-        onItemChange={onItemChange}
+      <ColumnMenuContext.Provider
+        value={{
+          columns: getColumns(),
+          onLock,
+        }}
       >
-        <GridToolbar>
-          <Grid container justify="flex-start"
-            className={classes.toolbarContainer}
-          >
-            <Grid
-              item
-              data-cy="collapse-expand-collapse"
-              className={classes.toggleExpandCollapse}
-              alignItems="center"
-              justify="center"
+        <KendoDataGrid<EditableLCP>
+          {...dataState}
+          data={newData}
+          schema={getColumns()}
+          onDataStateChange={onDataStateChange}
+          total={resultState?.total}
+          group={DATA_GROUP}
+          fullWidth
+          className={classes.rootMDTable}
+          hasBoxScrollbars
+          dataItemKey={DATA_ITEM_KEY}
+          skipDataProcessing
+          filterable={true}
+          groupable={true}
+          navigatable={true}
+          expandField={EXPAND_FIELD}
+          rowRender={rowRender}
+          loading={fetchLCPDocTypesAsync.isLoading}
+          onItemChange={onItemChange}
+        >
+          <GridToolbar>
+            <Grid container justify="flex-start"
+              className={classes.toolbarContainer}
             >
-              <span onClick={() => onGroupsToggle(true)}>
-                {translate('common.expand.all')} {' / '}
-              </span>
-              <span onClick={() => onGroupsToggle()}>
-                {translate('common.collapse.all')}
-              </span>
+              <Grid
+                item
+                data-cy="collapse-expand-collapse"
+                className={classes.toggleExpandCollapse}
+                alignItems="center"
+                justify="center"
+              >
+                <span onClick={() => onGroupsToggle(true)}>
+                  {translate('common.expand.all')} {' / '}
+                </span>
+                <span onClick={() => onGroupsToggle()}>
+                  {translate('common.collapse.all')}
+                </span>
+              </Grid>
             </Grid>
-          </Grid>
-        </GridToolbar>
-      </KendoDataGrid>
+          </GridToolbar>
+        </KendoDataGrid>
+      </ColumnMenuContext.Provider>
     </Grid>
     <Grid item>
       {hasEditLCPPermission && <AddButton

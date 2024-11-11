@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
 import { MomentFormats } from '../../../../common/utils/date';
-import { deleteBulkImport, getReportsExcelFile, setBulkImport, setBulkImportsStatus, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
+import { deleteBulkImportSuccess, getReportsExcelFile, patchBulkImport, setBulkImport, setBulkImportsStatus, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
 import { BkStatus, BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
 import { ChangeRequestTransitionResponse } from '../../../../state/ducks/changeRequest/types';
@@ -45,7 +45,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const history = useHistory() as History;
   const dispatch = useDispatch();
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
-  const deleteBulkImportAction = useActionCreator(deleteBulkImport);
+  const deleteBulkImportAction = useActionCreator(patchBulkImport);
   const currentApproval = item?.documentRevision?.approvals.find(
     approval => approval.status === ApprovalStatus.Pending && approval.approverId === currentEmployeeId,
   );
@@ -100,8 +100,12 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     openDeleteDialog.close();
   };
 
+  const afterDeleteBk = (bulkImportId: string) => {
+    dispatch(deleteBulkImportSuccess(bulkImportId));
+  };
+
   const handleDeleteClick = () => {
-    asyncDeleteBk.start(deleteBulkImportAction, { bulkImportId: item.id }, asyncDeleteBk);
+    asyncDeleteBk.start(deleteBulkImportAction, { bulkImportId: item.id, data: { status: BkStatus.DELETED }, callback: afterDeleteBk }, asyncDeleteBk);
   };
 
   const handleDownloadFile = () => {

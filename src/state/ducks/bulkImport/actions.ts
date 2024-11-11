@@ -2,7 +2,7 @@ import { FileWithPreview } from '../../../ui/components/forms/fields-next/Dropzo
 import { toastError } from '../../../ui/components/notifications';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_DELETE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_ONE_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_BULK_IMPORTS_STATUS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { BULK_GET_APPROVERS_URL, BULK_GET_REPORTS_EXCEL_URL, BULK_HEADERS_TO_MAP_URL, BULK_IMPORT_CREATE_URL, BULK_IMPORT_FORM_DOCUMENTS_TYPE_GROUP_URL, BULK_IMPORT_ONE_URL, BULK_IMPORT_TYPE_DATA_URL, BULK_IMPORT_UPLOAD_DATA_URL, BULK_IMPORT_UPLOAD_S3_URL, BULK_IMPORT_URL, BULK_SET_DATA_URL, BULK_TABLE_DATA, CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_BULK_IMPORTS_STATUS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 import { Approver, BkStatus, BulkImport, DataType, FormDocumentTypeGroup, TableRow, UpdateRowFieldTablePayload } from './types';
 import { downloadFile, orderBkData } from './utils';
 
@@ -82,7 +82,7 @@ export const setBulkImportsStatus = (bulkImportId: string, status: BkStatus): { 
   },
 });
 
-const deleteBulkImportSuccess = (payload: string): { type: string, payload: string } => ({
+export const deleteBulkImportSuccess = (payload: string): { type: string, payload: string } => ({
   type: DELETE_BULK_IMPORT,
   payload,
 });
@@ -185,26 +185,6 @@ export const getApprovers = (): ApiAction<Approver[]> => apiAction({
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));
   },
-  onFailure: (err: string) => {
-    toastError(err);
-  },
-});
-
-export const deleteBulkImport = (
-  body: {bulkImportId: string},
-  handlers: Handlers,
-): ApiAction => apiActionWithCallbacks({
-  url: `${BULK_IMPORT_DELETE_URL}${body.bulkImportId}`,
-  method: 'post',
-  onSuccess: (data, dispatch) => {
-    if (data?.id) {
-      dispatch(deleteBulkImportSuccess(data.id));
-    }
-  },
-  onCompleted: (dispatch) => {
-    dispatch(setIsLoading(false));
-  },
-  handlers,
   onFailure: (err: string) => {
     toastError(err);
   },
@@ -357,14 +337,18 @@ export const getOneBulkImport = (bulkImportId: string): ApiAction<BulkImport> =>
 });
 
 export const patchBulkImport = (
-  body: {bulkImportId: string, data: Partial<BulkImport>},
+  body: {bulkImportId: string, data: Partial<BulkImport>, callback?: (id: string) => void},
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${BULK_IMPORT_URL}${body.bulkImportId}`,
   method: 'patch',
   data: body.data,
-  onSuccess: (data, dispatch) => {
-    dispatch(setBulkImport(data));
+  onSuccess: (data: BulkImport, dispatch) => {
+    if (data?.id && body?.callback) {
+      body.callback(data.id);
+    } else {
+      dispatch(setBulkImport(data));
+    }
   },
   onCompleted: (dispatch) => {
     dispatch(setIsLoading(false));

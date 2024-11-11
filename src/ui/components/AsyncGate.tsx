@@ -1,5 +1,6 @@
-import { Button, LinearProgress, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Box, Button, LinearProgress, Typography, WithStyles, withStyles } from '@material-ui/core';
 import React, { useCallback, useEffect } from 'react';
+import { ReactComponent as NoAccessIcon } from '../../assets/images/NoAccess_Image.svg';
 import { AsyncState, AsyncStatus } from '../../state/types';
 import useDidMount from '../hooks/useDidMount';
 import styles from './AsyncGate.styles';
@@ -53,6 +54,20 @@ const AsyncGate: React.FunctionComponent<Props> = ({
       <React.Fragment>
         {children}
       </React.Fragment>
+    );
+  }
+
+  if (asyncState.status === AsyncStatus.Error && asyncState.statusCode === 403) {
+    return (
+      <div className={classes.errorAccessDeniedContainer}>
+        <NoAccessIcon />
+        <Box className={classes.accessDeniedText}>
+          <Text translation="async.state.message.access.denied" />
+        </Box>
+        <Typography variant="body1" className={classes.errorText}>
+          {asyncState.message}
+        </Typography>
+      </div>
     );
   }
 

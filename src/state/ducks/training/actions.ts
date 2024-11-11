@@ -1,6 +1,7 @@
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
 import { documentRevisionsActions } from '../documentRevisions';
+import { ExportToEmailRequest } from '../documentRevisions/types';
 import { TRAINING_RECORD_ROOT_URL } from './constants';
 import { TrainingPlanTransition, TrainingRequestBody, TrainingTransitionRequestBody } from './types';
 
@@ -39,11 +40,13 @@ const completeSelfTaughtTraining = (
 
 const exportTrainingRecord = (
   id: string,
+  data: ExportToEmailRequest,
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
     url: `/export/training_record/${id}/email`,
     method: 'post',
+    data,
     handlers,
   });
 
