@@ -70,16 +70,24 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const topic = React.useMemo(() =>
     `${employeeId}/external_export_email/${revisionId}/pdf`
   , [employeeId, revisionId]);
+  const notificationInitiatedRef = useRef(false);
 
   const callBack = useCallback((data) => {
     handleDownloadComplete(true);
-    toastSuccess(<ExportPDFToastr />, {
-      className: classes.popup,
-      bodyClassName: classes.popupBody,
-      progressClassName: 'progressClassName',
-      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
-      autoClose: false,
-    });
+    if (!notificationInitiatedRef.current) {
+      notificationInitiatedRef.current = true;
+      toastSuccess(<ExportPDFToastr />, {
+        className: classes.popup,
+        bodyClassName: classes.popupBody,
+        progressClassName: 'progressClassName',
+        closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
+        autoClose: false,
+      });
+
+      setTimeout(() => {
+        notificationInitiatedRef.current = false;
+      }, 5000);
+    }
   }, []);
 
   useMqttSubscription(topic, callBack);
