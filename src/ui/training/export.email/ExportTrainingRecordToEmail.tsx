@@ -78,7 +78,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
     <Button
       variant="outlined"
       color="primary"
-      data-cy="export-to-email"
+      data-cy="exportToEmail"
       onClick={emailDialog.open}
     >
       <Text translation="common.share" />
