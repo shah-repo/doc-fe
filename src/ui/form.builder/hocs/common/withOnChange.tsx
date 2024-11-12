@@ -1,4 +1,4 @@
-import { filter, get, isArray, isEmpty, isEqual, isString as lodashIsString, isUndefined, map, omit, pick, toInteger, toString, union } from 'lodash';
+import { filter, get, isArray, isEmpty, isEqual, isUndefined, isString as lodashIsString, map, omit, pick, toInteger, toString, union } from 'lodash';
 import React from 'react';
 import { FB, FBButton } from '../..';
 import FBTextField from '../../components/inputs/FBTextField';
@@ -163,7 +163,7 @@ export const withOnChange = <T extends FBInputProps>(
         if (isArray(value)) {
           if (optionValueType === 'object') {
             return optionObjectKeys
-              ? map(value, (v) => pick(v, optionObjectKeys as string[]))
+              ? map(value, (v) => pick(v, optionObjectKeys))
               : value;
           }
           return map(value, (v) => (lodashIsString(v) ? v : get(v, optionValueKey)));

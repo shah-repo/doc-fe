@@ -638,4 +638,5 @@ export enum tabIdByInternalType {
   LOT = 'details',
   WORK_ORDER = 'details',
   CUSTOMERS = 'details',
+  SHIPPING = 'details',
 }
