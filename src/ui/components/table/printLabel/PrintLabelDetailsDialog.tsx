@@ -72,10 +72,12 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
 }) => {
   const classes = styles();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
-  const printerValue: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY) ?? '');
+  const printerValue: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY) || 'null') ?? {};
   const isRecentPrinterExist = zebraPrint?.find(item => item.printer.name === printerValue?.printer?.name && item.printer.isActive);
   const recentPrinterLabelType = localStorage.getItem(PRINTER_LABEL_TYPE_KEY);
-  const defaultLabelType = isRecentPrinterExist ? JSON.parse(recentPrinterLabelType ?? '') : '';
+  const defaultLabelType = isRecentPrinterExist && recentPrinterLabelType
+    ? JSON.parse(recentPrinterLabelType)
+    : {};
   const isShowpH = defaultLabelType?.name === PH_PRINT_LABEL_TYPE;
   const qtyUnitsRender = () => {
     const gridSize = Number(selectedNumberOfLabel) < 6 ? (gridMaxWidth / Number(selectedNumberOfLabel)) : (gridMaxWidth / 5);
