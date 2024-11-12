@@ -1,18 +1,249 @@
 import { createStyles, makeStyles } from '@material-ui/core';
-import Colors from '../../layout/theme/utils/colors';
+import { Colors } from '../../layout/theme-next';
+import LegacyColors from '../../layout/theme/utils/colors';
+
+const MIN_COLUMN_WIDTH = 160;
 
 export default makeStyles((theme) =>
   createStyles({
-    mainDiv: {
-      marginBottom: theme.spacing(2),
+    tableContainer: {
+      border: `1px solid ${Colors.tableStroke}`,
+      borderRadius: theme.spacing(0.5),
+      overflowY: 'auto',
+      backgroundColor: Colors.white,
+    },
+    table: {
+      display: 'grid',
+      gridTemplateColumns: `
+        max-content
+        max-content
+        minmax(${MIN_COLUMN_WIDTH}px, 4fr)
+        minmax(${MIN_COLUMN_WIDTH}px, 5fr)
+        minmax(${MIN_COLUMN_WIDTH}px, 5fr)
+        48px
+      `,
+    },
+    tableWithSubstitution: {
+      gridTemplateColumns: `
+        48px
+        max-content
+        max-content
+        minmax(${MIN_COLUMN_WIDTH}px, 4fr)
+        minmax(${MIN_COLUMN_WIDTH}px, 5fr)
+        minmax(${MIN_COLUMN_WIDTH}px, 5fr)
+        48px
+      `,
     },
     title: {
-      display: 'flex',
-      padding: theme.spacing(0.5),
-      alignItems: 'center',
+      color: Colors.textBlack,
     },
-    fullWidth: {
-      width: '100%',
+    tableHeader: {
+      gridColumn: '1 / -1',
+      minHeight: 40,
+      display: 'grid',
+      gridTemplateColumns: 'subgrid',
+      alignItems: 'center',
+      backgroundColor: Colors.primaryBg,
+      color: Colors.textBlack,
+      borderBottom: 'none',
+      fontSize: 12,
+      lineHeight: 1.15,
+      fontWeight: 600,
+    },
+    headerCell: {
+      padding: theme.spacing(1, 1.25),
+      position: 'relative',
+
+      '&:before': {
+        content: '""',
+        position: 'absolute',
+        width: 1,
+        height: 24,
+        backgroundColor: Colors.tableStroke,
+        left: 0,
+        top: '50%',
+        transform: 'translateY(-50%)',
+      },
+
+      '&:first-child:before': {
+        display: 'none',
+      },
+    },
+    tableContent: {
+      display: 'grid',
+      alignItems: 'center',
+      gridTemplateColumns: 'subgrid',
+      gridColumn: '1 / -1',
+    },
+    contentCell: {
+      padding: theme.spacing(1.5, 1.25),
+      overflow: 'hidden',
+    },
+    contentSubCell: {
+      padding: theme.spacing(0.5, 1.25),
+      overflow: 'hidden',
+    },
+    contentRow: {
+      display: 'grid',
+      alignItems: 'center',
+      gridTemplateColumns: 'subgrid',
+      gridColumn: '1 / -1',
+      minHeight: 60,
+    },
+    editedContentRow: {
+      outline: `1px solid ${Colors.primaryLight}`,
+      outlineOffset: -1,
+      position: 'relative',
+    },
+    contentSubRow: {
+      minHeight: 0,
+    },
+    enclosingDiv: {
+      gridColumn: '1 / -1',
+      color: Colors.textBlack,
+      position: 'relative',
+      flexWrap: 'wrap',
+      backgroundColor: Colors.white,
+      borderBottom: `1px solid ${Colors.tableStroke}`,
+      display: 'grid',
+      gridTemplateColumns: 'subgrid',
+
+      '&:last-child': {
+        borderRadius: theme.spacing(0, 0, 0.625, 0.625),
+        borderBottom: 'none',
+      },
+    },
+    enclosingDivViewItem: {
+      cursor: 'pointer',
+
+      '&:hover': {
+        backgroundColor: Colors.hover,
+
+        '& $expandIcon': {
+          backgroundColor: Colors.white,
+        },
+      },
+    },
+    moreDetails: {
+      display: 'grid',
+      gridColumn: '1 / -1',
+      gridTemplateColumns: 'subgrid',
+      padding: theme.spacing(0, 0, 1.5),
+    },
+    moreDetailsHeader: {
+      gridColumn: '1 / -1',
+      borderTop: `1px solid ${Colors.tableStroke}`,
+      padding: theme.spacing(1.5, 0, 0.75, 1.25),
+      margin: 0,
+      color: Colors.textGray,
+      fontSize: 12,
+      fontWeight: 500,
+    },
+    moreDetailsHeaderSubstituted: {
+      padding: theme.spacing(1.5, 0, 0.75, 7.25),
+    },
+    link: {
+      textDecoration: 'none',
+      color: Colors.primary,
+
+      '&:visited': {
+        color: Colors.primaryDark,
+      },
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+    autoUpdateCell: {
+      textAlign: 'center',
+
+      '& label': {
+        margin: 0,
+      },
+    },
+    itemCell: {
+      display: 'flex',
+      alignItems: 'center',
+      columnGap: theme.spacing(0.75),
+      whiteSpace: 'nowrap',
+    },
+    wideItemCell: {
+      gridColumnEnd: 'span 3',
+
+      '& > div': {
+        width: '100%',
+      },
+    },
+    expandIcon: {
+      width: 20,
+      minHeight: 20,
+      height: 20,
+    },
+    expandIconExpanded: {
+      color: Colors.primary,
+      transform: 'rotate(90deg)',
+    },
+    textCell: {
+      '& .MuiOutlinedInput-multiline': {
+        padding: theme.spacing(1.25, 1.75),
+      },
+    },
+    textCellEditing: {
+      padding: theme.spacing(0.625, 0.25),
+    },
+    textCellAdding: {
+      padding: theme.spacing(2, 0.25, 0.5),
+    },
+    whereUsedCell: {
+      textAlign: 'center',
+    },
+    whereUsedIcon: {
+      height: 10,
+      width: 10,
+    },
+    iconDisabled: {
+      opacity: 0.5,
+    },
+    subItemCellSubstituted: {
+      gridColumnStart: 2,
+    },
+    subObsoleteCell: {
+      gridColumnEnd: 'span 4',
+    },
+    obsoleteIcon: {
+      color: Colors.primaryLight,
+    },
+    tooltipContent: {
+      maxWidth: 425,
+      maxHeight: 200,
+      overflow: 'auto',
+      whiteSpace: 'pre-line',
+      paddingRight: theme.spacing(0.5),
+      marginRight: theme.spacing(-0.5),
+    },
+    popper: {
+      zIndex: theme.zIndex.tooltip,
+      marginTop: -1,
+    },
+    attachmentsDialogContainer: {
+      marginTop: theme.spacing(-4),
+    },
+    attachmentsList: {
+      gap: theme.spacing(1, 1),
+      fontSize: 12,
+      color: Colors.primary,
+    },
+    allAttachments: {
+      color: Colors.primary,
+      display: 'inline-block',
+      fontSize: 12,
+      fontWeight: 400,
+      textDecoration: 'underline',
+      margin: theme.spacing(1, 0, 0),
+    },
+    autocompleteOption: {
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      display: 'block',
     },
     tabContent: {
       width: '100%',
@@ -24,17 +255,13 @@ export default makeStyles((theme) =>
     tabContentInactive: {
       pointerEvents: 'none',
     },
-    titleHeading: {
-      marginRight: theme.spacing(1.25),
-      display: 'inline-block',
-    },
     loader: {
       position: 'absolute',
       top: 0,
       left: 0,
       width: '100%',
       height: '100%',
-      backgroundColor: Colors.background_white,
+      backgroundColor: LegacyColors.background_white,
       opacity: 0.7,
       display: 'flex',
       alignItems: 'center',
@@ -42,290 +269,8 @@ export default makeStyles((theme) =>
       fontWeight: 600,
       zIndex: 1,
     },
-    btnMargin: {
-      margin: 0,
-    },
-    dividerStyle: {
+    divider: {
       margin: theme.spacing(0, 0, 1.5, 0),
-    },
-    editRowParentNormal: {
-      border: '1px solid',
-      borderColor: Colors.cerulean,
-    },
-    editRowParentError: {
-      border: '1px solid',
-      borderColor: Colors.red,
-    },
-    labelError: {
-      color: Colors.red,
-    },
-    gridCenterAlign: {
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    normalFontWeight: {
-      fontWeight: 'normal',
-    },
-    iconButton: {
-      fontSize: '16px',
-      '&:hover': {
-        color: Colors.blue,
-      },
-    },
-    viewIcon: {
-      fill: Colors.cerulean,
-      marginTop: theme.spacing(0.5),
-      fontSize: '1.2rem',
-      cursor: 'pointer',
-    },
-    header: {
-      height: '40px',
-      display: 'flex',
-      alignItems: 'center',
-
-      backgroundColor: Colors.alice_blue,
-      color: Colors.almost_black,
-      textTransform: 'uppercase',
-      fontSize: '12px',
-
-      padding: theme.spacing(1.5),
-
-      fontWeight: 600,
-
-      borderRadius: theme.spacing(0.5, 0.5, 0, 0),
-    },
-    cellautoUpdate: {
-      width: '8%',
-      display: 'flex',
-      alignItems: 'center',
-      '& > #field-autoUpdate': {
-        margin: 0,
-      },
-    },
-    cellOne: {
-      width: '18%',
-      display: 'flex',
-      alignItems: 'center',
-      columnGap: theme.spacing(1.25),
-      paddingRight: theme.spacing(1),
-      '& > .MuiBox-root': {
-        width: '100%',
-      },
-    },
-    smallCellOther: {
-      width: '25%',
-      '& .MuiOutlinedInput-multiline': {
-        padding: theme.spacing(1.28, 1.75),
-      },
-    },
-    cellOther: {
-      width: '25%',
-      '& .MuiOutlinedInput-multiline': {
-        padding: theme.spacing(1.28, 1.75),
-      },
-    },
-    cellRev: {
-      width: '16%',
-    },
-    cellWhereUsed: {
-      width: '8%',
-      textAlign: 'center',
-    },
-    hiddenLegend: {
-      '& legend': {
-        display: 'none',
-      },
-    },
-    dot: {
-      height: 10,
-      width: 10,
-    },
-    itemLeftPadding: {
-      paddingLeft: `calc(${theme.spacing(1.25)}px + 1px)`,
-    },
-    itemRightPadding: {
-      paddingRight: theme.spacing(1),
-    },
-    enclosingDiv: {
-      color: Colors.almost_black,
-      position: 'relative',
-      flexWrap: 'wrap',
-    },
-    enclosingDivEditItem: {
-      border: `1px solid ${Colors.alice_blue}`,
-    },
-    enclosingDivViewItem: {
-      backgroundColor: Colors.white,
-      cursor: 'pointer',
-      '& .actionBtnClass': {
-        display: 'none',
-      },
-      '&:hover': {
-        backgroundColor: Colors.whitest_grey,
-        '& .iconClass': {
-          backgroundColor: Colors.white,
-        },
-        '& .actionBtnClass': {
-          display: 'flex',
-          justifyContent: 'center',
-        },
-      },
-    },
-    enclosingDivOpened: {
-      '& .iconClass': {
-        transform: 'rotate(90deg)',
-      },
-    },
-    itemRow: {
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-      minHeight: '60px',
-      padding: theme.spacing(1.5),
-    },
-    editItemRow: {
-      width: '100%',
-      border: `1px solid ${Colors.dodger_blue}`,
-      position: 'relative',
-      flexWrap: 'wrap',
-      '& div div.MuiBox-root': {
-        marginBottom: 0,
-      },
-    },
-    actionButtonChildDiv: {
-      backgroundColor: Colors.dodger_blue,
-      position: 'absolute',
-      right: 0,
-      borderRadius: theme.spacing(0, 0, 0.5, 0.5),
-      zIndex: 100,
-      display: 'flex',
-      justifyContent: 'center',
-    },
-    actionButton: {
-      backgroundColor: Colors.white,
-      borderRadius: '6px',
-      padding: theme.spacing(0.6),
-      minWidth: 'auto',
-      border: theme.spacing(1),
-    },
-    actionButtonDelete: {
-      '& svg': {
-        fill: Colors.latest_red_varient,
-      },
-    },
-    actionButtonDone: {
-      '& svg': {
-        color: Colors.navy,
-      },
-    },
-    moreDetails: {
-      padding: theme.spacing(0, 1.5, 0, 5.5),
-    },
-    separator: {
-      height: '1px',
-      backgroundColor: Colors.gray_goose,
-      border: 'none',
-      marginTop: 0,
-    },
-    moreDetailsHeader: {
-      color: Colors.font_gray,
-      fontSize: '12px',
-      fontWeight: 500,
-    },
-    iconClass: {
-      width: '1.4rem',
-      height: '1.4rem',
-      border: `1px solid ${Colors.whitest_grey}`,
-      backgroundColor: Colors.whitest_grey,
-      borderRadius: '50%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      cursor: 'pointer',
-    },
-    showMoreIcon: {
-      fill: Colors.font_gray,
-      transform: 'rotate(0)',
-      transition: 'transform 0.2s',
-    },
-    docList: {
-      listStyle: 'none',
-      paddingLeft: 0,
-      marginBottom: 0,
-      paddingBottom: theme.spacing(1.75),
-    },
-    docListItem: {
-      padding: theme.spacing(0.75, 3, 0.75, 0),
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    verticalDivider: {
-      borderLeft: '2px solid white',
-      paddingLeft: theme.spacing(1.25),
-    },
-    successMessage: {
-      width: '380px',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    textField: {
-      width: '100%',
-      '& .MuiInputBase-root': {
-        marginTop: 0,
-        padding: 0,
-      },
-      '& .MuiOutlinedInput-input': {
-        padding: theme.spacing(1.25),
-        fontSize: 14,
-        fontWeight: 'bold',
-      },
-      '& .MuiFormHelperText-root': {
-        lineHeight: '1.15rem',
-        margin: theme.spacing(1, 0, 0, 0.5),
-      },
-    },
-    option: {
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
-      display: 'block',
-    },
-    sectionTitle: {
-      color: Colors.almost_black,
-    },
-    link: {
-      textDecoration: 'none',
-      '&:hover': {
-        textDecoration: 'underline',
-      },
-    },
-    truncate: {
-      fontFamily: 'Sora',
-      fontWeight: 400,
-      fontSize: 14,
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'pre-line',
-      display: '-webkit-box',
-      '-webkit-line-clamp': 4,
-      'line-clamp': 4,
-      '-webkit-box-orient': 'vertical',
-    },
-    tooltipBox: {
-      maxHeight: '200px !important',
-      maxWidth: '425px !important',
-      overflow: 'auto',
-      padding: theme.spacing(0.25),
-      fontSize: 12,
-      whiteSpace: 'pre-line',
-    },
-    customTooltip: {
-      backgroundColor: Colors.black,
-      whiteSpace: 'pre-wrap',
-    },
-    customArrow: {
-      color: Colors.black,
     },
   }),
 );
