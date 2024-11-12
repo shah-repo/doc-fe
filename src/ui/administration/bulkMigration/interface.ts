@@ -1,6 +1,7 @@
 import { Permission } from '../../../state/ducks/auth/types';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
+import { FBSchemaProps } from '../../form.builder';
 
 export interface IBulkMigrationDocumentType {
   id: string
@@ -83,3 +84,8 @@ export interface IApprovalRequirementGroup {
   name: string
   permissions: Permission[]
 }
+
+export type ISchemaItem = FBSchemaProps & {
+  isMapped?: boolean
+  mappedFrom?: Array<{label: any, name: string}>
+};

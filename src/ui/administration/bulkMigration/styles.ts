@@ -121,4 +121,18 @@ export default makeStyles<NextTheme>(theme => ({
     padding: theme.spacing(1),
     maxWidth: '340px',
   },
+  mappingRuleSchemaItemBox: {
+    position: 'relative',
+    marginTop: '8px',
+    border: `1px solid ${Colors.textGray}`,
+    borderRadius: '4px',
+    padding: '4px',
+    width: '100%',
+  },
+  compactListItem: {
+    marginBottom: '4px',
+    '& .MuiListItemText-root': {
+      marginBottom: 0,
+    },
+  },
 }));
