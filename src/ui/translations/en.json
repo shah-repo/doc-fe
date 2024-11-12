@@ -1769,7 +1769,7 @@
   "exportFileDownload.downloaded": "Your download started.",
   "exportFileDownload.error": "There was an error processing your request.",
   "ocr.sub.title.msg": "Select files below to run OCR",
-  "ocr.submit.button": "Run OCR",
+  "ocr.submit.button": "Extract Data",
   "ocr.document.preview.title": "Document Preview",
   "ocr.hide.preview.button": "Hide Preview",
   "ocr.file.preview.not.support.message": "Preview not available for this file type.",
