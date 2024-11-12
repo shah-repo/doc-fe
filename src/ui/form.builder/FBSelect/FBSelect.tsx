@@ -1,18 +1,11 @@
-import { createStyles, makeStyles, MenuItem, Select } from '@material-ui/core';
+import { MenuItem, Select } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
 import { FBInput, FBSelectProps } from '..';
 import Text from '../../components/Text';
 import { FBFontStyle } from '../styles/FBFont.styles';
+import styles from './FBSelect.styles';
 import { withFBSelect } from './FBSelect.wrap';
-
-const styles = makeStyles(() =>
-  createStyles({
-    select: {
-      '& .MuiSelect-root': {
-        padding: 10.4,
-      },
-    },
-  }));
 
 const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   defaultValue,
@@ -21,14 +14,20 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   variant = 'outlined',
   placeholder,
   style,
+  isPlaceholderShown,
   ...props
 }) => {
   const classes = styles();
+
   return (
     <FBInput {...props} {...{ placeholder }} type="select" labelProps={FBFontStyle.labelProps}>
-      <Select displayEmpty {...{ defaultValue, style, variant, SelectDisplayProps }} className={classes.select}>
+      <Select
+        className={cx(classes.select, { [classes.placeholderValue]: isPlaceholderShown })}
+        {...{ defaultValue, style, variant, SelectDisplayProps }}
+        displayEmpty
+      >
         {!!placeholder?.trim() && (
-          <MenuItem value={undefined} disabled>
+          <MenuItem value={undefined} className={classes.placeholderItem}>
             <Text message={placeholder} />
           </MenuItem>
         )}

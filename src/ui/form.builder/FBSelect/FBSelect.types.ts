@@ -7,4 +7,5 @@ export type FBSelectProps =
 & FBOptionProps
 & {
   menuItems?: React.ReactNode[]
+  isPlaceholderShown?: boolean
 };
