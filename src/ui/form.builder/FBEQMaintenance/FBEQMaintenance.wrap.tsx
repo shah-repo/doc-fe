@@ -44,7 +44,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const isEqStatusReleased = status === DocumentRevisionStatus.Released;
     const isTypePM = editorConfig.type?.includes('preventativeMaintenance');
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
-    const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYearAlt);
+    const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.MonthDateYearTwoDigit);
     availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
 
     useEffect(() => {
