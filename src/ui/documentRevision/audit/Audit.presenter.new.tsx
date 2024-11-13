@@ -73,7 +73,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     fetchLCPDocTypesAsync.start(
       fetchDocRevOptions,
       docTypeId,
-      undefined,
       fetchLCPDocTypesAsync,
     );
   }, []);
