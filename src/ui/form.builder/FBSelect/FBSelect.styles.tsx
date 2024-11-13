@@ -4,7 +4,7 @@ import { Colors } from '../../layout/theme-next';
 export default makeStyles((theme) => createStyles({
   select: {
     '& .MuiSelect-root': {
-      padding: theme.spacing(1.3),
+      padding: theme.spacing(1.5),
     },
   },
   placeholderValue: {
