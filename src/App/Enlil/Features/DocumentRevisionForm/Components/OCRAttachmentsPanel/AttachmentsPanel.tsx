@@ -39,8 +39,8 @@ const AttachmentsPanel = () => {
   };
 
   const handleClick = async () => {
-    const { employeeId, sessionId } = store.getState().auth.user; 
-    const headers = { authorization: OCR_API_TOKEN, employeeId, sessionId};
+    const { employeeId, sessionId } = store.getState().auth.user;
+    const headers = { authorization: OCR_API_TOKEN, employeeId, sessionId };
     try {
       if (!docRevId) {
         toastError('Document revision ID not found!');
@@ -72,8 +72,7 @@ const AttachmentsPanel = () => {
   const attachmentsAsync = useAsync<any>({
     onSuccess: (attachments) => {
       setAttachments(attachments);
-      // We may need to filter some type of attachments
-      // setAttachments(attachments?.filter(attachment => attachment.type === PDF));
+      // TODO: We may need to filter some type of attachments
     },
     onError: () => {
       toastError('Failed to load attachments');
