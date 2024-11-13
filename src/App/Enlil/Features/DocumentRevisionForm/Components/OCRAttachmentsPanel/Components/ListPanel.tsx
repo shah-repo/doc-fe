@@ -52,6 +52,7 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
                 checked={checkedIndices.indexOf(index) !== -1}
                 tabIndex={-1}
                 disableRipple
+                data-cy={`attachment-checkbox-${index}`}
               />
             </ListItemIcon>
             <ListItemText>

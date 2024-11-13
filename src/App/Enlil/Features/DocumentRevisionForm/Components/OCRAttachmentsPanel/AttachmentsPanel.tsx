@@ -113,7 +113,9 @@ const AttachmentsPanel = () => {
               variant="contained"
               color="primary"
               disabled={selectedIndices.length <= 0}
-              fullWidth >
+              fullWidth
+              data-cy="ocr-extract-data"
+              >
 
               <Text translation="ocr.submit.button" />
             </Button>
