@@ -17,6 +17,9 @@ import { documentRevisionsActions } from '../../../../../../state/ducks/document
 import { store } from '../../../../../../state/store';
 import { toastError, toastSuccess } from '../../../../../../ui/components/notifications';
 
+const OCR_API_URL = 'https://3jnnotdcy8.execute-api.us-west-1.amazonaws.com/processLotHistoryRecord';
+const OCR_API_TOKEN = 'bearer K-ZImFHfgu!=yo49=6AmSc770!nH?cv!Ckf/b0BqZIZLtuImCDfHG4?A?6P0cNfh';
+
 const AttachmentsPanel = () => {
   const { _documentRevisionFormState } = SM.useStores();
   const docRevId = _documentRevisionFormState?.documentRevision?.id;
@@ -37,7 +40,7 @@ const AttachmentsPanel = () => {
 
   const handleClick = async () => {
     const headers = {
-      authorization: 'bearer K-ZImFHfgu!=yo49=6AmSc770!nH?cv!Ckf/b0BqZIZLtuImCDfHG4?A?6P0cNfh',
+      authorization: OCR_API_TOKEN,
       employeeId: store.getState().auth.user.employeeId,
       sessionId: store.getState().auth.user.sessionId,
     };
@@ -54,10 +57,11 @@ const AttachmentsPanel = () => {
             url: attachments[index].url,
             attachmentId: attachments[index].id,
           };
-          const apiUrl = 'https://3jnnotdcy8.execute-api.us-west-1.amazonaws.com/processLotHistoryRecord';
-          await axios.post(apiUrl, data, { headers });
+
+          await axios.post(OCR_API_URL, data, { headers });
           counter++;
         } else {
+          // TODO: remove when we move to using s3 links instead of presigned urls
           console.log(`****** There is no presigned url for attachment at index=${index} ****************`);
         }
       }
