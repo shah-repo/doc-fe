@@ -26,11 +26,12 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
         {...{ defaultValue, style, variant, SelectDisplayProps }}
         displayEmpty
       >
-        {!!placeholder?.trim() && (
-          <MenuItem value={undefined} className={classes.placeholderItem}>
-            <Text message={placeholder} />
-          </MenuItem>
-        )}
+        <MenuItem value={undefined} className={classes.placeholderItem}>
+          {placeholder?.trim()
+            ? <Text message={placeholder} />
+            : <>&nbsp;</>
+          }
+        </MenuItem>
         {menuItems}
       </Select>
     </FBInput>
