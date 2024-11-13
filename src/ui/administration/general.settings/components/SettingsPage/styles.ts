@@ -3,7 +3,7 @@ import { Colors } from '../../../../layout/theme-next';
 import { NextTheme } from '../../../../layout/theme-next/provider';
 import { SIDEBAR_WIDTH } from '../../constants';
 
-export default makeStyles((theme: NextTheme) => ({
+export default makeStyles<NextTheme>(theme => ({
   root: {
     width: '100%',
     height: '100%',
@@ -51,6 +51,9 @@ export default makeStyles((theme: NextTheme) => ({
     gridArea: '2 / 1 / 4 / 2',
     paddingBottom: theme.spacing(3),
   },
+  list: {
+    padding: 0,
+  },
   listItem: {
     borderRadius: 4,
     padding: theme.spacing(1, 1.25),
@@ -85,11 +88,11 @@ export default makeStyles((theme: NextTheme) => ({
   },
   [theme.media.mobile]: {
     header: {
-      flexWrap: 'wrap',
+      flexWrap: 'wrap' as const,
       space: 'nowrap',
     },
     actions: {
-      flexDirection: 'row-reverse',
+      flexDirection: 'row-reverse' as const,
     },
     sidebar: {
       display: 'none',

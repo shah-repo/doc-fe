@@ -38,7 +38,7 @@ import { HoverStyleChip } from '../../common/HoverStyleChipPendingReview';
 import { NormalStyleChip } from '../../common/NormalStyleChipPendingReview';
 import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
-import { formatCurrency, getPendingTooltipText } from '../../common/Utils';
+import { delay, formatCurrency, getPendingTooltipText } from '../../common/Utils';
 import EmailModal from '../../dialogs/email/EmailDialog';
 import useStyles from './purchaseOrder.styles';
 interface Props {
@@ -196,8 +196,10 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
     setDownloadPdfHover(true);
   };
 
-  const handleDownloadClick = () => {
+  const handleDownloadClick = async () => {
     setDownloadPdfMobile(true);
+    await delay(1000);
+    setDownloadPdfMobile(false);
   };
 
   const handleDownloadClose = () => {
@@ -273,7 +275,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} md={3} sm={6} xs={4} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'} className={classes.textPoReviewlapMobile} onClick={handleClick}>
+              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + 'InReview'} className={classes.textPoReviewlapMobile} onClick={handleClick}>
                 <Grid item={true}>
                   <DocId url={documentVersionPath(docRevId || '', docDocumentId)} docId={docId} />
                 </Grid>

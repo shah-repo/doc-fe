@@ -25,6 +25,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   isPreview,
   toolbar,
   disabled,
+  onAwayClick,
   placeholder,
   showToggleButton,
   isTextClamped,
@@ -44,12 +45,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     _documentRevisionFormState?.setExpanded(true);
     _documentRevisionFormState?.setDescriptionFocused(true);
     _textEditorState?.setPreviewMode(false);
-  };
-  const onAway = () => {
-    _documentRevisionFormState?.setExpanded(false);
-    _documentRevisionFormState?.setDescriptionFocused(false);
-    _textEditorState?.setPreviewMode(true);
-    showToggleButton && showToggleButton();
   };
 
   const toggleButton = (el: React.MouseEvent<HTMLButtonElement>) => {
@@ -76,7 +71,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
-            <ClickAwayListener onClickAway={onAway} mouseEvent="onMouseUp">
+            <ClickAwayListener onClickAway={e => onAwayClick?.(e)} mouseEvent="onMouseUp">
               <Box
                 borderColor={Colors.hint_gray}
                 borderRadius={4}

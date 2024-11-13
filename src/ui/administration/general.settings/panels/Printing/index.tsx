@@ -1,157 +1,196 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from '@material-ui/core';
-import { GridCellProps } from '@progress/kendo-react-grid';
-import { FormikContextType } from 'formik';
-import { get } from 'lodash';
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { FormikProvider, useFormik, useFormikContext } from 'formik';
+import { omit } from 'lodash';
+import React, { useMemo, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
-import { ZebraPrintSettings } from '../../../../../state/ducks/company/types';
-import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
-import { IconButton } from '../../../../components/forms/fields-next';
-import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
-import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import OverflowTooltip from '../../../../components/OverflowTooltip';
-import { DialogHandler } from '../../../../hooks/useDialog';
+import { Nullable } from '../../../../../state/ducks/common/types';
+import { companyActions, companySelectors } from '../../../../../state/ducks/company';
+import { GeneralSettings, ZebraPrintSettings } from '../../../../../state/ducks/company/types';
+import { AlertDialog } from '../../../../components/dialogs';
+import PromptIfDirty from '../../../../components/forms/PromptIfDirty';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import { toastError } from '../../../../components/notifications';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
 import SettingsPanel from '../../components/SettingsPanel';
+import SettingsTable from '../../components/SettingsTable';
 import { SettingsPanelProps } from '../../types';
-import AddNewPrinter from './AddNewPrinter';
-import useStyles from './styles';
-import { withLabelPrinting } from './wrap';
+import PrinterEditDialog from './components/PrinterEditDialog';
+import { buildSchema } from './schema';
+import { EditablePrinter } from './types';
 
-const SELECTED_FIELD = 'printer.isActive';
-const DATA_ITEM_KEY = 'apiKey';
+const PANEL_FIELD = 'zebraPrint';
 
-interface PrintinfPanelProps extends SettingsPanelProps {
-  onEdit: (editData: ZebraPrintSettings, rowIndex: number) => void
-  onDelete: (data: ZebraPrintSettings) => void
-  onUpdate: () => void
-  onCancel: () => void
-  isOpened: boolean
-  dataResult: []
-  onSelectionChange: () => void
-  formik: FormikContextType<ZebraPrintSettings>
-  confirmationDialog: DialogHandler
-  confirmDeletePrinter: () => void
-  cancelDeletePrinter: () => void
-  isFormDirty: boolean
-  onFormikFieldChange: React.FormEventHandler<HTMLDivElement>
-}
-
-interface SchemaBuilderProps {
-  ActionCell: (props: any) => JSX.Element
-  cellRender: (props: any) => JSX.Element
-}
-
-type schemaBuilder = (options: SchemaBuilderProps) => Array<ColumnDefinition<T>>;
-const buildSchema: schemaBuilder = ({ ActionCell, cellRender }) => {
-  return [
-    {
-      id: 'isActive',
-      field: 'printer.isActive',
-      title: 'administration.general.settings.printing.table.column.active',
-      width: 80,
-    },
-    {
-      id: 'sn',
-      field: 'printer.sn',
-      title: 'administration.general.settings.printing.table.column.serial.number',
-    },
-    {
-      id: 'name',
-      field: 'printer.name',
-      title: 'administration.general.settings.printing.table.column.name',
-      cell: cellRender,
-    },
-    {
-      id: 'actions',
-      field: 'actions',
-      filterable: false,
-      title: 'administration.general.settings.printing.table.column.actions',
-      cell: ActionCell,
-      width: 80,
-    },
-  ];
+const INITIAL_VALUES = {
+  _id: '',
+  [MODE_FIELD]: Mode.add,
+  active: true,
+  tenantId: '',
+  apiKey: '',
+  printer: {
+    isActive: true,
+    name: '',
+    sn: '',
+    labelTemplates: [],
+  },
 };
 
-const PrintingSettingsPanel: React.FC<PrintinfPanelProps> = ({
-  onAddNew,
-  onEdit,
-  onCancel,
-  onSelectionChange,
-  onDelete,
-  isOpened,
-  dataResult,
-  formik,
-  confirmationDialog,
-  confirmDeletePrinter,
-  cancelDeletePrinter,
-  isFormDirty,
-  onFormikFieldChange,
-  ...props
-}) => {
-  const ActionCell = (props: GridCellProps) => {
-    const { dataItem, dataIndex } = props;
-    const { cellStyle, deleteButton } = useStyles({ isActive: dataItem.printer?.isActive });
-    return (<td className={`${cellStyle} k-command-cell`} >
-      <Tooltip title={translate('common.edit')}>
-        <IconButton
-          kind="simple"
-          color="primary"
-          style={{ marginRight: '10px' }}
-          onClick={() => onEdit(dataItem, dataIndex)}
-        >
-          <FontAwesomeIcon
-            icon={regular('pen-to-square')}
-          />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title={translate('common.delete')}>
-        <IconButton
-          kind="simple"
-          onClick={() => onDelete(dataItem)}
-          className={deleteButton}
-        >
-          <FontAwesomeIcon
-            icon={regular('trash-can')}
-          />
-        </IconButton>
-      </Tooltip>
-    </td>);
+const PrintingSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
+  const printersList = getFieldProps<Nullable<ZebraPrintSettings[]>>(PANEL_FIELD).value;
+  const settingsId = useSelector(companySelectors.getGeneralSettingsId);
+  const printerToDelete = useRef<EditablePrinter>();
+
+  const editDialog = useDialog();
+  const deleteConfirmationDialog = useDialog();
+
+  const async = useAsync({ onError: toastError });
+  const updatePrinterSettings = useActionCreator(companyActions.updateGeneralSettings);
+
+  const data = useMemo(
+    () => printersList?.map(printer => ({
+      ...printer,
+      _id: uuidv4(),
+      [MODE_FIELD]: Mode.show,
+      active: printer.printer.isActive,
+    })) ?? [],
+    [printersList],
+  );
+
+  const updatePrinters = (updatedPrinters: ZebraPrintSettings[]) => {
+    const updatedValues = {
+      ...formValues,
+      [PANEL_FIELD]: updatedPrinters.map(printer => omit(printer, MODE_FIELD, '_id', 'active')),
+    };
+    async.start(updatePrinterSettings, updatedValues, settingsId, 'PUT', async);
   };
 
-  const cellRender = (props: GridCellProps) => {
-    const { dataItem, field } = props;
-    const value = get(dataItem, field);
-    return (<td className="k-command-cell"><OverflowTooltip title={value}>{value}</OverflowTooltip></td>);
+  const formik = useFormik<EditablePrinter>({
+    initialValues: INITIAL_VALUES,
+    onSubmit: (values) => {
+      const isAdding = values[MODE_FIELD] === Mode.add;
+      const updatedPrinters = isAdding
+        ? [...data, values]
+        : data.map(printer => printer._id === values._id ? values : printer);
+      updatePrinters(updatedPrinters);
+      editDialog.close();
+    },
+  });
+
+  const changePrinterActiveState = (printer: EditablePrinter, state: boolean) => {
+    const updatedPrinters = data.map(
+      item => item._id === printer._id
+        ? { ...item, printer: { ...item.printer, isActive: state } }
+        : item,
+    );
+    updatePrinters(updatedPrinters);
   };
 
-  const schema = buildSchema({ ActionCell, cellRender });
+  const addNewPrinter = () => {
+    formik.resetForm();
+    editDialog.open();
+  };
+
+  const editPrinter = (printer: EditablePrinter) => {
+    formik.setValues({
+      ...printer,
+      [MODE_FIELD]: Mode.edit,
+    });
+    editDialog.open();
+  };
+
+  const discardEdit = () => {
+    formik.resetForm();
+    editDialog.close();
+  };
+
+  const confirmPrinterDeletion = (printer: EditablePrinter) => {
+    printerToDelete.current = printer;
+    deleteConfirmationDialog.open();
+  };
+
+  const deletePrinter = () => {
+    deleteConfirmationDialog.close();
+
+    if (!printerToDelete.current) {
+      return;
+    }
+
+    const updatedPrinters = data.reduce<EditablePrinter[]>(
+      (list, printer) => printer._id === printerToDelete.current?._id ? list : [...list, printer],
+      [],
+    );
+    const updatedValues = {
+      ...formValues,
+      [PANEL_FIELD]: updatedPrinters.map(printer => omit(printer, MODE_FIELD, '_id', 'active')),
+    };
+    async.start(updatePrinterSettings, updatedValues, settingsId, 'PUT', async);
+  };
+
+  const discardDelete = () => {
+    printerToDelete.current = undefined;
+    deleteConfirmationDialog.close();
+  };
+
+  const savePrinter = async () => {
+    await formik.submitForm();
+  };
+
+  const schema = buildSchema({
+    isActive: true,
+    onEdit: editPrinter,
+    onActiveStateChange: changePrinterActiveState,
+    onDelete: confirmPrinterDeletion,
+    onDiscard: discardEdit,
+    onConfirm: savePrinter,
+  });
+
+  const isEditMode = formik.values._mode === Mode.edit;
 
   return (
-    <SettingsPanel {...props} title={translate('administration.general.settings.printing')} onAddNew={onAddNew}>
-      <KendoDataGrid schema={schema}
-        data={dataResult ?? []}
-        selectedField={SELECTED_FIELD}
-        dataItemKey={DATA_ITEM_KEY}
-        selectable={{
-          enabled: true,
-          drag: false,
-          cell: true,
-          mode: 'multiple',
-        }}
-        onSelectionChange={onSelectionChange} />
-      <AddNewPrinter {...{ isOpened, onCancel, formik, isFormDirty, onFormikFieldChange }} />
-      {confirmationDialog?.isOpen && (
-        <AlertDialog
-          dialog={confirmationDialog}
-          confirmAction={confirmDeletePrinter}
-          cancelAction={cancelDeletePrinter}
-          message="printer.delete.alert"
+    <>
+      <SettingsPanel
+        {...props}
+        title={translate('administration.general.settings.printing')}
+        onAddNew={addNewPrinter}
+      >
+        <SettingsTable
+          isActive
+          data={data}
+          schema={schema}
         />
-      )}
-    </SettingsPanel>
+      </SettingsPanel>
+      <AlertDialog
+        handler={deleteConfirmationDialog}
+        onConfirm={deletePrinter}
+        onCancel={discardDelete}
+      >
+        {translate('printer.delete.alert')}
+      </AlertDialog>
+      <PromptIfDirty
+        isDialog
+        dirty={formik.dirty}
+        doNotPrompt={!editDialog.isOpen}
+        onConfirm={discardEdit}
+      />
+      <FormikProvider value={formik}>
+        <PrinterEditDialog
+          disableBackdropClick
+          title={isEditMode ? 'common.edit.printer' : 'common.add.printer'}
+          confirmLabel={isEditMode ? 'common.save.changes' : 'common.add.printer'}
+          cancelLabel="common.cancel"
+          open={editDialog.isOpen}
+          onClose={discardEdit}
+          onCancel={discardEdit}
+          onConfirm={savePrinter}
+        />
+      </FormikProvider>
+    </>
   );
 };
 
-export default withLabelPrinting(PrintingSettingsPanel);
+export default PrintingSettingsPanel;

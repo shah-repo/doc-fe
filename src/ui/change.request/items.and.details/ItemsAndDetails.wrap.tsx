@@ -6,9 +6,9 @@ import { AsyncStatus } from '../../../state/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import { FB, FBFormState, FBWorkspaceModeOptions } from '../../form.builder';
 import ItemsAndDetailsState from '../items.and.details/ItemsAndDetails.state';
+import { formDataToStoreData, storeDataToFormData } from './helpers';
 import ItemsAndDetails from './ItemsAndDetails';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from './ItemsAndDetails.types';
-import { formDataToStoreData, storeDataToFormData } from './helpers';
 
 interface Props extends ItemsAndDetailsWrapperProps {
   name: string
@@ -57,7 +57,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
   };
 
   const handleUpdate = () => {
-    const { justificationOfChange, descriptionOfChange, proposedDocumentRevision, autoUpdate }
+    const { justificationOfChange, descriptionOfChange, proposedDocumentRevision, autoUpdate, revisionFormTo, attachments }
       = formState?.getValues() as FBDocumentRevisionsValue;
     const orderItemsUpdated = itemsAndDetailsState.approvalRequestItemsList
       .map((item: ApprovalRequestGridItem) => {
@@ -65,7 +65,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
           return item;
         }
 
-        return { ...item, justificationOfChange, descriptionOfChange, autoUpdate };
+        return { ...item, justificationOfChange, descriptionOfChange, revisionFormTo, autoUpdate, attachments };
       });
 
     const dataToSend: FBDocumentRevisionsValue[]
@@ -87,7 +87,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
       }, 2000);
     } else {
       // Edit the itemsAndDetailsState & set the approvalRequestItemsList to dataToSend
-      const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions);
+      const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions) as ApprovalRequestGridItem[];
       itemsAndDetailsState.setApprovalRequestItemsList(entries);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
     }
@@ -110,7 +110,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
       itemsAndDetailsState.setViewItemActionsVisibility(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps, max-len
-  }, [JSON.stringify(changeRequest?.documentRevisions.map((docRev: DocumentRevision) => docRev.id) ?? []), formInput]);
+  }, [JSON.stringify(changeRequest?.documentRevisions.map((docRev: DocumentRevision) => docRev.id) ?? []), formInput, changeRequest]);
 
   const processChangeRequest = () => {
     let currentDocRevPresent = false;
@@ -124,7 +124,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
         currentDocRevPresent = documentRevisionsAssigned.some(docRev => docRev.proposedDocumentRevision.id === currentDocRevId);
       }
 
-      entries = formDataToStoreData(documentRevisionsAssigned, documentRevisionsData);
+      entries = formDataToStoreData(documentRevisionsAssigned, documentRevisionsData) as ApprovalRequestGridItem[];
     }
 
     if (changeRequest && !currentDocRevPresent && currentDocRevId) {
@@ -146,6 +146,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
         handleUpdate,
         itemsAndDetailsState,
       }}
+      itemToAdd={itemsAndDetailsState.approvalRequstItemInEditMode}
     />
   ));
 };

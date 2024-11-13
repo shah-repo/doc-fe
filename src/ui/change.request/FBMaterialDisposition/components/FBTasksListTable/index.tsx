@@ -1,6 +1,5 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
@@ -12,11 +11,11 @@ import { Attachment } from '../../../../../state/ducks/attachments/types';
 import { ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
 import { taskActions } from '../../../../../state/ducks/tasks';
+import { Button } from '../../../../components/forms/fields-next';
+import { useFormContext } from '../../../../components/forms/FormContext';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import { useFormContext } from '../../../../components/forms/FormContext';
-import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
 import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../../documentRevision/helpers/checkDocumentGroup';
 import { FB, FBSection } from '../../../../form.builder';
@@ -26,7 +25,7 @@ import { changeRequestPreviewPath } from '../../../utils/paths';
 import { COMMENTS_FIELD, EmployeeStatus } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableTLItem, EmployeeResponse, TLItemEditEvent, TasksListItem } from './types';
+import { EditableTLItem, EmployeeResponse, TasksListItem, TLItemEditEvent } from './types';
 import { updateData } from './utils';
 
 interface props {
@@ -280,7 +279,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
 
   const debounceEmployeeEvidenceUpdates = debounce(employeeEvidenceUpdates, 1000);
   const isWOReleased = isWORecord && DocumentRevisionStatus.Released === workspaceState?.document?.status;
-  const isClosed = isWORecord ? isWOReleased : [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state);
+  const isWOVoided = isWORecord && DocumentRevisionStatus.Voided === workspaceState?.document?.status;
+  const isClosed = isWORecord ? (isWOReleased || isWOVoided) : Boolean(state && [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state));
   const schema = buildSchema({
     actionsClass: classes.actionsCell,
     onRowClick: editTLItem,
@@ -341,7 +341,7 @@ const FBTasksListTable: React.FunctionComponent<props> = (
   }, isTasksListAdded ? [editedTLItem] : []);
 
   return (
-    <Box ref={containerRef} className={classes.root} data-cy="tasks-list-table">
+    <div ref={containerRef} className={classes.root} data-cy="tasks-list-table">
       <FBSection label={label ?? translate('approvalRequest.tasks.list.section.heading')}>
         <Button
           kind="ghost"
@@ -376,7 +376,8 @@ const FBTasksListTable: React.FunctionComponent<props> = (
       >
         {translate('approvalRequest.tasks.list.add')}
       </Button>}
-    </Box>);
+    </div>
+  );
 };
 
 export default FBTasksListTable;

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 
-export default makeStyles((theme) => ({
+export default makeStyles(theme => ({
   inputRoot: {
     padding: theme.spacing(0, 4.5, 0, 0.75),
   },
@@ -20,6 +20,7 @@ export default makeStyles((theme) => ({
   input: {
     border: 'none',
     background: 'none',
+
     '&:hover': {
       background: 'none',
     },
@@ -35,6 +36,12 @@ export default makeStyles((theme) => ({
   },
   sizeSmall: {
     padding: theme.spacing(0, 4, 0, 0.25),
+
+    '& input': {
+      '&:first-child': {
+        paddingLeft: theme.spacing(0.75),
+      },
+    },
   },
   withClearIcon: {
     padding: theme.spacing(0, 7, 0, 0.75),

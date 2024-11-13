@@ -1,8 +1,12 @@
+import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
+import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
-import { GroupTag } from '../auth/types';
+import { GroupTag, Permission } from '../auth/types';
 import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
+import { EquipmentStatus, LotStatus } from '../documentRevisions/types';
+import { MaterialFlowAclRule } from '../materialFlowAcl/types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 
 export interface WhiteLabelingColors {
@@ -38,6 +42,7 @@ export interface CompanyLocation {
   id: string
   name: string
   active: boolean
+  includedInTotalQty?: boolean
 }
 
 export interface Company {
@@ -53,7 +58,7 @@ export interface Company {
   teamId: string
   addresses: string[]
   acctCodes: string[]
-  locations: CompanyLocation[]
+  locations?: CompanyLocation[]
   navigation: NavigationItem[]
   employees?: Employee[]
   scheduledForDeletion: boolean
@@ -97,6 +102,22 @@ export enum NavigationItems {
   CATEGORY = 'CATEGORY',
 }
 
+export enum AllocationOrder {
+  FIFO = 'fifo',
+  LIFO = 'lifo',
+}
+
+export enum ExpiredLotTypes {
+  WARNING = 'warning',
+  ERROR = 'error',
+}
+
+export enum NotifyPartLCP {
+  DO_NOTHING = 'NO',
+  WARNING = 'WARN',
+  ERROR = 'ERROR',
+}
+
 export interface NavigationItem {
   label: string
   type: NavigationItemType
@@ -105,6 +126,7 @@ export interface NavigationItem {
   icon?: string
   category?: string
   restrictedToUsersWithTags?: GroupTag[]
+  restrictedToUserPermissions?: Permission[]
   isOpen?: boolean
 }
 
@@ -162,16 +184,58 @@ export interface EquipmentLocation {
   active: boolean
 }
 
+export interface EquipmentFamilyEquipmentStatus {
+  name: EquipmentStatus
+  isActive: boolean
+}
+
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
+  equipmentStatuses: EquipmentFamilyEquipmentStatus[]
+}
+
+enum SystemTransactionsEvent {
+  CreateFromReceiving='createFromReceiving',
+}
+
+export interface SystemTransactionsRule {
+  id: string
+  isActive: boolean
+  event: SystemTransactionsEvent
+  action: LotTransferType
+  from: string
+  to: string | null
+  lotStatus: LotStatus | null
+}
+
+interface AllocationConfig {
+  sortOrderByReleaseDate: AllocationOrder
+  expiredLotsPrompt: ExpiredLotTypes
+}
+
+interface TrainingReminders {
+  customDaysDueOn: { isActive: boolean, days: number, isCcActive: boolean }
+  isSevenDaysDueOnCountdownActive: boolean
+  isAssignedActive: boolean
+  isOverdueActive: boolean
+  isAssignedCcActive: boolean
+  isSevenDaysDueOnCountdownCcActive: boolean
+  isOverdueCcActive: boolean
 }
 
 export interface GeneralSettings {
-  zebraPrint: ZebraPrintSettings[]
-  equipmentFamily: EquipmentFamilySettings
+  allocationConfig: AllocationConfig
   approvalRequestAdmin: boolean
+  equipmentFamily: EquipmentFamilySettings
+  isMaterialFlowAclEnabled: boolean
+  lifecyclePhases?: { categories: LCPResponse[] } | LCP[]
+  materialFlowACLs: MaterialFlowAclRule[]
   shouldAutoUpdateLotStatus: boolean
+  shouldNotifyLcpMismatch: NotifyPartLCP
+  systemTransactions: SystemTransactionsRule[]
+  zebraPrint: ZebraPrintSettings[] | null
+  trainingReminders: TrainingReminders
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

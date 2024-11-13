@@ -46,6 +46,7 @@ import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectAp
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
+import { useIsLatestRevision } from '../../helpers/useIsLatestRevision';
 import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
 import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
@@ -78,7 +79,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
   // of create button until correct doc id is generated
-  const { isCreateDocumentDisabled, setDoNotPrompt, isSliderView } = props;
+  const { isCreateDocumentDisabled, setDoNotPrompt, isSliderView, inDialog } = props;
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
   const printDialog = useDialog();
@@ -159,6 +160,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
+  const isLatestRevision = useIsLatestRevision(documentRevision);
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -252,13 +254,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       dispatch(companyActions.autosaveConfig());
     }
     setFBValue();
-    if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
-      formik.setFieldValue('attachments', []);
-      formik.setFieldValue('name', 'Void');
-      formik.setFieldValue('description', 'Void');
-      formik.setFieldValue('referenceTo', null);
-      formik.setFieldValue('parentEquipment', null);
-    }
+
     formik.submitForm();
     if (isPOEditState) {
       setDoNotPrompt(true);
@@ -420,6 +416,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               owner={documentRevision?.owner}
               renderAsButton={renderAsButton}
               isSliderView={isSliderView}
+              inDialog={inDialog}
               {...{
                 isRecord,
                 documentTypeId,
@@ -495,7 +492,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {isPO && documentRevision.poStatus && (
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
-      {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isLot && (
         <>

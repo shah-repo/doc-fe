@@ -6,8 +6,8 @@ import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
-import Text from '../../../../components/Text';
 import { toastSuccess } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import Colors from '../../../../layout/theme/utils/colors';
@@ -24,6 +24,11 @@ interface Props {
   transitionDialog: any
   onSuccess?: () => void
   type?: string
+  translationRejectMsg?: Translation
+}
+
+interface ResponseProps {
+  status: string
 }
 
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
@@ -33,11 +38,12 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   label,
   type,
   transitionDialog,
+  translationRejectMsg = 'dashboard.po.reject.alert',
   onSuccess,
 }) => {
   const dispatch = useDispatch();
   const async = useAsync({
-    onSuccess: (response) => {
+    onSuccess: (response?: ResponseProps) => {
       transitionDialog.close();
       toastSuccess(
         <>
@@ -56,8 +62,16 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         </>, {
           closeButton: true,
         });
-      dispatch(dashboardTodoActions.loadMyFeedsList());
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        dispatch(dashboardTodoActions.loadMyFeedsList());
+        dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      }
+    },
+    onError: () => {
+      async.reset();
     },
   });
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
@@ -71,7 +85,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
     <>
       { type && <PoRejectDialog
         dialog={transitionDialog}
-        message="dashboard.po.reject.alert"
+        message={translationRejectMsg}
         onSubmit={onReject}
         cancelAction={transitionDialog.close}
       />}

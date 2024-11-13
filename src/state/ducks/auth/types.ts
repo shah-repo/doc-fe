@@ -31,6 +31,22 @@ export interface LogoutRequestBody {
   AccessToken: string
 }
 
+interface Credentials {
+  AccessKeyId: string
+  SecretAccessKey: string
+  SessionToken: string
+  Expiration: string
+}
+
+export interface IotCredentials {
+  credentials: Credentials
+  endpoint: string
+  environment: string
+  companyId: string
+  employeeId: string
+  region: string
+}
+
 export interface AuthResponse {
   ExpiresAt: string
   ExpiresIn: number
@@ -113,22 +129,6 @@ export interface UserState {
   initialColor: string
 }
 
-export interface IotCredentials {
-  credentials: Credentials
-  endpoint: string
-  environment: string
-  companyId: string
-  employeeId: string
-  region: string
-}
-
-interface Credentials {
-  AccessKeyId: string
-  SecretAccessKey: string
-  SessionToken: string
-  Expiration: string
-}
-
 export interface AuthProps {
   currentUserEmail: string
 }
@@ -179,6 +179,9 @@ export enum Permission {
   CR_OWNER_AS_APPROVER = 'CR_OWNER_AS_APPROVER',
   CR_ON_APPROVER_LIST = 'CR_ON_APPROVER_LIST',
   DOCUMENT_OWNER_CHANGE = 'DOCUMENT_OWNER_CHANGE',
+  // Settings
+  COMPANY_SETTINGS_GET = 'COMPANY_SETTINGS_GET',
+  COMPANY_SETTINGS_UPDATE = 'COMPANY_SETTINGS_UPDATE',
   // Company data
   // COMPANY_DATA = "COMPANY_DATA",
   // Employee
@@ -210,6 +213,8 @@ export enum Permission {
   EDIT_LOT_TRANSFERS = 'EDIT_LOT_TRANSFERS',
   EDIT_LOT_STATUS = 'EDIT_LOT_STATUS',
   EDIT_CYCLE_COUNT = 'EDIT_CYCLE_COUNT',
+  // LCP
+  EDIT_LIFE_CYCLE = 'EDIT_LIFE_CYCLE',
   // TODO unused, remove
   USERS_GET_IN_COMPANY = 'USERS_GET_IN_COMPANY',
   USERS_UPDATE_IN_COMPANY = 'USERS_UPDATE_IN_COMPANY',
@@ -224,6 +229,10 @@ export enum Permission {
   AR_IN_REVIEW_EDIT = 'AR_IN_REVIEW_EDIT',
   // EQUIPMENT
   EDIT_EQ_STATUS = 'EDIT_EQ_STATUS',
+  // BULK_IMPORT
+  BULK_IMPORT = 'BULK_IMPORT',
+  // REDLINE FILE ACCESS
+  CAN_ACCESS_REDLINE_ATTACHMENTS = 'CAN_ACCESS_REDLINE_ATTACHMENTS',
 }
 
 export enum GroupTag {
@@ -232,6 +241,7 @@ export enum GroupTag {
   OWNERSHIP_CHANGE = 'OWNERSHIP_CHANGE',
   QMS_DEFAULT = 'QMS_DEFAULT',
   GROUP_MANAGEMENT = 'GROUP_MANAGEMENT',
+  ADMIN_MANAGEMENT = 'ADMIN_MANAGEMENT',
   FB_COMPONENT_PURCHASE_ORDER = 'FB_COMPONENT_PURCHASE_ORDER',
   FB_COMPONENT_RECEIVE_PURCHASE_ORDER = 'FB_COMPONENT_RECEIVE_PURCHASE_ORDER',
   FB_COMPONENT_INLINE_APPROVAL = 'FB_COMPONENT_INLINE_APPROVAL',

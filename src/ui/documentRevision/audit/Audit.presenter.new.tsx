@@ -1,21 +1,27 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
 import { find, has, isEmpty, last, orderBy } from 'lodash';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
-import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
+import { Audit, AuditGroupType, LifecyclePahseOptionPayload } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
+import { companyActions } from '../../../state/ducks/company';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
+import { LCPDocRevOptions } from '../../administration/general.settings/panels/LCP/components/Grid/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
+import { toastError } from '../../components/notifications';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
+import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
@@ -47,9 +53,29 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const intl = useIntl();
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
-  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
 
   const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
+  const docTypeId = documentRevisions[0].document?.documentType?.id;
+
+  // fetch lifecycle phase options
+  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<LifecyclePahseOptionPayload[]>([]);
+  const fetchDocRevOptions = useActionCreator(companyActions.fetchDocRevOptionsByDocTypeId);
+
+  const fetchLCPDocTypesAsync = useAsync({
+    onSuccess: (data: LCPDocRevOptions[] = []) => {
+      setLifecyclePhaseOptions(data.map((docType) => ({ id: docType.id, text: docType.displayLabel })));
+    },
+    onError: toastError,
+  });
+
+  useEffect(() => {
+    fetchLCPDocTypesAsync.start(
+      fetchDocRevOptions,
+      docTypeId,
+      fetchLCPDocTypesAsync,
+    );
+  }, []);
 
   // Added to exclude few PO line items unwanted audit recrods
   const excludeFewPOAuditRecords = (change: Audit) => (change.field.includes(PO_ITEMS_COMPONENT_NAME)
@@ -469,7 +495,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                     values={{
                       nextStatus: change.nextValue,
                       relatedType: getDynamicTextValue(
-                        revIdRelatedTypeObj[change.documentRevisionId]?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+                        revIdRelatedTypeObj[change.documentRevisionId ?? '']?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+                      rowDetails: getLhrSummaryRowIdentifier(change),
                     }}
                   />
                 </Typography>
@@ -499,6 +526,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   audit={change}
                   dataCy={`change-value-${groupKey}-${key}`}
                   revIdRelatedTypeObj={revIdRelatedTypeObj}
+                  lifecyclePhaseOptions={lifecyclePhaseOptions}
                 />
               </div>
             )}
@@ -541,7 +569,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const isRemovingApproverAction = (
       auditGroup[0].field === 'approvals.status' && auditGroup[0].nextValue === ApprovalStatus.Abandoned
     );
-    const isWorkOrder = revIdRelatedTypeObj[auditGroup[0].documentRevisionId]?.isWorkOrder;
+    const isWorkOrder = revIdRelatedTypeObj[auditGroup[0].documentRevisionId ?? '']?.isWorkOrder;
 
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
@@ -565,6 +593,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               audit={change}
               dataCy={`change-value-${change.groupKey}-${change.index}`}
               revIdRelatedTypeObj={revIdRelatedTypeObj}
+              lifecyclePhaseOptions={lifecyclePhaseOptions}
             />
           </div>
         ))}
@@ -596,8 +625,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 const labelToShow = (change: Audit,
   groupKey: number | undefined,
   key: number | undefined,
-  revIdRelatedTypeObj: {[key: string]: IRevIdMapper}) => {
-  const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId] ?? {};
+  revIdRelatedTypeObj: { [key: string]: IRevIdMapper }) => {
+  const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId ?? ''] ?? {};
   return (
     <>
       {change.field === 'relatedPartsStatus' && <Text
@@ -620,6 +649,48 @@ const labelToShow = (change: Audit,
       />}
     </>
   );
+};
+
+const getLhrSummaryRowIdentifier = (change: Audit): string => {
+  const prevVal: string = change.previousValue as string;
+  const nextVal: string = change.nextValue as string;
+
+  try {
+    const { step: prevStep, stepOrMpiDetails: prevDetails } = JSON.parse(prevVal);
+    const { step: nextStep, stepOrMpiDetails: nextDetails } = JSON.parse(nextVal);
+    // modify here
+    const prevStepValue = prevDetails?.isExternalItem ? prevDetails.value : prevDetails?.docId;
+    const nextStepValue = nextDetails?.isExternalItem ? nextDetails.value : nextDetails?.docId;
+
+    let stepNumber = '';
+    if (prevStep !== nextStep && nextStep !== undefined) {
+      if (prevStep === undefined) {
+        stepNumber = nextStep;
+      } else {
+        stepNumber = `${prevStep} To ${nextStep}`;
+      }
+    } else {
+      stepNumber = prevStep;
+    }
+
+    let stepDetails = '';
+    const prevStepValueWithRev = getDisplayDocumentByDetailsObj(prevDetails);
+    const nextStepValueWithRev = getDisplayDocumentByDetailsObj(nextDetails);
+
+    if (prevStepValue !== nextStepValue && nextStepValue !== undefined) {
+      if (prevStepValue === undefined) {
+        stepDetails = nextStepValueWithRev;
+      } else {
+        stepDetails = `${prevStepValueWithRev} To ${nextStepValueWithRev}`;
+      }
+    } else {
+      stepDetails = prevStepValueWithRev;
+    }
+
+    return `${stepNumber} / ${stepDetails}`;
+  } catch (error) {
+    return '';
+  }
 };
 
 export default AuditPresenter;

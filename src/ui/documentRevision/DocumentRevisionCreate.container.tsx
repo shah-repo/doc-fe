@@ -24,7 +24,7 @@ interface DispatchProps {
 interface OwnProps {
   documentRevision: DocumentRevision
   type?: DocumentCloneType
-  isNewVersion: boolean
+  isNewVersion?: boolean
   isSliderView?: boolean
 }
 
@@ -55,6 +55,7 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
 
   formTemplate: { outputDocumentTypes: [], schema: [] },
   securityGroups: [],
+  lifecyclePhaseId: '',
   securityEmployees: [],
   operators: [],
 });
@@ -81,7 +82,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
       return toDocumentRevisionFormValuesForOutput(documentRevision);
     }
     if (history.location.state) {
-      return toDocumentRevisionFormValuesForOutput(history.location.state);
+      return toDocumentRevisionFormValuesForOutput(history.location.state as DocumentRevision);
     }
     return DEFAULT_INITIAL_VALUES();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,7 +106,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    if(isEquipment && documentRevision?.status === DocumentRevisionStatus.Released) {
+    if (isEquipment && documentRevision?.status === DocumentRevisionStatus.Released) {
       values.formInput = documentRevision.formInput;
     }
     const promise = async.start(create, toNewVersionRequestBody(values), async);

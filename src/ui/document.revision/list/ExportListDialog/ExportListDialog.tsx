@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typog
 import { ExportToCsv } from 'export-to-csv';
 import React, { useEffect, useState } from 'react';
 import { ReactComponent as ExportIcon } from '../../../../assets/images/icon_export_data.svg';
-import { HeaderTableType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevisionStatusDisplay, HeaderTableType, POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
 import Text from '../../../components/Text';
 import { DialogHandler } from '../../../hooks/useDialog';
 import { styles } from './ExportListDialog.styles';
@@ -45,6 +45,13 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   const handleFileName = (ev: React.ChangeEvent<any>) => {
     saveFileName(ev.target.value);
   };
+
+  data = data.map((item) => ({
+    ...item,
+    poStatus: item.poStatus === POStatusType.OPENED ? POStatusLabelMapping.OPENED : item.poStatus,
+    displayStatus: item.displayStatus === DocumentRevisionStatusDisplay.Released ? DocumentRevisionStatusDisplay.Approved : item.displayStatus,
+  }));
+
   return (
     <>
       {

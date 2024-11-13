@@ -17,9 +17,9 @@ import { Audit, AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { documentsActions } from '../documents';
 import { MATERIAL_DISPOSITION_WHERE_USED_URL } from '../materialDisposition/constants';
-import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, EQUIPMENT_ROOT_URL, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_OF_PARTS, LOT_ROOT_URL, PO_ROOT_URL, UPDATE_BOM_BRANCH } from './constants';
-import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from './documentType/types';
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, EquipmentStatus, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
+import { ADD_ALTERNATE_PART, ADD_BOM_BRANCH, CHANGE_ORDER_BOM_BRANCH, CHECK_IS_USED, DELETE_ALTERNATE_PART, DELETE_BOM_BRANCH, DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_ASYNC_DRAWER, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET, EQUIPMENT_ROOT_URL, FETCH_ALTERNATE_PART, FETCH_BOM_BRANCH, FETCH_BOM_TREE, FETCH_VENDORS, FETCH_WHERE_USED_TREE, LOT_OF_PARTS, LOT_ROOT_URL, PO_ROOT_URL, UPDATE_BOM_BRANCH } from './constants';
+import { DOC_TYPE_GROUP_OPTION, DocRevQueryParam, DocumentGroupOptionsType } from './documentType/types';
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, EquipmentStatus, ExportToEmailRequest, FBDocumentRevisionProps, FinalizeAndReleaseRequest, LotStatus, MeqResponse, POStatusType, SecurityList, UpdateFormRequestBody } from './types';
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -225,6 +225,7 @@ const approveAndRelease = (
   body: ApproveAndReleaseRequest,
   password,
   isSliderView,
+  inDialog,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
@@ -235,7 +236,11 @@ const approveAndRelease = (
     if (isSliderView) {
       FBDataStore.selectedSliderInfo = { documentId: docRev.document.id, documentRevision: docRev, reRender: true };
     } else {
-      dispatch(load(id));
+      if (inDialog) {
+        dispatch(load(id, DOCUMENT_REVISION_GET_ASYNC_DRAWER));
+      } else {
+        dispatch(load(id));
+      }
       dispatch(loadDocument(docRev.document.id));
     }
   },
@@ -438,6 +443,16 @@ const fetchLotsByPartId = (
     handlers,
   });
 
+const fetchMaterialsOrEquipmentsBySelectedMPI = (
+  mpiID: string,
+  handlers: Handlers,
+): ApiAction<MeqResponse> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${mpiID}/materials_and_equipment?isLhrSummary=true`,
+    method: 'get',
+    handlers,
+  });
+
 const fetchAvailableLHRList = (
   partRevIdSelected: string,
   handlers: Handlers,
@@ -629,6 +644,26 @@ const removePreviousBuild = (
     handlers,
   });
 
+const getAttachmentsByDocRevId = (
+  revisionId: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/attachments/document_revisions/${revisionId}/all`,
+    method: 'get',
+    handlers,
+  });
+
+const getAttachmentsByARId = (
+  arId: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/attachments/change_requests/${arId}/all`,
+    method: 'get',
+    handlers,
+  });
+
 const exportToEmail = (
   revisionId: string,
   body: ExportToEmailRequest,
@@ -740,6 +775,8 @@ export default {
   fetchAvailableForms,
   createFaiInspection,
   removePreviousBuild,
+  getAttachmentsByDocRevId,
+  getAttachmentsByARId,
   ownerChange,
   saveWithNoResponse,
   exportToEmail,
@@ -748,6 +785,7 @@ export default {
   fetchAvailableParts,
   fetchAvailableLHRList,
   fetchLotsByPartId,
+  fetchMaterialsOrEquipmentsBySelectedMPI,
   fetchSelectedLHR,
   fetchBOMBranch,
   fetchBOMTree,

@@ -1,0 +1,103 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, InputLabel, Typography } from '@material-ui/core';
+import { useFormikContext } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { translate } from '../../../../common/intl';
+import { companyActions } from '../../../../state/ducks/company';
+import { LCPDocRevOptions } from '../../../administration/general.settings/panels/LCP/components/Grid/types';
+import SelectField from '../../../components/forms/fields/Select';
+import { toastError } from '../../../components/notifications';
+import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTooltip';
+import { styles as FBAutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
+import { styles } from './LifecyclePhaseSelect.style';
+
+interface Props {
+  docTypeId?: string
+  lifecyclePhaseId?: string
+  isDisabled?: boolean
+  isInfoIconHidden?: boolean
+}
+
+const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
+  docTypeId = '',
+  lifecyclePhaseId,
+  isDisabled,
+  isInfoIconHidden,
+}) => {
+  const classes = styles();
+  const formik = useFormikContext();
+  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<Array<{ value: string, text: string }>>([]);
+  const fetchDocRevOptions = useActionCreator(companyActions.fetchDocRevOptionsByDocTypeId);
+
+  const fetchLCPDocTypesAsync = useAsync({
+    onSuccess: (data: LCPDocRevOptions[] = []) => {
+      setLifecyclePhaseOptions(data.map((docType) => ({ value: docType.id, text: docType.displayLabel })));
+    },
+    onError: toastError,
+  });
+
+  const isDisabledFieldBasedOnLCPConfig = !lifecyclePhaseOptions.length && !fetchLCPDocTypesAsync.isLoading;
+
+  useEffect(() => {
+    fetchLCPDocTypesAsync.start(
+      fetchDocRevOptions,
+      docTypeId,
+      fetchLCPDocTypesAsync,
+      lifecyclePhaseId ?? undefined,
+    );
+  }, []);
+
+  const handleTypeChange = (
+    event: React.ChangeEvent<{ name?: string, value: unknown }>,
+  ) => {
+    if (isDisabled) { return; }
+    const value = event.target.value as string;
+    formik.setFieldValue('lifecyclePhaseId', value);
+    formik.handleChange(event);
+  };
+
+  return (
+    <>
+      <InputLabel id="life-cycle-phases-label">
+        <Box display="flex" alignItems="center">
+          <Typography variant="body1" className={classes.labelStyle} >
+            {translate('common.lifecycle.phase')}
+          </Typography>
+          <StyleTooltip
+            arrow
+            placement="top"
+            title={translate('documentRevision.lcp.configuration.empty')}
+            hidden={!isDisabledFieldBasedOnLCPConfig || isInfoIconHidden}
+          >
+            <FontAwesomeIcon className={classes.infoIcon} icon={regular('circle-info')} />
+          </StyleTooltip>
+        </Box>
+      </InputLabel>
+      <SelectField
+        name="lifecyclePhaseId"
+        selectProps={{
+          inputProps: {
+            labelId: 'life-cycle-phases-label',
+            disabled: isDisabledFieldBasedOnLCPConfig || isDisabled,
+          },
+          disabled: isDisabledFieldBasedOnLCPConfig || isDisabled,
+          onChange: handleTypeChange,
+          displayEmpty: true,
+          renderValue: value => lifecyclePhaseOptions.find(item => item.value === value)?.text ?? (
+            <span className={classes.placeholderStyle}>
+              {translate('common.select.placeholder')}
+            </span>),
+        }}
+        options={lifecyclePhaseOptions}
+        includeEmpty={false}
+        inputStyleProps={classes.input}
+        labelProps={FBAutoCompleteStyles.labelStyle}
+      />
+    </>
+  );
+};
+
+export default LifecyclePhaseSelect;

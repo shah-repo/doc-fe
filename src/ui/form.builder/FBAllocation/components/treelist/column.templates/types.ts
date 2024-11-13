@@ -24,4 +24,11 @@ export interface AllocItemActionsProps<EditableAllocationItem> {
   onReorder?: () => void
 }
 
+export interface LotAutoCompleteOptions {
+  label: string
+  value: string
+  isExpired?: boolean
+  expiryDate?: string
+}
+
 type IAllocationCallback = (dataItem: EditableAllocationItem) => void;

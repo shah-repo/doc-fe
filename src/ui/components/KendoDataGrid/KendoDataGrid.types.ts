@@ -3,6 +3,11 @@ import { Grid, GridCellProps, GridColumnProps, GridColumnReorderEvent, GridDataS
 import React, { ComponentType, ReactElement } from 'react';
 import { Size } from 'react-virtualized';
 import { StyledKendoGridProps } from '../StyledKendoGrid/StyledKendoGrid.types';
+import { Mode, MODE_FIELD } from './constants';
+
+export interface EditableItem {
+  [MODE_FIELD]: Mode
+}
 
 export interface DataGridRowClickEvent<T> extends GridRowClickEvent {
   dataItem: T
@@ -43,6 +48,7 @@ export interface ColumnDefinition<T> extends Omit<GenericColumnDefinition<T>, 'f
   show?: boolean
   disabled?: boolean
   selectable?: boolean
+  mainOrderIndex?: number
   isHidden?: boolean
   disableShowOrHideSelection?: boolean
 }
