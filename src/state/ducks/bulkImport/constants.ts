@@ -35,6 +35,7 @@ export const UPDATE_ROW_FIELD_TABLE = 'bulkImport/UPDATE_ROW_FIELD_TABLE';
 export const SET_APPROVALS = 'bulkImport/SET_APPROVALS';
 export const SET_APPROVAL = 'bulkImport/SET_APPROVAL';
 export const SET_IS_LOADING = 'bulkImport/SET_IS_LOADING';
+export const SET_HAS_UNSAVED_CHANGES = 'bulkImport/SET_HAS_UNSAVED_CHANGES';
 export const SET_IS_LOADING_MAIN = 'bulkImport/SET_IS_LOADING_MAIN';
 export const SET_DATA_TYPE_FILTER = 'bulkImport/SET_DATA_TYPE_FILTER';
 export const SET_STATUS_FILTER = 'bulkImport/SET_STATUS_FILTER';

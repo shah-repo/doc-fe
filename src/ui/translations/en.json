@@ -2211,6 +2211,7 @@
   "bulkImport.approval.remove.error": "An error occurred during the removal process.",
   "bulkImport.approval.process.error": "An error occurred during the document revision process.",
   "bulkImport.approval.select.error": "At least you should select one approver",
+  "bulkImport.unsavedChangesLeave": "You have unsaved changes, are you sure you want to exit this page?",
   "common.mapHeaders.noHeaders": "There are no headers in the file. Please upload a new file.",
   "common.importingFiles": "Importing files",
   "common.table.rowsErrors": "rows contain errors.",
