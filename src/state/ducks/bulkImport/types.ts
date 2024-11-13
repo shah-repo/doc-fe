@@ -7,7 +7,6 @@ import { Group } from '../auth/types';
 import { Approval } from '../common/types';
 import { Employee as EmployeeCompany } from '../company/types';
 import { DocumentRevisionStatus, EquipmentStatus, InputOwner, LotStatus, POStatusType, Precalc, TypeSpecificConfig, UsedDocumentsInLHRS } from '../documentRevisions/types';
-import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_BULK_IMPORTS_STATUS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HAS_UNSAVED_CHANGES, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 
 export interface DataType {
   [key: string]: string
@@ -67,101 +66,101 @@ SetIsLoadingMain;
 
 // STEPS
 interface ResetSteps {
-  type: typeof RESET_STEPS
+  type: string
 }
 
 interface SetCurrentStep {
-  type: typeof CURRENT_STEP
+  type: string
   payload: number
 }
 
 interface SetSelectedDataType {
-  type: typeof SET_SELECTED_TYPE
+  type: string
   payload: string
 }
 
 interface SetDataTypes {
-  type: typeof SET_DATA_TYPES
+  type: string
   payload: DataType
 }
 
 interface SetFormDocumentsTypeGroup {
-  type: typeof SET_FORM_DOCUMENTS_TYPE_GROUP
+  type: string
   payload: FormDocumentTypeGroup[]
 }
 
 interface SetBulkImport {
-  type: typeof SET_BULK_IMPORT
+  type: string
   payload: BulkImport
 }
 
 interface DeleteBulkImportSuccess {
-  type: typeof DELETE_BULK_IMPORT
+  type: string
   payload: string
 }
 
 interface SetTemplateFIle {
-  type: typeof SET_TEMPLATE_FILE
+  type: string
   payload: FileWithPreview[]
 }
 
 interface SetShowTable {
-  type: typeof SET_SHOW_TABLE
+  type: string
   payload: boolean
 }
 
 interface SetOnlyErrorsTable {
-  type: typeof SET_ONLY_ERRORS_TABLE
+  type: string
   payload: boolean
 }
 
 interface SetHeaders {
-  type: typeof SET_HEADERS
+  type: string
   payload: Headers
 }
 
 interface SetTableData {
-  type: typeof SET_TABLE_DATA
+  type: string
   payload: TableRow[]
 }
 
 interface CleanUpMappedHeaders {
-  type: typeof CLEAN_UP_MAPPED_HEADERS
+  type: string
 }
 
 interface UpdateRowFieldTable {
-  type: typeof UPDATE_ROW_FIELD_TABLE
+  type: string
   payload: UpdateRowFieldTablePayload
 }
 
 interface SetApprovers {
-  type: typeof SET_APPROVALS
+  type: string
   payload: Approver[]
 }
 
 interface SetApproval {
-  type: typeof SET_APPROVAL
+  type: string
   payload: Approval
 }
 
 interface SetIsLoading {
-  type: typeof SET_IS_LOADING
+  type: string
   payload: boolean
 }
 
 interface SetUnsavedChanges {
-  type: typeof SET_HAS_UNSAVED_CHANGES
+  type: string
   payload: boolean
 }
 
 // MAIN BULK IMPORT
 interface SetBulkImports {
-  type: typeof SET_BULK_IMPORTS
+  type: string
   payload: BulkImport[]
 }
 
 interface SetBulkImportsStatus {
-  type: typeof SET_BULK_IMPORTS_STATUS
+  type: string
   payload: {
     bulkImportId: string
     status: BkStatus
@@ -169,17 +168,17 @@ interface SetBulkImportsStatus {
 }
 
 interface SetIsLoadingMain {
-  type: typeof SET_IS_LOADING_MAIN
+  type: string
   payload: boolean
 }
 
 interface SetDataTypeFilter {
-  type: typeof SET_DATA_TYPE_FILTER
+  type: string
   payload: string
 }
 
 interface SetStatusFilter {
-  type: typeof SET_STATUS_FILTER
+  type: string
   payload: string
 }
 
