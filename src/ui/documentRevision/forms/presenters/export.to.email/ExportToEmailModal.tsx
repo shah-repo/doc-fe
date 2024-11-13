@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import cx from 'classnames';
 import { Field, FormikProvider, useFormik } from 'formik';
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import React, { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { ReactComponent as Active } from '../../../../../assets/images/radioActive.svg';
 import { ReactComponent as InActive } from '../../../../../assets/images/radioInActive.svg';
 import { translate } from '../../../../../common/intl';
@@ -140,6 +140,10 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
     setWatermarkAttachments(updatedAttachments as AttachmentPayload[]);
   };
 
+  const handleIncludeAuditHistoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFieldValue('includeAuditLogs', event.target.checked);
+  };
+
   return (
     <FormikProvider value={formik}>
       <Box className={classes.paper}>
@@ -249,7 +253,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
 
         <RadioGroup
           value={formik.values.includeAuditLogs}
-          onChange={formik.handleChange}
+          onChange={handleIncludeAuditHistoryChange}
           name="includeAuditLogs"
           className={classes.radioGroup}
         >
@@ -263,6 +267,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
                 disableRipple
               />
             }
+            checked={formik.values.includeAuditLogs}
             className={classes.radioContainer}
             label={
               <Typography variant="body2" className={classes.radioLabel}>
@@ -280,6 +285,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
                 disableRipple
               />
             }
+            checked={!formik.values.includeAuditLogs}
             className={classes.radioContainer}
             label={
               <Typography variant="body2" className={classes.radioLabel}>
