@@ -25,8 +25,8 @@ const AttachmentsPanel = () => {
   const docRevId = _documentRevisionFormState?.documentRevision?.id;
   const classes = useStyles();
   const [file, setFile] = useState<FBAttachment>();
-  const [selectedIndices, setSelectedIndices] = React.useState<any>([]);
-  const [attachments, setAttachments] = useState<any>([]);
+  const [selectedIndices, setSelectedIndices] = React.useState<number[]>([]);
+  const [attachments, setAttachments] = useState<FBAttachment[]>([]);
   const docPreview = useDialog();
 
   const showDocPreview = (file: FBAttachment) => {
@@ -34,16 +34,13 @@ const AttachmentsPanel = () => {
     docPreview.open();
   };
 
-  const onSelectionChange = (indices: number) => {
+  const onSelectionChange = (indices: number[]) => {
     setSelectedIndices(indices);
   };
 
   const handleClick = async () => {
-    const headers = {
-      authorization: OCR_API_TOKEN,
-      employeeId: store.getState().auth.user.employeeId,
-      sessionId: store.getState().auth.user.sessionId,
-    };
+    const { employeeId, sessionId } = store.getState().auth.user; 
+    const headers = { authorization: OCR_API_TOKEN, employeeId, sessionId};
     try {
       if (!docRevId) {
         toastError('Document revision ID not found!');
@@ -117,9 +114,7 @@ const AttachmentsPanel = () => {
           <ListPanel {...{ showDocPreview, attachments, onSelectionChange }} />
           <Box paddingX={1.875} pt={2.5}>
             <Button
-              onClick={() => {
-                handleClick();
-              }}
+              onClick={handleClick}
               variant="contained"
               color="primary"
               disabled={selectedIndices.length <= 0}

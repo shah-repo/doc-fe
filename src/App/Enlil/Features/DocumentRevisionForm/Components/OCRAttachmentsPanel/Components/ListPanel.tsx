@@ -36,7 +36,7 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
 
   return (
     <List className={cx(classes.list, 'containing-box-scrollbar')}>
-      {attachments && attachments.map((attachment, index) => {
+      {attachments?.map((attachment, index) => {
         return (
           <ListItem
             key={index}
