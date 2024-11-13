@@ -412,16 +412,13 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
       <span className={cx(classes.nameCell, classes.titleInfoCell)}>
         {isEditMode && <div className={classes.idCellEditWrapper}>
           {getFieldInfo()}
-          {/* Commented functional */}
-          {false && (
-            <Tooltip
-              title={translate('form.builder.create.new.part')}
-              placement="top"
-              arrow
-            >
-              <FontAwesomeIcon onClick={handleAddButtonClick} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
-            </Tooltip>
-          )}
+          <Tooltip
+            title={translate('form.builder.create.new.part')}
+            placement="top"
+            arrow
+          >
+            <FontAwesomeIcon onClick={handleAddButtonClick} color={Colors.primaryLight } icon={solid('octagon-plus')} className={classes.childePartAddIcon} />
+          </Tooltip>
         </div>}
         {!isEditMode
         && (_documentRevisionFormState?.docId !== dataItem.docId
