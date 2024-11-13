@@ -85,12 +85,8 @@ const AttachmentsPanel = () => {
   );
 
   useEffect(() => {
-    try {
-      if (docRevId) {
-        attachmentsAsync.start(fetchAttachments, docRevId, attachmentsAsync);
-      }
-    } catch (error) {
-      toastError('Failed to load attachments');
+    if (docRevId) {
+      attachmentsAsync.start(fetchAttachments, docRevId, attachmentsAsync);
     }
   }, [docRevId]);
 
