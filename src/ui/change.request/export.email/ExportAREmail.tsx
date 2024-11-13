@@ -88,7 +88,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         return (<StyledMenuListItem button alignItems="flex-start" onClick={emailDialog.open}>
           <StyledMenuListIcon><FontAwesomeIcon icon={regular('share')} size="lg" /></StyledMenuListIcon>
           <StyledMenuListItemText
-            data-cy="export-to-email"
+            data-cy="exportToEmail"
             primary={<Text translation="common.share" />}
           />
         </StyledMenuListItem>
@@ -98,7 +98,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         <StyledButton
           color="primary"
           style={{ margin: 0 }}
-          data-cy="export-to-email"
+          data-cy="exportToEmail"
           onClick={emailDialog.open}
         >
           <Text translation="common.send.to.email" />
@@ -109,7 +109,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
     return (
       <Button
         kind="white"
-        data-cy="export-to-email"
+        data-cy="exportToEmail"
         onClick={emailDialog.open}
       >
         <Text translation="common.send.to.email" />

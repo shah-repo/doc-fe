@@ -89,12 +89,14 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
         selectedItem?.id,
         async,
       );
-      const recentPrinter: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY) ?? '');
+      const recentPrinter: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY) || 'null') ?? {};
       const isRecentPrinterExist = zebraPrint?.find(item => item.printer.name === recentPrinter?.printer?.name && item.printer.isActive);
       if (isRecentPrinterExist) {
         setPrinterSerial(recentPrinter?.printer?.sn);
         setLabelTypeData(recentPrinter?.printer?.labelTemplates);
-        const recentPrinterLabelType: LabelTemplatesProps = JSON.parse(localStorage.getItem(PRINTER_LABEL_TYPE_KEY) ?? '');
+        const recentPrinterLabelType: LabelTemplatesProps = JSON.parse(
+          localStorage.getItem(PRINTER_LABEL_TYPE_KEY) || 'null',
+        ) ?? {};
         setLabelTemplate(recentPrinterLabelType?.id);
       }
     }, []);
@@ -120,7 +122,7 @@ export const withPrintLabelDetailsDialog = <T extends PrintLabelDetailsDialogPro
     }, [companyEmployees]);
 
     const handleDateChange = (date: MaterialUiPickersDate) => {
-      if(date) {
+      if (date) {
         setSelectedDate(new Date(date?.toISOString()));
       }
     };
