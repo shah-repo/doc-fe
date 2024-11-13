@@ -28,7 +28,6 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
     }
 
     // Update local state with the new checked indices
-    console.log(newChecked);
     setCheckedIndices(newChecked);
 
     // Notify parent component of the change
@@ -56,7 +55,6 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
               />
             </ListItemIcon>
             <ListItemText>
-              {/* {index === 1 && <Chip label="Confidence Score 91%" color="secondary" className={classes.scoreChip} />} */}
               <Typography
                 className={classes.listItemText}
               >

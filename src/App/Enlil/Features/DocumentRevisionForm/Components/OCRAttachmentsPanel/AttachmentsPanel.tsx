@@ -17,43 +17,9 @@ import { documentRevisionsActions } from '../../../../../../state/ducks/document
 import { store } from '../../../../../../state/store';
 import { toastError, toastSuccess } from '../../../../../../ui/components/notifications';
 
-/* const attachments = [
-  {
-    createdAt: '2024-08-30T03:50:29.486Z',
-    updatedAt: '2024-08-30T03:50:29.486Z',
-    id: '2331fde5-73c0-4026-a792-79b16cc9669a',
-    name: 'Enlil',
-    description: null,
-    type: 'pdf',
-    lineType: 'CLEAN_COPY',
-    version: null,
-    s3link: 'a295d4f4-5854-4faa-9a50-eba1a2819612/2024-08-30T03:50:29.487Z/Enlil.pdf',
-    s3linkCleanCopy: null,
-    billIds: [],
-    importMetadataJson: {},
-    cleanCopyStatus: 'NOT_REQUIRED',
-    companyId: 'a295d4f4-5854-4faa-9a50-eba1a2819612',
-    fileSizeS3Link: 495782,
-    fileSizeS3LinkCleanCopy: null,
-    documentRevisions: [],
-    owner: {
-      createdAt: '2024-08-29T16:31:46.731Z',
-      updatedAt: '2024-08-29T16:31:46.731Z',
-      id: '531416f0-8f93-4758-ab1c-1f9bf584a8b0',
-      companyId: 'a295d4f4-5854-4faa-9a50-eba1a2819612',
-      active: true,
-      slackUserId: null,
-    },
-    isComplete: true,
-  },
-  { name: 'Inspection Instructions.docx', type: 'docx' },
-  { name: 'Inspection results spreadsheet.xlsx', type: 'xlsx' },
-]; */
-
 const AttachmentsPanel = () => {
   const { _documentRevisionFormState } = SM.useStores();
   const docRevId = _documentRevisionFormState?.documentRevision?.id;
-  console.log(`declaration docRevId:${docRevId}`);
   const classes = useStyles();
   const [file, setFile] = useState<FBAttachment>();
   const [selectedIndices, setSelectedIndices] = React.useState<any>([]);
@@ -61,16 +27,10 @@ const AttachmentsPanel = () => {
   const docPreview = useDialog();
 
   const showDocPreview = (file: FBAttachment) => {
-    console.log('SHOW DOC PREVIEW');
-    console.log(file);
     setFile(file);
     docPreview.open();
   };
 
-  console.log('*************** selectedIndices ***************');
-  console.log(selectedIndices);
-  console.log('token:');
-  console.log(`bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`);
   const onSelectionChange = (indices: number) => {
     setSelectedIndices(indices);
   };
@@ -82,7 +42,6 @@ const AttachmentsPanel = () => {
       sessionId: store.getState().auth.user.sessionId,
     };
     try {
-      console.log(`docRevId:${docRevId}`);
       if (!docRevId) {
         toastError('Document revision ID not found!');
         return;
@@ -90,17 +49,13 @@ const AttachmentsPanel = () => {
       let counter = 0;
       for (const index of selectedIndices) {
         if (attachments[index]?.url) {
-          console.log(`Processing attachment at index=${index}`);
-          console.log(attachments[index]);
           const data = {
             lhrDocRevId: docRevId,
             url: attachments[index].url,
             attachmentId: attachments[index].id,
           };
           const apiUrl = 'https://3jnnotdcy8.execute-api.us-west-1.amazonaws.com/processLotHistoryRecord';
-          const response = await axios.post(apiUrl, data, { headers });
-          console.log(`****** Processed Attachment with index=${index} ****************`);
-          console.log(response.data);
+          await axios.post(apiUrl, data, { headers });
           counter++;
         } else {
           console.log(`****** There is no presigned url for attachment at index=${index} ****************`);
@@ -115,13 +70,12 @@ const AttachmentsPanel = () => {
 
   const attachmentsAsync = useAsync<any>({
     onSuccess: (attachments) => {
-      console.log(attachments);
       setAttachments(attachments);
       // We may need to filter some type of attachments
       // setAttachments(attachments?.filter(attachment => attachment.type === PDF));
     },
     onError: () => {
-      console.log('Error');
+      toastError('Failed to load attachments');
     },
   });
 
@@ -131,12 +85,11 @@ const AttachmentsPanel = () => {
 
   useEffect(() => {
     try {
-      console.log(`useEffect docRevId:${docRevId}`);
       if (docRevId) {
         attachmentsAsync.start(fetchAttachments, docRevId, attachmentsAsync);
       }
     } catch (error) {
-      console.error('Failed to load attachments', error);
+      toastError('Failed to load attachments');
     }
   }, [docRevId]);
 
