@@ -7,7 +7,16 @@ import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
 import { LotStatus } from '../documentRevisions/types';
 import { MaterialFlowAclRule } from '../materialFlowAcl/types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
+import {
+  AUTOSAVE_CONFIG,
+  REDLINE_CONFIG,
+  SELECT_COMPANY,
+  SET_AUTOSAVE_CONFIG,
+  SET_COMPANY_MINE,
+  SET_GENERAL_SETTINGS,
+  SET_PREMIUM_FEATURES_SETTINGS,
+  UPDATE_NAVIGATION_ITEM,
+} from './constants';
 
 export interface WhiteLabelingColors {
   defaultBackground: string
@@ -227,7 +236,20 @@ export interface GeneralSettingsState extends GeneralSettings, AsyncState {
   updatedAt?: string
 }
 
+export interface PremiumFeatures {
+  isAIEnabled: boolean
+}
+
+export interface PremiumFeaturesState extends PremiumFeatures, AsyncState {
+  updatedAt?: string
+}
+
 export interface GeneralSettingsAction {
   type: typeof SET_GENERAL_SETTINGS
   payload: GeneralSettings
+}
+
+export interface PremiumFeaturesAction {
+  type: typeof SET_PREMIUM_FEATURES_SETTINGS
+  payload: PremiumFeatures
 }

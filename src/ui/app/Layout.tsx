@@ -3,11 +3,14 @@ import { Widget as AiWidget } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
+import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
+import { ApplicationState } from '../../state/reducers';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
+import PremiumFeaturesPage from '../administration/premium.settings';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
 import BulkImportProgressPage from '../bulkImport/container.progress';
@@ -33,6 +36,7 @@ import {
   GLOBAL_SEARCH_URL,
   HOME_URL,
   PAGE_DETAILS_MANAGEMENT_URL,
+  PREMIUM_FEATURES_URL,
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
   TRAINING_URL,
@@ -57,8 +61,9 @@ import useStyles from './Layout.styles';
 import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
+import { Permission } from '../../state/ducks/auth/types';
 
-const Layout: React.FunctionComponent = () => {
+const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePermissions: Permission[] }> = ({ isAIEnabled, currentEmployeePermissions }) => {
   const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
   const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
   const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
@@ -66,6 +71,7 @@ const Layout: React.FunctionComponent = () => {
     localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
     setOpen(!isOpened);
   };
+  const isAIPermissionEnabled = currentEmployeePermissions.includes(Permission.AI_SUBSCRIPTION);
 
   return (
     <>
@@ -78,7 +84,7 @@ const Layout: React.FunctionComponent = () => {
       <WatermarkFooterContainer />
       <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
-        <AiWidget />
+        {isAIEnabled && isAIPermissionEnabled && <AiWidget />}
         <Switch>
           <Route
             path={DOCUMENT_REVISION_LIST_URL}
@@ -159,6 +165,10 @@ const Layout: React.FunctionComponent = () => {
             component={GeneralSettingsPage}
           />
           <Route
+            path={PREMIUM_FEATURES_URL}
+            component={PremiumFeaturesPage}
+          />
+          <Route
             path={BULK_IMPORT_URL}
             component={BulkImportPage}
             exact
@@ -179,4 +189,11 @@ const Layout: React.FunctionComponent = () => {
   );
 };
 
-export default Layout;
+const mapStateToProps = (state: ApplicationState) => {
+  return {
+    isAIEnabled: state.company.premiumFeatures.isAIEnabled,
+    currentEmployeePermissions: state.auth.groups.permissions,
+  };
+};
+
+export default connect(mapStateToProps)(Layout);

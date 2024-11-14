@@ -37,6 +37,7 @@ export default makeStyles((theme: Theme) =>
       color: Colors.white,
       fontSize: 13,
       fontWeight: 400,
+      marginRight: '10px',
     },
     menu: {
       borderbottom: '1px solid transparent',

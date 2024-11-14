@@ -4,8 +4,36 @@ import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncStatus } from '../../types';
 import { LOGOUT_USER } from '../auth/constants';
 import { LogoutUserAction } from '../auth/types';
-import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from './constants';
-import { AllocationOrder, AutosaveAction, AutosaveState, CompanyMineAction, ExpiredLotTypes, GeneralSettingsAction, GeneralSettingsState, NotifyPartLCP, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, SetAutosaveAction, UpdateNavigationMenuItem } from './types';
+import {
+  AUTOSAVE_CONFIG,
+  DEFAULT_NAVIGATION_ITEMS,
+  REDLINE_CONFIG,
+  SELECT_COMPANY,
+  SET_AUTOSAVE_CONFIG,
+  SET_COMPANY_MINE,
+  SET_GENERAL_SETTINGS,
+  SET_PREMIUM_FEATURES_SETTINGS,
+  UPDATE_NAVIGATION_ITEM,
+  WHITE_LABEL_DEFAULT,
+} from './constants';
+import {
+  AllocationOrder,
+  AutosaveAction,
+  AutosaveState,
+  CompanyMineAction,
+  ExpiredLotTypes,
+  GeneralSettingsAction,
+  GeneralSettingsState,
+  NotifyPartLCP,
+  PremiumFeaturesAction,
+  PremiumFeaturesState,
+  RedlineAction,
+  RedlineState,
+  SelectCompanyAction,
+  SelectCompanyState,
+  SetAutosaveAction,
+  UpdateNavigationMenuItem,
+} from './types';
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   id: '',
@@ -55,6 +83,12 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   shouldNotifyLcpMismatch: NotifyPartLCP.DO_NOTHING,
   systemTransactions: [],
   zebraPrint: [],
+  status: AsyncStatus.Idle,
+  message: '',
+};
+
+const PREMIUM_FEATURES_DEFAULT_STATE: PremiumFeaturesState = {
+  isAIEnabled: false,
   status: AsyncStatus.Idle,
   message: '',
 };
@@ -177,10 +211,26 @@ const generalSettings = (
   }
 };
 
+const premiumFeatures = (
+  state: PremiumFeaturesState = PREMIUM_FEATURES_DEFAULT_STATE,
+  action: PremiumFeaturesAction,
+) => {
+  switch (action.type) {
+    case SET_PREMIUM_FEATURES_SETTINGS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   selectedCompany,
   companyMine,
   redlineConfig,
   autosaveConfig,
   generalSettings,
+  premiumFeatures,
 });
