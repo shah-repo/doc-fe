@@ -48,7 +48,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps & FBEditorOptio
     const onFBEditorClose = () => {
       leftPanelState?.closeDialog();
     };
-    openEditor = (props?: Partial<FBInputProps>): any => {
+    openEditor = (props?: Partial<FBInputProps>) => () => {
       const { type, index, isAddAction } = props || {};
       delete props?.isAddAction;
       if (!type) {
