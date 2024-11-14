@@ -1,8 +1,8 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Slide, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
-import { SMBox } from '../../../../..';
+import React, { useState, useEffect } from 'react';
+import { SM, SMBox } from '../../../../..';
 import { Button } from '../../../../../../ui/components/forms/fields-next';
 import Text from '../../../../../../ui/components/Text';
 import { FBAttachment } from '../../../../../../ui/form.builder';
@@ -10,49 +10,84 @@ import useDialog from '../../../../../../ui/hooks/useDialog';
 import useStyles from './AttachmentsPanel.styles';
 import ListPanel from './Components/ListPanel';
 import OCRFilePresenter from './Components/OCRFilePresenter';
+import axios from 'axios';
+import useAsync from '../../../../../../ui/hooks/useAsync';
+import useActionCreator from '../../../../../../ui/hooks/useActionCreator';
+import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
+import { store } from '../../../../../../state/store';
+import { toastError, toastSuccess } from '../../../../../../ui/components/notifications';
 
-const attachments = [
-  {
-    createdAt: '2024-08-30T03:50:29.486Z',
-    updatedAt: '2024-08-30T03:50:29.486Z',
-    id: '2331fde5-73c0-4026-a792-79b16cc9669a',
-    name: 'Enlil',
-    description: null,
-    type: 'pdf',
-    lineType: 'CLEAN_COPY',
-    version: null,
-    s3link: 'a295d4f4-5854-4faa-9a50-eba1a2819612/2024-08-30T03:50:29.487Z/Enlil.pdf',
-    s3linkCleanCopy: null,
-    billIds: [],
-    importMetadataJson: {},
-    cleanCopyStatus: 'NOT_REQUIRED',
-    companyId: 'a295d4f4-5854-4faa-9a50-eba1a2819612',
-    fileSizeS3Link: 495782,
-    fileSizeS3LinkCleanCopy: null,
-    documentRevisions: [],
-    owner: {
-      createdAt: '2024-08-29T16:31:46.731Z',
-      updatedAt: '2024-08-29T16:31:46.731Z',
-      id: '531416f0-8f93-4758-ab1c-1f9bf584a8b0',
-      companyId: 'a295d4f4-5854-4faa-9a50-eba1a2819612',
-      active: true,
-      slackUserId: null,
-    },
-    isComplete: true,
-  },
-  { name: 'Inspection Instructions.docx', type: 'docx' },
-  { name: 'Inspection results spreadsheet.xlsx', type: 'xlsx' },
-];
+const OCR_API_URL = 'https://3jnnotdcy8.execute-api.us-west-1.amazonaws.com/processLotHistoryRecord';
+const OCR_API_TOKEN = 'bearer K-ZImFHfgu!=yo49=6AmSc770!nH?cv!Ckf/b0BqZIZLtuImCDfHG4?A?6P0cNfh';
 
 const AttachmentsPanel = () => {
+  const { _documentRevisionFormState } = SM.useStores();
+  const docRevId = _documentRevisionFormState?.documentRevision?.id;
   const classes = useStyles();
   const [file, setFile] = useState<FBAttachment>();
+  const [selectedIndices, setSelectedIndices] = React.useState<number[]>([]);
+  const [attachments, setAttachments] = useState<FBAttachment[]>([]);
   const docPreview = useDialog();
 
   const showDocPreview = (file: FBAttachment) => {
     setFile(file);
     docPreview.open();
   };
+
+  const onSelectionChange = (indices: number[]) => {
+    setSelectedIndices(indices);
+  };
+
+  const handleClick = async () => {
+    const { employeeId, sessionId } = store.getState().auth.user;
+    const headers = { authorization: OCR_API_TOKEN, employeeId, sessionId };
+    try {
+      if (!docRevId) {
+        toastError('Document revision ID not found!');
+        return;
+      }
+      let counter = 0;
+      for (const index of selectedIndices) {
+        if (attachments[index]?.url) {
+          const data = {
+            lhrDocRevId: docRevId,
+            url: attachments[index].url,
+            attachmentId: attachments[index].id,
+          };
+
+          await axios.post(OCR_API_URL, data, { headers });
+          counter++;
+        } else {
+          // TODO: remove when we move to using s3 links instead of presigned urls
+          console.log(`****** There is no presigned url for attachment at index=${index} ****************`);
+        }
+      }
+      toastSuccess(`Processing ${counter} files...`);
+    }
+    catch (err) {
+      toastError('Error');
+    }
+  };
+
+  const attachmentsAsync = useAsync<any>({
+    onSuccess: (attachments) => {
+      setAttachments(attachments);
+      // TODO: We may need to filter some type of attachments
+    },
+    onError: () => {
+      toastError('Failed to load attachments');
+    },
+  });
+
+  const fetchAttachments = useActionCreator(
+    documentRevisionsActions.getAttachmentsByDocRevId,
+  );
+
+  useEffect(() => {
+    if (docRevId) {
+      attachmentsAsync.start(fetchAttachments, docRevId, attachmentsAsync);
+    }
+  }, [docRevId]);
 
   return (
     <Box className={classes.root}>
@@ -71,9 +106,17 @@ const AttachmentsPanel = () => {
           </Typography>
         </Box>
         <SMBox>
-          <ListPanel {...{ showDocPreview, attachments }} />
+          <ListPanel {...{ showDocPreview, attachments, onSelectionChange }} />
           <Box paddingX={1.875} pt={2.5}>
-            <Button variant="contained" color="primary" fullWidth >
+            <Button
+              onClick={handleClick}
+              variant="contained"
+              color="primary"
+              disabled={selectedIndices.length <= 0}
+              fullWidth
+              data-cy="ocr-extract-data"
+              >
+
               <Text translation="ocr.submit.button" />
             </Button>
           </Box>

@@ -721,6 +721,16 @@ const getAllApprovalRequests = (
   handlers,
 });
 
+const getAttachmentsByDocRevId = (
+  revisionId: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/attachments/document_revisions/${revisionId}/all`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -781,5 +791,6 @@ export default {
   alternatePartRevUpdate,
   updateLotStatus,
   getAllApprovalRequests,
+  getAttachmentsByDocRevId,
   updateEquipmentStatus,
 };
