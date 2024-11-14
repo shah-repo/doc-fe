@@ -146,7 +146,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
 
   return (
     <FormikProvider value={formik}>
-      <Box className={classes.paper}>
+      <Box className={classes.paper} data-cy="share-dialog">
         <Typography
           variant="h2"
           component="h2"
