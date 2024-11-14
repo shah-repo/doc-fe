@@ -15,6 +15,7 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   placeholder,
   style,
   isPlaceholderShown,
+  MenuProps,
   ...props
 }) => {
   const classes = styles();
@@ -23,14 +24,15 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
     <FBInput {...props} {...{ placeholder }} type="select" labelProps={FBFontStyle.labelProps}>
       <Select
         className={cx(classes.select, { [classes.placeholderValue]: isPlaceholderShown })}
+        MenuProps={{
+          ...MenuProps,
+          className: cx(MenuProps?.className, classes.menu),
+        }}
         {...{ defaultValue, style, variant, SelectDisplayProps }}
         displayEmpty
       >
         <MenuItem value={undefined} className={classes.placeholderItem}>
-          {placeholder?.trim()
-            ? <Text message={placeholder} />
-            : <>&nbsp;</>
-          }
+          {placeholder?.trim() && <Text message={placeholder} />}
         </MenuItem>
         {menuItems}
       </Select>

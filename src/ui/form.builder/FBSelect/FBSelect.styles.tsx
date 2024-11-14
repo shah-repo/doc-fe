@@ -7,6 +7,11 @@ export default makeStyles((theme) => createStyles({
       padding: theme.spacing(1.5),
     },
   },
+  menu: {
+    '& .MuiListItem-root': {
+      minHeight: 32,
+    },
+  },
   placeholderValue: {
     '& .MuiSelect-select': {
       color: Colors.textDisabled,
