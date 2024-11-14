@@ -26,7 +26,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     };
 
     const editSchemaItem = (ev: React.MouseEvent<HTMLElement>) => {
-      type && openEditor && openEditor(inputProps)?.(ev);
+      openEditor && type && openEditor(inputProps)?.(ev);
     };
 
     const removeSchemaItem = () => {
