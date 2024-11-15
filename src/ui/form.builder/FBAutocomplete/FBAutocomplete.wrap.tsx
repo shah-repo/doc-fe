@@ -83,7 +83,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     }
     const hasViableTemplateStatus = workspaceState?.document?.status && VIABLE_TEMPLATE_STATUSES.includes(workspaceState?.document?.status);
     const isTemplate = isEmpty(defaultValue) && workspaceState?.document?.status && disabled && hasViableTemplateStatus && workspaceState.mode === FBWorkspaceModeOptions.DESIGN;
-    const multiple = isTemplate ? !isTemplate : (editorProperties?.includes('multiple') || props.multiple);
+    const multiple = !isTemplate && (editorProperties?.includes('multiple') || props.multiple);
 
     useEffect(() => {
       setModifiedOptions(options);
