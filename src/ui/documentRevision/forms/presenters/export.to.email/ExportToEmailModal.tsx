@@ -125,7 +125,12 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
 
   useImperativeHandle(ref, () => ({
     getValues: () => {
-      return { ...formik?.values, watermarkAttachments } as ExportToEmailDialogProps;
+      return {
+        ...formik?.values,
+        watermarkAttachments: formik?.values.includeDate
+          ? watermarkAttachments
+          : [],
+      } as ExportToEmailDialogProps;
     },
   }));
 
@@ -141,7 +146,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
   };
 
   const handleIncludeAuditHistoryChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFieldValue('includeAuditLogs', event.target.checked);
+    setFieldValue('includeAuditLogs', event.target.value !== 'false');
   };
 
   return (
