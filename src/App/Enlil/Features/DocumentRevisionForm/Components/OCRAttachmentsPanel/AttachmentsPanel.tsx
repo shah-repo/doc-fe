@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Slide, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Slide, Typography } from '@material-ui/core';
 import axios from 'axios';
 import { reaction } from 'mobx';
 import { Observer } from 'mobx-react';
@@ -27,6 +27,7 @@ const AttachmentsPanel = () => {
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
   const docRevId = _documentRevisionFormState?.documentRevision?.id;
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<FBAttachment>();
   const [selectedIndices, setSelectedIndices] = React.useState<number[]>([]);
   const [attachments, setAttachments] = useState<FBAttachment[]>([]);
@@ -70,11 +71,14 @@ const AttachmentsPanel = () => {
     };
 
     try {
+      setLoading(true);
       await Promise.all(selectedIndices.map(uploadAttachment));
       toastSuccess(`Processing ${processedCount} files...`);
     } catch (error) {
       console.error(error);
       toastError('Error processing files');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,8 +129,11 @@ const AttachmentsPanel = () => {
                       onClick={handleClick}
                       variant="contained"
                       color="primary"
-                      disabled={selectedIndices.length <= 0}
+                      disabled={selectedIndices.length <= 0 || loading}
                       fullWidth
+                      startIcon={
+                        loading && <CircularProgress size={16} color="inherit" />
+                      }
                       data-cy="ocr-extract-data"
                     >
                       <Text translation="ocr.submit.button" />

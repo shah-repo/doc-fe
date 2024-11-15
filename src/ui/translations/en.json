@@ -2192,6 +2192,7 @@
   "common.allowed": "Allowed",
   "common.dataType": "Data Type",
   "common.viewAll": "View All",
+  "common.reload": "Reload",
   "common.rejected": "Rejected",
   "common.rev": "Rev."
 }

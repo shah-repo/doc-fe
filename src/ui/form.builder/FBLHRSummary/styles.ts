@@ -52,6 +52,11 @@ export default makeStyles((theme) => ({
   createdDatePaper: {
     marginLeft: theme.spacing(-8.75),
   },
+  reloadButton: {
+    float: 'right',
+    padding: theme.spacing(0.75),
+    color: Colors.primary,
+  },
   actionsCell: {
     overflow: 'visible !important',
     position: 'sticky',

@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
 import { GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
@@ -320,6 +320,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         label={translate('lhr.summary.table.title')}
         data-cy="lhr-summary-title"
       >
+
         {(!isShowOnly && !isDisabled) && (
           <Button
             kind="ghost"
@@ -331,6 +332,22 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           >
             {translate('lhr.summary.add.item')}
           </Button>
+        )}
+        {(!isShowOnly && !isDisabled) && (
+          <Tooltip
+            title={translate('common.reload')}
+            placement="top"
+            arrow
+          ><IconButton
+              kind="simple"
+              size="small"
+              data-cy="reload-btn"
+              className={classes.reloadButton}
+              onClick={fetchLHRSummaryData}
+            >
+              <FontAwesomeIcon icon={solid('arrow-rotate-left')} />
+            </IconButton>
+          </Tooltip>
         )}
       </FBSection>
       <ColumnMenuContext.Provider
