@@ -2,7 +2,7 @@ import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps } from '..';
+import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps, FBWorkspaceModeOptions } from '..';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
@@ -82,8 +82,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       disabled = true;
     }
     const hasViableTemplateStatus = workspaceState?.document?.status && VIABLE_TEMPLATE_STATUSES.includes(workspaceState?.document?.status);
-    const isTemplate = isEmpty(defaultValue) && workspaceState?.document?.status && disabled && hasViableTemplateStatus;
-    const multiple = !isTemplate && (editorProperties?.includes('multiple') || props.multiple);
+    const isTemplate = isEmpty(defaultValue) && workspaceState?.document?.status && disabled && hasViableTemplateStatus && workspaceState.mode === FBWorkspaceModeOptions.DESIGN;
+    const multiple = isTemplate ? !isTemplate : (editorProperties?.includes('multiple') || props.multiple);
 
     useEffect(() => {
       setModifiedOptions(options);
