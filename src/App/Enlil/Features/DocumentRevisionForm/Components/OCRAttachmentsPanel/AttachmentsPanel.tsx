@@ -166,6 +166,7 @@ const AttachmentsPanel = () => {
                     </Box>
                     <Box className={classes.previewContainer}>
                       <OCRFilePresenter
+                        key={file?.id}
                         file={file as FBAttachment}
                         setFile={setFile}
                       />
