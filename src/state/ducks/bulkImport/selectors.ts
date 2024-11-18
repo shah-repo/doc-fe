@@ -38,6 +38,7 @@ export const getTableDataFiltered = (state: ApplicationState) => {
   return newTableData || [];
 };
 export const getIsLoading = (state: ApplicationState) => state.bulkImport.steps.isLoading;
+export const getHasUnsavedChanges = (state: ApplicationState) => state.bulkImport.steps.hasUnsavedChanges;
 export const getApproversSelectList = (state: ApplicationState): ApproverOption[] =>
   state.bulkImport.steps.approvers.map((approver) => ({
     value: approver?.id,

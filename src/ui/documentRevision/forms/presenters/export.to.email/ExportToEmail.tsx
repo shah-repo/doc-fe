@@ -158,7 +158,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
     <>
       {getUpdatedButton()}
       <Dialog
-        title="common.send.to.email"
+        title="common.share"
         open={emailDialog.isOpen}
         loading={isDownloadInprogress}
         onClose={emailDialog.close}

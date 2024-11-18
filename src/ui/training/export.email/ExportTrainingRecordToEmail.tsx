@@ -91,7 +91,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
       <Text translation="common.share" />
     </Button>
     <Dialog
-      title="common.send.to.email"
+      title="common.share"
       open={emailDialog.isOpen}
       loading={isDownloadInprogress}
       onClose={emailDialog.close}

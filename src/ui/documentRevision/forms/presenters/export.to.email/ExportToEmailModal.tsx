@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import cx from 'classnames';
 import { Field, FormikProvider, useFormik } from 'formik';
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import React, { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { ReactComponent as Active } from '../../../../../assets/images/radioActive.svg';
 import { ReactComponent as InActive } from '../../../../../assets/images/radioInActive.svg';
 import { translate } from '../../../../../common/intl';
@@ -89,7 +89,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
     if (arId) {
       attachmentsAsync.start(fetchArAttachments, arId, attachmentsAsync);
     } else {
-      attachmentsAsync.start(fetchAttachments, revisionId, attachmentsAsync);
+      attachmentsAsync.start(fetchAttachments, revisionId, attachmentsAsync, true);
     }
   }, []);
 
@@ -125,7 +125,12 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
 
   useImperativeHandle(ref, () => ({
     getValues: () => {
-      return { ...formik?.values, watermarkAttachments } as ExportToEmailDialogProps;
+      return {
+        ...formik?.values,
+        watermarkAttachments: formik?.values.includeDate
+          ? watermarkAttachments
+          : [],
+      } as ExportToEmailDialogProps;
     },
   }));
 
@@ -140,9 +145,13 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
     setWatermarkAttachments(updatedAttachments as AttachmentPayload[]);
   };
 
+  const handleIncludeAuditHistoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFieldValue('includeAuditLogs', event.target.value !== 'false');
+  };
+
   return (
     <FormikProvider value={formik}>
-      <Box className={classes.paper}>
+      <Box className={classes.paper} data-cy="share-dialog">
         <Typography
           variant="h2"
           component="h2"
@@ -249,7 +258,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
 
         <RadioGroup
           value={formik.values.includeAuditLogs}
-          onChange={formik.handleChange}
+          onChange={handleIncludeAuditHistoryChange}
           name="includeAuditLogs"
           className={classes.radioGroup}
         >
@@ -263,6 +272,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
                 disableRipple
               />
             }
+            checked={formik.values.includeAuditLogs}
             className={classes.radioContainer}
             label={
               <Typography variant="body2" className={classes.radioLabel}>
@@ -280,6 +290,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
                 disableRipple
               />
             }
+            checked={!formik.values.includeAuditLogs}
             className={classes.radioContainer}
             label={
               <Typography variant="body2" className={classes.radioLabel}>

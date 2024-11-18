@@ -1,5 +1,4 @@
 import { translate } from '../../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FB } from '../helpers';
@@ -35,11 +34,11 @@ export const getExcelData = (
       plannedDocId: getDisplayDocumentByDetailsObj(item?.plannedDetails),
       actualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       lotOrEqDocId: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
-      ...(item.expiryDate && { expiryDate: getFormattedDateString(item.expiryDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
+      ...(item.expiryDate && { expiryDate: item.expiryDate }),
       issue: getDisplayDocumentByDetailsObj(item?.issueDetails),
-      ...(item.calDueDate && { calDueDate: getFormattedDateString(item.calDueDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
-      ...(item.pmDueDate && { pmDueDate: getFormattedDateString(item.pmDueDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
-      ...(item.recordCreationDate && { recordCreationDate: getFormattedDateString(item.recordCreationDate ?? '', MomentFormats.MonthDateYearTwoDigit) }),
+      ...(item.calDueDate && { calDueDate: item.calDueDate }),
+      ...(item.pmDueDate && { pmDueDate: item.pmDueDate }),
+      ...(item.recordCreationDate && { recordCreationDate: item.recordCreationDate }),
       enteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,
