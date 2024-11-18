@@ -69,7 +69,6 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
 
   const showNotificationAndDownloadPDF = (data: DownloadPDFSocketsData) => {
     const url = data.url;
-    setIsDownloadInprogress(false);
     handleDownloadComplete(true);
     emailDialog.close();
     window.location.href = url;
