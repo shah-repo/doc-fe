@@ -2230,7 +2230,6 @@
   "common.viewAll": "View All",
   "common.rejected": "Rejected",
   "async.state.message.access.denied": "Access Denied",
-  "async.state.message.access.denied.previous.revision": "To access previous revision(s) you need special permissions granted by the company administrator",
   "common.failed": "Failed",
   "common.or": "OR",
   "common.rev": "Rev."

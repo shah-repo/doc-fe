@@ -65,7 +65,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
           <Text translation="async.state.message.access.denied" />
         </Box>
         <Typography variant="body1" className={classes.errorText}>
-          <Text translation="async.state.message.access.denied.previous.revision" />
+          {asyncState.message}
         </Typography>
       </div>
     );
