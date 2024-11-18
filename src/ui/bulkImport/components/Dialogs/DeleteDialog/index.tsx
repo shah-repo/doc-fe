@@ -1,9 +1,8 @@
 import { noop } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
-import { DialogHandler } from '../../../../hooks/useDialog';
-
 import { AlertDialog } from '../../../../components/dialogs';
+import { DialogHandler } from '../../../../hooks/useDialog';
 
 interface BulkImportProgressProps {
   handler: DialogHandler

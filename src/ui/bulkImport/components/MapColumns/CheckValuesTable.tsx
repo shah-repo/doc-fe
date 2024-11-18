@@ -209,6 +209,15 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     },
   });
 
+  const handlePrevious = () => {
+    if (hasUnsavedChanges) {
+      currentDestination.current = null;
+      openLeaveDialog.open();
+      return;
+    }
+    handleBack();
+  };
+
   const asyncSaveDataTable = useAsync();
 
   const handleSaveChanges = () => {
@@ -224,6 +233,8 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const handleOpenLeaveDialog = () => {
     if (currentDestination.current) {
       history.push(currentDestination.current); // Navigate to saved destination
+    } else { // if currentDestination.current is null is because is a goBack
+      handleBack();
     }
     openLeaveDialog.close();
     dispatch(setUnsavedChanges(false));
@@ -353,7 +364,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
             <Text translation="common.export.xls" />
           </Button>
           <Button
-            onClick={handleBack}
+            onClick={handlePrevious}
             kind="outlined"
             className={classes.button}
           >

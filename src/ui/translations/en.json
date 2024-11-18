@@ -2219,6 +2219,7 @@
   "bulkImport.mismatchedStructure": "5 folders have mismatched structure errors.",
   "bulkImport.goBackStep": "Are you sure you want to go back to this step?",
   "bulkImport.deleteDialogDescription": "This will discard all the progress of this import and remove it from the list.",
+  "bulkImport.maxSizeDialogDescription": "The file you're trying to upload exceeds our size limit for direct attachments. Please use an Amazon S3 bucket for files of this size. Our customer support team will contact you with instructions and the necessary S3 bucket information.",
   "bulkImport.areYouSureWantToContinue": "Are you sure you want to continue?",
   "bulkImport.tableErrorCountMessage": "Please fix the {error} before continue",
   "bulkImport.reject.alert": "You are rejecting a Bulk Import\nAre you sure you want to continue?",

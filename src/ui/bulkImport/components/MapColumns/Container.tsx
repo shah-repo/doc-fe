@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box } from '@material-ui/core';
 import _ from 'lodash';
-import React, { ReactNode, useEffect, useRef } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBulkImportTableData, saveHeaderToMap, setIsLoading, setShowTable, setTableData } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImport, getShowTable, getTableData } from '../../../../state/ducks/bulkImport/selectors';
@@ -25,6 +25,7 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCan
   const bulkImport = useSelector(getBulkImport);
   const TableData = useSelector(getTableData);
   const alreadyCheckValues = useRef<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const uploadFileDataAction = useActionCreator(saveHeaderToMap);
 
@@ -68,6 +69,7 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCan
         }
       }
     }
+    setIsInitialized(true);
   };
 
   const checkStatus = () => {
@@ -87,6 +89,10 @@ const MapColumns: React.FC<MapColumnsProps> = ({ children, handleNext, handleCan
   useEffect(
     checkStatus
     , [TableData]);
+
+  if (!isInitialized) {
+    return null;
+  }
 
   if (showTable) {
     return (

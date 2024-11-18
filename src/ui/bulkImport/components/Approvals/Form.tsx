@@ -44,6 +44,8 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
   const haveApprovers = bulkImport?.documentRevision && bulkImport?.documentRevision?.status !== DocumentRevisionStatus.Draft;
   const approvalFieldId = useRef(bulkImport?.documentRevision?.approvals?.[0]?.fieldId || APPROVAL_FIELD_ID);
   const userState = useRef<UserState>({ employeeId: '', sessionId: '' });
+  const autocompleteRef = useRef<HTMLInputElement | null>(null);
+  const inputField = autocompleteRef.current?.querySelector('input');
 
   const handleSubmit = async () => {
     if (!users || users.length === 0) {
@@ -187,6 +189,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
               </Typography>
               {!haveApprovers && <FormControl className={`form-control ${classes.formControl}`} id="OwnerChangerPresenter-selectField">
                 <Autocomplete
+                  ref={autocompleteRef}
                   name="selectedUser"
                   options={availableOptions}
                   getOptionLabel={(option) => option.text}
@@ -199,6 +202,10 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
                         if (selectedUser) {
                           addNewUser(selectedUser);
                           setFieldValue('selectedUser', '');
+                          if (inputField) {
+                            inputField.value = '';
+                            inputField.blur();
+                          }
                         }
                       }
                     }
