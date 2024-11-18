@@ -11,6 +11,7 @@ import { skippedAttachmentFile } from '../../../../state/ducks/bulkImport/consta
 import { getBulkImport } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport } from '../../../../state/ducks/bulkImport/types';
 import Text from '../../../components/Text';
+import { AlertDialog } from '../../../components/dialogs';
 import { Button } from '../../../components/forms/fields-next';
 import { FileWithPreview } from '../../../components/forms/fields-next/Dropzone/Dropzone.types';
 import { DropzoneField } from '../../../components/forms/fields-next/index';
@@ -42,6 +43,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const dialog = useDialog();
   const showErrors = false;
   const loadFromBk = useRef<boolean>(false);
+  const openMaxSizeExceededDialog = useDialog();
 
   const asyncUploadFile = useAsync({
     onSuccess: () => handleNext(),
@@ -109,6 +111,14 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
     );
   };
 
+  const onMaxSizeExceeded = () => {
+    openMaxSizeExceededDialog.open();
+  };
+
+  const handleCloseMaxSize = () => {
+    openMaxSizeExceededDialog.close();
+  };
+
   const renderForm = () => {
     if (showErrors) {
       return (
@@ -158,7 +168,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
             <Divider style={{ flex: 1 }} />
           </Box>
           <Typography className={classes.dropzoneLabel}><Text translation="common.file.OrUploadFromFiles" /></Typography>
-          <DropzoneField name="files" onDropCallback={handleFilesDrop} className={classes.dropzopne} accept={{ 'application/zip': ['.zip'] }}>
+          <DropzoneField name="files" onDropCallback={handleFilesDrop} className={classes.dropzopne} accept={{ 'application/zip': ['.zip'] }} onMaxSizeExceeded={onMaxSizeExceeded}>
             <Typography variant="body2" className={classes.textDropZone}>
               <span><Text translation="dropzone.noDrag.textOr" /><span className={classes.browseText}><Text translation="dropzone.noDrag.subText" /></span></span>
             </Typography>
@@ -207,6 +217,15 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
           </Box>
         </Dialog>
       </Box>
+      <AlertDialog
+        handler={openMaxSizeExceededDialog}
+        cancelLabel="common.no.go.back"
+        onConfirm={handleCloseMaxSize}
+        confirmLabel="common.ok"
+        isCancelButtonHidden
+      >
+        <p>{translate('bulkImport.maxSizeDialogDescription')}</p>
+      </AlertDialog>
     </>
   );
 };
