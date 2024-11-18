@@ -41,7 +41,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
     emailDialog.close();
 
     if (data.userAgent === clientUserAgent && url) {
-      window.open(url, '_parent');
+      window.location.href = url;
     }
 
     toastSuccess(<ExportPDFToastr />, {
