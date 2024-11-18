@@ -4,13 +4,11 @@ import { Button } from '@material-ui/core';
 import { omit } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { StyledButton } from '../../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListIcon } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
-import { authSelectors } from '../../../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { Dialog } from '../../../../components/dialogs';
 import { toastError } from '../../../../components/notifications';
@@ -44,13 +42,13 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const emailDialog = useDialog();
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
-  const employeeId = useSelector(authSelectors.currentEmployeeId);
+  // const employeeId = useSelector(authSelectors.currentEmployeeId);
   const classes = exportPDFToastrStyles();
 
-  const handleDownloadComplete = (isComplete: boolean) => {
-    setIsDownloadInprogress(!isComplete);
-    emailDialog.close();
-  };
+  // const handleDownloadComplete = (isComplete: boolean) => {
+  //   setIsDownloadInprogress(!isComplete);
+  //   emailDialog.close();
+  // };
 
   const async = useAsync({
     onError: () => {

@@ -1,8 +1,6 @@
 import { omit } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
-import { authSelectors } from '../../../state/ducks/auth';
 import { trainingActions } from '../../../state/ducks/training';
 import Text from '../../components/Text';
 import Dialog from '../../components/dialogs';
@@ -29,9 +27,9 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
   const classes = exportPDFToastrStyles();
-  const employeeId = useSelector(authSelectors.currentEmployeeId);
+  // const employeeId = useSelector(authSelectors.currentEmployeeId);
   const emailDialog = useDialog();
-  const notificationInitiatedRef = useRef(false);
+  // const notificationInitiatedRef = useRef(false);
 
   const async = useAsync({
     onError: () => {
