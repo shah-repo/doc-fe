@@ -48,12 +48,11 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const classes = exportPDFToastrStyles();
-  const clientUserAgent = navigator.userAgent;
 
-  // const handleDownloadComplete = (isComplete: boolean) => {
-  //   setIsDownloadInprogress(!isComplete);
-  //   emailDialog.close();
-  // };
+  const handleDownloadComplete = (isComplete: boolean) => {
+    setIsDownloadInprogress(!isComplete);
+    emailDialog.close();
+  };
 
   const async = useAsync({
     onError: () => {
@@ -71,6 +70,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const showNotificationAndDownloadPDF = (data: DownloadPDFSocketsData) => {
     const url = data.url;
     setIsDownloadInprogress(false);
+    handleDownloadComplete(true);
     emailDialog.close();
     window.location.href = url;
     toastSuccess(<ExportPDFToastr />, {
