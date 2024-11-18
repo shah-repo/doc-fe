@@ -1,7 +1,6 @@
 import React from 'react';
 import ChangeRequestListSockets from './ChangeRequestListSockets';
 import DocumentTypeSockets from './DocumentTypeSockets';
-import DownloadPDFSockets from './DownloadPDFSockets';
 import EmployeeListSockets from './EmployeeListSockets';
 import GroupsListSockets from './GroupsListSockets';
 
@@ -11,7 +10,7 @@ const SocketsContainer: React.FunctionComponent = () => (
     <EmployeeListSockets />
     <GroupsListSockets />
     <DocumentTypeSockets />
-    <DownloadPDFSockets />
+    {/* <DownloadPDFSockets /> */}
   </>
 );
 

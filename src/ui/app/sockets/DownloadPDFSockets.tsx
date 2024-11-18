@@ -1,30 +1,38 @@
-import React, { useCallback, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { authSelectors } from '../../../state/ducks/auth';
-import { safeParse } from '../../document.revision/utils/paths';
+import React, { useCallback, useMemo } from 'react';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
-const DownloadPDFSockets: React.FC = () => {
-  const employeeId = useSelector(authSelectors.currentEmployeeId);
+interface DownloadPDFSocketsProps {
+  employeeId?: string
+  pdfSocketReceived?: (url: string) => void
+}
 
-  const topic = React.useMemo(() => `${employeeId}/external_export_email/+/pdf`, [employeeId]);
-  const downloadInitiatedRef = useRef(false);
+export const safeParse = (jsonString: string) => {
+  try {
+    return JSON.parse(jsonString);
+  } catch {
+    return null;
+  }
+};
 
-  const loadData = useCallback((data) => {
-    const clientUserAgent = navigator.userAgent;
-    const parsedData = safeParse(data);
-    const messageData = parsedData?.data?.message;
-    const parsedMessage = typeof messageData === 'string' ? safeParse(messageData) : messageData;
+const DownloadPDFSockets: React.FC<DownloadPDFSocketsProps> = ({
+  employeeId,
+  pdfSocketReceived,
+}) => {
+  const topic = useMemo(
+    () => `${employeeId}/external_export_email/+/pdf`,
+    [employeeId],
+  );
 
-    if (parsedMessage.userAgent === clientUserAgent && parsedMessage?.url && !downloadInitiatedRef.current) {
-      downloadInitiatedRef.current = true;
-      window.open(parsedMessage.url, '_parent');
-
-      setTimeout(() => {
-        downloadInitiatedRef.current = false;
-      }, 5000);
-    }
-  }, [employeeId]);
+  const loadData = useCallback(
+    (data) => {
+      const parsedData = safeParse(data);
+      const messageData = parsedData?.data?.message;
+      const parsedMessage
+        = typeof messageData === 'string' ? safeParse(messageData) : messageData;
+      pdfSocketReceived?.(parsedMessage);
+    },
+    [employeeId],
+  );
 
   useMqttSubscription(topic, loadData);
   return null;

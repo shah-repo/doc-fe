@@ -1,11 +1,15 @@
 import { omit } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../../../state/ducks/auth';
 import { trainingActions } from '../../../state/ducks/training';
+import DownloadPDFSockets from '../../app/sockets/DownloadPDFSockets';
 import Text from '../../components/Text';
 import Dialog from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
-import { toastError } from '../../components/notifications';
+import { toastError, toastSuccess } from '../../components/notifications';
+import { ExportPDFCloseButton, ExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
 import { exportPDFToastrStyles } from '../../components/notifications/ExportPDFToastr.styles';
 import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
 import ExportToEmailModal, { ExportToEmailDialogRefType } from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailModal';
@@ -27,39 +31,33 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
   const classes = exportPDFToastrStyles();
-  // const employeeId = useSelector(authSelectors.currentEmployeeId);
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
   const emailDialog = useDialog();
-  // const notificationInitiatedRef = useRef(false);
+  const clientUserAgent = navigator.userAgent;
+
+  const pdfSocketReceived = (data) => {
+    const url = data.url;
+    setIsDownloadInprogress(false);
+    emailDialog.close();
+
+    if (data.userAgent === clientUserAgent && url) {
+      window.open(url, '_parent');
+    }
+
+    toastSuccess(<ExportPDFToastr />, {
+      className: classes.popup,
+      bodyClassName: classes.popupBody,
+      progressClassName: 'progressClassName',
+      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={url} />,
+      autoClose: false,
+    });
+  };
 
   const async = useAsync({
     onError: () => {
       toastError(intl.formatMessage({ id: 'common.send.to.email.error' }));
     },
   });
-
-  // const topic = React.useMemo(() =>
-  //   `${employeeId}/external_export_email/+/pdf`
-  // , [employeeId]);
-
-  // const callBack = useCallback((data) => {
-  //   setIsDownloadInprogress(false);
-  //   emailDialog.close();
-  //   if (!notificationInitiatedRef.current) {
-  //     notificationInitiatedRef.current = true;
-  //     toastSuccess(<ExportPDFToastr />, {
-  //       className: classes.popup,
-  //       bodyClassName: classes.popupBody,
-  //       progressClassName: 'progressClassName',
-  //       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
-  //       autoClose: false,
-  //     });
-  //     setTimeout(() => {
-  //       notificationInitiatedRef.current = false;
-  //     }, 5000);
-  //   }
-  // }, []);
-
-  // useMqttSubscription(topic, callBack);
 
   const runExportWithChildren = () => {
     if (childFormRef.current) {
@@ -81,7 +79,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
     <Button
       variant="outlined"
       color="primary"
-      data-cy="exportToEmail"
+      data-cy="export-to-email"
       onClick={emailDialog.open}
     >
       <Text translation="common.share" />
@@ -94,6 +92,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
       actionsProps={{ className: classes.dialogAction }}
       actions={ <ExportToEmailDialogActions {...{ handleEmail: runExportWithChildren, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
     >
+      <DownloadPDFSockets employeeId={employeeId} pdfSocketReceived={pdfSocketReceived} />
       <ExportToEmailModal
         ref={childFormRef}
         {...{ value, handleChange, setNoOptionSelected, isNoOptionSelected, arId: id, hideEffectiveDateOption: true }}

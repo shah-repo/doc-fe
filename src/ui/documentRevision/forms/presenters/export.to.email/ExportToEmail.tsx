@@ -4,14 +4,18 @@ import { Button } from '@material-ui/core';
 import { omit } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { StyledButton } from '../../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListIcon } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import SM from '../../../../../App/Shifamed/Utils/SM/SM';
+import { authSelectors } from '../../../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import DownloadPDFSockets from '../../../../app/sockets/DownloadPDFSockets';
 import { Dialog } from '../../../../components/dialogs';
-import { toastError } from '../../../../components/notifications';
+import { toastError, toastSuccess } from '../../../../components/notifications';
+import { ExportPDFCloseButton, ExportPDFToastr } from '../../../../components/notifications/ExportPDFToastr';
 import { exportPDFToastrStyles } from '../../../../components/notifications/ExportPDFToastr.styles';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -42,8 +46,9 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   const emailDialog = useDialog();
   const [isNoOptionSelected, setNoOptionSelected] = useState<boolean>(false);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
-  // const employeeId = useSelector(authSelectors.currentEmployeeId);
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
   const classes = exportPDFToastrStyles();
+  const clientUserAgent = navigator.userAgent;
 
   // const handleDownloadComplete = (isComplete: boolean) => {
   //   setIsDownloadInprogress(!isComplete);
@@ -63,30 +68,23 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
     },
   });
 
-  // const topic = React.useMemo(() =>
-  //   `${employeeId}/external_export_email/${revisionId}/pdf`
-  // , [employeeId, revisionId]);
-  // const notificationInitiatedRef = useRef(false);
+  const pdfSocketReceived = (data) => {
+    const url = data.url;
+    setIsDownloadInprogress(false);
+    emailDialog.close();
 
-  // const callBack = useCallback((data) => {
-  //   handleDownloadComplete(true);
-  //   if (!notificationInitiatedRef.current) {
-  //     notificationInitiatedRef.current = true;
-  //     toastSuccess(<ExportPDFToastr />, {
-  //       className: classes.popup,
-  //       bodyClassName: classes.popupBody,
-  //       progressClassName: 'progressClassName',
-  //       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
-  //       autoClose: false,
-  //     });
+    if (data.userAgent === clientUserAgent && url) {
+      window.open(url, '_parent');
+    }
 
-  //     setTimeout(() => {
-  //       notificationInitiatedRef.current = false;
-  //     }, 5000);
-  //   }
-  // }, []);
-
-  // useMqttSubscription(topic, callBack);
+    toastSuccess(<ExportPDFToastr />, {
+      className: classes.popup,
+      bodyClassName: classes.popupBody,
+      progressClassName: 'progressClassName',
+      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={url} />,
+      autoClose: false,
+    });
+  };
 
   const exportToEmail = useActionCreator(
     documentRevisionsActions.exportToEmail,
@@ -119,7 +117,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
               <FontAwesomeIcon icon={regular('share')} size="lg" />
             </StyledMenuListIcon>
             <StyledMenuListItemText
-              data-cy="exportToEmail"
+              data-cy="export-to-email"
               primary={<Text translation="common.share" />}
             />
           </StyledMenuListItem>
@@ -128,7 +126,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
       return (
         <StyledButton
           color="primary"
-          data-cy="exportToEmail"
+          data-cy="export-to-email"
           onClick={emailDialog.open}
         >
           <Text translation="common.share" />
@@ -139,7 +137,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
     return (
       <>
         <Button
-          data-cy="exportToEmail"
+          data-cy="export-to-email"
           variant="outlined"
           color="secondary"
           onClick={emailDialog.open}
@@ -161,6 +159,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
         actionsProps={{ className: classes.dialogAction }}
         actions={ <ExportToEmailDialogActions {...{ handleEmail: runExportWithChildren, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
       >
+        <DownloadPDFSockets employeeId={employeeId} pdfSocketReceived={pdfSocketReceived} />
         <ExportToEmailModal ref={childFormRef} {...{ setNoOptionSelected, isNoOptionSelected, revisionId }} />
       </Dialog>
     </>

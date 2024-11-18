@@ -3,15 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { omit } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { SM } from '../../../App';
 import { StyledButton } from '../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListIcon } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon';
 import { StyledMenuListItem } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
 import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
+import { authSelectors } from '../../../state/ducks/auth';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import DownloadPDFSockets from '../../app/sockets/DownloadPDFSockets';
 import { Dialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
-import { toastError } from '../../components/notifications';
+import { toastError, toastSuccess } from '../../components/notifications';
+import { ExportPDFCloseButton, ExportPDFToastr } from '../../components/notifications/ExportPDFToastr';
 import { exportPDFToastrStyles } from '../../components/notifications/ExportPDFToastr.styles';
 import Text from '../../components/Text';
 import ExportToEmailDialogActions from '../../documentRevision/forms/presenters/export.to.email/ExportToEmailDialogActions';
@@ -30,10 +34,11 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const classes = exportPDFToastrStyles();
+  const clientUserAgent = navigator.userAgent;
   const emailDialog = useDialog();
   const [value, setValue] = useState(false);
   const [isNoOptionSelected, setNoOptionSelected] = useState(false);
-  // const employeeId = useSelector(authSelectors.currentEmployeeId);
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
   const [isDownloadInprogress, setIsDownloadInprogress] = useState(false);
   const handleChange = (event) => {
     setValue(event.target.value === 'true');
@@ -47,23 +52,23 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   });
   const childFormRef = useRef<ExportToEmailDialogRefType>();
 
-  // const topic = React.useMemo(() =>
-  //   `${employeeId}/external_export_email/${id}/pdf`
-  // , [employeeId, id]);
+  const pdfSocketReceived = (data) => {
+    const url = data.url;
+    setIsDownloadInprogress(false);
+    emailDialog.close();
 
-  // const callBack = useCallback(debounce((data) => {
-  //   setIsDownloadInprogress(false);
-  //   emailDialog.close();
-  //   toastSuccess(<ExportPDFToastr />, {
-  //     className: classes.popup,
-  //     bodyClassName: classes.popupBody,
-  //     progressClassName: 'progressClassName',
-  //     closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
-  //     autoClose: false,
-  //   });
-  // }, 1000), []);
+    if (data.userAgent === clientUserAgent && url) {
+      window.open(url, '_parent');
+    }
 
-  // useMqttSubscription(topic, callBack);
+    toastSuccess(<ExportPDFToastr />, {
+      className: classes.popup,
+      bodyClassName: classes.popupBody,
+      progressClassName: 'progressClassName',
+      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={url} />,
+      autoClose: false,
+    });
+  };
 
   const handleAREmail = () => {
     if (childFormRef.current) {
@@ -84,7 +89,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         return (<StyledMenuListItem button alignItems="flex-start" onClick={emailDialog.open}>
           <StyledMenuListIcon><FontAwesomeIcon icon={regular('share')} size="lg" /></StyledMenuListIcon>
           <StyledMenuListItemText
-            data-cy="exportToEmail"
+            data-cy="export-to-email"
             primary={<Text translation="common.share" />}
           />
         </StyledMenuListItem>
@@ -94,7 +99,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         <StyledButton
           color="primary"
           style={{ margin: 0 }}
-          data-cy="exportToEmail"
+          data-cy="export-to-email"
           onClick={emailDialog.open}
         >
           <Text translation="common.send.to.email" />
@@ -105,7 +110,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
     return (
       <Button
         kind="white"
-        data-cy="exportToEmail"
+        data-cy="export-to-email"
         onClick={emailDialog.open}
       >
         <Text translation="common.send.to.email" />
@@ -123,7 +128,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         onClose={emailDialog.close}
         actions={ <ExportToEmailDialogActions {...{ handleEmail: handleAREmail, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
         actionsProps={{ className: classes.dialogAction }}
-      >
+      > <DownloadPDFSockets employeeId={employeeId} pdfSocketReceived={pdfSocketReceived} />
         <ExportToEmailModal
           ref={childFormRef}
           {...{ value, handleChange, setNoOptionSelected, isNoOptionSelected, arId: id }}
