@@ -25,8 +25,8 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       deleteDisabled: (isDocumentForm && deleteInFormDisabled) || (!isDocumentForm && deleteDisabled),
     };
 
-    const editSchemaItem = () => {
-      openEditor && type && openEditor(inputProps);
+    const editSchemaItem = (ev: React.MouseEvent<HTMLElement>) => {
+      openEditor && type && openEditor(inputProps)?.(ev);
     };
 
     const removeSchemaItem = () => {

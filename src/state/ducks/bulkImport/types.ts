@@ -7,7 +7,7 @@ import { Group } from '../auth/types';
 import { Approval } from '../common/types';
 import { Employee as EmployeeCompany } from '../company/types';
 import { DocumentRevisionStatus, EquipmentStatus, InputOwner, LotStatus, POStatusType, Precalc, TypeSpecificConfig, UsedDocumentsInLHRS } from '../documentRevisions/types';
-import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_BULK_IMPORTS_STATUS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_BULK_IMPORTS_STATUS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HAS_UNSAVED_CHANGES, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 
 export interface DataType {
   [key: string]: string
@@ -35,6 +35,7 @@ export interface BulkImportStepsState {
   tableData: TableRow[]
   approvers: Approver[]
   approval: Approval | null
+  hasUnsavedChanges: boolean
 }
 
 export type BulkImportStepsActions =
@@ -53,6 +54,7 @@ UpdateRowFieldTable |
 SetApprovers |
 SetApproval |
 CleanUpMappedHeaders |
+SetUnsavedChanges |
 SetIsLoading;
 
 export type BulkImportActions =
@@ -144,6 +146,11 @@ interface SetApproval {
 
 interface SetIsLoading {
   type: typeof SET_IS_LOADING
+  payload: boolean
+}
+
+interface SetUnsavedChanges {
+  type: typeof SET_HAS_UNSAVED_CHANGES
   payload: boolean
 }
 

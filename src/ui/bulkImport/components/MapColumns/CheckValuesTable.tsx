@@ -5,19 +5,23 @@ import { ExcelExport } from '@progress/kendo-react-excel-export';
 import { GridCellProps, GridColumn, GridDataStateChangeEvent, GridFilterChangeEvent, GridPageChangeEvent } from '@progress/kendo-react-grid';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import cx from 'classnames';
-import { debounce, noop } from 'lodash';
+import { noop } from 'lodash';
 import React, { ComponentType, ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
 import { validateDateFormats } from '../../../../common/utils/date';
-import { patchBulkImport, setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
-import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
+import { patchBulkImport, setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, setUnsavedChanges, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
+import { getHasUnsavedChanges, getIsLoading, getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImport, TableErrorDetail, TableErrorValidation, TableRowWithIdx } from '../../../../state/ducks/bulkImport/types';
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import Text from '../../../components/Text';
+import Loader from '../../../components/common/kendo/Loader';
+import { AlertDialog } from '../../../components/dialogs';
 import { Button, Switch } from '../../../components/forms/fields-next';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
 import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
@@ -142,6 +146,8 @@ const BUTTON_COUNT = 4;
 const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleBack, handleCancel, bulkImport }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const history = useHistory();
+  const openLeaveDialog = useDialog();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [dataState, setDataState] = useState<State>({
@@ -156,8 +162,10 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const uploadFileDataAction = useActionCreator(setDataTable);
   const triggerNextClick = useActionCreator(patchBulkImport);
   const excelExportRef = useRef<ExcelExport | null>(null);
-  const firstLoad = useRef<boolean>(true);
-  const [filter, setFilter] = React.useState<CompositeFilterDescriptor>();
+  const currentDestination = useRef<string | null>(null);
+  const [filter, setFilter] = useState<CompositeFilterDescriptor>();
+  const isLoading = useSelector(getIsLoading);
+  const hasUnsavedChanges = useSelector(getHasUnsavedChanges);
 
   const dataStateChange = (event: GridDataStateChangeEvent) => {
     setDataState(event.dataState);
@@ -203,6 +211,30 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
 
   const asyncSaveDataTable = useAsync();
 
+  const handleSaveChanges = () => {
+    dispatch(setUnsavedChanges(false));
+    asyncSaveDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSaveDataTable);
+  };
+
+  const handleCloseLeaveDialog = () => {
+    currentDestination.current = null; // Reset destination if user cancels
+    openLeaveDialog.close();
+  };
+
+  const handleOpenLeaveDialog = () => {
+    if (currentDestination.current) {
+      history.push(currentDestination.current); // Navigate to saved destination
+    }
+    openLeaveDialog.close();
+    dispatch(setUnsavedChanges(false));
+  };
+
+  const confirmLeavePage = (event: BeforeUnloadEvent) => {
+    if (hasUnsavedChanges) {
+      event.preventDefault();
+    }
+  };
+
   const handlePageChange = (event: GridPageChangeEvent) => {
     setPage(event.page.skip / event.page.take);
     setPageSize(event.page.take);
@@ -210,15 +242,33 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   };
 
   const triggerNext = () => {
+    dispatch(setUnsavedChanges(false));
     dispatch(setIsLoading(true));
     asyncSetDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTable);
   };
 
-  const debouncedSaveTableData = debounce(() => {
-    asyncSaveDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSaveDataTable);
-  }, 500);
-
   const updateShowErrorOnly = () => dispatch(setOnlyErrorsTable(!showErrorsOnly));
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', confirmLeavePage);
+
+    return () => {
+      window.removeEventListener('beforeunload', confirmLeavePage);
+    };
+  }, [hasUnsavedChanges]);
+
+  useEffect(() => {
+    const unblock = history.block((nextLocation) => {
+      if (hasUnsavedChanges && !currentDestination.current) {
+        currentDestination.current = nextLocation.pathname;
+        openLeaveDialog.open();
+        return false; // Block the navigation
+      }
+      return true; // Allow the navigation
+    });
+
+    return () => unblock(); // Clean up listener on component unmount
+  }, [history, hasUnsavedChanges, openLeaveDialog]);
 
   useEffect(() => {
     setData(tableData.slice(page, pageSize));
@@ -232,11 +282,6 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
       return acc;
     }, 0);
     setErrorCount(count);
-    if (count !== errorCount && !firstLoad.current) {
-      debouncedSaveTableData();
-    }
-    // we first load to avoid saving the first load of the page.
-    firstLoad.current = false;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData]);
 
@@ -259,36 +304,39 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           </Button>
         </Box>
       </Box>
-      <ExcelExport
-        data={tableData}
-        ref={excelExportRef}
-        fileName={`${bulkImport?.processType || 'export'}.xlsx`}
-      >
-        <StyledKendoGrid
-          data={data}
-          {...dataState}
-          skip={page * pageSize}
-          take={pageSize}
-          total={tableData.length}
-          editField="inEdit"
-          pageable={{
-            buttonCount: BUTTON_COUNT,
-            pageSizes: PAGE_SIZES,
-          }}
-          sortable
-          resizable
-          reorderable
-          filterable
-          filter={filter}
-          onPageChange={handlePageChange}
-          onDataStateChange={dataStateChange}
-          onFilterChange={filterChange}
+      {isLoading && <Loader />}
+      { !isLoading
+        && <ExcelExport
+          data={tableData}
+          ref={excelExportRef}
+          fileName={`${bulkImport?.processType || 'export'}.xlsx`}
         >
-          {tableHeadersFiltered.map((key, idx) => (
-            <GridColumn width={150} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
-          ))}
-        </StyledKendoGrid>
-      </ExcelExport>
+          <StyledKendoGrid
+            data={data}
+            {...dataState}
+            skip={page * pageSize}
+            take={pageSize}
+            total={tableData.length}
+            editField="inEdit"
+            pageable={{
+              buttonCount: BUTTON_COUNT,
+              pageSizes: PAGE_SIZES,
+            }}
+            sortable
+            resizable
+            reorderable
+            filterable
+            filter={filter}
+            onPageChange={handlePageChange}
+            onDataStateChange={dataStateChange}
+            onFilterChange={filterChange}
+          >
+            {tableHeadersFiltered.map((key, idx) => (
+              <GridColumn width={150} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
+            ))}
+          </StyledKendoGrid>
+        </ExcelExport>
+      }
       <Box className={classes.actionsContainer}>
         <Button
           kind="secondary"
@@ -312,14 +360,29 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
             <Text translation="common.previous" />
           </Button>
           <Button
+            onClick={handleSaveChanges}
+            className={classes.button}
+            disabled={!hasUnsavedChanges}
+          >
+            <Text translation="common.save.changes" />
+          </Button>
+          <Button
             onClick={triggerNext}
             className={classes.button}
-            disabled={tableData.length === 0 }
+            disabled={tableData.length === 0}
           >
             <Text translation="common.next" />
           </Button>
         </Box>
       </Box>
+      <AlertDialog
+        handler={openLeaveDialog}
+        cancelLabel="common.no.go.back"
+        onConfirm={handleOpenLeaveDialog}
+        onCancel={handleCloseLeaveDialog}
+      >
+        <p>{translate('bulkImport.unsavedChangesLeave')}</p>
+      </AlertDialog>
     </>
   );
 };

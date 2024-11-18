@@ -647,9 +647,10 @@ const removePreviousBuild = (
 const getAttachmentsByDocRevId = (
   revisionId: string,
   handlers: Handlers,
+  includeCustomAttachments = false,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `/attachments/document_revisions/${revisionId}/all`,
+    url: `/attachments/document_revisions/${revisionId}/all?includeCustomAttachments=${String(includeCustomAttachments)}`,
     method: 'get',
     handlers,
   });

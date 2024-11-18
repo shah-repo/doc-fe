@@ -1,6 +1,7 @@
 import { flatten, unflatten } from 'flat';
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from 'lodash';
+import { cloneDeep, Dictionary, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, get as lodashGet, set as lodashSet, map, omit, omitBy, slice, toNumber, values } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
+import * as Validator from 'validatorjs';
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
 import FBSchemaState from '../FBSchema/FBSchema.state';
 
@@ -52,7 +53,7 @@ class FBFormState extends FBSchemaState {
   }
 
   @computed public get Validator (): any {
-    return lodashGet(window, 'EnlilRemoteValidators.validator');
+    return lodashGet(window, 'EnlilRemoteValidators.validator') ?? Validator;
   }
 
   public get shouldValidate (): boolean {

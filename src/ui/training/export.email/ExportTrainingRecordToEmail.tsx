@@ -33,6 +33,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   const classes = exportPDFToastrStyles();
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const emailDialog = useDialog();
+  const notificationInitiatedRef = useRef(false);
 
   const async = useAsync({
     onError: () => {
@@ -47,13 +48,19 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   const callBack = useCallback((data) => {
     setIsDownloadInprogress(false);
     emailDialog.close();
-    toastSuccess(<ExportPDFToastr />, {
-      className: classes.popup,
-      bodyClassName: classes.popupBody,
-      progressClassName: 'progressClassName',
-      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
-      autoClose: false,
-    });
+    if (!notificationInitiatedRef.current) {
+      notificationInitiatedRef.current = true;
+      toastSuccess(<ExportPDFToastr />, {
+        className: classes.popup,
+        bodyClassName: classes.popupBody,
+        progressClassName: 'progressClassName',
+        closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
+        autoClose: false,
+      });
+      setTimeout(() => {
+        notificationInitiatedRef.current = false;
+      }, 5000);
+    }
   }, []);
 
   useMqttSubscription(topic, callBack);
@@ -84,7 +91,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
       <Text translation="common.share" />
     </Button>
     <Dialog
-      title="common.send.to.email"
+      title="common.share"
       open={emailDialog.isOpen}
       loading={isDownloadInprogress}
       onClose={emailDialog.close}

@@ -150,3 +150,5 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
   },
 ];
+
+export const OMIT_FIELDS = ['id', 'materialFlowACLs', 'statusCode', 'approvalRoles'];
