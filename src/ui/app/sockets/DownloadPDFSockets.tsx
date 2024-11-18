@@ -1,22 +1,20 @@
 import React, { useCallback, useMemo } from 'react';
+import { safeParse } from '../../document.revision/utils/paths';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 interface DownloadPDFSocketsProps {
   employeeId?: string
-  pdfSocketReceived?: (url: string) => void
+  showNotificationAndDownloadPDF: (data: DownloadPDFSocketsData) => void
 }
 
-export const safeParse = (jsonString: string) => {
-  try {
-    return JSON.parse(jsonString);
-  } catch {
-    return null;
-  }
-};
+export interface DownloadPDFSocketsData {
+  url: string
+  message: string
+}
 
 const DownloadPDFSockets: React.FC<DownloadPDFSocketsProps> = ({
   employeeId,
-  pdfSocketReceived,
+  showNotificationAndDownloadPDF,
 }) => {
   const topic = useMemo(
     () => `${employeeId}/external_export_email/+/pdf`,
@@ -29,7 +27,10 @@ const DownloadPDFSockets: React.FC<DownloadPDFSocketsProps> = ({
       const messageData = parsedData?.data?.message;
       const parsedMessage
         = typeof messageData === 'string' ? safeParse(messageData) : messageData;
-      pdfSocketReceived?.(parsedMessage);
+      const clientUserAgent = navigator.userAgent;
+      if (data.userAgent === clientUserAgent && parsedMessage.url) {
+      showNotificationAndDownloadPDF?.(parsedMessage);
+      }
     },
     [employeeId],
   );

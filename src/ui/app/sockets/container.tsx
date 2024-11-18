@@ -10,7 +10,6 @@ const SocketsContainer: React.FunctionComponent = () => (
     <EmployeeListSockets />
     <GroupsListSockets />
     <DocumentTypeSockets />
-    {/* <DownloadPDFSockets /> */}
   </>
 );
 

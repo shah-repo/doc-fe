@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../state/ducks/auth';
 import { trainingActions } from '../../../state/ducks/training';
-import DownloadPDFSockets from '../../app/sockets/DownloadPDFSockets';
+import DownloadPDFSockets, { DownloadPDFSocketsData } from '../../app/sockets/DownloadPDFSockets';
 import Text from '../../components/Text';
 import Dialog from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
@@ -33,17 +33,12 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
   const classes = exportPDFToastrStyles();
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const emailDialog = useDialog();
-  const clientUserAgent = navigator.userAgent;
 
-  const pdfSocketReceived = (data) => {
+  const showNotificationAndDownloadPDF = (data: DownloadPDFSocketsData) => {
     const url = data.url;
     setIsDownloadInprogress(false);
     emailDialog.close();
-
-    if (data.userAgent === clientUserAgent && url) {
-      window.location.href = url;
-    }
-
+    window.location.href = url;
     toastSuccess(<ExportPDFToastr />, {
       className: classes.popup,
       bodyClassName: classes.popupBody,
@@ -79,7 +74,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
     <Button
       variant="outlined"
       color="primary"
-      data-cy="export-to-email"
+      data-cy="exportToEmail"
       onClick={emailDialog.open}
     >
       <Text translation="common.share" />
@@ -92,7 +87,7 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
       actionsProps={{ className: classes.dialogAction }}
       actions={ <ExportToEmailDialogActions {...{ handleEmail: runExportWithChildren, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
     >
-      <DownloadPDFSockets employeeId={employeeId} pdfSocketReceived={pdfSocketReceived} />
+      <DownloadPDFSockets employeeId={employeeId} showNotificationAndDownloadPDF={showNotificationAndDownloadPDF} />
       <ExportToEmailModal
         ref={childFormRef}
         {...{ value, handleChange, setNoOptionSelected, isNoOptionSelected, arId: id, hideEffectiveDateOption: true }}
