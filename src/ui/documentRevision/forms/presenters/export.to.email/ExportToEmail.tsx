@@ -2,7 +2,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@material-ui/core';
 import { omit } from 'lodash';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { StyledButton } from '../../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
@@ -13,14 +13,12 @@ import SM from '../../../../../App/Shifamed/Utils/SM/SM';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import { Dialog } from '../../../../components/dialogs';
-import { toastError, toastSuccess } from '../../../../components/notifications';
-import { ExportPDFCloseButton, ExportPDFToastr } from '../../../../components/notifications/ExportPDFToastr';
+import { toastError } from '../../../../components/notifications';
 import { exportPDFToastrStyles } from '../../../../components/notifications/ExportPDFToastr.styles';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
-import useMqttSubscription from '../../../../hooks/useMqttSubscription';
 import ExportToEmailDialogActions from './ExportToEmailDialogActions';
 import ExportToEmailModal, { ExportToEmailDialogRefType } from './ExportToEmailModal';
 interface Props {
@@ -67,30 +65,30 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
     },
   });
 
-  const topic = React.useMemo(() =>
-    `${employeeId}/external_export_email/${revisionId}/pdf`
-  , [employeeId, revisionId]);
-  const notificationInitiatedRef = useRef(false);
+  // const topic = React.useMemo(() =>
+  //   `${employeeId}/external_export_email/${revisionId}/pdf`
+  // , [employeeId, revisionId]);
+  // const notificationInitiatedRef = useRef(false);
 
-  const callBack = useCallback((data) => {
-    handleDownloadComplete(true);
-    if (!notificationInitiatedRef.current) {
-      notificationInitiatedRef.current = true;
-      toastSuccess(<ExportPDFToastr />, {
-        className: classes.popup,
-        bodyClassName: classes.popupBody,
-        progressClassName: 'progressClassName',
-        closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
-        autoClose: false,
-      });
+  // const callBack = useCallback((data) => {
+  //   handleDownloadComplete(true);
+  //   if (!notificationInitiatedRef.current) {
+  //     notificationInitiatedRef.current = true;
+  //     toastSuccess(<ExportPDFToastr />, {
+  //       className: classes.popup,
+  //       bodyClassName: classes.popupBody,
+  //       progressClassName: 'progressClassName',
+  //       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
+  //       autoClose: false,
+  //     });
 
-      setTimeout(() => {
-        notificationInitiatedRef.current = false;
-      }, 5000);
-    }
-  }, []);
+  //     setTimeout(() => {
+  //       notificationInitiatedRef.current = false;
+  //     }, 5000);
+  //   }
+  // }, []);
 
-  useMqttSubscription(topic, callBack);
+  // useMqttSubscription(topic, callBack);
 
   const exportToEmail = useActionCreator(
     documentRevisionsActions.exportToEmail,
