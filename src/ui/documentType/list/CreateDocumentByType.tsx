@@ -356,6 +356,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           <ExportListDialog
             {...{ headers, data }}
             dialog={exportDialog}
+            categoryName={categoryName}
             customFileName="DocumentList"
           />
           <CustomLabelTooltip {...{ tooltipConfig }}>

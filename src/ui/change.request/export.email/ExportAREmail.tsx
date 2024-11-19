@@ -1,7 +1,7 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { debounce, omit } from 'lodash';
-import React, { useCallback, useRef, useState } from 'react';
+import { omit } from 'lodash';
+import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../../App';
@@ -11,6 +11,8 @@ import { StyledMenuListItem } from '../../../App/Shifamed/Components/forms/prese
 import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText';
 import { authSelectors } from '../../../state/ducks/auth';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
+import DownloadPDFSockets, { DownloadPDFSocketsData } from '../../app/sockets/DownloadPDFSockets';
+import { downloadFile } from '../../common/utils/helpers';
 import { Dialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { toastError, toastSuccess } from '../../components/notifications';
@@ -22,7 +24,6 @@ import ExportToEmailModal, { ExportToEmailDialogRefType } from '../../documentRe
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
-import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 interface Props {
   id: string
@@ -51,23 +52,20 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
   });
   const childFormRef = useRef<ExportToEmailDialogRefType>();
 
-  const topic = React.useMemo(() =>
-    `${employeeId}/external_export_email/${id}/pdf`
-  , [employeeId, id]);
-
-  const callBack = useCallback(debounce((data) => {
+  const showNotificationAndDownloadPDF = (data: DownloadPDFSocketsData) => {
+    const url = data.url;
     setIsDownloadInprogress(false);
     emailDialog.close();
     toastSuccess(<ExportPDFToastr />, {
       className: classes.popup,
       bodyClassName: classes.popupBody,
       progressClassName: 'progressClassName',
-      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={data} />,
+      closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={url} />,
       autoClose: false,
     });
-  }, 1000), []);
-
-  useMqttSubscription(topic, callBack);
+    window.onbeforeunload = null;
+    downloadFile(url);
+  };
 
   const handleAREmail = () => {
     if (childFormRef.current) {
@@ -127,7 +125,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         onClose={emailDialog.close}
         actions={ <ExportToEmailDialogActions {...{ handleEmail: handleAREmail, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
         actionsProps={{ className: classes.dialogAction }}
-      >
+      > <DownloadPDFSockets employeeId={employeeId} revId={id} showNotificationAndDownloadPDF={showNotificationAndDownloadPDF} />
         <ExportToEmailModal
           ref={childFormRef}
           {...{ value, handleChange, setNoOptionSelected, isNoOptionSelected, arId: id }}

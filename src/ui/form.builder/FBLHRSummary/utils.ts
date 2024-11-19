@@ -1,4 +1,6 @@
 import { translate } from '../../../common/intl';
+import { LotStatus } from '../../../state/ducks/documentRevisions/types';
+import { getLotStatusLabel } from '../../components/common/header/HeaderLotStatus';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FB } from '../helpers';
@@ -36,6 +38,7 @@ export const getExcelData = (
       lotOrEqDocId: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       ...(item.expiryDate && { expiryDate: item.expiryDate }),
       issue: getDisplayDocumentByDetailsObj(item?.issueDetails),
+      lotStatus: getLotStatusLabel(item.lotStatus as LotStatus),
       ...(item.calDueDate && { calDueDate: item.calDueDate }),
       ...(item.pmDueDate && { pmDueDate: item.pmDueDate }),
       ...(item.recordCreationDate && { recordCreationDate: item.recordCreationDate }),
