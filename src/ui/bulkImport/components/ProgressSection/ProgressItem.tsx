@@ -39,6 +39,7 @@ interface ProgressItemProps {
 
 const STATUSES_HIDE_DELETE = [BkStatus.IN_PROGRESS, BkStatus.COMPLETED, BkStatus.SUCCESS, BkStatus.CANCELLED];
 const STATUSES_CANCELED = [BkStatus.CANCELLED, BkStatus.FAILED];
+const STATUSES_COMPLETE = [BkStatus.COMPLETED, BkStatus.SUCCESS];
 
 const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentEmployeeId }) => {
   const classes = useStyles();
@@ -56,6 +57,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && isProcessEmpty && item.status === BkStatus.STARTED;
   const showApprovals = !!currentApproval && showApproverButtons;
   const currentProgressStep = useRef(0);
+  const isComplete = STATUSES_COMPLETE.includes(item?.status as BkStatus) && item?.completedAt;
   const isRejected = STATUSES_CANCELED.includes(item?.status as BkStatus);
   const showDeleteButton = isProcessEmpty && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
   const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
@@ -152,7 +154,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
       <Box className={classes.itemContainer}>
         <Box>
           <Box className={classes.titleContainer}>
-            {item.completedAt ? <FontAwesomeIcon
+            {isComplete ? <FontAwesomeIcon
               className={classes.checkGreenIcon}
               icon={solid('circle-check')}
             /> : <FontAwesomeIcon
@@ -172,14 +174,14 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           )}
         </Box>
         <Box className={classes.progressBarIconsContainer}>
-          {item?.completedAt ? (
+          {isComplete ? (
             <Box className={classes.completedMsgContainer}>
               <FontAwesomeIcon
                 className={classes.checkGreenIcon}
                 icon={solid('circle-check')}
               />
               <Typography className={classes.completedText}>
-                {translate('common.completed')} ({moment(item.completedAt).format(MomentFormats.FullDateTime)})
+                {translate('common.completed')} ({ item.completedAt ? moment(item.completedAt).format(MomentFormats.FullDateTime) : ''})
               </Typography>
             </Box>
           ) : (
