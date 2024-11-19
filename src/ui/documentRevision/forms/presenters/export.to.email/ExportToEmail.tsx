@@ -13,6 +13,7 @@ import SM from '../../../../../App/Shifamed/Utils/SM/SM';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
 import DownloadPDFSockets, { DownloadPDFSocketsData } from '../../../../app/sockets/DownloadPDFSockets';
+import { downloadFile } from '../../../../common/utils/helpers';
 import { Dialog } from '../../../../components/dialogs';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import { ExportPDFCloseButton, ExportPDFToastr } from '../../../../components/notifications/ExportPDFToastr';
@@ -71,7 +72,6 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
     const url = data.url;
     handleDownloadComplete(true);
     emailDialog.close();
-    window.location.href = url;
     toastSuccess(<ExportPDFToastr />, {
       className: classes.popup,
       bodyClassName: classes.popupBody,
@@ -79,6 +79,8 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={url} />,
       autoClose: false,
     });
+    window.onbeforeunload = null;
+    downloadFile(url);
   };
 
   const exportToEmail = useActionCreator(

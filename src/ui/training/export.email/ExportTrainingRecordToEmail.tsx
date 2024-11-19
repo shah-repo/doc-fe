@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../state/ducks/auth';
 import { trainingActions } from '../../../state/ducks/training';
 import DownloadPDFSockets, { DownloadPDFSocketsData } from '../../app/sockets/DownloadPDFSockets';
+import { downloadFile } from '../../common/utils/helpers';
 import Text from '../../components/Text';
 import Dialog from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
@@ -38,7 +39,6 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
     const url = data.url;
     setIsDownloadInprogress(false);
     emailDialog.close();
-    window.location.href = url;
     toastSuccess(<ExportPDFToastr />, {
       className: classes.popup,
       bodyClassName: classes.popupBody,
@@ -46,6 +46,8 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={url} />,
       autoClose: false,
     });
+    window.onbeforeunload = null;
+    downloadFile(url);
   };
 
   const async = useAsync({

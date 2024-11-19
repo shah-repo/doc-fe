@@ -12,6 +12,7 @@ import { StyledMenuListItemText } from '../../../App/Shifamed/Components/forms/p
 import { authSelectors } from '../../../state/ducks/auth';
 import { changeRequestsActions } from '../../../state/ducks/changeRequest';
 import DownloadPDFSockets, { DownloadPDFSocketsData } from '../../app/sockets/DownloadPDFSockets';
+import { downloadFile } from '../../common/utils/helpers';
 import { Dialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { toastError, toastSuccess } from '../../components/notifications';
@@ -55,7 +56,6 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
     const url = data.url;
     setIsDownloadInprogress(false);
     emailDialog.close();
-    window.location.href = url;
     toastSuccess(<ExportPDFToastr />, {
       className: classes.popup,
       bodyClassName: classes.popupBody,
@@ -63,6 +63,8 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={url} />,
       autoClose: false,
     });
+    window.onbeforeunload = null;
+    downloadFile(url);
   };
 
   const handleAREmail = () => {
