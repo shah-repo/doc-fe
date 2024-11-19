@@ -123,7 +123,7 @@ const ExportARToEmail: React.FunctionComponent<Props> = ({
         onClose={emailDialog.close}
         actions={ <ExportToEmailDialogActions {...{ handleEmail: handleAREmail, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
         actionsProps={{ className: classes.dialogAction }}
-      > <DownloadPDFSockets employeeId={employeeId} showNotificationAndDownloadPDF={showNotificationAndDownloadPDF} />
+      > <DownloadPDFSockets employeeId={employeeId} revId={id} showNotificationAndDownloadPDF={showNotificationAndDownloadPDF} />
         <ExportToEmailModal
           ref={childFormRef}
           {...{ value, handleChange, setNoOptionSelected, isNoOptionSelected, arId: id }}

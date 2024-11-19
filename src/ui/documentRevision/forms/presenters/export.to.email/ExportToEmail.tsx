@@ -154,7 +154,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
         actionsProps={{ className: classes.dialogAction }}
         actions={ <ExportToEmailDialogActions {...{ handleEmail: runExportWithChildren, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
       >
-        <DownloadPDFSockets employeeId={employeeId} showNotificationAndDownloadPDF={showNotificationAndDownloadPDF} />
+        <DownloadPDFSockets employeeId={employeeId} revId={revisionId} showNotificationAndDownloadPDF={showNotificationAndDownloadPDF} />
         <ExportToEmailModal ref={childFormRef} {...{ setNoOptionSelected, isNoOptionSelected, revisionId }} />
       </Dialog>
     </>

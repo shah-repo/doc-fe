@@ -4,6 +4,7 @@ import useMqttSubscription from '../../hooks/useMqttSubscription';
 
 interface DownloadPDFSocketsProps {
   employeeId?: string
+  revId?: string
   showNotificationAndDownloadPDF: (data: DownloadPDFSocketsData) => void
 }
 
@@ -14,11 +15,15 @@ export interface DownloadPDFSocketsData {
 
 const DownloadPDFSockets: React.FC<DownloadPDFSocketsProps> = ({
   employeeId,
+  revId,
   showNotificationAndDownloadPDF,
 }) => {
   const topic = useMemo(
-    () => `${employeeId}/external_export_email/+/pdf`,
-    [employeeId],
+    () =>
+      revId
+        ? `${employeeId}/external_export_email/${revId}/pdf`
+        : `${employeeId}/external_export_email/+/pdf`,
+    [employeeId, revId],
   );
 
   const loadData = useCallback(
@@ -28,11 +33,11 @@ const DownloadPDFSockets: React.FC<DownloadPDFSocketsProps> = ({
       const parsedMessage
         = typeof messageData === 'string' ? safeParse(messageData) : messageData;
       const clientUserAgent = navigator.userAgent;
-      if (data.userAgent === clientUserAgent && parsedMessage.url) {
+      if (parsedMessage.userAgent === clientUserAgent && parsedMessage.url) {
       showNotificationAndDownloadPDF?.(parsedMessage);
       }
     },
-    [employeeId],
+    [employeeId, revId],
   );
 
   useMqttSubscription(topic, loadData);
