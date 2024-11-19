@@ -7,7 +7,7 @@ import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, CREATE_APPROVAL_ROLES_URL, LIFE
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, ApiActionMethod, Handlers } from '../../types';
 import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
+import { AUTOSAVE_CONFIG, OMIT_FIELDS, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettings, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
