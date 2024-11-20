@@ -2089,6 +2089,8 @@
   "administration.general.settings.training.reminders.sub.title": "Select how many notifications are required until training is due",
   "administration.general.settings.training.reminders.training.assigned": "Training Assigned",
   "administration.general.settings.training.reminders.seven.days": "7 days",
+  "administration.general.settings.training.reminders.three.days": "3 days",
+  "administration.general.settings.training.reminders.today": "Training due today",
   "administration.general.settings.training.reminders.custom.days": "days",
   "administration.general.settings.training.reminders.training.overdue": "Training overdue",
   "administration.general.settings.training.reminders.cc.training.notifications": "CC training notifications",
