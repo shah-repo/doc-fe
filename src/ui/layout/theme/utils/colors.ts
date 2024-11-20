@@ -92,6 +92,7 @@ enum Colors {
   green_blue='#0DB78D',
   light_forest_green_border='#509849',
   dark_jungle_green='#162229',
+  light_green_selected='#dbf5cb',
   // yellow
   light_yellow = '#FFF3CD',
   dark_yellow = '#856404',

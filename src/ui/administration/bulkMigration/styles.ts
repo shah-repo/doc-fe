@@ -82,18 +82,19 @@ export default makeStyles<NextTheme>(theme => ({
     color: Colors.textGray,
     fontSize: 12,
     minHeight: 0,
+    cursor: 'pointer',
 
     '&.Mui-selected': {
-      backgroundColor: Colors.primaryBg,
+      backgroundColor: Colors.lightGray,
       color: Colors.primaryDark,
       fontWeight: 600,
 
       '&:hover': {
-        backgroundColor: Colors.primaryBg,
+        backgroundColor: Colors.lightGray,
       },
     },
     '&:hover': {
-      backgroundColor: Colors.primaryBg,
+      backgroundColor: Colors.lightGray,
     },
   },
   panels: {
@@ -125,8 +126,8 @@ export default makeStyles<NextTheme>(theme => ({
     position: 'relative',
     marginTop: '8px',
     border: `1px solid ${Colors.textGray}`,
-    borderRadius: '4px',
-    padding: '4px',
+    borderRadius: '2px',
+    padding: '8px',
     width: '100%',
   },
   compactListItem: {
@@ -134,5 +135,58 @@ export default makeStyles<NextTheme>(theme => ({
     '& .MuiListItemText-root': {
       marginBottom: 0,
     },
+  },
+  mappingArea: {
+    '& > div > div': {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+      marginBottom: theme.spacing(1),
+    },
+  },
+  mappingSwitcher: {
+    '& span': {
+      fontSize: '12px',
+    },
+  },
+  switchBase: {
+    color: Colors.statusDraftBorder,
+    '&$checked': {
+      color: Colors.statusDraftBorder,
+    },
+  },
+  dialogPreviewDrawer: {
+    width: '80vw', // Width of the side panel
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%', // Full height of the drawer
+  },
+  dialogPreviewDrawerPaper: {
+    width: '80vw',
+  },
+  drawerContent: {
+    display: 'flex',
+    flexGrow: 1, // Allow sections to take full available height
+    flexDirection: 'row',
+  },
+  leftSection: {
+    flexBasis: '25%', // Left section takes 30% width
+    borderRight: `1px solid ${theme.palette.divider}`,
+    padding: theme.spacing(2),
+    boxSizing: 'border-box',
+    height: '92vh',
+    overflow: 'auto',
+  },
+  rightSection: {
+    flexBasis: '75%', // Right section takes 70% width
+    padding: theme.spacing(2),
+    boxSizing: 'border-box',
+  },
+  dialogPreviewDrawerCloseButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
   },
 }));

@@ -19,11 +19,15 @@ export const SET_GENERAL_SETTINGS = 'company/SET_GENERAL_SETTINGS';
 
 export const BULK_MIGRATION_GET_DOCUMENT_TYPES = 'bulk_migration/getDocumentTypes';
 export const BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS = 'bulk_migration/getDocumentTypeFormDetails';
-export const BULK_MIGRATION_GET_ELIGIBLE_REV_COUNT = 'bulk_migration/getEligibleRevs';
+export const BULK_MIGRATION_GET_ELIGIBLE_REVS = 'bulk_migration/getEligibleRevs';
 export const BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS = 'bulk_migration/getDocumentTypeApprovalRequirements';
-export const BULK_MIGRATION_UPGRADE_FORM = 'bulk_migration/releaseFormNewRevision';
+export const BULK_MIGRATION_UPGRADE_FORM = 'bulk_migration/createNewFormRevision';
 export const BULK_MIGRATION_REGISTER_SCAN = 'bulk_migration/registerScan';
+export const BULK_MIGRATION_UPDATE_SCAN = 'bulk_migration/updateScan';
 export const BULK_MIGRATION_CANCEL_SCAN = 'bulk_migration/cancelScan';
+export const BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW = 'bulk_migration/getScanRevisionsForPreview';
+export const BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW = 'bulk_migration/previewMapping';
+export const BULK_MIGRATION_GET_SCAN_REVISIONS = 'bulk_migration/getScanRevisions';
 export const BULK_MIGRATION_GET_LATEST_COMPLETED_SCAN = 'bulk_migration/getLatestCompletedScan';
 export const BULK_MIGRATION_GET_SCAN_RESULTS = 'bulk_migration/getScanRevisions';
 export const BULK_MIGRATION_START_REVS_MIGRATION = 'bulk_migration';

@@ -22,9 +22,10 @@ import { MomentFormats } from '../../../common/utils/date';
 import apiClient from '../../../state/apiClient';
 import {
   BULK_MIGRATION_CANCEL_SCAN,
-  BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REV_COUNT,
+  BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS,
   BULK_MIGRATION_GET_LATEST_COMPLETED_SCAN,
   BULK_MIGRATION_REGISTER_SCAN,
+  BULK_MIGRATION_UPDATE_SCAN,
   BULK_MIGRATION_UPGRADE_FORM,
 } from '../../../state/ducks/company/constants';
 import {
@@ -44,7 +45,8 @@ import {
   IApprovalRequirementGroup,
   IApprovalRequirements,
   IBulkMigrationDocumentType,
-  ISupplierScanDetails,
+  IBulkMigrationScanDetails,
+  ISchemaItem,
   MIGRATION_STATUS_ENUM,
 } from './interface';
 import MigrationMappingDialog from './MigrationMapping.dialog';
@@ -59,29 +61,24 @@ const BulkMigrationContainer: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [documentTypesList, setDocumentTypesList] = useState<
-  IBulkMigrationDocumentType[]
-  >([]);
+  const [documentTypesList, setDocumentTypesList] = useState<IBulkMigrationDocumentType[]>([]);
 
   const [fromDocumentTypeId, setFromDocumentTypeId] = useState<string>('');
   const [fromFormRevId, setFromFormRevId] = useState<string>('');
   const [toDocumentTypeId, setToDocumentTypeId] = useState<string>('');
   const [toFormRevId, setToFormRevId] = useState<string>('');
 
-  const [fromFormRevsList, setFromFormRevsList] = useState<DocumentRevision[]>(
-    [],
-  );
+  const [fromFormRevsList, setFromFormRevsList] = useState<DocumentRevision[]>([]);
   const [toFormRevsList, setToFormRevsList] = useState<DocumentRevision[]>([]);
 
   const [eligibleRevsCount, setEligibleRevsCount] = useState<number>(0);
 
-  const [approvalRequirements, setApprovalRequirements]
-    = useState<IApprovalRequirements>();
+  const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
 
   const [newFormSchema, setNewFormSchema] = useState([]);
   const [isFormSchemaExpanded, setIsFormSchemaExpanded] = useState(false);
 
-  const [scanDetails, setScanDetails] = useState<ISupplierScanDetails>();
+  const [scanDetails, setScanDetails] = useState<IBulkMigrationScanDetails>();
   // const [scanResults, setScanResults] = useState<ISupplierScanResultRev[]>([]);
 
   useEffect(() => {
@@ -177,7 +174,7 @@ const BulkMigrationContainer: React.FC = () => {
 
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
-      url: `${BULK_MIGRATION_GET_ELIGIBLE_REV_COUNT}/${formRevId}?isCountOnly=true`,
+      url: `${BULK_MIGRATION_GET_ELIGIBLE_REVS}/${formRevId}?isCountOnly=true`,
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
@@ -239,7 +236,7 @@ const BulkMigrationContainer: React.FC = () => {
         // console.log(data);
         setIsLoading(false);
 
-        const { scanDetails }: { scanDetails: ISupplierScanDetails } = data;
+        const { scanDetails }: { scanDetails: IBulkMigrationScanDetails } = data;
 
         if (scanDetails?.id) {
           setScanDetails(scanDetails);
@@ -289,7 +286,46 @@ const BulkMigrationContainer: React.FC = () => {
     if (toFormRevId) {
       const requestConfig: AxiosRequestConfig = {
         method: 'post',
-        url: `${BULK_MIGRATION_REGISTER_SCAN}/${toFormRevId}`,
+        url: `${BULK_MIGRATION_REGISTER_SCAN}`,
+        data: {
+          fromDocumentTypeId,
+          fromFormRevId,
+          toDocumentTypeId,
+          toFormRevId,
+        },
+        headers: {
+          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+        },
+        // cancelToken: call.token,
+      };
+
+      apiClient
+        .request(requestConfig)
+        .then((resp) => resp)
+        .then(({ data }) => {
+          console.log(data);
+          setIsLoading(false);
+          setScanDetails(data);
+          // toastSuccess(
+          //   'Scan request has been submitted. Please check back in some time.',
+          // );
+        })
+        .catch((exception) => {
+          catchAxiosException(exception);
+        });
+    }
+  }
+
+  function updateScanMapping (fromRevSchema: ISchemaItem[], toRevSchema: ISchemaItem[]) {
+    if (scanDetails) {
+      commonSetUp();
+      const requestConfig: AxiosRequestConfig = {
+        method: 'patch',
+        url: `${BULK_MIGRATION_UPDATE_SCAN}/${scanDetails.id}`,
+        data: {
+          fromFormSchema: fromRevSchema,
+          toFormSchema: toRevSchema,
+        },
         headers: {
           Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
         },
@@ -303,7 +339,7 @@ const BulkMigrationContainer: React.FC = () => {
           console.log(data);
           setIsLoading(false);
           toastSuccess(
-            'Scan request has been submitted. Please check back in some time.',
+            'Scan mapping rules have been updated. Click Preview to see these rules in action.',
           );
         })
         .catch((exception) => {
@@ -416,6 +452,13 @@ const BulkMigrationContainer: React.FC = () => {
     setIsFormSchemaExpanded(!isFormSchemaExpanded);
   };
 
+  useEffect(() => {
+    if (fromDocumentTypeId && toDocumentTypeId && fromFormRevId && toFormRevId) {
+      registerScanForRevisions();
+    }
+  }, [fromDocumentTypeId, toDocumentTypeId, fromFormRevId, toFormRevId]);
+
+  // Popover
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleUpgradeFormPopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -433,6 +476,7 @@ const BulkMigrationContainer: React.FC = () => {
     );
   };
 
+  // Migration mapping Dialog
   const [isMigrationMappingDialogVisible, setIsMigrationMappingDialogVisible]
     = useState<boolean>(false);
   const showMappingRules = () => {
@@ -773,6 +817,8 @@ const BulkMigrationContainer: React.FC = () => {
           handleClose={handleMigrationMappingDialogClose}
           fromRev={fromFormRevsList.find((rev) => rev.id === fromFormRevId)}
           toRev={toFormRevsList.find((rev) => rev.id === toFormRevId)}
+          updateScanMapping={updateScanMapping}
+          scanDetails={scanDetails}
         />
       )}
     </Box>

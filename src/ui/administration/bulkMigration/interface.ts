@@ -1,3 +1,4 @@
+import { AnchorPositionType } from 'react-archer/lib/types';
 import { Permission } from '../../../state/ducks/auth/types';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -11,10 +12,15 @@ export interface IBulkMigrationDocumentType {
   category: string
 }
 
-export interface ISupplierScanDetails {
-  suppliersCount: number
-  completedAt: string
+export interface IBulkMigrationScanDetails {
   id: string
+  fromDocumentTypeId: string
+  toDocumentTypeId: string
+  fromFormRevId: string
+  toFormRevId: string
+  fromFormSchema: ISchemaItem[]
+  toFormSchema: ISchemaItem[]
+  completedAt: string
   status: MIGRATION_STATUS_ENUM
 }
 
@@ -55,6 +61,7 @@ export enum REV_ACTION_OPTIONS {
 }
 
 export enum MIGRATION_STATUS_ENUM {
+  INITIALIZED = 'INITIALIZED',
   STARTED = 'STARTED',
   IN_PROGRESS = 'IN_PROGRESS',
   FAILED = 'FAILED',
@@ -87,5 +94,25 @@ export interface IApprovalRequirementGroup {
 
 export type ISchemaItem = FBSchemaProps & {
   isMapped?: boolean
-  mappedFrom?: Array<{label: any, name: string}>
+  mappedFrom?: IMappedFrom[]
+  tableMappings?: IRowData[]
 };
+
+export interface IMappedFrom {
+  label: any
+  name: string
+  type: any
+  isShowDirectly: boolean
+}
+
+export interface IRelation {
+  targetId: string
+  targetAnchor: AnchorPositionType
+  sourceAnchor: AnchorPositionType
+  style?: {[key: string]: string}
+  endMarker?: boolean
+}
+
+export interface IRowData {
+  [key: string]: any
+}
