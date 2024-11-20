@@ -60,7 +60,7 @@ const TopSection: React.FunctionComponent<{
               size="small"
               startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
               onClick={isButtonShown ? showEditRow : undefined}
-              data-cy="approval-request-items-button-add-text"
+              data-cy="approvalRequest.items.button.addText"
               disabled={!isButtonShown}
             >
               {translate('approvalRequest.items.button.addText')}
