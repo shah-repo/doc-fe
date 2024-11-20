@@ -469,6 +469,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           fbLabel = 'Note';
         }
 
+        if (change.field.includes('lifecyclePhaseId') && change.type === 'OBJECT_NEW') {
+          return;
+        }
+
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
         const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 
