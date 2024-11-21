@@ -116,3 +116,8 @@ export interface IRelation {
 export interface IRowData {
   [key: string]: any
 }
+
+export enum IReferenceDataType {
+  ARRAY = 'array',
+  OBJECT = 'object',
+}

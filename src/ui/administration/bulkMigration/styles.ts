@@ -156,37 +156,4 @@ export default makeStyles<NextTheme>(theme => ({
       color: Colors.statusDraftBorder,
     },
   },
-  dialogPreviewDrawer: {
-    width: '80vw', // Width of the side panel
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%', // Full height of the drawer
-  },
-  dialogPreviewDrawerPaper: {
-    width: '80vw',
-  },
-  drawerContent: {
-    display: 'flex',
-    flexGrow: 1, // Allow sections to take full available height
-    flexDirection: 'row',
-  },
-  leftSection: {
-    flexBasis: '25%', // Left section takes 30% width
-    borderRight: `1px solid ${theme.palette.divider}`,
-    padding: theme.spacing(2),
-    boxSizing: 'border-box',
-    height: '92vh',
-    overflow: 'auto',
-  },
-  rightSection: {
-    flexBasis: '75%', // Right section takes 70% width
-    padding: theme.spacing(2),
-    boxSizing: 'border-box',
-  },
-  dialogPreviewDrawerCloseButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
 }));

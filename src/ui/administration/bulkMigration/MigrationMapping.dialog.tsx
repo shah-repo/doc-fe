@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { AppBar, Box, Button, Chip, Dialog, DialogContent, Drawer, FormControlLabel, IconButton, LinearProgress, List, ListItem, ListItemText, Switch, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Box, Button, Chip, Dialog, DialogContent, FormControlLabel, IconButton, Switch, Toolbar, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
-import { AxiosRequestConfig } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
-import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW, BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW } from '../../../state/ducks/company/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { store } from '../../../state/store';
-import { toastError } from '../../components/notifications';
 import Colors from '../../layout/theme/utils/colors';
 import { IBulkMigrationScanDetails, IMappedFrom, IRowData, ISchemaItem } from './interface';
+import PreviewDrawer from './PreviewDrawer';
 import useStyles from './styles';
 import ToSchemaItemMappingTable from './ToSchemaItemMappingTable';
 import { autoMapArrays, canMapItems, getFromSchemaItemBgColor, isDisabledSchemaItem } from './utils';
@@ -26,8 +22,6 @@ const MigrationMappingDialog: React.FC<{
 }> = ({ isOpen, handleClose, updateScanMapping, fromRev, toRev, scanDetails }) => {
   const classes = useStyles();
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const [selectedSchemaItems, setSelectedSchemaItems] = useState<ISchemaItem[]>([]);
 
   const [fromRevSchema, setFromRevSchema] = useState<ISchemaItem[]>([]);
@@ -37,9 +31,6 @@ const MigrationMappingDialog: React.FC<{
   const [isShowRelationVisible, setIsShowRelationVisible] = useState<boolean>(false);
 
   const [isPreviewPanelVisible, setIsPreviewPanelVisible] = useState<boolean>(false);
-  const [previewDocRevsList, setPreviewDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
-
-  const [selectedPreviewDocRev, setSelectedPreviewDocRev] = React.useState<DocumentRevision & {formInputKeysCount: number}>();
 
   useEffect(() => {
     if (fromRev?.id) {
@@ -71,63 +62,9 @@ const MigrationMappingDialog: React.FC<{
     updateScanMapping(fromRevSchema, toRevSchema);
   }
 
-  function fetchAllEligibleRevisions () {
-    setIsLoading(true);
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: `${BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW}/${scanDetails?.id}`,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        setPreviewDocRevsList(data);
-        setIsLoading(false);
-      })
-      .catch((exception) => {
-        setIsLoading(false);
-        toastError(exception?.response.data?.message);
-      });
-  }
-
-  function getPreviewForDocRev (docRevSelected: DocumentRevision) {
-    setIsLoading(true);
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: `${BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW}/${scanDetails?.id}/${docRevSelected.id}`,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        console.log(data);
-        setIsLoading(false);
-      })
-      .catch((exception) => {
-        setIsLoading(false);
-        toastError(exception?.response.data?.message);
-      });
-  }
-
   function handleMappingPreview () {
     setIsPreviewPanelVisible(true);
-    fetchAllEligibleRevisions();
   }
-
-  const handlePreviewItemClick = (docRevSelected) => {
-    setSelectedPreviewDocRev(docRevSelected);
-    getPreviewForDocRev(docRevSelected);
-  };
 
   function handleClosePreview () {
     setIsPreviewPanelVisible(false);
@@ -315,9 +252,8 @@ const MigrationMappingDialog: React.FC<{
                   .filter(schemaItem => !schemaItem.deleted)
                   .map(schemaItem => {
                     return (
-                      <ArcherElement id={`from-${schemaItem.name!}`}>
+                      <ArcherElement id={`from-${schemaItem.name!}`} key={`from-${schemaItem.name!}`}>
                         <Box className={classes.mappingRuleSchemaItemBox}
-                          key={`from-${schemaItem.name}`}
                           style={{ backgroundColor: getFromSchemaItemBgColor(schemaItem), cursor: 'pointer' }}
                           onClick={e => handleFromSchemaItemClick(schemaItem)}
                         >
@@ -342,7 +278,7 @@ const MigrationMappingDialog: React.FC<{
                   .filter(schemaItem => !schemaItem.deleted)
                   .map(schemaItem => {
                     return (
-                      <ArcherElement id={`to-${schemaItem.name!}`}
+                      <ArcherElement id={`to-${schemaItem.name!}`} key={`to-${schemaItem.name}`}
                         relations={isShowRelationVisible ? schemaItem.mappedFrom?.map(mappedFromEntry => ({
                           targetId: `from-${mappedFromEntry.name}`,
                           targetAnchor: 'right',
@@ -357,7 +293,6 @@ const MigrationMappingDialog: React.FC<{
                             backgroundColor: isDisabledSchemaItem(schemaItem) ? Colors.hint_gray : '',
                             overflow: 'auto',
                           }}
-                          key={`to-${schemaItem.name}`}
                           onClick={e => handleToSchemaItemClick(schemaItem)}
                         >
                           <Box style={{ width: '100%' }}>
@@ -405,50 +340,13 @@ const MigrationMappingDialog: React.FC<{
         </Box>
       </DialogContent>
 
-      <Drawer
-        anchor="right"
-        open={isPreviewPanelVisible}
-        onClose={handleClosePreview}
-        classes={{ paper: classes.dialogPreviewDrawerPaper }}
-      >
-        <Box className={classes.dialogPreviewDrawer}>
-          <Button onClick={handleClosePreview}>Close</Button>
-          {isLoading && (
-            <LinearProgress
-              className={classes.progress}
-              data-cy="saving-progress-bar"
-            />
-          )}
-          <Box className={classes.drawerContent}>
-            <div className={classes.leftSection}>
-              {previewDocRevsList.length > 0
-                && <List dense={true}>
-                  {previewDocRevsList.map((docRev, index) => {
-                    const primaryText = `[${index + 1}] ${docRev.document?.docId} • ${docRev.name}`;
-                    const secondaryText = `Rev ${docRev.displayRevision} • ${docRev.displayStatus}`;
-                    return (<ListItem className={classes.listItem}
-                      selected={docRev.id === selectedPreviewDocRev?.id}
-                      style={{ display: 'flex', justifyContent: 'space-between' }}
-                      onClick={e => handlePreviewItemClick(docRev)}
-                    >
-                      <ListItemText
-                        primary={primaryText}
-                        secondary={secondaryText}
-                      />
-                      <ListItemText style={{ textAlign: 'right' }}>
-                        <Typography variant="caption">{docRev.formInputKeysCount} keys mapped</Typography>
-                      </ListItemText>
-                    </ListItem>);
-                  })}
-                </List>}
-            </div>
-            <div className={classes.rightSection}>
-              {/* Right section content */}
-              <p>Right section (70%)</p>
-            </div>
-          </Box>
-        </Box>
-      </Drawer>
+      {
+        isPreviewPanelVisible
+          && <PreviewDrawer isOpen={isPreviewPanelVisible} isPreviewPanelVisible={isPreviewPanelVisible}
+            handleClosePreview={handleClosePreview} scanDetails={scanDetails}
+            toRevSchema={toRevSchema}
+          />
+      }
     </Dialog>
   );
 };
