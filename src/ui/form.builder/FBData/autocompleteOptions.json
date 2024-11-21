@@ -367,5 +367,14 @@
     "valueKey": "id",
     "labelKey": "name",
     "hidden": false
+  },
+  {
+    "id": "47",
+    "label": "Released Customers",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": "",
+    "hidden": false
   }
 ]

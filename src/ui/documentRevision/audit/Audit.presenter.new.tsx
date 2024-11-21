@@ -213,6 +213,24 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           });
         }
       }
+      // SITE ADDRESS
+      if (fbType === 'headquarterAddress') {
+        if (change.field.endsWith('_city')) {
+          fbLabel = `${fbLabel as string} ${translate('form.builder.site.inforation.grid.heading.city')}`;
+        } else if (change.field.endsWith('_country')) {
+          fbLabel = `${fbLabel as string} ${translate('form.builder.site.inforation.grid.heading.country')}`;
+        } else if (change.field.endsWith('_zip_code')) {
+          fbLabel = `${fbLabel as string} ${translate('form.builder.site.inforation.grid.heading.zip.code')}`;
+        }
+      }
+      // SHIPPING ADDRESS
+      if (fbType === 'shippingAddress') {
+        if (change.field.endsWith('_attention.name')) {
+          fbLabel = `${fbLabel as string} ${translate('Attention')}`;
+        } else if (change.field.endsWith('_contact.name')) {
+          fbLabel = `${fbLabel as string} ${translate('Contact')}`;
+        }
+      }
       // LOT TRANSFERS
       if (fbType === 'lotTransfers') {
         const fieldParts = change.field.split('.');

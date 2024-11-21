@@ -92,6 +92,7 @@ export type FBInputType =
   | 'workOrderType'
   | 'headquarterAddress'
   | 'shippingItems'
+  | 'shippingAddress'
   ;
 
 export type FBInputProps =
