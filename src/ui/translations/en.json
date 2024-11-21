@@ -1773,6 +1773,7 @@
   "ocr.document.preview.title": "Document Preview",
   "ocr.hide.preview.button": "Hide Preview",
   "ocr.file.preview.not.support.message": "Preview not available for this file type.",
+  "ocr.filetype.not.support.message": "file type is not currently supported.",
   "documenttype.management": "Document type management",
   "documenttype.edit.schema": "Edit schema",
   "documenttype.view.schema": "View schema",

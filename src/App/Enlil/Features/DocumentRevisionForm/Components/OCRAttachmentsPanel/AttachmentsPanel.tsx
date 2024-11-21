@@ -19,9 +19,7 @@ import useDialog from '../../../../../../ui/hooks/useDialog';
 import useStyles from './AttachmentsPanel.styles';
 import ListPanel from './Components/ListPanel';
 import OCRFilePresenter from './Components/OCRFilePresenter';
-
-const OCR_API_URL = 'https://3jnnotdcy8.execute-api.us-west-1.amazonaws.com/processLotHistoryRecord';
-const OCR_API_TOKEN = 'bearer K-ZImFHfgu!=yo49=6AmSc770!nH?cv!Ckf/b0BqZIZLtuImCDfHG4?A?6P0cNfh';
+import Config from '../../../../../../config';
 
 const AttachmentsPanel = () => {
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
@@ -44,7 +42,7 @@ const AttachmentsPanel = () => {
 
   const handleClick = async () => {
     const { employeeId, sessionId } = store.getState().auth.user;
-    const headers = { authorization: OCR_API_TOKEN, employeeId, sessionId };
+    const headers = { authorization: `bearer ${employeeId}:${sessionId}`, employeeId, sessionId };
 
     if (!docRevId) {
       toastError('Document revision ID not found!');
@@ -61,12 +59,18 @@ const AttachmentsPanel = () => {
       }
 
       const data = {
-        lhrDocRevId: docRevId,
-        url: attachment.url,
-        attachmentId: attachment.id,
+        Url: attachment.url,
+        // TODO: Need to review the folowwing 3 variables
+        Company: 'akura',
+        FormID: '00184',
+        Revision: '3',
+        AttachmentUSID: attachment.id,
+        DocumentRevisionUSID: docRevId,
+        IsLHRSummaryInsertEnabled: Config.isLHRSummaryInsertEnabled,
+        LHRSummaryBulkInsertUrl: `${Config.ApiEndpoint}/lhr_summary/bulk/upload`,
       };
 
-      await axios.post(OCR_API_URL, data, { headers });
+      await axios.post(`${Config.ApiOCREndpoint}/e_socr`, data, { headers });
       processedCount++;
     };
 

@@ -5,6 +5,7 @@ import { ThemeEnv } from '../ui/layout/theme/utils/types';
 
 const DEFAULTS = {
   API_ENDPOINT: '/',
+  OCR_API_ENDPOINT: '/',
   WORKER_API_ENDPOINT: null,
   REFRESH_TOKEN_VALIDITY_DAYS: '30',
   SIGNUP_DOMAIN_URL: '/',
@@ -23,6 +24,8 @@ const DEFAULTS = {
   DATADOG_SAMPLE_RATE: '0',
   CONSOLE_TOAST: false,
   PREVENT_DOC_TYPE_MANAGEMENT_EDIT: false,
+  LHR_SUMMARY_INSERT_ENABLED: true,
+  OCR_SUPPORTED_FILE_TYPES: '',
 };
 
 type ConfigKey = keyof typeof DEFAULTS;
@@ -40,6 +43,10 @@ class Config {
 
   public static get ApiEndpoint () {
     return `${this.get('API_ENDPOINT')}/v1`;
+  }
+
+  public static get ApiOCREndpoint () {
+    return `${this.get('OCR_API_ENDPOINT')}/v1`;
   }
 
   public static get WorkerApiEndpoint () {
@@ -143,6 +150,14 @@ class Config {
 
   public static get docTypeManagementEditDisabled (): boolean {
     return this.get('PREVENT_DOC_TYPE_MANAGEMENT_EDIT') === 'true';
+  }
+
+  public static get isLHRSummaryInsertEnabled (): boolean {
+    return this.get('LHR_SUMMARY_INSERT_ENABLED') === 'true';
+  }
+
+  public static get ocrSupportedFileTypes (): string[] {
+    return this.get('OCR_SUPPORTED_FILE_TYPES').toLowerCase().split('|');
   }
 }
 

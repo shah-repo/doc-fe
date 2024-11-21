@@ -1,9 +1,11 @@
-import { List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Typography, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { Checkbox } from '../../../../../../../ui/components/forms/fields-next';
 import { FBAttachment } from '../../../../../../../ui/form.builder';
 import styles from './ListPanel.styles';
+import { translate } from '../../../../../../../common/intl';
+import Config from '../../../../../../../config';
 
 interface ListPanelProps{
   attachments: FBAttachment[]
@@ -38,31 +40,40 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
     <List className={cx(classes.list, 'containing-box-scrollbar')}>
       {attachments?.map((attachment, index) => {
         return (
-          <ListItem
-            key={index}
-            button
-            onClick={() => {
-              handleCheckboxClick(index);
-              showDocPreview(attachment);
-            }}
-            className={classes.listItemBtn}
+          <Tooltip
+            key={`tooltip-${index}`}
+            title={(Config.ocrSupportedFileTypes.includes(attachment.type)) ? '' : `${attachment.type} ${translate('ocr.filetype.not.support.message')}`}
+            placement="right"
           >
-            <ListItemIcon className={classes.listItemIcon} >
-              <Checkbox
-                checked={checkedIndices.indexOf(index) !== -1}
-                tabIndex={-1}
-                disableRipple
-                data-cy={`attachment-checkbox-${index}`}
-              />
-            </ListItemIcon>
-            <ListItemText>
-              <Typography
-                className={classes.listItemText}
-              >
-                {attachment.name}
-              </Typography>
-            </ListItemText>
-          </ListItem>
+            <ListItem
+              key={index}
+              button
+              onClick={() => {
+                if (Config.ocrSupportedFileTypes.includes(attachment.type)) {
+                  handleCheckboxClick(index);
+                }
+                showDocPreview(attachment);
+              }}
+              className={classes.listItemBtn}
+            >
+              <ListItemIcon className={classes.listItemIcon} >
+                <Checkbox
+                  checked={checkedIndices.indexOf(index) !== -1}
+                  disabled={!Config.ocrSupportedFileTypes.includes(attachment.type)}
+                  tabIndex={-1}
+                  disableRipple
+                  data-cy={`attachment-checkbox-${index}`}
+                />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  className={classes.listItemText}
+                >
+                  {attachment.name}
+                </Typography>
+              </ListItemText>
+            </ListItem>
+          </Tooltip>
         );
       })}
     </List>
