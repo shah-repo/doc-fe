@@ -42,14 +42,14 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
         return (
           <Tooltip
             key={`tooltip-${index}`}
-            title={(Config.ocrSupportedFileTypes.includes(attachment.type)) ? '' : `${attachment.type} ${translate('ocr.filetype.not.support.message')}`}
+            title={(Config.ocrSupportedFileTypes.includes(attachment.type?.toLowerCase())) ? '' : `${attachment.type} ${translate('ocr.filetype.not.support.message')}`}
             placement="right"
           >
             <ListItem
               key={index}
               button
               onClick={() => {
-                if (Config.ocrSupportedFileTypes.includes(attachment.type)) {
+                if (Config.ocrSupportedFileTypes.includes(attachment.type?.toLowerCase())) {
                   handleCheckboxClick(index);
                 }
                 showDocPreview(attachment);
@@ -59,7 +59,7 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
               <ListItemIcon className={classes.listItemIcon} >
                 <Checkbox
                   checked={checkedIndices.indexOf(index) !== -1}
-                  disabled={!Config.ocrSupportedFileTypes.includes(attachment.type)}
+                  disabled={!Config.ocrSupportedFileTypes.includes(attachment.type?.toLowerCase())}
                   tabIndex={-1}
                   disableRipple
                   data-cy={`attachment-checkbox-${index}`}

@@ -157,7 +157,7 @@ class Config {
   }
 
   public static get ocrSupportedFileTypes (): string[] {
-    return this.get('OCR_SUPPORTED_FILE_TYPES').toLowerCase().split('|');
+    return this.get('OCR_SUPPORTED_FILE_TYPES').toLowerCase().replaceAll(' ', '').split('|');
   }
 }
 
