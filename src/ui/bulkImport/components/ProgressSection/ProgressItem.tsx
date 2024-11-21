@@ -38,7 +38,6 @@ interface ProgressItemProps {
 }
 
 const STATUSES_HIDE_DELETE = [BkStatus.IN_PROGRESS, BkStatus.COMPLETED, BkStatus.SUCCESS, BkStatus.CANCELLED];
-const STATUSES_CANCELED = [BkStatus.CANCELLED, BkStatus.FAILED];
 const STATUSES_COMPLETE = [BkStatus.COMPLETED, BkStatus.SUCCESS];
 
 const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentEmployeeId }) => {
@@ -58,7 +57,9 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const showApprovals = !!currentApproval && showApproverButtons;
   const currentProgressStep = useRef(0);
   const isComplete = STATUSES_COMPLETE.includes(item?.status as BkStatus) && item?.completedAt;
-  const isRejected = STATUSES_CANCELED.includes(item?.status as BkStatus);
+  const isRejected = item?.status === BkStatus.CANCELLED;
+  const isFailed = item?.status === BkStatus.FAILED;
+  const showErrorMessage = isRejected || isFailed;
   const showDeleteButton = isProcessEmpty && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
   const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
   const openDeleteDialog = useDialog();
@@ -154,21 +155,30 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
       <Box className={classes.itemContainer}>
         <Box>
           <Box className={classes.titleContainer}>
-            {isComplete ? <FontAwesomeIcon
-              className={classes.checkGreenIcon}
-              icon={solid('circle-check')}
-            /> : <FontAwesomeIcon
-              className={classes.watchLaterIcon}
-              icon={solid('clock-three')}
-            />}
+            {isComplete ? (
+              <FontAwesomeIcon
+                className={classes.checkGreenIcon}
+                icon={solid('circle-check')}
+              />
+            ) : isFailed ? (
+              <FontAwesomeIcon
+                className={classes.errorRedIcon}
+                icon={regular('triangle-exclamation')}
+              />
+            ) : (
+              <FontAwesomeIcon
+                className={classes.watchLaterIcon}
+                icon={solid('clock-three')}
+              />
+            )}
             <Typography className={classes.itemTitle}>
               {item.jobId}
             </Typography>
           </Box>
-          {isRejected && (
+          {(showErrorMessage) && (
             <Box className={classes.itemErrorMessage}>
               <Typography className={classes.itemErrorMessageText}>
-                {translate('bulkImport.approval.rejected.error')}
+                {isRejected ? translate('bulkImport.approval.rejected.error') : translate('bulkImport.approval.failed.error')}
               </Typography>
             </Box>
           )}
@@ -182,6 +192,16 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
               />
               <Typography className={classes.completedText}>
                 {translate('common.completed')} ({ item.completedAt ? moment(item.completedAt).format(MomentFormats.FullDateTime) : ''})
+              </Typography>
+            </Box>
+          ) : isFailed ? (
+            <Box className={classes.completedMsgContainer}>
+              <FontAwesomeIcon
+                className={classes.errorRedIcon}
+                icon={solid('triangle-exclamation')}
+              />
+              <Typography className={classes.completedText}>
+                {translate('common.failed')} ({ item.completedAt ? moment(item.completedAt).format(MomentFormats.FullDateTime) : ''})
               </Typography>
             </Box>
           ) : (
