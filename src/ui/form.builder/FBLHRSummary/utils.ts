@@ -1,4 +1,6 @@
+import moment from 'moment';
 import { translate } from '../../../common/intl';
+import { MomentFormats } from '../../../common/utils/date';
 import { LotStatus } from '../../../state/ducks/documentRevisions/types';
 import { getLotStatusLabel } from '../../components/common/header/HeaderLotStatus';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
@@ -29,6 +31,7 @@ export const getExcelData = (
   availableUsers: OptionType[],
 ): Array<ColumnDefinition<EditableLHRSummaryItem>> =>
   LHRSummaryItemList.map(item => {
+    const lotStatus = item.lotStatus ? getLotStatusLabel(item.lotStatus as LotStatus) : EMPTY_PLACEHOLDER;
     const modifiedItem = {
       ...item,
       type: getTypeOptionLabelByValue(item.type),
@@ -36,12 +39,8 @@ export const getExcelData = (
       plannedDocId: getDisplayDocumentByDetailsObj(item?.plannedDetails),
       actualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       lotOrEqDocId: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
-      ...(item.expiryDate && { expiryDate: item.expiryDate }),
       issue: getDisplayDocumentByDetailsObj(item?.issueDetails),
-      lotStatus: getLotStatusLabel(item.lotStatus as LotStatus),
-      ...(item.calDueDate && { calDueDate: item.calDueDate }),
-      ...(item.pmDueDate && { pmDueDate: item.pmDueDate }),
-      ...(item.recordCreationDate && { recordCreationDate: item.recordCreationDate }),
+      lotStatus,
       enteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,
@@ -61,6 +60,10 @@ export const getDisplayDocument = (docId?: string, displayRevision?: string): st
   return `${docId ?? ''} - ${displayRevision ?? ''}`;
 };
 
+const formatDate = (date, format) => {
+  return moment(date).format(format);
+};
+
 export const processData = (
   data: EditableLHRSummaryItem[],
   availableUsers: OptionType[],
@@ -73,6 +76,10 @@ export const processData = (
       customActualDocId: getDisplayDocumentByDetailsObj(item?.actualDetails),
       customLotOrEquipment: getDisplayDocumentByDetailsObj(item?.lotOrEquipmentDetails),
       customIssue: getDisplayDocumentByDetailsObj(item?.issueDetails),
+      customCalDueDate: item?.calDueDate && formatDate(item?.calDueDate, MomentFormats.MonthDateYearTwoDigit),
+      customPmDueDate: item?.pmDueDate && formatDate(item?.pmDueDate, MomentFormats.MonthDateYearTwoDigit),
+      customExpiryDate: item?.expiryDate && formatDate(item?.expiryDate, MomentFormats.MonthDateYearTwoDigit),
+      customRecordCreationDate: item?.recordCreationDate && formatDate(item?.recordCreationDate, MomentFormats.MonthDateYearTwoDigit),
       customEnteredBy: FB.isUUID(item.enteredBy)
         ? availableUsers.find(user => user.value === item.enteredBy)?.label ?? item.enteredBy
         : item.enteredBy,
