@@ -21,6 +21,8 @@ import ListPanel from './Components/ListPanel';
 import OCRFilePresenter from './Components/OCRFilePresenter';
 import Config from '../../../../../../config';
 
+const OCR_URL = '/e_socr';
+
 const AttachmentsPanel = () => {
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
   const docRevId = _documentRevisionFormState?.documentRevision?.id;
@@ -42,7 +44,7 @@ const AttachmentsPanel = () => {
 
   const handleClick = async () => {
     const { employeeId, sessionId } = store.getState().auth.user;
-    const headers = { authorization: `bearer ${employeeId}:${sessionId}`, employeeId, sessionId };
+    const headers = { authorization: `bearer ${employeeId}:${sessionId}` };
 
     if (!docRevId) {
       toastError('Document revision ID not found!');
@@ -70,7 +72,7 @@ const AttachmentsPanel = () => {
         LHRSummaryBulkInsertUrl: `${Config.ApiEndpoint}/lhr_summary/bulk/upload`,
       };
 
-      await axios.post(`${Config.ApiOCREndpoint}/e_socr`, data, { headers });
+      await axios.post(`${Config.ApiOCREndpoint}${OCR_URL}`, data, { headers });
       processedCount++;
     };
 
