@@ -9,7 +9,7 @@ import { getHasPermission } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
@@ -107,6 +107,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isRelatedTogetherPart = documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
   const isBomDisabled = isDisabledInput || inRestrictedEditMode || isPartForm || !hasPermissionToEditBOM || isRelatedTogetherPart;
 
+  const [reloadKey, setReloadKey] = React.useState(0);
+
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
       ...schemaItem,
@@ -192,9 +194,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     [_tabsState],
   );
 
+  const reloadComponent = () => {
+    setReloadKey(prevKey => prevKey + 1);
+  };
+
   return (
     <>
       <SMForm
+        key={reloadKey}
         templateBoxProps={{ stretchY: '100%', width: '100%' }}
         contentBoxProps={{ bgcolor: Colors.alabaster }}
         values={formValues.values}
@@ -420,7 +427,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           </Observer>
         </SMTemplate>
       </SMForm>
-      {isDAM && <SyncMessageDialogContainer documentRevision={documentRevision} />}
+      {isDAM && <SyncMessageDialogContainer { ...{ documentRevision, reloadComponent } } />}
     </>
   );
 };
