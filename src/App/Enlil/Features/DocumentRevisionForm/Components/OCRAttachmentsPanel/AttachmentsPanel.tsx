@@ -21,7 +21,7 @@ import ListPanel from './Components/ListPanel';
 import OCRFilePresenter from './Components/OCRFilePresenter';
 import Config from '../../../../../../config';
 
-const OCR_URL = '/e_socr';
+const OCR_API_URL = `${Config.ApiOCREndpoint}/e_socr`;
 
 const AttachmentsPanel = () => {
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
@@ -72,7 +72,7 @@ const AttachmentsPanel = () => {
         LHRSummaryBulkInsertUrl: `${Config.ApiEndpoint}/lhr_summary/bulk/upload`,
       };
 
-      await axios.post(`${Config.ApiOCREndpoint}${OCR_URL}`, data, { headers });
+      await axios.post(OCR_API_URL, data, { headers });
       processedCount++;
     };
 
