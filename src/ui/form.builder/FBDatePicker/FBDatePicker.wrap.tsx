@@ -31,6 +31,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const disablePastDates = editorProperties?.includes('disablePastDates') || false;
     const { id, isOutput } = workspaceState || {};
     const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const save = debounce((date?: string) => {
       if (!date) { return; }
@@ -74,6 +75,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     }, [approvalRequest]);
 
     onDatePickerClick = () => {
+      console.log('Calendar opened');
       if (formState?.isBackdropOpen) { return; }
       if (!name) { return; }
       if (!id) { return; }
@@ -88,12 +90,14 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     };
 
     onDatePickerClose = () => {
+      setIsOpen(!isOpen);
       setTimeout(() => {
         formState?.unlockField(name);
       }, 1000);
     };
 
     onChange = (_date: MaterialUiPickersDate | null, value?: string | null) => {
+      console.log('Calendar change');
       datePickerState?.setValue(value);
       save(moment.tz(value || '', 'MM/DD/YYYY', TIME_ZONE).startOf('day').toISOString());
     };
@@ -103,6 +107,8 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       datePickerState,
       onDatePickerClick,
       onDatePickerClose,
+      setIsOpen,
+      isOpen,
       onChange,
       editorProperties,
       disablePastDates,
