@@ -156,4 +156,46 @@ export default makeStyles<NextTheme>(theme => ({
       color: Colors.statusDraftBorder,
     },
   },
+  /* Container to define the boundary */
+  searchIconContainer: {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+
+  /* Circle path for the motion */
+  searchIcon: {
+    fontSize: '16vw',
+    animation: '$circularMove 4s linear infinite',
+  },
+
+  searchIconSmall: {
+    fontSize: '16px',
+  },
+
+  blinking: {
+    animation: '$slowBlink 3s ease-in-out infinite',
+  },
+
+  /* Keyframes for the circular motion */
+  '@keyframes circularMove': {
+    '0%': {
+      transform: 'rotate(0deg) translate(32px) rotate(0deg)', // Adjust radius
+    },
+    '100%': {
+      transform: 'rotate(360deg) translate(32px) rotate(-360deg)',
+    },
+  },
+
+  '@keyframes slowBlink': {
+    '0%': {
+      opacity: 1, // Fully visible
+    },
+    '50%': {
+      opacity: 0.3, // Faded out
+    },
+    '100%': {
+      opacity: 1, // Fully visible
+    },
+  },
 }));

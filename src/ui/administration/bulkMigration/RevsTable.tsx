@@ -294,7 +294,10 @@ const ExpandableRow: React.FC<{
         </TableCell>
         {/* <TableCell align="left">{JSON.stringify(row.originalFormInput)}</TableCell>
         <TableCell align="left">{JSON.stringify(row.newFormInput)}</TableCell> */}
-        <TableCell align="left" style={{ overflow: 'hidden', wordWrap: 'break-word' }}>{JSON.stringify(row.fieldNamesUnmatched)}</TableCell>
+        <TableCell align="left" style={{ overflow: 'hidden', wordWrap: 'break-word' }}>
+          {JSON.stringify(row.fieldNamesUnmatched)}
+          {/* <ReactJson src={row.fieldNamesUnmatched} collapsed={1} /> */}
+        </TableCell>
         <TableCell style={{ overflow: 'hidden', wordWrap: 'break-word' }}>{row.proposedAction}</TableCell>
         <TableCell align="right" padding="checkbox" onClick={(event) => handleRejection(event, row.docRevId)}>
           { !row.status && <Checkbox
@@ -517,7 +520,7 @@ const RevsTable: React.FC<{
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper} style={{ maxHeight: '70vh', overflow: 'hidden', overflowY: 'auto' }}>
+      <Paper className={classes.paper} style={{ maxHeight: '60vh', overflow: 'hidden', overflowY: 'auto' }}>
         {!isEmpty(errorMessage) && <div style={{ color: 'red' }}>{errorMessage}</div>}
         <Toolbar
           className={cx(classes.root, classes.flexBox, {

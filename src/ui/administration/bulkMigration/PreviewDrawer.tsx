@@ -48,6 +48,13 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     boxSizing: 'border-box',
     height: '92vh',
+  },
+  rightSectionFieldsUnmatched: {
+    height: '20%',
+    overflow: 'auto',
+  },
+  rightSectionMappingView: {
+    height: '75%',
     overflow: 'auto',
   },
   dialogPreviewDrawerCloseButton: {
@@ -209,54 +216,68 @@ const PreviewDrawer: React.FC<{
             {!selectedPreviewDocRev?.id
                 && <Typography variant="h4" color="primary"> Click on a Document Revision from the left to see its preview here. </Typography>
             }
-            {
-                selectedPreviewDocRev?.id && isLoading
+            {selectedPreviewDocRev?.id && isLoading
                 && <Typography variant="h4" color="primary"> <HourglassFullIcon /> Generating Preview.... </Typography>
             }
-            {!isLoading && selectedPreviewDocRev?.id && fieldsUnmatched
-                  && <ReactJson src={fieldsUnmatched} collapsed={1} />
-            }
-            {!isLoading && selectedPreviewDocRev?.id && newFormInput
-                && toRevSchema.filter(schemaItem => !schemaItem.deleted)
-                  .map(schemaItem => {
-                    return (
-                      <Box className={classes.mappingRuleSchemaItemBox}
-                        style={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          gap: '8px',
-                          backgroundColor: isDisabledSchemaItem(schemaItem) ? Colors.hint_gray : '',
-                          overflow: 'auto',
-                        }}
-                        key={schemaItem.name}
-                      >
-                        <Box style={{ width: '100%' }}>
-                          <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
-                            <Typography variant="caption" align="right"> {schemaItem.name} </Typography>
-                          </Box>
-                          {
-                            !schemaItem.referenceDataType && newFormInput[schemaItem.name!]
-                            && <Typography variant="caption" display="block" style={{ marginTop: '4px', fontWeight: 'bold' }}>
-                              <em>{JSON.stringify(newFormInput[schemaItem.name!])}</em>
-                            </Typography>
-                          }
-                          {
-                            schemaItem.referenceDataType === 'array' && newFormInput[schemaItem.name!]
-                               && <MappingTableView schemaItem={schemaItem}
-                                 formInput={newFormInput}
-                               />
-                          }
-                          {
-                            schemaItem.referenceDataType === 'object'
-                               && <MappingTableView schemaItem={schemaItem}
-                                 formInput={newFormInput}
-                               />
-                          }
-                        </Box>
-                      </Box>
-                    );
-                  })
+            {
+              !isLoading && selectedPreviewDocRev?.id
+              && <>
+                <Box className={classes.rightSectionFieldsUnmatched}>
+                  { fieldsUnmatched && <>
+                    <Typography variant="h5" style={{ marginBottom: '4px' }}> Fields Unmatched </Typography>
+                    <ReactJson src={fieldsUnmatched} collapsed={1} />
+                  </> }
+                </Box>
+                <Box className={classes.rightSectionMappingView}>
+                  { newFormInput
+                      && <>
+                        <Typography variant="h5" style={{ marginBottom: '4px' }}> Mapped Fields </Typography>
+                        {
+                          toRevSchema.filter(schemaItem => !schemaItem.deleted)
+                            .map(schemaItem => {
+                              return (
+                                <Box className={classes.mappingRuleSchemaItemBox}
+                                  style={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    gap: '8px',
+                                    backgroundColor: isDisabledSchemaItem(schemaItem) ? Colors.hint_gray : '',
+                                    overflow: 'auto',
+                                  }}
+                                  key={schemaItem.name}
+                                >
+                                  <Box style={{ width: '100%' }}>
+                                    <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                      <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
+                                      <Typography variant="caption" align="right"> {schemaItem.name} </Typography>
+                                    </Box>
+                                    {
+                                      !schemaItem.referenceDataType && newFormInput[schemaItem.name!]
+                                      && <Typography variant="caption" display="block" style={{ marginTop: '4px', fontWeight: 'bold' }}>
+                                        <em>{JSON.stringify(newFormInput[schemaItem.name!])}</em>
+                                      </Typography>
+                                    }
+                                    {
+                                      schemaItem.referenceDataType === 'array' && newFormInput[schemaItem.name!]
+                                         && <MappingTableView schemaItem={schemaItem}
+                                           formInput={newFormInput}
+                                         />
+                                    }
+                                    {
+                                      schemaItem.referenceDataType === 'object'
+                                         && <MappingTableView schemaItem={schemaItem}
+                                           formInput={newFormInput}
+                                         />
+                                    }
+                                  </Box>
+                                </Box>
+                              );
+                            })
+                        }
+                      </>
+                  }
+                </Box>
+              </>
             }
           </div>
         </Box>

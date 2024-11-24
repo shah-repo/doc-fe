@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import InfoIcon from '@material-ui/icons/Info';
+import SearchIcon from '@material-ui/icons/Search';
 import WarningIcon from '@material-ui/icons/Warning';
 import axios, { AxiosRequestConfig } from 'axios';
 import cx from 'classnames';
@@ -23,8 +24,9 @@ import apiClient from '../../../state/apiClient';
 import {
   BULK_MIGRATION_CANCEL_SCAN,
   BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS,
-  BULK_MIGRATION_GET_LATEST_COMPLETED_SCAN,
+  BULK_MIGRATION_GET_LATEST_SCANS,
   BULK_MIGRATION_REGISTER_SCAN,
+  BULK_MIGRATION_REGISTER_SCAN_FOR_RUN,
   BULK_MIGRATION_UPDATE_SCAN,
   BULK_MIGRATION_UPGRADE_FORM,
 } from '../../../state/ducks/company/constants';
@@ -78,12 +80,13 @@ const BulkMigrationContainer: React.FC = () => {
   const [newFormSchema, setNewFormSchema] = useState([]);
   const [isFormSchemaExpanded, setIsFormSchemaExpanded] = useState(false);
 
+  const [latestScans, setLatestScans] = useState<IBulkMigrationScanDetails[]>([]);
   const [scanDetails, setScanDetails] = useState<IBulkMigrationScanDetails>();
   // const [scanResults, setScanResults] = useState<ISupplierScanResultRev[]>([]);
 
   useEffect(() => {
     fetchAllDocumentTypes();
-    fetchLatestScanDetails();
+    fetchLatestScans();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -217,37 +220,6 @@ const BulkMigrationContainer: React.FC = () => {
       });
   }
 
-  // Gets a completed scan detail & top 25 results for the user to start reviewing.
-  const fetchLatestScanDetails = () => {
-    commonSetUp();
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: BULK_MIGRATION_GET_LATEST_COMPLETED_SCAN,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        // console.log(data);
-        setIsLoading(false);
-
-        const { scanDetails }: { scanDetails: IBulkMigrationScanDetails } = data;
-
-        if (scanDetails?.id) {
-          setScanDetails(scanDetails);
-          // setScanResults(scanResults ?? []);
-        }
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  };
-
   const createNewFormRevision = () => {
     commonSetUp();
     if (toDocumentTypeId) {
@@ -316,6 +288,66 @@ const BulkMigrationContainer: React.FC = () => {
     }
   }
 
+  // Get the top 5 latest scans.
+  const fetchLatestScans = () => {
+    commonSetUp();
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: BULK_MIGRATION_GET_LATEST_SCANS,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      // cancelToken: call.token,
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        console.log('latestScans :', data);
+        setIsLoading(false);
+
+        if (data.length) {
+          setLatestScans(data);
+        }
+      })
+      .catch((exception) => {
+        catchAxiosException(exception);
+      });
+  };
+
+  function startRevisionsScan () {
+    if (!scanDetails?.toFormSchema?.length) {
+      toastError(`Mapping Rules have not been set. 
+        Click on "Mapping Rules" to define how the previous form schema maps to the current one`);
+      return;
+    }
+
+    commonSetUp();
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${BULK_MIGRATION_REGISTER_SCAN_FOR_RUN}/${scanDetails?.id}`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        console.log(data);
+        setIsLoading(false);
+        setScanDetails(data);
+        toastSuccess(
+          'Scan request has been submitted. Please check back in some time.',
+        );
+      })
+      .catch((exception) => {
+        catchAxiosException(exception);
+      });
+  }
+
   function updateScanMapping (fromRevSchema: ISchemaItem[], toRevSchema: ISchemaItem[]) {
     if (scanDetails) {
       commonSetUp();
@@ -350,27 +382,26 @@ const BulkMigrationContainer: React.FC = () => {
 
   function cancelScanForRevisions () {
     commonSetUp();
-    if (toFormRevId) {
-      const requestConfig: AxiosRequestConfig = {
-        method: 'post',
-        url: `${BULK_MIGRATION_CANCEL_SCAN}/${toFormRevId}`,
-        headers: {
-          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-        },
-        // cancelToken: call.token,
-      };
+    const requestConfig: AxiosRequestConfig = {
+      method: 'post',
+      url: `${BULK_MIGRATION_CANCEL_SCAN}/${scanDetails?.id}`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      // cancelToken: call.token,
+    };
 
-      apiClient
-        .request(requestConfig)
-        .then((resp) => resp)
-        .then(({ data }) => {
-          setIsLoading(false);
-          toastSuccess('Scan request has been canceled. Please refresh.');
-        })
-        .catch((exception) => {
-          catchAxiosException(exception);
-        });
-    }
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        setIsLoading(false);
+        setScanDetails(data);
+        toastSuccess('Scan request has been canceled. Please refresh.');
+      })
+      .catch((exception) => {
+        catchAxiosException(exception);
+      });
   }
 
   function handleDocumentTypeChange (value: string, fieldName: string) {
@@ -490,326 +521,330 @@ const BulkMigrationContainer: React.FC = () => {
   return (
     <Box className={classes.root}>
       <Box className={classes.header}>
-        <Box style={{ width: '100%' }}>
-          <Typography variant="h1" className={classes.title}>
-            {translate('administration.bulk.migration.title')}
-          </Typography>
-          {!isLoading && (
-            <Typography variant="subtitle1" className={classes.subtitle}>
-              {translate('administration.bulk.migration.subtitle')}
+        <Box style={{ width: '100%', display: 'flex' }}>
+          <Box style={{ width: '75%' }}>
+            <Typography variant="h1" className={classes.title}>
+              {translate('administration.bulk.migration.title')}
             </Typography>
-          )}
-          {/* <br className={classes.spaceTitle} /> */}
-          {isLoading && (
-            <LinearProgress
-              className={classes.progress}
-              data-cy="saving-progress-bar"
-            />
-          )}
-          <Box
-            className={classes.flexBox}
-            style={{ justifyContent: 'space-between' }}
-          >
-            <Box className={classes.boxForSelection}>
-              <Typography variant="h5"> Migrate From </Typography>
-              <Typography variant="subtitle2">
-                Select the Document Type & Form Rev
+            {!isLoading && (
+              <Typography variant="subtitle1" className={classes.subtitle}>
+                {translate('administration.bulk.migration.subtitle')}
               </Typography>
-
-              <Box style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-                <FormControl
-                  className={classes.formControl}
-                  style={{ width: '40%' }}
-                >
-                  <InputLabel id="document-type-migrate-from">
-                    Document Type
-                  </InputLabel>
-                  <Select
-                    labelId="document-type-migrate-from"
-                    value={fromDocumentTypeId}
-                    onChange={(event) =>
-                      handleDocumentTypeChange(
-                        event.target.value as string,
-                        'fromDocumentTypeId',
-                      )
-                    }
-                  >
-                    {documentTypesList.map((type) => (
-                      <MenuItem value={type.id} key={type.id}>
-                        <em>
-                          {type.documentTypeName} - {type.documentTypeAcronym}
-                        </em>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {/* <FormHelperText>Some important helper text</FormHelperText> */}
-                </FormControl>
-
-                <FormControl
-                  className={classes.formControl}
-                  style={{ width: '60%' }}
-                >
-                  <InputLabel id="form-rev-migrate-from">
-                    Form Rev Selection
-                  </InputLabel>
-                  <Select
-                    labelId="form-rev-migrate-from"
-                    value={fromFormRevId}
-                    onChange={(event) =>
-                      handleFormRevSelection(
-                        event.target.value as string,
-                        'fromFormRevId',
-                      )
-                    }
-                  >
-                    {fromFormRevsList.map((formRev) => (
-                      <MenuItem value={formRev.id} key={formRev.id}>
-                        <em>
-                          {formRev.document?.docId} • {formRev.name} •{' '}
-                          {formRev.displayRevision} • {formRev.status}
-                        </em>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {/* <FormHelperText>Some important helper text</FormHelperText> */}
-                </FormControl>
-              </Box>
-              {/* { fromDocumentTypeId && fromFormRevId
-                && <Typography variant="subtitle2">Eligible Revisions - <span style={{ color: Colors.black }}>{eligibleRevsCount}</span>
-                </Typography>
-              } */}
-            </Box>
-
+            )}
+            {/* <br className={classes.spaceTitle} /> */}
+            {isLoading && (
+              <LinearProgress
+                className={classes.progress}
+                data-cy="saving-progress-bar"
+              />
+            )}
             <Box
-              className={classes.flexBoxColumn}
-              style={{ marginTop: '16px', gridGap: 0, alignItems: 'center' }}
+              className={classes.flexBox}
+              style={{ justifyContent: 'space-between' }}
             >
-              {fromDocumentTypeId && fromFormRevId && (
-                <Typography variant="subtitle2">
-                  Eligible Revisions -{' '}
-                  <span style={{ color: Colors.black }}>
-                    {eligibleRevsCount}
-                  </span>
-                </Typography>
-              )}
-              {scanDetails?.id && (
-                <Box className={cx(classes.buttons, classes.flexBoxColumn)}>
-                  {[
-                    MIGRATION_STATUS_ENUM.IN_PROGRESS,
-                    MIGRATION_STATUS_ENUM.STARTED,
-                  ].includes(scanDetails.status) && (
+              <Box className={classes.boxForSelection}>
+                <Typography variant="h5"> Migrate From </Typography>
+                <Typography variant="subtitle2"> Select the Document Type & Form Rev </Typography>
+
+                <Box style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                  <FormControl
+                    className={classes.formControl}
+                    style={{ width: '40%' }}
+                  >
+                    <InputLabel id="document-type-migrate-from"> Document Type </InputLabel>
+                    <Select
+                      labelId="document-type-migrate-from"
+                      value={fromDocumentTypeId}
+                      onChange={(event) =>
+                        handleDocumentTypeChange(
+                          event.target.value as string,
+                          'fromDocumentTypeId',
+                        )
+                      }
+                    >
+                      {documentTypesList.map((type) => (
+                        <MenuItem value={type.id} key={type.id}>
+                          <em>
+                            {type.documentTypeName} - {type.documentTypeAcronym}
+                          </em>
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {/* <FormHelperText>Some important helper text</FormHelperText> */}
+                  </FormControl>
+
+                  <FormControl
+                    className={classes.formControl}
+                    style={{ width: '60%' }}
+                  >
+                    <InputLabel id="form-rev-migrate-from"> Form Rev Selection </InputLabel>
+                    <Select
+                      labelId="form-rev-migrate-from"
+                      value={fromFormRevId}
+                      onChange={(event) =>
+                        handleFormRevSelection(
+                          event.target.value as string,
+                          'fromFormRevId',
+                        )
+                      }
+                    >
+                      {fromFormRevsList.map((formRev) => (
+                        <MenuItem value={formRev.id} key={formRev.id}>
+                          <em>
+                            {formRev.document?.docId} • {formRev.name} •{' '}
+                            {formRev.displayRevision} • {formRev.status}
+                          </em>
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {/* <FormHelperText>Some important helper text</FormHelperText> */}
+                  </FormControl>
+                </Box>
+                {fromDocumentTypeId && fromFormRevId && (
+                  <Typography variant="subtitle2">
+                  Eligible Revisions - <span style={{ color: Colors.black }}> {eligibleRevsCount} </span>
+                  </Typography>
+                )}
+              </Box>
+
+              <Box
+                className={classes.flexBoxColumn}
+                style={{ marginTop: '16px', gridGap: 0, alignItems: 'center' }}
+              >
+                {scanDetails?.id && (
+                  <Box className={cx(classes.buttons, classes.flexBoxColumn)}>
+                    {[MIGRATION_STATUS_ENUM.IN_PROGRESS, MIGRATION_STATUS_ENUM.STARTED].includes(scanDetails.status)
+                  && <>
                     <FBButton
                       label="Cancel Current Scan"
                       dataCy="supplier-migration-scan-cancel"
                       onClick={cancelScanForRevisions}
                       variant="outlined"
                       color="primary"
+                      style={{ marginBottom: '0px' }}
                     />
-                  )}
-                  {scanDetails.status === MIGRATION_STATUS_ENUM.COMPLETED && (
-                    <>
-                      <FBButton
-                        label="Scan For Revisions"
-                        dataCy="bulk-migration-scan"
-                        onClick={registerScanForRevisions}
-                        variant="outlined"
-                        color="primary"
-                      />
-                      <DateTime
-                        value={scanDetails.completedAt}
-                        format={MomentFormats.BriefDateTime}
-                        className={cx(classes.dateTimeLabel)}
-                      />
-                    </>
-                  )}
-                  {!scanDetails.completedAt && <span>In Progress</span>}
-                </Box>
-              )}
-              {!scanDetails?.id && toFormRevId && fromFormRevId && (
-                <>
-                  <Box className={classes.buttons}>
-                    <FBButton
+                    <Typography variant="caption" className={classes.blinking}>{scanDetails.status}</Typography>
+                  </>
+                    }
+                    {scanDetails.status === MIGRATION_STATUS_ENUM.COMPLETED && (
+                      <>
+                        <FBButton
+                          label="Scan For Revisions"
+                          dataCy="bulk-migration-scan"
+                          onClick={startRevisionsScan}
+                          variant="outlined"
+                          color="primary"
+                        />
+                        <DateTime
+                          value={scanDetails.completedAt}
+                          format={MomentFormats.BriefDateTime}
+                          className={cx(classes.dateTimeLabel)}
+                        />
+                      </>
+                    )}
+                    {[MIGRATION_STATUS_ENUM.INITIALIZED, MIGRATION_STATUS_ENUM.CANCELLED].includes(scanDetails.status)
+                    && <FBButton
                       label="Scan For Revisions"
                       dataCy="bulk-migration-scan"
-                      onClick={registerScanForRevisions}
+                      onClick={startRevisionsScan}
                     />
+                    }
+                    {scanDetails.status === MIGRATION_STATUS_ENUM.FAILED && (
+                      <>
+                        <FBButton
+                          label="Scan For Revisions"
+                          dataCy="bulk-migration-scan"
+                          onClick={startRevisionsScan}
+                          variant="outlined"
+                          color="primary"
+                        />
+                      Last Failed at: <DateTime
+                          value={scanDetails.completedAt}
+                          format={MomentFormats.BriefDateTime}
+                          className={cx(classes.dateTimeLabel)}
+                        />
+                      </>
+                    )}
                   </Box>
-                </>
-              )}
-              {toFormRevId && fromFormRevId && (
-                <Box>
-                  <Button
-                    variant="text"
-                    color="secondary"
-                    onClick={showMappingRules}
-                  >
+                )}
+                {toFormRevId && fromFormRevId && (
+                  <Box>
+                    <Button
+                      variant="text"
+                      color="secondary"
+                      onClick={showMappingRules}
+                    >
                     Mapping Rules
-                  </Button>
-                </Box>
-              )}
-            </Box>
-
-            <Box className={classes.boxForSelection}>
-              <Typography variant="h5"> Migrate To </Typography>
-              <Typography variant="subtitle2">
-                Select the Document Type & Form Rev
-              </Typography>
-
-              <Box style={{ display: 'flex', gap: '8px' }}>
-                <FormControl
-                  className={classes.formControl}
-                  style={{ width: '40%' }}
-                >
-                  <InputLabel id="document-type-migrate-to">
-                    Document Type
-                  </InputLabel>
-                  <Select
-                    labelId="document-type-migrate-to"
-                    value={toDocumentTypeId}
-                    onChange={(event) =>
-                      handleDocumentTypeChange(
-                        event.target.value as string,
-                        'toDocumentTypeId',
-                      )
-                    }
-                  >
-                    {documentTypesList.map((type) => (
-                      <MenuItem value={type.id} key={type.id}>
-                        <em>
-                          {type.documentTypeName} - {type.documentTypeAcronym}
-                        </em>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {/* <FormHelperText>Some important helper text</FormHelperText> */}
-                </FormControl>
-
-                <FormControl
-                  className={classes.formControl}
-                  style={{ width: '60%' }}
-                >
-                  <InputLabel id="form-rev-migrate-to">
-                    Form Rev Selection
-                  </InputLabel>
-                  <Select
-                    labelId="form-rev-migrate-to"
-                    value={toFormRevId}
-                    onChange={(event) =>
-                      handleFormRevSelection(
-                        event.target.value as string,
-                        'toFormRevId',
-                      )
-                    }
-                  >
-                    {toFormRevsList.map((formRev) => (
-                      <MenuItem value={formRev.id} key={formRev.id}>
-                        <em>
-                          {formRev.document?.docId} • {formRev.name} •{' '}
-                          {formRev.displayRevision} • {formRev.status}
-                        </em>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                    </Button>
+                  </Box>
+                )}
               </Box>
 
-              {newFormSchema.length > 0 && (
-                <>
-                  <Box
-                    className={classes.buttons}
-                    style={{ justifyContent: 'end' }}
+              <Box className={classes.boxForSelection}>
+                <Typography variant="h5">Migrate To</Typography>
+                <Typography variant="subtitle2">Select the Document Type & Form Rev</Typography>
+
+                <Box style={{ display: 'flex', gap: '8px' }}>
+                  <FormControl
+                    className={classes.formControl}
+                    style={{ width: '40%' }}
                   >
-                    <Button
-                      variant="contained"
-                      onClick={createNewFormRevision}
-                      data-cy="supplier-migration-upgrade-form"
+                    <InputLabel id="document-type-migrate-to"> Document Type </InputLabel>
+                    <Select
+                      labelId="document-type-migrate-to"
+                      value={toDocumentTypeId}
+                      onChange={(event) =>
+                        handleDocumentTypeChange(
+                          event.target.value as string,
+                          'toDocumentTypeId',
+                        )
+                      }
                     >
-                      Upgrade Form
-                    </Button>
-                    <InfoIcon
-                      onMouseEnter={handleUpgradeFormPopoverOpen}
-                      onMouseLeave={handleUpgradeFormPopoverClose}
-                    />
-                    <Popover
-                      style={{ pointerEvents: 'none' }}
-                      classes={{
-                        paper: classes.popoverPaper,
-                      }}
-                      open={Boolean(anchorEl)}
-                      anchorEl={anchorEl}
-                      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                      transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-                      onClose={handleUpgradeFormPopoverClose}
-                      disableRestoreFocus
+                      {documentTypesList.map((type) => (
+                        <MenuItem value={type.id} key={type.id}>
+                          <em>
+                            {type.documentTypeName} - {type.documentTypeAcronym}
+                          </em>
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {/* <FormHelperText>Some important helper text</FormHelperText> */}
+                  </FormControl>
+
+                  <FormControl
+                    className={classes.formControl}
+                    style={{ width: '60%' }}
+                  >
+                    <InputLabel id="form-rev-migrate-to"> Form Rev Selection </InputLabel>
+                    <Select
+                      labelId="form-rev-migrate-to"
+                      value={toFormRevId}
+                      onChange={(event) =>
+                        handleFormRevSelection(
+                          event.target.value as string,
+                          'toFormRevId',
+                        )
+                      }
                     >
-                      <Typography
-                        variant="subtitle1"
-                        style={{ marginTop: '4px' }}
+                      {toFormRevsList.map((formRev) => (
+                        <MenuItem value={formRev.id} key={formRev.id}>
+                          <em>
+                            {formRev.document?.docId} • {formRev.name} •{' '}
+                            {formRev.displayRevision} • {formRev.status}
+                          </em>
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+
+                {newFormSchema.length > 0 && (
+                  <>
+                    <Box
+                      className={classes.buttons}
+                      style={{ justifyContent: 'end' }}
+                    >
+                      <Button
+                        variant="contained"
+                        onClick={createNewFormRevision}
+                        data-cy="supplier-migration-upgrade-form"
                       >
+                      Upgrade Form
+                      </Button>
+                      <InfoIcon
+                        onMouseEnter={handleUpgradeFormPopoverOpen}
+                        onMouseLeave={handleUpgradeFormPopoverClose}
+                      />
+                      <Popover
+                        style={{ pointerEvents: 'none' }}
+                        classes={{
+                          paper: classes.popoverPaper,
+                        }}
+                        open={Boolean(anchorEl)}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                        onClose={handleUpgradeFormPopoverClose}
+                        disableRestoreFocus
+                      >
+                        <Typography
+                          variant="subtitle1"
+                          style={{ marginTop: '4px' }}
+                        >
                         A new Form revision can be created with a predefined
                         Form schema. <i>This Rev would be created in Draft</i>.{' '}
-                        <br />
+                          <br />
                         You can preview it & once released, come back here to
                         select the new revision, to continue with migration.
-                      </Typography>
-                    </Popover>
-                  </Box>
-                </>
-              )}
-            </Box>
-          </Box>
-
-          {approvalRequirements && (
-            <Box
-              style={{
-                marginTop: '16px',
-                padding: '8px',
-                backgroundColor: Colors.background_blue,
-                borderRadius: '4px',
-              }}
-            >
-              <Typography variant="body2" style={{ marginBottom: '4px' }}>
-                For revisions, that are already Released, migration would create
-                a new Revision and automate its approval & release, using{' '}
-                <span style={{ fontWeight: 'bold', color: Colors.bright_blue }}>
-                  {approvalRequirements.email}
-                </span>
-              </Typography>
-              <Typography variant="body2" style={{ margin: '0px 0px 4px 0px' }}>
-                Based on the Document Type selected, this user{' '}
-                <b>should be a part of the groups</b> listed below, without
-                which the process will fail.
-              </Typography>
-              <Box py={1} mt={0.3} display="flex" style={{ gap: '8px' }}>
-                {approvalRequirements.requiredGroups.map((group) => {
-                  return (
-                    <Box ml={1} display="flex" key={group.id}>
-                      {isApprovalRequirementFulfilled(group) && (
-                        <CheckCircleIcon style={{ color: Colors.green }} />
-                      )}
-                      {!isApprovalRequirementFulfilled(group) && (
-                        <WarningIcon style={{ color: Colors.red }} />
-                      )}
-                      <Box ml={0.5}>
-                        <Typography variant="subtitle2">
-                          {group.name}
                         </Typography>
-                      </Box>
+                      </Popover>
                     </Box>
-                  );
-                })}
+                  </>
+                )}
               </Box>
             </Box>
-          )}
+          </Box>
+          <Box style={{ width: '25%', padding: '8px' }}>
+            {approvalRequirements && (
+              <Box
+                style={{
+                  marginTop: '16px',
+                  padding: '12px',
+                  backgroundColor: Colors.background_blue,
+                  borderRadius: '4px',
+                }}
+              >
+                <Typography variant="body2" style={{ marginBottom: '4px' }}>
+                For revisions, that are already Released, migration would create
+                a new Revision and automate its approval & release, using{' '}
+                  <span style={{ fontWeight: 'bold', color: Colors.bright_blue }}>
+                    {approvalRequirements.email}
+                  </span>
+                </Typography>
+                <Typography variant="body2" style={{ margin: '0px 0px 4px 0px' }}>
+                Based on the Document Type selected, this user{' '}
+                  <b>should be a part of the groups</b> listed below, without
+                which the process will fail.
+                </Typography>
+                <Box py={1} mt={0.3} display="flex" style={{ gap: '8px' }}>
+                  {approvalRequirements.requiredGroups.map((group) => {
+                    return (
+                      <Box ml={1} display="flex" key={group.id}>
+                        {isApprovalRequirementFulfilled(group) && (
+                          <CheckCircleIcon style={{ color: Colors.green }} />
+                        )}
+                        {!isApprovalRequirementFulfilled(group) && (
+                          <WarningIcon style={{ color: Colors.red }} />
+                        )}
+                        <Box ml={0.5}>
+                          <Typography variant="subtitle2">
+                            {group.name}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </Box>
+            )}
+          </Box>
         </Box>
+
       </Box>
       <div className={classes.panels}>
         {!isEmpty(errorMessage) && (
           <div style={{ color: 'red' }}>{errorMessage}</div>
         )}
-        {!isLoading && isEmpty(errorMessage) && toFormRevId && (
-          <Box>{scanDetails?.id && <RevsTable scanId={scanDetails.id} />}</Box>
-        )}
+        {!isLoading && isEmpty(errorMessage) && scanDetails?.id
+          && [MIGRATION_STATUS_ENUM.IN_PROGRESS, MIGRATION_STATUS_ENUM.COMPLETED].includes(scanDetails?.status)
+          && <Box> <RevsTable scanId={scanDetails.id} /> </Box>
+        }
+        {!isLoading && isEmpty(errorMessage) && scanDetails?.id
+          && [MIGRATION_STATUS_ENUM.STARTED].includes(scanDetails?.status)
+          && <Box className={classes.searchIconContainer}>
+            <SearchIcon className={classes.searchIcon} />
+          </Box>
+        }
       </div>
       {isMigrationMappingDialogVisible && fromFormRevId && toFormRevId && (
         <MigrationMappingDialog

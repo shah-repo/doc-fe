@@ -22,13 +22,14 @@ export const BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS = 'bulk_migration/get
 export const BULK_MIGRATION_GET_ELIGIBLE_REVS = 'bulk_migration/getEligibleRevs';
 export const BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS = 'bulk_migration/getDocumentTypeApprovalRequirements';
 export const BULK_MIGRATION_UPGRADE_FORM = 'bulk_migration/createNewFormRevision';
+export const BULK_MIGRATION_GET_LATEST_SCANS = 'bulk_migration/getLatestScans';
 export const BULK_MIGRATION_REGISTER_SCAN = 'bulk_migration/registerScan';
 export const BULK_MIGRATION_UPDATE_SCAN = 'bulk_migration/updateScan';
 export const BULK_MIGRATION_CANCEL_SCAN = 'bulk_migration/cancelScan';
+export const BULK_MIGRATION_REGISTER_SCAN_FOR_RUN = 'bulk_migration/registerScanForRun';
 export const BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW = 'bulk_migration/getScanRevisionsForPreview';
 export const BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW = 'bulk_migration/previewMapping';
 export const BULK_MIGRATION_GET_SCAN_REVISIONS = 'bulk_migration/getScanRevisions';
-export const BULK_MIGRATION_GET_LATEST_COMPLETED_SCAN = 'bulk_migration/getLatestCompletedScan';
 export const BULK_MIGRATION_GET_SCAN_RESULTS = 'bulk_migration/getScanRevisions';
 export const BULK_MIGRATION_START_REVS_MIGRATION = 'bulk_migration';
 
