@@ -4,7 +4,7 @@ import { checkIsDocumentOTHER, checkIsDocumentPart } from '../../documentRevisio
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
 export const generateDocTitleText = (docId: string, displayRevision: string, name: string): string => (
-  `${docId} • Rev ${displayRevision}`
+  `${docId} • Rev ${displayRevision} - ${name}`
 );
 
 export const storeDataToFormData = (approvalRequestItemsList: ApprovalRequestGridItem[]): FBDocumentRevisionsValue[] => (
