@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
   },
   leftSection: {
-    flexBasis: '25%', // Left section takes 30% width
+    width: '25%', // Left section takes 25% width
     borderRight: `1px solid ${theme.palette.divider}`,
     padding: theme.spacing(2),
     boxSizing: 'border-box',
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
   },
   rightSection: {
-    flexBasis: '75%', // Right section takes 70% width
+    width: '75%', // Right section takes 75% width
     padding: theme.spacing(2),
     boxSizing: 'border-box',
     height: '92vh',
@@ -96,12 +96,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PreviewDrawer: React.FC<{
-  isOpen: boolean
   isPreviewPanelVisible: boolean
   handleClosePreview: () => void
   toRevSchema: ISchemaItem[]
   scanDetails: IBulkMigrationScanDetails | undefined
-}> = ({ isOpen, isPreviewPanelVisible, handleClosePreview, toRevSchema, scanDetails }) => {
+}> = ({ isPreviewPanelVisible, handleClosePreview, toRevSchema, scanDetails }) => {
   const classes = useStyles();
 
   const [isLoading, setIsLoading] = useState(false);

@@ -318,8 +318,8 @@ const BulkMigrationContainer: React.FC = () => {
 
   function startRevisionsScan () {
     if (!scanDetails?.toFormSchema?.length) {
-      toastError(`Mapping Rules have not been set. 
-        Click on "Mapping Rules" to define how the previous form schema maps to the current one`);
+      toastError(`Mapping Logic has not been set. 
+        Click on "Mapping Logic" to define how the previous form schema maps to the current one`);
       return;
     }
 
@@ -371,7 +371,7 @@ const BulkMigrationContainer: React.FC = () => {
           console.log(data);
           setIsLoading(false);
           toastSuccess(
-            'Scan mapping rules have been updated. Click Preview to see these rules in action.',
+            'Scan mapping logic has been updated. Click Preview to see this logic in action.',
           );
         })
         .catch((exception) => {
@@ -669,13 +669,8 @@ const BulkMigrationContainer: React.FC = () => {
                 )}
                 {toFormRevId && fromFormRevId && (
                   <Box>
-                    <Button
-                      variant="text"
-                      color="secondary"
-                      onClick={showMappingRules}
-                    >
-                    Mapping Rules
-                    </Button>
+                    <Button variant="text" color="secondary"
+                      onClick={showMappingRules}> Mapping Logic </Button>
                   </Box>
                 )}
               </Box>
@@ -795,31 +790,23 @@ const BulkMigrationContainer: React.FC = () => {
                 }}
               >
                 <Typography variant="body2" style={{ marginBottom: '4px' }}>
-                For revisions, that are already Released, migration would create
-                a new Revision and automate its approval & release, using{' '}
+                For revisions, that are already Released, migration would create a new Revision and automate its approval & release, using
                   <span style={{ fontWeight: 'bold', color: Colors.bright_blue }}>
                     {approvalRequirements.email}
                   </span>
                 </Typography>
-                <Typography variant="body2" style={{ margin: '0px 0px 4px 0px' }}>
-                Based on the Document Type selected, this user{' '}
-                  <b>should be a part of the groups</b> listed below, without
+                <Typography variant="body2" style={{ margin: '8px 0px 4px 0px' }}>
+                Based on the Document Type selected, this user <b>should be a part of the groups</b> listed below, without
                 which the process will fail.
                 </Typography>
                 <Box py={1} mt={0.3} display="flex" style={{ gap: '8px' }}>
                   {approvalRequirements.requiredGroups.map((group) => {
                     return (
                       <Box ml={1} display="flex" key={group.id}>
-                        {isApprovalRequirementFulfilled(group) && (
-                          <CheckCircleIcon style={{ color: Colors.green }} />
-                        )}
-                        {!isApprovalRequirementFulfilled(group) && (
-                          <WarningIcon style={{ color: Colors.red }} />
-                        )}
+                        {isApprovalRequirementFulfilled(group) && <CheckCircleIcon style={{ color: Colors.green }} />}
+                        {!isApprovalRequirementFulfilled(group) && <WarningIcon style={{ color: Colors.red }} />}
                         <Box ml={0.5}>
-                          <Typography variant="subtitle2">
-                            {group.name}
-                          </Typography>
+                          <Typography variant="subtitle2">{group.name}</Typography>
                         </Box>
                       </Box>
                     );
@@ -829,7 +816,6 @@ const BulkMigrationContainer: React.FC = () => {
             )}
           </Box>
         </Box>
-
       </Box>
       <div className={classes.panels}>
         {!isEmpty(errorMessage) && (

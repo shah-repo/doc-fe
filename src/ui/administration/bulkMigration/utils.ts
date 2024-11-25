@@ -1,10 +1,80 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { some } from 'lodash';
 import Colors from '../../layout/theme/utils/colors';
-import { ISchemaItem } from './interface';
+import { IMappedFrom, IRowData, ISchemaItem } from './interface';
 
-export function canMapItems (selectedSchema: ISchemaItem, toSchemaItem: ISchemaItem) {
-  return true;
+export function canMapItems (selectedSchema: ISchemaItem, toSchemaItem: ISchemaItem): {canMap: boolean, errMessage: string} {
+  let canMap = true;
+  let errMessage = '';
+  // Rule 1 - Autocomplete type / Checkbox Group must be mapped to an autocomplete / Checkbox Group, an object, or an array type.
+  const types = ['autocomplete', 'checkboxgroup'];
+  for (const type of types) {
+    if (selectedSchema.type === type) {
+      if (toSchemaItem.type !== type && !toSchemaItem.referenceDataType) {
+        canMap = false;
+        errMessage = `${type} can be mapped to an ${type}, an object, or an array type`;
+      }
+    }
+  }
+
+  return { canMap, errMessage };
+}
+
+export function validateTableMappings (selectedRow: IRowData): {canMap: boolean, errMessage: string} {
+  let canMap = true;
+  let errMessage = '';
+
+  // Rule 2:3 - In a table row, only one column can be an autocomplete / checkboxGroup
+  let columnKeyWithAutocomplete;
+  let columnKeyWithCheckbox;
+
+  for (const key of Object.keys(selectedRow)) {
+    if (key === 'id') {
+      continue;
+    }
+
+    const mappedEntries: IMappedFrom[] = selectedRow[key] ?? [];
+
+    if (mappedEntries.length) {
+      const hasAutocomplete = some(mappedEntries, { type: 'autocomplete' });
+      const hasNonAutocomplete = some(mappedEntries, (item) => item.type !== 'autocomplete');
+
+      // Within the same column cannot map autocomplete and non autocomplete fields.
+      if (hasAutocomplete && hasNonAutocomplete) {
+        canMap = false;
+        errMessage = 'Within the same column cannot map autocomplete and non autocomplete fields';
+      }
+
+      const hasCheckboxgroup = some(mappedEntries, { type: 'checkboxgroup' });
+      const hasNonCheckboxgroup = some(mappedEntries, (item) => item.type !== 'checkboxgroup');
+
+      // Within the same column cannot map checkboxgroup and non checkboxgroup fields.
+      if (hasCheckboxgroup && hasNonCheckboxgroup) {
+        canMap = false;
+        errMessage = 'Within the same column cannot map checkboxgroup and non checkboxgroup fields';
+      }
+
+      if (hasAutocomplete) {
+        if (!columnKeyWithAutocomplete || columnKeyWithAutocomplete === key) {
+          columnKeyWithAutocomplete = key;
+        } else {
+          canMap = false;
+          errMessage = `In this table row, ${columnKeyWithAutocomplete} is already an autocomplete. Only one column can be an autocomplete`;
+        }
+      }
+
+      if (hasCheckboxgroup) {
+        if (!columnKeyWithCheckbox || columnKeyWithCheckbox === key) {
+          columnKeyWithCheckbox = key;
+        } else {
+          canMap = false;
+          errMessage = `In this table row, ${columnKeyWithCheckbox} is already an checkboxgroup. Only one column can be an checkboxgroup`;
+        }
+      }
+    }
+  }
+  return { canMap, errMessage };
 }
 
 export function getFromSchemaItemBgColor (schemaItem: ISchemaItem): string {

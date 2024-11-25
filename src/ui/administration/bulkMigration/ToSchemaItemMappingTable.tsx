@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { toastError } from '../../components/notifications';
 import Colors from '../../layout/theme/utils/colors';
 import { IMappedFrom, IRowData, ISchemaItem } from './interface';
+import { validateTableMappings } from './utils';
 
 const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
 
@@ -71,21 +72,37 @@ const ToSchemaItemMappingTable: React.FC<{
 
     const selectedSchemaItem = selectedSchemaItems[0];
 
+    if (selectedSchemaItem.referenceDataType) {
+      toastError('Reference data type cannot be mapped to a column in the table. Please use direct mapping.');
+      return;
+    }
+
+    const modifiedRow = { ...selectedRow };
+    if (!modifiedRow[key]) {
+      modifiedRow[key] = [];
+    }
+    modifiedRow[key].push({
+      name: selectedSchemaItem.name,
+      label: selectedSchemaItem.label,
+      type: selectedSchemaItem.type,
+      rules: selectedSchemaItem.rules,
+    });
+
+    // Check for Table Mappings
+    const { canMap, errMessage } = validateTableMappings(modifiedRow);
+    if (!canMap) {
+      toastError(errMessage);
+      return;
+    }
+
     const modifiedRows = rows.map(row => {
       if (row.id === selectedRow.id) {
-        if (!row[key]) {
-          row[key] = [];
-        }
-        row[key].push({
-          name: selectedSchemaItem.name,
-          label: selectedSchemaItem.label,
-          type: selectedSchemaItem.type,
-          rules: selectedSchemaItem.rules,
-        });
+        return modifiedRow;
+      } else {
+        return row;
       }
-
-      return row;
     });
+
     setRows(modifiedRows);
     handleMappingChange(modifiedRows);
   }

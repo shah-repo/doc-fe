@@ -5,8 +5,10 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import React, { useEffect, useState } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { toastError } from '../../components/notifications';
 import Colors from '../../layout/theme/utils/colors';
 import { IBulkMigrationScanDetails, IMappedFrom, IRowData, ISchemaItem } from './interface';
+import MappingRulesDrawer from './MappingRulesDrawer';
 import PreviewDrawer from './PreviewDrawer';
 import useStyles from './styles';
 import ToSchemaItemMappingTable from './ToSchemaItemMappingTable';
@@ -31,6 +33,7 @@ const MigrationMappingDialog: React.FC<{
   const [isShowRelationVisible, setIsShowRelationVisible] = useState<boolean>(false);
 
   const [isPreviewPanelVisible, setIsPreviewPanelVisible] = useState<boolean>(false);
+  const [isMappingRulesPanelVisible, setIsMappingRulesPanelVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (fromRev?.id) {
@@ -70,6 +73,14 @@ const MigrationMappingDialog: React.FC<{
     setIsPreviewPanelVisible(false);
   }
 
+  function showMappingRules () {
+    setIsMappingRulesPanelVisible(true);
+  }
+
+  function handleCloseMappingRulesPanel () {
+    setIsMappingRulesPanelVisible(false);
+  }
+
   function handleAutoMapping () {
     // Schema items with the same name or label can be auto mapped.
     const { fromRevSchema: modifiedFromRevSchema, toRevSchema: modifiedToRevSchema } = autoMapArrays(fromRevSchema, toRevSchema);
@@ -78,7 +89,8 @@ const MigrationMappingDialog: React.FC<{
   }
 
   function handleFromSchemaItemClick (schemaItem: ISchemaItem) {
-    if (!isDisabledSchemaItem(schemaItem) && !schemaItem.isMapped) {
+    // if (!isDisabledSchemaItem(schemaItem) && !schemaItem.isMapped) {
+    if (!isDisabledSchemaItem(schemaItem)) {
       const isAlreadyPresent = selectedSchemaItems?.findIndex(item => item.name === schemaItem.name) > -1;
       if (isAlreadyPresent) {
         const filteredSelectedSchemaItems = selectedSchemaItems?.filter(item => item.name !== schemaItem.name);
@@ -127,7 +139,8 @@ const MigrationMappingDialog: React.FC<{
     }
 
     for (const selectedSchemaItem of selectedSchemaItems) {
-      if (canMapItems(selectedSchemaItem, toSchemaItem)) {
+      const { canMap, errMessage } = canMapItems(selectedSchemaItem, toSchemaItem);
+      if (canMap) {
         // push into mappedFrom on toRevSchema item to selectedSchemaName.name
         if (!selectedSchemaItem.isMapped) {
           setToRevSchema(toRevSchema.map(toRevSchemaItem => {
@@ -144,6 +157,8 @@ const MigrationMappingDialog: React.FC<{
 
         // Set isMapped on fromRevSchema item to true
         setFromRevSchemaItemMapped(selectedSchemaItem);
+      } else {
+        toastError(errMessage);
       }
     }
     setSelectedSchemaItems([]);
@@ -202,9 +217,10 @@ const MigrationMappingDialog: React.FC<{
             <CloseIcon />
           </IconButton>
           <Typography variant="h6">
-            Migration Mapping Rules
+            Migration Form Schema Fields Mapping
           </Typography>
           <Box style={{ display: 'flex', justifyContent: 'space-between', gap: '4px' }}>
+            <Button variant="text" color="secondary" onClick={showMappingRules}> Rules </Button>
             <Button color="primary" variant="contained" onClick={handleMappingSave}> Save </Button>
             <Button variant="outlined" onClick={handleMappingPreview}> Preview </Button>
             <FormControlLabel
@@ -232,8 +248,8 @@ const MigrationMappingDialog: React.FC<{
           <li className={classes.compactListItem}>Click on a Schema Item on left. A <DoneAllIcon style={{ color: Colors.green, position: 'relative', top: '6px' }} /> would appear, indicating that this is selected.</li>
           <li className={classes.compactListItem}>Now click on any item in the <em>To Rev</em> area. This maps the two fields together.</li>
           <li className={classes.compactListItem}>More than one item from the left can be mapped to items on the right.</li>
-          <li className={classes.compactListItem}>There are basic rules governing mapping, based on the type of the item. For eg. A checkbox can be mapped only to a checkbox, & so on. This is to minimize data loss.</li>
         </ul>
+        {/* <MappingRules /> */}
         <Typography variant="subtitle2">{unmappedCount} fields unmapped</Typography>
         <Box style={{ display: 'flex', justifyContent: 'space-between' }} className={classes.mappingArea}>
           <ArcherContainer
@@ -342,11 +358,14 @@ const MigrationMappingDialog: React.FC<{
 
       {
         isPreviewPanelVisible
-          && <PreviewDrawer isOpen={isPreviewPanelVisible} isPreviewPanelVisible={isPreviewPanelVisible}
+          && <PreviewDrawer isPreviewPanelVisible={isPreviewPanelVisible}
             handleClosePreview={handleClosePreview} scanDetails={scanDetails}
             toRevSchema={toRevSchema}
           />
       }
+      <MappingRulesDrawer isOpen={isMappingRulesPanelVisible}
+        handleClosePanel={handleCloseMappingRulesPanel}
+      />
     </Dialog>
   );
 };
