@@ -3,7 +3,7 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { checkIsDocumentOTHER, checkIsDocumentPart } from '../../documentRevision/helpers/checkDocumentGroup';
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from './ItemsAndDetails.types';
 
-export const generateDocTitleText = (docId: string, displayRevision: string, name: string): string => (
+export const generateDocTitleText = (docId: string, displayRevision: string, name?: string): string => (
   `${docId} • Rev ${displayRevision}${name ? ` - ${name}` : ''}`
 );
 
@@ -43,11 +43,11 @@ export const formDataToStoreData = (
   };
 
   const docRevId = item.proposedDocumentRevision.id;
-  const { displayRevision, name, document, attachments }
+  const { displayRevision, document, attachments }
           = documentRevisionsData?.find((docRev: DocumentRevision) => docRev.id === docRevId) ?? {};
 
   if (document) {
-    entryInfo.titleText = generateDocTitleText(document.docId, displayRevision, name);
+    entryInfo.titleText = generateDocTitleText(document.docId, displayRevision);
     entryInfo.isPart
           = checkIsDocumentPart(document.documentType.group) || checkIsDocumentOTHER(document.documentType.group);
     entryInfo.documentId = document.id;

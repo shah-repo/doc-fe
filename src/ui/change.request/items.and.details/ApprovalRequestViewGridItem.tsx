@@ -102,8 +102,8 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
 
   const getDocumentDetails = useCallback(async () => {
     if (!documentId) {
-      const { document, displayRevision, name } = await documentDetailsApi.fetch() as FBDocumentRevisionResponse;
-      const documentTitleText = generateDocTitleText(document.docId, displayRevision, name);
+      const { document, displayRevision } = await documentDetailsApi.fetch() as FBDocumentRevisionResponse;
+      const documentTitleText = generateDocTitleText(document.docId, displayRevision);
       setDocTitle(documentTitleText);
       setDocRevDocumentId(document.id);
       if ([DOC_TYPE_GROUP.PART, DOC_TYPE_GROUP.OTHER].includes(document.documentType?.group)) {
