@@ -58,9 +58,17 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   };
 
   const handleSubmit = (values: { files: FileWithPreview[], link: string }) => {
-    // if the user wants to skip the step
-    // eslint-disable-next-line no-mixed-operators
-    if ((values.files.length === 0 && !values.link) || (values.link === bulkImport?.s3Link || bulkImport?.attachmentId && files.length === 0)) {
+    const isFormEmpty = values.files.length === 0 && !values.link;
+    // if the user wants to skip the step and we don't want to save the skipped
+    if ((bulkImport?.attachmentLink === skippedAttachmentFile && isFormEmpty) // if we have skipped and the form is empty
+      || (bulkImport?.attachmentLink !== skippedAttachmentFile && bulkImport?.attachmentLink?.length && isFormEmpty) // if is different to skipped but we already have attachmentLink
+      || (bulkImport?.attachmentId && isFormEmpty) // if we already have an attachmentId and the form is empty
+      || (values.link === bulkImport?.attachmentLink && values.files.length === 0)) { // if the current link on form is the same as attachmentLink
+      handleNext();
+      return;
+    }
+    // if the user wants to skip the step when is a zip file and there is not s3 link
+    if (isFormEmpty && !bulkImport?.attachmentId && !bulkImport?.attachmentLink) {
       dispatch(setIsLoading(true));
       asyncSkipAttachment.start(patchBkSkipAttachment, { bulkImportId: bulkImport?.id, data: { attachmentLink: skippedAttachmentFile } }, asyncSkipAttachment);
       return;
@@ -147,7 +155,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
     return (
       <Formik initialValues={{
         files: [],
-        link: '',
+        link: bulkImport?.attachmentLink?.length && bulkImport?.attachmentLink !== skippedAttachmentFile ? bulkImport?.attachmentLink : '',
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}>
