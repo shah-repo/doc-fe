@@ -21,7 +21,7 @@ import ListPanel from './Components/ListPanel';
 import OCRFilePresenter from './Components/OCRFilePresenter';
 import Config from '../../../../../../config';
 
-const OCR_API_URL = `${Config.ApiOCREndpoint}/e_socr`;
+const OCR_API_URL = `${Config.ApiOCREndpoint}/aocr`;
 
 const AttachmentsPanel = () => {
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
@@ -55,13 +55,8 @@ const AttachmentsPanel = () => {
 
     const uploadAttachment = async (index) => {
       const attachment = attachments[index];
-      if (!attachment?.url) {
-        console.log(`****** No presigned URL for attachment at index=${index} ******`);
-        return;
-      }
-
       const data = {
-        Url: attachment.url,
+        FilePath: attachment.s3link,
         // TODO: Need to review the folowwing 3 variables
         Company: 'akura',
         FormID: '00184',
@@ -91,7 +86,6 @@ const AttachmentsPanel = () => {
   const attachmentsAsync = useAsync<any>({
     onSuccess: (attachments) => {
       setAttachments(attachments);
-      // TODO: We may need to filter some type of attachments
     },
     onError: () => {
       toastError('Failed to load attachments');
