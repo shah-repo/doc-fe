@@ -1,4 +1,5 @@
 import { Tooltip, TooltipProps, makeStyles } from '@material-ui/core';
+import cx from 'classnames';
 import React from 'react';
 import useOverflow from '../hooks/useOverflow';
 
@@ -20,12 +21,14 @@ const useStyles = makeStyles({
 
 interface Props extends Omit<TooltipProps, 'children'> {
   maxLines?: number
+  wrapperClassName?: string
 }
 
 const OverflowTooltip: React.FC<Props> = ({
   title,
   children,
   maxLines = 1,
+  wrapperClassName,
   ...props
 }) => {
   const [overflowRef, isOverflowing] = useOverflow<HTMLDivElement>();
@@ -37,7 +40,13 @@ const OverflowTooltip: React.FC<Props> = ({
       title={isOverflowing ? title : ''}
     >
       <div
-        className={maxLines > 1 ? classes.multilineWrapper : classes.wrapper}
+        className={cx(
+          wrapperClassName,
+          {
+            [classes.multilineWrapper]: maxLines > 1,
+            [classes.wrapper]: maxLines <= 1,
+          },
+        )}
         ref={overflowRef}
       >
         {children}

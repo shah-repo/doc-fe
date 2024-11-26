@@ -33,16 +33,18 @@ interface IDocRelatedPart {
 
 interface TooltipProps {
   'data-cy': string
-  tooltipClassName: string
+  tooltipClassName?: string
+  wrapperClassName?: string
 }
 
-const TextTooltip: React.FC<TooltipProps> = ({ children, tooltipClassName, ...props }) => (
+const TextTooltip: React.FC<TooltipProps> = ({ children, tooltipClassName, wrapperClassName, ...props }) => (
   <OverflowTooltip
     arrow
     interactive
     placement="top"
     title={<div className={cx('containing-box-scrollbar', tooltipClassName)}>{children}</div>}
     maxLines={4}
+    wrapperClassName={wrapperClassName}
     {...props}
   >
     {children}
@@ -200,6 +202,7 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
           <div className={cx(classes.contentCell, classes.textCell)}>
             <TextTooltip
               tooltipClassName={classes.tooltipContent}
+              wrapperClassName={classes.textContent}
               data-cy="view-description-of-change"
             >
               {descriptionOfChange}
@@ -209,6 +212,7 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
             <TextTooltip
               data-cy="view-justification-of-change"
               tooltipClassName={classes.tooltipContent}
+              wrapperClassName={classes.textContent}
             >
               {justificationOfChange}
             </TextTooltip>
