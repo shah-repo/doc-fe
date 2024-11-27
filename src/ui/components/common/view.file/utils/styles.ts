@@ -22,6 +22,8 @@ export const styles = makeStyles((theme: NextTheme) => ({
   },
   contentRoot: {
     textAlign: 'center',
+    overflow: 'hidden',
+    height: '85%',
   },
   buttonsContainer: {
     position: 'absolute',
