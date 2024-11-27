@@ -7,7 +7,7 @@ import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { FB } from '../helpers';
 import { EMPTY_PLACEHOLDER, TYPE_OPTIONS } from './constants';
-import { DetailsObj, EditableLHRSummaryItem } from './types';
+import { DetailsObj, EditableLHRSummaryItem, NullableString } from './types';
 
 export const getExcelColumns = (columns: Array<ColumnDefinition<EditableLHRSummaryItem>>): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
   return [...columns].filter(col => col.show).map(col => {
@@ -59,6 +59,18 @@ export const getDisplayDocumentByDetailsObj = (object?: DetailsObj): string => {
 export const getDisplayDocument = (docId?: string, displayRevision?: string): string => {
   return `${docId ?? ''} - ${displayRevision ?? ''}`;
 };
+
+export const setFieldValuesForOriginalAndPrefixed = (
+  setFieldValue: (fieldName: string, value: NullableString) => void,
+  fieldName: string,
+  value: NullableString,
+): void => {
+  setFieldValue(fieldName, value);
+  setFieldValue(addCustomPrefix(fieldName), value);
+};
+
+const addCustomPrefix = (fieldName: string): string =>
+    `custom${fieldName[0].toUpperCase()}${fieldName.slice(1)}`;
 
 const formatDate = (date, format) => {
   return moment(date).format(format);
