@@ -151,7 +151,6 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
       <Dialog
         title="common.share"
         open={emailDialog.isOpen}
-        loading={isDownloadInprogress}
         onClose={emailDialog.close}
         actionsProps={{ className: classes.dialogAction }}
         actions={ <ExportToEmailDialogActions {...{ handleEmail: runExportWithChildren, emailDialog, isLoading: isDownloadInprogress, isNoOptionSelected }} />}
