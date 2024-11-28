@@ -72,10 +72,11 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
   const [attachments, setAttachments] = useState<AttachmentsInfo[]>();
   const [watermarkAttachments, setWatermarkAttachments]
       = useState<AttachmentPayload[]>();
-  const getUpdatedAttchmentPayload = (attachments?: AttachmentsInfo[]) => attachments?.map(({ id, name, type }) => ({ id, name: `${name}.${type}` }));
+  const sortAttachmentsByPrimary = (attachments?: AttachmentsInfo[]) => attachments?.sort((a: AttachmentsInfo, b: AttachmentsInfo) => Number(b.isPrimaryAttachment) - Number(a.isPrimaryAttachment));
+  const getUpdatedAttchmentPayload = (attachments?: AttachmentsInfo[]) => sortAttachmentsByPrimary(attachments)?.map(({ id, name, type }) => ({ id, name: `${name}.${type}` }));
   const attachmentsAsync = useAsync<AttachmentsInfo[]>({
     onSuccess: (attachments) => {
-      setAttachments(attachments?.filter(attachment => attachment.type === PDF));
+      setAttachments(sortAttachmentsByPrimary(attachments?.filter(attachment => attachment.type === PDF)));
       setWatermarkAttachments(getUpdatedAttchmentPayload(attachments?.filter(attachment => attachment.type === PDF && attachment.isPrimaryAttachment)));
     },
     onError: () => {
