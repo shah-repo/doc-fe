@@ -16,7 +16,6 @@ export const styles = makeStyles((theme: Theme) =>
     radioGroup: {
       gap: theme.spacing(3.75),
       flexDirection: 'row',
-      marginBottom: theme.spacing(4.5),
     },
     radio: {
       paddingTop: 11,
@@ -41,6 +40,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     checkboxContainer: {
       marginLeft: theme.spacing(0),
+      marginTop: theme.spacing(3.75),
       '&.Mui-disabled span.Mui-disabled': {
         color: Colors.textBlack,
       },

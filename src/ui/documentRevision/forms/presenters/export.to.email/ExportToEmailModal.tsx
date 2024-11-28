@@ -2,7 +2,6 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Box,
-  Grid,
   List,
   ListItem,
   ListItemIcon,
@@ -256,8 +255,8 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
             })}
           </List>
         </Box>}
-        <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item sm={6} xs={12}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box flex="0 0 50%">
             <Typography
               variant="h2"
               component="h2"
@@ -309,8 +308,8 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
                 }
               />
             </RadioGroup>
-          </Grid>
-          <Grid item sm={6} xs={12}>
+          </Box>
+          <Box flex="0 0 50%">
             <FormControlLabel
               control={
                 <Field
@@ -327,8 +326,8 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
               className={classes.checkboxContainer}
               label={translate('common.send.to.email')}
             />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
       </Box>
     </FormikProvider>
