@@ -84,5 +84,41 @@ export const styles = makeStyles((theme: Theme) =>
     radioContainer: {
       marginLeft: theme.spacing(0),
     },
+    loader: {
+      gap: theme.spacing(1.25),
+    },
+    spinner: {
+      animation: '$spin 1s linear infinite',
+      fontSize: 20,
+      color: Colors.black,
+      marginRight: theme.spacing(1),
+    },
+    '@keyframes spin': {
+      from: { transform: 'rotate(0deg)' },
+      to: { transform: 'rotate(360deg)' },
+    },
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+    },
+    noteContainer: {
+      background: Colors.white,
+      padding: theme.spacing(1.25, 1.5),
+      width: '100%',
+      textAlign: 'left',
+    },
+    contentNote: {
+      color: Colors.textBlack,
+      fontSize: 14,
+      fontWeight: 700,
+      lineHeight: 2,
+    },
+    additionalText: {
+      fontSize: 14,
+      fontWeight: 400,
+      color: Colors.textBlack,
+      lineHeight: 2,
+    },
   }),
 );

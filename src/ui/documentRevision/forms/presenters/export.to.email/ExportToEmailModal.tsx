@@ -2,6 +2,7 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Box,
+  Grid,
   List,
   ListItem,
   ListItemIcon,
@@ -247,77 +248,80 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
             ))}
           </List>
         </Box>}
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Grid item sm={6} xs={12}>
+            <Typography
+              variant="h2"
+              component="h2"
+              className={cx(classes.auditContenttitle, classes.contenttitle)}
+            >
+              <Text translation="common.send.to.email.prompt" />
+            </Typography>
 
-        <Typography
-          variant="h2"
-          component="h2"
-          className={cx(classes.auditContenttitle, classes.contenttitle)}
-        >
-          <Text translation="common.send.to.email.prompt" />
-        </Typography>
+            <RadioGroup
+              value={formik.values.includeAuditLogs}
+              onChange={handleIncludeAuditHistoryChange}
+              name="includeAuditLogs"
+              className={classes.radioGroup}
+            >
+              <FormControlLabel
+                value={true}
+                control={
+                  <Radio
+                    classes={{ root: classes.radio }}
+                    checkedIcon={<Active />}
+                    icon={<InActive />}
+                    disableRipple
+                  />
+                }
+                checked={formik.values.includeAuditLogs}
+                className={classes.radioContainer}
+                label={
+                  <Typography variant="body2" className={classes.radioLabel}>
+                    <Text translation="common.true" />
+                  </Typography>
+                }
+              />
+              <FormControlLabel
+                value={false}
+                control={
+                  <Radio
+                    classes={{ root: classes.radio }}
+                    checkedIcon={<Active />}
+                    icon={<InActive />}
+                    disableRipple
+                  />
+                }
+                checked={!formik.values.includeAuditLogs}
+                className={classes.radioContainer}
+                label={
+                  <Typography variant="body2" className={classes.radioLabel}>
+                    <Text translation="common.false" />
+                  </Typography>
+                }
+              />
+            </RadioGroup>
+          </Grid>
+          <Grid item sm={6} xs={12}>
+            <FormControlLabel
+              control={
+                <Field
+                  name="sendEmail"
+                  type="checkbox"
+                  as={Checkbox}
+                  disabled
+                  checked={true}
+                  className={classes.check}
+                  data-cy="select-send-email"
+                />
+              }
+              value={true}
+              className={classes.checkboxContainer}
+              label={translate('common.send.to.email')}
+            />
+          </Grid>
+        </Grid>
 
-        <RadioGroup
-          value={formik.values.includeAuditLogs}
-          onChange={handleIncludeAuditHistoryChange}
-          name="includeAuditLogs"
-          className={classes.radioGroup}
-        >
-          <FormControlLabel
-            value={true}
-            control={
-              <Radio
-                classes={{ root: classes.radio }}
-                checkedIcon={<Active />}
-                icon={<InActive />}
-                disableRipple
-              />
-            }
-            checked={formik.values.includeAuditLogs}
-            className={classes.radioContainer}
-            label={
-              <Typography variant="body2" className={classes.radioLabel}>
-                <Text translation="common.true" />
-              </Typography>
-            }
-          />
-          <FormControlLabel
-            value={false}
-            control={
-              <Radio
-                classes={{ root: classes.radio }}
-                checkedIcon={<Active />}
-                icon={<InActive />}
-                disableRipple
-              />
-            }
-            checked={!formik.values.includeAuditLogs}
-            className={classes.radioContainer}
-            label={
-              <Typography variant="body2" className={classes.radioLabel}>
-                <Text translation="common.false" />
-              </Typography>
-            }
-          />
-        </RadioGroup>
-
-        <Box>
-          <FormControlLabel
-            control={
-              <Field
-                name="sendEmail"
-                type="checkbox"
-                as={Checkbox}
-                disabled
-                checked={true}
-                className={classes.check}
-                data-cy="select-send-email"
-              />
-            }
-            value={true}
-            className={classes.checkboxContainer}
-            label={translate('common.send.to.email')}
-          />
-        </Box>
       </Box>
     </FormikProvider>
   );
