@@ -245,11 +245,11 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
                     </Box>
                   </ListItemIcon>
                   <ListItemText>
-                    <Typography className={classes.listItemText}>
-                      <OverflowContent title={attachmentName}>
+                    <OverflowContent title={attachmentName}>
+                      <span className={classes.listItemText}>
                         {attachmentName}{attachment?.isPrimaryAttachment && <span className={classes.primary}> ({translate('share.download.popup.attachment.primary')}) </span>}
-                      </OverflowContent>
-                    </Typography>
+                      </span>
+                    </OverflowContent>
                   </ListItemText>
                 </ListItem>
               );
