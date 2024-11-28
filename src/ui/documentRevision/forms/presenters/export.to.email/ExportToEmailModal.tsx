@@ -24,6 +24,7 @@ import {
   FormControlLabel,
 } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
+import OverflowContent from '../../../../components/OverflowContent';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -214,38 +215,44 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
             <Text translation={attachments?.length ? 'share.select.attachment.with.effective.date' : 'common.no.attachments'} />
           </Typography>
           <List className={classes.attachmenstList}>
-            {attachments?.map((attachment, index) => (
-              <ListItem
-                key={index}
-                className={classes.attachmentListItem}
-                button
-                onClick={() => handleAttachmentToggle(attachment)}
-              >
-                <ListItemIcon className={classes.listItemIcon}>
-                  <Box>
-                    <Field
-                      key={isCurrentAttachmentExists(attachment)}
-                      name="watermarkAttachments"
-                      as={Checkbox}
-                      checked={isCurrentAttachmentExists(attachment)}
-                      tabIndex={-1}
-                      disableRipple
-                      data-cy={`select-attachment-${index}`}
-                    />
-                    <FontAwesomeIcon
-                      icon={solid('paperclip')}
-                      size="lg"
-                      className={classes.attachmentIcon}
-                    />
-                  </Box>
-                </ListItemIcon>
-                <ListItemText>
-                  <Typography className={classes.listItemText}>
-                    {attachment.name}.{attachment.type}
-                  </Typography>
-                </ListItemText>
-              </ListItem>
-            ))}
+            {attachments?.map((attachment, index) => {
+              const attachmentName = `${attachment.name}.${attachment.type}`;
+
+              return (
+                <ListItem
+                  key={index}
+                  className={classes.attachmentListItem}
+                  button
+                  onClick={() => handleAttachmentToggle(attachment)}
+                >
+                  <ListItemIcon className={classes.listItemIcon}>
+                    <Box>
+                      <Field
+                        key={isCurrentAttachmentExists(attachment)}
+                        name="watermarkAttachments"
+                        as={Checkbox}
+                        checked={isCurrentAttachmentExists(attachment)}
+                        tabIndex={-1}
+                        disableRipple
+                        data-cy={`select-attachment-${index}`}
+                      />
+                      <FontAwesomeIcon
+                        icon={solid('paperclip')}
+                        size="lg"
+                        className={classes.attachmentIcon}
+                      />
+                    </Box>
+                  </ListItemIcon>
+                  <ListItemText>
+                    <Typography className={classes.listItemText}>
+                      <OverflowContent title={attachmentName}>
+                        {attachmentName}
+                      </OverflowContent>
+                    </Typography>
+                  </ListItemText>
+                </ListItem>
+              );
+            })}
           </List>
         </Box>}
         <Grid container justifyContent="space-between" alignItems="center">
