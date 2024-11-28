@@ -2,7 +2,7 @@ import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps } from '..';
+import { FB, FBAutocompleteProps, FBOptionValueType, FBSchemaProps, FBWorkspaceModeOptions } from '..';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
@@ -11,6 +11,13 @@ import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentLHRT, checkIsDo
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { isTranslation } from '../../translations/types';
+
+const VIABLE_TEMPLATE_STATUSES = [
+  DocumentRevisionStatus.Draft,
+  DocumentRevisionStatus.Released,
+  DocumentRevisionStatus.InReview,
+  DocumentRevisionStatus.Deprecated,
+];
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>,
@@ -74,7 +81,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     && workspaceState?.document?.status === DocumentRevisionStatus.InReview) {
       disabled = true;
     }
-    const isTemplate = isEmpty(defaultValue) && disabled && [DocumentRevisionStatus.Draft, DocumentRevisionStatus.Released].includes(workspaceState?.document?.status);
+    const hasViableTemplateStatus = workspaceState?.document?.status && VIABLE_TEMPLATE_STATUSES.includes(workspaceState?.document?.status);
+    const isTemplate = isEmpty(defaultValue) && workspaceState?.document?.status && disabled && hasViableTemplateStatus && workspaceState.mode === FBWorkspaceModeOptions.DESIGN;
     const multiple = !isTemplate && (editorProperties?.includes('multiple') || props.multiple);
 
     useEffect(() => {

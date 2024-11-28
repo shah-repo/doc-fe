@@ -14,7 +14,7 @@ const FBProcedureItemDetails: React.FunctionComponent<FBProcedureItemProps> = ({
     <FBText
       locale={`form.builder.procedure.${type}.title`}
       values={{
-        title: getItem?.(item?.title),
+        title: getItem?.(item?.title as string),
         lot: lotDocId,
         quantity: item?.quantity || 'form.builder.none',
         unit: item?.unit,
