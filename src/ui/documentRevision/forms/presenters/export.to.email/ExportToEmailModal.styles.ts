@@ -120,5 +120,8 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.textBlack,
       lineHeight: 2,
     },
+    primary: {
+      color: Colors.textBlack,
+    },
   }),
 );
