@@ -36,20 +36,25 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
     onSelectionChange(newChecked);
   };
 
+  const isSupportedFileType = (fileType: string): boolean => {
+    return Config.ocrSupportedFileTypes.includes(fileType?.toLowerCase());
+  };
+
   return (
     <List className={cx(classes.list, 'containing-box-scrollbar')}>
       {attachments?.map((attachment, index) => {
+        const isFileTypeSupported = isSupportedFileType(attachment.type);
         return (
           <Tooltip
             key={`tooltip-${index}`}
-            title={(Config.ocrSupportedFileTypes.includes(attachment.type?.toLowerCase())) ? '' : `${attachment.type} ${translate('ocr.filetype.not.support.message')}`}
+            title={(isFileTypeSupported) ? '' : `${attachment.type} ${translate('ocr.filetype.not.support.message')}`}
             placement="right"
           >
             <ListItem
               key={index}
               button
               onClick={() => {
-                if (Config.ocrSupportedFileTypes.includes(attachment.type?.toLowerCase())) {
+                if (isFileTypeSupported) {
                   handleCheckboxClick(index);
                 }
                 showDocPreview(attachment);
@@ -59,7 +64,7 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
               <ListItemIcon className={classes.listItemIcon} >
                 <Checkbox
                   checked={checkedIndices.indexOf(index) !== -1}
-                  disabled={!Config.ocrSupportedFileTypes.includes(attachment.type?.toLowerCase())}
+                  disabled={!isFileTypeSupported}
                   tabIndex={-1}
                   disableRipple
                   data-cy={`attachment-checkbox-${index}`}
