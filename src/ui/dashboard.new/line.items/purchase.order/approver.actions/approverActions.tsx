@@ -40,7 +40,7 @@ import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
 import { NormalStyleChip as RejectedNormalStyleChip } from '../../common/NormalStyleChipApprovalRejected';
 import { StyledListItem } from '../../common/StyledListItem';
 import { StyleTooltip } from '../../common/StyleTooltip';
-import { delay, formatCurrency } from '../../common/Utils';
+import { formatCurrency } from '../../common/Utils';
 import useStyles from './approverActions.styles';
 interface Props {
   id: string
@@ -184,10 +184,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
     onMouseHoverItem(id);
   };
 
-  const handleDownloadClick = async () => {
+  const handleDownloadClick = () => {
     setDownloadPdfMobile(true);
-    await delay(1000);
-    setDownloadPdfMobile(false);
   };
 
   const handleDownloadClose = () => {
