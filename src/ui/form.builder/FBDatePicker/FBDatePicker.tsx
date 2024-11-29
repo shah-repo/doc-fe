@@ -58,7 +58,7 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
                   endAdornment: (
                     <>
                       <InputAdornment position="end">
-                        {datePickerState?.date && <IconButton onClick={onDatePickerClear} disabled={props.disabled} data-cy="date-clear" aria-label="clear date">
+                        {datePickerState?.date && <IconButton onClick={onDatePickerClear} size="small" disabled={props.disabled} data-cy="date-clear" aria-label="clear date">
                           <FontAwesomeIcon icon={regular('xmark')} />
                         </IconButton>}
                         {props?.InputProps?.endAdornment}
