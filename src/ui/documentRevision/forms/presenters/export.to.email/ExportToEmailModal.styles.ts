@@ -40,10 +40,12 @@ export const styles = makeStyles((theme: Theme) =>
     },
     checkboxContainer: {
       marginLeft: theme.spacing(0),
-      marginTop: theme.spacing(3.75),
       '&.Mui-disabled span.Mui-disabled': {
         color: Colors.textBlack,
       },
+    },
+    sendToEmailContainer: {
+      marginTop: theme.spacing(3.75),
     },
     check: {
       marginRight: theme.spacing(1.25),
