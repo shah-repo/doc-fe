@@ -323,7 +323,7 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
                 />
               }
               value={true}
-              className={classes.checkboxContainer}
+              className={cx(classes.checkboxContainer, classes.sendToEmailContainer)}
               label={translate('common.send.to.email')}
             />
           </Box>
