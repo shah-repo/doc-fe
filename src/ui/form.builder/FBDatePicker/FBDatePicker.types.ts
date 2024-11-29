@@ -10,6 +10,4 @@ export type FBDatePickerProps =
   onDatePickerClose?: () => void
   onDatePickerClear?: () => void
   disablePastDates?: boolean
-  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>
-  isOpen?: boolean
 };

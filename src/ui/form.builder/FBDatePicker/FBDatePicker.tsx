@@ -21,8 +21,6 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
   onDatePickerClose,
   onDatePickerClear,
   disablePastDates,
-  setIsOpen,
-  isOpen,
   ...props
 }) => {
   const classes = FBTextFieldStyles();
