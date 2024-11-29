@@ -17,6 +17,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     datePickerState,
     onDatePickerClick,
     onDatePickerClose,
+    onDatePickerClear,
     onChange,
     editorProperties,
     name = '',
@@ -31,7 +32,6 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const disablePastDates = editorProperties?.includes('disablePastDates') || false;
     const { id, isOutput } = workspaceState || {};
     const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
-    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const save = debounce((date?: string) => {
       if (!date) { return; }
@@ -75,7 +75,6 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     }, [approvalRequest]);
 
     onDatePickerClick = () => {
-      console.log('Calendar opened');
       if (formState?.isBackdropOpen) { return; }
       if (!name) { return; }
       if (!id) { return; }
@@ -90,16 +89,29 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     };
 
     onDatePickerClose = () => {
-      setIsOpen(!isOpen);
       setTimeout(() => {
         formState?.unlockField(name);
       }, 1000);
     };
 
     onChange = (_date: MaterialUiPickersDate | null, value?: string | null) => {
-      console.log('Calendar change');
       datePickerState?.setValue(value);
       save(moment.tz(value || '', 'MM/DD/YYYY', TIME_ZONE).startOf('day').toISOString());
+    };
+
+    onDatePickerClear = () => {
+      datePickerState?.setValue(null);
+      formState?.setFieldValue(name, null);
+      formState?.validate();
+
+      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+      if (!isUnderWorkspace) { return; }
+
+      if (workspaceState?.isChangeRequest) {
+        submitForm();
+      }
+
+      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     return Component({
@@ -107,8 +119,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       datePickerState,
       onDatePickerClick,
       onDatePickerClose,
-      setIsOpen,
-      isOpen,
+      onDatePickerClear,
       onChange,
       editorProperties,
       disablePastDates,
