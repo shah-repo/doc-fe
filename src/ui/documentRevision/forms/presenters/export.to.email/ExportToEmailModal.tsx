@@ -71,10 +71,11 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
   const [attachments, setAttachments] = useState<AttachmentsInfo[]>();
   const [watermarkAttachments, setWatermarkAttachments]
       = useState<AttachmentPayload[]>();
-  const getUpdatedAttchmentPayload = (attachments?: AttachmentsInfo[]) => attachments?.map(({ id, name, type }) => ({ id, name: `${name}.${type}` }));
+  const sortAttachmentsByPrimary = (attachments?: AttachmentsInfo[]) => attachments?.sort((a: AttachmentsInfo, b: AttachmentsInfo) => Number(b.isPrimaryAttachment) - Number(a.isPrimaryAttachment));
+  const getUpdatedAttchmentPayload = (attachments?: AttachmentsInfo[]) => sortAttachmentsByPrimary(attachments)?.map(({ id, name, type }) => ({ id, name: `${name}.${type}` }));
   const attachmentsAsync = useAsync<AttachmentsInfo[]>({
     onSuccess: (attachments) => {
-      setAttachments(attachments?.filter(attachment => attachment.type === PDF));
+      setAttachments(sortAttachmentsByPrimary(attachments?.filter(attachment => attachment.type === PDF)));
       setWatermarkAttachments(getUpdatedAttchmentPayload(attachments?.filter(attachment => attachment.type === PDF && attachment.isPrimaryAttachment)));
     },
     onError: () => {
@@ -243,88 +244,91 @@ const ExportToEmailModal = forwardRef<ExportToEmailDialogRefType, ExportToEmailM
                     </Box>
                   </ListItemIcon>
                   <ListItemText>
-                    <Typography className={classes.listItemText}>
-                      <OverflowContent title={attachmentName}>
-                        {attachmentName}
-                      </OverflowContent>
-                    </Typography>
+                    <OverflowContent title={attachmentName}>
+                      <span className={classes.listItemText}>
+                        {attachmentName}{attachment?.isPrimaryAttachment && <span className={classes.primary}> ({translate('share.download.popup.attachment.primary')}) </span>}
+                      </span>
+                    </OverflowContent>
                   </ListItemText>
                 </ListItem>
               );
             })}
           </List>
         </Box>}
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box flex="0 0 50%">
+            <Typography
+              variant="h2"
+              component="h2"
+              className={cx(classes.auditContenttitle, classes.contenttitle)}
+            >
+              <Text translation="common.send.to.email.prompt" />
+            </Typography>
 
-        <Typography
-          variant="h2"
-          component="h2"
-          className={cx(classes.auditContenttitle, classes.contenttitle)}
-        >
-          <Text translation="common.send.to.email.prompt" />
-        </Typography>
-
-        <RadioGroup
-          value={formik.values.includeAuditLogs}
-          onChange={handleIncludeAuditHistoryChange}
-          name="includeAuditLogs"
-          className={classes.radioGroup}
-        >
-          <FormControlLabel
-            value={true}
-            control={
-              <Radio
-                classes={{ root: classes.radio }}
-                checkedIcon={<Active />}
-                icon={<InActive />}
-                disableRipple
+            <RadioGroup
+              value={formik.values.includeAuditLogs}
+              onChange={handleIncludeAuditHistoryChange}
+              name="includeAuditLogs"
+              className={classes.radioGroup}
+            >
+              <FormControlLabel
+                value={true}
+                control={
+                  <Radio
+                    classes={{ root: classes.radio }}
+                    checkedIcon={<Active />}
+                    icon={<InActive />}
+                    disableRipple
+                  />
+                }
+                checked={formik.values.includeAuditLogs}
+                className={classes.radioContainer}
+                label={
+                  <Typography variant="body2" className={classes.radioLabel}>
+                    <Text translation="common.true" />
+                  </Typography>
+                }
               />
-            }
-            checked={formik.values.includeAuditLogs}
-            className={classes.radioContainer}
-            label={
-              <Typography variant="body2" className={classes.radioLabel}>
-                <Text translation="common.true" />
-              </Typography>
-            }
-          />
-          <FormControlLabel
-            value={false}
-            control={
-              <Radio
-                classes={{ root: classes.radio }}
-                checkedIcon={<Active />}
-                icon={<InActive />}
-                disableRipple
+              <FormControlLabel
+                value={false}
+                control={
+                  <Radio
+                    classes={{ root: classes.radio }}
+                    checkedIcon={<Active />}
+                    icon={<InActive />}
+                    disableRipple
+                  />
+                }
+                checked={!formik.values.includeAuditLogs}
+                className={classes.radioContainer}
+                label={
+                  <Typography variant="body2" className={classes.radioLabel}>
+                    <Text translation="common.false" />
+                  </Typography>
+                }
               />
-            }
-            checked={!formik.values.includeAuditLogs}
-            className={classes.radioContainer}
-            label={
-              <Typography variant="body2" className={classes.radioLabel}>
-                <Text translation="common.false" />
-              </Typography>
-            }
-          />
-        </RadioGroup>
-
-        <Box>
-          <FormControlLabel
-            control={
-              <Field
-                name="sendEmail"
-                type="checkbox"
-                as={Checkbox}
-                disabled
-                checked={true}
-                className={classes.check}
-                data-cy="select-send-email"
-              />
-            }
-            value={true}
-            className={classes.checkboxContainer}
-            label={translate('common.send.to.email')}
-          />
+            </RadioGroup>
+          </Box>
+          <Box flex="0 0 50%">
+            <FormControlLabel
+              control={
+                <Field
+                  name="sendEmail"
+                  type="checkbox"
+                  as={Checkbox}
+                  disabled
+                  checked={true}
+                  className={classes.check}
+                  data-cy="select-send-email"
+                />
+              }
+              value={true}
+              className={cx(classes.checkboxContainer, classes.sendToEmailContainer)}
+              label={translate('common.send.to.email')}
+            />
+          </Box>
         </Box>
+
       </Box>
     </FormikProvider>
   );
