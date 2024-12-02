@@ -15,6 +15,17 @@ const ImportLog: React.FC = () => {
   const classes = useStyles();
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
 
+  const renderItem = (text, formattedDate) => (
+    <ListItem className={classes.listItem}>
+      <Typography className={classes.primaryText}>
+        {text}
+      </Typography>
+      <Typography className={classes.secondaryText} color="textSecondary">
+        {formattedDate}
+      </Typography>
+    </ListItem>
+  );
+
   const renderFileData = (file: BulkImportFile) => {
     // Create a new Date object from the createdAt string
     const date = new Date(file.createdAt);
@@ -22,16 +33,16 @@ const ImportLog: React.FC = () => {
     // Format the date as MM/DD/YYYY
     const formattedDate = moment(date).format(MomentFormats.MonthDateYearTwoDigit);
 
-    return (
-      <ListItem className={classes.listItem}>
-        <Typography className={classes.primaryText}>
-          {`${file.name}.${file.type}`}
-        </Typography>
-        <Typography className={classes.secondaryText} color="textSecondary">
-          {formattedDate}
-        </Typography>
-      </ListItem>
-    );
+    return renderItem(`${file.name}.${file.type}`, formattedDate);
+  };
+
+  const renderS3Link = (s3Link: string, createdAt: string) => {
+    const date = new Date(createdAt);
+
+    // Format the date as MM/DD/YYYY
+    const formattedDate = moment(date).format(MomentFormats.MonthDateYearTwoDigit);
+
+    return renderItem(s3Link, formattedDate);
   };
 
   return (
@@ -53,6 +64,7 @@ const ImportLog: React.FC = () => {
 
                 return (
                   <Fragment key={`${item.id}-${idx}`}>
+                    {item.s3Link ? renderS3Link(item.s3Link, item.createdAt) : null}
                     {item.excelFile ? renderFileData(item.excelFile) : null}
                     {item.zipFile ? renderFileData(item.zipFile) : null}
                   </Fragment>
