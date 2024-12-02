@@ -43,6 +43,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const dialog = useDialog();
   const showErrors = false;
   const loadFromBk = useRef<boolean>(false);
+  const currentIndex = useRef<number>(0);
   const openMaxSizeExceededDialog = useDialog();
 
   const asyncUploadFile = useAsync({
@@ -51,6 +52,10 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
 
   const asyncSkipAttachment = useAsync({
     onSuccess: () => handleNext(),
+  });
+
+  const asyncDeleteAttachment = useAsync({
+    onSuccess: () => setFiles(files.filter((_, i) => i !== currentIndex.current)),
   });
 
   const handleFilesDrop = (acceptedFilesWithPreview: FileWithPreview[]) => {
@@ -79,7 +84,9 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   };
 
   const handleRemoveFile = (index: number) => {
-    setFiles(files.filter((_, i) => i !== index));
+    currentIndex.current = index;
+    dispatch(setIsLoading(true));
+    asyncDeleteAttachment.start(patchBkSkipAttachment, { bulkImportId: bulkImport?.id, data: { attachmentId: null, zipFile: null } }, asyncDeleteAttachment);
   };
 
   const handleConfirmOpen = () => {
