@@ -9,6 +9,7 @@ import { EditableRole, FBApprovalMatrixRolesProps, RoleEditEvent } from './types
 interface Options {
   groups: FBApprovalMatrixRolesProps['groups']
   actionsClass?: string
+  isLoading: boolean
   onRowClick?: (e: RoleEditEvent) => void
   discardRole: () => void
   saveRole: () => void
@@ -19,6 +20,7 @@ export default function createSchema ({
   discardRole,
   saveRole,
   groups,
+  isLoading,
   actionsClass,
 }: Options): Array<ColumnDefinition<EditableRole>> {
   return [
@@ -55,6 +57,7 @@ export default function createSchema ({
           {...props}
           onConfirm={saveRole}
           onDiscard={discardRole}
+          isSubmitDisabled={isLoading}
         />
       ),
       width: 0,
