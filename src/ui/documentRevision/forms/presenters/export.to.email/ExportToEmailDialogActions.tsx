@@ -33,7 +33,7 @@ const ExportToEmailDialogActions: React.FC<ExportToEmailDialogActionsProps> = ({
           <strong className={classes.contentNote}>{translate('share.download.popup.large.files')}</strong> {translate('share.download.popup.large.files.message')}
           <br />
           <span className={classes.additionalText}>
-            {translate('share.download.popup.additional.message')}
+            {translate('share.download.popup.note.message')}
           </span>
         </Typography>
       </Box>
