@@ -37,7 +37,7 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
   };
 
   const isSupportedFileType = (fileType: string): boolean => {
-    console.log('Config.ocrSupportedFileTypes', Config.ocrSupportedFileTypes);
+    console.log('Config.ocrSupportedFileTypes', Config.ocrSupportedFileTypes, Config.NODE_ENV, Config.ApiOCREndpoint, Config.EnvironmentName, Config.isDev);
     return Config.ocrSupportedFileTypes.includes(fileType?.toLowerCase());
   };
 
