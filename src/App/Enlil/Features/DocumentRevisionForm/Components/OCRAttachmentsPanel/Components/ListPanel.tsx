@@ -1,11 +1,11 @@
-import { List, ListItem, ListItemIcon, ListItemText, Typography, Tooltip } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
+import { translate } from '../../../../../../../common/intl';
+import Config from '../../../../../../../config';
 import { Checkbox } from '../../../../../../../ui/components/forms/fields-next';
 import { FBAttachment } from '../../../../../../../ui/form.builder';
 import styles from './ListPanel.styles';
-import { translate } from '../../../../../../../common/intl';
-import Config from '../../../../../../../config';
 
 interface ListPanelProps{
   attachments: FBAttachment[]
@@ -37,6 +37,7 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
   };
 
   const isSupportedFileType = (fileType: string): boolean => {
+    console.log('Config.ocrSupportedFileTypes', Config.ocrSupportedFileTypes);
     return Config.ocrSupportedFileTypes.includes(fileType?.toLowerCase());
   };
 

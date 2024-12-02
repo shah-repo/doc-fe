@@ -6,6 +6,7 @@ import { reaction } from 'mobx';
 import { Observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { SM, SMBox } from '../../../../..';
+import Config from '../../../../../../config';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { TabTypeOptions } from '../../../../../../state/ducks/documentRevisions/documentType/types';
 import { store } from '../../../../../../state/store';
@@ -19,11 +20,10 @@ import useDialog from '../../../../../../ui/hooks/useDialog';
 import useStyles from './AttachmentsPanel.styles';
 import ListPanel from './Components/ListPanel';
 import OCRFilePresenter from './Components/OCRFilePresenter';
-import Config from '../../../../../../config';
 
 const OCR_API_URL = `${Config.ApiOCREndpoint}/aocr`;
 
-const AttachmentsPanel = () => {
+const AttachmentsPanel: React.FC = () => {
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
   const docRevId = _documentRevisionFormState?.documentRevision?.id;
   const classes = useStyles();
@@ -112,7 +112,7 @@ const AttachmentsPanel = () => {
           {_tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
             <Box className={classes.root}>
               <Box className={classes.pannel}>
-                <Box pl={3.125} mt={1.25} height={45} alignItems="center">
+                <Box pl={3.125} mt={1.25} height={45} alignItems="center" data-cy="attachments">
                   <Typography variant="h6" className={classes.titleText}>
                     <Text translation="form.builder.attachments" />
                   </Typography>
