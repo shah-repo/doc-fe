@@ -1753,7 +1753,7 @@
   "share.download.popup.small.files.message": "Your download will start automatically in your browser.",
   "share.download.popup.large.files.message": "This may take 15-20 minutes.",
   "share.download.popup.attachment.primary": "Primary",
-   "share.download.popup.note.message": "You can close this popup in which case a link will be sent to you via email to download the files (you will not see the download via your browser).",
+  "share.download.popup.note.message": "You can close this popup in which case a link will be sent to you via email to download the files (you will not see the download via your browser).",
   "training.your": "Your training",
   "training.your.on": "Your training on",
   "training.assign": "A training is assigned to you",
