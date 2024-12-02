@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { kebabCase, omit } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React from 'react';
+import { FB } from '..';
 import { translate } from '../../../common/intl';
 import { AsyncStatus } from '../../../state/types';
 import Loader from '../../components/common/kendo/Loader';
@@ -27,12 +28,13 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   updateRole,
 }) => {
   const classes = useStyles();
+  const { workspaceState } = FB.useStores();
   const [editedRole, setEditedRole] = React.useState<EditableRole>();
+  const { asyncState } = React.useContext(FormHeaderContext) ?? {};
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { asyncState } = React.useContext(FormHeaderContext)!;
-
-  const isLoading = useObserver(() => asyncState.status === AsyncStatus.Active);
+  const isLoading = useObserver(
+    () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading || false,
+  );
 
   const addNewRole = () => setEditedRole({
     id: '',
@@ -110,6 +112,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
 
   const schema = createSchema({
     groups,
+    isLoading,
     actionsClass: classes.actionsCell,
     saveRole,
     discardRole,
@@ -150,7 +153,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
           fullWidth
           kind="add"
           data-cy="form-builder-add-another-role"
-          disabled={editedRole !== undefined}
+          disabled={editedRole !== undefined || isLoading}
           onClick={addNewRole}
         >
           <Text message="form.builder.add.another.role" />

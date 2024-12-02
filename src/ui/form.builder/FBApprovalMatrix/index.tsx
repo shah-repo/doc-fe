@@ -52,8 +52,7 @@ const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
 };
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { asyncState } = React.useContext(FormHeaderContext)!;
+  const { asyncState } = React.useContext(FormHeaderContext) ?? {};
   const { workspaceState } = FB.useStores();
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
@@ -62,9 +61,8 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
 
   const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
 
-  const isLoading = useObserver(() => (
-    asyncState.status === AsyncStatus.Active
-      || workspaceState?.documentRevApi.loading),
+  const isLoading = useObserver(
+    () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading,
   );
 
   const schema = createSchema({
@@ -131,6 +129,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           generateNewItem={generateNewItem}
           onSave={handleSave}
           withoutStatus={withoutStatus}
+          isLoading={isLoading}
           {...dataState}
           onDataStateChange={dataStateChange}
         />

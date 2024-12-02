@@ -23,19 +23,20 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
   const {
     data: originData,
     schema,
-    disabled, onSave,
+    disabled,
+    isLoading,
+    onSave,
     generateNewItem,
     withoutStatus,
     ...restProps
   } = props;
   const classes = useStyles();
-  const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData) as GridItem<T>[]);
+  const [data, setData] = useState<Array<GridItem<T>>>(normalizeData(originData) as Array<GridItem<T>>);
   const [activeItem, setActiveItem] = useState<GridItem<T>>();
- const { workspaceState, formState } = FB.useStores();
 
   useEffect(
     () => {
-      setData(normalizeData(originData) as GridItem<T>[]);
+      setData(normalizeData(originData) as Array<GridItem<T>>);
     },
     [originData],
   );
@@ -154,6 +155,8 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
           dataItem={dataItem}
           onConfirm={handleItemSave}
           onDiscard={handleItemDiscard}
+          isSubmitDisabled={isLoading}
+          isDeleteDisabled={isLoading}
         />
       </td>
     );
@@ -202,7 +205,7 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
           data-cy="button-add"
           className={classes.buttonAdd}
           kind="add"
-          disabled={isAdding}
+          disabled={isAdding || isLoading}
           onClick={handleAdd}
         >
           {translate('form.builder.am.add')}
