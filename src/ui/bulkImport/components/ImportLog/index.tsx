@@ -15,7 +15,7 @@ const ImportLog: React.FC = () => {
   const classes = useStyles();
   const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
 
-  const renderItem = (text, formattedDate) => (
+  const renderItem = (text: string, formattedDate: string): JSX.Element => (
     <ListItem className={classes.listItem}>
       <Typography className={classes.primaryText}>
         {text}
@@ -26,7 +26,7 @@ const ImportLog: React.FC = () => {
     </ListItem>
   );
 
-  const renderFileData = (file: BulkImportFile) => {
+  const renderFileData = (file: BulkImportFile): JSX.Element => {
     // Create a new Date object from the createdAt string
     const date = new Date(file.createdAt);
 
@@ -36,7 +36,7 @@ const ImportLog: React.FC = () => {
     return renderItem(`${file.name}.${file.type}`, formattedDate);
   };
 
-  const renderS3Link = (s3Link: string, createdAt: string) => {
+  const renderS3Link = (s3Link: string, createdAt: string): JSX.Element => {
     const date = new Date(createdAt);
 
     // Format the date as MM/DD/YYYY
