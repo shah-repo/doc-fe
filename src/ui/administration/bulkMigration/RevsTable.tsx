@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell, { SortDirection } from '@material-ui/core/TableCell';
+import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
@@ -16,11 +16,13 @@ import ErrorIcon from '@material-ui/icons/Error';
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { AxiosRequestConfig } from 'axios';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { ReactElement, useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
+import { Link } from 'react-router-dom';
 import { intl } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import apiClient from '../../../state/apiClient';
@@ -28,11 +30,12 @@ import { BULK_MIGRATION_GET_SCAN_RESULTS, BULK_MIGRATION_START_REVS_MIGRATION } 
 import { store } from '../../../state/store';
 import DateTime from '../../components/DateTime';
 import { toastError, toastSuccess } from '../../components/notifications';
+import { documentVersionPath } from '../../document.revision/utils/paths';
 import UserAvatarListItem from '../../documentRevision/Sidebar/common/UserAvatarListItem';
 import { FBButton } from '../../form.builder';
 import { Colors } from '../../layout/theme-next';
 import UtilColors from '../../layout/theme/utils/colors';
-import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM } from './interface';
+import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from './interface';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 
 const INITIAL_ROWS_COUNT = 25;
@@ -111,6 +114,13 @@ const useStyles = makeStyles((theme) => ({
   '.MuiTablePagination-selectIcon': {
     top: '0px',
     left: '1px',
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
   },
 }));
 
@@ -196,23 +206,23 @@ const ExpandableRow: React.FC<{
     const contentEl: ReactElement
     = <>
       { row.runDetails[0]?.runAt && row.runDetails[0]?.completedAt
-           && <>
-             <>
+      && <>
+        <>
             Completed At: <DateTime
-                 value={row.runDetails[0]?.completedAt}
-                 format={MomentFormats.BriefDateTime}
-                 className={cx(classes.dateTimeLabel)}
-               /> • Started At: <DateTime
-                 value={row.runDetails[0]?.runAt}
-                 format={MomentFormats.BriefDateTime}
-                 className={cx(classes.dateTimeLabel)}
-               />
-             </>
-             {
-              row.runDetails[0]?.failureReason
-                && <><br />{row.runDetails[0]?.failureReason?.message ?? 'Something went wrong'}</>
-             }
-           </>
+            value={row.runDetails[0]?.completedAt}
+            format={MomentFormats.BriefDateTime}
+            className={cx(classes.dateTimeLabel)}
+          /> • Started At: <DateTime
+            value={row.runDetails[0]?.runAt}
+            format={MomentFormats.BriefDateTime}
+            className={cx(classes.dateTimeLabel)}
+          />
+        </>
+        {
+          row.runDetails[0]?.failureReason
+            && <><br />{row.runDetails[0]?.failureReason?.message ?? 'Something went wrong'}</>
+        }
+      </>
       }
       { row.runDetails[0]?.runAt && !row.runDetails[0]?.completedAt
            && <>
@@ -230,6 +240,10 @@ const ExpandableRow: React.FC<{
       }
     </>;
     onIconHovered(event, contentEl);
+  };
+
+  const linkHandler = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
   };
 
   return (
@@ -272,7 +286,14 @@ const ExpandableRow: React.FC<{
           </div>
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" padding="none">
-          {row.docId}
+          <Link
+            to={documentVersionPath(row.docRevId, row.documentId)}
+            target="_blank"
+            className={classes.link}
+            onClick={linkHandler}
+          >
+            {row.docId}
+          </Link>
         </TableCell>
         <TableCell align="left">
           <p className={classes.flexBoxColumn}>
@@ -492,7 +513,7 @@ const RevsTable: React.FC<{
 
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
-      url: `${BULK_MIGRATION_START_REVS_MIGRATION}`,
+      url: `${BULK_MIGRATION_START_REVS_MIGRATION}/${scanId}`,
       data: {
         revIds: selected.map(entry => entry.id),
       },
@@ -521,14 +542,20 @@ const RevsTable: React.FC<{
   return (
     <div className={classes.root}>
       <Paper className={classes.paper} style={{ maxHeight: '60vh', overflow: 'hidden', overflowY: 'auto' }}>
-        {!isEmpty(errorMessage) && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        {!isEmpty(errorMessage) && (
+          <div style={{ color: UtilColors.red, backgroundColor: UtilColors.light_red, padding: '4px' }}>{errorMessage}</div>
+        )}
         <Toolbar
           className={cx(classes.root, classes.flexBox, {
             [classes.highlight]: selected.length > 0,
           })}
           style={{ marginBottom: '4px' }}
         >
-          <Typography variant="h6" id="tableTitle" component="div">Supplier Revs
+          <Typography variant="h6" id="tableTitle" component="div">
+            Supplier Revs <RefreshIcon
+              style={{ cursor: 'pointer', marginLeft: '4px', fontSize: '16px' }}
+              onClick={fetchScanSupplierRevisions}
+            />
             <Typography color="inherit" variant="subtitle1" component="div">
               {selected.length} selected
             </Typography>

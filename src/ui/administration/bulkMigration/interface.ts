@@ -67,6 +67,7 @@ export enum MIGRATION_STATUS_ENUM {
   FAILED = 'FAILED',
   CANCELLED = 'CANCELLED',
   COMPLETED = 'COMPLETED',
+  MAPPING = 'MAPPING',
 }
 
 export interface ISelectedDetails {
@@ -121,3 +122,6 @@ export enum IReferenceDataType {
   ARRAY = 'array',
   OBJECT = 'object',
 }
+
+export type SortDirection = 'asc' | 'desc' | undefined;
+export const INTERVAL_DURATION = 10000;

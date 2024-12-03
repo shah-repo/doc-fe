@@ -1,56 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  LinearProgress,
-  MenuItem,
-  Popover,
-  Select,
-  Typography,
-} from '@material-ui/core';
+import { Box, Button, FormControl, InputLabel, LinearProgress, MenuItem, Popover, Select, Typography } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import InfoIcon from '@material-ui/icons/Info';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import SearchIcon from '@material-ui/icons/Search';
 import WarningIcon from '@material-ui/icons/Warning';
 import axios, { AxiosRequestConfig } from 'axios';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { intl, translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import apiClient from '../../../state/apiClient';
-import {
-  BULK_MIGRATION_CANCEL_SCAN,
-  BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS,
-  BULK_MIGRATION_GET_LATEST_SCANS,
-  BULK_MIGRATION_REGISTER_SCAN,
-  BULK_MIGRATION_REGISTER_SCAN_FOR_RUN,
-  BULK_MIGRATION_UPDATE_SCAN,
-  BULK_MIGRATION_UPGRADE_FORM,
-} from '../../../state/ducks/company/constants';
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-} from '../../../state/ducks/documentRevisions/types';
+import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_LATEST_SCANS, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_UPDATE_SCAN, BULK_MIGRATION_UPGRADE_FORM } from '../../../state/ducks/company/constants';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import DateTime from '../../components/DateTime';
-import {
-  toastError,
-  toastInfo,
-  toastSuccess,
-} from '../../components/notifications';
+import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { FBButton } from '../../form.builder';
 import Colors from '../../layout/theme/utils/colors';
-import {
-  IApprovalRequirementGroup,
-  IApprovalRequirements,
-  IBulkMigrationDocumentType,
-  IBulkMigrationScanDetails,
-  ISchemaItem,
-  MIGRATION_STATUS_ENUM,
-} from './interface';
+import { IApprovalRequirementGroup, IApprovalRequirements, IBulkMigrationDocumentType, IBulkMigrationScanDetails, INTERVAL_DURATION, ISchemaItem, MIGRATION_STATUS_ENUM } from './interface';
 import MigrationMappingDialog from './MigrationMapping.dialog';
 import RevsTable from './RevsTable';
 import useStyles from './styles';
@@ -82,7 +51,8 @@ const BulkMigrationContainer: React.FC = () => {
 
   const [latestScans, setLatestScans] = useState<IBulkMigrationScanDetails[]>([]);
   const [scanDetails, setScanDetails] = useState<IBulkMigrationScanDetails>();
-  // const [scanResults, setScanResults] = useState<ISupplierScanResultRev[]>([]);
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null); // Reference to store the interval ID.
 
   useEffect(() => {
     fetchAllDocumentTypes();
@@ -108,6 +78,28 @@ const BulkMigrationContainer: React.FC = () => {
       toastInfo(exception?.response.data?.message);
     }
   }
+
+  useEffect(() => {
+    if (scanDetails?.status === MIGRATION_STATUS_ENUM.STARTED) {
+      // Set up the interval when status becomes 'Started'
+      intervalRef.current = setInterval(() => {
+        getScanDetails();
+      }, INTERVAL_DURATION); // 10 seconds interval
+    }
+
+    if (scanDetails?.status === MIGRATION_STATUS_ENUM.MAPPING && intervalRef.current) {
+      // Clear the interval when status becomes 'Mapping'
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
+    // Cleanup function to clear the interval when component unmounts
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [scanDetails]);
 
   function fetchAllDocumentTypes () {
     commonSetUp();
@@ -197,8 +189,6 @@ const BulkMigrationContainer: React.FC = () => {
   }
 
   function fetchApprovalRequirements (toDocumentTypeId: string) {
-    commonSetUp();
-
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
       url: `${BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS}/${toDocumentTypeId}`,
@@ -213,7 +203,35 @@ const BulkMigrationContainer: React.FC = () => {
       .then(({ data }) => {
         // console.log(data);
         setApprovalRequirements(data);
-        setIsLoading(false);
+      })
+      .catch((exception) => {
+        catchAxiosException(exception);
+      });
+  }
+
+  function addUserToGroups () {
+    if (!approvalRequirements?.missingGroups?.length) {
+      return;
+    }
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'patch',
+      url: `${BULK_MIGRATION_ADD_USER_TO_GROUPS}/${toDocumentTypeId}`,
+      data: {
+        missingGroups: approvalRequirements?.missingGroups,
+      },
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      // cancelToken: call.token,
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        // console.log(data);
+        setApprovalRequirements(data);
+        toastSuccess('Automation user has been added to the required groups successfully');
       })
       .catch((exception) => {
         catchAxiosException(exception);
@@ -278,9 +296,29 @@ const BulkMigrationContainer: React.FC = () => {
           console.log(data);
           setIsLoading(false);
           setScanDetails(data);
-          // toastSuccess(
-          //   'Scan request has been submitted. Please check back in some time.',
-          // );
+        })
+        .catch((exception) => {
+          catchAxiosException(exception);
+        });
+    }
+  }
+
+  function getScanDetails () {
+    if (scanDetails?.id) {
+      const requestConfig: AxiosRequestConfig = {
+        method: 'post',
+        url: `${BULK_MIGRATION_GET_SCAN_DETAILS}/${scanDetails.id}`,
+        headers: {
+          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+        },
+        // cancelToken: call.token,
+      };
+
+      apiClient
+        .request(requestConfig)
+        .then((resp) => resp)
+        .then(({ data }) => {
+          setScanDetails(data);
         })
         .catch((exception) => {
           catchAxiosException(exception);
@@ -373,6 +411,7 @@ const BulkMigrationContainer: React.FC = () => {
           toastSuccess(
             'Scan mapping logic has been updated. Click Preview to see this logic in action.',
           );
+          registerScanForRevisions();
         })
         .catch((exception) => {
           catchAxiosException(exception);
@@ -613,7 +652,7 @@ const BulkMigrationContainer: React.FC = () => {
               >
                 {scanDetails?.id && (
                   <Box className={cx(classes.buttons, classes.flexBoxColumn)}>
-                    {[MIGRATION_STATUS_ENUM.IN_PROGRESS, MIGRATION_STATUS_ENUM.STARTED].includes(scanDetails.status)
+                    {[MIGRATION_STATUS_ENUM.IN_PROGRESS, MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.MAPPING].includes(scanDetails.status)
                   && <>
                     <FBButton
                       label="Cancel Current Scan"
@@ -623,13 +662,18 @@ const BulkMigrationContainer: React.FC = () => {
                       color="primary"
                       style={{ marginBottom: '0px' }}
                     />
-                    <Typography variant="caption" className={classes.blinking}>{scanDetails.status}</Typography>
+                    <Typography variant="caption" className={classes.blinking}>{scanDetails.status}
+                      <RefreshIcon
+                        style={{ cursor: 'pointer', marginLeft: '4px', fontSize: '16px' }}
+                        onClick={getScanDetails}
+                      />
+                    </Typography>
                   </>
                     }
                     {scanDetails.status === MIGRATION_STATUS_ENUM.COMPLETED && (
                       <>
                         <FBButton
-                          label="Scan For Revisions"
+                          label="Run Scan"
                           dataCy="bulk-migration-scan"
                           onClick={startRevisionsScan}
                           variant="outlined"
@@ -644,7 +688,7 @@ const BulkMigrationContainer: React.FC = () => {
                     )}
                     {[MIGRATION_STATUS_ENUM.INITIALIZED, MIGRATION_STATUS_ENUM.CANCELLED].includes(scanDetails.status)
                     && <FBButton
-                      label="Scan For Revisions"
+                      label="Run Scan"
                       dataCy="bulk-migration-scan"
                       onClick={startRevisionsScan}
                     />
@@ -652,7 +696,7 @@ const BulkMigrationContainer: React.FC = () => {
                     {scanDetails.status === MIGRATION_STATUS_ENUM.FAILED && (
                       <>
                         <FBButton
-                          label="Scan For Revisions"
+                          label="Run Scan"
                           dataCy="bulk-migration-scan"
                           onClick={startRevisionsScan}
                           variant="outlined"
@@ -791,7 +835,7 @@ const BulkMigrationContainer: React.FC = () => {
               >
                 <Typography variant="body2" style={{ marginBottom: '4px' }}>
                 For revisions, that are already Released, migration would create a new Revision and automate its approval & release, using
-                  <span style={{ fontWeight: 'bold', color: Colors.bright_blue }}>
+                  <span style={{ fontWeight: 'bold', color: Colors.bright_blue, marginLeft: '4px' }}>
                     {approvalRequirements.email}
                   </span>
                 </Typography>
@@ -812,6 +856,14 @@ const BulkMigrationContainer: React.FC = () => {
                     );
                   })}
                 </Box>
+                { approvalRequirements?.missingGroups?.length > 0 && <FBButton
+                  label="Add To Groups"
+                  dataCy="automation-add-to-groups"
+                  onClick={addUserToGroups}
+                  variant="outlined"
+                  color="primary"
+                  style={{ marginBottom: '0px' }}
+                /> }
               </Box>
             )}
           </Box>
@@ -819,10 +871,9 @@ const BulkMigrationContainer: React.FC = () => {
       </Box>
       <div className={classes.panels}>
         {!isEmpty(errorMessage) && (
-          <div style={{ color: 'red' }}>{errorMessage}</div>
+          <div style={{ color: Colors.red, backgroundColor: Colors.light_red, padding: '4px' }}>{errorMessage}</div>
         )}
         {!isLoading && isEmpty(errorMessage) && scanDetails?.id
-          && [MIGRATION_STATUS_ENUM.IN_PROGRESS, MIGRATION_STATUS_ENUM.COMPLETED].includes(scanDetails?.status)
           && <Box> <RevsTable scanId={scanDetails.id} /> </Box>
         }
         {!isLoading && isEmpty(errorMessage) && scanDetails?.id

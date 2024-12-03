@@ -49,7 +49,8 @@ const MigrationMappingDialog: React.FC<{
     }
 
     if (scanDetails?.id) {
-      if (scanDetails.fromFormSchema && scanDetails.toFormSchema) {
+      if (scanDetails.fromFormSchema && Array.isArray(scanDetails.fromFormSchema)
+      && scanDetails.toFormSchema && Array.isArray(scanDetails.toFormSchema)) {
         setFromRevSchema(scanDetails.fromFormSchema);
         setToRevSchema(scanDetails.toFormSchema);
       }
@@ -57,8 +58,10 @@ const MigrationMappingDialog: React.FC<{
   }, [fromRev, toRev, scanDetails]);
 
   useEffect(() => {
-    const unmappedItems = fromRevSchema.filter(fromRevSchemaItem => !fromRevSchemaItem.isMapped && !isDisabledSchemaItem(fromRevSchemaItem));
-    setUnmappedCount(unmappedItems.length);
+    if (fromRevSchema?.length) {
+      const unmappedItems = fromRevSchema.filter(fromRevSchemaItem => !fromRevSchemaItem.isMapped && !isDisabledSchemaItem(fromRevSchemaItem));
+      setUnmappedCount(unmappedItems.length);
+    }
   }, [fromRevSchema]);
 
   function handleMappingSave () {
@@ -222,7 +225,8 @@ const MigrationMappingDialog: React.FC<{
           <Box style={{ display: 'flex', justifyContent: 'space-between', gap: '4px' }}>
             <Button variant="text" color="secondary" onClick={showMappingRules}> Rules </Button>
             <Button color="primary" variant="contained" onClick={handleMappingSave}> Save </Button>
-            <Button variant="outlined" onClick={handleMappingPreview}> Preview </Button>
+            { Array.isArray(scanDetails?.toFormSchema) && scanDetails?.toFormSchema?.length
+                && <Button variant="outlined" onClick={handleMappingPreview}> Preview </Button> }
             <FormControlLabel
               control={
                 <Switch
