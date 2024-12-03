@@ -25,7 +25,7 @@ const ExportToEmailDialogActions: React.FC<ExportToEmailDialogActionsProps> = ({
 
   return (
     <Box className={classes.container}>
-      <Box className={classes.noteContainer}>
+      <Box className={classes.noteContainer} data-cy="note-container">
         <Typography variant="h2" component="h2" className={classes.additionalText}>
           <strong className={classes.contentNote}>{translate('share.download.popup.note')}</strong> <br />
           <strong className={classes.contentNote}>{translate('share.download.popup.small.files')}</strong> {translate('share.download.popup.small.files.message')}
@@ -40,19 +40,20 @@ const ExportToEmailDialogActions: React.FC<ExportToEmailDialogActionsProps> = ({
       <br />
       <Box display="flex" justifyContent="flex-end" alignItems="center" width="100%">
         {isLoading ? (
-          <Box className={classes.loader}>
+          <Box className={classes.loader} data-cy="download-message">
             <FontAwesomeIcon className={classes.spinner} icon={regular('loader')} size="lg" />
             <Text translation="share.download.message" />
           </Box>
         ) : (
           <>
-            <Button variant="text" onClick={emailDialog.close}>
+            <Button variant="text" onClick={emailDialog.close} data-cy="cancel">
               <Text translation="common.cancel" />
             </Button>
             <Button
               disabled={isNoOptionSelected}
               variant="contained"
               onClick={handleEmail}
+              data-cy="confirm"
             >
               <Text translation="common.confirm" />
             </Button>
