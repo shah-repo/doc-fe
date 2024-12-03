@@ -2,13 +2,14 @@ import { Grid } from '@material-ui/core';
 import { CheckboxProps as MuiCheckboxProps } from '@material-ui/core/Checkbox';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { GroupTag } from '../../../../../state/ducks/auth/types';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
-import { Checkbox, TextField } from '../../../../components/forms/fields-next';
+import { Checkbox, FormField, TextField } from '../../../../components/forms/fields-next';
 import CheckboxField from '../../../../components/forms/fields/Checkbox';
 import Text from '../../../../components/Text';
 import SettingsPanel from '../../components/SettingsPanel';
@@ -25,6 +26,9 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
     className: classes.marginRight,
   };
   const disabledCheckboxProps = { ...checkboxProps, disabled: true };
+  const showError = isEmpty(String(getFieldProps('trainingReminders.customDaysDueOn.days').value))
+    || getFieldProps('trainingReminders.customDaysDueOn.days').value === 0
+    || String(getFieldProps('trainingReminders.customDaysDueOn.days').value).includes('-');
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.training.reminders')}>
@@ -55,12 +59,17 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
             {...getFieldProps('trainingReminders.customDaysDueOn.isActive')}
             checked={values.trainingReminders.customDaysDueOn.isActive}
           />
-          <TextField
-            className={classes.textArea}
-            {...getFieldProps('trainingReminders.customDaysDueOn.days')}
-            fullWidth={false}
-            type="number"
-          />
+          <FormField
+            required
+            error={showError}
+            helperText={showError ? translate('validator.must.be.number') : ''}>
+            <TextField
+              className={classes.textArea}
+              {...getFieldProps('trainingReminders.customDaysDueOn.days')}
+              fullWidth={false}
+              type="number"
+            />
+          </FormField>
           <Text message="administration.general.settings.training.reminders.custom.days" />
         </Grid>
         <Grid item className={classes.gridItem}>
