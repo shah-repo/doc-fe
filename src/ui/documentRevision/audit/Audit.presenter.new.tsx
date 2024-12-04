@@ -215,10 +215,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
       // SITE INFOMRATION
       if (fbType === 'siteInformations') {
-        const fieldShippingItems = change.field.split('.');
-        const field = fieldShippingItems.at(-1) as string;
-        const parentField = fieldShippingItems.at(-2) as string;
-        console.log('change.field =', change.field, 'field = ', field);
+        const changeField = change.field.split('.');
+        const field = changeField.at(-1) as string;
+        const parentField = changeField.at(-2) as string;
         if (['id', 'primary'].includes(field)) {
           return;
         }
@@ -229,32 +228,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             label: fbLabel as string,
             field: fieldName,
           });
-        }
-      }
-      // SHIPPING ITEAMS
-      if (fbType === 'shippingItems') {
-        const fieldShippingItems = change.field.split('.');
-        const field = fieldShippingItems.at(-1) as string;
-        const parentField = fieldShippingItems.at(-2) as string;
-        console.log('change.field =', change.field, 'parentField = ', parentField, 'field = ', field);
-        if (['id', 'primary'].includes(field)) {
-          return;
-        }
-        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
-          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
-          if (fieldShippingItems.includes('siteContact')) {
-            const fieldName = translate(`form.builder.shipping.items.${fieldFullName}`);
-            fbLabel = translate('form.builder.shipping.items.audit.item', {
-              label: fbLabel as string,
-              field: fieldName,
-            });
-          } else {
-            const fieldName = translate(`form.builder.shipping.items.${fieldFullName}`);
-            fbLabel = translate('form.builder.shipping.items.audit.item', {
-              label: fbLabel as string,
-              field: fieldName,
-            });
-          }
         }
       }
       // SITE ADDRESS
@@ -269,10 +242,32 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
       // SHIPPING ADDRESS
       if (fbType === 'shippingAddress') {
-        if (change.field.endsWith('_attention.name')) {
+        const changeField = change.field.split('.');
+        const field = changeField.at(-1) as string;
+        if (['id'].includes(field)) {
+          return;
+        }
+        if ((change.field.endsWith('_attention.name')) || (change.type === 'OBJECT_DELETED' && change.field.endsWith('_attention'))) {
           fbLabel = `${fbLabel as string} ${translate('Attention')}`;
-        } else if (change.field.endsWith('_contact.name')) {
+        } else if ((change.field.endsWith('_contact.name')) || (change.type === 'OBJECT_DELETED' && change.field.endsWith('_contact'))) {
           fbLabel = `${fbLabel as string} ${translate('Contact')}`;
+        }
+      }
+      // SHIPPING ITEMS
+      if (fbType === 'shippingItems') {
+        const changeField = change.field.split('.');
+        const field = changeField.at(-1) as string;
+        const parentField = changeField.at(-2) as string;
+        if (['id'].includes(field)) {
+          return;
+        }
+        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
+          const fieldName = translate(`form.builder.shipping.items.${fieldFullName}`);
+          fbLabel = translate('form.builder.shipping.items.audit.item', {
+            label: fbLabel as string,
+            field: fieldName,
+          });
         }
       }
       // LOT TRANSFERS
