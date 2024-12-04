@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Tooltip } from '@material-ui/core';
 import { GridHeaderCellProps } from '@progress/kendo-react-grid';
 import { kebabCase } from 'lodash';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { CustomColumnMenu } from '../../CustomColumnMenu';
 import useStyles from './styles';
@@ -20,13 +20,14 @@ export const HeaderCell: React.FC<HeaderCellProps> = ({
   isShowIcon = true,
   isShowMenu = true,
 }) => {
-  const translatedContent = translate(content);
+  const translatedContent = useMemo(() => translate(content), [content]);
+  const dataCyField = useMemo(() => `header-cell-${kebabCase(field)}`, [field]);
   const classes = useStyles();
 
   return (
     <span className="k-cell-inner">
       <span className="k-link">
-        <span className="k-column-title" data-cy={`header-cell-${kebabCase(field)}`} >
+        <span className="k-column-title" data-cy={dataCyField} >
           <Box display="flex" alignItems="center">
             {isShowIcon && <Tooltip
               arrow

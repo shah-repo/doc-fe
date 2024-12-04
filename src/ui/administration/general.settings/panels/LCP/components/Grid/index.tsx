@@ -273,7 +273,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     [getGroupByCategory],
   );
 
-  const addPhase = (dataItem: LCP) => {
+  const addPhase = useCallback((dataItem: LCP) => {
     setPrevData(cloneDeep(data));
     const selectedPhaseCategory = data?.filter(phase => phase.category === dataItem.category);
     const enlilTypeOptions = uniq(selectedPhaseCategory?.map(phase => phase.internalType));
@@ -306,7 +306,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setData(newData);
     setAddNewPhase(newPhase);
     setResultState(processWithGroups(newData, initialDataState));
-  };
+  },
+  [data, initialDataState],
+  );
 
   const onTogglePhaseItem = (dataItem: LCP) => {
     if (dataItem.isActive) {
@@ -486,31 +488,43 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   }, [editGroup, resultState]);
 
   const onItemChange = (e: GridItemChangeEvent) => {
-    resultState?.data?.forEach((group: CustomGroupDataItem) => {
-      if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
-        group.items?.forEach((data) => {
-          if (data.id === e.dataItem.id) {
-            if (e.field === LCP_KEYS.isActive) {
-              onTogglePhaseItem(e.dataItem);
-            } else {
-              data.isUserModified = true;
-              data[e.field || ''] = e.value;
-            }
-          }
-          return data;
-        });
+    if (!resultState?.data) return;
+
+    const updatedData = resultState.data.map((group: CustomGroupDataItem) => {
+      if (group.groupId !== getGroupIdByCategory(e.dataItem.category)) {
+        return group;
       }
-      return group;
+
+      const updatedItems = group.items?.map((item) => {
+        if (item.id !== e.dataItem.id) {
+          return item;
+        }
+
+        if (e.field === LCP_KEYS.isActive) {
+          onTogglePhaseItem(e.dataItem);
+          return item;
+        }
+
+        return {
+          ...item,
+          isUserModified: true,
+          [e.field || '']: e.value,
+        };
+      });
+
+      return {
+        ...group,
+        items: updatedItems,
+      };
     });
 
-    setResultState(resultState);
+    setResultState({ ...resultState, data: updatedData });
   };
 
-  const addLCP = () => {
-    setPrevData(cloneDeep(data));
-    const newData = [
-      ...(data ?? []),
-      {
+  const addLCP = useCallback(() => {
+    setPrevData(data);
+    setData((prevData = []) => {
+      const newItem = {
         id: uuidv4(),
         internalType: '',
         displayLabel: '',
@@ -523,12 +537,13 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         isAdd: true,
         isUserAdded: true,
         isUserModified: false,
-      },
-    ];
-    setData(newData);
-    setEditGroup(ADD_GROUP_ID);
-    setResultState(processWithGroups(newData, initialDataState));
-  };
+      };
+      const updatedData = [...prevData, newItem];
+      setEditGroup(ADD_GROUP_ID);
+      setResultState(processWithGroups(updatedData, initialDataState));
+      return updatedData;
+    });
+  }, [data, initialDataState]);
 
   const newData = setExpandedState({
     data: getUpdatedStateDataByEditInfo(resultState),
