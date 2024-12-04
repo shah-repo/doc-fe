@@ -1,9 +1,8 @@
 import { FormikProvider, useFormik } from 'formik';
-import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { translate } from '../../../../../common/intl';
+import * as Yup from 'yup';
 import { GroupTag } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
@@ -25,17 +24,14 @@ const GeneralSettingsContainer: React.FC = () => {
 
   const formik = useFormik<GeneralSettings>({
     initialValues,
+    validationSchema: Yup.object().shape({
+    trainingReminders: Yup.object({
+      customDaysDueOn: Yup.object({
+        days: Yup.number().required('common.required').min(1),
+      }),
+    }),
+    }),
     onSubmit: (values: GeneralSettings) => {
-      const customDays = values.trainingReminders.customDaysDueOn.days;
-      if(isEmpty(String(customDays))) {
-        return toastError(translate('validator.must.be.number'));
-      }
-      else if(String(customDays).includes('-')) {
-        return toastError(translate('validators.positive.number'));
-      }
-      else if(customDays === 0) {
-        return toastError(translate('validators.greater.than.zero'));
-      }
       dispatch(companyActions.updateGeneralSettings(values));
     },
   });
