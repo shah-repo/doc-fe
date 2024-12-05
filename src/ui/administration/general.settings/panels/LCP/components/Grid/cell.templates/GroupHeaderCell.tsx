@@ -4,6 +4,7 @@ import { Grid, Tooltip } from '@material-ui/core';
 import { GridRowProps } from '@progress/kendo-react-grid';
 import { kebabCase, replace, startsWith } from 'lodash';
 import * as React from 'react';
+import { useCallback, useMemo } from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete, Checkbox, IconButton } from '../../../../../../../components/forms/fields-next';
 import useHover from '../../../../../../../hooks/useHover';
@@ -50,24 +51,46 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = React.memo((props
   const displayGroupSelection = isEditModeAndHasEditLCPPermission && !isEditGroup;
   const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
   const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
-
-  const handleGroupChange = (e, value: CustomGroupOptions) => {
-    onGroupChange(value, groupId);
-  };
-
   const documentTypeId = dataItem.items?.[0].documentTypeId;
   const isLCPActive = isGroupActivateOrDeactivate(dataItem.items, true);
   const isLCPDeactive = isGroupActivateOrDeactivate(dataItem.items, false);
-  const defaultValue = (partGroups?.length ? partGroups : selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeId === groups.value);
-  const displayValue = defaultValue?.map(data => data.label).join(', ');
-  const selectedIDs = selectedPartGroups?.map((group) => group.value);
-  const options = partGroups?.filter((group) => !selectedIDs.includes(group.value));
-  const updatedGroupId = (startsWith(groupId, ADD_GROUP_ID) ? replace(groupId, ADD_GROUP_NAME, 'ADD_') : groupId) as string;
-  const groupTypeAcronym = defaultValue[0]?.docTypeAcronym;
+  const defaultValue = useMemo(
+    () =>
+      (partGroups?.length ? partGroups : selectedPartGroups)?.filter(
+        (group: CustomGroupOptions) => documentTypeId === group.value,
+      ),
+    [partGroups, selectedPartGroups, documentTypeId],
+  );
+  const displayValue = useMemo(
+    () => defaultValue?.map((data) => data.label).join(', '),
+    [defaultValue],
+  );
+  const selectedIDs = useMemo(
+    () => selectedPartGroups?.map((group) => group.value),
+    [selectedPartGroups],
+  );
+  const options = useMemo(
+    () => partGroups?.filter((group) => !selectedIDs.includes(group.value)),
+    [partGroups, selectedIDs],
+  );
+  const updatedGroupId = useMemo(
+    () =>
+      startsWith(groupId, ADD_GROUP_ID)
+        ? replace(groupId, ADD_GROUP_NAME, 'ADD_')
+        : groupId,
+    [groupId],
+  );
+  const groupTypeAcronym = defaultValue?.[0]?.docTypeAcronym;
 
-  const handleChange = (event, checked: boolean) => {
-    onToggleGroupActivation({ ...dataItem, isLCPActive: checked });
-  };
+  const handleExpandChange = useCallback(() => onExpandChange(dataItem), [onExpandChange, dataItem]);
+  const handleToggleActivation = useCallback(
+    (event, checked: boolean) => onToggleGroupActivation({ ...dataItem, isLCPActive: checked }),
+    [onToggleGroupActivation, dataItem],
+  );
+  const handleGroupChange = useCallback(
+    (e, value: CustomGroupOptions) => onGroupChange(value, groupId),
+    [onGroupChange, groupId],
+  );
 
   return (
     <Grid container justify="space-between" alignItems="center">
@@ -83,7 +106,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = React.memo((props
               data-cy={`${groupTypeAcronym}toggle-group`}
               size="sm"
               className={classes.toggleExpandCollapse}
-              onClick={() => onExpandChange(dataItem)}
+              onClick={handleExpandChange}
               icon={
                 dataItem[EXPAND_FIELD]
                   ? regular('square-minus')
@@ -94,7 +117,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = React.memo((props
               checked={isLCPActive}
               disabled={hasEditLCPPermission ? displayGroupSelection : !isEditModeAndHasEditLCPPermission}
               className={classes.groupCheckBox}
-              onChange={handleChange}
+              onChange={handleToggleActivation}
               data-cy={`${groupTypeAcronym}select`}
             />
             {!displayGroupSelection && displayValue}
