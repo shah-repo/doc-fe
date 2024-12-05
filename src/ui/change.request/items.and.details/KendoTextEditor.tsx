@@ -31,10 +31,9 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
 
   useEffect(formik.resetForm, []);
 
-  const onBlur = (evt) => {
+  const onChange = (evt) => {
     if (!name) { return; }
     const updatedValue = (evt?.currentTarget?.value ?? '') as string;
-    formik.setFieldValue(name, updatedValue);
     formState?.setFieldValue(name, updatedValue);
   };
 
@@ -43,7 +42,7 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
     return (<>
       <TextareaAutosize
         defaultValue={value}
-        onBlur={onBlur}
+        onChange={onChange}
         className={classes.textArea}
         data-cy={name}
         name={name}
