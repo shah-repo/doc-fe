@@ -9,8 +9,16 @@ import { getCellDataCyBasedOnParentDocType } from '../utils';
 
 const Editor: React.FC<CustomCellProps> = ({ dataItem, partGroups, dataIndex, field, onChange }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
-  const dataCy = getCellDataCyBasedOnParentDocType(partGroups, dataItem.documentTypeId, field, dataItem.internalType);
-
+  const dataCy = React.useMemo(
+    () =>
+      getCellDataCyBasedOnParentDocType(
+        partGroups,
+        dataItem.documentTypeId,
+        field,
+        dataItem.internalType,
+      ),
+    [partGroups, dataItem, field],
+  );
   const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (event) => {
     const value = event.target.value;
     if (dataItem.isAddPhase) {
@@ -47,7 +55,16 @@ export const LabelCell: React.FC<CustomCellProps> = (props) => {
   const { field, dataItem, onClick, colSpan, partGroups, style, className } = props;
   const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
   const handleClick = () => onClick?.({ dataItem });
-  const dataCy = getCellDataCyBasedOnParentDocType(partGroups, dataItem.documentTypeId, field, dataItem.internalType);
+  const dataCy = React.useMemo(
+    () =>
+      getCellDataCyBasedOnParentDocType(
+        partGroups,
+        dataItem.documentTypeId,
+        field,
+        dataItem.internalType,
+      ),
+    [partGroups, dataItem, field],
+  );
 
   return <td
     colSpan={colSpan}

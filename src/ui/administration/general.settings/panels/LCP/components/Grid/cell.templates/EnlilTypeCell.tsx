@@ -19,7 +19,16 @@ const Editor: React.FC<CustomCellProps> = ({
   onChange,
 }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
-  const dataCy = getCellDataCyBasedOnParentDocType(partGroups, dataItem.documentTypeId, field, dataItem.internalType);
+  const dataCy = React.useMemo(
+    () =>
+      getCellDataCyBasedOnParentDocType(
+        partGroups,
+        dataItem.documentTypeId,
+        field,
+        dataItem.internalType,
+      ),
+    [partGroups, dataItem, field],
+  );
 
   const handleChange = (e, value: string) => {
     setFieldValue(field, value);
@@ -52,7 +61,16 @@ export const EnlilTypeCell: React.FC<CustomCellProps> = (props) => {
   const { field, dataItem, onClick, colSpan, style, className, partGroups } = props;
   const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
   const handleClick = () => onClick?.({ dataItem });
-  const dataCy = getCellDataCyBasedOnParentDocType(partGroups, dataItem.documentTypeId, field, dataItem.internalType);
+  const dataCy = React.useMemo(
+    () =>
+      getCellDataCyBasedOnParentDocType(
+        partGroups,
+        dataItem.documentTypeId,
+        field,
+        dataItem.internalType,
+      ),
+    [partGroups, dataItem, field],
+  );
 
   return (
     <td
