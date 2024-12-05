@@ -242,9 +242,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
+    const flattenedData = resultState?.data?.flatMap((group: CustomGroupDataItem) => group.items);
     setEditGroup('');
     setSelectedDocType(undefined);
-    updateSettingsObj(data);
+    updateSettingsObj(flattenedData);
   };
 
   const getGroupByCategory = useCallback(
