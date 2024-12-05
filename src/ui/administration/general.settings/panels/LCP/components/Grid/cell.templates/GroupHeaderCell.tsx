@@ -27,7 +27,7 @@ interface GroupHeaderCellProps extends GridRowProps {
   editGroup?: string
 }
 
-export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
+export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = React.memo((props) => {
   const {
     dataItem,
     onExpandChange,
@@ -166,4 +166,4 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
       </Grid>
     </Grid>
   );
-};
+});
