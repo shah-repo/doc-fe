@@ -528,7 +528,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const addLCP = useCallback(() => {
-    setPrevData(data);
+    setPrevData(cloneDeep(data));
     setData((prevData = []) => {
       const newItem = {
         id: uuidv4(),
