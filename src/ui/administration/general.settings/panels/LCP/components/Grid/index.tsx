@@ -5,7 +5,7 @@ import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolba
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { cloneDeep, last, pick, uniq, uniqBy } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
@@ -398,12 +398,22 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   }, [addNewPhase, resetForm]);
 
   const rowRender: DataGridProps<LCP>['rowRender'] = (row: React.ReactElement, rowProps: GridRowProps) => {
-    const fieldCount = rowProps.dataItem.fieldCount ?? columns?.length;
-    if (rowProps.rowType === 'groupHeader') {
-      const groupId = rowProps.dataItem.groupId as string;
+    console.log('rowRender');
+
+    const { dataItem, rowType } = rowProps;
+    const fieldCount = dataItem.fieldCount ?? columns?.length;
+    const groupId = dataItem.groupId as string;
+    const itemId = dataItem?.id;
+    const itemCategory = dataItem?.category;
+    const isGroupUpdating = editGroup === getGroupIdByCategory(itemCategory);
+    const isLastRow = isLastGroupRow(itemId, itemCategory);
+
+    if (rowType === 'groupHeader') {
       return React.cloneElement(row, {
         ...rowProps,
-        className: cx(row.props.className, { updatingRow: editGroup === groupId }, { groupLastRow: groupId === ADD_GROUP_ID && rowProps.dataItem.items.length === 1 }),
+        className: cx(row.props.className,
+          { updatingRow: editGroup === groupId },
+          { groupLastRow: groupId === ADD_GROUP_ID && dataItem.items.length === 1 }),
         children: (
           <td colSpan={fieldCount} className="groupHeader">
             <GroupHeaderCell
@@ -423,16 +433,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
     }
 
-    if (rowProps.dataItem.isAdd) {
+    if (dataItem.isAdd) {
       // hide other elements while adding the row
       return <React.Fragment />;
     }
 
-    const isGroupUpdating = editGroup === getGroupIdByCategory(rowProps.dataItem.category);
-    const itemId = rowProps?.dataItem?.id;
-    const itemCategory = rowProps?.dataItem?.category;
-
-    if (rowProps.dataItem.isAddPhase) {
+    if (dataItem.isAddPhase) {
       return <FormikProvider value={formik}>
         {React.cloneElement(row, {
           ...rowProps,
@@ -441,7 +447,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       </FormikProvider>;
     }
 
-    if (isLastGroupRow(itemId, itemCategory) && !isGroupUpdating && hasEditLCPPermission) {
+    if (isLastRow && !isGroupUpdating && hasEditLCPPermission) {
       if (isGroupPhasesDeactivated(itemCategory)) {
         return <React.Fragment />;
       }
@@ -458,33 +464,31 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       ];
     }
 
-    rowProps.dataItem.isGroupDeactivated = isGroupPhasesDeactivated(itemCategory);
+    dataItem.isGroupDeactivated = isGroupPhasesDeactivated(itemCategory);
 
     return React.cloneElement(row, {
       ...rowProps,
-      className: cx(row.props.className, { updatingRow: isGroupUpdating }, { groupLastRow: isLastGroupRow(itemId, itemCategory) && isGroupUpdating }),
+      className: cx(row.props.className,
+        { updatingRow: isGroupUpdating },
+        { groupLastRow: isLastRow && isGroupUpdating }),
     });
   };
 
   const onGroupsToggle = React.useCallback((isExpandAll?) => {
-    const dataStateWithoutPaging = processWithGroups((data ?? []), {
-      group: dataState.group,
-    });
-
     setCollapsedState(
-      isExpandAll ? [] : getGroupIds({ data: dataStateWithoutPaging.data }),
+      isExpandAll ? [] : getGroupIds({ data: resultState?.data }),
     );
-  }, [collapsedState, dataState]);
+  }, [collapsedState, resultState]);
 
   const getUpdatedStateDataByEditInfo = useCallback((resultState?: DataResult) => {
-    resultState?.data?.forEach((group: CustomGroupDataItem) => {
-      group.items?.forEach((data) => {
-        data[EDIT_FIELD] = group.groupId === editGroup;
-        return data;
-      });
-      return group;
-    });
-    return sortGroups(resultState?.data ?? [], selectedDocType?.categoryUniqId);
+    const updatedData = resultState?.data?.map((group: CustomGroupDataItem) => ({
+      ...group,
+      items: group.items?.map((data) => ({
+        ...data,
+        [EDIT_FIELD]: group.groupId === editGroup,
+      })),
+    }));
+    return sortGroups(updatedData ?? [], selectedDocType?.categoryUniqId);
   }, [editGroup, resultState]);
 
   const onItemChange = (e: GridItemChangeEvent) => {
@@ -518,7 +522,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       };
     });
 
-    setResultState({ ...resultState, data: updatedData });
+    setResultState((prevState) => ({
+      ...(prevState as DataResult),
+      data: updatedData,
+    }));
   };
 
   const addLCP = useCallback(() => {
@@ -545,10 +552,16 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     });
   }, [data, initialDataState]);
 
-  const newData = setExpandedState({
-    data: getUpdatedStateDataByEditInfo(resultState),
-    collapsedIds: collapsedState,
-  });
+  const memoizedUpdatedStateData = useMemo(() => {
+    return getUpdatedStateDataByEditInfo(resultState);
+  }, [resultState, editGroup, selectedDocType?.categoryUniqId]);
+
+  const newData = useMemo(() => {
+    return setExpandedState({
+      data: memoizedUpdatedStateData,
+      collapsedIds: collapsedState,
+    });
+  }, [memoizedUpdatedStateData, collapsedState]);
 
   const onLock = React.useCallback(
     ({ field, locked }: CustomGridColumnMenuColumnProps) => {
