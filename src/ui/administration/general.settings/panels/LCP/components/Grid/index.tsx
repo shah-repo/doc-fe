@@ -399,8 +399,6 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   }, [addNewPhase, resetForm]);
 
   const rowRender: DataGridProps<LCP>['rowRender'] = (row: React.ReactElement, rowProps: GridRowProps) => {
-    console.log('rowRender');
-
     const { dataItem, rowType } = rowProps;
     const fieldCount = dataItem.fieldCount ?? columns?.length;
     const groupId = dataItem.groupId as string;
