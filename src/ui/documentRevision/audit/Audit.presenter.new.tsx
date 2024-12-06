@@ -222,12 +222,24 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           return;
         }
         if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
-          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
-          const fieldName = translate(`form.builder.contact.grid.heading.${fieldFullName}`);
-          fbLabel = translate('form.builder.contact.grid.heading.audit.item', {
-            label: fbLabel as string,
-            field: fieldName,
-          });
+          if (parentField.startsWith('siteContact')) {
+            let fieldFullName = ['docId', 'value'].includes(field) ? parentField : field;
+            console.log('fieldFullName', fieldFullName);
+            fieldFullName = getSiteInformationsFieldName(fieldFullName, 'contact');
+            const fieldName = translate(`form.builder.contact.grid.heading.${fieldFullName}`);
+            fbLabel = translate('form.builder.contact.grid.heading.audit.item', {
+              label: `${fbLabel as string} Contact`,
+              field: fieldName,
+            });
+          } else {
+            let fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
+            fieldFullName = getSiteInformationsFieldName(fieldFullName, 'site');
+            const fieldName = translate(`form.builder.contact.grid.heading.${fieldFullName}`);
+            fbLabel = translate('form.builder.site.inforation.grid.heading.audit.item', {
+              label: fbLabel as string,
+              field: fieldName,
+            });
+          }
         }
       }
       // SITE ADDRESS
@@ -721,6 +733,25 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
   } catch (error) {
     return '';
   }
+};
+
+const getSiteInformationsFieldName = (field: string, type: string): string => {
+  if (type === 'site') {
+    const fields = {
+      siteName: 'site.name',
+      siteAddress: 'site.address',
+      zipCode: 'zip.code',
+      approvedToReceive: 'approved.to.receive',
+      sameAsHQ: 'same.as.hq',
+    };
+    return fields[field] || field;
+  } else if (type === 'contact') {
+    const fields = {
+      phoneNumber: 'phone.number',
+    };
+    return fields[field] || field;
+  }
+  return field;
 };
 
 export default AuditPresenter;

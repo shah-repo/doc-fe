@@ -1511,7 +1511,7 @@
   "form.builder.site.inforation.grid.heading.audit.item": "{label} items {field}",
   "form.builder.site.inforation.grid.heading.audit.delete": "{name}",
   "form.builder.contact.grid.heading.audit.item": "{label} items {field}",
-  "form.builder.contact.grid.grid.heading.audit.delete": "{name}",
+  "form.builder.contact.grid.heading.audit.delete": "{name}",
   "form.builder.shipping.items.audit.item": "{label} {field}",
   "form.builder.shipping.items.audit.delete": "{name}",
   "form.builder.shipping.items.title": "Shipping Items",
