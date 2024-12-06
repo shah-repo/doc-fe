@@ -7,8 +7,8 @@ import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { find, map, pick } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
@@ -56,7 +56,7 @@ interface props {
   isDisabled?: boolean
 }
 
-const FBLHRSummary: React.FunctionComponent<props> = ({
+const FBLHRSummary: React.FunctionComponent<props> = memo(({
   isShowOnly,
   isDisabled,
 }) => {
@@ -95,12 +95,12 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const fetchLHRSummaryData = () => {
     const docRevId = _documentRevisionFormState?.documentRevision?.id;
-    if (!docRevId) {
-      return;
-    }
+    if (!docRevId) return;
 
-    LHRSummaryAsync.start(fetchLHRSummary, docRevId, LHRSummaryAsync);
-    dispatch(documentRevisionsActions.loadAudit(docRevId));
+    batch(() => {
+      LHRSummaryAsync.start(fetchLHRSummary, docRevId, LHRSummaryAsync);
+      dispatch(documentRevisionsActions.loadAudit(docRevId));
+    });
   };
 
   const addLHRSummaryAsync = useAsync({
@@ -176,7 +176,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     }
 
     const { stepOrMPI } = dataItem;
-    const step = stepOrMPI?.split('/')?.[0];
+    const step = stepOrMPI?.split('/')?.[0] ?? '';
     const mpiId = stepOrMPI?.split('/')?.[1];
 
     setEditedLHRSummaryItem({
@@ -196,10 +196,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     }
 
     deleteLHRSummaryAsync.start(deleteLHRSummary, _documentRevisionFormState?.documentRevision?.id, editedLHRSummaryItem?.id, deleteLHRSummaryAsync);
-  };
-
-  const getColumns = () => {
-    return columns.filter(({ show }) => show);
   };
 
   const onAddItem = () => {
@@ -230,7 +226,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     setEditedLHRSummaryItem(newLHRSummaryItem);
   };
 
-  const rowRender: DataGridProps<LHRSummaryItem>['rowRender'] = (
+  const rowRender: DataGridProps<LHRSummaryItem>['rowRender'] = useCallback((
     row,
     { dataItem },
   ) => {
@@ -246,7 +242,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     });
 
     return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
-  };
+  }, [formik]);
 
   const isAlternatePartAdded = editedLHRSummaryItem?.[MODE_FIELD] === Mode.add;
 
@@ -275,9 +271,13 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   });
 
   const [columns, setColumns]
-    = React.useState<Array<ColumnDefinition<EditableLHRSummaryItem>>>(schema);
+    = useState<Array<ColumnDefinition<EditableLHRSummaryItem>>>(schema);
 
-  const onLock = React.useCallback(
+  const getColumns = useMemo(() => {
+    return columns.filter(({ show }) => show);
+  }, [columns]);
+
+  const onLock = useCallback(
     ({ field, locked }: CustomTreeListColumnProps) => {
       const index = columns.findIndex((c) => c.field === field);
       const column = columns[index];
@@ -296,7 +296,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     [columns],
   );
 
-  const onColumnShowHide = ({ field }: KendoColumn) => {
+  const onColumnShowHide = useCallback(({ field }: KendoColumn) => {
     const dataColumns = map(columns, (column: ColumnDefinition<EditableLHRSummaryItem>) => {
       if (column.field === field) {
         column.show = !column.show;
@@ -305,12 +305,13 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       return column;
     });
     setColumns(dataColumns);
-  };
+  }, [columns],
+  );
 
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
     if (_export.current !== null) {
-      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers), getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
+      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers), getExcelColumns(getColumns) as ExcelExportColumnProps[]);
     }
   };
 
@@ -352,7 +353,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       </FBSection>
       <ColumnMenuContext.Provider
         value={{
-          columns: getColumns(),
+          columns: getColumns,
           onLock,
         }}
       >
@@ -360,7 +361,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           <KendoDataGrid<EditableLHRSummaryItem>
             style={{ overflow: 'auto', maxHeight: size?.height ? `${size.height - 160}px` : '100px' }}
             data={LHRSummaryItemList}
-            schema={getColumns()}
+            schema={getColumns}
             fullWidth
             className={classes.rootLHRSummaryTable}
             hasBoxScrollbars
@@ -368,7 +369,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
             columnMenu={(props) => (
               <CustomColumnMenu
                 {...props}
-                columns={getColumns()}
+                columns={getColumns}
                 {...{
                   onLock,
                 }}
@@ -434,6 +435,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       )}
     </>
   );
-};
+});
 
-export default FBLHRSummary;
+export default memo(FBLHRSummary);

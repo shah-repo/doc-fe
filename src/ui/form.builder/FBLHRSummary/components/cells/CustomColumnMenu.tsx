@@ -1,6 +1,6 @@
 import { ColumnMenuItem } from '@progress/kendo-react-data-tools';
 import { GridColumnMenuProps } from '@progress/kendo-react-grid';
-import React from 'react';
+import React, { memo } from 'react';
 import { translate } from '../../../../../common/intl';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { DisplayText, TranslatedText } from '../../../../components/common/kendo/helpers';
@@ -18,7 +18,7 @@ interface ColumnMenuContextProps {
 
 export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} as ColumnMenuContextProps);
 
-export const CustomColumnMenu: React.ComponentType<CustomColumnMenuProps> = (props) => {
+export const CustomColumnMenu: React.ComponentType<CustomColumnMenuProps> = memo((props) => {
   const { column, onLock, columns } = props;
   const selectedColumn = columns.find(c => c.field === column.field);
   const isLocked = Boolean(selectedColumn?.locked);
@@ -33,4 +33,4 @@ export const CustomColumnMenu: React.ComponentType<CustomColumnMenuProps> = (pro
       data-cy={`column-menu-${index}-item-${selectedColumn?.locked ? 'unfreeze' : 'freeze'}`}
     />
   );
-};
+});
