@@ -88,6 +88,7 @@ export type FBInputType =
   | 'workOrderLhrTable'
   | 'woApprovals'
   | 'workOrderType'
+  | 'shippingItems'
   ;
 
 export type FBInputProps =
