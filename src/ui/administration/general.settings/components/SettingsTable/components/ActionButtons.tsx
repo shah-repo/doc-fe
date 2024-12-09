@@ -49,6 +49,7 @@ const ActionsButtons: React.FC<Props> = ({
               onClick={onDiscard}
               iconSize={22}
               data-cy="action-discard"
+              disabled={isLoading}
             >
               <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
             </IconButton>

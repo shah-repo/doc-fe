@@ -45,7 +45,7 @@ export default makeStyles<NextTheme>(theme => ({
       display: 'none',
     },
     tabs: {
-      overflowX: 'hidden',
+      overflowX: 'hidden' as const,
     },
   },
 }));

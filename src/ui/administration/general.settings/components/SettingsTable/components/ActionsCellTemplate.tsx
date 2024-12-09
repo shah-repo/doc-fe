@@ -7,6 +7,7 @@ interface Props<T extends EditableItem> extends CellTemplateProps<T> {
   scrollBehavior?: ScrollBehavior
   isLoading?: boolean
   isActive?: boolean
+  isLoading?: boolean
   onEdit?: (item: T) => void
   onConfirm: () => void
   onDiscard: () => void
@@ -18,6 +19,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
   scrollBehavior = 'auto',
   isLoading,
   isActive,
+  isLoading,
   onEdit,
   onDelete,
   onConfirm,

@@ -59,6 +59,7 @@ import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
+import { useIsLatestRevision } from './helpers/useIsLatestRevision';
 import { InspectionControlsContainer } from './InspectionControls/InspectionControls.container';
 import { PreviewControlButtons } from './PreviewControls.container.types';
 
@@ -641,6 +642,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const loggedInUser = store.getState().auth.user;
   const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
+  const isLatestRevision = useIsLatestRevision(documentRevision);
 
   return (
     <>
@@ -653,7 +655,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
         )}
       </>
-      {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled || !isDocOwner} />}
       <>

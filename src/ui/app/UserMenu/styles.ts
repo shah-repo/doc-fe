@@ -8,9 +8,6 @@ export default makeStyles((theme) => ({
     justifyContent: 'center',
     marginTop: theme.spacing(0.75),
     marginBottom: theme.spacing(0.75),
-    '&:hover': {
-      background: Colors.darkJungleGreenDimmed,
-    },
   },
   listItemIcon: {
     minWidth: 31,
