@@ -57,7 +57,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
   };
 
   const handleUpdate = () => {
-    const { justificationOfChange, descriptionOfChange, proposedDocumentRevision, autoUpdate, revisionFormTo }
+    const { justificationOfChange, descriptionOfChange, proposedDocumentRevision, autoUpdate, revisionFormTo, attachments }
       = formState?.getValues() as FBDocumentRevisionsValue;
     const orderItemsUpdated = itemsAndDetailsState.approvalRequestItemsList
       .map((item: ApprovalRequestGridItem) => {
@@ -65,7 +65,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
           return item;
         }
 
-        return { ...item, justificationOfChange, descriptionOfChange, revisionFormTo, autoUpdate };
+        return { ...item, justificationOfChange, descriptionOfChange, revisionFormTo, autoUpdate, attachments };
       });
 
     const dataToSend: FBDocumentRevisionsValue[]
@@ -87,7 +87,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
       }, 2000);
     } else {
       // Edit the itemsAndDetailsState & set the approvalRequestItemsList to dataToSend
-      const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions);
+      const entries = formDataToStoreData(dataToSend, changeRequest?.documentRevisions) as ApprovalRequestGridItem[];
       itemsAndDetailsState.setApprovalRequestItemsList(entries);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
     }
@@ -124,7 +124,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
         currentDocRevPresent = documentRevisionsAssigned.some(docRev => docRev.proposedDocumentRevision.id === currentDocRevId);
       }
 
-      entries = formDataToStoreData(documentRevisionsAssigned, documentRevisionsData);
+      entries = formDataToStoreData(documentRevisionsAssigned, documentRevisionsData) as ApprovalRequestGridItem[];
     }
 
     if (changeRequest && !currentDocRevPresent && currentDocRevId) {
@@ -146,6 +146,7 @@ const ItemsAndDetailsContainer: React.FC<Props> = ({
         handleUpdate,
         itemsAndDetailsState,
       }}
+      itemToAdd={itemsAndDetailsState.approvalRequstItemInEditMode}
     />
   ));
 };

@@ -18,7 +18,8 @@ type AuditTypes =
     | 'NUMBER_DELETED'
     | 'OBJECT_NEW'
     | 'BOOLEAN_NEW'
-    | 'BOOLEAN_EDITED';
+    | 'BOOLEAN_EDITED'
+    | 'OBJECT_EDITED';
 export interface Audit {
   groupKey?: number | undefined
   index?: number | undefined
@@ -41,7 +42,7 @@ export interface Audit {
   previousValue?: Audit['nextValue']
   reference?: SmartReference
   timestamp: string
-  documentRevisionId: string
+  documentRevisionId?: string
   docId?: string
   groupId: string
   owner: Owner
@@ -86,4 +87,9 @@ export interface POLineItem {
   glCode: string
   tax: boolean
   capitalEquipment?: boolean
+}
+
+export interface LifecyclePahseOptionPayload {
+  id: string
+  text: string
 }

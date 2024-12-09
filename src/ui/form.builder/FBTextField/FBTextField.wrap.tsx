@@ -1,6 +1,6 @@
-import { get, isEmpty, isUndefined } from 'lodash';
+import { get, isEmpty, isUndefined, toNumber } from 'lodash';
 import { reaction } from 'mobx';
-import React, { useEffect } from 'react';
+import React, { FocusEventHandler, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBTextFieldProps } from '..';
 import { THRESHOLD_KEY } from '../../../state/ducks/documentRevisions/constants';
@@ -10,8 +10,8 @@ import { checkIsDocumentPOAM } from '../../documentRevision/helpers/checkDocumen
 import { isTranslation } from '../../translations/types';
 
 export const withFBTextField = <T extends FBTextFieldProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     onFocus,
     multiline,
@@ -25,8 +25,8 @@ export const withFBTextField = <T extends FBTextFieldProps>(
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     const { submitForm } = useFormContext();
-    const { workspaceMode: mode } = formState || {};
-    const { id } = workspaceState || {};
+    const { workspaceMode: mode } = formState ?? {};
+    const { id } = workspaceState ?? {};
     const isDocumentPOAM = checkIsDocumentPOAM(workspaceState?.document?.document?.documentType?.groupOptions);
     defaultValue = defaultValue ?? formState?.getFieldValue(name);
 
@@ -64,33 +64,57 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       }, name);
     };
 
-    const onBlur = (ev) => {
+    const roundToStep = function <T = number | string>(value: T, rawStep: T, rawMin: T, rawMax: T) {
+      const number = toNumber(value);
+      const min = isEmpty(rawMin) ? Number.MIN_VALUE : toNumber(rawMin);
+      const max = isEmpty(rawMax) ? Number.MAX_VALUE : toNumber(rawMax);
+      const step = isEmpty(rawStep) ? false : toNumber(rawStep);
+      const roundedNumber = step ? Math.round((number - min) / step) * step + min : number;
+
+      return Math.min(
+        max,
+        Math.max(
+          min,
+          roundedNumber,
+        ),
+      );
+    };
+
+    const onBlur: FocusEventHandler<HTMLInputElement> = (ev) => {
+      const { type, value, step, min, max } = ev.target;
+
       if (formState?.isBackdropOpen) {
         ev.target.focus();
         return;
       }
-      if (ev?.target?.type === 'number' && ev?.target?.step === '.01') {
-        ev.target.value = Math.abs(ev.target?.value).toFixed(2).toString();
+      if (!name) {
+        return;
       }
-      if (!name) { return; }
-      if (isDocumentPOAM && name === THRESHOLD_KEY && isEmpty(ev.target?.value)) {
+      if (type === 'number' && !isEmpty(value) && (!isEmpty(step) || !isEmpty(min) || !isEmpty(max))) {
+        const numericSteppedValue = roundToStep(value, step, min, max);
+        formState?.setFieldValue(name, numericSteppedValue, true);
+      }
+      if (isDocumentPOAM && name === THRESHOLD_KEY && isEmpty(value)) {
         // Setting POAM Item form value back to 0 If the value is removed
         formState?.setFieldValue(name, 0, true);
       }
       formState?.unlockField(name);
       formState?.setFieldAutosave(name);
-      if (workspaceState?.isChangeRequest && workspaceState?.autosave
-         && (name.includes('.justificationOfChange') || name.includes('.descriptionOfChange'))) {
+
+      const isArItemField = name.includes('.justificationOfChange') || name.includes('.descriptionOfChange');
+      if (workspaceState?.isChangeRequest && workspaceState?.autosave && isArItemField) {
         submitForm();
         return;
       }
-      if (!workspaceState?.autosave && name?.includes('lhrs-start-quantity')) {
+
+      const isLhrStartField = name.includes('lhrs-start-quantity');
+      if (!workspaceState?.autosave && isLhrStartField) {
         workspaceState?.saveDocRev(formState?.getValues(), true);
       }
     };
 
     useEffect(() => reaction(
-      () => workspaceState?.formInputSync.get(name),
+      () => workspaceState?.formInputSync.get(name) as string | undefined,
       (value?: string) => {
         formState?.setFieldValue(name, value, true);
       },

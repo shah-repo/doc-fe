@@ -43,7 +43,7 @@ DocumentRevisionListContainerProps
   const classes = styles();
   const dispatch = useDispatch();
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadDocumentAsyncState);
-  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
   const loadDocumentAction = useCallback(() => {
     dispatch(documentRevisionsActions.loadDocument(documentId));
   }, [dispatch, documentId]);

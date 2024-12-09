@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { match, Route } from 'react-router-dom';
 import { getDocumentRevision } from '../../state/ducks/documentRevisions/tests/factories';
 import {
   DOCUMENT_REVISION_DETAILS_URL,
@@ -10,10 +10,12 @@ import {
 import { ASYNC_DEFAULT_STATE } from '../hooks/useAsync';
 import getRouteComponentProps from '../tests/helpers/getRouteComponentProps';
 import { Container, Props } from './container';
+import { RouteParams } from './utils/types';
 
 describe('Container tests', () => {
   const defaultProps: Props = {
     ...getRouteComponentProps(),
+    match: getRouteComponentProps().match as match<RouteParams>,
     dataProp: getDocumentRevision(),
     load: jest.fn(),
     loadAsyncState: ASYNC_DEFAULT_STATE,

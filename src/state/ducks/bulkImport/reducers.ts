@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
-import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, SET_XLSX_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
+import { CLEAN_UP_MAPPED_HEADERS, CURRENT_STEP, DELETE_BULK_IMPORT, RESET_STEPS, SET_APPROVAL, SET_APPROVALS, SET_BULK_IMPORT, SET_BULK_IMPORTS, SET_BULK_IMPORTS_STATUS, SET_DATA_TYPE_FILTER, SET_DATA_TYPES, SET_FORM_DOCUMENTS_TYPE_GROUP, SET_HAS_UNSAVED_CHANGES, SET_HEADERS, SET_IS_LOADING, SET_IS_LOADING_MAIN, SET_ONLY_ERRORS_TABLE, SET_SELECTED_TYPE, SET_SHOW_TABLE, SET_STATUS_FILTER, SET_TABLE_DATA, SET_TEMPLATE_FILE, UPDATE_ROW_FIELD_TABLE } from './constants';
 import { BulkImport, BulkImportActions, BulkImportState, BulkImportStepsActions, BulkImportStepsState } from './types';
+import { orderBkData } from './utils';
 
 const BULK_IMPORT_DEFAULT_STEPS = {
   step: 0,
@@ -17,6 +18,7 @@ const BULK_IMPORT_DEFAULT_STEPS = {
   approvers: [],
   approval: null,
   showErrorsOnly: false,
+  hasUnsavedChanges: false,
 };
 
 const steps = (
@@ -56,11 +58,6 @@ const steps = (
         ...state,
         templateFile: action.payload,
       };
-    case SET_XLSX_FILE:
-      return {
-        ...state,
-        xlsx: action.payload,
-      };
     case SET_SHOW_TABLE:
       return {
         ...state,
@@ -80,6 +77,7 @@ const steps = (
       return {
         ...state,
         tableData: action.payload,
+        hasUnsavedChanges: false,
       };
     case SET_APPROVALS:
       return {
@@ -101,6 +99,7 @@ const steps = (
     case UPDATE_ROW_FIELD_TABLE:
       return {
         ...state,
+        hasUnsavedChanges: true,
         tableData: state.tableData.map((table, idx) => {
           if (idx === action.payload.dataIndex) {
             const updatedErrors = table.errors?.map(error => {
@@ -120,6 +119,11 @@ const steps = (
       return {
         ...state,
         isLoading: action.payload,
+      };
+    case SET_HAS_UNSAVED_CHANGES:
+      return {
+        ...state,
+        hasUnsavedChanges: action.payload,
       };
     default:
       return state;
@@ -143,10 +147,24 @@ const main = (
         ...state,
         bulkImports: action.payload,
       };
+    case SET_BULK_IMPORTS_STATUS:
+      return {
+        ...state,
+        bulkImports: state.bulkImports.map(importItem =>
+          importItem.id === action.payload.bulkImportId
+            ? { ...importItem, status: action.payload.status }
+            : importItem,
+        ),
+      };
     case SET_IS_LOADING_MAIN:
       return {
         ...state,
         isLoading: action.payload,
+      };
+    case DELETE_BULK_IMPORT:
+      return {
+        ...state,
+        bulkImports: orderBkData(state.bulkImports.filter(importItem => importItem.id !== action.payload)),
       };
     case SET_DATA_TYPE_FILTER:
       return {
