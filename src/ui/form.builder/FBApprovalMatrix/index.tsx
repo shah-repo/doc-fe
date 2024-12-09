@@ -2,13 +2,17 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { isEmpty } from 'lodash';
+import { useObserver } from 'mobx-react';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
-import { FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
+import { FB, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixRoleTitles, FBApprovalRolesStages, FBDocTypeGroup, FBGridTableContainerProps } from '..';
 import { translate } from '../../../common/intl';
+import { AsyncStatus } from '../../../state/types';
+import Loader from '../../components/common/kendo/Loader';
 import { Dialog } from '../../components/dialogs';
 import { IconButton } from '../../components/forms/fields-next';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
+import { FormHeaderContext } from '../../documentRevision/forms/DocumentRevisionForm.container';
 import useDialog from '../../hooks/useDialog';
 import useTableCriteria from '../FBApprovalMatrixRoles/utils';
 import Grid from './components/Grid';
@@ -48,12 +52,18 @@ const FBGridTableContainer: React.FC<FBGridTableContainerProps> = ({
 };
 
 const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
+  const { asyncState } = React.useContext(FormHeaderContext) ?? {};
+  const { workspaceState } = FB.useStores();
   const { data, handleSave, disabled, withoutStatus, size } = props;
   const { approvalMatrix = [], approvalRoles = [] } = data ?? {};
   const classes = useStyles();
   const dialog = useDialog();
 
   const { dataState, dataStateChange } = useTableCriteria(APPROVAL_MATRIX_TABLE_NAME);
+
+  const isLoading = useObserver(
+    () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading,
+  );
 
   const schema = createSchema({
     data,
@@ -111,6 +121,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
         dialogContentStyle={classes.dialogContentStyle}
         onDialogClose={dialog.close}
       >
+        {isLoading && <Loader />}
         <GridTable
           data={approvalMatrix}
           schema={schema}
@@ -118,6 +129,7 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
           generateNewItem={generateNewItem}
           onSave={handleSave}
           withoutStatus={withoutStatus}
+          isLoading={isLoading}
           {...dataState}
           onDataStateChange={dataStateChange}
         />
