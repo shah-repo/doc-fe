@@ -43,4 +43,10 @@ export const exportPDFToastrStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     color: Colors.primaryLight,
   },
+  tooltip: {
+    zIndex: 9999,
+  },
+  disabledText: {
+    color: Colors.textGray,
+  },
 }));

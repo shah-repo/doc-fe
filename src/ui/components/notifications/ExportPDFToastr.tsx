@@ -1,8 +1,10 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Tooltip, Typography } from '@material-ui/core';
+import cx from 'classnames';
 import copy from 'copy-to-clipboard';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { translate } from '../../../common/intl';
 import Text from '../Text';
 import { exportPDFToastrStyles } from './ExportPDFToastr.styles';
 
@@ -30,13 +32,23 @@ export const ExportPDFToastr: React.FC = () => {
 
 export const ExportPDFCloseButton = ({ closeToast, linkInfo }) => {
   const classes = exportPDFToastrStyles();
+  const [isCopied, setIsCopied] = useState(false);
 
   const copyLinkAddress = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
     if (linkInfo) {
       copy(linkInfo);
+      setIsCopied(true);
     }
   };
+
+  useEffect(() => {
+    if (isCopied) {
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    }
+  }, [isCopied]);
 
   return (
     <Box
@@ -55,9 +67,17 @@ export const ExportPDFCloseButton = ({ closeToast, linkInfo }) => {
         />
       </Box>
       <Box className={classes.closeText}>
-        <span onClick={copyLinkAddress}>
-          <Text translation="share.copy.link" />
-        </span>
+        <Tooltip
+          placement="top"
+          title={translate('share.copy.link.copied')}
+          open={isCopied}
+          PopperProps={{ className: cx('MuiTooltip-popper MuiTooltip-popperArrow', classes.tooltip) }}
+          arrow
+        >
+          <span className={cx({ [classes.disabledText]: isCopied })} onClick={copyLinkAddress}>
+            <Text translation="share.copy.link" />
+          </span>
+        </Tooltip>
       </Box>
     </Box>
   );
