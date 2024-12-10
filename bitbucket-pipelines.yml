@@ -44,6 +44,15 @@ definitions:
         services:
           - docker
 
+    - step: &RUN_TYPECHECK
+        <<: *COMMON
+        name: Typecheck
+        artifacts:
+          - typecheck-results/**
+        script:
+          - NODE_ENV=development yarn install --frozen-lockfile
+          - yarn lint:tsc
+
     - step: &RUN_LINTER
         <<: *COMMON
         name: Linter
@@ -57,7 +66,6 @@ definitions:
     - step: &RUN_TESTS
         <<: *COMMON
         name: Tests
-        size: 2x
         caches:
           - yarn-node-modules
         artifacts:
@@ -127,6 +135,7 @@ pipelines:
     "**":
       - parallel:
           - step: *RUN_TESTS
+          - step: *RUN_TYPECHECK
           - step: *RUN_LINTER
           - step: *BUILD_DEV
 
@@ -173,6 +182,7 @@ pipelines:
               - prod4
       - parallel:
           - step: *RUN_TESTS
+          - step: *RUN_TYPECHECK
           - step: *RUN_LINTER
           - step:
               <<: *COMMON_BUILD
@@ -192,6 +202,7 @@ pipelines:
     develop:
       - parallel:
           - step: *RUN_TESTS
+          - step: *RUN_TYPECHECK
           - step: *RUN_LINTER
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
@@ -199,6 +210,7 @@ pipelines:
     demo:
       - parallel:
           - step: *RUN_TESTS
+          - step: *RUN_TYPECHECK
           - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
@@ -206,6 +218,7 @@ pipelines:
     master:
       - parallel:
           - step: *RUN_TESTS
+          - step: *RUN_TYPECHECK
           - step: *RUN_LINTER
           - step: *BUILD_PROD
       - step: *DEPLOY_PROD

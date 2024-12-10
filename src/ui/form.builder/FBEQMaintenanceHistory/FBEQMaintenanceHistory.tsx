@@ -5,10 +5,10 @@ import React from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Link } from 'react-router-dom';
 import { FBMapWrapper, FBText } from '..';
+import { translate } from '../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { documentVersionPath } from '../../document.revision/utils/paths';
-import Colors from '../../layout/theme/utils/colors';
 
 interface FBEQMaintenanceHistoryProps {
   maintenanceHistory?: DocumentRevision[]
@@ -26,10 +26,13 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
     </Box>
     <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
       {(item: DocumentRevision, index) => {
-        const showDate = get(item.formInput, 'fb-equipment_due_date') || item.releasedAt;
+        const releaseDate = get(item.formInput, 'fb-equipment_due_date') || item.releasedAt;
+        const areTasksCompleted = get(item.formInput, 'fb-maintenance-all-tasks-completed') === 'Yes';
+        const isReleased = item.status === DocumentRevisionStatus.Released;
+
         return (
           <Box data-cy="maintenanceHistory" display="flex" flexDirection="row" key={`fb-eq-${index}`}>
-            <Box color={Colors.medium_blue} mr={0.5}>
+            <Box mr={0.5}>
               <Link
                 to={documentVersionPath(item.id, item.document?.id)}
                 target="_blank"
@@ -38,17 +41,14 @@ const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
               </Link>
             </Box>
             <Box fontWeight="fontWeightRegular">
-            | {item.owner.user.name}
-            | {item.status}
-              {showDate && item.status === DocumentRevisionStatus.Released
-              && `| ${getFormattedDateString(showDate, MomentFormats.MonthDateYearAlt)}`}
-              {item.createdAt && item.status !== DocumentRevisionStatus.Released
-              && `| ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
+              {`| ${item.owner.user.name} | ${item.status}`}
+              {isReleased && releaseDate && ` | ${getFormattedDateString(releaseDate, MomentFormats.MonthDateYearAlt)}`}
+              {!isReleased && item.createdAt && ` | ${getFormattedDateString(item.createdAt, MomentFormats.MonthDateYearAlt)}`}
+              {isReleased && areTasksCompleted && ` | ${translate('document.equipment.cal.pm.tasks.completed')}`}
             </Box>
           </Box>
         );
-      }
-      }
+      }}
     </FBMapWrapper>
   </Box>
 );

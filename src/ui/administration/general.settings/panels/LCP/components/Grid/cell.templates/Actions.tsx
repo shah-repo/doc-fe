@@ -5,6 +5,7 @@ import React, { useCallback } from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { IconButton } from '../../../../../../../components/forms/fields-next';
 import useHover from '../../../../../../../hooks/useHover';
+import { CustomGroupOptions } from '../types';
 import { ActionsProps } from './LCPActionsCellTemplate';
 import useStyles from './styles';
 
@@ -13,12 +14,14 @@ const Actions: React.FC<ActionsProps> = ({
   onDiscard,
   scrollBehavior = 'auto',
   dataItem,
+  selectedPartGroups,
   ...props
 }) => {
   const { cellStyle } = useStyles();
   const isEditMode = dataItem.isAddPhase;
   const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
   const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
+  const selectedGroup = selectedPartGroups?.find((group: CustomGroupOptions) => dataItem?.documentTypeId === group.value);
 
   const ref = useCallback((node: HTMLDivElement | null) => {
     if (node) {
@@ -41,6 +44,7 @@ const Actions: React.FC<ActionsProps> = ({
                 ref={discardRef}
                 onClick={onDiscard}
                 iconSize={22}
+                data-cy={`${selectedGroup?.docTypeAcronym}discard-phase`}
               >
                 <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
               </IconButton>
@@ -52,6 +56,7 @@ const Actions: React.FC<ActionsProps> = ({
                 ref={saveRef}
                 onClick={onConfirm}
                 iconSize={22}
+                data-cy={`${selectedGroup?.docTypeAcronym}save-phase`}
               >
                 <FontAwesomeIcon icon={isSaveHovered ? solid('square-check') : light('square-check')} />
               </IconButton>

@@ -20,11 +20,11 @@ import { Nullable } from '../../../../../state/ducks/common/types';
 import { ActionTypes, STATUS_TYPES_LABEL } from '../../../../../state/ducks/dashboard.new/my.feeds/types';
 import { Attachment } from '../../../../change.request/form/types';
 import { downloadFile } from '../../../../common/utils/helpers';
-import Text from '../../../../components/Text';
 import AttachmentSlideProvider from '../../../../components/common/attachment.icon/AttachmentSlideProvider';
 import ViewFile from '../../../../components/common/view.file/container';
 import { checkIfFileIsViewable } from '../../../../components/common/view.file/utils/helpers';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
+import Text from '../../../../components/Text';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -38,9 +38,9 @@ import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
 import { HoverStyleChip as RejectedHoverStyleChip } from '../../common/HoverStyleChipApprovalRejected';
 import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
 import { NormalStyleChip as RejectedNormalStyleChip } from '../../common/NormalStyleChipApprovalRejected';
-import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
-import { delay, formatCurrency } from '../../common/Utils';
+import { StyleTooltip } from '../../common/StyleTooltip';
+import { formatCurrency } from '../../common/Utils';
 import useStyles from './approverActions.styles';
 interface Props {
   id: string
@@ -184,10 +184,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
     onMouseHoverItem(id);
   };
 
-  const handleDownloadClick = async () => {
+  const handleDownloadClick = () => {
     setDownloadPdfMobile(true);
-    await delay(1000);
-    setDownloadPdfMobile(false);
   };
 
   const handleDownloadClose = () => {

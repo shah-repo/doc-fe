@@ -12,4 +12,5 @@ export interface GridProps<T> extends DataGridProps<T> {
   onSave?: (data: DataGridProps<T>['data']) => void
   disabled?: boolean
   withoutStatus?: boolean
+  isLoading?: boolean
 }

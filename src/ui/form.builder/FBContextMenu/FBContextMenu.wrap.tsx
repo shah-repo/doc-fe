@@ -1,7 +1,7 @@
 import { MenuItem } from '@material-ui/core';
 import { at, filter, isUndefined, map } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import { FB, FBContextMenuProps, FBContextMenuState } from '..';
 import Text from '../../components/Text';
 
@@ -26,8 +26,8 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
     menuItems && (menuEls = map(menuItems, (menuItem, index) => {
       const [message, values, onClick] = at(menuItem, ['text', 'textValues', 'onClick']);
       return (
-        <MenuItem key={`fb-context-menu-item-${menuId}-${index}`} {...{ onClick }}>
-          <Text {...{ message, values }} />
+        <MenuItem key={`fb-context-menu-item-${menuId}-${index}`} {...{ onClick: onClick as MouseEventHandler<HTMLLIElement> | undefined }}>
+          <Text {...{ message: message as string, values: values as Record<string, React.ReactNode> }} />
         </MenuItem>
       );
     }));

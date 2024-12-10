@@ -14,6 +14,7 @@ const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
           selectedOptions={options as string[]}
           multiple={true}
           optionId="1"
+          onBlur={undefined}
         />
       )}
       {!isOutput && (
@@ -23,6 +24,7 @@ const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
           optionId="1"
           value={options}
           // defaultValue={options}
+          onBlur={undefined}
         />
       )}
     </>
