@@ -1,6 +1,8 @@
 import { Box, Button, LinearProgress, Typography, WithStyles, withStyles } from '@material-ui/core';
 import React, { useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { ReactComponent as NoAccessIcon } from '../../assets/images/NoAccess_Image.svg';
+import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { AsyncState, AsyncStatus } from '../../state/types';
 import useDidMount from '../hooks/useDidMount';
 import styles from './AsyncGate.styles';
@@ -24,6 +26,9 @@ const AsyncGate: React.FunctionComponent<Props> = ({
   passive = false,
 }) => {
   const didMount = useDidMount();
+  const loadAsyncValidatorState = useSelector(
+    documentRevisionsSelectors.getLoadAsyncValidatorState,
+  );
 
   const runAsyncAction = useCallback(() => {
     if (asyncAction) {
@@ -49,7 +54,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
     );
   }
 
-  if (asyncState.status === AsyncStatus.Success && didMount) {
+  if (asyncState.status === AsyncStatus.Success && loadAsyncValidatorState.status === AsyncStatus.Success && didMount) {
     return (
       <React.Fragment>
         {children}

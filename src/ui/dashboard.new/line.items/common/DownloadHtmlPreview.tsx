@@ -40,6 +40,8 @@ const DownloadHtmlPreview: React.FC<Props> = ({
   const handleClose = () => {
     dialogPDF.close();
     onClose?.();
+    downloadPdfHover = false;
+    downloadImmediately = false;
   };
 
   const templateAction = useActionCreator(documentRevisionsActions.getRenderTemplatePreview);
@@ -75,7 +77,6 @@ const DownloadHtmlPreview: React.FC<Props> = ({
   const assetAsync = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       const url = downloadInfo?.url ?? '';
-
       if (downloadImmediately) {
         handleClose();
         window.location.href = url;
