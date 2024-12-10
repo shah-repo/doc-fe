@@ -42,7 +42,9 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const location = useLocation();
-  const showDeleteButton = !location.pathname.includes(entry?.docRevId) && !isDeletionDisabled;
+  console.log({ entryDocRevId: entry?.docRevId, locationPathname: location.pathname, pathnameIncludesDocRevId: location.pathname.includes(entry?.docRevId), isDeletionDisabled });
+
+  const showDeleteButton = Boolean(entry?.docRevId) && !location.pathname.includes(entry?.docRevId);
   const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
   const popperAnchorRef = useRef<HTMLDivElement>(null);
 
@@ -179,8 +181,8 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
           >
             <Actions
               scrollBehavior="smooth"
-              isDeleteDisabled={!showDeleteButton}
-              deleteTooltipText={!showDeleteButton ? translate('form.builder.delete.disabled') : undefined}
+              isDeleteDisabled={isDeletionDisabled}
+              deleteTooltipText={isDeletionDisabled ? translate('form.builder.delete.disabled') : undefined}
               dataItem={{ [MODE_FIELD]: Mode.add }}
               customDataCy={{
                 confirm: 'done-record',
@@ -189,10 +191,10 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
               }}
               onConfirm={addRevisionToChangeRequest}
               onDiscard={resetAndCancelEdit}
-              onDelete={() => {
+              onDelete={showDeleteButton ? () => {
                 resetAndCancelEdit?.();
                 handleRemove?.(entry?.docRevId as string);
-              }}
+              } : undefined}
             />
           </Popper>
         )}
