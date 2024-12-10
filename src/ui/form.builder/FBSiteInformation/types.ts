@@ -38,7 +38,7 @@ export interface Site {
 }
 
 export interface EditableSite extends Site {
-  [MODE_FIELD]: Mode
+  [MODE_FIELD]?: Mode
 }
 
 export interface SiteEditEvent {
