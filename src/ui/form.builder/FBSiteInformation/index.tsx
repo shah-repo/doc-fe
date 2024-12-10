@@ -92,7 +92,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     const updatedSites = sites.filter((site) =>
       site.id !== dataItem.id,
     );
-    setSites(updatedSites);
+    setSites(updatedSites as EditableSite[]);
   formState?.setFieldValue(name, updatedSites);
   workspaceState?.saveDocRev({
     ...workspaceState?.formInput,
