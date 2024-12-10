@@ -2,7 +2,7 @@
 import { useFormikContext } from 'formik';
 import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isNull, isString, isUndefined, last, map, size, union, uniqWith } from 'lodash';
 import { autorun, reaction } from 'mobx';
-import { useLocalStore } from 'mobx-react';
+import { useLocalStore, useObserver } from 'mobx-react';
 import React, { cloneElement, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from '..';
@@ -154,9 +154,10 @@ export const withFBInput = <T extends FBInputProps>(
     // TODO: Autocomplete default set as input
     // then this can be removed and handle through defaultValue
     const validationValue = get(formState?.validationValues, name);
+    const validatorRules = useObserver(() => get(formState?.validatorRules, name));
 
     if (validationMode === 'visibility' || validationMode === 'disabled') {
-      map(get(formState?.validatorRules, name), (rule) => {
+      map(validatorRules, (rule) => {
         const { value = '' } = rule || {};
         const isValueObj = value?.includes('{') || value?.includes('}');
         const fieldName: string = first(value.split(',')) || '';

@@ -17,6 +17,7 @@ import { ApiAction, ApiActionMethod, Handlers } from '../../types';
 import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
 import {
   AUTOSAVE_CONFIG,
+  OMIT_FIELDS,
   REDLINE_CONFIG,
   SELECT_COMPANY,
   SET_AUTOSAVE_CONFIG,
@@ -136,7 +137,7 @@ const updateGeneralSettings = (
   return apiAction({
     url,
     method,
-    data: omit(payload, 'id', 'materialFlowACLs'),
+    data: omit(payload, OMIT_FIELDS),
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
       dispatch(setGeneralSettings(data));
@@ -180,8 +181,8 @@ const fetchLCPDocTypes = (
 
 const fetchDocRevOptionsByDocTypeId = (
   documentTypeId: string,
-  currentPhaseId?: string,
   handlers: Handlers,
+  currentPhaseId?: string,
 ): ApiAction<LCPDocRevOptions[]> => {
   const params = qs.stringify({ documentTypeId, currentPhaseId });
 

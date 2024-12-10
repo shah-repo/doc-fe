@@ -1,49 +1,55 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import Text from '../../components/Text';
+import { withThemeNext } from '../../layout/theme-next';
 import useStyles from './ApprovalRequestGrid.styles';
 
-const ApprovalRequestGridHeader: React.FunctionComponent<{
-  isLineItemPartCanBeSubstituted?: boolean}> = ({ isLineItemPartCanBeSubstituted }) => {
+interface Props {
+  isLineItemPartCanBeSubstituted?: boolean
+}
+
+const ApprovalRequestGridHeader: React.FunctionComponent<Props> = ({
+  isLineItemPartCanBeSubstituted,
+}) => {
   const classes = useStyles();
+
   return (
-    <div className={classes.header}>
-      { isLineItemPartCanBeSubstituted && <div className={classes.cellautoUpdate}>
-        <Tooltip title={translate('approvalRequest.grid.heading.autoUpdate.title')} placement="right"
-          classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
-          arrow>
-          <span><Text translation="approvalRequest.grid.heading.autoUpdate" /></span>
+    <div className={classes.tableHeader}>
+      {isLineItemPartCanBeSubstituted && (
+        <div className={cx(classes.headerCell, classes.autoUpdateCell)}>
+          <Tooltip
+            title={translate('approvalRequest.grid.heading.autoUpdate.title')}
+            placement="right"
+          >
+            <FontAwesomeIcon icon={regular('memo-circle-check')} size="lg" />
+          </Tooltip>
+        </div>
+      )}
+      <div className={cx(classes.headerCell, classes.itemCell)}>
+        {translate('approvalRequest.grid.heading.item')}
+      </div>
+      <div className={cx(classes.headerCell)}>
+        {translate('approvalRequest.grid.heading.rev')}
+      </div>
+      <div className={cx(classes.headerCell)}>
+        {translate('common.attachments')}
+      </div>
+      <div className={cx(classes.headerCell, classes.textCell)}>
+        {translate('approvalRequest.grid.heading.description.of.change')}
+      </div>
+      <div className={cx(classes.headerCell, classes.textCell)}>
+        {translate('approvalRequest.grid.heading.justification.of.change')}
+      </div>
+      <div className={cx(classes.headerCell, classes.whereUsedCell)}>
+        <Tooltip title={translate('approvalRequest.grid.heading.where.used')}>
+          <FontAwesomeIcon icon={regular('list-tree')} size="lg" />
         </Tooltip>
-      </div> }
-      <div className={classes.cellOne}>
-        <span className={cx(isLineItemPartCanBeSubstituted ? classes.verticalDivider : '')}>
-          <Text translation="approvalRequest.grid.heading.item" />
-        </span>
-      </div>
-      <div className={classes.cellRev}>
-        <span className={classes.verticalDivider}>
-          <Text translation="approvalRequest.grid.heading.rev" />
-        </span>
-      </div>
-      <div className={classes.cellOther}>
-        <span className={classes.verticalDivider}>
-          <Text translation="approvalRequest.grid.heading.description.of.change" />
-        </span>
-      </div>
-      <div className={classes.cellOther}>
-        <span className={classes.verticalDivider}>
-          <Text translation="approvalRequest.grid.heading.justification.of.change" />
-        </span>
-      </div>
-      <div className={classes.cellWhereUsed}>
-        <span className={classes.verticalDivider}>
-          <Text translation="approvalRequest.grid.heading.where.used" />
-        </span>
       </div>
     </div>
   );
 };
 
-export default ApprovalRequestGridHeader;
+export default withThemeNext(ApprovalRequestGridHeader);
