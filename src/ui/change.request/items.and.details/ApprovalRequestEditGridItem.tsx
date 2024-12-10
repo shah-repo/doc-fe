@@ -42,8 +42,6 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const location = useLocation();
-  console.log({ entryDocRevId: entry?.docRevId, locationPathname: location.pathname, pathnameIncludesDocRevId: location.pathname.includes(entry?.docRevId), isDeletionDisabled });
-
   const showDeleteButton = Boolean(entry?.docRevId) && !location.pathname.includes(entry?.docRevId);
   const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
   const popperAnchorRef = useRef<HTMLDivElement>(null);
