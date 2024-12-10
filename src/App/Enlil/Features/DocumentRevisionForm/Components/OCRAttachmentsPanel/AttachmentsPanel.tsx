@@ -57,10 +57,10 @@ const AttachmentsPanel: React.FC = () => {
       const attachment = attachments[index];
       const data = {
         FilePath: attachment.s3link,
-        // TODO: Need to review the folowwing 3 variables
-        Company: 'akura',
-        FormID: '00184',
-        Revision: '3',
+        Company: store.getState().auth.user.employee.company?.companyAcronym || '',
+        // Sending now dummy values for FormID and Revision since we are currently supporting one Form/Revision per company
+        FormID: 'FormID',
+        Revision: 'Revision',
         AttachmentUSID: attachment.id,
         DocumentRevisionUSID: docRevId,
         IsLHRSummaryInsertEnabled: Config.isLHRSummaryInsertEnabled,
