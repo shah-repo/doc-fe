@@ -74,7 +74,7 @@ const SiteContact: React.FC<SiteContactProps> = ({
           : site,
       );
 
-      setSiteContact(updatedSiteContacts);
+      setSiteContact(updatedSiteContacts as siteContact[]);
       formState?.setFieldValue(name, updatedSites);
       workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
