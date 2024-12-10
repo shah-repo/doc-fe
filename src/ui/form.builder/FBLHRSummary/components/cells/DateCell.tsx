@@ -2,7 +2,6 @@ import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import {
-  getFormattedDateString,
   MomentFormats,
 } from '../../../../../common/utils/date';
 import {
@@ -13,27 +12,39 @@ import {
   Mode,
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { CustomTemplateProps } from '../../types';
 
 export const DateCell: React.FC<CustomTemplateProps> = ({
   field,
   dataItem,
+  onClick,
   PopoverProps,
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const fieldValue = dataItem[field];
-  const value = fieldValue && getFormattedDateString(
-    fieldValue,
-    MomentFormats.MonthDateYearTwoDigit,
-  );
+  const value = dataItem[field];
 
   if (!isEditMode) {
-    return <>{value}</>;
+    return (
+      <OverflowTooltip
+        title={value}
+        placement="top"
+        onClick={() => onClick?.({ dataItem })}
+        interactive
+        arrow
+      >
+        {value}
+      </OverflowTooltip>);
   }
 
   const { getFieldProps, setFieldValue } = useFormikContext();
+  const removeCustomPrefix = (fieldName: string): string =>
+    fieldName.replace(/^custom/, '').replace(/^[A-Z]/, (char) => char.toLowerCase());
+
   const handleChange = (date: MaterialUiPickersDate) => {
-    setFieldValue(field, date?.toISOString());
+    const dateValue = date?.toISOString();
+    setFieldValue(field, dateValue);
+    setFieldValue(removeCustomPrefix(field), dateValue);
   };
 
   return (

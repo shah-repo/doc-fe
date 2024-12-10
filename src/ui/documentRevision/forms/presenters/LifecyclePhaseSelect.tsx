@@ -29,7 +29,7 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const formik = useFormikContext();
-  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<Array<{value: string, text: string}>>([]);
+  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<Array<{ value: string, text: string }>>([]);
   const fetchDocRevOptions = useActionCreator(companyActions.fetchDocRevOptionsByDocTypeId);
 
   const fetchLCPDocTypesAsync = useAsync({
@@ -45,8 +45,8 @@ const LifecyclePhaseSelect: React.FunctionComponent<Props> = ({
     fetchLCPDocTypesAsync.start(
       fetchDocRevOptions,
       docTypeId,
-      lifecyclePhaseId ?? undefined,
       fetchLCPDocTypesAsync,
+      lifecyclePhaseId ?? undefined,
     );
   }, []);
 

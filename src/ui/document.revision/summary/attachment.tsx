@@ -1,18 +1,18 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import Text from '../../components/Text';
 import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
 import AttachmentField from '../../components/common/attachment.icon/container';
+import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
 
 export interface Props {
   isAttachmentEmpty: boolean
-  docRevId: string
-  containsRedline: boolean
+  docRevId?: string
+  containsRedline?: boolean
   label?: string
   docRevStatus: DocumentRevisionStatus
-  isDownloadAllVisible: boolean
+  isDownloadAllVisible?: boolean
 }
 
 export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label, isDownloadAllVisible }) => {
@@ -54,8 +54,8 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
         </Typography>
         <AttachmentDownloadAllButton
           isAttachmentEmpty = {!isDownloadAllVisible}
-          docRevId = {docRevId}
-          containsRedline = {containsRedline}
+          docRevId = {docRevId ?? ''}
+          containsRedline = {containsRedline ?? false}
           docRevStatus = {docRevStatus} />
       </Box>
       <AttachmentField name="attachments" disabled={true} docRevId={docRevId} />

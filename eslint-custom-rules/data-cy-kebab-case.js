@@ -39,10 +39,11 @@ module.exports = {
 
         context.report({
           node,
-          message: 'The value of data-cy/dataCy attribute must be in kebab-case.',
-          fix: function (fixer) {
-            return fixer.replaceText(node.value, `"${kebabValue}"`);
-          }
+          message: `data-cy/dataCy value should be in kebab-case: ${kebabValue}`,
+          // @todo Enable back once TA will be ready
+          // fix: function (fixer) {
+          //   return fixer.replaceText(node.value, `"${kebabValue}"`);
+          // }
         });
       }
     };

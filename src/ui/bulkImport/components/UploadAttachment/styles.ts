@@ -143,4 +143,10 @@ export default makeStyles(theme => ({
     height: 16,
     marginRight: theme.spacing(1.25),
   },
+  or: {
+    padding: theme.spacing(0, 1.05),
+    backgroundColor: Colors.background,
+    fontWeight: 600,
+    fontSize: 12,
+  },
 }));

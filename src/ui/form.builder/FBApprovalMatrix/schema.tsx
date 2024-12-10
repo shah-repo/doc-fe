@@ -5,10 +5,7 @@ import React from 'react';
 import { translate } from '../../../common/intl';
 import { GroupWithGroupOptions } from '../../../state/ducks/documentRevisions/documentType/types';
 import { CellTemplate, ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import {
-  FBApprovalMatrixFieldData,
-  FBApprovalMatrixItem,
-} from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
+import { FBApprovalMatrixFieldData, FBApprovalMatrixItem } from '../FBApprovalMatrixField/FBApprovalMatrixField.types';
 import BooleanFilter from './components/BooleanFilter';
 import CheckboxCellTemplate from './components/CheckboxCellTemplate';
 import DropdownCellTemplate from './components/DropdownCellTemplate';
@@ -99,7 +96,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: StatusFilter,
-      template: StatusCellTemplate,
+      template: StatusCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       locked: true,
       width: 140,
     },
@@ -110,7 +107,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: InputFilter,
-      template: InputCellTemplate,
+      template: InputCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       locked: true,
       required: true,
       width: 100,
@@ -133,7 +130,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: false,
       filterCell: InputFilter,
-      template: InputCellTemplate,
+      template: InputCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       locked: true,
       required: true,
       width: 140,
@@ -145,7 +142,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
-      template: CheckboxCellTemplate,
+      template: CheckboxCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       width: 100,
     },
     {
@@ -155,7 +152,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
       filterable: true,
       editable: true,
       filterCell: BooleanFilter,
-      template: CheckboxCellTemplate,
+      template: CheckboxCellTemplate as CellTemplate<FBApprovalMatrixItem>,
       width: 100,
     },
     {
@@ -182,7 +179,7 @@ export default function createSchema (options: Options): Array<ColumnDefinition<
           field: `approvalRoles.${headKey}.${role.index}`,
           filterable: false,
           editable: true,
-          template: CheckboxCellTemplate,
+          template: CheckboxCellTemplate as CellTemplate<FBApprovalMatrixItem, Record<string, unknown>>,
           width: 90,
           headerClassName: cx(cellARHeaderClassName, { [clearRightBorderClassName]: index !== arr.length - 1 }),
           className: cellARClassName,
