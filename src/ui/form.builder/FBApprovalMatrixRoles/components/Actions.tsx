@@ -11,7 +11,7 @@ import { MODE_FIELD, Mode } from '../constants';
 import useStyles from '../styles';
 
 interface EditableItem {
-  [MODE_FIELD]?: Mode
+  [MODE_FIELD]: Mode
 }
 
 export interface ActionsProps {
