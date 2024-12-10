@@ -66,7 +66,7 @@ export const withOCRFilePresenter = (
     };
 
     useEffect(() => {
-      loadFIle();
+      loadFIle?.();
     }, []);
 
     return Component({

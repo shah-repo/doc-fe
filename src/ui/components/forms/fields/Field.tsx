@@ -46,6 +46,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
   actionsRenderer,
   labelProps,
   inputLabel,
+  inputLabelProps = {},
 }) => {
   // storing BE response in status
   const error = get(errors, field.name);
@@ -62,7 +63,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
     if (!inputLabel) return null;
 
     return (
-      <InputLabel>
+      <InputLabel {...inputLabelProps}>
         <Text translation={inputLabel} />
       </InputLabel>
     );
@@ -76,7 +77,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
     }
     return (
       label && (
-        <LabelField htmlFor={field.name} style={{ position: 'inherit' }}>
+        <LabelField htmlFor={field.name} style={{ position: 'inherit' }} {...inputLabelProps}>
           <Typography
             variant={TypographySize[size]}
             className={classes.typography}

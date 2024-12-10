@@ -1,5 +1,5 @@
 import { flatten, unflatten } from 'flat';
-import { Dictionary, cloneDeep, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, get as lodashGet, set as lodashSet, map, omit, omitBy, slice, toNumber, values } from 'lodash';
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceSkipValidationModes, FBWorkspaceState } from '..';
 import FBSchemaState from '../FBSchema/FBSchema.state';
@@ -13,7 +13,7 @@ class FBFormState extends FBSchemaState {
   public values: Dictionary<any> = {};
   public validationValues: Dictionary<any> = {};
   private finalValidationRulse: Dictionary<string> = {};
-  public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
+  @observable public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
   public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
   public includeLocking = false;
   public expireLocks: Record<string, string> = {};

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { Audit } from '../../state/ducks/audit/types';
 import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { ApplicationState } from '../../state/reducers';
@@ -23,7 +23,7 @@ const AuditTraineeList: React.FC<Props> = ({
 }) => {
   const field = audit.field.split('.').at(-1) as string;
   const documentRevision = useSelector(
-    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, audit.documentRevisionId),
+    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(state, audit?.documentRevisionId ?? ''),
   );
 
   const auditFieldFactory: Record<string, () => ReactNode> = {

@@ -46,12 +46,7 @@ import {
 } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import {
-  CustomTreeListColumnProps,
-  EditableLHRSummaryItem,
-  EditableLHRSummaryItemEditEvent,
-  LHRSummaryItem,
-} from './types';
+import { CustomTreeListColumnProps, EditableLHRSummaryItem, EditableLHRSummaryItemEditEvent, LHRSummaryItem } from './types';
 import { getExcelColumns, getExcelData, processData } from './utils';
 
 interface props {
@@ -204,7 +199,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
 
     setEditedLHRSummaryItem({
       ...dataItem,
-      step,
+      step: step ?? '',
       mpiId,
     });
   };
@@ -384,26 +379,28 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
         label={translate('lhr.summary.table.title')}
         data-cy="lhr-summary-title"
       >
-
-        {(!isShowOnly && !isDisabled) && (
-          <Button
-            kind="ghost"
-            size="small"
-            style={{ float: 'right' }}
-            startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
-            onClick={onAddItem}
-            data-cy="lhr-summary-header-add-btn"
+        {(!isShowOnly && !isDisabled) && (<>
+          <Tooltip
+            title={translate('lhr.summary.add.item')}
+            placement="top"
+            arrow
           >
-            {translate('lhr.summary.add.item')}
-          </Button>
-        )}
-        {(!isShowOnly && !isDisabled) && (
+            <Button
+              kind="ghost"
+              size="small"
+              style={{ float: 'right' }}
+              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+              onClick={onAddItem}
+              data-cy="lhr-summary-header-add-btn"
+            >
+              {translate('lhr.summary.add.item')}
+            </Button>
+          </Tooltip>
           <Tooltip
             title={translate('common.reload')}
             placement="top"
             arrow
           ><IconButton
-              kind="simple"
               size="small"
               data-cy="reload-btn"
               className={classes.reloadButton}
@@ -412,6 +409,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
               <FontAwesomeIcon icon={solid('arrow-rotate-left')} />
             </IconButton>
           </Tooltip>
+        </>
         )}
       </FBSection>
       <ColumnMenuContext.Provider
@@ -460,9 +458,9 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
             }
             loading={
               LHRSummaryAsync.isLoading
-            || addLHRSummaryAsync.isLoading
-            || deleteLHRSummaryAsync.isLoading
-            || updateLHRSummaryAsync.isLoading
+              || addLHRSummaryAsync.isLoading
+              || deleteLHRSummaryAsync.isLoading
+              || updateLHRSummaryAsync.isLoading
             }
             resizable={true}
           >
