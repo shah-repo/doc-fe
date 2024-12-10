@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
+import { process, State } from '@progress/kendo-data-query';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
-import { GridToolbar } from '@progress/kendo-react-grid';
+import { GridDataStateChangeEvent, GridFilterChangeEvent, GridPageChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { find, map, pick } from 'lodash';
+import { cloneDeep, find, map, pick } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
@@ -21,7 +23,7 @@ import {
   ColumnDefinition,
   DataGridProps,
 } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
 import { KendoColumn } from '../../components/common/kendo/types';
 import { Button } from '../../components/forms/fields-next';
@@ -37,6 +39,7 @@ import {
 import {
   COLUMN_LOCK_FIELDS,
   DATA_ITEM_KEY,
+  DEFAULT_FILTER,
   EXCEL_FILE_NAME,
   FIELDS_TO_PICK,
   SELECTED_FIELD,
@@ -67,12 +70,30 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
+  const [origionalData, setOrigionalData] = React.useState<EditableLHRSummaryItem[]>([]);
   const fetchLHRSummary = useActionCreator(lhrSummaryActions.fetchLHRSummary);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
   const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
   const isVoided = Boolean(_documentRevisionFormState?.documentRevision?.displayStatus?.includes(DocumentRevisionStatusDisplay.Voided));
+  const [skip, setSkip] = React.useState(0);
+  const pageSize = 25;
+
+  const onPageChange = ({ page: { skip } }: GridPageChangeEvent) => {
+    setSkip(skip);
+  };
+
+  const [dataState, setDataState] = useState<State>({
+    filter: {
+      logic: 'and',
+      filters: [],
+    },
+    skip: 0,
+    take: pageSize,
+    group: [],
+    sort: [],
+  });
 
   if (isVoided) {
     return null;
@@ -80,7 +101,9 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
-      data && setData(processData(data as EditableLHRSummaryItem[], availableUsers));
+      const updatedData = processData(data as EditableLHRSummaryItem[], availableUsers);
+      data && setData(updatedData);
+      setOrigionalData(updatedData);
     },
     onError: toastError,
   });
@@ -226,10 +249,11 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
     setEditedLHRSummaryItem(newLHRSummaryItem);
   };
 
-  const rowRender: DataGridProps<LHRSummaryItem>['rowRender'] = useCallback((
+  const rowRender: DataGridProps<LHRSummaryItem>['rowRender'] = (
     row,
     { dataItem },
   ) => {
+    console.log('rowRender');
     const item = dataItem as LHRSummaryItem;
     const isUpdating = [Mode.edit, Mode.add].includes(item[MODE_FIELD]);
 
@@ -238,11 +262,12 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
     }
 
     const editedRow = React.cloneElement(row, {
+      ...row.props,
       className: cx(row.props.className, classes.updatingRow),
     });
 
     return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
-  }, [formik]);
+  };
 
   const isAlternatePartAdded = editedLHRSummaryItem?.[MODE_FIELD] === Mode.add;
 
@@ -315,6 +340,44 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
     }
   };
 
+  const onDataStateChange = ({ dataState }: GridDataStateChangeEvent) => {
+    console.log('onDataStateChange ');
+    setDataState(dataState);
+    const processedData = process(origionalData, dataState);
+    setData(processedData.data);
+    return dataState;
+  };
+
+  const onFilerChange = ({ filter }: GridFilterChangeEvent) => {
+    console.log('onFilerChange ', filter);
+    setSkip(0);
+    setDataState({
+      ...dataState,
+      ...{
+        filter: filter ?? DEFAULT_FILTER,
+      },
+    });
+    const processedData = process(origionalData, {
+      ...dataState,
+      ...{ filter: filter ?? DEFAULT_FILTER },
+    });
+    setData(filter ? processedData.data : origionalData);
+    console.log('onFilerChange parent', data);
+  };
+
+  const slicedData = useMemo(
+    () => LHRSummaryItemList.slice(skip, skip + pageSize),
+    [LHRSummaryItemList, skip, pageSize],
+  );
+
+  console.log(
+    'parent',
+    skip,
+    origionalData?.length,
+    LHRSummaryItemList?.length,
+    cloneDeep(LHRSummaryItemList).slice(skip, skip + pageSize),
+  );
+
   return (
     <>
       <FBSection
@@ -359,13 +422,23 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
       >
         <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
           <KendoDataGrid<EditableLHRSummaryItem>
+            {...dataState}
             style={{ overflow: 'auto', maxHeight: size?.height ? `${size.height - 160}px` : '100px' }}
-            data={LHRSummaryItemList}
+            data={slicedData}
             schema={getColumns}
             fullWidth
             className={classes.rootLHRSummaryTable}
-            hasBoxScrollbars
+            rowHeight={50}
+            take={pageSize}
+            pageSize={pageSize}
+            total={LHRSummaryItemList?.length}
+            skip={skip}
+            scrollable="virtual"
             onRowClick={onEditLHRSummaryItem}
+            onDataStateChange={onDataStateChange}
+            onPageChange={onPageChange}
+            onFilterChange={onFilerChange}
+            hasBoxScrollbars
             columnMenu={(props) => (
               <CustomColumnMenu
                 {...props}
