@@ -224,7 +224,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
           if (parentField.startsWith('siteContact')) {
             let fieldFullName = ['docId', 'value'].includes(field) ? parentField : field;
-            console.log('fieldFullName', fieldFullName);
             fieldFullName = getSiteInformationsFieldName(fieldFullName, 'contact');
             const fieldName = translate(`form.builder.contact.grid.heading.${fieldFullName}`);
             fbLabel = translate('form.builder.contact.grid.heading.audit.item', {
