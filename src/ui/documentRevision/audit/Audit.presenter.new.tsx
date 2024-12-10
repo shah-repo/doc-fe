@@ -258,7 +258,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           } else {
             let fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
             fieldFullName = getSiteInformationsFieldName(fieldFullName, 'site');
-            const fieldName = translate(`form.builder.contact.grid.heading.${fieldFullName}`);
+            const fieldName = translate(`form.builder.site.inforation.grid.heading.${fieldFullName}`);
             fbLabel = translate('form.builder.site.inforation.grid.heading.audit.item', {
               label: fbLabel as string,
               field: fieldName,
