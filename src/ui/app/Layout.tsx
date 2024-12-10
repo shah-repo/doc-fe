@@ -3,11 +3,15 @@ import { Widget as AiWidget } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
-import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { connect, useSelector } from 'react-redux';
+import { matchPath, Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
+import { authSelectors } from '../../state/ducks/auth';
+import { Permission } from '../../state/ducks/auth/types';
+import { companySelectors } from '../../state/ducks/company';
 import { ApplicationState } from '../../state/reducers';
+import { store } from '../../state/store';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import PremiumFeaturesPage from '../administration/premium.settings';
@@ -61,7 +65,6 @@ import useStyles from './Layout.styles';
 import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
-import { Permission } from '../../state/ducks/auth/types';
 
 const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePermissions: Permission[] }> = ({ isAIEnabled, currentEmployeePermissions }) => {
   const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
@@ -72,6 +75,17 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
     setOpen(!isOpened);
   };
   const isAIPermissionEnabled = currentEmployeePermissions.includes(Permission.AI_SUBSCRIPTION);
+  const isAIWidgetShown = isAIEnabled && isAIPermissionEnabled;
+  const userName = useSelector(authSelectors.currentUserName);
+  const location = useLocation();
+  const documentMatch = matchPath<{ documentId?: string }>(location.pathname, {
+    path: DOCUMENT_REVISION_ROOT_URL,
+    exact: false,
+    strict: false,
+  });
+  const companyId = useSelector(companySelectors.companyIdSelector);
+  const documentId = documentMatch?.params?.documentId;
+  const accessToken = `${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
 
   return (
     <>
@@ -84,7 +98,16 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
       <WatermarkFooterContainer />
       <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
-        {isAIEnabled && isAIPermissionEnabled && <AiWidget />}
+        {isAIWidgetShown && (
+          <AiWidget
+            appName="d2m"
+            userName={userName}
+            companyId={companyId}
+            documentId={documentId}
+            token={accessToken}
+            apiPath="https://api.ai.dev2.enlil.io/t4/v1"
+          />
+        )}
         <Switch>
           <Route
             path={DOCUMENT_REVISION_LIST_URL}

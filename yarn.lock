@@ -3549,11 +3549,12 @@ aggregate-error@^3.0.0:
 
 "ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git":
   version "0.0.1"
-  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#636589b8ffce060e88d20da9ce0eb5f7d23d0571"
+  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#e191d81b37e8e45248f67a4ed2e4bcef9147639f"
   dependencies:
     "@chatscope/chat-ui-kit-react" "^2.0.3"
     "@chatscope/chat-ui-kit-styles" "^1.4.0"
     "@material-ui/core" "4.12.4"
+    uuid "^7.0.3"
 
 airbnb-prop-types@^2.15.0:
   version "2.15.0"
