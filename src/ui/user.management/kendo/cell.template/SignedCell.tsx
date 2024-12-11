@@ -64,7 +64,7 @@ export const SignedCell = ({
     }
     asyncSignUpEmail.start(
       getResendSignupEmailAction,
-      dataItem.user?.email,
+      { name: dataItem.user?.name, email: dataItem.user?.email },
       asyncSignUpEmail,
     );
   };

@@ -207,13 +207,13 @@ const loginWithCode = (
   });
 
 const resendSignupEmail = (
-  email: string,
+  userDto: { name: string, email: string },
   handlers: Handlers,
 ): ApiAction<Partial<AuthResponse>> =>
   apiActionWithCallbacks({
     url: RESEND_SIGNUP_EMAIL_URL,
     method: 'post',
-    data: { email },
+    data: userDto,
     handlers,
   });
 
