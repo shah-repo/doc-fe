@@ -89,6 +89,7 @@ export type FBInputType =
   | 'woApprovals'
   | 'workOrderType'
   | 'shippingItems'
+  | 'shippingInformation'
   ;
 
 export type FBInputProps =
