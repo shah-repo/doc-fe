@@ -96,6 +96,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
         disableBackdropClick={true}
         open={transitionDialog.isOpen}
         onSubmit={preventPropagation}
+        PaperProps={{ className: classes.dialogRoot }}
       >
         <Box component="div" className={classes.paper}>
           <Grid container justify="space-between">
