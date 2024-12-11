@@ -83,7 +83,7 @@ class FBSchemaState {
     'lhrstep',
   ];
 
-  private static readonly control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
+  static readonly control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBSection,
     subsection: FBSubsection,
     stepsection: FBSection,
