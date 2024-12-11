@@ -7,6 +7,7 @@ import {
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../../state/ducks/auth';
+import { bkStatusTextMap } from '../../../../state/ducks/bulkImport/constants';
 import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
 import ProgressItem from './ProgressItem';
@@ -26,7 +27,7 @@ const ProgressSection: React.FC = () => {
               <FontAwesomeIcon
                 className={classes.expandIcon}
                 icon={solid('chevron-down')}
-              />{key}
+              />{bkStatusTextMap[key] || key}
             </Typography>
             {bulkImportsGroupByProcess[key]?.map((item: BulkImportCustom, idx: number) => {
               return (

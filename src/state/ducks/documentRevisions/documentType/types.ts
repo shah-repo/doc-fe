@@ -637,4 +637,6 @@ export enum tabIdByInternalType {
   PAPER_LHR = 'details',
   LOT = 'details',
   WORK_ORDER = 'details',
+  CUSTOMERS = 'details',
+  SHIPPING = 'details',
 }

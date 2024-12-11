@@ -1,22 +1,27 @@
 import { Box, LinearProgress, List, Typography } from '@material-ui/core';
 import { find, has, isEmpty, last, orderBy } from 'lodash';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
-import { Audit, AuditGroupType } from '../../../state/ducks/audit/types';
+import { Audit, AuditGroupType, LifecyclePahseOptionPayload } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
+import { companyActions } from '../../../state/ducks/company';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
+import { LCPDocRevOptions } from '../../administration/general.settings/panels/LCP/components/Grid/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
+import { toastError } from '../../components/notifications';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
@@ -48,9 +53,29 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const intl = useIntl();
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
-  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
 
   const revIdRelatedTypeObj = revIdRelatedTypeMapper(documentRevisions);
+  const docTypeId = documentRevisions[0].document?.documentType?.id;
+
+  // fetch lifecycle phase options
+  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<LifecyclePahseOptionPayload[]>([]);
+  const fetchDocRevOptions = useActionCreator(companyActions.fetchDocRevOptionsByDocTypeId);
+
+  const fetchLCPDocTypesAsync = useAsync({
+    onSuccess: (data: LCPDocRevOptions[] = []) => {
+      setLifecyclePhaseOptions(data.map((docType) => ({ id: docType.id, text: docType.displayLabel })));
+    },
+    onError: toastError,
+  });
+
+  useEffect(() => {
+    fetchLCPDocTypesAsync.start(
+      fetchDocRevOptions,
+      docTypeId,
+      fetchLCPDocTypesAsync,
+    );
+  }, []);
 
   // Added to exclude few PO line items unwanted audit recrods
   const excludeFewPOAuditRecords = (change: Audit) => (change.field.includes(PO_ITEMS_COMPONENT_NAME)
@@ -208,6 +233,74 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
           const fieldName = translate(`form.builder.part.vendors.${fieldFullName}`);
           fbLabel = translate('form.builder.part.vendors.audit.item', {
+            label: fbLabel as string,
+            field: fieldName,
+          });
+        }
+      }
+      // SITE INFOMRATION
+      if (fbType === 'siteInformations') {
+        const changeField = change.field.split('.');
+        const field = changeField.at(-1) as string;
+        const parentField = changeField.at(-2) as string;
+        if (['id', 'primary'].includes(field)) {
+          return;
+        }
+        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+          if (parentField.startsWith('siteContact')) {
+            let fieldFullName = ['docId', 'value'].includes(field) ? parentField : field;
+            fieldFullName = getSiteInformationsFieldName(fieldFullName, 'contact');
+            const fieldName = translate(`form.builder.contact.grid.heading.${fieldFullName}`);
+            fbLabel = translate('form.builder.contact.grid.heading.audit.item', {
+              label: `${fbLabel as string} Contact`,
+              field: fieldName,
+            });
+          } else {
+            let fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
+            fieldFullName = getSiteInformationsFieldName(fieldFullName, 'site');
+            const fieldName = translate(`form.builder.site.inforation.grid.heading.${fieldFullName}`);
+            fbLabel = translate('form.builder.site.inforation.grid.heading.audit.item', {
+              label: fbLabel as string,
+              field: fieldName,
+            });
+          }
+        }
+      }
+      // SITE ADDRESS
+      if (fbType === 'headquarterAddress') {
+        if (change.field.endsWith('_city')) {
+          fbLabel = `${fbLabel as string} ${translate('form.builder.site.inforation.grid.heading.city')}`;
+        } else if (change.field.endsWith('_country')) {
+          fbLabel = `${fbLabel as string} ${translate('form.builder.site.inforation.grid.heading.country')}`;
+        } else if (change.field.endsWith('_zip_code')) {
+          fbLabel = `${fbLabel as string} ${translate('form.builder.site.inforation.grid.heading.zip.code')}`;
+        }
+      }
+      // SHIPPING ADDRESS
+      if (fbType === 'shippingAddress') {
+        const changeField = change.field.split('.');
+        const field = changeField.at(-1) as string;
+        if (['id'].includes(field)) {
+          return;
+        }
+        if ((change.field.endsWith('_attention.name')) || (change.type === 'OBJECT_DELETED' && change.field.endsWith('_attention'))) {
+          fbLabel = `${fbLabel as string} ${translate('Attention')}`;
+        } else if ((change.field.endsWith('_contact.name')) || (change.type === 'OBJECT_DELETED' && change.field.endsWith('_contact'))) {
+          fbLabel = `${fbLabel as string} ${translate('Contact')}`;
+        }
+      }
+      // SHIPPING ITEMS
+      if (fbType === 'shippingItems') {
+        const changeField = change.field.split('.');
+        const field = changeField.at(-1) as string;
+        const parentField = changeField.at(-2) as string;
+        if (['id'].includes(field)) {
+          return;
+        }
+        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
+          const fieldName = translate(`form.builder.shipping.items.${fieldFullName}`);
+          fbLabel = translate('form.builder.shipping.items.audit.item', {
             label: fbLabel as string,
             field: fieldName,
           });
@@ -444,6 +537,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           fbLabel = 'Note';
         }
 
+        if (change.field.includes('lifecyclePhaseId') && change.type === 'OBJECT_NEW') {
+          return;
+        }
+
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
         const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 
@@ -470,7 +567,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                     values={{
                       nextStatus: change.nextValue,
                       relatedType: getDynamicTextValue(
-                        revIdRelatedTypeObj[change.documentRevisionId]?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
+                        revIdRelatedTypeObj[change.documentRevisionId ?? '']?.relatedType, RELATED_TYPE_VALUES_ENUM.SUB_PART_CAPS, RELATED_TYPE_VALUES_ENUM.SUB_DOCUMENT_CAPS),
                       rowDetails: getLhrSummaryRowIdentifier(change),
                     }}
                   />
@@ -501,6 +598,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   audit={change}
                   dataCy={`change-value-${groupKey}-${key}`}
                   revIdRelatedTypeObj={revIdRelatedTypeObj}
+                  lifecyclePhaseOptions={lifecyclePhaseOptions}
                 />
               </div>
             )}
@@ -543,7 +641,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const isRemovingApproverAction = (
       auditGroup[0].field === 'approvals.status' && auditGroup[0].nextValue === ApprovalStatus.Abandoned
     );
-    const isWorkOrder = revIdRelatedTypeObj[auditGroup[0].documentRevisionId]?.isWorkOrder;
+    const isWorkOrder = revIdRelatedTypeObj[auditGroup[0].documentRevisionId ?? '']?.isWorkOrder;
 
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
@@ -567,6 +665,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               audit={change}
               dataCy={`change-value-${change.groupKey}-${change.index}`}
               revIdRelatedTypeObj={revIdRelatedTypeObj}
+              lifecyclePhaseOptions={lifecyclePhaseOptions}
             />
           </div>
         ))}
@@ -599,7 +698,7 @@ const labelToShow = (change: Audit,
   groupKey: number | undefined,
   key: number | undefined,
   revIdRelatedTypeObj: { [key: string]: IRevIdMapper }) => {
-  const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId] ?? {};
+  const { relatedType, isWorkOrder } = revIdRelatedTypeObj[change.documentRevisionId ?? ''] ?? {};
   return (
     <>
       {change.field === 'relatedPartsStatus' && <Text
@@ -664,6 +763,25 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
   } catch (error) {
     return '';
   }
+};
+
+const getSiteInformationsFieldName = (field: string, type: string): string => {
+  if (type === 'site') {
+    const fields = {
+      siteName: 'site.name',
+      siteAddress: 'site.address',
+      zipCode: 'zip.code',
+      approvedToReceive: 'approved.to.receive',
+      sameAsHQ: 'same.as.hq',
+    };
+    return fields[field] || field;
+  } else if (type === 'contact') {
+    const fields = {
+      phoneNumber: 'phone.number',
+    };
+    return fields[field] || field;
+  }
+  return field;
 };
 
 export default AuditPresenter;

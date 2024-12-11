@@ -4,9 +4,10 @@ import { CircularProgress, Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import { Styles } from '@material-ui/core/styles/withStyles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { WithStyles, withStyles } from '@material-ui/core/styles';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -168,4 +169,4 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   );
 };
 
-export default withRouter(withStyles(styles)(Navigation));
+export default withRouter(withStyles(styles as Styles<Theme, {}, string>)(Navigation));
