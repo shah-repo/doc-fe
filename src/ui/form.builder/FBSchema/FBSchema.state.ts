@@ -1,16 +1,7 @@
 import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union, unionBy } from 'lodash';
 import { action, get, observable, set } from 'mobx';
 import React from 'react';
-import {
-  FBActionField,
-  FBApproval,
-  FBAutocompleteAsync,
-  FBCheckboxGroup,
-  FBEditorState,
-  FBInputProps,
-  FBInputType,
-  FBSchemaProps,
-} from '..';
+import { FBActionField, FBApproval, FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType, FBSchemaProps } from '..';
 import FBTasksListTable from '../../change.request/FBMaterialDisposition/components/FBTasksListTable';
 import FBApprovalMatrixField from '../FBApprovalMatrixField/FBApprovalMatrixField';
 import FBApprovalMatrixFieldRoles from '../FBApprovalMatrixField/FBApprovalMatrixFieldRoles';

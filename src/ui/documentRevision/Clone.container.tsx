@@ -19,7 +19,7 @@ export enum DocumentCloneTypeOptions {
 interface OwnProps {
   documentRevision: DocumentRevision
   type: DocumentCloneType
-  isNewVersion: boolean
+  isNewVersion?: boolean
   isSliderView?: boolean
 }
 

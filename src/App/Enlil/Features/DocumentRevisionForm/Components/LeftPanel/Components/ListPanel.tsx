@@ -1,13 +1,4 @@
-import {
-  Box,
-  Collapse,
-  IconButton,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from '@material-ui/core';
+import { Box, Collapse, IconButton, LinearProgress, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { ChevronRight, ExpandMore } from '@material-ui/icons';
 import { each } from 'lodash';
 import { Observer } from 'mobx-react';
@@ -16,13 +7,8 @@ import { useIntl } from 'react-intl';
 import { ReactComponent as FavoriteIcon } from '../../../../../../../assets/images/favorite.svg';
 import { ReactComponent as StarIcon } from '../../../../../../../assets/images/starIcon.svg';
 import Text from '../../../../../../../ui/components/Text';
-import {
-  FB, FBEditorState, FBInputType, FBMapWrapper,
-} from '../../../../../../../ui/form.builder';
-import {
-  FBControlPickerDataProps,
-  FBControlPickerProps,
-} from '../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types';
+import { FB, FBEditorState, FBInputType, FBMapWrapper } from '../../../../../../../ui/form.builder';
+import { FBControlPickerDataProps, FBControlPickerProps } from '../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types';
 import { withFBControlPicker } from '../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap';
 import styles from './ListPanel.styles';
 import SearchBox from './SearchBox';
@@ -121,9 +107,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                           )}
                         </IconButton>
                         <ListItemText key={index} data-cy={picker.label}
-                          onClick={
-                            openEditor
-                            && openEditor({ type: picker.key, index, isAddAction: true })
+                          onClick={openEditor?.({ type: picker.key, index, isAddAction: true })
                           }
                         >
                           <Typography className={classes.listSubItem}>

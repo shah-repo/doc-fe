@@ -109,6 +109,11 @@ RouteComponentProps
         taskType: type,
         currentDate: selectedDate,
       }));
+    } else if ([SQS_TYPES.SEND_EMAILS_FOR_TRAINING_RECORDS_DUE_DATES].includes(SQS_TYPES[type])) {
+      setPayload(JSON.stringify({
+        taskType: type,
+        currentDate: selectedDate,
+      }));
     } else if ([SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS].includes(SQS_TYPES[type])) {
       setPayload(JSON.stringify({
         taskType: type,
