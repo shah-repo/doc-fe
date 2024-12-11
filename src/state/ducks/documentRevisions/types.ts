@@ -6,7 +6,7 @@ import { Attachment } from '../attachments/types';
 import { AuditActionPayload } from '../audit/types';
 import { Group } from '../auth/types';
 import { ChangeRequest } from '../changeRequest/types';
-import { Approval, Id, Nullable, Owner, User } from '../common/types';
+import { Approval, Id, Nullable, Owner, ReleasedBy, User } from '../common/types';
 import { Employee } from '../company/types';
 import { RELATED_PARTS_STATUS } from '../relatedParts/types';
 import { TrainingRecord } from '../training/types';
@@ -271,6 +271,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   deprecatedAt?: string
   obsoletedAt?: string
   releasedAt?: string
+  releasedBy?: ReleasedBy
   voidedAt?: string
   trainingRecords: TrainingRecord[]
   effectiveDate?: Date
@@ -302,12 +303,12 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   relatedParentPartDetails?: RelatedParentPartDetails
   changeControlOptions?: ChangeControlOptions
   isBeingEditedAfterRelease?: boolean
-  lotStatus: LotStatus
+  lotStatus?: LotStatus
   hasAttachments?: boolean
   hasPrimaryAttachment?: boolean
   needSync?: boolean
   needSyncedSuccessNotify?: boolean
-  eqStatus: EquipmentStatus
+  eqStatus?: EquipmentStatus
   lifecyclePhaseId?: string
   lifecyclePhase?: lifecyclePhase
   isExpired?: boolean

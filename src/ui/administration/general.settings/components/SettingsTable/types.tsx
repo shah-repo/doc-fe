@@ -1,13 +1,13 @@
-import { GridProps } from '@progress/kendo-react-grid';
-import { ColumnDefinition, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
+import { ColumnDefinition, DataGridProps, EditableItem } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
 
-export interface SettingsTableProps<T extends EditableItem = EditableItem> {
-  data: T[]
-  schema: Array<ColumnDefinition<T>>
+interface CustomRowProperties extends Record<string, unknown> {
+  className?: string
+}
+
+export interface SettingsTableProps<T extends EditableItem = EditableItem> extends DataGridProps<T> {
   addButtonLabel?: string
   onAdd?: () => void
-  onRowClick?: GridProps['onRowClick']
-  getRowProperties?: (item: T) => Record<string, unknown>
+  getRowProperties?: (item: T) => CustomRowProperties | undefined
   isEditing?: boolean
   isActive?: boolean
   filterable?: boolean
@@ -15,6 +15,7 @@ export interface SettingsTableProps<T extends EditableItem = EditableItem> {
 
 interface SettingsSchemaOptions<T extends EditableItem = EditableItem> {
   isActive: boolean
+  isLoading?: boolean
   onEdit?: (item: T) => void
   onActiveStateChange?: (item: T, state: boolean) => void
   onDelete?: (item: T) => void

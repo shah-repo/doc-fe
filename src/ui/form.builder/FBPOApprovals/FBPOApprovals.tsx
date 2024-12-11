@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { orderBy } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from '..';
+import { FBApprovalsStatusEndpoint, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from '..';
 import { ReactComponent as EmailSuccessIcon } from '../../../assets/images/email_success.svg';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { GroupTag } from '../../../state/ducks/auth/types';
@@ -178,7 +178,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                           label="common.reject"
                                           size="small"
                                           className={cx(classes.poButton, classes.poRejectButton)}
-                                          onClick={() => approvalTransition('reject', approval.id)}
+                                          onClick={() => approvalTransition(FBApprovalsStatusEndpoint.REJECT, approval.id)}
                                         />
                                         <FBButton
                                           label="form.builder.request.approve"

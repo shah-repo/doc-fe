@@ -53,7 +53,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     onChange = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       const [valueName, checked] = at(ev.target, ['value', 'checked']);
       // *NOTE: Mobile support until mobile switches to editor props
-      formState?.setFieldValue(valueName, checked);
+      formState?.setFieldValue(valueName as string, checked);
     };
 
     // We need to refactor this. All disabled props will have to be handled from editor properties

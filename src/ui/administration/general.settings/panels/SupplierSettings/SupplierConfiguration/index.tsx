@@ -114,13 +114,13 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
         );
 
       discardSupplierConfiguration();
-      updateSupplierConfiguration(updatedSupplierConfig ?? []);
+      updateSupplierConfiguration((updatedSupplierConfig ?? []) as SupplierConfig[]);
     },
   });
   const { setValues, submitForm } = formik;
 
-  const changeLocationActiveState = (supplierConfiguration: EditableSupplierConfig, state: boolean) => {
-    const updatedSupplierConfig = supplierConfiguration?.map(it => it.id === supplierConfiguration.id ? { ...it, active: state } : it);
+  const changeLocationActiveState = (configuration: EditableSupplierConfig, state: boolean) => {
+    const updatedSupplierConfig = supplierConfiguration?.map(it => it.id === configuration.id ? { ...it, active: state } : it);
     updateSupplierConfiguration(updatedSupplierConfig ?? []);
   };
 
@@ -136,6 +136,8 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       supplierTypeId: '',
       services: [],
       [MODE_FIELD]: Mode.add,
+      services_edit: '',
+      capabilities_edit: '',
     });
   };
 
@@ -186,7 +188,7 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       <FormikProvider value={formik}>
         <SettingsTable
           isActive={isActive}
-          data={locationsList}
+          data={locationsList as unknown as EditableSupplierConfig[]}
           isEditing={editedSupplierConfiguration !== undefined}
           schema={schema}
           addButtonLabel={translate('common.add.new')}

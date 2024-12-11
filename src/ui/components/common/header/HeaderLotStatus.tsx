@@ -13,13 +13,13 @@ import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import { withThemeNext } from '../../../layout/theme-next';
 import { Translation } from '../../../translations/types';
-import HeaderStatusButton from './HeaderStatusButton';
+import HeaderStatusButton, { StatusValue } from './HeaderStatusButton';
 
 interface Props {
   documentRevision: DocumentRevision
 }
 
-export const getLotStatusLabel = (status: LotStatus): string =>
+export const getLotStatusLabel = (status?: LotStatus): string =>
   translate(`form.builder.header.lot.status.label.${kebabCase(status)}`);
 
 const disabledStatuses = [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided];
@@ -42,12 +42,12 @@ const HeaderLotStatus: React.FC<Props> = ({ documentRevision }) => {
   const canLotStatusBeChanged = !disabledStatuses.includes(documentRevision.status);
   const isLotStatusEditable = canChangeLotStatus && canLotStatusBeChanged;
 
-  const statusLabel = getLotStatusLabel(documentRevision.lotStatus);
+  const statusLabel = getLotStatusLabel(documentRevision?.lotStatus);
 
   const updateLotStatus = useRef<() => void>();
-  const nextStatus = useRef<LotStatus>();
+  const nextStatus = useRef<StatusValue>();
 
-  const confirmUpdate = (lotStatus: LotStatus) => {
+  const confirmUpdate = (lotStatus: StatusValue) => {
     nextStatus.current = lotStatus;
     updateLotStatus.current = () => {
       async.start(updateLotStatusAction, documentRevision.id, { lotStatus }, async);

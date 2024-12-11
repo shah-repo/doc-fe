@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, IconButton } from '@material-ui/core';
 import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
-import { GridCellProps, GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridHeaderCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridHeaderCellProps, GridNoRecords, GridToolbar, GridColumn as KendoColumn } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, isEmpty, isNull, map, set } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ComponentType, useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
@@ -340,8 +340,8 @@ export function KendoGrid<T extends any> ({
             width={setColumnWidth(column.width as number, gridWidth)}
             minResizableWidth={200}
             headerCell={
-              headerCellMapping[column.headerCell]
-                ? headerCellMapping[column.headerCell]
+              headerCellMapping[column.headerCell as string]
+                ? headerCellMapping[column.headerCell as string]
                 : column.title ? (props) => <ColumnHeader {...props} /> : undefined
             }
 
@@ -536,6 +536,8 @@ export function KendoGrid<T extends any> ({
           <GridColumn
             {...printColumnProps }
             filterable={false}
+            headerCell={printColumnProps.headerCell as ComponentType<GridHeaderCellProps> | undefined}
+            filterCell={printColumnProps.filterCell as ComponentType<GridFilterCellProps>}
             cell={(props) => <td className={props?.className} style={props?.style} >
               <IconButton data-cy="print-label-icon" onClick={() => onPrintIconClick(props)}>
                 <FontAwesomeIcon icon={regular('print')} />

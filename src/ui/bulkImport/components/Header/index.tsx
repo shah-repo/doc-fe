@@ -40,9 +40,9 @@ const BulkImportProgressPage: React.FC<BulkImportProgressProps> = ({
       </Box>
       <Box className={classes.actions}>
         <Box className={classes.buttons}>
-          {/* <Button kind="outlined" onClick={onHistory} data-cy="settings-history" disabled><Text translation="common.history" /></Button> */}
+          <Button kind="outlined" onClick={onHistory} disabled data-cy="history-bk"><Text translation="common.history" /></Button>
           {/* <Button onClick={onNewOCR} data-cy="settings-save"><Text translation="bulkImport.progress.header.newOCR" /></Button> */}
-          <Button onClick={onNewImport} data-cy="settings-save">
+          <Button onClick={onNewImport} data-cy="new-bk">
             <Text translation="bulkImport.progress.header.newImport" />
           </Button>
         </Box>

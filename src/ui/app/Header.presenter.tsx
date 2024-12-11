@@ -2,7 +2,8 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormControlLabel, Grid, Switch, Toolbar, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import { WithStyles, withStyles } from '@material-ui/core/styles';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import { Styles } from '@material-ui/core/styles/withStyles';
 import cx from 'classnames';
 import React from 'react';
 import { SM } from '../../App';
@@ -15,9 +16,9 @@ import { WhiteLabelingEnv } from '../../state/ducks/company/types';
 import { store } from '../../state/store';
 import Text from '../components/Text';
 import { ThemeEnv } from '../layout/theme/utils/types';
+import AutosaveToggle from './autosave/autosave';
 import styles from './Header.styles';
 import { UserMenuContext } from './NavigationProfile.container';
-import AutosaveToggle from './autosave/autosave';
 export interface HeaderPresenterProps {
   name: string
   fullHeight?: boolean
@@ -108,4 +109,5 @@ const Header: React.FunctionComponent<HeaderPresenterProps & WithStyles<typeof s
     </AppBar>
   );
 };
-export default withStyles(styles)(Header);
+
+export default withStyles(styles as Styles<Theme, {}, string>)(Header);

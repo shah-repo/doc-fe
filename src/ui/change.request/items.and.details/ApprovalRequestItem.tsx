@@ -54,6 +54,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
       { key: 'autoUpdate', value: entry.autoUpdate },
       { key: 'proposedDocumentRevision', value: { id: entry.docRevId } },
       { key: 'revisionFormTo', value: entry.revisionFormTo ?? revision },
+      { key: 'attachments', value: entry.attachments },
       { key: 'descriptionOfChange', value: entry.descriptionOfChange },
       { key: 'justificationOfChange', value: entry.justificationOfChange },
     ];
@@ -66,28 +67,25 @@ const ApprovalRequestItem: React.FunctionComponent<{
 
   return useObserver(() => (
     <>
-      {
-        isEditMode
-          && <ApprovalRequestEditGridItem {...{ formState }}
-            disabledOptions={disabledOptions()}
-            addRevisionToChangeRequest={addRevisionToChangeRequest}
-            resetAndCancelEdit={resetAndCancelEdit}
-            showAutoComplete={false}
-            titleText={entry.titleText}
-            handleRemove={handleRemove}
-            entry={entry}
-            isLineItemPartCanBeSubstituted={isLineItemPartCanBeSubstituted}
-            isDeletionDisabled={isDeletionDisabled}
-          />
-      }
-      { !isEditMode
-        && <ApprovalRequestViewGridItem
+      {isEditMode ? (
+        <ApprovalRequestEditGridItem
+          {...{ formState }}
+          entry={entry}
+          addRevisionToChangeRequest={addRevisionToChangeRequest}
+          resetAndCancelEdit={resetAndCancelEdit}
+          handleRemove={handleRemove}
+          isLineItemPartCanBeSubstituted={isLineItemPartCanBeSubstituted}
+          isDeletionDisabled={isDeletionDisabled}
+        />
+      ) : (
+        <ApprovalRequestViewGridItem
           entry={entry}
           editItem={editItem}
           handleRemove={handleRemove}
           viewItemActionsVisible={viewItemActionsVisible}
           isLineItemPartCanBeSubstituted={isLineItemPartCanBeSubstituted}
-        /> }
+        />
+      )}
     </>
   ));
 };

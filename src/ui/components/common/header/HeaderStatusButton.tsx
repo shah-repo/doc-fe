@@ -8,7 +8,7 @@ import useMenu from '../../../hooks/useMenu';
 import { Button, SplitButtonMenu } from '../../forms/fields-next';
 import useStyles from './HeaderStatusButton.styles';
 
-type StatusValue = LotStatus | EquipmentStatus | string;
+export type StatusValue = LotStatus | EquipmentStatus | string;
 
 interface StatusOption {
   value: StatusValue

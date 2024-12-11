@@ -7,7 +7,7 @@ import { AsyncState } from '../../types';
 import { GroupTag, Permission } from '../auth/types';
 import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
-import { LotStatus } from '../documentRevisions/types';
+import { EquipmentStatus, LotStatus } from '../documentRevisions/types';
 import { MaterialFlowAclRule } from '../materialFlowAcl/types';
 import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
 
@@ -44,7 +44,7 @@ export interface CompanyLocation {
   id: string
   name: string
   active: boolean
-  includedInTotalQty: boolean
+  includedInTotalQty?: boolean
 }
 
 export interface Company {
@@ -60,7 +60,7 @@ export interface Company {
   teamId: string
   addresses: string[]
   acctCodes: string[]
-  locations: CompanyLocation[]
+  locations?: CompanyLocation[]
   navigation: NavigationItem[]
   employees?: Employee[]
   scheduledForDeletion: boolean
@@ -186,9 +186,15 @@ export interface EquipmentLocation {
   active: boolean
 }
 
+export interface EquipmentFamilyEquipmentStatus {
+  name: EquipmentStatus
+  isActive: boolean
+}
+
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
+  equipmentStatuses: EquipmentFamilyEquipmentStatus[]
 }
 
 enum SystemTransactionsEvent {
@@ -210,6 +216,18 @@ interface AllocationConfig {
   expiredLotsPrompt: ExpiredLotTypes
 }
 
+interface TrainingReminders {
+  customDaysDueOn: { isActive: boolean, days: number }
+  isSevenDaysDueOnCountdownActive: boolean
+  isAssignedActive: boolean
+  isOverdueActive: boolean
+  isAssignedCcActive: boolean
+  isSevenDaysDueOnCcActive: boolean
+  isThreeDaysDueOnCcActive: boolean
+  isTodayDueOnCcActive: boolean
+  isOverdueCcActive: boolean
+}
+
 export interface GeneralSettings {
   allocationConfig: AllocationConfig
   approvalRequestAdmin: boolean
@@ -223,6 +241,7 @@ export interface GeneralSettings {
   shouldNotifyLcpMismatch: NotifyPartLCP
   systemTransactions: SystemTransactionsRule[]
   zebraPrint: ZebraPrintSettings[] | null
+  trainingReminders: TrainingReminders
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

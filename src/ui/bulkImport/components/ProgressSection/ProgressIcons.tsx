@@ -18,6 +18,7 @@ export const iconStatuses: Record<string, IconStatus> = {
   progress: { name: solid('circle-three-quarters-stroke'), className: 'progressIcon' },
   warning: { name: solid('triangle-exclamation'), className: 'warningIcon' },
   blank: { name: solid('circle'), className: 'blankIcon' },
+  skip: { name: solid('circle-arrow-right'), className: 'skipIcon' },
 };
 
 interface ProgressIconsProps {

@@ -25,7 +25,7 @@ const Editor: React.FC<CustomCellProps> = ({
   const { getFieldProps, setFieldValue } = useFormikContext();
   const isEditMode = Mode.edit === dataItem[MODE_FIELD];
   const classes = useStyles();
-  const value = dataOptions?.find(
+  const value = (dataOptions as ASLStatus[])?.find(
     (option: ASLStatus) => option.internalType === dataItem[field],
   );
 

@@ -9,6 +9,7 @@ import PrintingSettingsPanel from './panels/Printing';
 import ASLStatusSettings from './panels/SupplierSettings/ASLStatus';
 import SupplierConfiguration from './panels/SupplierSettings/SupplierConfiguration';
 import SystemTransactionsSettingsPanel from './panels/SystemTransactions';
+import TrainingReminders from './panels/TrainingReminders';
 import ExpiredLots from './panels/WorkOrder/ExpiredLots';
 import LotAutoAllocationOrder from './panels/WorkOrder/LotAutoAllocationOrder';
 import { GeneralSettingsTabs } from './types';
@@ -20,6 +21,11 @@ export const panels = [
     key: GeneralSettingsTabs.Printing,
     title: 'administration.general.settings.printing',
     component: PrintingSettingsPanel,
+  },
+  {
+    key: GeneralSettingsTabs.TrainingReminders,
+    title: 'administration.general.settings.training.reminders',
+    component: TrainingReminders,
   },
   {
     key: GeneralSettingsTabs.AR,

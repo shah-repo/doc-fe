@@ -70,8 +70,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'expiryDate',
-      field: 'expiryDate',
+      id: 'customExpiryDate',
+      field: 'customExpiryDate',
       title: 'lhr.summary.grid.heading.expiry.date',
       show: true,
       selectable: false,
@@ -116,8 +116,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      field: 'calDueDate',
-      id: 'calDueDate',
+      field: 'customCalDueDate',
+      id: 'customCalDueDate',
       selectable: false,
       title: 'lhr.summary.grid.heading.cal.due.date',
       show: true,
@@ -125,8 +125,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'pmDueDate',
-      field: 'pmDueDate',
+      id: 'customPmDueDate',
+      field: 'customPmDueDate',
       title: 'lhr.summary.grid.heading.pm.due.date',
       show: true,
       template: (props) => <DateCell {...props} onClick={onRowClick} />,
@@ -149,8 +149,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'recordCreationDate',
-      field: 'recordCreationDate',
+      id: 'customRecordCreationDate',
+      field: 'customRecordCreationDate',
       title: 'lhr.summary.grid.heading.date',
       show: true,
       template: (props) => <DateCell {...props}

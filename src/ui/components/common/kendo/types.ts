@@ -1,6 +1,6 @@
 import { GroupDescriptor } from '@progress/kendo-data-query';
 import { ColumnSortSettings } from '@progress/kendo-react-data-tools';
-import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridPagerSettings } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridHeaderCellProps, GridPagerSettings } from '@progress/kendo-react-grid';
 import { schema } from 'normalizr';
 import { ComponentType } from 'react';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
@@ -29,7 +29,7 @@ export enum KendoCellTemplates {
   SUPPLIER_STATUS='SupplierStatus',
 }
 export interface KendoColumn {
-  headerCell: string
+  headerCell?: ComponentType<GridHeaderCellProps> | string
   sortable?: ColumnSortSettings
   field: string
   title: string
@@ -44,7 +44,7 @@ export interface KendoColumn {
   width?: number | string
   reorderable?: boolean
   orderIndex?: number
-  columnMenu?: GridColumnMenuProps
+  columnMenu?: ComponentType<GridColumnMenuProps>
   filterable?: boolean
   disabled?: boolean
   resizable?: boolean

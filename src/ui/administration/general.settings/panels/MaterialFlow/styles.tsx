@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   chips: {
@@ -10,5 +11,21 @@ export default makeStyles(theme => ({
   inputRoot: {
     margin: theme.spacing(0, -1.125),
     width: `calc(100% + ${theme.spacing(2.25)}px)`,
+  },
+  '@keyframes newRowAnimation': {
+    '0%': {
+      backgroundColor: Colors.primaryHighlight,
+    },
+    '50%': {
+      backgroundColor: Colors.primaryHighlight,
+    },
+    '100%': {
+      backgroundColor: Colors.white,
+    },
+  },
+  newRow: {
+    '& td': {
+      animation: `$newRowAnimation 5s ${theme.transitions.easing.easeIn}`,
+    },
   },
 }));

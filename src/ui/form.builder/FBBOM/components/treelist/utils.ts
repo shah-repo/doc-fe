@@ -1,8 +1,8 @@
 import { cloneDeep, isNil } from 'lodash';
 import { DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { CustomTreeListColumnProps } from '../../../../components/common/treelist/types';
 import { BOM, EditableBOM } from '../../interface';
 import { ADD_FIELD, CELL_EMPTY_VALUE, MODE_FIELD, SELECTED_PART_KEY_SEPARATOR, SUB_ITEMS_FIELD } from './constants';
-import { CustomTreeListColumnProps } from './interface';
 
 export const isAddOnly = (dataItem: EditableBOM): boolean => {
   return dataItem[ADD_FIELD] ?? false;

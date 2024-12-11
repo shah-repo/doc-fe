@@ -39,24 +39,38 @@ const REDLINE_DEFAULT_STATE = {
 };
 
 const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
+  equipmentFamily: {
+    autoSyncEnabled: false,
+    locations: [],
+    equipmentStatuses: [],
+  },
+  isMaterialFlowAclEnabled: false,
+  lifecyclePhases: { categories: [] },
+  materialFlowACLs: [],
   allocationConfig: {
     sortOrderByReleaseDate: AllocationOrder.FIFO,
     expiredLotsPrompt: ExpiredLotTypes.WARNING,
   },
   approvalRequestAdmin: false,
-  equipmentFamily: {
-    autoSyncEnabled: false,
-    locations: [],
-  },
-  isMaterialFlowAclEnabled: false,
-  lifecyclePhases: { categories: [] },
-  materialFlowACLs: [],
   shouldAutoUpdateLotStatus: false,
   shouldNotifyLcpMismatch: NotifyPartLCP.DO_NOTHING,
   systemTransactions: [],
   zebraPrint: [],
   status: AsyncStatus.Idle,
   message: '',
+  trainingReminders: {
+    customDaysDueOn: { isActive: false, days: 14 },
+    isSevenDaysDueOnCountdownActive: true,
+    isAssignedActive: true,
+    isOverdueActive: true,
+    isAssignedCcActive: false,
+    isSevenDaysDueOnCcActive: false,
+    isThreeDaysDueOnCcActive: false,
+    isTodayDueOnCcActive: false,
+    isOverdueCcActive: false,
+  },
+  aslStatusConfig: [],
+  supplierConfig: [],
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
