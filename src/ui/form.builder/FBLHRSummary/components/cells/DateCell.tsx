@@ -47,6 +47,11 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     setFieldValue(removeCustomPrefix(field), dateValue);
   };
 
+  const handleClear = () => {
+    setFieldValue(field, null);
+    setFieldValue(removeCustomPrefix(field), null);
+  };
+
   return (
     <FormikField name={field}>
       <DatePicker
@@ -55,6 +60,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
         size="small"
         data-cy={`${field}`}
         onChange={handleChange}
+        onClear={handleClear}
         format={MomentFormats.MonthDateYearTwoDigit}
       />
     </FormikField>
