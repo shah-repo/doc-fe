@@ -58,7 +58,7 @@ const Header: React.FunctionComponent<HeaderPresenterProps> = ({
           <Grid item className={classes.menu}>
             <FontAwesomeIcon
               className={cx(classes.menuIcon, { [classes.menuIconDisabled]: !canAccessNavigation })}
-              icon={isSidebarExpanded ? solid('xmark') : solid('bars-sort')}
+              icon={solid('bars-sort')}
               onClick={canAccessNavigation ? onSidebarToggle : undefined}
             />
           </Grid>
