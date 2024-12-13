@@ -76,13 +76,13 @@ const Presenter: React.FunctionComponent<Props> = ({
   };
 
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
-  const isDownloadAllVisible = attachments?.length > 1;
 
   const groupOptions = document?.documentType?.groupOptions;
   const isRecord = checkIsDocumentRecord(groupOptions);
   const isEB = checkIsDocumentEB(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
   const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(dataProp);
+  const isAttachmentEmpty = !attachments?.length;
   const { _tabsState } = SM.useStores();
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
   const shouldRenderTrainingButton = isDocumentRevisionInStatus(
@@ -219,20 +219,18 @@ const Presenter: React.FunctionComponent<Props> = ({
         {isPO || includes(outputDocumentTypeName, 'Purchase Order')
           ? attachments && !_tabsState?.isTabActive('details') && (
             <Attachment
-              isAttachmentEmpty={attachments?.length < 1}
+              isAttachmentEmpty={isAttachmentEmpty}
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
-              {...{ isDownloadAllVisible }}
             />
           )
           : attachments && (
             <Attachment
-              isAttachmentEmpty={attachments?.length < 1}
+              isAttachmentEmpty={isAttachmentEmpty}
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
-              {...{ isDownloadAllVisible }}
             />
           )}
         {renderTrainingControl}
