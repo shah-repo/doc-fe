@@ -24,7 +24,7 @@ const Editor: React.FC<Props> = ({ field, dataIndex }) => {
 
   useEffect(() => {
     setSelected(values[field]);
-  }, [values[field]]);
+  }, [values]);
 
   return (
     <Box display="flex" justifyContent="center" mt={0.75}>

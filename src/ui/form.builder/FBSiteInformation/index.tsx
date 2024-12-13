@@ -82,6 +82,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const createSite = () => setEditedSite({
     id: uuidv4(),
+    primary: sites.length === 0,
     [MODE_FIELD]: Mode.add,
   });
 

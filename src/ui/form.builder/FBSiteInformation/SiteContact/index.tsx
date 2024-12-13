@@ -93,6 +93,7 @@ const SiteContact: React.FC<SiteContactProps> = ({
   const createSiteContact = () =>
     setEditedSite({
       id: uuidv4(),
+      primary: siteContact.length === 0,
       [MODE_FIELD]: Mode.add,
     });
 
