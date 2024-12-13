@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../common/intl';
 import { Button } from '../../../components/forms/fields-next';
@@ -99,26 +99,25 @@ const SiteContact: React.FC<SiteContactProps> = ({
 
   const onDiscardSiteContact = () => setEditedSite(undefined);
 
-  const onDeleteSiteContact = (dataItem: EditableSiteContact) => {
-    if (!editedSiteContact) return;
-    const updatedSiteContacts = siteContact.filter(
-      (site) => site.id !== dataItem.id,
-    );
-    setSiteContact(updatedSiteContacts);
-    const updatedSites = sites?.map((site) => ({
-      ...site,
-      siteContact: site.siteContact.filter(
-        (contact) => contact.id !== dataItem.id,
-      ),
-    }));
+  const onDeleteSiteContact = useCallback(
+    (dataItem: EditableSiteContact) => {
+      if (!editedSiteContact) return;
 
-    formState?.setFieldValue(name, updatedSites);
-    workspaceState?.saveDocRev({
-      ...workspaceState?.formInput,
-      [name]: updatedSites,
-    });
-    onDiscardSiteContact();
-  };
+      const updatedSiteContacts = siteContact.filter((site) => site.id !== dataItem.id);
+      setSiteContact(updatedSiteContacts);
+      const updatedSites = sites?.map((site) => ({
+        ...site,
+        siteContact: site.siteContact.filter((contact) => contact.id !== dataItem.id),
+      }));
+        formState?.setFieldValue(name, updatedSites);
+        workspaceState?.saveDocRev({
+          ...workspaceState?.formInput,
+          [name]: updatedSites,
+        });
+        onDiscardSiteContact();
+    },
+    [editedSiteContact, siteContact, setSiteContact, sites, formState, name, workspaceState, onDiscardSiteContact],
+  );
 
   const rowRender: DataGridProps<EditableSiteContact>['rowRender'] = (
     row,
@@ -147,21 +146,22 @@ const SiteContact: React.FC<SiteContactProps> = ({
     onDelete: onDeleteSiteContact,
   });
 
-  const siteContactList = siteContact?.reduce(
-    (list, item) => {
-      const isSiteEdited
-        = editedSiteContact && editedSiteContact.id === item.id;
+  const siteContactList = useMemo(() => {
+    return siteContact?.reduce(
+      (list, item) => {
+        const isSiteEdited = editedSiteContact && editedSiteContact.id === item.id;
 
-      return [
-        ...list,
-        {
-          ...(isSiteEdited ? editedSiteContact : item),
-          [MODE_FIELD]: isSiteEdited ? Mode.edit : Mode.show,
-        },
-      ];
-    },
-    isSiteAdded ? [editedSiteContact] : [],
-  );
+        return [
+          ...list,
+          {
+            ...(isSiteEdited ? editedSiteContact : item),
+            [MODE_FIELD]: isSiteEdited ? Mode.edit : Mode.show,
+          },
+        ];
+      },
+      isSiteAdded ? [editedSiteContact] : [],
+    );
+  }, [siteContact, editedSiteContact, isSiteAdded]);
 
   return (
     <Box className={classes.root} data-cy="site-contact">
