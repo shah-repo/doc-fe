@@ -3,7 +3,7 @@ import { GridDetailRowProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
 import { Button } from '../../components/forms/fields-next';
@@ -122,6 +122,18 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     );
   };
 
+  const handleSameAsHQ = useCallback((sameAsHQ) => {
+    const hqAddress = workspaceState?.formInput;
+    formik.setValues({
+      ...editedSite,
+      zipCode: sameAsHQ ? hqAddress?.headquarter_address_zip_code || '' : '',
+      siteAddress: sameAsHQ ? hqAddress?.headquarter_address || '' : '',
+      city: sameAsHQ ? hqAddress?.headquarter_address_city || '' : '',
+      country: sameAsHQ ? hqAddress?.headquarter_address_country || '' : '',
+      sameAsHQ,
+    });
+  }, [workspaceState?.formInput, editedSite]);
+
   const schema = buildSchema({
     isActive,
     isInEditMode,
@@ -130,6 +142,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     onConfirm: submitForm,
     onDiscard: onDiscardSite,
     onDelete: onDeleteSite,
+    onSameAsHQ: handleSameAsHQ,
   });
 
   const siteList = sites.reduce((list, item) => {

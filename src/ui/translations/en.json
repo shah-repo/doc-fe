@@ -2083,6 +2083,7 @@
   "bom.drawerTable.field.status.title": "Status",
   "bom.ar.child.pending.message": "All line items in the BOM should be released before releasing the BOM. \nClose the ARs for these items, before proceeding with this BOM/AR:",
   "bom.ar.child.invalid.message": "All line items in the BOM should be released before releasing the BOM. \nRemove these {obsolete} / {void} items, before proceeding with this BOM/AR:",
+  "customer.site.information.same.as.hq.label": "Same as headquater",
   "lhr.summary.table.title": "LHR Summary Table",
   "lhr.summary.add.item": "Add Item",
   "lhr.summary.grid.heading.type": "Type",
