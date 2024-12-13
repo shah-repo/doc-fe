@@ -2244,5 +2244,6 @@
   "async.state.message.access.denied": "Access Denied",
   "common.failed": "Failed",
   "common.or": "OR",
-  "common.rev": "Rev."
+  "common.rev": "Rev.",
+  "commom.quick.view": "Quick View"
 }

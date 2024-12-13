@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
+import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -95,15 +95,17 @@ DocumentRevisionDialogProps
           asyncState={loadDocumentRevisionAsyncState}
         >
           {documentRevision && (
-            <Theme>
-              <DocumentRevisionUpdateContainer
-                documentRevision={documentRevision }
-                documentId={((documentRevision)?.documentId) as string}
-                canChangeOwnerShip={false}
-                isNewVersion={false}
-                inDialog={true}
-              />
-            </Theme>
+            <Box height="80vh">
+              <Theme>
+                <DocumentRevisionUpdateContainer
+                  documentRevision={documentRevision }
+                  documentId={((documentRevision)?.documentId) as string}
+                  canChangeOwnerShip={false}
+                  isNewVersion={false}
+                  inDialog={true}
+                />
+              </Theme>
+            </Box>
           )}
         </AsyncGate>
       </DialogContent>

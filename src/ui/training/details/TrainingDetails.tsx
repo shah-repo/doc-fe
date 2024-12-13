@@ -1,6 +1,6 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@material-ui/core';
+import { Box, DialogContent, DialogTitle, Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
@@ -9,10 +9,13 @@ import { translate } from '../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { TrainingRecordQuery } from '../../../state/ducks/training/types';
 import AttachmentIconPresenter from '../../components/common/attachment.icon/presenter';
+import DocumentRevisionDialog from '../../components/common/dialogs/DocumentRevisionDialog';
+import { IconButton as IButton } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
 import { FBFieldName } from '../../form.builder';
 import { Trainee, TraineeAttachment } from '../../form.builder/FBTraineeList/types';
-import { DialogHandler } from '../../hooks/useDialog';
+import useDialog, { DialogHandler } from '../../hooks/useDialog';
+import useHover from '../../hooks/useHover';
 import ExportTrainingRecordToEmail from '../export.email/ExportTrainingRecordToEmail';
 import ReferenceLink from './ReferenceLink';
 import { styles } from './styles';
@@ -40,7 +43,19 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
     },
     [],
   );
+  const quickViewDialog = useDialog();
   const referenceClassName = cx(classes.refID, classes.itemContentBlue);
+
+  const [docRevRef, isDocRevRefHovered] = useHover<HTMLButtonElement>();
+  const [refIdRef, isRefIdRefHovered] = useHover<HTMLButtonElement>();
+  const [docRevId, setDocRevId] = React.useState('');
+  const [parentRevId, setParentRevId] = React.useState('');
+
+  const onOpenDialog = (docRevId, parentRevId) => {
+    setDocRevId(docRevId);
+    setParentRevId(parentRevId);
+    quickViewDialog.open();
+  };
 
   return (
     <>
@@ -71,15 +86,25 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
               <Typography className={classes.label}>
                 <Text translation="training.doc.id.rev" />
               </Typography>
-              <ReferenceLink
-                className={referenceClassName}
-                label={translate('common.displayRevision', {
-                  docId: training.trainingPlan?.document.docId,
-                  displayRevision: training.documentRevision?.displayRevision,
-                })}
-                documentId={training.documentRevision?.documentId}
-                revisionId={training.documentRevision?.id}
-              />
+              <>
+                <ReferenceLink
+                  className={referenceClassName}
+                  label={translate('common.displayRevision', {
+                    docId: training.trainingPlan?.document.docId,
+                    displayRevision: training.documentRevision?.displayRevision,
+                  })}
+                  documentId={training.documentRevision?.documentId}
+                  revisionId={training.documentRevision?.id}
+                />
+                <Tooltip title={translate('commom.quick.view')}>
+                  <IButton
+                    kind="simple"
+                    ref={refIdRef}
+                    onClick={() => onOpenDialog(training.documentRevision?.id, training.documentRevision?.documentId)}>
+                    <FontAwesomeIcon icon={isRefIdRefHovered ? solid('eye') : regular('eye')} />
+                  </IButton>
+                </Tooltip>
+              </>
             </Grid>
             {!isEmpty(referencesIds) && (
               <Grid item xs={12} className={classes.item}>
@@ -95,6 +120,14 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
                       documentId={item.documentId}
                       revisionId={item.revisionId}
                     />
+                    <Tooltip title={translate('commom.quick.view')}>
+                      <IButton
+                        kind="simple"
+                        ref={docRevRef}
+                        onClick={() => onOpenDialog(item.revisionId, item.documentId)}>
+                        <FontAwesomeIcon icon={isDocRevRefHovered ? solid('eye') : regular('eye')} />
+                      </IButton>
+                    </Tooltip>
                     {index < (arr.length - 1) && ', '}
                   </>
                 ))}
@@ -154,6 +187,9 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
           )}
         </Grid>
       </DialogContent>
+      { quickViewDialog.isOpen
+        && <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId, parentRevId }} />
+      }
     </>
   );
 };
