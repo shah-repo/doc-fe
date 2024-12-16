@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { redirectTo } from '../../../common/redirectHandler';
 import apiClient from '../../../state/apiClient';
 import { authActions } from '../../../state/ducks/auth';
-import { ANNOUNCEMENTS_GET } from '../../../state/ducks/company/constants';
+import { ANNOUNCEMENTS_BASE } from '../../../state/ducks/company/constants';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
 import { store } from '../../../state/store';
@@ -150,7 +150,7 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
   const getAnnouncements = (documentTypeCategory: string) => {
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
-      url: `${ANNOUNCEMENTS_GET}/${documentTypeCategory}/active`,
+      url: `${ANNOUNCEMENTS_BASE}/${documentTypeCategory}/active`,
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },

@@ -29,7 +29,7 @@ export const BULK_MIGRATION_GET_SCAN_REVISIONS = 'bulk_migration/getScanRevision
 export const BULK_MIGRATION_GET_SCAN_RESULTS = 'bulk_migration/getScanRevisions';
 export const BULK_MIGRATION_START_REVS_MIGRATION = 'bulk_migration/migrateDocRevs';
 
-export const ANNOUNCEMENTS_GET = 'announcementHub';
+export const ANNOUNCEMENTS_BASE = 'announcementHub';
 export const ANNOUNCEMENTS_GET_DETAILS = 'announcementHub/details';
 
 export const WHITE_LABEL_DEFAULT = {
