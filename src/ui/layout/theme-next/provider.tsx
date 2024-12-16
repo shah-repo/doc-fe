@@ -1,4 +1,4 @@
-import { createTheme, Theme as MuiTheme, ThemeProvider } from '@material-ui/core';
+import { createMuiTheme, Theme as MuiTheme, ThemeProvider } from '@material-ui/core';
 import isMobile from 'is-mobile';
 import * as React from 'react';
 import { shape, spacing } from './consts';
@@ -8,7 +8,7 @@ import props from './props';
 import shadows from './shadows';
 import typography from './typography';
 
-const baseTheme = createTheme({
+const baseTheme = createMuiTheme({
   palette,
   shadows,
   typography,
@@ -22,7 +22,7 @@ export interface NextTheme extends MuiTheme {
   }
 }
 
-export const themeNext = createTheme(
+export const themeNext = createMuiTheme(
   {
     ...baseTheme,
     overrides: overrides(baseTheme),

@@ -1,4 +1,4 @@
-import createTheme from '@material-ui/core/styles/createTheme';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import Config from '../../../config';
 import { WhiteLabelingColors } from '../../../state/ducks/company/types';
 import { NextTheme, themeNext } from '../theme-next/provider';
@@ -7,7 +7,7 @@ import { createAppPalette, muiTheme } from './palette';
 import themeProps from './props';
 import { ThemeEnv } from './utils/types';
 
-const createAppTheme = (customColors: WhiteLabelingColors) => createTheme(
+const createAppTheme = (customColors: WhiteLabelingColors) => createMuiTheme(
   {
     ...muiTheme,
     palette: createAppPalette(Config.Theme as ThemeEnv, customColors),
@@ -20,7 +20,7 @@ const createAppTheme = (customColors: WhiteLabelingColors) => createTheme(
 export default (customColors: WhiteLabelingColors = {} as WhiteLabelingColors) => {
   const appTheme = createAppTheme(customColors);
 
-  return createTheme({
+  return createMuiTheme({
     ...appTheme,
     props: themeProps(),
     overrides: themeOverrides(appTheme, customColors),
