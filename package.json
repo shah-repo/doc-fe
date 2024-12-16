@@ -36,7 +36,7 @@
     "@progress/kendo-react-treeview": "^4.13.0",
     "@progress/kendo-svg-icons": "^1.5.0",
     "Base64": "^1.1.0",
-    "ai-widget": "git+ssh://git@bitbucket.org/shifamed/ai-widget.git",
+    "ai-widget": "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#5f113c3e777dc70935cc7d3aad75c80f851e8337",
     "aws-mqtt": "^1.0.0",
     "aws-sdk": "^2.580.0",
     "axios": "0.19.0",
