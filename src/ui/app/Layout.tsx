@@ -1,5 +1,5 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Widget as AiWidget } from 'ai-widget';
+import { Widget as AiWidget, AppName } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
@@ -35,6 +35,7 @@ import {
   DOCUMENT_REVISION_CREATE_URL,
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
+  DOCUMENT_REVISION_VERSION_URL,
   DOCUMENT_TYPE_MANAGEMENT_URL,
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
@@ -78,13 +79,13 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
   const isAIWidgetShown = isAIEnabled && isAIPermissionEnabled;
   const userName = useSelector(authSelectors.currentUserName);
   const location = useLocation();
-  const documentMatch = matchPath<{ documentId?: string }>(location.pathname, {
-    path: DOCUMENT_REVISION_ROOT_URL,
+  const documentMatch = matchPath<{ documentRevisionId?: string }>(location.pathname, {
+    path: DOCUMENT_REVISION_VERSION_URL,
     exact: false,
     strict: false,
   });
   const companyId = useSelector(companySelectors.companyIdSelector);
-  const documentId = documentMatch?.params?.documentId;
+  const documentRevisionId = documentMatch?.params?.documentRevisionId;
   const accessToken = `${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
 
   return (
@@ -100,10 +101,10 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
         <DataFetcherContainer />
         {isAIWidgetShown && (
           <AiWidget
-            appName="d2m"
+            appName={AppName.D2M}
             userName={userName}
             companyId={companyId}
-            documentId={documentId}
+            documentRevisionId={documentRevisionId}
             token={accessToken}
             apiPath="https://api.ai.dev2.enlil.io/t4/v1"
           />
