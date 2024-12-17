@@ -3,6 +3,7 @@ import { useObserver } from 'mobx-react';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FB, FBAutocompleteAsyncOption } from '..';
 import { translate } from '../../../common/intl';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { shippingInfoActions } from '../../../state/ducks/ShippingInformation';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
@@ -39,8 +40,8 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
     };
 
     const fetchShippingAddressAsync = useAsync({
-      onSuccess: (data) => {
-        const siteAddress = data?.formInput?.site_informations;
+      onSuccess: (data: DocumentRevision | undefined) => {
+        const siteAddress = data?.formInput?.site_informations as ShippingAddress[];
         if (isEmpty(siteAddress)) {
           return;
         }
@@ -64,7 +65,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
     }, [customerId]);
 
     const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
-      const contacts = value?.siteContact?.reduce<{attention: ContactValue, shipping: ContactValue}>((contacts, item) => {
+      const contacts = value?.siteContact?.reduce<{attention: ContactValue | undefined, shipping: ContactValue | undefined}>((contacts, item) => {
         const contact = { id: item.id, name: item.name };
         if (item.attention) {
           contacts.attention = contact;
@@ -74,7 +75,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
         }
 
         return contacts;
-      }, {});
+      }, { attention: undefined, shipping: undefined });
 
       formState?.setFieldValue('shipping_address', { id: value?.value, name: value?.label });
       formState?.setFieldValue('shipping_address_attention', contacts?.attention);

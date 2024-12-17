@@ -5,12 +5,12 @@ import React from 'react';
 import { translate } from '../../../common/intl';
 import styles from './FBShippingAddress.styles';
 import { withFBShippingAddress } from './FBShippingAddress.wrap';
-import { Contact, FBShippingAddresProps } from './types';
+import { FBShippingAddresProps } from './types';
 
-const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleChange, shippingAddresses, value, loading, disabled }) => {
+const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleChange, value, loading, disabled }) => {
   const classes = styles();
-  const attention = find(value?.siteContact, { attention: true }) ?? ({} as Contact);
-  const shipping = find(value?.siteContact, { shipping: true }) ?? ({} as Contact);
+  const attention = find(value?.siteContact, { attention: true });
+  const shipping = find(value?.siteContact, { shipping: true });
 
   return (
     <div>
@@ -79,16 +79,16 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
                     data-cy="shipping-info-customer"
                     component="span"
                   >
-                    {attention.name && <>
-                      {attention.name} (<span className={classes.cardEmail}>{attention.email}</span>)
+                    {attention?.name && <>
+                      {attention?.name} (<span className={classes.cardEmail}>{attention?.email}</span>)
                     </>}
                   </Typography>
-                  {attention.phoneNumber && <Typography
+                  {attention?.phoneNumber && <Typography
                     className={classes.cardInfo}
                     data-cy="shipping-info-customer"
                     component="span"
                   >
-                    +{attention.phoneNumber}
+                    +{attention?.phoneNumber}
                   </Typography>}
                 </Box>
               </Grid>
@@ -106,16 +106,16 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
                     data-cy="shipping-info-customer"
                     component="span"
                   >
-                    {shipping.name && <>
-                      {shipping.name} (<span className={classes.cardEmail} >{shipping.email}</span>)
+                    {shipping?.name && <>
+                      {shipping?.name} (<span className={classes.cardEmail} >{shipping?.email}</span>)
                     </>}
                   </Typography>
-                  {shipping.phoneNumber && <Typography
+                  {shipping?.phoneNumber && <Typography
                     className={classes.cardInfo}
                     data-cy="shipping-info-customer"
                     component="span"
                   >
-                    +{shipping.phoneNumber}
+                    +{shipping?.phoneNumber}
                   </Typography>}
                 </Box>
               </Grid>
