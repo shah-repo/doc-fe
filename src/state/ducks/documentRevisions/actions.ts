@@ -175,10 +175,11 @@ const loadDocument = (id: string): ApiAction<Document> => apiAction({
 
 const applyTransition = (
   id: string,
+  ignoreWarning: boolean,
   transition: DocumentRevisionTransition,
   handlers: Handlers<DocumentRevisionTransitionResponse>,
 ): ApiAction<DocumentRevisionTransitionResponse, DocumentRevisionTransitionRequestBody> => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_ROOT_URL}/${transition}/${id}`,
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${transition}/${id}?ignoreWarning=${ignoreWarning}`,
   method: 'post',
   onSuccess: (d, dispatch) => {
     dispatch(load(id));

@@ -46,6 +46,38 @@ export const styles = makeStyles((theme: Theme) =>
     alertIcon: {
       marginTop: theme.spacing(0.25),
       paddingRight: theme.spacing(2.5),
+      color: Colors.error,
+      '& svg': {
+        fontSize: '3em',
+      },
+    },
+    warningIcon: {
+      marginTop: theme.spacing(0.25),
+      paddingRight: theme.spacing(2.5),
+      color: Colors.warning,
+      '& svg': {
+        fontSize: '3em',
+      },
+    },
+    alertDiv: {
+      backgroundColor: Colors.errorLight,
+      color: Colors.reject,
+      padding: theme.spacing(0.5, 1),
+      marginBottom: theme.spacing(1),
+    },
+    chipBox: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: theme.spacing(0.5),
+      marginTop: theme.spacing(1.5),
+      '& div': {
+        borderRadius: theme.spacing(1.5),
+        backgroundColor: Colors.lightGray,
+        fontSize: 'smaller',
+      },
+    },
+    topSpacing: {
+      marginTop: theme.spacing(1.5),
     },
     alertTitle: {
       fontWeight: 600,

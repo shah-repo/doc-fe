@@ -164,6 +164,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     asyncWithdraw.start(
       applyTransition,
       documentRevision.id,
+      true,
       'withdrawn',
       asyncWithdraw,
     );

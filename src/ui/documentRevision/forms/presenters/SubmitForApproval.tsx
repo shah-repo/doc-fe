@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyledButton } from '../../../../App/Shifamed/Components/forms/presenters/StyledListButton';
 import { StyledMenuListItem } from '../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem';
@@ -9,6 +9,7 @@ import { translate } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentType } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
+import SupplierStatusDialog from '../../../app/alert.dialog/SupplierStatusDialog';
 import VoidAlertDialog from '../../../app/alert.dialog/VoidAlertDialog';
 import { toastError } from '../../../components/notifications';
 import Text from '../../../components/Text';
@@ -30,6 +31,21 @@ interface Props {
   isWOForm?: boolean
 }
 
+export interface IItem {
+  docId: string
+  displayRevision: string
+  phase: string
+}
+
+export interface IApprovalErrorResponse {
+  msgs: string[]
+  isWarning: boolean
+  isError: boolean
+  itemsAsOfferingNotApproved: Array<{docId: string, displayRevision: string}>
+  errorItems: IItem[]
+  warningItems: IItem[]
+}
+
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
   documentRevision,
   docRevId,
@@ -44,6 +60,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const isNewLayout = SM.isNewLayout;
   const dispatch = useDispatch();
   const dialog = useDialog();
+  const supplierStatusDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
   const isEquipment = checkIsDocumentEquipment(currentDocumentType?.groupOptions);
   const isObsolete = isEquipment ? false : revisionChangeType === RevisionChangeType.Obsolete;
@@ -51,14 +68,27 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
   let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
 
+  const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
+
   if (isWO && !isWOForm) {
     label = 'record.assign';
   }
 
   const releaseAsync = useAsync({
     onError: (error) => {
-      toastError(error as string);
-      dialog.close();
+      try {
+        const parsedError = JSON.parse(error as string);
+        if (parsedError.status === 412 && parsedError.response) {
+          setErrorResponse(parsedError.response as IApprovalErrorResponse);
+          supplierStatusDialog.open();
+        } else {
+          toastError(error as string);
+          dialog.close();
+        }
+      } catch (error) {
+        toastError(error as string);
+        dialog.close();
+      }
     },
   });
   const updateDocAsync = useAsync({
@@ -70,7 +100,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
     },
   });
 
-  const releaseRecord = () => {
+  const releaseRecord = (event?, ignoreWarning?: boolean) => {
     if (!hasBuildType && isLhrDoc) {
       toastError(translate('form.builder.lhr.build.type.error.message'));
       return;
@@ -78,6 +108,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
     releaseAsync.start(
       applyTransition,
       docRevId,
+      ignoreWarning ?? false,
       'in_review',
       releaseAsync,
     );
@@ -123,6 +154,12 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           async={updateDocAsync}
           voidAction={documentRevisionsActions.save}
         />
+      )}
+      {errorResponse && (
+        <SupplierStatusDialog
+          dialog={supplierStatusDialog}
+          data={errorResponse}
+          confirmAction={e => releaseRecord(e, true)} />
       )}
     </>
   );
