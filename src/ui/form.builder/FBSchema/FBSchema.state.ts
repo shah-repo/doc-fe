@@ -50,7 +50,7 @@ import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
 import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
-import FBShippingInformation from '../FBShippingInfo/FBShippingInformation';
+import FBShippingAddress from '../FBShippingInfo/FBShippingAddress';
 import FBShippingItems from '../FBShippingItems';
 import FBSiteInformation from '../FBSiteInformation';
 import FBSubsection from '../FBSubsection/FBSubsection';
@@ -156,7 +156,7 @@ class FBSchemaState {
     workOrderType: FBWorkOrderType,
     workOrderLhrTable: FBWorkOrderLHRTable,
     shippingItems: FBShippingItems,
-    shippingInformation: FBShippingInformation,
+    shippingAddress: FBShippingAddress,
   };
 
   @observable public schema?: FBSchemaProps[];
