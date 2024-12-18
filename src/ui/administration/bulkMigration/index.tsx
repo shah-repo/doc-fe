@@ -11,7 +11,7 @@ import ReactJson from 'react-json-view';
 import { intl, translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_ELIGIBLE_REV_COUNT, BULK_MIGRATION_GET_LATEST_COMPLETED_SCAN, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_UPGRADE_FORM } from '../../../state/ducks/company/constants';
+import { BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REV_COUNT, BULK_MIGRATION_GET_LATEST_COMPLETED_SCAN, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_UPGRADE_FORM } from '../../../state/ducks/company/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import DateTime from '../../components/DateTime';
@@ -476,7 +476,7 @@ const BulkMigrationContainer: React.FC = () => {
                 </>
               }
               { toFormRevId && fromFormRevId && <Box>
-                <Button variant="text" color="secondary" dataCy="migration-mapping-config" onClick={registerScanForRevisions}>Mapping Rules</Button>
+                <Button variant="text" color="secondary" onClick={registerScanForRevisions}>Mapping Rules</Button>
               </Box> }
             </Box>
 
