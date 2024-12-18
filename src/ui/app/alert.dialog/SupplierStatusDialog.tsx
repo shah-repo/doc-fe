@@ -57,7 +57,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
             { data.isError && <Grid item className={classes.alertIcon}>
               <WarningIcon />
             </Grid> }
-            { data.isWarning && <Grid item className={classes.warningIcon}>
+            { data.isWarning && !data.isError && <Grid item className={classes.warningIcon}>
               <ErrorOutlineIcon />
             </Grid> }
             <Grid item >
@@ -78,7 +78,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                 </Box>
               }
               {
-                data.warningItems.length > 0
+                data.warningItems.length > 0 && data.errorItems.length === 0
                 && <Box className={classes.chipBox}>
                   {
                     data.warningItems.map((errorItem, index) => (
@@ -104,7 +104,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
         </DialogContentText>
       </DialogContent>
       <Box className={classes.dialogAction}>
-        {data.isWarning && <Button
+        {data.isWarning && !data.isError && <Button
           variant="text"
           className={cx(classes.cancelButton, classes.buttonLabel)}
           onClick={cancelAction}
@@ -113,7 +113,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
         >
           <Text translation={cancelLabel} />
         </Button> }
-        {data.isWarning && <Button
+        {data.isWarning && !data.isError && <Button
           variant="contained"
           className={cx(classes.submitButton, classes.buttonLabel)}
           id="dialog-continue"
