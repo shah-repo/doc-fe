@@ -9,7 +9,6 @@ import TableCell, { SortDirection } from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
@@ -127,10 +126,6 @@ const EnhancedTableHead: React.FC<{
 }> = ({
   classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, onSearchTextChange,
 }) => {
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
   const searchTextChanged = (value: string, fieldName: string) => {
     onSearchTextChange(value, fieldName);
   };
@@ -157,19 +152,7 @@ const EnhancedTableHead: React.FC<{
           >
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div>
-                { headCell.orderingAllowed && <TableSortLabel
-                  active={orderBy === headCell.id}
-                  direction={orderBy === headCell.id ? order : 'asc'}
-                  onClick={createSortHandler(headCell.id)}
-                >
-                  {headCell.label}
-                  {orderBy === headCell.id ? (
-                    <span className={classes.visuallyHidden}>
-                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                    </span>
-                  ) : null}
-                </TableSortLabel> }
-                { !headCell.orderingAllowed && <span>{headCell.label}</span> }
+                <span>{headCell.label}</span>
               </div>
               {headCell.searchAllowed
               && <TextField size="small" variant="outlined" placeholder="Search"
