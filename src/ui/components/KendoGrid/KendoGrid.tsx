@@ -15,6 +15,8 @@ import { companySelectors } from '../../../state/ducks/company';
 import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, EquipmentStatus, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
 import { printLabelsActions } from '../../../state/ducks/printLabels';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import AnnouncementIndicator from '../../administration/announcements/AnnoucementIndicator';
+import { IAnnouncement } from '../../administration/announcements/interface';
 import { AsyncFilterTemplate } from '../../async.tasks/grid/filter.template/AsyncFilterTemplate';
 import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateFilterTemplate';
 import { AsyncStatus, dropDownOptions } from '../../async.tasks/grid/helper';
@@ -170,6 +172,11 @@ export function KendoGrid<T extends any> ({
     if (data.total === 0) {
       setNoDataMessage(<NoDataFound />);
     }
+  };
+
+  const [announcements, setAnnouncements] = useState<IAnnouncement[]>([]);
+  const announcementReceived = (data: IAnnouncement[]) => {
+    setAnnouncements(data);
   };
 
   // Column Menu Filters
@@ -521,10 +528,16 @@ export function KendoGrid<T extends any> ({
       >
         <GridToolbar>
           <Grid container>
-            <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
+            <Grid item={true} xs={4} style={{ textAlign: 'left' }}>
               <ClearFilters {...{ clearFilter }} />
             </Grid>
-            <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
+            <Grid item={true} xs={4} style={{ textAlign: 'center' }}>
+              {
+                announcements.length > 0
+                && <AnnouncementIndicator announcement={announcements[0]} />
+              }
+            </Grid>
+            <Grid item={true} xs={4} style={{ textAlign: 'right' }}>
               <ColumnShowHideMenu
                 columnDefinition={columns}
                 onChange={onColumnShowHide}
@@ -558,6 +571,7 @@ export function KendoGrid<T extends any> ({
         <DataLoader
           dataState={dataState}
           onDataReceived={dataReceived}
+          onAnnouncementReceived={announcementReceived}
           schema={schema}
           tableName={tableName}
           queryUrl={queryUrl}
