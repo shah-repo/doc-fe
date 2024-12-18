@@ -33,6 +33,8 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditShippingItems from './AuditShippingItems';
+import AuditSiteInformations from './AuditSiteInformations';
 import AuditTraineeList from './AuditTraineeList';
 import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
@@ -184,6 +186,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
+      },
+      siteInformations () {
+        return <AuditSiteInformations {...{ audit, dataCy, auditValue }} />;
+      },
+      shippingItems () {
+        return <AuditShippingItems {...{ audit, dataCy, auditValue }} />;
       },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };

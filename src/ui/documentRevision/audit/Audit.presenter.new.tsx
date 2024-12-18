@@ -300,10 +300,22 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
           const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
           const fieldName = translate(`form.builder.shipping.items.${fieldFullName}`);
-          fbLabel = translate('form.builder.shipping.items.audit.item', {
-            label: fbLabel as string,
-            field: fieldName,
-          });
+          if (change.type === 'OBJECT_DELETED') {
+            if (change.field.endsWith('part') || change.field.endsWith('lot')) {
+              const value = JSON.parse(change.previousValue as string) as DocumentRevision;
+              const fieldLabel = change.field.endsWith('part') ? translate('Part') : translate('Lot');
+              fbLabel = `${fbLabel as string} ${fieldLabel}`;
+              change = {
+                ...change,
+                previousValue: value?.name,
+              };
+            }
+          } else {
+            fbLabel = translate('form.builder.shipping.items.audit.item', {
+              label: fbLabel as string,
+              field: fieldName,
+            });
+          }
         }
       }
       // LOT TRANSFERS
@@ -539,6 +551,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
         if (change.field.includes('lifecyclePhaseId') && change.type === 'OBJECT_NEW') {
           return;
+        }
+
+        // for site contact info delete chage FbLable
+        if (change.field.includes('siteContact') && change.type === 'ARRAY_DELETED') {
+          fbLabel = `${fbLabel} Contact`;
         }
 
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
