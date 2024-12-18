@@ -4,12 +4,13 @@ import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { connect, useSelector } from 'react-redux';
-import { matchPath, Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import { authSelectors } from '../../state/ducks/auth';
 import { Permission } from '../../state/ducks/auth/types';
 import { companySelectors } from '../../state/ducks/company';
+import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { ApplicationState } from '../../state/reducers';
 import { store } from '../../state/store';
 import UserGroupManagment from '../administration/UserGroupManagement';
@@ -78,15 +79,17 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
   const isAIPermissionEnabled = currentEmployeePermissions.includes(Permission.AI_SUBSCRIPTION);
   const isAIWidgetShown = isAIEnabled && isAIPermissionEnabled;
   const userName = useSelector(authSelectors.currentUserName);
-  const location = useLocation();
-  const documentMatch = matchPath<{ documentRevisionId?: string }>(location.pathname, {
-    path: DOCUMENT_REVISION_VERSION_URL,
-    exact: false,
-    strict: false,
-  });
+  const documentMatch = useRouteMatch(DOCUMENT_REVISION_VERSION_URL);
   const companyId = useSelector(companySelectors.companyIdSelector);
   const documentRevisionId = documentMatch?.params?.documentRevisionId;
   const accessToken = `${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
+  const documentRevision = useSelector(
+    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
+      state,
+      documentRevisionId ?? '',
+    ),
+  );
+  const attachmentIds = documentRevision?.attachments?.map(item => item.id);
 
   return (
     <>
@@ -105,6 +108,7 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
             userName={userName}
             companyId={companyId}
             documentRevisionId={documentRevisionId}
+            attachmentIds={attachmentIds}
             token={accessToken}
             apiPath="https://api.ai.dev2.enlil.io/t4/v1"
           />
