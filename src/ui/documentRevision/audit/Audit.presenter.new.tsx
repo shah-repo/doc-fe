@@ -283,10 +283,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (['id'].includes(field)) {
           return;
         }
-        if ((change.field.endsWith('_attention.name')) || (change.type === 'OBJECT_DELETED' && change.field.endsWith('_attention'))) {
-          fbLabel = `${fbLabel as string} ${translate('Attention')}`;
-        } else if ((change.field.endsWith('_contact.name')) || (change.type === 'OBJECT_DELETED' && change.field.endsWith('_contact'))) {
-          fbLabel = `${fbLabel as string} ${translate('Contact')}`;
+        if (changeField.includes('shipping_address_attention') || changeField.includes('shipping_address_contact')) {
+          return;
         }
       }
       // SHIPPING ITEMS
