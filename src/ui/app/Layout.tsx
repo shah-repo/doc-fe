@@ -77,7 +77,7 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
     setOpen(!isOpened);
   };
   const isAIPermissionEnabled = currentEmployeePermissions.includes(Permission.AI_SUBSCRIPTION);
-  const isAIWidgetShown = isAIEnabled && isAIPermissionEnabled;
+  const isAIWidgetShown = true || (isAIEnabled && isAIPermissionEnabled);
   const userName = useSelector(authSelectors.currentUserName);
   const documentMatch = useRouteMatch(DOCUMENT_REVISION_VERSION_URL);
   const companyId = useSelector(companySelectors.companyIdSelector);
