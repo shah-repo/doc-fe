@@ -13,6 +13,7 @@ import { StatusCell } from './components/cells/StatusCell';
 import { StepCell } from './components/cells/StepCell';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { TypeCell } from './components/cells/TypeCell';
+import { UnitCell } from './components/cells/UnitCell';
 import styles from './styles';
 import { EditableLHRSummaryItem, SchemaOptions } from './types';
 
@@ -22,6 +23,7 @@ export const buildSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  units,
 }: SchemaOptions): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
   const classes = styles();
   return [
@@ -104,6 +106,15 @@ export const buildSchema = ({
       show: true,
       selectable: false,
       template: (props) => <QuantityCell {...props} onClick={onRowClick} />,
+      width: 201,
+    },
+    {
+      id: 'unit',
+      field: 'unit',
+      title: 'lhr.summary.grid.heading.unit',
+      show: true,
+      selectable: false,
+      template: (props) => <UnitCell {...props} units={units} onClick={onRowClick} />,
       width: 201,
     },
     {

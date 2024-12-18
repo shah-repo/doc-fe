@@ -2055,6 +2055,7 @@
   "lhr.summary.grid.heading.issue": "Issue",
   "lhr.summary.grid.heading.start.qty": "Start Qty",
   "lhr.summary.grid.heading.end.qty": "End Qty",
+  "lhr.summary.grid.heading.start.qty.unit": "Unit",
   "lhr.summary.grid.heading.lotStatus": "Lot Status",
   "lhr.summary.grid.heading.cal.due.date": "Cal Due Date",
   "lhr.summary.grid.heading.pm.due.date": "PM Due Date",

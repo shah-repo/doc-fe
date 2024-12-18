@@ -55,6 +55,7 @@ export interface LHRSummaryItem {
   plannedDetails?: DetailsObj
   actualDetails?: DetailsObj
   isRevRemoved?: boolean
+  unit?: string
 }
 
 export interface RecordsResponse {
@@ -108,12 +109,14 @@ export interface SchemaOptions {
   onDelete?: () => void
   onRowClick?: (e: EditableLHRSummaryItemEditEvent) => void
   onSelectCell?: (dataItem: EditableLHRSummaryItem, field: string) => void
+  units: string[]
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<EditableLHRSummaryItem> {
   onClick?: (e: EditableLHRSummaryItemEditEvent) => void
   onSelectCell?: (dataItem: EditableLHRSummaryItem, field: string) => void
   PopoverProps?: Partial<PopoverProps>
+  units?: string[]
 }
 
 interface DueDateCombined extends DocumentRevision{

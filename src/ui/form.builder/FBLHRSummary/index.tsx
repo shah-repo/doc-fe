@@ -7,7 +7,7 @@ import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel
 import { GridDataStateChangeEvent, GridFilterChangeEvent, GridPageChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
-import { cloneDeep, find, map, pick } from 'lodash';
+import { find, map, pick } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
@@ -29,9 +29,11 @@ import { KendoColumn } from '../../components/common/kendo/types';
 import { Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
-import { FBSection } from '../../form.builder';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { UnitOption } from '../FBPartVendors/types';
 import {
   ColumnMenuContext,
   CustomColumnMenu,
@@ -102,6 +104,21 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
     },
     onError: toastError,
   });
+
+  const unitsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+    optionId: FBAutocompleteAsyncOption.unitMeasures,
+  });
+
+  const units = useObserver(
+    () => {
+      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.unitMeasures) as Map<string, UnitOption>;
+      return asyncData ? Array.from(asyncData.values()).map(item => item.text) : [];
+    },
+  );
+
+  useEffect(() => {
+    unitsAsync.load();
+  }, [unitsAsync]);
 
   useEffect(() => {
     if (isShowOnly) {
@@ -237,6 +254,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
       ncmr: '',
       comments: '',
       enteredBy: '',
+      unit: '',
       recordCreationDate: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
     };
@@ -248,7 +266,6 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
     row,
     { dataItem },
   ) => {
-    console.log('rowRender');
     const item = dataItem as LHRSummaryItem;
     const isUpdating = [Mode.edit, Mode.add].includes(item[MODE_FIELD]);
 
@@ -288,6 +305,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
     onConfirm: submitForm,
     onDiscard: ondiscardLHRSummaryItem,
     onDelete: onDeleteLHRSummary,
+    units,
   });
 
   const [columns, setColumns]
@@ -336,7 +354,6 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   };
 
   const onDataStateChange = ({ dataState }: GridDataStateChangeEvent) => {
-    console.log('onDataStateChange ');
     setDataState(dataState);
     const processedData = process(origionalData, dataState);
     setData(processedData.data);
@@ -344,7 +361,6 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   };
 
   const onFilerChange = ({ filter }: GridFilterChangeEvent) => {
-    console.log('onFilerChange ', filter);
     setSkip(0);
     setDataState({
       ...dataState,
@@ -357,20 +373,11 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
       ...{ filter: filter ?? DEFAULT_FILTER },
     });
     setData(filter ? processedData.data : origionalData);
-    console.log('onFilerChange parent', data);
   };
 
   const slicedData = useMemo(
     () => LHRSummaryItemList.slice(skip, skip + pageSize),
     [LHRSummaryItemList, skip, pageSize],
-  );
-
-  console.log(
-    'parent',
-    skip,
-    origionalData?.length,
-    LHRSummaryItemList?.length,
-    cloneDeep(LHRSummaryItemList).slice(skip, skip + pageSize),
   );
 
   return (
