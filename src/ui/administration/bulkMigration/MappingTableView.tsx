@@ -20,7 +20,7 @@ const MappingTableView: React.FC<{
     if (schemaItem.referenceDataType === IReferenceDataType.ARRAY && Array.isArray(formInputValueRows) && formInputValueRows.length) {
       setRows(formInputValueRows);
     } else if (schemaItem.referenceDataType === IReferenceDataType.OBJECT && formInputValueRows) {
-      setRows([formInputValueRows]);
+      setRows([formInputValueRows as IRowData]);
     }
   }, [schemaItem.name]);
 
