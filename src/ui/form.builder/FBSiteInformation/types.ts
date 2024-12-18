@@ -12,6 +12,7 @@ export interface SchemaOptions {
   onDelete?: (dataItem: EditableSite) => void
   onRowClick?: (e: SiteEditEvent) => void
   onPrimaryChange?: (id: string) => void
+  onSameAsHQ?: (sameAsHQ: boolean) => void
 }
 
 export type FBSiteProps =
@@ -38,7 +39,7 @@ export interface Site {
 }
 
 export interface EditableSite extends Site {
-  [MODE_FIELD]?: Mode
+  [MODE_FIELD]: Mode
 }
 
 export interface SiteEditEvent {
@@ -47,4 +48,5 @@ export interface SiteEditEvent {
 
 export interface CustomSiteTemplateProps extends CellTemplateProps<EditableSite> {
   onClick?: (e: SiteEditEvent) => void
+  onSameAsHQ?: (sameAsHQ: boolean) => void
 }

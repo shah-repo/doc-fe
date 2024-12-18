@@ -15,13 +15,12 @@ export const withFBSiteInformation = <T extends FBSiteProps>(
     const formValue = formState?.getFieldValue(name);
 
     const initialSites = useMemo(() => {
-      return prepareSitesData(formValue ?? workspaceState?.formInputSync.get(name) ?? []);
+      return prepareSitesData(formValue ?? workspaceState?.formInputSync.get(name) ?? []) as EditableSite[];
     }, [formValue, workspaceState?.formInputSync, name]);
 
     const [sites, setSites] = useState<EditableSite[]>(initialSites);
 
     useEffect(() => {
-      console.log('initialSites :', initialSites);
       setSites(initialSites);
     }, [initialSites]);
 

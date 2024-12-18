@@ -1,7 +1,8 @@
-import { Grid } from '@material-ui/core';
+import { Grid, Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { translate } from '../../../../common/intl';
 import SwitchControl from '../../../administration/general.settings/components/SwitchControl';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../components/OverflowContent';
@@ -10,7 +11,7 @@ import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomSiteTemplateProps, EditableSite } from '../types';
 import styles from './styles';
 
-const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem }) => {
+const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, values, setFieldValue }
     = useFormikContext<EditableSite>();
@@ -20,11 +21,12 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelected((prevSelected) => !prevSelected);
     setFieldValue('sameAsHQ', !selected);
+    onSameAsHQ?.(!selected);
   };
 
   useEffect(() => {
     setSelected(values.sameAsHQ);
-  }, [values.sameAsHQ]);
+  }, [values]);
 
   return (
     <Grid container spacing={2} direction="row" alignItems="center">
@@ -62,7 +64,9 @@ export const SiteAddressCell: React.FC<CustomSiteTemplateProps> = (props) => {
   return (
     <Grid container spacing={2} direction="row" alignItems="center">
       <Grid item>
-        <SwitchControl checked={dataItem?.sameAsHQ} label="" />
+        <Tooltip arrow placement="top" title={translate('customer.site.information.same.as.hq.label')} PopperProps={{ style: { zIndex: 2000 } }} >
+          <span><SwitchControl checked={dataItem?.sameAsHQ} label="" disabled /></span>
+        </Tooltip>
       </Grid>
       <Grid item className={classes.sideAddress}>
         <OverflowContent onClick={handleClick}>{displayValue}</OverflowContent>

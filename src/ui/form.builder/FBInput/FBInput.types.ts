@@ -90,6 +90,7 @@ export type FBInputType =
   | 'workOrderLhrTable'
   | 'woApprovals'
   | 'workOrderType'
+  | 'shippingInformation'
   | 'headquarterAddress'
   | 'shippingItems'
   | 'shippingAddress'

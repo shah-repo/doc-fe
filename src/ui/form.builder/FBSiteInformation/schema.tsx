@@ -15,6 +15,7 @@ export const buildSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  onSameAsHQ,
 }: SchemaOptions): Array<ColumnDefinition<EditableSite>> => {
   return [
     {
@@ -43,7 +44,7 @@ export const buildSchema = ({
       field: 'siteAddress',
       title: 'form.builder.site.inforation.grid.heading.site.address',
       filterable: false,
-      template: (props) => <SiteAddressCell {...props} onClick={onRowClick} />,
+      template: (props) => <SiteAddressCell {...props} onClick={onRowClick} onSameAsHQ={onSameAsHQ} />,
       width: 350,
     },
     {

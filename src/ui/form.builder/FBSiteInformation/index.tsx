@@ -3,7 +3,7 @@ import { GridDetailRowProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
 import { Button } from '../../components/forms/fields-next';
@@ -82,6 +82,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const createSite = () => setEditedSite({
     id: uuidv4(),
+    primary: sites.length === 0,
     [MODE_FIELD]: Mode.add,
   });
 
@@ -92,7 +93,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     const updatedSites = sites.filter((site) =>
       site.id !== dataItem.id,
     );
-    setSites(updatedSites);
+    setSites(updatedSites as EditableSite[]);
   formState?.setFieldValue(name, updatedSites);
   workspaceState?.saveDocRev({
     ...workspaceState?.formInput,
@@ -122,6 +123,18 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     );
   };
 
+  const handleSameAsHQ = useCallback((sameAsHQ) => {
+    const hqAddress = workspaceState?.formInput;
+    formik.setValues({
+      ...editedSite,
+      zipCode: sameAsHQ ? hqAddress?.headquarter_address_zip_code || '' : '',
+      siteAddress: sameAsHQ ? hqAddress?.headquarter_address || '' : '',
+      city: sameAsHQ ? hqAddress?.headquarter_address_city || '' : '',
+      country: sameAsHQ ? hqAddress?.headquarter_address_country || '' : '',
+      sameAsHQ,
+    });
+  }, [workspaceState?.formInput, editedSite]);
+
   const schema = buildSchema({
     isActive,
     isInEditMode,
@@ -130,24 +143,29 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     onConfirm: submitForm,
     onDiscard: onDiscardSite,
     onDelete: onDeleteSite,
+    onSameAsHQ: handleSameAsHQ,
   });
 
-  const siteList = sites.reduce((list, item) => {
-    const isSiteEdited = editedSite && editedSite.id === item.id;
-
-    return [
-      ...list,
-      {
+  const siteList = useMemo(() => {
+    return sites.reduce((list, item) => {
+      const isSiteEdited = editedSite && editedSite.id === item.id;
+      const site = {
         ...(isSiteEdited ? editedSite : item),
         [MODE_FIELD]: isSiteEdited ? Mode.edit : Mode.show,
         [EXPAND_FIELD]: true,
-      },
-    ];
-  }, isSiteAdded ? [editedSite] : []);
+      };
+
+      list.push(site);
+      return list;
+    }, isSiteAdded ? [editedSite] : []);
+  }, [sites, editedSite, isSiteAdded]);
+
+  const memoizedSites = useMemo(() => sites, [sites?.length]);
+  const memoizedName = useMemo(() => name, [name]);
 
   const DetailComponent = memo((props: GridDetailRowProps) => {
     return (
-      <SiteContact dataItem={props.dataItem} name={name} sites={sites} />
+      <SiteContact {...props} name={memoizedName} sites={memoizedSites} />
     );
   });
 
@@ -164,11 +182,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
         fullWidth
         hasBoxScrollbars
         schema={schema}
-        detail={(props) => (
-          <DetailComponent
-            {...props}
-          />
-        )}
+        detail={DetailComponent}
         expandField={EXPAND_FIELD}
         data={siteList as EditableSite[]}
         onRowClick={handleRowClick}

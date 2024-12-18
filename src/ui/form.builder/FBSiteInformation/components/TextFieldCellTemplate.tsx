@@ -1,14 +1,13 @@
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
-import React from 'react';
+import React, { memo } from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../components/OverflowContent';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomSiteTemplateProps } from '../types';
 
-const Editor: React.FC<CustomSiteTemplateProps> = ({ field }) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
+const Editor: React.FC<CustomSiteTemplateProps> = memo(({ field }) => {
   const { getFieldProps } = useFormikContext();
   const isNumberField = field === 'zipCode';
 
@@ -24,7 +23,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field }) => {
       />
     </FormikField>
   );
-};
+});
 
 export const TextFieldCellTemplate: React.FC<CustomSiteTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
@@ -35,7 +34,6 @@ export const TextFieldCellTemplate: React.FC<CustomSiteTemplateProps> = (props) 
   }
 
   const handleClick = () => onClick?.({ dataItem });
-
   const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
 
   return (

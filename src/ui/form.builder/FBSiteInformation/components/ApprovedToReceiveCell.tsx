@@ -32,7 +32,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({
   const value
     = APPROVED_TO_RECEIVE_OPTIONS.find(
       (option) => option.value === dataItem[field],
-    ) ?? APPROVED_TO_RECEIVE_OPTIONS[0];
+    );
 
   return (
     <FormikField name={field}>
