@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, FormControlLabel, Grid, makeStyles, Radio, RadioGroup, Typography } from '@material-ui/core';
+import Markdown from 'markdown-to-jsx';
 import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { FBOption } from '../../../../src/ui/form.builder/index';
 import Text from '../../components/Text';
 import { FBSchemaState } from '../../form.builder';
@@ -102,7 +102,7 @@ const AnnouncementDetail: React.FC<{
           </CardContent>
           {
             announcementDetailRow.helpText && <CardContent className={classes.textDescription}>
-              <ReactMarkdown>{announcementDetailRow.helpText}</ReactMarkdown>
+              <Markdown>{announcementDetailRow.helpText}</Markdown>
             </CardContent>
           }
           <Box className={classes.componentDisplayBox}>
@@ -110,12 +110,12 @@ const AnnouncementDetail: React.FC<{
           </Box>
           {
             formBuilder.describingText && <CardContent className={classes.textDescription}>
-              <ReactMarkdown>{formBuilder.describingText}</ReactMarkdown>
+              <Markdown>{formBuilder.describingText}</Markdown>
             </CardContent>
           }
         </>}
         {!formBuilder && announcementDetailRow.helpText && <CardContent className={classes.textDescription}>
-          <ReactMarkdown>{announcementDetailRow.helpText}</ReactMarkdown>
+          <Markdown>{announcementDetailRow.helpText}</Markdown>
         </CardContent>
         }
         {
