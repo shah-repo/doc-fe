@@ -45,7 +45,11 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const { addToDam = [], removeFromDam = [] } = generalSettings?.approvalRoles ?? {};
   const dam = generalSettings?.approvalRoles?.dam;
   let updatedDAR = cloneDeep(formInput?.[FBDAMFields.DAR] ?? []) as FBApprovalRole[];
-  const updatedDAM = cloneDeep(formInput?.[FBDAMFields.DAM] ?? []) as FBApprovalMatrixItem[];
+  const updatedDAM = cloneDeep(
+    formInput?.[FBDAMFields.DAM]?.approvalMatrix
+    ?? formInput?.[FBDAMFields.DAM]
+    ?? [],
+  ) as FBApprovalMatrixItem[];
   const showAlertDialog = localStorage.getItem(OUT_OF_SYNC_ALERT_DATA_KEY) as unknown as Dam; // @todo
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
