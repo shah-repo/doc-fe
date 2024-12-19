@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { intl, translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_LATEST_SCANS, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_UPDATE_SCAN, BULK_MIGRATION_UPGRADE_FORM } from '../../../state/ducks/company/constants';
+import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_UPDATE_SCAN, BULK_MIGRATION_UPGRADE_FORM } from '../../../state/ducks/company/constants';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import DateTime from '../../components/DateTime';
@@ -47,16 +47,13 @@ const BulkMigrationContainer: React.FC = () => {
   const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
 
   const [newFormSchema, setNewFormSchema] = useState([]);
-  const [isFormSchemaExpanded, setIsFormSchemaExpanded] = useState(false);
 
-  const [latestScans, setLatestScans] = useState<IBulkMigrationScanDetails[]>([]);
   const [scanDetails, setScanDetails] = useState<IBulkMigrationScanDetails>();
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null); // Reference to store the interval ID.
 
   useEffect(() => {
     fetchAllDocumentTypes();
-    fetchLatestScans();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -326,34 +323,6 @@ const BulkMigrationContainer: React.FC = () => {
     }
   }
 
-  // Get the top 5 latest scans.
-  const fetchLatestScans = () => {
-    commonSetUp();
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: BULK_MIGRATION_GET_LATEST_SCANS,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        console.log('latestScans :', data);
-        setIsLoading(false);
-
-        if (data.length) {
-          setLatestScans(data);
-        }
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  };
-
   function startRevisionsScan () {
     if (!scanDetails?.toFormSchema?.length) {
       toastError(`Mapping Logic has not been set. 
@@ -517,10 +486,6 @@ const BulkMigrationContainer: React.FC = () => {
       fetchFormRevsForDocumentType(toDocumentTypeId, 'to');
     }
   }, [toDocumentTypeId]);
-
-  const toggleFormSchema = () => {
-    setIsFormSchemaExpanded(!isFormSchemaExpanded);
-  };
 
   useEffect(() => {
     if (fromDocumentTypeId && toDocumentTypeId && fromFormRevId && toFormRevId) {

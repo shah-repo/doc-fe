@@ -1,4 +1,3 @@
-import { AnchorPositionType } from 'react-archer/lib/types';
 import { Permission } from '../../../state/ducks/auth/types';
 import { Employee } from '../../../state/ducks/company/types';
 import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -46,13 +45,13 @@ export interface ISupplierScanResultRev {
   ownerId: string
 }
 
-export enum SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM {
+enum SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM {
   DEFAULT = 'DEFAULT',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
 }
 
-export enum REV_ACTION_OPTIONS {
+enum REV_ACTION_OPTIONS {
   REVISE_AND_MIGRATE = 'REVISE_AND_MIGRATE',
   MIGRATE_ONLY = 'MIGRATE_ONLY',
   CHECK_FORM_INPUT_ONLY = 'Check Form Input Only',
@@ -73,11 +72,6 @@ export enum MIGRATION_STATUS_ENUM {
 export interface ISelectedDetails {
   id: string
   action: REV_ACTION_OPTIONS
-}
-
-export interface ISearchDetails {
-  id: string
-  value: string
 }
 
 export interface IApprovalRequirements {
@@ -105,15 +99,6 @@ export interface IMappedFrom {
   type: any
   isShowDirectly: boolean
 }
-
-export interface IRelation {
-  targetId: string
-  targetAnchor: AnchorPositionType
-  sourceAnchor: AnchorPositionType
-  style?: {[key: string]: string}
-  endMarker?: boolean
-}
-
 export interface IRowData {
   [key: string]: any
 }
