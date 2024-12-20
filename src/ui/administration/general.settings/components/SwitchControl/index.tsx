@@ -15,7 +15,7 @@ const SwitchControl: React.FC<SwitchControlProps> = ({
   return (
     <FormControlLabel
       {...labelProps}
-      className={cx(classes.root, labelProps.className)}
+      className={cx(classes.root, labelProps?.className)}
       control={<Switch {...props} />}
       labelPlacement="start"
       label={label}
