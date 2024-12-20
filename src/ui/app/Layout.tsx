@@ -1,15 +1,10 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Widget as AiWidget } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
-import { getHasPermission, hasActiveSubscription } from '../../common/utils/selectors';
-import { Permission } from '../../state/ducks/auth/types';
-import { PremiumFeature } from '../../state/ducks/company/types';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import PremiumFeaturesPage from '../administration/premium.settings';
@@ -72,10 +67,6 @@ const Layout: React.FC = () => {
     localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
     setOpen(!isOpened);
   };
-  const isAISubscriptionEnabled = useSelector(hasActiveSubscription(PremiumFeature.AI));
-  const hasAIPermission = useSelector(getHasPermission(Permission.AI_SUBSCRIPTION));
-
-  const canUseAI = isAISubscriptionEnabled && hasAIPermission;
 
   return (
     <>
@@ -88,7 +79,6 @@ const Layout: React.FC = () => {
       <WatermarkFooterContainer />
       <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
-        {canUseAI && <AiWidget />}
         <Switch>
           <Route
             path={DOCUMENT_REVISION_LIST_URL}
