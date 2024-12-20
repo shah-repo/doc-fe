@@ -1,6 +1,7 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
+import { omit } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
@@ -11,6 +12,7 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
+import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableShippingItem, FBShippingItemsProps, ShippingItemEditEvent } from './types';
@@ -19,9 +21,15 @@ import { withFBShippingItems } from './wrap';
 const FBShippingItems: React.FC<FBShippingItemsProps> = ({
   label = 'form.builder.record.shipping.items.label',
   name = '',
+  lots,
+  parts,
   disabled,
+  isLotsloading,
+  isPartsloading,
   shippingItems = [],
-  setShippingItems,
+  fetchLotsByPartId,
+  updateShippingItem,
+  deleteShippingItem,
   ...props
 }) => {
   const classes = useStyles();
@@ -35,7 +43,8 @@ const FBShippingItems: React.FC<FBShippingItemsProps> = ({
   const formik = useFormik<Partial<EditableShippingItem>>({
     initialValues: {},
     onSubmit: (values) => {
-      // TO DO
+      const itemToSave = omit(values, FIELDS_TO_OMIT);
+      updateShippingItem(itemToSave as EditableShippingItem);
       discardShippingItem();
     },
   });
@@ -53,9 +62,9 @@ const FBShippingItems: React.FC<FBShippingItemsProps> = ({
 
   const discardShippingItem = () => setEditedShippingItem(undefined);
 
-  const removeShippingItem = (dataItem: EditableShippingItem) => {
+  const removeShippingItem = () => {
     if (!editedShippingItem) return;
-    // TO DO
+    deleteShippingItem(editedShippingItem as EditableShippingItem);
     discardShippingItem();
   };
 
@@ -81,11 +90,16 @@ const FBShippingItems: React.FC<FBShippingItemsProps> = ({
   };
 
   const schema = buildSchema({
+    lots,
+    parts,
+    isLotsloading,
+    isPartsloading,
     actionsClass: classes.actionsCell,
     onRowClick: handleRowClick,
     onConfirm: submitForm,
     onDiscard: discardShippingItem,
     onDelete: removeShippingItem,
+    fetchLotsByPartId,
   });
 
   const shippingItemList = shippingItems.reduce((list, item) => {

@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { differenceBy, unionBy } from 'lodash';
+import { useState } from 'react';
 import { FB } from '..';
 import { FBShippingItemsProps, ShippingItem } from './types';
+import { useOptions } from './utils';
 
 export const withFBShippingItems = <T extends FBShippingItemsProps>(
   Component: React.FC<T>,
@@ -10,21 +12,38 @@ export const withFBShippingItems = <T extends FBShippingItemsProps>(
     disabled,
     ...props
   }: T) => {
-    const { workspaceState } = FB.useStores();
-    const [shippingItems, setShippingItems] = useState<ShippingItem[]>();
+    const { formState, workspaceState } = FB.useStores();
+    const [shippingItems, setShippingItems] = useState<ShippingItem[]>(workspaceState?.formInputSync.get(name) ?? []);
+    const { parts, lots, fetchLotsByPartId, isLotsloading, isPartsloading } = useOptions();
 
-    useEffect(() => {
-      if (!workspaceState?.documentId && !workspaceState?.formInputSync.get(name)) {
+    const updateState = (state: ShippingItem[]) => {
+      setShippingItems(state);
+      formState?.setFieldValue(name, state);
+      formState?.setFieldAutosave(name);
+    };
 
-      }
-    }, [workspaceState?.documentId, workspaceState?.formInput?.[name]]);
+    const updateShippingItem = (item: ShippingItem) => {
+      const newItems = unionBy([item], shippingItems, 'id');
+      updateState(newItems);
+    };
+
+    const deleteShippingItem = (item: ShippingItem) => {
+      const updatedItems = differenceBy(shippingItems, [item], 'id');
+      updateState(updatedItems);
+    };
 
     return Component({
       ...props as T,
       name,
+      lots,
+      parts,
+      isLotsloading,
+      isPartsloading,
       disabled: disabled ?? workspaceState?.isPreview,
       shippingItems,
-      setShippingItems,
+      fetchLotsByPartId,
+      updateShippingItem,
+      deleteShippingItem,
     });
   };
 

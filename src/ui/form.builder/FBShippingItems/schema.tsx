@@ -1,33 +1,39 @@
 import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
+import { ItemIDcell } from './components/ItemIDcell';
+import { LotIDCell } from './components/LotIDCell';
 import { QuantityCell } from './components/QuantityCell';
-import { RefIDcell } from './components/RefIDcell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
 import { EditableShippingItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
+  lots,
+  parts,
+  isLotsloading,
+  isPartsloading,
   actionsClass,
   onRowClick,
   onConfirm,
   onDiscard,
   onDelete,
+  fetchLotsByPartId,
 }: SchemaOptions): Array<ColumnDefinition<EditableShippingItem>> => {
   return [
     {
-      id: 'itemId',
-      field: 'itemId',
-      title: 'form.builder.record.shipping.items.grid.heading.item.id',
+      id: 'part',
+      field: 'part',
+      title: 'form.builder.record.shipping.items.grid.heading.part',
       filterable: false,
-      template: (props) => <RefIDcell {...props} onClick={onRowClick} />,
+      template: (props) => <ItemIDcell {...props} options={parts} loading={isPartsloading} onClick={onRowClick} />,
       width: 150,
     },
     {
-      id: 'lotNumber',
-      field: 'lotNumber',
-      title: 'form.builder.record.shipping.items.grid.heading.lot.number',
+      id: 'lot',
+      field: 'lot',
+      title: 'form.builder.record.shipping.items.grid.heading.lot',
       filterable: false,
-      template: (props) => <RefIDcell {...props} onClick={onRowClick} />,
+      template: (props) => <LotIDCell {...props} options={lots} loading={isLotsloading} fetchLotsByPartId={fetchLotsByPartId} onClick={onRowClick} />,
       width: 310,
     },
     {
