@@ -82,7 +82,7 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
   const documentMatch = useRouteMatch(DOCUMENT_REVISION_VERSION_URL);
   const companyId = useSelector(companySelectors.companyIdSelector);
   const documentRevisionId = documentMatch?.params?.documentRevisionId;
-  const accessToken = `${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
+  const accessToken = `Bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
       state,
