@@ -7,7 +7,7 @@ import styles from './FBShippingAddress.styles';
 import { withFBShippingAddress } from './FBShippingAddress.wrap';
 import { FBShippingAddresProps } from './types';
 
-const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleChange, value, loading, disabled }) => {
+const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleChange, value, loading, disabled, isShippingAddressEmpty }) => {
   const classes = styles();
   const attention = find(value?.siteContact, { attention: true });
   const shipping = find(value?.siteContact, { shipping: true });
@@ -30,6 +30,7 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
               getOptionLabel={(option) => option.label ?? ''}
               loading={loading}
               disabled={disabled}
+              disableClearable
               onChange={handleChange}
               value={value}
               renderInput={(params: RenderInputParams) => (
@@ -63,7 +64,7 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
               )}
             />
           </Grid>
-          <Grid xs={6}>
+          {!isShippingAddressEmpty && <Grid xs={6}>
             <Box className={classes.shippingInfoContainer}>
               <Grid xs={6}>
                 <Box className={classes.shippingInfoCard}>
@@ -120,7 +121,7 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
                 </Box>
               </Grid>
             </Box>
-          </Grid>
+          </Grid>}
         </Grid>
       </Box>
     </div>

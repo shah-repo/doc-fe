@@ -24,6 +24,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
     const customerId = useObserver(() => formState?.getFieldValue('customer') || workspaceState?.formInputSync.get('customer') || workspaceState?.formInput?.customer);
     const isCustomerFieldLoading = useObserver(() => workspaceState?.documentRevApi.loading);
     const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue('customer'));
+    const isShippingAddressEmpty = isEmpty(formState?.getFieldValue('shipping_address'));
     const fetchAddressesByCustomerId = useActionCreator(
       shippingInfoActions.fetchAddressesByCustomerId,
     );
@@ -96,6 +97,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
       name,
       disabled: disabled || isCustomerFieldEmpty || isCustomerFieldLoading,
       loading: fetchShippingAddressAsync.isLoading,
+      isShippingAddressEmpty,
       value,
       handleChange,
       options,

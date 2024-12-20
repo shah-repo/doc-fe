@@ -5,6 +5,7 @@ export interface FBShippingAddresProps {
   name?: string
   loading: boolean
   disabled: boolean
+  isShippingAddressEmpty?: boolean
   value: CustomOptionType
   options: CustomOptionType[]
   shippingAddresses: ShippingAddress[]
