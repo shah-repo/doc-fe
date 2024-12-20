@@ -62,11 +62,12 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
         FBAutocompleteAsyncOption.shippingInformation,
         fetchShippingAddressAsync,
       );
+      return saveShippingAddressInfo;
     }, [customerId]);
 
-    const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
+    const saveShippingAddressInfo = (value?: CustomOptionType) => {
       const contacts = value?.siteContact?.reduce<{attention: ContactValue | undefined, shipping: ContactValue | undefined}>((contacts, item) => {
-        const contact = { id: item.id, name: item.name };
+        const contact = { id: item.id, name: `${item.name} (${item.email})` };
         if (item.attention) {
           contacts.attention = contact;
         }
@@ -77,10 +78,14 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
         return contacts;
       }, { attention: undefined, shipping: undefined });
 
-      formState?.setFieldValue('shipping_address', { id: value?.value, name: value?.label });
-      formState?.setFieldValue('shipping_address_attention', contacts?.attention);
-      formState?.setFieldValue('shipping_address_contact', contacts?.shipping);
+      formState?.setFieldValue('shipping_address', !isEmpty(value) ? { id: value?.value, name: value?.label } : {});
+      formState?.setFieldValue('shipping_address_attention', !isEmpty(value) ? contacts?.attention : {});
+      formState?.setFieldValue('shipping_address_contact', !isEmpty(value) ? contacts?.shipping : {});
       workspaceState?.saveDocRev(formState?.getValues());
+    };
+
+    const handleChange = (event: ChangeEvent<{}>, value?: CustomOptionType) => {
+      saveShippingAddressInfo(value);
     };
 
     const value = !isEmpty(defaultValue) ? options.find((option) => option.value === defaultValue?.id)

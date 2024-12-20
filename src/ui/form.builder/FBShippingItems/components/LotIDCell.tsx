@@ -20,8 +20,9 @@ interface Props extends CustomTemplateProps {
   fetchLotsByPartId: (id?: string) => void
 }
 
-const Editor: React.FC<Props> = ({ field, fetchLotsByPartId, options, loading, ...props }) => {
+const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, loading }) => {
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableShippingItem>();
+  const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const { part } = values ?? {};
   const classes = styles();
 
@@ -59,6 +60,7 @@ const Editor: React.FC<Props> = ({ field, fetchLotsByPartId, options, loading, .
           value={value}
           options={renderOptions()}
           getOptionLabel={(option) => option?.label ?? ''}
+          disabled={isUpdateAction}
           size="small"
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
@@ -67,7 +69,6 @@ const Editor: React.FC<Props> = ({ field, fetchLotsByPartId, options, loading, .
                   {...params}
                   fullWidth
                   variant="outlined"
-                  // disabled={isTypeFieldEmpty}
                   placeholder={translate('lhr.summary.placeholder.select.enter')}
                   InputProps={{
                     ...params.InputProps,
