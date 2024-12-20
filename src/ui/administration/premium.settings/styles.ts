@@ -1,8 +1,8 @@
-import { makeStyles } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
 import { NextTheme } from '../../layout/theme-next/provider';
 
-export default makeStyles((theme: NextTheme) => ({
+export default makeStyles((theme: NextTheme) => createStyles({
   root: {
     width: '100%',
     height: '100%',

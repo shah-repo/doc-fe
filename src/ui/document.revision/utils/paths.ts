@@ -19,3 +19,11 @@ export const documentVersionPath = (documentRevisionId: string, documentId: stri
 
 export const documentNewVersionPath = (documentRevisionId: string, documentId: string) =>
   documentPath(DOCUMENT_REVISION_NEW_VERSION_URL, { documentRevisionId, documentId });
+
+export const safeParse = (jsonString: string) => {
+  try {
+    return JSON.parse(jsonString);
+  } catch {
+    return null;
+  }
+};

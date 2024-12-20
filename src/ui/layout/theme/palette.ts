@@ -1,9 +1,9 @@
-import { createTheme } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core';
 import { Palette, PaletteColor } from '@material-ui/core/styles/createPalette';
 import { WhiteLabelingColors } from '../../../state/ducks/company/types';
 import { ThemeEnv } from './utils/types';
 
-export const muiTheme = createTheme();
+export const muiTheme = createMuiTheme();
 
 export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingColors) => {
   let palette;

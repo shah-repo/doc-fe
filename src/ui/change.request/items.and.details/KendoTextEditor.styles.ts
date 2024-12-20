@@ -17,6 +17,7 @@ export default makeStyles((theme: Theme) =>
       maxWidth: '100%',
       padding: theme.spacing(0.875, 1, 0.875, 1),
       border: `1px solid ${Colors.stroke}`,
+      borderRadius: 3,
       '&:hover, &:focus, &:active': {
         outline: 'none',
         border: `1px solid ${Colors.statusDraft}`,

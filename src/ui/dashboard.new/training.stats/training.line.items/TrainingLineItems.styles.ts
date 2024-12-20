@@ -1,7 +1,8 @@
 import { makeStyles } from '@material-ui/core';
+import { NextTheme } from '../../../layout/theme-next/provider';
 import { loadMoreStyles } from '../../Dashboard.styles';
 
-export default makeStyles((theme) => ({
+export default makeStyles((theme: NextTheme) => ({
   root: {
     flexGrow: 1,
     overflow: 'auto',

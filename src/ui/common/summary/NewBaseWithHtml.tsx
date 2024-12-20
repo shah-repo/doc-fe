@@ -1,4 +1,5 @@
 import { Box, Button, Grid } from '@material-ui/core';
+import { EditorState } from 'draft-js';
 import React, { useEffect, useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import { useIntl } from 'react-intl';
@@ -23,7 +24,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   const [isTextClamped, setIsTextClamped] = useState(false);
   const viewMore = intl.formatMessage({ id: 'document.revision.view.more' });
   const viewLess = intl.formatMessage({ id: 'document.revision.view.less' });
-  const [editor, setEditor] = useState();
+  const [editor, setEditor] = useState<EditorState>();
   const [btnText, setBtnText] = useState(viewMore);
   const [flag, setFlag] = useState(false);
   const classes = styles(isTextClamped);

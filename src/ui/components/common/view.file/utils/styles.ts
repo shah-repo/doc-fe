@@ -22,6 +22,8 @@ export const styles = makeStyles((theme: NextTheme) => ({
   },
   contentRoot: {
     textAlign: 'center',
+    overflow: 'hidden',
+    height: '85%',
   },
   buttonsContainer: {
     position: 'absolute',
@@ -55,7 +57,7 @@ export const styles = makeStyles((theme: NextTheme) => ({
         marginTop: theme.spacing(1.5),
       },
     },
-    content: {
+    dialogContent: {
       width: 340,
     },
     buttonsContainer: {

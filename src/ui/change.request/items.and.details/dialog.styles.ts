@@ -140,4 +140,8 @@ export default makeStyles((theme) => ({
   dotContainer: {
     marginLeft: theme.spacing(1.5),
   },
+  dialog: {
+    width: '100%',
+    maxWidth: 760,
+  },
 }));

@@ -87,10 +87,18 @@ export default makeStyles(theme => ({
     justifyContent: 'end',
     alignItems: 'center',
   },
+  buttonsCancel: {
+    justifySelf: 'left',
+    minWidth: 140,
+    fontWeight: 700,
+  },
   buttonsFooterContainer: {
     display: 'flex',
-    width: 'fit-content',
+    width: '100%',
     gap: theme.spacing(2.5, 2.5),
+    '& button:first-of-type': {
+      marginLeft: 'auto',
+    },
   },
   button: {
     minWidth: 180,
