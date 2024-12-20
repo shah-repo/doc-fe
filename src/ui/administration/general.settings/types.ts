@@ -1,5 +1,5 @@
-import { ExpansionPanelProps, SwitchProps } from '@material-ui/core';
-import { RefObject } from 'react';
+import { ExpansionPanelProps, FormControlLabelProps, SwitchProps } from '@material-ui/core';
+import { ReactNode, RefObject } from 'react';
 
 export enum GeneralSettingsTabs {
   Printing = 'Printing',
@@ -33,7 +33,8 @@ export interface SettingsPanelProps extends ExpansionPanelProps {
 }
 
 export interface SwitchControlProps extends SwitchProps {
-  label: string
+  label: ReactNode
+  labelProps: Partial<FormControlLabelProps>
 }
 
 export interface HeaderLastSavedProps {

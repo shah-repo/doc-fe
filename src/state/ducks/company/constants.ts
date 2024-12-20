@@ -16,7 +16,8 @@ export const AUTOSAVE_CONFIG = 'company/AUTOSAVE_CONFIG';
 export const SET_AUTOSAVE_CONFIG = 'company/SET_AUTOSAVE_CONFIG';
 export const REDLINE_CONFIG = 'company/REDLINE_CONFIG';
 export const SET_GENERAL_SETTINGS = 'company/SET_GENERAL_SETTINGS';
-export const SET_PREMIUM_FEATURES_SETTINGS = 'company/SET_PREMIUM_FEATURES_SETTINGS';
+export const SET_SUBSCRIPTIONS = 'company/SET_SUBSCRIPTIONS';
+export const UPDATE_SUBSCRIPTION = 'company/UPDATE_SUBSCRIPTION';
 
 export const WHITE_LABEL_DEFAULT = {
   logo: '',

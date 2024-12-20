@@ -3,11 +3,13 @@ import { Widget as AiWidget } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
-import { ApplicationState } from '../../state/reducers';
+import { getHasPermission, hasActiveSubscription } from '../../common/utils/selectors';
+import { Permission } from '../../state/ducks/auth/types';
+import { PremiumFeature } from '../../state/ducks/company/types';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import PremiumFeaturesPage from '../administration/premium.settings';
@@ -61,9 +63,8 @@ import useStyles from './Layout.styles';
 import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
-import { Permission } from '../../state/ducks/auth/types';
 
-const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePermissions: Permission[] }> = ({ isAIEnabled, currentEmployeePermissions }) => {
+const Layout: React.FC = () => {
   const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
   const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
   const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
@@ -71,7 +72,10 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
     localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
     setOpen(!isOpened);
   };
-  const isAIPermissionEnabled = currentEmployeePermissions.includes(Permission.AI_SUBSCRIPTION);
+  const isAISubscriptionEnabled = useSelector(hasActiveSubscription(PremiumFeature.AI));
+  const hasAIPermission = useSelector(getHasPermission(Permission.AI_SUBSCRIPTION));
+
+  const canUseAI = isAISubscriptionEnabled && hasAIPermission;
 
   return (
     <>
@@ -84,7 +88,7 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
       <WatermarkFooterContainer />
       <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
-        {isAIEnabled && isAIPermissionEnabled && <AiWidget />}
+        {canUseAI && <AiWidget />}
         <Switch>
           <Route
             path={DOCUMENT_REVISION_LIST_URL}
@@ -189,11 +193,4 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
   );
 };
 
-const mapStateToProps = (state: ApplicationState) => {
-  return {
-    isAIEnabled: state.company.premiumFeatures.isAIEnabled,
-    currentEmployeePermissions: state.auth.groups.permissions,
-  };
-};
-
-export default connect(mapStateToProps)(Layout);
+export default Layout;

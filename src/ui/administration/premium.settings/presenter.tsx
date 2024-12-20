@@ -9,7 +9,6 @@ import AlertDialog from '../../components/dialogs/Alert';
 import { Button } from '../../components/forms/fields-next';
 import useDialog from '../../hooks/useDialog';
 import { withThemeNext } from '../../layout/theme-next';
-import HeaderLastSaved from '../general.settings/components/HeaderLastSaved';
 import SwitchControl from '../general.settings/components/SwitchControl';
 import NewBadge from './components/NewBadge';
 import useStyles from './styles';
@@ -68,12 +67,6 @@ const PremiumFeaturesPage: React.FC<PremiumFeaturesPageProps> = ({
           <br className={classes.spaceTitle} />
         </Box>
         <Box className={classes.actions}>
-          {updatedAt && (
-            <HeaderLastSaved
-              timestamp={updatedAt}
-              loading={isLoading}
-            />
-          )}
           <Box className={classes.buttons}>
             <Button kind="outlined" data-cy="settings-history" disabled>{translate('common.history')}</Button>
           </Box>

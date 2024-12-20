@@ -65,10 +65,10 @@ export const USER_GROUP_URL = '/user_group';
 export const USER_GROUPS_URL = '/user_group/group';
 
 export const COMPANY_SETTINGS_URL = '/company/settings';
-
-export const SUBSCRIPTIONS_URL = '/company/subscriptions';
-
 export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
+
+export const SUBSCRIPTIONS_URL = '/subscriptions';
+export const SUBSCRIPTIONS_UPDATE_URL = '/subscriptions/:id';
 
 export const BULK_IMPORT_URL = '/bulk_import/create';
 

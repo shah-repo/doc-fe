@@ -14,8 +14,9 @@ import {
   SET_AUTOSAVE_CONFIG,
   SET_COMPANY_MINE,
   SET_GENERAL_SETTINGS,
-  SET_PREMIUM_FEATURES_SETTINGS,
+  SET_SUBSCRIPTIONS,
   UPDATE_NAVIGATION_ITEM,
+  UPDATE_SUBSCRIPTION,
 } from './constants';
 
 export interface WhiteLabelingColors {
@@ -236,12 +237,26 @@ export interface GeneralSettingsState extends GeneralSettings, AsyncState {
   updatedAt?: string
 }
 
-export interface PremiumFeatures {
-  isAIEnabled: boolean
+export enum PremiumFeature {
+  AI = 'AI',
+  Reports = 'REPORTS',
 }
 
-export interface PremiumFeaturesState extends PremiumFeatures, AsyncState {
-  updatedAt?: string
+export interface SubscriptionPayload {
+  isEnabled: boolean
+}
+
+export interface Subscription extends SubscriptionPayload {
+  id: string
+  companyId: string
+  type: PremiumFeature
+  publicConfig?: Record<string, unknown>
+  createdAt: string
+  updatedAt: string
+}
+
+export interface SubscriptionsState extends AsyncState {
+  subscriptions: Subscription[]
 }
 
 export interface GeneralSettingsAction {
@@ -249,7 +264,11 @@ export interface GeneralSettingsAction {
   payload: GeneralSettings
 }
 
-export interface PremiumFeaturesAction {
-  type: typeof SET_PREMIUM_FEATURES_SETTINGS
-  payload: PremiumFeatures
+export interface SetSubscriptionsAction {
+  type: typeof SET_SUBSCRIPTIONS
+  payload: Subscription[]
+}
+export interface UpdateSubscriptionAction {
+  type: typeof UPDATE_SUBSCRIPTION
+  payload: Subscription
 }

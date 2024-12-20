@@ -9,6 +9,7 @@ import {
   LIFE_CYCLE_DOC_REV_OPTIONS_URL,
   LIFE_CYCLE_DOC_TYPES_URL,
   LIFE_CYCLE_PHASES_URL,
+  SUBSCRIPTIONS_UPDATE_URL,
   SUBSCRIPTIONS_URL,
   UPDATE_COMPANY_SETTINGS_URL,
 } from '../../../ui/constants/urls';
@@ -22,8 +23,9 @@ import {
   SET_AUTOSAVE_CONFIG,
   SET_COMPANY_MINE,
   SET_GENERAL_SETTINGS,
-  SET_PREMIUM_FEATURES_SETTINGS,
+  SET_SUBSCRIPTIONS,
   UPDATE_NAVIGATION_ITEM,
+  UPDATE_SUBSCRIPTION,
 } from './constants';
 import {
   Company,
@@ -33,11 +35,12 @@ import {
   GeneralSettingsAction,
   GeneralSettingsState,
   NavigationMenu,
-  PremiumFeatures,
-  PremiumFeaturesAction,
-  PremiumFeaturesState,
   SelectCompanyAction,
+  SetSubscriptionsAction,
+  Subscription,
+  SubscriptionPayload,
   UpdateNavigationMenuItem,
+  UpdateSubscriptionAction,
 } from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
@@ -111,19 +114,39 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
-const setPremiumFeatures = (premiumFeatures: PremiumFeaturesState,
-): PremiumFeaturesAction => ({
-  type: SET_PREMIUM_FEATURES_SETTINGS,
-  payload: premiumFeatures,
+const setSubscriptionsAction = (subscriptions: Subscription[]): SetSubscriptionsAction => ({
+  type: SET_SUBSCRIPTIONS,
+  payload: subscriptions,
 });
 
-const getSubscriptions = (): ApiAction => apiAction({
+const updateSubscriptionAction = (subscription: Subscription): UpdateSubscriptionAction => ({
+  type: UPDATE_SUBSCRIPTION,
+  payload: subscription,
+});
+
+const getSubscriptions = (): ApiAction<Subscription[], void> => apiAction({
   url: SUBSCRIPTIONS_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
-    dispatch(setPremiumFeatures(data));
+    dispatch(setSubscriptionsAction(data));
   },
 });
+
+const updateSubscription = (
+  id: string,
+  payload: SubscriptionPayload,
+  method: ApiActionMethod = 'patch',
+): ApiAction<Subscription> => {
+  return apiAction({
+    url: generatePath(SUBSCRIPTIONS_UPDATE_URL, { id }),
+    method,
+    data: payload,
+    asyncType: UPDATE_SUBSCRIPTION,
+    onSuccess: (data, dispatch) => {
+      dispatch(updateSubscriptionAction(data));
+    },
+  });
+};
 
 const updateGeneralSettings = (
   body: GeneralSettings,
@@ -140,21 +163,6 @@ const updateGeneralSettings = (
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
       dispatch(setGeneralSettings(data));
-    },
-  });
-};
-
-const updateSubscriptions = (
-  body: PremiumFeatures,
-  method: ApiActionMethod = 'put',
-): ApiAction<PremiumFeaturesState> => {
-  return apiAction({
-    url: SUBSCRIPTIONS_URL,
-    method,
-    data: body,
-    asyncType: SET_PREMIUM_FEATURES_SETTINGS,
-    onSuccess: (data, dispatch) => {
-      dispatch(setPremiumFeatures(data));
     },
   });
 };
@@ -206,5 +214,5 @@ export default {
   getGeneralSettings,
   updateGeneralSettings,
   getSubscriptions,
-  updateSubscriptions,
+  updateSubscription,
 };

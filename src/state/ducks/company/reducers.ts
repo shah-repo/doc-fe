@@ -12,8 +12,9 @@ import {
   SET_AUTOSAVE_CONFIG,
   SET_COMPANY_MINE,
   SET_GENERAL_SETTINGS,
-  SET_PREMIUM_FEATURES_SETTINGS,
+  SET_SUBSCRIPTIONS,
   UPDATE_NAVIGATION_ITEM,
+  UPDATE_SUBSCRIPTION,
   WHITE_LABEL_DEFAULT,
 } from './constants';
 import {
@@ -25,14 +26,15 @@ import {
   GeneralSettingsAction,
   GeneralSettingsState,
   NotifyPartLCP,
-  PremiumFeaturesAction,
-  PremiumFeaturesState,
   RedlineAction,
   RedlineState,
   SelectCompanyAction,
   SelectCompanyState,
   SetAutosaveAction,
+  SetSubscriptionsAction,
+  SubscriptionsState,
   UpdateNavigationMenuItem,
+  UpdateSubscriptionAction,
 } from './types';
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
@@ -87,8 +89,8 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   message: '',
 };
 
-const PREMIUM_FEATURES_DEFAULT_STATE: PremiumFeaturesState = {
-  isAIEnabled: false,
+const SUBSCRIPTIONS_DEFAULT_STATE: SubscriptionsState = {
+  subscriptions: [],
   status: AsyncStatus.Idle,
   message: '',
 };
@@ -211,15 +213,22 @@ const generalSettings = (
   }
 };
 
-const premiumFeatures = (
-  state: PremiumFeaturesState = PREMIUM_FEATURES_DEFAULT_STATE,
-  action: PremiumFeaturesAction,
+const subscriptions = (
+  state: SubscriptionsState = SUBSCRIPTIONS_DEFAULT_STATE,
+  action: SetSubscriptionsAction | UpdateSubscriptionAction,
 ) => {
   switch (action.type) {
-    case SET_PREMIUM_FEATURES_SETTINGS:
+    case SET_SUBSCRIPTIONS:
       return {
         ...state,
-        ...action.payload,
+        subscriptions: action.payload,
+      };
+    case UPDATE_SUBSCRIPTION:
+      return {
+        ...state,
+        subscriptions: state.subscriptions.map(
+          subscription => subscription.id === action.payload.id ? action.payload : subscription,
+        ),
       };
     default:
       return state;
@@ -232,5 +241,5 @@ export default combineReducers({
   redlineConfig,
   autosaveConfig,
   generalSettings,
-  premiumFeatures,
+  subscriptions,
 });
