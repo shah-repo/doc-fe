@@ -1,6 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, LinearProgress, Tooltip, Typography } from '@material-ui/core';
+import { Box, LinearProgress, Typography } from '@material-ui/core';
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -14,65 +14,10 @@ import { Button } from '../../components/forms/fields-next';
 import { HOME_URL } from '../../constants/urls';
 import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
-import useHover from '../../hooks/useHover';
 import { withThemeNext } from '../../layout/theme-next';
-import SwitchControl from '../general.settings/components/SwitchControl';
 import NewBadge from './components/NewBadge';
+import SubscriptionItem from './components/SubscriptionItem';
 import useStyles from './styles';
-
-interface SubscriptionItemProps {
-  subscription: Subscription
-  onToggle: (state: boolean, subscription: Subscription) => void
-}
-
-const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
-  subscription,
-  onToggle,
-}) => {
-  const classes = useStyles();
-  const [hoverRef, isHover] = useHover();
-
-  const key = subscription.type.toLowerCase();
-
-  return (
-    <SwitchControl
-      id={`is${key}Enabled`}
-      onChange={(e, checked) => onToggle(checked, subscription)}
-      labelProps={{
-        className: classes.togglerContainer,
-        classes: {
-          label: classes.togglerLabel,
-        },
-      }}
-      checked={subscription.isEnabled}
-      label={
-        <>
-          <div>
-            <div className={classes.subscriptionTitle}>
-              {translate(`administration.premium.features.${key}.title`)}
-            </div>
-            <div className={classes.subscriptionDescription}>
-              {translate(`administration.premium.features.${key}.description`)}
-            </div>
-          </div>
-          <Tooltip
-            title={translate('administration.premium.features.info')}
-            arrow
-            placement="right"
-            className={classes.subscriptionInfo}
-          >
-            <span ref={hoverRef}>
-              <FontAwesomeIcon
-                className={classes.infoIcon}
-                icon={isHover ? solid('circle-info') : regular('circle-info')}
-              />
-            </span>
-          </Tooltip>
-        </>
-      }
-    />
-  );
-};
 
 const PremiumFeaturesContainer: React.FC = () => {
   const canManageSettings = useGetHasTag(GroupTag.ADMIN_MANAGEMENT);
@@ -161,7 +106,13 @@ const PremiumFeaturesContainer: React.FC = () => {
           >
             {translate('administration.premium.feature.table.title')}
           </Typography>
-          {allSubscriptions.map(subscription => <SubscriptionItem subscription={subscription} onToggle={confirmToggling} key={subscription.type} />)}
+          {allSubscriptions.map(subscription => (
+            <SubscriptionItem
+              subscription={subscription}
+              onToggle={confirmToggling}
+              key={subscription.type}
+            />
+          ))}
         </Box>
       </Box>
     </Box>

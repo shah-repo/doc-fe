@@ -52,15 +52,15 @@ export default makeStyles((theme: NextTheme) => createStyles({
     padding: theme.spacing(1.5, 1.5, 1.5),
     marginBottom: theme.spacing(2.5),
   },
+  descriptionIcon: {
+    color: Colors.primaryLight,
+    marginTop: theme.spacing(0.25),
+  },
   progress: {
     position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
-  },
-  infoIcon: {
-    color: Colors.primaryLight,
-    fontSize: 20,
   },
   subscriptionsList: {
     padding: theme.spacing(2.5, 2.5, 1.5),
@@ -73,37 +73,8 @@ export default makeStyles((theme: NextTheme) => createStyles({
     fontSize: 16,
     marginBottom: theme.spacing(0.5),
   },
-  subscriptionInfo: {
-    lineHeight: 1,
-  },
-  subscriptionTitle: {
-    color: Colors.textBlack,
-    marginBottom: theme.spacing(0.25),
-    fontWeight: 600,
-    fontSize: 14,
-  },
-  subscriptionDescription: {
-    color: Colors.textGray,
-    fontSize: 12,
-  },
-  togglerContainer: {
-    padding: theme.spacing(1.25, 0),
-    alignItems: 'center',
-    borderBottom: `1px solid ${Colors.stroke}`,
-
-    '&:last-child': {
-      borderBottom: 'none',
-    },
-  },
-  descriptionIcon: {
+  dialogIcon: {
     color: Colors.primaryLight,
-    marginTop: theme.spacing(0.25),
-  },
-  togglerLabel: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexGrow: 1,
   },
   [theme.media.mobile]: {
     header: {
@@ -118,26 +89,5 @@ export default makeStyles((theme: NextTheme) => createStyles({
       display: 'block',
       paddingTop: theme.spacing(2.5),
     },
-    togglerContainer: {
-      marginTop: theme.spacing(2.5),
-      marginLeft: 0,
-      display: 'flex',
-      alignItems: 'center',
-    },
-  },
-  togglerIcon: {
-    color: Colors.primaryLight,
-    marginLeft: theme.spacing(1),
-    fontSize: '20px',
-  },
-  dialogIcon: {
-    color: Colors.primaryLight,
-  },
-  descriptionPlaceholder: {
-    fontSize: '12px',
-    fontWeight: 400,
-    lineHeight: '15px',
-    color: Colors.textGray,
-    marginTop: theme.spacing(0.5),
   },
 }));
