@@ -16,7 +16,7 @@ import { ApplicationState } from '../../../../state/reducers';
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from '../../../constants/urls';
 import { DocCategories, DocTypeGroups } from '../../../dashboard.new/line.items/common/types';
 import { documentPreviewPath } from '../../../document.revision/utils/paths';
-import { checkIsDocumentChangeRequest, checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO } from '../../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentCustomers, checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentShipping } from '../../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from '../../../documentRevision/helpers/documentRevisionStatus';
 import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import { useDocumentStatus, useTitle } from '../../../hooks/docCustomization/useCustomization';
@@ -70,6 +70,9 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const isPO = checkIsDocumentPO(documentType?.groupOptions);
   const isChangeRequest = checkIsDocumentChangeRequest(documentType?.groupOptions);
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
+  const isShipping = checkIsDocumentShipping(documentType?.groupOptions);
+  const isCusomers = checkIsDocumentCustomers(documentType?.groupOptions);
+
   const navigationDetails = useSelector((state: ApplicationState) =>
     companySelectors.getNavigationDetails(
       state,
@@ -109,6 +112,8 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   } else if (isTypeMpiOutput) {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${DocCategories.LHR}`;
     iconLink = '/navigation_icons/lhr_icon.svg';
+  } else if (isShipping || isCusomers) {
+    iconLink = '/navigation_icons/sales-header.svg';
   }
   const classes = styles({ iconLink });
 
