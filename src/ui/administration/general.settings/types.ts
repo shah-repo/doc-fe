@@ -35,7 +35,7 @@ export interface SettingsPanelProps extends ExpansionPanelProps {
 
 export interface SwitchControlProps extends SwitchProps {
   label: ReactNode
-  labelProps: Partial<FormControlLabelProps>
+  labelProps?: Partial<FormControlLabelProps>
 }
 
 export interface HeaderLastSavedProps {
