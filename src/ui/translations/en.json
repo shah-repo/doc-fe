@@ -2292,5 +2292,6 @@
   "async.state.message.access.denied": "Access Denied",
   "common.failed": "Failed",
   "common.or": "OR",
-  "common.rev": "Rev."
+  "common.rev": "Rev.",
+  "purchaseOrder.supplierStatus.dialog.general": "The below mentioned Items need to be ordered from an Approved Supplier"
 }

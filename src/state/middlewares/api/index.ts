@@ -126,6 +126,11 @@ const apiMiddleware: Middleware = ({
         });
         break;
       }
+      case 412: {
+        const { data } = (exception as AxiosError)?.response as AsyncActionErrorResponse;
+        responseMessage = JSON.stringify(data);
+        break;
+      }
       default: {
         const {
           data: { message },
