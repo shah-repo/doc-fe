@@ -88,7 +88,7 @@ export interface IApprovalRequirementGroup {
 }
 
 export type ISchemaItem = FBSchemaProps & {
-  isMapped?: boolean
+  mappedToCount?: number
   mappedFrom?: IMappedFrom[]
   tableMappings?: IRowData[]
 };

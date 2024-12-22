@@ -1,5 +1,6 @@
 import { Box, Button, makeStyles, Popover, Typography } from '@material-ui/core';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
+import Markdown from 'markdown-to-jsx';
 import React, { useState } from 'react';
 import Colors from '../../layout/theme/utils/colors';
 import AnnouncementDetailsDialog from './AnnouncementDetails.dialog';
@@ -69,7 +70,7 @@ const AnnouncementIndicator: React.FC<{
             variant="body2"
             style={{ marginTop: '4px', marginBottom: '4px' }}
           >
-            {announcement.text}
+            <Markdown>{announcement.text}</Markdown>
           </Typography>
           <Button color="secondary" variant="outlined" onClick={proceedToDetails} fullWidth> View Details </Button>
         </Popover>

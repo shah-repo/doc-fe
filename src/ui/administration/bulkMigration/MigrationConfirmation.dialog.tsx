@@ -1,20 +1,107 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@material-ui/core';
-import React from 'react';
-import { ISelectedDetails } from './interface';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@material-ui/core';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import WarningIcon from '@material-ui/icons/Warning';
+import { AxiosRequestConfig } from 'axios';
+import React, { useEffect, useState } from 'react';
+import { intl } from '../../../common/intl';
+import apiClient from '../../../state/apiClient';
+import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS } from '../../../state/ducks/company/constants';
+import { store } from '../../../state/store';
+import { toastError, toastSuccess } from '../../components/notifications';
+import { FBButton } from '../../form.builder';
+import Colors from '../../layout/theme/utils/colors';
+import { IApprovalRequirementGroup, IApprovalRequirements, ISelectedDetails } from './interface';
 
 const MigrationConfirmationDialog: React.FC<{
   isOpen: boolean
   handleClose: () => void
   handleConfirmation: () => void
   selectedDetails: ISelectedDetails[]
-}> = ({ isOpen, handleClose, selectedDetails, handleConfirmation }) => {
-  const actionCountMap: {[key: string]: number} = {};
+  toDocumentTypeId: string
+}> = ({ isOpen, handleClose, selectedDetails, handleConfirmation, toDocumentTypeId }) => {
+  const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
+  // const [isLoading, setIsLoading] = useState(false);
+
+  const actionCountMap: { [key: string]: number } = {};
   selectedDetails.forEach(detail => {
     if (!actionCountMap[detail.action]) {
       actionCountMap[detail.action] = 0;
     }
     actionCountMap[detail.action] += 1;
   });
+
+  function catchAxiosException (exception: any) {
+    // setIsLoading(false);
+    if (exception?.response?.status === 504) {
+      toastError(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
+    } else {
+      toastError(exception?.response.data?.message);
+    }
+  }
+
+  useEffect(() => {
+    if (toDocumentTypeId) {
+      fetchApprovalRequirements(toDocumentTypeId);
+    }
+  }, [toDocumentTypeId]);
+
+  function fetchApprovalRequirements (toDocumentTypeId: string) {
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS}/${toDocumentTypeId}`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      // cancelToken: call.token,
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        // console.log(data);
+        setApprovalRequirements(data);
+      })
+      .catch((exception) => {
+        catchAxiosException(exception);
+      });
+  }
+
+  function addUserToGroups () {
+    if (!approvalRequirements?.missingGroups?.length) {
+      return;
+    }
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'patch',
+      url: `${BULK_MIGRATION_ADD_USER_TO_GROUPS}/${toDocumentTypeId}`,
+      data: {
+        missingGroups: approvalRequirements?.missingGroups,
+      },
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      // cancelToken: call.token,
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        // console.log(data);
+        setApprovalRequirements(data);
+        toastSuccess('Automation user has been added to the required groups successfully');
+      })
+      .catch((exception) => {
+        catchAxiosException(exception);
+      });
+  }
+
+  const isApprovalRequirementFulfilled = (group: IApprovalRequirementGroup) => {
+    return (
+      approvalRequirements?.missingGroups.findIndex(
+        (missingGroup) => group.id === missingGroup.id,
+      ) === -1
+    );
+  };
 
   return (
     <Dialog
@@ -27,7 +114,7 @@ const MigrationConfirmationDialog: React.FC<{
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           <Typography variant="h5" style={{ marginBottom: '8px' }}>{selectedDetails.length} Supplier revisions selected</Typography>
-          { Object.keys(actionCountMap).map(key => {
+          {Object.keys(actionCountMap).map(key => {
             return <Typography variant="subtitle2">{key} - {actionCountMap[key]} revisions</Typography>;
           })}
           <Typography variant="body2" style={{ marginTop: '16px' }}>
@@ -35,13 +122,58 @@ const MigrationConfirmationDialog: React.FC<{
           </Typography>
           <p>Are you sure you want to revise these Suppliers?</p>
         </DialogContentText>
+
+        <Box style={{ padding: '8px', marginTop: '8px' }}>
+          {approvalRequirements && (
+            <Box
+              style={{
+                marginTop: '16px',
+                padding: '12px',
+                backgroundColor: Colors.background_blue,
+                borderRadius: '4px',
+              }}
+            >
+              <Typography variant="body2" style={{ marginBottom: '4px' }}>
+                For revisions, that are already Released, migration would create a new Revision and automate its approval & release, using
+                <span style={{ fontWeight: 'bold', color: Colors.bright_blue, marginLeft: '4px' }}>
+                  {approvalRequirements.email}
+                </span>
+              </Typography>
+              <Typography variant="body2" style={{ margin: '8px 0px 4px 0px' }}>
+                Based on the Document Type selected, this user <b>should be a part of the groups</b> listed below, without
+                which the process will fail.
+              </Typography>
+              <Box py={1} mt={0.3} display="flex" style={{ gap: '8px' }}>
+                {approvalRequirements.requiredGroups.map((group) => {
+                  return (
+                    <Box ml={1} display="flex" key={group.id}>
+                      {isApprovalRequirementFulfilled(group) && <CheckCircleIcon style={{ color: Colors.green }} />}
+                      {!isApprovalRequirementFulfilled(group) && <WarningIcon style={{ color: Colors.red }} />}
+                      <Box ml={0.5}>
+                        <Typography variant="subtitle2">{group.name}</Typography>
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+              {approvalRequirements?.missingGroups?.length > 0 && <FBButton
+                label="Add To Groups"
+                dataCy="automation-add-to-groups"
+                onClick={addUserToGroups}
+                variant="outlined"
+                color="primary"
+                style={{ marginBottom: '0px' }}
+              />}
+            </Box>
+          )}
+        </Box>
       </DialogContent>
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button onClick={handleClose} color="primary">
-            Cancel
+          Cancel
         </Button>
         <Button onClick={handleConfirmation} color="primary" autoFocus>
-            Confirm
+          Confirm
         </Button>
       </DialogActions>
     </Dialog>

@@ -11,7 +11,7 @@ import { toastError, toastSuccess } from '../../components/notifications';
 import Colors from '../../layout/theme/utils/colors';
 import AnnouncementDetail from './AnnouncementDetail';
 import InfoIndicator from './InfoIndicator';
-import { ANNOUNCEMENT_STATUS_ENUM, IAnnouncement, IAnnouncementDetail, IConflictingItem, IndicatorTypeEnum, SELECTED_RESOLUTION_ENUM } from './interface';
+import { IAnnouncement, IAnnouncementDetail, IConflictingItem, IndicatorTypeEnum, SELECTED_RESOLUTION_ENUM } from './interface';
 import { updateNestedObject } from './utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,8 +44,9 @@ const AnnouncementDetailsDialog: React.FC<{
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [announcementDetailRows, setAnnouncementDetailRows] = useState<IAnnouncementDetail[]>([]);
-
   const [conflictingElementsMap, setConflictingElementsMap] = useState<{ [key: string]: IConflictingItem }>({});
+  const [isFormUpgradeDone, setIsFormUpgradeDone] = useState<boolean>(false);
+
   const [isAnyConflictingElementsUnResolved, setIsAnyConflictingElementsUnResolved] = useState<boolean>(false);
 
   function catchAxiosException (exception: any) {
@@ -80,11 +81,15 @@ const AnnouncementDetailsDialog: React.FC<{
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        const { announcementActionEntries, conflictingElementsMap } = data as {announcementActionEntries: IAnnouncementDetail[]
-          conflictingElementsMap: { [key: string]: IConflictingItem }};
+        const { announcementActionEntries, conflictingElementsMap, isFormUpgradeDone } = data as {
+          announcementActionEntries: IAnnouncementDetail[]
+          conflictingElementsMap: { [key: string]: IConflictingItem }
+          isFormUpgradeDone: boolean
+        };
         setIsLoading(false);
         setAnnouncementDetailRows(announcementActionEntries);
         setConflictingElementsMap(conflictingElementsMap);
+        setIsFormUpgradeDone(isFormUpgradeDone ?? false);
       })
       .catch((exception) => {
         console.log(exception);
@@ -136,7 +141,7 @@ const AnnouncementDetailsDialog: React.FC<{
       .then(({ data }) => {
         setIsSubmitting(false);
         toastSuccess(
-          `Form has been upgraded to Rev ${data.displayRevision} . Please review and approve for next steps.`,
+          `Form has been upgraded to Rev ${data.formRev?.displayRevision} . Please review and approve for next steps.`,
         );
       })
       .catch((exception) => {
@@ -154,7 +159,7 @@ const AnnouncementDetailsDialog: React.FC<{
     >
       <AppBar className={classes.appBar} color="default">
         <Grid container spacing={3} alignItems="center">
-          <Grid item xs={5}>
+          <Grid item xs={3}>
             <Box>
               <Typography variant="h5">
                 {announcement.name}
@@ -165,8 +170,8 @@ const AnnouncementDetailsDialog: React.FC<{
             </Box>
           </Grid>
 
-          <Grid item xs={5}>
-            { announcement.canUpgradeForm && announcement.status === ANNOUNCEMENT_STATUS_ENUM.REGISTERED
+          <Grid item xs={8}>
+            { announcement.canUpgradeForm && !isFormUpgradeDone
             && <Box display="flex" style={{ gap: '4px' }} alignItems="center" justifyContent="center">
               {isAnyConflictingElementsUnResolved && <InfoIndicator
                 type={IndicatorTypeEnum.WARNING}
@@ -176,27 +181,27 @@ const AnnouncementDetailsDialog: React.FC<{
               <InfoIndicator
                 type={IndicatorTypeEnum.INFO}
                 text={`A new Form revision would be created with combining these new elements with the existing schema.<i>This Rev would be created in Draft</i>.
-            <br /><br /> Kindly preview it, & make the necessary changes before approving & releasing it.`} />
-            </Box> }
-            { !announcement.canUpgradeForm && announcement.status === ANNOUNCEMENT_STATUS_ENUM.REGISTERED
+              <br /><br /> Kindly preview it, & make the necessary changes before approving & releasing it. <br /><br /> Once created, please use <b>Bulk Migration</b> to select this revision, set up <b>Mapping Rules</b> and preview the changes.`} />
+            </Box>
+            }
+            { !announcement.canUpgradeForm
               && <div className={classes.infoDiv}> Talk to your Admin Or Form Owner to upgrade.</div>
             }
-            { announcement.canUpgradeForm && announcement.status === ANNOUNCEMENT_STATUS_ENUM.FORM_REVISION_CREATED
-              && <div className={classes.infoDiv}> Form has been upgraded with the newer elements. Please review and approve for next steps. </div>
+            { announcement.canUpgradeForm && isFormUpgradeDone
+              && <div className={classes.infoDiv}> Form has been upgraded with the newer elements. Please use <b>Bulk Migration</b> to select this revision, set up <b>Mapping Rules</b> and preview the changes.</div>
             }
           </Grid>
 
-          <Grid item xs={2} justify="flex-end">
+          <Grid item xs={1} justify="flex-end">
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
               <CloseIcon />
             </IconButton>
           </Grid>
-
         </Grid>
       </AppBar>
       <DialogContent >
-        { isLoading
-          && <Typography variant="h4" color="primary"> <HourglassFullIcon /> Loading.... </Typography> }
+        {isLoading
+          && <Typography variant="h4" color="primary"> <HourglassFullIcon /> Loading.... </Typography>}
         {!isLoading && errorMessage
           && <div className={classes.errorDiv}> {errorMessage}. </div>}
         {!isLoading && <>
@@ -214,9 +219,7 @@ const AnnouncementDetailsDialog: React.FC<{
               })
             }
           </Grid>
-        </>
-
-        }
+        </>}
       </DialogContent>
     </Dialog>
   );

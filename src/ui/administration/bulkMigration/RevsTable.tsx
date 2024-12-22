@@ -364,8 +364,10 @@ const ExpandableRow: React.FC<{
 
 const RevsTable: React.FC<{
   scanId: string
+  toDocumentTypeId: string
 }> = ({
   scanId,
+  toDocumentTypeId,
 }) => {
   const classes = useStyles();
   const [searchQueries, setSearchQueries] = React.useState<{[key: string]: string}>({});
@@ -640,6 +642,7 @@ const RevsTable: React.FC<{
           handleClose={handleMigrationConfirmationDialogClose}
           selectedDetails={selected}
           handleConfirmation={handleMigrationConfirmation}
+          toDocumentTypeId={toDocumentTypeId}
         />
       }
     </div>

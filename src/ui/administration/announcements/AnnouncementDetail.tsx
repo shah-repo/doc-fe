@@ -96,7 +96,7 @@ const AnnouncementDetail: React.FC<{
               <u>{formBuilder.defaultLabel}</u>
             </Typography>
             <Typography style={{ color: Colors.font_gray, fontSize: '12px' }}>
-              ( Will be added by default to the <i><b><Text translation={getTabText(formBuilder.defaultTabId)} /></b></i> tab )
+              [ Added to <i><b><Text translation={getTabText(formBuilder.defaultTabId)} /></b></i> tab by default ]
             </Typography>
 
           </CardContent>

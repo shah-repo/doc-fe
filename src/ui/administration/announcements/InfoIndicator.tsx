@@ -16,10 +16,12 @@ const useStyles = makeStyles((theme) => ({
   },
   popoverText: {
     marginTop: '4px',
+    fontSize: 'small',
   },
   warningText: {
     color: Colors.latest_red_varient,
     marginTop: '4px',
+    fontSize: 'small',
   },
 }));
 

@@ -59,7 +59,7 @@ const MigrationMappingDialog: React.FC<{
 
   useEffect(() => {
     if (fromRevSchema?.length) {
-      const unmappedItems = fromRevSchema.filter(fromRevSchemaItem => !fromRevSchemaItem.isMapped && !isDisabledSchemaItem(fromRevSchemaItem));
+      const unmappedItems = fromRevSchema.filter(fromRevSchemaItem => !fromRevSchemaItem.mappedToCount && !isDisabledSchemaItem(fromRevSchemaItem));
       setUnmappedCount(unmappedItems.length);
     }
   }, [fromRevSchema]);
@@ -145,18 +145,16 @@ const MigrationMappingDialog: React.FC<{
       const { canMap, errMessage } = canMapItems(selectedSchemaItem, toSchemaItem);
       if (canMap) {
         // push into mappedFrom on toRevSchema item to selectedSchemaName.name
-        if (!selectedSchemaItem.isMapped) {
-          setToRevSchema(toRevSchema.map(toRevSchemaItem => {
-            if (toRevSchemaItem.name === toSchemaItem.name) {
-              if (!toRevSchemaItem.mappedFrom) {
-                toRevSchemaItem.mappedFrom = [];
-              }
-              toRevSchemaItem.mappedFrom.push(
-                { name: selectedSchemaItem.name!, label: selectedSchemaItem.label!, isShowDirectly: true, type: selectedSchemaItem.type });
+        setToRevSchema(toRevSchema.map(toRevSchemaItem => {
+          if (toRevSchemaItem.name === toSchemaItem.name) {
+            if (!toRevSchemaItem.mappedFrom) {
+              toRevSchemaItem.mappedFrom = [];
             }
-            return toRevSchemaItem;
-          }));
-        }
+            toRevSchemaItem.mappedFrom.push(
+              { name: selectedSchemaItem.name!, label: selectedSchemaItem.label!, isShowDirectly: true, type: selectedSchemaItem.type });
+          }
+          return toRevSchemaItem;
+        }));
 
         // Set isMapped on fromRevSchema item to true
         setFromRevSchemaItemMapped(selectedSchemaItem);
@@ -178,7 +176,9 @@ const MigrationMappingDialog: React.FC<{
 
     setFromRevSchema(fromRevSchema.map(fromRevSchemaItem => {
       if (fromRevSchemaItem.name === mappedFromEntryToRemove.name) {
-        fromRevSchemaItem.isMapped = false;
+        if (fromRevSchemaItem.mappedToCount) {
+          fromRevSchemaItem.mappedToCount -= 1;
+        }
       }
       return fromRevSchemaItem;
     }));
@@ -187,7 +187,7 @@ const MigrationMappingDialog: React.FC<{
   function setFromRevSchemaItemMapped (selectedSchemaItem: ISchemaItem) {
     setFromRevSchema(fromRevSchema.map(fromRevSchemaItem => {
       if (fromRevSchemaItem.name === selectedSchemaItem.name) {
-        fromRevSchemaItem.isMapped = true;
+        fromRevSchemaItem.mappedToCount = (fromRevSchemaItem.mappedToCount ?? 0) + 1;
       }
       return fromRevSchemaItem;
     }));
@@ -338,17 +338,16 @@ const MigrationMappingDialog: React.FC<{
                             }
                           </Box>
                           {
-                            (schemaItem.mappedFrom ?? []).length > 0
-                          && schemaItem.mappedFrom?.map(mappedFromEntry => {
-                            return mappedFromEntry.isShowDirectly && (
-                              <Chip
-                                label={mappedFromEntry.label}
-                                onDelete={e => handleMappedFromDelete(schemaItem, mappedFromEntry)}
-                                color="secondary"
-                                style={{ padding: '0px 4px', height: '28px' }}
-                              />
-                            );
-                          })
+                            (schemaItem.mappedFrom ?? []).length > 0 && schemaItem.mappedFrom?.map(mappedFromEntry => {
+                              return mappedFromEntry.isShowDirectly && (
+                                <Chip
+                                  label={mappedFromEntry.label}
+                                  onDelete={e => handleMappedFromDelete(schemaItem, mappedFromEntry)}
+                                  color="secondary"
+                                  style={{ padding: '0px 4px', height: '28px' }}
+                                />
+                              );
+                            })
                           }
                         </Box>
                       </ArcherElement>

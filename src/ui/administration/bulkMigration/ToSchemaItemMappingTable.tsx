@@ -164,6 +164,7 @@ const ToSchemaItemMappingTable: React.FC<{
                   contentEditable = {!Array.isArray(row[fieldName])}
                   suppressContentEditableWarning
                   onInput={(event) => handleCellInput(event, row, fieldName)}
+                  key={fieldName}
                 >
                   {(Array.isArray(row[fieldName]) && row[fieldName]?.length) ? row[fieldName].map(entry => {
                     return (
@@ -172,6 +173,7 @@ const ToSchemaItemMappingTable: React.FC<{
                         onDelete={e => handleRowCellClearMapping(row, fieldName, entry)}
                         color="secondary"
                         style={{ padding: '0px 4px', height: '28px', margin: '0 4px 4px 0' }}
+                        key={entry.label}
                       />
                     );
                   }) : row[fieldName]}
