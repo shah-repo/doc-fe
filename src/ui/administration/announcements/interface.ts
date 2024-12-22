@@ -30,6 +30,7 @@ export interface IAnnouncement {
   type: ANNOUNCEMENT_TYPE_ENUM
   status: ANNOUNCEMENT_STATUS_ENUM
   canUpgradeForm: boolean
+  isMappingRequired: boolean
 }
 
 export interface IAnnouncementDetail {

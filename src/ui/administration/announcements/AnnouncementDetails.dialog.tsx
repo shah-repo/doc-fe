@@ -188,7 +188,7 @@ const AnnouncementDetailsDialog: React.FC<{
               && <div className={classes.infoDiv}> Talk to your Admin Or Form Owner to upgrade.</div>
             }
             { announcement.canUpgradeForm && isFormUpgradeDone
-              && <div className={classes.infoDiv}> Form has been upgraded with the newer elements. Please use <b>Bulk Migration</b> to select this revision, set up <b>Mapping Rules</b> and preview the changes.</div>
+              && <div className={classes.infoDiv}> Form has been upgraded with the newer elements. {announcement.isMappingRequired && <span>Please use <b>Bulk Migration</b> to select this revision, set up <b>Mapping Rules</b> and preview the changes.</span>} </div>
             }
           </Grid>
 
