@@ -63,7 +63,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   const selectedIDs = selectedPartGroups?.map((group) => group.value);
   const options = partGroups?.filter((group) => !selectedIDs.includes(group.value));
   const updatedGroupId = (startsWith(groupId, ADD_GROUP_ID) ? replace(groupId, ADD_GROUP_NAME, 'ADD_') : groupId) as string;
-  const groupTypeAcronym = defaultValue[0]?.docTypeAcronym ?? '';
+  const groupTypeAcronym = defaultValue[0]?.docTypeAcronym;
 
   const handleChange = (event, checked: boolean) => {
     onToggleGroupActivation({ ...dataItem, isLCPActive: checked });
