@@ -40,6 +40,7 @@ interface OwnProps {
 type AuditPresenterProps = OwnProps;
 
 const SERVER_OWNED = 'Server Automation';
+const CUSTOM_BOOLEAN_FIELD = 'custom_boolean_field';
 
 const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
@@ -264,6 +265,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               field: fieldName,
             });
           }
+        }
+        if (change.type === 'BOOLEAN_NEW' || change.type === 'BOOLEAN_EDITED') {
+          change = {
+            ...change,
+            field: CUSTOM_BOOLEAN_FIELD,
+          };
         }
       }
       // SITE ADDRESS
@@ -557,6 +564,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
 
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
+        const isCustomBooleanField = change.field === CUSTOM_BOOLEAN_FIELD;
+
         const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 
         singleFields.push(
@@ -596,7 +605,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   {labelToShow(change, groupKey, key, revIdRelatedTypeObj)}
                 </Typography>
               )}
-              {(isFBField || isSmartRef) && (
+              {isCustomBooleanField && (
+                <Typography className={classes.auditKey}>
+                  <span data-cy={`change-key-${groupKey}-${key}`}>
+                    {fbLabel}
+                  </span>
+                </Typography>
+              )}
+              {(isFBField || isSmartRef) && !isCustomBooleanField && (
                 <Typography
                   className={classes.auditKey}
                 >
