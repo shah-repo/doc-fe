@@ -103,11 +103,11 @@ const SiteContact: React.FC<SiteContactProps> = ({
     (dataItem: EditableSiteContact) => {
       if (!editedSiteContact) return;
 
-      const updatedSiteContacts = siteContact.filter((site) => site.id !== dataItem.id);
+      const updatedSiteContacts = siteContact?.filter((site) => site.id !== dataItem.id);
       setSiteContact(updatedSiteContacts);
       const updatedSites = sites?.map((site) => ({
         ...site,
-        siteContact: site.siteContact.filter((contact) => contact.id !== dataItem.id),
+        siteContact: site.siteContact?.filter((contact) => contact.id !== dataItem.id),
       }));
         formState?.setFieldValue(name, updatedSites);
         workspaceState?.saveDocRev({
