@@ -2,10 +2,12 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, D
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import WarningIcon from '@material-ui/icons/Warning';
 import { AxiosRequestConfig } from 'axios';
+import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { intl } from '../../../common/intl';
 import apiClient from '../../../state/apiClient';
 import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS } from '../../../state/ducks/company/constants';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError, toastSuccess } from '../../components/notifications';
 import { FBButton } from '../../form.builder';
@@ -18,8 +20,10 @@ const MigrationConfirmationDialog: React.FC<{
   handleConfirmation: () => void
   selectedDetails: ISelectedDetails[]
   toDocumentTypeId: string
-}> = ({ isOpen, handleClose, selectedDetails, handleConfirmation, toDocumentTypeId }) => {
+  toFormRev?: DocumentRevision
+}> = ({ isOpen, handleClose, selectedDetails, handleConfirmation, toDocumentTypeId, toFormRev }) => {
   const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
+  const [toFormReleasedError, setToFormReleasedError] = useState<string>('');
   // const [isLoading, setIsLoading] = useState(false);
 
   const actionCountMap: { [key: string]: number } = {};
@@ -42,6 +46,7 @@ const MigrationConfirmationDialog: React.FC<{
   useEffect(() => {
     if (toDocumentTypeId) {
       fetchApprovalRequirements(toDocumentTypeId);
+      isToFormRevReleased();
     }
   }, [toDocumentTypeId]);
 
@@ -103,6 +108,18 @@ const MigrationConfirmationDialog: React.FC<{
     );
   };
 
+  const isToFormRevReleased = () => {
+    if (
+      toFormRev
+      && ![
+        DocumentRevisionStatus.Released,
+        DocumentRevisionStatus.Deprecated,
+      ].includes(toFormRev.status)
+    ) {
+      setToFormReleasedError('The selected form revision must be approved and released.');
+    }
+  };
+
   return (
     <Dialog
       open={isOpen}
@@ -120,7 +137,6 @@ const MigrationConfirmationDialog: React.FC<{
           <Typography variant="body2" style={{ marginTop: '16px' }}>
             This will fire a <b>JOB request</b>, which might take 10 mins or more, depending on the network congestion.
           </Typography>
-          <p>Are you sure you want to revise these Suppliers?</p>
         </DialogContentText>
 
         <Box style={{ padding: '8px', marginTop: '8px' }}>
@@ -167,14 +183,21 @@ const MigrationConfirmationDialog: React.FC<{
             </Box>
           )}
         </Box>
+
+        {!isEmpty(toFormReleasedError) && (
+          <div style={{ color: Colors.red, backgroundColor: Colors.light_red, padding: '4px' }}>{toFormReleasedError}</div>
+        )}
+
+        {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError) && <p>Are you sure you want to revise these Suppliers?</p> }
       </DialogContent>
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleConfirmation} color="primary" autoFocus>
+        {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError)
+        && <Button onClick={handleConfirmation} color="primary" autoFocus>
           Confirm
-        </Button>
+        </Button>}
       </DialogActions>
     </Dialog>
   );

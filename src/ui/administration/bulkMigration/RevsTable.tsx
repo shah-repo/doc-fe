@@ -26,17 +26,15 @@ import { Link } from 'react-router-dom';
 import { intl } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_GET_SCAN_RESULTS, BULK_MIGRATION_START_REVS_MIGRATION } from '../../../state/ducks/company/constants';
+import { BULK_MIGRATION_GET_SCAN_RESULTS } from '../../../state/ducks/company/constants';
 import { store } from '../../../state/store';
 import DateTime from '../../components/DateTime';
-import { toastError, toastSuccess } from '../../components/notifications';
+import { toastError } from '../../components/notifications';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import UserAvatarListItem from '../../documentRevision/Sidebar/common/UserAvatarListItem';
-import { FBButton } from '../../form.builder';
 import { Colors } from '../../layout/theme-next';
 import UtilColors from '../../layout/theme/utils/colors';
 import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from './interface';
-import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 
 const INITIAL_ROWS_COUNT = 25;
 
@@ -365,9 +363,11 @@ const ExpandableRow: React.FC<{
 const RevsTable: React.FC<{
   scanId: string
   toDocumentTypeId: string
+  handleSelectedRowsChange: (selected: ISelectedDetails[]) => void
 }> = ({
   scanId,
   toDocumentTypeId,
+  handleSelectedRowsChange,
 }) => {
   const classes = useStyles();
   const [searchQueries, setSearchQueries] = React.useState<{[key: string]: string}>({});
@@ -382,8 +382,6 @@ const RevsTable: React.FC<{
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popoverContent, setPopoverContent] = useState<ReactElement>(<></>);
@@ -487,6 +485,10 @@ const RevsTable: React.FC<{
     setSelected(newSelected);
   };
 
+  useEffect(() => {
+    handleSelectedRowsChange(selected);
+  }, [selected.length]);
+
   const handleRejection = (event, id: string) => {
     // Will update DB
   };
@@ -498,43 +500,6 @@ const RevsTable: React.FC<{
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  const confirmSubmission = () => {
-    setIsConfirmationDialogVisible(true);
-  };
-
-  const handleMigrationConfirmationDialogClose = () => {
-    setIsConfirmationDialogVisible(false);
-  };
-
-  const handleMigrationConfirmation = () => {
-    // Take all the ones selected & send to BE
-    setIsLoading(true);
-    setErrorMessage('');
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'post',
-      url: `${BULK_MIGRATION_START_REVS_MIGRATION}/${scanId}`,
-      data: {
-        revIds: selected.map(entry => entry.id),
-      },
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        setIsLoading(false);
-        handleMigrationConfirmationDialogClose();
-        toastSuccess('Supplier Migration job request has been placed. Please check back in some time.');
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
   };
 
   const isSelected = (id: string) => selected.findIndex(entry => entry.id === id) > -1;
@@ -562,14 +527,6 @@ const RevsTable: React.FC<{
               {selected.length} selected
             </Typography>
           </Typography>
-
-          { selected.length > 0 && <FBButton
-            label="Migrate Suppliers"
-            dataCy="migrate-suppliers-btn"
-            onClick = {confirmSubmission}
-            variant="contained"
-            color="primary"
-          /> }
 
           <TablePagination
             rowsPerPageOptions={[25, 50, 100]}
@@ -636,15 +593,6 @@ const RevsTable: React.FC<{
           </Popover>
         </div>
       </Paper>
-      {
-        isConfirmationDialogVisible && <MigrationConfirmationDialog
-          isOpen={isConfirmationDialogVisible}
-          handleClose={handleMigrationConfirmationDialogClose}
-          selectedDetails={selected}
-          handleConfirmation={handleMigrationConfirmation}
-          toDocumentTypeId={toDocumentTypeId}
-        />
-      }
     </div>
   );
 };
