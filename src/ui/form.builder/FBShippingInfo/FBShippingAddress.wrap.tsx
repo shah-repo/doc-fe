@@ -53,7 +53,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
     });
 
     useEffect(() => {
-      if (!FB.isUUID(customerId) && isCustomerFieldLoading) {
+      if ((!FB.isUUID(customerId) && isCustomerFieldLoading) || !customerId) {
         return;
       }
 
@@ -68,7 +68,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
 
     const saveShippingAddressInfo = (value?: CustomOptionType) => {
       const contacts = value?.siteContact?.reduce<{attention: ContactValue | undefined, shipping: ContactValue | undefined}>((contacts, item) => {
-        const contact = { id: item.id, name: `${item.name} (${item.email})` };
+        const contact = { id: item.id, name: `${item.name} (${item.email}) +${item?.phoneNumber}` };
         if (item.attention) {
           contacts.attention = contact;
         }
