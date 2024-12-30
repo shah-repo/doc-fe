@@ -1,15 +1,20 @@
 import { ButtonProps } from '@material-ui/core/Button';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as SuccessIcon } from '../../../../../assets/images/success_iconn.svg';
 import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
-import { toastSuccess } from '../../../../components/notifications';
+import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
+import { TASK_APPROVAL_GET_ASYNC } from '../../../../../state/ducks/documentRevisions/constants';
+import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDialog';
+import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
+import { IApprovalErrorResponse } from '../../../../documentRevision/forms/presenters/SubmitForApproval';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
 import { Translation } from '../../../../translations/types';
 import ApproveDialog from '../../dialogs/transitionDialog/ApproveOrRejectDialog';
@@ -42,6 +47,8 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   onSuccess,
 }) => {
   const dispatch = useDispatch();
+  const supplierStatusDialog = useDialog();
+  const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
   const async = useAsync({
     onSuccess: (response?: ResponseProps) => {
       transitionDialog.close();
@@ -70,13 +77,25 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         dispatch(dashboardMyFeedsActions.loadMyFeedsList());
       }
     },
-    onError: () => {
+    onError: (error) => {
       async.reset();
+      try {
+        const parsedError = JSON.parse(error as string);
+        if (parsedError.status === 412 && parsedError.response) {
+          setErrorResponse(parsedError.response as IApprovalErrorResponse);
+          supplierStatusDialog.open();
+        } else {
+          toastError(error as string);
+        }
+      } catch (error) {
+        toastError(error as string);
+      }
     },
   });
+  const asyncState = useSelector(documentRevisionsSelectors.getLoadAsyncTaskApprovalState);
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const onSubmit = (props: PasswordFormValues) => {
-    async.start(applyTransition, approvalId, transition, async, props.password);
+    async.start(applyTransition, approvalId, transition, async, props.password, TASK_APPROVAL_GET_ASYNC);
   };
   const onReject = () => {
     async.start(applyTransition, approvalId, transition, async, null);
@@ -91,7 +110,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       />}
       { !type && <ApproveDialog
         onSubmit={onSubmit}
-        asyncState={async.asyncState}
+        asyncState={asyncState}
         buttonProps={buttonProps}
         transition={transition}
         label={label}
@@ -99,6 +118,12 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
           transitionDialog,
         }}
       />}
+      {errorResponse && (
+        <SupplierStatusDialog
+          dialog={supplierStatusDialog}
+          data={errorResponse}
+          confirmAction={() => supplierStatusDialog?.close()} />
+      )}
     </>
   );
 };

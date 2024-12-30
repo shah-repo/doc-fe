@@ -4,6 +4,7 @@ import { action, computed, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPOInlineApprovalUpdateBody, FBRequiredApprover } from '..';
 import { GroupType } from '../../../state/ducks/auth/types';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
+import { IApprovalErrorResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { POApprovalMatrixLevel } from '../FBPOApprovalMatrix/FBPOApprovalMatrix.types';
@@ -124,6 +125,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
+    callback?: (response: IApprovalErrorResponse) => void,
   ) => {
     if (!id) { return; }
     return this.transitionApi.set({
@@ -133,7 +135,16 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
       method: 'post',
     }, (data, error) => {
       if (error) {
-        return this.transitionApi.onError(error);
+        try {
+          const parsedError = JSON.parse(JSON.stringify(error));
+          if (parsedError.status === 412 && parsedError.response) {
+            callback?.(parsedError.response);
+          } else {
+            return this.transitionApi.onError(error);
+          }
+        } catch (error) {
+          return this.transitionApi.onError(error);
+        }
       }
       if (data) {
         this.upsertApproval(data);
