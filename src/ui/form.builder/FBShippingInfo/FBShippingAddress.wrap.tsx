@@ -21,6 +21,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
     const { workspaceState, formState } = FB.useStores();
     const [options, setOptions] = useState<CustomOptionType[]>([]);
     const defaultValue = formState?.getFieldValue(name) ?? '';
+    const shippingAddress = useObserver(() => formState?.getFieldValue('shipping_address') || workspaceState?.formInputSync.get('shipping_address') || workspaceState?.formInput?.shipping_address);
     const customerId = useObserver(() => formState?.getFieldValue('customer') || workspaceState?.formInputSync.get('customer') || workspaceState?.formInput?.customer);
     const isCustomerFieldLoading = useObserver(() => workspaceState?.documentRevApi.loading);
     const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue('customer'));
@@ -54,6 +55,9 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
 
     useEffect(() => {
       if ((!FB.isUUID(customerId) && isCustomerFieldLoading) || !customerId) {
+        if (!isEmpty(shippingAddress)) {
+          saveShippingAddressInfo();
+        }
         return;
       }
 
@@ -63,7 +67,11 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
         FBAutocompleteAsyncOption.shippingInformation,
         fetchShippingAddressAsync,
       );
-      return saveShippingAddressInfo;
+      if (!isEmpty(shippingAddress)) {
+        setTimeout(() => {
+          saveShippingAddressInfo();
+        }, 3000);
+      }
     }, [customerId]);
 
     const saveShippingAddressInfo = (value?: CustomOptionType) => {
