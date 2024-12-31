@@ -160,12 +160,9 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     }, isSiteAdded ? [editedSite] : []);
   }, [sites, editedSite, isSiteAdded]);
 
-  const memoizedSites = useMemo(() => sites, [sites?.length]);
-  const memoizedName = useMemo(() => name, [name]);
-
   const DetailComponent = memo((props: GridDetailRowProps) => {
     return (
-      <SiteContact {...props} name={memoizedName} sites={memoizedSites} />
+      <SiteContact {...props} name={name} sites={sites} />
     );
   });
 
