@@ -126,10 +126,11 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
     id?: string,
     body?: FBInlineApprovalTransitionBody,
     callback?: (response: IApprovalErrorResponse) => void,
+    ignoreWarning?: boolean,
   ) => {
     if (!id) { return; }
     return this.transitionApi.set({
-      url: FBEndpoint.ApprovalsTransition,
+      url: `${FBEndpoint.ApprovalsTransition}?ignoreWarning=${ignoreWarning}`,
       urlValues: { id, transition },
       body,
       method: 'post',

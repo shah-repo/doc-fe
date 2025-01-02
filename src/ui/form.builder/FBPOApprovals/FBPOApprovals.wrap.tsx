@@ -22,6 +22,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     isIncluded,
     approvalTransition,
     onApproveClick,
+    onConfirmClick,
     name = '',
     loading,
     value,
@@ -42,6 +43,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
     const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
+    const [password, setPassword] = useState<string>();
     const supplierStatusDialog = useDialog();
 
     const {
@@ -87,9 +89,15 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       supplierStatusDialog.open();
     };
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, ignoreWarning = false) => {
       if (!approvalId) { return; }
-      poApprovalsState?.applyTransition(transition, approvalId, { password }, handleError);
+      setPassword(password);
+      poApprovalsState?.applyTransition(transition, approvalId, { password }, handleError, ignoreWarning);
+    };
+
+    onConfirmClick = (approvalId: string) => {
+      approvalTransition(FBApprovalsStatusEndpoint.APPROVE, approvalId, password, true);
+      setPassword('');
     };
 
     onApproveClick = (approvalId: string) => {
@@ -200,6 +208,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       isIncluded,
       approvalTransition,
       onApproveClick,
+      onConfirmClick,
       loading,
       name,
       value,

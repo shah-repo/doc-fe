@@ -26,6 +26,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   isIncluded,
   approvalTransition,
   onApproveClick,
+  onConfirmClick,
   name,
   disabled,
   loading,
@@ -217,17 +218,17 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                   )
                                 }
                               />
+                              {errorResponse && (
+                                <SupplierStatusDialog
+                                  dialog={supplierStatusDialog as Dialog}
+                                  data={errorResponse}
+                                  confirmAction={e => onConfirmClick?.(approval.id)} />
+                              )}
                             </ListItem>
                           );
                         }}
                       </FBMapWrapper>
                     </List>
-                    {errorResponse && (
-                      <SupplierStatusDialog
-                        dialog={supplierStatusDialog as Dialog}
-                        data={errorResponse}
-                        confirmAction={e => supplierStatusDialog?.close()} />
-                    )}
                   </ApprovalsBlock>
                 );
               }}
