@@ -88,7 +88,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         } else {
           toastError(error as string);
         }
-      } catch (error) {
+      } catch (err) {
         toastError(error as string);
       }
     },
