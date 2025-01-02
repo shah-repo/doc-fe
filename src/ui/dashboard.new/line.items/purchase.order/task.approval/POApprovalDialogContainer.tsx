@@ -49,6 +49,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const supplierStatusDialog = useDialog();
   const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
+  const [password, setPassword] = useState<string>();
   const async = useAsync({
     onSuccess: (response?: ResponseProps) => {
       transitionDialog.close();
@@ -95,11 +96,19 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const asyncState = useSelector(documentRevisionsSelectors.getLoadAsyncTaskApprovalState);
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const onSubmit = (props: PasswordFormValues) => {
+    setPassword(props.password);
     async.start(applyTransition, approvalId, transition, async, props.password, TASK_APPROVAL_GET_ASYNC);
   };
   const onReject = () => {
     async.start(applyTransition, approvalId, transition, async, null);
   };
+
+  const onConfirmClick = () => {
+    async.start(applyTransition, approvalId, transition, async, password, TASK_APPROVAL_GET_ASYNC, true);
+    setPassword('');
+    supplierStatusDialog.close();
+  };
+
   return (
     <>
       { type && <PoRejectDialog
@@ -122,7 +131,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         <SupplierStatusDialog
           dialog={supplierStatusDialog}
           data={errorResponse}
-          confirmAction={() => supplierStatusDialog?.close()} />
+          confirmAction={onConfirmClick} />
       )}
     </>
   );

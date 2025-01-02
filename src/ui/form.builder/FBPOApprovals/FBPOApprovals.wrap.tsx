@@ -98,6 +98,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     onConfirmClick = (approvalId: string) => {
       approvalTransition(FBApprovalsStatusEndpoint.APPROVE, approvalId, password, true);
       setPassword('');
+      supplierStatusDialog.close();
     };
 
     onApproveClick = (approvalId: string) => {
