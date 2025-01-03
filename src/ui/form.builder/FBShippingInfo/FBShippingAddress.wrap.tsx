@@ -67,12 +67,13 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
         FBAutocompleteAsyncOption.shippingInformation,
         fetchShippingAddressAsync,
       );
-      if (!isEmpty(shippingAddress)) {
-        setTimeout(() => {
-          saveShippingAddressInfo();
-        }, 3000);
-      }
     }, [customerId]);
+
+    useEffect(() => {
+      if (!isEmpty(shippingAddress) && !isEmpty(options) && customerId && !options.some(option => option.value === defaultValue?.id)) {
+        saveShippingAddressInfo();
+      }
+    }, [customerId, defaultValue, options]);
 
     const saveShippingAddressInfo = (value?: CustomOptionType) => {
       const contacts = value?.siteContact?.reduce<{attention: ContactValue | undefined, shipping: ContactValue | undefined}>((contacts, item) => {
