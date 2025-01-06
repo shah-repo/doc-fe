@@ -86,6 +86,8 @@ export enum DocumentCategory {
   Equipment = 'Equipment',
   TrainingCurriculums = 'Training Curriculums',
   Lot = 'Lot',
+  Parts = 'Parts',
+  EB = 'EB',
 }
 export enum RevisionChangeType {
   NextRevision = 'NEXT_REVISION',

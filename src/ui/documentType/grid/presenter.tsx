@@ -3,7 +3,7 @@ import { cloneDeep, has, map } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import { TableDataProps } from '../../components/table/types';
@@ -79,7 +79,6 @@ export function DocumentTypePresenter ({
     setDataToBeExported(copyDate);
   };
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
-  console.log('tableName', tableName);
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
@@ -107,7 +106,10 @@ export function DocumentTypePresenter ({
             status: documentRevisionQueryStatus(),
           }}
           documentTypeCategory={documentTypeCategory}
-          enableKeywordSearch
+          enableKeywordSearch={[
+            DocumentCategory.Parts,
+            DocumentCategory.EB,
+          ].includes(documentTypeCategory as DocumentCategory)}
         />}
       </Grid>
     </Grid>
