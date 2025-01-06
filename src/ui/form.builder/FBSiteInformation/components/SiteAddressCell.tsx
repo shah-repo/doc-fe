@@ -15,13 +15,12 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, values, setFieldValue }
     = useFormikContext<EditableSite>();
-  const isNumberField = field === 'zipCode';
   const [selected, setSelected] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelected((prevSelected) => !prevSelected);
     setFieldValue('sameAsHQ', !selected);
-    onSameAsHQ?.(!selected);
+    onSameAsHQ?.(!selected, values);
   };
 
   useEffect(() => {
@@ -38,7 +37,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
           <TextField
             {...getFieldProps(field)}
             defaultValue={undefined}
-            type={isNumberField ? 'number' : 'text'}
+            type="text"
             size="small"
           />
         </FormikField>

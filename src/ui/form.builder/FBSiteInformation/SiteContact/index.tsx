@@ -10,6 +10,7 @@ import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import FB from '../../helpers/FB';
+import { EditableSite } from '../types';
 import { setPrimaryFieldDefaultValue } from '../utils';
 import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
@@ -26,6 +27,7 @@ const SiteContact: React.FC<SiteContactProps> = ({
   disabled,
   sites,
   dataItem,
+  setSites,
 }) => {
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
@@ -76,6 +78,7 @@ const SiteContact: React.FC<SiteContactProps> = ({
 
       setSiteContact(updatedSiteContacts as siteContact[]);
       formState?.setFieldValue(name, updatedSites);
+      setSites?.(updatedSites as EditableSite[]);
       workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
         [name]: updatedSites,
@@ -109,12 +112,13 @@ const SiteContact: React.FC<SiteContactProps> = ({
         ...site,
         siteContact: site.siteContact?.filter((contact) => contact.id !== dataItem.id),
       }));
-        formState?.setFieldValue(name, updatedSites);
-        workspaceState?.saveDocRev({
-          ...workspaceState?.formInput,
-          [name]: updatedSites,
-        });
-        onDiscardSiteContact();
+      formState?.setFieldValue(name, updatedSites);
+      setSites?.(updatedSites as EditableSite[]);
+      workspaceState?.saveDocRev({
+        ...workspaceState?.formInput,
+        [name]: updatedSites,
+      });
+      onDiscardSiteContact();
     },
     [editedSiteContact, siteContact, setSiteContact, sites, formState, name, workspaceState, onDiscardSiteContact],
   );

@@ -64,7 +64,6 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
             ? updatedSite
             : toggleExclusiveFields(site),
         );
-
       formState?.setFieldValue(name, updatedSites);
       workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
@@ -123,10 +122,10 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     );
   };
 
-  const handleSameAsHQ = useCallback((sameAsHQ) => {
+  const handleSameAsHQ = useCallback((sameAsHQ, currentSite) => {
     const hqAddress = workspaceState?.formInput;
     formik.setValues({
-      ...editedSite,
+      ...currentSite,
       zipCode: sameAsHQ ? hqAddress?.headquarter_address_zip_code || '' : '',
       siteAddress: sameAsHQ ? hqAddress?.headquarter_address || '' : '',
       city: sameAsHQ ? hqAddress?.headquarter_address_city || '' : '',
@@ -162,7 +161,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const DetailComponent = memo((props: GridDetailRowProps) => {
     return (
-      <SiteContact {...props} name={name} sites={sites} />
+      <SiteContact {...props} name={name} sites={sites} setSites={setSites} />
     );
   });
 
