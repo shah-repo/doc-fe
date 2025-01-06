@@ -79,6 +79,7 @@ export function DocumentTypePresenter ({
     setDataToBeExported(copyDate);
   };
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
+  console.log('tableName', tableName);
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
@@ -106,6 +107,7 @@ export function DocumentTypePresenter ({
             status: documentRevisionQueryStatus(),
           }}
           documentTypeCategory={documentTypeCategory}
+          enableKeywordSearch
         />}
       </Grid>
     </Grid>

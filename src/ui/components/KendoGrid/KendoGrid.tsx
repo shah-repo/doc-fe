@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, IconButton } from '@material-ui/core';
 import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
-import { GridCellProps, GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar, GridColumn as KendoColumn } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, isEmpty, isNull, map, set } from 'lodash';
 import React, { ComponentType, useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -38,9 +38,11 @@ import ColumnShowHideMenu from '../common/kendo/ColumnShowHideMenu';
 import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, orderByLockedState, pagerSettings, setColumnWidth, TranslatedText } from '../common/kendo/helpers';
 import NoDataFound from '../common/kendo/NoDataFound';
 import { KendoColumn as KendoColumnProps } from '../common/kendo/types';
+import { SEARCH_KEYWORD_FIELD_KEY } from '../KendoDataGrid/constants';
 import { toastError, toastSuccess } from '../notifications';
 import StyledKendoGrid from '../StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../table/ClearFilters';
+import KeywordSearch from '../table/KeywordSearch';
 import PrintLabelDetailsDialog from '../table/printLabel/PrintLabelDetailsDialog';
 import { printColumnProps } from '../table/printLabel/PrintLabelDetailsDialog.wrap';
 import { DataLoader } from './DataLoader';
@@ -60,6 +62,7 @@ export function KendoGrid<T extends any> ({
   defaultPayloadData,
   documentTypeCategory,
   exportDataChanges,
+  enableKeywordSearch,
 }: KendoGridProps<T>) {
   const didMount = useDidMount();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
@@ -377,6 +380,52 @@ export function KendoGrid<T extends any> ({
       ),
     );
   };
+
+  const applySearchFilter = (searchText) => {
+    const updatedDataState = { ...dataState };
+    if (updatedDataState.filter?.filters) {
+      const existingFilter = updatedDataState.filter.filters.find(
+        (filter) => (filter as FilterDescriptor)?.field === SEARCH_KEYWORD_FIELD_KEY,
+      ) as FilterDescriptor;
+
+      if (existingFilter) {
+        existingFilter.value = searchText;
+      } else {
+        updatedDataState.filter.filters.push({
+          field: SEARCH_KEYWORD_FIELD_KEY,
+          operator: 'contains',
+          value: searchText,
+        });
+      }
+    }
+    setDateStateAndDispatchByUpdatedState(updatedDataState);
+  };
+
+  const clearSearchFilter = () => {
+    const updatedDataState = { ...dataState };
+    if (updatedDataState.filter?.filters) {
+      updatedDataState.filter.filters = updatedDataState.filter.filters.filter(
+        (filter) => (filter as FilterDescriptor)?.field !== SEARCH_KEYWORD_FIELD_KEY,
+      );
+    }
+    setDateStateAndDispatchByUpdatedState(updatedDataState);
+  };
+
+  const setDateStateAndDispatchByUpdatedState = (updatedDataState: State) => {
+    setDataState(updatedDataState);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          queryDict: {
+            dataState: updatedDataState,
+          },
+        },
+        tableName,
+      ),
+    );
+  };
+
   const updateDataColumnsState = (dataColumns: KendoColumnProps[]) => {
     setColumns(dataColumns);
     dispatch(
@@ -507,6 +556,7 @@ export function KendoGrid<T extends any> ({
           <Grid container>
             <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
               <ClearFilters {...{ clearFilter }} />
+              {enableKeywordSearch && <KeywordSearch {...{ applySearchFilter, clearSearchFilter, dataState }} />}
             </Grid>
             <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
               <ColumnShowHideMenu
