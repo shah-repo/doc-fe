@@ -8,10 +8,6 @@ const FBCustomerHeaderQuaterAddress: React.FC<FBInputProps> = ({
   label = '',
   ...props
 }) => {
-  // const { workspaceState } = FB.useStores();
-  // const conversionData = useObserver(() => workspaceState?.formInputSync.get('part-conversion') as ConversionData);
-  // const isPreview = formState?.workspaceMode === FBWorkspaceModeOptions.PREVIEW;
-
   return (
     <Grid container spacing={1}>
       <Grid item md={6} xs={6}>

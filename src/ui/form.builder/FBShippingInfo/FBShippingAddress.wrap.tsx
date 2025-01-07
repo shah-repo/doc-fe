@@ -42,7 +42,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
     };
 
     const fetchShippingAddressAsync = useAsync({
-      onSuccess: (data: DocumentRevision | undefined) => {
+      onSuccess: (data?: DocumentRevision) => {
         const siteAddress = data?.formInput?.site_informations as ShippingAddress[];
         if (isEmpty(siteAddress)) {
           return;
@@ -76,7 +76,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
     }, [customerId, defaultValue, options]);
 
     const saveShippingAddressInfo = (value?: CustomOptionType) => {
-      const contacts = value?.siteContact?.reduce<{attention: ContactValue | undefined, shipping: ContactValue | undefined}>((contacts, item) => {
+      const contacts = value?.siteContact?.reduce<{attention?: ContactValue, shipping?: ContactValue}>((contacts, item) => {
         const contact = { id: item.id, name: `${item.name} (${item.email}) +${item?.phoneNumber}` };
         if (item.attention) {
           contacts.attention = contact;

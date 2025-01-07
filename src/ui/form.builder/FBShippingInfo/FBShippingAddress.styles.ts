@@ -11,25 +11,25 @@ export default makeStyles((theme) =>
     shippingInfo: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '30px',
+      gap: theme.spacing(3.75),
     },
     fieldContainer: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '10px',
+      gap: theme.spacing(1.25),
     },
     shippingInfoContainer: {
       display: 'flex',
       background: Colors.primaryBg,
-      padding: '15px',
-      gap: '10px',
+      padding: theme.spacing(1.875),
+      gap: theme.spacing(1.25),
       marginLeft: theme.spacing(3.75),
-      borderRadius: '7px',
+      borderRadius: theme.spacing(0.875),
     },
     shippingInfoCard: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '3px',
+      gap: theme.spacing(0.375),
     },
     cardHeading: {
       color: Colors.textBlack,
