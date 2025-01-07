@@ -11,7 +11,7 @@ import { withSMTabs } from '../../../../../../../App/Shifamed/Components/SMTabs/
 import { emptyFunction } from '../../../../../../../common/utils/helpers';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../../../../state/ducks/documentRevisions/documentType';
-import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../../../../state/reducers';
 import FBMaterialDisposition from '../../../../../../change.request/FBMaterialDisposition';
@@ -94,7 +94,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(documentType.groupOptions);
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length);
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const isCurrentUserOperator = useContext(isOperator);
   const isDisabledInput = formik.values.id !== undefined && isCurrentUserOperator && !isOwner;
   const isOutput = true;
