@@ -42,7 +42,6 @@ const SiteContact: React.FC<SiteContactProps> = ({
     setEditedSite(dataItem);
   const isInEditMode = editedSiteContact !== undefined;
   const handleRowClick = isActive && !isInEditMode ? editContact : undefined;
-  console.log('origionalSites:', sites);
 
   const formik = useFormik<Partial<EditableSiteContact>>({
     initialValues: {},

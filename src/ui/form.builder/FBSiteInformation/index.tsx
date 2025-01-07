@@ -161,7 +161,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const DetailComponent = memo((props: GridDetailRowProps) => {
     return (
-      <SiteContact {...props} name={name} sites={sites} setSites={setSites} />
+      <SiteContact {...props} name={name} sites={sites} setSites={setSites} disabled={disabled} />
     );
   });
 
