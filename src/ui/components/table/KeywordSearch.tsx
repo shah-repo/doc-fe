@@ -6,7 +6,7 @@ import {
   FilterDescriptor,
   State,
 } from '@progress/kendo-data-query';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
 import { translate } from '../../../common/intl';
 import { SEARCH_KEYWORD_FIELD_KEY } from '../KendoDataGrid/constants';
 import { styles } from './KeywordSearch.styles';
@@ -36,6 +36,14 @@ const KeywordSearch: React.FC<KeywordSearchProps> = ({
     clearSearchFilter?.();
   };
 
+  const onHandleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    event.key === 'Enter' && applySearchFilter?.(searchText);
+  };
+
+  const onHandleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setSearchText(event.target.value);
+  };
+
   const getKeywordSearchValue = (
     filters?: Array<CompositeFilterDescriptor | FilterDescriptor>,
   ): string =>
@@ -48,12 +56,13 @@ const KeywordSearch: React.FC<KeywordSearchProps> = ({
 
   useEffect(() => {
     setSearchText(getKeywordSearchValue(dataState?.filter?.filters));
-  }, []);
+  }, [dataState?.filter?.filters]);
 
   return (
     <TextField
       value={searchText}
-      onChange={(e) => setSearchText(e.target.value)}
+      onChange={onHandleChange}
+      onKeyDown={onHandleKeyDown}
       placeholder={translate('common.search.keyword')}
       variant="outlined"
       size="small"
