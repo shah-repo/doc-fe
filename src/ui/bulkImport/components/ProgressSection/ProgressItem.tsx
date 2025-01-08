@@ -207,7 +207,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
           ) : (
             <>
               <ProgressIcons item={item} />
-              {!isRejected && <Box className={classes.progressBarContainer}>
+              {item?.status === BkStatus.IN_PROGRESS && <Box className={classes.progressBarContainer}>
                 <Typography className={classes.progressBarTitle}>
                   {translate('common.importingFiles')}
                 </Typography>
