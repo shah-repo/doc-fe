@@ -115,6 +115,10 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   const formik = useFormik<DraftLhrTableItem>({
     initialValues: {},
     onSubmit: (values) => {
+      if (isEmpty(values)) {
+        return;
+      }
+
       const updatedLhrs = uniqBy([...lhrList, values], 'lotId');
       updateState(updatedLhrs);
     },
