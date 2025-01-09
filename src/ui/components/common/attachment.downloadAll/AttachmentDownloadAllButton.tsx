@@ -5,7 +5,7 @@ import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
-import Text from '../../../components/Text';
+// import Text from '../../../components/Text';
 import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from '../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -147,7 +147,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
           id="AttachmentFieldPresenter-downloadAllButton"
         >
           {isDownloading ? <CircularProgress className={classes.icon} /> : <GetAppIcon className={classes.icon} />}
-          <Text translation="common.download.all.files" />
+          {/* <Text translation="common.download.all.files" /> */}
         </Link>
       </label>
     </>

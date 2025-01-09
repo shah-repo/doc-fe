@@ -2244,5 +2244,14 @@
   "async.state.message.access.denied": "Access Denied",
   "common.failed": "Failed",
   "common.or": "OR",
-  "common.rev": "Rev."
+  "common.rev": "Rev.",
+  "attachment.table.file.name": "Filename",
+  "attachment.table.extension": "Extension",
+  "attachment.table.uploaded.by": "Uploaded by",
+  "attachment.table.uploaded.date": "Uploaded Date",
+  "attachment.table.file.size": "File Size",
+  "attachment.menu.download.file": "Download attached",
+  "attachment.menu.download.as.pdf": "Download as PDF",
+  "attachment.menu.view": "View",
+  "attachment.menu.delete": "Delete"
 }

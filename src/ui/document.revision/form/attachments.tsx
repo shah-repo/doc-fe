@@ -1,10 +1,13 @@
+// import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import Text from '../../components/Text';
+import AttachmentDeleteAllButton from '../../components/common/attachment.deleteAll/AttachmentDeleteAllButton';
 import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
 import AttachmentField from '../../components/common/attachment.field/container';
 import AttachmentIconField from '../../components/common/attachment.icon/container';
+import Text from '../../components/Text';
 import { useAttachments } from '../../hooks/docCustomization/useCustomization';
 import Colors from '../../layout/theme/utils/colors';
 
@@ -50,13 +53,17 @@ const Attachments: React.FunctionComponent<Props> = ({
   if (!isVisible) {
     return null;
   }
-
+console.log('-----documentRevision---', { documentRevision });
   return (
     <Box>
       <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
         <Typography variant="h6" style = {classes.attachmentHeadText}>
           <Text message={labeld || label} />
         </Typography>
+        <AttachmentDeleteAllButton isAttachmentEmpty = {isAttachmentEmpty}
+          docRevId = {docRevId}
+          containsRedline={containsRedline}
+          docRevStatus = {docRevStatus} />
         <AttachmentDownloadAllButton
           isAttachmentEmpty = {isAttachmentEmpty}
           docRevId = {docRevId}
@@ -65,6 +72,7 @@ const Attachments: React.FunctionComponent<Props> = ({
       </Box>
       <AttachmentField name="attachments" component="field" disabled={isDisabled} />
       <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }} />
+      {/* <AttachmentTable {...{ documentRevision }} /> */}
     </Box>
   );
 };
