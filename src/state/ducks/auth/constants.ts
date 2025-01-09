@@ -9,6 +9,9 @@ export const TOGGLE_CUSTOM_LABELS = 'auth/TOGGLE_CUSTOM_LABELS';
 export const USER_GROUPS_GET_ASYNC = 'auth/USER_GROUPS_GET_ASYNC';
 export const PING_SERVER_GET_ASYNC = 'auth/PING_SERVER_GET_ASYNC';
 
+export const SSO_LOGIN_URL = '/auth/login/sso';
+export const SSO_CALLBACK_URL = `${SSO_LOGIN_URL}/callback`;
+
 export const LOGIN_URL = '/auth/login';
 export const SIGNUP_URL = '/auth/sign_up';
 export const FORGOT_PASSWORD_URL = '/auth/forgot_password';

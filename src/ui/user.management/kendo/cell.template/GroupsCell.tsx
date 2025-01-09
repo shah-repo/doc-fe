@@ -1,13 +1,8 @@
-import { filterBy } from '@progress/kendo-data-query';
-import {
-  MultiSelect,
-  MultiSelectChangeEvent,
-  MultiSelectFilterChangeEvent,
-} from '@progress/kendo-react-dropdowns';
 import { GridCellProps } from '@progress/kendo-react-grid';
 import { filter, map } from 'lodash';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
+import { translate } from '../../../../common/intl';
 import {
   Group,
   GroupTag,
@@ -17,8 +12,9 @@ import {
 import { Nullable } from '../../../../state/ducks/common/types';
 import { userManagementSelectors } from '../../../../state/ducks/userManagement';
 import ExpandableTemplate from '../../../components/common/kendo/ExpandableTemplate';
+import { Autocomplete } from '../../../components/forms/fields-next';
 import { AddUserManage } from '../types';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface GroupOptions {
   label: string
@@ -46,7 +42,7 @@ export const GroupsCell = ({
 }: GroupsProps) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
-  const classes = styles();
+  const classes = useStyles();
   const [result, setResult] = React.useState<GroupOptions[]>([]);
   const [data, setData] = React.useState<GroupOptions[]>([]);
 
@@ -62,17 +58,11 @@ export const GroupsCell = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupOptions, defaultGroups, dataItem.id]);
 
-  const updateGroupField = ({ target }: MultiSelectChangeEvent) => {
-    dataItem.groups = target.value.map((item) => ({
+  const updateGroupField = (event: ChangeEvent<unknown>, value: GroupOptions[]) => {
+    dataItem.groups = value.map((item) => ({
       id: item.value || '',
     }));
-    setResult(target.value);
-  };
-
-  const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
-    const allData = groupOptions.slice();
-    const newData = filterBy(allData, filter);
-    setData(newData);
+    setResult(value);
   };
 
   if (rowType === 'groupHeader') {
@@ -88,15 +78,15 @@ export const GroupsCell = ({
       className={classes.groupCell}
     >
       {dataItem.inEdit ? (
-        <MultiSelect
-          data={data}
+        <Autocomplete
+          options={data}
           value={result}
-          filterable={true}
-          onChange={updateGroupField}
-          onFilterChange={filterChange}
-          dataItemKey="value"
-          textField="label"
+          getOptionLabel={(option: GroupOptions) => option.label}
           defaultValue={defaultGroups}
+          onChange={updateGroupField}
+          placeholder={result.length ? undefined : translate('common.groups')}
+          size="small"
+          multiple
         />
       ) : (
         <ExpandableTemplate items={dataItem.groups.split(',')} dataId={`${dataItem.id}-${columnIndex}`} />
