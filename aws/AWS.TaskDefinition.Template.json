@@ -55,10 +55,6 @@
           "value": ""
         },
         {
-          "name": "REACT_APP_LHR_SUMMARY_INSERT_ENABLED",
-          "value": ""
-        },
-        {
           "name": "REACT_APP_OCR_SUPPORTED_FILE_TYPES",
           "value": ""
         }
