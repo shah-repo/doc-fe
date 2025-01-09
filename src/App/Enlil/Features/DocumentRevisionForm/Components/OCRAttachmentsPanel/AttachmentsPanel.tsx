@@ -22,6 +22,7 @@ import ListPanel from './Components/ListPanel';
 import OCRFilePresenter from './Components/OCRFilePresenter';
 
 const OCR_API_URL = `${Config.ApiOCREndpoint}/aocr`;
+const BULK_OCR_INSERT_URL = `${Config.ApiEndpoint}/lhr_summary/bulk/upload`;
 
 const AttachmentsPanel: React.FC = () => {
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
@@ -52,7 +53,6 @@ const AttachmentsPanel: React.FC = () => {
     }
 
     let processedCount = 0;
-
     const uploadAttachment = async (index) => {
       const attachment = attachments[index];
       const data = {
@@ -63,8 +63,8 @@ const AttachmentsPanel: React.FC = () => {
         Revision: 'Revision',
         AttachmentUSID: attachment.id,
         DocumentRevisionUSID: docRevId,
-        IsLHRSummaryInsertEnabled: Config.isLHRSummaryInsertEnabled,
-        LHRSummaryBulkInsertUrl: `${Config.ApiEndpoint}/lhr_summary/bulk/upload`,
+        IsLHRSummaryInsertEnabled: true,
+        LHRSummaryBulkInsertUrl: BULK_OCR_INSERT_URL,
       };
 
       await axios.post(OCR_API_URL, data, { headers });

@@ -24,7 +24,6 @@ const DEFAULTS = {
   DATADOG_SAMPLE_RATE: '0',
   CONSOLE_TOAST: false,
   PREVENT_DOC_TYPE_MANAGEMENT_EDIT: false,
-  LHR_SUMMARY_INSERT_ENABLED: true,
   OCR_SUPPORTED_FILE_TYPES: '',
 };
 
@@ -150,10 +149,6 @@ class Config {
 
   public static get docTypeManagementEditDisabled (): boolean {
     return this.get('PREVENT_DOC_TYPE_MANAGEMENT_EDIT') === 'true';
-  }
-
-  public static get isLHRSummaryInsertEnabled (): boolean {
-    return this.get('LHR_SUMMARY_INSERT_ENABLED') === 'true';
   }
 
   public static get ocrSupportedFileTypes (): string[] {
