@@ -7,6 +7,7 @@ import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { differenceBy, isEmpty, map, uniqBy } from 'lodash';
 import { reaction } from 'mobx';
+import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FBInputProps, FBSection, FBWorkspaceModeOptions } from '..';
@@ -32,7 +33,7 @@ import { CustomColumnMenu, LHRTableColumnMenuContext } from './components/Custom
 import { EMPTY_PLACEHOLDER, EXCEL_FILE_NAME, Mode, MODE_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { DraftLhrTableItem, EditableLHRTableItem, ILHRTableItem, LHRTableItemEditEvent } from './types';
+import { DraftLhrTableItem, EditableLHRTableItem, ILHRAutocompleteOption, ILHRTableItem, LHRTableItemEditEvent } from './types';
 
 const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   name = '',
@@ -50,6 +51,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   const [editedLHRItem, setEditedLHRItem] = useState<EditableLHRTableItem>();
   const [lhrList, setLhrList] = useState<EditableLHRTableItem[]>([]);
   const { document } = workspaceState?.document ?? { version: 0 };
+  const partRevIdSelected = useObserver(() => workspaceState?.formInputSync.get('wo_part')?.id ?? '');
   const isForm = checkIsDocumentForm(document?.documentType?.groupOptions);
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = workspaceState?.document?.owner?.user?.id === currentUserId;
@@ -74,6 +76,15 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
 
   const schema = buildSchema({
     onRowClick: handleRowClick,
+  });
+
+  const fetchAvailableLhrsAction = useActionCreator(documentRevisionsActions.fetchAvailableLHRList);
+  const fetchAvailableLhrsAsync = useAsync({
+    onSuccess: (data: ILHRAutocompleteOption[] = []) => {
+      if (!data.some(item => item.id === lhrList[0]?.lhrDetails?.docRevId)) {
+        updateState([]);
+      }
+    },
   });
 
   const fetchLhrsDetailsAction = useActionCreator(documentRevisionsActions.fetchSelectedLHR);
@@ -111,6 +122,25 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
       });
     }
   };
+
+  useEffect(() => {
+    if (!_formState?.loading || isEmpty(lhrList)) {
+      return;
+    }
+
+    if (isEmpty(partRevIdSelected)) {
+      updateState([]);
+      return;
+    }
+
+    if (partRevIdSelected) {
+      fetchAvailableLhrsAsync.start(
+        fetchAvailableLhrsAction,
+        partRevIdSelected,
+        fetchAvailableLhrsAsync,
+      );
+    }
+  }, [partRevIdSelected]);
 
   const formik = useFormik<DraftLhrTableItem>({
     initialValues: {},
