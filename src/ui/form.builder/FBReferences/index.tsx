@@ -17,6 +17,7 @@ import { toastError } from '../../components/notifications';
 import useDialog from '../../hooks/useDialog';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
+import { SUPPLIER_KEYS } from '../FBSupplierContacts/constants';
 import { FB } from '../helpers';
 import { FIELDS_TO_PICK } from './constants';
 import { buildSchema } from './schema';
@@ -66,6 +67,7 @@ const FBReferences: React.FC<FBReferenceProps> = ({
     formState?.setFieldValue(name, updatedReferences);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
+      [SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY),
       [name]: payload,
     });
     setReferences(updatedReferences as Reference[]);
@@ -100,6 +102,7 @@ const FBReferences: React.FC<FBReferenceProps> = ({
     formState?.setFieldValue(name, updatedReferences);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
+      [SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY),
       [name]: updatedReferences,
     });
 

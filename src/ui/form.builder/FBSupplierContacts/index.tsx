@@ -15,7 +15,7 @@ import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.type
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
 import FB from '../helpers/FB';
-import { FIELDS_TO_OMIT } from './constants';
+import { FIELDS_TO_OMIT, SUPPLIER_KEYS } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableSupplierContact, FBSupplierContactsProps, SupplierContactEditEvent } from './types';
@@ -45,7 +45,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
     onSubmit: (values: Partial<EditableSupplierContact>) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const supplierContacts: EditableSupplierContact[]
-        = workspaceState?.formInput?.[name] ?? [];
+        = workspaceState?.formInputSync.get(name) ?? [];
       const updatedContact = omit(values, FIELDS_TO_OMIT);
 
       const updatedContacts = isAddition
@@ -61,6 +61,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
       formState?.setFieldValue(name, updatedContacts);
       workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
+        [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY),
         [name]: updatedContacts,
       });
       discardContact();
@@ -90,6 +91,7 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
   formState?.setFieldValue(name, updatedContacts);
   workspaceState?.saveDocRev({
     ...workspaceState?.formInput,
+    [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY),
     [name]: updatedContacts,
   });
   discardContact();
