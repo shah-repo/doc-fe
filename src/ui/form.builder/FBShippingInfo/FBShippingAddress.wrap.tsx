@@ -21,6 +21,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
     const { workspaceState, formState } = FB.useStores();
     const [options, setOptions] = useState<CustomOptionType[]>([]);
     const defaultValue = formState?.getFieldValue(name) ?? '';
+    const shippingAddress = useObserver(() => formState?.getFieldValue('shipping_address') || workspaceState?.formInputSync.get('shipping_address') || workspaceState?.formInput?.shipping_address);
     const customerId = useObserver(() => formState?.getFieldValue('customer') || workspaceState?.formInputSync.get('customer') || workspaceState?.formInput?.customer);
     const isCustomerFieldLoading = useObserver(() => workspaceState?.documentRevApi.loading);
     const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue('customer'));
@@ -41,7 +42,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
     };
 
     const fetchShippingAddressAsync = useAsync({
-      onSuccess: (data: DocumentRevision | undefined) => {
+      onSuccess: (data?: DocumentRevision) => {
         const siteAddress = data?.formInput?.site_informations as ShippingAddress[];
         if (isEmpty(siteAddress)) {
           return;
@@ -54,6 +55,9 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
 
     useEffect(() => {
       if ((!FB.isUUID(customerId) && isCustomerFieldLoading) || !customerId) {
+        if (!isEmpty(shippingAddress)) {
+          saveShippingAddressInfo();
+        }
         return;
       }
 
@@ -63,11 +67,16 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
         FBAutocompleteAsyncOption.shippingInformation,
         fetchShippingAddressAsync,
       );
-      return saveShippingAddressInfo;
     }, [customerId]);
 
+    useEffect(() => {
+      if (!isEmpty(shippingAddress) && !isEmpty(options) && customerId && !options.some(option => option.value === defaultValue?.id)) {
+        saveShippingAddressInfo();
+      }
+    }, [customerId, defaultValue, options]);
+
     const saveShippingAddressInfo = (value?: CustomOptionType) => {
-      const contacts = value?.siteContact?.reduce<{attention: ContactValue | undefined, shipping: ContactValue | undefined}>((contacts, item) => {
+      const contacts = value?.siteContact?.reduce<{attention?: ContactValue, shipping?: ContactValue}>((contacts, item) => {
         const contact = { id: item.id, name: `${item.name} (${item.email}) +${item?.phoneNumber}` };
         if (item.attention) {
           contacts.attention = contact;

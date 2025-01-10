@@ -1,6 +1,6 @@
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
-import { Site } from '../types';
+import { EditableSite, Site } from '../types';
 
 export interface SchemaOptions {
   isActive: boolean
@@ -18,6 +18,7 @@ export interface SiteContactProps {
   disabled?: boolean
   name: string
   sites: Site[]
+  setSites: React.Dispatch<React.SetStateAction<EditableSite[]>>
 }
 
 export interface siteContact {

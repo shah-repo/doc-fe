@@ -126,18 +126,19 @@ export const LotIDCell: React.FC<Props> = (props) => {
   const handleClick = () => onClick?.({ dataItem });
 
   const defaultValue = dataItem[field]?.name ?? EMPTY_VALUE_PLACEHOLDER;
+  const value = defaultValue.split('Rev')[0];
   const dataCy = `${kebabCase(field)}-cell`;
 
   return (
     <OverflowTooltip
-      title={defaultValue}
+      title={value}
       placement="top"
       interactive
       arrow
       onClick={handleClick}
       data-cy={dataCy}
     >
-      {defaultValue}
+      {value}
     </OverflowTooltip>
   );
 };
