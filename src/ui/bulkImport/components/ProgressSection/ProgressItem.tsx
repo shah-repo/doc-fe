@@ -27,6 +27,7 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import DeleteDialog from '../Dialogs/DeleteDialog';
+import MessageBox from './ErrorMessage';
 import ProgressIcons, { iconStatuses } from './ProgressIcons';
 import useStyles, { CustomLinearProgress } from './styles';
 
@@ -62,6 +63,8 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const showErrorMessage = isRejected || isFailed;
   const showDeleteButton = isProcessEmpty && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
   const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
+  const totalExcelErrors = Number(item?.process?.totalExcelErrors ?? 0);
+  const isWarning = !showErrorMessage && !(item?.attachmentId || Number(item.process?.step) <= 3) && totalExcelErrors >= 1;
   const openDeleteDialog = useDialog();
 
   const async = useAsync<ChangeRequestTransitionResponse>({
@@ -132,7 +135,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
 
   useEffect(() => {
     if (item?.icons) {
-      const firstBlankIcon = item.icons.find(icon => (!iconStatuses[icon.icon] || icon.icon === 'blank'));
+      const firstBlankIcon = item.icons.find(icon => (!iconStatuses[icon.icon] || icon.icon === 'warning' || icon.icon === 'blank'));
       if (firstBlankIcon) {
         currentProgressStep.current = firstBlankIcon.step;
       }
@@ -160,7 +163,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
                 className={classes.checkGreenIcon}
                 icon={solid('circle-check')}
               />
-            ) : isFailed ? (
+            ) : isFailed || isWarning ? (
               <FontAwesomeIcon
                 className={classes.errorRedIcon}
                 icon={regular('triangle-exclamation')}
@@ -176,11 +179,10 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
             </Typography>
           </Box>
           {(showErrorMessage) && (
-            <Box className={classes.itemErrorMessage}>
-              <Typography className={classes.itemErrorMessageText}>
-                {isRejected ? translate('bulkImport.approval.rejected.error') : translate('bulkImport.approval.failed.error')}
-              </Typography>
-            </Box>
+            <MessageBox message={isRejected ? translate('bulkImport.approval.rejected.error') : translate('bulkImport.approval.failed.error')} />
+          )}
+          {(isWarning) && (
+            <MessageBox message={translate('bulkImport.approval.warning.error', { count: totalExcelErrors })} action={translate('bulkImport.approval.view.error')} callback={handleReturnToStep} />
           )}
         </Box>
         <Box className={classes.progressBarIconsContainer}>

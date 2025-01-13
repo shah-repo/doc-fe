@@ -362,6 +362,7 @@ interface BkProcess {
   process: Process[]
   totalSteps: number
   step?: number
+  totalExcelErrors?: number
 }
 
 interface OriginalHeader {

@@ -2219,6 +2219,8 @@
   "bulkImport.delete": "Cancel Import",
   "bulkImport.withdrawSubmission": "Withdraw Submission",
   "bulkImport.approval.rejected.error": "Approval was rejected. Please resubmit for approval",
+  "bulkImport.approval.warning.error": "{count} rows contain erros.",
+  "bulkImport.approval.view.error": "View errors",
   "bulkImport.approval.failed.error": "The import failed. Please download the logs to see the errors.",
   "bulkImport.approval.remove.error": "An error occurred during the removal process.",
   "bulkImport.approval.process.error": "An error occurred during the document revision process.",

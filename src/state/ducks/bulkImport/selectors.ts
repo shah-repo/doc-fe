@@ -78,7 +78,7 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         step: 1,
       },
       { // we valid if the next step is already done "attachmentId" because process.step can be deleted on Bulk import process after the approve
-        icon: bulkImport?.attachmentId || Number(bulkImport.process?.step) <= 3 ? 'check' : 'blank',
+        icon: bulkImport?.attachmentId || Number(bulkImport.process?.step) <= 3 ? 'check' : Number(bulkImport.process?.totalExcelErrors ?? 0) >= 1 ? 'warning' : 'blank',
         text: translate('bulkImport.mapColumns'),
         step: 2,
       },

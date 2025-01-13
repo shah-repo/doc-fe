@@ -38,9 +38,11 @@ const ProgressIcons: React.FC<ProgressIconsProps> = ({ item }) => {
     <Box className={classes.statusesContainer}>
       {icons?.map(icon => {
         let iconData = iconStatuses[icon.icon] ? iconStatuses[icon.icon] : iconStatuses.blank;
-        if ((!iconStatuses[icon.icon] || icon.icon === 'blank') && !firstBlankIconFound) {
+        if ((!iconStatuses[icon.icon] || icon.icon === 'warning' || icon.icon === 'blank') && !firstBlankIconFound) {
           firstBlankIconFound = true;
-          iconData = iconStatuses.progress;
+          if (icon.icon !== 'warning') {
+            iconData = iconStatuses.progress;
+          }
         }
 
         return (
