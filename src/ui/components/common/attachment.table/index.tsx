@@ -48,7 +48,7 @@ const AttachmentTable: React.FC<Props> = ({
   onDelete,
   onSelectedAttachmentsChange,
 }) => {
-  const [attachmentsData, setAttachmentsData] = React.useState(documentRevision.attachments);
+  const [attachmentsData, setAttachmentsData] = React.useState(documentRevision?.attachments ?? []);
   const [headerChecked, setHeaderChecked] = React.useState(false);
 
   // State to hold the grid's data and the item currently being dragged
