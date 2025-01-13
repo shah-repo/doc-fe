@@ -1,47 +1,28 @@
-// import Filter from '../Filter';
-// import { GridFilterCellProps } from '@progress/kendo-react-grid';
+import { createStyles, makeStyles } from '@material-ui/styles';
+import { Theme } from '@material-ui/core';
 import { Checkbox } from '@progress/kendo-react-inputs';
-// import { debounce } from 'lodash';
 import React from 'react';
-// import Filter from '../../../../form.builder/FBApprovalMatrix/components/Filter';
+
+const styles = makeStyles((theme: Theme) =>
+  createStyles({
+    headerCheckbox: {
+      marginLeft: theme.spacing(1),
+    },
+  }));
 
 const SelectFilter: React.FC<any> = (props) => {
   const {
     headerChecked,
     handleHeaderCheckedChange,
-    // operator = 'contains',
-    // onChange,
   } = props;
-
-  // const [checked, setChecked] = React.useState(false);
-//   const handleChange = debounce(
-//     (event: CheckboxChangeEvent) => {
-//       const newValue = event.target.value;
-// console.log('-----new value--', { newValue, value });
-//       if (newValue === value) {
-//         return;
-//       }
-
-//       onChange({
-//         value: newValue,
-//         operator,
-//         syntheticEvent: event.syntheticEvent,
-//       });
-//     },
-//     500,
-//   );
-// const handleChange = (event: CheckboxChangeEvent) => {
-//   console.log('---value---', { value }, event.target.value);
-//   setChecked(Boolean(event.target.value));
-// };
+  const classes = styles();
 
   return (
-    // <Filter {...props}>
       <Checkbox
+        className={classes.headerCheckbox}
         checked={headerChecked}
         onChange={handleHeaderCheckedChange}
       />
-    // </Filter>
   );
 };
 

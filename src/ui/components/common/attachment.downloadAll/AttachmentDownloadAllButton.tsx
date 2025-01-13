@@ -1,11 +1,12 @@
-import { CircularProgress, createStyles, Link, makeStyles, Theme } from '@material-ui/core';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CircularProgress, createStyles, Link, makeStyles, Theme, Tooltip } from '@material-ui/core';
 import React, { useState } from 'react';
+import { translate } from '../../../../common/intl';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
-// import Text from '../../../components/Text';
 import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from '../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -26,12 +27,6 @@ interface Props {
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
-    downloadLabel: ({ isAttachmentEmpty }) => ({
-      flex: '0 0 50%',
-      display: isAttachmentEmpty ? 'none' : 'flex',
-      justifyContent: 'flex-end',
-      paddingRight: '25px',
-    }),
     icon: {
       verticalAlign: 'middle',
       maxHeight: '20px',
@@ -39,7 +34,12 @@ const styles = makeStyles((theme: Theme) =>
     },
     link: {
       cursor: 'pointer',
-      color: Colors.navy,
+      color: Colors.font_gray,
+      marginLeft: theme.spacing(1),
+    },
+    downloadIcon: {
+      height: 18,
+      width: 18,
     },
   }));
 
@@ -136,9 +136,9 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
         closeDialog={passwordDialogHandler.close}
         asyncState={passwordState}
       />
+      <Tooltip title={translate('common.download.all.files')}>
       <label
         htmlFor="button-file"
-        className={classes.downloadLabel}
         onClick={handleAllDownload(docRevId, undefined)}>
         <Link
           className={classes.link}
@@ -146,10 +146,10 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
           variant="button"
           id="AttachmentFieldPresenter-downloadAllButton"
         >
-          {isDownloading ? <CircularProgress className={classes.icon} /> : <GetAppIcon className={classes.icon} />}
-          {/* <Text translation="common.download.all.files" /> */}
+          {isDownloading ? <CircularProgress className={classes.icon} /> : <FontAwesomeIcon icon={regular('arrow-down-to-line')} className={classes.downloadIcon} />}
         </Link>
       </label>
+      </Tooltip>
     </>
   );
 };

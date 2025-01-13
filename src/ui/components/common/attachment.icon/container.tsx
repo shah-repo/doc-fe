@@ -46,6 +46,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   documentRevision,
   docRevId,
   isRedlineFirst,
+  selectedAttachments,
+  onSelectedAttachmentsChange,
   ...other
 }) => {
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
@@ -97,15 +99,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   });
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
-      console.log('-----3-----');
       window.onbeforeunload = null;
       downloadInfo && window.open(downloadInfo.url, '_parent');
-      // downloadInfo && fetch(downloadInfo.url)
-      // .then((response) => response.blob())
-      // .then((blob) => {
-      //   const imageBlobUrl = URL.createObjectURL(blob);
-      //   window.open(imageBlobUrl, '_blank');
-      // });
       setPassword(undefined);
     },
     onError: (message) => {
@@ -294,7 +289,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
 
   const noNeedPasswordHandler = (attachment: Attachment) => {
     if (checkIfFileIsViewable(attachment.type)) {
-      // openFileView();
+      openFileView();
       handleDownload(attachment);
       closeContextMenu();
     } else {
@@ -325,7 +320,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       setSelectedAttachment(attachment);
       needPasswordHandler(attachment);
     } else {
-      console.log('-----1-----');
       setSelectedAttachment(attachment);
       noNeedPasswordHandler(attachment);
     }
@@ -429,7 +423,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       {attachmentsRenderer}
     </div>
     <AttachmentTable
-      {...{ documentRevision }}
+      {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange }}
       onDownloadAttachment={handleDownload}
       onDownloadAsPDF={handleWatermarkRequest}
       onDelete={handleRemove}

@@ -1,15 +1,14 @@
-// import { Checkbox } from "@material-ui/core";
+import { Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/styles';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import React from 'react';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
-// import { CycleCountEditEvent } from './types';
 import { Attachment } from '../../../change.request/form/types';
 import InputFilter from '../../../form.builder/FBApprovalMatrix/components/InputFilter';
 import { ColumnDefinition } from '../../KendoDataGrid/KendoDataGrid.types';
 import ActionNeededCellTemplate from './components/ActionNeededCellTemplate';
 import FileExtensionCellTemplate from './components/FileExtensionCellTemplate';
-// import InputFilter from '../FBApprovalMatrix/components/InputFilter';
 import FileNameCellTemplate from './components/FileNameCellTemplate';
 import FileOwnerCellTemplate from './components/FileOwnerCellTemplate';
 import FileSizeCellTemplate from './components/FileSizeCellTemplate';
@@ -28,10 +27,14 @@ interface SchemaOptions {
   handleHeaderCheckedChange: (event: CheckboxChangeEvent) => void
 }
 
+const styles = makeStyles((theme: Theme) =>
+  createStyles({
+    checkbox: {
+      paddingLeft: '20px !important',
+    },
+  }));
+
 export const buildSchema = ({
-  // onHandQuantityUnit,
-  // onHandQuantity,
-  // onRowClick,
   headerChecked,
   documentRevision,
   onDownloadAttachment,
@@ -40,16 +43,15 @@ export const buildSchema = ({
   onView,
   handleHeaderCheckedChange,
 }: SchemaOptions): Array<ColumnDefinition<any>> => {
-  // const actionNeededOptions = ACTION_NEEDED_OPTIONS.map((option) => createOption(option.value, option.label));
-
+  const classes = styles();
   return [
     {
       id: 'id',
       field: 'selected',
       title: 'Select',
       filterCell: (props) => <SelectFilter {...{ props, headerChecked, handleHeaderCheckedChange }} />,
-      // template: (props) => <FileNameCellTemplate {...{ props, documentRevision }} />,
-      width: 40,
+      className: classes.checkbox,
+      width: 60,
     },
     {
       id: 'name',

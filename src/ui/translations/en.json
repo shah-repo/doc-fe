@@ -421,6 +421,8 @@
   "common.lifecycle.phase": "Lifecycle Phase",
   "common.upload.files": "Upload files",
   "common.download.all.files": "Download All",
+  "common.delete.all.files": "Delete All",
+  "common.summarize.with.ai": "Summarize with Enlil AI",
   "common.add.attachment": "Add attachment",
   "common.warning": "Warning",
   "common.open": "Open",
@@ -2253,5 +2255,6 @@
   "attachment.menu.download.file": "Download attached",
   "attachment.menu.download.as.pdf": "Download as PDF",
   "attachment.menu.view": "View",
-  "attachment.menu.delete": "Delete"
+  "attachment.menu.delete": "Delete",
+  "attachment.header.selected": "Selected"
 }

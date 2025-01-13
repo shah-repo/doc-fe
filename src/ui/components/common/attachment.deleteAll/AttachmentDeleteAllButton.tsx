@@ -1,13 +1,12 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, createStyles, IconButton, makeStyles, Theme } from '@material-ui/core';
-// import GetAppIcon from '@material-ui/icons/GetApp';
+import { CircularProgress, createStyles, IconButton, makeStyles, Theme, Tooltip } from '@material-ui/core';
 import React, { useState } from 'react';
+import { translate } from '../../../../common/intl';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
-// import Text from '../../../components/Text';
 import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from '../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -28,23 +27,20 @@ interface Props {
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
-    downloadLabel: ({ isAttachmentEmpty }) => ({
-      flex: '0 0 50%',
-      display: isAttachmentEmpty ? 'none' : 'flex',
-      justifyContent: 'flex-end',
-      paddingRight: '25px',
-    }),
     icon: {
       verticalAlign: 'middle',
       maxHeight: '20px',
       maxWidth: '20px',
     },
-    link: {
-      cursor: 'pointer',
-      color: Colors.navy,
+    deleteButton: {
+      padding: 0,
+      marginRight: theme.spacing(1),
+      marginLeft: theme.spacing(1),
     },
     deleteIcon: {
       color: Colors.red,
+      height: 17,
+      width: 17,
     },
   }));
 
@@ -64,7 +60,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
     message: '',
   };
 
-  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const downloadAllAttachments = useActionCreator(attachmentsActions.downloadAllAttachments);
   const downloadAllAttachmentsPassword = useActionCreator(attachmentsActions.downloadAllAttachmentsPassword);
   const passwordDialogHandler = useDialog();
@@ -74,12 +70,12 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
-      setIsDownloading(false);
+      setIsDeleting(false);
       window.onbeforeunload = null;
       downloadInfo && window.open(downloadInfo.url, '_parent');
     },
     onError: (message) => {
-      setIsDownloading(false);
+      setIsDeleting(false);
       message && toastError(message as unknown as string);
     },
   });
@@ -106,22 +102,22 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
     passwordDialogHandler.open();
   };
 
-  const handleAllDownload = (documentRevisionId: string, password: string | undefined) => () => {
+  const handleAllDelete = (documentRevisionId: string, password: string | undefined) => () => {
     if (isDocumentRevisionInDraft(docRevStatus)) {
-      setIsDownloading(true);
+      setIsDeleting(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
     } else if (!containsRedline && isDocumentRevisionInStatusFlag(docRevStatus)) {
-      setIsDownloading(true);
+      setIsDeleting(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
     } else {
-      setIsDownloading(true);
+      setIsDeleting(true);
       redlineWarningDialogHandler.open();
     }
   };
 
   const closeDialog = () => {
     redlineWarningDialogHandler.close();
-    setIsDownloading(false);
+    setIsDeleting(false);
   };
 
   return (
@@ -141,23 +137,12 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
         closeDialog={passwordDialogHandler.close}
         asyncState={passwordState}
       />
-      <IconButton onClick={() => handleAllDownload}>
-        {isDownloading ? <CircularProgress className={classes.icon} /> : null }
+      <Tooltip title={translate('common.delete.all.files')}>
+      <IconButton onClick={() => handleAllDelete} className={classes.deleteButton}>
+        {isDeleting ? <CircularProgress className={classes.icon} /> : null}
         <FontAwesomeIcon icon={regular('trash-can')} className={classes.deleteIcon} />
-        </IconButton>
-      {/* <label
-        htmlFor="button-file"
-        className={classes.downloadLabel}
-        onClick={handleAllDownload(docRevId, undefined)}>
-        <Link
-          className={classes.link}
-          component="span"
-          variant="button"
-          id="AttachmentFieldPresenter-downloadAllButton"
-        >
-          {isDownloading ? <CircularProgress className={classes.icon} /> : <GetAppIcon className={classes.icon} />}
-        </Link>
-      </label> */}
+      </IconButton>
+      </Tooltip>
     </>
   );
 };

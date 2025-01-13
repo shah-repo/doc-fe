@@ -15,7 +15,6 @@ const FileNameCellTemplate: React.FC<any> = ({ props, documentRevision }) => {
   const fileName = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
   const extension = get(dataItem, 'type', EMPTY_VALUE_PLACEHOLDER) as string;
   const isRedlineIcon = dataItem?.lineType === LINE_TYPES.RED_LINE;
-  console.log('----props-1--', { props, documentRevision });
   const isPrimary = dataItem?.id === documentRevision?.primaryAttachment?.id;
 
   const open = () => {

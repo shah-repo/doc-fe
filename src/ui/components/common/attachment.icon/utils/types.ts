@@ -41,6 +41,8 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isRedlineFirst?: boolean
   handleIconClick?: (attachment: Attachment) => any
   docRevId?: string
+  selectedAttachments?: {[id: string]: boolean | number[]}
+  onSelectedAttachmentsChange?: (selectedAttachments: {[id: string]: boolean | number[]}) => void
 }
 
 export interface AttachmentMenuProps {
