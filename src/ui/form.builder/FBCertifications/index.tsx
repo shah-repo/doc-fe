@@ -15,6 +15,7 @@ import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
+import { SUPPLIER_KEYS } from '../FBSupplierContacts/constants';
 import FB from '../helpers/FB';
 import { ATTACHMENT_FIELDS_TO_OMIT, FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
@@ -61,6 +62,7 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
       formState?.setFieldValue(name, updatedCertifications);
       workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
+        [SUPPLIER_KEYS.SUPPLIER_REFERENCES_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_REFERENCES_KEY),
         [name]: updatedCertifications,
       });
       setCertifications(updatedCertifications as Certification[]);
@@ -93,6 +95,7 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
     formState?.setFieldValue(name, updatedCertifications);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
+      [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY),
       [name]: updatedCertifications,
     });
     discardCertification();

@@ -21,6 +21,7 @@ import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
+import { SUPPLIER_KEYS } from '../FBSupplierContacts/constants';
 import FB from '../helpers/FB';
 import { FIELDS_TO_PICK } from './constants';
 import { buildSchema } from './schema';
@@ -87,6 +88,7 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
     formState?.setFieldValue(name, updatedProductOrServices);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
+      [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY),
       [name]: payload,
     });
     setProductOrServices(updatedProductOrServices as ProductORService[]);
@@ -120,6 +122,7 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
     formState?.setFieldValue(name, updatedProductOrServices);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
+      [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY),
       [name]: payload,
     });
     discardItem();
