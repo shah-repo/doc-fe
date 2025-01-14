@@ -2243,6 +2243,7 @@
   "bulkImport.approvals.approvers": "Approvers",
   "bulkImport.approvals.step1Title": "Select data type",
   "bulkImport.approvals.step1SubTitle": "Please select type of data to import",
+  "bulkImport.approvals.selectDataType": "Select data type",
   "bulkImport.approvals.viewFolderStructureGuide": "View Folder Structure Guide",
   "bulkImport.approvals.submit": "Submit for approval",
   "bulkImport.approvals.select.placeholder": "Start typing to see list of users...",
