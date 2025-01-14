@@ -3585,7 +3585,7 @@ aggregate-error@^3.0.0:
 
 "ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git":
   version "0.0.1"
-  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#6882afb5216cef0a00b6a75b5e3a6b38e6ba715e"
+  resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#180d24a4876279d3a060b0d5056a50aeb64cb116"
   dependencies:
     "@chatscope/chat-ui-kit-react" "^2.0.3"
     "@chatscope/chat-ui-kit-styles" "^1.4.0"
