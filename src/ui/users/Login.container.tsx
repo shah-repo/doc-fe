@@ -6,7 +6,7 @@ import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import { translate } from '../../common/intl';
 import Config from '../../config';
 import { authActions, authSelectors } from '../../state/ducks/auth';
-import { SSO_LOGIN_URL } from '../../state/ducks/auth/constants';
+import { SSO_LOGIN_URL, SSO_REDIRECT_PARAM } from '../../state/ducks/auth/constants';
 import { Employee } from '../../state/ducks/company/types';
 import { ApplicationState } from '../../state/reducers';
 import { Button } from '../components/forms/fields-next';
@@ -28,8 +28,15 @@ interface StateProps {
 
 export type LoginContainerProps = StateProps & Pick<RouteComponentProps, 'location'>;
 
+const IS_DEV_BUILD = process.env.NODE_ENV === 'development';
+
 const redirectToSSO = () => {
-  window.location.href = `${Config.ApiEndpoint}${SSO_LOGIN_URL}`;
+  const redirectUrl = new URL(`${Config.ApiEndpoint}${SSO_LOGIN_URL}`);
+
+  if (IS_DEV_BUILD) {
+    redirectUrl.searchParams.append(SSO_REDIRECT_PARAM, window.location.origin);
+  }
+  window.location.href = redirectUrl.toString();
 };
 
 const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => {
@@ -59,8 +66,12 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
   const code = new URLSearchParams(window.location.search).get('code');
 
   useEffect(() => {
+    const params = {
+      code,
+      [SSO_REDIRECT_PARAM]: IS_DEV_BUILD ? window.location.origin : undefined,
+    };
     if (code && !props.isUserAuthenticated) {
-      async.start(loginSSOAction, { code }, async);
+      async.start(loginSSOAction, params, async);
     }
   }, [code, props.isUserAuthenticated]);
 

@@ -16,6 +16,8 @@
   "signup.verification.message": "Please check your email and follow the instructions to verify your email address. If you didn't receive an email, check your spam folder.",
   "signup.sign.in": "Click here to sign in",
   "signup.close.window": "CLOSE WINDOW",
+  "password.expiring": "Your password will expire in {daysUntilPasswordExpires} days. {link}",
+  "password.expiring.link": "Reset it now.",
   "forgot.password": "Forgot your password?",
   "forgot.password.message": "Enter your email address below and we will send you a secure link to reset your password",
   "forgot.password.close": "CLOSE",
