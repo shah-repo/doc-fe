@@ -30,7 +30,7 @@ import { EditableProductORService, FBProductORServiceProps, ProductORService, Pr
 import { withFBProductORService } from './wrap';
 
 const FBProductORService: React.FC<FBProductORServiceProps> = ({
-  label = 'form.builder.supplier.produc.or.service.title',
+  label = 'form.builder.supplier.product.or.service.title',
   name = '',
   disabled,
   productOrServices = [],

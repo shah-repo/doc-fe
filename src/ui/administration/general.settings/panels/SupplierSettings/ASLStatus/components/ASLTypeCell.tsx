@@ -1,5 +1,4 @@
-import { Box, Chip } from '@material-ui/core';
-import cx from 'classnames';
+import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { kebabCase } from 'lodash';
 import React from 'react';
@@ -13,10 +12,8 @@ import {
   MODE_FIELD,
 } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../../components/OverflowTooltip';
-import { ASL_STATUS_CLASS_MAPPING } from '../../../../../../form.builder/FBProductOrService/constants';
 import useStyles from '../../../../components/SettingsTable/styles';
 import { ASLStatus, ASLSTATUS_KEYS, CustomCellProps } from '../types';
-import styles from './ASLTypeCell.styles';
 
 const Editor: React.FC<CustomCellProps> = ({
   dataItem,
@@ -74,7 +71,6 @@ export const ASLTypeCell: React.FC<CustomCellProps> = (props) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = kebabCase(field);
-  const classes = styles();
   const displayValue = dataItem[field];
 
   return (
@@ -93,14 +89,7 @@ export const ASLTypeCell: React.FC<CustomCellProps> = (props) => {
           onClick={handleClick}
           data-cy={`${dataCy}-value`}
         >
-          <Chip
-            size="small"
-            className={cx(
-              classes.chip,
-              classes[ASL_STATUS_CLASS_MAPPING[displayValue]],
-            )}
-            label={displayValue}
-          />
+          {displayValue}
         </OverflowTooltip>
       )}
     </Box>

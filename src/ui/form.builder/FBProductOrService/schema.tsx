@@ -21,7 +21,7 @@ export const buildSchema = ({
     {
       id: 'rev-id',
       field: 'revId',
-      title: 'form.builder.supplier.produc.or.service.grid.heading.item',
+      title: 'form.builder.supplier.product.or.service.grid.heading.item',
       filterable: false,
       template: (props) => <ItemCell {...props} onClick={onRowClick} onOpenQuickView={onOpenQuickView} />,
       width: 300,
@@ -29,7 +29,7 @@ export const buildSchema = ({
     {
       id: 'supplier-part-number',
       field: 'supplierPartNumber',
-      title: 'form.builder.supplier.produc.or.service.grid.heading.supplier.part.number',
+      title: 'form.builder.supplier.product.or.service.grid.heading.supplier.part.number',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
@@ -37,7 +37,7 @@ export const buildSchema = ({
     {
       id: 'lifecycle-phase',
       field: 'lifecyclePhase',
-      title: 'form.builder.supplier.produc.or.service.grid.heading.lifecycle.phase',
+      title: 'form.builder.supplier.product.or.service.grid.heading.lifecycle.phase',
       filterable: false,
       template: (props) => <LifeCyclePhaseCell {...props} onClick={onRowClick} />,
       width: 140,
@@ -45,7 +45,7 @@ export const buildSchema = ({
     {
       id: 'status',
       field: 'status',
-      title: 'form.builder.supplier.produc.or.service.grid.heading.status',
+      title: 'form.builder.supplier.product.or.service.grid.heading.item.state',
       filterable: false,
       template: (props) => <StatusCell {...props} onClick={onRowClick} />,
       width: 180,
@@ -53,7 +53,7 @@ export const buildSchema = ({
     {
       id: 'asl-status',
       field: 'aslStatus',
-      title: 'form.builder.supplier.produc.or.service.grid.heading.asl.status',
+      title: 'form.builder.supplier.product.or.service.grid.heading.asl.status',
       filterable: false,
       template: (props) => <ASLCell {...props} onClick={onRowClick} aslItems={aslItems} />,
       width: 280,
@@ -61,7 +61,7 @@ export const buildSchema = ({
     {
       id: 'comments',
       field: 'comment',
-      title: 'form.builder.supplier.produc.or.service.grid.heading.comments',
+      title: 'form.builder.supplier.product.or.service.grid.heading.comments',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
       width: 280,
