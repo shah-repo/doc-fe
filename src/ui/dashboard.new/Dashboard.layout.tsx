@@ -5,29 +5,27 @@ import useGetHasTag from '../hooks/useGetHasTag';
 import useStyles from './Dashboard.styles';
 import Tabs from './tabs/Tabs';
 import TrainingStats from './training.stats/TrainingStats';
-import { SearchBar } from '../../App/Enlil/Features/Search';
+import Welcome from './welcome';
 
 const DashboardLayout: React.FC = () => {
   const classes = useStyles();
   const isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
 
   return (
-    <Box className={classes.box}>
-      <Grid container>
-        <Grid item xs className={classes.searchContainer}>
-          <SearchBar />
-        </Grid>
-      </Grid>
-      <Grid container className={classes.root}>
-        <Grid item className={classes.tabs} xs={12} md={isDashboardAdmin ? 8 : 12}>
-          <Tabs />
-        </Grid>
-        {isDashboardAdmin && (
-          <Grid item className={classes.stats} xs={12} md={4}>
-            <TrainingStats />
+    <Box className={classes.root}>
+      <Welcome />
+      <Box className={classes.dashboard}>
+        <Grid container className={classes.wrapper}>
+          <Grid item className={classes.tabs} xs={12} md={isDashboardAdmin ? 8 : 12}>
+            <Tabs />
           </Grid>
-        )}
-      </Grid>
+          {isDashboardAdmin && (
+            <Grid item className={classes.stats} xs={12} md={4}>
+              <TrainingStats />
+            </Grid>
+          )}
+        </Grid>
+      </Box>
     </Box>
   );
 };

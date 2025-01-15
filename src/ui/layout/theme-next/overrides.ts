@@ -649,6 +649,25 @@ const overrides = (theme: Theme): Overrides & MuiPickersOverrides => ({
       opacity: 1,
       backgroundColor: Colors.textGray,
     },
+    colorSecondary: {
+      '& + $track': {
+        backgroundColor: Colors.white,
+      },
+      '& $thumb': {
+        color: Colors.textDisabled,
+      },
+      '&$checked': {
+        color: Colors.primaryLight,
+
+        '& $thumb': {
+          color: Colors.primaryLight,
+        },
+        '& + $track': {
+          opacity: 1,
+          backgroundColor: Colors.white,
+        },
+      },
+    },
   },
 });
 
