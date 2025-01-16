@@ -23,7 +23,7 @@ export interface ShippingAddress {
   siteContact: Contact[]
 }
 
-interface Contact {
+export interface Contact {
   id: string
   name: string
   email: string
