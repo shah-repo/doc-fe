@@ -16,6 +16,10 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
     setFieldValue('date', date?.toISOString());
   };
 
+  const handleClear = () => {
+    setFieldValue('date', null);
+  };
+
   if (isEditMode) {
     return (
       <FormikField
@@ -26,6 +30,7 @@ export const DateCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataIte
           {...getFieldProps('date')}
           size="small"
           onChange={handleChange}
+          onClear={handleClear}
           format={MomentFormats.MonthDateYearTwoDigit}
         />
       </FormikField>
