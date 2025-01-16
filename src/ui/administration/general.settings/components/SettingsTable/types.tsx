@@ -10,7 +10,7 @@ export interface SettingsTableProps<T extends EditableItem = EditableItem> exten
   getRowProperties?: (item: T) => CustomRowProperties | undefined
   isEditing?: boolean
   isActive?: boolean
-  filterable?: boolean
+  isFilterable?: boolean
 }
 
 interface SettingsSchemaOptions<T extends EditableItem = EditableItem> {
