@@ -1,4 +1,3 @@
-// import Filter from '../Filter';
 import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import { debounce } from 'lodash';
@@ -15,7 +14,6 @@ const FileSizeFilter: React.FC<GridFilterCellProps> = (props) => {
   const handleChange = debounce(
     (event: InputChangeEvent) => {
       const newValue = event.target.value;
-console.log('--file---new value--', { newValue, value });
       if (newValue === value) {
         return;
       }

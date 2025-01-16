@@ -1,7 +1,7 @@
-import { Theme } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import React from 'react';
+import { DragCell } from '.';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Attachment } from '../../../change.request/form/types';
@@ -27,7 +27,7 @@ interface SchemaOptions {
   handleHeaderCheckedChange: (event: CheckboxChangeEvent) => void
 }
 
-const styles = makeStyles((theme: Theme) =>
+const styles = makeStyles(() =>
   createStyles({
     checkbox: {
       paddingLeft: '20px !important',
@@ -47,18 +47,25 @@ export const buildSchema = ({
   return [
     {
       id: 'id',
+      field: 'id',
+      cell: DragCell,
+      filterable: false,
+      width: 30,
+    },
+    {
+      id: 'id',
       field: 'selected',
       title: 'Select',
       filterCell: (props) => <SelectFilter {...{ props, headerChecked, handleHeaderCheckedChange }} />,
       className: classes.checkbox,
-      width: 60,
+      width: 50,
     },
     {
       id: 'name',
       field: 'name',
       title: 'attachment.table.file.name',
       filterCell: InputFilter,
-      template: (props) => <FileNameCellTemplate {...{ props, documentRevision }} />,
+      template: (props) => <FileNameCellTemplate {...{ props, documentRevision, onView }} />,
       width: 200,
     },
     {
@@ -98,7 +105,7 @@ export const buildSchema = ({
       field: 'actionNeeded',
       title: 'table.column.actions',
       filterable: false,
-      template: (props) => <ActionNeededCellTemplate {...props} {...{ onDownloadAttachment, onDelete, onDownloadAsPDF, onView }} />,
+      template: (props) => <ActionNeededCellTemplate {...props} {...{ onDownloadAttachment, onDelete, onDownloadAsPDF, onView, documentRevision }} />,
       width: 60,
     },
   ];

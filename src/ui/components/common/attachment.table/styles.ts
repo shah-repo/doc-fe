@@ -29,12 +29,14 @@ export default makeStyles((theme) => ({
     borderRadius: theme.spacing(0.2),
   },
   columnMenuItem: {
-    margin: '0px',
-    padding: '0px',
-    width: '230px',
+    margin: 0,
+    padding: 0,
+    width: 250,
   },
   menuIcons: {
     marginRight: theme.spacing(2),
+    height: 16,
+    width: 16,
   },
   menuDeleteIcon: {
     color: Colors.error,

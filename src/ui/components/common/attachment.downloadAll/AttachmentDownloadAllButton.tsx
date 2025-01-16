@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
-import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
 import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from '../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -23,6 +23,8 @@ interface Props {
   docRevId: string
   containsRedline: boolean
   docRevStatus: DocumentRevisionStatus
+  selectedAttachments?: {[id: string]: boolean | number[]}
+  documentRevision?: DocumentRevision
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -48,6 +50,8 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   docRevId,
   containsRedline,
   docRevStatus,
+  selectedAttachments,
+  documentRevision,
 }) => {
   const passwordState = {
     status: AsyncStatus.Idle,
@@ -64,7 +68,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   const downloadAllAttachmentsPassword = useActionCreator(attachmentsActions.downloadAllAttachmentsPassword);
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
-
+  const selectedAttachmentsCount = Object.values(selectedAttachments || {}).filter(value => value === true).length;
   const classes = styles({ isAttachmentEmpty });
 
   const async = useAsync<AttachmentDownloadResponse>({
@@ -119,6 +123,8 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     setIsDownloading(false);
   };
 
+  const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === documentRevision?.attachments?.length ? 'common.download.all.files' : 'common.download.selected.files';
+
   return (
     <>
       <AttachmentRedLineWarningDialog
@@ -136,7 +142,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
         closeDialog={passwordDialogHandler.close}
         asyncState={passwordState}
       />
-      <Tooltip title={translate('common.download.all.files')}>
+      <Tooltip title={translate(toolTipText)}>
       <label
         htmlFor="button-file"
         onClick={handleAllDownload(docRevId, undefined)}>

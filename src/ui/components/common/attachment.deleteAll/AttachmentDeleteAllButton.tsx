@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
-import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
 import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from '../../../documentRevision/helpers/documentRevisionStatus';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -23,6 +23,8 @@ interface Props {
   docRevId: string
   containsRedline: boolean
   docRevStatus: DocumentRevisionStatus
+  selectedAttachments: {[id: string]: boolean | number[]}
+  documentRevision: DocumentRevision
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -49,6 +51,8 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   docRevId,
   containsRedline,
   docRevStatus,
+  selectedAttachments,
+  documentRevision,
 }) => {
   const passwordState = {
     status: AsyncStatus.Idle,
@@ -65,6 +69,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   const downloadAllAttachmentsPassword = useActionCreator(attachmentsActions.downloadAllAttachmentsPassword);
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
+  const selectedAttachmentsCount = Object.values(selectedAttachments).filter(value => value === true).length;
 
   const classes = styles({ isAttachmentEmpty });
 
@@ -120,6 +125,8 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
     setIsDeleting(false);
   };
 
+  const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === documentRevision.attachments.length ? 'common.delete.all.files' : 'common.delete.selected.files';
+
   return (
     <>
       <AttachmentRedLineWarningDialog
@@ -137,7 +144,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
         closeDialog={passwordDialogHandler.close}
         asyncState={passwordState}
       />
-      <Tooltip title={translate('common.delete.all.files')}>
+      <Tooltip title={translate(toolTipText)}>
       <IconButton onClick={() => handleAllDelete} className={classes.deleteButton}>
         {isDeleting ? <CircularProgress className={classes.icon} /> : null}
         <FontAwesomeIcon icon={regular('trash-can')} className={classes.deleteIcon} />

@@ -293,7 +293,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       handleDownload(attachment);
       closeContextMenu();
     } else {
-      console.log('-----2-----');
       handleDownload(attachment);
       closeContextMenu();
     }
@@ -353,6 +352,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       return null;
     }
 
+    return null;
+
     return (
       <PresenterFactory
         {...other}
@@ -375,7 +376,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
 
   return (
     <>
-    <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: sortedAttachments.length ? '2rem' : '0rem' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: sortedAttachments.length ? '1rem' : '0rem' }}>
       <AttachmentRedLineWarningDialog
         isDialogOpen={redlineWarningDialogHandler.isOpen}
         onSubmit={warningSubmit}
