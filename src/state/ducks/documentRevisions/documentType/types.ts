@@ -44,6 +44,8 @@ export enum DOC_TYPE_GROUP {
   CONFIG_OPTIONS = 'CONFIG_OPTIONS',
   WORK_ORDER = 'WORK_ORDER',
   GROUP_TRAINING = 'GROUP_TRAINING',
+  CUSTOMERS = 'CUSTOMERS',
+  SHIPPING = 'SHIPPING',
 }
 
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
