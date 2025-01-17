@@ -42,7 +42,7 @@ import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
@@ -161,6 +161,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
   const isLatestRevision = useIsLatestRevision(documentRevision);
+  const isShipping = checkIsDocumentShipping(documentRevision?.document?.documentType?.groupOptions);
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -323,7 +324,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
     accessableButtons.push(PreviewControlButtons.GeneratePDF);
   }
-  if ((isStatusReleased || isStatusInDraft) && serializedCSV) {
+  if ((isStatusReleased || isStatusInDraft) && serializedCSV && !isShipping) {
     accessableButtons.push(PreviewControlButtons.ExportCsvButton);
   }
   if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild)) {
