@@ -5,12 +5,57 @@ import React from 'react';
 import { translate } from '../../../common/intl';
 import styles from './FBShippingAddress.styles';
 import { withFBShippingAddress } from './FBShippingAddress.wrap';
-import { FBShippingAddresProps } from './types';
+import { Contact, FBShippingAddresProps } from './types';
 
 const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleChange, value, loading, disabled, isShippingAddressEmpty }) => {
   const classes = styles();
   const attention = find(value?.siteContact, { attention: true });
   const shipping = find(value?.siteContact, { shipping: true });
+
+  const renderInfoCardDetails = (
+    type: string,
+    name?: string,
+    email?: string,
+    phoneNumber?: string,
+  ) => (
+    <>
+      {(name || email) && (
+        <Typography
+          className={classes.cardInfo}
+          data-cy={`${type}-info-name-email`}
+          component="span"
+        >
+          {name}{email && <span className={classes.cardEmail}> ({email})</span>}
+        </Typography>
+      )}
+      {phoneNumber && (
+        <Typography
+          className={classes.cardInfo}
+          data-cy={`${type}-info-phone-number`}
+          component="span"
+        >
+          +{phoneNumber}
+        </Typography>
+      )}
+    </>
+  );
+
+  const InfoCard = ({ title, info, type }: {
+    title: string
+    info?: Contact
+    type: string
+  }) => (
+    <Box className={classes.shippingInfoCard}>
+      <Typography
+        className={classes.cardHeading}
+        data-cy={`${type}-info-heading`}
+        component="span"
+      >
+        {title}
+      </Typography>
+      {renderInfoCardDetails(type, info?.name, info?.email, info?.phoneNumber)}
+    </Box>
+  );
 
   return (
     <div>
@@ -67,58 +112,18 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
           {!isShippingAddressEmpty && <Grid xs={6}>
             <Box className={classes.shippingInfoContainer}>
               <Grid xs={6}>
-                <Box className={classes.shippingInfoCard}>
-                  <Typography
-                    className={classes.cardHeading}
-                    data-cy="shipping-info-customer"
-                    component="span"
-                  >
-                    {translate('form.builder.record.shipping.info.heading.shipping.attention')}
-                  </Typography>
-                  <Typography
-                    className={classes.cardInfo}
-                    data-cy="shipping-info-customer"
-                    component="span"
-                  >
-                    {attention?.name && <>
-                      {attention?.name} (<span className={classes.cardEmail}>{attention?.email}</span>)
-                    </>}
-                  </Typography>
-                  {attention?.phoneNumber && <Typography
-                    className={classes.cardInfo}
-                    data-cy="shipping-info-customer"
-                    component="span"
-                  >
-                    +{attention?.phoneNumber}
-                  </Typography>}
-                </Box>
+                <InfoCard
+                  title={translate('form.builder.record.shipping.info.heading.shipping.attention')}
+                  info={attention}
+                  type="attention"
+                />
               </Grid>
               <Grid xs={6}>
-                <Box className={classes.shippingInfoCard} >
-                  <Typography
-                    className={classes.cardHeading}
-                    data-cy="shipping-info-customer"
-                    component="span"
-                  >
-                    {translate('form.builder.record.shipping.info.heading.shipping.contact')}
-                  </Typography>
-                  <Typography
-                    className={classes.cardInfo}
-                    data-cy="shipping-info-customer"
-                    component="span"
-                  >
-                    {shipping?.name && <>
-                      {shipping?.name} (<span className={classes.cardEmail} >{shipping?.email}</span>)
-                    </>}
-                  </Typography>
-                  {shipping?.phoneNumber && <Typography
-                    className={classes.cardInfo}
-                    data-cy="shipping-info-customer"
-                    component="span"
-                  >
-                    +{shipping?.phoneNumber}
-                  </Typography>}
-                </Box>
+                <InfoCard
+                  title={translate('form.builder.record.shipping.info.heading.shipping.contact')}
+                  info={shipping}
+                  type="shipping"
+                />
               </Grid>
             </Box>
           </Grid>}

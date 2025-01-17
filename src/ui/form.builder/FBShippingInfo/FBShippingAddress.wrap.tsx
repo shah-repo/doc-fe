@@ -77,7 +77,14 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
 
     const saveShippingAddressInfo = (value?: CustomOptionType) => {
       const contacts = value?.siteContact?.reduce<{attention?: ContactValue, shipping?: ContactValue}>((contacts, item) => {
-        const contact = { id: item.id, name: `${item.name} (${item.email}) +${item?.phoneNumber}` };
+        const contact = {
+          id: item.id,
+          name: [
+            item.name?.trim() ? item.name : null,
+            item.email?.trim() ? `(${item.email})` : null,
+            item.phoneNumber?.trim() ? `+${item.phoneNumber}` : null,
+          ].filter(Boolean).join(' '),
+        };
         if (item.attention) {
           contacts.attention = contact;
         }
