@@ -779,7 +779,7 @@ const fetchReferences = (
   const params = qs.stringify({ searchQuery, offset, limit: 25 });
 
   return apiActionWithCallbacks({
-    url: `${DOCUMENT_REVISION_ROOT_URL}/references/search?${params}`,
+    url: `${SUPPLIER_ROOT_URL}/references/search?${params}`,
     method: 'get',
     handlers,
   });

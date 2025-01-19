@@ -7,5 +7,5 @@ export enum ASL_STATUS_CLASS_MAPPING {
   'Pending Evaluation' ='PENDING_STATUS',
   'Approved' ='GREEN_STATUS',
   'Disqualify' = 'RED_STATUS',
-  'Inactive'='RED_STATUS',
+  'Inactive'='GRAY_STATUS',
 }
