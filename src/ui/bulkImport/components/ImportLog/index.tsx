@@ -1,19 +1,19 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, List, ListItem, Typography } from '@material-ui/core';
+import { startCase, toLower } from 'lodash';
 import moment from 'moment';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { MomentFormats } from '../../../../common/utils/date';
-import { bkStatusTextMap } from '../../../../state/ducks/bulkImport/constants';
-import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
+import { getBulkImportsGroupByProcessType } from '../../../../state/ducks/bulkImport/selectors';
 import { BulkImportCustom, BulkImportFile } from '../../../../state/ducks/bulkImport/types';
 import Text from '../../../components/Text';
 import useStyles from './styles';
 
 const ImportLog: React.FC = () => {
   const classes = useStyles();
-  const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcess);
+  const bulkImportsGroupByProcess = useSelector(getBulkImportsGroupByProcessType);
 
   const renderItem = (text: string, formattedDate: string): JSX.Element => (
     <ListItem className={classes.listItem}>
@@ -56,7 +56,7 @@ const ImportLog: React.FC = () => {
                 className={classes.chevronRightIcon}
                 icon={solid('chevron-right')}
               />
-              <Typography className={classes.categoryTitle} variant="subtitle1">{bkStatusTextMap[key] || ''}</Typography>
+              <Typography className={classes.categoryTitle} variant="subtitle1">{key ? startCase(toLower(key)) : ''}</Typography>
             </Box>
             <List className={classes.listCategory}>
               {bulkImportsGroupByProcess[key]?.map((item: BulkImportCustom, idx: number) => {
