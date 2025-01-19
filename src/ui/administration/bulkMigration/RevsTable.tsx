@@ -39,12 +39,11 @@ import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDi
 const INITIAL_ROWS_COUNT = 25;
 
 const headCells = [
-  { id: 'docId', disablePadding: true, label: 'Doc Id', width: '10%', searchAllowed: true, orderingAllowed: true },
-  { id: 'name', disablePadding: false, label: 'Name', width: '25%', searchAllowed: true, orderingAllowed: true },
-  { id: 'owner', disablePadding: false, label: 'Owner', width: '15%', searchAllowed: true, orderingAllowed: true },
-  { id: 'fieldsUnmatched', disablePadding: false, label: 'Fields Unmatched', width: '24%' },
+  { id: 'docId', disablePadding: true, label: 'Doc Id', width: '12%', searchAllowed: true, orderingAllowed: true },
+  { id: 'name', disablePadding: false, label: 'Name', width: '27%', searchAllowed: true, orderingAllowed: true },
+  { id: 'owner', disablePadding: false, label: 'Owner', width: '17%', searchAllowed: true, orderingAllowed: true },
+  { id: 'fieldsUnmatched', disablePadding: false, label: 'Fields Unmatched', width: '26%' },
   { id: 'proposedAction', disablePadding: false, label: 'Proposed Action', width: '10%' },
-  { id: 'haveConcerns', alignRight: true, disablePadding: false, label: 'Have Concerns', width: '8%' },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -154,7 +153,7 @@ const EnhancedTableHead: React.FC<{
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.alignRight ? 'right' : 'left'}
+            align="left"
             sortDirection={orderBy === headCell.id ? order : false}
             style={{ width: `${headCell.width}`, overflow: 'hidden', padding: '8px 4px' }}
           >
@@ -177,15 +176,13 @@ const EnhancedTableHead: React.FC<{
 const ExpandableRow: React.FC<{
   row: ISupplierScanResultRev
   handleSelection: (event, row: ISupplierScanResultRev) => void
-  handleRejection: (event, docRevId: string) => void
   isItemSelected: boolean
   labelId: string
-  isItemRejected: boolean
   onIconHovered: (event, content: ReactElement) => void
   handlePopoverClose: () => void
 }> = ({
-  row, handleSelection, handleRejection, isItemSelected,
-  labelId, isItemRejected, onIconHovered, handlePopoverClose,
+  row, handleSelection, isItemSelected,
+  labelId, onIconHovered, handlePopoverClose,
 }) => {
   const [rowOpen, setRowOpen] = React.useState(false);
   const classes = useStyles();
@@ -318,12 +315,6 @@ const ExpandableRow: React.FC<{
           {/* <ReactJson src={row.fieldNamesUnmatched} collapsed={1} /> */}
         </TableCell>
         <TableCell style={{ overflow: 'hidden', wordWrap: 'break-word' }}>{row.proposedAction}</TableCell>
-        <TableCell align="right" padding="checkbox" onClick={(event) => handleRejection(event, row.docRevId)}>
-          { !row.status && <Checkbox
-            checked={isItemRejected}
-            inputProps={{ 'aria-labelledby': labelId }}
-          /> }
-        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
@@ -489,10 +480,6 @@ const RevsTable: React.FC<{
     handleSelectedRowsChange(selected);
   }, [selected.length]);
 
-  const handleRejection = (event, id: string) => {
-    // Will update DB
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -503,8 +490,6 @@ const RevsTable: React.FC<{
   };
 
   const isSelected = (id: string) => selected.findIndex(entry => entry.id === id) > -1;
-  const hasConcerns = (id: string) => selected.findIndex(entry => entry.id === id) > -1;
-  // const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -559,12 +544,11 @@ const RevsTable: React.FC<{
             <TableBody>
               {rows.map((row, index) => {
                 const isItemSelected = isSelected(row.docRevId);
-                const isItemRejected = hasConcerns(row.docRevId);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <ExpandableRow row={row} handleSelection={handleSelection} handleRejection={handleRejection}
-                    isItemSelected={isItemSelected} labelId={labelId} key={row.docRevId} isItemRejected={isItemRejected}
+                  <ExpandableRow row={row} handleSelection={handleSelection}
+                    isItemSelected={isItemSelected} labelId={labelId} key={row.docRevId}
                     onIconHovered={(event, content) => handlePopoverOpen(event, content)}
                     handlePopoverClose={handlePopoverClose}
                   />
