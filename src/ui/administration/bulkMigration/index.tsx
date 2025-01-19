@@ -351,16 +351,13 @@ const BulkMigrationContainer: React.FC = () => {
     let isValidated = true;
 
     if (fromDocumentTypeId === toDocumentTypeId) {
-      const fromFormVersion
-        = fromFormRevsList.find((formRev) => formRev.id === fromFormRevId)
-          ?.version ?? -1;
+      const fromFormRev = fromFormRevsList.find((formRev) => formRev.id === fromFormRevId);
+      const fromFormVersion = fromFormRev?.version ?? -1;
 
-      const toFormRev = toFormRevsList.find(
-        (formRev) => formRev.id === selectedFormRevId,
-      );
+      const toFormRev = toFormRevsList.find((formRev) => formRev.id === selectedFormRevId);
       const toFormVersion = toFormRev?.version ?? -1;
 
-      if (toFormVersion <= fromFormVersion) {
+      if (fromFormRev?.document.docId === toFormRev?.document.docId && toFormVersion <= fromFormVersion) {
         isValidated = false;
         toastError('Must migrate to a higher Form Rev');
       }

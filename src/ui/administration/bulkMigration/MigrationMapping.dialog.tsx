@@ -248,10 +248,12 @@ const MigrationMappingDialog: React.FC<{
         </Toolbar>
       </AppBar>
       <DialogContent>
-        <ul style={{ marginTop: 0, marginBottom: '24px', paddingLeft: '20px' }}>
+        <ul style={{ marginTop: 0, marginBottom: '24px', paddingLeft: '20px', width: '80%' }}>
           <li className={classes.compactListItem}>Click on a Schema Item on left. A <DoneAllIcon style={{ color: Colors.green, position: 'relative', top: '6px' }} /> would appear, indicating that this is selected.</li>
-          <li className={classes.compactListItem}>Now click on any item in the <em>To Rev</em> area. This maps the two fields together.</li>
+          <li className={classes.compactListItem}>Clicking on any item in the <em>To Rev</em> area, maps the two fields together.</li>
           <li className={classes.compactListItem}>More than one item from the left can be mapped to items on the right.</li>
+          <li className={classes.compactListItem}>Click <b>Save</b> to make the <b>Preview</b> button appear. You can adjust the mapping rules, save, and preview as needed until you're satisfied with the results. Once everything looks good, close this screen, select the revisions from the table, and click <b>Run Scan</b> to fetch all the eligible revisions for selection.
+          </li>
         </ul>
         {/* <MappingRules /> */}
         <Typography variant="subtitle2">{unmappedCount} fields unmapped</Typography>
