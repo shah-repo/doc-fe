@@ -8,6 +8,7 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { intl, translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
+import { encodeString } from '../../../common/utils/helpers';
 import apiClient from '../../../state/apiClient';
 import { BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_START_REVS_MIGRATION, BULK_MIGRATION_UPDATE_SCAN } from '../../../state/ducks/company/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -379,7 +380,7 @@ const BulkMigrationContainer: React.FC = () => {
     setIsConfirmationDialogVisible(false);
   };
 
-  const handleMigrationConfirmation = () => {
+  const handleMigrationConfirmation = (employeePassword: string) => {
     // Take all the ones selected & send to BE
     setIsLoading(true);
     setErrorMessage('');
@@ -389,9 +390,10 @@ const BulkMigrationContainer: React.FC = () => {
       url: `${BULK_MIGRATION_START_REVS_MIGRATION}/${scanDetails?.id}`,
       data: {
         revIds: selectedRows.map(entry => entry.id),
+        password: btoa(employeePassword),
       },
       headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+        Authorization: `bearer_password ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}:${encodeString(employeePassword)}`,
       },
       // cancelToken: call.token,
     };

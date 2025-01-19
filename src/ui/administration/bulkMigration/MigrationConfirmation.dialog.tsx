@@ -1,9 +1,9 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@material-ui/core';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, TextField, Typography } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import WarningIcon from '@material-ui/icons/Warning';
 import { AxiosRequestConfig } from 'axios';
 import { isEmpty } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { intl } from '../../../common/intl';
 import apiClient from '../../../state/apiClient';
 import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS } from '../../../state/ducks/company/constants';
@@ -17,13 +17,15 @@ import { IApprovalRequirementGroup, IApprovalRequirements, ISelectedDetails } fr
 const MigrationConfirmationDialog: React.FC<{
   isOpen: boolean
   handleClose: () => void
-  handleConfirmation: () => void
+  handleConfirmation: (password: string) => void
   selectedDetails: ISelectedDetails[]
   toDocumentTypeId: string
   toFormRev?: DocumentRevision
 }> = ({ isOpen, handleClose, selectedDetails, handleConfirmation, toDocumentTypeId, toFormRev }) => {
   const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
   const [toFormReleasedError, setToFormReleasedError] = useState<string>('');
+
+  const employeePassword = useRef<string>('');
   // const [isLoading, setIsLoading] = useState(false);
 
   const actionCountMap: { [key: string]: number } = {};
@@ -100,6 +102,14 @@ const MigrationConfirmationDialog: React.FC<{
       });
   }
 
+  function handleEmployeeConfirmation () {
+    handleConfirmation(employeePassword.current);
+  }
+
+  function setEmployeePassword (empPassword: string) {
+    employeePassword.current = empPassword;
+  }
+
   const isApprovalRequirementFulfilled = (group: IApprovalRequirementGroup) => {
     return (
       approvalRequirements?.missingGroups.findIndex(
@@ -143,19 +153,18 @@ const MigrationConfirmationDialog: React.FC<{
           {approvalRequirements && (
             <Box
               style={{
-                marginTop: '16px',
                 padding: '12px',
                 backgroundColor: Colors.background_blue,
                 borderRadius: '4px',
               }}
             >
-              <Typography variant="body2" style={{ marginBottom: '4px' }}>
-                For revisions, that are already Released, migration would create a new Revision and automate its approval & release, using
-                <span style={{ fontWeight: 'bold', color: Colors.bright_blue, marginLeft: '4px' }}>
+              <Typography variant="body2" style={{ marginBottom: '4px', color: Colors.light_gray_II }}>
+                For revisions, that are already Released, migration would create a new Revision and automate its approval & release, using <i>the current user</i>
+                <span style={{ fontWeight: 'bold', color: Colors.bright_blue, display: 'block' }}>
                   {approvalRequirements.email}
                 </span>
               </Typography>
-              <Typography variant="body2" style={{ margin: '8px 0px 4px 0px' }}>
+              <Typography variant="body2" style={{ margin: '8px 0px 4px 0px', color: Colors.light_gray_II }}>
                 Based on the Document Type selected, this user <b>should be a part of the groups</b> listed below, without
                 which the process will fail.
               </Typography>
@@ -188,14 +197,38 @@ const MigrationConfirmationDialog: React.FC<{
           <div style={{ color: Colors.red, backgroundColor: Colors.light_red, padding: '4px' }}>{toFormReleasedError}</div>
         )}
 
-        {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError) && <p>Are you sure you want to revise these Suppliers?</p> }
+        {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError)
+          && <>
+            <p>Are you sure you want to revise these Suppliers? Please provide the password to confirm.</p>
+
+            <FormControl
+              style={{ width: '100%' }}
+            >
+              <TextField
+                id="current-employee-password"
+                label="Employee Password"
+                type="password"
+                onChange={e => setEmployeePassword(e.target.value)}
+                style={{ width: '100%', border: '0px', borderBottom: `1px solid ${Colors.gray_goose}` }}
+              />
+            </FormControl>
+            {/* <InputField
+              name="password"
+              label="transition.action.password"
+              dataCy="transition.action.password"
+              inputProps={{ type: 'password' }}
+              validate={validator(required)}
+            /> */}
+          </>
+        }
+
       </DialogContent>
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
         {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError)
-        && <Button onClick={handleConfirmation} color="primary" autoFocus>
+        && <Button onClick={handleEmployeeConfirmation} color="primary" autoFocus>
           Confirm
         </Button>}
       </DialogActions>
