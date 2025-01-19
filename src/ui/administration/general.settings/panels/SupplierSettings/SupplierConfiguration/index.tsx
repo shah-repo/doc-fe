@@ -194,7 +194,7 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
           addButtonLabel={translate('common.add.new')}
           onAdd={addSupplierConfig}
           getRowProperties={dataCyGenerator}
-          filterable={true}
+          isFilterable
         />
       </FormikProvider>
     </SettingsPanel>
