@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import { DialogHandler } from '../../hooks/useDialog';
 import Text from '../Text';
 import LotWhereUsedTree from './LotWhereUsedTree';
@@ -15,7 +15,7 @@ export enum WhereUsedType {
 interface Props {
   revId: string
   whereUsedDialog: DialogHandler
-  closeDialog: () => void
+  closeDialog: MouseEventHandler<Element>
   type: WhereUsedType
 }
 

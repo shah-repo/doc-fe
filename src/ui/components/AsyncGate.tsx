@@ -1,5 +1,8 @@
-import { Button, LinearProgress, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Box, Button, LinearProgress, Typography, WithStyles, withStyles } from '@material-ui/core';
 import React, { useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { ReactComponent as NoAccessIcon } from '../../assets/images/NoAccess_Image.svg';
+import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { AsyncState, AsyncStatus } from '../../state/types';
 import useDidMount from '../hooks/useDidMount';
 import styles from './AsyncGate.styles';
@@ -23,6 +26,9 @@ const AsyncGate: React.FunctionComponent<Props> = ({
   passive = false,
 }) => {
   const didMount = useDidMount();
+  const loadAsyncValidatorState = useSelector(
+    documentRevisionsSelectors.getLoadAsyncValidatorState,
+  );
 
   const runAsyncAction = useCallback(() => {
     if (asyncAction) {
@@ -37,7 +43,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startActionOnMount]);
 
-  if (passive && didMount && [AsyncStatus.Active, AsyncStatus.Success].includes(asyncState.status)) {
+  if (passive && didMount && asyncState?.status && [AsyncStatus.Active, AsyncStatus.Success].includes(asyncState?.status)) {
     return (
       <div className={classes.passiveContainer}>
         {asyncState.status === AsyncStatus.Active && (
@@ -48,11 +54,25 @@ const AsyncGate: React.FunctionComponent<Props> = ({
     );
   }
 
-  if (asyncState.status === AsyncStatus.Success && didMount) {
+  if (asyncState.status === AsyncStatus.Success && loadAsyncValidatorState.status === AsyncStatus.Success && didMount) {
     return (
       <React.Fragment>
         {children}
       </React.Fragment>
+    );
+  }
+
+  if (asyncState.status === AsyncStatus.Error && asyncState.statusCode === 403) {
+    return (
+      <div className={classes.errorAccessDeniedContainer}>
+        <NoAccessIcon />
+        <Box className={classes.accessDeniedText}>
+          <Text translation="async.state.message.access.denied" />
+        </Box>
+        <Typography variant="body1" className={classes.errorText}>
+          {asyncState.message}
+        </Typography>
+      </div>
     );
   }
 

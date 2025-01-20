@@ -27,7 +27,7 @@ interface FieldCheckboxProps {
   label: string
   checked: boolean
   checkboxName: string
-  onFieldCheck: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void
+  onFieldCheck?: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void
   fullWidth?: boolean
   children?: React.ReactNode
   className?: string
@@ -72,15 +72,17 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
 }) => {
   const classes = styles();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
-  const printerValue: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY));
+  const printerValue: ZebraPrintSettings = JSON.parse(localStorage.getItem(PRINTER_NAME_KEY) || 'null') ?? {};
   const isRecentPrinterExist = zebraPrint?.find(item => item.printer.name === printerValue?.printer?.name && item.printer.isActive);
   const recentPrinterLabelType = localStorage.getItem(PRINTER_LABEL_TYPE_KEY);
-  const defaultLabelType = isRecentPrinterExist ? JSON.parse(recentPrinterLabelType) : '';
+  const defaultLabelType = isRecentPrinterExist && recentPrinterLabelType
+    ? JSON.parse(recentPrinterLabelType)
+    : {};
   const isShowpH = defaultLabelType?.name === PH_PRINT_LABEL_TYPE;
   const qtyUnitsRender = () => {
-    const gridSize = selectedNumberOfLabel < 6 ? (gridMaxWidth / selectedNumberOfLabel) : (gridMaxWidth / 5);
+    const gridSize = Number(selectedNumberOfLabel) < 6 ? (gridMaxWidth / Number(selectedNumberOfLabel)) : (gridMaxWidth / 5);
     const qtyClasses = qtyLabelStyle(gridSize);
-    return (qtyUnits.map((item, i) => (
+    return (qtyUnits?.map((item, i) => (
       <Grid item key={i} className={qtyClasses.qtyLabel} >
         <FormField label="print.label.dialog.field.quantity.units" />
         <FormField data-cy={`label-count-${i}`} label={`(Label ${i + 1})`} >
@@ -88,7 +90,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             type="number"
             data-cy="quantity-units"
             value={item}
-            onChange={e => onQtyUnitsChange(e, i)} />
+            onChange={e => onQtyUnitsChange && onQtyUnitsChange(e, i)} />
         </FormField>
       </Grid>
     )));
@@ -192,7 +194,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             <TextField
               data-cy="serial"
               onChange={onSerialChange}
-              value={serial.slice(0, 14)} />
+              value={serial?.slice(0, 14)} />
           </Grid>
           <Grid item xs={6}>
             <FieldCheckbox label="print.label.dialog.field.by" {...{ onFieldCheck }}
@@ -213,12 +215,12 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
             <FieldCheckbox label="print.label.dialog.field.date" {...{ onFieldCheck }}
               checkboxName="printDate"
               checked={includes(selectedParams, 'printDate')}>
-              <Datepicker
+              {handleDateChange && <Datepicker
                 value={selectedDate}
                 data-cy="date"
                 size="medium"
                 onChange={handleDateChange}
-              />
+              />}
             </FieldCheckbox>
           </Grid>
           <Grid item xs={isShowpH ? 6 : 12}>
@@ -229,7 +231,7 @@ const PrintLabelDetailsDialog: React.FC<PrintLabelDetailsDialogProps> = ({
                 data-cy="number-of-labels"
                 options={range(1, 11, 1)}
                 getOptionLabel={(option) => typeof (option) === 'number' ? String(option) : option}
-                onChange={(e, value: number) => onNumberOfLabelChange(value)} />
+                onChange={(e, value: number) => onNumberOfLabelChange && onNumberOfLabelChange(value)} />
             </FormField>
           </Grid>
           {isShowpH && (

@@ -49,16 +49,19 @@ export default makeStyles(theme => ({
     fontWeight: 400,
     padding: theme.spacing(0, 1),
     height: 30,
-    display: 'flex',
     alignItems: 'center',
     color: Colors.textBlack,
     position: 'relative',
     overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    display: 'inline',
   },
   errorCell: {
     backgroundColor: Colors.errorHighlight,
     border: `1px solid ${Colors.error}`,
     borderRadius: 4,
+    display: 'flex',
   },
   warningIcon: {
     color: Colors.error,
@@ -87,10 +90,18 @@ export default makeStyles(theme => ({
     justifyContent: 'end',
     alignItems: 'center',
   },
+  buttonsCancel: {
+    justifySelf: 'left',
+    minWidth: 140,
+    fontWeight: 700,
+  },
   buttonsFooterContainer: {
     display: 'flex',
-    width: 'fit-content',
+    width: '100%',
     gap: theme.spacing(2.5, 2.5),
+    '& button:first-of-type': {
+      marginLeft: 'auto',
+    },
   },
   button: {
     minWidth: 180,

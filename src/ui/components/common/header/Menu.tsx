@@ -52,7 +52,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children, columnMenuItemCl
           data-cy="HeaderMenuButton"
           id="HeaderMenuButton"
         >
-          <MoreVertIcon />
+          {icon ?? <MoreVertIcon />}
         </IconButton>
       )}
 
