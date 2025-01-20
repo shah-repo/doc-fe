@@ -33,7 +33,6 @@ const FBCustomerHeaderQuaterAddress: React.FC<FBInputProps> = ({
           {...props}
           label={translate('form.builder.customer.zip.code.label')}
           name={`${name}_zip_code`}
-          type="number"
           inputProps={{ min: '0' }}
           gutter={false}
           placeholder=""
