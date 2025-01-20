@@ -34,8 +34,6 @@ mkdir -p "${JEST_CONFIG_LOG_DIR}"
 export JEST_JUNIT_OUTPUT_DIR="${TEST_RESULTS_DIR}"
 export CI=false
 
-NODE_ENV=development yarn install --frozen-lockfile
-
 yarn test \
   --reporters="default" \
   --reporters="jest-junit" \
