@@ -4,9 +4,9 @@ import isMobile from 'is-mobile';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import { getHasPermission, hasActiveSubscription } from '../../common/utils/selectors';
+import { authSelectors } from '../../state/ducks/auth';
 import { Permission } from '../../state/ducks/auth/types';
 import { PremiumFeature } from '../../state/ducks/company/types';
 import UserGroupManagment from '../administration/UserGroupManagement';
@@ -36,6 +36,7 @@ import {
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
   HOME_URL,
+  NO_ACCESS,
   PAGE_DETAILS_MANAGEMENT_URL,
   PREMIUM_FEATURES_URL,
   SLACK_ROOT_URL,
@@ -51,6 +52,7 @@ import { DocumentTypeManagementContainer } from '../document.type.management/ken
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
+import NoAccessScreen from '../noAccessScreen';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
 import SlackContainer from '../slack/Container';
@@ -64,13 +66,15 @@ import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
 
 const Layout: React.FC = () => {
-  const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
-  const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
-  const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
-  const handleDrawerOpen = () => {
-    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
-    setOpen(!isOpened);
+  const isMobileView = isMobile();
+  const defaultSidebarExpandedValue = isMobileView ? false : localStorage.getItem(IS_SIDEBAR_EXPANDED) === '1';
+  const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(defaultSidebarExpandedValue);
+  const classes = useStyles();
+  const toggleSidebar = () => {
+    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isSidebarExpanded ? '1' : '0');
+    setIsSidebarExpanded(prev => !prev);
   };
+  const canAccessNavigation = useSelector(authSelectors.hasCompanies);
 
   // TODO. Example. Remove before the merge
   const isAISubscriptionEnabled = useSelector(hasActiveSubscription(PremiumFeature.AI));
@@ -83,11 +87,23 @@ const Layout: React.FC = () => {
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer className={classes.mobileLayout} isOpened={isOpened} handleDrawerOpen={handleDrawerOpen} />
-      <Navigation handleDrawerOpen={handleDrawerOpen} open={isOpened} />
+      <HeaderContainer
+        isSidebarExpanded={isSidebarExpanded && canAccessNavigation}
+        onSidebarToggle={toggleSidebar}
+        canAccessNavigation={canAccessNavigation}
+      />
+      {canAccessNavigation && (
+        <Navigation isOpen={(isSidebarExpanded || isMobileView) && canAccessNavigation} onSidebarToggle={toggleSidebar} />
+      )}
       <SocketsContainer />
       <WatermarkFooterContainer />
-      <main className={cx(classes.root, classes.mobileLayout)} >
+      <main className={cx(
+        classes.root,
+        {
+          [classes.withSidebarExpanded]: isSidebarExpanded,
+          [classes.fullWidth]: !canAccessNavigation,
+        },
+      )} >
         <DataFetcherContainer />
         <Switch>
           <Route
@@ -184,6 +200,11 @@ const Layout: React.FC = () => {
           <Route
             path={BULK_IMPORT_PROGRESS_URL}
             component={BulkImportProgressPage}
+            exact
+          />
+          <Route
+            path={NO_ACCESS}
+            component={NoAccessScreen}
             exact
           />
           <Redirect to={HOME_URL} />
