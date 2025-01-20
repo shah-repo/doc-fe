@@ -1,20 +1,14 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Widget as AiWidget, AppName } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import { getHasPermission, hasActiveSubscription } from '../../common/utils/selectors';
-import { authSelectors } from '../../state/ducks/auth';
 import { Permission } from '../../state/ducks/auth/types';
-import { companySelectors } from '../../state/ducks/company';
 import { PremiumFeature } from '../../state/ducks/company/types';
-import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
-import { ApplicationState } from '../../state/reducers';
-import { store } from '../../state/store';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import PremiumFeaturesPage from '../administration/premium.settings';
@@ -38,7 +32,6 @@ import {
   DOCUMENT_REVISION_CREATE_URL,
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
-  DOCUMENT_REVISION_VERSION_URL,
   DOCUMENT_TYPE_MANAGEMENT_URL,
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
@@ -79,22 +72,11 @@ const Layout: React.FC = () => {
     setOpen(!isOpened);
   };
 
+  // TODO. Example. Remove before the merge
   const isAISubscriptionEnabled = useSelector(hasActiveSubscription(PremiumFeature.AI));
   const hasAIPermission = useSelector(getHasPermission(Permission.AI_SUBSCRIPTION));
   const canUseAiWidget = isAISubscriptionEnabled && hasAIPermission;
-
-  const userName = useSelector(authSelectors.currentUserName);
-  const documentMatch = useRouteMatch(DOCUMENT_REVISION_VERSION_URL);
-  const companyId = useSelector(companySelectors.companyIdSelector);
-  const documentRevisionId = documentMatch?.params?.documentRevisionId;
-  const accessToken = `Bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
-  const documentRevision = useSelector(
-    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
-      state,
-      documentRevisionId ?? '',
-    ),
-  );
-  const attachmentIds = documentRevision?.attachments?.map(item => item.id);
+  console.log({ canUseAiWidget });
 
   return (
     <>
@@ -107,17 +89,6 @@ const Layout: React.FC = () => {
       <WatermarkFooterContainer />
       <main className={cx(classes.root, classes.mobileLayout)} >
         <DataFetcherContainer />
-        {canUseAiWidget && (
-          <AiWidget
-            appName={AppName.D2M}
-            userName={userName}
-            companyId={companyId}
-            documentRevisionId={documentRevisionId}
-            attachmentIds={attachmentIds}
-            token={accessToken}
-            apiPath="https://api.ai.dev2.enlil.io/t4/v1"
-          />
-        )}
         <Switch>
           <Route
             path={DOCUMENT_REVISION_LIST_URL}
