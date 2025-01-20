@@ -9,11 +9,9 @@ import PasswordDialogueContainer from '../dialogs/PasswordDialogue';
 import DateForm from '../forms/date.form/date.form';
 import EmailForm from '../forms/email.form/email.form';
 import EmptyForm from '../forms/empty.form/empty.form';
-import PasswordExpirationEmailSpecificForm from '../forms/password.expiration.email.specific/password.expiration.email.specific.form';
 import PasswordExpirationForm from '../forms/password.expiration.form/password.expiration.form';
 import TimeTravelCompany from '../forms/time.travel.company.form/time.travel.company.form';
 import TimeTravelForm from '../forms/time.travel.form/time.travel.form';
-import TimeTravelUser from '../forms/time.travel.user.form/time.travel.user.form';
 import UUIDBasedForm from '../forms/uuid.form/uuid.form';
 import { SQS_TYPES } from '../types';
 import { dropDownOptions } from './helper';
@@ -34,12 +32,10 @@ export function AsyncTasksPresenter ({
   handleEmptyFormSubmit,
   handleDateFormSubmit,
   handlePasswordExpirationFormSubmit,
-  handlePasswordExpirationEmailSpecificFormSubmit,
   handleuuidFormSubmit,
   handleEmailFormSubmit,
   handleTimeTravelFormSubmit,
   handleTimeTravelCompany,
-  handleTimeTravelUser,
   onSubmit,
 }: KendoPresenterProps) {
   const classes = styles();
@@ -71,6 +67,7 @@ export function AsyncTasksPresenter ({
           SQS_TYPES.UPDATE_BILLS,
           SQS_TYPES.RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES,
           SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS,
+          SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS,
         ].includes(SQS_TYPES[type]) && (
             <EmptyForm {...{ handleEmptyFormSubmit }} key={type} />
           )}
@@ -87,15 +84,11 @@ export function AsyncTasksPresenter ({
           SQS_TYPES.GENERATE_COMPANY_CONFIGS,
           SQS_TYPES.CLOSE_CR_BY_EFFECTIVE_DATE,
           SQS_TYPES.USAGE_REPORT,
-          SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS,
         ].includes(SQS_TYPES[type]) && (
             <DateForm {...{ handleDateFormSubmit }} key={type} />
           )}
           {SQS_TYPES.UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE === type && (
             <PasswordExpirationForm {...{ handlePasswordExpirationFormSubmit }} />
-          )}
-          {SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC === type && (
-            <PasswordExpirationEmailSpecificForm key={type} {...{ handlePasswordExpirationEmailSpecificFormSubmit }} />
           )}
           {type
         && [
@@ -121,12 +114,6 @@ export function AsyncTasksPresenter ({
           SQS_TYPES.TIME_TRAVEL_COMPANY,
         ].includes(SQS_TYPES[type]) && (
             <TimeTravelCompany {...{ handleTimeTravelCompany }} key={type} />
-          )}
-          {type
-        && [
-          SQS_TYPES.TIME_TRAVEL_USER,
-        ].includes(SQS_TYPES[type]) && (
-            <TimeTravelUser {...{ handleTimeTravelUser }} key={type} />
           )}
           <PasswordDialogueContainer
             transition="approve"

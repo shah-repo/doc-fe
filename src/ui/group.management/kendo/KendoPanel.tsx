@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { DataResult, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import {
@@ -38,8 +38,6 @@ import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWid
 import Loader from '../../components/common/kendo/Loader';
 import NoDataFound from '../../components/common/kendo/NoDataFound';
 import { KendoColumn, KendoPanelProps } from '../../components/common/kendo/types';
-import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
-import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
 import { toastError } from '../../components/notifications';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../../components/table/ClearFilters';
@@ -47,7 +45,7 @@ import { TablePanelStateProps } from '../../components/table/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDidMount from '../../hooks/useDidMount';
-import KendoPanelStyles from '../../user.management/kendo/KendoPanel.styles';
+import useStyles from '../../user.management/kendo/styles';
 import AddGroupContainer from '../add.group/AddGroup.container';
 import { DEFAULT_ACTIVE_EMPLOYEES } from '../utils/types';
 import { CommandCell } from './cell.template/CommandCell';
@@ -81,8 +79,7 @@ export function KendoPanel ({
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
   const didMount = useDidMount();
   const dispatch = useDispatch();
-  const classes = KendoGridStyles();
-  const panelClasses = KendoPanelStyles();
+  const classes = useStyles();
   const [Official, setOfficial] = useState(false);
   const { columnConfig, kendoConfig } = tableCriteria;
   if (columnConfig && JSON.parse(columnConfig).length) {
@@ -531,11 +528,11 @@ export function KendoPanel ({
   // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
   hideOperatorTooltip();
 
-  const tableRenderer = ({ width }: Size) => (
+  const tableRenderer = ({ width, height }: Size) => (
     <>
       <StyledKendoGrid
-        className={`${panelClasses.userGroupGrid} no-row-pointer`}
-        style={{ width: `${width}px` }}
+        className="no-row-pointer"
+        style={{ width, height }}
         rowHeight={40}
         data={result}
         editField={editField}
@@ -572,28 +569,26 @@ export function KendoPanel ({
       {isLoading && <Loader />}
     </>
   );
-  const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
+
+  useEffect(() => {
+    if (tableCriteria.apiError) {
+      toastError(tableCriteria.apiError, { autoClose: false });
+    }
+  }, [tableCriteria.apiError]);
 
   return (
-    <>
-      <Grid item xs={12} className={classes.headerGridItem}>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <GridTitle translation="navigation.group.management" />
-          </Grid>
-          <Grid item>
-            <Box display="flex">
-              <GMExport gridData={dataState.group?.length ? flatMap(map(result, 'items')) : result}
-                columns={columnDefinitions} isGrouped={(dataState?.group || []).length > 0} />
-              {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
-            </Box>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12} className={classes.kendoGridItem}>
-        <div style={{ color: 'red' }}>{tableCriteria.apiError}</div>
-        {renderBody()}
-      </Grid>
-    </>
+    <div className={classes.container}>
+      <div className={classes.actions}>
+        <GMExport
+          gridData={dataState.group?.length ? flatMap(map(result, 'items')) : result}
+          columns={columnDefinitions}
+          isGrouped={(dataState?.group ?? []).length > 0}
+        />
+        {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+      </div>
+      <div className={classes.table}>
+        <AutoSizer>{tableRenderer}</AutoSizer>
+      </div>
+    </div>
   );
 }

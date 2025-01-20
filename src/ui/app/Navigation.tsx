@@ -1,11 +1,10 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, Tooltip } from '@material-ui/core';
+import { CircularProgress, Tooltip, useMediaQuery } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/core/styles/withStyles';
+import { useTheme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import cx from 'classnames';
@@ -20,16 +19,16 @@ import { companyActions, companySelectors } from '../../state/ducks/company';
 import { NavigationItem, NavigationItems } from '../../state/ducks/company/types';
 import Logo from '../components/icons/Logo.container';
 import { HOME_URL } from '../constants/urls';
-import useStyles from '../form.builder/FBTooltip/FBTooltip.styles';
+import useTooltipStyles from '../form.builder/FBTooltip/FBTooltip.styles';
 import useActionCreator from '../hooks/useActionCreator';
 import useAsync from '../hooks/useAsync';
-import styles from './Navigation.styles';
+import useStyles from './Navigation.styles';
 import NavigationLinkContainer from './NavigationLink.container';
 import NavigationProfileContainer from './NavigationProfile.container';
 
-type NavigationProps = WithStyles<typeof styles> & RouteComponentProps & {
-  handleDrawerOpen: () => void
-  open: boolean
+type NavigationProps = RouteComponentProps & {
+  onSidebarToggle: () => void
+  isOpen: boolean
 };
 
 function isChildAllowedByUserTags (item: NavigationItem, userTags: GroupTag[]): boolean {
@@ -43,10 +42,9 @@ function isChildAllowedByUserPermissions (item: NavigationItem, userPermissions:
 }
 
 const Navigation: React.FunctionComponent<NavigationProps> = ({
-  classes,
   location,
-  open,
-  handleDrawerOpen,
+  isOpen,
+  onSidebarToggle,
 }) => {
   const userTags = useSelector(getCurrentUserTags());
   const currentEmployeePermissions = useSelector(authSelectors.currentEmployeePermissions);
@@ -55,10 +53,13 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       setIsLoading(false);
     },
   });
-  const tooltipClasses = useStyles();
+  const tooltipClasses = useTooltipStyles();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
   const navigationSelectorItems = useSelector(companySelectors.getNavigationItems) || [];
+  const theme = useTheme();
+  const isXsBreakpoint = useMediaQuery(theme.breakpoints.down('xs'));
+  const classes = useStyles();
 
   const navigationItems = (navigationSelectorItems)
     .reduce<NavigationItem[]>((acc, item) => {
@@ -99,12 +100,12 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       variant="permanent"
       classes={{
         root: cx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
+          [classes.drawerOpen]: isOpen,
+          [classes.drawerClose]: !isOpen,
         }),
         paper: cx(classes.drawerPaper, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
+          [classes.drawerOpen]: isOpen,
+          [classes.drawerClose]: !isOpen,
         }),
       }}
       anchor="left"
@@ -113,35 +114,35 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6" className={classes.toolbarTitle}>
             <Link to={HOME_URL} className={classes.headerLink}>
-              <Logo open={open} />
+              <Logo isOpen={isOpen || isXsBreakpoint} />
             </Link>
           </Typography>
         </Toolbar>
         <Box
           className={cx(classes.defaultIcon, {
-            [classes.icon]: !open,
-            [classes.shiftIcon]: open,
+            [classes.icon]: !isOpen,
+            [classes.shiftIcon]: isOpen,
           })}
         >
           <span
             onClick={() => {
               handleMouseLeave();
-              handleDrawerOpen();
+              onSidebarToggle();
             }}
             className={classes.leftSideIcon}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave }
-            data-cy={open ? 'collapse-icon' : 'expand-icon'}
+            data-cy={isOpen ? 'collapse-icon' : 'expand-icon'}
           >
             <Tooltip
               arrow
               placement="right-start"
-              title={open ? translate('common.collapse') : translate('common.expand')}
+              title={isOpen ? translate('common.collapse') : translate('common.expand')}
               disableHoverListener
               open={isHovered}
               classes={tooltipClasses}
             >
-              <FontAwesomeIcon flip={!open ? 'horizontal' : undefined} size="xs" icon={solid('chevron-left')} />
+              <FontAwesomeIcon flip={!isOpen ? 'horizontal' : undefined} size="xs" icon={solid('chevron-left')} />
             </Tooltip>
           </span>
         </Box>
@@ -155,18 +156,18 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
                     key={link.label}
                     currentPath={location.pathname}
                     {...link}
-                    open={open}
+                    open={isOpen}
                   />
                 ))}
               </List>
             )
         }
         <Box className={classes.userInfo}>
-          <NavigationProfileContainer open={open} />
+          <NavigationProfileContainer open={isOpen} />
         </Box>
       </Box>
     </Drawer>
   );
 };
 
-export default withRouter(withStyles(styles as Styles<Theme, {}, string>)(Navigation));
+export default withRouter(Navigation);
