@@ -109,6 +109,7 @@ export function DocumentTypePresenter ({
           enableKeywordSearch={[
             DocumentCategory.Parts,
             DocumentCategory.EB,
+            DocumentCategory.Receive,
           ].includes(documentTypeCategory as DocumentCategory)}
         />}
       </Grid>
