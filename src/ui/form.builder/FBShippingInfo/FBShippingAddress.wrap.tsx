@@ -82,7 +82,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
           name: [
             item.name?.trim() ? item.name : null,
             item.email?.trim() ? `(${item.email})` : null,
-            item.phoneNumber?.trim() ? `+${item.phoneNumber}` : null,
+            item.phoneNumber?.trim() ? item.phoneNumber : null,
           ].filter(Boolean).join(' '),
         };
         if (item.attention) {

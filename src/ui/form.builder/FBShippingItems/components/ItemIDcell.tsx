@@ -123,19 +123,18 @@ export const ItemIDcell: React.FC<Props> = (props) => {
   const handleClick = () => onClick?.({ dataItem });
 
   const defaultValue = dataItem[field]?.name ?? EMPTY_VALUE_PLACEHOLDER;
-  const value = defaultValue.split('.')[0];
   const dataCy = `${kebabCase(field)}-cell`;
 
   return (
     <OverflowTooltip
-      title={value}
+      title={defaultValue}
       placement="top"
       interactive
       arrow
       onClick={handleClick}
       data-cy={dataCy}
     >
-      {value}
+      {defaultValue}
     </OverflowTooltip>
   );
 };

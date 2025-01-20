@@ -34,7 +34,7 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
           data-cy={`${type}-info-phone-number`}
           component="span"
         >
-          +{phoneNumber}
+          {phoneNumber}
         </Typography>
       )}
     </>
