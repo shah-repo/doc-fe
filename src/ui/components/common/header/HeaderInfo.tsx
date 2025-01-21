@@ -71,7 +71,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const isChangeRequest = checkIsDocumentChangeRequest(documentType?.groupOptions);
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
   const isShipping = checkIsDocumentShipping(documentType?.groupOptions);
-  const isCusomers = checkIsDocumentCustomers(documentType?.groupOptions);
+  const isCustomers = checkIsDocumentCustomers(documentType?.groupOptions);
 
   const navigationDetails = useSelector((state: ApplicationState) =>
     companySelectors.getNavigationDetails(
@@ -112,7 +112,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   } else if (isTypeMpiOutput) {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${DocCategories.LHR}`;
     iconLink = '/navigation_icons/lhr_icon.svg';
-  } else if (isShipping || isCusomers) {
+  } else if (isShipping || isCustomers) {
     iconLink = '/navigation_icons/sales-header.svg';
   }
   const classes = styles({ iconLink });
