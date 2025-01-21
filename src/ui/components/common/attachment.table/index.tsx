@@ -78,7 +78,7 @@ const AttachmentTable: React.FC<Props> = ({
   onDelete,
   onSelectedAttachmentsChange,
 }) => {
-  const [attachmentsData, setAttachmentsData] = React.useState(documentRevision.attachments);
+  const [attachmentsData, setAttachmentsData] = React.useState(documentRevision?.attachments ?? []);
   const [headerChecked, setHeaderChecked] = React.useState(false);
 
   const [activeItem, setActiveItem] = React.useState<any | null>(null);
