@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { translate } from '../../common/intl';
 import { Audit } from '../../state/ducks/audit/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 
@@ -22,9 +21,7 @@ const AuditShippingItems: React.FC<Props> = ({
         try {
           const data = JSON.parse(auditValue as string);
           if (data) {
-            return translate('form.builder.shipping.items.audit.delete', {
-              name: data?.part?.name || data?.lot?.name,
-            });
+            return data?.part?.name || data?.lot?.name;
           }
         } catch (err) {
           return getAuditDefaultValue(auditValue);

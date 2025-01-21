@@ -316,10 +316,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               };
             }
           } else {
-            fbLabel = translate('form.builder.shipping.items.audit.item', {
-              label: fbLabel as string,
-              field: fieldName,
-            });
+            fbLabel = `${fbLabel as string} ${fieldName}`;
           }
         }
       }
