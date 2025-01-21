@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { SM, SMBox } from '../../../../..';
 import Config from '../../../../../../config';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
-import { TabTypeOptions } from '../../../../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, TabTypeOptions } from '../../../../../../state/ducks/documentRevisions/documentType/types';
 import { store } from '../../../../../../state/store';
 import { Button } from '../../../../../../ui/components/forms/fields-next';
 import { toastError, toastSuccess } from '../../../../../../ui/components/notifications';
@@ -22,7 +22,6 @@ import ListPanel from './Components/ListPanel';
 import OCRFilePresenter from './Components/OCRFilePresenter';
 
 const OCR_API_URL = `${Config.ApiOCREndpoint}/aocr`;
-const BULK_OCR_INSERT_URL = `${Config.ApiEndpoint}/lhr_summary/bulk/upload`;
 
 const AttachmentsPanel: React.FC = () => {
   const { _documentRevisionFormState, _tabsState } = SM.useStores();
@@ -56,15 +55,13 @@ const AttachmentsPanel: React.FC = () => {
     const uploadAttachment = async (index) => {
       const attachment = attachments[index];
       const data = {
-        FilePath: attachment.s3link,
-        Company: store.getState().auth.user.employee.company?.companyAcronym || '',
+        DocumentType: DOC_TYPE_GROUP.LHR,
         // Sending now dummy values for FormID and Revision since we are currently supporting one Form/Revision per company
         FormID: 'FormID',
         Revision: 'Revision',
         AttachmentUSID: attachment.id,
         DocumentRevisionUSID: docRevId,
         IsLHRSummaryInsertEnabled: true,
-        LHRSummaryBulkInsertUrl: BULK_OCR_INSERT_URL,
       };
 
       await axios.post(OCR_API_URL, data, { headers });
