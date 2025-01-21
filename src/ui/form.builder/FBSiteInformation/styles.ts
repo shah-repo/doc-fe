@@ -24,7 +24,7 @@ export default makeStyles(theme => ({
     },
     '& tr': {
       '&:last-child td': {
-        borderBottom: '1px solid #DBE0EB',
+        borderBottom: `1px solid ${Colors.tableStroke}`,
         '&:not(.k-grid-content-sticky) + .k-grid-content-sticky': {
           boxShadow: '-5px -12px 10px 2px rgba(0, 0, 0, .1)',
         },
