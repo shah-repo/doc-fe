@@ -9,6 +9,7 @@ import {
   DisplayText,
   TranslatedText,
 } from '../../../components/common/kendo/helpers';
+import { KendoGridFilterCellOperators } from '../../../components/KendoGrid/interfaces';
 
 interface DropdownFilterCellProps extends GridFilterCellProps {
   defaultItem: string
@@ -20,6 +21,7 @@ export const DropdownFilterCell = ({
   onChange,
   value,
   data,
+  operator = KendoGridFilterCellOperators.CONTAINS,
 }: DropdownFilterCellProps) => {
   const intl = useIntl();
   const hasValue = (value: string) => value && value !== defaultItem;
@@ -28,7 +30,7 @@ export const DropdownFilterCell = ({
     const isValueExists = hasValue(target.value);
     onChange({
       value: isValueExists ? target.value : '',
-      operator: isValueExists ? 'contains' : '',
+      operator: isValueExists ? operator : '',
       syntheticEvent,
     });
   };
