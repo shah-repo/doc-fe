@@ -299,7 +299,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const changeField = change.field.split('.');
         const field = changeField.at(-1) as string;
         const parentField = changeField.at(-2) as string;
-        if (['id'].includes(field)) {
+        if (['id', 'documentId'].includes(field)) {
           return;
         }
         if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
