@@ -82,7 +82,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ''));
   const isPO = checkIsDocumentPO(documentType?.groupOptions);
-  const hideTitle = checkIsDocumentShipping(documentType?.groupOptions) || checkIsDocumentCustomers(documentType?.groupOptions);
+  const isTitleHidden = checkIsDocumentShipping(documentType?.groupOptions) || checkIsDocumentCustomers(documentType?.groupOptions);
 
   if (isRecord) {
     if (isReleased) {
@@ -178,7 +178,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           label={docIdLabel}
           value={docId}
         />
-        {!isRecordOrPO && !hideTitle && (
+        {!isRecordOrPO && !isTitleHidden && (
           <SummaryInfo label="common.title" value={documentRevision.name} />
         )}
         <SummaryInfo

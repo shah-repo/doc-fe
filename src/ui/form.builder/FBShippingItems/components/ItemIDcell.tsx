@@ -23,7 +23,7 @@ interface Props extends CustomTemplateProps {
 
 interface CustomOptionType extends OptionType {
   revision: string
-  quantity: string
+  docId: string
   comments: string
 }
 
@@ -32,7 +32,7 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
 
   const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
-    setFieldValue(field, { id: value?.value, name: value?.label });
+    setFieldValue(field, { id: value?.value, name: `${value?.docId}.${value.revision}` });
   };
 
   const renderOptions = (): OptionType[] => {
@@ -43,6 +43,8 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
           displayRevision: item?.displayRevision,
           name: item?.name,
         }),
+      docId: item.document?.docId,
+      revision: item?.displayRevision,
       value: item.id,
     }));
   };
@@ -121,19 +123,18 @@ export const ItemIDcell: React.FC<Props> = (props) => {
   const handleClick = () => onClick?.({ dataItem });
 
   const defaultValue = dataItem[field]?.name ?? EMPTY_VALUE_PLACEHOLDER;
-  const value = defaultValue.split(' ')[0];
   const dataCy = `${kebabCase(field)}-cell`;
 
   return (
     <OverflowTooltip
-      title={value}
+      title={defaultValue}
       placement="top"
       interactive
       arrow
       onClick={handleClick}
       data-cy={dataCy}
     >
-      {value}
+      {defaultValue}
     </OverflowTooltip>
   );
 };

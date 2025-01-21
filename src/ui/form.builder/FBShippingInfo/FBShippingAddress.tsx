@@ -34,7 +34,7 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
           data-cy={`${type}-info-phone-number`}
           component="span"
         >
-          +{phoneNumber}
+          {phoneNumber}
         </Typography>
       )}
     </>
@@ -86,7 +86,7 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
                       fullWidth
                       variant="outlined"
                       disabled={disabled}
-                      placeholder={translate('lhr.summary.placeholder.select.enter')}
+                      placeholder={translate('common.select')}
                       InputProps={{
                         ...params.InputProps,
                         style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
