@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { translate } from '../../common/intl';
 import { Audit } from '../../state/ducks/audit/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 import { siteContact } from '../form.builder/FBSiteInformation/SiteContact/types';
@@ -23,9 +22,7 @@ const AuditSiteInformations: React.FC<Props> = ({
         try {
           const data = JSON.parse(auditValue as string) as Site;
           if (data) {
-            return translate('form.builder.site.inforation.grid.heading.audit.delete', {
-              name: data.siteName || data.siteAddress,
-            });
+            return data.siteName || data.siteAddress;
           }
         } catch (err) {
           return getAuditDefaultValue(auditValue);
@@ -37,9 +34,7 @@ const AuditSiteInformations: React.FC<Props> = ({
         try {
           const data = JSON.parse(auditValue as string) as siteContact;
           if (data) {
-            return translate('form.builder.contact.grid.heading.audit.delete', {
-              name: data.name || data.email,
-            });
+            return data.name || data.email;
           }
         } catch (err) {
           return getAuditDefaultValue(auditValue);
