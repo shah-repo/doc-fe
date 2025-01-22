@@ -227,7 +227,7 @@ const MigrationConfirmationDialog: React.FC<{
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError)
+        {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError) && selectedDetails?.length
         && <Button onClick={handleEmployeeConfirmation} color="primary" autoFocus>
           Confirm
         </Button>}

@@ -43,6 +43,7 @@ export interface ISupplierScanResultRev {
   name: string
   email: string
   ownerId: string
+  isMapped: boolean
 }
 
 enum SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM {

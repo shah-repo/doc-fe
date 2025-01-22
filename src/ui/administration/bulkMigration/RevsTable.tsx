@@ -189,12 +189,22 @@ const ExpandableRow: React.FC<{
 
   const getRowColor = (row: ISupplierScanResultRev) => {
     if (row.status === MIGRATION_STATUS_ENUM.IN_PROGRESS) {
-      return Colors.secondaryLight;
+      return UtilColors.inProgress;
     }
 
     if (row.status === MIGRATION_STATUS_ENUM.FAILED) {
-      return UtilColors.error_bg;
+      return UtilColors.failed;
     }
+
+    if (row.status === MIGRATION_STATUS_ENUM.COMPLETED) {
+      return UtilColors.done;
+    }
+
+    if (row.isMapped) {
+      return UtilColors.alice_blue;
+    }
+
+    return UtilColors.default;
   };
 
   const handleIconHover = (event) => {
@@ -237,6 +247,11 @@ const ExpandableRow: React.FC<{
     onIconHovered(event, contentEl);
   };
 
+  const handleRowSelection = (event, row) => {
+    row.isSelected = event.target.checked as boolean;
+    handleSelection(event, row);
+  };
+
   const linkHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
   };
@@ -249,7 +264,7 @@ const ExpandableRow: React.FC<{
         aria-checked={isItemSelected}
         tabIndex={-1}
         selected={isItemSelected}
-        style={{ backgroundColor: getRowColor(row) }}
+        style={{ backgroundColor: row.isSelected ? UtilColors.selected : getRowColor(row) }}
       >
         <TableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => setRowOpen(!rowOpen)}>
@@ -257,7 +272,7 @@ const ExpandableRow: React.FC<{
           </IconButton>
         </TableCell>
         <TableCell padding="checkbox"
-          onClick={(event) => row.status !== MIGRATION_STATUS_ENUM.COMPLETED && handleSelection(event, row)}>
+          onClick={(event) => row.status !== MIGRATION_STATUS_ENUM.COMPLETED && handleRowSelection(event, row)}>
           <div style={{ display: 'flex', alignItems: 'center' }}
             onMouseEnter={handleIconHover}
             onMouseLeave={handlePopoverClose}

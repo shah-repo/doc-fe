@@ -387,7 +387,7 @@ const BulkMigrationContainer: React.FC = () => {
       url: `${BULK_MIGRATION_START_REVS_MIGRATION}/${scanDetails?.id}`,
       data: {
         revIds: selectedRows.map(entry => entry.id),
-        password: btoa(employeePassword),
+        password: employeePassword,
       },
       headers: {
         Authorization: `bearer_password ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}:${encodeString(employeePassword)}`,

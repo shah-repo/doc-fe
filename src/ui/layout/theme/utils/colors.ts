@@ -120,6 +120,13 @@ enum Colors {
   gains_boro='#DDDDDD',
   white_smoke='#F9F9F9',
   gradient_color= 'rgba(255, 255, 255, 0.1)',
+
+  // Migration Scan rows status
+  selected = '#ADD8E6A0',
+  inProgress = '#FFE8D5',
+  done = '#4CAF5050',
+  failed = '#FF450050',
+  default = '#FAFAFA',
 }
 
 export default Colors;
