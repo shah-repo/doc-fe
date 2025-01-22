@@ -122,15 +122,15 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     );
   };
 
-  const handleSameAsHQ = useCallback((sameAsHQ, currentSite) => {
+  const handleSameAsHQ = useCallback((isSameAsHQ, currentSite) => {
     const hqAddress = workspaceState?.formInput;
     formik.setValues({
       ...currentSite,
-      zipCode: sameAsHQ ? hqAddress?.headquarter_address_zip_code || '' : '',
-      siteAddress: sameAsHQ ? hqAddress?.headquarter_address || '' : '',
-      city: sameAsHQ ? hqAddress?.headquarter_address_city || '' : '',
-      country: sameAsHQ ? hqAddress?.headquarter_address_country || '' : '',
-      sameAsHQ,
+      zipCode: isSameAsHQ ? hqAddress?.headquarter_address_zip_code || '' : '',
+      siteAddress: isSameAsHQ ? hqAddress?.headquarter_address || '' : '',
+      city: isSameAsHQ ? hqAddress?.headquarter_address_city || '' : '',
+      country: isSameAsHQ ? hqAddress?.headquarter_address_country || '' : '',
+      sameAsHQ: isSameAsHQ,
     });
   }, [workspaceState?.formInput, editedSite]);
 
