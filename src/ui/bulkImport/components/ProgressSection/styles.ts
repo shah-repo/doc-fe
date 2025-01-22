@@ -75,7 +75,7 @@ export default makeStyles(theme => ({
     height: 14,
     color: Colors.statusReleased,
   },
-  xmarkRedIcon: {
+  errorRedIcon: {
     width: 14,
     height: 14,
     color: Colors.error,

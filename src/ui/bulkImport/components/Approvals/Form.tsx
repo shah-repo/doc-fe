@@ -194,6 +194,7 @@ const ApprovalsForm: React.FC<ApprovalsFormProps> = ({ children }) => {
                   options={availableOptions}
                   getOptionLabel={(option) => option.text}
                   placeholder={translate('bulkImport.approvals.select.placeholder')}
+                  value={{ text: '' }}
                   onChange={(_, option: ApproverOption) => {
                     if (option?.value) {
                       const isAlreadySelected = users.some(user => user.value === option.value);

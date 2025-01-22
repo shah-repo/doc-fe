@@ -3,12 +3,14 @@ import { omit } from 'lodash';
 import { Colors } from '../../../../../../ui/layout/theme-next';
 import { NextTheme } from '../../../../../../ui/layout/theme-next/provider';
 
-export default makeStyles((theme: NextTheme) => ({
+export default makeStyles<NextTheme>(theme => ({
   root: {
-    width: 350,
+    maxWidth: 350,
+    margin: 'auto',
   },
   rootFocused: {
     width: '100%',
+    maxWidth: 'none',
   },
   popperFocused: {
     width: '100%',
@@ -16,8 +18,8 @@ export default makeStyles((theme: NextTheme) => ({
   listPaper: {
     ...omit(theme.overrides?.MuiMenu?.paper, 'boxShadow'),
     boxShadow: theme.shadows[2],
-    marginTop: theme.spacing(-5),
-    paddingTop: theme.spacing(5),
+    marginTop: theme.spacing(-3.75),
+    paddingTop: theme.spacing(4.375),
     paddingBottom: theme.spacing(1),
   },
   listOption: {
@@ -30,7 +32,7 @@ export default makeStyles((theme: NextTheme) => ({
   },
   listGroupLabel: {
     ...theme.typography.h6,
-    padding: theme.spacing(1.25, 2),
+    padding: theme.spacing(1.25, 1.5),
     borderTop: `1px solid ${Colors.stroke}`,
     backgroundColor: Colors.white,
   },
@@ -54,10 +56,5 @@ export default makeStyles((theme: NextTheme) => ({
   },
   iconFocused: {
     color: Colors.textBlack,
-  },
-  searchBarResponsive: {
-    [theme.breakpoints.down('md')]: {
-      marginTop: theme.spacing(-2.6),
-    },
   },
 }));

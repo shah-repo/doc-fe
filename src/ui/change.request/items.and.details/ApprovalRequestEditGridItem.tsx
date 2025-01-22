@@ -44,7 +44,7 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
   const location = useLocation();
   const showDeleteButton = !location.pathname.includes(entry?.docRevId) && !isDeletionDisabled;
   const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
-  const rowRef = useRef<HTMLDivElement>(null);
+  const popperAnchorRef = useRef<HTMLDivElement>(null);
 
   const isWhereUsedTreeExist = (entry?.whereUsedView ?? []).length > 1;
 
@@ -53,7 +53,6 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
       <div
         className={classes.enclosingDiv}
         data-cy="enclosing-div-edit-item"
-        ref={rowRef}
       >
         <div
           className={cx(classes.contentRow, classes.editedContentRow)}
@@ -157,11 +156,14 @@ const ApprovalRequestEditGridItem: React.FC<Props> = ({
             />
           </div>
         </div>
-        {rowRef.current && (
+      </div>
+      <div className={classes.actionsRow}>
+        <div ref={popperAnchorRef} className={classes.actionsAnchor} />
+        {popperAnchorRef.current && (
           <Popper
             open
             placement="bottom-end"
-            anchorEl={rowRef.current}
+            anchorEl={popperAnchorRef.current}
             className={classes.popper}
             modifiers={{
               keepTogether: {

@@ -1,6 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
-import LegacyColors from '../../layout/theme/utils/colors';
 
 const MIN_COLUMN_WIDTH = 160;
 
@@ -212,6 +211,9 @@ export default makeStyles((theme) =>
     obsoleteIcon: {
       color: Colors.primaryLight,
     },
+    textContent: {
+      whiteSpace: 'pre-line',
+    },
     tooltipContent: {
       maxWidth: 425,
       maxHeight: 200,
@@ -261,7 +263,7 @@ export default makeStyles((theme) =>
       left: 0,
       width: '100%',
       height: '100%',
-      backgroundColor: LegacyColors.background_white,
+      backgroundColor: Colors.white,
       opacity: 0.7,
       display: 'flex',
       alignItems: 'center',
@@ -271,6 +273,16 @@ export default makeStyles((theme) =>
     },
     divider: {
       margin: theme.spacing(0, 0, 1.5, 0),
+    },
+    actionsRow: {
+      gridColumn: '1 / -1',
+    },
+    actionsAnchor: {
+      width: 1,
+      position: 'sticky',
+      margin: '0 0 0 auto',
+      right: 0,
+      top: 0,
     },
   }),
 );

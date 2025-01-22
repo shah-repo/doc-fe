@@ -290,9 +290,17 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
             </Box>
           </span>
         ) : (
-          <span className={classes.mpi} data-cy="step-mpi-field">
+          <OverflowTooltip
+            title={mpiRevId}
+            onClick={() => onClick?.({ dataItem })}
+            placement="top"
+            data-cy="step-mpi-field"
+            interactive
+            className={classes.mpi}
+            arrow
+          >
             {mpiRevId}
-          </span>
+          </OverflowTooltip>
         )}
       </span>
     </>

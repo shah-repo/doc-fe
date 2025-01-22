@@ -1,4 +1,3 @@
-import { Grid } from '@material-ui/core';
 import React, { useState } from 'react';
 import { EMPLOYEES_URL } from '../../../state/ducks/userManagement/constants';
 import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
@@ -31,7 +30,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Grid container>
+    <>
       <KendoPanel
         gridConfiguration={gridConfiguration}
         queryUrl={EMPLOYEES_URL}
@@ -46,7 +45,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
         showUserProfile={showUserProfile}
         selectedEmployee={selectedEmployee}
       />
-    </Grid>
+    </>
   );
 };
 

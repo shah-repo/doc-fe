@@ -1,4 +1,4 @@
-import { Box, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { DataResult, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridCellProps, GridColumn, GridColumnMenuGroup, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
@@ -6,10 +6,10 @@ import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios';
 import { find, flatten, get, isEmpty, map, set, sortBy, startCase, values } from 'lodash';
 import qs from 'query-string';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
-import * as generateUuid from 'uuid/v4';
+import { v4 as generateUuid } from 'uuid';
+import { translate } from '../../../common/intl';
 import apiClient from '../../../state/apiClient';
 import { authActions } from '../../../state/ducks/auth';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
@@ -24,8 +24,7 @@ import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWid
 import Loader from '../../components/common/kendo/Loader';
 import NoDataFound from '../../components/common/kendo/NoDataFound';
 import { KendoColumn } from '../../components/common/kendo/types';
-import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
-import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import { KendoGridFilterCellOperators } from '../../components/KendoGrid/interfaces';
 import { toastError } from '../../components/notifications';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../../components/table/ClearFilters';
@@ -41,7 +40,7 @@ import { GroupsCell } from './cell.template/GroupsCell';
 import { NameCell } from './cell.template/NameCell';
 import { SignedCell } from './cell.template/SignedCell';
 import { enterUserInfo } from './column.definition';
-import KendoPanelStyles from './KendoPanel.styles';
+import useStyles from './styles';
 import { AddUserManage, UserManage, UserManagementProps } from './types';
 import UMExport from './UMExport';
 
@@ -55,14 +54,12 @@ export function KendoPanel ({
   queryUrl = '',
   rerender,
   onSelect,
-}: UserManagementProps<Partial<GetEmployeeResponse>>) {
-  const intl = useIntl();
-  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
-  const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
+}: UserManagementProps<Partial<GetEmployeeResponse>>): React.ReactElement {
+  const editField = translate(TranslatedText[DisplayText.INEDIT]);
   const didMount = useDidMount();
   const dispatch = useDispatch();
-  const classes = KendoGridStyles();
-  const panelClasses = KendoPanelStyles();
+
+  const classes = useStyles();
   const { columnConfig, kendoConfig } = tableCriteria;
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
@@ -266,14 +263,14 @@ export function KendoPanel ({
             .sort()
             .join(', '),
           status:
-            el?.user?.confirmed && !el?.user?.locked
-              ? getTranslatedText('user.management.signed.up')
-              : !el?.user?.confirmed
-                ? getTranslatedText('user.management.resend.signup.email')
-                : getTranslatedText('reset.password'),
+            el?.user?.locked
+              ? translate('user.locked')
+              : el?.user?.confirmed
+                ? translate('user.confirmed')
+                : translate('user.unconfirmed'),
           activeStatus: el?.active
-            ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
-            : getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
+            ? translate(TranslatedText[DisplayText.ACTIVE])
+            : translate(TranslatedText[DisplayText.INACTIVE]),
         }));
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
@@ -369,15 +366,15 @@ export function KendoPanel ({
     <DropdownFilterTemplate
       {...props}
       data={[{
-        text: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
-        value: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
+        text: translate(TranslatedText[DisplayText.ACTIVE]),
+        value: translate(TranslatedText[DisplayText.ACTIVE]),
       }, {
-        text: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
-        value: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
+        text: translate(TranslatedText[DisplayText.INACTIVE]),
+        value: translate(TranslatedText[DisplayText.INACTIVE]),
       }]}
       defaultItem={{
-        text: getTranslatedText(TranslatedText[DisplayText.ALL]),
-        value: getTranslatedText(TranslatedText[DisplayText.ALL]),
+        text: translate(TranslatedText[DisplayText.ALL]),
+        value: translate(TranslatedText[DisplayText.ALL]),
       }}
     />
   );
@@ -386,13 +383,12 @@ export function KendoPanel ({
     <DropdownFilterCell
       {...props}
       data={[
-        getTranslatedText(TranslatedText[DisplayText.SIGNEDUP]),
-        getTranslatedText(TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL]),
-        getTranslatedText(TranslatedText[DisplayText.RESET_PASSWORD]),
+        translate('user.confirmed'),
+        translate('user.unconfirmed'),
+        translate('user.locked'),
       ]}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.ALL],
-      })}
+      operator={KendoGridFilterCellOperators.EQ}
+      defaultItem={translate(TranslatedText[DisplayText.ALL])}
     />
   );
 
@@ -417,7 +413,7 @@ export function KendoPanel ({
       <GridColumn
         key={idx}
         {...column}
-        title={startCase(getTranslatedText(column.title))}
+        title={startCase(translate(column.title))}
         minResizableWidth={200}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
@@ -438,7 +434,8 @@ export function KendoPanel ({
         }
         width={setColumnWidth(column.width as number, gridWidth)}
       />
-    )));
+    ))
+  );
 
   const columnResize = ({ columns, end }: GridColumnResizeEvent) => {
     hideColumnTitleOnResize();
@@ -484,11 +481,11 @@ export function KendoPanel ({
   // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
   hideOperatorTooltip();
 
-  const tableRenderer = ({ width }: Size) => (
+  const tableRenderer = ({ width, height }: Size) => (
     <>
       <StyledKendoGrid
-        className={`${panelClasses.userGroupGrid} no-row-pointer`}
-        style={{ width: `${width}px` }}
+        className="no-row-pointer"
+        style={{ width, height }}
         rowHeight={40}
         data={result}
         total={resultState.total}
@@ -530,27 +527,26 @@ export function KendoPanel ({
     }
     return data;
   };
-  const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
+
+  useEffect(() => {
+    if (tableCriteria.apiError) {
+      toastError(tableCriteria.apiError, { autoClose: false });
+    }
+  }, [tableCriteria.apiError]);
+
   return (
-    <>
-      <Grid item xs={12} className={classes.headerGridItem}>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <GridTitle translation="navigation.user.management" />
-          </Grid>
-          <Grid item>
-            <Box display="flex">
-              <UMExport gridData={dataState.group?.length ? getExportData(result) : result}
-                columns={columnDefinitions} isGrouped={(dataState.group || []).length > 0} />
-              <AddEmployeeContainer addGroup={addNew} />
-            </Box>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12} className={classes.kendoGridItem}>
-        <div style={{ color: 'red' }}>{tableCriteria.apiError}</div>
-        {renderBody()}
-      </Grid>
-    </>
+    <div className={classes.container}>
+      <div className={classes.actions}>
+        <UMExport
+          gridData={dataState.group?.length ? getExportData(result) : result}
+          columns={columnDefinitions}
+          isGrouped={(dataState.group ?? []).length > 0}
+        />
+        <AddEmployeeContainer onAdd={addNew} />
+      </div>
+      <div className={classes.table}>
+        <AutoSizer>{tableRenderer}</AutoSizer>
+      </div>
+    </div>
   );
 }

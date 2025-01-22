@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Typography } from '@material-ui/core';
 import copy from 'copy-to-clipboard';
 import React from 'react';
-import { safeParse } from '../../document.revision/utils/paths';
 import Text from '../Text';
 import { exportPDFToastrStyles } from './ExportPDFToastr.styles';
 
@@ -34,13 +33,8 @@ export const ExportPDFCloseButton = ({ closeToast, linkInfo }) => {
 
   const copyLinkAddress = (event: { stopPropagation: () => void }) => {
     event.stopPropagation();
-    const parsedData = safeParse(linkInfo);
-    const messageData = parsedData?.data?.message;
-    const parsedMessage
-        = typeof messageData === 'string' ? safeParse(messageData) : messageData;
-    const link = parsedMessage?.url;
-    if (link) {
-      copy(link);
+    if (linkInfo) {
+      copy(linkInfo);
     }
   };
 

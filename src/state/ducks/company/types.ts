@@ -237,12 +237,14 @@ interface AllocationConfig {
 }
 
 interface TrainingReminders {
-  customDaysDueOn: { isActive: boolean, days: number, isCcActive: boolean }
+  customDaysDueOn: { isActive: boolean, days: number }
   isSevenDaysDueOnCountdownActive: boolean
   isAssignedActive: boolean
   isOverdueActive: boolean
   isAssignedCcActive: boolean
-  isSevenDaysDueOnCountdownCcActive: boolean
+  isSevenDaysDueOnCcActive: boolean
+  isThreeDaysDueOnCcActive: boolean
+  isTodayDueOnCcActive: boolean
   isOverdueCcActive: boolean
 }
 

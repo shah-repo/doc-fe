@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { kebabCase, omit } from 'lodash';
 import React from 'react';
+import { FB } from '..';
 import { translate } from '../../../common/intl';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
@@ -20,6 +21,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   updateRole,
 }) => {
   const classes = useStyles();
+  const { workspaceState } = FB.useStores();
   const [editedRole, setEditedRole] = React.useState<EditableRole>();
 
   const editRole = ({ dataItem }: RoleEditEvent) => setEditedRole(dataItem);
@@ -82,6 +84,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
 
   const schema = createSchema({
     groups,
+    isLoading,
     actionsClass: classes.actionsCell,
     saveRole,
     discardRole,
@@ -104,6 +107,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
 
   return (
     <Box className={classes.root}>
+      {isLoading && <Loader />}
       <KendoDataGrid<EditableRole>
         schema={schema}
         data={roles}

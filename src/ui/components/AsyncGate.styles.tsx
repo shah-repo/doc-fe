@@ -39,5 +39,7 @@ export default (theme: Theme) =>
     },
     errorText: {
       color: Colors.font_gray,
+      maxWidth: 570,
+      textAlign: 'center',
     },
   });

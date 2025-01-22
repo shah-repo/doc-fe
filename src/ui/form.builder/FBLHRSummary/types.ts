@@ -14,6 +14,8 @@ export interface DetailsObj {
   isRevRemoved?: boolean
 }
 
+export type NullableString = null | string;
+
 export interface LHRSummaryItem {
   id: string
   type: string
@@ -26,16 +28,17 @@ export interface LHRSummaryItem {
   mpiId?: string
   issue?: string
   stepOrMPI?: string
-  expiryDate?: null | string
+  expiryDate?: NullableString
+  customExpiryDate?: NullableString
   startQuantity: number
   endQuantity: number
   lotStatus: string
-  calDueDate?: null | string
-  pmDueDate?: null | string
+  calDueDate?: NullableString
+  pmDueDate?: NullableString
   ncmr: string
   comments: string
   enteredBy: string
-  recordCreationDate?: null | string
+  recordCreationDate?: NullableString
   lotOrEqDocId?: string
   lotOrEqDocumentId?: string
   actualDocId?: string

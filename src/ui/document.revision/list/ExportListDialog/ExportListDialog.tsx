@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typog
 import { ExportToCsv } from 'export-to-csv';
 import React, { useEffect, useState } from 'react';
 import { ReactComponent as ExportIcon } from '../../../../assets/images/icon_export_data.svg';
-import { DocumentRevisionStatusDisplay, HeaderTableType, POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevisionStatusDisplay, HeaderTableType, POStatusLabelMapping, POStatusType } from '../../../../state/ducks/documentRevisions/types';
 import Text from '../../../components/Text';
 import { DialogHandler } from '../../../hooks/useDialog';
 import { styles } from './ExportListDialog.styles';
@@ -13,6 +13,7 @@ interface Props {
   data: any[]
   useKeysAsHeaders?: boolean
   customFileName: string
+  categoryName?: string
 }
 
 const ExportListDialog: React.FunctionComponent<Props> = ({
@@ -21,6 +22,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   data,
   useKeysAsHeaders = false,
   customFileName,
+  categoryName,
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState('');
@@ -46,11 +48,13 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
     saveFileName(ev.target.value);
   };
 
-  data = data.map((item) => ({
-    ...item,
-    ...(item.poStatus === POStatusType.OPENED && { poStatus: POStatusLabelMapping.OPENED }),
-    ...(item.displayStatus === DocumentRevisionStatusDisplay.Released && { displayStatus: DocumentRevisionStatusDisplay.Approved }),
-  }));
+  if (categoryName === DocumentCategory.PurchaseOrder) {
+    data = data.map((item) => ({
+      ...item,
+      ...(item.poStatus === POStatusType.OPENED && { poStatus: POStatusLabelMapping.OPENED }),
+      ...(item.displayStatus === DocumentRevisionStatusDisplay.Released && { displayStatus: DocumentRevisionStatusDisplay.Approved }),
+    }));
+  }
 
   return (
     <>

@@ -53,6 +53,12 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
   const error = dataItem.errors?.find(error => error.column === field);
   const isErrorShown = error && !error?.edited;
 
+  // Update cellValue when dataItem[field] changes
+  useEffect(() => {
+    if (dataItem[field] === cellValue) return;
+    setCellValue(dataItem[field]);
+  }, [dataItem, field]);
+
   const handleErrorField = () => {
     setIsEditing(true);
   };
@@ -156,21 +162,27 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     sort: [],
   });
   const [data, setData] = useState<TableRowWithIdx[]>([]);
-  const [errorCount, setErrorCount] = useState(0);
+  const [errorCount, setErrorCount] = useState<number>(0);
+  const [forceLoading, setForceLoading] = useState<boolean>(true);
+  const [columnOrder, setColumnOrder] = useState<string[]>([]);
+  const [filter, setFilter] = useState<CompositeFilterDescriptor>();
   const tableData: TableRowWithIdx[] = useSelector(getTableDataFiltered);
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
   const triggerNextClick = useActionCreator(patchBulkImport);
   const excelExportRef = useRef<ExcelExport | null>(null);
   const currentDestination = useRef<string | null>(null);
-  const [filter, setFilter] = useState<CompositeFilterDescriptor>();
   const isLoading = useSelector(getIsLoading);
   const hasUnsavedChanges = useSelector(getHasUnsavedChanges);
+  const tableLoading = forceLoading || isLoading;
+  const tableHeadersFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors' && key !== 'idx') : [];
 
   const dataStateChange = (event: GridDataStateChangeEvent) => {
+    setForceLoading(true);
     setDataState(event.dataState);
     const processedData = process(tableData, event.dataState);
     setData(processedData.data);
+    setForceLoading(false);
   };
 
   const filterChange = (event: GridFilterChangeEvent) => {
@@ -249,7 +261,8 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const handlePageChange = (event: GridPageChangeEvent) => {
     setPage(event.page.skip / event.page.take);
     setPageSize(event.page.take);
-    setData(tableData.slice(event.page.skip, event.page.skip + event.page.take));
+    const newData = tableData.slice(event.page.skip, event.page.skip + event.page.take);
+    setData(newData);
   };
 
   const triggerNext = () => {
@@ -258,7 +271,20 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     asyncSetDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTable);
   };
 
-  const updateShowErrorOnly = () => dispatch(setOnlyErrorsTable(!showErrorsOnly));
+  const updateShowErrorOnly = () => {
+    setForceLoading(true);
+    dispatch(setOnlyErrorsTable(!showErrorsOnly));
+  };
+
+  const handleColumnReorder = (event: any) => {
+    // We use the forceLoading to be able to update the table
+    setForceLoading(true);
+    // Sort columns based on the `orderIndex` property
+    const newOrder = [...event.columns].sort((a, b) => a.orderIndex - b.orderIndex).map(col => col.field);
+
+    setColumnOrder(newOrder); // Update state with the new order
+    setForceLoading(false);
+  };
 
   useEffect(() => {
     window.addEventListener('beforeunload', confirmLeavePage);
@@ -293,16 +319,15 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
       return acc;
     }, 0);
     setErrorCount(count);
+    setForceLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableData]);
-
-  const tableHeadersFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors' && key !== 'idx') : [];
+  }, [tableData, showErrorsOnly]);
 
   return (
     <>
       <StepTitle title="bulkImport.mapColumns.table.title" subTitle="bulkImport.mapColumns.table.subTitle" />
       <Box className={classes.informationHeader}>
-        <MessageInformation showError={errorCount > 0} message={errorCount > 0 ? `${errorCount} ${translate('common.table.rowsErrors')}` : translate('common.table.noRowsErrors')} />
+        <MessageInformation hideMessage={!tableData.length} showError={errorCount > 0} message={errorCount > 0 ? `${errorCount} ${translate('common.table.rowsErrors')}` : translate('common.table.noRowsErrors')} />
         <Box className={classes.actionsHeader}>
           <Switch checked={showErrorsOnly && errorCount !== 0} onChange={updateShowErrorOnly} disabled={errorCount === 0} />
           <Typography className={classes.switchLabel}><Text translation="common.table.onlyShowRowsErrors" /></Typography>
@@ -315,8 +340,8 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           </Button>
         </Box>
       </Box>
-      {isLoading && <Loader />}
-      { !isLoading
+      {tableLoading && <Loader />}
+      { !tableLoading
         && <ExcelExport
           data={tableData}
           ref={excelExportRef}
@@ -340,9 +365,10 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
             filter={filter}
             onPageChange={handlePageChange}
             onDataStateChange={dataStateChange}
+            onColumnReorder={handleColumnReorder}
             onFilterChange={filterChange}
           >
-            {tableHeadersFiltered.map((key, idx) => (
+            {(columnOrder.length > 0 ? columnOrder : tableHeadersFiltered).map((key, idx) => (
               <GridColumn width={150} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
             ))}
           </StyledKendoGrid>
