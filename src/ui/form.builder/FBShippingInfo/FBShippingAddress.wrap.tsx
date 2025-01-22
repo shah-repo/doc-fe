@@ -2,7 +2,6 @@ import { isEmpty } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FB, FBAutocompleteAsyncOption } from '..';
-import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { shippingInfoActions } from '../../../state/ducks/ShippingInformation';
 import { toastError } from '../../components/notifications';
@@ -32,10 +31,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
 
     const renderOptions = (shippingAddresses: ShippingAddress[]): CustomOptionType[] => {
       return shippingAddresses.map((address) => ({
-        label: translate('form.builder.shipping.info.address.label', {
-          siteName: address.siteName,
-          siteAddress: address.siteAddress,
-        }),
+        label: `${address.siteName}, ${address.siteAddress}`,
         value: address.id,
         siteContact: address.siteContact,
       }));

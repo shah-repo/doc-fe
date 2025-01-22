@@ -1,7 +1,7 @@
+import { orderBy } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { FB } from '..';
 import { EditableSite, FBSiteProps } from './types';
-import { prepareSitesData } from './utils';
 
 export const withFBSiteInformation = <T extends FBSiteProps>(
   Component: React.FC<T>,
@@ -15,7 +15,7 @@ export const withFBSiteInformation = <T extends FBSiteProps>(
     const formValue = formState?.getFieldValue(name);
 
     const initialSites = useMemo(() => {
-      return prepareSitesData(formValue ?? workspaceState?.formInputSync.get(name) ?? []) as EditableSite[];
+      return orderBy(formValue ?? workspaceState?.formInputSync.get(name) ?? [], 'isPrimary', 'desc');
     }, [formValue, workspaceState?.formInputSync, name]);
 
     const [sites, setSites] = useState<EditableSite[]>(initialSites);
