@@ -374,6 +374,7 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
+    "includeRevision": "displayRevision",
     "root": "",
     "hidden": false
   }
