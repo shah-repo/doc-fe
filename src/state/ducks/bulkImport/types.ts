@@ -290,6 +290,7 @@ export interface BulkImportCustom extends BulkImport {
   progress?: number
   icons?: IconsBk[]
   date?: string
+  currentProgressStep: number
 }
 
 export interface BulkImport {

@@ -8,7 +8,7 @@ import {
 import { History } from 'history';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
@@ -20,7 +20,7 @@ import { ChangeRequestTransitionResponse } from '../../../../state/ducks/changeR
 import { ApprovalStatus } from '../../../../state/ducks/common/types';
 import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
-import { BULK_IMPORT_URL } from '../../../constants/urls';
+import { BULK_IMPORT_EDIT_BASE_URL } from '../../../constants/urls';
 import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTooltip';
 import ApproveDialogueContainer from '../../../dashboard.new/line.items/purchase.order/task.approval/POApprovalDialogContainer';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -28,7 +28,7 @@ import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import DeleteDialog from '../Dialogs/DeleteDialog';
 import MessageBox from './ErrorMessage';
-import ProgressIcons, { iconStatuses } from './ProgressIcons';
+import ProgressIcons from './ProgressIcons';
 import useStyles, { CustomLinearProgress } from './styles';
 
 interface ProgressItemProps {
@@ -56,13 +56,12 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const isReportEmpty = isEmpty(item?.reports);
   const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && isProcessEmpty && item.status === BkStatus.STARTED;
   const showApprovals = !!currentApproval && showApproverButtons;
-  const currentProgressStep = useRef(0);
   const isComplete = STATUSES_COMPLETE.includes(item?.status as BkStatus) && item?.completedAt;
   const isRejected = item?.status === BkStatus.CANCELLED;
   const isFailed = item?.status === BkStatus.FAILED;
   const showErrorMessage = isRejected || isFailed;
   const showDeleteButton = isProcessEmpty && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
-  const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
+  const showButtonView = ((!isRejected && item.currentProgressStep > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
   const totalExcelErrors = Number(item?.process?.totalExcelErrors ?? 0);
   const isWarning = !showErrorMessage && !(item?.attachmentId || Number(item.process?.step) <= 3) && totalExcelErrors >= 1;
   const openDeleteDialog = useDialog();
@@ -121,8 +120,8 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const handleReturnToStep = () => {
     dispatch(setBulkImport(item));
     // if the process is not empty is because is importing
-    dispatch(setCurrentStep(currentProgressStep.current));
-    history.push(BULK_IMPORT_URL);
+    dispatch(setCurrentStep(item.currentProgressStep));
+    history.push(`${BULK_IMPORT_EDIT_BASE_URL}${item.id}`);
   };
 
   const handleRejectedBulkImport = () => {
@@ -132,26 +131,6 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const handleApproveBulkImport = () => {
     dispatch(setBulkImportsStatus(item.id, BkStatus.IN_PROGRESS));
   };
-
-  useEffect(() => {
-    if (item?.icons) {
-      const firstBlankIcon = item.icons.find(icon => (!iconStatuses[icon.icon] || icon.icon === 'warning' || icon.icon === 'blank'));
-      if (firstBlankIcon) {
-        currentProgressStep.current = firstBlankIcon.step;
-      }
-      if ((item?.documentRevision?.approvals
-        && item.documentRevision.approvals.some(approval => approval.status === ApprovalStatus.Pending)
-        && item.documentRevision.approvals.some(approval => approval.status !== ApprovalStatus.Approved))) {
-        // if we don't find any blank icon is because we already finish and is on the last step
-        currentProgressStep.current = 4; // approver step
-      }
-      if (!isProcessEmpty || item.status === BkStatus.IN_PROGRESS) {
-        currentProgressStep.current = 5; // importing step
-      } else if (currentProgressStep.current === 5) {
-        currentProgressStep.current = 4; // approver step
-      }
-    }
-  }, [item]);
 
   return (
     <React.Fragment key={idx}>

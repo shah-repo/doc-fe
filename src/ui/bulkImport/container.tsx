@@ -1,12 +1,13 @@
 import { light } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, CircularProgress } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { translate } from '../../common/intl';
 import {
   deleteBulkImportSuccess,
+  getOneBulkImport,
   patchBulkImport,
   setCurrentStep,
   setIsLoading,
@@ -16,7 +17,8 @@ import {
   getIsLoading,
   getStep,
 } from '../../state/ducks/bulkImport/selectors';
-import { BkStatus } from '../../state/ducks/bulkImport/types';
+import { BkStatus, BulkImport } from '../../state/ducks/bulkImport/types';
+import { getBulkImportCustomData } from '../../state/ducks/bulkImport/utils';
 import { Button } from '../components/forms/fields-next';
 import Text from '../components/Text';
 import { BULK_IMPORT_PROGRESS_URL } from '../constants/urls';
@@ -34,7 +36,9 @@ import UploadAttachment from './components/UploadAttachment/Form';
 import UploadDataForm from './components/UploadData/Form';
 import useStyles from './styles';
 
-interface BulkImportContainerProps extends RouteComponentProps {}
+interface BulkImportContainerProps {
+  bulkImportId?: string
+}
 
 const steps = [
   translate('bulkImport.step.importDetails'),
@@ -46,9 +50,10 @@ const steps = [
 ];
 
 const BulkImportContainer: React.FunctionComponent<
-BulkImportContainerProps
-> = ({ history }) => {
+RouteComponentProps<BulkImportContainerProps>
+> = ({ history, match }) => {
   const dispatch = useDispatch();
+  const { bulkImportId } = match.params;
   const classes = useStyles();
   const activeStep = useSelector(getStep);
   const isLoading = useSelector(getIsLoading);
@@ -96,6 +101,19 @@ BulkImportContainerProps
       );
     }
   };
+
+  const goToStepBulkImport = (data: BulkImport) => {
+    if (data?.id) {
+      const customBulkImport = getBulkImportCustomData(data);
+      dispatch(setCurrentStep(customBulkImport.currentProgressStep));
+    }
+  };
+
+  useEffect(() => {
+    if ((!bulkImport && bulkImportId) || (bulkImport && bulkImportId && bulkImport.id !== bulkImportId)) {
+      dispatch(getOneBulkImport(bulkImportId, goToStepBulkImport));
+    }
+  }, [bulkImportId, bulkImport, dispatch, goToStepBulkImport]);
 
   const getStepContent = () => {
     switch (activeStep) {

@@ -1,8 +1,11 @@
 import axios from 'axios';
-import { orderBy } from 'lodash';
+import { isEmpty, orderBy } from 'lodash';
+import { translate } from '../../../common/intl';
 import Config from '../../../config';
-import { APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_IMPORT_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, DOCUMENT_REVISION_WITHDRAWN_URL } from './constants';
-import { BkStatus } from './types';
+import { iconStatuses } from '../../../ui/bulkImport/components/ProgressSection/ProgressIcons';
+import { ApprovalStatus } from '../common/types';
+import { APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_IMPORT_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, DOCUMENT_REVISION_WITHDRAWN_URL, skippedAttachmentFile } from './constants';
+import { BkStatus, BulkImport, BulkImportCustom } from './types';
 
 const TEMPLATE_CSV = 'template.xlsx';
 
@@ -172,4 +175,66 @@ export const downloadFile = (data: BlobPart, fileName: string) => {
 
 export const orderBkData = (data) => {
   return orderBy(data, 'createdAt', 'desc');
+};
+
+export const getBulkImportCustomData = (bulkImport: BulkImport): BulkImportCustom => {
+  const progress = bulkImport?.process?.process
+    ? bulkImport.process.process.filter(p => p.status === BkStatus.COMPLETED)
+      .reduce((total, current) => total + (current.percentage * 100), 0) : 0;
+  const approvalCheck = bulkImport?.documentRevision?.approvals?.some(approval => approval.status !== ApprovalStatus.Abandoned) ?? false;
+
+  const icons = [
+    {
+      icon: bulkImport?.xlsx && bulkImport?.xlsx.length > 0 ? 'check' : 'blank',
+      text: translate('bulkImport.uploadData'),
+      step: 1,
+    },
+    { // we valid if the next step is already done "attachmentId" because process.step can be deleted on Bulk import process after the approve
+      icon: bulkImport?.attachmentId || Number(bulkImport.process?.step) <= 3 ? 'check' : Number(bulkImport.process?.totalExcelErrors ?? 0) >= 1 ? 'warning' : 'blank',
+      text: translate('bulkImport.mapColumns'),
+      step: 2,
+    },
+    {
+      icon: bulkImport?.attachmentId || (bulkImport?.attachmentLink && bulkImport?.attachmentLink !== skippedAttachmentFile) ? 'check' : approvalCheck || bulkImport.attachmentLink === skippedAttachmentFile ? 'skip' : 'blank',
+      text: translate('common.attachments'),
+      step: 3,
+    },
+    {
+      icon: approvalCheck && bulkImport?.status !== BkStatus.CANCELLED ? 'check' : 'blank',
+      text: translate('bulkImport.approvals'),
+      step: 4,
+    },
+    {
+      icon: !isEmpty(bulkImport.process?.process) && progress > 99 && bulkImport?.status !== BkStatus.CANCELLED ? 'check' : 'blank',
+      text: translate('bulkImport.importing'),
+      step: 5,
+    },
+  ];
+
+  // Set the current step
+  let currentProgressStep = 0;
+
+  const firstBlankIcon = icons.find(icon => (!iconStatuses[icon.icon] || icon.icon === 'warning' || icon.icon === 'blank'));
+  if (firstBlankIcon) {
+    currentProgressStep = firstBlankIcon.step;
+  }
+  if ((bulkImport?.documentRevision?.approvals
+    && bulkImport.documentRevision.approvals.some(approval => approval.status === ApprovalStatus.Pending)
+    && bulkImport.documentRevision.approvals.some(approval => approval.status !== ApprovalStatus.Approved))) {
+    // if we don't find any blank icon is because we already finish and is on the last step
+    currentProgressStep = 4; // approver step
+  }
+  if (!isEmpty(bulkImport.process?.process) || bulkImport.status === BkStatus.IN_PROGRESS) {
+    currentProgressStep = 5; // importing step
+  } else if (currentProgressStep === 5) {
+    currentProgressStep = 4; // approver step
+  }
+
+  // Create the custom bulk import
+  return {
+    ...bulkImport,
+    progress,
+    icons,
+    currentProgressStep,
+  };
 };
