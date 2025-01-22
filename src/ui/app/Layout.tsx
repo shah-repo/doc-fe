@@ -5,10 +5,8 @@ import isMobile from 'is-mobile';
 import React from 'react';
 import { connect, useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
-import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import { authSelectors } from '../../state/ducks/auth';
-import { Permission } from '../../state/ducks/auth/types';
 import { companySelectors } from '../../state/ducks/company';
 import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { ApplicationState } from '../../state/reducers';
@@ -80,8 +78,6 @@ const Layout: React.FunctionComponent = () => {
     setIsSidebarExpanded(prev => !prev);
   };
   const canAccessNavigation = useSelector(authSelectors.hasCompanies);
-  const isAIPermissionEnabled = currentEmployeePermissions.includes(Permission.AI_SUBSCRIPTION);
-  const isAIWidgetShown = true || (isAIEnabled && isAIPermissionEnabled);
   const userName = useSelector(authSelectors.currentUserName);
   const documentMatch = useRouteMatch(DOCUMENT_REVISION_VERSION_URL);
   const companyId = useSelector(companySelectors.companyIdSelector);
@@ -118,17 +114,15 @@ const Layout: React.FunctionComponent = () => {
         },
       )} >
         <DataFetcherContainer />
-        {isAIWidgetShown && (
-          <AiWidget
-            appName={AppName.D2M}
-            userName={userName}
-            companyId={companyId}
-            documentRevisionId={documentRevisionId}
-            attachmentIds={attachmentIds}
-            token={accessToken}
-            apiPath="https://api.ai.dev2.enlil.io/t4/v1"
-          />
-        )}
+        <AiWidget
+          appName={AppName.D2M}
+          userName={userName}
+          companyId={companyId}
+          documentRevisionId={documentRevisionId}
+          attachmentIds={attachmentIds}
+          token={accessToken}
+          apiPath="https://api.ai.dev2.enlil.io/t4/v1"
+        />
         <Switch>
           <Route
             path={DOCUMENT_REVISION_LIST_URL}
