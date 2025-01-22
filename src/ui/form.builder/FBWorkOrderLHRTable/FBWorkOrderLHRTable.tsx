@@ -126,7 +126,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
 
   useEffect(() => {
     const isLoading = _formState?.loading;
-    if (!isLoading || isEmpty(lhrList)) {
+    if (!isLoading || !lhrList.length) {
       return;
     }
 
