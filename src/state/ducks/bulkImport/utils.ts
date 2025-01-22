@@ -5,7 +5,7 @@ import Config from '../../../config';
 import { iconStatuses } from '../../../ui/bulkImport/components/ProgressSection/ProgressIcons';
 import { ApprovalStatus } from '../common/types';
 import { APPROVALS_URL, BULK_DOWNLOAD_FILE_URL, BULK_IMPORT_URL, DOCUMENT_REVISION_IN_REVIEW_URL, DOCUMENT_REVISION_URL, DOCUMENT_REVISION_WITHDRAWN_URL, skippedAttachmentFile } from './constants';
-import { BkStatus, BulkImport, BulkImportCustom } from './types';
+import { BkIconStatus, BkStatus, BulkImport, BulkImportCustom } from './types';
 
 const TEMPLATE_CSV = 'template.xlsx';
 
@@ -185,27 +185,27 @@ export const getBulkImportCustomData = (bulkImport: BulkImport): BulkImportCusto
 
   const icons = [
     {
-      icon: bulkImport?.xlsx && bulkImport?.xlsx.length > 0 ? 'check' : 'blank',
+      icon: bulkImport?.xlsx?.length > 0 ? BkIconStatus.check : BkIconStatus.blank,
       text: translate('bulkImport.uploadData'),
       step: 1,
     },
     { // we valid if the next step is already done "attachmentId" because process.step can be deleted on Bulk import process after the approve
-      icon: bulkImport?.attachmentId || Number(bulkImport.process?.step) <= 3 ? 'check' : Number(bulkImport.process?.totalExcelErrors ?? 0) >= 1 ? 'warning' : 'blank',
+      icon: bulkImport?.attachmentId || Number(bulkImport.process?.step) <= 3 ? BkIconStatus.check : Number(bulkImport.process?.totalExcelErrors ?? 0) >= 1 ? BkIconStatus.warning : BkIconStatus.blank,
       text: translate('bulkImport.mapColumns'),
       step: 2,
     },
     {
-      icon: bulkImport?.attachmentId || (bulkImport?.attachmentLink && bulkImport?.attachmentLink !== skippedAttachmentFile) ? 'check' : approvalCheck || bulkImport.attachmentLink === skippedAttachmentFile ? 'skip' : 'blank',
+      icon: bulkImport?.attachmentId || (bulkImport?.attachmentLink && bulkImport?.attachmentLink !== skippedAttachmentFile) ? BkIconStatus.check : approvalCheck || bulkImport.attachmentLink === skippedAttachmentFile ? BkIconStatus.skip : BkIconStatus.blank,
       text: translate('common.attachments'),
       step: 3,
     },
     {
-      icon: approvalCheck && bulkImport?.status !== BkStatus.CANCELLED ? 'check' : 'blank',
+      icon: approvalCheck && bulkImport?.status !== BkStatus.CANCELLED ? BkIconStatus.check : BkIconStatus.blank,
       text: translate('bulkImport.approvals'),
       step: 4,
     },
     {
-      icon: !isEmpty(bulkImport.process?.process) && progress > 99 && bulkImport?.status !== BkStatus.CANCELLED ? 'check' : 'blank',
+      icon: !isEmpty(bulkImport.process?.process) && progress > 99 && bulkImport?.status !== BkStatus.CANCELLED ? BkIconStatus.check : BkIconStatus.blank,
       text: translate('bulkImport.importing'),
       step: 5,
     },
@@ -214,7 +214,7 @@ export const getBulkImportCustomData = (bulkImport: BulkImport): BulkImportCusto
   // Set the current step
   let currentProgressStep = 0;
 
-  const firstBlankIcon = icons.find(icon => (!iconStatuses[icon.icon] || icon.icon === 'warning' || icon.icon === 'blank'));
+  const firstBlankIcon = icons.find(icon => (!iconStatuses[icon.icon] || icon.icon === BkIconStatus.warning || icon.icon === BkIconStatus.blank));
   if (firstBlankIcon) {
     currentProgressStep = firstBlankIcon.step;
   }

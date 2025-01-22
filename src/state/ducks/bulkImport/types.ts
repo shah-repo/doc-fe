@@ -456,3 +456,11 @@ export interface LogEntry extends Partial<Audit> {
   attachmentId: string | null
   ownerEmail: string
 }
+
+export enum BkIconStatus {
+  check = 'check',
+  progress = 'progress',
+  warning = 'warning',
+  blank = 'blank',
+  skip = 'skip',
+}
