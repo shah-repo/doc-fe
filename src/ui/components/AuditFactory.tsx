@@ -212,6 +212,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
         break;
       case 'documentRevisions': {
+        if (!audit.nextValue) {
+          returnValue = <></>;
+          break;
+        }
         const { displayRevision, document, name } = audit.nextValue as DocumentRevision;
         const displayName = name ? ` - ${name}` : '';
         returnValue = (<div data-cy={dataCy}>{document?.docId} - Rev {displayRevision}{displayName}</div>);
