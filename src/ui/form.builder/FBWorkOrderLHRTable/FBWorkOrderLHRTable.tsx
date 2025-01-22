@@ -81,7 +81,8 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   const fetchAvailableLhrsAction = useActionCreator(documentRevisionsActions.fetchAvailableLHRList);
   const fetchAvailableLhrsAsync = useAsync({
     onSuccess: (data: ILHRAutocompleteOption[] = []) => {
-      if (!data.some(item => item.id === lhrList[0]?.lhrDetails?.docRevId)) {
+      const lhrItemId = lhrList[0]?.lhrDetails?.docRevId;
+      if (!data.some(item => item.id === lhrItemId)) {
         updateState([]);
       }
     },
@@ -124,7 +125,8 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
   };
 
   useEffect(() => {
-    if (!_formState?.loading || isEmpty(lhrList)) {
+    const isLoading = _formState?.loading;
+    if (!isLoading || isEmpty(lhrList)) {
       return;
     }
 
