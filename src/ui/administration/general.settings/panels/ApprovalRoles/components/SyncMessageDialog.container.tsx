@@ -152,7 +152,11 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   }, [showAsyncMessage]);
 
   if (!isEmptyArray(addToDam)) {
-    const lastIndex = Math.max(...updatedDAR.map(item => item.index));
+    let lastIndex = Math.max(...updatedDAR.map(item => item.index));
+    if (lastIndex === Number.NEGATIVE_INFINITY || !lastIndex) {
+      lastIndex = 0;
+    }
+
     addToDam?.forEach((item, index) => {
       const newDarValue = {
         id: item.id,
