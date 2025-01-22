@@ -130,7 +130,7 @@ const FBWorkOrderLHRTable: React.FC<FBInputProps> = ({
       return;
     }
 
-    if (isEmpty(partRevIdSelected)) {
+    if (!partRevIdSelected) {
       updateState([]);
       return;
     }
