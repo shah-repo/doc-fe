@@ -88,12 +88,12 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
         step: 3,
       },
       {
-        icon: approvalCheck ? 'check' : 'blank',
+        icon: approvalCheck && bulkImport?.status !== BkStatus.CANCELLED ? 'check' : 'blank',
         text: translate('bulkImport.approvals'),
         step: 4,
       },
       {
-        icon: !isEmpty(bulkImport.process?.process) && progress > 99 ? 'check' : 'blank',
+        icon: !isEmpty(bulkImport.process?.process) && progress > 99 && bulkImport?.status !== BkStatus.CANCELLED ? 'check' : 'blank',
         text: translate('bulkImport.importing'),
         step: 5,
       },
@@ -106,6 +106,27 @@ export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<st
     // Apply filters before adding to accumulator
     if ((!filterDataType || processType === filterDataType) && (!filterStatus || status === filterStatus)) {
       acc[status] = [...(acc[status] ?? []), bulkImportWithCustom];
+    }
+    return acc;
+  }, {});
+};
+export const getBulkImportsGroupByProcessType = (state: ApplicationState): Record<string, BulkImportCustom[]> => {
+  const filterDataType = state.bulkImport.main.selectedDataType;
+  const filterStatus = state.bulkImport.main.selectedStatus;
+  return state.bulkImport.main.bulkImports.reduce<Record<string, BulkImportCustom[]>>((acc, bulkImport) => {
+    // Skip bulk imports with status DELETED
+    if (bulkImport.status === BkStatus.DELETED) {
+      return acc;
+    }
+
+    const processType = bulkImport.processType;
+    // As we need the rejected status as a started we change internally the group.
+    const status = bulkImport?.status === BkStatus.CANCELLED
+      ? BkStatus.STARTED
+      : bulkImport.status;
+    // Apply filters before adding to accumulator
+    if ((!filterDataType || processType === filterDataType) && (!filterStatus || status === filterStatus)) {
+      acc[processType] = [...(acc[processType] ?? []), bulkImport];
     }
     return acc;
   }, {});

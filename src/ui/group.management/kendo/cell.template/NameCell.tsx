@@ -1,6 +1,6 @@
-import { TextField } from '@material-ui/core';
 import React from 'react';
 import Tooltip from '../../../components/common/kendo/Tooltip';
+import { TextField } from '../../../components/forms/fields-next';
 
 interface NameCellProps {
   dataItem: any
@@ -50,11 +50,9 @@ export const NameCell = ({
           className={className}
           data-grid-col-index={columnIndex}
         >
-
           <TextField
             id="input-with-icon-textfield"
-            variant="outlined"
-            margin="dense"
+            size="small"
             value={name}
             onChange={updateNameField}
           />

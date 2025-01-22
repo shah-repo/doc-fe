@@ -41,6 +41,7 @@ import {
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
   HOME_URL,
+  NO_ACCESS,
   PAGE_DETAILS_MANAGEMENT_URL,
   PREMIUM_FEATURES_URL,
   SLACK_ROOT_URL,
@@ -56,6 +57,7 @@ import { DocumentTypeManagementContainer } from '../document.type.management/ken
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
+import NoAccessScreen from '../noAccessScreen';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
 import SlackContainer from '../slack/Container';
@@ -68,14 +70,16 @@ import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
 
-const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePermissions: Permission[] }> = ({ isAIEnabled, currentEmployeePermissions }) => {
-  const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
-  const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
-  const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
-  const handleDrawerOpen = () => {
-    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
-    setOpen(!isOpened);
+const Layout: React.FunctionComponent = () => {
+  const isMobileView = isMobile();
+  const defaultSidebarExpandedValue = isMobileView ? false : localStorage.getItem(IS_SIDEBAR_EXPANDED) === '1';
+  const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(defaultSidebarExpandedValue);
+  const classes = useStyles();
+  const toggleSidebar = () => {
+    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isSidebarExpanded ? '1' : '0');
+    setIsSidebarExpanded(prev => !prev);
   };
+  const canAccessNavigation = useSelector(authSelectors.hasCompanies);
   const isAIPermissionEnabled = currentEmployeePermissions.includes(Permission.AI_SUBSCRIPTION);
   const isAIWidgetShown = true || (isAIEnabled && isAIPermissionEnabled);
   const userName = useSelector(authSelectors.currentUserName);
@@ -96,11 +100,23 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer className={classes.mobileLayout} isOpened={isOpened} handleDrawerOpen={handleDrawerOpen} />
-      <Navigation handleDrawerOpen={handleDrawerOpen} open={isOpened} />
+      <HeaderContainer
+        isSidebarExpanded={isSidebarExpanded && canAccessNavigation}
+        onSidebarToggle={toggleSidebar}
+        canAccessNavigation={canAccessNavigation}
+      />
+      {canAccessNavigation && (
+        <Navigation isOpen={(isSidebarExpanded || isMobileView) && canAccessNavigation} onSidebarToggle={toggleSidebar} />
+      )}
       <SocketsContainer />
       <WatermarkFooterContainer />
-      <main className={cx(classes.root, classes.mobileLayout)} >
+      <main className={cx(
+        classes.root,
+        {
+          [classes.withSidebarExpanded]: isSidebarExpanded,
+          [classes.fullWidth]: !canAccessNavigation,
+        },
+      )} >
         <DataFetcherContainer />
         {isAIWidgetShown && (
           <AiWidget
@@ -208,6 +224,11 @@ const Layout: React.FunctionComponent<{ isAIEnabled: boolean, currentEmployeePer
           <Route
             path={BULK_IMPORT_PROGRESS_URL}
             component={BulkImportProgressPage}
+            exact
+          />
+          <Route
+            path={NO_ACCESS}
+            component={NoAccessScreen}
             exact
           />
           <Redirect to={HOME_URL} />

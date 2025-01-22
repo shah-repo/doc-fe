@@ -75,6 +75,7 @@ const ImportDetailForm: React.FC<ImportDetailFormProps> = ({ children, handleNex
                 includeEmpty={false}
                 options={typeOfDataOptions}
                 inputStyleProps={classes.select}
+                placeholder="bulkImport.approvals.selectDataType"
               />
             </FormControl>
           </Box>

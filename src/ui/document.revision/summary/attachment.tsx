@@ -1,4 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
@@ -12,16 +13,24 @@ export interface Props {
   containsRedline?: boolean
   label?: string
   docRevStatus: DocumentRevisionStatus
-  isDownloadAllVisible?: boolean
 }
 
-export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label, isDownloadAllVisible }) => {
+export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label }) => {
+  const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
+
+  const onSelectedAttachmentsChange = (selected: {[id: string]: boolean | number[]}) => {
+    if(isEmpty(selected)) {
+      return setSelectedAttachments({});
+    }
+    setSelectedAttachments((prevVal) => ({ ...prevVal, ...selected }));
+  };
+
   const classes = {
     buttonsContainer: {
       display: 'flex',
     },
     buttonLeft: {
-      flex: '0 0 50%',
+      flex: '100%',
       display: 'flex',
       justifyContent: 'flex-start',
       fontWeight: 600,
@@ -30,7 +39,6 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
     },
 
     buttonRight: {
-      flex: '0 0 50%',
       display: isAttachmentEmpty ? 'none' : 'flex',
       justifyContent: 'flex-end',
       paddingRight: '25px',
@@ -53,12 +61,12 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
           <Text message={label || 'common.attachments' } />
         </Typography>
         <AttachmentDownloadAllButton
-          isAttachmentEmpty = {!isDownloadAllVisible}
+          isAttachmentEmpty = {isAttachmentEmpty}
           docRevId = {docRevId ?? ''}
           containsRedline = {containsRedline ?? false}
           docRevStatus = {docRevStatus} />
       </Box>
-      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} />
+      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} {...{ selectedAttachments, onSelectedAttachmentsChange }} />
       {emptyAttachmentsRenderer}
     </Box>
   );

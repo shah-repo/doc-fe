@@ -28,6 +28,7 @@ import { toastError } from '../../notifications';
 import PasswordDialog from '../../password/dialog';
 import { Password } from '../../password/types';
 import { AttachmentRedLineWarningDialog } from '../attachment.redline.warning/dialog';
+import AttachmentTable from '../attachment.table';
 import ViewFile from '../view.file/container';
 import { checkIfFileIsViewable } from '../view.file/utils/helpers';
 import AttachmentSlideProvider from './AttachmentSlideProvider';
@@ -45,6 +46,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   documentRevision,
   docRevId,
   isRedlineFirst,
+  selectedAttachments,
+  onSelectedAttachmentsChange,
   ...other
 }) => {
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
@@ -287,6 +290,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const noNeedPasswordHandler = (attachment: Attachment) => {
     if (checkIfFileIsViewable(attachment.type)) {
       openFileView();
+      handleDownload(attachment);
       closeContextMenu();
     } else {
       handleDownload(attachment);
@@ -348,6 +352,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       return null;
     }
 
+    return null;
+
     return (
       <PresenterFactory
         {...other}
@@ -369,7 +375,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   });
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: sortedAttachments.length ? '2rem' : '0rem' }}>
+    <>
+    <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: sortedAttachments.length ? '1rem' : '0rem' }}>
       <AttachmentRedLineWarningDialog
         isDialogOpen={redlineWarningDialogHandler.isOpen}
         onSubmit={warningSubmit}
@@ -416,6 +423,14 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       />
       {attachmentsRenderer}
     </div>
+    <AttachmentTable
+      {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange }}
+      onDownloadAttachment={handleDownload}
+      onDownloadAsPDF={handleWatermarkRequest}
+      onDelete={handleRemove}
+      onView={handleClick}
+    />
+    </>
   );
 };
 

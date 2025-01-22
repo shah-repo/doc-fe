@@ -3,6 +3,7 @@ import { SelectProps as MuiSelectProps } from '@material-ui/core/Select';
 import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
 import * as React from 'react';
 import { TypographyProps } from '../../../../state/ducks/common/types';
+import { Translation } from '../../../translations/types';
 import Text from '../../Text';
 import { useFormContext } from '../FormContext';
 import Field, { FieldOwnProps } from './Field';
@@ -20,6 +21,7 @@ interface SelectOwnProps extends FieldOwnProps {
   inputFieldProps?: InputBaseProps
   inputStyleProps?: string
   labelProps?: BoxProps
+  placeholder?: Translation
 }
 
 type SelectPropsWithFormik = SelectOwnProps &
@@ -33,6 +35,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
   inputFieldProps,
   inputStyleProps,
   labelProps,
+  placeholder,
   ...fieldProps
 }) => {
   const { field } = fieldProps;
@@ -42,6 +45,12 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
       <Text translation="fields.select.none" tagName="em" />
     </MenuItem>
   );
+
+  const PlaceholderItem = placeholder ? (
+    <MenuItem value="" disabled>
+      <Text translation={placeholder} />
+    </MenuItem>
+  ) : null;
 
   const Items = options.map((option) => (
     <MenuItem key={option.value} value={option.value} data-cy={`selectItem.${fieldProps.field.name}.${option.text}`}>
@@ -57,12 +66,14 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
         className={inputStyleProps}
         data-cy={`select.${fieldProps.field.name}`}
         input={<InputField name={fieldProps.field.name} {...inputFieldProps} />}
+        displayEmpty
         onChange={(evt, child) => {
           field.onChange(evt);
           selectProps?.onChange?.(evt, child);
           submitForm();
         }}
       >
+        {PlaceholderItem}
         {EmptyItem}
         {Items}
       </MuiSelect>

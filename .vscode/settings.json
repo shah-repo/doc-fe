@@ -1,7 +1,7 @@
 {
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
+    "source.organizeImports": "never"
   },
   "[typescript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
@@ -12,7 +12,7 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "editor.detectIndentation": false,
   "editor.tabSize": 2,
   "javascript.preferences.importModuleSpecifier": "relative",
