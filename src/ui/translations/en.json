@@ -1527,7 +1527,6 @@
   "form.builder.shipping.items.quantity": "Quanity",
   "form.builder.shipping.items.comments": "Comments",
   "form.builder.shipping.items.label": "{docId} Rev {displayRevision} - {name}",
-  "form.builder.shipping.info.address.label": "{siteName}, {siteAddress}",
   "form.builder.equipments.label": "EQ Status",
   "form.builder.related.equipments.title": "Related Equipment",
   "form.builder.related.equipments.add.last": "Add new using last selected form",

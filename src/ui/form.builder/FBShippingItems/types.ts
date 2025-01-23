@@ -31,8 +31,8 @@ export type FBShippingItemsProps =
 
 export interface ShippingItem {
   id: string
-  part: {id: string, name: string}
-  lot: {id: string, name: string}
+  part: {id: string, name: string, documentId: string}
+  lot: {id: string, name: string, documentId: string}
   quantity: number
   comments: string
   createdDate: string

@@ -19,7 +19,6 @@ import { buildSchema } from './schema';
 import SiteContact from './SiteContact';
 import useStyles from './styles';
 import { EditableSite, FBSiteProps, SiteEditEvent } from './types';
-import { setPrimaryFieldDefaultValue } from './utils';
 import { withFBSiteInformation } from './wrap';
 
 const FBSiteInformation: React.FC<FBSiteProps> = ({
@@ -47,7 +46,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       const sites: EditableSite[]
         = workspaceState?.formInput?.[name] ?? [];
       const updatedSite = omit(values, FIELDS_TO_OMIT);
-      updatedSite.primary = setPrimaryFieldDefaultValue(updatedSite.primary);
+      updatedSite.primary = updatedSite.primary ?? false;
 
       const toggleExclusiveFields = (
         contact: EditableSite,
