@@ -58,6 +58,7 @@ RouteComponentProps<BulkImportContainerProps>
   const activeStep = useSelector(getStep);
   const isLoading = useSelector(getIsLoading);
   const bulkImport = useSelector(getBulkImport);
+  console.log('🚀 ~ bulkImport:', bulkImport);
   const deleteBulkImportAction = useActionCreator(patchBulkImport);
   const openDeleteDialog = useDialog();
 
@@ -208,13 +209,19 @@ RouteComponentProps<BulkImportContainerProps>
           <Button
             component={Link}
             to={BULK_IMPORT_PROGRESS_URL}
-            kind="outlined"
+            kind="ghost"
+            classes={{
+              label: classes.buttonLabel,
+            }}
           >
-            <FontAwesomeIcon
-              className={classes.arrowLeftIcon}
-              icon={light('arrow-left')}
-            />
-            <Text translation="bulkImport.backToDashbord" />
+            <span className={classes.backToDashBoardButtonText}>
+              <FontAwesomeIcon
+                className={classes.arrowLeftIcon}
+                icon={light('arrow-left')}
+              />
+              <Text translation="bulkImport.backToDashbord" />
+            </span>
+            {bulkImport?.jobId && <span className={classes.jobIdText}>/ {bulkImport.jobId}</span>}
           </Button>
         </Box>
         <Steps activeStep={activeStep} steps={steps} />

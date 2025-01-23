@@ -148,6 +148,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
 // Create an array of mock data items
 const PAGE_SIZES = [12, 24, 50, 100];
 const BUTTON_COUNT = 4;
+const NO_FILTERS_COLUMN = ['REVISION'];
 
 const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleBack, handleCancel, bulkImport }) => {
   const dispatch = useDispatch();
@@ -377,7 +378,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
             onFilterChange={filterChange}
           >
             {(columnOrder.length > 0 ? columnOrder : tableHeadersFiltered).map((key, idx) => (
-              <GridColumn width={150} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
+              <GridColumn width={150} sortable={!NO_FILTERS_COLUMN.includes(key)} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
             ))}
           </StyledKendoGrid>
         </ExcelExport>
