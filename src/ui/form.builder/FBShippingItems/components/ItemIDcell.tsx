@@ -7,12 +7,14 @@ import {
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { isEmpty, kebabCase } from 'lodash';
-import React from 'react';
+import React, { MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
 import { FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
+import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableShippingItem, PartOption } from '../types';
 
@@ -24,7 +26,7 @@ interface Props extends CustomTemplateProps {
 interface CustomOptionType extends OptionType {
   revision: string
   docId: string
-  comments: string
+  documentId: string
 }
 
 const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
@@ -32,10 +34,10 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
 
   const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
-    setFieldValue(field, { id: value?.value, name: `${value?.docId}.${value.revision}` });
+    setFieldValue(field, { id: value?.value, name: `${value?.docId}.${value.revision}`, documentId: value?.documentId });
   };
 
-  const renderOptions = (): OptionType[] => {
+  const renderOptions = (): CustomOptionType[] => {
     return options.map((item) => ({
       label: translate('form.builder.shipping.items.label',
         {
@@ -46,6 +48,7 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
       docId: item.document?.docId,
       revision: item?.displayRevision,
       value: item.id,
+      documentId: item.document?.id,
     }));
   };
 
@@ -121,20 +124,23 @@ export const ItemIDcell: React.FC<Props> = (props) => {
   }
 
   const handleClick = () => onClick?.({ dataItem });
+  const blockEditing = (e: MouseEvent) => e.stopPropagation();
 
-  const defaultValue = dataItem[field]?.name ?? EMPTY_VALUE_PLACEHOLDER;
+  const value = dataItem[field] as EditableShippingItem['part'];
+  const displayValue = value?.name ?? EMPTY_VALUE_PLACEHOLDER;
+  const linkPath = (!isEmpty(value) && value?.documentId) ? documentVersionPath(value?.id, value?.documentId) : undefined;
   const dataCy = `${kebabCase(field)}-cell`;
 
   return (
     <OverflowTooltip
-      title={defaultValue}
+      title={displayValue}
       placement="top"
       interactive
       arrow
       onClick={handleClick}
       data-cy={dataCy}
     >
-      {defaultValue}
+      {linkPath ? <Link target="_blank" to={linkPath} onClick={blockEditing}>{displayValue}</Link> : displayValue}
     </OverflowTooltip>
   );
 };
