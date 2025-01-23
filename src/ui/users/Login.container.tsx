@@ -1,19 +1,25 @@
-import React from 'react';
+import { Box, CircularProgress } from '@material-ui/core';
+import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
-import { logo } from '../../common/utils/helpers';
-import { authSelectors } from '../../state/ducks/auth';
+import { translate } from '../../common/intl';
+import Config from '../../config';
+import { authActions, authSelectors } from '../../state/ducks/auth';
+import { SSO_LOGIN_URL, SSO_REDIRECT_PARAM } from '../../state/ducks/auth/constants';
 import { Employee } from '../../state/ducks/company/types';
 import { ApplicationState } from '../../state/reducers';
-import { toastInfo, toastSuccess } from '../components/notifications';
-import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from '../constants/urls';
-import LoginPresenter from './Login.presenter';
+import { Button } from '../components/forms/fields-next';
+import { toastError, toastInfo, toastSuccess } from '../components/notifications';
+import { COMPANY_EMAIL, HOME_URL, NO_ACCESS, RESET_PASSWORD_URL } from '../constants/urls';
+import useActionCreator from '../hooks/useActionCreator';
+import useAsync from '../hooks/useAsync';
 import SwitchCompanyContainer from './SwitchCompany/SwitchCompany.container';
 
 interface StateProps {
   isUserAuthenticated: boolean
   employees: Employee[]
+  hasCompanies: boolean
   hasMultipleCompanies: boolean
   passwordSoonToExpire: boolean
   daysUntilPasswordExpires: number
@@ -22,9 +28,52 @@ interface StateProps {
 
 export type LoginContainerProps = StateProps & Pick<RouteComponentProps, 'location'>;
 
+const IS_DEV_BUILD = process.env.NODE_ENV === 'development';
+
+const redirectToSSO = () => {
+  const redirectUrl = new URL(`${Config.ApiEndpoint}${SSO_LOGIN_URL}`);
+
+  if (IS_DEV_BUILD) {
+    redirectUrl.searchParams.append(SSO_REDIRECT_PARAM, window.location.origin);
+  }
+  window.location.href = redirectUrl.toString();
+};
+
 const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => {
-  const { from } = props.location.state || { from: { pathname: HOME_URL } };
+  const { from } = props.location.state ?? { from: { pathname: HOME_URL } };
   const intl = useIntl();
+  const async = useAsync({
+    onError: (message) => {
+      toastError(
+        <Box display="flex">
+          <Box mr={2}>
+            <div><b>{translate('login.error')}</b></div>
+            <small>{message}</small>
+          </Box>
+          <Button kind="white" onClick={redirectToSSO}>{translate('errors.fetch.tryAgain')}</Button>
+        </Box>,
+        {
+          autoClose: false,
+          closeButton: false,
+          closeOnClick: false,
+          draggable: false,
+        },
+      );
+    },
+  });
+  const loginSSOAction = useActionCreator(authActions.loginSSO);
+
+  const code = new URLSearchParams(window.location.search).get('code');
+
+  useEffect(() => {
+    const params = {
+      code,
+      [SSO_REDIRECT_PARAM]: IS_DEV_BUILD ? window.location.origin : undefined,
+    };
+    if (code && !props.isUserAuthenticated) {
+      async.start(loginSSOAction, params, async);
+    }
+  }, [code, props.isUserAuthenticated]);
 
   if (props.isUserAuthenticated) {
     if (props.hasMultipleCompanies) {
@@ -34,28 +83,39 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
         />
       );
     }
+
+    if (!props.hasCompanies) {
+      return <Redirect to={NO_ACCESS} />;
+    }
+
     props.passwordSoonToExpire && toastInfo(
       <div>
         Your password will expire in {props.daysUntilPasswordExpires} days.&nbsp;
         <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
       </div>,
-      { autoClose: 10000 });
+      { autoClose: 10000 },
+    );
 
-    props.isScheduledForDeletion
-    && toastSuccess(
+    props.isScheduledForDeletion && toastSuccess(
       <div>
         {intl.formatMessage({ id: 'toast.notification.deletion' })}
         <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>
       </div>,
-      { autoClose: 15000 });
+      { autoClose: 15000 },
+    );
 
     return <Redirect to={from} />;
   }
 
+  if (!code && !props.isUserAuthenticated) {
+    redirectToSSO();
+  }
+
   return (
-    <LoginPresenter
-      logo={logo}
-    />
+    <Box top={0} left={0} right={0} bottom={0} display="flex" alignItems="center" justifyContent="center" flexDirection="column" position="fixed">
+      <CircularProgress size={20} />
+      {code && <Box mt={2}>{translate('login.logging.in')}</Box>}
+    </Box>
   );
 };
 
@@ -63,9 +123,10 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   isUserAuthenticated: authSelectors.isAuthenticated(state),
   employees: authSelectors.employees(state),
   hasMultipleCompanies: authSelectors.hasMultipleCompanies(state),
+  hasCompanies: authSelectors.hasCompanies(state),
   passwordSoonToExpire: authSelectors.getPasswordSoonToExpire(state),
   daysUntilPasswordExpires: authSelectors.getDaysUntilPasswordExpires(state),
   isScheduledForDeletion: authSelectors.getIsScheduledForDeletion(state),
 });
 
-export default connect<StateProps, {}, {}, ApplicationState>(mapStateToProps)(LoginContainer);
+export default connect<StateProps, unknown, unknown, ApplicationState>(mapStateToProps)(LoginContainer);

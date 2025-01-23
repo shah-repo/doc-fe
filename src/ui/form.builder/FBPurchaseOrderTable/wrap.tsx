@@ -263,7 +263,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
       const shippingCost = previousLineItemsLength ? getShippingCost(allItems.shippingCost) : 0;
       const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + shippingCost;
-      const totalInUSD = totalAmount * updatedValues.current?.exchangeRate ?? allItems.exchangeRate;
+      const totalInUSD = totalAmount * (updatedValues.current?.exchangeRate ?? allItems.exchangeRate);
 
       values.formInput[PO_ITEMS_COMPONENT_NAME] = {
         ...values?.formInput[PO_ITEMS_COMPONENT_NAME],

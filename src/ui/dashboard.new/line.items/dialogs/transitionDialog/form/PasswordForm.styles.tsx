@@ -3,6 +3,9 @@ import Colors from '../../../../../layout/theme/utils/colors';
 
 export default (theme: Theme) =>
   createStyles({
+    container: {
+      width: '100%',
+    },
     submitButton: {
       display: 'flex',
       flexDirection: 'row',

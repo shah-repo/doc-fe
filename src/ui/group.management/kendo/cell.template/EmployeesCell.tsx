@@ -1,13 +1,13 @@
-import { filterBy } from '@progress/kendo-data-query';
-import { MultiSelect, MultiSelectFilterChangeEvent } from '@progress/kendo-react-dropdowns';
-import { isEmpty, sortBy } from 'lodash';
-import React from 'react';
+import { isEmpty } from 'lodash';
+import React, { ChangeEvent } from 'react';
+import { translate } from '../../../../common/intl';
 import { GetEmployeeResponse, LoadCompanyGroup } from '../../../../state/ducks/userManagement/types';
 import ExpandableTemplate from '../../../components/common/kendo/ExpandableTemplate';
-import { toMembersOptions } from '../../utils/transform';
+import { Autocomplete } from '../../../components/forms/fields-next';
 
-interface LoadMemberGroupExt extends LoadCompanyGroup {
+interface LoadMemberGroupExt extends Omit<LoadCompanyGroup, 'employees'> {
   memberNames: string
+  employees: Array<{ id: string }>
 }
 
 interface EmployeeCellProps {
@@ -32,24 +32,19 @@ export const EmployeesCell = ({
   field,
 }: EmployeeCellProps) => {
   const employeesData = dataItem[field || ''];
-  const [result, setResult] = React.useState([]);
-  const [data, setData] = React.useState(sortBy(toMembersOptions(employees), 'label'));
-  const updateMembersField = ({ target }) => {
-    dataItem.employees = target?.value.map((item: { value: string }) => ({
-      id: item?.value || '',
+  const [result, setResult] = React.useState<GetEmployeeResponse[]>([]);
+  const updateMembersField = (event: ChangeEvent<unknown>, value: GetEmployeeResponse[]) => {
+    dataItem.employees = value.map(item => ({
+      id: item.id,
     }));
-    setResult(target.value);
-  };
-
-  const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
-    const newData = filterBy(toMembersOptions(employees), filter);
-    setData(sortBy(newData, 'label'));
+    setResult(value);
   };
 
   if (rowType === 'groupHeader') {
     return null;
   }
   const employeesList = isEmpty(employeesData) ? [] : employeesData.split(',');
+
   return (
     <td
       id="kendo-expandable-column"
@@ -59,17 +54,24 @@ export const EmployeesCell = ({
       className={className}
       data-grid-col-index={columnIndex}
     >
-      {dataItem.inEdit
-        ? <MultiSelect
-          data={data}
-          value={result}
-          filterable={true}
-          onChange={updateMembersField}
-          onFilterChange={filterChange}
-          dataItemKey="value"
-          textField="label"
+      {dataItem.inEdit ? (
+        <>
+          <Autocomplete
+            options={employees}
+            value={result}
+            getOptionLabel={(option: GetEmployeeResponse) => option.user.name}
+            onChange={updateMembersField}
+            placeholder={result.length ? undefined : translate('common.members')}
+            size="small"
+            multiple
+          />
+        </>
+      ) : (
+        <ExpandableTemplate
+          items={employeesList}
+          dataId={`${dataItem.id}-${columnIndex}`}
         />
-        : <ExpandableTemplate items={employeesList} dataId={`${dataItem.id}-${columnIndex}`} />
+      )
       }
     </td>
   );
