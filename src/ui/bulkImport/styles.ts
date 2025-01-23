@@ -56,7 +56,7 @@ export default makeStyles(theme => ({
     marginRight: theme.spacing(1.2),
   },
   jobIdText: {
-    color: Colors.textDisabled,
+    color: Colors.textGray,
     marginLeft: theme.spacing(0.625),
     alignContent: 'center',
     height: 16.5,
