@@ -66,7 +66,7 @@ export const buildSchema = ({
       title: 'attachment.table.file.name',
       filterCell: InputFilter,
       template: (props) => <FileNameCellTemplate {...{ props, documentRevision, onView }} />,
-      width: 200,
+      width: 250,
     },
     {
       id: 'type',
@@ -74,7 +74,7 @@ export const buildSchema = ({
       filterCell: InputFilter,
       title: 'attachment.table.extension',
       template: (props) => <FileExtensionCellTemplate {...props} />,
-      width: 150,
+      width: 70,
     },
     {
       id: 'ownerName',
@@ -82,7 +82,7 @@ export const buildSchema = ({
       filterCell: InputFilter,
       title: 'attachment.table.uploaded.by',
       template: (props) => <FileOwnerCellTemplate {...props} />,
-      width: 150,
+      width: 200,
     },
     {
       id: 'date',
@@ -90,7 +90,7 @@ export const buildSchema = ({
       title: 'attachment.table.uploaded.date',
       filterCell: DateFilter,
       template: (props) => <FileUploadDateCellTemplate {...props} />,
-      width: 170,
+      width: 100,
     },
     {
       id: 'fileSizeS3Link',
@@ -98,7 +98,7 @@ export const buildSchema = ({
       title: 'attachment.table.file.size',
       filterCell: FileSizeFilter,
       template: (props) => <FileSizeCellTemplate {...props} />,
-      width: 170,
+      width: 100,
     },
     {
       id: 'action-needed',
