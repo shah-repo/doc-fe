@@ -43,7 +43,9 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
             disablePast={disablePastDates}
             label=""
             value={datePickerState?.date || null}
-            initialFocusedDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+            initialFocusedDate={getStartOfDayDateString(
+              moment().tz(TIME_ZONE).toISOString(),
+            )}
             onChange={(date, value) => onChange?.(date, value)}
             TextFieldComponent={(props) => (
               <TextField
@@ -56,9 +58,17 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
                   endAdornment: (
                     <>
                       <InputAdornment position="end">
-                        {datePickerState?.date && <IconButton onClick={onDatePickerClear} size="small" disabled={props.disabled} data-cy="date-clear" aria-label="clear date">
-                          <FontAwesomeIcon icon={regular('xmark')} />
-                        </IconButton>}
+                        {datePickerState?.date && (
+                          <IconButton
+                            onClick={onDatePickerClear}
+                            size="small"
+                            disabled={props.disabled}
+                            data-cy="date-clear"
+                            aria-label="clear date"
+                          >
+                            <FontAwesomeIcon icon={regular('xmark')} />
+                          </IconButton>
+                        )}
                         {props?.InputProps?.endAdornment}
                       </InputAdornment>
                     </>

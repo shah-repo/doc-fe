@@ -5,7 +5,7 @@ import { InputAdornment, PopoverProps, TextFieldProps, useFormControl } from '@m
 import formControlState from '@material-ui/core/FormControl/formControlState';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import cx from 'classnames';
-import { isEmpty, isNil, omit } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -41,20 +41,35 @@ const DatepickerTextField: React.FC<customTextFieldProps> = ({
     e.stopPropagation();
     onClear?.();
   };
-  const isClearVisible = !isNil(onClear) && !isEmpty(props.value);
+  const isClearVisible = onClear && !isEmpty(props.value);
 
   return (
     <TextField
-      onKeyDown={(e) => onKeyDown && onKeyDown(e as React.KeyboardEvent<HTMLDivElement>)}
+      onKeyDown={(e) =>
+        onKeyDown && onKeyDown(e as React.KeyboardEvent<HTMLDivElement>)
+      }
       {...suitableProps}
       {...InputProps}
       endAdornment={
         <InputAdornment
           position="end"
-          className={cx({ [classes.endAdorment]: !props.disabled, [classes.endAdormentDisabled]: props.disabled })}
+          className={cx({
+            [classes.endAdorment]: !props.disabled,
+            [classes.endAdormentDisabled]: props.disabled,
+          })}
         >
-          {isClearVisible && <FontAwesomeIcon className={classes.clear} data-cy="date-clear" icon={regular('xmark')} onClick={onDateClear} />}
-          <FontAwesomeIcon data-cy="calendar-day" icon={regular('calendar-day')} />
+          {isClearVisible && (
+            <FontAwesomeIcon
+              className={classes.clear}
+              data-cy="date-clear"
+              icon={regular('xmark')}
+              onClick={onDateClear}
+            />
+          )}
+          <FontAwesomeIcon
+            data-cy="calendar-day"
+            icon={regular('calendar-day')}
+          />
         </InputAdornment>
       }
     />

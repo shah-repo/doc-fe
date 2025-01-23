@@ -105,7 +105,9 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       formState?.validate();
 
       const isUnderWorkspace = workspaceState?.getSchemaItem(name);
-      if (!isUnderWorkspace) { return; }
+      if (!isUnderWorkspace) {
+        return;
+      }
 
       if (workspaceState?.isChangeRequest) {
         submitForm();
