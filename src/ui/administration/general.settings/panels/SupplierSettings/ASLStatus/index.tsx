@@ -35,9 +35,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
   );
 
   const supplierTypesAsync = useAsync<ASLStatus[]>({
-    onSuccess: (aslStatusList) => {
-      setTypes(aslStatusList);
-    },
+    onSuccess: setTypes,
     onError: toastError,
   });
 
@@ -87,18 +85,19 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
 
   const formik = useFormik<EditableASLStatus | Record<string, never>>({
     initialValues: {},
-    validate: (values) => {
+    validate: (values: Partial<EditableASLStatus>) => {
       const error: Record<string, string> = {};
       if (isEmpty(values.internalType)) {
         error.name = 'validators.required';
       }
-      if (values.displayLabel.length > 255) {
+
+      if ((values?.displayLabel?.length ?? 0) > 255) {
         error.displayLabel = 'validator.asl.status.displayLabel.char.limit';
       }
-      console.log('error', error);
+
       return error;
     },
-    onSubmit: (values) => {
+    onSubmit: (values: Partial<EditableASLStatus>) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedValues = omit(values, MODE_FIELD);
       const updatedData = isAddition
@@ -134,10 +133,10 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
 
   const changeASLActiveState = (
     aslStatus: EditableASLStatus,
-    state: boolean,
+    isActive: boolean,
   ) => {
     const updatedList = ASLStastusList?.map((item) =>
-      item.id === aslStatus.id ? { ...item, isActive: state, isUserModified: true } : item,
+      item.id === aslStatus.id ? { ...item, isActive, isUserModified: true } : item,
     );
     updateASLStatusList(updatedList ?? []);
   };

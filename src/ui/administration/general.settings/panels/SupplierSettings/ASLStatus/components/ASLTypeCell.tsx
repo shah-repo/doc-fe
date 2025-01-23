@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { kebabCase } from 'lodash';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../../../../common/intl';
 import {
   Autocomplete,
@@ -29,13 +29,13 @@ const Editor: React.FC<CustomCellProps> = ({
     (option: ASLStatus) => option.internalType === dataItem[field],
   );
 
-  const handleChange = (e, value: ASLStatus) => {
+  const handleChange = (event: ChangeEvent<unknown>, value: ASLStatus) => {
     setFieldValue(field, value.internalType);
     setFieldValue(ASLSTATUS_KEYS.order, value.order);
     onChange?.({
       dataIndex,
       dataItem,
-      syntheticEvent: e.syntheticEvent,
+      syntheticEvent: event,
       field,
       value,
     });

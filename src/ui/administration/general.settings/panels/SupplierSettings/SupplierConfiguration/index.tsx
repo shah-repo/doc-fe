@@ -32,7 +32,7 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   const discardSupplierConfiguration = () => setEditedSupplierConfiguration(undefined);
 
   const deleteSupplierConfiguration = (dataItem: EditableSupplierConfig) => {
-    const updateSupplierConfiguration = supplierConfiguration?.filter((config) => { return config.id !== dataItem.id; });
+    const updateSupplierConfiguration = supplierConfiguration?.filter((config) => config.id !== dataItem.id);
     setSupplierConfiguration(updateSupplierConfiguration);
   };
 
@@ -41,23 +41,17 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   );
 
   const capabilitiesAsync = useAsync<OptionType[]>({
-    onSuccess: (data) => {
-      setCapabilities(data);
-    },
+    onSuccess: setCapabilities,
     onError: toastError,
   });
 
   const supplierServiesAsync = useAsync<OptionType[]>({
-    onSuccess: (data) => {
-      setServices(data);
-    },
+    onSuccess: setServices,
     onError: toastError,
   });
 
   const supplierTypesAsync = useAsync<OptionType[]>({
-    onSuccess: (data) => {
-      setTypes(data);
-    },
+    onSuccess: setTypes,
     onError: toastError,
   });
 
@@ -93,14 +87,14 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
 
   const formik = useFormik<EditableSupplierConfig | Record<string, never>>({
     initialValues: {},
-    validate: (values) => {
+    validate: (values: Partial<EditableSupplierConfig>) => {
       const error: Record<string, string> = {};
       if (isEmpty(values.text)) {
         error.name = 'validators.required';
       }
       return error;
     },
-    onSubmit: (values) => {
+    onSubmit: (values: Partial<EditableSupplierConfig>) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedValues = {
         ...omit(values, [MODE_FIELD, ...EDIT_FIELDS]),

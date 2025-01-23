@@ -51,9 +51,7 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
   const handleRowClick = isActive && !isInEditMode ? editItem : undefined;
 
   const fetchOptionsDataAsync = useAsync<ASLStatus[]>({
-    onSuccess: (data) => {
-      setAslItems(data);
-    },
+    onSuccess: setAslItems,
     onError: toastError,
   });
 
