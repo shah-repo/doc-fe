@@ -124,7 +124,6 @@ export const ItemIDcell: React.FC<Props> = (props) => {
   }
 
   const handleClick = () => onClick?.({ dataItem });
-  const blockEditing = (e: MouseEvent) => e.stopPropagation();
 
   const value = dataItem[field] as EditableShippingItem['part'];
   const displayValue = value?.name ?? EMPTY_VALUE_PLACEHOLDER;
@@ -140,7 +139,7 @@ export const ItemIDcell: React.FC<Props> = (props) => {
       onClick={handleClick}
       data-cy={dataCy}
     >
-      {linkPath ? <Link target="_blank" to={linkPath} onClick={blockEditing}>{displayValue}</Link> : displayValue}
+      {linkPath ? <Link target="_blank" to={linkPath} onClick={(e: MouseEvent) => e.stopPropagation()}>{displayValue}</Link> : displayValue}
     </OverflowTooltip>
   );
 };
