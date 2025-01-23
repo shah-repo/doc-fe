@@ -658,9 +658,10 @@ const getAttachmentsByDocRevId = (
 const getAttachmentsByARId = (
   arId: string,
   handlers: Handlers,
+  includeCustomAttachments: false,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `/attachments/change_requests/${arId}/all`,
+    url: `/attachments/change_requests/${arId}/all?includeCustomAttachments=${String(includeCustomAttachments)}`,
     method: 'get',
     handlers,
   });
