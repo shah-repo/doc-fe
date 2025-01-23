@@ -9,7 +9,6 @@ import { CustomSiteTemplateProps } from '../types';
 
 const Editor: React.FC<CustomSiteTemplateProps> = memo(({ field }) => {
   const { getFieldProps } = useFormikContext();
-  const isNumberField = field === 'zipCode';
 
   return (
     <FormikField
@@ -18,7 +17,6 @@ const Editor: React.FC<CustomSiteTemplateProps> = memo(({ field }) => {
       <TextField
         {...getFieldProps(field)}
         defaultValue={undefined}
-        type={isNumberField ? 'number' : 'text'}
         size="small"
       />
     </FormikField>
