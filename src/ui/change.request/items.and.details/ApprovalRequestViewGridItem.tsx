@@ -236,7 +236,7 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
                 },
               )}
             >
-              {translate('form.builder.related.parts')}
+              {translate('form.builder.related.items')}
             </h4>
             <div className={classes.moreDetails}>
               {docRelatedParts.map((part) => (
