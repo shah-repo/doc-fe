@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import { authSelectors } from '../../state/ducks/auth';
-import UserGroupManagment from '../administration/UserGroupManagement';
 import BulkMigrationPage from '../administration/bulkMigration';
 import GeneralSettingsPage from '../administration/general.settings';
+import UserGroupManagment from '../administration/UserGroupManagement';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
 import BulkImportProgressPage from '../bulkImport/container.progress';
@@ -53,8 +53,8 @@ import NoAccessScreen from '../noAccessScreen';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
 import SlackContainer from '../slack/Container';
-import TrainingDetailContainer from '../training/TrainingDetail.container';
 import TrainingListContainer from '../training/grid/container';
+import TrainingDetailContainer from '../training/TrainingDetail.container';
 import DataFetcherContainer from './DataFetcher.container';
 import HeaderContainer from './Header.container';
 import useStyles from './Layout.styles';
@@ -183,6 +183,7 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={BULK_MIGRATION_URL}
             component={BulkMigrationPage}
+            exact
           />
           <Route
             path={USER_GROUP_URL}

@@ -518,7 +518,7 @@ const BulkMigrationContainer: React.FC = () => {
                     <MenuItem value={formRev.id} key={formRev.id}>
                       <em>
                         {formRev.document?.docId} • {formRev.name} •{' '}
-                        {formRev.displayRevision} • {formRev.status}
+                        {formRev.displayRevision} • {formRev.displayStatus}
                       </em>
                     </MenuItem>
                   ))}
@@ -658,7 +658,7 @@ const BulkMigrationContainer: React.FC = () => {
                     <MenuItem value={formRev.id} key={formRev.id}>
                       <em>
                         {formRev.document?.docId} • {formRev.name} •{' '}
-                        {formRev.displayRevision} • {formRev.status}
+                        {formRev.displayRevision} • {formRev.displayStatus}
                       </em>
                     </MenuItem>
                   ))}
