@@ -97,7 +97,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
 
       return error;
     },
-    onSubmit: (values: Partial<EditableASLStatus>) => {
+    onSubmit: (values: EditableASLStatus | Record<string, never>) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedValues = omit(values, MODE_FIELD);
       const updatedData = isAddition
@@ -115,8 +115,8 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
         item[ASLSTATUS_KEYS.displayOrder] = index + 1;
       });
 
-      const displayOrderMap = sortedItems?.reduce((acc, item) => {
-        acc[item.id as string] = item[ASLSTATUS_KEYS.displayOrder];
+      const displayOrderMap = (sortedItems)?.reduce((acc, item) => {
+        acc[item.id] = item[ASLSTATUS_KEYS.displayOrder];
         return acc;
       }, {});
 
