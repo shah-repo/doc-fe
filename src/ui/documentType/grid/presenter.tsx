@@ -84,6 +84,7 @@ export function DocumentTypePresenter ({
     DocumentCategory.EB,
     DocumentCategory.Receive,
     DocumentCategory.Equipment,
+    DocumentCategory.EquipmentSpecification,
   ].includes(documentTypeCategory as DocumentCategory);
 
   return (

@@ -84,6 +84,7 @@ export enum DocumentCategory {
   PurchaseOrder = 'Purchase Order',
   Supplier = 'Supplier',
   Equipment = 'Equipment',
+  EquipmentSpecification = 'Equipment Specification',
   TrainingCurriculums = 'Training Curriculums',
   Lot = 'Lot',
   Parts = 'Parts',
