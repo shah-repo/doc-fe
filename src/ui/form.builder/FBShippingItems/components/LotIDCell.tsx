@@ -125,6 +125,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
 };
 
 export const LotIDCell: React.FC<Props> = (props) => {
+  const classes = styles();
   const { field, dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
@@ -148,7 +149,7 @@ export const LotIDCell: React.FC<Props> = (props) => {
       onClick={handleClick}
       data-cy={dataCy}
     >
-      {linkPath ? <Link target="_blank" to={linkPath} onClick={(e) => e.stopPropagation()}>{displayValue}</Link> : displayValue}
+      {linkPath ? <Link target="_blank" to={linkPath} onClick={(e) => e.stopPropagation()} className={classes.link}>{displayValue}</Link> : displayValue}
     </OverflowTooltip>
   );
 };
