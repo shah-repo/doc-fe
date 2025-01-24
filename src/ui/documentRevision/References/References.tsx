@@ -42,7 +42,7 @@ const References = ({
   const showChangeControlDetails = selectedDocument?.changeControlOptions?.id
     && selectedDocument.isBeingEditedAfterRelease;
 
-  const documentTypeId = selectedDocument?.document?.documentType?.id || '';
+  const documentTypeId = selectedDocument?.document?.documentType?.id ?? '';
   const { isVisible } = useTraining(documentTypeId);
   const isRecord = checkIsDocumentRecord(groupOptions);
 
