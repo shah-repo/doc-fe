@@ -79,6 +79,13 @@ export function DocumentTypePresenter ({
     setDataToBeExported(copyDate);
   };
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
+  const isEnabledKeywordSearch = [
+    DocumentCategory.Parts,
+    DocumentCategory.EB,
+    DocumentCategory.Receive,
+    DocumentCategory.Equipment,
+  ].includes(documentTypeCategory as DocumentCategory);
+
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
@@ -106,11 +113,7 @@ export function DocumentTypePresenter ({
             status: documentRevisionQueryStatus(),
           }}
           documentTypeCategory={documentTypeCategory}
-          enableKeywordSearch={[
-            DocumentCategory.Parts,
-            DocumentCategory.EB,
-            DocumentCategory.Receive,
-          ].includes(documentTypeCategory as DocumentCategory)}
+          enableKeywordSearch={isEnabledKeywordSearch}
         />}
       </Grid>
     </Grid>
