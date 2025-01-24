@@ -58,7 +58,6 @@ RouteComponentProps<BulkImportContainerProps>
   const activeStep = useSelector(getStep);
   const isLoading = useSelector(getIsLoading);
   const bulkImport = useSelector(getBulkImport);
-  console.log('🚀 ~ bulkImport:', bulkImport);
   const deleteBulkImportAction = useActionCreator(patchBulkImport);
   const openDeleteDialog = useDialog();
 
