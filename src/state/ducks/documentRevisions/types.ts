@@ -227,7 +227,7 @@ export interface SearchRecordsResponse {
   totalCount: number
 }
 
-interface lifecyclePhase {
+interface LifecyclePhase {
   displayLabel: string
   displayOrder: number
   documentTypeId: string
@@ -310,7 +310,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   needSyncedSuccessNotify?: boolean
   eqStatus?: EquipmentStatus
   lifecyclePhaseId?: string
-  lifecyclePhase?: lifecyclePhase
+  lifecyclePhase?: LifecyclePhase
   isExpired?: boolean
   expiryDate?: string
   supplierStatusId?: string

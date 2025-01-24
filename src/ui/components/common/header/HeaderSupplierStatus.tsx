@@ -5,7 +5,6 @@ import { translate } from '../../../../common/intl';
 import { getHasPermission } from '../../../../common/utils/selectors';
 import { authSelectors } from '../../../../state/ducks/auth';
 import { Permission } from '../../../../state/ducks/auth/types';
-import { companyActions } from '../../../../state/ducks/company';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
@@ -32,7 +31,7 @@ const HeaderSupplierStatus: React.FC<Props> = ({ documentRevision }) => {
   const updateSupplierStatusAction = useActionCreator(documentRevisionsActions.updateSupplierStatus);
 
   const [options, setOptions] = useState<OptionType[]>([]);
-  const fetchASLTypes = useActionCreator(companyActions.fetchASLOptions);
+  const fetchASLTypes = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
 
   const supplierTypesAsync = useAsync<ASLStatus[]>({
     onSuccess: (aslStatusList) => {

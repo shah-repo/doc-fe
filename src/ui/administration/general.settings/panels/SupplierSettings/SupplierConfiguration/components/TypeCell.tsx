@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { kebabCase } from 'lodash';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../../../../common/intl';
 import {
   Autocomplete,
@@ -19,17 +19,18 @@ const Editor: React.FC<CustomCellProps> = ({
   onChange,
 }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
-  const value = dataOptions?.find((data) => data.text === dataItem[field]);
+  const defaultValue = dataItem[field] as string;
+  const value = dataOptions?.find((data) => data.text === defaultValue);
   const isEditMode = Mode.edit === dataItem[MODE_FIELD];
 
-  const handleChange = (e, value: OptionType) => {
+  const handleChange = (event: ChangeEvent<unknown>, value: OptionType) => {
     setFieldValue(field, value.text);
     setFieldValue('supplierTypeId', value.id);
 
     onChange?.({
       dataIndex,
       dataItem,
-      syntheticEvent: e.syntheticEvent,
+      syntheticEvent: event,
       field,
       value,
     });
