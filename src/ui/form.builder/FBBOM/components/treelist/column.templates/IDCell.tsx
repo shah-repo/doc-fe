@@ -82,7 +82,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
         setFieldValue('hasAttachments', hasAttachments);
         setFieldValue('hasPrimaryAttachment', hasPrimaryAttachment);
         setFieldValue('docId', docId);
-        setFieldValue('quantity', quantity ?? 1);
+        if (dataItem[ADD_FIELD]) {
+          setFieldValue('quantity', quantity ?? 1);
+        }
         if (dialog.isOpen) {
           setFieldValue('childNodeRevId', dataItem?.id?.split(SELECTED_PART_KEY_SEPARATOR)[0]);
           setFieldValue('newChildNodeRevId', id);
