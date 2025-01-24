@@ -1,5 +1,7 @@
 import MomentUtils from '@date-io/moment';
-import { TextField } from '@material-ui/core';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconButton, InputAdornment, TextField } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Observer } from 'mobx-react';
 import moment from 'moment';
@@ -17,6 +19,7 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
   onChange,
   onDatePickerClick,
   onDatePickerClose,
+  onDatePickerClear,
   disablePastDates,
   ...props
 }) => {
@@ -39,8 +42,10 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
             autoOk={true}
             disablePast={disablePastDates}
             label=""
-            value={datePickerState?.date || ''}
-            initialFocusedDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+            value={datePickerState?.date || null}
+            initialFocusedDate={getStartOfDayDateString(
+              moment().tz(TIME_ZONE).toISOString(),
+            )}
             onChange={(date, value) => onChange?.(date, value)}
             TextFieldComponent={(props) => (
               <TextField
@@ -48,6 +53,27 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
                 disabled={props.disabled}
                 className={classes.textfield}
                 inputProps={{ disabled: true }}
+                InputProps={{
+                  ...props.InputProps,
+                  endAdornment: (
+                    <>
+                      <InputAdornment position="end">
+                        {datePickerState?.date && (
+                          <IconButton
+                            onClick={onDatePickerClear}
+                            size="small"
+                            disabled={props.disabled}
+                            data-cy="date-clear"
+                            aria-label="clear date"
+                          >
+                            <FontAwesomeIcon icon={regular('xmark')} />
+                          </IconButton>
+                        )}
+                        {props?.InputProps?.endAdornment}
+                      </InputAdornment>
+                    </>
+                  ),
+                }}
               />
             )}
             keyboardIcon={<DatePickerIcon />}
