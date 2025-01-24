@@ -14,7 +14,7 @@ export const OverflowCell: React.FunctionComponent<CustomGridCellProps> = ({
   columnIndex,
   cellRowClick,
 }) => {
-  const fieldValue = field && (get(dataItem, field) || '');
+  const fieldValue = get(dataItem, field ?? '', '') ?? '';
   const dataString = Array.isArray(fieldValue) ? fieldValue.join(', ') : fieldValue;
   const dataItemValue = convertHtmlEntities(dataString) ?? '';
 

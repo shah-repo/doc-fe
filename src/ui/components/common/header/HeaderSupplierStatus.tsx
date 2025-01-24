@@ -54,7 +54,7 @@ const HeaderSupplierStatus: React.FC<Props> = ({ documentRevision }) => {
   const hasPermissionToUpdateSupplierStatus = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_STATUS));
   const isSupplierStatusEditable = (isOwner || hasPermissionToUpdateSupplierStatus) && (!disabledStatuses.includes(documentRevision.status));
 
-  const statusLabel = getSupplierStatusByValue(documentRevision.supplierStatus);
+  const statusLabel = getSupplierStatusByValue(documentRevision.supplierStatusId);
 
   const updateLotStatus = useRef<() => void>();
   const nextStatus = useRef<string>();
@@ -62,7 +62,7 @@ const HeaderSupplierStatus: React.FC<Props> = ({ documentRevision }) => {
   const confirmUpdate = (supplierStatus: string) => {
     nextStatus.current = options?.find((data) => data.value === supplierStatus)?.label;
     updateLotStatus.current = () => {
-      async.start(updateSupplierStatusAction, documentRevision.id, { supplierStatus }, async);
+      async.start(updateSupplierStatusAction, documentRevision.id, { supplierStatusId: supplierStatus }, async);
     };
     confirmationDialog.open();
   };
