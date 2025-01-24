@@ -34,11 +34,14 @@ export interface LHRSummaryItem {
   endQuantity: number
   lotStatus: string
   calDueDate?: NullableString
+  customCalDueDate?: NullableString
   pmDueDate?: NullableString
+  customPmDueDate?: NullableString
   ncmr: string
   comments: string
   enteredBy: string
   recordCreationDate?: NullableString
+  customRecordCreationDate?: NullableString
   lotOrEqDocId?: string
   lotOrEqDocumentId?: string
   actualDocId?: string
