@@ -43,11 +43,13 @@ export const ExportPDFCloseButton = ({ closeToast, linkInfo }) => {
   };
 
   useEffect(() => {
-    if (isCopied) {
-      setTimeout(() => {
-        setIsCopied(false);
-      }, 2000);
+    if (!isCopied) {
+      return;
     }
+
+    const timer = setTimeout(() => setIsCopied(false), 2000);
+
+    return () => clearTimeout(timer);
   }, [isCopied]);
 
   return (
