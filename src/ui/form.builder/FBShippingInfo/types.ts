@@ -1,9 +1,9 @@
 import { ChangeEvent } from 'react';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 
-export interface FBShippingAddresProps {
+export interface FBShippingAddressProps {
   name?: string
-  loading: boolean
+  isLoading: boolean
   disabled: boolean
   isShippingAddressEmpty?: boolean
   value: CustomOptionType

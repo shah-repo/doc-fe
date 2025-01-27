@@ -7,9 +7,9 @@ import { shippingInfoActions } from '../../../state/ducks/ShippingInformation';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
-import { ContactValue, CustomOptionType, FBShippingAddresProps, ShippingAddress } from './types';
+import { ContactValue, CustomOptionType, FBShippingAddressProps, ShippingAddress } from './types';
 
-export const withFBShippingAddress = <T extends FBShippingAddresProps>(
+export const withFBShippingAddress = <T extends FBShippingAddressProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
   const Comp = ({
@@ -108,7 +108,7 @@ export const withFBShippingAddress = <T extends FBShippingAddresProps>(
       ...props as T,
       name,
       disabled: disabled || isCustomerFieldEmpty || isCustomerFieldLoading,
-      loading: fetchShippingAddressAsync.isLoading,
+      isLoading: fetchShippingAddressAsync.isLoading,
       isShippingAddressEmpty,
       value,
       handleChange,

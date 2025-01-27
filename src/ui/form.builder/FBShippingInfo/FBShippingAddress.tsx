@@ -5,9 +5,9 @@ import React from 'react';
 import { translate } from '../../../common/intl';
 import styles from './FBShippingAddress.styles';
 import { withFBShippingAddress } from './FBShippingAddress.wrap';
-import { Contact, FBShippingAddresProps } from './types';
+import { Contact, FBShippingAddressProps } from './types';
 
-const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleChange, value, loading, disabled, isShippingAddressEmpty }) => {
+const FBShippingAddress: React.FC<FBShippingAddressProps> = ({ options, handleChange, value, isLoading, disabled, isShippingAddressEmpty }) => {
   const classes = styles();
   const attention = find(value?.siteContact, { attention: true });
   const shipping = find(value?.siteContact, { shipping: true });
@@ -73,7 +73,7 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
               key={isEmpty(options) ? 'disabled' : 'enabled'}
               options={options}
               getOptionLabel={(option) => option.label ?? ''}
-              loading={loading}
+              loading={isLoading}
               disabled={disabled}
               disableClearable
               onChange={handleChange}
@@ -93,7 +93,7 @@ const FBShippingAddress: React.FC<FBShippingAddresProps> = ({ options, handleCha
                         startAdornment: <div>{params.InputProps.startAdornment}</div>,
                         endAdornment: (
                           <>
-                            {loading && (
+                            {isLoading && (
                               <CircularProgress color="inherit" size={16} />
                             )}
                             {params.InputProps.endAdornment}
