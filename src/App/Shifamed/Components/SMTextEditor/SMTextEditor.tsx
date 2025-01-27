@@ -33,7 +33,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const classes = SMEditorStyles();
   const intl = useIntl();
   const [hover, setHover] = useState(false);
-  const descriptionPlaceholder = intl.formatMessage({ id: 'form.builder.enter.description' });
+  const descriptionPlaceholder = placeholder ?? intl.formatMessage({ id: 'form.builder.enter.description' });
   const viewMore = intl.formatMessage({ id: 'document.revision.view.more' });
   const viewLess = intl.formatMessage({ id: 'document.revision.view.less' });
   const toggleEditMode = () => {

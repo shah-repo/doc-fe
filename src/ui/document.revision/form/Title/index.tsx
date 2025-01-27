@@ -1,11 +1,11 @@
-import React, { FC, useCallback, memo } from 'react';
+import React, { FC, memo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { asyncDebounce } from '../../../../common/utils/helpers';
 import CreatableField from '../../../components/forms/fields/Autocomplete/Creatable';
+import { FB } from '../../../form.builder';
 import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelTooltip';
 import { useTitle } from '../../../hooks/docCustomization/useCustomization';
-import { FB } from '../../../form.builder';
 import TitleState from './state';
-import { asyncDebounce } from '../../../../common/utils/helpers';
 
 interface TitleProps {
   name: string
@@ -51,7 +51,7 @@ const Index: FC<TitleProps> = ({
           id: 'Title-field',
         }}
         isDisabled={props.disabled}
-        placeholder={intl.formatMessage({ id: 'form.builder.enter.title' })}
+        placeholder={label ?? intl.formatMessage({ id: 'form.builder.enter.title' })}
         labelProps={{ margin: 0 }}
         {...{ label }}
       />
