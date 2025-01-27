@@ -67,7 +67,7 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
           size="small"
           className={cx(
             classes.chip,
-            classes[ASL_STATUS_CLASS_MAPPING[defaultValue]],
+            classes[ASL_STATUS_CLASS_MAPPING[dataItem[field]]],
           )}
           label={defaultValue}
         />

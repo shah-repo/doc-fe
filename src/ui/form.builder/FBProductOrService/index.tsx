@@ -65,12 +65,14 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
   const formik = useFormik<Partial<EditableProductORService>>({
     initialValues: {},
     onSubmit: (values) => {
+      const addedAslItem = aslItems?.find(aslItem => aslItem.id === values.aslStatusId);
       const isAddition = values[MODE_FIELD] === Mode.add;
+
       const updatedProductOrServices = isAddition
-        ? [...productOrServices, values]
+        ? [...productOrServices, { ...values, ...{ aslDisplayLabel: addedAslItem?.displayLabel } }]
         : productOrServices.map((reference) =>
           reference.id === values.id
-            ? values
+            ? { values, ...{ aslDisplayLabel: addedAslItem?.displayLabel } }
             : reference,
         );
 
