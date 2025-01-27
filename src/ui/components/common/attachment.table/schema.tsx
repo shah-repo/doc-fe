@@ -58,7 +58,7 @@ export const buildSchema = ({
       title: 'Select',
       filterCell: (props) => <SelectFilter {...{ props, headerChecked, handleHeaderCheckedChange }} />,
       className: classes.checkbox,
-      width: 50,
+      width: 65,
     },
     {
       id: 'name',

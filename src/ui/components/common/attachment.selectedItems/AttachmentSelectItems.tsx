@@ -53,9 +53,17 @@ const AttachmentSelectItems: React.FunctionComponent<Props> = ({
   const classes = styles();
   const selectedAttachmentsCount = Object.values(selectedAttachments).filter(value => value === true).length;
 
-  if(selectedAttachmentsCount === 0) {
+  if (selectedAttachmentsCount === 0) {
     return null;
   }
+
+  const selectedIds = Object.entries(selectedAttachments)
+    .filter(([id, selected]) => selected)
+    .map(([id]) => id);
+
+  const handleSummarizeAi = () => {
+    global.handleSummarizeAi(selectedIds);
+  };
 
   return (
     <Box display="flex" alignItems="center">
@@ -66,7 +74,7 @@ const AttachmentSelectItems: React.FunctionComponent<Props> = ({
       <Text message={translate('attachment.header.selected')} />
       <hr className={classes.hr} />
       <Tooltip title={translate('common.summarize.with.ai')}>
-        <IconButton className={classes.aiButton}>
+        <IconButton onClick={handleSummarizeAi} className={classes.aiButton}>
           <FontAwesomeIcon icon={regular('stars')} className={classes.aiIcon} />
         </IconButton>
       </Tooltip>

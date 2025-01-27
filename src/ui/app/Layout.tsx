@@ -1,8 +1,8 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Widget as AiWidget, AppName } from 'ai-widget';
+import { Widget as AiWidget, AppName, WidgetRef } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
-import React from 'react';
+import React, { useRef } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
@@ -90,6 +90,11 @@ const Layout: React.FunctionComponent = () => {
     ),
   );
   const attachmentIds = documentRevision?.attachments?.map(item => item.id);
+  const widgetRef = useRef<WidgetRef>(null);
+
+  global.handleSummarizeAi = (attachmentIds: string[]) => {
+    widgetRef.current?.triggerSummarizeAttachments(attachmentIds);
+  };
 
   return (
     <>
@@ -115,6 +120,7 @@ const Layout: React.FunctionComponent = () => {
       )} >
         <DataFetcherContainer />
         <AiWidget
+          ref={widgetRef}
           appName={AppName.D2M}
           userName={userName}
           companyId={companyId}
