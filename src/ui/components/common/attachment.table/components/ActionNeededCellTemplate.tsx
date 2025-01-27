@@ -1,6 +1,6 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MenuItem } from '@material-ui/core';
+import { MenuItem, Divider } from '@material-ui/core';
 import cx from 'classnames';
 import { get } from 'lodash';
 import React, { useMemo } from 'react';
@@ -61,7 +61,7 @@ const ActionNeededCellTemplate: React.FC<any> = (props) => {
           <FontAwesomeIcon icon={regular('trash-can')} className={cx(classes.menuIcons, classes.menuDeleteIcon)} />
           <Text message={translate('attachment.menu.delete')} />
         </MenuItem>}
-        {showSetAsPrimary && <MenuItemSetPrimary {...{ attachment, documentRevision }} />}
+        {showSetAsPrimary && <> <Divider /> <MenuItemSetPrimary {...{ attachment, documentRevision }} /> </>}
       </HeaderMenu>
   );
 };

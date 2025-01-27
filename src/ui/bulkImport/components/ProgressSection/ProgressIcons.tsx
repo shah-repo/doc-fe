@@ -5,7 +5,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
-import { BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
+import { BkIconStatus, BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
 import useStyles from './styles';
 
 interface IconStatus {
@@ -14,11 +14,11 @@ interface IconStatus {
 }
 
 export const iconStatuses: Record<string, IconStatus> = {
-  check: { name: solid('circle-check'), className: 'checkIcon' },
-  progress: { name: solid('circle-three-quarters-stroke'), className: 'progressIcon' },
-  warning: { name: solid('triangle-exclamation'), className: 'warningIcon' },
-  blank: { name: solid('circle'), className: 'blankIcon' },
-  skip: { name: solid('circle-arrow-right'), className: 'skipIcon' },
+  [BkIconStatus.check]: { name: solid('circle-check'), className: 'checkIcon' },
+  [BkIconStatus.progress]: { name: solid('circle-three-quarters-stroke'), className: 'progressIcon' },
+  [BkIconStatus.warning]: { name: solid('triangle-exclamation'), className: 'warningIcon' },
+  [BkIconStatus.blank]: { name: solid('circle'), className: 'blankIcon' },
+  [BkIconStatus.skip]: { name: solid('circle-arrow-right'), className: 'skipIcon' },
 };
 
 interface ProgressIconsProps {
@@ -38,9 +38,11 @@ const ProgressIcons: React.FC<ProgressIconsProps> = ({ item }) => {
     <Box className={classes.statusesContainer}>
       {icons?.map(icon => {
         let iconData = iconStatuses[icon.icon] ? iconStatuses[icon.icon] : iconStatuses.blank;
-        if ((!iconStatuses[icon.icon] || icon.icon === 'blank') && !firstBlankIconFound) {
+        if ((!iconStatuses[icon.icon] || icon.icon === BkIconStatus.warning || icon.icon === BkIconStatus.blank) && !firstBlankIconFound) {
           firstBlankIconFound = true;
-          iconData = iconStatuses.progress;
+          if (icon.icon !== BkIconStatus.warning) {
+            iconData = iconStatuses.progress;
+          }
         }
 
         return (

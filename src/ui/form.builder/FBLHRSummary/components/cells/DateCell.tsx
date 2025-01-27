@@ -13,6 +13,7 @@ import {
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
+import { LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 
 export const DateCell: React.FC<CustomTemplateProps> = ({
@@ -47,6 +48,11 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
     setFieldValue(removeCustomPrefix(field), dateValue);
   };
 
+  const handleClear = () => {
+    setFieldValue(field, null);
+    setFieldValue(removeCustomPrefix(field), null);
+  };
+
   return (
     <FormikField name={field}>
       <DatePicker
@@ -55,6 +61,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
         size="small"
         data-cy={`${field}`}
         onChange={handleChange}
+        onClear={field === LHR_SUMARY_FIELDS.customRecordCreationDate ? undefined : handleClear}
         format={MomentFormats.MonthDateYearTwoDigit}
       />
     </FormikField>

@@ -17,6 +17,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     datePickerState,
     onDatePickerClick,
     onDatePickerClose,
+    onDatePickerClear,
     onChange,
     editorProperties,
     name = '',
@@ -98,11 +99,29 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       save(moment.tz(value || '', 'MM/DD/YYYY', TIME_ZONE).startOf('day').toISOString());
     };
 
+    onDatePickerClear = () => {
+      datePickerState?.setValue(null);
+      formState?.setFieldValue(name, null);
+      formState?.validate();
+
+      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+      if (!isUnderWorkspace) {
+        return;
+      }
+
+      if (workspaceState?.isChangeRequest) {
+        submitForm();
+      }
+
+      workspaceState?.saveDocRev(formState?.getValues());
+    };
+
     return Component({
       ...(props as T),
       datePickerState,
       onDatePickerClick,
       onDatePickerClose,
+      onDatePickerClear,
       onChange,
       editorProperties,
       disablePastDates,
