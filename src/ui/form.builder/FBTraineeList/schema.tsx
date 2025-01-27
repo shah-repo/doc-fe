@@ -73,7 +73,7 @@ export const buildSchema = ({
       filterCell: InputFilter,
       template: DateCellTemplate,
       editable: true,
-      width: 200,
+      width: 220,
     },
     {
       id: 'comments',

@@ -7,7 +7,7 @@ import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { MomentFormats } from '../../../../common/utils/date';
 import { getBulkImportsGroupByProcessType } from '../../../../state/ducks/bulkImport/selectors';
-import { BulkImportCustom, BulkImportFile } from '../../../../state/ducks/bulkImport/types';
+import { BulkImport, BulkImportFile } from '../../../../state/ducks/bulkImport/types';
 import Text from '../../../components/Text';
 import useStyles from './styles';
 
@@ -59,7 +59,7 @@ const ImportLog: React.FC = () => {
               <Typography className={classes.categoryTitle} variant="subtitle1">{key ? startCase(toLower(key)) : ''}</Typography>
             </Box>
             <List className={classes.listCategory}>
-              {bulkImportsGroupByProcess[key]?.map((item: BulkImportCustom, idx: number) => {
+              {bulkImportsGroupByProcess[key]?.map((item: BulkImport, idx: number) => {
                 if (!item.excelFile && item.zipFile) return null;
 
                 return (

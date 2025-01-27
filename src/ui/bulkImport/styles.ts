@@ -40,6 +40,9 @@ export default makeStyles(theme => ({
     position: 'absolute',
     top: theme.spacing(2.5),
     left: theme.spacing(1),
+    '& a': {
+      paddingLeft: 0,
+    },
   },
   [theme.breakpoints.down('md')]: {
     backToDashboard: {
@@ -51,5 +54,19 @@ export default makeStyles(theme => ({
     height: 15,
     color: Colors.primary,
     marginRight: theme.spacing(1.2),
+  },
+  jobIdText: {
+    color: Colors.textGray,
+    marginLeft: theme.spacing(0.625),
+    alignContent: 'center',
+    height: 16.5,
+  },
+  backToDashBoardButtonText: {
+    display: 'flex',
+  },
+  buttonLabel: {
+    [theme.breakpoints.down(1570)]: {
+      flexDirection: 'column',
+    },
   },
 }));
