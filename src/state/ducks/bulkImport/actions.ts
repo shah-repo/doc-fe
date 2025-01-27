@@ -326,15 +326,20 @@ export const getBulkImports = (): ApiAction<BulkImport[]> => apiAction({
   },
 });
 
-export const getOneBulkImport = (bulkImportId: string): ApiAction<BulkImport> => apiAction({
+export const getOneBulkImport = (bulkImportId: string, callback?: (data: BulkImport) => void): ApiAction<BulkImport> => apiAction({
   url: `${BULK_IMPORT_ONE_URL}${bulkImportId}`,
   method: 'get',
   onSuccess: (data, dispatch) => {
     dispatch(setBulkImport(data));
+    if (callback) {
+      callback(data);
+    }
   },
   onCompleted: (dispatch) => {
-    dispatch(setIsLoadingMain(false));
-    dispatch(setIsLoading(false));
+    if (!callback) {
+      dispatch(setIsLoadingMain(false));
+      dispatch(setIsLoading(false));
+    }
   },
   onFailure: (err: string) => {
     toastError(err);
