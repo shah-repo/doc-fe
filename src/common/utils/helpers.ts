@@ -53,9 +53,15 @@ const translate = {
   gt: '>',
 };
 const translateRe = new RegExp(`&(${Object.keys(translate).join('|')});`, 'g');
-export const convertHtmlEntities = (html: string) => (html.replace?.(translateRe, function (match, entity) {
-  return translate[entity];
-}));
+export const convertHtmlEntities = (html: string): string => {
+  if (typeof html !== 'string') {
+    return html;
+  }
+
+  return html.replace(translateRe, (match: string, entity: string): string => {
+    return translate[entity];
+  });
+};
 
 export const theme = Config.Theme;
 export const logo = '/logo_enlil_dark.svg';

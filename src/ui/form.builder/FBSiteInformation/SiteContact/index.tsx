@@ -23,14 +23,14 @@ import {
 
 const SiteContact: React.FC<SiteContactProps> = ({
   name,
-  disabled,
+  isDisabled,
   sites,
   dataItem,
   setSites,
 }) => {
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
-  const isActive = !disabled;
+  const isActive = !isDisabled;
   const [siteContact, setSiteContact] = React.useState(
     dataItem.siteContact || [],
   );

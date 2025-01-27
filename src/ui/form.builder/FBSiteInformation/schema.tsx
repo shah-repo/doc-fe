@@ -22,7 +22,7 @@ export const buildSchema = ({
       id: 'primary',
       field: 'primary',
       filterable: false,
-      title: 'form.builder.site.inforation.grid.heading.primary',
+      title: 'form.builder.site.information.grid.heading.primary',
       template: (props) => (
         <PrimaryCell
           isActive={false}
@@ -34,7 +34,7 @@ export const buildSchema = ({
     {
       id: 'siteName',
       field: 'siteName',
-      title: 'form.builder.site.inforation.grid.heading.site.name',
+      title: 'form.builder.site.information.grid.heading.site.name',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
       width: 200,
@@ -42,7 +42,7 @@ export const buildSchema = ({
     {
       id: 'siteAddress',
       field: 'siteAddress',
-      title: 'form.builder.site.inforation.grid.heading.site.address',
+      title: 'form.builder.site.information.grid.heading.site.address',
       filterable: false,
       template: (props) => <SiteAddressCell {...props} onClick={onRowClick} onSameAsHQ={onSameAsHQ} />,
       width: 350,
@@ -50,7 +50,7 @@ export const buildSchema = ({
     {
       id: 'city',
       field: 'city',
-      title: 'form.builder.site.inforation.grid.heading.city',
+      title: 'form.builder.site.information.grid.heading.city',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
       width: 200,
@@ -58,7 +58,7 @@ export const buildSchema = ({
     {
       id: 'zipCode',
       field: 'zipCode',
-      title: 'form.builder.site.inforation.grid.heading.zip.code',
+      title: 'form.builder.site.information.grid.heading.zip.code',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
@@ -66,7 +66,7 @@ export const buildSchema = ({
     {
       id: 'country',
       field: 'country',
-      title: 'form.builder.site.inforation.grid.heading.country',
+      title: 'form.builder.site.information.grid.heading.country',
       filterable: false,
       template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
       width: 150,
@@ -74,7 +74,7 @@ export const buildSchema = ({
     {
       id: 'approvedToReceive',
       field: 'approvedToReceive',
-      title: 'form.builder.site.inforation.grid.heading.approved.to.receive',
+      title: 'form.builder.site.information.grid.heading.approved.to.receive',
       filterable: false,
       template: (props) => <ApprovedToReceiveCell {...props} onClick={onRowClick} />,
       width: 150,

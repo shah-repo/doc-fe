@@ -19,12 +19,12 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelected((prevSelected) => !prevSelected);
-    setFieldValue('sameAsHQ', !selected);
+    setFieldValue('isSameAsHQ', !selected);
     onSameAsHQ?.(!selected, values);
   };
 
   useEffect(() => {
-    setSelected(values.sameAsHQ);
+    setSelected(values.isSameAsHQ);
   }, [values]);
 
   return (
@@ -64,7 +64,7 @@ export const SiteAddressCell: React.FC<CustomSiteTemplateProps> = (props) => {
     <Grid container spacing={2} direction="row" alignItems="center">
       <Grid item>
         <Tooltip arrow placement="top" title={translate('customer.site.information.same.as.hq.label')} PopperProps={{ style: { zIndex: 2000 } }} >
-          <span><SwitchControl checked={dataItem?.sameAsHQ} label="" disabled /></span>
+          <span><SwitchControl checked={dataItem?.isSameAsHQ} label="" disabled /></span>
         </Tooltip>
       </Grid>
       <Grid item className={classes.sideAddress}>

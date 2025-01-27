@@ -39,6 +39,8 @@ interface OwnProps {
 
 type AuditPresenterProps = OwnProps;
 
+type SiteInformationFieldType = 'site' | 'contact';
+
 const SERVER_OWNED = 'Server Automation';
 const CUSTOM_BOOLEAN_FIELD = 'custom_boolean_field';
 
@@ -239,61 +241,77 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           });
         }
       }
+
       // SITE INFOMRATION
       if (fbType === 'siteInformations') {
         const changeField = change.field.split('.');
-        const field = changeField.at(-1) as string;
-        const parentField = changeField.at(-2) as string;
+        const field = changeField.at(-1) ?? '';
+        const parentField = changeField.at(-2) ?? '';
+
         if (['id', 'primary'].includes(field)) {
           return;
         }
+
         if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
-          if (parentField.startsWith('siteContact')) {
-            let fieldFullName = ['docId', 'value'].includes(field) ? parentField : field;
-            fieldFullName = getSiteInformationsFieldName(fieldFullName, 'contact');
-            const fieldName = translate(`form.builder.contact.grid.heading.${fieldFullName}`);
-            fbLabel = translate('form.builder.contact.grid.heading.audit.item', {
-              label: `${fbLabel as string} Contact`,
-              field: fieldName,
-            });
-          } else {
-            let fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
-            fieldFullName = getSiteInformationsFieldName(fieldFullName, 'site');
-            const fieldName = translate(`form.builder.site.inforation.grid.heading.${fieldFullName}`);
-            fbLabel = translate('form.builder.site.inforation.grid.heading.audit.item', {
-              label: fbLabel as string,
-              field: fieldName,
-            });
-          }
+          const isSiteContact = parentField.startsWith('siteContact');
+          const context = isSiteContact ? 'contact' : 'site';
+
+          let fieldFullName = ['docId', 'value', ...(isSiteContact ? [] : ['name'])].includes(field)
+            ? parentField
+            : field;
+          fieldFullName = getSiteOrContactFullName(fieldFullName, context);
+
+          const headingKey = isSiteContact
+            ? `form.builder.contact.grid.heading.${fieldFullName}`
+            : `form.builder.site.information.grid.heading.${fieldFullName}`;
+          const fieldName = translate(headingKey);
+
+          const labelContext = isSiteContact ? 'Contact' : '';
+          const auditKey = isSiteContact
+            ? 'form.builder.contact.grid.heading.audit.item'
+            : 'form.builder.site.information.grid.heading.audit.item';
+
+          fbLabel = translate(auditKey, {
+            label: `${fbLabel as string} ${labelContext}`.trim(),
+            field: fieldName,
+          });
         }
-        if (change.type === 'BOOLEAN_NEW' || change.type === 'BOOLEAN_EDITED') {
+
+        if (['BOOLEAN_NEW', 'BOOLEAN_EDITED'].includes(change.type)) {
           change = {
             ...change,
             field: CUSTOM_BOOLEAN_FIELD,
           };
         }
       }
+
       // SITE ADDRESS
       if (fbType === 'headquarterAddress') {
-        if (change.field.endsWith('_city')) {
-          fbLabel = `${fbLabel as string} ${translate('form.builder.site.inforation.grid.heading.city')}`;
-        } else if (change.field.endsWith('_country')) {
-          fbLabel = `${fbLabel as string} ${translate('form.builder.site.inforation.grid.heading.country')}`;
-        } else if (change.field.endsWith('_zip_code')) {
-          fbLabel = `${fbLabel as string} ${translate('form.builder.site.inforation.grid.heading.zip.code')}`;
+        const fieldMap: Record<string, string> = {
+          _city: 'form.builder.site.information.grid.heading.city',
+          _country: 'form.builder.site.information.grid.heading.country',
+          _zip_code: 'form.builder.site.information.grid.heading.zip.code',
+        };
+
+        const fieldKey = Object.keys(fieldMap).find((key) => change.field.endsWith(key));
+        if (fieldKey) {
+          fbLabel = `${fbLabel as string} ${translate(fieldMap[fieldKey])}`;
         }
       }
+
       // SHIPPING ADDRESS
       if (fbType === 'shippingAddress') {
-        const changeField = change.field.split('.');
-        const field = changeField.at(-1) as string;
-        if (['id'].includes(field)) {
-          return;
-        }
-        if (changeField.includes('shipping_address_attention') || changeField.includes('shipping_address_contact')) {
+        const changeFieldParts = change.field.split('.');
+        const field = changeFieldParts.at(-1);
+
+        if (field === 'id'
+            || changeFieldParts.some(part =>
+              ['shipping_address_attention', 'shipping_address_contact'].includes(part),
+            )) {
           return;
         }
       }
+
       // SHIPPING ITEMS
       if (fbType === 'shippingItems') {
         const changeField = change.field.split('.');
@@ -793,23 +811,21 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
   }
 };
 
-const getSiteInformationsFieldName = (field: string, type: string): string => {
-  if (type === 'site') {
-    const fields = {
+const getSiteOrContactFullName = (field: string, type: SiteInformationFieldType): string => {
+  const fieldMappings: Record<SiteInformationFieldType, Record<string, string>> = {
+    site: {
       siteName: 'site.name',
       siteAddress: 'site.address',
       zipCode: 'zip.code',
       approvedToReceive: 'approved.to.receive',
-      sameAsHQ: 'same.as.hq',
-    };
-    return fields[field] || field;
-  } else if (type === 'contact') {
-    const fields = {
+      isSameAsHQ: 'same.as.hq',
+    },
+    contact: {
       phoneNumber: 'phone.number',
-    };
-    return fields[field] || field;
-  }
-  return field;
+    },
+  };
+
+  return fieldMappings[type]?.[field] || field;
 };
 
 export default AuditPresenter;

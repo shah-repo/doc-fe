@@ -15,7 +15,7 @@ export interface SchemaOptions {
 
 export interface SiteContactProps {
   dataItem: Site
-  disabled?: boolean
+  isDisabled?: boolean
   name: string
   sites: Site[]
   setSites: React.Dispatch<React.SetStateAction<EditableSite[]>>

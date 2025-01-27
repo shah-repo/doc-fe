@@ -129,7 +129,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       siteAddress: isSameAsHQ ? hqAddress?.headquarter_address || '' : '',
       city: isSameAsHQ ? hqAddress?.headquarter_address_city || '' : '',
       country: isSameAsHQ ? hqAddress?.headquarter_address_country || '' : '',
-      sameAsHQ: isSameAsHQ,
+      isSameAsHQ: isSameAsHQ,
     });
   }, [workspaceState?.formInput, editedSite]);
 
@@ -160,7 +160,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const DetailComponent = memo((props: GridDetailRowProps) => {
     return (
-      <SiteContact {...props} name={name} sites={sites} setSites={setSites} disabled={disabled} />
+      <SiteContact {...props} name={name} sites={sites} setSites={setSites} isDisabled={disabled} />
     );
   });
 

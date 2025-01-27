@@ -40,12 +40,7 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
 
   const renderOptions = (): CustomOptionType[] => {
     return options.map((item) => ({
-      label: translate('form.builder.shipping.items.label',
-        {
-          docId: item.document?.docId,
-          displayRevision: item?.displayRevision,
-          name: item?.name,
-        }),
+      label: `${item.document?.docId} Rev ${item?.displayRevision ?? ''} - ${item?.name ?? ''}`.trim(),
       docId: item.document?.docId,
       revision: item?.displayRevision,
       value: item.id,

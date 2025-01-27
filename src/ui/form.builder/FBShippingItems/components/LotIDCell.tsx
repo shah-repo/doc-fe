@@ -46,11 +46,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
 
   const renderOptions = (): CustomOptionType[] => {
     return options.map((lot) => ({
-      label: translate('form.builder.shipping.items.label', {
-        docId: lot.document.docId,
-        displayRevision: lot?.displayRevision,
-        name: lot?.name,
-      }),
+      label: `${lot.document.docId} Rev ${lot?.displayRevision ?? ''} - ${lot?.name ?? ''}`.trim(),
       value: lot.id,
       docId: lot.document?.docId,
       documentId: lot.document?.id,
