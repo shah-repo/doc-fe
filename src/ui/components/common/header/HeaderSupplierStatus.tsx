@@ -71,11 +71,13 @@ const HeaderSupplierStatus: React.FC<Props> = ({ documentRevision }) => {
     { status: nextStatus.current },
   );
 
+  const emptyStatusLabel = translate('form.builder.supplier.status.default.label');
+
   return (
     <>
       <HeaderStatusButton
         onItemSelect={confirmUpdate}
-        label={statusLabel ?? ''}
+        label={statusLabel ?? emptyStatusLabel}
         options={options}
         disabled={!isSupplierStatusEditable}
         data-cy="supplier-status"
