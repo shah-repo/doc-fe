@@ -4,7 +4,7 @@ import Colors from '../../layout/theme/utils/colors';
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     checkboxHolder: {
-      margin: 0,
+      margin: theme.spacing(0, 0, 2.5, 0),
       '& .MuiTypography-root': {
         fontWeight: 'normal',
         fontSize: 14,

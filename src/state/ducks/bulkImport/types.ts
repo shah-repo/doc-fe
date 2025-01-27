@@ -290,6 +290,7 @@ export interface BulkImportCustom extends BulkImport {
   progress?: number
   icons?: IconsBk[]
   date?: string
+  currentProgressStep: number
 }
 
 export interface BulkImport {
@@ -362,6 +363,7 @@ interface BkProcess {
   process: Process[]
   totalSteps: number
   step?: number
+  totalExcelErrors?: number
 }
 
 interface OriginalHeader {
@@ -453,4 +455,12 @@ export interface LogEntry extends Partial<Audit> {
   companyId: string
   attachmentId: string | null
   ownerEmail: string
+}
+
+export enum BkIconStatus {
+  check = 'check',
+  progress = 'progress',
+  warning = 'warning',
+  blank = 'blank',
+  skip = 'skip',
 }

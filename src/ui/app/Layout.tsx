@@ -18,6 +18,7 @@ import ChangeRequestListContainer from '../change.request/grid/container';
 import WatermarkFooterContainer from '../components/watermarkFooter/container';
 import {
   ASYNC_TASKS_URL,
+  BULK_IMPORT_EDIT_URL,
   BULK_IMPORT_PROGRESS_URL,
   BULK_IMPORT_URL,
   BULK_MIGRATION_URL,
@@ -184,6 +185,10 @@ const Layout: React.FunctionComponent = () => {
             path={BULK_MIGRATION_URL}
             component={BulkMigrationPage}
             exact
+          />
+          <Route
+            path={BULK_IMPORT_EDIT_URL}
+            component={BulkImportPage}
           />
           <Route
             path={USER_GROUP_URL}

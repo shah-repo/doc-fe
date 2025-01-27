@@ -7,10 +7,13 @@ import {
 import { Form, Formik } from 'formik';
 import React, { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { createBulkImport, getDataTypes, getFormDocumentsTypeGroup, setIsLoading } from '../../../../state/ducks/bulkImport/actions';
 import { getDataTypeSelectList, getFormDocumentsTypeGroupSelectList } from '../../../../state/ducks/bulkImport/selectors';
+import { BulkImport } from '../../../../state/ducks/bulkImport/types';
 import Text from '../../../components/Text';
 import SelectField from '../../../components/forms/fields/Select';
+import { BULK_IMPORT_EDIT_BASE_URL } from '../../../constants/urls';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import StepTitle from '../StepTitle';
@@ -29,12 +32,14 @@ interface ImportDetailFormProps {
 
 const ImportDetailForm: React.FC<ImportDetailFormProps> = ({ children, handleNext }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles();
   const createBulkImportAction = useActionCreator(createBulkImport);
   const async = useAsync({
-    onSuccess: (complete?) => {
-      if (complete) {
+    onSuccess: (bk?: BulkImport) => {
+      if (bk) {
         handleNext();
+        history.push(`${BULK_IMPORT_EDIT_BASE_URL}${bk?.id}`);
       }
     },
   });

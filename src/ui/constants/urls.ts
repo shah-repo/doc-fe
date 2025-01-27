@@ -71,6 +71,8 @@ export const BULK_IMPORT_URL = '/bulk_import/create';
 export const BULK_MIGRATION_URL = '/bulk_migration';
 
 export const BULK_IMPORT_PROGRESS_URL = '/bulk_import';
+export const BULK_IMPORT_EDIT_BASE_URL = `${BULK_IMPORT_PROGRESS_URL}/edit/`;
+export const BULK_IMPORT_EDIT_URL = `${BULK_IMPORT_EDIT_BASE_URL}:bulkImportId`;
 
 export const LIFE_CYCLE_URL = '/lifecycle';
 export const SUPPLIERS_URL = '/supplier';

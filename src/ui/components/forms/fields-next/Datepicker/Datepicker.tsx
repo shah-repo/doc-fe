@@ -5,7 +5,7 @@ import { InputAdornment, PopoverProps, TextFieldProps, useFormControl } from '@m
 import formControlState from '@material-ui/core/FormControl/formControlState';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import cx from 'classnames';
-import { omit } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -25,25 +25,51 @@ const PROPS_TO_SKIP: Array<keyof TextFieldProps> = [
   'helperText',
 ];
 
-const DatepickerTextField: React.FC<TextFieldProps> = ({
+type customTextFieldProps = TextFieldProps & {
+  onClear?: () => void
+};
+
+const DatepickerTextField: React.FC<customTextFieldProps> = ({
   onKeyDown,
+  onClear,
   InputProps,
   ...props
 }) => {
   const classes = useInputStyles();
   const suitableProps = omit(props, ...PROPS_TO_SKIP);
+  const onDateClear = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    onClear?.();
+  };
+  const isClearVisible = onClear && !isEmpty(props.value);
 
   return (
     <TextField
-      onKeyDown={(e) => onKeyDown && onKeyDown(e as React.KeyboardEvent<HTMLDivElement>)}
+      onKeyDown={(e) =>
+        onKeyDown && onKeyDown(e as React.KeyboardEvent<HTMLDivElement>)
+      }
       {...suitableProps}
       {...InputProps}
       endAdornment={
         <InputAdornment
           position="end"
-          className={cx({ [classes.endAdorment]: !props.disabled, [classes.endAdormentDisabled]: props.disabled })}
+          className={cx({
+            [classes.endAdorment]: !props.disabled,
+            [classes.endAdormentDisabled]: props.disabled,
+          })}
         >
-          <FontAwesomeIcon icon={regular('calendar-day')} />
+          {isClearVisible && (
+            <FontAwesomeIcon
+              className={classes.clear}
+              data-cy="date-clear"
+              icon={regular('xmark')}
+              onClick={onDateClear}
+            />
+          )}
+          <FontAwesomeIcon
+            data-cy="calendar-day"
+            icon={regular('calendar-day')}
+          />
         </InputAdornment>
       }
     />
@@ -70,6 +96,7 @@ const Datepicker: React.FC<DatePickerProps> = ({
   variant = 'inline',
   PopoverProps,
   onBlur,
+  onClear,
   ...props
 }) => {
   const intl = useIntl();
@@ -121,7 +148,7 @@ const Datepicker: React.FC<DatePickerProps> = ({
         format={format}
         error={controlState.error}
         disabled={controlState.disabled}
-        TextFieldComponent={DatepickerTextField}
+        TextFieldComponent={(dataProps: customTextFieldProps) => <DatepickerTextField {...dataProps} onClear={onClear} />}
         PopoverProps={finalPopoverProps}
         rightArrowIcon={<FontAwesomeIcon icon={regular('angle-right')} />}
         leftArrowIcon={<FontAwesomeIcon icon={regular('angle-left')} />}
