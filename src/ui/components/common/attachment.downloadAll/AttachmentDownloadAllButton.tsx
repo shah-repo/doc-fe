@@ -65,10 +65,12 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
 
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const downloadAllAttachments = useActionCreator(attachmentsActions.downloadAllAttachments);
+  const downloadSelectedAttachments = useActionCreator(attachmentsActions.downloadSelectedAttachments);
   const downloadAllAttachmentsPassword = useActionCreator(attachmentsActions.downloadAllAttachmentsPassword);
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
   const selectedAttachmentsCount = Object.values(selectedAttachments || {}).filter(value => value === true).length;
+  const attachments = selectedAttachments && Object.keys(selectedAttachments).filter(key => selectedAttachments[key]);
   const classes = styles({ isAttachmentEmpty });
 
   const async = useAsync<AttachmentDownloadResponse>({
@@ -118,6 +120,19 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     }
   };
 
+  const handleSelectedDownload = (documentRevisionId: string, attachments: string[], password: string | undefined) => () => {
+    if (isDocumentRevisionInDraft(docRevStatus)) {
+      setIsDownloading(true);
+      async.start(downloadSelectedAttachments, documentRevisionId, attachments, async);
+    } else if (!containsRedline && isDocumentRevisionInStatusFlag(docRevStatus)) {
+      setIsDownloading(true);
+      async.start(downloadSelectedAttachments, documentRevisionId, attachments, async);
+    } else {
+      setIsDownloading(true);
+      redlineWarningDialogHandler.open();
+    }
+  };
+
   const closeDialog = () => {
     redlineWarningDialogHandler.close();
     setIsDownloading(false);
@@ -145,7 +160,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       <Tooltip title={translate(toolTipText)}>
       <label
         htmlFor="button-file"
-        onClick={handleAllDownload(docRevId, undefined)}>
+        onClick={selectedAttachmentsCount === 0 || selectedAttachmentsCount === documentRevision?.attachments?.length ? handleAllDownload(docRevId, undefined) : handleSelectedDownload(docRevId, attachments ?? [], undefined)}>
         <Link
           className={classes.link}
           component="span"

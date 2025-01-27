@@ -152,10 +152,10 @@ const AttachmentTable: React.FC<Props> = ({
   }, [selectedAttachments]);
 
   React.useEffect(() => {
-    setAttachmentsData(documentRevision.attachments);
-  }, [documentRevision.attachments]);
+    setAttachmentsData(documentRevision?.attachments);
+  }, [documentRevision?.attachments]);
 
-  if(isEmpty(documentRevision.attachments)) {
+  if(isEmpty(documentRevision?.attachments)) {
     return null;
   }
 
