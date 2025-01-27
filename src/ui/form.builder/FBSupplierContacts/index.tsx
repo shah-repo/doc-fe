@@ -76,7 +76,6 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
 
   const createDraftContact = () => setEditedContact({
     id: uuidv4(),
-    isPrimary: contacts.length === 0,
     [MODE_FIELD]: Mode.add,
   });
 
