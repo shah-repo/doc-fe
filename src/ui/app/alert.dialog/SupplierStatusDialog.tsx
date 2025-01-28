@@ -1,17 +1,14 @@
-import { Box, Button, Chip, DialogContent, DialogContentText, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
-import React from 'react';
-
-import { Dialog } from '../../components/dialogs';
-import { DialogHandler } from '../../hooks/useDialog';
-import { styles } from './AlertDialog.styles';
-
+import { Box, Button, Chip, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-
 import WarningIcon from '@material-ui/icons/Warning';
 import cx from 'classnames';
+import React from 'react';
+import { Dialog } from '../../components/dialogs';
 import Text from '../../components/Text';
 import { IApprovalErrorResponse, IItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
+import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
+import { styles } from './AlertDialog.styles';
 
 interface Props {
   confirmAction: (values?) => void
@@ -72,7 +69,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                 && <Box className={classes.chipBox}>
                   {
                     data.errorItems.map((errorItem, index) => (
-                      <Chip label={getItemDetail(errorItem)} variant="outlined" />
+                      <Chip label={getItemDetail(errorItem)} variant="outlined" key={index} />
                     ))
                   }
                 </Box>
@@ -86,18 +83,6 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                     ))
                   }
                 </Box>
-              }
-              {
-                data.msgs.length > 0
-                && <List dense={true} className={classes.topSpacing}>
-                  {
-                    data.msgs.map((msg: string, index: number) => (
-                      <ListItem className={classes.alertDiv} key={index}>
-                        <ListItemText primary={msg} />
-                      </ListItem>
-                    ))
-                  }
-                </List>
               }
             </Grid>
           </Grid>
