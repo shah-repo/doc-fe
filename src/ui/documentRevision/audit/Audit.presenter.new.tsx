@@ -27,6 +27,7 @@ import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import { styles } from './Audit.presenter.styles.new';
+import { handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -38,8 +39,6 @@ interface OwnProps {
 }
 
 type AuditPresenterProps = OwnProps;
-
-type SiteInformationFieldType = 'site' | 'contact';
 
 const SERVER_OWNED = 'Server Automation';
 const CUSTOM_BOOLEAN_FIELD = 'custom_boolean_field';
@@ -242,102 +241,128 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
 
-      // SITE INFOMRATION
       if (fbType === 'siteInformations') {
-        const changeField = change.field.split('.');
-        const field = changeField.at(-1) ?? '';
-        const parentField = changeField.at(-2) ?? '';
-
-        if (['id', 'isPrimary'].includes(field)) {
-          return;
-        }
-
-        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
-          const isSiteContact = parentField.startsWith('siteContact');
-          const context = isSiteContact ? 'contact' : 'site';
-
-          let fieldFullName = ['docId', 'value', ...(isSiteContact ? [] : ['name'])].includes(field)
-            ? parentField
-            : field;
-          fieldFullName = getSiteOrContactFullName(fieldFullName, context);
-
-          const headingKey = isSiteContact
-            ? `form.builder.contact.grid.heading.${fieldFullName}`
-            : `form.builder.site.information.grid.heading.${fieldFullName}`;
-          const fieldName = translate(headingKey);
-
-          const labelContext = isSiteContact ? 'Contact' : '';
-          const auditKey = isSiteContact
-            ? 'form.builder.contact.grid.heading.audit.item'
-            : 'form.builder.site.information.grid.heading.audit.item';
-
-          fbLabel = translate(auditKey, {
-            label: `${fbLabel as string} ${labelContext}`.trim(),
-            field: fieldName,
-          });
-        }
-
-        if (['BOOLEAN_NEW', 'BOOLEAN_EDITED'].includes(change.type)) {
-          change = {
-            ...change,
-            field: CUSTOM_BOOLEAN_FIELD,
-          };
+        const result = handleSiteInformationChange(change, fbLabel);
+        if (result) {
+          ({ change, fbLabel } = result);
         }
       }
 
-      // SITE ADDRESS
       if (fbType === 'headquarterAddress') {
-        const fieldMap: Record<string, string> = {
-          _city: 'form.builder.site.information.grid.heading.city',
-          _country: 'form.builder.site.information.grid.heading.country',
-          _zip_code: 'form.builder.site.information.grid.heading.zip.code',
-        };
-
-        const fieldKey = Object.keys(fieldMap).find((key) => change.field.endsWith(key));
-        if (fieldKey) {
-          fbLabel = `${fbLabel as string} ${translate(fieldMap[fieldKey])}`;
+        const result = handleSiteAddressChange(change, fbLabel);
+        if (result) {
+          ({ change, fbLabel } = result);
         }
       }
 
-      // SHIPPING ADDRESS
       if (fbType === 'shippingAddress') {
-        const changeFieldParts = change.field.split('.');
-        const field = changeFieldParts.at(-1);
-
-        if (field === 'id'
-            || changeFieldParts.some(part =>
-              ['shipping_address_attention', 'shipping_address_contact'].includes(part),
-            )) {
-          return;
-        }
+        const result = handleShippingAddressChange(change);
+        if (!result) return;
       }
 
-      // SHIPPING ITEMS
       if (fbType === 'shippingItems') {
-        const changeField = change.field.split('.');
-        const field = changeField.at(-1) as string;
-        const parentField = changeField.at(-2) as string;
-        if (['id', 'documentId'].includes(field)) {
-          return;
-        }
-        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
-          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
-          const fieldName = translate(`form.builder.shipping.items.${fieldFullName}`);
-          if (change.type === 'OBJECT_DELETED') {
-            if (change.field.endsWith('part') || change.field.endsWith('lot')) {
-              const value = JSON.parse(change.previousValue as string) as DocumentRevision;
-              const fieldLabel = change.field.endsWith('part') ? translate('Part') : translate('Lot');
-              fbLabel = `${fbLabel as string} ${fieldLabel}`;
-              change = {
-                ...change,
-                previousValue: value?.name,
-              };
-            }
-          } else {
-            fbLabel = `${fbLabel as string} ${fieldName}`;
-          }
+        const result = handleShippingItemsChange(change, fbLabel);
+        if (result) {
+          ({ change, fbLabel } = result);
         }
       }
+
+      // SITE INFOMRATION
+      // if (fbType === 'siteInformations') {
+      //   const changeField = change.field.split('.');
+      //   const field = changeField.at(-1) ?? '';
+      //   const parentField = changeField.at(-2) ?? '';
+
+      //   if (['id', 'isPrimary'].includes(field)) {
+      //     return;
+      //   }
+
+      //   if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+      //     const isSiteContact = parentField.startsWith('siteContact');
+      //     const context = isSiteContact ? 'contact' : 'site';
+
+      //     let fieldFullName = ['docId', 'value', ...(isSiteContact ? [] : ['name'])].includes(field)
+      //       ? parentField
+      //       : field;
+      //     fieldFullName = getSiteOrContactFullName(fieldFullName, context);
+
+      //     const headingKey = isSiteContact
+      //       ? `form.builder.contact.grid.heading.${fieldFullName}`
+      //       : `form.builder.site.information.grid.heading.${fieldFullName}`;
+      //     const fieldName = translate(headingKey);
+
+      //     const labelContext = isSiteContact ? 'Contact' : '';
+      //     const auditKey = isSiteContact
+      //       ? 'form.builder.contact.grid.heading.audit.item'
+      //       : 'form.builder.site.information.grid.heading.audit.item';
+
+      //     fbLabel = translate(auditKey, {
+      //       label: `${fbLabel as string} ${labelContext}`.trim(),
+      //       field: fieldName,
+      //     });
+      //   }
+
+      //   if (['BOOLEAN_NEW', 'BOOLEAN_EDITED'].includes(change.type)) {
+      //     change = {
+      //       ...change,
+      //       field: CUSTOM_BOOLEAN_FIELD,
+      //     };
+      //   }
+      // }
+
+      // // SITE ADDRESS
+      // if (fbType === 'headquarterAddress') {
+      //   const fieldMap: Record<string, string> = {
+      //     _city: 'form.builder.site.information.grid.heading.city',
+      //     _country: 'form.builder.site.information.grid.heading.country',
+      //     _zip_code: 'form.builder.site.information.grid.heading.zip.code',
+      //   };
+
+      //   const fieldKey = Object.keys(fieldMap).find((key) => change.field.endsWith(key));
+      //   if (fieldKey) {
+      //     fbLabel = `${fbLabel as string} ${translate(fieldMap[fieldKey])}`;
+      //   }
+      // }
+
+      // // SHIPPING ADDRESS
+      // if (fbType === 'shippingAddress') {
+      //   const changeFieldParts = change.field.split('.');
+      //   const field = changeFieldParts.at(-1);
+
+      //   if (field === 'id'
+      //       || changeFieldParts.some(part =>
+      //         ['shipping_address_attention', 'shipping_address_contact'].includes(part),
+      //       )) {
+      //     return;
+      //   }
+      // }
+
+      // // SHIPPING ITEMS
+      // if (fbType === 'shippingItems') {
+      //   const changeField = change.field.split('.');
+      //   const field = changeField.at(-1) ?? '';
+      //   const parentField = changeField.at(-2) ?? '';
+      //   if (['id', 'documentId'].includes(field)) {
+      //     return;
+      //   }
+      //   if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+      //     const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
+      //     const fieldName = translate(`form.builder.shipping.items.${fieldFullName}`);
+      //     if (change.type === 'OBJECT_DELETED') {
+      //       if (change.field.endsWith('part') || change.field.endsWith('lot')) {
+      //         const value = JSON.parse(change.previousValue as string) as DocumentRevision;
+      //         const fieldLabel = change.field.endsWith('part') ? translate('Part') : translate('Lot');
+      //         fbLabel = `${fbLabel as string} ${fieldLabel}`;
+      //         change = {
+      //           ...change,
+      //           previousValue: value?.name,
+      //         };
+      //       }
+      //     } else {
+      //       fbLabel = `${fbLabel as string} ${fieldName}`;
+      //     }
+      //   }
+      // }
       // LOT TRANSFERS
       if (fbType === 'lotTransfers') {
         const fieldParts = change.field.split('.');
@@ -809,23 +834,6 @@ const getLhrSummaryRowIdentifier = (change: Audit): string => {
   } catch (error) {
     return '';
   }
-};
-
-const getSiteOrContactFullName = (field: string, type: SiteInformationFieldType): string => {
-  const fieldMappings: Record<SiteInformationFieldType, Record<string, string>> = {
-    site: {
-      siteName: 'site.name',
-      siteAddress: 'site.address',
-      zipCode: 'zip.code',
-      approvedToReceive: 'approved.to.receive',
-      isSameAsHQ: 'same.as.hq',
-    },
-    contact: {
-      phoneNumber: 'phone.number',
-    },
-  };
-
-  return fieldMappings[type]?.[field] || field;
 };
 
 export default AuditPresenter;
