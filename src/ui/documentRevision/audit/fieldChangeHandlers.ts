@@ -3,13 +3,14 @@ import { Audit } from '../../../state/ducks/audit/types';
 
 type SiteInformationFieldType = 'site' | 'contact';
 type FBLabel = string | Record<string, unknown>;
+export const CUSTOM_BOOLEAN_FIELD = 'custom_boolean_field';
 
 export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel) => {
   const changeField = change.field.split('.');
   const field = changeField.at(-1) ?? '';
   const parentField = changeField.at(-2) ?? '';
 
-  if (['id', 'isPrimary'].includes(field)) return { change, fbLabel };
+  if (['id', 'isPrimary'].includes(field)) return;
 
   if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
     const isSiteContact = parentField.startsWith('siteContact');
@@ -44,7 +45,7 @@ export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel) => 
   if (['BOOLEAN_NEW', 'BOOLEAN_EDITED'].includes(change.type)) {
     change = {
       ...change,
-      field: 'CUSTOM_BOOLEAN_FIELD',
+      field: CUSTOM_BOOLEAN_FIELD,
     };
   }
 
@@ -112,7 +113,7 @@ export const handleShippingItemsChange = (change: Audit, fbLabel: FBLabel) => {
   const field = changeField.at(-1) ?? '';
   const parentField = changeField.at(-2) ?? '';
 
-  if (['id', 'documentId'].includes(field)) return { change, fbLabel };
+  if (['id', 'documentId'].includes(field)) return;
 
   if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
     const fieldFullName = ['docId', 'value', 'name'].includes(field)

@@ -27,7 +27,7 @@ import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import { styles } from './Audit.presenter.styles.new';
-import { handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
+import { CUSTOM_BOOLEAN_FIELD, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -41,7 +41,6 @@ interface OwnProps {
 type AuditPresenterProps = OwnProps;
 
 const SERVER_OWNED = 'Server Automation';
-const CUSTOM_BOOLEAN_FIELD = 'custom_boolean_field';
 
 const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
@@ -245,7 +244,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const result = handleSiteInformationChange(change, fbLabel);
         if (result) {
           ({ change, fbLabel } = result);
-        }
+        } else return;
       }
 
       if (fbType === 'headquarterAddress') {
@@ -264,7 +263,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const result = handleShippingItemsChange(change, fbLabel);
         if (result) {
           ({ change, fbLabel } = result);
-        }
+        } else return;
       }
 
       // SITE INFOMRATION
