@@ -85,7 +85,7 @@ export const handleShippingAddressChange = (change: Audit) => {
   return { change };
 };
 
-export const getSiteOrContactFullName = (
+const getSiteOrContactFullName = (
   field: string,
   type: SiteInformationFieldType,
 ): string => {
