@@ -39,7 +39,7 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
 
     const fetchShippingAddressAsync = useAsync({
       onSuccess: (data?: DocumentRevision) => {
-        const siteAddress = data?.formInput?.site_informations as ShippingAddress[];
+        const siteAddress = data?.formInput?.siteInformations as ShippingAddress[];
         if (isEmpty(siteAddress)) {
           return;
         }

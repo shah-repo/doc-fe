@@ -17,7 +17,7 @@ const AuditSiteInformations: React.FC<Props> = ({
 }) => {
   const field = audit.field.split('.').at(-1) as string;
   const auditFieldFactory: Record<string, () => ReactNode> = {
-    site_informations: () => {
+    siteInformations: () => {
       if (audit.type === 'ARRAY_DELETED') {
         try {
           const data = JSON.parse(auditValue as string) as Site;
