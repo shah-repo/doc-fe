@@ -259,7 +259,8 @@ export interface GeneralSettingsState extends GeneralSettings, AsyncState {
 
 export enum PremiumFeature {
   AI = 'AI',
-  Reports = 'REPORTS',
+  Analytics = 'ANALYTICS',
+  OCR = 'OCR',
 }
 
 export interface SubscriptionPayload {

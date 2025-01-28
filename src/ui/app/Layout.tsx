@@ -5,10 +5,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
-import { getHasPermission, hasActiveSubscription } from '../../common/utils/selectors';
 import { authSelectors } from '../../state/ducks/auth';
-import { Permission } from '../../state/ducks/auth/types';
-import { PremiumFeature } from '../../state/ducks/company/types';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import PremiumFeaturesPage from '../administration/premium.settings';
@@ -75,12 +72,6 @@ const Layout: React.FC = () => {
     setIsSidebarExpanded(prev => !prev);
   };
   const canAccessNavigation = useSelector(authSelectors.hasCompanies);
-
-  // TODO. Example. Remove before the merge
-  const isAISubscriptionEnabled = useSelector(hasActiveSubscription(PremiumFeature.AI));
-  const hasAIPermission = useSelector(getHasPermission(Permission.AI_SUBSCRIPTION));
-  const canUseAiWidget = isAISubscriptionEnabled && hasAIPermission;
-  console.log({ canUseAiWidget });
 
   return (
     <>
