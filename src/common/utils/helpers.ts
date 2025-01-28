@@ -54,11 +54,7 @@ const translate = {
 };
 const translateRe = new RegExp(`&(${Object.keys(translate).join('|')});`, 'g');
 export const convertHtmlEntities = (html: string): string => {
-  if (typeof html !== 'string') {
-    return html;
-  }
-
-  return html.replace(translateRe, (match: string, entity: string): string => {
+  return html.replace(translateRe, (_, entity: string): string => {
     return translate[entity];
   });
 };

@@ -32,7 +32,7 @@ export const TextFieldCellTemplate: React.FC<CustomSiteTemplateProps> = (props) 
   }
 
   const handleClick = () => onClick?.({ dataItem });
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
+  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER);
 
   return (
     <OverflowContent onClick={handleClick}>
