@@ -180,8 +180,8 @@ const AnnouncementDetailsDialog: React.FC<{
                 disabled={isAnyConflictingElementsUnResolved}> { isSubmitting ? 'Upgrading Form Rev' : 'Upgrade Form' } </Button>
               <InfoIndicator
                 type={IndicatorTypeEnum.INFO}
-                text={`A new Form revision would be created with combining these new elements with the existing schema.<i>This Rev would be created in Draft</i>.
-              <br /><br /> Kindly preview it, & make the necessary changes before approving & releasing it. <br /><br /> Once created, please use <b>Bulk Migration</b> to select this revision, set up <b>Mapping Rules</b> and preview the changes.`} />
+                text={`A new Form revision would be created with combining these new elements with the existing schema.This Rev would be created in Draft.
+              <br /><br /> Kindly preview it, make the necessary changes before approving and releasing it. <br /><br /> Once created, please use <b>Bulk Migration</b> to select this revision, set up <b>Mapping Rules</b> and preview the changes.`} />
             </Box>
             }
             { !announcement.canUpgradeForm
