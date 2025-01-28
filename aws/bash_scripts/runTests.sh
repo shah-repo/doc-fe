@@ -14,7 +14,7 @@ source "${ENVIRONMENT_DIR}/test.env"
 set +o allexport
 
 echo "-------- Generate fake server info -------"
-cat >> "${BITBUCKET_CLONE_DIR}/src/data/buildInfo.json" <<EOF
+cat >> "${BITBUCKET_CLONE_DIR}/src/data/buildInfo.json" <<EOF 
 {
 "Repository": "sample",
 "Branch": "sample",
