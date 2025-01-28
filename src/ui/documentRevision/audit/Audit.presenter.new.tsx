@@ -248,7 +248,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const field = changeField.at(-1) ?? '';
         const parentField = changeField.at(-2) ?? '';
 
-        if (['id', 'primary'].includes(field)) {
+        if (['id', 'isPrimary'].includes(field)) {
           return;
         }
 

@@ -81,10 +81,10 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
             item.phoneNumber?.trim() ? item.phoneNumber : null,
           ].filter(Boolean).join(' '),
         };
-        if (item.attention) {
+        if (item.isAttention) {
           contacts.attention = contact;
         }
-        if (item.shipping) {
+        if (item.isShipping) {
           contacts.shipping = contact;
         }
 

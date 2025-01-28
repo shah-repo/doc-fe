@@ -28,9 +28,9 @@ export interface Contact {
   name: string
   email: string
   other: string
-  primary: boolean
-  shipping: boolean
-  attention: boolean
+  isPrimary: boolean
+  isShipping: boolean
+  isAttention: boolean
   phoneNumber: string
 }
 

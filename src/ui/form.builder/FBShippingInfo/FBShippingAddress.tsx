@@ -10,8 +10,8 @@ import { Contact, FBShippingAddressProps } from './types';
 
 const FBShippingAddress: React.FC<FBShippingAddressProps> = ({ options, handleChange, value, isLoading, disabled, isShippingAddressEmpty }) => {
   const classes = styles();
-  const attention = find(value?.siteContact, { attention: true });
-  const shipping = find(value?.siteContact, { shipping: true });
+  const attention = find(value?.siteContact, { isAttention: true });
+  const shipping = find(value?.siteContact, { isShipping: true });
 
   const renderInfoCardDetails = (
     type: string,

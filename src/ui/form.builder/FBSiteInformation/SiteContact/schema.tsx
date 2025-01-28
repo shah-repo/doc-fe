@@ -19,7 +19,7 @@ export const buildSchema = ({
       id: 'isPrimary',
       field: 'isPrimary',
       filterable: false,
-      title: 'form.builder.contact.grid.heading.primary',
+      title: 'form.builder.contact.grid.heading.isPrimary',
       template: (props) => (
         <PrimaryCell
           {...props}
@@ -32,7 +32,7 @@ export const buildSchema = ({
     {
       id: 'isShipping',
       field: 'isShipping',
-      title: 'form.builder.contact.grid.heading.shipping',
+      title: 'form.builder.contact.grid.heading.isShipping',
       filterable: false,
       template: (props) => (
         <PrimaryCell
@@ -46,7 +46,7 @@ export const buildSchema = ({
     {
       id: 'isAttention',
       field: 'isAttention',
-      title: 'form.builder.contact.grid.heading.attention',
+      title: 'form.builder.contact.grid.heading.isAttention',
       filterable: false,
       template: (props) => (
         <PrimaryCell

@@ -22,7 +22,7 @@ export const buildSchema = ({
       id: 'isPrimary',
       field: 'isPrimary',
       filterable: false,
-      title: 'form.builder.site.information.grid.heading.primary',
+      title: 'form.builder.site.information.grid.heading.isPrimary',
       template: (props) => (
         <PrimaryCell
           isActive={false}
