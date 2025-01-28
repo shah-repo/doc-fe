@@ -9,4 +9,5 @@ export const getTableCriteria = (tableName: string) => (reduxState: ApplicationS
 export const getTableData = (tableName: string) => (reduxState: ApplicationState) => tableSearchSelectors.getTableData(reduxState, tableName);
 export const getHasPermission = (permission: Permission) => (reduxState: ApplicationState): boolean => authSelectors.getHasPermission(reduxState, permission);
 export const getCurrentUserTags = () => (reduxState: ApplicationState) => authSelectors.currentEmployeeTags(reduxState);
+// ts-unused-exports:disable-next-line
 export const hasActiveSubscription = (subscriptionType: PremiumFeature) => (reduxState: ApplicationState): boolean => companySelectors.hasActiveSubscription(reduxState, subscriptionType);
