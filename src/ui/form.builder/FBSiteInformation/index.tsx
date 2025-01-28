@@ -46,14 +46,14 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       const sites: EditableSite[]
         = workspaceState?.formInput?.[name] ?? [];
       const updatedSite = omit(values, FIELDS_TO_OMIT);
-      updatedSite.primary = updatedSite.primary ?? false;
+      updatedSite.isPrimary = updatedSite.isPrimary ?? false;
 
       const toggleExclusiveFields = (
         contact: EditableSite,
       ) => ({
         ...contact,
         zipCode: Number(contact.zipCode),
-        primary: updatedSite.primary ? false : contact.primary,
+        isPrimary: updatedSite.isPrimary ? false : contact.isPrimary,
       });
 
       const updatedSites = isAddition
@@ -80,7 +80,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const createSite = () => setEditedSite({
     id: uuidv4(),
-    primary: sites.length === 0,
+    isPrimary: sites.length === 0,
     [MODE_FIELD]: Mode.add,
   });
 

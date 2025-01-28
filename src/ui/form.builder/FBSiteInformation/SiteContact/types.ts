@@ -23,9 +23,9 @@ export interface SiteContactProps {
 
 export interface siteContact {
   id: string
-  primary: boolean
-  shipping: boolean
-  attention: boolean
+  isPrimary: boolean
+  isShipping: boolean
+  isAttention: boolean
   name: string
   email: string
   phoneNumber: string

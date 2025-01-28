@@ -16,8 +16,8 @@ export const buildSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<EditableSiteContact>> => {
   return [
     {
-      id: 'primary',
-      field: 'primary',
+      id: 'isPrimary',
+      field: 'isPrimary',
       filterable: false,
       title: 'form.builder.contact.grid.heading.primary',
       template: (props) => (
@@ -30,8 +30,8 @@ export const buildSchema = ({
       width: 80,
     },
     {
-      id: 'shipping',
-      field: 'shipping',
+      id: 'isShipping',
+      field: 'isShipping',
       title: 'form.builder.contact.grid.heading.shipping',
       filterable: false,
       template: (props) => (
@@ -44,8 +44,8 @@ export const buildSchema = ({
       width: 80,
     },
     {
-      id: 'attention',
-      field: 'attention',
+      id: 'isAttention',
+      field: 'isAttention',
       title: 'form.builder.contact.grid.heading.attention',
       filterable: false,
       template: (props) => (

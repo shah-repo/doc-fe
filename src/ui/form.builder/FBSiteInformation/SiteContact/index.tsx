@@ -47,17 +47,17 @@ const SiteContact: React.FC<SiteContactProps> = ({
     onSubmit: (values: Partial<EditableSiteContact>) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedSite = omit(values, FIELDS_TO_OMIT);
-      updatedSite.primary = updatedSite.primary ?? false;
-      updatedSite.attention = updatedSite.attention ?? false;
-      updatedSite.shipping = updatedSite.shipping ?? false;
+      updatedSite.isPrimary = updatedSite.isPrimary ?? false;
+      updatedSite.isAttention = updatedSite.isAttention ?? false;
+      updatedSite.isShipping = updatedSite.isShipping ?? false;
 
       const toggleExclusiveFields = (
         contact: EditableSiteContact | siteContact,
       ) => ({
         ...contact,
-        primary: updatedSite.primary ? false : contact.primary,
-        shipping: updatedSite.shipping ? false : contact.shipping,
-        attention: updatedSite.attention ? false : contact.attention,
+        isPrimary: updatedSite.isPrimary ? false : contact.isPrimary,
+        isShipping: updatedSite.isShipping ? false : contact.isShipping,
+        isAttention: updatedSite.isAttention ? false : contact.isAttention,
       });
 
       const updatedSiteContacts = isAddition
@@ -94,7 +94,7 @@ const SiteContact: React.FC<SiteContactProps> = ({
   const createSiteContact = () =>
     setEditedSite({
       id: uuidv4(),
-      primary: siteContact.length === 0,
+      isPrimary: siteContact.length === 0,
       [MODE_FIELD]: Mode.add,
     });
 

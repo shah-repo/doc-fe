@@ -26,7 +26,7 @@ export type FBSiteProps =
 
 export interface Site {
   id: string
-  primary: boolean
+  isPrimary: boolean
   isSameAsHQ: boolean
   siteName: string
   siteAddress: string

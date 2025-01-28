@@ -19,8 +19,8 @@ export const buildSchema = ({
 }: SchemaOptions): Array<ColumnDefinition<EditableSite>> => {
   return [
     {
-      id: 'primary',
-      field: 'primary',
+      id: 'isPrimary',
+      field: 'isPrimary',
       filterable: false,
       title: 'form.builder.site.information.grid.heading.primary',
       template: (props) => (
