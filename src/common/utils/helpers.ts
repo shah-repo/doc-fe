@@ -53,10 +53,22 @@ const translate = {
   gt: '>',
 };
 const translateRe = new RegExp(`&(${Object.keys(translate).join('|')});`, 'g');
-export const convertHtmlEntities = (html: string): string => {
-  return html.replace(translateRe, (_, entity: string): string => {
-    return translate[entity];
-  });
+export const convertHtmlEntities = (input: string | string[]): string => {
+  if (typeof input === 'string') {
+    return input.replace(translateRe, (_, entity: string): string => {
+      return translate[entity] || `&${entity};`;
+    });
+  }
+
+  if (Array.isArray(input)) {
+    return input.map((item) =>
+      typeof item === 'string'
+        ? item.replace(translateRe, (_, entity: string): string => translate[entity] || `&${entity};`)
+        : item,
+    ).join(',');
+  }
+
+  return '';
 };
 
 export const theme = Config.Theme;
