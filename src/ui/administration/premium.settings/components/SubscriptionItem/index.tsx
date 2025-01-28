@@ -38,7 +38,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
             </div>
           </div>
           <Tooltip
-            title={translate('administration.premium.features.info')}
+            title={translate(`administration.premium.features.${key}.info`)}
             arrow
             placement="right"
             className={classes.subscriptionInfo}
