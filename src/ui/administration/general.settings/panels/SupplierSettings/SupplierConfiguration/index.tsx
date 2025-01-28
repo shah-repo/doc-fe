@@ -31,11 +31,6 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
 
   const discardSupplierConfiguration = () => setEditedSupplierConfiguration(undefined);
 
-  const deleteSupplierConfiguration = (dataItem: EditableSupplierConfig) => {
-    const updateSupplierConfiguration = supplierConfiguration?.filter((config) => config.id !== dataItem.id);
-    setSupplierConfiguration(updateSupplierConfiguration);
-  };
-
   const updateASLStatusSettings = useActionCreator(
     companyActions.updateGeneralSettings,
   );
@@ -160,6 +155,11 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
   const dataCyGenerator = (SupplierConfig: EditableSupplierConfig) => ({
     'data-cy': `row-${kebabCase(SupplierConfig.text)}`,
   });
+
+  const deleteSupplierConfiguration = (dataItem: EditableSupplierConfig) => {
+    const updatedSupplierConfiguration = supplierConfiguration?.filter((config) => config.id !== dataItem.id);
+    updateSupplierConfiguration(updatedSupplierConfiguration ?? []);
+  };
 
   const schema = buildSchema({
     isActive,
