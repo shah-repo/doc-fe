@@ -81,7 +81,6 @@ const FBShippingAddress: React.FC<FBShippingAddressProps> = ({ options, handleCh
               value={value}
               data-cy="shipping-address-field"
               getOptionLabel={(option: OptionType) => option.label}
-              size="small"
               loading={isLoading}
             />
           </Grid>

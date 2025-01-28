@@ -19,6 +19,7 @@ import { getHasPermission } from '../../common/utils/selectors';
 import { getPOIndexDbInstance } from '../../indexDb';
 import { authSelectors } from '../../state/ducks/auth';
 import { Permission } from '../../state/ducks/auth/types';
+import { Approval } from '../../state/ducks/common/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { DOC_TYPE_GROUP } from '../../state/ducks/documentRevisions/documentType/types';
 import { Document, DocumentRevision, DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from '../../state/ducks/documentRevisions/types';
@@ -56,7 +57,7 @@ import { Translation } from '../translations/types';
 import WOClose from './forms/presenters/Close';
 import ExportToEmail from './forms/presenters/export.to.email/ExportToEmail';
 import GenerateHtmlPreview from './forms/presenters/GenerateHtmlPreview';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, checkIsTypeHaveOutput } from './helpers/checkDocumentGroup';
 import { canCreateNewVersion, canCreateOutput } from './helpers/documentRevisionPermissions';
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionObsolete, isDocumentRevisionReleased, isDocumentRevisionVoided } from './helpers/documentRevisionStatus';
 import { useIsLatestRevision } from './helpers/useIsLatestRevision';
@@ -129,8 +130,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isLot = documentRevision?.document?.documentType?.group === DOC_TYPE_GROUP.LOT;
   const isEB = checkIsDocumentEB(groupOptions);
   const isWO = checkIsDocumentWO(groupOptions);
+  const isShipping = checkIsDocumentShipping(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isWORecord = isWO && !hasOutput;
+  const isShippingRecord = isShipping && !hasOutput;
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
 
@@ -492,7 +495,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (showEditButton) {
     accessableButtons.push(PreviewControlButtons.EditPartButton);
   }
-  if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise && !isWORecord) {
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise && !isWORecord && !isShippingRecord) {
     accessableButtons.push(PreviewControlButtons.CloneButton);
   }
   if (!isLastVersionObsolete() && hasAccess && canCreate() && isPO && showUpdate
@@ -638,11 +641,15 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       }
     </>
   );
-  const isWOCloseEnabled = isWORecord && documentRevision?.approvals?.some((approval) => approval.status === ApprovalStatus.Pending);
+  const hasPendingApprovals = documentRevision?.approvals?.some(
+    (approval: Approval) => approval.status === ApprovalStatus.Pending,
+  );
   const loggedInUser = store.getState().auth.user;
   const isDocOwner = documentRevision?.owner.id === loggedInUser.employeeId;
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
   const isLatestRevision = useIsLatestRevision(documentRevision);
+  const isCloseDisabled = ((isWORecord || isShippingRecord) && hasPendingApprovals)
+    || !isDocOwner;
 
   return (
     <>
@@ -657,7 +664,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       </>
       {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
-      {isWORecord && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isWOCloseEnabled || !isDocOwner} />}
+      {(isWORecord || isShippingRecord) && isStatusInReview && <WOClose woId={documentRevision.id} label={translate('common.close')} isDisabled={isCloseDisabled} />}
       <>
         {hasAccess && canCreate() && isPO
           && documentRevision?.id
