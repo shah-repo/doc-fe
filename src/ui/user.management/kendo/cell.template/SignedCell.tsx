@@ -1,15 +1,15 @@
-import { Link } from '@material-ui/core';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link, Tooltip } from '@material-ui/core';
 import { GridCellProps } from '@progress/kendo-react-grid';
+import cx from 'classnames';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { translate } from '../../../../common/intl';
 import { authActions } from '../../../../state/ducks/auth';
-import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
-import Tooltip from '../../../components/common/kendo/Tooltip';
-import { toastInfo } from '../../../components/notifications';
-import Text from '../../../components/Text';
+import { toastError, toastInfo } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import { styles } from './styles';
+import useStyles from './styles';
 
 export const SignedCell = ({
   rowType,
@@ -18,10 +18,8 @@ export const SignedCell = ({
   style,
   className,
   columnIndex,
-}: GridCellProps) => {
-  const classes = styles();
-  const intl = useIntl();
-  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+}: GridCellProps): React.ReactElement | null => {
+  const classes = useStyles();
   const getResendSignupEmailAction = useActionCreator(
     authActions.resendSignupEmail,
   );
@@ -31,53 +29,46 @@ export const SignedCell = ({
 
   const asyncSignUpEmail = useAsync({
     onSuccess: () => {
-      toastInfo(getTranslatedText('user.management.signup.email.sent'));
+      toastInfo(translate('user.management.signup.email.sent'));
     },
+    onError: toastError,
   });
 
   const asyncResetPasswordEmail = useAsync({
     onSuccess: () => {
-      toastInfo(getTranslatedText('user.management.reset.password.email.sent'));
+      toastInfo(translate('user.management.reset.password.email.sent'));
     },
+    onError: toastError,
   });
-
-  const handleResendEmail = ({ user, id }: GetEmployeeResponse) => {
-    !user?.confirmed
-      ? asyncSignUpEmail.start(
-        getResendSignupEmailAction,
-          user?.email,
-          asyncSignUpEmail,
-      )
-      : asyncResetPasswordEmail.start(
-        getSendPasswordResetEmailAction,
-        id,
-        asyncResetPasswordEmail,
-      );
-  };
 
   if (rowType === 'groupHeader') {
     return null;
   }
-  const getChildrenElement = (
-    <span>
-      {dataItem?.user?.confirmed && !dataItem?.user?.locked ? (
-        <Text translation="user.management.signed.up" />
-      ) : (
-        <Link
-          component="button"
-          variant="body2"
-          onClick={() => handleResendEmail(dataItem)}
-        >
-          <span className={classes.link}>
-            <Text translation={!dataItem?.user?.confirmed
-              ? 'user.management.resend.signup.email'
-              : 'reset.password'
-            } />
-          </span>
-        </Link>
-      )}
-    </span>
-  );
+
+  const isLocked = Boolean(dataItem.user?.locked);
+  const isConfirmed = Boolean(dataItem.user?.confirmed);
+
+  const linkMessage = isConfirmed || isLocked ? 'reset.password' : 'user.management.resend.signup.email';
+  const linkText = translate(linkMessage);
+  const statusMessage = isLocked ? 'user.locked' : isConfirmed ? 'user.confirmed' : 'user.unconfirmed';
+  const statusText = translate(statusMessage);
+
+  const sendEmail = () => {
+    if (isConfirmed || isLocked) {
+      asyncResetPasswordEmail.start(
+        getSendPasswordResetEmailAction,
+        dataItem.id,
+        asyncResetPasswordEmail,
+      );
+      return;
+    }
+    asyncSignUpEmail.start(
+      getResendSignupEmailAction,
+      { name: dataItem.user?.name, email: dataItem.user?.email },
+      asyncSignUpEmail,
+    );
+  };
+
   return (
     <td
       colSpan={colSpan}
@@ -87,15 +78,31 @@ export const SignedCell = ({
       data-grid-col-index={columnIndex}
     >
       {!dataItem.inEdit && (
-        <Tooltip
-          data={
-            dataItem?.user?.confirmed && !dataItem?.user?.locked
-              ? getTranslatedText('user.management.signed.up')
-              : !dataItem?.user?.confirmed ? getTranslatedText('user.management.resend.signup.email')
-                : getTranslatedText('reset.password')
-          }
-          childrenElement={getChildrenElement}
-        />
+        <div className={classes.statusContainer}>
+          <Tooltip title={statusText}>
+            <FontAwesomeIcon
+              className={cx(classes.statusIcon, {
+                [classes.confirmedIcon]: isConfirmed,
+                [classes.unconfirmedIcon]: !isConfirmed,
+                [classes.lockedIcon]: isLocked,
+              })}
+              icon={
+                isLocked
+                  ? solid('circle-exclamation')
+                  : isConfirmed
+                    ? solid('circle-check')
+                    : solid('circle-ellipsis')
+              }
+            />
+          </Tooltip>
+          <Link
+            component="button"
+            variant="body2"
+            onClick={sendEmail}
+          >
+            <span className={classes.link}>{linkText}</span>
+          </Link>
+        </div>
       )}
     </td>
   );

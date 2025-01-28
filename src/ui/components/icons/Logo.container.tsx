@@ -5,14 +5,14 @@ import { companySelectors } from '../../../state/ducks/company';
 import { ThemeEnv } from '../../layout/theme/utils/types';
 import Logo from './Logo.presenter';
 
-const LogoContainer: React.FunctionComponent<{open: boolean}> = ({ open }) => {
+const LogoContainer: React.FunctionComponent<{isOpen: boolean}> = ({ isOpen }) => {
   const whiteLabeling = useSelector(companySelectors.getWhiteLabeling);
-  const showEnvironment
+  const shouldShowEnvironment
     = theme === ThemeEnv.DEV_THEME
     || theme === ThemeEnv.DEMO_THEME
     || theme === ThemeEnv.SANDBOX_THEME;
   const navigationLogo = whiteLabeling.logo || '/logo_enlil.svg';
-  return <Logo logo={navigationLogo} showEnvironment={showEnvironment} open={open} />;
+  return <Logo logo={navigationLogo} shouldShowEnvironment={shouldShowEnvironment} isOpen={isOpen} />;
 };
 
 export default LogoContainer;
