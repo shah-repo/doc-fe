@@ -52,7 +52,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
         contact: EditableSite,
       ) => ({
         ...contact,
-        zipCode: Number(contact.zipCode),
+        zipCode: contact.zipCode ?? '',
         isPrimary: updatedSite.isPrimary ? false : contact.isPrimary,
       });
 
