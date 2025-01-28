@@ -76,6 +76,16 @@ export default makeStyles((theme: NextTheme) => createStyles({
   dialogIcon: {
     color: Colors.primaryLight,
   },
+  noticeText: {
+    '& p': {
+      whiteSpace: 'pre-wrap',
+      marginBottom: theme.spacing(2.5),
+
+      '&:last-child': {
+        marginBottom: 0,
+      },
+    },
+  },
   [theme.media.mobile]: {
     header: {
       flexWrap: 'wrap',

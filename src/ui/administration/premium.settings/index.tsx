@@ -62,8 +62,15 @@ const PremiumFeaturesContainer: React.FC = () => {
         icon={regular('wand-magic-sparkles')}
         iconClass={classes.dialogIcon}
       >
-        <div data-cy="dialog-message" className={classes.contentText}>
-          {translate('administration.premium.features.info')}
+        <div data-cy="dialog-message" className={classes.noticeText}>
+          {toggledSubscription.current && (
+            <p>
+              {translate(`administration.premium.features.${toggledSubscription.current.type.toLowerCase()}.notice`)}
+            </p>
+          )}
+          <p>
+            {translate('administration.premium.features.notice')}
+          </p>
         </div>
       </AlertDialog>
       <Box className={classes.header}>
