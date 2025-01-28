@@ -64,7 +64,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
           disableClearable
           placeholder={translate('common.select')}
           options={renderOptions()}
-          data-cy="lot-id-cell-field"
+          data-cy="lot-id-field"
           value={value}
           disabled={isUpdateAction}
           getOptionLabel={(option) => option?.label ?? ''}

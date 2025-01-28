@@ -1,16 +1,9 @@
-import {
-  Box,
-  CircularProgress,
-  Popper,
-  TextField,
-} from '@material-ui/core';
-import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { isEmpty, kebabCase } from 'lodash';
 import React, { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
-import { FormikField } from '../../../components/forms/fields-next';
+import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
@@ -31,7 +24,7 @@ interface CustomOptionType extends OptionType {
 }
 
 const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
-  const { values, setFieldValue } = useFormikContext<EditableShippingItem>();
+  const { values, setFieldValue, getFieldProps } = useFormikContext<EditableShippingItem>();
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
 
   const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
@@ -53,58 +46,18 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
   return (
     <FormikField name={field}>
       <Autocomplete
-        {...{ onChange }}
+        blurOnSelect
+        {...getFieldProps(field)}
         key={isEmpty(values) ? 'disabled' : 'enabled'}
-        value={value}
         options={renderOptions()}
-        getOptionLabel={(option) => option.label ?? ''}
-        disabled={isUpdateAction}
-        size="small"
-        renderInput={(params: RenderInputParams) => (
-          <Box display="flex">
-            <Box width="100%" data-cy="reference-items">
-              <TextField
-                {...params}
-                fullWidth
-                variant="outlined"
-                placeholder={translate('common.select')}
-                InputProps={{
-                  ...params.InputProps,
-                  style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
-                  startAdornment: <div>{params.InputProps.startAdornment}</div>,
-                  endAdornment: (
-                    <>
-                      {loading && (
-                        <CircularProgress color="inherit" size={16} />
-                      )}
-                      {params.InputProps.endAdornment}
-                    </>
-                  ),
-                }}
-                inputProps={{
-                  ...params.inputProps,
-                  style: { padding: '4.5px 0' },
-                }}
-              />
-            </Box>
-          </Box>
-        )}
-        PopperComponent={({ style, ...props }) => (
-          <Popper
-            {...props}
-            modifiers={[
-              {
-                name: 'flip',
-                options: {
-                  fallbackPlacements: [],
-                },
-              },
-            ]}
-            style={{ ...style }}
-          />
-        )}
-        renderOption={(option) => option.label}
         disableClearable
+        placeholder={translate('common.select')}
+        disabled={isUpdateAction}
+        onChange={onChange}
+        value={value}
+        data-cy="item-id-field"
+        getOptionLabel={(option: OptionType) => option.label ?? ''}
+        size="small"
         loading={loading}
       />
     </FormikField>

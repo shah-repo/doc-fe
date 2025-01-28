@@ -1,8 +1,9 @@
-import { Box, CircularProgress, Grid, TextField, Typography } from '@material-ui/core';
-import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { find, isEmpty } from 'lodash';
 import React from 'react';
 import { translate } from '../../../common/intl';
+import { Autocomplete } from '../../components/forms/fields-next';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
 import styles from './FBShippingAddress.styles';
 import { withFBShippingAddress } from './FBShippingAddress.wrap';
 import { Contact, FBShippingAddressProps } from './types';
@@ -70,43 +71,18 @@ const FBShippingAddress: React.FC<FBShippingAddressProps> = ({ options, handleCh
               {translate('form.builder.record.shipping.info.label.shipping.address')}
             </Typography>
             <Autocomplete
+              blurOnSelect
               key={isEmpty(options) ? 'disabled' : 'enabled'}
               options={options}
-              getOptionLabel={(option) => option.label ?? ''}
-              loading={isLoading}
-              disabled={disabled}
               disableClearable
+              placeholder={translate('common.select')}
+              disabled={disabled}
               onChange={handleChange}
               value={value}
-              renderInput={(params: RenderInputParams) => (
-                <Box display="flex">
-                  <Box width="100%">
-                    <TextField
-                      {...params}
-                      fullWidth
-                      variant="outlined"
-                      disabled={disabled}
-                      placeholder={translate('common.select')}
-                      InputProps={{
-                        ...params.InputProps,
-                        style: { padding: '0px 30px 0px 9px', borderRadius: 3 },
-                        startAdornment: <div>{params.InputProps.startAdornment}</div>,
-                        endAdornment: (
-                          <>
-                            {isLoading && (
-                              <CircularProgress color="inherit" size={16} />
-                            )}
-                            {params.InputProps.endAdornment}
-                          </>
-                        ),
-                      }}
-                      inputProps={{
-                        ...params.inputProps,
-                      }}
-                    />
-                  </Box>
-                </Box>
-              )}
+              data-cy="shipping-address-field"
+              getOptionLabel={(option: OptionType) => option.label}
+              size="small"
+              loading={isLoading}
             />
           </Grid>
           {!isShippingAddressEmpty && <Grid xs={6}>
