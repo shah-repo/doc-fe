@@ -1,6 +1,7 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress, createStyles, Link, makeStyles, Theme, Tooltip } from '@material-ui/core';
+import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
@@ -139,6 +140,10 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   };
 
   const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === documentRevision?.attachments?.length ? 'common.download.all.files' : 'common.download.selected.files';
+
+  if(isEmpty(documentRevision?.attachments)) {
+    return null;
+  }
 
   return (
     <>

@@ -78,9 +78,9 @@ const downloadSelectedAttachments = (
   attachmentIds: string[],
   handlers: Handlers<AttachmentDownloadResponse>,
 ): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-  url: `${ATTACHMENT_ROOT_URL}/${docRevId}/downloadAttachments`,
+  url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_attachments`,
   method: 'get',
-  params: { attachmentIds },
+  params: { attachmentIds: JSON.stringify(attachmentIds) },
   handlers,
 });
 
