@@ -58,7 +58,10 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   });
 
   const handleDelete = () => {
-    const filtered = documentRevision?.attachments?.filter((item) => !selectedAttachmentsData.includes(item.id));
+    let filtered = documentRevision?.attachments?.filter((item) => !selectedAttachmentsData.includes(item.id));
+    if(selectedAttachmentsCount === 0) {
+      filtered = [];
+    }
     setIsDownloading(true);
     async.start(
       deleteAttachmentsAction,
