@@ -18,8 +18,9 @@ import { documentTypeSelectors } from '../../state/ducks/documentRevisions/docum
 import { DocumentType } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, LotStatus, Reference, RevisionChangeType } from '../../state/ducks/documentRevisions/types';
 import { BOMTreeData, RELATED_PARTS_STATUS } from '../../state/ducks/relatedParts/types';
+import { ASLStatus } from '../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
-import { getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
+import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
@@ -43,12 +44,13 @@ interface OwnProps {
   dataCy?: string
   revIdRelatedTypeObj?: { [key: string]: IRevIdMapper }
   lifecyclePhaseOptions?: LifecyclePahseOptionPayload[]
+  aslStatusOptions?: ASLStatus[]
 }
 
 type Props = OwnProps;
 
 const AuditFactory: React.FunctionComponent<Props> = ({
-  audit, dataCy, revIdRelatedTypeObj, lifecyclePhaseOptions,
+  audit, dataCy, revIdRelatedTypeObj, lifecyclePhaseOptions, aslStatusOptions,
 }) => {
   let returnValue;
   const intl = useIntl();
@@ -903,6 +905,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case 'lifecyclePhaseId':
         returnValue = (<div data-cy={dataCy}>{getLCPAuditDefaultValue(audit, lifecyclePhaseOptions)}</div>);
+        break;
+      case 'supplierStatusId':
+        returnValue = (<div data-cy={dataCy}>{getASLStatusAuditDefaultValue(audit, aslStatusOptions)}</div>);
         break;
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);

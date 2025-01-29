@@ -9,11 +9,12 @@ import { MomentFormats, getFormattedDateString } from '../../../common/utils/dat
 import { Audit, AuditGroupType, LifecyclePahseOptionPayload } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { companyActions } from '../../../state/ducks/company';
-import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
+import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { PO_ITEMS_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
 import { LCPDocRevOptions } from '../../administration/general.settings/panels/LCP/components/Grid/types';
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import Text from '../../components/Text';
@@ -69,11 +70,25 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     onError: toastError,
   });
 
+  const [aslStatusOptions, setOptions] = useState<ASLStatus[]>([]);
+  const fetchASLTypes = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
+
+  const supplierTypesAsync = useAsync<ASLStatus[]>({
+    onSuccess: (aslStatusList) => {
+      setOptions(aslStatusList ?? []);
+    },
+    onError: toastError,
+  });
+
   useEffect(() => {
     fetchLCPDocTypesAsync.start(
       fetchDocRevOptions,
       docTypeId,
       fetchLCPDocTypesAsync,
+    );
+    supplierTypesAsync.start(
+      fetchASLTypes,
+      supplierTypesAsync,
     );
   }, []);
 
@@ -531,6 +546,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   dataCy={`change-value-${groupKey}-${key}`}
                   revIdRelatedTypeObj={revIdRelatedTypeObj}
                   lifecyclePhaseOptions={lifecyclePhaseOptions}
+                  aslStatusOptions={aslStatusOptions}
                 />
               </div>
             )}
@@ -598,6 +614,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               dataCy={`change-value-${change.groupKey}-${change.index}`}
               revIdRelatedTypeObj={revIdRelatedTypeObj}
               lifecyclePhaseOptions={lifecyclePhaseOptions}
+              aslStatusOptions={aslStatusOptions}
             />
           </div>
         ))}
