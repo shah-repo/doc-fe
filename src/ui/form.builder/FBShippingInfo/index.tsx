@@ -4,12 +4,12 @@ import React from 'react';
 import { translate } from '../../../common/intl';
 import { Autocomplete } from '../../components/forms/fields-next';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
-import styles from './FBShippingAddress.styles';
-import { withFBShippingAddress } from './FBShippingAddress.wrap';
+import useStyles from './styles';
 import { Contact, FBShippingAddressProps } from './types';
+import { withFBShippingAddress } from './wrap';
 
 const FBShippingAddress: React.FC<FBShippingAddressProps> = ({ options, handleChange, value, isLoading, disabled, isShippingAddressEmpty }) => {
-  const classes = styles();
+  const classes = useStyles();
   const attention = find(value?.siteContact, { isAttention: true });
   const shipping = find(value?.siteContact, { isShipping: true });
 
