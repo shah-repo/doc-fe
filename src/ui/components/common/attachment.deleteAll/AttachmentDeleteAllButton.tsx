@@ -73,7 +73,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
 
   const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === documentRevision.attachments.length ? 'common.delete.all.files' : 'common.delete.selected.files';
 
-  if(isEmpty(documentRevision.attachments)) {
+  if(isEmpty(documentRevision?.attachments)) {
     return null;
   }
 
