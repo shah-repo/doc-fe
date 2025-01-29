@@ -12,7 +12,7 @@ import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { FB } from '../../helpers';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableShippingItem } from '../types';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface Props extends CustomTemplateProps {
   loading: boolean
@@ -29,7 +29,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableShippingItem>();
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const { part } = values ?? {};
-  const classes = styles();
+  const classes = useStyles();
 
   useEffect(() => {
     if (!FB.isUUID(part?.id)) {
@@ -78,7 +78,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
 };
 
 export const LotIDCell: React.FC<Props> = (props) => {
-  const classes = styles();
+  const classes = useStyles();
   const { field, dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 

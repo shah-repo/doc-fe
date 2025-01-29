@@ -10,7 +10,7 @@ import OverflowTooltip from '../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableShippingItem, PartOption } from '../types';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface Props extends CustomTemplateProps {
   loading: boolean
@@ -65,7 +65,7 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
 };
 
 export const ItemIDcell: React.FC<Props> = (props) => {
-  const classes = styles();
+  const classes = useStyles();
   const { field, dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 

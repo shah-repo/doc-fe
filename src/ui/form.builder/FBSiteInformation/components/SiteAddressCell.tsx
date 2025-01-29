@@ -9,7 +9,7 @@ import OverflowContent from '../../../components/OverflowContent';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomSiteTemplateProps, EditableSite } from '../types';
-import styles from './styles';
+import useStyles from './styles';
 
 const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -48,7 +48,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
 
 export const SiteAddressCell: React.FC<CustomSiteTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
-  const classes = styles();
+  const classes = useStyles();
   const isEditMode
     = dataItem[MODE_FIELD]
     && [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
