@@ -1,11 +1,13 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { DialogHandler } from '../../hooks/useDialog';
 import { Translation } from '../../translations/types';
 import { DialogProps } from './Dialog.types';
+
 export interface AlertDialogProps extends Omit<DialogProps, 'open'> {
   handler: DialogHandler
   title?: Translation
   warning?: boolean
   isCancelButtonHidden?: boolean
-  icon?: any
+  icon?: IconProp
   iconClass?: string
 }
