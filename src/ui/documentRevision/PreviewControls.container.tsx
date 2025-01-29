@@ -438,10 +438,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     />
   </>);
 
-  const renderWOWithdrawButton = (renderAsButton: boolean) => {
-    const label: Translation = 'wo.withdraw.button.label';
-    const alertMessage: Translation = 'wo.withdraw.alert';
-    const dataCy = 'wo-withdraw-alert-button';
+  const renderWithdrawButton = (renderAsButton: boolean) => {
+    const type = isShipping ? 'shipping' : 'wo';
+    const alertMessage: Translation = `${type}.withdraw.alert`;
+    const dataCy = `${type}-withdraw-alert-button`;
+    const label: Translation = 'common.withdraw';
 
     return (
       <>
@@ -515,12 +516,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (!isEmailSent && !hasAccess) {
     accessableButtons.push(PreviewControlButtons.RequestAccess);
   }
-  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && !isWO) {
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && !isWO && !isShipping) {
     accessableButtons.push(PreviewControlButtons.WithdrawSubmission);
   }
 
-  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && isWORecord) {
-    accessableButtons.push(PreviewControlButtons.WOWithdrawButton);
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner && (isWORecord || isShippingRecord)) {
+    accessableButtons.push(PreviewControlButtons.WithdrawButton);
   }
 
   if (isLot) {
@@ -598,8 +599,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         && renderWithdrawSubmissionButton()}
       {buttons.includes(PreviewControlButtons.WithdrawSubmission) && isNewLayout
         && newRenderWithdrawSubmissionButton(renderAsButton)}
-      {buttons.includes(PreviewControlButtons.WOWithdrawButton) && isNewLayout
-        && renderWOWithdrawButton(renderAsButton)}
+      {buttons.includes(PreviewControlButtons.WithdrawButton) && isNewLayout
+        && renderWithdrawButton(renderAsButton)}
       {buttons.includes(PreviewControlButtons.InspectionControl) && (
         <InspectionControlsContainer {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
