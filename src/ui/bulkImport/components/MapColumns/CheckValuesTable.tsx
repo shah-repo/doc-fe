@@ -148,6 +148,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
 // Create an array of mock data items
 const PAGE_SIZES = [12, 24, 50, 100];
 const BUTTON_COUNT = 4;
+const NO_FILTERS_COLUMN = ['REVISION'];
 
 const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleBack, handleCancel, bulkImport }) => {
   const dispatch = useDispatch();
@@ -169,7 +170,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const tableData: TableRowWithIdx[] = useSelector(getTableDataFiltered);
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
-  const triggerNextClick = useActionCreator(patchBulkImport);
+  const patchBulkImportData = useActionCreator(patchBulkImport);
   const excelExportRef = useRef<ExcelExport | null>(null);
   const currentDestination = useRef<string | null>(null);
   const isLoading = useSelector(getIsLoading);
@@ -217,7 +218,15 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
 
   const asyncSetDataTable = useAsync({
     onSuccess: () => {
-      asyncNextClick.start(triggerNextClick, { bulkImportId: bulkImport?.id, data: { process: { step: 3 } } }, asyncNextClick);
+      asyncNextClick.start(patchBulkImportData, { bulkImportId: bulkImport?.id, data: { process: { step: 3, totalExcelErrors: errorCount } } }, asyncNextClick);
+    },
+  });
+
+  const genericAsync = useAsync();
+
+  const asyncSetDataTableErrors = useAsync({
+    onSuccess: () => {
+      genericAsync.start(patchBulkImportData, { bulkImportId: bulkImport?.id, data: { process: { totalExcelErrors: errorCount } } }, genericAsync);
     },
   });
 
@@ -230,11 +239,10 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     handleBack();
   };
 
-  const asyncSaveDataTable = useAsync();
-
   const handleSaveChanges = () => {
     dispatch(setUnsavedChanges(false));
-    asyncSaveDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSaveDataTable);
+    genericAsync.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, genericAsync);
+    asyncSetDataTableErrors.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTableErrors);
   };
 
   const handleCloseLeaveDialog = () => {
@@ -320,6 +328,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     }, 0);
     setErrorCount(count);
     setForceLoading(false);
+    setErrorCount(count);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData, showErrorsOnly]);
 
@@ -369,7 +378,7 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
             onFilterChange={filterChange}
           >
             {(columnOrder.length > 0 ? columnOrder : tableHeadersFiltered).map((key, idx) => (
-              <GridColumn width={150} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
+              <GridColumn width={150} sortable={!NO_FILTERS_COLUMN.includes(key)} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
             ))}
           </StyledKendoGrid>
         </ExcelExport>
