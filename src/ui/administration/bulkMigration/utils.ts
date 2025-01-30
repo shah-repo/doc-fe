@@ -126,7 +126,7 @@ export function autoMapArrays (
       matchingItemsFromLabel = toRevSchemaIndex[fromRevSchemaItem.label.toLocaleLowerCase()];
     }
 
-    const matchingItems: ISchemaItem[] = matchingItemsFromLabel ?? matchingItemsFromName;
+    const matchingItems: ISchemaItem[] = matchingItemsFromLabel ?? matchingItemsFromName ?? [];
 
     for (const matchingItem of matchingItems) {
       if (matchingItem?.name) {
