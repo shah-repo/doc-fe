@@ -1,7 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import { isEmpty } from 'lodash';
 import React from 'react';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
 import AttachmentField from '../../components/common/attachment.icon/container';
 import Text from '../../components/Text';
@@ -13,9 +13,10 @@ export interface Props {
   containsRedline?: boolean
   label?: string
   docRevStatus: DocumentRevisionStatus
+  documentRevision?: DocumentRevision
 }
 
-export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label }) => {
+export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label, documentRevision }) => {
   const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
 
   const onSelectedAttachmentsChange = (selected: {[id: string]: boolean | number[]}) => {
@@ -61,6 +62,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
           <Text message={label || 'common.attachments' } />
         </Typography>
         <AttachmentDownloadAllButton
+          {...{ selectedAttachments, documentRevision }}
           isAttachmentEmpty = {isAttachmentEmpty}
           docRevId = {docRevId ?? ''}
           containsRedline = {containsRedline ?? false}
