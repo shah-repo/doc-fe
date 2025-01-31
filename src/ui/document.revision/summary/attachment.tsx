@@ -6,6 +6,7 @@ import AttachmentDownloadAllButton from '../../components/common/attachment.down
 import AttachmentField from '../../components/common/attachment.icon/container';
 import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
+import AttachmentSelectItems from '../../components/common/attachment.selectedItems/AttachmentSelectItems';
 
 export interface Props {
   isAttachmentEmpty: boolean
@@ -20,10 +21,14 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
   const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
 
   const onSelectedAttachmentsChange = (selected: {[id: string]: boolean | number[]}) => {
-    if(isEmpty(selected)) {
+    if (isEmpty(selected)) {
       return setSelectedAttachments({});
     }
     setSelectedAttachments((prevVal) => ({ ...prevVal, ...selected }));
+  };
+
+  const onClearSelection = () => {
+    setSelectedAttachments({});
   };
 
   const classes = {
@@ -55,12 +60,14 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
       <Text message="common.no.attachments" />
     </Typography>
   );
+
   return (
     <Box pl={0} width="100%">
       <Box display="flex">
         <Typography variant="h6" style = {classes.buttonLeft}>
           <Text message={label || 'common.attachments' } />
         </Typography>
+        <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
         <AttachmentDownloadAllButton
           {...{ selectedAttachments, documentRevision }}
           isAttachmentEmpty = {isAttachmentEmpty}
