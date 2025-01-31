@@ -10,8 +10,10 @@ import { getFormattedDateString, MomentFormats } from '../../../common/utils/dat
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../../ui/components/Text';
+import SupplierStatusDialog from '../../app/alert.dialog/SupplierStatusDialog';
 import { getInitalsFromName } from '../../components/icons/avatar/helpers';
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import { Dialog } from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import Colors from '../../layout/theme/utils/colors';
 import ApprovalsBlock from './ApprovalsBlock';
@@ -24,6 +26,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   isIncluded,
   approvalTransition,
   onApproveClick,
+  onConfirmClick,
   name,
   disabled,
   loading,
@@ -31,6 +34,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   autosave,
   label,
   approvals,
+  errorResponse,
+  supplierStatusDialog,
   currentUser,
   documentStatus,
   dialogState,
@@ -213,6 +218,12 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                   )
                                 }
                               />
+                              {errorResponse && (
+                                <SupplierStatusDialog
+                                  dialog={supplierStatusDialog as Dialog}
+                                  data={errorResponse}
+                                  confirmAction={e => onConfirmClick?.(approval.id)} />
+                              )}
                             </ListItem>
                           );
                         }}

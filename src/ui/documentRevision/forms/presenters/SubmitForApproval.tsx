@@ -85,7 +85,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           toastError(error as string);
           dialog.close();
         }
-      } catch (error) {
+      } catch (err) {
         toastError(error as string);
         dialog.close();
       }

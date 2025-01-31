@@ -9,7 +9,7 @@ export interface FormMessageProps extends FormHelperTextProps {
 
 const FormMessage: React.FunctionComponent<FormMessageProps> = ({ asyncState, ...formHelperTextProps }) => {
   React.useEffect(() => {
-    if (asyncState.message) {
+    if (asyncState.message && asyncState.statusCode !== 412) {
       toastError(asyncState.message);
     }
   }, [asyncState.message]);

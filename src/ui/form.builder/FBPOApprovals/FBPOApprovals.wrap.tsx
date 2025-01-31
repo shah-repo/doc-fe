@@ -2,11 +2,13 @@ import { Box } from '@material-ui/core';
 import { compact, difference, isEmpty, isEqual, map, some } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from '..';
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from '../../../state/ducks/documentRevisions/constants';
 import { RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
+import { IApprovalErrorResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
+import useDialog from '../../hooks/useDialog';
 import Colors from '../../layout/theme/utils/colors';
 import { checkServiceOrProductPartExists } from '../FBPurchaseOrderTable/helpers';
 import FBDataStore from '../FBStore/FBDataStore';
@@ -20,6 +22,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     isIncluded,
     approvalTransition,
     onApproveClick,
+    onConfirmClick,
     name = '',
     loading,
     value,
@@ -39,6 +42,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
+    const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
+    const [password, setPassword] = useState<string>();
+    const supplierStatusDialog = useDialog();
 
     const {
       poApprovalsState,
@@ -78,9 +84,21 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
+    const handleError = (response: IApprovalErrorResponse) => {
+      setErrorResponse(response);
+      supplierStatusDialog.open();
+    };
+
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, ignoreWarning = false) => {
       if (!approvalId) { return; }
-      poApprovalsState?.applyTransition(transition, approvalId, { password });
+      setPassword(password);
+      poApprovalsState?.applyTransition(transition, approvalId, { password }, handleError, ignoreWarning);
+    };
+
+    onConfirmClick = (approvalId: string) => {
+      approvalTransition(FBApprovalsStatusEndpoint.APPROVE, approvalId, password, true);
+      setPassword('');
+      supplierStatusDialog.close();
     };
 
     onApproveClick = (approvalId: string) => {
@@ -191,6 +209,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       isIncluded,
       approvalTransition,
       onApproveClick,
+      onConfirmClick,
       loading,
       name,
       value,
@@ -202,6 +221,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       dialogState,
       disabled,
       disabledOptions,
+      errorResponse,
+      supplierStatusDialog,
     });
   };
 
