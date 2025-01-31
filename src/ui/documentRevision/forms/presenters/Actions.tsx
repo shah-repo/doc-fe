@@ -283,7 +283,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const hasBuildType = Boolean(documentRevision?.formInput?.['lhr-build-type']);
   const isRenderHTMLDefined = documentRevision?.formDocument?.renderHTMLDefined;
   const isShippingOrWO = isWO || isShipping;
-  const showAssignBtn = isShippingOrWO && !(isShippingOrWO && !isEmpty(documentRevision?.formTemplate));
+  const isAssignBtnShown = isShippingOrWO && !(isShippingOrWO && !isEmpty(documentRevision?.formTemplate));
   const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
   const showCancelEditPartButton = isPart && documentRevision?.isBeingEditedAfterRelease
     && documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER
@@ -441,7 +441,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           {...{
             revisionChangeType,
             currentDocumentType,
-            showAssignBtn,
+            isAssignBtnShown,
           }}
         />
       )}
