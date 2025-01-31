@@ -79,7 +79,7 @@ const Layout: React.FunctionComponent = () => {
     setIsSidebarExpanded(prev => !prev);
   };
   const canAccessNavigation = useSelector(authSelectors.hasCompanies);
-  const userName = useSelector(authSelectors.currentUserName);
+  const userName = (useSelector(authSelectors.currentUserName) ?? '').trim();
   const documentMatch = useRouteMatch(DOCUMENT_REVISION_VERSION_URL);
   const companyId = useSelector(companySelectors.companyIdSelector);
   const documentRevisionId = documentMatch?.params?.documentRevisionId;
