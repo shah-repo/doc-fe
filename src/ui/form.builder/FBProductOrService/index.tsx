@@ -58,6 +58,7 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
   useEffect(() => {
     fetchOptionsDataAsync.start(
       fetchASLItems,
+      false,
       fetchOptionsDataAsync,
     );
   }, []);

@@ -22,10 +22,15 @@ interface CustomOptionType extends OptionType{
 }
 
 const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, aslItems }) => {
-  const aslOptions = aslItems?.map((data) => { return { value: data.internalType, label: data.displayLabel, aslStatusId: data.id }; });
+  const aslOptions = (aslItems ?? []).map(
+    (data) => ({ value: data.internalType, label: data.displayLabel, aslStatusId: data.id, isActive: data.isActive }),
+  );
   let value = aslOptions?.find((option) => option.value === dataItem[field]);
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableProductORService>();
   value = aslOptions?.find((option) => option.value === values[field]);
+
+  const filteredAslOptions = aslOptions.filter(data => data.isActive);
+
   const handleChange = (event: ChangeEvent<unknown>, value?: CustomOptionType) => {
     setFieldValue(field, value?.value ?? '');
     setFieldValue('aslStatusId', value?.aslStatusId ?? '');
@@ -39,7 +44,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, aslItems }) =>
         blurOnSelect
         disableClearable
         placeholder={translate('common.select')}
-        options={aslOptions}
+        options={filteredAslOptions}
         value={value}
         getOptionLabel={(option: CustomOptionType) => option.label}
         onChange={handleChange}

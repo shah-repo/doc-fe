@@ -41,7 +41,7 @@ const HeaderSupplierStatus: React.FC<Props> = ({ documentRevision }) => {
   });
 
   useEffect(() => {
-    supplierTypesAsync.start(fetchASLTypes, supplierTypesAsync);
+    supplierTypesAsync.start(fetchASLTypes, true, supplierTypesAsync);
   }, []);
 
   const getSupplierStatusByValue = (supplierStatus?: string) => {
