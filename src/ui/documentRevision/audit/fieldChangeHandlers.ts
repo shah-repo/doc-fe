@@ -1,5 +1,6 @@
 import { translate } from '../../../common/intl';
 import { Audit } from '../../../state/ducks/audit/types';
+import { SHIPPING_ADDRESS_FIELDS } from '../../form.builder/FBShippingInfo/constants';
 
 type SiteInformationFieldType = 'site' | 'contact';
 type FBLabel = string | Record<string, unknown>;
@@ -83,7 +84,7 @@ export const handleShippingAddressChange = (change: Audit): {
   if (
     field === 'id'
     || changeFieldParts.some((part) =>
-      ['shipping_address_attention', 'shipping_address_contact'].includes(part),
+      [SHIPPING_ADDRESS_FIELDS.ATTENTION, SHIPPING_ADDRESS_FIELDS.CONTACT].includes(part),
     )
   ) {
     return null;

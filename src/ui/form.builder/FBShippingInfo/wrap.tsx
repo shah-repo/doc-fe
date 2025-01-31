@@ -7,6 +7,7 @@ import { shippingInfoActions } from '../../../state/ducks/ShippingInformation';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import { SHIPPING_ADDRESS_FIELDS, SHIPPING_CUSTOMER_FIELD } from './constants';
 import { ContactValue, CustomOptionType, FBShippingAddressProps, ShippingAddress } from './types';
 
 export const withFBShippingAddress = <T extends FBShippingAddressProps>(
@@ -20,11 +21,11 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
     const { workspaceState, formState } = FB.useStores();
     const [options, setOptions] = useState<CustomOptionType[]>([]);
     const defaultValue = formState?.getFieldValue(name) ?? '';
-    const shippingAddress = useObserver(() => formState?.getFieldValue('shipping_address') || workspaceState?.formInputSync.get('shipping_address') || workspaceState?.formInput?.shipping_address);
-    const customerId = useObserver(() => formState?.getFieldValue('customer') || workspaceState?.formInputSync.get('customer') || workspaceState?.formInput?.customer);
+    const shippingAddress = useObserver(() => formState?.getFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS) || workspaceState?.formInputSync.get(SHIPPING_ADDRESS_FIELDS.ADDRESS) || workspaceState?.formInput?.shipping_address);
+    const customerId = useObserver(() => formState?.getFieldValue(SHIPPING_CUSTOMER_FIELD) || workspaceState?.formInputSync.get(SHIPPING_CUSTOMER_FIELD) || workspaceState?.formInput?.customer);
     const isCustomerFieldLoading = useObserver(() => workspaceState?.documentRevApi.loading);
-    const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue('customer'));
-    const isShippingAddressEmpty = isEmpty(formState?.getFieldValue('shipping_address'));
+    const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue(SHIPPING_CUSTOMER_FIELD));
+    const isShippingAddressEmpty = isEmpty(formState?.getFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS));
     const fetchAddressesByCustomerId = useActionCreator(
       shippingInfoActions.fetchAddressesByCustomerId,
     );
@@ -91,9 +92,9 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
         return contacts;
       }, { attention: undefined, shipping: undefined });
 
-      formState?.setFieldValue('shipping_address', !isEmpty(value) ? { id: value?.value, name: value?.label } : {});
-      formState?.setFieldValue('shipping_address_attention', !isEmpty(value) ? contacts?.attention : {});
-      formState?.setFieldValue('shipping_address_contact', !isEmpty(value) ? contacts?.shipping : {});
+      formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS, !isEmpty(value) ? { id: value?.value, name: value?.label } : {});
+      formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.ATTENTION, !isEmpty(value) ? contacts?.attention : {});
+      formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.CONTACT, !isEmpty(value) ? contacts?.shipping : {});
       workspaceState?.saveDocRev(formState?.getValues());
     };
 
