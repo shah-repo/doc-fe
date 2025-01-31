@@ -56,7 +56,7 @@ export const SiteAddressCell: React.FC<CustomSiteTemplateProps> = (props) => {
   }
 
   const handleClick = () => onClick?.({ dataItem });
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
+  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER);
 
   return (
     <Grid container spacing={2} direction="row" alignItems="center">
