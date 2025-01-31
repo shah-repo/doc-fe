@@ -398,6 +398,7 @@ export function KendoGrid<T extends any> ({
         });
       }
     }
+    updatedDataState.skip = 0;
     setDateStateAndDispatchByUpdatedState(updatedDataState);
   };
 
