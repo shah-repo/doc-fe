@@ -1,8 +1,9 @@
-import { Box, Button, Chip, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
+import { Box, Button, DialogContent, DialogContentText, Grid, Typography } from '@material-ui/core';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import WarningIcon from '@material-ui/icons/Warning';
 import cx from 'classnames';
 import React from 'react';
+import { translate } from '../../../common/intl';
 import { Dialog } from '../../components/dialogs';
 import Text from '../../components/Text';
 import { IApprovalErrorResponse, IItem } from '../../documentRevision/forms/presenters/SubmitForApproval';
@@ -37,8 +38,12 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
 
   const title: Translation = data.isError ? 'common.alert' : 'common.warning';
 
-  const getItemDetail = (errorItem: IItem) => {
-    return `${errorItem.docId} • ${errorItem.displayRevision} • ${errorItem.phase}`;
+  const getConflictingPhases = (items: IItem[]) => {
+    const itemPhasesSet = new Set(items.map(item => item.phase));
+    const phases: string[] = Array.from(itemPhasesSet).map(phase => `${phase} phase`);
+
+    if (phases.length === 1) return phases[0];
+    return `${phases.slice(0, -1).join(', ')} and ${phases[items.length - 1]}`;
   };
 
   return (
@@ -61,28 +66,25 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
               <Typography data-cy="dialog-header" className={classes.alertTitle}>
                 <Text translation={title} />
               </Typography>
-              <Typography data-cy="dialog-message" className={classes.contentText}>
-                <Text translation="purchaseOrder.supplierStatus.dialog.general" />
-              </Typography>
               {
                 data.errorItems.length > 0
-                && <Box className={classes.chipBox}>
-                  {
-                    data.errorItems.map((errorItem, index) => (
-                      <Chip label={getItemDetail(errorItem)} variant="outlined" key={index} />
-                    ))
-                  }
-                </Box>
+                && <Typography data-cy="dialog-message" className={classes.contentText}>
+                  <Text message={
+                    translate('purchaseOrder.supplierStatus.dialog.general', {
+                      phases: getConflictingPhases(data.errorItems),
+                    })
+                  } />
+                </Typography>
               }
               {
                 data.warningItems.length > 0 && data.errorItems.length === 0
-                && <Box className={classes.chipBox}>
-                  {
-                    data.warningItems.map((errorItem, index) => (
-                      <Chip label={getItemDetail(errorItem)} variant="outlined" key={index} />
-                    ))
-                  }
-                </Box>
+                && <Typography data-cy="dialog-message" className={classes.contentText}>
+                  <Text message={
+                    translate('purchaseOrder.supplierStatus.dialog.general', {
+                      phases: getConflictingPhases(data.warningItems),
+                    })
+                  } />
+                </Typography>
               }
             </Grid>
           </Grid>
