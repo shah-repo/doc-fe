@@ -90,7 +90,23 @@ const Layout: React.FunctionComponent = () => {
       documentRevisionId ?? '',
     ),
   );
-  const attachmentIds = documentRevision?.attachments?.map(item => item.id);
+  const defaultAttachmentIds = documentRevision?.attachments?.map(item => item.id) ?? [];
+  const schema = documentRevision?.formDocument?.formTemplate?.schema ?? [];
+  const formInput = documentRevision?.formInput ?? {};
+  const fileUploadFields = schema
+    .filter(item => item.type === 'fileupload')
+    .map(item => item.name);
+  const uploadedFileIds = fileUploadFields.reduce((acc: string[], name) => {
+    if (!name) {
+      return acc;
+    }
+
+    const ids = (formInput[name] ?? []).map(item => item?.id) as string[];
+    acc.push(...ids);
+
+    return acc;
+  }, []);
+  const attachmentIds = [...defaultAttachmentIds, ...uploadedFileIds].filter(Boolean);
   const widgetRef = useRef<WidgetRef>(null);
 
   global.handleSummarizeAi = (attachmentIds: string[]) => {
