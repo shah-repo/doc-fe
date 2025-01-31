@@ -133,8 +133,8 @@ export const handleShippingItemsChange = (change: Audit, fbLabel: FBLabel): Chan
       if (change.field.endsWith('part') || change.field.endsWith('lot')) {
         const value = JSON.parse(change.previousValue as string);
         const fieldLabel = change.field.endsWith('part')
-          ? translate('Part')
-          : translate('Lot');
+          ? translate('form.builder.part')
+          : translate('form.builder.lot');
         fbLabel = `${fbLabel} ${fieldLabel}`;
         change = {
           ...change,
