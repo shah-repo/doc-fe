@@ -1,9 +1,11 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress, createStyles, Link, makeStyles, Theme, Tooltip } from '@material-ui/core';
+import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
+import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
 import { AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
@@ -121,13 +123,14 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   };
 
   const handleSelectedDownload = (documentRevisionId: string, attachments: string[], password: string | undefined) => () => {
-    if (isDocumentRevisionInDraft(docRevStatus)) {
+    const isRedlineAttachmentExist = documentRevision?.attachments.filter(item => attachments.includes(item.id) && item.lineType === LINE_TYPES.RED_LINE );
+    if (isDocumentRevisionInDraft(docRevStatus) || isEmpty(isRedlineAttachmentExist)) {
       setIsDownloading(true);
       async.start(downloadSelectedAttachments, documentRevisionId, attachments, async);
     } else if (!containsRedline && isDocumentRevisionInStatusFlag(docRevStatus)) {
       setIsDownloading(true);
       async.start(downloadSelectedAttachments, documentRevisionId, attachments, async);
-    } else {
+    } else if(!isEmpty(isRedlineAttachmentExist)) {
       setIsDownloading(true);
       redlineWarningDialogHandler.open();
     }
@@ -139,6 +142,10 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   };
 
   const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === documentRevision?.attachments?.length ? 'common.download.all.files' : 'common.download.selected.files';
+
+  if(isEmpty(documentRevision?.attachments)) {
+    return null;
+  }
 
   return (
     <>

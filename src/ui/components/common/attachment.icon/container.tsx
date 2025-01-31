@@ -290,7 +290,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const noNeedPasswordHandler = (attachment: Attachment) => {
     if (checkIfFileIsViewable(attachment.type)) {
       openFileView();
-      handleDownload(attachment);
       closeContextMenu();
     } else {
       handleDownload(attachment);

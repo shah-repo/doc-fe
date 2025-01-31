@@ -76,7 +76,7 @@ const Attachments: React.FunctionComponent<Props> = ({
         </Typography>
         <Box display="flex" alignItems="center">
         <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
-        <AttachmentDeleteAllButton {...{ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision }} />
+        <AttachmentDeleteAllButton {...{ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision, onSelectedAttachmentsChange }} />
         <AttachmentDownloadAllButton
           {...{ selectedAttachments, documentRevision }}
           isAttachmentEmpty = {isAttachmentEmpty}
