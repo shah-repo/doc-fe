@@ -48,6 +48,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   isRedlineFirst,
   selectedAttachments,
   onSelectedAttachmentsChange,
+  onHeaderChecked,
+  headerChecked,
   ...other
 }) => {
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
@@ -423,7 +425,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       {attachmentsRenderer}
     </div>
     <AttachmentTable
-      {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange }}
+      {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange, onHeaderChecked, headerChecked }}
       onDownloadAttachment={handleDownload}
       onDownloadAsPDF={handleWatermarkRequest}
       onDelete={handleRemove}

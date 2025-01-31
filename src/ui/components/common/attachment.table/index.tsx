@@ -12,7 +12,7 @@ import { DragAndDrop } from '@progress/kendo-react-common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { makeStyles, Theme, createStyles } from '@material-ui/core';
-import { isEmpty, isNull } from 'lodash';
+import { isNull } from 'lodash';
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,20 +67,22 @@ interface Props {
   onDelete?: (attachment: Attachment) => () => any
   selectedAttachments?: { [id: string]: boolean | number[] }
   onSelectedAttachmentsChange?: (selectedAttachments: { [id: string]: boolean | number[] }) => void
+  onHeaderChecked?: (value: boolean) => void
+  headerChecked?: boolean
 }
 
 const AttachmentTable: React.FC<Props> = ({
   documentRevision,
   selectedAttachments,
+  headerChecked = false,
   onDownloadAttachment,
   onDownloadAsPDF,
   onView,
   onDelete,
   onSelectedAttachmentsChange,
+  onHeaderChecked,
 }) => {
   const [attachmentsData, setAttachmentsData] = React.useState(documentRevision?.attachments ?? []);
-  const [headerChecked, setHeaderChecked] = React.useState(false);
-
   const [activeItem, setActiveItem] = React.useState<any | null>(null);
 
   const reorder = (dataItem: any) => {
@@ -102,7 +104,7 @@ const AttachmentTable: React.FC<Props> = ({
   };
 
   const handleHeaderCheckedChange = (event: CheckboxChangeEvent) => {
-    setHeaderChecked(Boolean(event.target.value));
+    onHeaderChecked?.(Boolean(event.target.value));
     if (event.target.value) {
       const checkedItems = {} as { [id: string]: boolean | number[] };
       attachmentsData.forEach(element => {
@@ -129,11 +131,7 @@ const AttachmentTable: React.FC<Props> = ({
     });
     onSelectedAttachmentsChange?.(newSelectedState);
     const selectedAttachmentsCount = Object.values(newSelectedState).filter(value => value === true).length;
-    if (selectedAttachmentsCount === attachmentsData.length) {
-      setHeaderChecked(true);
-    } else {
-      setHeaderChecked(false);
-    }
+    onHeaderChecked?.(selectedAttachmentsCount === attachmentsData.length);
   };
 
   const schema = buildSchema({
@@ -155,10 +153,6 @@ const AttachmentTable: React.FC<Props> = ({
     setAttachmentsData(documentRevision?.attachments);
   }, [documentRevision?.attachments]);
 
-  if(isEmpty(documentRevision?.attachments)) {
-    return null;
-  }
-
   return (
     <MyContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
       <DragAndDrop>
@@ -178,6 +172,7 @@ const AttachmentTable: React.FC<Props> = ({
             mode: 'multiple',
           }}
           onSelectionChange={onSelectionChange}
+          resizable
         />
       </DragAndDrop>
     </MyContext.Provider>

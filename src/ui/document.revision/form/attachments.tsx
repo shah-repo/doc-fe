@@ -52,6 +52,7 @@ const Attachments: React.FunctionComponent<Props> = ({
   const classes = styles();
   const { isVisible, label } = useAttachments(documentTypeId);
   const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
+  const [headerChecked, setHeaderChecked] = React.useState(false);
 
   if (!isVisible) {
     return null;
@@ -59,6 +60,10 @@ const Attachments: React.FunctionComponent<Props> = ({
 
   const onClearSelection = () => {
     setSelectedAttachments({});
+  };
+
+  const onHeaderChecked = (value: boolean) => {
+    setHeaderChecked(value);
   };
 
   const onSelectedAttachmentsChange = (selected: {[id: string]: boolean | number[]}) => {
@@ -76,7 +81,7 @@ const Attachments: React.FunctionComponent<Props> = ({
         </Typography>
         <Box display="flex" alignItems="center">
         <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
-        <AttachmentDeleteAllButton {...{ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision, onSelectedAttachmentsChange }} />
+        <AttachmentDeleteAllButton {...{ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision, onSelectedAttachmentsChange, onHeaderChecked }} />
         <AttachmentDownloadAllButton
           {...{ selectedAttachments, documentRevision }}
           isAttachmentEmpty = {isAttachmentEmpty}
@@ -86,7 +91,7 @@ const Attachments: React.FunctionComponent<Props> = ({
         </Box>
       </Box>
       <AttachmentField name="attachments" component="field" disabled={isDisabled} />
-      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision, onSelectedAttachmentsChange, selectedAttachments }} />
+      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision, onSelectedAttachmentsChange, selectedAttachments, onHeaderChecked, headerChecked }} />
     </Box>
   );
 };
