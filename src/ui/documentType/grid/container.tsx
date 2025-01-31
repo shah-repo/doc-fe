@@ -35,12 +35,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const dispatch = useDispatch();
   const history = useHistory();
   const { categoryName, docTypeId } = match.params;
-  console.log(categoryName, docTypeId);
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
-
   const getStatusesAction = useActionCreator(documentRevisionsActions.getDocRevStatuses);
   const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
-
   const async = useAsync({
     onSuccess: (response: DocumentRevisionStatus[] = []) => {
       saveStatuses(response);
