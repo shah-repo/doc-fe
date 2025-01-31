@@ -11,7 +11,7 @@ import { DisplayText, TranslatedText } from '../../../components/common/kendo/he
 
 interface Props extends GridFilterCellProps {
   defaultItem: string
-  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[] | EquipmentStatus[]
+  data: DocumentRevisionStatus[] | ChangeRequestStatus[] | POStatusLabelMapping[] | EquipmentStatus[] | string[]
   documentTypeCategory?: string
 }
 

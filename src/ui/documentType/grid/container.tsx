@@ -10,10 +10,11 @@ import { documentRevisionsActions } from '../../../state/ducks/documentRevisions
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from '../../../state/ducks/documentRevisions/constants';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { PageDetailsColumn } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { DocumentCategory, DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { pageDetailsSelectors } from '../../../state/ducks/pageDetails';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { ApplicationState } from '../../../state/reducers';
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
 import { KendoCellTemplates, KendoColumn } from '../../components/common/kendo/types';
 import { DataStateProps, KendoGridFilterCell, KendoGridHeaderCell } from '../../components/KendoGrid/interfaces';
@@ -34,15 +35,31 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const dispatch = useDispatch();
   const history = useHistory();
   const { categoryName, docTypeId } = match.params;
+  console.log(categoryName, docTypeId);
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
+
   const getStatusesAction = useActionCreator(documentRevisionsActions.getDocRevStatuses);
   const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
+
   const async = useAsync({
     onSuccess: (response: DocumentRevisionStatus[] = []) => {
       saveStatuses(response);
     },
   });
   const getStatuses = () => async.start(getStatusesAction, async, documentRevisionQueryStatus(), [], categoryName);
+
+  // ASL Status
+  const [aslStatuses, saveAslStatuses] = useState<string[]>([]);
+  const fetchASLTypes = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
+
+  const supplierTypesAsync = useAsync<ASLStatus[]>({
+    onSuccess: (aslStatusList) => {
+      saveAslStatuses((aslStatusList ?? []).map(item => item.displayLabel));
+    },
+  });
+
+  const getASLStatuses = () => supplierTypesAsync.start(fetchASLTypes, true, supplierTypesAsync);
+
   /** If true, documents are filtered by category. If false, documents are filtered by type. */
   const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);
   const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
@@ -89,6 +106,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     getStatuses();
+    if (categoryName === DocumentCategory.Supplier) {
+      getASLStatuses();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryName]);
 
@@ -157,6 +177,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = 'displayStatus';
+    } else if (columnDetails.searchOptions?.supplierStatusTemplate) {
+      filterCellTemplate = KendoGridFilterCell.SUPPLIER_STATUS;
+      dynamicCellTemplate = KendoCellTemplates.SUPPLIER_STATUS;
     } else if (columnDetails.searchOptions?.eqStatusTemplate) {
       dynamicCellTemplate = KendoCellTemplates.EQ_STATUS;
       filterCellTemplate = KendoGridFilterCell.EQ_STATUS;
@@ -213,6 +236,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       tableCriteria={tableCriteria}
       schema={schema}
       statuses={statuses}
+      aslStatuses={aslStatuses}
       isByCategory={isByCategory}
       documentCategory={documentCategory}
       documentType={documentType}

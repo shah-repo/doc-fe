@@ -52,6 +52,11 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     searchOptions.dataKey = 'eqStatus';
     searchOptions.eqStatusTemplate = true;
   }
+  if (valuePath === 'supplierStatusId') {
+    searchOptions.dataKey = 'supplierStatusId';
+    searchOptions.supplierStatusTemplate = true;
+  }
+
   return searchOptions;
 };
 
