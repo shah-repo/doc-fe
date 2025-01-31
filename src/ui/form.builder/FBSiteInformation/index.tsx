@@ -89,16 +89,14 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const onDeleteSite = (dataItem: EditableSite) => {
     if (!editedSite) return;
-    const updatedSites = sites.filter((site) =>
-      site.id !== dataItem.id,
-    );
+    const updatedSites = sites.filter((site) => site.id !== dataItem.id);
     setSites(updatedSites as EditableSite[]);
-  formState?.setFieldValue(name, updatedSites);
-  workspaceState?.saveDocRev({
-    ...workspaceState?.formInput,
-    [name]: updatedSites,
-  });
-  onDiscardSite();
+    formState?.setFieldValue(name, updatedSites);
+    workspaceState?.saveDocRev({
+      ...workspaceState?.formInput,
+      [name]: updatedSites,
+    });
+    onDiscardSite();
   };
 
   const rowRender: DataGridProps<EditableSite>['rowRender'] = (row, { dataItem }) => {

@@ -54,26 +54,24 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
   const value = renderOptions()?.find(option => option.value === values[field]?.id);
 
   return (
-    <>
-      <FormikField name={field}>
-        <Autocomplete
-          {...getFieldProps(field)}
-          key={(isEmpty(values) || isLoading) ? 'disabled' : 'enabled'}
-          classes={{ option: classes.option }}
-          blurOnSelect
-          disableClearable
-          placeholder={translate('common.select')}
-          options={renderOptions()}
-          data-cy="lot-id-field"
-          value={value}
-          disabled={isUpdateAction}
-          getOptionLabel={(option) => option?.label ?? ''}
-          onChange={handleChange}
-          loading={isLoading}
-          size="small"
-        />
-      </FormikField>
-    </>
+    <FormikField name={field}>
+      <Autocomplete
+        {...getFieldProps(field)}
+        key={(isEmpty(values) || isLoading) ? 'disabled' : 'enabled'}
+        classes={{ option: classes.option }}
+        blurOnSelect
+        disableClearable
+        placeholder={translate('common.select')}
+        options={renderOptions()}
+        data-cy="lot-id-field"
+        value={value}
+        disabled={isUpdateAction}
+        getOptionLabel={(option) => option?.label ?? ''}
+        onChange={handleChange}
+        loading={isLoading}
+        size="small"
+      />
+    </FormikField>
   );
 };
 

@@ -7,6 +7,7 @@ import {
 } from '../../../components/KendoDataGrid/constants';
 import { Radio } from '../../../components/forms/fields-next';
 import { CustomSiteTemplateProps, EditableSite } from '../types';
+import useStyles from './styles';
 interface Props extends CustomSiteTemplateProps {
   isActive: boolean
   isInEditMode: boolean
@@ -16,6 +17,7 @@ interface Props extends CustomSiteTemplateProps {
 const Editor: React.FC<Props> = ({ field, dataIndex }) => {
   const { values, setFieldValue } = useFormikContext<EditableSite>();
   const [selected, setSelected] = useState(false);
+  const classes = useStyles();
 
   const handleChange = () => {
     setSelected((prevSelected) => !prevSelected);
@@ -27,7 +29,7 @@ const Editor: React.FC<Props> = ({ field, dataIndex }) => {
   }, [values]);
 
   return (
-    <Box display="flex" justifyContent="center" mt={0.75}>
+    <Box className={classes.radioContainer}>
       <Radio
         checked={selected}
         color="primary"
@@ -54,7 +56,7 @@ export const PrimaryCell: React.FC<Props> = (props) => {
   if (isEditMode) {
     return <Editor {...props} />;
   }
-  const shouldDisable = isInEditMode;
+
   return (
     <Box display="flex" justifyContent="center">
       <Radio
@@ -64,7 +66,7 @@ export const PrimaryCell: React.FC<Props> = (props) => {
         value={dataItem.id}
         name={`${field}-${dataIndex}`}
         onChange={handleChange}
-        disabled={shouldDisable}
+        disabled={isInEditMode}
       />
     </Box>
   );

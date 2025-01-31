@@ -61,7 +61,7 @@ export const SiteAddressCell: React.FC<CustomSiteTemplateProps> = (props) => {
   return (
     <Grid container spacing={2} direction="row" alignItems="center">
       <Grid item>
-        <Tooltip arrow placement="top" title={translate('customer.site.information.same.as.hq.label')} PopperProps={{ style: { zIndex: 2000 } }} >
+        <Tooltip arrow placement="top" title={translate('customer.site.information.same.as.hq.label')} >
           <span><SwitchControl checked={dataItem?.isSameAsHQ} label="" disabled /></span>
         </Tooltip>
       </Grid>
