@@ -13,7 +13,7 @@ import { CustomTemplateProps, EditableShippingItem, PartOption } from '../types'
 import useStyles from './styles';
 
 interface Props extends CustomTemplateProps {
-  loading: boolean
+  isLoading: boolean
   options: PartOption[]
 }
 
@@ -23,7 +23,7 @@ interface CustomOptionType extends OptionType {
   documentId: string
 }
 
-const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
+const Editor: React.FC<Props> = ({ dataItem, field, options, isLoading }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableShippingItem>();
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
 
@@ -58,7 +58,7 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, loading }) => {
         data-cy="item-id-field"
         getOptionLabel={(option: OptionType) => option.label ?? ''}
         size="small"
-        loading={loading}
+        loading={isLoading}
       />
     </FormikField>
   );

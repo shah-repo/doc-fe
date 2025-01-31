@@ -55,8 +55,7 @@ export const ApprovedToReceiveCell: React.FC<CustomSiteTemplateProps> = (
   props,
 ) => {
   const { field, dataItem, onClick } = props;
-  const isEditMode
-    = dataItem[MODE_FIELD] === Mode.add || dataItem[MODE_FIELD] === Mode.edit;
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = `${kebabCase(field)}-td`;
 

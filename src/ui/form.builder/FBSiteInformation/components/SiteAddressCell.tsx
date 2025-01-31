@@ -49,9 +49,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
 export const SiteAddressCell: React.FC<CustomSiteTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
   const classes = useStyles();
-  const isEditMode
-    = dataItem[MODE_FIELD]
-    && [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
     return <Editor {...props} />;

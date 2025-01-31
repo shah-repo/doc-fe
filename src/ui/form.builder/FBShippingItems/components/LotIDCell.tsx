@@ -15,9 +15,9 @@ import { CustomTemplateProps, EditableShippingItem } from '../types';
 import useStyles from './styles';
 
 interface Props extends CustomTemplateProps {
-  loading: boolean
+  isLoading: boolean
   options: DocumentRevision[]
-  fetchLotsByPartId: (id?: string) => any
+  fetchLotsByPartId: (id?: string) => void
 }
 
 interface CustomOptionType extends OptionType {
@@ -25,7 +25,7 @@ interface CustomOptionType extends OptionType {
   documentId: string
 }
 
-const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, loading }) => {
+const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, isLoading }) => {
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableShippingItem>();
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const { part } = values ?? {};
@@ -58,7 +58,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
       <FormikField name={field}>
         <Autocomplete
           {...getFieldProps(field)}
-          key={(isEmpty(values) || loading) ? 'disabled' : 'enabled'}
+          key={(isEmpty(values) || isLoading) ? 'disabled' : 'enabled'}
           classes={{ option: classes.option }}
           blurOnSelect
           disableClearable
@@ -69,7 +69,7 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
           disabled={isUpdateAction}
           getOptionLabel={(option) => option?.label ?? ''}
           onChange={handleChange}
-          loading={loading}
+          loading={isLoading}
           size="small"
         />
       </FormikField>

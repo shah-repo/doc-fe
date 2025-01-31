@@ -5,7 +5,12 @@ type SiteInformationFieldType = 'site' | 'contact';
 type FBLabel = string | Record<string, unknown>;
 export const CUSTOM_BOOLEAN_FIELD = 'custom_boolean_field';
 
-export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel) => {
+interface ChangeFieldType {
+  change: Audit
+  fbLabel: FBLabel
+}
+
+export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel): ChangeFieldType | undefined => {
   const changeField = change.field.split('.');
   const field = changeField.at(-1) ?? '';
   const parentField = changeField.at(-2) ?? '';
@@ -52,7 +57,7 @@ export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel) => 
   return { change, fbLabel };
 };
 
-export const handleSiteAddressChange = (change: Audit, fbLabel: FBLabel) => {
+export const handleSiteAddressChange = (change: Audit, fbLabel: FBLabel): ChangeFieldType => {
   const fieldMap: Record<string, string> = {
     _city: 'form.builder.site.information.grid.heading.city',
     _country: 'form.builder.site.information.grid.heading.country',
@@ -69,7 +74,9 @@ export const handleSiteAddressChange = (change: Audit, fbLabel: FBLabel) => {
   return { change, fbLabel };
 };
 
-export const handleShippingAddressChange = (change: Audit) => {
+export const handleShippingAddressChange = (change: Audit): {
+  change: Audit
+} | null => {
   const changeFieldParts = change.field.split('.');
   const field = changeFieldParts.at(-1);
 
@@ -108,7 +115,7 @@ const getSiteOrContactFullName = (
   return fieldMappings[type]?.[field] || field;
 };
 
-export const handleShippingItemsChange = (change: Audit, fbLabel: FBLabel) => {
+export const handleShippingItemsChange = (change: Audit, fbLabel: FBLabel): ChangeFieldType | undefined => {
   const changeField = change.field.split('.');
   const field = changeField.at(-1) ?? '';
   const parentField = changeField.at(-2) ?? '';

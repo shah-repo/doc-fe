@@ -25,7 +25,7 @@ export const buildSchema = ({
       field: 'part',
       title: 'form.builder.record.shipping.items.grid.heading.part',
       filterable: false,
-      template: (props) => <ItemIDcell {...props} options={parts} loading={isPartsloading} onClick={onRowClick} />,
+      template: (props) => <ItemIDcell {...props} options={parts} isLoading={isPartsloading} onClick={onRowClick} />,
       width: 150,
     },
     {
@@ -33,7 +33,7 @@ export const buildSchema = ({
       field: 'lot',
       title: 'form.builder.record.shipping.items.grid.heading.lot',
       filterable: false,
-      template: (props) => <LotIDCell {...props} options={lots} loading={isLotsloading} fetchLotsByPartId={fetchLotsByPartId} onClick={onRowClick} />,
+      template: (props) => <LotIDCell {...props} options={lots} isLoading={isLotsloading} fetchLotsByPartId={fetchLotsByPartId} onClick={onRowClick} />,
       width: 310,
     },
     {

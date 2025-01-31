@@ -41,8 +41,7 @@ const Editor: React.FC<Props> = ({ field, dataIndex }) => {
 
 export const PrimaryCell: React.FC<Props> = (props) => {
   const { dataIndex, dataItem, isInEditMode, onPrimaryChange, field } = props;
-  const isEditMode
-    = dataItem[MODE_FIELD] === Mode.add || dataItem[MODE_FIELD] === Mode.edit;
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (isEditMode) {
       return;

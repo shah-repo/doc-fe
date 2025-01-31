@@ -48,21 +48,22 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       const updatedSite = omit(values, FIELDS_TO_OMIT);
       updatedSite.isPrimary = updatedSite.isPrimary ?? false;
 
-      const toggleExclusiveFields = (
-        contact: EditableSite,
+      const toggleSitePrimaryFields = (
+        siteInfo: EditableSite,
       ) => ({
-        ...contact,
-        zipCode: contact.zipCode ?? '',
-        isPrimary: updatedSite.isPrimary ? false : contact.isPrimary,
+        ...siteInfo,
+        zipCode: siteInfo.zipCode ?? '',
+        isPrimary: updatedSite.isPrimary ? false : siteInfo.isPrimary,
       });
 
-      const updatedSites = isAddition
-        ? [...sites.map(toggleExclusiveFields), updatedSite]
-        : sites.map((site) =>
-          site.id === values.id
-            ? updatedSite
-            : toggleExclusiveFields(site),
-        );
+      const updatedSites = sites.map((site: EditableSite) =>
+        isAddition ? toggleSitePrimaryFields(site) : site.id === values.id ? updatedSite : toggleSitePrimaryFields(site),
+      );
+
+      if (isAddition) {
+        updatedSites.push(updatedSite);
+      }
+
       formState?.setFieldValue(name, updatedSites);
       workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
