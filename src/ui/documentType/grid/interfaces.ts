@@ -6,6 +6,7 @@ import { TablePanelStateProps } from '../../components/table/types';
 
 export interface KendoPresenterProps {
   statuses?: DocumentRevisionStatus | DocumentRevisionStatus[]
+  aslStatuses?: string[]
   tableName: string
   tableCriteria: TablePanelStateProps
   schema: object

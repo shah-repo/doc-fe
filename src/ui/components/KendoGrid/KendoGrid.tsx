@@ -56,6 +56,7 @@ export function KendoGrid<T extends any> ({
   tableCriteria,
   schema,
   statuses = [],
+  aslStatuses = [],
   onRowClick,
   queryUrl,
   defaultPayloadData,
@@ -195,6 +196,16 @@ export function KendoGrid<T extends any> ({
     />
   );
 
+  const SupplierStatusFilter = (props: GridFilterCellProps) => (
+    <StatusFilterTemplate
+      {...props}
+      data={aslStatuses}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+
   const poStatusOptions = [
     POStatusLabelMapping.OPENED,
     POStatusLabelMapping.CLOSED,
@@ -322,6 +333,7 @@ export function KendoGrid<T extends any> ({
     [KendoGridFilterCell.TASKTYPE]: TaskTypeFilter,
     [KendoGridFilterCell.STATUS]: AsyncStatusFilter,
     [KendoGridFilterCell.ASYNC_CREATED_AT]: AsyncDateFilter,
+    [KendoGridFilterCell.SUPPLIER_STATUS]: SupplierStatusFilter,
   };
 
   const headerCellMapping = {

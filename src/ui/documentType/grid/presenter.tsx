@@ -14,6 +14,7 @@ import { KendoPresenterProps } from './interfaces';
 
 export function DocumentTypePresenter ({
   statuses,
+  aslStatuses,
   tableName,
   tableCriteria,
   schema,
@@ -98,6 +99,7 @@ export function DocumentTypePresenter ({
           tableCriteria={tableCriteria}
           schema={schema}
           statuses={statuses}
+          aslStatuses={aslStatuses}
           exportDataChanges={handleExportData}
           onRowClick={onRowClick}
           queryUrl={queryUrl}

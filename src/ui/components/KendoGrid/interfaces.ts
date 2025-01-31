@@ -45,6 +45,7 @@ export interface KendoGridProps<T> {
   tableCriteria: TablePanelStateProps
   schema: object
   statuses?: DocumentRevisionStatus | DocumentRevisionStatus[]
+  aslStatuses?: string[]
   exportDataChanges: (data: T[]) => void
   onRowClick: ((dataItem: any) => void)
   queryUrl: string
@@ -77,6 +78,7 @@ export enum KendoGridFilterCell {
   STATE = 'state',
   TASKTYPE = 'taskType',
   STATUS = 'status',
+  SUPPLIER_STATUS = 'supplierStatusId',
   EQ_STATUS = 'eqStatus',
   ASYNC_CREATED_AT = 'createdAtt',
 }
