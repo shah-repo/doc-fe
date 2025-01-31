@@ -9,11 +9,13 @@ import { Checkbox } from '../../components/forms/fields-next';
 import Text from '../../components/Text';
 import ReferencedByContainer from '../../document.revision/summary/referencedBy.container.new';
 import ReferenceToContainer from '../../document.revision/summary/referenceTo.container.new';
+import { useTraining } from '../../hooks/docCustomization/useCustomization';
 import useGetAvailableReferences from '../../hooks/useGetAvailableReferences';
 import { isOperator } from '../DocumentRevisionDisplay.container';
 import AvailableReferencesField from '../forms/presenters/AvailableReferences.new';
 import { toDocumentRevisionFormValues } from '../forms/transform';
 import { DocumentRevisionFormValues } from '../forms/types';
+import { checkIsDocumentRecord } from '../helpers/checkDocumentGroup';
 import { isOwner } from '../helpers/documentRevisionPermissions';
 import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './References.styles';
@@ -39,6 +41,10 @@ const References = ({
 
   const showChangeControlDetails = selectedDocument?.changeControlOptions?.id
     && selectedDocument.isBeingEditedAfterRelease;
+
+  const documentTypeId = selectedDocument?.document?.documentType?.id ?? '';
+  const { isVisible } = useTraining(documentTypeId);
+  const isRecord = checkIsDocumentRecord(groupOptions);
 
   return (
     <Box padding={1.875} width={1} data-cy="generalInfo">
@@ -71,7 +77,7 @@ const References = ({
       {document.referencedBy && (
         <ReferencedByContainer dataProp={document.referencedBy} />
       )}
-      <FormControlLabel id="checkbox-label" className={classes.checkboxHolder}
+      {(isVisible && !isRecord) && <FormControlLabel id="checkbox-label" className={classes.checkboxHolder}
         control={
           <Checkbox
             checked={retrain}
@@ -81,8 +87,8 @@ const References = ({
           />
         }
         label={<Text data-cy="training" translation="document.revision.trainingRequired" />}
-      />
-      <Box pt={2.5}>
+      />}
+      <Box>
         <Typography component="span" className={classes.releaseDate}>
           <Text dataCy="releaseDate" translation="documentRevision.form.release.date" />
         </Typography>

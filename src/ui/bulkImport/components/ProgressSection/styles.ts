@@ -55,6 +55,11 @@ export default makeStyles(theme => ({
   itemErrorMessageText: {
     fontWeight: 400,
     fontSize: 12,
+    fontFamily: 'Sora',
+    '& span': {
+      fontWeight: 600,
+      cursor: 'pointer',
+    },
   },
   completedText: {
     fontWeight: 400,
@@ -122,6 +127,9 @@ export default makeStyles(theme => ({
     gridRowGap: 0,
     paddingTop: theme.spacing(2.5),
     paddingBottom: theme.spacing(2.5),
+    [theme.breakpoints.up('xl')]: {
+      gridTemplateColumns: '2fr 5fr 1fr !important',
+    },
     [theme.breakpoints.down('xl')]: {
       gridTemplateColumns: '3fr 5fr 1fr',
     },
@@ -138,6 +146,9 @@ export default makeStyles(theme => ({
   progressBarIconsContainer: {
     minWidth: 450,
     [theme.breakpoints.down('sm')]: {
+      minWidth: 250,
+    },
+    [theme.breakpoints.down(1080)]: {
       minWidth: 250,
     },
   },
@@ -167,6 +178,9 @@ export default makeStyles(theme => ({
     gap: theme.spacing(2.5, 2.5),
     marginBottom: theme.spacing(1.25),
     [theme.breakpoints.down('sm')]: {
+      display: 'block',
+    },
+    [theme.breakpoints.down(1080)]: {
       display: 'block',
     },
     [theme.breakpoints.down('xs')]: {
