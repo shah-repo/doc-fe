@@ -24,15 +24,15 @@ const FileNameCellTemplate: React.FC<any> = ({ props, documentRevision, onView }
       {...props}
       title={isOverflowing ? `${fileName}.${extension}` : ''}
     >
-    <div ref={overflowRef} className={classes.fileNameContainer} onClick={onView(attachment)}>
-      <Box minWidth={20}>
-        {isPrimary && (<FontAwesomeIcon className={classes.primaryIcon} icon={solid('circle-star')} />)}
-        {isRedlineIcon && (<FontAwesomeIcon className={classes.redLineIcon} icon={regular('paperclip')} />)}
-      </Box>
-      <div className={classes.fileName}>
-        {fileName}.{extension}
+      <div ref={overflowRef} className={classes.fileNameContainer} onClick={onView(attachment)}>
+        <Box>
+          {isPrimary && (<FontAwesomeIcon className={classes.primaryIcon} icon={solid('circle-star')} />)}
+          {isRedlineIcon && (<FontAwesomeIcon className={classes.redLineIcon} icon={regular('paperclip')} />)}
+        </Box>
+        <div className={classes.fileName}>
+          {fileName}.{extension}
+        </div>
       </div>
-    </div>
     </Tooltip>
   );
 };

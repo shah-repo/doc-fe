@@ -38,6 +38,7 @@ export const DragCell = (props) => {
   const currentContext = React.useContext(MyContext);
   return (
     <td
+      style={{ textOverflow: 'initial' }}
       onDragOver={(e) => {
         currentContext.reorder(props.dataItem);
 
@@ -113,15 +114,14 @@ const AttachmentTable: React.FC<Props> = ({
         }
       });
       onSelectedAttachmentsChange?.(checkedItems);
-    }
-    else {
+    } else {
       onSelectedAttachmentsChange?.({});
     }
   };
 
   const onSelectionChange = (event: GridSelectionChangeEvent) => {
     const { dataItem } = event;
-    if(isNull(dataItem)) {
+    if (isNull(dataItem)) {
       return;
     }
     const newSelectedState = getSelectedState({
@@ -162,7 +162,7 @@ const AttachmentTable: React.FC<Props> = ({
           filterable
           hasBoxScrollbars
           schema={schema}
-          data={attachmentsData}
+          data={attachmentsData ?? []}
           selectedField={SELECTED_FIELD}
           dataItemKey={DATA_ITEM_KEY}
           selectable={{
