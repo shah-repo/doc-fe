@@ -21,6 +21,7 @@ export type FBCheckboxGroupAsyncProps =
     className?: string
     boxProps?: BoxProps
     labelProps?: BoxProps
+    options?: CheckBoxOptionType[]
   };
 
 export interface CheckBoxOptionType extends OptionType{

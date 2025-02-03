@@ -56,8 +56,8 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value, checked } = event.target;
       const option = options?.find((opt) => opt.id === value);
-      const optionText = option?.text || '';
-      const selectedValues = formState?.getFieldValue(name, []);
+      const optionText = (option?.text || '') as string;
+      const selectedValues = formState?.getFieldValue(name, []) as OptionType[];
       const updatedValues = checked
         ? union(selectedValues, [{ id: value, text: optionText }])
         : selectedValues.filter((item) => item.id !== value);
@@ -76,8 +76,8 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     }, [selectedTypes]);
 
     controls = map(options, (option, index) => {
-      const [value, message] = at(option, [optionValueKey, optionLabelKey]);
-      const defaultChecked = formValue?.some((item) => item.id === value);
+      const [value, message] = at(option, [optionValueKey as keyof typeof option, optionLabelKey as keyof typeof option]) as string[];
+      const defaultChecked = formValue?.some((item) => item.id === value) as boolean;
       let attr = message;
       if (isTranslation(attr)) {
         attr = intl.formatMessage({ id: message });
