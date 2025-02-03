@@ -15,6 +15,7 @@ interface Props {
   selectedAttachments: {[id: string]: boolean | number[]}
   documentRevision: DocumentRevision
   onSelectedAttachmentsChange: (selectedAttachments: {[id: string]: boolean | number[]}) => void
+  onHeaderChecked: (value: boolean) => void
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -41,6 +42,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   selectedAttachments,
   documentRevision,
   onSelectedAttachmentsChange,
+  onHeaderChecked,
 }) => {
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
   const selectedAttachmentsCount = Object.values(selectedAttachments).filter(value => value === true).length;
@@ -50,6 +52,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       onSelectedAttachmentsChange({});
+      onHeaderChecked(false);
       setIsDownloading(false);
     },
     onError: () => {

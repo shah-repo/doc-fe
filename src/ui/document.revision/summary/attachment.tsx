@@ -19,6 +19,11 @@ export interface Props {
 
 export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label, documentRevision }) => {
   const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
+  const [headerChecked, setHeaderChecked] = React.useState(false);
+
+  const onHeaderChecked = (value: boolean) => {
+    setHeaderChecked(value);
+  };
 
   const onSelectedAttachmentsChange = (selected: {[id: string]: boolean | number[]}) => {
     if (isEmpty(selected)) {
@@ -75,7 +80,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
           containsRedline = {containsRedline ?? false}
           docRevStatus = {docRevStatus} />
       </Box>
-      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} {...{ selectedAttachments, onSelectedAttachmentsChange }} />
+      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} {...{ selectedAttachments, onSelectedAttachmentsChange, headerChecked, onHeaderChecked }} />
       {emptyAttachmentsRenderer}
     </Box>
   );
