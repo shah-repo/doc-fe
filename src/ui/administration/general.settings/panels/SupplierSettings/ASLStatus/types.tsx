@@ -23,6 +23,7 @@ export interface ASLStatus {
   displayLabel: string
   isActive: boolean
 }
+
 export interface CustomCellProps extends CellTemplateProps<EditableASLStatus> {
   dataOptions?: OptionType[] | ASLStatus[]
   onActiveStateChange?: (item: EditableASLStatus, isActive: boolean) => void

@@ -1,4 +1,7 @@
-import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import {
+  CellTemplateProps,
+  EditableItem,
+} from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
 
 export interface EditableSupplierConfig extends SupplierConfig, EditableItem {
   services_edit: string
@@ -23,6 +26,7 @@ export interface SupplierConfig {
   services?: OptionType[]
 }
 
-export interface CustomCellProps extends CellTemplateProps<EditableSupplierConfig>{
+export interface CustomCellProps
+  extends CellTemplateProps<EditableSupplierConfig> {
   dataOptions: OptionType[]
 }

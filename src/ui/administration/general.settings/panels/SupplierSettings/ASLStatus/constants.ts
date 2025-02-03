@@ -1,1 +1,2 @@
 export const ASL_MAX_DISPLAY_LABEL_LENGTH = 255;
+export const ASL_DEFAULT_ORDER = 10;

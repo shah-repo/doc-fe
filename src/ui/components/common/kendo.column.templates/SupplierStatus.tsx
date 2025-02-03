@@ -14,9 +14,10 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
   cellRowClick,
 }) => {
   const classes = useStyles();
-  const status = dataItem[field] as string;
   const cellClickEvent = () => {
-    if (!cellRowClick) { return; }
+    if (!cellRowClick) {
+      return;
+    }
     cellRowClick({ dataItem });
   };
 
@@ -34,12 +35,11 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
         justify="flex-start"
         alignItems="center"
         container
-        data-cy={`supplier-status-button-${status}`}
+        data-cy={`supplier-status-button-${dataItem[field]}`}
       >
-        <div className={cx(classes.statusIcon, classes[status])} />
-        {status}
+        <div className={cx(classes.statusIcon, classes[dataItem[field]])} />
+        {dataItem[field]}
       </Grid>
-
     </td>
   );
 };

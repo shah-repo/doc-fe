@@ -18,7 +18,7 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import { withFBFilesPresenter } from '../../FBFilesPresenter/FBFilesPresenter.wrap';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface Props extends FBFilesPresenterProps {
   isDisabled?: boolean
@@ -36,7 +36,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
   };
 
   const dialogHandler = useDialog();
-  const classes = styles();
+  const classes = useStyles();
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {

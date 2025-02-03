@@ -22,9 +22,9 @@ const Editor: React.FC<CustomCellProps> = ({
   dataOptions = [],
   onChange,
 }) => {
+  const classes = useStyles();
   const { getFieldProps, setFieldValue } = useFormikContext();
   const isEditMode = Mode.edit === dataItem[MODE_FIELD];
-  const classes = useStyles();
   const value = (dataOptions as ASLStatus[])?.find(
     (option: ASLStatus) => option.internalType === dataItem[field],
   );
@@ -71,7 +71,10 @@ export const ASLTypeCell: React.FC<CustomCellProps> = (props) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = kebabCase(field);
-  const displayValue = dataItem[field];
+
+  if (isEditMode) {
+    return <Editor {...props} />;
+  }
 
   return (
     <Box
@@ -80,18 +83,15 @@ export const ASLTypeCell: React.FC<CustomCellProps> = (props) => {
       data-cy={`${dataCy}-td`}
       onClick={handleClick}
     >
-      {isEditMode && <Editor {...props} />}
-      {!isEditMode && (
-        <OverflowTooltip
-          arrow
-          placement="top"
-          title={displayValue}
-          onClick={handleClick}
-          data-cy={`${dataCy}-value`}
-        >
-          {displayValue}
-        </OverflowTooltip>
-      )}
+      <OverflowTooltip
+        arrow
+        placement="top"
+        title={dataItem[field]}
+        onClick={handleClick}
+        data-cy={`${dataCy}-value`}
+      >
+        {dataItem[field]}
+      </OverflowTooltip>
     </Box>
   );
 };

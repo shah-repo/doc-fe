@@ -18,13 +18,15 @@ import useAsync from '../../../../../hooks/useAsync';
 import SettingsPanel from '../../../components/SettingsPanel';
 import SettingsTable from '../../../components/SettingsTable';
 import { SettingsPanelProps } from '../../../types';
-import { ASL_MAX_DISPLAY_LABEL_LENGTH } from './constants';
+import { ASL_DEFAULT_ORDER, ASL_MAX_DISPLAY_LABEL_LENGTH } from './constants';
 import { buildSchema } from './schema';
 import { ASLStatus, ASLSTATUS_KEYS, EditableASLStatus } from './types';
 
 const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
-  const isActive = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_CONFIG));
-  const [ASLStastusList, setASLStastusList] = React.useState<ASLStatus[]>();
+  const isActive = useSelector(
+    getHasPermission(Permission.EDIT_SUPPLIER_CONFIG),
+  );
+  const [ASLStatusList, setASLStatusList] = React.useState<ASLStatus[]>();
   const [editedASLStatus, setEditedASLStatus]
     = React.useState<EditableASLStatus>();
   const discardASLStatus = () => setEditedASLStatus(undefined);
@@ -34,14 +36,13 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
   const updateASLStatusSettings = useActionCreator(
     companyActions.updateGeneralSettings,
   );
-
   const supplierTypesAsync = useAsync<ASLStatus[]>({
     onSuccess: setTypes,
     onError: toastError,
   });
 
   useEffect(() => {
-    setASLStastusList(sortStatusByDisplayOrder(formValues?.aslStatusConfig));
+    setASLStatusList(sortStatusByDisplayOrder(formValues?.aslStatusConfig));
   }, [formValues?.aslStatusConfig]);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
   const sortStatusByDisplayOrder = (statusList?: ASLStatus[]): ASLStatus[] => {
     if (!statusList?.length) return [];
 
-    return [...statusList].sort((status1, status2) => {
+    return [...statusList].sort((status1: ASLStatus, status2: ASLStatus) => {
       const orderComparison
         = (status1[ASLSTATUS_KEYS.order] ?? 0)
         - (status2[ASLSTATUS_KEYS.order] ?? 0);
@@ -65,14 +66,14 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const async = useAsync({
-    onError: (error) => {
-      setASLStastusList(ASLStastusList);
+    onError: (error?: string) => {
+      setASLStatusList(ASLStatusList);
       toastError(error);
     },
   });
 
   const updateASLStatusList = (updatedASLStatusList: ASLStatus[]) => {
-    setASLStastusList(updatedASLStatusList);
+    setASLStatusList(updatedASLStatusList);
     if (formValues) {
       async.start(
         updateASLStatusSettings,
@@ -102,9 +103,11 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedValues = omit(values, MODE_FIELD);
       const updatedData = isAddition
-        ? [...(ASLStastusList ?? []), { ...updatedValues, isUserAdded: true }]
-        : ASLStastusList?.map((aslStatus) =>
-          aslStatus.id === values.id ? { ...updatedValues, isUserModified: true } : aslStatus,
+        ? [...(ASLStatusList ?? []), { ...updatedValues, isUserAdded: true }]
+        : ASLStatusList?.map((aslStatus: ASLStatus) =>
+          aslStatus.id === values.id
+            ? { ...updatedValues, isUserModified: true }
+            : aslStatus,
         );
 
       const sortedItems = updatedData?.sort(
@@ -116,7 +119,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
         item[ASLSTATUS_KEYS.displayOrder] = index + 1;
       });
 
-      const displayOrderMap = (sortedItems)?.reduce((acc, item) => {
+      const displayOrderMap = sortedItems?.reduce((acc, item) => {
         acc[item.id] = item[ASLSTATUS_KEYS.displayOrder];
         return acc;
       }, {});
@@ -136,8 +139,10 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
     aslStatus: EditableASLStatus,
     isActive: boolean,
   ) => {
-    const updatedList = ASLStastusList?.map((item) =>
-      item.id === aslStatus.id ? { ...item, isActive, isUserModified: true } : item,
+    const updatedList = ASLStatusList?.map((item: ASLStatus) =>
+      item.id === aslStatus.id
+        ? { ...item, isActive, isUserModified: true }
+        : item,
     );
     updateASLStatusList(updatedList ?? []);
   };
@@ -152,14 +157,14 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
       internalType: '',
       displayLabel: '',
       isActive: true,
-      order: 10,
-      displayOrder: 10,
+      order: ASL_DEFAULT_ORDER,
+      displayOrder: ASL_DEFAULT_ORDER,
       [MODE_FIELD]: Mode.add,
     });
   };
 
   const mappedASLStatusList
-    = ASLStastusList?.map((aslStatus) => {
+    = ASLStatusList?.map((aslStatus: ASLStatus) => {
       return {
         ...aslStatus,
         [MODE_FIELD]:

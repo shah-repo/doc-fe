@@ -6,14 +6,14 @@ import {
 } from '@progress/kendo-react-grid';
 import React from 'react';
 import Tooltip from '../kendo/Tooltip';
-import { styles } from './Attachments.styles';
+import useStyles from './Attachments.styles';
 
-const Attachments: React.FunctionComponent<GridHeaderCellProps> = ({
+const Attachments: React.FC<GridHeaderCellProps> = ({
   title,
   onClick,
   columnMenuWrapperProps,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   return (
     <>
       {title && (
