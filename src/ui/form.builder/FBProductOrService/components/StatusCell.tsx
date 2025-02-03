@@ -13,33 +13,33 @@ import useStyles from './Status.styles';
 export const StatusCell: React.FC<CustomTemplateProps> = ({
   dataItem,
   field,
-  ...props
 }) => {
   const classes = useStyles();
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   let defaultValue = dataItem[field];
   const formik = useFormikContext<EditableProductORService>();
 
-  if (isEditMode) {
+  if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     defaultValue = formik?.values.status || dataItem[field];
   }
 
   const displayStatus = getStatusLabel('', defaultValue, '');
 
   if (defaultValue) {
-    return <Tooltip
-      data={displayStatus}
-      childrenElement={
-        <Chip
-          size="small"
-          className={cx(
-            classes.chip,
-            classes[statusClassMapping[displayStatus]],
-          )}
-          label={displayStatus}
-        />
-      }
-    />;
+    return (
+      <Tooltip
+        data={displayStatus}
+        childrenElement={
+          <Chip
+            size="small"
+            className={cx(
+              classes.chip,
+              classes[statusClassMapping[displayStatus]],
+            )}
+            label={displayStatus}
+          />
+        }
+      />
+    );
   }
 
   return <>{EMPTY_VALUE_PLACEHOLDER}</>;

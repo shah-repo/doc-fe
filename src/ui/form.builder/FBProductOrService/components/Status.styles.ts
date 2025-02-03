@@ -1,7 +1,7 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
-export default makeStyles((theme) => ({
+export default makeStyles((theme: Theme) => ({
   chip: {
     display: 'inline-flex',
     flexDirection: 'row',

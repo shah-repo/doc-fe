@@ -1,5 +1,4 @@
 import { useFormikContext } from 'formik';
-import { get } from 'lodash';
 import React from 'react';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../components/OverflowContent';
@@ -12,9 +11,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   const { getFieldProps } = useFormikContext();
 
   return (
-    <FormikField
-      name={field}
-    >
+    <FormikField name={field}>
       <TextField
         {...getFieldProps(field)}
         defaultValue={undefined}
@@ -27,19 +24,16 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
 
 export const TextFieldCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  if (isEditMode) {
+  if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return <Editor {...props} />;
   }
 
   const handleClick = () => onClick?.({ dataItem });
 
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
-
   return (
     <OverflowContent onClick={handleClick}>
-      {displayValue}
+      {dataItem[field] ?? EMPTY_VALUE_PLACEHOLDER}
     </OverflowContent>
   );
 };

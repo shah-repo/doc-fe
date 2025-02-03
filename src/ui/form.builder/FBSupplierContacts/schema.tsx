@@ -37,7 +37,9 @@ export const buildSchema = ({
       field: 'name',
       title: 'form.builder.supplier.contacts.grid.heading.name',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <TextFieldCellTemplate {...props} onClick={onRowClick} />
+      ),
       width: 200,
     },
     {
@@ -45,7 +47,9 @@ export const buildSchema = ({
       field: 'title',
       title: 'form.builder.supplier.contacts.grid.heading.title',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <TextFieldCellTemplate {...props} onClick={onRowClick} />
+      ),
       width: 120,
     },
     {
@@ -53,7 +57,9 @@ export const buildSchema = ({
       field: 'email',
       title: 'form.builder.supplier.contacts.grid.heading.email.address',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <TextFieldCellTemplate {...props} onClick={onRowClick} />
+      ),
       width: 200,
     },
     {
@@ -61,7 +67,9 @@ export const buildSchema = ({
       field: 'phoneNumber',
       title: 'form.builder.supplier.contacts.grid.heading.phone.number',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <TextFieldCellTemplate {...props} onClick={onRowClick} />
+      ),
       width: 150,
     },
     {
@@ -69,7 +77,9 @@ export const buildSchema = ({
       field: 'address',
       title: 'form.builder.supplier.contacts.grid.heading.address',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <TextFieldCellTemplate {...props} onClick={onRowClick} />
+      ),
       width: 150,
     },
     {
@@ -77,7 +87,9 @@ export const buildSchema = ({
       field: 'comments',
       title: 'form.builder.supplier.contacts.grid.heading.comments',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <TextFieldCellTemplate {...props} onClick={onRowClick} />
+      ),
       width: 150,
     },
     {

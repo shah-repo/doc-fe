@@ -1,6 +1,12 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, CircularProgress, Grid, TextField, Tooltip } from '@material-ui/core';
+import {
+  Box,
+  CircularProgress,
+  Grid,
+  TextField,
+  Tooltip,
+} from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
@@ -23,7 +29,7 @@ import useHover from '../../../hooks/useHover';
 import { Colors } from '../../../layout/theme-next';
 import { LIMIT, MIN_SEARCH_TERM_LENGTH } from '../constants';
 import { CustomTemplateProps } from '../types';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface CustomOptionType extends OptionType {
   revision: string
@@ -68,7 +74,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
               docId: item.document?.docId,
               displayRevision: item.displayRevision,
               name: item?.name,
-              status: item.status,
             },
           );
 
@@ -94,7 +99,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
     onError: toastError,
   });
 
-  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+  const onInputChange = (_, inputVal: string) => {
     if (inputValue === inputVal && !isEmpty(inputVal)) {
       return;
     }
@@ -114,7 +119,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
     }
   };
 
-  const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
+  const onChange = (_, value: CustomOptionType) => {
     setSelectedObj(value);
     setInputValue(value?.label);
     setFieldValue(field, value?.value);
@@ -224,7 +229,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
 export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
   const { dataItem, onClick, onOpenQuickView } = props;
   const [viewIconRef, isHovered] = useHover<HTMLButtonElement>();
-  const classes = styles();
+  const classes = useStyles();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
@@ -235,35 +240,50 @@ export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => onOpenQuickView?.(evt, dataItem);
 
-  return (<Grid
-    justify="flex-start"
-    alignItems="center"
-    container
-    onClick={handleClick}
-  >
-    <Grid item xs={dataItem.title ? 12 : 10} className={classes.grid}>
-      <span data-cy="selected-product-or-service">
-        {dataItem.title && dataItem.title}
-        {!dataItem.title && dataItem.itemDisplayName && <StyledLink
-          to={dataItem?.documentId ? documentVersionPath(dataItem?.revId, dataItem?.documentId) : '#'}
-          onClick={e => { e.preventDefault(); }}
-          data-cy="selected-product-or-service-link"
-        >
-          {dataItem.itemDisplayName}
-        </StyledLink>}
-      </span>
+  return (
+    <Grid
+      justify="flex-start"
+      alignItems="center"
+      container
+      onClick={handleClick}
+    >
+      <Grid item xs={dataItem.title ? 12 : 10} className={classes.grid}>
+        <span data-cy="selected-product-or-service">
+          {dataItem.title && dataItem.title}
+          {!dataItem.title && dataItem.itemDisplayName && (
+            <StyledLink
+              to={
+                dataItem?.documentId
+                  ? documentVersionPath(dataItem?.revId, dataItem?.documentId)
+                  : '#'
+              }
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              data-cy="selected-product-or-service-link"
+            >
+              {dataItem.itemDisplayName}
+            </StyledLink>
+          )}
+        </span>
+      </Grid>
+      {!dataItem.title && (
+        <Grid item xs={2}>
+          <span ref={viewIconRef} onClick={openQuickView}>
+            <Tooltip
+              arrow
+              title={translate('common.quick.view')}
+              placement="top"
+            >
+              <FontAwesomeIcon
+                data-cy="quick-view"
+                icon={isHovered ? solid('eye') : regular('eye')}
+                color={isHovered ? Colors.navigationBg : Colors.textGray}
+              />
+            </Tooltip>
+          </span>
+        </Grid>
+      )}
     </Grid>
-    {!dataItem.title && <Grid item xs={2}>
-      <span ref={viewIconRef} onClick={openQuickView}>
-        <Tooltip arrow title={translate('common.quick.view')} placement="top">
-          <FontAwesomeIcon
-            data-cy="quick-view"
-            icon={isHovered ? solid('eye') : regular('eye')}
-            color={isHovered ? Colors.navigationBg : Colors.textGray}
-          />
-        </Tooltip>
-      </span>
-    </Grid>}
-  </Grid>
   );
 };

@@ -67,7 +67,6 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
               docId: item.document?.docId,
               displayRevision: item.displayRevision,
               name: item?.name,
-              status: item.status,
             },
           );
 
@@ -91,7 +90,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
     },
   });
 
-  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+  const onInputChange = (_, inputVal: string) => {
     if (inputValue === inputVal && !isEmpty(inputVal)) {
       return;
     }
@@ -111,7 +110,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
     }
   };
 
-  const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
+  const onChange = (_, value: CustomOptionType) => {
     setInputValue(value?.label);
     setFieldValue(field, value?.value);
     setFieldValue('referenceDisplayName', value?.label);
@@ -242,8 +241,17 @@ export const RefIDcell: React.FC<CustomTemplateProps> = (props) => {
     >
       <Grid item xs={10} className={classes.grid}>
         <StyledLink
-          to={dataItem?.documentId ? documentVersionPath(dataItem?.referenceRevId, dataItem?.documentId) : '#'}
-          onClick={e => { e.preventDefault(); }}
+          to={
+            dataItem?.documentId
+              ? documentVersionPath(
+                  dataItem?.referenceRevId,
+                  dataItem?.documentId,
+              )
+              : '#'
+          }
+          onClick={(e) => {
+            e.preventDefault();
+          }}
           data-cy="selected-reference-item-link"
         >
           {dataItem.referenceDisplayName}

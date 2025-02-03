@@ -26,7 +26,12 @@ import FB from '../helpers/FB';
 import { FIELDS_TO_PICK } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableProductORService, FBProductORServiceProps, ProductORService, ProductORServiceEditEvent } from './types';
+import {
+  EditableProductORService,
+  FBProductORServiceProps,
+  ProductORService,
+  ProductORServiceEditEvent,
+} from './types';
 import { withFBProductORService } from './wrap';
 
 const FBProductORService: React.FC<FBProductORServiceProps> = ({
@@ -39,14 +44,19 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
 }) => {
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
-  const [selectedDataItem, setSelectedDataItem] = useState<EditableProductORService>();
+  const [selectedDataItem, setSelectedDataItem]
+    = useState<EditableProductORService>();
   const [aslItems, setAslItems] = useState<ASLStatus[]>();
-  const fetchASLItems = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
+  const fetchASLItems = useActionCreator(
+    documentRevisionsActions.fetchASLSuppliersListData,
+  );
   const quickViewDialog = useDialog();
   const isActive = !disabled;
-  const [editedItem, setEditedItem] = useState<Partial<EditableProductORService>>();
+  const [editedItem, setEditedItem]
+    = useState<Partial<EditableProductORService>>();
   const isItemAdded = editedItem?.[MODE_FIELD] === Mode.add;
-  const editItem = ({ dataItem }: ProductORServiceEditEvent) => setEditedItem(dataItem);
+  const editItem = ({ dataItem }: ProductORServiceEditEvent) =>
+    setEditedItem(dataItem);
   const isInEditMode = editedItem !== undefined;
   const handleRowClick = isActive && !isInEditMode ? editItem : undefined;
 
@@ -56,10 +66,7 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
   });
 
   useEffect(() => {
-    fetchOptionsDataAsync.start(
-      fetchASLItems,
-      fetchOptionsDataAsync,
-    );
+    fetchOptionsDataAsync.start(fetchASLItems, fetchOptionsDataAsync);
   }, []);
 
   const formik = useFormik<Partial<EditableProductORService>>({
@@ -68,29 +75,30 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedProductOrServices = isAddition
         ? [...productOrServices, values]
-        : productOrServices.map((reference) =>
-          reference.id === values.id
-            ? values
-            : reference,
+        : productOrServices.map((productORService: ProductORService) =>
+          productORService.id === values.id ? values : productORService,
         );
 
-      const payload = updatedProductOrServices
-        .map((productOrService) => {
+      const payload = updatedProductOrServices.map(
+        (productOrService: Partial<EditableProductORService>) => {
           const obj = pick(productOrService, FIELDS_TO_PICK);
           if (obj.revId) {
             obj.title = '';
           }
           return obj;
-        });
+        },
+      );
 
-    formState?.setFieldValue(name, updatedProductOrServices);
-    workspaceState?.saveDocRev({
-      ...workspaceState?.formInput,
-      [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY),
-      [name]: payload,
-    });
-    setProductOrServices(updatedProductOrServices as ProductORService[]);
-    discardItem();
+      formState?.setFieldValue(name, updatedProductOrServices);
+      workspaceState?.saveDocRev({
+        ...workspaceState?.formInput,
+        [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(
+          SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY,
+        ),
+        [name]: payload,
+      });
+      setProductOrServices(updatedProductOrServices as ProductORService[]);
+      discardItem();
     },
   });
 
@@ -100,58 +108,61 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
     resetForm({ values: editedItem ?? {} });
   }, [editedItem, setValues, resetForm]);
 
-  const createDraftItem = () => setEditedItem({
-    id: uuidv4(),
-    [MODE_FIELD]: Mode.add,
-  });
+  const createDraftItem = () =>
+    setEditedItem({
+      id: uuidv4(),
+      [MODE_FIELD]: Mode.add,
+    });
 
   const discardItem = () => setEditedItem(undefined);
 
   const removeItem = (dataItem: ProductORService) => {
     if (!editedItem) return;
-    const updatedProductOrServices = productOrServices
-      .filter((productOrService) =>
+    const updatedProductOrServices = productOrServices.filter(
+      (productOrService: ProductORService) =>
         productOrService.id !== dataItem.id,
-      );
-    const payload = updatedProductOrServices
-      .map((productOrService) => pick(productOrService, FIELDS_TO_PICK));
+    );
+    const payload = updatedProductOrServices.map(
+      (productOrService: ProductORService) =>
+        pick(productOrService, FIELDS_TO_PICK),
+    );
 
     setProductOrServices(updatedProductOrServices);
     formState?.setFieldValue(name, updatedProductOrServices);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
-      [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY),
+      [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(
+        SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY,
+      ),
       [name]: payload,
     });
     discardItem();
   };
 
-  const openQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableProductORService) => {
+  const openQuickView = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    dataItem: EditableProductORService,
+  ) => {
     setSelectedDataItem(dataItem);
     quickViewDialog.open();
     event.preventDefault();
     event.stopPropagation();
   };
 
-  const rowRender: DataGridProps<EditableProductORService>['rowRender'] = (row, { dataItem }) => {
+  const rowRender: DataGridProps<EditableProductORService>['rowRender'] = (
+    row,
+    { dataItem },
+  ) => {
     const item = dataItem as EditableProductORService;
-    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
-    if (!isUpdating) {
+    if (![Mode.add, Mode.edit].includes(item[MODE_FIELD])) {
       return row;
     }
 
-    const editedRow = React.cloneElement(
-      row,
-      {
-        className: cx(row.props.className, classes.updatingRow),
-      },
-    );
+    const editedRow = React.cloneElement(row, {
+      className: cx(row.props.className, classes.updatingRow),
+    });
 
-    return (
-      <FormikProvider value={formik}>
-        {editedRow}
-      </FormikProvider>
-    );
+    return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
   };
 
   const schema = buildSchema({
@@ -164,23 +175,27 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
     onOpenQuickView: openQuickView,
   });
 
-  const itemsList = productOrServices.reduce((list, item) => {
-    const isItemEdited = editedItem && editedItem.id === item.id;
+  const itemsList = productOrServices.reduce(
+    (
+      list: Array<Partial<EditableProductORService>>,
+      item: ProductORService,
+    ) => {
+      const isItemEdited = editedItem && editedItem.id === item.id;
 
-    return [
-      ...list,
-      {
-        ...(isItemEdited ? editedItem : item),
-        [MODE_FIELD]: isItemEdited ? Mode.edit : Mode.show,
-      },
-    ];
-  }, isItemAdded ? [editedItem] : []);
+      return [
+        ...list,
+        {
+          ...(isItemEdited ? editedItem : item),
+          [MODE_FIELD]: isItemEdited ? Mode.edit : Mode.show,
+        },
+      ];
+    },
+    isItemAdded ? [editedItem] : [],
+  );
 
   return (
     <Box className={classes.root} data-cy="product-service">
-      <PromptIfDirty
-        dirty={dirty}
-      />
+      <PromptIfDirty dirty={dirty} />
       <FBInput {...props} type="productorservice" name={name}>
         <FBSection label={label}>
           {isActive && (
@@ -219,7 +234,13 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
           {translate('form.builder.add.item')}
         </Button>
       )}
-      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: selectedDataItem?.revId, parentRevId: workspaceState?.id }} />
+      <DocumentRevisionDialog
+        dialog={quickViewDialog}
+        {...{
+          docRevId: selectedDataItem?.revId,
+          parentRevId: workspaceState?.id,
+        }}
+      />
     </Box>
   );
 };

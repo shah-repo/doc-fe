@@ -8,12 +8,16 @@ export interface SchemaOptions {
   onDiscard?: () => void
   onDelete?: (dataItem: EditableReference) => void
   onRowClick?: (e: ReferenceEditEvent) => void
-  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableReference) => void
+  onOpenQuickView?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    dataItem: EditableReference
+  ) => void
 }
 
-export type FBReferenceProps =
-& Pick<FBInputProps, 'name' | 'label' | 'disabled'>
-& {
+export type FBReferenceProps = Pick<
+FBInputProps,
+'name' | 'label' | 'disabled'
+> & {
   references: Reference[]
   setReferences: React.Dispatch<React.SetStateAction<Reference[]>>
 };
@@ -38,7 +42,11 @@ export interface ReferenceEditEvent {
   dataItem: EditableReference
 }
 
-export interface CustomTemplateProps extends CellTemplateProps<EditableReference> {
+export interface CustomTemplateProps
+  extends CellTemplateProps<EditableReference> {
   onClick?: (e: ReferenceEditEvent) => void
-  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableReference) => void
+  onOpenQuickView?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    dataItem: EditableReference
+  ) => void
 }
