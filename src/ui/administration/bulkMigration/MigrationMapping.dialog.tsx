@@ -193,6 +193,11 @@ const MigrationMappingDialog: React.FC<{
     }));
   }
 
+  function showAllSelectOptions (schemaItem: ISchemaItem) {
+    const options = schemaItem.options?.map((option, index) => option.value);
+    return <span style={{ fontSize: '84%', padding: '2px', backgroundColor: Colors.gray_goose }}> - [ {options?.join(' | ')} ]</span>;
+  }
+
   function getBoxStyle () {
     const styleObject = {};
 
@@ -280,7 +285,9 @@ const MigrationMappingDialog: React.FC<{
                           onClick={e => handleFromSchemaItemClick(schemaItem)}
                         >
                           <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
-                          <Typography variant="caption" display="block" style={{ textTransform: 'capitalize' }}> {schemaItem.type} </Typography>
+                          <Typography variant="caption" display="block" style={{ textTransform: 'capitalize' }}>
+                            {schemaItem.type} { schemaItem.type === 'select' && showAllSelectOptions(schemaItem) }
+                          </Typography>
                           <Typography variant="caption" display="block"> {schemaItem.name} </Typography>
                           {
                             selectedSchemaItems?.map(selectedSchemaItems => selectedSchemaItems.name).includes(schemaItem.name)
@@ -322,7 +329,9 @@ const MigrationMappingDialog: React.FC<{
                               <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
                               <Typography variant="caption" align="right"> {schemaItem.name} </Typography>
                             </Box>
-                            <Typography variant="caption" display="block" style={{ textTransform: 'capitalize' }}> {schemaItem.type} </Typography>
+                            <Typography variant="caption" display="block" style={{ textTransform: 'capitalize' }}>
+                              {schemaItem.type} { schemaItem.type === 'select' && showAllSelectOptions(schemaItem) }
+                            </Typography>
                             {
                               schemaItem.referenceDataType === 'array'
                                && <ToSchemaItemMappingTable schemaItem={schemaItem}

@@ -1,20 +1,28 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { some } from 'lodash';
+import { checkSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/transform';
 import Colors from '../../layout/theme/utils/colors';
 import { IMappedFrom, IRowData, ISchemaItem } from './interface';
 
-export function canMapItems (selectedSchema: ISchemaItem, toSchemaItem: ISchemaItem): {canMap: boolean, errMessage: string} {
+export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISchemaItem): {canMap: boolean, errMessage: string} {
+  const errMessage = '';
   let canMap = true;
-  let errMessage = '';
-  // Rule 1 - Autocomplete type / Checkbox Group must be mapped to an autocomplete / Checkbox Group, an object, or an array type.
-  const types = ['autocomplete', 'checkboxgroup'];
-  for (const type of types) {
-    if (selectedSchema.type === type) {
-      if (toSchemaItem.type !== type && !toSchemaItem.referenceDataType) {
-        canMap = false;
-        errMessage = `${type} can be mapped to an ${type}, an object, or an array type`;
-      }
+
+  if (!toSchemaItem.referenceDataType) {
+    if (selectedSchemaItem.type !== toSchemaItem.type) {
+      return {
+        canMap: false,
+        errMessage: `"${selectedSchemaItem.type as string}" can be mapped to another "${selectedSchemaItem.type as string}"`,
+      };
+    }
+
+    canMap = checkSpecialFields(selectedSchemaItem, toSchemaItem);
+    if (!canMap) {
+      return {
+        canMap,
+        errMessage: `"${selectedSchemaItem.type as string}" can be mapped to another "${selectedSchemaItem.type as string}" with the same options.`,
+      };
     }
   }
 
@@ -126,9 +134,15 @@ export function autoMapArrays (
       matchingItemsFromLabel = toRevSchemaIndex[fromRevSchemaItem.label.toLocaleLowerCase()];
     }
 
+    // The fields from the new schema that match.
     const matchingItems: ISchemaItem[] = matchingItemsFromLabel ?? matchingItemsFromName ?? [];
 
     for (const matchingItem of matchingItems) {
+      const isMatching = checkSpecialFields(fromRevSchemaItem, matchingItem);
+      if (!isMatching) {
+        continue;
+      }
+
       if (matchingItem?.name) {
         fromRevSchemaItem.mappedToCount = (fromRevSchemaItem.mappedToCount ?? 0) + 1;
         if (!matchingItem.mappedFrom) {
