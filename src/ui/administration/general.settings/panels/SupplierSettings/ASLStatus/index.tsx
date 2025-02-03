@@ -18,6 +18,7 @@ import useAsync from '../../../../../hooks/useAsync';
 import SettingsPanel from '../../../components/SettingsPanel';
 import SettingsTable from '../../../components/SettingsTable';
 import { SettingsPanelProps } from '../../../types';
+import { ASL_MAX_DISPLAY_LABEL_LENGTH } from './constants';
 import { buildSchema } from './schema';
 import { ASLStatus, ASLSTATUS_KEYS, EditableASLStatus } from './types';
 
@@ -91,7 +92,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
         error.name = 'validators.required';
       }
 
-      if ((values?.displayLabel?.length ?? 0) > 255) {
+      if ((values?.displayLabel?.length ?? 0) > ASL_MAX_DISPLAY_LABEL_LENGTH) {
         error.displayLabel = 'validator.asl.status.displayLabel.char.limit';
       }
 

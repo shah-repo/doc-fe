@@ -1,0 +1,1 @@
+export const ASL_MAX_DISPLAY_LABEL_LENGTH = 255;
