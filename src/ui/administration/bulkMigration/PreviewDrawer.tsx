@@ -8,10 +8,10 @@ import { BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW, BULK_MIGRATION_GET_SCAN_RE
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError } from '../../components/notifications';
+import { FB, FBFormState, FBInputProps, FBProvider, FBSchemaState } from '../../form.builder';
 import { Colors as ThemeColors } from '../../layout/theme-next';
 import Colors from '../../layout/theme/utils/colors';
 import { IBulkMigrationScanDetails, ISchemaItem } from './interface';
-import MappingTableView from './MappingTableView';
 import { isDisabledSchemaItem } from './utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -88,7 +88,6 @@ const useStyles = makeStyles((theme) => ({
   mappingRuleSchemaItemBox: {
     position: 'relative',
     marginTop: '8px',
-    border: `1px solid ${ThemeColors.textGray}`,
     borderRadius: '2px',
     padding: '8px',
     width: '100%',
@@ -110,6 +109,8 @@ const PreviewDrawer: React.FC<{
   const [selectedPreviewDocRev, setSelectedPreviewDocRev] = useState<DocumentRevision & {formInputKeysCount: number}>();
   const [newFormInput, setNewFormInput] = useState<{[key: string]: any}>();
   const [fieldsUnmatched, setFieldsUnmatched] = useState<{[key: string]: any}>();
+
+  const formState = FB.useRef<FBFormState>(FBFormState, {});
 
   function fetchAllEligibleRevisions () {
     setIsLoading(true);
@@ -154,6 +155,7 @@ const PreviewDrawer: React.FC<{
         setNewFormInput(newFormInput);
         setFieldsUnmatched(fieldNamesUnmatched);
 
+        formState?.setValues(newFormInput);
         setIsLoading(false);
       })
       .catch((exception) => {
@@ -171,25 +173,40 @@ const PreviewDrawer: React.FC<{
     getPreviewForDocRev(docRevSelected);
   };
 
+  function componentToRender (controlProps: FBInputProps): React.ReactNode | undefined {
+    const { type, name, index } = controlProps;
+    const schemaControl = FBSchemaState.control[type || ''];
+    if (!schemaControl) {
+      return;
+    }
+    return React.createElement(schemaControl, {
+      key: `fb-control-${type}-${name}-${index}`,
+      ...controlProps,
+    });
+  }
+
   return (
-    <Drawer
-      anchor="right"
-      open={isPreviewPanelVisible}
-      onClose={handleClosePreview}
-      classes={{ paper: classes.dialogPreviewDrawerPaper }}
-    >
-      <Box className={classes.dialogPreviewDrawer}>
-        <Button onClick={handleClosePreview}>Close</Button>
-        {isLoading && (
-          <LinearProgress
-            className={classes.progress}
-            data-cy="saving-progress-bar"
-          />
-        )}
-        <Box className={classes.drawerContent}>
-          {/* Left Section */}
-          <div className={classes.leftSection}>
-            {previewDocRevsList.length > 0
+    <FBProvider {...{
+      formState,
+    }}>
+      <Drawer
+        anchor="right"
+        open={isPreviewPanelVisible}
+        onClose={handleClosePreview}
+        classes={{ paper: classes.dialogPreviewDrawerPaper }}
+      >
+        <Box className={classes.dialogPreviewDrawer}>
+          <Button onClick={handleClosePreview}>Close</Button>
+          {isLoading && (
+            <LinearProgress
+              className={classes.progress}
+              data-cy="saving-progress-bar"
+            />
+          )}
+          <Box className={classes.drawerContent}>
+            {/* Left Section */}
+            <div className={classes.leftSection}>
+              {previewDocRevsList.length > 0
                 && <List dense={true}>
                   {previewDocRevsList.map((docRev, index) => {
                     const primaryText = `[${index + 1}] ${docRev.document?.docId} • ${docRev.name}`;
@@ -209,17 +226,17 @@ const PreviewDrawer: React.FC<{
                     </ListItem>);
                   })}
                 </List>}
-          </div>
-          {/* Right Section */}
-          <div className={classes.rightSection}>
-            {!selectedPreviewDocRev?.id
+            </div>
+            {/* Right Section */}
+            <div className={classes.rightSection}>
+              {!selectedPreviewDocRev?.id
                 && <Typography variant="h4" color="primary"> Click on a Document Revision from the left to see its preview here. </Typography>
-            }
-            {selectedPreviewDocRev?.id && isLoading
+              }
+              {selectedPreviewDocRev?.id && isLoading
                 && <Typography variant="h4" color="primary"> <HourglassFullIcon /> Generating Preview.... </Typography>
-            }
-            {
-              !isLoading && selectedPreviewDocRev?.id
+              }
+              {
+                !isLoading && selectedPreviewDocRev?.id
               && <>
                 <Box className={classes.rightSectionFieldsUnmatched}>
                   { fieldsUnmatched && <>
@@ -245,30 +262,7 @@ const PreviewDrawer: React.FC<{
                                   }}
                                   key={schemaItem.name}
                                 >
-                                  <Box style={{ width: '100%' }}>
-                                    <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                      <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
-                                      <Typography variant="caption" align="right"> {schemaItem.name} </Typography>
-                                    </Box>
-                                    {
-                                      !schemaItem.referenceDataType && newFormInput[schemaItem.name!]
-                                      && <Typography variant="caption" display="block" style={{ marginTop: '4px', fontWeight: 'bold' }}>
-                                        <em>{JSON.stringify(newFormInput[schemaItem.name!])}</em>
-                                      </Typography>
-                                    }
-                                    {
-                                      schemaItem.referenceDataType === 'array' && newFormInput[schemaItem.name!]
-                                         && <MappingTableView schemaItem={schemaItem}
-                                           formInput={newFormInput}
-                                         />
-                                    }
-                                    {
-                                      schemaItem.referenceDataType === 'object'
-                                         && <MappingTableView schemaItem={schemaItem}
-                                           formInput={newFormInput}
-                                         />
-                                    }
-                                  </Box>
+                                  <Box style={{ width: '100%' }}>{componentToRender(schemaItem)}</Box>
                                 </Box>
                               );
                             })
@@ -277,11 +271,12 @@ const PreviewDrawer: React.FC<{
                   }
                 </Box>
               </>
-            }
-          </div>
+              }
+            </div>
+          </Box>
         </Box>
-      </Box>
-    </Drawer>
+      </Drawer>
+    </FBProvider>
   );
 };
 

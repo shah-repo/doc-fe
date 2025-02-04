@@ -194,8 +194,12 @@ const MigrationMappingDialog: React.FC<{
   }
 
   function showAllSelectOptions (schemaItem: ISchemaItem) {
-    const options = schemaItem.options?.map((option, index) => option.value);
-    return <span style={{ fontSize: '84%', padding: '2px', backgroundColor: Colors.gray_goose }}> - [ {options?.join(' | ')} ]</span>;
+    const options = schemaItem.options?.map((option, index) => option.value) ?? [];
+    if (options?.length > 0) {
+      return <span style={{ fontSize: '84%', padding: '2px', backgroundColor: Colors.gray_goose }}> - [ {options?.join(' | ')} ]</span>;
+    } else {
+      return <></>;
+    }
   }
 
   function getBoxStyle () {
@@ -286,7 +290,7 @@ const MigrationMappingDialog: React.FC<{
                         >
                           <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
                           <Typography variant="caption" display="block" style={{ textTransform: 'capitalize' }}>
-                            {schemaItem.type} { schemaItem.type === 'select' && showAllSelectOptions(schemaItem) }
+                            {schemaItem.type} { showAllSelectOptions(schemaItem) }
                           </Typography>
                           <Typography variant="caption" display="block"> {schemaItem.name} </Typography>
                           {
@@ -330,7 +334,7 @@ const MigrationMappingDialog: React.FC<{
                               <Typography variant="caption" align="right"> {schemaItem.name} </Typography>
                             </Box>
                             <Typography variant="caption" display="block" style={{ textTransform: 'capitalize' }}>
-                              {schemaItem.type} { schemaItem.type === 'select' && showAllSelectOptions(schemaItem) }
+                              {schemaItem.type} { showAllSelectOptions(schemaItem) }
                             </Typography>
                             {
                               schemaItem.referenceDataType === 'array'
