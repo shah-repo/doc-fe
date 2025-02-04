@@ -10,7 +10,7 @@ export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel) => 
   const field = changeField.at(-1) ?? '';
   const parentField = changeField.at(-2) ?? '';
 
-  if (['id', 'isPrimary'].includes(field)) return;
+  if (['id'].includes(field)) return;
 
   if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
     const isSiteContact = parentField.startsWith('siteContact');
