@@ -52,7 +52,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
   const sortStatusByDisplayOrder = (statusList?: ASLStatus[]): ASLStatus[] => {
     if (!statusList?.length) return [];
 
-    return [...statusList].sort((status1: ASLStatus, status2: ASLStatus) => {
+    return statusList.toSorted((status1: ASLStatus, status2: ASLStatus) => {
       const orderComparison
         = (status1[ASL_STATUS_KEYS.order] ?? 0)
         - (status2[ASL_STATUS_KEYS.order] ?? 0);
@@ -62,7 +62,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
         (status1[ASL_STATUS_KEYS.displayOrder] ?? 0)
         - (status2[ASL_STATUS_KEYS.displayOrder] ?? 0)
       );
-    });
+    }) as ASLStatus[];
   };
 
   const async = useAsync({
