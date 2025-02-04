@@ -37,10 +37,11 @@ const Editor: React.FC<CustomTemplateProps> = ({
       aslStatusId: data.id,
     };
   });
-  let value = aslOptions?.find(
+  console.log('dataItem[field]', dataItem[field]);
+  console.log('values', values[field]);
+  const value = aslOptions?.find(
     (option: CustomOptionType) => option.value === dataItem[field],
   );
-  value = aslOptions?.find((option) => option.value === values[field]);
   const handleChange = (_, value?: CustomOptionType) => {
     setFieldValue(field, value?.value ?? '');
     setFieldValue('aslStatusId', value?.aslStatusId ?? '');
@@ -82,6 +83,7 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
             size="small"
             className={cx(
               classes.chip,
+              classes.truncateChip,
               classes[ASL_STATUS_CLASS_MAPPING[defaultValue]],
             )}
             label={defaultValue}

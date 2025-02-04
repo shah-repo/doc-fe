@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import { noop } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -19,6 +20,7 @@ import { AlertDialog } from '../../dialogs';
 import { OptionType } from '../../forms/fields/Autocomplete/types';
 import { toastError } from '../../notifications';
 import HeaderStatusButton from './HeaderStatusButton';
+import useStyles from './HeaderStatusButton.styles';
 
 interface HeaderSupplierStatusProps {
   documentRevision: DocumentRevision
@@ -33,6 +35,7 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
   documentRevision,
 }) => {
   const confirmationDialog = useDialog();
+  const classes = useStyles();
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
   const hasPermissionToUpdateSupplierStatus = useSelector(
@@ -110,8 +113,11 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
       <AlertDialog
         handler={confirmationDialog}
         onConfirm={updateLotStatus.current ?? noop}
+        loading={async.isLoading}
       >
-        {confirmationMessage}
+        <Box className={classes.alertMessage}>
+          {confirmationMessage}
+        </Box>
       </AlertDialog>
     </>
   );
