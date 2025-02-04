@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Checkbox } from '../../../../../../../components/forms/fields-next';
 import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { CustomGroupOptions, LCP } from '../types';
@@ -13,11 +13,11 @@ interface ActiveCellProps extends CellTemplateProps<LCP> {
 export const ActiveCell: React.FC<ActiveCellProps> = ({ dataItem, colSpan, style, field, dataIndex, hasEditLCPPermission, selectedPartGroups, className, onChange }) => {
   const dataCy = getCellDataCyBasedOnParentDocType(selectedPartGroups, dataItem.documentTypeId, field, dataItem.internalType);
 
-  const handleChange = (event, checked: boolean) => {
+  const handleChange = (event: ChangeEvent<{}>, checked: boolean) => {
     onChange?.({
       dataIndex,
       dataItem,
-      syntheticEvent: event.syntheticEvent,
+      syntheticEvent: event,
       field,
       value: checked,
     });

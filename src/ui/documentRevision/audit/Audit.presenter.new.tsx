@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
 import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
-import { Audit, AuditGroupType, LifecyclePhaseOptionPayload } from '../../../state/ducks/audit/types';
+import { Audit, AuditGroupType, LifecyclePhaseOptionType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { companyActions } from '../../../state/ducks/company';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
@@ -60,7 +60,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const docTypeId = documentRevisions[0].document?.documentType?.id;
 
   // fetch lifecycle phase options
-  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<LifecyclePhaseOptionPayload[]>([]);
+  const [lifecyclePhaseOptions, setLifecyclePhaseOptions] = useState<LifecyclePhaseOptionType[]>([]);
   const fetchDocRevOptions = useActionCreator(companyActions.fetchDocRevOptionsByDocTypeId);
 
   const fetchLCPDocTypesAsync = useAsync({

@@ -59,11 +59,10 @@ const Editor: React.FC<CustomCellProps> = ({
 
 export const SupplierDropDownCell: React.FC<CustomCellProps> = (props) => {
   const { field, dataItem, onClick } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = kebabCase(field);
 
-  if (isEditMode) {
+  if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return <Editor {...props} />;
   }
 

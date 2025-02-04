@@ -222,7 +222,7 @@ export interface UsedDocumentsInLHRS {
   [key: string]: DocumentsInLHRS
 }
 
-export interface SearchRecordsResponse {
+export interface EntitySearchResults {
   items: DocumentRevision[]
   totalCount: number
 }

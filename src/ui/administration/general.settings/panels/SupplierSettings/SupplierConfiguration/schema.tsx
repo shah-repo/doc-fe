@@ -8,7 +8,6 @@ import { EditableSupplierConfig, OptionType } from './types';
 export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
   isActive,
   onEdit,
-  onActiveStateChange,
   onDelete,
   capabilities,
   services,

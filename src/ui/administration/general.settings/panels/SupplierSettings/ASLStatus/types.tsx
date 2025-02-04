@@ -6,7 +6,7 @@ import { OptionType } from '../SupplierConfiguration/types';
 
 export interface EditableASLStatus extends ASLStatus, EditableItem {}
 
-export enum ASLSTATUS_KEYS {
+export enum ASL_STATUS_KEYS {
   id = 'id',
   order = 'order',
   internalType = 'internalType',

@@ -1,7 +1,7 @@
 import { get, isString } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { translate } from '../../../common/intl';
-import { Audit, LifecyclePhaseOptionPayload } from '../../../state/ducks/audit/types';
+import { Audit, LifecyclePhaseOptionType } from '../../../state/ducks/audit/types';
 import { WorkOrderTypesValues } from '../../../state/ducks/documentRevisions/documentType/types';
 import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '../../form.builder';
@@ -59,10 +59,10 @@ export const getWOAuditDefaultValue = (audit: Audit): string => {
 
 export const getLCPAuditDefaultValue = (
   audit: Audit,
-  lifecyclePhaseOptions?: LifecyclePhaseOptionPayload[],
+  lifecyclePhaseOptions?: LifecyclePhaseOptionType[],
 ): string => {
   const lifecyclePhase = lifecyclePhaseOptions?.find(
-    (data: LifecyclePhaseOptionPayload) => data.id === audit.nextValue,
+    (data: LifecyclePhaseOptionType) => data.id === audit.nextValue,
   );
   return lifecyclePhase?.text ?? translate('common.not.applicable');
 };

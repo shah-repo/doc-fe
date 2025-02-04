@@ -89,7 +89,7 @@ export interface POLineItem {
   capitalEquipment?: boolean
 }
 
-export interface LifecyclePhaseOptionPayload {
+export interface LifecyclePhaseOptionType {
   id: string
   text: string
 }

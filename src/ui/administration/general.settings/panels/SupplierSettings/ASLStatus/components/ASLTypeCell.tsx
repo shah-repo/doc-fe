@@ -13,7 +13,7 @@ import {
 } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../../components/OverflowTooltip';
 import useStyles from '../../../../components/SettingsTable/styles';
-import { ASLStatus, ASLSTATUS_KEYS, CustomCellProps } from '../types';
+import { ASL_STATUS_KEYS, ASLStatus, CustomCellProps } from '../types';
 
 const Editor: React.FC<CustomCellProps> = ({
   dataItem,
@@ -24,14 +24,13 @@ const Editor: React.FC<CustomCellProps> = ({
 }) => {
   const classes = useStyles();
   const { getFieldProps, setFieldValue } = useFormikContext();
-  const isEditMode = Mode.edit === dataItem[MODE_FIELD];
   const value = (dataOptions as ASLStatus[])?.find(
     (option: ASLStatus) => option.internalType === dataItem[field],
   );
 
   const handleChange = (event: ChangeEvent<unknown>, value: ASLStatus) => {
     setFieldValue(field, value.internalType);
-    setFieldValue(ASLSTATUS_KEYS.order, value.order);
+    setFieldValue(ASL_STATUS_KEYS.order, value.order);
     onChange?.({
       dataIndex,
       dataItem,
@@ -45,7 +44,7 @@ const Editor: React.FC<CustomCellProps> = ({
     <FormikField name={field}>
       <Autocomplete
         {...getFieldProps(field)}
-        disabled={isEditMode}
+        disabled={Mode.edit === dataItem[MODE_FIELD]}
         blurOnSelect
         disableClearable
         getOptionLabel={(option: ASLStatus) => option.internalType}
@@ -68,11 +67,10 @@ const Editor: React.FC<CustomCellProps> = ({
 
 export const ASLTypeCell: React.FC<CustomCellProps> = (props) => {
   const { field, dataItem, onClick } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = kebabCase(field);
 
-  if (isEditMode) {
+  if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return <Editor {...props} />;
   }
 

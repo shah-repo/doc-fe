@@ -25,8 +25,6 @@ const Editor: React.FC<CustomCellProps> = ({
   const value = dataOptions?.find(
     (data: OptionType) => data.text === dataItem[field],
   );
-  const isEditMode = Mode.edit === dataItem[MODE_FIELD];
-
   const handleChange = (event: ChangeEvent<unknown>, value: OptionType) => {
     setFieldValue(field, value.text);
     setFieldValue('supplierTypeId', value.id);
@@ -46,7 +44,7 @@ const Editor: React.FC<CustomCellProps> = ({
         {...getFieldProps(field)}
         blurOnSelect
         disableClearable
-        disabled={isEditMode}
+        disabled={Mode.edit === dataItem[MODE_FIELD]}
         getOptionLabel={(option: OptionType) => option.text}
         getOptionSelected={(option: OptionType, value) => option.text === value}
         placeholder={translate('common.select')}
@@ -62,11 +60,10 @@ const Editor: React.FC<CustomCellProps> = ({
 
 export const TypeCell: React.FC<CustomCellProps> = (props) => {
   const { field, dataItem, onClick } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = kebabCase(field);
 
-  if (isEditMode) {
+  if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return <Editor {...props} />;
   }
 

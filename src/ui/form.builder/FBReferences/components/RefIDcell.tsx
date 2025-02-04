@@ -15,7 +15,7 @@ import { translate } from '../../../../common/intl';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import {
   DocumentRevisionStatus,
-  SearchRecordsResponse,
+  EntitySearchResults,
 } from '../../../../state/ducks/documentRevisions/types';
 import StyledLink from '../../../components/common/kendo/StyledLink';
 import { FormikField } from '../../../components/forms/fields-next';
@@ -58,7 +58,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
   };
 
   const fetchOptionsDataAsync = useAsync({
-    onSuccess: (data?: SearchRecordsResponse) => {
+    onSuccess: (data?: EntitySearchResults) => {
       const modifiedItems
         = data?.items?.map((item) => {
           const label = translate(
