@@ -13,9 +13,10 @@ export interface SchemaOptions {
   onRowClick?: (e: CertificationEditEvent) => void
 }
 
-export type FBCertificationProps =
-& Pick<FBInputProps, 'name' | 'label' | 'disabled'>
-& {
+export type FBCertificationProps = Pick<
+FBInputProps,
+'name' | 'label' | 'disabled'
+> & {
   certifications: Certification[]
   setCertifications: React.Dispatch<React.SetStateAction<Certification[]>>
 };
@@ -37,6 +38,7 @@ export interface CertificationEditEvent {
   dataItem: EditableCertification
 }
 
-export interface CustomTemplateProps extends CellTemplateProps<EditableCertification> {
+export interface CustomTemplateProps
+  extends CellTemplateProps<EditableCertification> {
   onClick?: (e: CertificationEditEvent) => void
 }

@@ -14,12 +14,7 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
   cellRowClick,
 }) => {
   const classes = useStyles();
-  const cellClickEvent = () => {
-    if (!cellRowClick) {
-      return;
-    }
-    cellRowClick({ dataItem });
-  };
+  const handleOnClick = () => cellRowClick?.({ dataItem });
 
   return (
     <td
@@ -29,7 +24,7 @@ export const SupplierStatus: React.FC<CustomGridCellProps> = ({
       className={className}
       data-grid-col-index={columnIndex}
       data-cy="cell-status"
-      onClick={cellClickEvent}
+      onClick={handleOnClick}
     >
       <Grid
         justify="flex-start"

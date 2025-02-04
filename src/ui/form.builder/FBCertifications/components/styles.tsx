@@ -45,4 +45,8 @@ export default makeStyles((theme) => ({
       width: '1em',
     },
   },
+  fileName: {
+    width: 235,
+    marginX: theme.spacing(0.75),
+  },
 }));

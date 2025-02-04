@@ -20,7 +20,12 @@ import FB from '../helpers/FB';
 import { ATTACHMENT_FIELDS_TO_OMIT, FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { Certification, CertificationEditEvent, EditableCertification, FBCertificationProps } from './types';
+import {
+  Certification,
+  CertificationEditEvent,
+  EditableCertification,
+  FBCertificationProps,
+} from './types';
 import { withFBCertifications } from './wrap';
 
 const FBCertifications: React.FC<FBCertificationProps> = ({
@@ -34,39 +39,45 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
   const classes = useStyles();
   const isActive = !disabled;
   const { formState, workspaceState } = FB.useStores();
-  const [editedCertification, setEditedCertification] = useState<Partial<EditableCertification>>();
+  const [editedCertification, setEditedCertification]
+    = useState<Partial<EditableCertification>>();
 
   const isCertificationAdded = editedCertification?.[MODE_FIELD] === Mode.add;
-  const editCertification = ({ dataItem }: CertificationEditEvent) => setEditedCertification(dataItem);
+  const editCertification = ({ dataItem }: CertificationEditEvent) =>
+    setEditedCertification(dataItem);
   const isInEditMode = editedCertification !== undefined;
-  const handleRowClick = isActive && !isInEditMode ? editCertification : undefined;
+  const handleRowClick
+    = isActive && !isInEditMode ? editCertification : undefined;
 
   const formik = useFormik<Partial<EditableCertification>>({
     initialValues: {},
     onSubmit: (values: Partial<EditableCertification>) => {
       const updatedCertification = omit(values, FIELDS_TO_OMIT);
       if (updatedCertification.attachments) {
-        updatedCertification.attachments = updatedCertification.attachments?.map(attachment =>
-          omit(attachment, ATTACHMENT_FIELDS_TO_OMIT) as Attachment,
-        );
+        updatedCertification.attachments
+          = updatedCertification.attachments?.map(
+            (attachment) =>
+              omit(attachment, ATTACHMENT_FIELDS_TO_OMIT) as Attachment,
+          );
       }
-      const isAddition = values[MODE_FIELD] === Mode.add;
-      console.log({ updatedCertification });
-      const updatedCertifications = isAddition
-        ? [...certifications, updatedCertification]
-        : certifications.map((certification) =>
-          certification.id === values.id
-            ? updatedCertification
-            : certification,
-        );
+      const updatedCertifications
+        = values[MODE_FIELD] === Mode.add
+          ? [...certifications, updatedCertification]
+          : certifications.map((certification) =>
+            certification.id === values.id
+              ? updatedCertification
+              : certification,
+          );
       formState?.setFieldValue(name, updatedCertifications);
       workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
-        [SUPPLIER_KEYS.SUPPLIER_REFERENCES_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_REFERENCES_KEY),
+        [SUPPLIER_KEYS.SUPPLIER_REFERENCES_KEY]:
+          workspaceState.formInputSync.get(
+            SUPPLIER_KEYS.SUPPLIER_REFERENCES_KEY,
+          ),
         [name]: updatedCertifications,
       });
       setCertifications(updatedCertifications as Certification[]);
-
       discardCertification();
     },
   });
@@ -77,49 +88,47 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
     resetForm({ values: editedCertification ?? {} });
   }, [editedCertification, setValues, resetForm]);
 
-  const createDraftCertification = () => setEditedCertification({
-    id: uuidv4(),
-    expiryDate: undefined,
-    [MODE_FIELD]: Mode.add,
-  });
+  const createDraftCertification = () =>
+    setEditedCertification({
+      id: uuidv4(),
+      expiryDate: undefined,
+      [MODE_FIELD]: Mode.add,
+    });
 
   const discardCertification = () => setEditedCertification(undefined);
 
   const removeCertification = (dataItem: EditableCertification) => {
     if (!editedCertification) return;
 
-    const updatedCertifications = certifications.filter((contact) =>
-      contact.id !== dataItem.id,
+    const updatedCertifications = certifications.filter(
+      (certification: Certification) => certification.id !== dataItem.id,
     );
     setCertifications(updatedCertifications);
     formState?.setFieldValue(name, updatedCertifications);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
-      [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY),
+      [SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY]: workspaceState.formInputSync.get(
+        SUPPLIER_KEYS.SUPPLIER_CONTACTS_KEY,
+      ),
       [name]: updatedCertifications,
     });
     discardCertification();
   };
 
-  const rowRender: DataGridProps<EditableCertification>['rowRender'] = (row, { dataItem }) => {
+  const rowRender: DataGridProps<EditableCertification>['rowRender'] = (
+    row,
+    { dataItem },
+  ) => {
     const item = dataItem as EditableCertification;
-    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
-    if (!isUpdating) {
+    if (![Mode.add, Mode.edit].includes(item[MODE_FIELD])) {
       return row;
     }
 
-    const editedRow = React.cloneElement(
-      row,
-      {
-        className: cx(row.props.className, classes.updatingRow),
-      },
-    );
+    const editedRow = React.cloneElement(row, {
+      className: cx(row.props.className, classes.updatingRow),
+    });
 
-    return (
-      <FormikProvider value={formik}>
-        {editedRow}
-      </FormikProvider>
-    );
+    return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
   };
 
   const schema = buildSchema({
@@ -132,23 +141,25 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
     onDelete: removeCertification,
   });
 
-  const certificationsList = certifications.reduce((list, item) => {
-    const isCertificationEdited = editedCertification && editedCertification.id === item.id;
+  const certificationsList = certifications.reduce(
+    (list: Array<Partial<EditableCertification>>, item: Certification) => {
+      const isCertificationEdited
+        = editedCertification && editedCertification.id === item.id;
 
-    return [
-      ...list,
-      {
-        ...(isCertificationEdited ? editedCertification : item),
-        [MODE_FIELD]: isCertificationEdited ? Mode.edit : Mode.show,
-      },
-    ];
-  }, isCertificationAdded ? [editedCertification] : []);
+      return [
+        ...list,
+        {
+          ...(isCertificationEdited ? editedCertification : item),
+          [MODE_FIELD]: isCertificationEdited ? Mode.edit : Mode.show,
+        },
+      ];
+    },
+    isCertificationAdded ? [editedCertification] : [],
+  );
 
   return (
     <Box className={classes.root} data-cy="certifications">
-      <PromptIfDirty
-        dirty={dirty}
-      />
+      <PromptIfDirty dirty={dirty} />
       <FBInput {...props} type="certifications" name={name}>
         <FBSection label={label}>
           {isActive && (
