@@ -7,7 +7,7 @@ import {
   TextField,
   Tooltip,
 } from '@material-ui/core';
-import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
+import { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -18,7 +18,7 @@ import {
   EntitySearchResults,
 } from '../../../../state/ducks/documentRevisions/types';
 import StyledLink from '../../../components/common/kendo/StyledLink';
-import { FormikField } from '../../../components/forms/fields-next';
+import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../components/notifications';
