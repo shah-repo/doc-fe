@@ -352,6 +352,7 @@ const MigrationMappingDialog: React.FC<{
                             (schemaItem.mappedFrom ?? []).length > 0 && schemaItem.mappedFrom?.map(mappedFromEntry => {
                               return mappedFromEntry.isShowDirectly && (
                                 <Chip
+                                  key={mappedFromEntry.label}
                                   label={mappedFromEntry.label}
                                   onDelete={e => handleMappedFromDelete(schemaItem, mappedFromEntry)}
                                   color="secondary"

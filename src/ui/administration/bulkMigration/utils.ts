@@ -30,8 +30,8 @@ export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISch
 }
 
 export function validateTableMappings (selectedRow: IRowData): {canMap: boolean, errMessage: string} {
-  let canMap = true;
-  let errMessage = '';
+  const canMap = true;
+  const errMessage = '';
 
   // Rule 2:3 - In a table row, only one column can be an autocomplete / checkboxGroup
   let columnKeyWithAutocomplete;
@@ -50,8 +50,10 @@ export function validateTableMappings (selectedRow: IRowData): {canMap: boolean,
 
       // Within the same column cannot map autocomplete and non autocomplete fields.
       if (hasAutocomplete && hasNonAutocomplete) {
-        canMap = false;
-        errMessage = 'Within the same column cannot map autocomplete and non autocomplete fields';
+        return {
+          canMap: false,
+          errMessage: 'Within the same column cannot map autocomplete and non autocomplete fields',
+        };
       }
 
       const hasCheckboxgroup = some(mappedEntries, { type: 'checkboxgroup' });
@@ -59,16 +61,20 @@ export function validateTableMappings (selectedRow: IRowData): {canMap: boolean,
 
       // Within the same column cannot map checkboxgroup and non checkboxgroup fields.
       if (hasCheckboxgroup && hasNonCheckboxgroup) {
-        canMap = false;
-        errMessage = 'Within the same column cannot map checkboxgroup and non checkboxgroup fields';
+        return {
+          canMap: false,
+          errMessage: 'Within the same column cannot map checkboxgroup and non checkboxgroup fields',
+        };
       }
 
       if (hasAutocomplete) {
         if (!columnKeyWithAutocomplete || columnKeyWithAutocomplete === key) {
           columnKeyWithAutocomplete = key;
         } else {
-          canMap = false;
-          errMessage = `In this table row, ${columnKeyWithAutocomplete} is already an autocomplete. Only one column can be an autocomplete`;
+          return {
+            canMap: false,
+            errMessage: `In this table row, ${columnKeyWithAutocomplete} is already an autocomplete. Only one column can be an autocomplete`,
+          };
         }
       }
 
@@ -76,8 +82,10 @@ export function validateTableMappings (selectedRow: IRowData): {canMap: boolean,
         if (!columnKeyWithCheckbox || columnKeyWithCheckbox === key) {
           columnKeyWithCheckbox = key;
         } else {
-          canMap = false;
-          errMessage = `In this table row, ${columnKeyWithCheckbox} is already an checkboxgroup. Only one column can be an checkboxgroup`;
+          return {
+            canMap: false,
+            errMessage: `In this table row, ${columnKeyWithCheckbox} is already an checkboxgroup. Only one column can be an checkboxgroup`,
+          };
         }
       }
     }
@@ -136,9 +144,11 @@ export function autoMapArrays (
 
     // The fields from the new schema that match.
     const matchingItems: ISchemaItem[] = matchingItemsFromLabel ?? matchingItemsFromName ?? [];
+    console.log(matchingItems);
 
     for (const matchingItem of matchingItems) {
       const isMatching = checkSpecialFields(fromRevSchemaItem, matchingItem);
+      console.log(fromRevSchemaItem, matchingItem, isMatching);
       if (!isMatching) {
         continue;
       }

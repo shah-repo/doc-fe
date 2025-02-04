@@ -450,8 +450,8 @@ const BulkMigrationContainer: React.FC = () => {
             {/* <br className={classes.spaceTitle} /> */}
           </Box>
           { selectedRows.length > 0 && <FBButton
-            label="Migrate Suppliers"
-            dataCy="migrate-suppliers-btn"
+            label="Migrate Revisions"
+            dataCy="migrate-revisions-btn"
             onClick = {confirmSubmission}
             variant="contained"
             color="primary"

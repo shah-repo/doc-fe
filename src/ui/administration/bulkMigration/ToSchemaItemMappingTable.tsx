@@ -6,6 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toastError } from '../../components/notifications';
@@ -77,7 +78,7 @@ const ToSchemaItemMappingTable: React.FC<{
       return;
     }
 
-    const modifiedRow = { ...selectedRow };
+    const modifiedRow = cloneDeep(selectedRow);
     if (!modifiedRow[key]) {
       modifiedRow[key] = [];
     }
@@ -145,7 +146,7 @@ const ToSchemaItemMappingTable: React.FC<{
           {schemaItem.fieldNames?.map(fieldName => {
             return (
               // <TableCell style={{ width: `${widthPercent}`, overflow: 'hidden', overflowWrap: 'break-word' }}>{fieldName}</TableCell>
-              <TableCell>{fieldName}</TableCell>
+              <TableCell key={`header-${fieldName}`}>{fieldName}</TableCell>
             );
           })}
           { !isSingleRow && <TableCell style={{ width: `${ADD_ROW_COLUMN_WIDTH_PERCENT}` }} /> }
@@ -164,7 +165,7 @@ const ToSchemaItemMappingTable: React.FC<{
                   contentEditable = {!Array.isArray(row[fieldName])}
                   suppressContentEditableWarning
                   onInput={(event) => handleCellInput(event, row, fieldName)}
-                  key={fieldName}
+                  key={`valueField-${fieldName}-${index}`}
                 >
                   {(Array.isArray(row[fieldName]) && row[fieldName]?.length) ? row[fieldName].map(entry => {
                     return (
