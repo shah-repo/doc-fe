@@ -30,6 +30,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
 }) => {
   const { values, getFieldProps, setFieldValue }
     = useFormikContext<EditableProductORService>();
+  const classes = useStyles();
   const aslOptions = aslItems?.map((data: ASLStatus) => {
     return {
       value: data.internalType,
@@ -37,10 +38,8 @@ const Editor: React.FC<CustomTemplateProps> = ({
       aslStatusId: data.id,
     };
   });
-  console.log('dataItem[field]', dataItem[field]);
-  console.log('values', values[field]);
   const value = aslOptions?.find(
-    (option: CustomOptionType) => option.value === dataItem[field],
+    (option: CustomOptionType) => option.value === values[field],
   );
   const handleChange = (_, value?: CustomOptionType) => {
     setFieldValue(field, value?.value ?? '');
@@ -57,8 +56,15 @@ const Editor: React.FC<CustomTemplateProps> = ({
         placeholder={translate('common.select')}
         options={aslOptions}
         value={value}
-        getOptionLabel={(option: CustomOptionType) => option.label}
+        getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
+        renderOption={(option: CustomOptionType) => {
+          return (
+            <div className={cx(classes.aslOptionLabel, classes.textOverflow)}>
+              {option.label}
+            </div>
+          );
+        }}
         size="small"
       />
     </FormikField>
@@ -83,7 +89,8 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
             size="small"
             className={cx(
               classes.chip,
-              classes.truncateChip,
+              classes.textOverflow,
+              classes.aslChip,
               classes[ASL_STATUS_CLASS_MAPPING[defaultValue]],
             )}
             label={defaultValue}

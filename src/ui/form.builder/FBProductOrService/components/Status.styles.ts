@@ -17,12 +17,6 @@ export default makeStyles((theme: Theme) => ({
     cursor: 'pointer',
     marginRight: theme.spacing(0.5),
   },
-  truncateChip: {
-    maxWidth: 250,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-  },
   GREEN_STATUS: {
     background: Colors.successHighlight,
     color: Colors.approve,
@@ -47,5 +41,16 @@ export default makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  textOverflow: {
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+  },
+  aslOptionLabel: {
+    maxWidth: '100%',
+  },
+  aslChip: {
+    maxWidth: 250,
   },
 }));
