@@ -42,15 +42,10 @@ export default makeStyles((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  textOverflow: {
+  aslChipTextOverflow: {
+    maxWidth: 250,
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-  },
-  aslOptionLabel: {
-    maxWidth: '100%',
-  },
-  aslChip: {
-    maxWidth: 250,
   },
 }));

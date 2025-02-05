@@ -12,6 +12,7 @@ import {
 } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import {
   ASL_STATUS_CLASS_MAPPING,
   EMPTY_VALUE_PLACEHOLDER,
@@ -30,7 +31,6 @@ const Editor: React.FC<CustomTemplateProps> = ({
 }) => {
   const { values, getFieldProps, setFieldValue }
     = useFormikContext<EditableProductORService>();
-  const classes = useStyles();
   const aslOptions = aslItems?.map((data: ASLStatus) => {
     return {
       value: data.internalType,
@@ -58,13 +58,11 @@ const Editor: React.FC<CustomTemplateProps> = ({
         value={value}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
-        renderOption={(option: CustomOptionType) => {
-          return (
-            <div className={cx(classes.aslOptionLabel, classes.textOverflow)}>
-              {option.label}
-            </div>
-          );
-        }}
+        renderOption={(option: CustomOptionType) => (
+          <OverflowTooltip arrow placement="top" title={option.label}>
+            {option.label}
+          </OverflowTooltip>
+        )}
         size="small"
       />
     </FormikField>
@@ -89,8 +87,7 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
             size="small"
             className={cx(
               classes.chip,
-              classes.textOverflow,
-              classes.aslChip,
+              classes.aslChipTextOverflow,
               classes[ASL_STATUS_CLASS_MAPPING[defaultValue]],
             )}
             label={defaultValue}
