@@ -27,7 +27,8 @@ export const buildSchema = ({
         <PrimaryCell
           isActive={false}
           {...props}
-          isInEditMode={isInEditMode} />
+          isInEditMode={isInEditMode}
+        />
       ),
       width: 80,
     },

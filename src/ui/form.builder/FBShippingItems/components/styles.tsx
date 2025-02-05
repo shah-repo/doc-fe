@@ -1,10 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
-export const styles = makeStyles((theme) => ({
+export default makeStyles((theme) => ({
   option: {
-    fontSize: '14px',
-    fontFamily: 'Sora',
+    fontSize: 14,
     overflowWrap: 'anywhere',
   },
   link: {

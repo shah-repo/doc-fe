@@ -7,4 +7,9 @@ export default makeStyles(theme => ({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
+  radioContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing(0.75),
+  },
 }));

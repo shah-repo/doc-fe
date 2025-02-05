@@ -1,12 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { isEmpty } from 'lodash';
+import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { FB, FBAutocompleteAsyncOption } from '..';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { shippingInfoActions } from '../../../state/ducks/ShippingInformation';
-import { toastError } from '../../components/notifications';
-import useActionCreator from '../../hooks/useActionCreator';
-import useAsync from '../../hooks/useAsync';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
+import { SHIPPING_ADDRESS_FIELDS, SHIPPING_CUSTOMER_FIELD } from './constants';
 import { ContactValue, CustomOptionType, FBShippingAddressProps, ShippingAddress } from './types';
 
 export const withFBShippingAddress = <T extends FBShippingAddressProps>(
@@ -20,34 +18,30 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
     const { workspaceState, formState } = FB.useStores();
     const [options, setOptions] = useState<CustomOptionType[]>([]);
     const defaultValue = formState?.getFieldValue(name) ?? '';
-    const shippingAddress = useObserver(() => formState?.getFieldValue('shipping_address') || workspaceState?.formInputSync.get('shipping_address') || workspaceState?.formInput?.shipping_address);
-    const customerId = useObserver(() => formState?.getFieldValue('customer') || workspaceState?.formInputSync.get('customer') || workspaceState?.formInput?.customer);
+    const shippingAddress = useObserver(() => formState?.getFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS) || workspaceState?.formInputSync.get(SHIPPING_ADDRESS_FIELDS.ADDRESS) || workspaceState?.formInput?.shipping_address);
+    const customerId = useObserver(() => formState?.getFieldValue(SHIPPING_CUSTOMER_FIELD) || workspaceState?.formInputSync.get(SHIPPING_CUSTOMER_FIELD) || workspaceState?.formInput?.customer);
     const isCustomerFieldLoading = useObserver(() => workspaceState?.documentRevApi.loading);
-    const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue('customer'));
-    const isShippingAddressEmpty = isEmpty(formState?.getFieldValue('shipping_address'));
-    const fetchAddressesByCustomerId = useActionCreator(
-      shippingInfoActions.fetchAddressesByCustomerId,
+    const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue(SHIPPING_CUSTOMER_FIELD));
+    const isShippingAddressEmpty = isEmpty(formState?.getFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS));
+
+    const customersAsync = FB.useRef<FBAutocompleteAsyncState>(
+      FBAutocompleteAsyncState,
+      {
+        optionId: FBAutocompleteAsyncOption.shippingInformation,
+      },
     );
+
+    useEffect(() => {
+      customersAsync.load();
+    }, [customersAsync]);
 
     const renderOptions = (shippingAddresses: ShippingAddress[]): CustomOptionType[] => {
       return shippingAddresses.map((address) => ({
-        label: `${address.siteName}, ${address.siteAddress}`,
+        label: `${address.siteName} (${address.siteAddress}, ${address.city} ${address.zipCode}, ${address.country})`,
         value: address.id,
         siteContact: address.siteContact,
       }));
     };
-
-    const fetchShippingAddressAsync = useAsync({
-      onSuccess: (data?: DocumentRevision) => {
-        const siteAddress = (data?.formInput?.siteInformations ?? data?.formInput?.site_informations) as ShippingAddress[];
-        if (isEmpty(siteAddress)) {
-          return;
-        }
-
-        setOptions(renderOptions(siteAddress));
-      },
-      onError: toastError,
-    });
 
     useEffect(() => {
       if ((!FB.isUUID(customerId) && isCustomerFieldLoading) || !customerId) {
@@ -57,13 +51,23 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
         return;
       }
 
-      fetchShippingAddressAsync.start(
-        fetchAddressesByCustomerId,
-        customerId,
-        FBAutocompleteAsyncOption.shippingInformation,
-        fetchShippingAddressAsync,
-      );
+      customersAsync.fetchAutocompleteOption(customerId, FBAutocompleteAsyncOption.shippingInformation);
     }, [customerId]);
+
+    useEffect(
+      () =>
+        reaction(
+          () => customersAsync.autocompleteValueApi.data,
+          (data) => {
+            if (data) {
+              const siteAddress = data?.formInput
+                ?.siteInformations as ShippingAddress[];
+              setOptions(siteAddress ? renderOptions(siteAddress) : []);
+            }
+          },
+        ),
+      [],
+    );
 
     useEffect(() => {
       if (!isEmpty(shippingAddress) && !isEmpty(options) && customerId && !options.some(option => option.value === defaultValue?.id)) {
@@ -91,9 +95,9 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
         return contacts;
       }, { attention: undefined, shipping: undefined });
 
-      formState?.setFieldValue('shipping_address', !isEmpty(value) ? { id: value?.value, name: value?.label } : {});
-      formState?.setFieldValue('shipping_address_attention', !isEmpty(value) ? contacts?.attention : {});
-      formState?.setFieldValue('shipping_address_contact', !isEmpty(value) ? contacts?.shipping : {});
+      formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS, !isEmpty(value) ? { id: value?.value, name: value?.label } : {});
+      formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.ATTENTION, !isEmpty(value) ? contacts?.attention : {});
+      formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.CONTACT, !isEmpty(value) ? contacts?.shipping : {});
       workspaceState?.saveDocRev(formState?.getValues());
     };
 
@@ -108,7 +112,7 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
       ...props as T,
       name,
       disabled: disabled || isCustomerFieldEmpty || isCustomerFieldLoading,
-      isLoading: fetchShippingAddressAsync.isLoading,
+      isLoading: customersAsync.loading,
       isShippingAddressEmpty,
       value,
       handleChange,

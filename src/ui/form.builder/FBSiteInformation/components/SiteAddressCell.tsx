@@ -9,7 +9,7 @@ import OverflowContent from '../../../components/OverflowContent';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomSiteTemplateProps, EditableSite } from '../types';
-import styles from './styles';
+import useStyles from './styles';
 
 const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -48,22 +48,20 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
 
 export const SiteAddressCell: React.FC<CustomSiteTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
-  const classes = styles();
-  const isEditMode
-    = dataItem[MODE_FIELD]
-    && [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const classes = useStyles();
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
   const handleClick = () => onClick?.({ dataItem });
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
+  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER);
 
   return (
     <Grid container spacing={2} direction="row" alignItems="center">
       <Grid item>
-        <Tooltip arrow placement="top" title={translate('customer.site.information.same.as.hq.label')} PopperProps={{ style: { zIndex: 2000 } }} >
+        <Tooltip arrow placement="top" title={translate('customer.site.information.same.as.hq.label')} >
           <span><SwitchControl checked={dataItem?.isSameAsHQ} label="" disabled /></span>
         </Tooltip>
       </Grid>

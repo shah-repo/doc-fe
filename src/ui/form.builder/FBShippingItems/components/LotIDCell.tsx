@@ -12,12 +12,12 @@ import { documentVersionPath } from '../../../document.revision/utils/paths';
 import { FB } from '../../helpers';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableShippingItem } from '../types';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface Props extends CustomTemplateProps {
-  loading: boolean
+  isLoading: boolean
   options: DocumentRevision[]
-  fetchLotsByPartId: (id?: string) => any
+  fetchLotsByPartId: (id?: string) => void
 }
 
 interface CustomOptionType extends OptionType {
@@ -25,11 +25,11 @@ interface CustomOptionType extends OptionType {
   documentId: string
 }
 
-const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, loading }) => {
+const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, isLoading }) => {
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableShippingItem>();
   const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const { part } = values ?? {};
-  const classes = styles();
+  const classes = useStyles();
 
   useEffect(() => {
     if (!FB.isUUID(part?.id)) {
@@ -54,31 +54,29 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
   const value = renderOptions()?.find(option => option.value === values[field]?.id);
 
   return (
-    <>
-      <FormikField name={field}>
-        <Autocomplete
-          {...getFieldProps(field)}
-          key={(isEmpty(values) || loading) ? 'disabled' : 'enabled'}
-          classes={{ option: classes.option }}
-          blurOnSelect
-          disableClearable
-          placeholder={translate('common.select')}
-          options={renderOptions()}
-          data-cy="lot-id-field"
-          value={value}
-          disabled={isUpdateAction}
-          getOptionLabel={(option) => option?.label ?? ''}
-          onChange={handleChange}
-          loading={loading}
-          size="small"
-        />
-      </FormikField>
-    </>
+    <FormikField name={field}>
+      <Autocomplete
+        {...getFieldProps(field)}
+        key={(isEmpty(values) || isLoading) ? 'disabled' : 'enabled'}
+        classes={{ option: classes.option }}
+        blurOnSelect
+        disableClearable
+        placeholder={translate('common.select')}
+        options={renderOptions()}
+        data-cy="lot-id-field"
+        value={value}
+        disabled={isUpdateAction}
+        getOptionLabel={(option) => option?.label ?? ''}
+        onChange={handleChange}
+        loading={isLoading}
+        size="small"
+      />
+    </FormikField>
   );
 };
 
 export const LotIDCell: React.FC<Props> = (props) => {
-  const classes = styles();
+  const classes = useStyles();
   const { field, dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
