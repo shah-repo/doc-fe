@@ -1,7 +1,7 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
-export default makeStyles((theme) => ({
+export default makeStyles((theme: Theme) => ({
   button: {
     borderRadius: theme.shape.borderRadius / 2,
     padding: theme.spacing(0, 1.5),
@@ -10,7 +10,7 @@ export default makeStyles((theme) => ({
   },
   buttonLabel: {
     display: 'block',
-    width: 130,
+    maxWidth: 150,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',

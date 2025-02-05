@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, ButtonProps, ListItemText, MenuItem } from '@material-ui/core';
+import { Box, ButtonProps, ListItemText, MenuItem, Typography } from '@material-ui/core';
 import { kebabCase } from 'lodash';
 import React from 'react';
 import {
@@ -53,9 +53,9 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         onClick={!disabled ? optionsMenu.open : undefined}
         data-cy={`${dataCy}-button`}
       >
-        <Box className={classes.buttonLabel}>
+        <Typography noWrap className={classes.buttonLabel}>
           {label}
-        </Box>
+        </Typography>
       </Button>
       {!disabled && (
         <SplitButtonMenu
@@ -65,7 +65,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
             ['data-cy' as string]: `${dataCy}-menu`,
           }}
         >
-          {options.map((option) => (
+          {options.map((option: StatusOption) => (
             <MenuItem
               key={option.value}
               onClick={handleMenuClick(option.value)}
