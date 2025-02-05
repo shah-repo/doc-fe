@@ -24,7 +24,6 @@ interface NavigationLinkPresenterProps extends NavigationItem {
   currentPath: string
   open: boolean
   menu?: NavigationItem[]
-  showLabelNew?: boolean
   checkIfItemIsActive: (
     type: NavigationItemType,
     currentPath: string,
@@ -51,7 +50,7 @@ NavigationLinkPresenterProps
   currentPath,
   open,
   checkIfItemIsActive,
-  showLabelNew,
+  isNew,
 }) => {
   const isMenu = type === NavigationItems.MENU;
   const classes = styles({
@@ -110,7 +109,7 @@ NavigationLinkPresenterProps
               >
                 {label}
               </Typography>
-              {showLabelNew && <NewBadge />}
+              {isNew && <NewBadge />}
             </>
           }
           onClick={toggleChildren}

@@ -12,9 +12,9 @@ import {
   SET_AUTOSAVE_CONFIG,
   SET_COMPANY_MINE,
   SET_GENERAL_SETTINGS,
-  SET_SUBSCRIPTIONS,
+  SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   UPDATE_NAVIGATION_ITEM,
-  UPDATE_SUBSCRIPTION,
+  UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
   WHITE_LABEL_DEFAULT,
 } from './constants';
 import {
@@ -26,15 +26,15 @@ import {
   GeneralSettingsAction,
   GeneralSettingsState,
   NotifyPartLCP,
+  PremiumFeatureSubscriptionsState,
   RedlineAction,
   RedlineState,
   SelectCompanyAction,
   SelectCompanyState,
   SetAutosaveAction,
-  SetSubscriptionsAction,
-  SubscriptionsState,
+  SetPremiumFeatureSubscriptionsAction,
   UpdateNavigationMenuItem,
-  UpdateSubscriptionAction,
+  UpdatePremiumFeatureSubscriptionAction,
 } from './types';
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
@@ -101,8 +101,8 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   },
 };
 
-const SUBSCRIPTIONS_DEFAULT_STATE: SubscriptionsState = {
-  subscriptions: [],
+const PREMIUM_FEATURE_SUBSCRIPTIONS_DEFAULT_STATE: PremiumFeatureSubscriptionsState = {
+  list: [],
   status: AsyncStatus.Idle,
   message: '',
 };
@@ -225,20 +225,20 @@ const generalSettings = (
   }
 };
 
-const subscriptions = (
-  state: SubscriptionsState = SUBSCRIPTIONS_DEFAULT_STATE,
-  action: SetSubscriptionsAction | UpdateSubscriptionAction,
+const premiumFeaturesSubscriptions = (
+  state: PremiumFeatureSubscriptionsState = PREMIUM_FEATURE_SUBSCRIPTIONS_DEFAULT_STATE,
+  action: SetPremiumFeatureSubscriptionsAction | UpdatePremiumFeatureSubscriptionAction,
 ) => {
   switch (action.type) {
-    case SET_SUBSCRIPTIONS:
+    case SET_PREMIUM_FEATURE_SUBSCRIPTIONS:
       return {
         ...state,
         subscriptions: action.payload,
       };
-    case UPDATE_SUBSCRIPTION:
+    case UPDATE_PREMIUM_FEATURE_SUBSCRIPTION:
       return {
         ...state,
-        subscriptions: state.subscriptions.map(
+        subscriptions: state.list.map(
           subscription => subscription.id === action.payload.id ? action.payload : subscription,
         ),
       };
@@ -253,5 +253,5 @@ export default combineReducers({
   redlineConfig,
   autosaveConfig,
   generalSettings,
-  subscriptions,
+  premiumFeaturesSubscriptions,
 });

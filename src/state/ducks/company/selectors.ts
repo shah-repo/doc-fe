@@ -7,7 +7,7 @@ import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { ApplicationState } from '../../reducers';
 import { AsyncState } from '../../types';
 import { WHITE_LABEL_DEFAULT } from './constants';
-import { PremiumFeature, Subscription } from './types';
+import { PremiumFeature, PremiumFeatureSubscription } from './types';
 
 const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
 const companyIdSelector = (state: ApplicationState) => state.company.companyMine.id;
@@ -92,20 +92,20 @@ const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
   message: state.company.generalSettings.message,
 });
 
-const getSubscriptions = (state: ApplicationState): Subscription[] => state.company.subscriptions.subscriptions;
+const getPremiumFeatureSubscriptions = (state: ApplicationState): PremiumFeatureSubscription[] => state.company.premiumFeaturesSubscriptions.list;
 
-const getSubscriptionsUpdatedAt = createSelector(
-  getSubscriptions,
+const getPremiumFeatureSubscriptionsUpdatedAt = createSelector(
+  getPremiumFeatureSubscriptions,
   (subscriptions) => moment.max(subscriptions.map(subscription => moment(subscription.updatedAt))),
 );
 
 const getSubscriptionsAsyncState = (state: ApplicationState): AsyncState => ({
-  status: state.company.subscriptions.status,
-  message: state.company.subscriptions.message,
+  status: state.company.premiumFeaturesSubscriptions.status,
+  message: state.company.premiumFeaturesSubscriptions.message,
 });
 
-const hasActiveSubscription = createSelector(
-  getSubscriptions,
+const hasActivePremiumFeatureSubscription = createSelector(
+  getPremiumFeatureSubscriptions,
   (state: ApplicationState, subscriptionType: PremiumFeature) => subscriptionType,
   (subscriptions, subscriptionType) => subscriptions.some(
     subscription => subscription.type === subscriptionType && subscription.isEnabled,
@@ -137,10 +137,10 @@ export default {
   getGeneralSettingsId,
   getGeneralSettingsAsyncState,
   getGeneralSettingsUpdatedAt,
-  getSubscriptionsUpdatedAt,
+  getPremiumFeatureSubscriptionsUpdatedAt,
   getZebraPrintSettings,
   isAprovalRequestEditingEnabled,
-  getSubscriptions,
+  getPremiumFeatureSubscriptions,
   getSubscriptionsAsyncState,
-  hasActiveSubscription,
+  hasActivePremiumFeatureSubscription,
 };

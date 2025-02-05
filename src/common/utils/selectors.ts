@@ -13,4 +13,4 @@ export const getCurrentUserTags = () => (reduxState: ApplicationState) => authSe
 export const hasActiveSubscription
   = (subscriptionType: PremiumFeature) =>
     (reduxState: ApplicationState): boolean =>
-      companySelectors.hasActiveSubscription(reduxState, subscriptionType);
+      companySelectors.hasActivePremiumFeatureSubscription(reduxState, subscriptionType);

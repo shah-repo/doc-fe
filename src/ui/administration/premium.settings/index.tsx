@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom';
 import { translate } from '../../../common/intl';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../state/ducks/company';
-import { Subscription } from '../../../state/ducks/company/types';
+import { PremiumFeatureSubscription } from '../../../state/ducks/company/types';
 import { AsyncStatus } from '../../../state/types';
 import { AlertDialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
@@ -24,16 +24,16 @@ const PremiumFeaturesContainer: React.FC = () => {
   const subscriptionsDialog = useDialog();
   const classes = useStyles();
   const asyncState = useSelector(companySelectors.getSubscriptionsAsyncState);
-  const allSubscriptions = useSelector(companySelectors.getSubscriptions);
+  const allSubscriptions = useSelector(companySelectors.getPremiumFeatureSubscriptions);
   const isLoading = asyncState.status === AsyncStatus.Active;
   const dispatch = useDispatch();
-  const toggledSubscription = useRef<Subscription>();
+  const toggledSubscription = useRef<PremiumFeatureSubscription>();
 
   if (!canManageSettings) {
     return <Redirect to={HOME_URL} />;
   }
 
-  const confirmToggling = (state: boolean, subscription: Subscription) => {
+  const confirmToggling = (state: boolean, subscription: PremiumFeatureSubscription) => {
     toggledSubscription.current = subscription;
     if (state) {
       return subscriptionsDialog.open();
@@ -45,7 +45,7 @@ const PremiumFeaturesContainer: React.FC = () => {
     const currentSubscription = toggledSubscription.current;
     if (currentSubscription) {
       currentSubscription.isEnabled = !currentSubscription.isEnabled;
-      dispatch(companyActions.updateSubscription(currentSubscription.id, {
+      dispatch(companyActions.updatePremiumFeatureSubscription(currentSubscription.id, {
         isEnabled: currentSubscription.isEnabled,
       }));
     }

@@ -14,9 +14,9 @@ import {
   SET_AUTOSAVE_CONFIG,
   SET_COMPANY_MINE,
   SET_GENERAL_SETTINGS,
-  SET_SUBSCRIPTIONS,
+  SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   UPDATE_NAVIGATION_ITEM,
-  UPDATE_SUBSCRIPTION,
+  UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
 } from './constants';
 
 export interface WhiteLabelingColors {
@@ -135,6 +135,7 @@ export interface NavigationItem {
   menu?: NavigationItem[]
   icon?: string
   category?: string
+  isNew?: boolean
   restrictedToUsersWithTags?: GroupTag[]
   restrictedToUserPermissions?: Permission[]
   isOpen?: boolean
@@ -263,11 +264,11 @@ export enum PremiumFeature {
   OCR = 'OCR',
 }
 
-export interface SubscriptionPayload {
+export interface PremiumFeatureSubscriptionPayload {
   isEnabled: boolean
 }
 
-export interface Subscription extends SubscriptionPayload {
+export interface PremiumFeatureSubscription extends PremiumFeatureSubscriptionPayload {
   id: string
   companyId: string
   type: PremiumFeature
@@ -276,8 +277,8 @@ export interface Subscription extends SubscriptionPayload {
   updatedAt: string
 }
 
-export interface SubscriptionsState extends AsyncState {
-  subscriptions: Subscription[]
+export interface PremiumFeatureSubscriptionsState extends AsyncState {
+  list: PremiumFeatureSubscription[]
 }
 
 export interface GeneralSettingsAction {
@@ -285,11 +286,11 @@ export interface GeneralSettingsAction {
   payload: GeneralSettings
 }
 
-export interface SetSubscriptionsAction {
-  type: typeof SET_SUBSCRIPTIONS
-  payload: Subscription[]
+export interface SetPremiumFeatureSubscriptionsAction {
+  type: typeof SET_PREMIUM_FEATURE_SUBSCRIPTIONS
+  payload: PremiumFeatureSubscription[]
 }
-export interface UpdateSubscriptionAction {
-  type: typeof UPDATE_SUBSCRIPTION
-  payload: Subscription
+export interface UpdatePremiumFeatureSubscriptionAction {
+  type: typeof UPDATE_PREMIUM_FEATURE_SUBSCRIPTION
+  payload: PremiumFeatureSubscription
 }

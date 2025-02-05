@@ -25,7 +25,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
   useEffect(() => {
     if (employeeId) {
       dispatch(companyActions.getGeneralSettings());
-      dispatch(companyActions.getSubscriptions());
+      dispatch(companyActions.getPremiumFeatureSubscriptions());
       dispatch(pageDetailsActions.allPageDetails());
       dispatch(documentTypeActions.loadTabConfiguration());
       dispatch(documentTypeActions.loadList());

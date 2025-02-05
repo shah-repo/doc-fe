@@ -9,8 +9,8 @@ import {
   LIFE_CYCLE_DOC_REV_OPTIONS_URL,
   LIFE_CYCLE_DOC_TYPES_URL,
   LIFE_CYCLE_PHASES_URL,
-  SUBSCRIPTIONS_UPDATE_URL,
-  SUBSCRIPTIONS_URL,
+  PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL,
+  PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
   UPDATE_COMPANY_SETTINGS_URL,
 } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
@@ -24,9 +24,9 @@ import {
   SET_AUTOSAVE_CONFIG,
   SET_COMPANY_MINE,
   SET_GENERAL_SETTINGS,
-  SET_SUBSCRIPTIONS,
+  SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   UPDATE_NAVIGATION_ITEM,
-  UPDATE_SUBSCRIPTION,
+  UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
 } from './constants';
 import {
   Company,
@@ -36,12 +36,12 @@ import {
   GeneralSettingsAction,
   GeneralSettingsState,
   NavigationMenu,
+  PremiumFeatureSubscription,
+  PremiumFeatureSubscriptionPayload,
   SelectCompanyAction,
-  SetSubscriptionsAction,
-  Subscription,
-  SubscriptionPayload,
+  SetPremiumFeatureSubscriptionsAction,
   UpdateNavigationMenuItem,
-  UpdateSubscriptionAction,
+  UpdatePremiumFeatureSubscriptionAction,
 } from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
@@ -115,36 +115,36 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
-const setSubscriptionsAction = (subscriptions: Subscription[]): SetSubscriptionsAction => ({
-  type: SET_SUBSCRIPTIONS,
+const setPremiumFeatureSubscriptionsAction = (subscriptions: PremiumFeatureSubscription[]): SetPremiumFeatureSubscriptionsAction => ({
+  type: SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   payload: subscriptions,
 });
 
-const updateSubscriptionAction = (subscription: Subscription): UpdateSubscriptionAction => ({
-  type: UPDATE_SUBSCRIPTION,
+const updatePremiumFeatureSubscriptionAction = (subscription: PremiumFeatureSubscription): UpdatePremiumFeatureSubscriptionAction => ({
+  type: UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
   payload: subscription,
 });
 
-const getSubscriptions = (): ApiAction<Subscription[], void> => apiAction({
-  url: SUBSCRIPTIONS_URL,
+const getPremiumFeatureSubscriptions = (): ApiAction<PremiumFeatureSubscription[], void> => apiAction({
+  url: PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
-    dispatch(setSubscriptionsAction(data));
+    dispatch(setPremiumFeatureSubscriptionsAction(data));
   },
 });
 
-const updateSubscription = (
+const updatePremiumFeatureSubscription = (
   id: string,
-  payload: SubscriptionPayload,
+  payload: PremiumFeatureSubscriptionPayload,
   method: ApiActionMethod = 'patch',
-): ApiAction<Subscription> => {
+): ApiAction<PremiumFeatureSubscription> => {
   return apiAction({
-    url: generatePath(SUBSCRIPTIONS_UPDATE_URL, { id }),
+    url: generatePath(PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL, { id }),
     method,
     data: payload,
-    asyncType: UPDATE_SUBSCRIPTION,
+    asyncType: UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
     onSuccess: (data, dispatch) => {
-      dispatch(updateSubscriptionAction(data));
+      dispatch(updatePremiumFeatureSubscriptionAction(data));
     },
   });
 };
@@ -214,6 +214,6 @@ export default {
   redlineConfig,
   getGeneralSettings,
   updateGeneralSettings,
-  getSubscriptions,
-  updateSubscription,
+  getPremiumFeatureSubscriptions,
+  updatePremiumFeatureSubscription,
 };

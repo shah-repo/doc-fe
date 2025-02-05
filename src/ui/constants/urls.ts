@@ -68,8 +68,8 @@ export const USER_GROUPS_URL = '/user_group/group';
 export const COMPANY_SETTINGS_URL = '/company/settings';
 export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
 
-export const SUBSCRIPTIONS_URL = '/subscriptions';
-export const SUBSCRIPTIONS_UPDATE_URL = '/subscriptions/:id';
+export const PREMIUM_FEATURE_SUBSCRIPTIONS_URL = '/premium_feature_subscriptions';
+export const PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL = `${PREMIUM_FEATURE_SUBSCRIPTIONS_URL}/:id`;
 
 export const BULK_IMPORT_URL = '/bulk_import/create';
 
