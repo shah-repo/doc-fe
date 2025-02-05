@@ -112,7 +112,7 @@ const fetchLCPPhasesByGroup = (
   });
 
 const fetchSupplierConfigs = (
-  type,
+  type: string,
   handlers: Handlers,
 ): ApiAction<OptionType> =>
   apiActionWithCallbacks({

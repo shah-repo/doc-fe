@@ -53,15 +53,10 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
     if (!statusList?.length) return [];
 
     return [...statusList].sort((status1: ASLStatus, status2: ASLStatus) => {
-      const orderComparison
-        = (status1[ASL_STATUS_KEYS.order] ?? 0)
-        - (status2[ASL_STATUS_KEYS.order] ?? 0);
+      const orderComparison = (status1[ASL_STATUS_KEYS.order] ?? 0) - (status2[ASL_STATUS_KEYS.order] ?? 0);
       if (orderComparison !== 0) return orderComparison;
 
-      return (
-        (status1[ASL_STATUS_KEYS.displayOrder] ?? 0)
-        - (status2[ASL_STATUS_KEYS.displayOrder] ?? 0)
-      );
+      return (status1[ASL_STATUS_KEYS.displayOrder] ?? 0) - (status2[ASL_STATUS_KEYS.displayOrder] ?? 0);
     });
   };
 
@@ -163,19 +158,17 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
     });
   };
 
-  const mappedASLStatusList
-    = ASLStatusList?.map((aslStatus: ASLStatus) => {
-      return {
-        ...aslStatus,
-        [MODE_FIELD]:
+  const mappedASLStatusList = ASLStatusList?.map((aslStatus: ASLStatus) => {
+    return {
+      ...aslStatus,
+      [MODE_FIELD]:
           aslStatus.id === editedASLStatus?.id ? Mode.edit : Mode.show,
-      };
-    }) ?? [];
+    };
+  }) ?? [];
 
-  const aslList
-    = editedASLStatus?.[MODE_FIELD] === Mode.add
-      ? [...mappedASLStatusList, editedASLStatus]
-      : mappedASLStatusList;
+  const aslList = editedASLStatus?.[MODE_FIELD] === Mode.add
+    ? [...mappedASLStatusList, editedASLStatus]
+    : mappedASLStatusList;
 
   const dataCyGenerator = (aslStatus: EditableASLStatus) => ({
     'data-cy': `row-${kebabCase(aslStatus.internalType)}-${

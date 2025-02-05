@@ -234,12 +234,12 @@ interface LifecyclePhase {
   groupType: string
   id: string
   internalType: string
-  isActive: false
+  isActive: boolean
   isAllowedOnLhrProd: string
   isAllowedToBuy: string
   isApprovedSupplierEnforcedOnPO: string
-  isUserAdded: false
-  isUserModified: true
+  isUserAdded: boolean
+  isUserModified: boolean
   order: number
 }
 
