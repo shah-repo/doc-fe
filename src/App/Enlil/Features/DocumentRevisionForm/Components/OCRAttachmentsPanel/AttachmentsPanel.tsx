@@ -6,12 +6,19 @@ import { reaction } from 'mobx';
 import { Observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { SM, SMBox } from '../../../../..';
+import { translate } from '../../../../../../common/intl';
 import Config from '../../../../../../config';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
-import { DOC_TYPE_GROUP, TabTypeOptions } from '../../../../../../state/ducks/documentRevisions/documentType/types';
+import {
+  DOC_TYPE_GROUP,
+  TabTypeOptions,
+} from '../../../../../../state/ducks/documentRevisions/documentType/types';
 import { store } from '../../../../../../state/store';
 import { Button } from '../../../../../../ui/components/forms/fields-next';
-import { toastError, toastSuccess } from '../../../../../../ui/components/notifications';
+import {
+  toastError,
+  toastSuccess,
+} from '../../../../../../ui/components/notifications';
 import Text from '../../../../../../ui/components/Text';
 import { FBAttachment } from '../../../../../../ui/form.builder';
 import useActionCreator from '../../../../../../ui/hooks/useActionCreator';
@@ -47,12 +54,12 @@ const AttachmentsPanel: React.FC = () => {
     const headers = { authorization: `bearer ${employeeId}:${sessionId}` };
 
     if (!docRevId) {
-      toastError('Document revision ID not found!');
+      toastError(translate('ocr.doc.rev.empty.error.message'));
       return;
     }
 
-    let processedCount = 0;
-    const uploadAttachment = async (index) => {
+    let processedFilesCount = 0;
+    const uploadAttachment = async (index: number) => {
       const attachment = attachments[index];
       const data = {
         DocumentType: DOC_TYPE_GROUP.LHR,
@@ -65,27 +72,27 @@ const AttachmentsPanel: React.FC = () => {
       };
 
       await axios.post(OCR_API_URL, data, { headers });
-      processedCount++;
+      processedFilesCount++;
     };
 
     try {
       setLoading(true);
       await Promise.all(selectedIndices.map(uploadAttachment));
-      toastSuccess(`Processing ${processedCount} files...`);
+      toastSuccess(translate('ocr.process.alert.message', { count: processedFilesCount }));
     } catch (error) {
       console.error(error);
-      toastError('Error processing files');
+      toastError(translate('ocr.process.alert.error.message'));
     } finally {
       setLoading(false);
     }
   };
 
-  const attachmentsAsync = useAsync<any>({
-    onSuccess: (attachments) => {
-      setAttachments(attachments);
+  const attachmentsAsync = useAsync({
+    onSuccess: (attachments?: FBAttachment[]) => {
+      setAttachments(attachments ?? []);
     },
     onError: () => {
-      toastError('Failed to load attachments');
+      toastError(translate('ocr.submit.error.message'));
     },
   });
 
@@ -93,14 +100,16 @@ const AttachmentsPanel: React.FC = () => {
     documentRevisionsActions.getAttachmentsByDocRevId,
   );
 
-  useEffect(() => reaction(
-    () => _tabsState?.activeTabId,
-    () => {
-      if (docRevId && _tabsState?.isTabActive(TabTypeOptions.SUMMARY)) {
-        attachmentsAsync.start(fetchAttachments, docRevId, attachmentsAsync);
-      }
-    },
-  ));
+  useEffect(() =>
+    reaction(
+      () => _tabsState?.activeTabId,
+      () => {
+        if (docRevId && _tabsState?.isTabActive(TabTypeOptions.SUMMARY)) {
+          attachmentsAsync.start(fetchAttachments, docRevId, attachmentsAsync);
+        }
+      },
+    ),
+  );
 
   return (
     <Observer>
@@ -108,8 +117,8 @@ const AttachmentsPanel: React.FC = () => {
         <>
           {_tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
             <Box className={classes.root}>
-              <Box className={classes.pannel}>
-                <Box pl={3.125} mt={1.25} height={45} alignItems="center" data-cy="attachments">
+              <Box className={classes.panel}>
+                <Box className={classes.panelTitle} data-cy="attachments">
                   <Typography variant="h6" className={classes.titleText}>
                     <Text translation="form.builder.attachments" />
                   </Typography>
@@ -119,9 +128,14 @@ const AttachmentsPanel: React.FC = () => {
                 </Box>
                 <SMBox>
                   <ListPanel
-                    {...{ showDocPreview, attachments, onSelectionChange }}
+                    {...{
+                      showDocPreview,
+                      attachments,
+                      onSelectionChange,
+                      selectedIndices,
+                    }}
                   />
-                  <Box paddingX={1.875} pt={2.5}>
+                  <Box className={classes.panelButton}>
                     <Button
                       onClick={handleClick}
                       variant="contained"
@@ -129,7 +143,9 @@ const AttachmentsPanel: React.FC = () => {
                       disabled={selectedIndices.length <= 0 || loading}
                       fullWidth
                       startIcon={
-                        loading && <CircularProgress size={16} color="inherit" />
+                        loading && (
+                          <CircularProgress size={16} color="inherit" />
+                        )
                       }
                       data-cy="ocr-extract-data"
                     >
@@ -146,14 +162,7 @@ const AttachmentsPanel: React.FC = () => {
                   unmountOnExit
                 >
                   <Box className={classes.docPreview}>
-                    <Box
-                      height={40}
-                      paddingX={1.875}
-                      paddingY={1.5}
-                      alignItems="center"
-                      display="flex"
-                      justifyContent="space-between"
-                    >
+                    <Box className={classes.panelPreview}>
                       <Typography variant="h6" className={classes.titleText}>
                         <Text translation="ocr.document.preview.title" />
                       </Typography>
@@ -170,7 +179,7 @@ const AttachmentsPanel: React.FC = () => {
                     </Box>
                     <Box className={classes.previewContainer}>
                       <OCRFilePresenter
-                        key={file?.id}
+                        key={`${file?.id}-${file ? new Date().getTime() : ''}`}
                         file={file as FBAttachment}
                         setFile={setFile}
                       />

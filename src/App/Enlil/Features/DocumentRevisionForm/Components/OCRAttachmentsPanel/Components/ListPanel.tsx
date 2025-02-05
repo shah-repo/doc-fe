@@ -5,18 +5,18 @@ import { translate } from '../../../../../../../common/intl';
 import Config from '../../../../../../../config';
 import { Checkbox } from '../../../../../../../ui/components/forms/fields-next';
 import { FBAttachment } from '../../../../../../../ui/form.builder';
-import styles from './ListPanel.styles';
+import useStyles from './ListPanel.styles';
 
 interface ListPanelProps{
   attachments: FBAttachment[]
   showDocPreview: (file: FBAttachment) => void
-  onSelectionChange: (checkedIndices: any) => void
+  onSelectionChange: (checkedIndices: number[]) => void
+  selectedIndices: number[]
 }
 
-const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSelectionChange }) => {
-  const classes = styles();
-
-  const [checkedIndices, setCheckedIndices] = React.useState<any>([]);
+const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSelectionChange, selectedIndices }) => {
+  const classes = useStyles();
+  const [checkedIndices, setCheckedIndices] = React.useState<number[]>(selectedIndices);
 
   const handleCheckboxClick = (index: number) => {
     const currentIndex = checkedIndices.indexOf(index);
@@ -63,7 +63,7 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
             >
               <ListItemIcon className={classes.listItemIcon} >
                 <Checkbox
-                  checked={checkedIndices.indexOf(index) !== -1}
+                  checked={checkedIndices.includes(index)}
                   disabled={!isFileTypeSupported}
                   tabIndex={-1}
                   disableRipple
