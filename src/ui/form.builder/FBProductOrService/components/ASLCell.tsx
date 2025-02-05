@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React from 'react';
+import useCommonStatusStyles from '../../../../../src/ui/components/common/kendo.column.templates/Status.styles';
 import { translate } from '../../../../common/intl';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import Tooltip from '../../../components/common/kendo/Tooltip';
@@ -73,6 +74,7 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
   const { field, dataItem } = props;
   const defaultValue = dataItem?.aslDisplayLabel ?? dataItem[field];
   const classes = useStyles();
+  const statusClasses = useCommonStatusStyles();
 
   if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return <Editor {...props} />;
@@ -86,9 +88,9 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
           <Chip
             size="small"
             className={cx(
-              classes.chip,
+              statusClasses.chip,
               classes.aslChipTextOverflow,
-              classes[ASL_STATUS_CLASS_MAPPING[defaultValue]],
+              statusClasses[ASL_STATUS_CLASS_MAPPING[defaultValue]],
             )}
             label={defaultValue}
           />
