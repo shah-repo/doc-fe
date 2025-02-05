@@ -24,9 +24,9 @@ import { FBAttachment } from '../../../../../../ui/form.builder';
 import useActionCreator from '../../../../../../ui/hooks/useActionCreator';
 import useAsync from '../../../../../../ui/hooks/useAsync';
 import useDialog from '../../../../../../ui/hooks/useDialog';
-import useStyles from './AttachmentsPanel.styles';
 import ListPanel from './Components/ListPanel';
 import OCRFilePresenter from './Components/OCRFilePresenter';
+import useStyles from './styles';
 
 const OCR_API_URL = `${Config.ApiOCREndpoint}/aocr`;
 

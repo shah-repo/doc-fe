@@ -1,22 +1,35 @@
-import { List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from '@material-ui/core';
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../../../common/intl';
 import Config from '../../../../../../../config';
 import { Checkbox } from '../../../../../../../ui/components/forms/fields-next';
 import { FBAttachment } from '../../../../../../../ui/form.builder';
-import useStyles from './ListPanel.styles';
+import useStyles from './styles';
 
-interface ListPanelProps{
+interface ListPanelProps {
   attachments: FBAttachment[]
   showDocPreview: (file: FBAttachment) => void
   onSelectionChange: (checkedIndices: number[]) => void
   selectedIndices: number[]
 }
 
-const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSelectionChange, selectedIndices }) => {
+const ListPanel: React.FC<ListPanelProps> = ({
+  attachments,
+  showDocPreview,
+  onSelectionChange,
+  selectedIndices,
+}) => {
   const classes = useStyles();
-  const [checkedIndices, setCheckedIndices] = React.useState<number[]>(selectedIndices);
+  const [checkedIndices, setCheckedIndices]
+    = React.useState<number[]>(selectedIndices);
 
   const handleCheckboxClick = (index: number) => {
     const currentIndex = checkedIndices.indexOf(index);
@@ -40,28 +53,40 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
     return Config.ocrSupportedFileTypes.includes(fileType?.toLowerCase());
   };
 
+  const handleItemClick = (
+    isFileTypeSupported: boolean,
+    index: number,
+    attachment: FBAttachment,
+  ) => {
+    if (isFileTypeSupported) {
+      handleCheckboxClick(index);
+    }
+    showDocPreview(attachment);
+  };
+
   return (
     <List className={cx(classes.list, 'containing-box-scrollbar')}>
-      {attachments?.map((attachment, index) => {
+      {attachments?.map((attachment: FBAttachment, index: number) => {
         const isFileTypeSupported = isSupportedFileType(attachment.type);
         return (
           <Tooltip
             key={`tooltip-${index}`}
-            title={(isFileTypeSupported) ? '' : `${attachment.type} ${translate('ocr.filetype.not.support.message')}`}
+            title={
+              isFileTypeSupported
+                ? ''
+                : `${attachment.type} ${translate(
+                    'ocr.filetype.not.support.message',
+                  )}`
+            }
             placement="right"
           >
             <ListItem
               key={index}
               button
-              onClick={() => {
-                if (isFileTypeSupported) {
-                  handleCheckboxClick(index);
-                }
-                showDocPreview(attachment);
-              }}
+              onClick={() => handleItemClick(isFileTypeSupported, index, attachment)}
               className={classes.listItemBtn}
             >
-              <ListItemIcon className={classes.listItemIcon} >
+              <ListItemIcon className={classes.listItemIcon}>
                 <Checkbox
                   checked={checkedIndices.includes(index)}
                   disabled={!isFileTypeSupported}
@@ -71,9 +96,7 @@ const ListPanel: React.FC<ListPanelProps> = ({ attachments, showDocPreview, onSe
                 />
               </ListItemIcon>
               <ListItemText>
-                <Typography
-                  className={classes.listItemText}
-                >
+                <Typography className={classes.listItemText}>
                   {attachment.name}
                 </Typography>
               </ListItemText>

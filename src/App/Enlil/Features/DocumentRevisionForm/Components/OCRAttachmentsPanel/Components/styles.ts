@@ -44,7 +44,7 @@ export default makeStyles((theme) =>
       color: Colors.almost_black,
     },
     list: {
-      maxHeight: '655px',
+      maxHeight: 655,
       flexGrow: 1,
       overflowY: 'auto',
       padding: 0,

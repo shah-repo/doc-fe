@@ -35,7 +35,7 @@ import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMTabs } from '../../../Shifamed/Components/SMTabs/SMTabs.hoc';
 import FBTrainingInfoContainer from '../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container';
-import AttachmentsPanel from './Components/OCRAttachmentsPanel/AttachmentsPanel';
+import AttachmentsPanel from './Components/OCRAttachmentsPanel';
 import { withDocumentRevisionFormWrap } from './DocumentRevisionForm.wrap';
 
 const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> = ({

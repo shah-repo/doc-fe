@@ -1,12 +1,12 @@
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { PDF, SUPPORTED_IMAGE_FILES } from '../../../../../../../ui/components/common/view.file/utils/constants';
-import { FB, FBFilePresenterDownloadType, FBFilePresenterState } from '../../../../../../../ui/form.builder';
-import { OCRFilePresenterProps } from './OCRFilePresenter';
+import { OCRFilePresenterProps } from '.';
+import { PDF, SUPPORTED_IMAGE_FILES } from '../../../../../../../../ui/components/common/view.file/utils/constants';
+import { FB, FBFilePresenterDownloadType, FBFilePresenterState } from '../../../../../../../../ui/form.builder';
 
 export const withOCRFilePresenter = (
-  Component: React.FunctionComponent<OCRFilePresenterProps>,
+  Component: React.FC<OCRFilePresenterProps>,
 ) => {
   const Comp = ({
     handleDownload,

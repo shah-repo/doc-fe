@@ -1,8 +1,13 @@
 import { LinearProgress, makeStyles } from '@material-ui/core';
 import React, { Dispatch, SetStateAction } from 'react';
-import { translate } from '../../../../../../../common/intl';
-import { FBAttachment, FBFilePresenterDownloadType, FBFilePresenterState, FBFilePreview } from '../../../../../../../ui/form.builder';
-import { withOCRFilePresenter } from './OCRFilePresenter.wrap';
+import { translate } from '../../../../../../../../common/intl';
+import {
+  FBAttachment,
+  FBFilePresenterDownloadType,
+  FBFilePresenterState,
+  FBFilePreview,
+} from '../../../../../../../../ui/form.builder';
+import { withOCRFilePresenter } from './wrap';
 
 export interface OCRFilePresenterProps {
   loadFIle?: () => any
@@ -21,20 +26,22 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const OCRFilePresenter: React.FunctionComponent<OCRFilePresenterProps> = ({ file, loading, isSupportedFileType }) => {
+const OCRFilePresenter: React.FC<OCRFilePresenterProps> = ({
+  file,
+  loading,
+  isSupportedFileType,
+}) => {
   const classes = useStyle();
 
   if (loading) {
-    return (<LinearProgress className={classes.progress} />);
+    return <LinearProgress className={classes.progress} />;
   }
 
   if (!isSupportedFileType) {
-    return (<span>{translate('ocr.file.preview.not.support.message')}</span>);
+    return <span>{translate('ocr.file.preview.not.support.message')}</span>;
   }
 
-  return (
-    <FBFilePreview file={file} />
-  );
+  return <FBFilePreview file={file} />;
 };
 
 export default withOCRFilePresenter(OCRFilePresenter);
