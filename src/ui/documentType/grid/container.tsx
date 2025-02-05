@@ -140,6 +140,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     'precalc.supplierCertifications',
     'precalc.supplierItemsApproved',
     'formInput.supplier-type',
+    'supplierStatusId',
     'name',
   ];
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
