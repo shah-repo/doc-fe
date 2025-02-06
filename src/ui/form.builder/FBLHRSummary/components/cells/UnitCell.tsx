@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { translate } from '../../../../../common/intl';
 import {
   Autocomplete,
@@ -14,10 +14,9 @@ import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field, units, dataItem }) => {
-  const { getFieldProps, values, setFieldValue }
-    = useFormikContext<EditableLHRSummaryItem>();
+  const { getFieldProps, values, setFieldValue } = useFormikContext<EditableLHRSummaryItem>();
 
-  const handleChange = (event: ChangeEvent<unknown>, value?: OptionType) => {
+  const handleChange = (_, value?: OptionType) => {
     setFieldValue(field, value);
   };
 
@@ -40,10 +39,8 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, units, dataItem }) => {
 
 export const UnitCell: React.FC<CustomTemplateProps> = (props) => {
   const { field, dataItem, onClick } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const defaultValue = dataItem[field];
 
-  if (isEditMode) {
+  if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return <Editor {...props} />;
   }
 
@@ -51,13 +48,13 @@ export const UnitCell: React.FC<CustomTemplateProps> = (props) => {
 
   return (
     <OverflowTooltip
-      title={defaultValue}
+      title={dataItem[field]}
       onClick={handleClick}
       placement="top"
       interactive
       arrow
     >
-      {defaultValue}
+      {dataItem[field]}
     </OverflowTooltip>
   );
 };

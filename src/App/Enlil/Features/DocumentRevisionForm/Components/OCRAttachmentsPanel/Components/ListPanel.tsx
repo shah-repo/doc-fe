@@ -28,24 +28,19 @@ const ListPanel: React.FC<ListPanelProps> = ({
   selectedIndices,
 }) => {
   const classes = useStyles();
-  const [checkedIndices, setCheckedIndices]
-    = React.useState<number[]>(selectedIndices);
+  const [checkedIndices, setCheckedIndices] = React.useState<number[]>(selectedIndices);
 
   const handleCheckboxClick = (index: number) => {
     const currentIndex = checkedIndices.indexOf(index);
     const newChecked = [...checkedIndices];
 
-    // Add/remove the index from the list of checked indices
     if (currentIndex === -1) {
-      newChecked.push(index); // Add if not checked
+      newChecked.push(index);
     } else {
-      newChecked.splice(currentIndex, 1); // Remove if checked
+      newChecked.splice(currentIndex, 1);
     }
 
-    // Update local state with the new checked indices
     setCheckedIndices(newChecked);
-
-    // Notify parent component of the change
     onSelectionChange(newChecked);
   };
 

@@ -69,4 +69,7 @@ export default makeStyles((theme) => ({
       borderLeft: `1px solid ${Colors.primaryLight} !important`,
     },
   },
+  addButton: {
+    float: 'right',
+  },
 }));

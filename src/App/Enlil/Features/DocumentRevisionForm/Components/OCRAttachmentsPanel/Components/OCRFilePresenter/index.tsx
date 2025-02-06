@@ -10,9 +10,9 @@ import {
 import { withOCRFilePresenter } from './wrap';
 
 export interface OCRFilePresenterProps {
-  loadFIle?: () => any
-  handleDownload?: (type: FBFilePresenterDownloadType) => any
-  handleRemove?: () => any
+  loadFIle?: () => void
+  handleDownload?: (type: FBFilePresenterDownloadType) => void
+  handleRemove?: () => void
   setFile?: Dispatch<SetStateAction<FBAttachment>>
   filePresenterState?: FBFilePresenterState
   loading?: boolean

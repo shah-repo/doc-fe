@@ -44,6 +44,8 @@ import {
   DEFAULT_FILTER,
   EXCEL_FILE_NAME,
   FIELDS_TO_PICK,
+  PAGE_SIZE,
+  ROW_HEIGHT,
   SELECTED_FIELD,
 } from './constants';
 import { buildSchema } from './schema';
@@ -75,7 +77,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
   const isVoided = Boolean(_documentRevisionFormState?.documentRevision?.displayStatus?.includes(DocumentRevisionStatusDisplay.Voided));
   const [skip, setSkip] = React.useState(0);
-  const pageSize = 25;
+  const isAddButtonVisible = !isShowOnly && !isDisabled;
 
   const onPageChange = ({ page: { skip } }: GridPageChangeEvent) => {
     setSkip(skip);
@@ -87,7 +89,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
       filters: [],
     },
     skip: 0,
-    take: pageSize,
+    take: PAGE_SIZE,
     group: [],
     sort: [],
   });
@@ -376,8 +378,8 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   };
 
   const slicedData = useMemo(
-    () => LHRSummaryItemList.slice(skip, skip + pageSize),
-    [LHRSummaryItemList, skip, pageSize],
+    () => LHRSummaryItemList.slice(skip, skip + PAGE_SIZE),
+    [LHRSummaryItemList, skip, PAGE_SIZE],
   );
 
   return (
@@ -386,37 +388,35 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
         label={translate('lhr.summary.table.title')}
         data-cy="lhr-summary-title"
       >
-        {(!isShowOnly && !isDisabled) && (<>
-          <Tooltip
-            title={translate('lhr.summary.add.item')}
-            placement="top"
-            arrow
-          >
-            <Button
-              kind="ghost"
-              size="small"
-              style={{ float: 'right' }}
-              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
-              onClick={onAddItem}
-              data-cy="lhr-summary-header-add-btn"
+        {isAddButtonVisible && (
+          <>
+            <Tooltip
+              title={translate('lhr.summary.add.item')}
+              placement="top"
+              arrow
             >
-              {translate('lhr.summary.add.item')}
-            </Button>
-          </Tooltip>
-          <Tooltip
-            title={translate('common.reload')}
-            placement="top"
-            arrow
-          ><IconButton
-              size="small"
-              data-cy="reload-btn"
-              className={classes.reloadButton}
-              onClick={fetchLHRSummaryData}
-            >
-              <FontAwesomeIcon icon={solid('arrow-rotate-left')} />
-            </IconButton>
-          </Tooltip>
-        </>
+              <Button
+                kind="ghost"
+                size="small"
+                className={classes.addButton}
+                startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+                onClick={onAddItem}
+                data-cy="lhr-summary-header-add-btn"
+              >
+                {translate('lhr.summary.add.item')}
+              </Button>
+            </Tooltip>
+            <Tooltip title={translate('common.reload')} placement="top" arrow>
+              <IconButton
+                size="small"
+                data-cy="reload-btn"
+                className={classes.reloadButton}
+                onClick={fetchLHRSummaryData}
+              >
+                <FontAwesomeIcon icon={solid('arrow-rotate-left')} />
+              </IconButton>
+            </Tooltip>
+          </>
         )}
       </FBSection>
       <ColumnMenuContext.Provider
@@ -433,9 +433,9 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
             schema={getColumns}
             fullWidth
             className={classes.rootLHRSummaryTable}
-            rowHeight={50}
-            take={pageSize}
-            pageSize={pageSize}
+            rowHeight={ROW_HEIGHT}
+            take={PAGE_SIZE}
+            pageSize={PAGE_SIZE}
             total={LHRSummaryItemList?.length}
             skip={skip}
             scrollable="virtual"
@@ -500,7 +500,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
           </KendoDataGrid>
         </ExcelExport>
       </ColumnMenuContext.Provider>
-      {(!isShowOnly && !isDisabled) && (
+      {isAddButtonVisible && (
         <Button
           kind="add"
           fullWidth

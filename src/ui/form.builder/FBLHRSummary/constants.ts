@@ -32,6 +32,8 @@ export const LHR_SUMARY_FIELDS = {
 };
 export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment', 'recordCreationDate', 'unit'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex', 'show'];
+export const PAGE_SIZE = 25;
+export const ROW_HEIGHT = 50;
 
 export enum DocType {
   equipment = 'equipment',

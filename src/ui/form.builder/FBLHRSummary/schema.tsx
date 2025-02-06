@@ -15,7 +15,7 @@ import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate'
 import { TypeCell } from './components/cells/TypeCell';
 import { UnitCell } from './components/cells/UnitCell';
 import styles from './styles';
-import { EditableLHRSummaryItem, SchemaOptions } from './types';
+import { CustomTemplateProps, EditableLHRSummaryItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
   actionsClass,
@@ -114,7 +114,7 @@ export const buildSchema = ({
       title: 'lhr.summary.grid.heading.unit',
       show: true,
       selectable: false,
-      template: (props) => <UnitCell {...props} units={units} onClick={onRowClick} />,
+      template: (props: CustomTemplateProps) => <UnitCell {...props} units={units} onClick={onRowClick} />,
       width: 201,
     },
     {
