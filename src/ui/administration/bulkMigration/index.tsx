@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Button, FormControl, InputLabel, LinearProgress, MenuItem, Select, Typography } from '@material-ui/core';
+import { Box, Button, FormControl, Grid, InputLabel, LinearProgress, MenuItem, Select, Typography } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SearchIcon from '@material-ui/icons/Search';
 import axios, { AxiosRequestConfig } from 'axios';
@@ -44,6 +44,10 @@ const BulkMigrationContainer: React.FC = () => {
   const [eligibleRevsCount, setEligibleRevsCount] = useState<number>(0);
 
   const [scanDetails, setScanDetails] = useState<IBulkMigrationScanDetails>();
+  const [rerunScanDetails, setRerunScanDetails] = useState<{irrelevantRevsCount: number, newRevsCount: number}>({
+    irrelevantRevsCount: 0,
+    newRevsCount: 0,
+  });
 
   const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
   const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
@@ -199,9 +203,12 @@ const BulkMigrationContainer: React.FC = () => {
         .request(requestConfig)
         .then((resp) => resp)
         .then(({ data }) => {
-          console.log(data);
+          const { scanDetails, irrelevantRevsCount, newRevsCount } = data;
           setIsLoading(false);
-          setScanDetails(data);
+          setScanDetails(scanDetails);
+          setRerunScanDetails({
+            irrelevantRevsCount, newRevsCount,
+          });
         })
         .catch((exception) => {
           catchAxiosException(exception);
@@ -436,28 +443,49 @@ const BulkMigrationContainer: React.FC = () => {
     setIsMigrationMappingDialogVisible(false);
   };
 
+  const promptUserToRerunScan = () => {
+    const msgParts: string[] = [];
+    if (rerunScanDetails.irrelevantRevsCount > 0) {
+      msgParts.push(`resolve ${rerunScanDetails.irrelevantRevsCount}`);
+    }
+
+    if (rerunScanDetails.newRevsCount > 0) {
+      msgParts.push(`include ${rerunScanDetails.newRevsCount} new revisions`);
+    }
+
+    return `Please rerun scan to ${msgParts.join(' and ')}`;
+  };
+
   return (
     <Box className={classes.root}>
       <Box className={classes.header}>
-        <Box className={classes.flexBox}>
-          <Box>
-            <Typography variant="h1" className={classes.title}>
-              {translate('administration.bulk.migration.title')}
-            </Typography>
-            <Typography variant="subtitle1" className={classes.subtitle}>
-              {translate('administration.bulk.migration.subtitle')}
-            </Typography>
-            {/* <br className={classes.spaceTitle} /> */}
-          </Box>
-          { selectedRows.length > 0 && <FBButton
-            label="Migrate Revisions"
-            dataCy="migrate-revisions-btn"
-            onClick = {confirmSubmission}
-            variant="contained"
-            color="primary"
-          /> }
-        </Box>
-
+        <Grid container spacing={3}>
+          <Grid item xs={6}>
+            <Box>
+              <Typography variant="h1" className={classes.title}>
+                {translate('administration.bulk.migration.title')}
+              </Typography>
+              <Typography variant="subtitle1" className={classes.subtitle}>
+                {translate('administration.bulk.migration.subtitle')}
+              </Typography>
+              {/* <br className={classes.spaceTitle} /> */}
+            </Box>
+          </Grid>
+          <Grid item xs={4}>
+            {(rerunScanDetails.newRevsCount > 0 || rerunScanDetails.irrelevantRevsCount > 0) && scanDetails?.status !== MIGRATION_STATUS_ENUM.IN_PROGRESS
+              && <div style={{ color: Colors.red, backgroundColor: Colors.light_red, padding: '8px', textAlign: 'center' }}>{promptUserToRerunScan()}</div>
+            }
+          </Grid>
+          <Grid item xs={2}>
+            { selectedRows.length > 0 && <FBButton
+              label="Migrate Revisions"
+              dataCy="migrate-revisions-btn"
+              onClick = {confirmSubmission}
+              variant="contained"
+              color="primary"
+            /> }
+          </Grid>
+        </Grid>
         {isLoading && (
           <LinearProgress
             className={classes.progress}
