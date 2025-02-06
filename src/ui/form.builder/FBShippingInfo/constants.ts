@@ -1,7 +1,7 @@
 export const SHIPPING_ADDRESS_FIELDS = {
-  ADDRESS: 'shipping_address',
-  ATTENTION: 'shipping_address_attention',
-  CONTACT: 'shipping_address_contact',
+  ADDRESS: 'shippingAddress',
+  ATTENTION: 'shippingAddressAttention',
+  CONTACT: 'shippingAddressContact',
 };
 
 export const SHIPPING_CUSTOMER_FIELD = 'customer';
