@@ -60,9 +60,9 @@ export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel): Ch
 
 export const handleSiteAddressChange = (change: Audit, fbLabel: FBLabel): ChangeFieldType => {
   const fieldMap: Record<string, string> = {
-    _city: 'form.builder.site.information.grid.heading.city',
-    _country: 'form.builder.site.information.grid.heading.country',
-    _zip_code: 'form.builder.site.information.grid.heading.zip.code',
+    City: 'form.builder.site.information.grid.heading.city',
+    Country: 'form.builder.site.information.grid.heading.country',
+    ZipCode: 'form.builder.site.information.grid.heading.zip.code',
   };
 
   const fieldKey = Object.keys(fieldMap).find((key) =>

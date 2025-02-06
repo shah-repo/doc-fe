@@ -124,10 +124,10 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     const hqAddress = workspaceState?.formInput;
     formik.setValues({
       ...currentSite,
-      zipCode: isSameAsHQ ? hqAddress?.headquarter_address_zip_code ?? '' : '',
-      siteAddress: isSameAsHQ ? hqAddress?.headquarter_address ?? '' : '',
-      city: isSameAsHQ ? hqAddress?.headquarter_address_city ?? '' : '',
-      country: isSameAsHQ ? hqAddress?.headquarter_address_country ?? '' : '',
+      zipCode: isSameAsHQ ? hqAddress?.headquarterAddressZipCode ?? '' : '',
+      siteAddress: isSameAsHQ ? hqAddress?.headquarterAddress ?? '' : '',
+      city: isSameAsHQ ? hqAddress?.headquarterAddressCity ?? '' : '',
+      country: isSameAsHQ ? hqAddress?.headquarterAddressCountry ?? '' : '',
       isSameAsHQ: isSameAsHQ,
     });
   }, [workspaceState?.formInput, editedSite]);
