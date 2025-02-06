@@ -37,7 +37,7 @@ export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel): Ch
       : `form.builder.site.information.grid.heading.${fieldFullName}`;
     const fieldName = translate(headingKey);
 
-    const labelContext = isSiteContact ? 'Contact' : '';
+    const labelContext = isSiteContact ? translate('form.builder.customer.contact.audit.label') : '';
     const auditKey = isSiteContact
       ? 'form.builder.contact.grid.heading.audit.item'
       : 'form.builder.site.information.grid.heading.audit.item';

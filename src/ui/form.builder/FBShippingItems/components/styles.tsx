@@ -8,7 +8,7 @@ export default makeStyles((theme) => ({
   },
   link: {
     color: `${Colors.primaryDark} !important`,
-    cursor: 'Pointer',
+    cursor: 'pointer',
     overflow: 'hidden',
     textDecoration: 'initial !important',
     '&:hover': {
