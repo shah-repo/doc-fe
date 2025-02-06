@@ -41,6 +41,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
             defaultValue={undefined}
             type="text"
             size="small"
+            readOnly={selected}
           />
         </FormikField>
       </Grid>
