@@ -50,6 +50,7 @@ import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
 import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
+import FBShippingCustomer from '../FBShippingCustomer';
 import FBShippingAddress from '../FBShippingInfo';
 import FBShippingItems from '../FBShippingItems';
 import FBSiteInformation from '../FBSiteInformation';
@@ -90,7 +91,8 @@ class FBSchemaState {
     textfield: FBTextField,
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
-    autocomplete: FBAutocompleteAsync,
+    // autocomplete: FBAutocompleteAsync,
+    autocomplete: FBShippingCustomer,
     autocompleteasync: FBAutocompleteAsync,
     texteditor: FBTextEditor,
     datepicker: FBDatePicker,
@@ -157,6 +159,7 @@ class FBSchemaState {
     workOrderLhrTable: FBWorkOrderLHRTable,
     shippingItems: FBShippingItems,
     shippingAddress: FBShippingAddress,
+    // shippingCustomer: FBShippingCustomer,
   };
 
   @observable public schema?: FBSchemaProps[];
