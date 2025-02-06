@@ -240,7 +240,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
 
-      if (fbType === 'siteInformations') {
+      if (fbType === 'siteInformation') {
         const result = handleSiteInformationChange(change, fbLabel);
         if (result) {
           ({ change, fbLabel } = result);

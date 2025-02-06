@@ -61,7 +61,7 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
           (data) => {
             if (data) {
               const siteAddress = data?.formInput
-                ?.siteInformations as ShippingAddress[];
+                ?.siteInformation as ShippingAddress[];
               setOptions(siteAddress ? renderOptions(siteAddress) : []);
             }
           },

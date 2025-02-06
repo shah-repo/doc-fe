@@ -168,7 +168,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       <PromptIfDirty
         dirty={dirty}
       />
-      <FBInput {...props} type="siteInformations" name={name}>
+      <FBInput {...props} type="siteInformation" name={name}>
         <FBSection label={label} />
       </FBInput>
       <KendoDataGrid<EditableSite>
