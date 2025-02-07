@@ -6,10 +6,15 @@ import { isEmpty, map, values } from 'lodash';
 import qs from 'query-string';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import apiClient from '../../../../state/apiClient';
-import { BULK_IMPORT_AUDIT_URL } from '../../../../state/ducks/bulkImport/constants';
+import { bkStatusTextMap, BULK_IMPORT_AUDIT_URL } from '../../../../state/ducks/bulkImport/constants';
+import { getBulkImportsMap } from '../../../../state/ducks/bulkImport/selectors';
+import { BkStatus, BulkImport, LogEntry } from '../../../../state/ducks/bulkImport/types';
+import { companySelectors } from '../../../../state/ducks/company';
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT } from '../../../../state/ducks/userManagement/constants';
-import { AUDIT_FIELD_PATHS, AuditDetailsProps } from '../../../../state/ducks/userManagement/types';
+import { AuditDetailsProps } from '../../../../state/ducks/userManagement/types';
 import { store } from '../../../../state/store';
 import Default from '../../../components/common/audit.history/Cards/Default';
 import LoadMoreButton from '../../../components/common/load.more.button/LoadMoreButton';
@@ -17,21 +22,14 @@ import Text from '../../../components/Text';
 import styles from './styles';
 
 let call: CancelTokenSource;
-// const fieldTypeConditions = {
-//   processType: null, // No type requirement
-//   jobId: null, // No type requirement
-//   documentRevisionId: null, // No type requirement
-//   xlsx: 'ARRAY_NEW',
-//   originalHeaders: 'OBJECT_EDITED',
-//   dataId: 'STRING_EDITED',
-//   attachmentId: 'STRING_EDITED',
-//   status: 'STRING_EDITED',
-//   approver: 'STRING_NEW',
-// };
 
 interface AuditHistoryProps {
   openHistoryPanel: boolean
   closeHistoryPanel: (panel: boolean) => void
+}
+
+interface MergedLog extends LogEntry {
+  bulkImport: BulkImport
 }
 
 const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
@@ -41,6 +39,8 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
   const intl = useIntl();
   const limit = UM_AUDIT_HISTORY_LIMIT;
   const classes = styles();
+  const bulkImportsMaps = useSelector(getBulkImportsMap);
+  const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const [isLoading, setIsLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -50,6 +50,9 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
   const [overallLimit, setOverallLimit] = React.useState(0);
   const [dataTotal, setDataTotal] = React.useState(0);
+
+  const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
+
   const closeDrawer = () => {
     setOpenDrawer({ ...openDrawer, right: false });
     closeHistoryPanel(openDrawer.right);
@@ -59,6 +62,97 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
     fetchAuditRecords();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getDescription = (log: MergedLog): Array<{ primaryText: string, secondaryText: string }> => {
+    const currentBulkImport: BulkImport = bulkImportsMaps[log.bulkImport.jobId];
+    let secondaryText = `Changed from ${log.previousValue} to ${log.nextValue}`; // Default secondary text
+    let stepChange = '';
+
+    switch (log.fieldPath) {
+      case 'processType':
+        secondaryText = `Select process type: ${log.nextValue}`;
+        stepChange = 'Step 1 Import Details';
+        break;
+      case 'jobId':
+        secondaryText = `Created the bulk import job id: ${log.nextValue}`;
+        stepChange = 'Bulk Import Created';
+        break;
+      case 'xlsx':
+        if (log.type === 'ARRAY_NEW') {
+          const xlsxData = JSON.parse(log?.nextValue as string);
+          const matchedExcelFile = currentBulkImport.excelFile && currentBulkImport.excelFile.id === xlsxData.fileId;
+          secondaryText = matchedExcelFile && currentBulkImport.excelFile
+            ? `Uploaded Excel file: ${currentBulkImport.excelFile.name}.${currentBulkImport.excelFile.type}`
+            : `Upload a old xlsx file, field id: ${xlsxData.fileId}`;
+          stepChange = 'Step 2 Upload Data';
+        }
+        break;
+      case 'originalHeaders':
+        if (log?.type === 'OBJECT_EDITED') {
+          secondaryText = 'Select the headers';
+          stepChange = 'Step 3 Map Columns';
+        }
+        break;
+      case 'dataId':
+        if (log.type === 'STRING_EDITED') {
+          secondaryText = 'Edit table data';
+          stepChange = 'Step 3 Edit table data';
+        }
+        break;
+      case 'attachmentId':
+        if (log.type === 'STRING_EDITED') {
+          const matchedZipFile = currentBulkImport.zipFile && currentBulkImport.zipFile.id === log.nextValue;
+          secondaryText = matchedZipFile && currentBulkImport.zipFile
+            ? `Uploaded zip file: ${currentBulkImport.zipFile.name}.${currentBulkImport.zipFile.type}`
+            : `Upload zip file id: ${log.nextValue}`;
+          stepChange = 'Step 4 Upload Attachment';
+        }
+        break;
+      case 'status':
+        if (log.type === 'STRING_EDITED') {
+          const previousStatus = bkStatusTextMap[log.previousValue as BkStatus] || log.previousValue;
+          const nextStatus = bkStatusTextMap[log.nextValue as BkStatus] || log.nextValue;
+          secondaryText = `Bulk import status changed from ${previousStatus} to ${nextStatus}`;
+          stepChange = 'Bulk import update';
+        }
+        break;
+      case 'approver':
+        if (log.type === 'STRING_NEW') {
+          const approverDetails = getUserDetails(log.nextValue as string);
+          secondaryText = approverDetails
+            ? `Assigned approver: ${approverDetails?.user?.name}`
+            : `Assigned approver ID: ${log.nextValue}`;
+          stepChange = 'Approver Assigned';
+        }
+        break;
+    }
+
+    return [
+      { primaryText: 'Type: ', secondaryText: stepChange },
+      { primaryText: 'Update: ', secondaryText },
+    ];
+  };
+
+  const processLogs = (logs: MergedLog[]): AuditDetailsProps[] => {
+    return logs.map((log) => {
+      const ownerDetails = getUserDetails(log.ownerId) ?? {
+        user: {
+          name: intl.formatMessage({ id: 'common.server.automation' }),
+          email: log.ownerEmail,
+        },
+      };
+
+      const descriptions = [{ primaryText: 'Job ID:', secondaryText: `${log.bulkImport.jobId}` }, ...getDescription(log)];
+
+      return {
+        descriptions,
+        employeeDetails: {},
+        groupId: log.groupId,
+        ownerDetails,
+        timestamp: `${getFormattedDateString(log.timestamp, MomentFormats.BriefDateTime)}`,
+      } as AuditDetailsProps;
+    });
+  };
 
   const fetchAuditRecords = () => {
      call?.cancel();
@@ -80,20 +174,8 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
      apiClient
        .request(requestConfig)
        .then((resp) => resp)
-       .then(({ data }) => {
-         const definedFieldPaths = [
-           AUDIT_FIELD_PATHS.ACTIVE,
-           AUDIT_FIELD_PATHS.NAME,
-           AUDIT_FIELD_PATHS.EMPLOYEES,
-           AUDIT_FIELD_PATHS.AVATAR,
-           AUDIT_FIELD_PATHS.GROUPS,
-           AUDIT_FIELD_PATHS.RESEND_CONFIRMATION_EMAIL_TIMESTAMP,
-           AUDIT_FIELD_PATHS.RESET_PASSWORD_EMAIL_TIMESTAMP,
-         ];
-         const results = (data.results || [])?.filter((data) =>
-           definedFieldPaths.includes(data.fieldPath),
-         );
-         console.log('🚀 ~ apiClient ~ results:', results);
+       .then(({ data }: { data: {results: MergedLog[], total: number }}) => {
+         const results = processLogs(data.results || []);
          setItems((prevState: AuditDetailsProps[]) => [
            ...prevState,
            ...values(results),
@@ -101,7 +183,7 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
          setPage((prevPageNumber) => prevPageNumber + limit);
          setIsLoading(false);
          setShowLoadMoreButton(true);
-         setLoadMore(data.page_total > 0);
+         setLoadMore(page + limit < data.total);
          setDataTotal(data.total);
        })
        .catch((exception) => {
