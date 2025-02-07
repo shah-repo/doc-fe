@@ -60,6 +60,7 @@ export const DragCell = (props) => {
 };
 
 interface Props {
+  attachments: Attachment[]
   documentRevision: DocumentRevision
   onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => any
   onDownloadAsPDF?: (attachment: Attachment, attachmentType: AttachmentType) => void
@@ -72,6 +73,7 @@ interface Props {
 }
 
 const AttachmentTable: React.FC<Props> = ({
+  attachments,
   documentRevision,
   selectedAttachments,
   headerChecked = false,
@@ -82,8 +84,9 @@ const AttachmentTable: React.FC<Props> = ({
   onSelectedAttachmentsChange,
   onHeaderChecked,
 }) => {
-  const [attachmentsData, setAttachmentsData] = React.useState(documentRevision?.attachments ?? []);
+  const [attachmentsData, setAttachmentsData] = React.useState(attachments ?? []);
   const [activeItem, setActiveItem] = React.useState<any | null>(null);
+  const [showAll, setShowAll] = React.useState(false);
 
   const reorder = (dataItem: any) => {
     if (activeItem === dataItem) {
@@ -150,8 +153,32 @@ const AttachmentTable: React.FC<Props> = ({
   }, [selectedAttachments]);
 
   React.useEffect(() => {
-    setAttachmentsData(documentRevision?.attachments);
-  }, [documentRevision?.attachments]);
+    setAttachmentsData(attachments);
+  }, [attachments]);
+
+  const rowRender = (tr, props) => {
+    const index = props.dataIndex;
+    if (index === 5 && !showAll) {
+      return React.cloneElement(tr, {
+        children: (
+          <td colSpan={6} style={{ textAlign: 'center', cursor: 'pointer' }} onClick={handleViewAllClick}>
+            {showAll ? 'View Less' : 'View All'}
+          </td>
+        ),
+      });
+    }
+
+    // Hide rows after the 5th one (index 5 and above)
+    if (index >= 5 && !showAll) {
+      return React.cloneElement(tr, { style: { display: 'none' } });
+    }
+
+    return tr;
+  };
+
+  const handleViewAllClick = () => {
+    setShowAll((prev) => !prev);
+  };
 
   return (
     <MyContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
@@ -161,8 +188,10 @@ const AttachmentTable: React.FC<Props> = ({
           sortable
           filterable
           hasBoxScrollbars
+          resizable
+          rowRender={rowRender}
           schema={schema}
-          data={attachmentsData}
+          data={attachmentsData ?? []}
           selectedField={SELECTED_FIELD}
           dataItemKey={DATA_ITEM_KEY}
           selectable={{
@@ -172,7 +201,6 @@ const AttachmentTable: React.FC<Props> = ({
             mode: 'multiple',
           }}
           onSelectionChange={onSelectionChange}
-          resizable
         />
       </DragAndDrop>
     </MyContext.Provider>

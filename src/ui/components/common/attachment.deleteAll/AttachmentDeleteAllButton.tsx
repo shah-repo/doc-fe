@@ -1,6 +1,7 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createStyles, IconButton, makeStyles, Theme, Tooltip, CircularProgress } from '@material-ui/core';
+import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../common/intl';
@@ -44,11 +45,13 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   onSelectedAttachmentsChange,
   onHeaderChecked,
 }) => {
+  const { getFieldProps, setFieldValue, submitForm } = useFormikContext();
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
   const selectedAttachmentsCount = Object.values(selectedAttachments).filter(value => value === true).length;
   const selectedAttachmentsData = selectedAttachments && Object.keys(selectedAttachments).filter(key => selectedAttachments[key]);
   const classes = styles({ isAttachmentEmpty });
   const deleteAttachmentsAction = useActionCreator(documentRevisionsActions.save);
+  const attachments = documentRevision?.attachments ?? getFieldProps('attachments').value;
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       onSelectedAttachmentsChange({});
@@ -61,22 +64,29 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   });
 
   const handleDelete = () => {
-    let filtered = documentRevision?.attachments?.filter((item) => !selectedAttachmentsData.includes(item.id));
+    let filtered = attachments?.filter((item) => !selectedAttachmentsData.includes(item.id));
     if(selectedAttachmentsCount === 0) {
       filtered = [];
     }
-    setIsDownloading(true);
-    async.start(
-      deleteAttachmentsAction,
-      documentRevision.id,
-      { attachments: filtered },
-      async,
-    );
+    if(documentRevision?.id) {
+      setIsDownloading(true);
+      async.start(
+        deleteAttachmentsAction,
+        documentRevision?.id,
+        { attachments: filtered },
+        async,
+      );
+    } else {
+      setFieldValue('attachments', filtered);
+      submitForm();
+      onSelectedAttachmentsChange({});
+      onHeaderChecked(false);
+    }
   };
 
-  const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === documentRevision.attachments.length ? 'common.delete.all.files' : 'common.delete.selected.files';
+  const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === attachments?.length ? 'common.delete.all.files' : 'common.delete.selected.files';
 
-  if(isEmpty(documentRevision?.attachments)) {
+  if(isEmpty(attachments)) {
     return null;
   }
 

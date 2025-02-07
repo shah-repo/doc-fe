@@ -425,7 +425,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       {attachmentsRenderer}
     </div>
     <AttachmentTable
-      {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange, onHeaderChecked, headerChecked }}
+      {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange, onHeaderChecked, headerChecked, attachments }}
       onDownloadAttachment={handleDownload}
       onDownloadAsPDF={handleWatermarkRequest}
       onDelete={handleRemove}

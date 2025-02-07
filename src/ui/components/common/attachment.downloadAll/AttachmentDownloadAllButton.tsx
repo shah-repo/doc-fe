@@ -1,7 +1,8 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CircularProgress, createStyles, Link, makeStyles, Theme, Tooltip } from '@material-ui/core';
-import { isEmpty } from 'lodash';
+import { useFormikContext } from 'formik';
+import { isEmpty, isUndefined } from 'lodash';
 import React, { useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
@@ -74,7 +75,9 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   const selectedAttachmentsCount = Object.values(selectedAttachments || {}).filter(value => value === true).length;
   const attachments = selectedAttachments && Object.keys(selectedAttachments).filter(key => selectedAttachments[key]);
   const classes = styles({ isAttachmentEmpty });
-
+  const { getFieldProps, setFieldValue, submitForm } = useFormikContext();
+  const attachmentsData = documentRevision?.attachments ?? getFieldProps('attachments').value;
+console.log({ setFieldValue, submitForm });
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       setIsDownloading(false);
@@ -88,7 +91,11 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   });
 
   const passwordSubmit = (values: Password) => {
-    async.start(downloadAllAttachmentsPassword, docRevId, async, values.password);
+    if(selectedAttachmentsCount === 0 || selectedAttachmentsCount === documentRevision?.attachments?.length) {
+      async.start(downloadAllAttachmentsPassword, docRevId, async, values.password);
+    } else {
+      async.start(downloadSelectedAttachments, docRevId, attachments, async);
+    }
     passwordDialogHandler.close();
   };
 
@@ -110,7 +117,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   };
 
   const handleAllDownload = (documentRevisionId: string, password: string | undefined) => () => {
-    if (isDocumentRevisionInDraft(docRevStatus)) {
+    if (isDocumentRevisionInDraft(docRevStatus) || isUndefined(documentRevision?.attachments)) {
       setIsDownloading(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
     } else if (!containsRedline && isDocumentRevisionInStatusFlag(docRevStatus)) {
@@ -123,11 +130,11 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   };
 
   const handleSelectedDownload = (documentRevisionId: string, attachments: string[], password: string | undefined) => () => {
-    const isRedlineAttachmentExist = documentRevision?.attachments.filter(item => attachments.includes(item.id) && item.lineType === LINE_TYPES.RED_LINE );
+    const isRedlineAttachmentExist = attachmentsData.filter(item => attachments.includes(item.id) && item.lineType === LINE_TYPES.RED_LINE );
     if (isDocumentRevisionInDraft(docRevStatus) || isEmpty(isRedlineAttachmentExist)) {
       setIsDownloading(true);
       async.start(downloadSelectedAttachments, documentRevisionId, attachments, async);
-    } else if (!containsRedline && isDocumentRevisionInStatusFlag(docRevStatus)) {
+    } else if (isEmpty(isRedlineAttachmentExist) && isDocumentRevisionInStatusFlag(docRevStatus)) {
       setIsDownloading(true);
       async.start(downloadSelectedAttachments, documentRevisionId, attachments, async);
     } else if(!isEmpty(isRedlineAttachmentExist)) {
@@ -141,9 +148,9 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     setIsDownloading(false);
   };
 
-  const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === documentRevision?.attachments?.length ? 'common.download.all.files' : 'common.download.selected.files';
+  const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === attachmentsData?.length ? 'common.download.all.files' : 'common.download.selected.files';
 
-  if(isEmpty(documentRevision?.attachments)) {
+  if(isEmpty(attachmentsData)) {
     return null;
   }
 

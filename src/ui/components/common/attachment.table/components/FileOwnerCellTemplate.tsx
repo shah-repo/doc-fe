@@ -15,9 +15,11 @@ const FileOwnerCellTemplate: React.FC<any> = (props) => {
     <Box display="flex">
       <UserAvatar
         avatar={dataItem?.owner?.user?.avatar}
-        name={dataItem?.owner?.user?.name}
+        name={dataItem?.owner?.user?.name ?? ''}
         {...{ initialColor }} />
-      {displayValue}
+      <Box alignSelf="center">
+        {displayValue}
+      </Box>
     </Box>
   );
 };
