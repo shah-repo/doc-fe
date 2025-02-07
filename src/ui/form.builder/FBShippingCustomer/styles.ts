@@ -4,6 +4,9 @@ import { NextTheme } from '../../layout/theme-next/provider';
 
 export default makeStyles((theme: NextTheme) =>
   createStyles({
+    grid: {
+      width: '100%',
+    },
     label: {
       fontSize: 12,
       fontWeight: 600,
@@ -11,9 +14,9 @@ export default makeStyles((theme: NextTheme) =>
     },
     shippingInfo: {
       display: 'flex',
+      justifyContent: 'center',
       flexDirection: 'column',
       gap: theme.spacing(3.75),
-      justifyContent: 'center',
     },
     infoIcon: {
       marginRight: theme.spacing(1),
