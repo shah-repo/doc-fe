@@ -323,11 +323,8 @@ const ExpandableRow: React.FC<{
             secondaryComponent={<></>}
           /> }
         </TableCell>
-        {/* <TableCell align="left">{JSON.stringify(row.originalFormInput)}</TableCell>
-        <TableCell align="left">{JSON.stringify(row.newFormInput)}</TableCell> */}
         <TableCell align="left" style={{ overflow: 'hidden', wordWrap: 'break-word' }}>
-          {JSON.stringify(row.fieldNamesUnmatched)}
-          {/* <ReactJson src={row.fieldNamesUnmatched} collapsed={1} /> */}
+          {row.isMapped ? JSON.stringify(row.fieldNamesUnmatched) : 'NOT MAPPED'}
         </TableCell>
         <TableCell style={{ overflow: 'hidden', wordWrap: 'break-word' }}>{row.proposedAction}</TableCell>
       </TableRow>
@@ -352,8 +349,9 @@ const ExpandableRow: React.FC<{
                       {!row.originalFormInput && <span>No FormInput</span> }
                     </TableCell>
                     <TableCell align="left">
-                      {row.newFormInput && <ReactJson src={row.newFormInput} collapsed={1} /> }
+                      {row.newFormInput && row.isMapped && <ReactJson src={row.newFormInput} collapsed={1} /> }
                       {!row.newFormInput && <span>No FormInput</span> }
+                      {!row.isMapped && <span>NOT MAPPED</span> }
                     </TableCell>
                   </TableRow>
                 </TableBody>

@@ -79,11 +79,10 @@ const BulkMigrationContainer: React.FC = () => {
   }
 
   useEffect(() => {
-    if (scanDetails?.status === MIGRATION_STATUS_ENUM.STARTED) {
-      // Set up the interval when status becomes 'Started'
+    if (scanDetails?.status === MIGRATION_STATUS_ENUM.STARTED || scanDetails?.status === MIGRATION_STATUS_ENUM.IN_PROGRESS) {
       intervalRef.current = setInterval(() => {
         getScanDetails();
-      }, INTERVAL_DURATION); // 10 seconds interval
+      }, INTERVAL_DURATION);
     }
 
     if (scanDetails?.status === MIGRATION_STATUS_ENUM.MAPPING && intervalRef.current) {
@@ -231,7 +230,11 @@ const BulkMigrationContainer: React.FC = () => {
         .request(requestConfig)
         .then((resp) => resp)
         .then(({ data }) => {
-          setScanDetails(data);
+          const { scanDetails, irrelevantRevsCount, newRevsCount } = data;
+          setScanDetails(scanDetails);
+          setRerunScanDetails({
+            irrelevantRevsCount, newRevsCount,
+          });
         })
         .catch((exception) => {
           catchAxiosException(exception);
@@ -700,13 +703,12 @@ const BulkMigrationContainer: React.FC = () => {
         {!isEmpty(errorMessage) && (
           <div style={{ color: Colors.red, backgroundColor: Colors.light_red, padding: '4px' }}>{errorMessage}</div>
         )}
-        {!isLoading && isEmpty(errorMessage) && scanDetails?.id
+        {scanDetails?.id && ![MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
           && <Box>
             <RevsTable scanId={scanDetails.id} toDocumentTypeId={toDocumentTypeId} handleSelectedRowsChange={handleSelectedRowsChange} />
           </Box>
         }
-        {!isLoading && isEmpty(errorMessage) && scanDetails?.id
-          && [MIGRATION_STATUS_ENUM.STARTED].includes(scanDetails?.status)
+        {scanDetails?.id && [MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
           && <Box className={classes.searchIconContainer}>
             <SearchIcon className={classes.searchIcon} />
           </Box>
