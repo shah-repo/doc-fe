@@ -11,10 +11,8 @@ import { CustomerRevisionInfo, FBShippingCustomerProps } from './types';
 export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
-  const Comp = ({
-    name = '',
-    ...props
-  }: T) => {
+  const Comp = (props: T) => {
+    const { name } = props;
     const { workspaceState, formState } = FB.useStores();
     const defaultValue = formState?.getFieldValue(name) ?? '';
     const [latestRevisionSummary, setLatestRevisionSummary] = useState<CustomerRevisionInfo>();
@@ -43,7 +41,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     };
 
     return Component({
-      ...props as T,
+      ...props,
       updateLatestAvailableRevision,
       latestRevisionSummary: latestRevisionSummary ?? {
         hasOBSRevision: true,
