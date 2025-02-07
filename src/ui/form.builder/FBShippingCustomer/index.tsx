@@ -10,11 +10,11 @@ import { withFBShippingCustomer } from './wrap';
 
 const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
   latestRevisionSummary,
+  resetOBSCustomerSelection,
+  updateLatestAvailableRevision,
   ...props
 }) => {
   const classes = useStyles();
-  console.log('props', props);
-
   return (
     <Grid container className={classes.grid}>
       <Grid item xs="auto" className={classes.shippingInfo}>
@@ -29,17 +29,16 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
                 data-cy="new-revision-available"
                 color={Colors.primaryLight}
                 className={classes.infoIcon}
+                onClick={updateLatestAvailableRevision}
                 icon={solid('circle-exclamation')}
               />
             </Tooltip>
           )}
           {latestRevisionSummary.hasOBSRevision && (
-            <Tooltip
-              arrow
-              title="OBS revision available"
-              placement="top-start">
+            <Tooltip arrow title="OBS revision available" placement="top-start">
               <FontAwesomeIcon
                 className={classes.infoIcon}
+                onClick={resetOBSCustomerSelection}
                 color={Colors.error}
                 icon={solid('triangle-exclamation')}
               />
@@ -52,7 +51,8 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
           {...props}
           autosave
           withState
-          data-cy="shipping-address-field" />
+          data-cy="shipping-address-field"
+        />
       </Grid>
     </Grid>
   );
