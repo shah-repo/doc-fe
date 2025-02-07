@@ -78,6 +78,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
       progressClassName: 'progressClassName',
       closeButton: (props) => <ExportPDFCloseButton {...props} linkInfo={url} />,
       autoClose: false,
+      closeOnClick: false,
     });
     window.onbeforeunload = null;
     downloadFile(url);
