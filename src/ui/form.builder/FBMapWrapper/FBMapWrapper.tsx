@@ -8,7 +8,12 @@ const FBMapWrapper = <T extends any>({
   ...props
 }: FBMapWrapperProps<T>) => (
   <React.Fragment>
-    {map(collection as Dictionary<T>, (value: T, key: number | any) => children(value, key, props))}
+    {map(collection as Dictionary<T>, (value: T, key: number | any) =>
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      (<React.Fragment key={key}>
+        {children(value, key, props)}
+      </React.Fragment>
+      ))}
   </React.Fragment>
 );
 
