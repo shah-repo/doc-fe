@@ -17,6 +17,7 @@ import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import { AxiosRequestConfig } from 'axios';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
@@ -26,7 +27,7 @@ import { Link } from 'react-router-dom';
 import { intl } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_GET_SCAN_RESULTS } from '../../../state/ducks/company/constants';
+import { BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW, BULK_MIGRATION_GET_SCAN_RESULTS } from '../../../state/ducks/company/constants';
 import { store } from '../../../state/store';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
@@ -180,11 +181,13 @@ const ExpandableRow: React.FC<{
   labelId: string
   onIconHovered: (event, content: ReactElement) => void
   handlePopoverClose: () => void
+  scanId: string
 }> = ({
   row, handleSelection, isItemSelected,
-  labelId, onIconHovered, handlePopoverClose,
+  labelId, onIconHovered, handlePopoverClose, scanId,
 }) => {
   const [rowOpen, setRowOpen] = React.useState(false);
+  const [rowMapping, setRowMapping] = useState(false);
   const classes = useStyles();
 
   const getRowColor = (row: ISupplierScanResultRev) => {
@@ -196,7 +199,7 @@ const ExpandableRow: React.FC<{
       return UtilColors.failed;
     }
 
-    if (row.status === MIGRATION_STATUS_ENUM.COMPLETED) {
+    if (row.status === MIGRATION_STATUS_ENUM.COMPLETED || row.isAlreadyUpgraded) {
       return UtilColors.done;
     }
 
@@ -256,6 +259,33 @@ const ExpandableRow: React.FC<{
     e.stopPropagation();
   };
 
+  function getPreviewForDocRev () {
+    setRowMapping(true);
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW}/${scanId}/${row.docRevId}`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        const { newFormInput, fieldNamesUnmatched } = data;
+        row.newFormInput = newFormInput;
+        row.fieldNamesUnmatched = fieldNamesUnmatched;
+        row.isMapped = true;
+
+        setRowMapping(false);
+      })
+      .catch((exception) => {
+        setRowMapping(false);
+        toastError(exception?.response.data?.message);
+      });
+  }
+
   return (
     <React.Fragment>
       <TableRow
@@ -277,12 +307,12 @@ const ExpandableRow: React.FC<{
             onMouseEnter={handleIconHover}
             onMouseLeave={handlePopoverClose}
           >
-            { row.status !== MIGRATION_STATUS_ENUM.COMPLETED && <Checkbox
+            { row.status !== MIGRATION_STATUS_ENUM.COMPLETED && !row.isAlreadyUpgraded && <Checkbox
               checked={isItemSelected}
               inputProps={{ 'aria-labelledby': labelId }}
             /> }
             {
-              row.status === MIGRATION_STATUS_ENUM.COMPLETED
+              (row.status === MIGRATION_STATUS_ENUM.COMPLETED || row.isAlreadyUpgraded)
               && <DoneAllIcon style={{ color: Colors.success }} />
             }
             {
@@ -324,7 +354,9 @@ const ExpandableRow: React.FC<{
           /> }
         </TableCell>
         <TableCell align="left" style={{ overflow: 'hidden', wordWrap: 'break-word' }}>
-          {row.isMapped ? JSON.stringify(row.fieldNamesUnmatched) : 'NOT MAPPED'}
+          {row.isMapped ? JSON.stringify(row.fieldNamesUnmatched)
+            : <>{ rowMapping ? <span>Mapping... </span>
+              : <span>NOT MAPPED <TrackChangesIcon onClick={getPreviewForDocRev} style={{ cursor: 'pointer' }} /></span>} </>}
         </TableCell>
         <TableCell style={{ overflow: 'hidden', wordWrap: 'break-word' }}>{row.proposedAction}</TableCell>
       </TableRow>
@@ -366,12 +398,12 @@ const ExpandableRow: React.FC<{
 
 const RevsTable: React.FC<{
   scanId: string
-  toDocumentTypeId: string
   handleSelectedRowsChange: (selected: ISelectedDetails[]) => void
+  updateRevsTable: number
 }> = ({
   scanId,
-  toDocumentTypeId,
   handleSelectedRowsChange,
+  updateRevsTable,
 }) => {
   const classes = useStyles();
   const [searchQueries, setSearchQueries] = React.useState<{[key: string]: string}>({});
@@ -415,7 +447,7 @@ const RevsTable: React.FC<{
       fetchScanSupplierRevisions();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scanId, searchQueries, page, rowsPerPage, orderBy, order]);
+  }, [updateRevsTable, scanId, searchQueries, page, rowsPerPage, orderBy, order]);
 
   function fetchScanSupplierRevisions () {
     setIsLoading(true);
@@ -564,6 +596,7 @@ const RevsTable: React.FC<{
                     isItemSelected={isItemSelected} labelId={labelId} key={row.docRevId}
                     onIconHovered={(event, content) => handlePopoverOpen(event, content)}
                     handlePopoverClose={handlePopoverClose}
+                    scanId={scanId}
                   />
                 );
               })}

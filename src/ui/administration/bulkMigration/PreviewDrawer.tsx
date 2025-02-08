@@ -1,4 +1,4 @@
-import { Box, Button, Drawer, LinearProgress, List, ListItem, ListItemText, makeStyles, Typography } from '@material-ui/core';
+import { Box, Button, Drawer, LinearProgress, List, ListItem, ListItemText, makeStyles, TextField, Typography } from '@material-ui/core';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import { AxiosRequestConfig } from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -105,6 +105,7 @@ const PreviewDrawer: React.FC<{
   const [isLoading, setIsLoading] = useState(false);
 
   const [previewDocRevsList, setPreviewDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
+  const [filteredDocRevsList, setFilteredDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
 
   const [selectedPreviewDocRev, setSelectedPreviewDocRev] = useState<DocumentRevision & {formInputKeysCount: number}>();
   const [newFormInput, setNewFormInput] = useState<{[key: string]: any}>();
@@ -128,6 +129,7 @@ const PreviewDrawer: React.FC<{
       .then((resp) => resp)
       .then(({ data }) => {
         setPreviewDocRevsList(data);
+        setFilteredDocRevsList(data);
         setIsLoading(false);
       })
       .catch((exception) => {
@@ -173,6 +175,17 @@ const PreviewDrawer: React.FC<{
     getPreviewForDocRev(docRevSelected);
   };
 
+  function searchTextChanged (searchText: string) {
+    if (!searchText) {
+      setFilteredDocRevsList(previewDocRevsList);
+    } else {
+      const filteredRevs = previewDocRevsList.filter(
+        docRev => docRev.document?.docId.includes(searchText) || docRev.name.includes(searchText),
+      );
+      setFilteredDocRevsList(filteredRevs);
+    }
+  }
+
   function componentToRender (controlProps: FBInputProps): React.ReactNode | undefined {
     const { type, name, index } = controlProps;
     const schemaControl = FBSchemaState.control[type || ''];
@@ -206,9 +219,11 @@ const PreviewDrawer: React.FC<{
           <Box className={classes.drawerContent}>
             {/* Left Section */}
             <div className={classes.leftSection}>
-              {previewDocRevsList.length > 0
+              <TextField size="small" variant="outlined" placeholder="Search" style={{ width: '100%' }}
+                onChange={e => searchTextChanged(e.target.value)} />
+              {filteredDocRevsList.length > 0
                 && <List dense={true}>
-                  {previewDocRevsList.map((docRev, index) => {
+                  {filteredDocRevsList.map((docRev, index) => {
                     const primaryText = `[${index + 1}] ${docRev.document?.docId} • ${docRev.name}`;
                     const secondaryText = `Rev ${docRev.displayRevision} • ${docRev.displayStatus}`;
                     return (<ListItem className={classes.listItem}

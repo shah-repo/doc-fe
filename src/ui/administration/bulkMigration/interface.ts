@@ -44,6 +44,7 @@ export interface ISupplierScanResultRev {
   email: string
   ownerId: string
   isMapped: boolean
+  isAlreadyUpgraded: boolean
 }
 
 enum SUPPLIER_REV_MIGRATION_APPROVAL_STATUS_ENUM {

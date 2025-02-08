@@ -42,6 +42,7 @@ const BulkMigrationContainer: React.FC = () => {
   const [toFormRevsList, setToFormRevsList] = useState<DocumentRevision[]>([]);
 
   const [eligibleRevsCount, setEligibleRevsCount] = useState<number>(0);
+  const [updateRevsTable, setUpdateRevsTable] = useState<number>(0);
 
   const [scanDetails, setScanDetails] = useState<IBulkMigrationScanDetails>();
   const [rerunScanDetails, setRerunScanDetails] = useState<{irrelevantRevsCount: number, newRevsCount: number}>({
@@ -294,12 +295,12 @@ const BulkMigrationContainer: React.FC = () => {
         .request(requestConfig)
         .then((resp) => resp)
         .then(({ data }) => {
-          console.log(data);
           setIsLoading(false);
           toastSuccess(
-            'Scan mapping logic has been updated. Click Preview to see this logic in action.',
+            'Scan mapping logic has been updated. Click Preview to see this logic in action. All mapping has been reset.',
           );
-          registerScanForRevisions();
+          setScanDetails(data);
+          setUpdateRevsTable(updateRevsTable => updateRevsTable + 1);
         })
         .catch((exception) => {
           catchAxiosException(exception);
@@ -436,8 +437,7 @@ const BulkMigrationContainer: React.FC = () => {
   }, [fromDocumentTypeId, toDocumentTypeId, fromFormRevId, toFormRevId]);
 
   // Migration mapping Dialog
-  const [isMigrationMappingDialogVisible, setIsMigrationMappingDialogVisible]
-    = useState<boolean>(false);
+  const [isMigrationMappingDialogVisible, setIsMigrationMappingDialogVisible] = useState<boolean>(false);
   const showMappingRules = () => {
     setIsMigrationMappingDialogVisible(true);
   };
@@ -559,7 +559,10 @@ const BulkMigrationContainer: React.FC = () => {
             </Box>
             {fromDocumentTypeId && fromFormRevId && (
               <Typography variant="subtitle2">
-                  Eligible Revisions - <span style={{ color: Colors.black }}> {eligibleRevsCount} </span>
+                  Eligible Revisions - <span style={{ color: Colors.black }}> {eligibleRevsCount} <RefreshIcon
+                  style={{ cursor: 'pointer', marginLeft: '4px', fontSize: '16px' }}
+                  onClick={e => fetchEligibleRevisionsOfRevType(fromFormRevId)}
+                /> </span>
               </Typography>
             )}
           </Box>
@@ -705,7 +708,7 @@ const BulkMigrationContainer: React.FC = () => {
         )}
         {scanDetails?.id && ![MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
           && <Box>
-            <RevsTable scanId={scanDetails.id} toDocumentTypeId={toDocumentTypeId} handleSelectedRowsChange={handleSelectedRowsChange} />
+            <RevsTable scanId={scanDetails.id} handleSelectedRowsChange={handleSelectedRowsChange} updateRevsTable={updateRevsTable} />
           </Box>
         }
         {scanDetails?.id && [MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
