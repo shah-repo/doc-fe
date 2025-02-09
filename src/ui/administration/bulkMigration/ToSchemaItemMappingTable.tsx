@@ -57,7 +57,8 @@ const ToSchemaItemMappingTable: React.FC<{
   }
 
   function handleRowCellClicked (
-    event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, selectedRow: IRowData, key: string,
+    event: React.MouseEvent<HTMLTableCellElement, MouseEvent>,
+    selectedRow: IRowData, key: string, mappedToSchemaItem: ISchemaItem,
   ) {
     event.preventDefault();
     event.stopPropagation();
@@ -90,7 +91,8 @@ const ToSchemaItemMappingTable: React.FC<{
     });
 
     // Check for Table Mappings
-    const { canMap, errMessage } = validateTableMappings(modifiedRow);
+    const { canMap, errMessage }
+      = validateTableMappings(key, selectedSchemaItem, modifiedRow, mappedToSchemaItem);
     if (!canMap) {
       toastError(errMessage);
       return;
@@ -161,7 +163,7 @@ const ToSchemaItemMappingTable: React.FC<{
             {schemaItem.fieldNames?.map(fieldName => {
               return (
                 <TableCell style={{ border: `1px solid ${Colors.dark_gray2}` }}
-                  onClick={e => handleRowCellClicked(e, row, fieldName)}
+                  onClick={e => handleRowCellClicked(e, row, fieldName, schemaItem)}
                   contentEditable = {!Array.isArray(row[fieldName])}
                   suppressContentEditableWarning
                   onInput={(event) => handleCellInput(event, row, fieldName)}

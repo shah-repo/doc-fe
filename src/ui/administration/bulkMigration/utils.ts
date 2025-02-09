@@ -5,6 +5,19 @@ import { checkSpecialFields } from '../../documentRevision/forms/presenters/chan
 import Colors from '../../layout/theme/utils/colors';
 import { IMappedFrom, IRowData, ISchemaItem } from './interface';
 
+const schemaValidationMap = {
+  supplierContacts: {
+    isPrimary: {
+      isNotMappable: true,
+    },
+  },
+  supplierSupportingDocs: {
+    attachments: {
+      shouldMapTo: 'fileupload',
+    },
+  },
+};
+
 export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISchemaItem): {canMap: boolean, errMessage: string} {
   const errMessage = '';
   let canMap = true;
@@ -29,7 +42,9 @@ export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISch
   return { canMap, errMessage };
 }
 
-export function validateTableMappings (selectedRow: IRowData): {canMap: boolean, errMessage: string} {
+export function validateTableMappings (
+  key: string, selectedSchemaItem: ISchemaItem, selectedRow: IRowData, mappedToSchemaItem: ISchemaItem,
+): {canMap: boolean, errMessage: string} {
   const canMap = true;
   const errMessage = '';
 
@@ -88,6 +103,21 @@ export function validateTableMappings (selectedRow: IRowData): {canMap: boolean,
           };
         }
       }
+    }
+
+    const keyAttributes = schemaValidationMap[mappedToSchemaItem.type!]?.[key];
+    if (keyAttributes?.isNotMappable) {
+      return {
+        canMap: false,
+        errMessage: 'This field is not mappable.',
+      };
+    }
+
+    if (keyAttributes?.shouldMapTo && keyAttributes.shouldMapTo !== selectedSchemaItem.type) {
+      return {
+        canMap: false,
+        errMessage: `This field should only be mapped to a ${keyAttributes.shouldMapTo}.`,
+      };
     }
   }
   return { canMap, errMessage };

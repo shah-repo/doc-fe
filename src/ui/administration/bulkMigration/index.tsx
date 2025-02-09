@@ -297,7 +297,7 @@ const BulkMigrationContainer: React.FC = () => {
         .then(({ data }) => {
           setIsLoading(false);
           toastSuccess(
-            'Scan mapping logic has been updated. Click Preview to see this logic in action. All mapping has been reset.',
+            'Scan mapping logic has been updated. Click Preview to see this logic in action.',
           );
           setScanDetails(data);
           setUpdateRevsTable(updateRevsTable => updateRevsTable + 1);
