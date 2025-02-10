@@ -3,11 +3,11 @@ import { action, observable, set } from 'mobx';
 import moment, { MomentInput } from 'moment';
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { CurrencyRate, FBCurrency, FBPurchaseOrderValue, ReceiveableQuantity } from '../../form.builder';
 import FBRequest from '../FBApi/FBApi.request';
 import { getDecimalLength } from '../FBPurchaseOrderTable/helpers';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import { TAX_RATE } from '../helpers/constants';
-import { CurrencyRate, FBCurrency, FBPurchaseOrderValue, ReceiveableQuantity } from './FBPurchaseOrder.types';
 
 class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<number>> {
   public exchangeRate: FBRequest<CurrencyRate, Dictionary<number>> = new FBRequest();
