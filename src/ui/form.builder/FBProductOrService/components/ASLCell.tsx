@@ -6,7 +6,6 @@ import React from 'react';
 import useCommonStatusStyles from '../../../../../src/ui/components/common/kendo.column.templates/Status.styles';
 import { translate } from '../../../../common/intl';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
-import Tooltip from '../../../components/common/kendo/Tooltip';
 import {
   Autocomplete,
   FormikField,
@@ -73,6 +72,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
 export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
   const { field, dataItem } = props;
   const defaultValue = dataItem?.aslDisplayLabel ?? dataItem[field];
+  const statusClass = dataItem?.aslStatus ?? defaultValue;
   const classes = useStyles();
   const statusClasses = useCommonStatusStyles();
 
@@ -82,20 +82,17 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
 
   if (defaultValue) {
     return (
-      <Tooltip
-        data={defaultValue}
-        childrenElement={
-          <Chip
-            size="small"
-            className={cx(
-              statusClasses.chip,
-              classes.aslChipTextOverflow,
-              statusClasses[ASL_STATUS_CLASS_MAPPING[defaultValue]],
-            )}
-            label={defaultValue}
-          />
-        }
-      />
+      <OverflowTooltip arrow placement="top" title={defaultValue}>
+        <Chip
+          size="small"
+          className={cx(
+            statusClasses.chip,
+            classes.aslChipTextOverflow,
+            statusClasses[ASL_STATUS_CLASS_MAPPING[statusClass]],
+          )}
+          label={defaultValue}
+        />
+      </OverflowTooltip>
     );
   }
   return <>{EMPTY_VALUE_PLACEHOLDER}</>;

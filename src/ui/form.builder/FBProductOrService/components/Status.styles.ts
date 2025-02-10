@@ -7,7 +7,7 @@ export default makeStyles(() => ({
     justifyContent: 'flex-start',
   },
   aslChipTextOverflow: {
-    maxWidth: 250,
+    maxWidth: '100%',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     overflow: 'hidden',

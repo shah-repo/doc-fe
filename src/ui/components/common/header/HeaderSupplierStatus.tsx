@@ -101,11 +101,16 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
     { status: nextStatus.current },
   );
 
+  const getStatusLabel = (): string =>
+    isSupplierStatusEditable
+      ? statusLabel || translate('common.select.status')
+      : statusLabel;
+
   return (
     <>
       <HeaderStatusButton
         onItemSelect={confirmUpdate}
-        label={statusLabel}
+        label={getStatusLabel()}
         options={options}
         disabled={!isSupplierStatusEditable}
         data-cy="supplier-status"
