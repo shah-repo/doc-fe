@@ -6,7 +6,7 @@ export interface AutocompleteInputProps extends InputBaseProps {
   size: AutocompleteProps['size']
 }
 
-export type AutocompleteProps = Omit<MuiAutocompleteProps, 'renderInput' | 'onBlur'> & {
+export type AutocompleteProps = Partial<MuiAutocompleteProps> & {
   name?: string
   error?: boolean
   onBlur?: React.FocusEventHandler
