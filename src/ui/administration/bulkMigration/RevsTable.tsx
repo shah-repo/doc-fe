@@ -1,4 +1,4 @@
-import { Box, Collapse, LinearProgress, ListItemText, Popover, TextField } from '@material-ui/core';
+import { Box, Collapse, FormControlLabel, LinearProgress, ListItemText, Popover, Switch, TextField } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
@@ -118,6 +118,17 @@ const useStyles = makeStyles((theme) => ({
     color: 'inherit',
     '&:hover': {
       textDecoration: 'underline',
+    },
+  },
+  mappingSwitcher: {
+    '& span': {
+      fontSize: '12px',
+    },
+  },
+  switchBase: {
+    color: Colors.statusDraftBorder,
+    '&$checked': {
+      color: Colors.statusDraftBorder,
     },
   },
 }));
@@ -419,6 +430,8 @@ const RevsTable: React.FC<{
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const [isShowActionableRows, setIsShowActionableRows] = useState<boolean>(true);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popoverContent, setPopoverContent] = useState<ReactElement>(<></>);
 
@@ -447,7 +460,7 @@ const RevsTable: React.FC<{
       fetchScanSupplierRevisions();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateRevsTable, scanId, searchQueries, page, rowsPerPage, orderBy, order]);
+  }, [updateRevsTable, scanId, searchQueries, page, rowsPerPage, orderBy, order, isShowActionableRows]);
 
   function fetchScanSupplierRevisions () {
     setIsLoading(true);
@@ -455,7 +468,8 @@ const RevsTable: React.FC<{
 
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
-      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}&sortOrder=${(order as string).toLocaleUpperCase()}`,
+      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}
+      &sortOrder=${(order as string).toLocaleUpperCase()}&isShowActionableOnly=${isShowActionableRows}`,
       data: {
         searchQueries,
       },
@@ -557,6 +571,23 @@ const RevsTable: React.FC<{
               {selected.length} selected
             </Typography>
           </Typography>
+
+          <FormControlLabel
+            control={
+              <Switch
+                size="small"
+                checked={isShowActionableRows}
+                onChange={event => setIsShowActionableRows(event.target.checked)}
+                color="primary"
+                classes= {{
+                  switchBase: classes.switchBase,
+                }}
+              />
+            }
+            label="Actionable Rows"
+            className={classes.mappingSwitcher}
+            labelPlacement="bottom"
+          />
 
           <TablePagination
             rowsPerPageOptions={[25, 50, 100]}

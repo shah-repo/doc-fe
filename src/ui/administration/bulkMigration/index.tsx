@@ -231,11 +231,7 @@ const BulkMigrationContainer: React.FC = () => {
         .request(requestConfig)
         .then((resp) => resp)
         .then(({ data }) => {
-          const { scanDetails, irrelevantRevsCount, newRevsCount } = data;
-          setScanDetails(scanDetails);
-          setRerunScanDetails({
-            irrelevantRevsCount, newRevsCount,
-          });
+          setScanDetails(data);
         })
         .catch((exception) => {
           catchAxiosException(exception);
