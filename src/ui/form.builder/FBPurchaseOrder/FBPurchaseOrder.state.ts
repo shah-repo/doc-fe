@@ -7,10 +7,10 @@ import FBRequest from '../FBApi/FBApi.request';
 import { getDecimalLength } from '../FBPurchaseOrderTable/helpers';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import { TAX_RATE } from '../helpers/constants';
-import { FBCurrency, FBPurchaseOrderValue } from './FBPurchaseOrder.types';
+import { CurrencyRate, FBCurrency, FBPurchaseOrderValue, ReceiveableQuantity } from './FBPurchaseOrder.types';
 
-class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
-  public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
+class FBPurchaseOrderState extends FBRequest<ReceiveableQuantity[], Dictionary<number>> {
+  public exchangeRate: FBRequest<CurrencyRate, Dictionary<number>> = new FBRequest();
   @observable public itemTotalAmount = 0;
   @observable public hasPartNumber = false;
   @observable public isAllItemsReceived = false;
@@ -222,25 +222,23 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.reCalculateValue();
   };
 
-  public onSuccess () {
+  public onSuccess (): void {
     super.onSuccess();
-    const items = reduce(this.value.items, (reduced: FBPurchaseOrderItem[], item) => {
-      if (!item.partNumber) {
-        reduced.push({
-          ...item,
-          received: this.data.find(receiving => receiving.key === item.id)?.value ?? 0,
-        });
-        return reduced;
-      }
+    this.value.items = this.value.items.reduce<FBPurchaseOrderItem[]>((newItems, item) => {
+      const received = this.data?.reduce((total, receiving) => {
+        return receiving.key === item[receiving.keyName]
+          ? total + receiving.value
+          : total;
+      }, 0);
 
-      const matchingReceived = this.data.find(receiving => receiving.key === item[receiving.keyName]);
-      reduced.push({
-        ...item,
-        received: matchingReceived?.value ?? 0,
-      });
-      return reduced;
+      return [
+        ...newItems,
+        {
+          ...item,
+          received,
+        },
+      ];
     }, []);
-    this.value.items = items;
   }
 
   private readonly fetchReceivedItems = (documentId: string) => {
