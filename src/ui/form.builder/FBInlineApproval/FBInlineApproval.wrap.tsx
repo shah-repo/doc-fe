@@ -78,16 +78,14 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       });
     };
 
-    // MARK: @reaction
-    // Approvals sync
     React.useEffect(() => reaction(
-      () => workspaceState?.approvals,
+      () => FBDataStore?.refreshData,
       (data) => {
-        if (!difference(inlineApprovalState?.approvals, data || [])) {
+        if (!difference(inlineApprovalState?.approvals, data?.approvals as FBInlineApprovalBody[] || [])) {
           return;
         }
-        const fieldApprovals = filter(data, { fieldId: name });
-        inlineApprovalState?.setApprovals(fieldApprovals);
+        const fieldApprovals = filter(data?.approvals, { fieldId: name });
+        inlineApprovalState?.setApprovals(fieldApprovals as FBInlineApprovalBody[]);
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
