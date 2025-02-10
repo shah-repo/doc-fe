@@ -75,9 +75,9 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   const selectedAttachmentsCount = Object.values(selectedAttachments || {}).filter(value => value === true).length;
   const attachments = selectedAttachments && Object.keys(selectedAttachments).filter(key => selectedAttachments[key]);
   const classes = styles({ isAttachmentEmpty });
-  const { getFieldProps, setFieldValue, submitForm } = useFormikContext();
+  const { getFieldProps } = useFormikContext();
   const attachmentsData = documentRevision?.attachments ?? getFieldProps('attachments').value;
-console.log({ setFieldValue, submitForm });
+
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       setIsDownloading(false);
@@ -128,7 +128,7 @@ console.log({ setFieldValue, submitForm });
       redlineWarningDialogHandler.open();
     }
   };
-
+  //  Need to change on API when docRevision is not available, waiting for BE changes to deploy
   const handleSelectedDownload = (documentRevisionId: string, attachments: string[], password: string | undefined) => () => {
     const isRedlineAttachmentExist = attachmentsData.filter(item => attachments.includes(item.id) && item.lineType === LINE_TYPES.RED_LINE );
     if (isDocumentRevisionInDraft(docRevStatus) || isEmpty(isRedlineAttachmentExist)) {

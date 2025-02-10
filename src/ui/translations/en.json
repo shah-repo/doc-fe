@@ -705,6 +705,7 @@
   "document.revision.stage": "Revision Stage",
   "document.revision.view.more": "View more",
   "document.revision.view.less": "View less",
+  "document.revision.view.all": "View All ({count} more)",
   "document.revision.type.of.update": "Type of Update",
   "document.revision.cr.history": "Revision History",
   "document.revision.tpl.invalid": "Approval Request has additional fields to fill in.\nClick on Confirm to Create Approval Request for the document.",

@@ -11,14 +11,42 @@ import { buildSchema } from './schema';
 import { DragAndDrop } from '@progress/kendo-react-common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { makeStyles, Theme, createStyles } from '@material-ui/core';
+import { makeStyles, Theme, createStyles, Button } from '@material-ui/core';
 import { isNull } from 'lodash';
+import { Colors } from '../../../layout/theme-next';
+import { translate } from '../../../../common/intl';
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     dragIcon: {
       width: 16,
       height: 16,
+    },
+    grid: {
+      '.k-grid': {
+        borderRadius: '0 !important',
+        borderBottomWidth: 0,
+      },
+      '& .k-grid-container:last-child': {
+        borderRadius: '0 !important',
+      },
+    },
+    viewContainer: {
+      display: 'flex',
+      paddingLeft: theme.spacing(4),
+      textAlign: 'center',
+      border: '1px solid #DBE0EB',
+      borderTopWidth: '0px',
+      height: 46,
+      backgroundColor: Colors.white,
+      borderBottomLeftRadius: '6px',
+      borderBottomRightRadius: '6px',
+    },
+    toggleButton: {
+      backgroundColor: Colors.primaryBg,
+      color: Colors.primary,
+      borderRadius: 25,
+      textTransform: 'none',
     },
   }));
 
@@ -84,6 +112,7 @@ const AttachmentTable: React.FC<Props> = ({
   onSelectedAttachmentsChange,
   onHeaderChecked,
 }) => {
+  const classes = styles();
   const [attachmentsData, setAttachmentsData] = React.useState(attachments ?? []);
   const [activeItem, setActiveItem] = React.useState<any | null>(null);
   const [showAll, setShowAll] = React.useState(false);
@@ -158,21 +187,10 @@ const AttachmentTable: React.FC<Props> = ({
 
   const rowRender = (tr, props) => {
     const index = props.dataIndex;
-    if (index === 5 && !showAll) {
-      return React.cloneElement(tr, {
-        children: (
-          <td colSpan={6} style={{ textAlign: 'center', cursor: 'pointer' }} onClick={handleViewAllClick}>
-            {showAll ? 'View Less' : 'View All'}
-          </td>
-        ),
-      });
-    }
-
     // Hide rows after the 5th one (index 5 and above)
     if (index >= 5 && !showAll) {
       return React.cloneElement(tr, { style: { display: 'none' } });
     }
-
     return tr;
   };
 
@@ -181,9 +199,11 @@ const AttachmentTable: React.FC<Props> = ({
   };
 
   return (
+    <>
     <MyContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
       <DragAndDrop>
         <KendoDataGrid
+          className={classes.grid}
           fullWidth
           sortable
           filterable
@@ -204,6 +224,14 @@ const AttachmentTable: React.FC<Props> = ({
         />
       </DragAndDrop>
     </MyContext.Provider>
+    {attachmentsData.length > 5 && (
+      <div className={classes.viewContainer}>
+        <Button className={classes.toggleButton} onClick={handleViewAllClick}>
+          {showAll ? translate('document.revision.view.less') : translate('document.revision.view.all', { count: attachmentsData.length - 5 })}
+        </Button>
+      </div>
+    )}
+    </>
   );
 };
 
