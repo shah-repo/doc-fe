@@ -23,6 +23,7 @@ export const ActionsCell: React.FC<ActionsProps> = (props) => {
           open
           placement="bottom-end"
           anchorEl={ref.current}
+          disablePortal
           modifiers={{
             keepTogether: {
               enabled: true,

@@ -23,7 +23,7 @@ const FBCustomerHeaderQuaterAddress: React.FC<FBInputProps> = ({
         <FBTextField
           {...props}
           label={translate('form.builder.customer.city.label')}
-          name={`${name}_city`}
+          name={`${name}City`}
           gutter={false}
           placeholder=""
         />
@@ -32,7 +32,7 @@ const FBCustomerHeaderQuaterAddress: React.FC<FBInputProps> = ({
         <FBTextField
           {...props}
           label={translate('form.builder.customer.zip.code.label')}
-          name={`${name}_zip_code`}
+          name={`${name}ZipCode`}
           inputProps={{ min: '0' }}
           gutter={false}
           placeholder=""
@@ -42,7 +42,7 @@ const FBCustomerHeaderQuaterAddress: React.FC<FBInputProps> = ({
         <FBTextField
           {...props}
           label={translate('form.builder.customer.country.label')}
-          name={`${name}_country`}
+          name={`${name}Country`}
           gutter={false}
           placeholder=""
         />

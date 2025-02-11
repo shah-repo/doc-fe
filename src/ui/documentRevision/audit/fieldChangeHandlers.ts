@@ -16,7 +16,7 @@ export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel): Ch
   const field = changeField.at(-1) ?? '';
   const parentField = changeField.at(-2) ?? '';
 
-  if (['id', 'isPrimary'].includes(field)) return;
+  if (field === 'id') return;
 
   if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
     const isSiteContact = parentField.startsWith('siteContact');
@@ -37,7 +37,7 @@ export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel): Ch
       : `form.builder.site.information.grid.heading.${fieldFullName}`;
     const fieldName = translate(headingKey);
 
-    const labelContext = isSiteContact ? 'Contact' : '';
+    const labelContext = isSiteContact ? translate('form.builder.customer.contact.audit.label') : '';
     const auditKey = isSiteContact
       ? 'form.builder.contact.grid.heading.audit.item'
       : 'form.builder.site.information.grid.heading.audit.item';
@@ -60,9 +60,9 @@ export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel): Ch
 
 export const handleSiteAddressChange = (change: Audit, fbLabel: FBLabel): ChangeFieldType => {
   const fieldMap: Record<string, string> = {
-    _city: 'form.builder.site.information.grid.heading.city',
-    _country: 'form.builder.site.information.grid.heading.country',
-    _zip_code: 'form.builder.site.information.grid.heading.zip.code',
+    City: 'form.builder.site.information.grid.heading.city',
+    Country: 'form.builder.site.information.grid.heading.country',
+    ZipCode: 'form.builder.site.information.grid.heading.zip.code',
   };
 
   const fieldKey = Object.keys(fieldMap).find((key) =>

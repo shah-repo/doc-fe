@@ -1530,6 +1530,7 @@
   "form.builder.contact.grid.heading.other": "Other",
   "form.builder.site.information.grid.heading.audit.item": "{label} items {field}",
   "form.builder.contact.grid.heading.audit.item": "{label} items {field}",
+  "form.builder.customer.contact.audit.label": "Contact",
   "form.builder.shipping.items.title": "Shipping Items",
   "form.builder.shipping.items.add": "Add Shipping Items",
   "form.builder.shipping.items.primary": "Primary Shipping Items",
@@ -2125,6 +2126,7 @@
   "lhr.summary.type.empty.error.message": "Please select a type before entering a value",
   "lhr.summary.status.invalid.message": "The selected revision was canceled, voided or obsoleted",
   "lhr.summary.revision.removed.mpi.tooltip.message": "This revision was removed from the selected MPI",
+  "shipping.withdraw.alert": "Are you sure you want to withdraw this Shipping?",
   "controlConfig.editPart.button.text": "Restricted Edit",
   "print.label.dialog.field.quantity.units": "Quantity Units",
   "print.label.dialog.field.partId": "Part ID",
@@ -2306,6 +2308,7 @@
   "common.rejected": "Rejected",
   "async.state.message.access.denied": "Access Denied",
   "common.failed": "Failed",
+  "common.withdraw": "Withdraw",
   "common.or": "OR",
   "common.rev": "Rev."
 }
