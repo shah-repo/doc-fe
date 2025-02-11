@@ -71,4 +71,14 @@ export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
   documentId?: string
 };
 
+export interface ReceiveableQuantity {
+  key: string
+  keyName: 'id' | 'partNumber'
+  value: number
+}
+
+export interface CurrencyRate {
+  rate: number
+}
+
 export type FBCurrency = 'USD' | 'EUR' | 'GBP';
