@@ -238,7 +238,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // MARK: @methods
     approvalTransition = (transition: FBInlineApprovalTransition, id?: string, password?: string) => {
       if (!id) { return; }
-      inlineApprovalState?.approvalTransition(transition, id, { password });
+      inlineApprovalState?.approvalTransition(transition, id, { password }, () => {
+        const { documentId } = workspaceState || {};
+        documentId && inlineApprovalState?.getDocument(documentId);
+      });
     };
 
     onApproveClick = (approvalId: string) => {
