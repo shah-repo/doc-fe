@@ -10,7 +10,7 @@ export interface RoleEditEvent {
   dataItem: EditableRole
 }
 
-interface ApprovalRole extends FBApprovalRole {
+export interface ApprovalRole extends FBApprovalRole {
   groups: RoleGroup[]
 }
 

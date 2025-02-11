@@ -32,7 +32,7 @@ export const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, edi
           {...props}
           onConfirm={onConfirm}
           onDiscard={onDiscard}
-          hideEditButton
+          isEditButtonHidden
         />
       ),
       width: editedApprovalRole?.[MODE_FIELD] === Mode.add ? 75 : 0,

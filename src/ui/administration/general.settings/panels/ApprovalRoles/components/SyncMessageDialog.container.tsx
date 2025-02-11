@@ -11,6 +11,7 @@ import { Dam } from '../../../../../../state/ducks/company/types';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import Text from '../../../../../components/Text';
+import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import { FBDAMFields } from '../../../../../form.builder';
 import { FBApprovalMatrixItem, FBApprovalRole } from '../../../../../form.builder/FBApprovalMatrixField/FBApprovalMatrixField.types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
@@ -20,16 +21,23 @@ import SyncMessageDialog from './SyncMessageDialog';
 
 const OUT_OF_SYNC_ALERT_DATA_KEY = 'outOfSyncAlertData';
 
-const SyncLabelElement: React.FC<{ label, subLabel }> = ({ label, subLabel }) => {
+const SyncLabelElement: React.FC<{ label?: string, subLabel?: string }> = ({ label, subLabel }) => {
   return (
     <>
-      <Text translation={label} />
+      <Text message={label} />
       <Box marginTop={2} >
-        <Text translation={subLabel} />
+        <Text message={subLabel} />
       </Box>
     </>
   );
 };
+
+function removeItemsAtIndices<T = unknown> (items: T[], indices: number[]): T[] {
+  const sortedIndices = sortBy(indices).reverse();
+  const newItems = [...items];
+  pullAt(newItems, sortedIndices);
+  return newItems;
+}
 
 interface Props {
   documentRevision: DocumentRevision
@@ -54,20 +62,14 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
   const dispatch = useDispatch();
+  const isDraftOrPending = isDocumentRevisionInStatus([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange], documentRevision.status);
 
   const showAsyncMessage = dam?.documentRevision?.id === documentRevision?.id
     && documentRevision.status !== DocumentRevisionStatus.Canceled
     && !dam?.isSynced
     && isOwner;
 
-  const removeItemsAtIndices = (items, indices) => {
-    const sortedIndices = sortBy(indices).reverse();
-    const newItems = [...items];
-    pullAt(newItems, sortedIndices);
-    return newItems;
-  };
-
-  const getSyncMessageTranslation = (isSubLabel = false) => {
+  const getSyncMessageTranslation = (isSubLabel = false): string | undefined => {
     const addToDam = generalSettings?.approvalRoles?.addToDam ?? [];
     const removeFromDam = generalSettings?.approvalRoles?.removeFromDam;
     const roleAddedList = addToDam?.map(item => item.name).join(', ');
@@ -112,7 +114,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   };
 
   const getSyncLabel = () => {
-    if ([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)) {
+    if (isDraftOrPending) {
       return (
         <SyncLabelElement
           label={getSyncMessageTranslation()}
@@ -121,7 +123,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       );
     }
 
-    if ([DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved].includes(documentRevision.status)) {
+    if (isDocumentRevisionInStatus([DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved], documentRevision.status)) {
       return (
         <SyncLabelElement
           label={getSyncMessageTranslation()}
@@ -133,7 +135,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       );
     }
 
-    if (documentRevision.status === DocumentRevisionStatus.Released) {
+    if (isDocumentRevisionReleased(documentRevision.status)) {
       return (
         <SyncLabelElement
           label={getSyncMessageTranslation()}
@@ -158,16 +160,16 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     }
 
     addToDam?.forEach((item, index) => {
-      const newDarValue = {
+      const newDarValue: FBApprovalRole = {
         id: item.id,
         name: item.name,
         index: lastIndex + index + 1,
         groups: [],
         employees: [],
-      } as FBApprovalRole;
+      };
       updatedDAR.push(newDarValue);
     });
-    updatedDAM.forEach(item => {
+    updatedDAM.forEach((item: FBApprovalMatrixItem) => {
       for (let index = 0; index < addToDam?.length; index++) {
         item.approvalRoles.admStage.push(false);
         item.approvalRoles.stage1.push(false);
@@ -178,11 +180,8 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   }
 
   if (!isEmptyArray(removeFromDam)) {
-    const removingARIndexes = removeFromDam.map(ar => {
-      const removingAR = updatedDAR.findIndex(dar => dar.id === ar.id);
-      return removingAR;
-    });
-    updatedDAM.forEach(item => {
+    const removingARIndexes = removeFromDam.map(ar => updatedDAR.findIndex(dar => dar.id === ar.id));
+    updatedDAM.forEach((item: FBApprovalMatrixItem) => {
       item.approvalRoles.admStage = removeItemsAtIndices(item.approvalRoles.admStage, removingARIndexes);
       item.approvalRoles.stage1 = removeItemsAtIndices(item.approvalRoles.stage1, removingARIndexes);
       item.approvalRoles.stage2 = removeItemsAtIndices(item.approvalRoles.stage2, removingARIndexes);
@@ -193,8 +192,8 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
 
   const onCloseDialogClick = () => {
     setIsSyncMessageOpen(false);
-    if ([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)) {
-      documentRevision.formInput = { ...formInput, 'dar-built-in': updatedDAR, 'dam-built-in': updatedDAM };
+    if (isDraftOrPending) {
+      documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDAR, [FBDAMFields.DAM]: updatedDAM };
       _documentRevisionFormState?.setDocumentRevision(documentRevision);
       localStorage.removeItem(OUT_OF_SYNC_ALERT_DATA_KEY);
       async.start(setDocumentRevision, documentRevision.id, { formInput: documentRevision.formInput }, async);
@@ -210,7 +209,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   });
   const setDocumentRevision = useActionCreator(documentRevisionsActions.save);
 
-  if (showAlertDialog && !showAlertDialog?.isSynced && isOwner && ![DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange].includes(documentRevision.status)) {
+  if (showAlertDialog && !showAlertDialog?.isSynced && isOwner && !isDraftOrPending) {
     return <SyncMessageAlert isOpen dialogContent={getSyncLabel()} />;
   }
 

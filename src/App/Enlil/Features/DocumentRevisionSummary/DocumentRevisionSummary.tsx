@@ -7,7 +7,7 @@ import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevisionStatus, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevisionStatus, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/components/SyncMessageDialog.container';
 import FBMaterialDisposition from '../../../../ui/change.request/FBMaterialDisposition';
@@ -42,18 +42,18 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   isSliderView,
   inDialog,
 }) => {
+  const outputDocumentType = documentRevision?.formTemplate?.outputDocumentTypes[0];
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
-  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
+  const outputTypeGroup = get(outputDocumentType, 'group');
+  const outputTypeGroupOptions = get(outputDocumentType, 'groupOptions');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isDAM = checkIsDocumentDAM(groupOptions);
   const hasOutput = isDocumentRevisionHasOutput(documentRevision);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
-  const isPartForm = checkIsDocumentPart(
-    (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
-  const isARForm = checkIsDocumentChangeRequest(
-    (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
+  const isPartForm = checkIsDocumentPart(outputTypeGroupOptions);
+  const isARForm = checkIsDocumentChangeRequest(outputTypeGroupOptions);
   const smartReferencesFrom
     = documentRevision?.smartReferencesFrom?.filter(
       (ref) =>

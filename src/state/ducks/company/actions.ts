@@ -1,4 +1,4 @@
-import { omit, pick } from 'lodash';
+import { omit } from 'lodash';
 import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
@@ -101,16 +101,15 @@ const updateGeneralSettings = (
 };
 
 const createApprovalRoles = (
-  body: any,
+  body: { name: string, isActive: boolean },
   handlers: Handlers,
   method: ApiActionMethod = 'post',
 ): ApiAction<GeneralSettingsState> => {
-  const { values } = body;
   const url = CREATE_APPROVAL_ROLES_URL;
   return apiActionWithCallbacks({
     url,
     method,
-    data: pick(values, 'name', 'isActive'),
+    data: body,
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
       dispatch(getGeneralSettings());
@@ -121,17 +120,15 @@ const createApprovalRoles = (
 
 const updateApprovalRoles = (
   id: string,
-  body: any,
+  body: { isActive: boolean },
   handlers: Handlers,
   method: ApiActionMethod = 'patch',
 ): ApiAction<GeneralSettingsState> => {
-  const { lifecyclePhases, ...rest } = body;
-  const payload = { ...rest, lifecyclePhases: Array.isArray(lifecyclePhases) ? lifecyclePhases : [] };
   const url = generatePath(UPDATE_APPROVAL_ROLES_URL, { id });
   return apiActionWithCallbacks({
     url,
     method,
-    data: pick(payload, 'isActive'),
+    data: body,
     asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
       dispatch(getGeneralSettings());

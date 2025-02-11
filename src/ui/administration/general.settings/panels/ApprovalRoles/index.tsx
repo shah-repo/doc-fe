@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { omit } from 'lodash';
+import { omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
@@ -36,7 +36,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     const updatedApprovalRoles = approvalRolesData?.map(item => item.id === dataItem.id ? { ...dataItem, isActive: !dataItem.isActive } : item);
     formValues.approvalRoles.approvalRoles = updatedApprovalRoles;
     setApprovalRolesData(updatedApprovalRoles);
-    async.start(updateApprovalRolesAction, dataItem.id, { isActive: !dataItem.isActive, formValues: formValues }, async);
+    async.start(updateApprovalRolesAction, dataItem.id, { isActive: !dataItem.isActive }, async);
   };
 
   const formik = useFormik<EditableApprovalRole | Record<string, never>>({
@@ -58,7 +58,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       discardApprovalRoles();
       formValues.approvalRoles.approvalRoles = updatedApprovalRoles;
       setApprovalRolesData(updatedApprovalRoles);
-      async.start(createApprovalRolesAction, { values, formValues }, async);
+      async.start(createApprovalRolesAction, pick(values, 'name', 'isActive'), async);
     },
   });
 

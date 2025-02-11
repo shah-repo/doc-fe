@@ -10,7 +10,7 @@ import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
 import SyncMessageDialogContainer from '../../../../ui/administration/general.settings/panels/ApprovalRoles/components/SyncMessageDialog.container';
@@ -75,17 +75,17 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   dirty = false,
   inDialog,
 }) => {
+  const outputDocumentType = documentRevision?.formTemplate?.outputDocumentTypes[0];
   const docTypeGroup = get(documentRevision?.document?.documentType, 'group', 'OTHER');
-  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], 'group');
+  const outputTypeGroup = get(outputDocumentType, 'group');
+  const outputTypeGroupOptions = get(outputDocumentType, 'groupOptions');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isDAM = checkIsDocumentDAM(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
   const isPart = checkIsDocumentPart(groupOptions);
-  const isPartForm = checkIsDocumentPart(
-    (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
-  const isARForm = checkIsDocumentChangeRequest(
-    (documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions);
+  const isPartForm = checkIsDocumentPart(outputTypeGroupOptions);
+  const isARForm = checkIsDocumentChangeRequest(outputTypeGroupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance
