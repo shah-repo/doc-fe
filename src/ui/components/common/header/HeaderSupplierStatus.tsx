@@ -65,7 +65,7 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
   });
 
   useEffect(() => {
-    supplierTypesAsync.start(fetchASLTypes, supplierTypesAsync);
+    supplierTypesAsync.start(fetchASLTypes, true, supplierTypesAsync);
   }, []);
 
   const getSupplierStatusByValue = (supplierStatus?: string): string => {
@@ -98,11 +98,13 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
     { status: nextStatus.current },
   );
 
+  const emptyStatusLabel = translate('form.builder.supplier.status.default.label');
+
   return (
     <>
       <HeaderStatusButton
         onItemSelect={confirmUpdate}
-        label={statusLabel}
+        label={statusLabel ?? emptyStatusLabel}
         options={options}
         disabled={!isSupplierStatusEditable}
         data-cy="supplier-status"
