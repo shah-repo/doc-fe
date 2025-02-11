@@ -41,10 +41,12 @@ function removeItemsAtIndices<T = unknown> (items: T[], indices: number[]): T[] 
 
 interface Props {
   documentRevision: DocumentRevision
+  reloadComponent?: () => void
 }
 
 const SyncMessageDialogContainer: React.FC<Props> = ({
   documentRevision,
+  reloadComponent,
 }) => {
   const { _documentRevisionFormState } = SM.useStores();
   const [isSyncMessageOpen, setIsSyncMessageOpen] = React.useState(false);
@@ -197,6 +199,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       _documentRevisionFormState?.setDocumentRevision(documentRevision);
       localStorage.removeItem(OUT_OF_SYNC_ALERT_DATA_KEY);
       async.start(setDocumentRevision, documentRevision.id, { formInput: documentRevision.formInput }, async);
+      reloadComponent?.();
     } else {
       localStorage.setItem(OUT_OF_SYNC_ALERT_DATA_KEY, JSON.stringify(dam));
     }

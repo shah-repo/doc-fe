@@ -107,6 +107,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isRelatedTogetherPart = documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
   const isBomDisabled = isDisabledInput || inRestrictedEditMode || isPartForm || !hasPermissionToEditBOM || isRelatedTogetherPart;
 
+  const [reloadKey, setReloadKey] = React.useState(0);
+
   if (isLHR) {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
       ...schemaItem,
@@ -192,9 +194,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     [_tabsState],
   );
 
+  const reloadComponent = () => {
+    setReloadKey(prevKey => prevKey + 1);
+  };
+
   return (
     <>
       <SMForm
+        key={reloadKey}
         templateBoxProps={{ stretchY: '100%', width: '100%' }}
         contentBoxProps={{ bgcolor: Colors.alabaster }}
         values={formValues.values}
@@ -420,7 +427,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           </Observer>
         </SMTemplate>
       </SMForm>
-      {isDAM && <SyncMessageDialogContainer documentRevision={documentRevision} />}
+      {isDAM && <SyncMessageDialogContainer { ...{ documentRevision, reloadComponent } } />}
     </>
   );
 };
