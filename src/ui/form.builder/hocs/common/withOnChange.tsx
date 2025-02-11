@@ -1,4 +1,4 @@
-import { filter, get, isArray, isEmpty, isEqual, isString as lodashIsString, isUndefined, map, omit, pick, toInteger, toString, union } from 'lodash';
+import { filter, get, isArray, isEmpty, isEqual, isUndefined, isString as lodashIsString, map, omit, pick, toInteger, toString, union } from 'lodash';
 import React from 'react';
 import { FB, FBButton } from '../..';
 import FBTextField from '../../components/inputs/FBTextField';

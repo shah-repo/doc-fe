@@ -10,6 +10,7 @@ import FBApprovers from '../FBApprovers/FBApprovers';
 import FBBlankTplForm from '../FBBlankTplForm/FBBlankTplForm';
 import FBButton from '../FBButton/FBButton';
 import FBCheckbox from '../FBCheckbox/FBCheckbox';
+import FBCustomerHeaderQuaterAddress from '../FBCustomerHeaderQuaterAddress/FBCustomerHeaderQuaterAddress';
 import FBCycleCount from '../FBCycleCount';
 import FBDatePicker from '../FBDatePicker/FBDatePicker';
 import FBDocumentRevisions from '../FBDocumentRevisions/FBDocumentRevisions';
@@ -49,6 +50,9 @@ import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
 import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
+import FBShippingAddress from '../FBShippingInfo';
+import FBShippingItems from '../FBShippingItems';
+import FBSiteInformation from '../FBSiteInformation';
 import FBSubsection from '../FBSubsection/FBSubsection';
 import FBSupplier from '../FBSupplier/FBSupplier';
 import FBTask from '../FBTask/FBTask';
@@ -104,6 +108,8 @@ class FBSchemaState {
     traineeList: FBTraineeList,
     purchaseorder: FBPurchaseOrder,
     purchaseordersummary: FBPurchaseOrderSummary,
+    headquarterAddress: FBCustomerHeaderQuaterAddress,
+    siteInformations: FBSiteInformation,
     poreceive: FBPOReceive,
     documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,
@@ -149,6 +155,8 @@ class FBSchemaState {
     tasksListTable: FBTasksListTable,
     workOrderType: FBWorkOrderType,
     workOrderLhrTable: FBWorkOrderLHRTable,
+    shippingItems: FBShippingItems,
+    shippingAddress: FBShippingAddress,
   };
 
   @observable public schema?: FBSchemaProps[];
