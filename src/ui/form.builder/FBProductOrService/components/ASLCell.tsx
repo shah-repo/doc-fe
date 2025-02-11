@@ -35,12 +35,16 @@ const Editor: React.FC<CustomTemplateProps> = ({
       value: data.internalType,
       label: data.displayLabel,
       aslStatusId: data.id,
+      isActive: data.isActive,
     };
   });
   let value = aslOptions?.find(
     (option: CustomOptionType) => option.value === dataItem[field],
   );
   value = aslOptions?.find((option) => option.value === values[field]);
+
+  const filteredAslOptions = aslOptions?.filter(data => data.isActive);
+
   const handleChange = (_, value?: CustomOptionType) => {
     setFieldValue(field, value?.value ?? '');
     setFieldValue('aslStatusId', value?.aslStatusId ?? '');
@@ -54,7 +58,7 @@ const Editor: React.FC<CustomTemplateProps> = ({
         blurOnSelect
         disableClearable
         placeholder={translate('common.select')}
-        options={aslOptions}
+        options={filteredAslOptions}
         value={value}
         getOptionLabel={(option: CustomOptionType) => option.label}
         onChange={handleChange}
@@ -82,7 +86,7 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
             size="small"
             className={cx(
               classes.chip,
-              classes[ASL_STATUS_CLASS_MAPPING[defaultValue]],
+              classes[ASL_STATUS_CLASS_MAPPING[dataItem[field]]],
             )}
             label={defaultValue}
           />
