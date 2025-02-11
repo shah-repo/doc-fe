@@ -8,14 +8,14 @@ import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, EditableCertification } from '../types';
 import FBAttachmentNamePresenter from './FBAttachmentNamePresenter';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface Props extends CustomTemplateProps {
   previousAttachments: Attachment[]
 }
 
 const Editor: React.FC<Props> = ({ field, dataItem, previousAttachments }) => {
-  const classes = styles();
+  const classes = useStyles();
   const { setFieldValue, values } = useFormikContext<EditableCertification>();
   const { fileUploadState } = FB.useStores();
   const { id } = dataItem ?? values;
@@ -41,29 +41,47 @@ const Editor: React.FC<Props> = ({ field, dataItem, previousAttachments }) => {
   }, [dataItem, previousAttachments]);
 
   return (
-    <FBFileField className={classes.uploadAttachmentField}
+    <FBFileField
+      className={classes.uploadAttachmentField}
       name={id}
       iconClassName={classes.uploadAttachmentFieldIcon}
       labelClassName={classes.uploadAttachmentFieldLabel}
-    />);
+    />
+  );
 };
 
 export const AttachmentCell: React.FC<CustomTemplateProps> = (props) => {
+  const classes = useStyles();
   const { dataItem = {}, field } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const classes = styles();
   const formik = useFormikContext<EditableCertification>();
-  const defaultAttachments = isEditMode ? formik?.values?.[field] ?? dataItem[field] : dataItem[field] as Attachment[];
+  const defaultAttachments = isEditMode
+    ? formik?.values?.[field] ?? dataItem[field]
+    : (dataItem[field] as Attachment[]);
   const fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState);
 
-  return (<>
-    <div>
+  return (
+    <>
       <FBProvider {...{ fileUploadState }}>
         {isEditMode && (
-          <Editor {...props} {...{ previousAttachments: defaultAttachments } } />
+          <Editor
+            {...props}
+            {...{ previousAttachments: defaultAttachments }}
+          />
         )}
-        { isEmpty(defaultAttachments) ? EMPTY_VALUE_PLACEHOLDER : <FBAttachmentNamePresenter {...{ files: defaultAttachments, fileUploadState, isDisabled: !isEditMode }} boxProps={{ className: classes.attachmentsContainer }} />}
+        {isEmpty(defaultAttachments) ? (
+          EMPTY_VALUE_PLACEHOLDER
+        ) : (
+          <FBAttachmentNamePresenter
+            {...{
+              files: defaultAttachments,
+              fileUploadState,
+              isDisabled: !isEditMode,
+            }}
+            boxProps={{ className: classes.attachmentsContainer }}
+          />
+        )}
       </FBProvider>
-    </div>
-  </>);
+    </>
+  );
 };

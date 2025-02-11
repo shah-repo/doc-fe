@@ -10,31 +10,34 @@ import { FBReferenceProps, Reference } from './types';
 export const withFBReferences = <T extends FBReferenceProps>(
   Component: React.FC<T>,
 ): React.FC<T> => {
-  const Comp = ({
-    name = '',
-    disabled,
-    ...props
-  }: T) => {
+  const Comp = ({ name = '', disabled, ...props }: T) => {
     const { workspaceState } = FB.useStores();
     const [references, setReferences] = useState<Reference[]>();
-    const fetchReferences = useActionCreator(documentRevisionsActions.fetchReferencesTableData);
+    const fetchReferences = useActionCreator(
+      documentRevisionsActions.fetchReferencesTableData,
+    );
     const referenceFormInput = workspaceState?.formInputSync.get(name) ?? [];
 
-    const mergeArrays = (references: Reference[], selectedReferences?: DocumentRevision[]) => {
+    const mergeArrays = (
+      references: Reference[],
+      selectedReferences?: DocumentRevision[],
+    ): Reference[] => {
       const map = new Map();
 
-      references.forEach((item) => {
+      references.forEach((item: Reference) => {
         map.set(item.referenceRevId, { ...item });
       });
 
-      selectedReferences?.forEach((item) => {
+      selectedReferences?.forEach((item: DocumentRevision) => {
         const refObj = {
-          referenceDisplayName: translate('form.builder.supplier.references.displayRevision', {
-            docId: item.document?.docId,
-            displayRevision: item.displayRevision,
-            name: item?.name,
-            status: item.status,
-          }),
+          referenceDisplayName: translate(
+            'form.builder.supplier.references.displayRevision',
+            {
+              docId: item.document?.docId,
+              displayRevision: item.displayRevision,
+              name: item?.name,
+            },
+          ),
           revision: item.displayRevision,
           title: item?.name,
           status: item.status,
@@ -56,19 +59,24 @@ export const withFBReferences = <T extends FBReferenceProps>(
     });
 
     useEffect(() => {
-      if (!workspaceState?.documentId && !workspaceState?.formInputSync.get(name)) {
+      if (
+        !workspaceState?.documentId
+        && !workspaceState?.formInputSync.get(name)
+      ) {
         return;
       }
       fetchOptionsDataAsync.start(
         fetchReferences,
         workspaceState?.id,
-        (workspaceState?.formInputSync.get(name) ?? []).map((data) => data.referenceRevId),
+        (workspaceState?.formInputSync.get(name) ?? []).map(
+          (data) => data.referenceRevId,
+        ),
         fetchOptionsDataAsync,
       );
     }, [workspaceState?.documentId, workspaceState?.formInput?.[name]]);
 
     return Component({
-      ...props as T,
+      ...(props as T),
       name,
       disabled: disabled ?? workspaceState?.isPreview,
       references,

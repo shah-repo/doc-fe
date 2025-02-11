@@ -3,14 +3,16 @@ import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps, SchemaOptions } from '../types';
 import { ActionsCell } from './ActionsCell';
 
-type Props = CustomTemplateProps & Pick<SchemaOptions, 'onConfirm' | 'onDiscard' | 'onDelete'>;
+type Props = CustomTemplateProps &
+Pick<SchemaOptions, 'onConfirm' | 'onDiscard' | 'onDelete'>;
 
-export const ActionsCellTemplate: React.FC<Props> = (props) => {
-  const { dataItem, onConfirm, onDiscard, onDelete } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const isAddition = Mode.add === dataItem[MODE_FIELD];
-
-  if (!isEditMode) {
+export const ActionsCellTemplate: React.FC<Props> = ({
+  dataItem,
+  onConfirm,
+  onDiscard,
+  onDelete,
+}) => {
+  if (![Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return null;
   }
 
@@ -19,7 +21,11 @@ export const ActionsCellTemplate: React.FC<Props> = (props) => {
       dataItem={dataItem}
       onConfirm={onConfirm}
       onDiscard={onDiscard}
-      onDelete={isAddition ? undefined : () => onDelete?.(dataItem)}
+      onDelete={
+        Mode.add === dataItem[MODE_FIELD]
+          ? undefined
+          : () => onDelete?.(dataItem)
+      }
     />
   );
 };

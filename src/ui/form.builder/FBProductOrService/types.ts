@@ -10,14 +10,20 @@ export interface SchemaOptions {
   onDelete?: (item: ProductORService) => void
   onRowClick?: (e: ProductORServiceEditEvent) => void
   aslItems?: ASLStatus[]
-  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableProductORService) => void
+  onOpenQuickView?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    dataItem: EditableProductORService
+  ) => void
 }
 
-export type FBProductORServiceProps =
-& Pick<FBInputProps, 'name' | 'label' | 'disabled'>
-& {
+export type FBProductORServiceProps = Pick<
+FBInputProps,
+'name' | 'label' | 'disabled'
+> & {
   productOrServices: ProductORService[]
-  setProductOrServices: React.Dispatch<React.SetStateAction<ProductORService[]>>
+  setProductOrServices: React.Dispatch<
+  React.SetStateAction<ProductORService[]>
+  >
 };
 
 export interface ProductORService {
@@ -42,8 +48,12 @@ export interface ProductORServiceEditEvent {
   dataItem: EditableProductORService
 }
 
-export interface CustomTemplateProps extends CellTemplateProps<EditableProductORService> {
+export interface CustomTemplateProps
+  extends CellTemplateProps<EditableProductORService> {
   onClick?: (e: ProductORServiceEditEvent) => void
   aslItems?: ASLStatus[]
-  onOpenQuickView?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableProductORService) => void
+  onOpenQuickView?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    dataItem: EditableProductORService
+  ) => void
 }

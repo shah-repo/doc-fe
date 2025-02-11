@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import Colors from '../../../layout/theme/utils/colors';
 
-export const styles = makeStyles((theme) => ({
+export default makeStyles((theme) => ({
   uploadAttachmentField: {
     padding: theme.spacing(0.625, 1.25),
     marginBottom: theme.spacing(1.25),
@@ -44,5 +44,9 @@ export const styles = makeStyles((theme) => ({
       height: '1em',
       width: '1em',
     },
+  },
+  fileName: {
+    width: 235,
+    marginX: theme.spacing(0.75),
   },
 }));

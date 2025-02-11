@@ -13,9 +13,10 @@ export interface SchemaOptions {
   onPrimaryChange?: (id: string) => void
 }
 
-export type FBSupplierContactsProps =
-& Pick<FBInputProps, 'name' | 'label' | 'disabled'>
-& {
+export type FBSupplierContactsProps = Pick<
+FBInputProps,
+'name' | 'label' | 'disabled'
+> & {
   contacts: SupplierContact[]
   deleteContact: (item: SupplierContact) => void
   updateContact: (item: SupplierContact, id?: string) => void
@@ -42,6 +43,7 @@ export interface SupplierContactEditEvent {
   dataItem: EditableSupplierContact
 }
 
-export interface CustomTemplateProps extends CellTemplateProps<EditableSupplierContact> {
+export interface CustomTemplateProps
+  extends CellTemplateProps<EditableSupplierContact> {
   onClick?: (e: SupplierContactEditEvent) => void
 }

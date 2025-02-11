@@ -151,7 +151,14 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const ownerFieldsMapping = {
     'owner.user.name': ['owner.user.avatar', 'owner.user.initialColor'],
   };
-  const overflowCellFields = ['precalc.partNumberTitle', 'precalc.partNumberDescription', 'precalc.supplierCertifications', 'precalc.supplierItemsApproved', 'formInput.supplier-type', 'name'];
+  const overflowCellFields = [
+    'precalc.partNumberTitle',
+    'precalc.partNumberDescription',
+    'precalc.supplierCertifications',
+    'precalc.supplierItemsApproved',
+    'formInput.supplier-type',
+    'name',
+  ];
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: string | undefined;
     let dynamicCellTemplate: KendoCellTemplates;

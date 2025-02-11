@@ -1,6 +1,7 @@
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { at, map, union, uniqBy } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useObserver } from 'mobx-react';
+import React, { useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { FB } from '..';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
@@ -11,7 +12,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
 import { withFBOption } from '../FBOption/FBOption.wrap';
-import { CheckBoxOptionType, FBCheckboxGroupAsyncProps } from './FBCheckboxGroupAsync.types';
+import { FBCheckboxGroupAsyncProps } from './FBCheckboxGroupAsync.types';
 
 const SUPPLIER_TYPE_NAME = 'supplier-type';
 
@@ -26,18 +27,23 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     disabled,
     name = '',
     isInputOwner,
+    options,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
 
-    const [options, setOptions] = useState<CheckBoxOptionType[]>([]);
-    const fetchSupplierConfigOptions = useActionCreator(documentRevisionsActions.fetchSupplierConfigurationOptions);
+    options = useObserver(
+      () => workspaceState?.checkboxGroupsOptionsMap.get(name) ?? [],
+    );
+    const fetchSupplierConfigOptions = useActionCreator(
+      documentRevisionsActions.fetchSupplierConfigurationOptions,
+    );
 
-    const selectedTypes = useMemo(() =>
-        workspaceState?.formInputSync?.get(SUPPLIER_TYPE_NAME) ?? [],
-    [workspaceState?.formInputSync?.get(SUPPLIER_TYPE_NAME)],
+    const selectedTypes = useMemo(
+      () => workspaceState?.formInputSync?.get(SUPPLIER_TYPE_NAME) ?? [],
+      [workspaceState?.formInputSync?.get(SUPPLIER_TYPE_NAME)],
     );
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
@@ -45,7 +51,9 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
 
     const async = useAsync<OptionType[]>({
       onSuccess: (list) => {
-        setOptions(list?.map((item) => ({ ...item, value: item.id })) || []);
+        const optionsList
+          = list?.map((item: OptionType) => ({ ...item, value: item.id })) || [];
+        workspaceState?.setCheckboxGroupsOptionsMap(name, optionsList);
       },
       onError: toastError,
     });
@@ -53,8 +61,8 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value, checked } = event.target;
       const option = options?.find((opt) => opt.id === value);
-      const optionText = option?.text || '';
-      const selectedValues = formState?.getFieldValue(name, []);
+      const optionText = option?.text ?? '';
+      const selectedValues = formState?.getFieldValue(name, []) as OptionType[];
       const updatedValues = checked
         ? union(selectedValues, [{ id: value, text: optionText }])
         : selectedValues.filter((item) => item.id !== value);
@@ -66,15 +74,25 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     useEffect(() => {
       const isSupplierType = name === SUPPLIER_TYPE_NAME;
       if (!isSupplierType && !selectedTypes.length) {
-        setOptions([]);
+        workspaceState?.setCheckboxGroupsOptionsMap(name, []);
         return;
       }
-      async.start(fetchSupplierConfigOptions, props.optionId, isSupplierType ? [] : selectedTypes?.map(item => item.id) || [], async);
+      async.start(
+        fetchSupplierConfigOptions,
+        props.optionId,
+        isSupplierType ? [] : selectedTypes?.map((item) => item.id) || [],
+        async,
+      );
     }, [selectedTypes]);
 
     controls = map(options, (option, index) => {
-      const [value, message] = at(option, [optionValueKey, optionLabelKey]);
-      const defaultChecked = formValue?.some((item) => item.id === value);
+      const [value, message] = at(option, [
+        optionValueKey as keyof typeof option,
+        optionLabelKey as keyof typeof option,
+      ]) as string[];
+      const defaultChecked = formValue?.some(
+        (item) => item.id === value,
+      ) as boolean;
       let attr = message;
       if (isTranslation(attr)) {
         attr = intl.formatMessage({ id: message });
@@ -84,7 +102,12 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
         <FormControlLabel
           key={`${value}-${index}`}
           data-cy={`${message}-${index}`}
-          control={<Checkbox disabled={disabled || option.disabled} {...{ value, onChange, defaultChecked }} />}
+          control={
+            <Checkbox
+              disabled={disabled || option.disabled}
+              {...{ value, onChange, defaultChecked }}
+            />
+          }
           label={<Text {...{ message }} />}
         />
       );

@@ -20,9 +20,12 @@ export const buildSchema = ({
     {
       id: 'certificateId',
       field: 'certificateId',
-      title: 'form.builder.supplier.certifications.grid.heading.certifications.name',
+      title:
+        'form.builder.supplier.certifications.grid.heading.certifications.name',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <TextFieldCellTemplate {...props} onClick={onRowClick} />
+      ),
       width: 140,
     },
     {
@@ -44,9 +47,12 @@ export const buildSchema = ({
     {
       id: 'type',
       field: 'type',
-      title: 'form.builder.supplier.certifications.grid.heading.certifications.type',
+      title:
+        'form.builder.supplier.certifications.grid.heading.certifications.type',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <TextFieldCellTemplate {...props} onClick={onRowClick} />
+      ),
       width: 140,
     },
     {

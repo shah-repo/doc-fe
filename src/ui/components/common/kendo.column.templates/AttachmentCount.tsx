@@ -4,7 +4,7 @@ import { Grid, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
 import React, { useCallback } from 'react';
 import { CustomGridCellProps } from '../kendo/types';
-import styles from './AttachmentCount.styles';
+import useStyles from './AttachmentCount.styles';
 
 export const AttachmentCount: React.FunctionComponent<CustomGridCellProps> = ({
   dataItem,
@@ -20,7 +20,7 @@ export const AttachmentCount: React.FunctionComponent<CustomGridCellProps> = ({
     return null;
   }
 
-  const classes = styles();
+  const classes = useStyles();
   const attachmentLength = (dataItem[field ?? ''] ?? 0) as number;
   const isAttachmentsExist = attachmentLength > 0;
   const cellClickEvent = () => cellRowClick?.({ dataItem });

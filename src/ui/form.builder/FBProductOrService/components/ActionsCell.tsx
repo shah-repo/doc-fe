@@ -1,6 +1,8 @@
 import { makeStyles, Popper } from '@material-ui/core';
 import React, { useRef } from 'react';
-import Actions, { ActionsProps } from '../../FBApprovalMatrixRoles/components/Actions';
+import Actions, {
+  ActionsProps,
+} from '../../FBApprovalMatrixRoles/components/Actions';
 
 const useStyles = makeStyles({
   popperHolder: {
@@ -36,10 +38,7 @@ export const ActionsCell: React.FC<ActionsProps> = (props) => {
           }}
           className={classes.popper}
         >
-          <Actions
-            scrollBehavior="smooth"
-            {...props}
-          />
+          <Actions scrollBehavior="smooth" {...props} />
         </Popper>
       )}
     </>

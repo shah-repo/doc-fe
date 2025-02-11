@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 
-export const styles = makeStyles((theme) => ({
+export default makeStyles(() => ({
   grid: {
     display: 'block',
     whiteSpace: 'pre-wrap',

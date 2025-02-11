@@ -11,6 +11,7 @@ import { EditableMDItem } from '../../change.request/FBMaterialDisposition/compo
 import { EditableTLItem } from '../../change.request/FBMaterialDisposition/components/FBTasksListTable/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
+import { CheckBoxOptionType } from '../FBCheckboxGroupAsync/FBCheckboxGroupAsync.types';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
@@ -45,6 +46,8 @@ class FBWorkspaceState extends FBSchemaState {
   public tlTableData: EditableTLItem[] = [];
   public tlUpdatedDataIds: string[] = [];
   public mdUpdatedDataIds: string[] = [];
+
+  @observable public checkboxGroupsOptionsMap = new Map<string, CheckBoxOptionType[]>();
 
   public constructor ({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
@@ -219,6 +222,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setFormInputSync = (name: string, value: any) => {
     set(this.formInputSync, name, value);
+  };
+
+  @action public setCheckboxGroupsOptionsMap = (name: string, value: any) => {
+    set(this.checkboxGroupsOptionsMap, name, value);
   };
 
   public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {

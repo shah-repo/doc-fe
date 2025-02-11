@@ -1,26 +1,24 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
-import { DatePicker, FormikField } from '../../../components/forms/fields-next';
 import {
-  Mode,
-  MODE_FIELD,
-} from '../../../components/KendoDataGrid/constants';
+  getFormattedDateString,
+  MomentFormats,
+} from '../../../../common/utils/date';
+import { DatePicker, FormikField } from '../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps } from '../types';
 
 export const ExpiryDateCell: React.FC<CustomTemplateProps> = ({
   field,
   dataItem,
 }) => {
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const fieldValue = dataItem[field];
-  const value = fieldValue && getFormattedDateString(
-    fieldValue,
-    MomentFormats.MonthDateYearTwoDigit,
-  );
+  const value
+    = fieldValue
+    && getFormattedDateString(fieldValue, MomentFormats.MonthDateYearTwoDigit);
 
-  if (!isEditMode) {
+  if (![Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return <>{value}</>;
   }
 

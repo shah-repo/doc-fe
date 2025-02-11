@@ -18,8 +18,8 @@ function ActiveCell ({
   field,
   onActiveStateChange,
 }: CustomCellProps): React.ReactElement {
-  const { getFieldProps, getFieldMeta } = useFormikContext();
   const classes = useStyles();
+  const { getFieldProps, getFieldMeta } = useFormikContext();
   const dataCy = kebabCase(field);
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 

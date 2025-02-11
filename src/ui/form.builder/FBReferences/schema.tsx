@@ -23,7 +23,13 @@ export const buildSchema = ({
       field: 'referenceRevId',
       title: 'form.builder.supplier.references.grid.heading.reference.rev.id',
       filterable: false,
-      template: (props) => <RefIDcell {...props} onClick={onRowClick} onOpenQuickView={onOpenQuickView} />,
+      template: (props) => (
+        <RefIDcell
+          {...props}
+          onClick={onRowClick}
+          onOpenQuickView={onOpenQuickView}
+        />
+      ),
       width: 310,
     },
     {
@@ -71,7 +77,9 @@ export const buildSchema = ({
       field: 'comment',
       title: 'form.builder.supplier.references.grid.heading.comments',
       filterable: false,
-      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => (
+        <TextFieldCellTemplate {...props} onClick={onRowClick} />
+      ),
       width: 250,
     },
     {

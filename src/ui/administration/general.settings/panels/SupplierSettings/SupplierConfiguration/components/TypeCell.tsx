@@ -7,7 +7,10 @@ import {
   Autocomplete,
   FormikField,
 } from '../../../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../../../components/KendoDataGrid/constants';
+import {
+  Mode,
+  MODE_FIELD,
+} from '../../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../../components/OverflowTooltip';
 import { CustomCellProps, OptionType } from '../types';
 
@@ -19,10 +22,9 @@ const Editor: React.FC<CustomCellProps> = ({
   onChange,
 }) => {
   const { getFieldProps, setFieldValue } = useFormikContext();
-  const defaultValue = dataItem[field] as string;
-  const value = dataOptions?.find((data) => data.text === defaultValue);
-  const isEditMode = Mode.edit === dataItem[MODE_FIELD];
-
+  const value = dataOptions?.find(
+    (data: OptionType) => data.text === dataItem[field],
+  );
   const handleChange = (event: ChangeEvent<unknown>, value: OptionType) => {
     setFieldValue(field, value.text);
     setFieldValue('supplierTypeId', value.id);
@@ -42,12 +44,12 @@ const Editor: React.FC<CustomCellProps> = ({
         {...getFieldProps(field)}
         blurOnSelect
         disableClearable
-        disabled={isEditMode}
+        disabled={Mode.edit === dataItem[MODE_FIELD]}
         getOptionLabel={(option: OptionType) => option.text}
         getOptionSelected={(option: OptionType, value) => option.text === value}
         placeholder={translate('common.select')}
         options={dataOptions}
-        value = {value}
+        value={value}
         data-cy={`${kebabCase(field)}-field`}
         onChange={handleChange}
         size="small"
@@ -58,25 +60,29 @@ const Editor: React.FC<CustomCellProps> = ({
 
 export const TypeCell: React.FC<CustomCellProps> = (props) => {
   const { field, dataItem, onClick } = props;
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const handleClick = () => onClick?.({ dataItem });
   const dataCy = kebabCase(field);
-  const displayValue = dataItem[field];
+
+  if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
+    return <Editor {...props} />;
+  }
 
   return (
-    <Box display="flex" justifyContent="start" data-cy={`${dataCy}-td`} onClick={handleClick}>
-      {isEditMode && <Editor {...props} />}
-      {!isEditMode && (
-        <OverflowTooltip
-          arrow
-          placement="top"
-          title={displayValue}
-          onClick={handleClick}
-          data-cy={`${dataCy}-value`}
-        >
-          {displayValue}
-        </OverflowTooltip>
-      )}
+    <Box
+      display="flex"
+      justifyContent="start"
+      data-cy={`${dataCy}-td`}
+      onClick={handleClick}
+    >
+      <OverflowTooltip
+        arrow
+        placement="top"
+        title={dataItem[field]}
+        onClick={handleClick}
+        data-cy={`${dataCy}-value`}
+      >
+        {dataItem[field]}
+      </OverflowTooltip>
     </Box>
   );
 };

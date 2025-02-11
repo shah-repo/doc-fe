@@ -15,7 +15,7 @@ const Editor: React.FC<Props> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, setFieldValue } = useFormikContext<EditableSupplierContact>();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = () => {
     setFieldValue(field, true);
   };
 
@@ -33,24 +33,19 @@ const Editor: React.FC<Props> = ({ field }) => {
 };
 
 export const PrimarySupplierCellTemplate: React.FC<Props> = (props) => {
-  const { dataIndex, dataItem, isActive, isInEditMode, onPrimaryChange } = props;
-  const isEditMode = dataItem[MODE_FIELD] === Mode.add || dataItem[MODE_FIELD] === Mode.edit;
+  const { dataIndex, dataItem, isActive, isInEditMode, onPrimaryChange }
+    = props;
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (isEditMode) {
-      return;
-    }
-    const id = event.target.value;
-    if (id && onPrimaryChange) {
-      onPrimaryChange(id);
+    if (!isEditMode && event.target.value) {
+      onPrimaryChange?.(event.target.value);
     }
   };
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
-
-  const shouldDisable = !isActive || isInEditMode;
 
   return (
     <Box display="flex" justifyContent="center">
@@ -61,7 +56,7 @@ export const PrimarySupplierCellTemplate: React.FC<Props> = (props) => {
         value={dataItem.id}
         name={`primary-supplier-${dataIndex}`}
         onChange={handleChange}
-        disabled={shouldDisable}
+        disabled={!isActive || isInEditMode}
       />
     </Box>
   );

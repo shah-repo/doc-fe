@@ -1,8 +1,9 @@
 import { get, isString } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { translate } from '../../../common/intl';
-import { Audit, LifecyclePahseOptionPayload } from '../../../state/ducks/audit/types';
+import { Audit, LifecyclePhaseOptionType } from '../../../state/ducks/audit/types';
 import { WorkOrderTypesValues } from '../../../state/ducks/documentRevisions/documentType/types';
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '../../form.builder';
 import FBAutocompleteAsyncStore from '../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store';
 
@@ -56,7 +57,22 @@ export const getWOAuditDefaultValue = (audit: Audit): string => {
   }
 };
 
-export const getLCPAuditDefaultValue = (audit: Audit, lifecyclePhaseOptions?: LifecyclePahseOptionPayload[]): string => {
-  const lifecyclePahse = lifecyclePhaseOptions?.find(data => data.id === audit.nextValue);
-  return lifecyclePahse?.text ?? translate('common.not.applicable');
+export const getLCPAuditDefaultValue = (
+  audit: Audit,
+  lifecyclePhaseOptions?: LifecyclePhaseOptionType[],
+): string => {
+  const lifecyclePhase = lifecyclePhaseOptions?.find(
+    (data: LifecyclePhaseOptionType) => data.id === audit.nextValue,
+  );
+  return lifecyclePhase?.text ?? translate('common.not.applicable');
+};
+
+export const getASLStatusAuditDefaultValue = (
+  audit: Audit,
+  aslStatusOptions?: ASLStatus[],
+): string => {
+  const aslStatus = aslStatusOptions?.find(
+    (data: ASLStatus) => data.id === audit.nextValue,
+  );
+  return aslStatus?.displayLabel ?? translate('common.not.applicable');
 };

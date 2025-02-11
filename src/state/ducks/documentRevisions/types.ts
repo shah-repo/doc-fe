@@ -222,7 +222,7 @@ export interface UsedDocumentsInLHRS {
   [key: string]: DocumentsInLHRS
 }
 
-export interface SearchRecordsResponse {
+export interface EntitySearchResults {
   items: DocumentRevision[]
   totalCount: number
 }
@@ -234,12 +234,12 @@ interface LifecyclePhase {
   groupType: string
   id: string
   internalType: string
-  isActive: false
+  isActive: boolean
   isAllowedOnLhrProd: string
   isAllowedToBuy: string
   isApprovedSupplierEnforcedOnPO: string
-  isUserAdded: false
-  isUserModified: true
+  isUserAdded: boolean
+  isUserModified: boolean
   order: number
 }
 

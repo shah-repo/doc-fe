@@ -13,9 +13,10 @@ export const ReadOnlyCell: React.FC<CustomTemplateProps> = ({
   dataItem,
   onClick,
 }) => {
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const formik = useFormikContext<EditableReference>();
-  const displayValue = isEditMode ? formik?.values[field] || dataItem[field] : dataItem[field];
+  const displayValue = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])
+    ? formik?.values[field] || dataItem[field]
+    : dataItem[field];
   const handleClick = () => onClick?.({ dataItem });
 
   return (

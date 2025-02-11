@@ -6,7 +6,10 @@ import { getHasPermission } from '../../../../common/utils/selectors';
 import { authSelectors } from '../../../../state/ducks/auth';
 import { Permission } from '../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import {
+  DocumentRevision,
+  DocumentRevisionStatus,
+} from '../../../../state/ducks/documentRevisions/types';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -17,25 +20,46 @@ import { OptionType } from '../../forms/fields/Autocomplete/types';
 import { toastError } from '../../notifications';
 import HeaderStatusButton from './HeaderStatusButton';
 
-interface Props {
+interface HeaderSupplierStatusProps {
   documentRevision: DocumentRevision
 }
 
-const disabledStatuses = [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided];
+const disabledStatuses = [
+  DocumentRevisionStatus.Obsolete,
+  DocumentRevisionStatus.Voided,
+];
 
-const HeaderSupplierStatus: React.FC<Props> = ({ documentRevision }) => {
+const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
+  documentRevision,
+}) => {
   const confirmationDialog = useDialog();
+  const currentUserId = useSelector(authSelectors.currentUserId);
+  const isOwner = documentRevision.owner.user.id === currentUserId;
+  const hasPermissionToUpdateSupplierStatus = useSelector(
+    getHasPermission(Permission.EDIT_SUPPLIER_STATUS),
+  );
+  const isSupplierStatusEditable
+    = (isOwner || hasPermissionToUpdateSupplierStatus)
+    && !disabledStatuses.includes(documentRevision.status);
+  const updateLotStatus = useRef<() => void>();
+  const nextStatus = useRef<string>();
   const async = useAsync({
     onSuccess: confirmationDialog.close,
   });
-  const updateSupplierStatusAction = useActionCreator(documentRevisionsActions.updateSupplierStatus);
-
+  const updateSupplierStatusAction = useActionCreator(
+    documentRevisionsActions.updateSupplierStatus,
+  );
   const [options, setOptions] = useState<OptionType[]>([]);
-  const fetchASLTypes = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
-
+  const fetchASLTypes = useActionCreator(
+    documentRevisionsActions.fetchASLSuppliersListData,
+  );
   const supplierTypesAsync = useAsync<ASLStatus[]>({
     onSuccess: (aslStatusList) => {
-      setOptions(aslStatusList?.map((data) => { return { label: data.displayLabel, value: data.id }; }) ?? []);
+      setOptions(
+        aslStatusList?.map((data: ASLStatus) => {
+          return { label: data.displayLabel, value: data.id };
+        }) ?? [],
+      );
     },
     onError: toastError,
   });
@@ -44,24 +68,27 @@ const HeaderSupplierStatus: React.FC<Props> = ({ documentRevision }) => {
     supplierTypesAsync.start(fetchASLTypes, true, supplierTypesAsync);
   }, []);
 
-  const getSupplierStatusByValue = (supplierStatus?: string) => {
-    return options?.find((data) => data.value === supplierStatus)?.label;
+  const getSupplierStatusByValue = (supplierStatus?: string): string => {
+    return (
+      options?.find((data: OptionType) => data.value === supplierStatus)
+        ?.label ?? ''
+    );
   };
-
-  const currentUserId = useSelector(authSelectors.currentUserId);
-  const isOwner = documentRevision.owner.user.id === currentUserId;
-  const hasPermissionToUpdateSupplierStatus = useSelector(getHasPermission(Permission.EDIT_SUPPLIER_STATUS));
-  const isSupplierStatusEditable = (isOwner || hasPermissionToUpdateSupplierStatus) && (!disabledStatuses.includes(documentRevision.status));
-
-  const statusLabel = getSupplierStatusByValue(documentRevision.supplierStatusId);
-
-  const updateLotStatus = useRef<() => void>();
-  const nextStatus = useRef<string>();
+  const statusLabel = getSupplierStatusByValue(
+    documentRevision.supplierStatusId,
+  );
 
   const confirmUpdate = (supplierStatus: string) => {
-    nextStatus.current = options?.find((data) => data.value === supplierStatus)?.label;
+    nextStatus.current = options?.find(
+      (data: OptionType) => data.value === supplierStatus,
+    )?.label;
     updateLotStatus.current = () => {
-      async.start(updateSupplierStatusAction, documentRevision.id, { supplierStatusId: supplierStatus }, async);
+      async.start(
+        updateSupplierStatusAction,
+        documentRevision.id,
+        { supplierStatusId: supplierStatus },
+        async,
+      );
     };
     confirmationDialog.open();
   };

@@ -18,7 +18,7 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import { withFBFilesPresenter } from '../../FBFilesPresenter/FBFilesPresenter.wrap';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface Props extends FBFilesPresenterProps {
   isDisabled?: boolean
@@ -31,12 +31,13 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
   isDisabled,
   fileUploadState,
 }) => {
+  const classes = useStyles();
+  const dialogHandler = useDialog();
+  const downloadAttachment = useActionCreator(attachmentsActions.download);
+
   const removeAttachment = (attachmentId: string) => {
     fileUploadState?.removeAttachment(attachmentId);
   };
-
-  const dialogHandler = useDialog();
-  const classes = styles();
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -45,8 +46,6 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
     },
     onError: toastError,
   });
-
-  const downloadAttachment = useActionCreator(attachmentsActions.download);
 
   const downloadOrViewFile = (file: FBAttachment) => {
     if (checkIfFileIsViewable(file?.type)) {
@@ -71,9 +70,7 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
             <div className={classes.attachmentName}>
               <AttachFile />
               <Box
-                width={235}
-                marginLeft={0.75}
-                marginRight={0.75}
+                className={classes.fileName}
                 onClick={() => downloadOrViewFile(file)}
               >
                 <OverflowingContent>
@@ -89,7 +86,10 @@ const FBAttachmentNamePresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {!isDisabled && (
-                <CloseIcon cursor="pointer" onClick={() => removeAttachment(id)} />
+                <CloseIcon
+                  cursor="pointer"
+                  onClick={() => removeAttachment(id)}
+                />
               )}
             </div>
           );

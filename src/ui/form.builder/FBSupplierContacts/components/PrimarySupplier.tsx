@@ -13,7 +13,8 @@ const PrimarySupplier = () => {
         arrow
       >
         <FontAwesomeIcon icon={solid('star')} />
-      </Tooltip></div>
+      </Tooltip>
+    </div>
   );
 };
 

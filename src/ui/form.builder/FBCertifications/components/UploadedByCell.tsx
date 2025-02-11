@@ -15,14 +15,14 @@ export const UploadedByCell: React.FC<CustomTemplateProps> = ({
   field,
   onClick,
 }) => {
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
-  const getUserDetails = (userId: string) => find(availableUsers, { value: userId });
+  const getUserDetails = (userId: string) =>
+    find(availableUsers, { value: userId });
   const user = getUserDetails(dataItem[field] ?? '');
   const [selectedUser, setSelectedUser] = useState(user ?? '');
   const label = user?.label;
 
-  if (!isEditMode) {
+  if (![Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return (
       <Box onClick={() => onClick?.({ dataItem })}>
         <OverflowTooltip title={label} placement="top" interactive arrow>
@@ -33,7 +33,7 @@ export const UploadedByCell: React.FC<CustomTemplateProps> = ({
   }
 
   const { setFieldValue } = useFormikContext<EditableCertification>();
-  const handleChange = (event: React.ChangeEvent<{}>, value?: OptionType) => {
+  const handleChange = (_, value?: OptionType) => {
     if (!value?.value) {
       return;
     }

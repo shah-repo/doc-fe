@@ -18,7 +18,12 @@ import FB from '../helpers/FB';
 import { FIELDS_TO_OMIT, SUPPLIER_KEYS } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableSupplierContact, FBSupplierContactsProps, SupplierContactEditEvent } from './types';
+import {
+  EditableSupplierContact,
+  FBSupplierContactsProps,
+  SupplierContact,
+  SupplierContactEditEvent,
+} from './types';
 import { withFBSupplierContacts } from './wrap';
 
 const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
@@ -33,10 +38,11 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
   const isActive = !disabled;
-  const [editedContact, setEditedContact] = useState<Partial<EditableSupplierContact>>();
-
+  const [editedContact, setEditedContact]
+    = useState<Partial<EditableSupplierContact>>();
   const isContactAdded = editedContact?.[MODE_FIELD] === Mode.add;
-  const editContact = ({ dataItem }: SupplierContactEditEvent) => setEditedContact(dataItem);
+  const editContact = ({ dataItem }: SupplierContactEditEvent) =>
+    setEditedContact(dataItem);
   const isInEditMode = editedContact !== undefined;
   const handleRowClick = isActive && !isInEditMode ? editContact : undefined;
 
@@ -50,18 +56,24 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
 
       const updatedContacts = isAddition
         ? [...supplierContacts, updatedContact]
-        : supplierContacts.map((contact) =>
+        : supplierContacts.map((contact: EditableSupplierContact) =>
           contact.id === values.id
             ? updatedContact
-            : updatedContact.isPrimary
-              ? { ...contact, isPrimary: false }
-              : contact,
+            : {
+              ...contact,
+              isPrimary: updatedContact.isPrimary
+                ? false
+                : contact.isPrimary,
+            },
         );
 
       formState?.setFieldValue(name, updatedContacts);
       workspaceState?.saveDocRev({
         ...workspaceState?.formInput,
-        [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY),
+        [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]:
+          workspaceState.formInputSync.get(
+            SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY,
+          ),
         [name]: updatedContacts,
       });
       discardContact();
@@ -74,47 +86,48 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
     resetForm({ values: editedContact ?? {} });
   }, [editedContact, setValues, resetForm]);
 
-  const createDraftContact = () => setEditedContact({
-    id: uuidv4(),
-    [MODE_FIELD]: Mode.add,
-  });
+  const createDraftContact = () =>
+    setEditedContact({
+      id: uuidv4(),
+      isPrimary: contacts.length === 0,
+      [MODE_FIELD]: Mode.add,
+    });
 
   const discardContact = () => setEditedContact(undefined);
 
   const onDeleteContact = (dataItem: EditableSupplierContact) => {
     if (!editedContact) return;
-    const updatedContacts = contacts.filter((contact) =>
-      contact.id !== dataItem.id,
+    const updatedContacts = contacts.filter(
+      (contact: SupplierContact) => contact.id !== dataItem.id,
     );
     setContacts(updatedContacts);
-  formState?.setFieldValue(name, updatedContacts);
-  workspaceState?.saveDocRev({
-    ...workspaceState?.formInput,
-    [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY),
-    [name]: updatedContacts,
-  });
-  discardContact();
+    formState?.setFieldValue(name, updatedContacts);
+    workspaceState?.saveDocRev({
+      ...workspaceState?.formInput,
+      [SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY]:
+        workspaceState.formInputSync.get(
+          SUPPLIER_KEYS.SUPPLIER_PRODUCT_SERVICE_PROVIDED_KEY,
+        ),
+      [name]: updatedContacts,
+    });
+    discardContact();
   };
 
-  const rowRender: DataGridProps<EditableSupplierContact>['rowRender'] = (row, { dataItem }) => {
+  const rowRender: DataGridProps<EditableSupplierContact>['rowRender'] = (
+    row,
+    { dataItem },
+  ) => {
     const item = dataItem as EditableSupplierContact;
     const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
     if (!isUpdating) {
       return row;
     }
 
-    const editedRow = React.cloneElement(
-      row,
-      {
-        className: cx(row.props.className, classes.updatingRow),
-      },
-    );
+    const editedRow = React.cloneElement(row, {
+      className: cx(row.props.className, classes.updatingRow),
+    });
 
-    return (
-      <FormikProvider value={formik}>
-        {editedRow}
-      </FormikProvider>
-    );
+    return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
   };
 
   const schema = buildSchema({
@@ -128,23 +141,24 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
     onPrimaryChange: setPrimaryContact,
   });
 
-  const contactsList = contacts.reduce((list, item) => {
-    const isContactEdited = editedContact && editedContact.id === item.id;
+  const contactsList = contacts.reduce(
+    (list: Array<Partial<EditableSupplierContact>>, item: SupplierContact) => {
+      const isContactEdited = editedContact && editedContact.id === item.id;
 
-    return [
-      ...list,
-      {
-        ...(isContactEdited ? editedContact : item),
-        [MODE_FIELD]: isContactEdited ? Mode.edit : Mode.show,
-      },
-    ];
-  }, isContactAdded ? [editedContact] : []);
+      return [
+        ...list,
+        {
+          ...(isContactEdited ? editedContact : item),
+          [MODE_FIELD]: isContactEdited ? Mode.edit : Mode.show,
+        },
+      ];
+    },
+    isContactAdded ? [editedContact] : [],
+  );
 
   return (
     <Box className={classes.root} data-cy="contacts">
-      <PromptIfDirty
-        dirty={dirty}
-      />
+      <PromptIfDirty dirty={dirty} />
       <FBInput {...props} type="contacts" name={name}>
         <FBSection label={label}>
           {isActive && (

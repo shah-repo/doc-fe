@@ -2,36 +2,46 @@ import { Chip } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { translate } from '../../../../common/intl';
+import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import Tooltip from '../../../components/common/kendo/Tooltip';
 import {
   Autocomplete,
   FormikField,
 } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import {
-  Mode, MODE_FIELD,
-} from '../../../components/KendoDataGrid/constants';
-import { ASL_STATUS_CLASS_MAPPING, EMPTY_VALUE_PLACEHOLDER } from '../constants';
+  ASL_STATUS_CLASS_MAPPING,
+  EMPTY_VALUE_PLACEHOLDER,
+} from '../constants';
 import { CustomTemplateProps, EditableProductORService } from '../types';
 import useStyles from './Status.styles';
 
-interface CustomOptionType extends OptionType{
+interface CustomOptionType extends OptionType {
   aslStatusId: string
 }
 
-const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, aslItems }) => {
-  const aslOptions = (aslItems ?? []).map(
-    (data) => ({ value: data.internalType, label: data.displayLabel, aslStatusId: data.id, isActive: data.isActive }),
+const Editor: React.FC<CustomTemplateProps> = ({
+  field,
+  dataItem,
+  aslItems,
+}) => {
+  const { values, getFieldProps, setFieldValue }
+    = useFormikContext<EditableProductORService>();
+  const aslOptions = aslItems?.map((data: ASLStatus) => {
+    return {
+      value: data.internalType,
+      label: data.displayLabel,
+      aslStatusId: data.id,
+    };
+  });
+  let value = aslOptions?.find(
+    (option: CustomOptionType) => option.value === dataItem[field],
   );
-  let value = aslOptions?.find((option) => option.value === dataItem[field]);
-  const { values, getFieldProps, setFieldValue } = useFormikContext<EditableProductORService>();
   value = aslOptions?.find((option) => option.value === values[field]);
-
-  const filteredAslOptions = aslOptions.filter(data => data.isActive);
-
-  const handleChange = (event: ChangeEvent<unknown>, value?: CustomOptionType) => {
+  const handleChange = (_, value?: CustomOptionType) => {
     setFieldValue(field, value?.value ?? '');
     setFieldValue('aslStatusId', value?.aslStatusId ?? '');
   };
@@ -44,7 +54,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field, dataItem, aslItems }) =>
         blurOnSelect
         disableClearable
         placeholder={translate('common.select')}
-        options={filteredAslOptions}
+        options={aslOptions}
         value={value}
         getOptionLabel={(option: CustomOptionType) => option.label}
         onChange={handleChange}
@@ -58,26 +68,27 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
   const { field, dataItem } = props;
   const defaultValue = dataItem?.aslDisplayLabel ?? dataItem[field];
   const classes = useStyles();
-  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  if (isEditMode) {
+  if ([Mode.add, Mode.edit].includes(dataItem[MODE_FIELD])) {
     return <Editor {...props} />;
   }
 
   if (defaultValue) {
-    return <Tooltip
-      data={defaultValue}
-      childrenElement={
-        <Chip
-          size="small"
-          className={cx(
-            classes.chip,
-            classes[ASL_STATUS_CLASS_MAPPING[dataItem[field]]],
-          )}
-          label={defaultValue}
-        />
-      }
-    />;
+    return (
+      <Tooltip
+        data={defaultValue}
+        childrenElement={
+          <Chip
+            size="small"
+            className={cx(
+              classes.chip,
+              classes[ASL_STATUS_CLASS_MAPPING[defaultValue]],
+            )}
+            label={defaultValue}
+          />
+        }
+      />
+    );
   }
   return <>{EMPTY_VALUE_PLACEHOLDER}</>;
 };

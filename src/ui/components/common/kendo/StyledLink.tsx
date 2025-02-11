@@ -15,10 +15,17 @@ const useStyles = makeStyles((theme) => ({
 
 const StyledLink = ({ to, onClick, children, ...props }) => {
   const classes = useStyles();
+  const handleClick = (onClick?: (e: React.MouseEvent) => void) => {
+    return (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (onClick) onClick(e);
+    };
+  };
+
   return (
     <RouterLink
       to={to}
-      onClick={onClick ? (e) => { e.preventDefault(); onClick(e); } : undefined}
+      onClick={handleClick(onClick)}
       className={classes.link}
       target="_blank"
       {...props}

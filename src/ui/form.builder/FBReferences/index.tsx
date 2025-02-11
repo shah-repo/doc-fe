@@ -22,7 +22,12 @@ import { FB } from '../helpers';
 import { FIELDS_TO_PICK } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { EditableReference, FBReferenceProps, Reference, ReferenceEditEvent } from './types';
+import {
+  EditableReference,
+  FBReferenceProps,
+  Reference,
+  ReferenceEditEvent,
+} from './types';
 import { withFBReferences } from './wrap';
 
 const FBReferences: React.FC<FBReferenceProps> = ({
@@ -36,11 +41,13 @@ const FBReferences: React.FC<FBReferenceProps> = ({
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
   const isActive = !disabled;
-  const [editedReference, setEditedReference] = useState<Partial<EditableReference>>();
+  const [editedReference, setEditedReference]
+    = useState<Partial<EditableReference>>();
   const [selectedDataItem, setSelectedDataItem] = useState<EditableReference>();
   const quickViewDialog = useDialog();
   const isReferenceAdded = editedReference?.[MODE_FIELD] === Mode.add;
-  const editReference = ({ dataItem }: ReferenceEditEvent) => setEditedReference(dataItem);
+  const editReference = ({ dataItem }: ReferenceEditEvent) =>
+    setEditedReference(dataItem);
   const isInEditMode = editedReference !== undefined;
   const handleRowClick = isActive && !isInEditMode ? editReference : undefined;
 
@@ -48,30 +55,33 @@ const FBReferences: React.FC<FBReferenceProps> = ({
     initialValues: {},
     onSubmit: (values) => {
       if (!values.id) {
-        toastError(translate('form.builder.supplier.references.empty.error.message'));
+        toastError(
+          translate('form.builder.supplier.references.empty.error.message'),
+        );
         return;
       }
+      const updatedReferences
+        = values[MODE_FIELD] === Mode.add
+          ? [...references, values]
+          : references.map((reference: Reference) =>
+            reference.id === values.id ? values : reference,
+          );
 
-      const isAddition = values[MODE_FIELD] === Mode.add;
-      const updatedReferences = isAddition
-        ? [...references, values]
-        : references.map((reference) =>
-          reference.id === values.id
-            ? values
-            : reference,
-        );
+      const payload = updatedReferences.map(
+        (contact: Partial<EditableReference>) => pick(contact, FIELDS_TO_PICK),
+      );
 
-      const payload = updatedReferences
-        .map((contact) => pick(contact, FIELDS_TO_PICK));
-
-    formState?.setFieldValue(name, updatedReferences);
-    workspaceState?.saveDocRev({
-      ...workspaceState?.formInput,
-      [SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY),
-      [name]: payload,
-    });
-    setReferences(updatedReferences as Reference[]);
-    discardReference();
+      formState?.setFieldValue(name, updatedReferences);
+      workspaceState?.saveDocRev({
+        ...workspaceState?.formInput,
+        [SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY]:
+          workspaceState.formInputSync.get(
+            SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY,
+          ),
+        [name]: payload,
+      });
+      setReferences(updatedReferences as Reference[]);
+      discardReference();
     },
   });
 
@@ -81,60 +91,62 @@ const FBReferences: React.FC<FBReferenceProps> = ({
     resetForm({ values: editedReference ?? {} });
   }, [editedReference, setValues, resetForm]);
 
-  const createDraftReference = () => setEditedReference({
-    id: uuidv4(),
-    [MODE_FIELD]: Mode.add,
-  });
+  const createDraftReference = () =>
+    setEditedReference({
+      id: uuidv4(),
+      [MODE_FIELD]: Mode.add,
+    });
 
   const discardReference = () => setEditedReference(undefined);
 
   const removeReference = (dataItem: EditableReference) => {
     if (!editedReference) return;
 
-    const referenceWithCompleteData = references
-      .filter((contact) =>
-        contact.id !== dataItem.id,
-      );
-    const updatedReferences = referenceWithCompleteData
-      .map((contact) => pick(contact, FIELDS_TO_PICK));
+    const referenceWithCompleteData = references.filter(
+      (reference: Reference) => reference.id !== dataItem.id,
+    );
+    const updatedReferences = referenceWithCompleteData.map(
+      (reference: Reference) => pick(reference, FIELDS_TO_PICK),
+    );
 
     setReferences(referenceWithCompleteData);
     formState?.setFieldValue(name, updatedReferences);
     workspaceState?.saveDocRev({
       ...workspaceState?.formInput,
-      [SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY]: workspaceState.formInputSync.get(SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY),
+      [SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY]:
+        workspaceState.formInputSync.get(
+          SUPPLIER_KEYS.SUPPLIER_SUPPORTING_DOCS_KEY,
+        ),
       [name]: updatedReferences,
     });
 
     discardReference();
   };
 
-  const openQuickView = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, dataItem: EditableReference) => {
+  const openQuickView = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    dataItem: EditableReference,
+  ) => {
     setSelectedDataItem(dataItem);
     quickViewDialog.open();
     event.preventDefault();
     event.stopPropagation();
   };
 
-  const rowRender: DataGridProps<EditableReference>['rowRender'] = (row, { dataItem }) => {
+  const rowRender: DataGridProps<EditableReference>['rowRender'] = (
+    row,
+    { dataItem },
+  ) => {
     const item = dataItem as EditableReference;
-    const isUpdating = [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
-    if (!isUpdating) {
+    if (![Mode.add, Mode.edit].includes(item[MODE_FIELD])) {
       return row;
     }
 
-    const editedRow = React.cloneElement(
-      row,
-      {
-        className: cx(row.props.className, classes.updatingRow),
-      },
-    );
+    const editedRow = React.cloneElement(row, {
+      className: cx(row.props.className, classes.updatingRow),
+    });
 
-    return (
-      <FormikProvider value={formik}>
-        {editedRow}
-      </FormikProvider>
-    );
+    return <FormikProvider value={formik}>{editedRow}</FormikProvider>;
   };
 
   const schema = buildSchema({
@@ -146,23 +158,25 @@ const FBReferences: React.FC<FBReferenceProps> = ({
     onOpenQuickView: openQuickView,
   });
 
-  const referencesList = references.reduce((list, item) => {
-    const isReferenceEdited = editedReference && editedReference.id === item.id;
+  const referencesList = references.reduce(
+    (list: Array<Partial<EditableReference>>, item: Reference) => {
+      const isReferenceEdited
+        = editedReference && editedReference.id === item.id;
 
-    return [
-      ...list,
-      {
-        ...(isReferenceEdited ? editedReference : item),
-        [MODE_FIELD]: isReferenceEdited ? Mode.edit : Mode.show,
-      },
-    ];
-  }, isReferenceAdded ? [editedReference] : []);
+      return [
+        ...list,
+        {
+          ...(isReferenceEdited ? editedReference : item),
+          [MODE_FIELD]: isReferenceEdited ? Mode.edit : Mode.show,
+        },
+      ];
+    },
+    isReferenceAdded ? [editedReference] : [],
+  );
 
   return (
     <Box className={classes.root} data-cy="references">
-      <PromptIfDirty
-        dirty={dirty}
-      />
+      <PromptIfDirty dirty={dirty} />
       <FBInput {...props} type="references" name={name}>
         <FBSection label={label}>
           {isActive && (
@@ -201,7 +215,13 @@ const FBReferences: React.FC<FBReferenceProps> = ({
           {translate('form.builder.supplier.references.add')}
         </Button>
       )}
-      <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId: selectedDataItem?.referenceRevId, parentRevId: workspaceState?.id }} />
+      <DocumentRevisionDialog
+        dialog={quickViewDialog}
+        {...{
+          docRevId: selectedDataItem?.referenceRevId,
+          parentRevId: workspaceState?.id,
+        }}
+      />
     </Box>
   );
 };

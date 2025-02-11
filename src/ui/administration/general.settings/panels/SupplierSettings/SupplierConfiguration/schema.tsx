@@ -8,7 +8,6 @@ import { EditableSupplierConfig, OptionType } from './types';
 export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
   isActive,
   onEdit,
-  onActiveStateChange,
   onDelete,
   capabilities,
   services,
@@ -21,19 +20,33 @@ export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
       id: 'text',
       field: 'text',
       title: 'administration.general.settings.suppliers.enlil.supplier.type',
-      template: (props) => <TypeCell {...props} dataOptions={types as OptionType[]} />,
+      template: (props) => (
+        <TypeCell {...props} dataOptions={types as OptionType[]} />
+      ),
     },
     {
       id: 'capabilities',
       field: 'capabilities',
-      title: 'administration.general.settings.suppliers.enlil.supplier.capabilities',
-      template: (props) => <SupplierDropDownCell {...props} dataOptions={capabilities as OptionType[]} />,
+      title:
+        'administration.general.settings.suppliers.enlil.supplier.capabilities',
+      template: (props) => (
+        <SupplierDropDownCell
+          {...props}
+          dataOptions={capabilities as OptionType[]}
+        />
+      ),
     },
     {
       id: 'services',
       field: 'services',
-      title: 'administration.general.settings.suppliers.enlil.supplier.services',
-      template: (props) => <SupplierDropDownCell {...props} dataOptions={services as OptionType[]} />,
+      title:
+        'administration.general.settings.suppliers.enlil.supplier.services',
+      template: (props) => (
+        <SupplierDropDownCell
+          {...props}
+          dataOptions={services as OptionType[]}
+        />
+      ),
     },
     {
       id: 'actions',
