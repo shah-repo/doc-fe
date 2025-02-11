@@ -13,11 +13,13 @@ import {
   MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
+import { LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 
 export const DateCell: React.FC<CustomTemplateProps> = ({
   field,
   dataItem,
+  onClick,
   PopoverProps,
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -28,6 +30,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
       <OverflowTooltip
         title={value}
         placement="top"
+        onClick={() => onClick?.({ dataItem })}
         interactive
         arrow
       >
@@ -36,8 +39,18 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
   }
 
   const { getFieldProps, setFieldValue } = useFormikContext();
+  const removeCustomPrefix = (fieldName: string): string =>
+    fieldName.replace(/^custom/, '').replace(/^[A-Z]/, (char) => char.toLowerCase());
+
   const handleChange = (date: MaterialUiPickersDate) => {
-    setFieldValue(field, date?.toISOString());
+    const dateValue = date?.toISOString();
+    setFieldValue(field, dateValue);
+    setFieldValue(removeCustomPrefix(field), dateValue);
+  };
+
+  const handleClear = () => {
+    setFieldValue(field, null);
+    setFieldValue(removeCustomPrefix(field), null);
   };
 
   return (
@@ -48,6 +61,7 @@ export const DateCell: React.FC<CustomTemplateProps> = ({
         size="small"
         data-cy={`${field}`}
         onChange={handleChange}
+        onClear={field === LHR_SUMARY_FIELDS.customRecordCreationDate ? undefined : handleClear}
         format={MomentFormats.MonthDateYearTwoDigit}
       />
     </FormikField>

@@ -11,14 +11,14 @@ import styles from './Logo.styles';
 
 interface Props {
   logo: string
-  showEnvironment: boolean
-  open: boolean
+  shouldShowEnvironment: boolean
+  isOpen: boolean
 }
 
 const Logo: React.FunctionComponent<Props> = ({
   logo,
-  showEnvironment,
-  open,
+  shouldShowEnvironment,
+  isOpen,
 }) => {
   const user = store.getState().auth.user;
   const companyName = user.employee.company.name;
@@ -27,18 +27,18 @@ const Logo: React.FunctionComponent<Props> = ({
   const whiteLabeling = ((user.employee.company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
   return (
     <React.Fragment>
-      {showEnvironment && (
+      {shouldShowEnvironment && (
         <div className={`${classes.envCnt} ${classes[themeBgClass]}`}>
           <span className={classes.evnTxt}>
             <Text
               message={
-                open ? `environment.${theme}` : `environment.${theme}.short`
+                isOpen ? `environment.${theme}` : `environment.${theme}.short`
               }
             />
           </span>
         </div>
       )}
-      {!open && (
+      {!isOpen && (
         <div className={classes.smallLogoContainer} data-cy={companyName}>
           {whiteLabeling.avatar ? (
             <img
@@ -52,14 +52,14 @@ const Logo: React.FunctionComponent<Props> = ({
           )}
         </div>
       )}
-      {open && (
+      {isOpen && (
         <div data-cy={companyName}>
           <img
             id="logo"
             src={logo}
             className={cx(classes.logo, {
-              [classes.mt0]: showEnvironment,
-              [classes.mt20]: !showEnvironment,
+              [classes.mt0]: shouldShowEnvironment,
+              [classes.mt20]: !shouldShowEnvironment,
             })}
             alt={companyName}
           />

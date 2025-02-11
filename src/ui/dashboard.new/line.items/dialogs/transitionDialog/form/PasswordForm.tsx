@@ -20,7 +20,7 @@ const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
   classes,
   asyncState,
 }) => (
-  <Form>
+  <Form className={classes.container}>
     <FormMessage asyncState={asyncState} />
     <InputField
       name="password"

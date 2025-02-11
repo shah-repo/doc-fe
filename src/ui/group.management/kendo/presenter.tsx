@@ -1,4 +1,3 @@
-import { Grid } from '@material-ui/core';
 import React, { useState } from 'react';
 import { GROUPS_URL } from '../../../state/ducks/userManagement/constants';
 import { LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
@@ -40,7 +39,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
     editGroupsDialog.close();
   };
   return (
-    <Grid container>
+    <>
       <KendoPanel
         gridConfiguration={gridConfiguration}
         queryUrl={GROUPS_URL}
@@ -62,7 +61,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
         selectedGroup={selectedGroup}
         title="group.management.edit.group"
       />
-    </Grid>
+    </>
   );
 };
 

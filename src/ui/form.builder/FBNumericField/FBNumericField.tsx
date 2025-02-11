@@ -20,6 +20,7 @@ const FBNumericField: React.FunctionComponent<Props> = ({
   const InputProps = {
     inputProps: {
       min: props[ADDITIONAL_SETTINGS].min,
+      max: props[ADDITIONAL_SETTINGS].max,
       step: props[ADDITIONAL_SETTINGS].step,
     },
     startAdornment: prefix ? <InputAdornment position="start">{prefix as ReactNode}</InputAdornment> : undefined,

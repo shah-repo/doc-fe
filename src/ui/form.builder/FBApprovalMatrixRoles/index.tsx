@@ -9,7 +9,7 @@ import { toastError } from '../../components/notifications';
 import { APPROVAL_MATRIX_ROLE_TABLE_NAME, ERROR_FIELD, ErrorField, Mode, MODE_FIELD, SEARCHABLE_GROUPS_FIELD } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
-import { EditableRole, FBApprovalMatrixRolesProps, RoleEditEvent } from './types';
+import { ApprovalRole, EditableRole, FBApprovalMatrixRolesProps, RoleEditEvent } from './types';
 import useTableCriteria from './utils';
 import { withFBApprovalMatrixRoles } from './wrap';
 
@@ -69,7 +69,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
 
   const isActive = !disabled;
 
-  const roles = approvalRoles.map((role) => {
+  const roles = approvalRoles.map((role: ApprovalRole) => {
     const isRoleEdited = editedRole && editedRole.id === role.id;
     return {
       ...(isRoleEdited ? editedRole : role),

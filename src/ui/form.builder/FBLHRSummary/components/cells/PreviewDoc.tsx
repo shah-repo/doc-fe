@@ -31,10 +31,18 @@ export const PreviewDoc: React.FC<props> = ({
   const dataCy = `${kebabCase(field)}-cell`;
 
   if (!documentId) {
+    const fieldValue = value ?? EMPTY_PLACEHOLDER;
     return (
-      <Box onClick={() => onClick?.({ dataItem })} data-cy={dataCy}>
-        {value ?? EMPTY_PLACEHOLDER}
-      </Box>
+      <OverflowTooltip
+        title={fieldValue}
+        placement="top"
+        interactive
+        arrow
+        onClick={() => onClick?.({ dataItem })}
+        data-cy={dataCy}
+      >
+        {fieldValue}
+      </OverflowTooltip>
     );
   }
 

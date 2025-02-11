@@ -1,30 +1,44 @@
-import React, { useCallback, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { authSelectors } from '../../../state/ducks/auth';
+import React, { useCallback, useMemo } from 'react';
 import { safeParse } from '../../document.revision/utils/paths';
 import useMqttSubscription from '../../hooks/useMqttSubscription';
 
-const DownloadPDFSockets: React.FC = () => {
-  const employeeId = useSelector(authSelectors.currentEmployeeId);
+interface DownloadPDFSocketsProps {
+  employeeId?: string
+  revId?: string
+  showNotificationAndDownloadPDF: (data: DownloadPDFSocketsData) => void
+}
 
-  const topic = React.useMemo(() => `${employeeId}/external_export_email/+/pdf`, [employeeId]);
-  const downloadInitiatedRef = useRef(false);
+export interface DownloadPDFSocketsData {
+  url: string
+  message: string
+}
 
-  const loadData = useCallback((data) => {
-    const clientUserAgent = navigator.userAgent;
-    const parsedData = safeParse(data);
-    const messageData = parsedData?.data?.message;
-    const parsedMessage = typeof messageData === 'string' ? safeParse(messageData) : messageData;
+const DownloadPDFSockets: React.FC<DownloadPDFSocketsProps> = ({
+  employeeId,
+  revId,
+  showNotificationAndDownloadPDF,
+}) => {
+  const topic = useMemo(
+    () =>
+      revId
+        ? `${employeeId}/external_export_email/${revId}/pdf`
+        : `${employeeId}/external_export_email/+/pdf`,
+    [employeeId, revId],
+  );
 
-    if (parsedMessage.userAgent === clientUserAgent && parsedMessage?.url && !downloadInitiatedRef.current) {
-      downloadInitiatedRef.current = true;
-      window.open(parsedMessage.url, '_parent');
-
-      setTimeout(() => {
-        downloadInitiatedRef.current = false;
-      }, 5000);
-    }
-  }, [employeeId]);
+  const loadData = useCallback(
+    (data) => {
+      const parsedData = safeParse(data);
+      const messageData = parsedData?.data?.message;
+      const parsedMessage
+        = typeof messageData === 'string' ? safeParse(messageData) : messageData;
+      const clientUserAgent = navigator.userAgent;
+      if (parsedMessage.userAgent === clientUserAgent && parsedMessage.url) {
+      showNotificationAndDownloadPDF?.(parsedMessage);
+      }
+    },
+    [employeeId, revId],
+  );
 
   useMqttSubscription(topic, loadData);
   return null;

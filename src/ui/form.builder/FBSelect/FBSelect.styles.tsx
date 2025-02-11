@@ -12,11 +12,6 @@ export default makeStyles((theme) => createStyles({
       minHeight: 32,
     },
   },
-  placeholderValue: {
-    '& .MuiSelect-select': {
-      color: Colors.textDisabled,
-    },
-  },
   placeholderItem: {
     '&.Mui-selected': {
       backgroundColor: 'unset',

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import striptags from 'striptags';
 import Config from '../../config';
 import { ChangeRequest } from '../../state/ducks/changeRequest/types';
-import { WorkOrderTypes, WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY } from '../../state/ducks/documentRevisions/documentType/types';
+import { WO_LHR_TABLE_KEY_NAME, WO_LOT_ID_KEY_NAME, WO_PART_KEY_NAME, WO_PART_QTY_KEY_NAME, WO_PART_UNIT_KEY_NAME, WO_TYPE_KEY, WorkOrderTypes } from '../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision } from '../../state/ducks/documentRevisions/types';
 
 export const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
@@ -53,9 +53,23 @@ const translate = {
   gt: '>',
 };
 const translateRe = new RegExp(`&(${Object.keys(translate).join('|')});`, 'g');
-export const convertHtmlEntities = (html: string) => (html.replace(translateRe, function (match, entity) {
-  return translate[entity];
-}));
+export const convertHtmlEntities = (input: string | string[]): string => {
+  if (typeof input === 'string') {
+    return input.replace(translateRe, (_, entity: string): string => {
+      return translate[entity] || `&${entity};`;
+    });
+  }
+
+  if (Array.isArray(input)) {
+    return input.map((item) =>
+      typeof item === 'string'
+        ? item.replace(translateRe, (_, entity: string): string => translate[entity] || `&${entity};`)
+        : item,
+    ).join(',');
+  }
+
+  return '';
+};
 
 export const theme = Config.Theme;
 export const logo = '/logo_enlil_dark.svg';

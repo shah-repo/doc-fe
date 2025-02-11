@@ -33,6 +33,8 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditShippingItems from './AuditShippingItems';
+import AuditSiteInformations from './AuditSiteInformations';
 import AuditTraineeList from './AuditTraineeList';
 import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
@@ -185,6 +187,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
       },
+      siteInformation () {
+        return <AuditSiteInformations {...{ audit, dataCy, auditValue }} />;
+      },
+      shippingItems () {
+        return <AuditShippingItems {...{ audit, dataCy, auditValue }} />;
+      },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
     returnValue = (fbValue[type] || fbValue.default)();
@@ -324,6 +332,15 @@ const AuditFactory: React.FunctionComponent<Props> = ({
 
           returnValue = (
             <>
+              <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.send.to.email"
+                values={{
+                  name: audit.ownerName,
+                  docId: audit?.docId ?? audit?.crId,
+                }}
+              />
+              <br />
               <div data-cy={dataCy}> {translate('share.item.only')}: {translate(emailObj.itemOnly === true ? 'common.true' : 'common.false')}</div>
               <div data-cy={dataCy}> {translate('share.attachments')}: {translate(emailObj.includeAttachments === true ? 'common.true' : 'common.false')}</div>
               <div data-cy={dataCy}> {translate('share.include.effective.date')}: {translate(includeEffectiveDate ? 'common.true' : 'common.false')}</div>

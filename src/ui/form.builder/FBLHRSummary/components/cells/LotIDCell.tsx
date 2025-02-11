@@ -15,6 +15,7 @@ import useAsync from '../../../../hooks/useAsync';
 import { FB } from '../../../helpers';
 import { LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
+import { setFieldValuesForOriginalAndPrefixed } from '../../utils';
 import { PreviewDoc } from './PreviewDoc';
 import { styles } from './styles';
 interface CustomOptionType extends OptionType {
@@ -71,6 +72,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
       ...values,
       lotStatus: value?.lotStatus ?? '',
       expiryDate: value?.expiryDate ?? null,
+      customExpiryDate: value?.expiryDate ?? null,
       lotOrEquipment: value?.value,
     });
   };
@@ -103,7 +105,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
     if (reason === 'input') {
       setInputValue(value);
       setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
-      setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
+      setFieldValuesForOriginalAndPrefixed(setFieldValue, LHR_SUMARY_FIELDS.expiryDate, null);
       setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, value);
     }
   };

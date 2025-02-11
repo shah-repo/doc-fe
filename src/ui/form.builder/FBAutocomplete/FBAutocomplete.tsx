@@ -1,7 +1,7 @@
 import { Box, IconButton, Popper, TextField, Typography } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
 import { RenderInputParams } from '@material-ui/lab/Autocomplete';
-import { get, includes, isEmpty } from 'lodash';
+import { get, includes } from 'lodash';
 import { Observer } from 'mobx-react';
 import React from 'react';
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from '..';
@@ -180,7 +180,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
             blurOnSelect={freeSolo}
           /> : <StyledAutoComplete
-            key={isEmpty(defaultValue) ? 'disabled' : 'enabled'}
+            key={!options?.some((value) => typeof value === 'object') ? 'disabled' : 'enabled'}
             {...{
               getOptionDisabled,
               getOptionLabel,

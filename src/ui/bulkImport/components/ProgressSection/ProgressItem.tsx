@@ -8,7 +8,7 @@ import {
 import { History } from 'history';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
@@ -20,14 +20,15 @@ import { ChangeRequestTransitionResponse } from '../../../../state/ducks/changeR
 import { ApprovalStatus } from '../../../../state/ducks/common/types';
 import Text from '../../../components/Text';
 import { Button } from '../../../components/forms/fields-next';
-import { BULK_IMPORT_URL } from '../../../constants/urls';
+import { BULK_IMPORT_EDIT_BASE_URL } from '../../../constants/urls';
 import { StyleTooltip } from '../../../dashboard.new/line.items/common/StyleTooltip';
 import ApproveDialogueContainer from '../../../dashboard.new/line.items/purchase.order/task.approval/POApprovalDialogContainer';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import DeleteDialog from '../Dialogs/DeleteDialog';
-import ProgressIcons, { iconStatuses } from './ProgressIcons';
+import MessageBox from './ErrorMessage';
+import ProgressIcons from './ProgressIcons';
 import useStyles, { CustomLinearProgress } from './styles';
 
 interface ProgressItemProps {
@@ -38,7 +39,7 @@ interface ProgressItemProps {
 }
 
 const STATUSES_HIDE_DELETE = [BkStatus.IN_PROGRESS, BkStatus.COMPLETED, BkStatus.SUCCESS, BkStatus.CANCELLED];
-const STATUSES_CANCELED = [BkStatus.CANCELLED, BkStatus.FAILED];
+const STATUSES_COMPLETE = [BkStatus.COMPLETED, BkStatus.SUCCESS];
 
 const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentEmployeeId }) => {
   const classes = useStyles();
@@ -55,10 +56,14 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const isReportEmpty = isEmpty(item?.reports);
   const showApproverButtons = currentApproval?.approverId && currentApproval?.approverId === currentEmployeeId && isProcessEmpty && item.status === BkStatus.STARTED;
   const showApprovals = !!currentApproval && showApproverButtons;
-  const currentProgressStep = useRef(0);
-  const isRejected = STATUSES_CANCELED.includes(item?.status as BkStatus);
+  const isComplete = STATUSES_COMPLETE.includes(item?.status as BkStatus) && item?.completedAt;
+  const isRejected = item?.status === BkStatus.CANCELLED;
+  const isFailed = item?.status === BkStatus.FAILED;
+  const showErrorMessage = isRejected || isFailed;
   const showDeleteButton = isProcessEmpty && !STATUSES_HIDE_DELETE.includes(item?.status as BkStatus);
-  const showButtonView = ((!isRejected && currentProgressStep.current > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
+  const showButtonView = ((!isRejected && item.currentProgressStep > 0 && !item?.completedAt) || (item?.reports) || item.status === BkStatus.CANCELLED);
+  const totalExcelErrors = Number(item?.process?.totalExcelErrors ?? 0);
+  const isWarning = !showErrorMessage && !(item?.attachmentId || Number(item.process?.step) <= 3) && totalExcelErrors >= 1;
   const openDeleteDialog = useDialog();
 
   const async = useAsync<ChangeRequestTransitionResponse>({
@@ -115,8 +120,8 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
   const handleReturnToStep = () => {
     dispatch(setBulkImport(item));
     // if the process is not empty is because is importing
-    dispatch(setCurrentStep(currentProgressStep.current));
-    history.push(BULK_IMPORT_URL);
+    dispatch(setCurrentStep(item.currentProgressStep));
+    history.push(`${BULK_IMPORT_EDIT_BASE_URL}${item.id}`);
   };
 
   const handleRejectedBulkImport = () => {
@@ -127,65 +132,63 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
     dispatch(setBulkImportsStatus(item.id, BkStatus.IN_PROGRESS));
   };
 
-  useEffect(() => {
-    if (item?.icons) {
-      const firstBlankIcon = item.icons.find(icon => (!iconStatuses[icon.icon] || icon.icon === 'blank'));
-      if (firstBlankIcon) {
-        currentProgressStep.current = firstBlankIcon.step;
-      }
-      if ((item?.documentRevision?.approvals
-        && item.documentRevision.approvals.some(approval => approval.status === ApprovalStatus.Pending)
-        && item.documentRevision.approvals.some(approval => approval.status !== ApprovalStatus.Approved))) {
-        // if we don't find any blank icon is because we already finish and is on the last step
-        currentProgressStep.current = 4; // approver step
-      }
-      if (!isProcessEmpty || item.status === BkStatus.IN_PROGRESS) {
-        currentProgressStep.current = 5; // importing step
-      } else if (currentProgressStep.current === 5) {
-        currentProgressStep.current = 4; // approver step
-      }
-    }
-  }, [item]);
-
   return (
     <React.Fragment key={idx}>
       <Box className={classes.itemContainer}>
         <Box>
           <Box className={classes.titleContainer}>
-            {item.completedAt ? <FontAwesomeIcon
-              className={classes.checkGreenIcon}
-              icon={solid('circle-check')}
-            /> : <FontAwesomeIcon
-              className={classes.watchLaterIcon}
-              icon={solid('clock-three')}
-            />}
+            {isComplete ? (
+              <FontAwesomeIcon
+                className={classes.checkGreenIcon}
+                icon={solid('circle-check')}
+              />
+            ) : isFailed || isWarning ? (
+              <FontAwesomeIcon
+                className={classes.errorRedIcon}
+                icon={regular('triangle-exclamation')}
+              />
+            ) : (
+              <FontAwesomeIcon
+                className={classes.watchLaterIcon}
+                icon={solid('clock-three')}
+              />
+            )}
             <Typography className={classes.itemTitle}>
               {item.jobId}
             </Typography>
           </Box>
-          {isRejected && (
-            <Box className={classes.itemErrorMessage}>
-              <Typography className={classes.itemErrorMessageText}>
-                {translate('bulkImport.approval.rejected.error')}
-              </Typography>
-            </Box>
+          {(showErrorMessage) && (
+            <MessageBox message={isRejected ? translate('bulkImport.approval.rejected.error') : translate('bulkImport.approval.failed.error')} />
+          )}
+          {(isWarning) && (
+            <MessageBox message={translate('bulkImport.approval.warning.error', { count: totalExcelErrors })} action={translate('bulkImport.approval.view.error')} callback={handleReturnToStep} />
           )}
         </Box>
         <Box className={classes.progressBarIconsContainer}>
-          {item?.completedAt ? (
+          {isComplete ? (
             <Box className={classes.completedMsgContainer}>
               <FontAwesomeIcon
                 className={classes.checkGreenIcon}
                 icon={solid('circle-check')}
               />
               <Typography className={classes.completedText}>
-                {translate('common.completed')} ({moment(item.completedAt).format(MomentFormats.FullDateTime)})
+                {translate('common.completed')} ({ item.completedAt ? moment(item.completedAt).format(MomentFormats.FullDateTime) : ''})
+              </Typography>
+            </Box>
+          ) : isFailed ? (
+            <Box className={classes.completedMsgContainer}>
+              <FontAwesomeIcon
+                className={classes.errorRedIcon}
+                icon={solid('triangle-exclamation')}
+              />
+              <Typography className={classes.completedText}>
+                {translate('common.failed')} ({ item.completedAt ? moment(item.completedAt).format(MomentFormats.FullDateTime) : ''})
               </Typography>
             </Box>
           ) : (
             <>
               <ProgressIcons item={item} />
-              {!isRejected && <Box className={classes.progressBarContainer}>
+              {item?.status === BkStatus.IN_PROGRESS && <Box className={classes.progressBarContainer}>
                 <Typography className={classes.progressBarTitle}>
                   {translate('common.importingFiles')}
                 </Typography>

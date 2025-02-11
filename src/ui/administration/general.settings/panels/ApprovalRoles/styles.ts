@@ -79,4 +79,11 @@ export default makeStyles(theme => createStyles({
     position: 'absolute',
     top: 20,
   },
+  activeCell: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  activeCellInEdit: {
+    marginTop: theme.spacing(1),
+  },
 }));
