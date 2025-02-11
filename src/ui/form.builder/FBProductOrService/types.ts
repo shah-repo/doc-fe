@@ -37,6 +37,7 @@ export interface ProductORService {
   status: string
   comment: string
   aslDisplayLabel?: string
+  aslStatusId?: string
 }
 
 export interface EditableProductORService extends ProductORService {
