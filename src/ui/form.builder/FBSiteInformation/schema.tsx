@@ -28,6 +28,7 @@ export const buildSchema = ({
           isActive={false}
           {...props}
           isInEditMode={isInEditMode}
+          onDataItemExpanded={onDataItemExpanded}
         />
       ),
       width: 80,

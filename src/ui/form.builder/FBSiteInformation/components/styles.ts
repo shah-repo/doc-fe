@@ -12,4 +12,8 @@ export default makeStyles(theme => ({
     justifyContent: 'center',
     marginTop: theme.spacing(0.75),
   },
+  expand: {
+    fontSize: 16,
+    marginRight: theme.spacing(1),
+  },
 }));
