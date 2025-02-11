@@ -53,6 +53,12 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
   const error = dataItem.errors?.find(error => error.column === field);
   const isErrorShown = error && !error?.edited;
 
+  // Update cellValue when dataItem[field] changes
+  useEffect(() => {
+    if (dataItem[field] === cellValue) return;
+    setCellValue(dataItem[field]);
+  }, [dataItem, field]);
+
   const handleErrorField = () => {
     setIsEditing(true);
   };
@@ -77,16 +83,18 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
     } else {
       // validate if the value is the same as requiered or if have - star with the value
       if (error?.help?.data?.length) {
-        isValid = error?.help?.data.some(entry => entry === valueCheck);
+        isValid = error?.help?.data.some(entry => valueCheck.startsWith(entry));
       }
-
       // At the moment format is only for dates
       if (isValid && error?.help?.format?.length) {
-        const dateFormats = error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
-        const datePattern = new RegExp(`^(${dateFormats.join('|')})$`);
+        const areRegex = error?.help?.format[0].startsWith('^') && error?.help?.format[0].endsWith('$');
+
+        const formats = areRegex ? error?.help?.format : error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
+        const datePattern = new RegExp(areRegex ? formats.join('|') : `^(${formats.join('|')})$`);
+
         isValid = datePattern.test(valueCheck);
 
-        if (isValid) {
+        if (isValid && !areRegex) {
           isValid = validateDateFormats(valueCheck, error?.help?.format);
         }
       }
@@ -142,6 +150,7 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
 // Create an array of mock data items
 const PAGE_SIZES = [12, 24, 50, 100];
 const BUTTON_COUNT = 4;
+const NO_FILTERS_COLUMN = ['REVISION'];
 
 const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleBack, handleCancel, bulkImport }) => {
   const dispatch = useDispatch();
@@ -158,21 +167,25 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const [data, setData] = useState<TableRowWithIdx[]>([]);
   const [errorCount, setErrorCount] = useState<number>(0);
   const [forceLoading, setForceLoading] = useState<boolean>(true);
+  const [columnOrder, setColumnOrder] = useState<string[]>([]);
   const [filter, setFilter] = useState<CompositeFilterDescriptor>();
   const tableData: TableRowWithIdx[] = useSelector(getTableDataFiltered);
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
-  const triggerNextClick = useActionCreator(patchBulkImport);
+  const patchBulkImportData = useActionCreator(patchBulkImport);
   const excelExportRef = useRef<ExcelExport | null>(null);
   const currentDestination = useRef<string | null>(null);
   const isLoading = useSelector(getIsLoading);
   const hasUnsavedChanges = useSelector(getHasUnsavedChanges);
   const tableLoading = forceLoading || isLoading;
+  const tableHeadersFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors' && key !== 'idx') : [];
 
   const dataStateChange = (event: GridDataStateChangeEvent) => {
+    setForceLoading(true);
     setDataState(event.dataState);
     const processedData = process(tableData, event.dataState);
     setData(processedData.data);
+    setForceLoading(false);
   };
 
   const filterChange = (event: GridFilterChangeEvent) => {
@@ -207,7 +220,15 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
 
   const asyncSetDataTable = useAsync({
     onSuccess: () => {
-      asyncNextClick.start(triggerNextClick, { bulkImportId: bulkImport?.id, data: { process: { step: 3 } } }, asyncNextClick);
+      asyncNextClick.start(patchBulkImportData, { bulkImportId: bulkImport?.id, data: { process: { step: 3, totalExcelErrors: errorCount } } }, asyncNextClick);
+    },
+  });
+
+  const genericAsync = useAsync();
+
+  const asyncSetDataTableErrors = useAsync({
+    onSuccess: () => {
+      genericAsync.start(patchBulkImportData, { bulkImportId: bulkImport?.id, data: { process: { totalExcelErrors: errorCount } } }, genericAsync);
     },
   });
 
@@ -220,11 +241,10 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     handleBack();
   };
 
-  const asyncSaveDataTable = useAsync();
-
   const handleSaveChanges = () => {
     dispatch(setUnsavedChanges(false));
-    asyncSaveDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSaveDataTable);
+    genericAsync.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, genericAsync);
+    asyncSetDataTableErrors.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTableErrors);
   };
 
   const handleCloseLeaveDialog = () => {
@@ -251,7 +271,8 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const handlePageChange = (event: GridPageChangeEvent) => {
     setPage(event.page.skip / event.page.take);
     setPageSize(event.page.take);
-    setData(tableData.slice(event.page.skip, event.page.skip + event.page.take));
+    const newData = tableData.slice(event.page.skip, event.page.skip + event.page.take);
+    setData(newData);
   };
 
   const triggerNext = () => {
@@ -263,6 +284,16 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
   const updateShowErrorOnly = () => {
     setForceLoading(true);
     dispatch(setOnlyErrorsTable(!showErrorsOnly));
+  };
+
+  const handleColumnReorder = (event: any) => {
+    // We use the forceLoading to be able to update the table
+    setForceLoading(true);
+    // Sort columns based on the `orderIndex` property
+    const newOrder = [...event.columns].sort((a, b) => a.orderIndex - b.orderIndex).map(col => col.field);
+
+    setColumnOrder(newOrder); // Update state with the new order
+    setForceLoading(false);
   };
 
   useEffect(() => {
@@ -299,10 +330,9 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     }, 0);
     setErrorCount(count);
     setForceLoading(false);
+    setErrorCount(count);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData, showErrorsOnly]);
-
-  const tableHeadersFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors' && key !== 'idx') : [];
 
   return (
     <>
@@ -346,10 +376,11 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
             filter={filter}
             onPageChange={handlePageChange}
             onDataStateChange={dataStateChange}
+            onColumnReorder={handleColumnReorder}
             onFilterChange={filterChange}
           >
-            {tableHeadersFiltered.map((key, idx) => (
-              <GridColumn width={150} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
+            {(columnOrder.length > 0 ? columnOrder : tableHeadersFiltered).map((key, idx) => (
+              <GridColumn width={150} sortable={!NO_FILTERS_COLUMN.includes(key)} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
             ))}
           </StyledKendoGrid>
         </ExcelExport>

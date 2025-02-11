@@ -22,6 +22,10 @@ export default (theme: NextTheme) =>
     },
     collapsedBottomPush: {
       padding: 0,
+
+      [theme.breakpoints.down('xs')]: {
+        padding: theme.spacing(0.625, 1.25, 2.5, 1.875),
+      },
     },
     emailPosition: {
       flexFlow: 'nowrap',

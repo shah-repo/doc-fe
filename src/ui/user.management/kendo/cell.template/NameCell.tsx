@@ -1,7 +1,8 @@
-import { TextField } from '@material-ui/core';
 import { GridCellProps } from '@progress/kendo-react-grid';
 import React from 'react';
+import { translate } from '../../../../common/intl';
 import Tooltip from '../../../components/common/kendo/Tooltip';
+import { TextField } from '../../../components/forms/fields-next';
 import { enterUserInfo } from '../column.definition';
 
 export const NameCell = ({
@@ -30,9 +31,9 @@ export const NameCell = ({
       {dataItem.inEdit ? (
         <TextField
           id="input-with-icon-textfield"
-          variant="outlined"
-          margin="dense"
           onChange={updateNameField}
+          placeholder={translate('common.name')}
+          size="small"
         />
       ) : (
         <Tooltip
