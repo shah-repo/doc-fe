@@ -1,45 +1,36 @@
 import { throttle } from 'lodash';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import IdleTimer from 'react-idle-timer';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions, authSelectors } from '../../state/ducks/auth';
-import useDialog from '../hooks/useDialog';
 
-const tenMinutes = 1000 * 60 * 10;
+const DEBOUNCE_EVENT_TIMEOUT = 250;
+const IDLE_TIMEOUT = 1000 * 60 * 10;
 
-const PingServer: React.FunctionComponent = () => {
+const PingServer: React.FC = () => {
   const dispatch = useDispatch();
-  const pingServer = useCallback(() => dispatch(authActions.pingServer()), [dispatch]);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
 
-  const dialogHandler = useDialog();
-
-  useEffect(() => {
+  const pingServer = useCallback(() => {
     if (currentEmployeeId) {
-      pingServer();
+      dispatch(authActions.pingServer());
     }
-  }, [pingServer, currentEmployeeId]);
+  }, [dispatch, currentEmployeeId]);
 
-  const onActive = useCallback(() => {
-    dialogHandler.close();
-  }, [dialogHandler]);
+  const handleActivity = useMemo(
+    () => throttle(pingServer, IDLE_TIMEOUT, { trailing: false }),
+    [pingServer],
+  );
 
-  const pingEveryTenMinutes = useCallback(throttle(() => {
-    if (currentEmployeeId) {
-      pingServer();
-    }
-  }, tenMinutes), [currentEmployeeId]);
-
-  const onAction = useCallback(() => {
-    pingEveryTenMinutes();
-  }, [pingEveryTenMinutes]);
+  useEffect(handleActivity, [handleActivity]);
 
   return (
     <IdleTimer
       element={document}
-      debounce={250}
-      onActive={onActive}
-      onAction={onAction}
+      timeout={IDLE_TIMEOUT}
+      debounce={DEBOUNCE_EVENT_TIMEOUT}
+      onActive={handleActivity}
+      onAction={handleActivity}
     />
   );
 };

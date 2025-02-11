@@ -1,6 +1,6 @@
 import { createStyles } from '@material-ui/core';
-import Colors from '../../../../layout/theme/utils/colors';
 import { NextTheme } from '../../../../layout/theme-next/provider';
+import Colors from '../../../../layout/theme/utils/colors';
 
 export default (theme: NextTheme) =>
   createStyles({
@@ -32,11 +32,15 @@ export default (theme: NextTheme) =>
       border: '1px solid',
       borderColor: Colors.sky_blue,
       display: 'flex',
+      width: '100%',
       padding: '20px',
       backgroundColor: Colors.white,
       boxSizing: 'border-box',
       alignItems: 'flex-start',
       borderRadius: '8px',
+    },
+    dialogRoot: {
+      width: '36vw',
     },
     paper: {
       display: 'flex',

@@ -8,5 +8,6 @@ export type FBDatePickerProps =
   onChange?: BaseKeyboardPickerProps['onChange']
   onDatePickerClick?: () => void
   onDatePickerClose?: () => void
+  onDatePickerClear?: () => void
   disablePastDates?: boolean
 };
