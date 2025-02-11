@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { isArray, isEmpty, kebabCase, omit } from 'lodash';
+import { groupBy, has, isArray, isEmpty, kebabCase, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -223,6 +223,17 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     onConfirm: submitForm,
   });
 
+  const locationsGroupBysupplierTypeId = groupBy(locationsList, 'supplierTypeId');
+
+  const newLocationsList = locationsList.reduce<EditableSupplierConfig[]>((sortedList, location) => {
+    if (has(locationsGroupBysupplierTypeId, location.supplierTypeId)) {
+      sortedList.push(...locationsGroupBysupplierTypeId[location.supplierTypeId] as EditableSupplierConfig[]);
+      delete locationsGroupBysupplierTypeId[location.supplierTypeId];
+    }
+
+    return sortedList;
+  }, []);
+
   return (
     <SettingsPanel
       {...props}
@@ -232,7 +243,7 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
       <FormikProvider value={formik}>
         <SettingsTable
           isActive={isActive}
-          data={locationsList as unknown as EditableSupplierConfig[]}
+          data={newLocationsList as unknown as EditableSupplierConfig[]}
           isEditing={editedSupplierConfiguration !== undefined}
           schema={schema}
           addButtonLabel={translate('common.add.new')}
