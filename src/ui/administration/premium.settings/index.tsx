@@ -65,7 +65,9 @@ const PremiumFeaturesContainer: React.FC = () => {
         <div data-cy="dialog-message" className={classes.noticeText}>
           {toggledSubscription.current && (
             <p>
-              {translate(`administration.premium.features.${toggledSubscription.current.type.toLowerCase()}.notice`)}
+              {translate(
+                `administration.premium.features.${toggledSubscription.current.premiumFeature.toLowerCase()}.notice`,
+              )}
             </p>
           )}
           <p>
@@ -117,7 +119,7 @@ const PremiumFeaturesContainer: React.FC = () => {
             <SubscriptionItem
               subscription={subscription}
               onToggle={confirmToggling}
-              key={subscription.type}
+              key={subscription.premiumFeature}
             />
           ))}
         </Box>

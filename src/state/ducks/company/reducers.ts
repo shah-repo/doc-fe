@@ -225,7 +225,7 @@ const generalSettings = (
   }
 };
 
-const premiumFeaturesSubscriptions = (
+const premiumFeatureSubscriptions = (
   state: PremiumFeatureSubscriptionsState = PREMIUM_FEATURE_SUBSCRIPTIONS_DEFAULT_STATE,
   action: SetPremiumFeatureSubscriptionsAction | UpdatePremiumFeatureSubscriptionAction,
 ) => {
@@ -233,12 +233,12 @@ const premiumFeaturesSubscriptions = (
     case SET_PREMIUM_FEATURE_SUBSCRIPTIONS:
       return {
         ...state,
-        subscriptions: action.payload,
+        list: action.payload,
       };
     case UPDATE_PREMIUM_FEATURE_SUBSCRIPTION:
       return {
         ...state,
-        subscriptions: state.list.map(
+        list: state.list.map(
           subscription => subscription.id === action.payload.id ? action.payload : subscription,
         ),
       };
@@ -253,5 +253,5 @@ export default combineReducers({
   redlineConfig,
   autosaveConfig,
   generalSettings,
-  premiumFeaturesSubscriptions,
+  premiumFeatureSubscriptions,
 });

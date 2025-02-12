@@ -271,7 +271,7 @@ export interface PremiumFeatureSubscriptionPayload {
 export interface PremiumFeatureSubscription extends PremiumFeatureSubscriptionPayload {
   id: string
   companyId: string
-  type: PremiumFeature
+  premiumFeature: PremiumFeature
   publicConfig?: Record<string, unknown>
   createdAt: string
   updatedAt: string

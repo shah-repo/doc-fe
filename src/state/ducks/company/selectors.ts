@@ -92,7 +92,7 @@ const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
   message: state.company.generalSettings.message,
 });
 
-const getPremiumFeatureSubscriptions = (state: ApplicationState): PremiumFeatureSubscription[] => state.company.premiumFeaturesSubscriptions.list;
+const getPremiumFeatureSubscriptions = (state: ApplicationState): PremiumFeatureSubscription[] => state.company.premiumFeatureSubscriptions.list;
 
 const getPremiumFeatureSubscriptionsUpdatedAt = createSelector(
   getPremiumFeatureSubscriptions,
@@ -100,15 +100,15 @@ const getPremiumFeatureSubscriptionsUpdatedAt = createSelector(
 );
 
 const getSubscriptionsAsyncState = (state: ApplicationState): AsyncState => ({
-  status: state.company.premiumFeaturesSubscriptions.status,
-  message: state.company.premiumFeaturesSubscriptions.message,
+  status: state.company.premiumFeatureSubscriptions.status,
+  message: state.company.premiumFeatureSubscriptions.message,
 });
 
 const hasActivePremiumFeatureSubscription = createSelector(
   getPremiumFeatureSubscriptions,
   (state: ApplicationState, subscriptionType: PremiumFeature) => subscriptionType,
   (subscriptions, subscriptionType) => subscriptions.some(
-    subscription => subscription.type === subscriptionType && subscription.isEnabled,
+    subscription => subscription.premiumFeature === subscriptionType && subscription.isEnabled,
   ),
 );
 

@@ -15,7 +15,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
   const classes = useStyles();
   const [hoverRef, isHover] = useHover();
 
-  const key = subscription.type.toLowerCase();
+  const key = subscription.premiumFeature.toLowerCase();
 
   return (
     <SwitchControl
