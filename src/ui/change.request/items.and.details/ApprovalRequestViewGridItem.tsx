@@ -3,14 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import React, { MouseEvent, MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ReactComponent as ExpandIcon } from '../../../assets/images/arrowDown_dec.svg';
+import { ReactComponent as CollapseIcon } from '../../../assets/images/arrowUp_dec.svg';
 import { translate } from '../../../common/intl';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_ROOT_URL } from '../../../state/ducks/relatedParts/constants';
 import { RELATED_PARTS_STATUS, RelatedPartsListItem } from '../../../state/ducks/relatedParts/types';
-import { Checkbox, IconButton } from '../../components/forms/fields-next';
+import { Button, Checkbox, IconButton } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
-import OverflowTooltip from '../../components/OverflowTooltip';
 import WhereUsedDialog, { WhereUsedType } from '../../components/whereUsed/WhereUsedDialog';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { FBAutocompleteAsyncOption } from '../../form.builder';
@@ -30,26 +31,6 @@ interface IDocRelatedPart {
   revisionChangeType?: RevisionChangeType
   whereUsedCount: number
 }
-
-interface TooltipProps {
-  'data-cy': string
-  tooltipClassName?: string
-  wrapperClassName?: string
-}
-
-const TextTooltip: React.FC<TooltipProps> = ({ children, tooltipClassName, wrapperClassName, ...props }) => (
-  <OverflowTooltip
-    arrow
-    interactive
-    placement="top"
-    title={<div className={cx('containing-box-scrollbar', tooltipClassName)}>{children}</div>}
-    maxLines={4}
-    wrapperClassName={wrapperClassName}
-    {...props}
-  >
-    {children}
-  </OverflowTooltip>
-);
 
 interface Props {
   entry: ApprovalRequestGridItem
@@ -200,22 +181,15 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
             />
           </div>
           <div className={cx(classes.contentCell, classes.textCell)}>
-            <TextTooltip
-              tooltipClassName={classes.tooltipContent}
-              wrapperClassName={classes.textContent}
-              data-cy="view-description-of-change"
-            >
+            <div className={`${classes.expandableContent} ${isExpanded ? classes.expanded : classes.textContent}`} data-cy="view-description-of-change">
               {descriptionOfChange}
-            </TextTooltip>
+            </div>
           </div>
           <div className={cx(classes.contentCell, classes.textCell)}>
-            <TextTooltip
-              data-cy="view-justification-of-change"
-              tooltipClassName={classes.tooltipContent}
-              wrapperClassName={classes.textContent}
-            >
+            <div className={`${classes.expandableContent} ${isExpanded ? classes.expanded : classes.textContent}`}
+              data-cy="view-justification-of-change">
               {justificationOfChange}
-            </TextTooltip>
+            </div>
           </div>
           <div className={cx(classes.contentCell, classes.whereUsedCell)}>
             <FontAwesomeIcon
@@ -277,6 +251,16 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
             </div>
           </>
         )}
+
+        <div className={classes.showMoreContainer}>
+          <Button onClick={toggleItem} className={classes.DescButton} kind="outlined" size="small">
+            {translate(isExpanded ? 'change.request.desc.show.less' : 'change.request.desc.show.more')}
+            <span className={classes.iconSpacing}>
+              {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
+            </span>
+          </Button>
+        </div>
+
       </div>
       {whereUsedDialog.isOpen && (
         <WhereUsedDialog

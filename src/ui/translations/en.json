@@ -2310,5 +2310,7 @@
   "common.failed": "Failed",
   "common.withdraw": "Withdraw",
   "common.or": "OR",
-  "common.rev": "Rev."
+  "common.rev": "Rev.",
+  "change.request.desc.show.more": "Show more",
+  "change.request.desc.show.less": "Show less"
 }
