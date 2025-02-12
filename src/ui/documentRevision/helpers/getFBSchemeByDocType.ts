@@ -1,6 +1,6 @@
 import { find, get, map, maxBy, some, union, unionBy } from 'lodash';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
-import { DocumentType, DocumentTypeByIdState, DOC_TYPE_GROUP, tabIdByInternalType, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
+import { DOC_TYPE_GROUP, DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBFormTemplateProps } from '../../../state/ducks/documentRevisions/types';
 import { store as appStore } from '../../../state/store';
 import { OptionType } from '../../components/forms/fields/Autocomplete/types';
@@ -77,7 +77,7 @@ export const getFBSchemeByDocType = (
         index: indexLast + 1,
       });
     } else {
-      if (outputTypesWithGroups[0].group !== DOC_TYPE_GROUP.WORK_ORDER) {
+      if (![DOC_TYPE_GROUP.WORK_ORDER, DOC_TYPE_GROUP.SHIPPING].includes(outputTypesWithGroups[0].group as DOC_TYPE_GROUP)) {
         finalScheme.push({
           label: 'form.builder.approvals',
           type: 'approvals',

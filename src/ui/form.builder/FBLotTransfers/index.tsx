@@ -57,10 +57,6 @@ const FBLotTransactions: React.FC<FBLotTransactionsProps> = ({
       }
 
       if (values.quantity !== undefined) {
-        if (values.quantity === 0) {
-          errors.quantity = 'validator.lot.transfers.quantity.null';
-        }
-
         if (initialQuantity > 0 && values.quantity > initialQuantity) {
           errors.quantity = 'validator.lot.transfers.quantity.limit';
         }

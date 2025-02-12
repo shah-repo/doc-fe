@@ -173,6 +173,7 @@ const FBWorkOrderPartDetails: React.FC<FBInputProps> = ({
           disabled={props.disabled}
           withState={true}
           autosave={true}
+          onBlur={undefined}
         />
         <ErrorBlock
           label={partSelectionLabel as Translation}

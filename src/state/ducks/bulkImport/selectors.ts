@@ -1,7 +1,7 @@
-import { translate } from '../../../common/intl';
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
-import { ApproverOption, BkStatus, BulkImportCustom } from './types';
+import { ApproverOption, BkStatus, BulkImport, BulkImportCustom, TableRow, TableRowWithIdx } from './types';
+import { getBulkImportCustomData } from './utils';
 
 // STEPS
 export const getStep = (state: ApplicationState) => state.bulkImport.steps.step;
@@ -25,15 +25,17 @@ export const getTableData = (state: ApplicationState) => state.bulkImport.steps.
 export const getShowErrorsOnly = (state: ApplicationState) => state.bulkImport.steps.showErrorsOnly;
 export const getTableDataFiltered = (state: ApplicationState) => {
   const showErrorsOnly = state.bulkImport.steps.showErrorsOnly;
-  const tableData = state.bulkImport.steps.tableData;
+  const tableData: TableRow[] = state.bulkImport.steps.tableData || [];
+  const newTableData: TableRowWithIdx[] = tableData.map((table, idx) => ({ ...table, idx }));
 
   if (showErrorsOnly) {
-    return tableData.filter((item) => item.errors && item.errors.length > 0);
+    return newTableData.filter((item) => item.errors && item.errors.length > 0 && item.errors.some(err => !err.edited));
   }
 
-  return tableData || [];
+  return newTableData || [];
 };
 export const getIsLoading = (state: ApplicationState) => state.bulkImport.steps.isLoading;
+export const getHasUnsavedChanges = (state: ApplicationState) => state.bulkImport.steps.hasUnsavedChanges;
 export const getApproversSelectList = (state: ApplicationState): ApproverOption[] =>
   state.bulkImport.steps.approvers.map((approver) => ({
     value: approver?.id,
@@ -43,45 +45,51 @@ export const getApproversSelectList = (state: ApplicationState): ApproverOption[
   }));
 // MAIN
 export const getBulkImports = (state: ApplicationState) => state.bulkImport.main.bulkImports;
+export const getBulkImportsMap = (state: ApplicationState) => state.bulkImport.main.bulkImports.reduce((acc, importItem) => {
+  acc[importItem.jobId] = importItem;
+  return acc;
+}, {});
 export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<string, BulkImportCustom[]> => {
   const filterDataType = state.bulkImport.main.selectedDataType;
   const filterStatus = state.bulkImport.main.selectedStatus;
   return state.bulkImport.main.bulkImports.reduce<Record<string, BulkImportCustom[]>>((acc, bulkImport) => {
+    // Skip bulk imports with status DELETED
+    if (bulkImport.status === BkStatus.DELETED) {
+      return acc;
+    }
+
     const processType = bulkImport.processType;
-    const status = bulkImport.status;
-    const progress = bulkImport?.process?.process
-      ? bulkImport.process.process.filter(p => p.status === BkStatus.COMPLETED)
-        .reduce((total, current) => total + (current.percentage * 100), 0) : 0;
-    const icons = [
-      {
-        icon: bulkImport?.xlsx && bulkImport?.xlsx.length > 0 ? 'check' : 'blank',
-        text: translate('bulkImport.uploadData'),
-        step: 1,
-      },
-      {
-        icon: bulkImport?.dataId ? 'check' : 'blank',
-        text: translate('bulkImport.mapColumns'),
-        step: 2,
-      },
-      {
-        icon: bulkImport?.attachmentId ? 'check' : 'blank',
-        text: translate('common.attachments'),
-        step: 3,
-      },
-      {
-        icon: bulkImport?.documentRevision?.approvals && bulkImport?.documentRevision?.approvals.length > 0 ? 'check' : 'blank',
-        text: translate('bulkImport.approvals'),
-        step: 4,
-      },
-    ];
-    const bulkImportWithCustom: BulkImportCustom = {
-      ...bulkImport,
-      progress: progress,
-      icons,
-    };
+    // As we need the rejected status as a started we change internally the group.
+    const status = bulkImport?.status === BkStatus.CANCELLED
+      ? BkStatus.STARTED
+      : bulkImport.status;
+
+    // Create the custom bulk import
+    const bulkImportWithCustom: BulkImportCustom = getBulkImportCustomData(bulkImport);
     // Apply filters before adding to accumulator
     if ((!filterDataType || processType === filterDataType) && (!filterStatus || status === filterStatus)) {
-      acc[processType] = [...(acc[processType] ?? []), bulkImportWithCustom];
+      acc[status] = [...(acc[status] ?? []), bulkImportWithCustom];
+    }
+    return acc;
+  }, {});
+};
+export const getBulkImportsGroupByProcessType = (state: ApplicationState): Record<string, BulkImport[]> => {
+  const filterDataType = state.bulkImport.main.selectedDataType;
+  const filterStatus = state.bulkImport.main.selectedStatus;
+  return state.bulkImport.main.bulkImports.reduce<Record<string, BulkImport[]>>((acc, bulkImport) => {
+    // Skip bulk imports with status DELETED
+    if (bulkImport.status === BkStatus.DELETED) {
+      return acc;
+    }
+
+    const processType = bulkImport.processType;
+    // As we need the rejected status as a started we change internally the group.
+    const status = bulkImport?.status === BkStatus.CANCELLED
+      ? BkStatus.STARTED
+      : bulkImport.status;
+    // Apply filters before adding to accumulator
+    if ((!filterDataType || processType === filterDataType) && (!filterStatus || status === filterStatus)) {
+      acc[processType] = [...(acc[processType] ?? []), bulkImport];
     }
     return acc;
   }, {});

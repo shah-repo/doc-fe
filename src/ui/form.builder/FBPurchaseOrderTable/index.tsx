@@ -44,7 +44,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   isDocumentReleased,
   isPOEditState,
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ disabled });
   const isActionsAllowed = !disabled || isReceivable;
 
   const editItem = ({ dataItem }: DataGridRowClickEvent<FBPurchaseOrderItem>) => {

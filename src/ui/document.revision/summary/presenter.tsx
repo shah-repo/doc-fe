@@ -11,6 +11,7 @@ import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentTyp
 import { documentsActions } from '../../../state/ducks/documents';
 import { RELATED_PARTS_STATUS } from '../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../state/reducers';
+import { LCP } from '../../administration/general.settings/panels/LCP/components/Grid/types';
 import SummaryField from '../../common/summary/base';
 import { FormContext } from '../../components/forms/FormContext';
 import EquipmentSpecification from '../../documentRevision/forms/presenters/EquipmentSpecification';
@@ -75,13 +76,13 @@ const Presenter: React.FunctionComponent<Props> = ({
   };
 
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
-  const isDownloadAllVisible = attachments?.length > 1;
 
   const groupOptions = document?.documentType?.groupOptions;
   const isRecord = checkIsDocumentRecord(groupOptions);
   const isEB = checkIsDocumentEB(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
   const isRelatedEquipmentsShowing = shouldShowRelatedEquipmentsTable(dataProp);
+  const isAttachmentEmpty = !attachments?.length;
   const { _tabsState } = SM.useStores();
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
   const shouldRenderTrainingButton = isDocumentRevisionInStatus(
@@ -152,6 +153,7 @@ const Presenter: React.FunctionComponent<Props> = ({
     valueStyle: { ...AutoCompleteStyles.labelFont, marginBottom: 22 },
   };
 
+  const lcp = dataProp?.lifecyclePhase as unknown as LCP;
   const contentRenderer = () => (
     <Box minHeight={16} width="calc(100% - 8px)">
       <Grid container>
@@ -166,7 +168,7 @@ const Presenter: React.FunctionComponent<Props> = ({
         {(isPart || isPartForm) && (
           <SummaryField
             label="common.lifecycle.phase"
-            value={dataProp?.lifecyclePhase?.displayLabel}
+            value={lcp?.displayLabel}
             {...summaryStyles}
           />)}
         {formTemplate && outputDocumentTypeName && (
@@ -217,20 +219,18 @@ const Presenter: React.FunctionComponent<Props> = ({
         {isPO || includes(outputDocumentTypeName, 'Purchase Order')
           ? attachments && !_tabsState?.isTabActive('details') && (
             <Attachment
-              isAttachmentEmpty={attachments?.length < 1}
+              isAttachmentEmpty={isAttachmentEmpty}
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
-              {...{ isDownloadAllVisible }}
             />
           )
           : attachments && (
             <Attachment
-              isAttachmentEmpty={attachments?.length < 1}
+              isAttachmentEmpty={isAttachmentEmpty}
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
-              {...{ isDownloadAllVisible }}
             />
           )}
         {renderTrainingControl}

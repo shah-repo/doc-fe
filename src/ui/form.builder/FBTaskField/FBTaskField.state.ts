@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 import { action, observable, set } from 'mobx';
 import { FBTaskFieldProps } from '..';
 

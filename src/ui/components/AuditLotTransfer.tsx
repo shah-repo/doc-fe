@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { Audit } from '../../state/ducks/audit/types';
 import { companySelectors } from '../../state/ducks/company';
 import { getAuditDefaultValue } from '../common/utils/audit';
@@ -22,7 +22,7 @@ const AuditLotTransfer: React.FC<Props> = ({
   const locations = useSelector(companySelectors.getAllLocations);
   const employees = useSelector(companySelectors.getAllEmployees);
 
-  const locationAuditValue = (id: string) => locations.find(location => location.id === id)?.name ?? translate('common.not.applicable');
+  const locationAuditValue = (id: string) => locations?.find(location => location.id === id)?.name ?? translate('common.not.applicable');
 
   const auditFieldFactory: Record<string, () => ReactNode> = {
     type: () => translate(`form.builder.lot.transfers.type.${String(auditValue)}`),
@@ -38,8 +38,8 @@ const AuditLotTransfer: React.FC<Props> = ({
             return translate('form.builder.lot.transfers.audit.transfer', {
               type: translate(`form.builder.lot.transfers.type.${transfer.type}`),
               quantity: transfer.quantity,
-              from: locations.find(location => location.id === transfer.from)?.name ?? translate('common.not.applicable'),
-              to: locations.find(location => location.id === transfer.to)?.name ?? translate('common.not.applicable'),
+              from: locations?.find(location => location.id === transfer.from)?.name ?? translate('common.not.applicable'),
+              to: locations?.find(location => location.id === transfer.to)?.name ?? translate('common.not.applicable'),
               date: getFormattedDateString(transfer.date, MomentFormats.MonthDateYear),
             });
           }

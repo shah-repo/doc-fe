@@ -1,14 +1,19 @@
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, useLocation } from 'react-router-dom';
+import { intl } from '../../../common/intl';
 import { getTableCriteria } from '../../../common/utils/selectors';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
+import { trainingActions } from '../../../state/ducks/training';
 import { TRAINING_RECORDS_SEARCH_URL } from '../../../state/ducks/training/constants';
 import { DEFAULT_TRAINING_RECORD_QUERY, TrainingRecordQuery } from '../../../state/ducks/training/types';
 import { getSchemaFromColumns } from '../../common/utils/helpers';
-import { DataStateProps } from '../../components/KendoGrid/interfaces';
 import { KendoColumn } from '../../components/common/kendo/types';
+import { DataStateProps } from '../../components/KendoGrid/interfaces';
+import { toastError } from '../../components/notifications';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
 import TrainingDialog from '../details/TrainingDialog';
 import gridConfiguration from './column.definition';
@@ -20,6 +25,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TRAINING_TABLE_NAME));
+  const location = useLocation();
 
   const setSearchStatus = (
     dataState: DataStateProps,
@@ -39,6 +45,30 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
       ),
     );
   };
+
+  const trainingRecordDataById = useActionCreator(trainingActions.getTrainingRecordData);
+  const async = useAsync({
+    onSuccess: (data?: TrainingRecordQuery) => {
+      if (!data) {
+        return;
+      }
+
+      trainingDetailsDialog.open();
+      setTraining(data);
+    },
+    onError: () => {
+      toastError(intl.formatMessage({ id: 'common.training.released.state.doc.not.found' }));
+    },
+  });
+
+  useEffect(() => {
+    const pathname = location?.pathname;
+    const params = pathname.split('/');
+    const id = params[params.length - 1];
+    if (!id.includes('training')) {
+      async.start(trainingRecordDataById, id, async);
+    }
+  }, []);
 
   useEffect(() => {
     if (

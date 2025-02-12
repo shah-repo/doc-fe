@@ -38,7 +38,7 @@ import { HoverStyleChip } from '../../common/HoverStyleChipPendingReview';
 import { NormalStyleChip } from '../../common/NormalStyleChipPendingReview';
 import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
-import { delay, formatCurrency, getPendingTooltipText } from '../../common/Utils';
+import { formatCurrency, getPendingTooltipText } from '../../common/Utils';
 import EmailModal from '../../dialogs/email/EmailDialog';
 import useStyles from './purchaseOrder.styles';
 interface Props {
@@ -196,10 +196,8 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
     setDownloadPdfHover(true);
   };
 
-  const handleDownloadClick = async () => {
+  const handleDownloadClick = () => {
     setDownloadPdfMobile(true);
-    await delay(1000);
-    setDownloadPdfMobile(false);
   };
 
   const handleDownloadClose = () => {

@@ -3,6 +3,7 @@ import { AsyncAction, AsyncReducerState, AsyncStatus } from '../types';
 export const ASYNC_REDUCER_INITIAL_STATE: AsyncReducerState = {
   status: AsyncStatus.Idle,
   message: '',
+  statusCode: 200,
 };
 
 const asyncReducer = (type: string) =>

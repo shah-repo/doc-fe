@@ -8,7 +8,7 @@ import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { CompanyLocation, GeneralSettings } from '../../../../../state/ducks/company/types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -24,7 +24,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const locations = companyMine.locations;
 
-  const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations);
+  const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations ?? []);
   const [editedLocation, setEditedLocation] = React.useState<EditableCompanyLocation>();
 
   const discardLocation = () => setEditedLocation(undefined);
@@ -33,7 +33,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const async = useAsync({
     onSuccess: submitSettingsForm,
     onError: (error) => {
-      setLocationsData(locations);
+      setLocationsData(locations ?? []);
       toastError(error);
     },
   });
@@ -47,7 +47,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
-      const isDuplicate = locations.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
+      const isDuplicate = locations?.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
       if (isEmpty(values.name)) {
         error.name = 'validators.required';
       }
@@ -65,7 +65,9 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { setValues, submitForm } = formik;
 
   const changeLocationActiveState = (location: EditableCompanyLocation, state: boolean) => {
-    const updatedLocations = locations.map(it => it.id === location.id ? { ...it, active: state } : it);
+    const updatedLocations = locations
+      ?.map(it => it.id === location.id ? { ...it, active: state } : it)
+      ?? [];
     updateLocations(updatedLocations);
   };
 
@@ -74,7 +76,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   }, [editedLocation, setValues]);
 
   useEffect(() => {
-    setLocationsData(locations);
+    setLocationsData(locations ?? []);
   }, [locations]);
 
   const addLocation = () => {

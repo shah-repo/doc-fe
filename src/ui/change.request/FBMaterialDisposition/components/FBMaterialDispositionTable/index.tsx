@@ -2,7 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Typography } from '@material-ui/core';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
-import { GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar, getSelectedState, getSelectedStateFromKeyDown } from '@progress/kendo-react-grid';
+import { getSelectedState, getSelectedStateFromKeyDown, GridKeyDownEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { cloneDeep, each, find, first, get, has, intersection, isEmpty, keys, map, omit, pick } from 'lodash';
@@ -11,19 +11,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../../../common/utils/date';
 import { changeRequestsActions } from '../../../../../state/ducks/changeRequest';
 import { ChangeRequest, ChangeRequestStatus } from '../../../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../../../state/ducks/company';
 import { materialDispositionActions } from '../../../../../state/ducks/materialDisposition';
 import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
+import { Button } from '../../../../components/forms/fields-next';
+import { useFormContext } from '../../../../components/forms/FormContext';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { ColumnDefinition, DataGridProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
-import Text from '../../../../components/Text';
-import { useFormContext } from '../../../../components/forms/FormContext';
-import { Button } from '../../../../components/forms/fields-next';
 import { toastError } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
 import { StyleTooltip } from '../../../../dashboard.new/line.items/common/StyleTooltip';
 import { FB, FBSection } from '../../../../form.builder';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -35,7 +35,7 @@ import { PopupClipboardMenuContext } from './components/PopupClipboardMenu';
 import { DATA_ITEM_KEY, DROPDOWN_FIELDS, EMPTY_DROPDOWN_PLACEHOLDER, EXCEL_FILE_NAME, EXISTING_DOC_FIELDS_TO_PICK, FIELDS_TO_PICK, NON_EXISTING_DOC_FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import { CopiedItems, EditableMDItem, MDItemEditEvent, MaterialDispositionItem } from './types';
+import { CopiedItems, EditableMDItem, MaterialDispositionItem, MDItemEditEvent } from './types';
 import { getExcelColumns, getMDItemList, hasConflictingSelections, updateData, updateDataWithCopiedValue } from './utils';
 
 interface props {
@@ -103,7 +103,7 @@ const FBMaterialDispositionTable: React.FunctionComponent<props> = ({ changeRequ
   const deleteItem = useActionCreator(materialDispositionActions.deleteMDItem);
 
   const materialDispositionAsync = useAsync({
-    onSuccess: (data: {records: EditableMDItem[], lastRefreshedAt: Date}) => {
+    onSuccess: (data: {records: EditableMDItem[], lastRefreshedAt: Date} | undefined) => {
       setData(data?.records ?? []);
       setLastRefreshedAt(data?.lastRefreshedAt);
     },

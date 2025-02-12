@@ -1,6 +1,7 @@
 import {
   Box,
 } from '@material-ui/core';
+import { noop } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../common/intl';
 import { Button } from '../../../components/forms/fields-next';
@@ -14,18 +15,21 @@ interface ButtonActionsProps {
   nextSubmit?: boolean
   useBack?: boolean
   useReset?: boolean
+  useCancel?: boolean
   nextTranslation?: Translation
   handleNext: () => void
   handleBack: () => void
   handleReset: () => void
+  handleCancel?: () => void
 }
 
-const ButtonActions: React.FC<ButtonActionsProps> = ({ activeStep, steps, nextSubmit = false, useBack = false, useReset = false, nextTranslation = 'common.next', handleNext, handleBack, handleReset }) => {
+const ButtonActions: React.FC<ButtonActionsProps> = ({ activeStep, steps, nextSubmit = false, useBack = false, useReset = false, useCancel = false, nextTranslation = 'common.next', handleNext, handleBack, handleReset, handleCancel = noop }) => {
   const classes = useStyles();
 
   return (
-    <Box>
-      <Box className={useBack ? classes.buttonsContainerMultiBtn : classes.buttonsContainer}>
+    <Box className={classes.container}>
+      {useCancel && (<Button kind="secondary" className={classes.buttonsCancel} onClick={handleCancel}><Text translation="bulkImport.delete" /></Button>)}
+      <Box className={useBack || useCancel ? classes.buttonsContainerMultiBtn : classes.buttonsContainer}>
         {useBack && (<Button kind="outlined" className={classes.buttonsBack} disabled={activeStep === 0} onClick={handleBack}><Text translation="common.previous" /></Button>)}
         <Button
           type={nextSubmit ? 'submit' : 'button'}

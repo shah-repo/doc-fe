@@ -2,19 +2,16 @@ import { Box } from '@material-ui/core';
 import { kebabCase } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { EMPTY_PLACEHOLDER } from '../../constants';
-import {
-  DetailsObj,
-  EditableLHRSummaryItem,
-  EditableLHRSummaryItemEditEvent,
-} from '../../types';
+import { DetailsObj, EditableLHRSummaryItem, EditableLHRSummaryItemEditEvent } from '../../types';
 import { getDisplayDocument } from '../../utils';
 import { InvalidDocIndicator } from './InvalidDocIndicator';
 import { styles } from './styles';
 
 interface props {
-  detailsObj: DetailsObj
+  detailsObj?: DetailsObj
   dataItem: EditableLHRSummaryItem
   isRevRemoved?: boolean
   onClick?: (event: EditableLHRSummaryItemEditEvent) => void
@@ -34,10 +31,18 @@ export const PreviewDoc: React.FC<props> = ({
   const dataCy = `${kebabCase(field)}-cell`;
 
   if (!documentId) {
+    const fieldValue = value ?? EMPTY_PLACEHOLDER;
     return (
-      <Box onClick={() => onClick?.({ dataItem })} data-cy={dataCy}>
-        {value ?? EMPTY_PLACEHOLDER}
-      </Box>
+      <OverflowTooltip
+        title={fieldValue}
+        placement="top"
+        interactive
+        arrow
+        onClick={() => onClick?.({ dataItem })}
+        data-cy={dataCy}
+      >
+        {fieldValue}
+      </OverflowTooltip>
     );
   }
 
@@ -53,7 +58,15 @@ export const PreviewDoc: React.FC<props> = ({
         data-cy={dataCy}
         className={classes.link}
       >
-        {getDisplayDocument(docId, displayRevision)}
+        <OverflowTooltip
+          title={getDisplayDocument(docId, displayRevision)}
+          placement="top"
+          interactive
+          arrow
+          data-cy={dataCy}
+        >
+          {getDisplayDocument(docId, displayRevision)}
+        </OverflowTooltip>
       </Link>
       <InvalidDocIndicator status={displayStatus} isRevRemoved={isRevRemoved} dataCy={`${dataCy}-invalid-indicator`} />
     </Box>

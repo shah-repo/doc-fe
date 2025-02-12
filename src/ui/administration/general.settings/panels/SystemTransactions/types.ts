@@ -6,5 +6,4 @@ export type LocationField = 'from' | 'to';
 export interface EditableSystemTransactionsRule extends Omit<SystemTransactionsRule, LocationField>, EditableItem {
   from?: CompanyLocation
   to?: CompanyLocation
-  active: boolean
 }

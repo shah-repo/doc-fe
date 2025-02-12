@@ -5,13 +5,13 @@ import { EmployeeEditRequestBody } from '../auth/types';
 import { ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC } from './constants';
 import { Attachment, AttachmentDownloadResponse, AttachmentType, AvatarS3linkResponse, WatermarkRequest, WatermarkRequestBody } from './types';
 
-const upload = (file: File, lineType: string, handlers: Handlers<Attachment>, isCleanCopyRequired): ApiAction => {
+const upload = (file: File, lineType: string, handlers: Handlers<Attachment>, isCleanCopyRequired?): ApiAction => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('lineType', lineType);
   const type = file.name.split('.').pop();
   isCleanCopyRequired = type === 'docx' && isCleanCopyRequired;
-  formData.append('isCleanCopyRequired', isCleanCopyRequired.toString());
+  formData.append('isCleanCopyRequired', isCleanCopyRequired?.toString());
 
   return apiActionWithCallbacks<Attachment, FormData>({
     url: ATTACHMENT_UPLOAD_URL,

@@ -7,7 +7,7 @@ import { Document, DocumentListAction, DocumentProposedIdSetAction, DocumentsAll
 type DocumentActions = DocumentListAction | DocumentSetAction | DocumentsToReviewListAction;
 
 const extendDocument = (document: Document): Document => (
-  { owner: {}, approvals: [], attachments: [], ...document }
+  { ...document }
 );
 
 const keyByDocumentIdReducer = (acc: DocumentsByIdState, document: Document): DocumentsByIdState => (

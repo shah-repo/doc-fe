@@ -42,6 +42,7 @@ export default makeStyles((theme: NextTheme) => ({
   poAttachmentMargin: {
     marginBottom: theme.spacing(0),
   },
+  innerWrap: {},
   [theme.media.mobile]: {
     truncateMobile: {
       textOverflow: 'ellipsis',
