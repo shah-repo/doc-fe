@@ -105,7 +105,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     tabConfig = tabConfig.filter(tab => ![TabTypeOptions.BOM, TabTypeOptions.ALLOCATION].includes(tab.type as TabTypeOptions));
   }
 
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length);
   const isDownloadAllVisible = (documentRevision?.attachments?.length > 1);
   const onSubmit = () => undefined;
 

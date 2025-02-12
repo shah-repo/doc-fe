@@ -1,10 +1,15 @@
 import { Nullable } from '../common/types';
 import { Employee } from '../company/types';
-import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from './constants';
+import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, SSO_REDIRECT_PARAM, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from './constants';
 
 export interface LoginRequestBody {
   email: string
   password: string
+}
+
+export interface LoginSSORequestBody {
+  code: string
+  [SSO_REDIRECT_PARAM]?: string
 }
 
 export interface ForgotPassword {
@@ -257,6 +262,8 @@ export enum GroupTag {
   PAGE_DETAILS_MANAGEMENT = 'PAGE_DETAILS_MANAGEMENT',
   ASYNC_TASKS_UI = 'ASYNC_TASKS_UI',
   PO_ADMIN = 'PO_ADMIN',
+  CUSTOMER_MODULE_ACCESS= 'CUSTOMER_MODULE_ACCESS',
+  SHIPPING_MODULE_ACCESS= 'SHIPPING_MODULE_ACCESS',
 }
 
 export enum GroupType{
