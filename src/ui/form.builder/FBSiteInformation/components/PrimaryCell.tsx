@@ -61,7 +61,6 @@ export const PrimaryCell: React.FC<Props> = (props) => {
   if (isEditMode) {
     return <Editor {...props} />;
   }
-  console.log('dataItem', dataItem);
 
   return (
     <Box display="flex" justifyContent="center">

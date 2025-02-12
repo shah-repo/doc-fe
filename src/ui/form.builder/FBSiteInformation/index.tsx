@@ -101,7 +101,6 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const rowRender: DataGridProps<EditableSite>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as EditableSite;
-    console.log('rowRender');
     const isUpdating = item[MODE_FIELD] && [Mode.add, Mode.edit].includes(item[MODE_FIELD]);
     if (!isUpdating) {
       return row;
@@ -156,7 +155,6 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
   });
 
   const siteList = useMemo(() => {
-    console.log('siteList change', editedSite?.siteAddress);
     const updatedList = isSiteAdded && editedSite ? [editedSite] : [];
 
     return [
@@ -169,8 +167,6 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
       }),
     ];
   }, [sites, editedSite, isSiteAdded, expandedSiteIDs]);
-
-  console.log('siteList', siteList?.length);
 
   const LazyDetailComponent = lazy(async () => await import('./SiteContact'));
 
