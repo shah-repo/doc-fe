@@ -28,8 +28,7 @@ interface Props {
   currentDocumentType?: DocumentType
   renderAsButton?: boolean
   hasBuildType?: boolean
-  isWO?: boolean
-  isWOForm?: boolean
+  isAssignBtnShown?: boolean
 }
 
 export interface IItem {
@@ -55,8 +54,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   currentDocumentType,
   renderAsButton,
   hasBuildType,
-  isWO,
-  isWOForm,
+  isAssignBtnShown,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const dispatch = useDispatch();
@@ -71,7 +69,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
 
   const [errorResponse, setErrorResponse] = useState<IApprovalErrorResponse>();
 
-  if (isWO && !isWOForm) {
+  if (isAssignBtnShown) {
     label = 'record.assign';
   }
 

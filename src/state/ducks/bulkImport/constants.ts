@@ -1,5 +1,6 @@
 import { BkStatus } from './types';
 
+// URL's
 export const BULK_IMPORT_URL = '/bulk_import/';
 export const BULK_IMPORT_ONE_URL = '/bulk_import/one/';
 export const BULK_IMPORT_TYPE_DATA_URL = '/bulk_import/get_bulk_import_type_data';
@@ -17,7 +18,9 @@ export const APPROVALS_URL = '/approvals';
 export const DOCUMENT_REVISION_URL = '/document_revisions/';
 export const DOCUMENT_REVISION_IN_REVIEW_URL = '/document_revisions/in_review/';
 export const DOCUMENT_REVISION_WITHDRAWN_URL = '/document_revisions/withdrawn/';
+export const BULK_IMPORT_AUDIT_URL = '/bulk_import/audit';
 
+// Reducer constants
 export const RESET_STEPS = 'bulkImport/RESET_STEPS';
 export const CURRENT_STEP = 'bulkImport/CURRENT_STEP';
 export const SET_BULK_IMPORT = 'bulkImport/SET_BULK_IMPORT';
@@ -42,9 +45,11 @@ export const SET_STATUS_FILTER = 'bulkImport/SET_STATUS_FILTER';
 export const CLEAN_UP_MAPPED_HEADERS = 'bulkImport/CLEAN_UP_MAPPED_HEADERS';
 export const SET_BULK_IMPORTS_STATUS = 'bulkImport/SET_BULK_IMPORTS_STATUS';
 
+// Variables
 export const approvalFieldPrefix = 'fb-approvals-fb-approvals-';
 export const skippedAttachmentFile = 'skipped';
 
+// Enums
 export const bkStatusTextMap: { [key in BkStatus]: string } = {
   [BkStatus.STARTED]: 'Started',
   [BkStatus.IN_PROGRESS]: 'In progress',
