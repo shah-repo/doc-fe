@@ -1,13 +1,13 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import { MomentFormats } from '../../../../common/utils/date';
 import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import { DatePicker, FormikField } from '../../../components/forms/fields-next';
-import { CustomTemplateProps } from '../types';
 import OverflowContent from '../../../components/OverflowContent';
-import cx from 'classnames';
+import { DatePicker, FormikField } from '../../../components/forms/fields-next';
 import useStyles from '../styles';
+import { CustomTemplateProps } from '../types';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -15,6 +15,10 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
 
   const handleChange = (date: MaterialUiPickersDate) => {
     setFieldValue('date', date?.toISOString());
+  };
+
+  const handleClear = () => {
+    setFieldValue('date', null);
   };
 
   return (
@@ -26,6 +30,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
         {...getFieldProps('date')}
         size="small"
         onChange={handleChange}
+        onClear={handleClear}
         format={MomentFormats.MonthDateYearTwoDigit}
       />
     </FormikField>

@@ -1,0 +1,44 @@
+import { ChangeEvent } from 'react';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types';
+
+export interface FBShippingAddressProps {
+  name?: string
+  isLoading: boolean
+  disabled: boolean
+  isShippingAddressEmpty?: boolean
+  value: CustomOptionType
+  options: CustomOptionType[]
+  shippingAddresses: ShippingAddress[]
+  handleChange: (event: ChangeEvent<{}>, value?: CustomOptionType) => void
+}
+
+export interface ShippingAddress {
+  id: string
+  city: string
+  country: string
+  primary: boolean
+  zipCode: number
+  siteName: string
+  siteAddress: string
+  siteContact: Contact[]
+}
+
+export interface Contact {
+  id: string
+  name: string
+  email: string
+  other: string
+  isPrimary: boolean
+  isShipping: boolean
+  isAttention: boolean
+  phoneNumber: string
+}
+
+export interface ContactValue {
+  id: string
+  name: string
+}
+
+export interface CustomOptionType extends OptionType {
+  siteContact: Contact[]
+}
