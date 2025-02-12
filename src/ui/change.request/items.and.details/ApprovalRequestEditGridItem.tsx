@@ -1,36 +1,39 @@
-import { Button, FormControlLabel, Checkbox as MuiCheckbox } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Popper } from '@material-ui/core';
 import cx from 'classnames';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ReactComponent as DeleteIcon } from '../../../assets/images/trash-can 2.svg';
+import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { EMPTY_VALUE_PLACEHOLDER } from '../../components/KendoDataGrid/constants';
+import { Checkbox } from '../../components/forms/fields-next';
+import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState } from '../../form.builder';
+import Actions from '../../form.builder/FBApprovalMatrixRoles/components/Actions';
 import useStyles from './ApprovalRequestGrid.styles';
+import ARAttachmentsList from './ARAttachmentsList';
 import { ApprovalRequestGridItem } from './ItemsAndDetails.types';
 import KendoTextEditor from './KendoTextEditor';
 
-const ApprovalRequestEditGridItem: React.FunctionComponent<{
-  disabledOptions: string[]
+interface Props {
+  disabledOptions?: string[]
   formState: FBFormState
   addRevisionToChangeRequest: () => void
   resetAndCancelEdit?: () => void
-  showAutoComplete?: boolean
-  titleText?: string
+  isAddingNewItem?: boolean
   handleRemove?: (docRevId: string) => void
   entry?: ApprovalRequestGridItem
   isLineItemPartCanBeSubstituted?: boolean
   documentRevision?: DocumentRevision
   isDeletionDisabled?: boolean
-}> = ({
-  disabledOptions,
+}
+
+const ApprovalRequestEditGridItem: React.FC<Props> = ({
+  disabledOptions = [],
   formState,
   addRevisionToChangeRequest,
   resetAndCancelEdit,
-  showAutoComplete = true,
-  titleText,
+  isAddingNewItem,
   handleRemove,
   isLineItemPartCanBeSubstituted,
   entry,
@@ -40,51 +43,85 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
   const classes = useStyles();
   const location = useLocation();
   const showDeleteButton = !location.pathname.includes(entry?.docRevId) && !isDeletionDisabled;
-
   const [autoUpdateChecked, setAutoUpdateChecked] = useState(entry?.autoUpdate);
+  const popperAnchorRef = useRef<HTMLDivElement>(null);
+
+  const isWhereUsedTreeExist = (entry?.whereUsedView ?? []).length > 1;
 
   return (
     <FBForm {...{ formState }} >
-      <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)} data-cy="enclosing-div-edit-item">
-        <div className={cx(classes.itemRow, classes.editItemRow)} data-cy="ar-item-edit-row">
-          {isLineItemPartCanBeSubstituted && <div className={cx(classes.cellautoUpdate, classes.hiddenLegend)}>
-            <FormControlLabel
-              color="primary"
-              control={
-                <MuiCheckbox
-                  checked={autoUpdateChecked}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setAutoUpdateChecked(event.target.checked);
-                    formState.setFieldValue('autoUpdate', event.target.checked);
-                  }}
-                  name="autoUpdate"
-                  color="primary"
-                />
-              }
-              label=""
-            />
-          </div> }
-          <div className={cx(classes.cellOne, classes.hiddenLegend)}>
-            { showAutoComplete
-              && <FBAutocompleteAsync
+      <div
+        className={classes.enclosingDiv}
+        data-cy="enclosing-div-edit-item"
+      >
+        <div
+          className={cx(classes.contentRow, classes.editedContentRow)}
+          data-cy="ar-item-edit-row"
+        >
+          {isLineItemPartCanBeSubstituted && (
+            <div className={cx(classes.contentCell, classes.autoUpdateCell)}>
+              <Checkbox
+                checked={autoUpdateChecked}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setAutoUpdateChecked(event.target.checked);
+                  formState.setFieldValue('autoUpdate', event.target.checked);
+                }}
+                name="autoUpdate"
+              />
+            </div>
+          )}
+          <div
+            className={cx(
+              classes.contentCell,
+              classes.itemCell,
+              {
+                [classes.wideItemCell]: isAddingNewItem,
+              },
+            )}
+          >
+            {isAddingNewItem ? (
+              <FBAutocompleteAsync
                 name="proposedDocumentRevision"
                 label="form.builder.document"
                 placeholder="form.builder.select"
                 optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
                 optionValueType="id"
                 rules="required"
-                {...{ disabledOptions }}
+                disabledOptions={disabledOptions}
                 shouldReloadOnInit
-                autoCompleteClasses={{ option: classes.option }}
+                autoCompleteClasses={{ option: classes.autocompleteOption }}
               />
-            }
-            { !showAutoComplete && <span>{titleText}</span>}
+            ) : (
+              <span>{entry?.titleText}</span>
+            )}
           </div>
-          <div className={cx(classes.cellRev, classes.itemLeftPadding, classes.hiddenLegend)}>
-            {entry?.revisionFormTo ?? (documentRevision?.revision ?? EMPTY_VALUE_PLACEHOLDER)}
-          </div>
-          <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
-            classes.itemLeftPadding, classes.hiddenLegend)}>
+          {!isAddingNewItem && (
+            <>
+              <div className={classes.contentCell}>
+                {entry?.revisionFormTo ?? documentRevision?.revision ?? EMPTY_VALUE_PLACEHOLDER}
+              </div>
+              <div className={classes.contentCell}>
+                {entry?.attachments ? (
+                  <ARAttachmentsList
+                    attachments={entry?.attachments}
+                    titleId={entry?.titleText}
+                  />
+                ) : (
+                  EMPTY_VALUE_PLACEHOLDER
+                )}
+              </div>
+            </>
+          )}
+          <div
+            className={cx(
+              classes.contentCell,
+              classes.textCell,
+              classes.textCellEditing,
+              {
+                [classes.textCellAdding]: isAddingNewItem,
+              },
+            )}
+          >
             <KendoTextEditor
               name="descriptionOfChange"
               label="form.builder.description.of.change"
@@ -92,8 +129,16 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               rules="required"
             />
           </div>
-          <div className={cx(isLineItemPartCanBeSubstituted ? classes.smallCellOther : classes.cellOther,
-            classes.itemLeftPadding, classes.hiddenLegend)}>
+          <div
+            className={cx(
+              classes.contentCell,
+              classes.textCell,
+              classes.textCellEditing,
+              {
+                [classes.textCellAdding]: isAddingNewItem,
+              },
+            )}
+          >
             <KendoTextEditor
               name="justificationOfChange"
               label="form.builder.justification.of.change"
@@ -101,26 +146,56 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
               rules="required"
             />
           </div>
-          <div className={cx(classes.cellWhereUsed, classes.itemLeftPadding, classes.hiddenLegend)} data-cy="edit-where-used">
-            {EMPTY_VALUE_PLACEHOLDER}
+          <div
+            className={cx(classes.contentCell, classes.whereUsedCell)} data-cy="edit-where-used"
+          >
+            <FontAwesomeIcon
+              icon={isWhereUsedTreeExist ? solid('circle') : regular('circle')}
+              data-cy="view-where-used"
+              className={cx(classes.whereUsedIcon, classes.iconDisabled)}
+            />
           </div>
         </div>
-        <div className={classes.actionButtonChildDiv}>
-          { showDeleteButton && <Button className={classes.actionButton}>
-            <DeleteIcon className={classes.iconButton}
-              onClick={() => {
+      </div>
+      <div className={classes.actionsRow}>
+        <div ref={popperAnchorRef} className={classes.actionsAnchor} />
+        {popperAnchorRef.current && (
+          <Popper
+            open
+            placement="bottom-end"
+            anchorEl={popperAnchorRef.current}
+            className={classes.popper}
+            modifiers={{
+              keepTogether: {
+                enabled: true,
+              },
+              preventOverflow: {
+                enabled: false,
+              },
+              hide: {
+                enabled: false,
+              },
+            }}
+          >
+            <Actions
+              scrollBehavior="smooth"
+              isDeleteDisabled={!showDeleteButton}
+              deleteTooltipText={!showDeleteButton ? translate('form.builder.delete.disabled') : undefined}
+              dataItem={{ [MODE_FIELD]: Mode.add }}
+              customDataCy={{
+                confirm: 'done-record',
+                discard: 'clear-record',
+                delete: 'delete-record',
+              }}
+              onConfirm={addRevisionToChangeRequest}
+              onDiscard={resetAndCancelEdit}
+              onDelete={() => {
                 resetAndCancelEdit?.();
                 handleRemove?.(entry?.docRevId as string);
-              }} />
-          </Button> }
-          <Button data-cy="clear-record" className={classes.actionButton} onClick = {resetAndCancelEdit}>
-            <ClearIcon className={classes.iconButton} />
-          </Button>
-          <Button data-cy="done-record"
-            className={cx(classes.actionButton, classes.actionButtonDone)} onClick = {addRevisionToChangeRequest}>
-            <DoneIcon className={classes.iconButton} />
-          </Button>
-        </div>
+              }}
+            />
+          </Popper>
+        )}
       </div>
     </FBForm>
   );

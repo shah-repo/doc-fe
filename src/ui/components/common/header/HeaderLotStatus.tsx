@@ -6,7 +6,7 @@ import { getHasPermission } from '../../../../common/utils/selectors';
 import { authSelectors } from '../../../../state/ducks/auth';
 import { Permission } from '../../../../state/ducks/auth/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DocumentRevision, DocumentRevisionStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus, EquipmentStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
 import AlertDialog from '../../../app/alert.dialog/AlertDialog';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -19,7 +19,7 @@ interface Props {
   documentRevision: DocumentRevision
 }
 
-export const getLotStatusLabel = (status: LotStatus): string =>
+export const getLotStatusLabel = (status?: LotStatus): string =>
   translate(`form.builder.header.lot.status.label.${kebabCase(status)}`);
 
 const disabledStatuses = [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided];
@@ -42,12 +42,12 @@ const HeaderLotStatus: React.FC<Props> = ({ documentRevision }) => {
   const canLotStatusBeChanged = !disabledStatuses.includes(documentRevision.status);
   const isLotStatusEditable = canChangeLotStatus && canLotStatusBeChanged;
 
-  const statusLabel = getLotStatusLabel(documentRevision.lotStatus);
+  const statusLabel = getLotStatusLabel(documentRevision?.lotStatus);
 
   const updateLotStatus = useRef<() => void>();
-  const nextStatus = useRef<LotStatus>();
+  const nextStatus = useRef<LotStatus | EquipmentStatus>();
 
-  const confirmUpdate = (lotStatus: LotStatus) => {
+  const confirmUpdate = (lotStatus: LotStatus | EquipmentStatus) => {
     nextStatus.current = lotStatus;
     updateLotStatus.current = () => {
       async.start(updateLotStatusAction, documentRevision.id, { lotStatus }, async);

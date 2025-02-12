@@ -30,18 +30,18 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
     disabled = !isInputOwner || disabled;
 
     controls = map(options as FBOption[], (option, index) => {
-      const [value, message] = at(option, [optionValueKey, optionLabelKey]);
+      const [value, message] = at(option, [optionValueKey as any, optionLabelKey]);
       const defaultChecked = includes(formValue, value);
-      let attr = message;
+      let attr = message as string;
       if (isTranslation(attr)) {
-        attr = intl.formatMessage({ id: message });
+        attr = intl.formatMessage({ id: message as string });
       }
-      formState?.setValidationAttributeName(value, attr);
+      formState?.setValidationAttributeName(value as string, attr);
       return (
         <FormControlLabel
           key={`${value}-${index}`}
           control={<Checkbox disabled={disabled || option.disabled} {...{ value, onChange, defaultChecked }} />}
-          label={<Text {...{ message }} />}
+          label={<Text {...{ message: message as string }} />}
         />
       );
     });

@@ -2,7 +2,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Typography } from '@material-ui/core';
 import React, { ReactNode } from 'react';
-import { Accept, useDropzone } from 'react-dropzone';
+import { Accept, FileRejection, useDropzone } from 'react-dropzone';
 import Text from '../../../Text';
 import useStyles from './Dropzone.styles';
 
@@ -11,11 +11,11 @@ interface DropzoneProps {
   className?: string
   children?: ReactNode
   isMultiple?: boolean
-  onDrop: (acceptedFiles: File[]) => void
+  onDrop: (acceptedFiles: File[], rejectedFiles: FileRejection[]) => void
   maxSize?: number
 }
 
-const MAX_SIZE = 2147483648;
+const MAX_SIZE = 1.4 * 1024 * 1024 * 1024;
 
 const Dropzone: React.FC<DropzoneProps> = ({
   children,
@@ -23,7 +23,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
   accept,
   onDrop,
   isMultiple = true,
-  maxSize = MAX_SIZE, // as default is 2GB
+  maxSize = MAX_SIZE, // as default is 1.4GB
 }) => {
   const classes = useStyles();
   const containerClassName = className ? `${classes.container} ${className}` : classes.container;

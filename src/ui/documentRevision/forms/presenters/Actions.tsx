@@ -42,10 +42,11 @@ import useGetHasTag from '../../../hooks/useGetHasTag';
 import useShouldUpgradeToLatest from '../../../hooks/useShouldUpgradeToLatest';
 import Colors from '../../../layout/theme/utils/colors';
 import { isOperator } from '../../DocumentRevisionDisplay.container';
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentCustomers, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord, checkIsDocumentShipping, checkIsDocumentWO, hasOperatorRelease, hasRedline, hasSerializedCSV } from '../../helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from '../../helpers/documentRevisionStatus';
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from '../../helpers/records';
 import { isDocumentNumericRelease } from '../../helpers/revisionStage';
+import { useIsLatestRevision } from '../../helpers/useIsLatestRevision';
 import InspectionControlsContainer from '../../InspectionControls/InspectionControls.container';
 import { PreviewControlButtons } from '../../PreviewControls.container.types';
 import { FormHeaderContext, isOwnerContext } from '../DocumentRevisionForm.container';
@@ -159,6 +160,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
   const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
   const showEQStatusValue = shouldShowEQStatus(documentRevision);
+  const isLatestRevision = useIsLatestRevision(documentRevision);
+  const isShipping = checkIsDocumentShipping(documentRevision?.document?.documentType?.groupOptions);
+  const isCustomers = checkIsDocumentCustomers(documentRevision?.document?.documentType?.groupOptions);
 
   function isOutputSchema (): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -278,7 +282,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const hasBuildType = Boolean(documentRevision?.formInput?.['lhr-build-type']);
   const isRenderHTMLDefined = documentRevision?.formDocument?.renderHTMLDefined;
-
+  const isShippingOrWO = isWO || isShipping;
+  const isAssignBtnShown = isShippingOrWO && isEmpty(documentRevision?.formTemplate);
   const hasPermisstionToEditRestrictedPart = useSelector(getHasPermission(Permission.RESTRICTED_PART_EDIT_ADMIN));
   const showCancelEditPartButton = isPart && documentRevision?.isBeingEditedAfterRelease
     && documentRevision?.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER
@@ -321,7 +326,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   if ((isStatusInDraft || isStatusInReview) && isPO && isRenderHTMLDefined) {
     accessableButtons.push(PreviewControlButtons.GeneratePDF);
   }
-  if ((isStatusReleased || isStatusInDraft) && serializedCSV) {
+  if ((isStatusReleased || isStatusInDraft) && serializedCSV && !isShipping && !isCustomers) {
     accessableButtons.push(PreviewControlButtons.ExportCsvButton);
   }
   if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild)) {
@@ -433,11 +438,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           status={values.status}
           renderAsButton={renderAsButton}
           hasBuildType={hasBuildType}
-          isWO={isWO}
-          isWOForm = {isWO && !isEmpty(documentRevision?.formTemplate)}
           {...{
             revisionChangeType,
             currentDocumentType,
+            isAssignBtnShown,
           }}
         />
       )}
@@ -490,7 +494,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {isPO && documentRevision.poStatus && (
         <HeaderPOStatus poStatus={documentRevision.poStatus} />
       )}
-      {isLot && <HeaderLotStatus documentRevision={documentRevision} />}
+      {isLot && isLatestRevision && <HeaderLotStatus documentRevision={documentRevision} />}
       {showEQStatusValue && <HeaderEquipmentStatus documentRevision={documentRevision} />}
       {isLot && (
         <>

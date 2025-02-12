@@ -21,8 +21,8 @@ import AttachmentLineTypeForm from './AttachmentLineTypeForm';
 
 interface Props {
   upload: typeof attachmentsActions.upload
-  field: FieldInputProps<any>
-  form: FormikProps<any>
+  field?: FieldInputProps<any>
+  form?: FormikProps<any>
   multiple?: boolean
   name?: string
   disabled?: boolean
@@ -95,7 +95,7 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   const documentRevisionTypeGroupFromDocList = React.useContext(documentRevisionTypeGroupsFromDocListContext);
   const isRecord = documentRevisionTypeGroupFromDocList === DOC_TYPE_GROUP_OPTION.RECORD;
   const documentTypeCanRedline = Boolean(useSelector((state: ApplicationState) =>
-    documentTypeSelectors.getDocumentTypeById(state, form.values.document?.documentType?.id))?.canRedLine);
+    documentTypeSelectors.getDocumentTypeById(state, form?.values.document?.documentType?.id))?.canRedLine);
 
   const openDialog = () => {
     async.reset();

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Chip, CircularProgress, TextField, Typography } from '@material-ui/core';
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
-import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
 import { debounce, isArray, map, some } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -12,11 +12,11 @@ import { intl } from '../../../../common/intl';
 import { TypographyProps } from '../../../../state/ducks/common/types';
 import { documentRevisionsActions, documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DocRevQueryParam, DocumentGroupOptionsType } from '../../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision, DocumentRevisionStatus, DocumentRevisionsByIdState, Reference } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from '../../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../../state/types';
-import Text from '../../../components/Text';
-import { useFormContext } from '../../../components/forms/FormContext';
 import Field, { FieldOwnProps } from '../../../components/forms/fields/Field';
+import { useFormContext } from '../../../components/forms/FormContext';
+import Text from '../../../components/Text';
 import { FBTooltip } from '../../../form.builder';
 import useActionCreator from '../../../hooks/useActionCreator';
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from '../../helpers/checkDocumentGroup';
@@ -62,7 +62,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   const loadAction = useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
-  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
 
   const onChange = (e, val) => {
     const newValue = isArray(val) ? val : [...value, val];

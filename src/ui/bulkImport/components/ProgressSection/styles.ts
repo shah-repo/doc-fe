@@ -43,6 +43,24 @@ export default makeStyles(theme => ({
       justifyContent: 'center',
     },
   },
+  itemErrorMessage: {
+    backgroundColor: Colors.errorHighlight,
+    borderColor: Colors.error,
+    border: '1px solid',
+    borderRadius: 4,
+    padding: theme.spacing(1),
+    width: 'fit-content',
+    margin: theme.spacing(1),
+  },
+  itemErrorMessageText: {
+    fontWeight: 400,
+    fontSize: 12,
+    fontFamily: 'Sora',
+    '& span': {
+      fontWeight: 600,
+      cursor: 'pointer',
+    },
+  },
   completedText: {
     fontWeight: 400,
     fontSize: 12,
@@ -62,7 +80,7 @@ export default makeStyles(theme => ({
     height: 14,
     color: Colors.statusReleased,
   },
-  xmarkRedIcon: {
+  errorRedIcon: {
     width: 14,
     height: 14,
     color: Colors.error,
@@ -87,6 +105,8 @@ export default makeStyles(theme => ({
     right: 0,
     top: 14,
     marginLeft: 'auto',
+    display: 'flex',
+    alignItems: 'center',
     [theme.breakpoints.down('xs')]: {
       margin: 'auto',
       marginTop: theme.spacing(2.5),
@@ -107,8 +127,14 @@ export default makeStyles(theme => ({
     gridRowGap: 0,
     paddingTop: theme.spacing(2.5),
     paddingBottom: theme.spacing(2.5),
+    [theme.breakpoints.up('xl')]: {
+      gridTemplateColumns: '2fr 5fr 1fr !important',
+    },
     [theme.breakpoints.down('xl')]: {
       gridTemplateColumns: '3fr 5fr 1fr',
+    },
+    [theme.breakpoints.down('lg')]: {
+      gridTemplateColumns: '2fr 5fr 1fr',
     },
     [theme.breakpoints.down('xs')]: {
       display: 'block',
@@ -120,6 +146,9 @@ export default makeStyles(theme => ({
   progressBarIconsContainer: {
     minWidth: 450,
     [theme.breakpoints.down('sm')]: {
+      minWidth: 250,
+    },
+    [theme.breakpoints.down(1080)]: {
       minWidth: 250,
     },
   },
@@ -149,6 +178,9 @@ export default makeStyles(theme => ({
     gap: theme.spacing(2.5, 2.5),
     marginBottom: theme.spacing(1.25),
     [theme.breakpoints.down('sm')]: {
+      display: 'block',
+    },
+    [theme.breakpoints.down(1080)]: {
       display: 'block',
     },
     [theme.breakpoints.down('xs')]: {
@@ -186,11 +218,26 @@ export default makeStyles(theme => ({
     minHeight: 14,
     color: Colors.stroke,
   },
+  skipIcon: {
+    minWidth: 14,
+    minHeight: 14,
+    color: Colors.textGray,
+  },
   divider: {
     backgroundColor: '#DDDEE3',
   },
   cursorPointer: {
     cursor: 'pointer',
+  },
+  deleteIcon: {
+    cursor: 'pointer',
+    color: Colors.error,
+    width: 14,
+    height: 16,
+    marginLeft: 15,
+    '&:hover': {
+      color: Colors.reject,
+    },
   },
   rejectIcon: {
     cursor: 'pointer',

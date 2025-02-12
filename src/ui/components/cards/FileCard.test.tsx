@@ -4,6 +4,7 @@ import React from 'react';
 import { Attachment } from '../../../state/ducks/attachments/types';
 import DownloadButtonContainer from './DownloadButton.container';
 import FileCard, { FileCardProps } from './FileCard';
+import { LINE_TYPES } from '../../../state/ducks/attachments/constants';
 
 describe('Filecard component unit tests', () => {
   const attachment: Attachment = {
@@ -13,6 +14,10 @@ describe('Filecard component unit tests', () => {
     s3link: 'tests3Link',
     s3linkCleanCopy: 'testS3LinkCleanCopy',
     isLoading: false,
+    fileSizeS3Link: 1,
+    fileSizeS3LinkCleanCopy: 1,
+    hasWatermarks: false,
+    lineType: LINE_TYPES.CLEAN_COPY,
   };
 
   const getWrapper = (props: FileCardProps) => shallow(<FileCard {...props} />);

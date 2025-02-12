@@ -23,9 +23,9 @@ export const styles = makeStyles((theme) => ({
   emptyMsg: {
     padding: theme.spacing(2),
   },
-  row: (props: TableStyleProps) => ({
+  row: (props?: TableStyleProps) => ({
     paddingRight: '0!important',
-    cursor: (props.isSelectable) ? 'pointer' : 'default',
+    cursor: (props?.isSelectable) ? 'pointer' : 'default',
     borderBottom: `1px solid ${theme.palette.text.hint}`,
     '&:hover': {
       background: '#F8F9FF',

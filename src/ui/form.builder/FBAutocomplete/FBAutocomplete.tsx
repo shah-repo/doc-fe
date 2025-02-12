@@ -180,6 +180,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
             blurOnSelect={freeSolo}
           /> : <StyledAutoComplete
+            key={!options?.some((value) => typeof value === 'object') ? 'disabled' : 'enabled'}
             {...{
               getOptionDisabled,
               getOptionLabel,

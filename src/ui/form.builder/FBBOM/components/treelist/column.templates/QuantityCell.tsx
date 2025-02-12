@@ -28,7 +28,7 @@ const QuantityCell: ComponentType<CustomTreeListCellProps> = ({
           type="number"
           onChange={(e) => {
             const val = e.target.value;
-            if (!isNaN(val) && Number(val) >= 0) { setFieldValue(field, val); }
+            if (!isNaN(Number(val)) && Number(val) >= 0) { setFieldValue(field, val); }
           }}
           inputProps={{ min: 0 }}
           disabled={!enableFieldAfterPartSelection(dataItem, values.docId)}

@@ -10,18 +10,32 @@ import { OptionType } from '../../../../components/forms/fields/Autocomplete/typ
 import {
   Mode, MODE_FIELD,
 } from '../../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { TYPE_OPTIONS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
 
 export const TypeCell: React.FC<CustomTemplateProps> = ({
   dataItem,
   field,
+  onClick,
 }) => {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
   let value = TYPE_OPTIONS.find((option) => option.value === dataItem.type);
 
   if (!isEditMode) {
-    return <>{value?.label}</>;
+    const typeValue = value?.label;
+    return (
+      <OverflowTooltip
+        title={typeValue}
+        onClick={() => onClick?.({ dataItem })}
+        placement="top"
+        interactive
+        data-cy="type-field"
+        arrow
+      >
+        {typeValue}
+      </OverflowTooltip>
+    );
   }
 
   const { values, getFieldProps, setValues } = useFormikContext<EditableLHRSummaryItem>();

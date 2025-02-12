@@ -161,10 +161,10 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   }
 
   protected loadInternal () {
-    const isIncomplete = !this.optionConfig || !this.optionId;
-    if (isIncomplete) {
+    if (!this.optionConfig || !this.optionId) {
       return;
     }
+
     FBAutocompleteAsyncStore.loading.set(this.optionId, true);
     const { id, root = '', publicApi } = this.optionConfig;
 

@@ -1,6 +1,6 @@
 import { Field, FieldProps, useFormikContext } from 'formik';
 import React, { ReactNode } from 'react';
-import { Accept } from 'react-dropzone';
+import { Accept, FileRejection } from 'react-dropzone';
 import { withThemeNext } from '../../../../layout/theme-next';
 import CustomDropzone from './Dropzone';
 import { FileWithPreview } from './Dropzone.types';
@@ -11,13 +11,25 @@ interface DropzoneFieldProps {
   children?: ReactNode
   className?: string
   isMultiple?: boolean
+  maxSize?: number
   onDropCallback?: (files: FileWithPreview[]) => void
+  onMaxSizeExceeded?: () => void
 }
 
-const DropzoneField: React.FC<DropzoneFieldProps> = ({ name, children, onDropCallback, ...restProps }) => {
+const DropzoneField: React.FC<DropzoneFieldProps> = ({ name, children, onDropCallback, onMaxSizeExceeded, ...restProps }) => {
   const { setFieldValue } = useFormikContext();
 
-  const handleDrop = (acceptedFiles: File[]) => {
+  const handleDrop = (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
+    if (onMaxSizeExceeded) {
+      const oversizedFiles = rejectedFiles
+        .filter(rejection => rejection.errors.some(error => error.code === 'file-too-large'));
+
+      if (oversizedFiles.length > 0) {
+        onMaxSizeExceeded();
+        return;
+      }
+    }
+
     setFieldValue(name, acceptedFiles);
 
     if (onDropCallback) {

@@ -25,7 +25,7 @@ import { CustomTreeListCellProps } from './types';
 const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, id, style, dataItem, field, level, openDetailDrawer, onExpandChange, expanded, ariaColumnIndex, colIndex, className }) => {
   const isEditMode = isEditAllocItem(dataItem) && !dataItem.isDisabled;
   const classes = styles({ hasChildren, isEditMode });
-  const { getFieldProps, setFieldValue } = useFormikContext<EditableAllocationItem>();
+  const { getFieldProps, setFieldValue, errors } = useFormikContext<EditableAllocationItem>();
   const navigationAttributes = useTableKeyboardNavigation(id);
   const docIdWithRevision = dataItem.docId ? `${dataItem.docId}.${dataItem.displayRevision}` : '';
 
@@ -90,6 +90,8 @@ const IDCell: React.ComponentType<CustomTreeListCellProps> = ({ hasChildren, col
   const getFieldInfo = () => (
     field && <FormikField
       name={field}
+      required
+      error={Boolean(errors[field])}
     >
       <Autocomplete
         {...getFieldProps(field)}

@@ -36,7 +36,7 @@ import { HoverStyleChip } from '../../common/HoverStyleChipApprovalApproved';
 import { NormalStyleChip } from '../../common/NormalStyleChipApprovalApproved';
 import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
-import { delay, formatCurrency } from '../../common/Utils';
+import { formatCurrency } from '../../common/Utils';
 import { DocTypeGroups } from '../../common/types';
 import useStyles from './purchaseOrder.styles';
 
@@ -176,10 +176,8 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
     onMouseHoverItem(id);
   };
 
-  const handleDownloadClick = async () => {
+  const handleDownloadClick = () => {
     setDownloadPdfMobile(true);
-    await delay(1000);
-    setDownloadPdfMobile(false);
   };
 
   const handleDownloadClose = () => {

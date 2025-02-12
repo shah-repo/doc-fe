@@ -47,7 +47,7 @@ class FBData {
   }
 
   public static get autocompleteOptions (): FBAutocompleteAsyncConfig[] {
-    return autocompleteOptions;
+    return autocompleteOptions as FBAutocompleteAsyncConfig[];
   }
 
   public static get unitsOptions (): FBOption[] {

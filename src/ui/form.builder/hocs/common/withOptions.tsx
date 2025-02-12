@@ -15,7 +15,7 @@ export const withOptions = <T extends FBOptionProps>(
     type,
     ...props
   }: T) => {
-    function mapStringOption (): T['options'] {
+    function mapStringOption () {
       const splitArray = split(props.options as string, '\n');
       const isValueVar = type === 'radiogroup' || type === 'select';
       const valueVar = isValueVar ? '-<-val->' : '';
@@ -25,15 +25,15 @@ export const withOptions = <T extends FBOptionProps>(
       }));
     }
 
-    function unionNoneOption (options: any[]): T['options'] {
+    function unionNoneOption (options: any[]) {
       return union([{
         [optionValueKey]: '',
         [optionLabelKey]: 'fields.select.none',
       }], options);
     }
 
-    function unionContextOption (options: any[]): T['options'] {
-      return union(options, [{
+    function unionContextOption (options: any[]) {
+      return union<any>(options, [{
         [optionValueKey]: `context-${name}`,
         [optionLabelKey]: 'form.builder.other',
       }]);
@@ -41,9 +41,9 @@ export const withOptions = <T extends FBOptionProps>(
 
     const optionsSet = (): T['options'] => {
       let options = props.options || '';
-      isString(options) && (options = mapStringOption());
-      includeNone && (options = unionNoneOption(options as any[]));
-      includeContext && (options = unionContextOption(options as any[]));
+      isString(options) && (options = mapStringOption() as string | NonNullable<T['options']>);
+      includeNone && (options = unionNoneOption(options as any[]) as string | NonNullable<T['options']>);
+      includeContext && (options = unionContextOption(options as any[]) as string | NonNullable<T['options']>);
       return options;
     };
 

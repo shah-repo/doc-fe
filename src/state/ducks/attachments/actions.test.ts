@@ -23,9 +23,12 @@ describe('attachemnt actions tests', () => {
       type: 'SOC',
       s3link: 'https://mylink.com',
       lineType: LINE_TYPES.CLEAN_COPY,
+      fileSizeS3Link: 1,
+      hasWatermarks: false,
+      fileSizeS3LinkCleanCopy: 1,
     };
 
-    const action = attachmentsActions.upload(file, attachment.lineType, handlers);
+    const action = attachmentsActions.upload(file, attachment.lineType ?? '', handlers);
 
     it('calls POST on ATTACHMENT_UPLOAD_URL', () => {
       expect(action.url).toBe(ATTACHMENT_UPLOAD_URL);
@@ -51,6 +54,9 @@ describe('attachemnt actions tests', () => {
       type: 'SOC',
       s3link: 'https://mylink.com',
       lineType: LINE_TYPES.CLEAN_COPY,
+      fileSizeS3Link: 1,
+      hasWatermarks: false,
+      fileSizeS3LinkCleanCopy: 1,
     };
 
     const action = attachmentsActions.download(attachment, handlers);

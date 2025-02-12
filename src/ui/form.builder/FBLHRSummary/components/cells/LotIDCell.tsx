@@ -4,26 +4,22 @@ import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { translate } from '../../../../../common/intl';
-import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
 import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
-import {
-  MODE_FIELD,
-  Mode,
-} from '../../../../components/KendoDataGrid/constants';
-import {
-  FormikField,
-} from '../../../../components/forms/fields-next';
+import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
+import { FormikField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import { FB } from '../../../helpers';
 import { LHR_SUMARY_FIELDS } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem } from '../../types';
+import { setFieldValuesForOriginalAndPrefixed } from '../../utils';
 import { PreviewDoc } from './PreviewDoc';
 import { styles } from './styles';
 interface CustomOptionType extends OptionType {
-  lotStatus: string
+  lotStatus?: string
   expiryDate: string
   documentId?: string
 }
@@ -76,6 +72,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
       ...values,
       lotStatus: value?.lotStatus ?? '',
       expiryDate: value?.expiryDate ?? null,
+      customExpiryDate: value?.expiryDate ?? null,
       lotOrEquipment: value?.value,
     });
   };
@@ -108,7 +105,7 @@ const Editor: React.FC<CustomTemplateProps> = (props) => {
     if (reason === 'input') {
       setInputValue(value);
       setFieldValue(LHR_SUMARY_FIELDS.lotStatus, '');
-      setFieldValue(LHR_SUMARY_FIELDS.expiryDate, null);
+      setFieldValuesForOriginalAndPrefixed(setFieldValue, LHR_SUMARY_FIELDS.expiryDate, null);
       setFieldValue(LHR_SUMARY_FIELDS.lotOrEquipment, value);
     }
   };

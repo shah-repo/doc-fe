@@ -72,5 +72,9 @@ export interface TypographyProps {
   color: keyof typeof TypographyColor
   variant: string
 }
+export interface ReleasedBy {
+  id: string
+  user: User
+}
 
 export type Nullable<T> = T | null;
