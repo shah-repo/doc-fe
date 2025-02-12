@@ -83,16 +83,18 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
     } else {
       // validate if the value is the same as requiered or if have - star with the value
       if (error?.help?.data?.length) {
-        isValid = error?.help?.data.some(entry => entry === valueCheck);
+        isValid = error?.help?.data.some(entry => valueCheck.startsWith(entry));
       }
-
       // At the moment format is only for dates
       if (isValid && error?.help?.format?.length) {
-        const dateFormats = error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
-        const datePattern = new RegExp(`^(${dateFormats.join('|')})$`);
+        const areRegex = error?.help?.format[0].startsWith('^') && error?.help?.format[0].endsWith('$');
+
+        const formats = areRegex ? error?.help?.format : error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
+        const datePattern = new RegExp(areRegex ? formats.join('|') : `^(${formats.join('|')})$`);
+
         isValid = datePattern.test(valueCheck);
 
-        if (isValid) {
+        if (isValid && !areRegex) {
           isValid = validateDateFormats(valueCheck, error?.help?.format);
         }
       }

@@ -157,7 +157,7 @@ const LineItemsPresenter: React.FC<Props> = ({
               );
             case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
             case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
-              if (pendingAction.docTypeGroup === DOC_TYPE_GROUP_OPTION.WORK_ORDER) {
+              if ([DOC_TYPE_GROUP_OPTION.WORK_ORDER, DOC_TYPE_GROUP_OPTION.SHIPPING].includes(pendingAction.docTypeGroup)) {
                 return (
                   <TaskCompletedItemPresenter
                     key={pendingAction.id}
