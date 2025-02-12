@@ -66,7 +66,7 @@ export const PrimaryCell: React.FC<Props> = (props) => {
     <Box display="flex" justifyContent="center">
       <FontAwesomeIcon
         data-cy="minimize-row-button"
-        icon={ dataItem[EXPAND_FIELD] ? regular('square-minus') : solid('square-plus')}
+        icon={dataItem[EXPAND_FIELD] ? regular('square-minus') : solid('square-plus')}
         className={classes.expand}
         onClick={() => onDataItemExpanded?.(dataItem)}
       />
