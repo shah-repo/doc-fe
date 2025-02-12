@@ -23,4 +23,6 @@ export const CATEGORY_OPTIONS = [
   createOption('Training Curriculums'),
   createOption('WO'),
   createOption('Hidden'),
+  createOption('Customers'),
+  createOption('Shipping'),
 ];

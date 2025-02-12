@@ -142,6 +142,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     'formInput.supplier-type',
     'name',
   ];
+
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: string | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
