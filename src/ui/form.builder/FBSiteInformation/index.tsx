@@ -32,6 +32,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
   const { formState, workspaceState } = FB.useStores();
   const isActive = !disabled;
   const [editedSite, setEditedSite] = useState<Partial<EditableSite>>();
+  const [expandedSiteIDs, setExpandedSiteIDs] = useState<string[]>();
 
   const isSiteAdded = editedSite?.[MODE_FIELD] === Mode.add;
   const editContact = ({ dataItem }: SiteEditEvent) => setEditedSite(dataItem);
@@ -109,7 +110,6 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     const editedRow = React.cloneElement(
       row,
       {
-        ...row.props,
         className: cx(row.props.className, classes.updatingRow),
       },
     );
@@ -133,6 +133,16 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     });
   }, [workspaceState?.formInput, editedSite]);
 
+  const handleDataItemExpanded = useCallback((dataItem) => {
+    console.log('dataItem', dataItem);
+    const selectedId = dataItem.id;
+    setExpandedSiteIDs((prevIds = []) =>
+      prevIds.includes(selectedId)
+        ? prevIds.filter(id => id !== selectedId)
+        : [...prevIds, selectedId],
+    );
+  }, []);
+
   const schema = buildSchema({
     isActive,
     isInEditMode,
@@ -142,6 +152,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     onDiscard: onDiscardSite,
     onDelete: onDeleteSite,
     onSameAsHQ: handleSameAsHQ,
+    onDataItemExpanded: handleDataItemExpanded,
   });
 
   const siteList = useMemo(() => {
@@ -154,10 +165,10 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
         if (editedSite?.id === item.id) {
           return { ...editedSite, [MODE_FIELD]: Mode.edit, [EXPAND_FIELD]: true };
         }
-        return { ...item, [MODE_FIELD]: Mode.show, [EXPAND_FIELD]: Math.random() > 0.5 };
+        return { ...item, [MODE_FIELD]: Mode.show, [EXPAND_FIELD]: expandedSiteIDs?.includes(item.id) };
       }),
     ];
-  }, [sites, editedSite, isSiteAdded]);
+  }, [sites, editedSite, isSiteAdded, expandedSiteIDs]);
 
   console.log('siteList', siteList?.length);
 
@@ -165,7 +176,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
 
   const DetailComponent = memo((props: GridDetailRowProps) => {
     return (
-      <Suspense fallback={<div>Loading details...{name}</div>}>
+      <Suspense fallback={<div>{translate('common.loading')}</div>}>
         <LazyDetailComponent {...props} name={name} sites={sites} setSites={setSites} isDisabled={disabled} />
       </Suspense>
     );

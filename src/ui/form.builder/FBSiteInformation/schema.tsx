@@ -16,6 +16,7 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
   onSameAsHQ,
+  onDataItemExpanded,
 }: SchemaOptions): Array<ColumnDefinition<EditableSite>> => {
   return [
     {

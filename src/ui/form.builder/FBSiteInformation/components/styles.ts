@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { Colors } from '../../../layout/theme-next';
 
 export default makeStyles(theme => ({
   sideAddress: {
@@ -13,7 +14,8 @@ export default makeStyles(theme => ({
     marginTop: theme.spacing(0.75),
   },
   expand: {
-    fontSize: 16,
+    fontSize: 18,
     marginRight: theme.spacing(1),
+    color: Colors.primary,
   },
 }));
