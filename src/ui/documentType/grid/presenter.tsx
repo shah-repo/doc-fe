@@ -83,8 +83,8 @@ export function DocumentTypePresenter ({
     DocumentCategory.Parts,
     DocumentCategory.EB,
     DocumentCategory.Receive,
+    DocumentCategory.Supplier,
     DocumentCategory.Equipment,
-    DocumentCategory.EquipmentSpecification,
     DocumentCategory.PurchaseOrder,
   ].includes(documentTypeCategory as DocumentCategory);
 
@@ -115,7 +115,7 @@ export function DocumentTypePresenter ({
             status: documentRevisionQueryStatus(),
           }}
           documentTypeCategory={documentTypeCategory}
-          enableKeywordSearch={isEnabledKeywordSearch}
+          isKeywordSearchEnabled={isEnabledKeywordSearch}
         />}
       </Grid>
     </Grid>

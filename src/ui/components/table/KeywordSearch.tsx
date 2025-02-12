@@ -6,7 +6,12 @@ import {
   FilterDescriptor,
   State,
 } from '@progress/kendo-data-query';
-import React, { ChangeEventHandler, KeyboardEventHandler, useEffect, useState } from 'react';
+import React, {
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  useEffect,
+  useState,
+} from 'react';
 import { translate } from '../../../common/intl';
 import { SEARCH_KEYWORD_FIELD_KEY } from '../KendoDataGrid/constants';
 import { styles } from './KeywordSearch.styles';

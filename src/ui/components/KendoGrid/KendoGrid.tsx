@@ -62,7 +62,7 @@ export function KendoGrid<T extends any> ({
   defaultPayloadData,
   documentTypeCategory,
   exportDataChanges,
-  enableKeywordSearch,
+  isKeywordSearchEnabled,
 }: KendoGridProps<T>) {
   const didMount = useDidMount();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
@@ -381,12 +381,14 @@ export function KendoGrid<T extends any> ({
     );
   };
 
-  const applySearchFilter = (searchText) => {
+  const applySearchFilter = (searchText: string) => {
     const updatedDataState = { ...dataState };
     if (updatedDataState.filter?.filters) {
-      const existingFilter = updatedDataState.filter.filters.find(
-        (filter) => (filter as FilterDescriptor)?.field === SEARCH_KEYWORD_FIELD_KEY,
-      ) as FilterDescriptor;
+      const existingFilter = (
+        updatedDataState.filter.filters as FilterDescriptor[]
+      ).find(
+        (filter: FilterDescriptor) => filter.field === SEARCH_KEYWORD_FIELD_KEY,
+      );
 
       if (existingFilter) {
         existingFilter.value = searchText;
@@ -405,8 +407,10 @@ export function KendoGrid<T extends any> ({
   const clearSearchFilter = () => {
     const updatedDataState = { ...dataState };
     if (updatedDataState.filter?.filters) {
-      updatedDataState.filter.filters = updatedDataState.filter.filters.filter(
-        (filter) => (filter as FilterDescriptor)?.field !== SEARCH_KEYWORD_FIELD_KEY,
+      updatedDataState.filter.filters = (
+        updatedDataState.filter.filters as FilterDescriptor[]
+      ).filter(
+        (filter: FilterDescriptor) => filter.field !== SEARCH_KEYWORD_FIELD_KEY,
       );
     }
     setDateStateAndDispatchByUpdatedState(updatedDataState);
@@ -557,7 +561,7 @@ export function KendoGrid<T extends any> ({
           <Grid container>
             <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
               <ClearFilters {...{ clearFilter }} />
-              {enableKeywordSearch && <KeywordSearch {...{ applySearchFilter, clearSearchFilter, dataState }} />}
+              {isKeywordSearchEnabled && <KeywordSearch {...{ applySearchFilter, clearSearchFilter, dataState }} />}
             </Grid>
             <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
               <ColumnShowHideMenu

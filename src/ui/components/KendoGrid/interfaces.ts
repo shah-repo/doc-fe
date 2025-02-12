@@ -50,7 +50,7 @@ export interface KendoGridProps<T> {
   queryUrl: string
   defaultPayloadData: object
   documentTypeCategory?: string
-  enableKeywordSearch?: boolean
+  isKeywordSearchEnabled?: boolean
 }
 
 export interface DataLoaderProps {
