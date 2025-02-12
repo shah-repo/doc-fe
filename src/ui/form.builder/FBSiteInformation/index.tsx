@@ -132,8 +132,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     });
   }, [workspaceState?.formInput, editedSite]);
 
-  const handleDataItemExpanded = useCallback((dataItem) => {
-    console.log('dataItem', dataItem);
+  const handleDataItemExpanded = useCallback((dataItem: EditableSite) => {
     const selectedId = dataItem.id;
     setExpandedSiteIDs((prevIds = []) =>
       prevIds.includes(selectedId)
