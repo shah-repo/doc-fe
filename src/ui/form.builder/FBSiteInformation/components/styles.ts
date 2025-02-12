@@ -15,7 +15,7 @@ export default makeStyles(theme => ({
   },
   expand: {
     fontSize: 18,
-    marginRight: theme.spacing(1),
-    color: Colors.primary,
+    marginRight: theme.spacing(2),
+    color: Colors.textBlack,
   },
 }));

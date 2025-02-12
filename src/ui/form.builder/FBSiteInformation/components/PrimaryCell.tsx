@@ -1,14 +1,14 @@
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import get from 'lodash/get';
 import React, { useEffect, useState } from 'react';
 import {
   MODE_FIELD,
   Mode,
 } from '../../../components/KendoDataGrid/constants';
 import { Radio } from '../../../components/forms/fields-next';
+import { EXPAND_FIELD } from '../constants';
 import { CustomSiteTemplateProps, EditableSite } from '../types';
 import useStyles from './styles';
 interface Props extends CustomSiteTemplateProps {
@@ -65,14 +65,13 @@ export const PrimaryCell: React.FC<Props> = (props) => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <div className={classes.expand}>
-        <FontAwesomeIcon
-          data-cy="minimize-row-button"
-          flip={get(dataItem, '_expanded') ? undefined : 'horizontal'}
-          icon={solid('square-chevron-left')}
-          onClick={() => onDataItemExpanded?.(dataItem)}
-        />
-      </div>
+      <FontAwesomeIcon
+        data-cy="minimize-row-button"
+        icon={ dataItem[EXPAND_FIELD] ? regular('square-minus')
+          : solid('square-plus')}
+        className={classes.expand}
+        onClick={() => onDataItemExpanded?.(dataItem)}
+      />
       <Radio
         checked={dataItem[field]}
         color="primary"
