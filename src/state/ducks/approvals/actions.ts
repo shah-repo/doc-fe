@@ -9,9 +9,9 @@ const applyTransition = (
   handlers: Handlers<any>,
   password?: string,
   asyncType?: string,
-  ignoreWarning = false,
+  isWarningIgnored = false,
 ): ApiAction<any, any> => apiActionWithCallbacks({
-  url: `${APPROVALS_ROOT_URL}/${id}/${transition}?ignoreWarning=${ignoreWarning}`,
+  url: `${APPROVALS_ROOT_URL}/${id}/${transition}?ignoreWarning=${isWarningIgnored}`,
   method: 'post',
   password,
   handlers,

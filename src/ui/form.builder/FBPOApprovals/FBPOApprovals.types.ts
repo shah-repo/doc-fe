@@ -7,7 +7,7 @@ export type FBPOApprovalsProps =
 & Pick<FBInputProps, 'name' | 'label' | 'disabled' | 'value'>
 & FBAutocompleteAsyncProps
 & {
-  approvalTransition: (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, ignoreWarning?: boolean) => void
+  approvalTransition: (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string, isWarningIgnored?: boolean) => void
   isIncluded?: (group: FBRequiredApprover) => void
   onApproveClick?: (approvalId: string) => void
   onConfirmClick?: (approvalId: string) => void
