@@ -18,6 +18,7 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
 import { checkIsDocumentEquipment, checkIsDocumentLHR, checkIsDocumentMPIOutput } from '../../helpers/checkDocumentGroup';
+import { FBErrorCodes } from '../types';
 
 interface Props {
   documentRevision: DocumentRevision
@@ -78,7 +79,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
     onError: (error) => {
       try {
         const parsedError = JSON.parse(error as string);
-        if (parsedError.status === 412 && parsedError.response) {
+        if (parsedError.status === FBErrorCodes.PRECONDITION_FAILED && parsedError.response) {
           setErrorResponse(parsedError.response as IApprovalErrorResponse);
           supplierStatusDialog.open();
         } else {
@@ -125,14 +126,14 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           color="primary"
           onClick={isObsolete ? dialog.open : releaseRecord}
           id="ApproveAndRelease-button"
-          data-cy="ApproveAndRelease-button"
+          data-cy="approve-and-release-button"
         >
           <Text message={isObsolete ? 'common.void' : label} />
         </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
           <StyledMenuListItemText
             onClick={isObsolete ? dialog.open : releaseRecord}
             id="ApproveAndRelease-button"
-            data-cy="ApproveAndRelease-button"
+            data-cy="approve-and-release-button"
             primary={<Text message={isObsolete ? 'common.void' : label} />}
           />
         </StyledMenuListItem>
@@ -142,7 +143,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           variant="outlined"
           onClick={isObsolete ? dialog.open : releaseRecord}
           id="ApproveAndRelease-button"
-          data-cy="ApproveAndRelease-button"
+          data-cy="approve-and-release-button"
         >
           <Text message={isObsolete ? 'common.void' : label} />
         </Button>

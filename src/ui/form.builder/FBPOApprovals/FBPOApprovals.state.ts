@@ -5,6 +5,7 @@ import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTrans
 import { GroupType } from '../../../state/ducks/auth/types';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
 import { IApprovalErrorResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
+import { FBErrorCodes } from '../../documentRevision/forms/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { POApprovalMatrixLevel } from '../FBPOApprovalMatrix/FBPOApprovalMatrix.types';
@@ -138,7 +139,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
       if (error) {
         try {
           const parsedError = JSON.parse(JSON.stringify(error));
-          if (parsedError.status === 412 && parsedError.response) {
+          if (parsedError.status === FBErrorCodes.PRECONDITION_FAILED && parsedError.response) {
             callback?.(parsedError.response);
           } else {
             return this.transitionApi.onError(error);

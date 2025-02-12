@@ -12,6 +12,7 @@ import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDia
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import { IApprovalErrorResponse } from '../../../../documentRevision/forms/presenters/SubmitForApproval';
+import { FBErrorCodes } from '../../../../documentRevision/forms/types';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
@@ -78,11 +79,11 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         dispatch(dashboardMyFeedsActions.loadMyFeedsList());
       }
     },
-    onError: (error) => {
+    onError: (error?: string) => {
       async.reset();
       try {
         const parsedError = JSON.parse(error as string);
-        if (parsedError.status === 412 && parsedError.response) {
+        if (parsedError.status === FBErrorCodes.PRECONDITION_FAILED && parsedError.response) {
           setErrorResponse(parsedError.response as IApprovalErrorResponse);
           supplierStatusDialog.open();
         } else {

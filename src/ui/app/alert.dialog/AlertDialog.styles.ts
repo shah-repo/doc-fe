@@ -48,7 +48,7 @@ export const styles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(2.5),
       color: Colors.error,
       '& svg': {
-        fontSize: '3em',
+        fontSize: '48px',
       },
     },
     warningIcon: {
@@ -56,7 +56,7 @@ export const styles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(2.5),
       color: Colors.warning,
       '& svg': {
-        fontSize: '3em',
+        fontSize: '48px',
       },
     },
     alertDiv: {
@@ -68,7 +68,7 @@ export const styles = makeStyles((theme: Theme) =>
     chipBox: {
       display: 'flex',
       flexWrap: 'wrap',
-      gap: '8px',
+      gap: theme.spacing(1),
       marginTop: theme.spacing(1.5),
       '& div': {
         borderRadius: theme.spacing(1.5),
