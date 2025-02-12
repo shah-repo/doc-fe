@@ -129,7 +129,7 @@ export const buildSchema = ({
       title: 'form.builder.lot.transfers.date',
       filterCell: InputFilter,
       template: DateCellTemplate,
-      width: 160,
+      width: 220,
     },
     {
       id: 'by',

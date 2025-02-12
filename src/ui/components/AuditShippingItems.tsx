@@ -16,7 +16,7 @@ const AuditShippingItems: React.FC<Props> = ({
   const field = audit.field.split('.').at(-1) as string;
 
   const auditFieldFactory: Record<string, () => ReactNode> = {
-    shipping_items: () => {
+    shippingItems: () => {
       if (audit.type === 'ARRAY_DELETED') {
         try {
           const data = JSON.parse(auditValue as string);

@@ -1,19 +1,14 @@
-import { IconButton } from '@material-ui/core';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
-import EditIcon from '@material-ui/icons/Edit';
 import { get, set } from 'lodash';
 import * as React from 'react';
-import { useIntl } from 'react-intl';
+import { translate } from '../../../../common/intl';
 import { userManagementActions } from '../../../../state/ducks/userManagement';
 import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
-import Tooltip from '../../../components/common/kendo/Tooltip';
+import ActionsButtons from '../../../administration/general.settings/components/SettingsTable/components/ActionButtons';
 import { toastError } from '../../../components/notifications';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { enterUserInfo } from '../column.definition';
 import { UserManage } from '../types';
-import Commandstyles from './CommandCell.styles';
 
 interface CommandCellProps {
   dataItem: UserManage | GetEmployeeResponse
@@ -37,15 +32,12 @@ export const CommandCell = ({
   colSpan,
   style,
   className,
-  columnIndex,
+  columnIndex = 0,
   add,
   cancel,
   edit,
-}: CommandCellProps) => {
-  const intl = useIntl();
-  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
-  const classes = Commandstyles();
-  const inEdit = dataItem[editField];
+}: CommandCellProps): React.ReactElement | null => {
+  const isEditMode = Boolean(dataItem[editField]);
 
   const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
   const asyncName = useAsync<GetEmployeeResponse[]>({
@@ -60,13 +52,14 @@ export const CommandCell = ({
       add(dataItem as UserManage);
     },
   });
+
   const fetchUseInfo = () => {
     const name = get(dataItem, 'name');
     const email = get(dataItem, 'email');
     const userName = name || enterUserInfo.name;
     const userEmail = email || enterUserInfo.email;
     if (!userEmail || !userName) {
-      toastError(intl.formatMessage({ id: 'user.management.name.email.required' }));
+      toastError(translate('user.management.name.email.required'));
       return;
     }
     if (!name) {
@@ -82,7 +75,7 @@ export const CommandCell = ({
     return null;
   }
 
-  return inEdit ? (
+  return (
     <td
       colSpan={colSpan}
       style={style}
@@ -90,59 +83,12 @@ export const CommandCell = ({
       className={className}
       data-grid-col-index={columnIndex}
     >
-      <Tooltip
-        placement="top"
-        data={getTranslatedText('user.management.add.employee')}
-        childrenElement={
-          <IconButton
-            disableRipple={true}
-            size="small"
-            onClick={() => fetchUseInfo()}
-            className={classes.button}
-          >
-            <AddCircleOutlineIcon
-              className={classes.ButtonColor}
-              fontSize="small"
-            />
-          </IconButton>
-        }
-      />
-      <Tooltip
-        placement="top"
-        data={getTranslatedText('common.discard')}
-        childrenElement={
-          <IconButton
-            disableRipple={true}
-            size="small"
-            onClick={() => cancel(dataItem as UserManage)}
-            className={classes.button}
-          >
-            <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
-          </IconButton>
-        }
-      />
-    </td>
-  ) : (
-    <td
-      colSpan={colSpan}
-      style={style}
-      role="gridcell"
-      className={className}
-      data-grid-col-index={columnIndex}
-    >
-      <Tooltip
-        placement="top"
-        data={getTranslatedText('user.management.edit.employee')}
-        childrenElement={
-          <IconButton
-            disableRipple={true}
-            size="small"
-            onClick={() => edit(dataItem as GetEmployeeResponse)}
-            className={classes.button}
-          >
-            <EditIcon className={classes.ButtonColor} fontSize="small" />
-          </IconButton>
-        }
+      <ActionsButtons
+        isEditMode={isEditMode}
+        isActive
+        onConfirm={fetchUseInfo}
+        onDiscard={() => cancel(dataItem as UserManage)}
+        onEdit={() => edit(dataItem as GetEmployeeResponse)}
       />
     </td>
   );

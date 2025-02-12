@@ -32,30 +32,14 @@ export const positiveNumber: Validator = (value) => {
   }
 };
 
-export const passwordSchema = Yup.string()
-  .min(8, 'validator.password.min')
-  .required('validators.required')
-  .matches(/(?=.*?[A-Z])/, 'validator.password.upper.case')
-  .matches(/(?=.*?[a-z])/, 'validator.password.lower.case')
-  .matches(/(?=.*?[0-9])/, 'validator.password.number')
-  .matches(/(?=.*?[$*.{}?"!@#%&/,><':;|_~`\\^[\]()-])/, 'validator.password.spec.char');
-
-export const confirmPasswordSchema = Yup.string()
-  .oneOf([Yup.ref('password'), null], 'validator.match.passwords')
-  .required('validator.confirm');
-
 export const confirmResetPasswordSchema = Yup.string()
   .oneOf([Yup.ref('newPassword'), null], 'validator.match.passwords')
   .required('validator.confirm');
 
-export const emailSchema = Yup.string()
-  .email('validators.email')
-  .required('validators.required');
-
 export const requiredSchema = Yup.string()
   .required('validators.required');
 
-const validatorFactory = (...validators: Validator[]): Validator => (value: any): Translation | undefined => {
+const validatorFactory = (...validators: Validator[]): Validator => (value: unknown): Translation | undefined => {
   for (const validatorFn of validators) {
     const error = validatorFn(value);
 

@@ -131,7 +131,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner && !documentRevision?.isBeingEditedAfterRelease;
   const isDisabledInputInPreview = isPreview || isDisabledInput;
   const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length);
   const documentTypeId = values.document?.documentType?.id || '';
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || '';
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;

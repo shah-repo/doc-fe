@@ -187,7 +187,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
       },
-      siteInformations () {
+      siteInformation () {
         return <AuditSiteInformations {...{ audit, dataCy, auditValue }} />;
       },
       shippingItems () {
