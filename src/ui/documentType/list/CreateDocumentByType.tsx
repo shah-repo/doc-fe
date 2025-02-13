@@ -18,6 +18,7 @@ import { DocumentProposedId } from '../../../state/ducks/documents/types';
 import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ApplicationState } from '../../../state/reducers';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import SearchBar from '../../components/KeywordSearch';
 import Text from '../../components/Text';
 import ExportListIcon from '../../components/common/kendo/ExportListIcon';
 import { FormContext } from '../../components/forms/FormContext';
@@ -49,6 +50,8 @@ interface Props {
   headers: HeaderTableType[]
   tableData: any[]
   isGrouped: boolean
+  isKeywordSearchEnabled?: boolean
+  tableName?: string
 }
 
 type DocCreator = (form: DocumentRevision) => void;
@@ -129,6 +132,8 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   headers,
   isGrouped,
   tableData,
+  isKeywordSearchEnabled,
+  tableName,
 }) => {
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
   const classes = styles();
@@ -338,7 +343,14 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     <>
       <Grid container alignItems="center" justify="space-between">
         <Grid item>
-          <GridTitle title={title} />
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item>
+              <GridTitle title={title} />
+            </Grid>
+            {isKeywordSearchEnabled && title && <Grid item xs>
+              <SearchBar tableName={tableName} />
+            </Grid>}
+          </Grid>
         </Grid>
         <Grid item>
           <Button

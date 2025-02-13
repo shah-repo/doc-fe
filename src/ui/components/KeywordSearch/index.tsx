@@ -1,67 +1,55 @@
 import { light, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Divider, InputAdornment, TextField } from '@material-ui/core';
-import {
-  CompositeFilterDescriptor,
-  FilterDescriptor,
-  State,
-} from '@progress/kendo-data-query';
 import React, {
   ChangeEventHandler,
   KeyboardEventHandler,
+  useContext,
   useEffect,
   useState,
 } from 'react';
 import { translate } from '../../../common/intl';
-import { SEARCH_KEYWORD_FIELD_KEY } from '../KendoDataGrid/constants';
-import { styles } from './KeywordSearch.styles';
+import useStyles from './styles';
+import { QueryType, SearchContext, SearchContextType } from './types';
 
-interface KeywordSearchProps {
-  applySearchFilter?: (searchText: string) => void
-  clearSearchFilter?: () => void
-  dataState: State
+interface SearchBarProps {
+  tableName?: string
 }
+const SearchBar: React.FC<SearchBarProps> = ({ tableName }) => {
+  const classes = useStyles();
+  const [searchText, setSearchText] = useState<QueryType>('');
+  const { setQuery, defaultQuery, setDefaultQuery } = useContext(
+    SearchContext,
+  ) as SearchContextType;
 
-const KeywordSearch: React.FC<KeywordSearchProps> = ({
-  applySearchFilter,
-  clearSearchFilter,
-  dataState,
-}) => {
-  const classes = styles();
-  const [searchText, setSearchText] = useState('');
+  useEffect(() => {
+    setSearchText(undefined);
+    setDefaultQuery?.(undefined);
+    setQuery?.(undefined);
+  }, [tableName]);
+
+  useEffect(() => {
+    setSearchText(defaultQuery ?? '');
+  }, [defaultQuery]);
 
   const handleSearchClick = () => {
-    if (searchText.trim()) {
-      applySearchFilter?.(searchText);
+    if (searchText?.trim()) {
+      setQuery?.(searchText);
     }
   };
 
   const handleClearClick = () => {
     setSearchText('');
-    clearSearchFilter?.();
+    setQuery?.('');
   };
 
   const onHandleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    event.key === 'Enter' && applySearchFilter?.(searchText);
+    event.key === 'Enter' && setQuery?.(searchText);
   };
 
   const onHandleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearchText(event.target.value);
   };
-
-  const getKeywordSearchValue = (
-    filters?: Array<CompositeFilterDescriptor | FilterDescriptor>,
-  ): string =>
-    (
-      filters?.find(
-        (filter) =>
-          'field' in filter && filter.field === SEARCH_KEYWORD_FIELD_KEY,
-      ) as FilterDescriptor
-    )?.value ?? '';
-
-  useEffect(() => {
-    setSearchText(getKeywordSearchValue(dataState?.filter?.filters));
-  }, [dataState?.filter?.filters]);
 
   return (
     <TextField
@@ -107,4 +95,4 @@ const KeywordSearch: React.FC<KeywordSearchProps> = ({
   );
 };
 
-export default KeywordSearch;
+export default SearchBar;

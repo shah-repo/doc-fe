@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 import { DocumentCategory, DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { KendoGrid } from '../../components/KendoGrid/KendoGrid';
 import KendoGridStyles from '../../components/KendoGrid/KendoGrid.styles';
+import { QueryType, SearchContext } from '../../components/KeywordSearch/types';
 import { TableDataProps } from '../../components/table/types';
 import { documentRevisionQueryStatus } from '../../document.revision/utils/helpers';
 import { isTranslation } from '../../translations/types';
@@ -79,7 +80,7 @@ export function DocumentTypePresenter ({
     setDataToBeExported(copyDate);
   };
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
-  const isEnabledKeywordSearch = [
+  const isKeywordSearchEnabled = [
     DocumentCategory.Parts,
     DocumentCategory.EB,
     DocumentCategory.Receive,
@@ -88,36 +89,40 @@ export function DocumentTypePresenter ({
     DocumentCategory.PurchaseOrder,
   ].includes(documentTypeCategory as DocumentCategory);
 
+  const [query, setQuery] = useState<QueryType>();
+  const [defaultQuery, setDefaultQuery] = useState<QueryType>();
+
   return (
     <Grid container>
-      <Grid item xs={12} className={classes.headerGridItem}>
-        <CreateDocumentByType
-          {...createDocumentProps}
-          {...{ isByCategory, headers, tableData: dataToBeExported, isGrouped }}
-          labelName={
-            isByCategory
-              ? documentCategory.addNewBtnLabel
-              : documentType.documentTypeName
-          }
-        />
-      </Grid>
-      <Grid item xs={12} className={classes.kendoGridItem}>
-        {ref.current === tableName && <KendoGrid
-          tableName={tableName}
-          tableCriteria={tableCriteria}
-          schema={schema}
-          statuses={statuses}
-          exportDataChanges={handleExportData}
-          onRowClick={onRowClick}
-          queryUrl={queryUrl}
-          defaultPayloadData={{
-            documentTypeCategory: 'Record',
-            status: documentRevisionQueryStatus(),
-          }}
-          documentTypeCategory={documentTypeCategory}
-          isKeywordSearchEnabled={isEnabledKeywordSearch}
-        />}
-      </Grid>
+      <SearchContext.Provider value={{ query, defaultQuery, setQuery, setDefaultQuery }}>
+        <Grid item xs={12} className={classes.headerGridItem}>
+          <CreateDocumentByType
+            {...createDocumentProps}
+            {...{ isByCategory, headers, tableData: dataToBeExported, isGrouped, isKeywordSearchEnabled, tableName }}
+            labelName={
+              isByCategory
+                ? documentCategory.addNewBtnLabel
+                : documentType.documentTypeName
+            }
+          />
+        </Grid>
+        <Grid item xs={12} className={classes.kendoGridItem}>
+          {ref.current === tableName && <KendoGrid
+            tableName={tableName}
+            tableCriteria={tableCriteria}
+            schema={schema}
+            statuses={statuses}
+            exportDataChanges={handleExportData}
+            onRowClick={onRowClick}
+            queryUrl={queryUrl}
+            defaultPayloadData={{
+              documentTypeCategory: 'Record',
+              status: documentRevisionQueryStatus(),
+            }}
+            documentTypeCategory={documentTypeCategory}
+          />}
+        </Grid>
+      </SearchContext.Provider>
     </Grid>
   );
 }

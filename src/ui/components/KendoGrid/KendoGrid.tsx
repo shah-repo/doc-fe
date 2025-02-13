@@ -1,11 +1,11 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, IconButton } from '@material-ui/core';
-import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
 import { GridCellProps, GridColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar, GridColumn as KendoColumn } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, isEmpty, isNull, map, set } from 'lodash';
-import React, { ComponentType, useCallback, useEffect, useState } from 'react';
+import React, { ComponentType, useCallback, useContext, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
@@ -39,10 +39,10 @@ import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, orderByLocke
 import NoDataFound from '../common/kendo/NoDataFound';
 import { KendoColumn as KendoColumnProps } from '../common/kendo/types';
 import { SEARCH_KEYWORD_FIELD_KEY } from '../KendoDataGrid/constants';
+import { SearchContext } from '../KeywordSearch/types';
 import { toastError, toastSuccess } from '../notifications';
 import StyledKendoGrid from '../StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../table/ClearFilters';
-import KeywordSearch from '../table/KeywordSearch';
 import PrintLabelDetailsDialog from '../table/printLabel/PrintLabelDetailsDialog';
 import { printColumnProps } from '../table/printLabel/PrintLabelDetailsDialog.wrap';
 import { DataLoader } from './DataLoader';
@@ -62,7 +62,6 @@ export function KendoGrid<T extends any> ({
   defaultPayloadData,
   documentTypeCategory,
   exportDataChanges,
-  isKeywordSearchEnabled,
 }: KendoGridProps<T>) {
   const didMount = useDidMount();
   const { zebraPrint } = useSelector(companySelectors.getGeneralSettings);
@@ -70,6 +69,7 @@ export function KendoGrid<T extends any> ({
   const [columns, setColumns] = useState<KendoColumnProps[]>([]);
   const dispatch = useDispatch();
   const intl = useIntl();
+  const context = useContext(SearchContext);
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const [dataState, setDataState] = React.useState<State>(
     tableCriteria?.queryDict?.dataState,
@@ -366,7 +366,10 @@ export function KendoGrid<T extends any> ({
           />
         ),
     );
+
   const clearFilter = () => {
+    context?.setDefaultQuery?.(undefined);
+    context?.setQuery?.(undefined);
     set(dataState, 'filter.filters', []);
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -381,7 +384,39 @@ export function KendoGrid<T extends any> ({
     );
   };
 
-  const applySearchFilter = (searchText: string) => {
+  useEffect(() => {
+    if (!context) return;
+    const { query } = context;
+    console.log('defaultSearchQuery', dataState?.filter?.filters, query);
+    if (query) {
+      onSearch(query);
+    } else if (query === '') {
+      clearSearchFilter();
+    }
+  }, [context?.query]);
+
+  const getKeywordSearchValue = (
+    filters?: Array<CompositeFilterDescriptor | FilterDescriptor>,
+  ): string =>
+    (
+      filters?.find(
+        (filter) =>
+          'field' in filter && filter.field === SEARCH_KEYWORD_FIELD_KEY,
+      ) as FilterDescriptor
+    )?.value ?? '';
+
+  useEffect(() => {
+    if (!context) return;
+    const defaultSearchQuery = getKeywordSearchValue(
+      dataState?.filter?.filters,
+    );
+    if (defaultSearchQuery === context?.query) {
+      return;
+    }
+    context?.setDefaultQuery?.(defaultSearchQuery ?? '');
+  }, []);
+
+  const onSearch = (searchText: string) => {
     const updatedDataState = { ...dataState };
     if (updatedDataState.filter?.filters) {
       const existingFilter = (
@@ -561,7 +596,6 @@ export function KendoGrid<T extends any> ({
           <Grid container>
             <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
               <ClearFilters {...{ clearFilter }} />
-              {isKeywordSearchEnabled && <KeywordSearch {...{ applySearchFilter, clearSearchFilter, dataState }} />}
             </Grid>
             <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
               <ColumnShowHideMenu
