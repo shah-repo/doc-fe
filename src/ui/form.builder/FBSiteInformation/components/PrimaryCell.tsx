@@ -63,7 +63,7 @@ export const PrimaryCell: React.FC<Props> = (props) => {
   }
 
   return (
-    <Box display="flex" justifyContent="center">
+    <Box className={classes.container} >
       <FontAwesomeIcon
         data-cy="minimize-row-button"
         icon={dataItem[EXPAND_FIELD] ? regular('square-minus') : solid('square-plus')}

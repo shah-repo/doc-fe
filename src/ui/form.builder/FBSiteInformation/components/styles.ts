@@ -18,4 +18,8 @@ export default makeStyles(theme => ({
     marginRight: theme.spacing(2),
     color: Colors.textBlack,
   },
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
 }));
