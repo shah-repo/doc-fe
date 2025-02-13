@@ -2184,7 +2184,6 @@
   "administration.general.settings.approvalRoles.sync.message.dialog.content": "Your changes to the Approval Roles will only be applied when you release a new revision of the DAM",
   "administration.general.settings.approvalRoles.sync.message.dialog.content.bottom": "Go to the DAM to update your changes.",
   "administration.general.settings.approvalRoles.sync.message.dialog.out.of.sync.with.dam": "Out of sync with DAM",
-  "administration.general.settings.approvalRoles.sync.message.dialog.doc.name": "({docId}.{rev} \"{status}\").",
   "dam.sync.message.role.added.removed.label": "The {roleAdded, plural, one {role} other {roles}} {addedList} {roleAdded, plural, one {was} other {were}} added and {roleRemoved, plural, one {role} other {roles}} {removedlist} {roleRemoved, plural, one {was} other {were}} removed from the General Settings/Approval Roles section.",
   "dam.sync.message.role.added.label": "The {rolesCount, plural, one {role} other {roles}} {addedList} {rolesCount, plural, one {was} other {were}} added from the General Settings/Approval Roles section.",
   "dam.sync.message.role.removed.label": "The {rolesCount, plural, one {role} other {roles}} {removedlist} {rolesCount, plural, one {was} other {were}} removed from the General Settings/Approval Roles section.",

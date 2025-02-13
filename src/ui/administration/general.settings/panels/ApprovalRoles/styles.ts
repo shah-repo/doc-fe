@@ -4,6 +4,7 @@ import { Colors } from '../../../../layout/theme-next';
 export default makeStyles(theme => createStyles({
   dialogTitle: {
     display: 'flex',
+    justifyContent: 'normal',
     paddingBottom: theme.spacing(1),
     color: Colors.black,
   },

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { translate } from '../../../../../../common/intl';
 import { Dam } from '../../../../../../state/ducks/company/types';
 import Text from '../../../../../components/Text';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
@@ -23,9 +22,7 @@ const SyncMessageDialog: React.FC<Props> = ({
   dialogContent,
 }) => {
   const classes = useStyles();
-  const url = documentVersionPath(dam?.documentRevision?.id ?? '', dam?.document?.id ?? '');
-  const label = translate('administration.general.settings.approvalRoles.sync.message.dialog.doc.name',
-    { docId: dam?.document?.docId, rev: dam?.documentRevision?.displayRevision, status: dam.documentRevision.displayStatus });
+  const damDocId = dam?.document?.docId;
 
   return (
     <Dialog
@@ -42,12 +39,18 @@ const SyncMessageDialog: React.FC<Props> = ({
         {dialogContent ?? (
           <>
             <Text translation="administration.general.settings.approvalRoles.sync.message.dialog.content" />
-            <Link
-              to={url}
-              className={classes.link}
-            >
-              &nbsp;{label}
-            </Link>
+            {damDocId && (
+              <>
+                {' ('}
+                <Link
+                  className={classes.link}
+                  to={documentVersionPath(dam?.documentRevision?.id ?? '', dam?.document?.id ?? '')}
+                >
+                  {damDocId}
+                </Link>
+                ).
+              </>
+            )}
             <div className={classes.bottomText}>
               <Text translation="administration.general.settings.approvalRoles.sync.message.dialog.content.bottom" />
             </div>
