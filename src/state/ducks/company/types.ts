@@ -7,7 +7,17 @@ import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
 import { EquipmentStatus, LotStatus } from '../documentRevisions/types';
 import { MaterialFlowAclRule } from '../materialFlowAcl/types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
+import {
+  AUTOSAVE_CONFIG,
+  REDLINE_CONFIG,
+  SELECT_COMPANY,
+  SET_AUTOSAVE_CONFIG,
+  SET_COMPANY_MINE,
+  SET_GENERAL_SETTINGS,
+  SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
+  UPDATE_NAVIGATION_ITEM,
+  UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
+} from './constants';
 
 export interface WhiteLabelingColors {
   defaultBackground: string
@@ -125,6 +135,7 @@ export interface NavigationItem {
   menu?: NavigationItem[]
   icon?: string
   category?: string
+  isNew?: boolean
   restrictedToUsersWithTags?: GroupTag[]
   restrictedToUserPermissions?: Permission[]
   isOpen?: boolean
@@ -275,7 +286,39 @@ export interface GeneralSettingsState extends GeneralSettings, AsyncState {
   updatedAt?: string
 }
 
+export enum PremiumFeature {
+  AI = 'AI',
+  Analytics = 'ANALYTICS',
+  OCR = 'OCR',
+}
+
+export interface PremiumFeatureSubscriptionPayload {
+  isEnabled: boolean
+}
+
+export interface PremiumFeatureSubscription extends PremiumFeatureSubscriptionPayload {
+  id: string
+  companyId: string
+  premiumFeature: PremiumFeature
+  publicConfig?: Record<string, unknown>
+  createdAt: string
+  updatedAt: string
+}
+
+export interface PremiumFeatureSubscriptionsState extends AsyncState {
+  list: PremiumFeatureSubscription[]
+}
+
 export interface GeneralSettingsAction {
   type: typeof SET_GENERAL_SETTINGS
   payload: GeneralSettings
+}
+
+export interface SetPremiumFeatureSubscriptionsAction {
+  type: typeof SET_PREMIUM_FEATURE_SUBSCRIPTIONS
+  payload: PremiumFeatureSubscription[]
+}
+export interface UpdatePremiumFeatureSubscriptionAction {
+  type: typeof UPDATE_PREMIUM_FEATURE_SUBSCRIPTION
+  payload: PremiumFeatureSubscription
 }

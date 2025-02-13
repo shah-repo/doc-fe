@@ -1,3 +1,5 @@
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -6,12 +8,14 @@ import {
   Mode,
 } from '../../../components/KendoDataGrid/constants';
 import { Radio } from '../../../components/forms/fields-next';
+import { EXPAND_FIELD } from '../constants';
 import { CustomSiteTemplateProps, EditableSite } from '../types';
 import useStyles from './styles';
 interface Props extends CustomSiteTemplateProps {
   isActive: boolean
   isInEditMode: boolean
   onPrimaryChange?: (id: string) => void
+  onDataItemExpanded?: (dataItem: EditableSite) => void
 }
 
 const Editor: React.FC<Props> = ({ field, dataIndex }) => {
@@ -42,8 +46,9 @@ const Editor: React.FC<Props> = ({ field, dataIndex }) => {
 };
 
 export const PrimaryCell: React.FC<Props> = (props) => {
-  const { dataIndex, dataItem, isInEditMode, onPrimaryChange, field } = props;
+  const { dataIndex, dataItem, isInEditMode, onPrimaryChange, field, onDataItemExpanded } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+  const classes = useStyles();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (isEditMode) {
       return;
@@ -58,7 +63,13 @@ export const PrimaryCell: React.FC<Props> = (props) => {
   }
 
   return (
-    <Box display="flex" justifyContent="center">
+    <Box className={classes.container} >
+      <FontAwesomeIcon
+        data-cy="minimize-row-button"
+        icon={dataItem[EXPAND_FIELD] ? regular('square-minus') : solid('square-plus')}
+        className={classes.expand}
+        onClick={() => onDataItemExpanded?.(dataItem)}
+      />
       <Radio
         checked={dataItem[field]}
         color="primary"

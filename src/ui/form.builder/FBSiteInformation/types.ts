@@ -13,6 +13,7 @@ export interface SchemaOptions {
   onRowClick?: (e: SiteEditEvent) => void
   onPrimaryChange?: (id: string) => void
   onSameAsHQ?: (isSameAsHQ: boolean, currentSite: EditableSite) => void
+  onDataItemExpanded?: (dataItem: EditableSite) => void
 }
 
 export type FBSiteProps =

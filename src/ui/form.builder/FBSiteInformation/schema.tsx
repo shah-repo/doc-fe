@@ -16,6 +16,7 @@ export const buildSchema = ({
   onDiscard,
   onDelete,
   onSameAsHQ,
+  onDataItemExpanded,
 }: SchemaOptions): Array<ColumnDefinition<EditableSite>> => {
   return [
     {
@@ -28,6 +29,7 @@ export const buildSchema = ({
           isActive={false}
           {...props}
           isInEditMode={isInEditMode}
+          onDataItemExpanded={onDataItemExpanded}
         />
       ),
       width: 80,
