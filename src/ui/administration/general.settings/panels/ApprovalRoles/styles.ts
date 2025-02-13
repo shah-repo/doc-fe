@@ -3,13 +3,9 @@ import { Colors } from '../../../../layout/theme-next';
 
 export default makeStyles(theme => createStyles({
   dialogTitle: {
-    justifyContent: 'normal',
+    display: 'flex',
     paddingBottom: theme.spacing(1),
-    paddingTop: theme.spacing(4),
-    '& .MuiTypography-h6': {
-      display: 'flex',
-      color: Colors.black,
-    },
+    color: Colors.black,
   },
   dialogContent: {
     marginLeft: theme.spacing(5),
@@ -48,15 +44,6 @@ export default makeStyles(theme => createStyles({
       backgroundColor: Colors.primaryDark,
     },
     margin: 0,
-  },
-  alertTitle: {
-    justifyContent: 'normal',
-    paddingBottom: theme.spacing(1),
-    paddingTop: theme.spacing(2),
-    '& .MuiTypography-h6': {
-      display: 'flex',
-      color: Colors.black,
-    },
   },
   alertContent: {
     marginLeft: theme.spacing(5),

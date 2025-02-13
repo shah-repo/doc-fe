@@ -82,4 +82,4 @@ export const LIFE_CYCLE_DOC_REV_OPTIONS_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYC
 export const LIFE_CYCLE_DOC_TYPES_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/documentTypeOptions`;
 
 export const CREATE_APPROVAL_ROLES_URL = '/approval_roles';
-export const UPDATE_APPROVAL_ROLES_URL = '/approval_roles/:id';
+export const UPDATE_APPROVAL_ROLES_URL = `${CREATE_APPROVAL_ROLES_URL}/:id`;

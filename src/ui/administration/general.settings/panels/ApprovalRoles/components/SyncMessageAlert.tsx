@@ -29,7 +29,7 @@ const SyncMessageAlert: React.FC<Props> = ({
       open={isOpen}
       scroll="paper"
     >
-      <DialogTitle className={classes.alertTitle}>
+      <DialogTitle className={classes.dialogTitle} disableTypography>
         <FontAwesomeIcon className={classes.alertIcon} icon={regular('triangle-exclamation')} />
         <Typography className={classes.titleText}>
           <Text translation="dam.sync.message.out.of.sync" />

@@ -22,6 +22,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const dam = getFieldProps('approvalRoles.dam').value as Dam;
   const [approvalRolesData, setApprovalRolesData] = React.useState(approvalRoles);
   const [editedApprovalRole, setEditedApprovalRole] = React.useState<EditableApprovalRole>();
+  const mode = editedApprovalRole?.[MODE_FIELD];
   const [isOpen, setIsOpen] = React.useState(false);
   const discardApprovalRoles = () => setEditedApprovalRole(undefined);
   const onChange = ({ dataItem }) => {
@@ -104,14 +105,14 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     };
   }) ?? [];
 
-  const approvalRoleList = editedApprovalRole?.[MODE_FIELD] === Mode.add
+  const approvalRoleList = editedApprovalRole && mode === Mode.add
     ? [...mappedApprovalRoles, editedApprovalRole]
     : mappedApprovalRoles;
 
   const schema = buildSchema({
     onChange,
     onDiscard,
-    editedApprovalRole,
+    mode,
     onConfirm: submitForm,
   });
 

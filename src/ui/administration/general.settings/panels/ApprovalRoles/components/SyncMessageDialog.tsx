@@ -32,7 +32,7 @@ const SyncMessageDialog: React.FC<Props> = ({
       open={isOpen}
       scroll="paper"
     >
-      <DialogTitle className={classes.dialogTitle}>
+      <DialogTitle className={classes.dialogTitle} disableTypography>
         <FontAwesomeIcon className={classes.infoIcon} icon={regular('circle-info')} />
         <Typography className={classes.titleText}>
           <Text translation="administration.general.settings.approvalRoles.sync.message.dialog.title" />

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
+import { Mode } from '../../../../components/KendoDataGrid/constants';
 import ActionsCellTemplate from '../../components/SettingsTable/components/ActionsCellTemplate';
 import TextCellTemplate from '../../components/SettingsTable/components/TextCellTemplate';
 import ActiveCellTemplate from './components/ActiveCellTemplate';
 import { SchemaBuilder } from './types';
 
-export const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, editedApprovalRole }) => {
+export const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, mode }) => {
   return [
     {
       id: 'isActive',
@@ -35,7 +35,7 @@ export const buildSchema: SchemaBuilder = ({ onChange, onConfirm, onDiscard, edi
           isEditButtonHidden
         />
       ),
-      width: editedApprovalRole?.[MODE_FIELD] === Mode.add ? 75 : 0,
+      width: mode === Mode.add ? 75 : 0,
     },
   ];
 };
