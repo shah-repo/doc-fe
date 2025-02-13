@@ -4,6 +4,7 @@ import { Grid, Tooltip } from '@material-ui/core';
 import React from 'react';
 import { Colors } from '../../layout/theme-next';
 import FBAutocompleteAsync from '../FBAutocompleteAsync/FBAutocompleteAsync';
+import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocompleteAsync.types';
 import useStyles from './styles';
 import { FBShippingCustomerProps } from './types';
 import { withFBShippingCustomer } from './wrap';
@@ -14,6 +15,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
   updateLatestAvailableRevision,
   ...props
 }) => {
+  console.log('FBShippingCustomer', props);
   const classes = useStyles();
   return (
     <Grid container className={classes.grid}>
@@ -34,7 +36,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
               />
             </Tooltip>
           )}
-          {latestRevisionSummary.hasOBSRevision && (
+          {latestRevisionSummary.hasObsoleteRevision && (
             <Tooltip arrow title="OBS revision available" placement="top-start">
               <FontAwesomeIcon
                 className={classes.infoIcon}
@@ -49,6 +51,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
       <Grid item xs>
         <FBAutocompleteAsync
           {...props}
+          optionId={FBAutocompleteAsyncOption.shippingInformation}
           autosave
           withState
           data-cy="shipping-address-field"

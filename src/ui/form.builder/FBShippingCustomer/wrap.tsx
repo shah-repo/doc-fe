@@ -22,7 +22,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       () =>
         formState?.getFieldValue(name)
         || workspaceState?.formInputSync.get(name)
-        || workspaceState?.formInput?.customer,
+        || workspaceState?.formInput?.shippingCustomer,
     );
     const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue(name));
     console.log('customerId', customerId, isCustomerFieldEmpty, defaultValue);
@@ -38,11 +38,13 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     });
 
     useEffect(() => {
-      latestRevisionSummaryAsync.start(
-        fetchLatestRevisionSummary,
-        customerId,
-        latestRevisionSummaryAsync,
-      );
+      if (customerId !== undefined) {
+        latestRevisionSummaryAsync.start(
+          fetchLatestRevisionSummary,
+          customerId,
+          latestRevisionSummaryAsync,
+        );
+      }
     }, []);
 
     const clearAddressFields = () => {
@@ -68,7 +70,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       ...props,
       updateLatestAvailableRevision,
       latestRevisionSummary: latestRevisionSummary ?? {
-        hasOBSRevision: false,
+        hasObsoleteRevision: false,
         hasReleasedRevision: true,
         revisionDetails: { name: 'Latest' },
       },

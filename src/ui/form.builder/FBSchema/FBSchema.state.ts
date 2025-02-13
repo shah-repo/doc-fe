@@ -159,7 +159,7 @@ class FBSchemaState {
     workOrderLhrTable: FBWorkOrderLHRTable,
     shippingItems: FBShippingItems,
     shippingAddress: FBShippingAddress,
-    // shippingCustomer: FBShippingCustomer,
+    shippingCustomer: FBShippingCustomer,
   };
 
   @observable public schema?: FBSchemaProps[];
