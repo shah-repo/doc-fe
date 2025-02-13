@@ -2320,6 +2320,6 @@
   "common.withdraw": "Withdraw",
   "common.or": "OR",
   "common.rev": "Rev.",
-  "change.request.desc.show.more": "Show more",
-  "change.request.desc.show.less": "Show less"
+  "common.show.more": "Show more",
+  "common.show.less": "Show less"
 }

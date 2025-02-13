@@ -3,8 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import React, { MouseEvent, MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ReactComponent as ExpandIcon } from '../../../assets/images/arrowDown_dec.svg';
-import { ReactComponent as CollapseIcon } from '../../../assets/images/arrowUp_dec.svg';
 import { translate } from '../../../common/intl';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
@@ -181,12 +179,13 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
             />
           </div>
           <div className={cx(classes.contentCell, classes.textCell)}>
-            <div className={`${classes.expandableContent} ${isExpanded ? classes.expanded : classes.textContent}`} data-cy="view-description-of-change">
+            <div className={cx(classes.expandableContent, isExpanded ? classes.expanded : classes.textContent)}
+              data-cy="view-description-of-change">
               {descriptionOfChange}
             </div>
           </div>
           <div className={cx(classes.contentCell, classes.textCell)}>
-            <div className={`${classes.expandableContent} ${isExpanded ? classes.expanded : classes.textContent}`}
+            <div className={cx(classes.expandableContent, isExpanded ? classes.expanded : classes.textContent)}
               data-cy="view-justification-of-change">
               {justificationOfChange}
             </div>
@@ -254,9 +253,9 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
 
         <div className={classes.showMoreContainer}>
           <Button onClick={toggleItem} className={classes.DescButton} kind="outlined" size="small">
-            {translate(isExpanded ? 'change.request.desc.show.less' : 'change.request.desc.show.more')}
+            {translate(isExpanded ? 'common.show.less' : 'common.show.more')}
             <span className={classes.iconSpacing}>
-              {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
+              {isExpanded ? <FontAwesomeIcon icon={solid('chevron-up')} /> : <FontAwesomeIcon icon={solid('chevron-down')} />}
             </span>
           </Button>
         </div>

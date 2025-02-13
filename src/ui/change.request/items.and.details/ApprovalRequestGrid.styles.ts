@@ -288,7 +288,6 @@ export default makeStyles((theme) =>
       height: 0,
     },
     truncate: {
-      fontFamily: 'Sora',
       fontWeight: 400,
       fontSize: 14,
       overflow: 'hidden',
@@ -303,7 +302,7 @@ export default makeStyles((theme) =>
       overflow: 'none',
     },
     textContainer: {
-      width: '300px',
+      width: 300,
       overflow: 'hidden',
       fontSize: 14,
       whitespace: 'break-spaces',
@@ -314,15 +313,15 @@ export default makeStyles((theme) =>
       cursor: 'pointer',
       justifyContent: 'center',
       marginTop: theme.spacing(-2),
-      marginLeft: '7in',
+      marginLeft: theme.spacing(84),
     },
     DescButton: {
-      height: '22px',
+      height: 22,
       position: 'absolute',
       zIndex: 1,
       border: 0,
-      backgroundColor: Colors.showMore,
-      fontSize: '12px',
+      backgroundColor: Colors.primaryBg,
+      fontSize: 12,
       fontWeight: 400,
       '&:hover': {
         border: 0,
@@ -341,11 +340,11 @@ export default makeStyles((theme) =>
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whitespace: 'nowrap',
-      maxHeight: '65px',
+      maxHeight: 65,
       transition: 'max-height 0.3s ease-in-out',
     },
     expanded: {
-      maxHeight: '200px',
+      maxHeight: 200,
     },
   }),
 );
