@@ -36,7 +36,7 @@ import useDialog from '../../hooks/useDialog';
 import FormListDialog from '../dialogs/FormListDialog/FormListDialog.presenter';
 import MultipleFormTemplateDialog from '../dialogs/MultipleFormTemplateDialog';
 import { filterSecurityGroupsForQms } from './helpers';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface MultipleFormInitialValues {
   selectType: OptionType[]
@@ -136,7 +136,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   tableName,
 }) => {
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
-  const classes = styles();
+  const classes = useStyles();
 
   const formDialog = useDialog();
   const multipleFormDialog = useDialog();
@@ -347,9 +347,11 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             <Grid item>
               <GridTitle title={title} />
             </Grid>
-            {isKeywordSearchEnabled && title && <Grid item xs>
-              <SearchBar tableName={tableName} />
-            </Grid>}
+            {isKeywordSearchEnabled && title && (
+              <Grid item xs>
+                <SearchBar tableName={tableName} />
+              </Grid>
+            )}
           </Grid>
         </Grid>
         <Grid item>
@@ -378,26 +380,28 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
               id="DocumentByTypeListPresenter-openDocRev"
               data-cy="document-by-type-list-presenter-open-doc-rev"
             >
-              <Text
-                message={buttonLabel}
-                values={{ name: labelName }}
-              />
+              <Text message={buttonLabel} values={{ name: labelName }} />
             </Button>
           </CustomLabelTooltip>
         </Grid>
       </Grid>
-      {
-        errorMessage && (
-          <div style={{ color: 'red' }} id="DocumentByTypeListPresenter-showError">
-            <Text
-              message={errorMessage}
-              values={{ name: isByCategory ? selectedTypeLabel : labelName }}
-            />
-          </div>
-        )
-      }
+      {errorMessage && (
+        <div
+          style={{ color: 'red' }}
+          id="DocumentByTypeListPresenter-showError"
+        >
+          <Text
+            message={errorMessage}
+            values={{ name: isByCategory ? selectedTypeLabel : labelName }}
+          />
+        </div>
+      )}
       <FormContext.Provider value={{ submitOnChange: false }}>
-        <Formik initialValues={initialValues} enableReinitialize onSubmit={handleDocTypeSelection}>
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={handleDocTypeSelection}
+        >
           {renderFormTemplateDialog}
         </Formik>
       </FormContext.Provider>

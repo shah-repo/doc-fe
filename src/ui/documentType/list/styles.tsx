@@ -7,7 +7,7 @@ const commonButtonStyles = {
   borderRadius: 100,
   'text-transform': 'capitalize',
 };
-export const styles = makeStyles((theme: Theme) =>
+export default makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: '100%',

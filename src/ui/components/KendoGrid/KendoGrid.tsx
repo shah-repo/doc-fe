@@ -387,7 +387,6 @@ export function KendoGrid<T extends any> ({
   useEffect(() => {
     if (!context) return;
     const { query } = context;
-    console.log('defaultSearchQuery', dataState?.filter?.filters, query);
     if (query) {
       onSearch(query);
     } else if (query === '') {
@@ -407,13 +406,14 @@ export function KendoGrid<T extends any> ({
 
   useEffect(() => {
     if (!context) return;
+    const { query, setDefaultQuery } = context;
     const defaultSearchQuery = getKeywordSearchValue(
       dataState?.filter?.filters,
     );
-    if (defaultSearchQuery === context?.query) {
-      return;
+
+    if (defaultSearchQuery !== query) {
+      setDefaultQuery?.(defaultSearchQuery);
     }
-    context?.setDefaultQuery?.(defaultSearchQuery ?? '');
   }, []);
 
   const onSearch = (searchText: string) => {

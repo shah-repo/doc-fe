@@ -9,4 +9,6 @@ export interface SearchContextType {
   setDefaultQuery?: Dispatch<SetStateAction<undefined | QueryType>>
 }
 
-export const SearchContext = createContext<SearchContextType | undefined>(undefined);
+export const SearchContext = createContext<SearchContextType | undefined>(
+  undefined,
+);

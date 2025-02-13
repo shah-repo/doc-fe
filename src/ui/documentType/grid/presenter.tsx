@@ -88,7 +88,6 @@ export function DocumentTypePresenter ({
     DocumentCategory.Equipment,
     DocumentCategory.PurchaseOrder,
   ].includes(documentTypeCategory as DocumentCategory);
-
   const [query, setQuery] = useState<QueryType>();
   const [defaultQuery, setDefaultQuery] = useState<QueryType>();
 
