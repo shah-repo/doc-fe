@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core';
+import { Colors } from '../../../../../../ui/layout/theme-next';
 import { NextTheme } from '../../../../../../ui/layout/theme-next/provider';
-import Colors from '../../../../../../ui/layout/theme/utils/colors';
 
 const DRAWER_WIDTH = 285;
 const DOC_PREVIEW_WIDTH = 500;
@@ -16,32 +16,32 @@ export default makeStyles((theme: NextTheme) =>
     },
     panel: {
       width: DRAWER_WIDTH,
-      boxShadow: `inset -1px 0px 0px ${Colors.lightest_grey1}`,
+      boxShadow: `inset -1px 0px 0px ${Colors.lightGray3}`,
     },
     iconButtonNew: {
       cursor: 'pointer',
-      color: Colors.navy,
+      color: Colors.primary,
     },
     titleText: {
       fontWeight: 600,
       fontSize: 12,
-      color: Colors.dark_jungle_green,
+      color: Colors.textBlack,
     },
     titleDescText: {
       fontWeight: 400,
       fontSize: 12,
-      color: Colors.font_gray,
+      color: Colors.textGray,
     },
     docPreview: {
       width: DOC_PREVIEW_WIDTH,
-      border: `1px solid ${Colors.gray_goose}`,
+      border: `1px solid ${Colors.lightGray3}`,
     },
     docPreviewExtended: {
       width: DOC_PREVIEW_WIDTH + DRAWER_WIDTH,
-      border: `1px solid ${Colors.gray_goose}`,
+      border: `1px solid ${Colors.lightGray3}`,
     },
     previewContainer: {
-      borderTop: `1px solid ${Colors.gray_goose}`,
+      borderTop: `1px solid ${Colors.lightGray3}`,
     },
     hidePreviewButton: {
       padding: 0,
@@ -59,11 +59,15 @@ export default makeStyles((theme: NextTheme) =>
     },
     panelPreview: {
       height: 40,
-      paddingX: theme.spacing(1.875),
-      paddingY: theme.spacing(1.5),
+      padding: theme.spacing(1.5, 1.875),
       alignItems: 'center',
       display: 'flex',
       justifyContent: 'space-between',
+    },
+    panelPreviewTitle: {
+      gap: 8,
+      display: 'flex',
+      alignItems: 'center',
     },
   }),
 );

@@ -174,11 +174,7 @@ const AttachmentsPanel: React.FC = () => {
                 >
                   <Box className={cx({ [classes.docPreview]: !hideAttachmentsPanel, [classes.docPreviewExtended]: hideAttachmentsPanel })}>
                     <Box className={classes.panelPreview}>
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        style={{ gap: '8px' }}
-                      >
+                      <Box className={classes.panelPreviewTitle}>
                         <FontAwesomeIcon
                           onClick={toggleAttachmentsPanelView}
                           className={classes.iconButtonNew}

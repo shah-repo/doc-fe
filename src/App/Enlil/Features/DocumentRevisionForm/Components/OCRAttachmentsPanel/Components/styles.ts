@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core';
-import Colors from '../../../../../../../ui/layout/theme/utils/colors';
+import { Colors } from '../../../../../../../ui/layout/theme-next';
 
 export default makeStyles((theme) =>
   createStyles({
@@ -11,12 +11,12 @@ export default makeStyles((theme) =>
     },
     listStyle: {
       padding: 0,
-      background: Colors.whitest_grey,
+      background: Colors.fieldDisabled,
     },
     listItemBtn: {
       padding: theme.spacing(1, 1.875, 1, 3.125),
       borderTop: 'none',
-      borderBottom: `1px solid ${Colors.lightest_grey3}`,
+      borderBottom: `1px solid ${Colors.tableStroke}`,
       gap: '5px',
       '&:last-child': {
         borderBottom: 'none',
@@ -26,7 +26,7 @@ export default makeStyles((theme) =>
       minWidth: 0,
     },
     scoreChip: {
-      backgroundColor: Colors.dodger_blue,
+      backgroundColor: Colors.primaryLight,
       borderRadius: '4px',
       height: 'fit-content',
       '& .MuiChip-label': {
@@ -41,15 +41,15 @@ export default makeStyles((theme) =>
       fontWeight: 400,
       fontSize: 14,
       lineHeight: 1.25,
-      color: Colors.almost_black,
+      color: Colors.textBlack,
     },
     list: {
       maxHeight: 655,
       flexGrow: 1,
       overflowY: 'auto',
       padding: 0,
-      borderBottom: `1px solid ${Colors.gray_goose}`,
-      borderTop: `1px solid ${Colors.gray_goose}`,
+      borderBottom: `1px solid ${Colors.lightGray3}`,
+      borderTop: `1px solid ${Colors.lightGray3}`,
     },
   }),
 );

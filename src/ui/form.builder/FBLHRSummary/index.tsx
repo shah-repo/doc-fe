@@ -317,7 +317,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const [columns, setColumns]
     = useState<Array<ColumnDefinition<EditableLHRSummaryItem>>>(schema);
 
-  const getColumns = useMemo(() => {
+  const visibleColumns = useMemo(() => {
     return columns.filter(({ show }) => show);
   }, [columns]);
 
@@ -355,7 +355,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
     if (_export.current !== null) {
-      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers), getExcelColumns(getColumns) as ExcelExportColumnProps[]);
+      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers), getExcelColumns(visibleColumns) as ExcelExportColumnProps[]);
     }
   };
 
@@ -368,16 +368,12 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
 
   const onFilerChange = ({ filter }: GridFilterChangeEvent) => {
     setSkip(0);
-    setDataState({
+    const updatedDataState = {
       ...dataState,
-      ...{
-        filter: filter ?? DEFAULT_FILTER,
-      },
-    });
-    const processedData = process(origionalData, {
-      ...dataState,
-      ...{ filter: filter ?? DEFAULT_FILTER },
-    });
+      filter: filter ?? DEFAULT_FILTER,
+    };
+    setDataState(updatedDataState);
+    const processedData = process(origionalData, updatedDataState);
     setData(filter ? processedData.data : origionalData);
   };
 
@@ -425,7 +421,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
       </FBSection>
       <ColumnMenuContext.Provider
         value={{
-          columns: getColumns,
+          columns: visibleColumns,
           onLock,
         }}
       >
@@ -434,7 +430,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
             {...dataState}
             style={{ overflow: 'auto', maxHeight: size?.height ? `${size.height - 160}px` : '100px' }}
             data={slicedData}
-            schema={getColumns}
+            schema={visibleColumns}
             fullWidth
             className={classes.rootLHRSummaryTable}
             rowHeight={ROW_HEIGHT}
@@ -451,7 +447,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
             columnMenu={(props) => (
               <CustomColumnMenu
                 {...props}
-                columns={getColumns}
+                columns={visibleColumns}
                 {...{
                   onLock,
                 }}
