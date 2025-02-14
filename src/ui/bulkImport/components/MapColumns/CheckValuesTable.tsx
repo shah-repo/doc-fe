@@ -327,8 +327,8 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
       // Check if item has errors and it's an array
       if (Array.isArray(item.errors)) {
         // Filter errors that are not edited and count them
-        const uneditedErrors = item.errors.filter(error => !error.edited).length;
-        return acc + uneditedErrors;
+        const hasUneditedError = item.errors.some(error => !error.edited);
+        return acc + (hasUneditedError ? 1 : 0);
       }
       return acc;
     }, 0);
