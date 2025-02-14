@@ -173,14 +173,7 @@ const AttachmentsPanel: React.FC = () => {
                   unmountOnExit
                 >
                   <Box className={cx({ [classes.docPreview]: !hideAttachmentsPanel, [classes.docPreviewExtended]: hideAttachmentsPanel })}>
-                    <Box
-                      height={40}
-                      paddingX={1.875}
-                      paddingY={1.5}
-                      alignItems="center"
-                      display="flex"
-                      justifyContent="space-between"
-                    >
+                    <Box className={classes.panelPreview}>
                       <Box
                         display="flex"
                         alignItems="center"

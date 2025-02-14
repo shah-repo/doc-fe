@@ -36,6 +36,7 @@ import {
   GeneralSettingsAction,
   GeneralSettingsState,
   NavigationMenu,
+  PremiumFeature,
   PremiumFeatureSubscription,
   PremiumFeatureSubscriptionPayload,
   SelectCompanyAction,
@@ -129,7 +130,9 @@ const getPremiumFeatureSubscriptions = (): ApiAction<PremiumFeatureSubscription[
   url: PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
-    dispatch(setPremiumFeatureSubscriptionsAction(data));
+    // TODO Remove once AI support added
+    const updatedSubscriptions = data.filter((data: PremiumFeatureSubscription) => data.premiumFeature !== PremiumFeature.AI);
+    dispatch(setPremiumFeatureSubscriptionsAction(updatedSubscriptions));
   },
 });
 
