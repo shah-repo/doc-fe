@@ -24,6 +24,7 @@ const styles = makeStyles((theme: Theme) => createStyles({
     width: 12,
   },
   aiButton: {
+    display: 'none',
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     padding: theme.spacing(0.6),

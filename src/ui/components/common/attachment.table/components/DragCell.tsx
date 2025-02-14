@@ -14,7 +14,7 @@ export const DragContext = React.createContext<DragContextProps>({ reorder: noop
 
 const styles = makeStyles((theme: Theme) => createStyles({
   cell: {
-    textOverflow: 'initial',
+    textOverflow: 'initial !important',
   },
   dragElement: {
     cursor: 'move',

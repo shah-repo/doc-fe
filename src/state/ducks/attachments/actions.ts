@@ -74,13 +74,12 @@ const downloadAllAttachmentsPassword = (
 });
 
 const downloadSelectedAttachments = (
-  docRevId: string,
   attachmentIds: string[],
   handlers: Handlers<AttachmentDownloadResponse>,
 ): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-  url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_attachments`,
+  url: `${ATTACHMENT_ROOT_URL}/file_url`,
   method: 'get',
-  params: { attachmentIds: JSON.stringify(attachmentIds) },
+  params: { attachmentIds },
   handlers,
 });
 

@@ -97,7 +97,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     if (isDownloadAll) {
       async.start(downloadAllAttachmentsPassword, docRevId, async, values.password);
     } else {
-      async.start(downloadSelectedAttachments, docRevId, attachments, async);
+      async.start(downloadSelectedAttachments, attachments, async);
     }
     passwordDialogHandler.close();
   };
@@ -132,14 +132,14 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     }
   };
   //  Need to change on API when docRevision is not available, waiting for BE changes to deploy
-  const handleSelectedDownload = (documentRevisionId: string, attachments: string[], password: string | undefined) => () => {
+  const handleSelectedDownload = (attachments: string[]) => () => {
     const isRedlineAttachmentExist = attachmentsData.filter(item => attachments.includes(item.id) && item.lineType === LINE_TYPES.RED_LINE);
     if (isDocumentRevisionInDraft(docRevStatus) || isEmpty(isRedlineAttachmentExist)) {
       setIsDownloading(true);
-      async.start(downloadSelectedAttachments, documentRevisionId, attachments, async);
+      async.start(downloadSelectedAttachments, attachments, async);
     } else if (isEmpty(isRedlineAttachmentExist) && isDocumentRevisionInStatusFlag(docRevStatus)) {
       setIsDownloading(true);
-      async.start(downloadSelectedAttachments, documentRevisionId, attachments, async);
+      async.start(downloadSelectedAttachments, attachments, async);
     } else if (!isEmpty(isRedlineAttachmentExist)) {
       setIsDownloading(true);
       redlineWarningDialogHandler.open();
@@ -177,7 +177,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
           htmlFor="button-file"
           onClick={isDownloadAll
             ? handleAllDownload(docRevId, undefined)
-            : handleSelectedDownload(docRevId, attachments ?? [], undefined)
+            : handleSelectedDownload(attachments ?? [])
           }
         >
           <Link
