@@ -27,7 +27,7 @@ interface TrainingDetailsProps {
 
 const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog, training }) => {
   const classes = styles();
-
+  const { id: documentRevisionId, documentId, displayRevision, document } = training.documentRevision ?? {};
   const referencesIds = training.trainingPlan?.sourceReferencesIds ?? [];
   const references = training.trainingPlan?.sourceReferences ?? [];
   const attachments = training.attachments ?? references.reduce(
@@ -90,17 +90,17 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
                 <ReferenceLink
                   className={referenceClassName}
                   label={translate('common.displayRevision', {
-                    docId: training.trainingPlan?.document.docId,
-                    displayRevision: training.documentRevision?.displayRevision,
+                    docId: document?.docId,
+                    displayRevision: displayRevision,
                   })}
-                  documentId={training.documentRevision?.documentId}
-                  revisionId={training.documentRevision?.id}
+                  documentId={documentId}
+                  revisionId={documentRevisionId}
                 />
                 <Tooltip title={translate('commom.quick.view')}>
                   <IButton
                     kind="simple"
                     ref={refIdRef}
-                    onClick={() => onOpenDialog(training.documentRevision?.id, training.documentRevision?.documentId)}>
+                    onClick={() => onOpenDialog(documentRevisionId, documentId)}>
                     <FontAwesomeIcon icon={isRefIdRefHovered ? solid('eye') : regular('eye')} />
                   </IButton>
                 </Tooltip>
