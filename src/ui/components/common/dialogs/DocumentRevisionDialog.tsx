@@ -95,7 +95,7 @@ DocumentRevisionDialogProps
           asyncState={loadDocumentRevisionAsyncState}
         >
           {documentRevision && (
-            <Box height="80vh">
+            <Box className={classes.updateContainer}>
               <Theme>
                 <DocumentRevisionUpdateContainer
                   documentRevision={documentRevision }

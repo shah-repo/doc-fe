@@ -187,7 +187,7 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
           )}
         </Grid>
       </DialogContent>
-      { quickViewDialog.isOpen
+      {quickViewDialog.isOpen
         && <DocumentRevisionDialog dialog={quickViewDialog} {...{ docRevId, parentRevId }} />
       }
     </>
