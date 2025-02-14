@@ -15,7 +15,7 @@ export interface AttachmentIconDispatchProps {
   download: typeof attachmentsActions.download
 }
 
-export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
+interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   attachment?: Attachment
   extension?: string
   size?: RenderSize

@@ -17,9 +17,7 @@ import FileIcon from './icon';
 import { styles } from './utils/styles';
 import { AttachmentIconProps } from './utils/types';
 
-const AttachmentIconPresenter: React.FunctionComponent<
-AttachmentIconProps
-> = ({
+const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProps> = ({
   attachment,
   size,
   handleRemove,
@@ -119,7 +117,7 @@ AttachmentIconProps
           <ButtonBase
             onContextMenu={handleContextMenu?.(file)}
             key={`icon-${file.id}`}
-            onClick={handleIconClick?.(file)}
+            onClick={() => handleIconClick?.(file)}
             id="AttachmentIconPresenter-handleIconClick"
           >
             {isLoading && <CircularProgress className={classes.progress} />}
@@ -140,7 +138,7 @@ AttachmentIconProps
       </div>
       <div
         className={classes.fileNameContainer}
-        onClick={handleIconClick?.(file)}
+        onClick={() => handleIconClick?.(file)}
         onContextMenu={handleContextMenu?.(file)}
       >
         <Typography
