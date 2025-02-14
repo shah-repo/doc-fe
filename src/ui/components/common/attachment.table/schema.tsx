@@ -13,9 +13,7 @@ import FileNameCellTemplate from './components/FileNameCellTemplate';
 import FileOwnerCellTemplate from './components/FileOwnerCellTemplate';
 import FileSizeCellTemplate from './components/FileSizeCellTemplate';
 import FileUploadDateCellTemplate from './components/FileUploadDateCellTemplate';
-import DateFilter from './filter/DateFilter';
-import FileSizeFilter from './filter/FileSizeFilter';
-import SelectFilter from './filter/SelectFilter';
+import SelectFilter from './components/SelectFilter';
 
 interface SchemaOptions {
   isHeaderChecked: boolean
@@ -88,7 +86,7 @@ export const buildSchema = ({
       id: 'date',
       field: 'createdAt',
       title: 'attachment.table.uploaded.date',
-      filterCell: DateFilter,
+      filterCell: InputFilter,
       template: (props) => <FileUploadDateCellTemplate {...props} />,
       width: 100,
     },
@@ -96,7 +94,7 @@ export const buildSchema = ({
       id: 'fileSizeS3Link',
       field: 'fileSizeS3Link',
       title: 'attachment.table.file.size',
-      filterCell: FileSizeFilter,
+      filterCell: InputFilter,
       template: (props) => <FileSizeCellTemplate {...props} />,
       width: 100,
     },
