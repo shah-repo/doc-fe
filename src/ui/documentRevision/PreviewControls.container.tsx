@@ -100,7 +100,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isGRPT = checkIsDocumentGRPT(documentRevision?.document?.documentType?.groupOptions);
   const isDocumentOwner = useSelector(getHasPermission(Permission.DOCUMENT_OWNER_CHANGE));
   const isGroupCreate = useSelector(getHasPermission(Permission.GROUP_TRAINING_CREATE));
-  canChangeOwnerShip = isGRPT ? isDocumentOwner && isGroupCreate : canChangeOwnerShip;
+  const isChangeOwnerShip = isGRPT ? isDocumentOwner && isGroupCreate : canChangeOwnerShip;
   const isNewLayout = SM.isNewLayout;
   const handleCreateDocument = useHandleCreateDoc();
   const {
@@ -551,7 +551,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (documentRevision.pdf && !isPO) {
     accessableButtons.push(PreviewControlButtons.Pdf);
   }
-  if (canChangeOwnerShip) {
+  if (isChangeOwnerShip) {
     accessableButtons.push(PreviewControlButtons.ChangeOwner);
   }
   if (isExportable) {
