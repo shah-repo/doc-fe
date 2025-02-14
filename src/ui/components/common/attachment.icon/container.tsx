@@ -191,7 +191,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const handleWatermarkRequest = (
     attachment: Attachment,
     attachmentType: AttachmentType,
-    documentRevisionId?: string) => {
+    documentRevisionId?: string,
+  ) => {
     setNewWatermarkError('');
     setNewWatermarkRequest(null);
 

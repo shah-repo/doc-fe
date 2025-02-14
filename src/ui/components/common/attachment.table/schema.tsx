@@ -20,7 +20,7 @@ import SelectFilter from './filter/SelectFilter';
 interface SchemaOptions {
   isHeaderChecked: boolean
   documentRevision: DocumentRevision
-  onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => () => any
+  onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => void
   onDownloadAsPDF?: (attachment: Attachment, attachmentType: AttachmentType) => void
   onView?: (e: any) => void
   onDelete?: (attachment: Attachment) => () => any
