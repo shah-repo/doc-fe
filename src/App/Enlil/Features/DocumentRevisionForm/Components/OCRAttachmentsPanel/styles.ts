@@ -1,9 +1,10 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
+import { NextTheme } from '../../../../../../ui/layout/theme-next/provider';
 import Colors from '../../../../../../ui/layout/theme/utils/colors';
 
 const DRAWER_WIDTH = 285;
 
-export default makeStyles((theme: Theme) =>
+export default makeStyles((theme: NextTheme) =>
   createStyles({
     root: {
       zIndex: 1202,
@@ -44,11 +45,13 @@ export default makeStyles((theme: Theme) =>
       height: 45,
     },
     panelButton: {
-      padding: theme.spacing(2.5, 1.875, 0),
+      paddingX: theme.spacing(1.875),
+      paddingTop: theme.spacing(2.5),
     },
     panelPreview: {
       height: 40,
-      padding: theme.spacing(1.5, 1.875),
+      paddingX: theme.spacing(1.875),
+      paddingY: theme.spacing(1.5),
       alignItems: 'center',
       display: 'flex',
       justifyContent: 'space-between',
