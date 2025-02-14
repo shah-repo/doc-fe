@@ -20,4 +20,7 @@ export const useInputStyles = makeStyles((theme) => createStyles({
   endAdormentDisabled: {
     color: Colors.textDisabled,
   },
+  clear: {
+    marginRight: theme.spacing(0.625),
+  },
 }));

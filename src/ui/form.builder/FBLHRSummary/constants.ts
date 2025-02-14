@@ -29,6 +29,7 @@ export const LHR_SUMARY_FIELDS = {
   enteredBy: 'enteredBy',
   lotOrEquipment: 'lotOrEquipment',
   recordCreationDate: 'recordCreationDate',
+  customRecordCreationDate: 'customRecordCreationDate',
 };
 export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment', 'recordCreationDate', 'unit'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex', 'show'];
