@@ -13,6 +13,8 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
   latestRevisionSummary,
   resetOBSCustomerSelection,
   updateLatestAvailableRevision,
+  autocompleteKey,
+  defaultValue,
   ...props
 }) => {
   console.log('FBShippingCustomer', props);
@@ -51,8 +53,10 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
       <Grid item xs>
         <FBAutocompleteAsync
           {...props}
+          key={autocompleteKey}
           optionId={FBAutocompleteAsyncOption.shippingInformation}
           autosave
+          defaultValue={defaultValue}
           withState
           data-cy="shipping-address-field"
         />

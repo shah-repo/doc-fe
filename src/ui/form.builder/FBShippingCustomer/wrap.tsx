@@ -27,6 +27,9 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue(name));
     console.log('customerId', customerId, isCustomerFieldEmpty, defaultValue);
 
+    const [autocompleteKey, setAutocompleteKey]
+      = useState<string | undefined>(customerId);
+
     const fetchLatestRevisionSummary = useActionCreator(
       ShippingActions.fetchLatestRevisionDetailsByRevId,
     );
@@ -38,14 +41,22 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     });
 
     useEffect(() => {
-      if (customerId !== undefined) {
-        latestRevisionSummaryAsync.start(
-          fetchLatestRevisionSummary,
-          customerId,
-          latestRevisionSummaryAsync,
-        );
+      if (!FB.isUUID(customerId)) {
+        return;
       }
+
+      latestRevisionSummaryAsync.start(
+        fetchLatestRevisionSummary,
+        customerId,
+        latestRevisionSummaryAsync,
+      );
     }, []);
+
+    useEffect(() => {
+      if (FB.isUUID(customerId)) {
+        setAutocompleteKey(customerId);
+      }
+    }, [customerId]);
 
     const clearAddressFields = () => {
       // TODO handle Once API Done
@@ -56,13 +67,15 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     };
 
     const updateLatestAvailableRevision = () => {
-      console.log('available rev');
-      formState?.setFieldValue(name, '');
+      const newCustomerId = latestRevisionSummary?.revisionDetails.id;
+      formState?.setFieldValue(name, newCustomerId);
+      setAutocompleteKey(newCustomerId);
       clearAddressFields();
     };
 
     const resetOBSCustomerSelection = () => {
-      console.log('clear OBS customer');
+      formState?.setFieldValue(name, '');
+      setAutocompleteKey('');
       clearAddressFields();
     };
 
@@ -75,6 +88,8 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
         revisionDetails: { name: 'Latest' },
       },
       resetOBSCustomerSelection,
+      autocompleteKey: autocompleteKey,
+      defaultValue: { value: customerId },
     });
   };
 

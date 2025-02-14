@@ -12,6 +12,7 @@ Partial<AutocompleteProps>,
   updateLatestAvailableRevision: () => void
   resetOBSCustomerSelection: () => void
   latestRevisionSummary: CustomerRevisionInfo
+  autocompleteKey?: string
 };
 
 export interface CustomerRevisionInfo {
