@@ -21,7 +21,7 @@ import { WATERMARK_FILES } from '../../view.file/utils/constants';
 import { checkIfFileIsViewable } from '../../view.file/utils/helpers';
 import useStyles from '../styles';
 
-interface Props {
+interface Props extends CellTemplateProps<Attachment> {
   documentRevision?: DocumentRevision
   onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => void
   onDownloadAsPDF?: (attachment: Attachment, attachmentType: AttachmentType, documentRevisionId?: string) => void
@@ -29,7 +29,7 @@ interface Props {
   onDelete?: (attachment: Attachment) => () => void
 }
 
-const ActionNeededCellTemplate: React.FC<CellTemplateProps<Attachment> & Props> = (props) => {
+const ActionNeededCellTemplate: React.FC<Props> = (props) => {
   const { dataItem: attachment, documentRevision, onDownloadAttachment, onDownloadAsPDF, onView, onDelete } = props;
   const classes = useStyles();
   const type = get(attachment, 'type') as AttachmentType;
