@@ -11,7 +11,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
-import { getHumanizedFormatPST } from '../../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import { deleteBulkImportSuccess, getReportsExcelFile, patchBulkImport, setBulkImport, setBulkImportsStatus, setCurrentStep } from '../../../../state/ducks/bulkImport/actions';
 import { getBulkImportsGroupByProcess } from '../../../../state/ducks/bulkImport/selectors';
 import { BkStatus, BulkImportCustom } from '../../../../state/ducks/bulkImport/types';
@@ -171,7 +171,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
                 icon={solid('circle-check')}
               />
               <Typography className={classes.completedText}>
-                {translate('common.completed')} ({ item.completedAt ? getHumanizedFormatPST(item.completedAt) : ''})
+                {translate('common.completed')} ({ item.completedAt ? getFormattedDateString(item.completedAt, MomentFormats.FullDateTime) : ''})
               </Typography>
             </Box>
           ) : isFailed ? (
@@ -181,7 +181,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ item, idx, valKey, currentE
                 icon={solid('triangle-exclamation')}
               />
               <Typography className={classes.completedText}>
-                {translate('common.failed')} ({ item.completedAt ? getHumanizedFormatPST(item.completedAt) : ''})
+                {translate('common.failed')} ({ item.completedAt ? getFormattedDateString(item.completedAt, MomentFormats.FullDateTime) : ''})
               </Typography>
             </Box>
           ) : (
