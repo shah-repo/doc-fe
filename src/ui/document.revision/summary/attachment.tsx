@@ -4,9 +4,9 @@ import React from 'react';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
 import AttachmentField from '../../components/common/attachment.icon/container';
+import AttachmentSelectItems from '../../components/common/attachment.selectedItems/AttachmentSelectItems';
 import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
-import AttachmentSelectItems from '../../components/common/attachment.selectedItems/AttachmentSelectItems';
 
 export interface Props {
   isAttachmentEmpty: boolean
@@ -19,10 +19,10 @@ export interface Props {
 
 export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label, documentRevision }) => {
   const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
-  const [headerChecked, setHeaderChecked] = React.useState(false);
+  const [isHeaderChecked, setIsHeaderChecked] = React.useState(false);
 
   const onHeaderChecked = (value: boolean) => {
-    setHeaderChecked(value);
+    setIsHeaderChecked(value);
   };
 
   const onSelectedAttachmentsChange = (selected: {[id: string]: boolean | number[]}) => {
@@ -70,7 +70,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
     <Box pl={0} width="100%">
       <Box display="flex">
         <Typography variant="h6" style = {classes.buttonLeft}>
-          <Text message={label || 'common.attachments' } />
+          <Text message={label ?? 'common.attachments' } />
         </Typography>
         <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
         <AttachmentDownloadAllButton
@@ -80,7 +80,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
           containsRedline = {containsRedline ?? false}
           docRevStatus = {docRevStatus} />
       </Box>
-      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} {...{ selectedAttachments, onSelectedAttachmentsChange, headerChecked, onHeaderChecked }} />
+      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} {...{ selectedAttachments, onSelectedAttachmentsChange, isHeaderChecked, onHeaderChecked }} />
       {emptyAttachmentsRenderer}
     </Box>
   );

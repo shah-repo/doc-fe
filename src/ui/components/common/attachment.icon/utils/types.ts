@@ -44,7 +44,7 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   selectedAttachments?: {[id: string]: boolean | number[]}
   onSelectedAttachmentsChange?: (selectedAttachments: {[id: string]: boolean | number[]}) => void
   onHeaderChecked?: (value: boolean) => void
-  headerChecked?: boolean
+  isHeaderChecked?: boolean
 }
 
 export interface AttachmentMenuProps {
