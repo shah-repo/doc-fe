@@ -45,24 +45,26 @@ const AttachmentTable: React.FC<Props> = ({
 }) => {
   const classes = styles();
   const [attachmentsData, setAttachmentsData] = React.useState(attachments ?? []);
-  const [activeItem, setActiveItem] = React.useState<any | null>(null);
+  const [activeItem, setActiveItem] = React.useState<Attachment | null>(null);
   const [showAll, setShowAll] = React.useState(false);
 
-  const reorder = (dataItem: any) => {
-    if (activeItem === dataItem) {
+  const reorder = (item: Attachment) => {
+    if (activeItem === item) {
       return;
     }
+
     const reorderedData = attachmentsData.slice();
     const prevIndex = reorderedData.findIndex((p) => p === activeItem);
-    const nextIndex = reorderedData.findIndex((p) => p === dataItem);
+    const nextIndex = reorderedData.findIndex((p) => p === item);
+
     reorderedData.splice(prevIndex, 1);
-    reorderedData.splice(nextIndex, 0, activeItem || reorderedData[0]);
+    reorderedData.splice(nextIndex, 0, activeItem ?? reorderedData[0]);
 
     setAttachmentsData(reorderedData);
   };
 
   // Sets the item being dragged as the active item
-  const dragStart = (dataItem: any) => {
+  const dragStart = (dataItem: Attachment) => {
     setActiveItem(dataItem);
   };
 

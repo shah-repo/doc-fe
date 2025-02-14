@@ -74,13 +74,16 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
         </Typography>
         <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
         <AttachmentDownloadAllButton
-          {...{ selectedAttachments, documentRevision }}
-          isAttachmentEmpty = {isAttachmentEmpty}
-          docRevId = {docRevId ?? ''}
-          containsRedline = {containsRedline ?? false}
-          docRevStatus = {docRevStatus} />
+          {...{ selectedAttachments, documentRevision, isAttachmentEmpty, docRevStatus }}
+          docRevId={docRevId ?? ''}
+          containsRedline={containsRedline ?? false}
+        />
       </Box>
-      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} {...{ selectedAttachments, onSelectedAttachmentsChange, isHeaderChecked, onHeaderCheck }} />
+      <AttachmentField
+        name="attachments"
+        disabled
+        {...{ docRevId, selectedAttachments, onSelectedAttachmentsChange, isHeaderChecked, onHeaderCheck }}
+      />
       {emptyAttachmentsRenderer}
     </Box>
   );

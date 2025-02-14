@@ -42,6 +42,7 @@ export const buildSchema = ({
   handleHeaderCheckedChange,
 }: SchemaOptions): Array<ColumnDefinition<Attachment>> => {
   const classes = styles();
+
   return [
     {
       id: 'id',
