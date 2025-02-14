@@ -1,13 +1,13 @@
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import React from 'react';
-import { DragCell } from '.';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Attachment } from '../../../change.request/form/types';
 import InputFilter from '../../../form.builder/FBApprovalMatrix/components/InputFilter';
 import { ColumnDefinition } from '../../KendoDataGrid/KendoDataGrid.types';
 import ActionNeededCellTemplate from './components/ActionNeededCellTemplate';
+import DragCell from './components/DragCell';
 import FileExtensionCellTemplate from './components/FileExtensionCellTemplate';
 import FileNameCellTemplate from './components/FileNameCellTemplate';
 import FileOwnerCellTemplate from './components/FileOwnerCellTemplate';
@@ -40,13 +40,13 @@ export const buildSchema = ({
   onDelete,
   onView,
   handleHeaderCheckedChange,
-}: SchemaOptions): Array<ColumnDefinition<any>> => {
+}: SchemaOptions): Array<ColumnDefinition<Attachment>> => {
   const classes = styles();
   return [
     {
       id: 'id',
       field: 'id',
-      cell: DragCell,
+      cell: (props) => <DragCell {...props} />,
       filterable: false,
       width: 30,
     },

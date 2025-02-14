@@ -1,6 +1,4 @@
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { getter } from '@progress/kendo-data-query';
 import { DragAndDrop } from '@progress/kendo-react-common';
 import { getSelectedState } from '@progress/kendo-react-data-tools';
@@ -12,81 +10,13 @@ import { translate } from '../../../../common/intl';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Attachment } from '../../../change.request/form/types';
-import { Colors } from '../../../layout/theme-next';
 import KendoDataGrid from '../../KendoDataGrid/KendoDataGrid';
+import { DragContext } from './components/DragCell';
+import { DATA_ITEM_KEY, MAX_SHOWN_ATTACHMENTS, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
+import styles from './styles';
 
-const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    dragIcon: {
-      width: 16,
-      height: 16,
-    },
-    grid: {
-      '.k-grid': {
-        borderRadius: '0 !important',
-        borderBottomWidth: 0,
-      },
-      '& .k-grid-container:last-child': {
-        borderRadius: '0 !important',
-      },
-    },
-    viewContainer: {
-      display: 'flex',
-      paddingLeft: theme.spacing(4),
-      textAlign: 'center',
-      border: '1px solid #DBE0EB',
-      borderTopWidth: '0px',
-      height: 46,
-      backgroundColor: Colors.white,
-      borderBottomLeftRadius: '6px',
-      borderBottomRightRadius: '6px',
-    },
-    toggleButton: {
-      backgroundColor: Colors.primaryBg,
-      color: Colors.primary,
-      borderRadius: 25,
-      textTransform: 'none',
-    },
-  }));
-
-const SELECTED_FIELD = 'selected';
-const DATA_ITEM_KEY = 'id';
 const idGetter = getter(DATA_ITEM_KEY);
-
-interface ContextProps {
-  reorder: (dataItem: any) => void
-  dragStart: (dataItem: any) => void
-}
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const MyContext = React.createContext<ContextProps>({ reorder: (dataItem) => { }, dragStart: (dataItem) => { } });
-
-export const DragCell = (props) => {
-  const classes = styles();
-  const currentContext = React.useContext(MyContext);
-  return (
-    <td
-      style={{ textOverflow: 'initial' }}
-      onDragOver={(e) => {
-        currentContext.reorder(props.dataItem);
-
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-      }}
-    >
-      <span
-        draggable={true}
-        style={{ cursor: 'move' }}
-        onDragStart={(e) => {
-          currentContext.dragStart(props.dataItem);
-          e.dataTransfer.setData('dragging', '');
-        }}
-      >
-        <FontAwesomeIcon icon={regular('grip-dots-vertical')} className={classes.dragIcon} />
-      </span>
-    </td>
-  );
-};
 
 interface Props {
   attachments: Attachment[]
@@ -188,7 +118,7 @@ const AttachmentTable: React.FC<Props> = ({
   const rowRender = (tr, props) => {
     const index = props.dataIndex;
     // Hide rows after the 5th one (index 5 and above)
-    if (index >= 5 && !showAll) {
+    if (index >= MAX_SHOWN_ATTACHMENTS && !showAll) {
       return React.cloneElement(tr, { style: { display: 'none' } });
     }
     return tr;
@@ -200,7 +130,7 @@ const AttachmentTable: React.FC<Props> = ({
 
   return (
     <>
-      <MyContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
+      <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
         <DragAndDrop>
           <KendoDataGrid
             className={classes.grid}
@@ -223,11 +153,14 @@ const AttachmentTable: React.FC<Props> = ({
             onSelectionChange={onSelectionChange}
           />
         </DragAndDrop>
-      </MyContext.Provider>
-      {attachmentsData.length > 5 && (
+      </DragContext.Provider>
+      {attachmentsData.length > MAX_SHOWN_ATTACHMENTS && (
         <div className={classes.viewContainer}>
           <Button className={classes.toggleButton} onClick={handleViewAllClick}>
-            {showAll ? translate('document.revision.view.less') : translate('document.revision.view.all', { count: attachmentsData.length - 5 })}
+            {showAll
+              ? translate('document.revision.view.less')
+              : translate('document.revision.view.all', { count: attachmentsData.length - MAX_SHOWN_ATTACHMENTS })
+            }
           </Button>
         </div>
       )}
