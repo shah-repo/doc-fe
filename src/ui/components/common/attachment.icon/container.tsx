@@ -4,17 +4,14 @@ import { connect, useSelector } from 'react-redux';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
 import { Attachment, AttachmentDownloadResponse, AttachmentType, WatermarkRequest, WatermarkRequestBody } from '../../../../state/ducks/attachments/types';
-import { authSelectors } from '../../../../state/ducks/auth';
-import { Id, Nullable } from '../../../../state/ducks/common/types';
+import { Nullable } from '../../../../state/ducks/common/types';
 import { documentRevisionsSelectors } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../../../state/reducers';
 import { AsyncStatus } from '../../../../state/types';
 import { FormHeaderSummaryContext } from '../../../document.revision/header/SummaryHeader';
-import { isOperator } from '../../../documentRevision/DocumentRevisionDisplay.container';
 import { documentRevisionStatusContextFromDocList } from '../../../documentRevision/DocumentRevisionsManager.container';
 import { documentRevisionStatusContextFromCR } from '../../../documentRevision/DocumentRevisionUpdate.container';
-import { documentTypeContext, isOwnerContext } from '../../../documentRevision/forms/DocumentRevisionForm.container';
 import FBDynamicValidatorStore from '../../../form.builder/stores/ui/FBDynamicValidatorStore';
 import FBStore from '../../../form.builder/stores/ui/FBStore';
 import useActionCreator from '../../../hooks/useActionCreator';
@@ -33,7 +30,6 @@ import ViewFile from '../view.file/container';
 import { checkIfFileIsViewable } from '../view.file/utils/helpers';
 import AttachmentSlideProvider from './AttachmentSlideProvider';
 import Menu from './menu';
-import PresenterFactory from './presenter.factory';
 import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from './utils/types';
 import WatermarkContainer from './watermark/container';
 
@@ -42,7 +38,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   form,
   field,
   value,
-  isNewVersion,
   documentRevision,
   docRevId,
   isRedlineFirst,
@@ -50,16 +45,15 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   onSelectedAttachmentsChange,
   onHeaderChecked,
   headerChecked,
-  ...other
 }) => {
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, docRevId || ''),
+    documentRevisionsSelectors.getDocumentRevision(state, docRevId ?? ''),
   );
-  documentRevision = documentRevision || documentRevisionFromState;
+  documentRevision = documentRevision ?? documentRevisionFromState;
   const dialogHandler = useDialog();
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
-  const attachments = value || field?.value as Attachment[] || [];
+  const attachments = (value ?? field?.value ?? []) as Attachment[];
   const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
   const [newWatermakrError, setNewWatermarkError] = useState<string>('');
   const [selectedAttachment, setSelectedAttachment] = useState<undefined | Attachment>(undefined);
@@ -69,12 +63,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const [isWatermarking, setWatermark] = useState<boolean>(false);
   const [PasswordSubmitAction, setPasswordSubmitAction] = useState<PasswordSubmitActionType>();
   const { submitForm } = useFormContext();
-  const isCurrentUserOperator = React.useContext(isOperator);
-  const isUserDocumentOwner = React.useContext(isOwnerContext);
-  const documentType = React.useContext(documentTypeContext);
   const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
   const documentRevisionStatusFromCR = React.useContext(documentRevisionStatusContextFromCR);
-  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const downloadAttachment = useActionCreator(attachmentsActions.download);
   const downloadAttachmentPassword = useActionCreator(attachmentsActions.downloadRedLine);
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
@@ -170,12 +160,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
     submitForm();
   };
 
-  const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
-    evt.preventDefault();
-    setSelectedAttachment(file);
-    setAnchorEl(evt.currentTarget);
-  };
-
   const startWaterMarkRequest = (
     attachment: Attachment,
     attachmentType: AttachmentType,
@@ -193,8 +177,8 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       },
       type: attachmentType,
       documentRevision: {
-        id: documentRevisionId,
-      } as Id,
+        id: documentRevisionId as string,
+      },
     };
     const body = documentRevisionId ? watermarkBody : pdfBody;
     requestWatermarkAsync.start(
@@ -337,100 +321,61 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       .sort((a) => (a.id === documentRevision?.primaryAttachment?.id ? -1 : 0));
   }, [attachments, documentRevision, isRedlineFirst]);
 
-  const attachmentsRenderer = sortedAttachments.map((attachment) => {
-    let showAttachment = true;
-    let canDeleteFile = false;
-    if (isCurrentUserOperator && (documentType === 'LOT' || documentType === 'EB')) {
-      const isOwnerOfFile = attachment.owner?.id === currentEmployeeId;
-      showAttachment = isOwnerOfFile;
-      canDeleteFile = isOwnerOfFile;
-    }
-    if (isUserDocumentOwner) {
-      showAttachment = true;
-      canDeleteFile = true;
-    }
-    if (!showAttachment) {
-      return null;
-    }
-
-    return null;
-
-    return (
-      <PresenterFactory
-        {...other}
-        key={`attachment-${attachment.id}`}
-        {...{
-          name,
-          documentRevisionData: documentRevision,
-          attachment,
-          handleRemove,
-          form,
-          field,
-          handleContextMenu,
-          handleIconClick: handleClick,
-          canDeleteFile,
-          isNewVersion,
-        }}
-      />
-    );
-  });
-
   return (
     <>
-    <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: sortedAttachments.length ? '1rem' : '0rem' }}>
-      <AttachmentRedLineWarningDialog
-        isDialogOpen={redlineWarningDialogHandler.isOpen}
-        onSubmit={warningSubmit}
-        closeDialog={redlineWarningDialogHandler.close}
-        asyncState={warningState}
-        translationText={warningPasswordText()}
-      />
-
-      <PasswordDialog
-        isDialogOpen={passwordDialogHandler.isOpen}
-        onSubmit={passwordSubmit}
-        closeDialog={passwordDialogHandler.close}
-        asyncState={passwordState}
-      />
-      <AttachmentSlideProvider {...{ setSelectedAttachment }}>
-        <ViewFile
-          isOpen={dialogHandler.isOpen}
-          handleClose={dialogHandler.close}
-          password={password}
-          attachments={attachments}
-          attachment={selectedAttachment}
+      <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: sortedAttachments.length ? '1rem' : '0rem' }}>
+        <AttachmentRedLineWarningDialog
+          isDialogOpen={redlineWarningDialogHandler.isOpen}
+          onSubmit={warningSubmit}
+          closeDialog={redlineWarningDialogHandler.close}
+          asyncState={warningState}
+          translationText={warningPasswordText()}
         />
-      </AttachmentSlideProvider>
-      <WatermarkContainer
-        newWatermarkRequest={newWatermarkRequest}
-        newWatermarkError={newWatermakrError}
+
+        <PasswordDialog
+          isDialogOpen={passwordDialogHandler.isOpen}
+          onSubmit={passwordSubmit}
+          closeDialog={passwordDialogHandler.close}
+          asyncState={passwordState}
+        />
+        <AttachmentSlideProvider {...{ setSelectedAttachment }}>
+          <ViewFile
+            isOpen={dialogHandler.isOpen}
+            handleClose={dialogHandler.close}
+            password={password}
+            attachments={attachments}
+            attachment={selectedAttachment}
+          />
+        </AttachmentSlideProvider>
+        <WatermarkContainer
+          newWatermarkRequest={newWatermarkRequest}
+          newWatermarkError={newWatermakrError}
+        />
+        <Menu
+          handleIconClick={handleClick}
+          handleClose={closeContextMenu}
+          attachment={selectedAttachment}
+          download={handleDownload}
+          {...{
+            setSelectedAttachment,
+            anchorEl,
+            openFileView,
+            openWarningDialog,
+            setPasswordSubmitAction,
+            handleWatermarkRequest,
+            cleanCopyRequiresPassword,
+            redLineRequiresPassword,
+            documentRevision,
+          }}
+        />
+      </div>
+      <AttachmentTable
+        {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange, onHeaderChecked, headerChecked, attachments }}
+        onDownloadAttachment={handleDownload}
+        onDownloadAsPDF={handleWatermarkRequest}
+        onDelete={handleRemove}
+        onView={handleClick}
       />
-      <Menu
-        handleIconClick={handleClick}
-        handleClose={closeContextMenu}
-        attachment={selectedAttachment}
-        download={handleDownload}
-        {...{
-          setSelectedAttachment,
-          anchorEl,
-          openFileView,
-          openWarningDialog,
-          setPasswordSubmitAction,
-          handleWatermarkRequest,
-          cleanCopyRequiresPassword,
-          redLineRequiresPassword,
-          documentRevision,
-        }}
-      />
-      {attachmentsRenderer}
-    </div>
-    <AttachmentTable
-      {...{ documentRevision, selectedAttachments, onSelectedAttachmentsChange, onHeaderChecked, headerChecked, attachments }}
-      onDownloadAttachment={handleDownload}
-      onDownloadAsPDF={handleWatermarkRequest}
-      onDelete={handleRemove}
-      onView={handleClick}
-    />
     </>
   );
 };
