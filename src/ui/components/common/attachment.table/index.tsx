@@ -91,10 +91,10 @@ export const DragCell = (props) => {
 interface Props {
   attachments: Attachment[]
   documentRevision: DocumentRevision
-  onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => any
+  onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => void
   onDownloadAsPDF?: (attachment: Attachment, attachmentType: AttachmentType) => void
-  onView?: (attachment: Attachment) => any
-  onDelete?: (attachment: Attachment) => () => any
+  onView?: (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => void
+  onDelete?: (attachment: Attachment) => () => void
   selectedAttachments?: { [id: string]: boolean | number[] }
   onSelectedAttachmentsChange?: (selectedAttachments: { [id: string]: boolean | number[] }) => void
   onHeaderCheck?: (value: boolean) => void

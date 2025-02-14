@@ -22,8 +22,8 @@ interface SchemaOptions {
   documentRevision: DocumentRevision
   onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => void
   onDownloadAsPDF?: (attachment: Attachment, attachmentType: AttachmentType) => void
-  onView?: (e: any) => void
-  onDelete?: (attachment: Attachment) => () => any
+  onView?: (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => void
+  onDelete?: (attachment: Attachment) => () => void
   handleHeaderCheckedChange: (event: CheckboxChangeEvent) => void
 }
 
@@ -65,7 +65,7 @@ export const buildSchema = ({
       field: 'name',
       title: 'attachment.table.file.name',
       filterCell: InputFilter,
-      template: (props) => <FileNameCellTemplate {...{ props, documentRevision, onView }} />,
+      template: (props) => <FileNameCellTemplate {...props} {...{ documentRevision, onView }} />,
       width: 250,
     },
     {

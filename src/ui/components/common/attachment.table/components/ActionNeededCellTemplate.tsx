@@ -25,8 +25,8 @@ interface Props {
   documentRevision?: DocumentRevision
   onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => void
   onDownloadAsPDF?: (attachment: Attachment, attachmentType: AttachmentType, documentRevisionId?: string) => void
-  onView?: (attachment: Attachment) => void
-  onDelete?: (attachment: Attachment) => void
+  onView?: (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => void
+  onDelete?: (attachment: Attachment) => () => void
 }
 
 const ActionNeededCellTemplate: React.FC<CellTemplateProps<Attachment> & Props> = (props) => {
