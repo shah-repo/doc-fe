@@ -2,6 +2,7 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, CircularProgress, Slide, Typography } from '@material-ui/core';
 import axios from 'axios';
+import cx from 'classnames';
 import { reaction } from 'mobx';
 import { Observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
@@ -39,6 +40,7 @@ const AttachmentsPanel: React.FC = () => {
   const [selectedIndices, setSelectedIndices] = React.useState<number[]>([]);
   const [attachments, setAttachments] = useState<FBAttachment[]>([]);
   const docPreview = useDialog();
+  const [hideAttachmentsPanel, setHideAttachmentsPanel] = React.useState<boolean>(false);
 
   const showDocPreview = (file: FBAttachment) => {
     setFile(file);
@@ -47,6 +49,15 @@ const AttachmentsPanel: React.FC = () => {
 
   const onSelectionChange = (indices: number[]) => {
     setSelectedIndices(indices);
+  };
+
+  const toggleAttachmentsPanelView = () => {
+    setHideAttachmentsPanel(!hideAttachmentsPanel);
+  };
+
+  const onHideDocPreview = () => {
+    hideAttachmentsPanel && toggleAttachmentsPanelView();
+    docPreview.close();
   };
 
   const handleClick = async () => {
@@ -117,7 +128,7 @@ const AttachmentsPanel: React.FC = () => {
         <>
           {_tabsState?.isTabActive(TabTypeOptions.SUMMARY) && (
             <Box className={classes.root}>
-              <Box className={classes.panel}>
+              {!hideAttachmentsPanel && <Box className={classes.panel}>
                 <Box className={classes.panelTitle} data-cy="attachments">
                   <Typography variant="h6" className={classes.titleText}>
                     <Text translation="form.builder.attachments" />
@@ -153,7 +164,7 @@ const AttachmentsPanel: React.FC = () => {
                     </Button>
                   </Box>
                 </SMBox>
-              </Box>
+              </Box>}
               {docPreview.isOpen && (
                 <Slide
                   direction="right"
@@ -161,25 +172,44 @@ const AttachmentsPanel: React.FC = () => {
                   mountOnEnter
                   unmountOnExit
                 >
-                  <Box className={classes.docPreview}>
-                    <Box className={classes.panelPreview}>
-                      <Typography variant="h6" className={classes.titleText}>
-                        <Text translation="ocr.document.preview.title" />
-                      </Typography>
+                  <Box className={cx({ [classes.docPreview]: !hideAttachmentsPanel, [classes.docPreviewExtended]: hideAttachmentsPanel })}>
+                    <Box
+                      height={40}
+                      paddingX={1.875}
+                      paddingY={1.5}
+                      alignItems="center"
+                      display="flex"
+                      justifyContent="space-between"
+                    >
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        style={{ gap: '8px' }}
+                      >
+                        <FontAwesomeIcon
+                          onClick={toggleAttachmentsPanelView}
+                          className={classes.iconButtonNew}
+                          icon={hideAttachmentsPanel ? solid('arrow-right-to-line') : solid('arrow-left-to-line')}
+                        />
+                        <Typography variant="h6" className={classes.titleText}>
+                          <Text translation="ocr.document.preview.title" />
+                        </Typography>
+                      </Box>
+
                       <Button
                         variant="text"
                         startIcon={
                           <FontAwesomeIcon icon={solid('arrow-left')} />
                         }
                         className={classes.hidePreviewButton}
-                        onClick={docPreview.close}
+                        onClick={onHideDocPreview}
                       >
                         <Text translation="ocr.hide.preview.button" />
                       </Button>
                     </Box>
                     <Box className={classes.previewContainer}>
                       <OCRFilePresenter
-                        key={`${file?.id}-${file ? new Date().getTime() : ''}`}
+                        key={file?.id}
                         file={file as FBAttachment}
                         setFile={setFile}
                       />

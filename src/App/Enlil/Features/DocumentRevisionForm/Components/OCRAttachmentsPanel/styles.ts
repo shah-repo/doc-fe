@@ -3,6 +3,7 @@ import { NextTheme } from '../../../../../../ui/layout/theme-next/provider';
 import Colors from '../../../../../../ui/layout/theme/utils/colors';
 
 const DRAWER_WIDTH = 285;
+const DOC_PREVIEW_WIDTH = 500;
 
 export default makeStyles((theme: NextTheme) =>
   createStyles({
@@ -17,6 +18,10 @@ export default makeStyles((theme: NextTheme) =>
       width: DRAWER_WIDTH,
       boxShadow: `inset -1px 0px 0px ${Colors.lightest_grey1}`,
     },
+    iconButtonNew: {
+      cursor: 'pointer',
+      color: Colors.navy,
+    },
     titleText: {
       fontWeight: 600,
       fontSize: 12,
@@ -28,7 +33,11 @@ export default makeStyles((theme: NextTheme) =>
       color: Colors.font_gray,
     },
     docPreview: {
-      width: 500,
+      width: DOC_PREVIEW_WIDTH,
+      border: `1px solid ${Colors.gray_goose}`,
+    },
+    docPreviewExtended: {
+      width: DOC_PREVIEW_WIDTH + DRAWER_WIDTH,
       border: `1px solid ${Colors.gray_goose}`,
     },
     previewContainer: {

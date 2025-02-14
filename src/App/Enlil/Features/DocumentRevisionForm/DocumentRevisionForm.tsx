@@ -5,9 +5,10 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
-import { getHasPermission } from '../../../../common/utils/selectors';
+import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
+import { PremiumFeature } from '../../../../state/ducks/company/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
@@ -103,6 +104,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && hasOutput;
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
+  const hasActiveOCRSubscription = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.OCR));
 
   const isRelatedTogetherPart = documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
   const isBomDisabled = isDisabledInput || inRestrictedEditMode || isPartForm || !hasPermissionToEditBOM || isRelatedTogetherPart;
@@ -193,7 +195,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   );
 
   const getLeftSidePanel = () => {
-    if (isPaperLHR) {
+    if (isPaperLHR && hasActiveOCRSubscription) {
       return AttachmentsPanel;
     }
 
