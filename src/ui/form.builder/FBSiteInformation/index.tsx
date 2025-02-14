@@ -172,7 +172,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
   const DetailComponent = memo((props: GridDetailRowProps) => {
     return (
       <Suspense fallback={<div>{translate('common.loading')}</div>}>
-        <LazyDetailComponent {...props} name={name} sites={sites} setSites={setSites} isDisabled={disabled} />
+        <LazyDetailComponent {...props} name={name} sites={sites} setSites={setSites} isDisabled={disabled || Boolean(editedSite)} />
       </Suspense>
     );
   });
