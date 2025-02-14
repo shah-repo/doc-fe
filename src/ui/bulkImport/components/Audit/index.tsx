@@ -30,6 +30,9 @@ interface AuditHistoryProps {
 
 interface MergedLog extends LogEntry {
   bulkImport: BulkImport
+  bulkImportId: string
+  approvalId: string
+  jobId: string
 }
 
 const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
@@ -63,8 +66,7 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getDescription = (log: MergedLog): Array<{ primaryText: string, secondaryText: string }> => {
-    const currentBulkImport: BulkImport = bulkImportsMaps[log.bulkImport.jobId];
+  const getDescription = (log: MergedLog, currentBulkImport: BulkImport): Array<{ primaryText: string, secondaryText: string }> => {
     let secondaryText = `Changed from ${log.previousValue} to ${log.nextValue}`; // Default secondary text
     let stepChange = '';
 
@@ -135,6 +137,7 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
 
   const processLogs = (logs: MergedLog[]): AuditDetailsProps[] => {
     return logs.map((log) => {
+      const currentBulkImport: BulkImport = bulkImportsMaps[log.jobId ?? log.bulkImportId];
       const ownerDetails = getUserDetails(log.ownerId) ?? {
         user: {
           name: intl.formatMessage({ id: 'common.server.automation' }),
@@ -142,7 +145,7 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         },
       };
 
-      const descriptions = [{ primaryText: 'Job ID:', secondaryText: `${log.bulkImport.jobId}` }, ...getDescription(log)];
+      const descriptions = [{ primaryText: 'Job ID:', secondaryText: `${currentBulkImport.jobId}` }, ...getDescription(log, currentBulkImport)];
 
       return {
         descriptions,
@@ -187,12 +190,16 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
          setDataTotal(data.total);
        })
        .catch((exception) => {
+         console.log('🚀 ~ fetchAuditRecords ~ exception:', exception);
          setIsLoading(false);
          if (axios.isCancel(exception)) {
            return;
          }
          if (exception?.response?.status === 504) {
            setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
+         } else {
+           console.log('try again message enter');
+           setErrorMessage(intl.formatMessage({ id: 'errors.somethingWentWrong' }));
          }
        });
   };
@@ -234,7 +241,7 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
     <Drawer anchor="right" open={openDrawer.right} onClose={closeDrawer}>
       <Box className={classes.root}>
         {renderAuditRecords()}
-        {!isEmpty(errorMessage) && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        {!isEmpty(errorMessage) && <div className={classes.errorMessage}>{errorMessage}</div>}
         {showLoadMoreButton && (
           <Box className={classes.listActions}>
             <LoadMoreButton

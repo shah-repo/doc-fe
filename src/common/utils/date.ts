@@ -24,6 +24,7 @@ export const getFormattedDateString = (date: DateTypes, format = '') =>
   moment(date).tz(TIME_ZONE).format(format);
 
 export const getHumanizedFormat = (dateString: string) => moment.utc(dateString).local().startOf('seconds').fromNow();
+export const getHumanizedFormatPST = (dateString: string) => moment(dateString).tz('America/Los_Angeles').format(MomentFormats.FullDateTime);
 
 export const getCurrentDate = (format: string) => moment().tz(TIME_ZONE).format(format);
 

@@ -105,7 +105,11 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
 
   const content = (
     <Box className={cx(classes.cell, { [classes.errorCell]: isErrorShown })}>
-      {cellValue}
+      <span
+        className={classes.tableText}
+      >
+        {cellValue}
+      </span>
       {isErrorShown && (
         <Tooltip
           title={
