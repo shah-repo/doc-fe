@@ -190,7 +190,6 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
          setDataTotal(data.total);
        })
        .catch((exception) => {
-         console.log('🚀 ~ fetchAuditRecords ~ exception:', exception);
          setIsLoading(false);
          if (axios.isCancel(exception)) {
            return;
@@ -198,7 +197,6 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
          if (exception?.response?.status === 504) {
            setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
          } else {
-           console.log('try again message enter');
            setErrorMessage(intl.formatMessage({ id: 'errors.somethingWentWrong' }));
          }
        });

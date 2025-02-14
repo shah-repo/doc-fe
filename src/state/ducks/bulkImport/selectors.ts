@@ -48,9 +48,8 @@ export const getBulkImports = (state: ApplicationState) => state.bulkImport.main
 // We are going to create a map with the id of the BK and the jobId as they are never be similar Ex: JobId: DOCUMENT-001, BK id would be a uuid
 // We need this map to avoid multiple loops on the audit logs because we have the jobId or bulkImportId
 export const getBulkImportsMap = (state: ApplicationState) =>
-  state.bulkImport.main.bulkImports.reduce<Record<string, BulkImport>>((acc, importItem) => {
-    acc[importItem.id] = importItem;
-    acc[importItem.jobId] = importItem;
+  state.bulkImport.main.bulkImports.reduce<Record<string, BulkImport>>((acc, { id, jobId, ...rest }) => {
+    acc[id] = acc[jobId] = { id, jobId, ...rest };
     return acc;
   }, {});
 export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<string, BulkImportCustom[]> => {
