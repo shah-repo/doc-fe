@@ -60,12 +60,16 @@ export const GLOBAL_SEARCH_URL = '/search';
 
 export const GENERAL_SETTINGS_URL = '/general_settings';
 
+export const PREMIUM_FEATURES_URL = '/premium_feature';
+
 export const USER_GROUP_URL = '/user_group';
 export const USER_GROUPS_URL = '/user_group/group';
 
 export const COMPANY_SETTINGS_URL = '/company/settings';
-
 export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
+
+export const PREMIUM_FEATURE_SUBSCRIPTIONS_URL = '/premium_feature_subscriptions';
+export const PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL = `${PREMIUM_FEATURE_SUBSCRIPTIONS_URL}/:id`;
 
 export const BULK_IMPORT_URL = '/bulk_import/create';
 export const BULK_IMPORT_PROGRESS_URL = '/bulk_import';
