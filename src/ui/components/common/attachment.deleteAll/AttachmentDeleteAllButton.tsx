@@ -23,18 +23,17 @@ const styles = makeStyles((theme: Theme) =>
   createStyles({
     icon: {
       verticalAlign: 'middle',
-      maxHeight: '20px',
-      maxWidth: '20px',
+      maxHeight: 20,
+      maxWidth: 20,
     },
     deleteButton: {
       padding: 0,
-      marginRight: theme.spacing(1),
-      marginLeft: theme.spacing(1),
+      marginLeft: theme.spacing(1.5),
     },
     deleteIcon: {
       color: Colors.reject,
-      height: 17,
-      width: 17,
+      height: 20,
+      width: 20,
     },
   }));
 
@@ -92,7 +91,10 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
 
   return (
     <Tooltip title={translate(toolTipText)}>
-      <IconButton onClick={() => handleDelete()} className={classes.deleteButton}>
+      <IconButton
+        className={classes.deleteButton}
+        onClick={() => handleDelete()}
+      >
         {isDownloading
           ? <CircularProgress className={classes.icon} />
           : <FontAwesomeIcon icon={regular('trash-can')} className={classes.deleteIcon} />

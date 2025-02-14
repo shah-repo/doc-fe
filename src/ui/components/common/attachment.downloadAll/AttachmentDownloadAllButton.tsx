@@ -1,6 +1,6 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, createStyles, Link, makeStyles, Theme, Tooltip } from '@material-ui/core';
+import { CircularProgress, createStyles, IconButton, makeStyles, Theme, Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty, isUndefined } from 'lodash';
 import React, { useState } from 'react';
@@ -14,7 +14,6 @@ import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevi
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import useDialog from '../../../hooks/useDialog';
-import Colors from '../../../layout/theme-next/colors';
 import { Translation } from '../../../translations/types';
 import { toastError } from '../../notifications';
 import PasswordDialog from '../../password/dialog';
@@ -30,23 +29,21 @@ interface Props {
   documentRevision?: DocumentRevision
 }
 
-const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    icon: {
-      verticalAlign: 'middle',
-      maxHeight: '20px',
-      maxWidth: '20px',
-    },
-    link: {
-      cursor: 'pointer',
-      color: Colors.textGray,
-      marginLeft: theme.spacing(1),
-    },
-    downloadIcon: {
-      height: 18,
-      width: 18,
-    },
-  }));
+const styles = makeStyles((theme: Theme) => createStyles({
+  icon: {
+    verticalAlign: 'middle',
+    maxHeight: 20,
+    maxWidth: 20,
+  },
+  downloadButton: {
+    padding: 0,
+    marginLeft: theme.spacing(1.5),
+  },
+  downloadIcon: {
+    height: 20,
+    width: 20,
+  },
+}));
 
 const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   isAttachmentEmpty,
@@ -165,7 +162,6 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
         translationText={warningPasswordText()}
         translationButtonText="common.attachment.redline.warning.download.labelAll"
       />
-
       <PasswordDialog
         isDialogOpen={passwordDialogHandler.isOpen}
         onSubmit={passwordSubmit}
@@ -173,25 +169,18 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
         asyncState={passwordState}
       />
       <Tooltip title={translate(isDownloadAll ? 'common.download.all.files' : 'common.download.selected.files')}>
-        <label
-          htmlFor="button-file"
+        <IconButton
+          className={classes.downloadButton}
           onClick={isDownloadAll
             ? handleAllDownload(docRevId, undefined)
             : handleSelectedDownload(attachments ?? [])
           }
         >
-          <Link
-            className={classes.link}
-            component="span"
-            variant="button"
-            id="AttachmentFieldPresenter-downloadAllButton"
-          >
-            {isDownloading
-              ? <CircularProgress className={classes.icon} />
-              : <FontAwesomeIcon icon={regular('arrow-down-to-line')} className={classes.downloadIcon} />
-            }
-          </Link>
-        </label>
+          {isDownloading
+            ? <CircularProgress className={classes.icon} />
+            : <FontAwesomeIcon icon={regular('arrow-down-to-line')} className={classes.downloadIcon} />
+          }
+        </IconButton>
       </Tooltip>
     </>
   );

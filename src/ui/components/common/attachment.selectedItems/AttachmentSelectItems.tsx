@@ -12,6 +12,10 @@ interface Props {
 }
 
 const styles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   clearSelectionButton: {
     paddingTop: 0,
     paddingBottom: 0,
@@ -25,9 +29,8 @@ const styles = makeStyles((theme: Theme) => createStyles({
   },
   aiButton: {
     display: 'none',
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    padding: theme.spacing(0.6),
+    marginLeft: theme.spacing(1.5),
+    padding: theme.spacing(0.5),
     background: `linear-gradient(226.32deg, ${Colors.secondary} 17.49%, ${Colors.primaryGradient} 44.44%, ${Colors.primary} 93.06%)`,
   },
   aiIcon: {
@@ -36,13 +39,12 @@ const styles = makeStyles((theme: Theme) => createStyles({
     width: 12,
   },
   hr: {
-    margin: '0px 8px',
-    height: 18,
+    margin: theme.spacing(0, 0, 0, 1.5),
+    height: 17,
   },
   attachmentCount: {
     color: Colors.primary,
     fontWeight: 700,
-    marginRight: theme.spacing(0.4),
   },
 }));
 
@@ -58,12 +60,15 @@ const AttachmentSelectItems: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Box display="flex" alignItems="center">
+    <Box className={classes.root}>
       <IconButton onClick={onClearSelection} className={classes.clearSelectionButton}>
         <FontAwesomeIcon icon={solid('x')} className={classes.clearSelectionIcon} />
       </IconButton>
-      <span className={classes.attachmentCount}>{selectedAttachmentsCount}</span>
-      <Text message={translate('attachment.header.selected')} />
+      <span>
+        <span className={classes.attachmentCount}>{selectedAttachmentsCount}</span>
+        &nbsp;
+        <Text message={translate('attachment.header.selected')} />
+      </span>
       <hr className={classes.hr} />
       <Tooltip title={translate('common.summarize.with.ai')}>
         <IconButton className={classes.aiButton}>
