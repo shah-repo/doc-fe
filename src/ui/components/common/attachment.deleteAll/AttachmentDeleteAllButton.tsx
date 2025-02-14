@@ -16,7 +16,7 @@ interface Props {
   selectedAttachments: {[id: string]: boolean | number[]}
   documentRevision: DocumentRevision
   onSelectedAttachmentsChange: (selectedAttachments: {[id: string]: boolean | number[]}) => void
-  onHeaderChecked: (value: boolean) => void
+  onHeaderCheck: (value: boolean) => void
 }
 
 const styles = makeStyles((theme: Theme) =>
@@ -43,7 +43,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   selectedAttachments,
   documentRevision,
   onSelectedAttachmentsChange,
-  onHeaderChecked,
+  onHeaderCheck,
 }) => {
   const { getFieldProps, setFieldValue, submitForm } = useFormikContext();
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
@@ -55,7 +55,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       onSelectedAttachmentsChange({});
-      onHeaderChecked(false);
+      onHeaderCheck(false);
       setIsDownloading(false);
     },
     onError: () => {
@@ -80,7 +80,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
       setFieldValue('attachments', filtered);
       submitForm();
       onSelectedAttachmentsChange({});
-      onHeaderChecked(false);
+      onHeaderCheck(false);
     }
   };
 

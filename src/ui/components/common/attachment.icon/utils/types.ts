@@ -43,7 +43,7 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   docRevId?: string
   selectedAttachments?: {[id: string]: boolean | number[]}
   onSelectedAttachmentsChange?: (selectedAttachments: {[id: string]: boolean | number[]}) => void
-  onHeaderChecked?: (value: boolean) => void
+  onHeaderCheck?: (value: boolean) => void
   isHeaderChecked?: boolean
 }
 

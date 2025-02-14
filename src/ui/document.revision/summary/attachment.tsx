@@ -21,7 +21,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
   const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
   const [isHeaderChecked, setIsHeaderChecked] = React.useState(false);
 
-  const onHeaderChecked = (value: boolean) => {
+  const onHeaderCheck = (value: boolean) => {
     setIsHeaderChecked(value);
   };
 
@@ -80,7 +80,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
           containsRedline = {containsRedline ?? false}
           docRevStatus = {docRevStatus} />
       </Box>
-      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} {...{ selectedAttachments, onSelectedAttachmentsChange, isHeaderChecked, onHeaderChecked }} />
+      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} {...{ selectedAttachments, onSelectedAttachmentsChange, isHeaderChecked, onHeaderCheck }} />
       {emptyAttachmentsRenderer}
     </Box>
   );

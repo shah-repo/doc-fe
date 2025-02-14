@@ -1,20 +1,20 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, createStyles, makeStyles, Theme } from '@material-ui/core';
 import { getter } from '@progress/kendo-data-query';
+import { DragAndDrop } from '@progress/kendo-react-common';
 import { getSelectedState } from '@progress/kendo-react-data-tools';
 import { GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
+import { isNull } from 'lodash';
 import React from 'react';
+import { translate } from '../../../../common/intl';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Attachment } from '../../../change.request/form/types';
+import { Colors } from '../../../layout/theme-next';
 import KendoDataGrid from '../../KendoDataGrid/KendoDataGrid';
 import { buildSchema } from './schema';
-import { DragAndDrop } from '@progress/kendo-react-common';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { makeStyles, Theme, createStyles, Button } from '@material-ui/core';
-import { isNull } from 'lodash';
-import { Colors } from '../../../layout/theme-next';
-import { translate } from '../../../../common/intl';
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -97,21 +97,21 @@ interface Props {
   onDelete?: (attachment: Attachment) => () => any
   selectedAttachments?: { [id: string]: boolean | number[] }
   onSelectedAttachmentsChange?: (selectedAttachments: { [id: string]: boolean | number[] }) => void
-  onHeaderChecked?: (value: boolean) => void
-  headerChecked?: boolean
+  onHeaderCheck?: (value: boolean) => void
+  isHeaderChecked?: boolean
 }
 
 const AttachmentTable: React.FC<Props> = ({
   attachments,
   documentRevision,
   selectedAttachments,
-  headerChecked = false,
+  isHeaderChecked = false,
   onDownloadAttachment,
   onDownloadAsPDF,
   onView,
   onDelete,
   onSelectedAttachmentsChange,
-  onHeaderChecked,
+  onHeaderCheck,
 }) => {
   const classes = styles();
   const [attachmentsData, setAttachmentsData] = React.useState(attachments ?? []);
@@ -137,7 +137,7 @@ const AttachmentTable: React.FC<Props> = ({
   };
 
   const handleHeaderCheckedChange = (event: CheckboxChangeEvent) => {
-    onHeaderChecked?.(Boolean(event.target.value));
+    onHeaderCheck?.(Boolean(event.target.value));
     if (event.target.value) {
       const checkedItems = {} as { [id: string]: boolean | number[] };
       attachmentsData.forEach(element => {
@@ -163,11 +163,11 @@ const AttachmentTable: React.FC<Props> = ({
     });
     onSelectedAttachmentsChange?.(newSelectedState);
     const selectedAttachmentsCount = Object.values(newSelectedState).filter(value => value === true).length;
-    onHeaderChecked?.(selectedAttachmentsCount === attachmentsData.length);
+    onHeaderCheck?.(selectedAttachmentsCount === attachmentsData.length);
   };
 
   const schema = buildSchema({
-    headerChecked,
+    isHeaderChecked,
     documentRevision,
     onDownloadAttachment,
     onDownloadAsPDF,
@@ -200,37 +200,37 @@ const AttachmentTable: React.FC<Props> = ({
 
   return (
     <>
-    <MyContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
-      <DragAndDrop>
-        <KendoDataGrid
-          className={classes.grid}
-          fullWidth
-          sortable
-          filterable
-          hasBoxScrollbars
-          resizable
-          rowRender={rowRender}
-          schema={schema}
-          data={attachmentsData ?? []}
-          selectedField={SELECTED_FIELD}
-          dataItemKey={DATA_ITEM_KEY}
-          selectable={{
-            enabled: true,
-            drag: false,
-            cell: true,
-            mode: 'multiple',
-          }}
-          onSelectionChange={onSelectionChange}
-        />
-      </DragAndDrop>
-    </MyContext.Provider>
-    {attachmentsData.length > 5 && (
-      <div className={classes.viewContainer}>
-        <Button className={classes.toggleButton} onClick={handleViewAllClick}>
-          {showAll ? translate('document.revision.view.less') : translate('document.revision.view.all', { count: attachmentsData.length - 5 })}
-        </Button>
-      </div>
-    )}
+      <MyContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
+        <DragAndDrop>
+          <KendoDataGrid
+            className={classes.grid}
+            fullWidth
+            sortable
+            filterable
+            hasBoxScrollbars
+            resizable
+            rowRender={rowRender}
+            schema={schema}
+            data={attachmentsData ?? []}
+            selectedField={SELECTED_FIELD}
+            dataItemKey={DATA_ITEM_KEY}
+            selectable={{
+              enabled: true,
+              drag: false,
+              cell: true,
+              mode: 'multiple',
+            }}
+            onSelectionChange={onSelectionChange}
+          />
+        </DragAndDrop>
+      </MyContext.Provider>
+      {attachmentsData.length > 5 && (
+        <div className={classes.viewContainer}>
+          <Button className={classes.toggleButton} onClick={handleViewAllClick}>
+            {showAll ? translate('document.revision.view.less') : translate('document.revision.view.all', { count: attachmentsData.length - 5 })}
+          </Button>
+        </div>
+      )}
     </>
   );
 };

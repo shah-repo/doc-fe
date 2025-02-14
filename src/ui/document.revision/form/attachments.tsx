@@ -62,7 +62,7 @@ const Attachments: React.FunctionComponent<Props> = ({
     setSelectedAttachments({});
   };
 
-  const onHeaderChecked = (value: boolean) => {
+  const onHeaderCheck = (value: boolean) => {
     setIsHeaderChecked(value);
   };
 
@@ -81,7 +81,7 @@ const Attachments: React.FunctionComponent<Props> = ({
         </Typography>
         <Box display="flex" alignItems="center">
           <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
-          <AttachmentDeleteAllButton {...{ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision, onSelectedAttachmentsChange, onHeaderChecked }} />
+          <AttachmentDeleteAllButton {...{ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision, onSelectedAttachmentsChange, onHeaderCheck }} />
           <AttachmentDownloadAllButton
             {...{ selectedAttachments, documentRevision }}
             isAttachmentEmpty = {isAttachmentEmpty}
@@ -91,7 +91,7 @@ const Attachments: React.FunctionComponent<Props> = ({
         </Box>
       </Box>
       <AttachmentField name="attachments" component="field" disabled={isDisabled} />
-      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision, onSelectedAttachmentsChange, selectedAttachments, onHeaderChecked, isHeaderChecked }} />
+      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision, onSelectedAttachmentsChange, selectedAttachments, onHeaderCheck, isHeaderChecked }} />
     </Box>
   );
 };

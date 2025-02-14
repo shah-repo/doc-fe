@@ -18,7 +18,7 @@ import FileSizeFilter from './filter/FileSizeFilter';
 import SelectFilter from './filter/SelectFilter';
 
 interface SchemaOptions {
-  headerChecked: boolean
+  isHeaderChecked: boolean
   documentRevision: DocumentRevision
   onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => () => any
   onDownloadAsPDF?: (attachment: Attachment, attachmentType: AttachmentType) => void
@@ -35,7 +35,7 @@ const styles = makeStyles(() =>
   }));
 
 export const buildSchema = ({
-  headerChecked,
+  isHeaderChecked,
   documentRevision,
   onDownloadAttachment,
   onDownloadAsPDF,
@@ -56,7 +56,7 @@ export const buildSchema = ({
       id: 'id',
       field: 'selected',
       title: 'Select',
-      filterCell: (props) => <SelectFilter {...{ props, headerChecked, handleHeaderCheckedChange }} />,
+      filterCell: (props) => <SelectFilter {...{ props, isHeaderChecked, handleHeaderCheckedChange }} />,
       className: classes.checkbox,
       width: 65,
     },
