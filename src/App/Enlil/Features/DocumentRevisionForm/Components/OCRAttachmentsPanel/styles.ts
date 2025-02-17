@@ -21,6 +21,7 @@ export default makeStyles((theme: NextTheme) =>
     iconButtonNew: {
       cursor: 'pointer',
       color: Colors.primary,
+      marginRight: theme.spacing(1),
     },
     titleText: {
       fontWeight: 600,
@@ -65,7 +66,6 @@ export default makeStyles((theme: NextTheme) =>
       justifyContent: 'space-between',
     },
     panelPreviewTitle: {
-      gap: 8,
       display: 'flex',
       alignItems: 'center',
     },

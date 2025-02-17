@@ -26,7 +26,7 @@ export const withOCRFilePresenter = (
     });
 
     React.useEffect(() => {
-      reaction(
+      return reaction(
         () => filePresenterState?.data,
         (data) => {
           if (!data?.url) { return; }
