@@ -66,6 +66,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       <FBAutocomplete
         {...{ label, disabled, options, loading }}
         name={`fb-ia-${name}`}
+        key={approvals.map(approval => approval.id).join('-')}
         multiple
         withState
         autosave={false}
