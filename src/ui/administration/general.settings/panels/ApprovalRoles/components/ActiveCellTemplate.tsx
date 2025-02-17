@@ -1,0 +1,26 @@
+import { Box } from '@material-ui/core';
+import cx from 'classnames';
+import React from 'react';
+import { Checkbox } from '../../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
+import { CellTemplateProps } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import useStyles from '../styles';
+import { EditableApprovalRole } from '../types';
+
+const ActiveCellTemplate: React.FC<CellTemplateProps<EditableApprovalRole>> = ({ dataItem, dataIndex, onChange }) => {
+  const classes = useStyles();
+  const isAddMode = Mode.add === dataItem[MODE_FIELD];
+  const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
+
+  return (
+    <Box className={cx(classes.activeCell, { [classes.activeCellInEdit]: isEditMode })}>
+      <Checkbox
+        checked={dataItem.isActive}
+        disabled={isAddMode}
+        onChange={(event) => onChange?.({ dataItem, dataIndex, syntheticEvent: event })}
+      />
+    </Box>
+  );
+};
+
+export default ActiveCellTemplate;
