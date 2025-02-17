@@ -330,7 +330,9 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     }, 0);
     setErrorCount(count);
     setForceLoading(false);
-    setErrorCount(count);
+    if (count === 0 && showErrorsOnly) {
+      dispatch(setOnlyErrorsTable(false));
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData, showErrorsOnly]);
 

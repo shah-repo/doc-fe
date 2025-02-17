@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { kebabCase, noop, omit } from 'lodash';
+import { isEmpty, isUndefined, kebabCase, noop, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -54,6 +54,9 @@ const EquipmentFamilySettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       const isDuplicate = locations.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
       if (values.name && isDuplicate) {
         error.name = 'validator.location.same.name.exist';
+      }
+      if (isEmpty(values.name) || isUndefined(values.name)) {
+        error.name = 'validator.location.name.required';
       }
       return error;
     },

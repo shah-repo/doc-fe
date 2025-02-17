@@ -1,6 +1,6 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { createStyles, IconButton, makeStyles, Theme, Tooltip, CircularProgress } from '@material-ui/core';
+import { CircularProgress, createStyles, IconButton, makeStyles, Theme, Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React from 'react';
@@ -9,32 +9,31 @@ import { documentRevisionsActions } from '../../../../state/ducks/documentRevisi
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
-import Colors from '../../../layout/theme/utils/colors';
+import Colors from '../../../layout/theme-next/colors';
 
 interface Props {
   isAttachmentEmpty: boolean
   selectedAttachments: {[id: string]: boolean | number[]}
   documentRevision: DocumentRevision
   onSelectedAttachmentsChange: (selectedAttachments: {[id: string]: boolean | number[]}) => void
-  onHeaderChecked: (value: boolean) => void
+  onHeaderCheck: (value: boolean) => void
 }
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     icon: {
       verticalAlign: 'middle',
-      maxHeight: '20px',
-      maxWidth: '20px',
+      maxHeight: 20,
+      maxWidth: 20,
     },
     deleteButton: {
       padding: 0,
-      marginRight: theme.spacing(1),
-      marginLeft: theme.spacing(1),
+      marginLeft: theme.spacing(1.5),
     },
     deleteIcon: {
-      color: Colors.red,
-      height: 17,
-      width: 17,
+      color: Colors.reject,
+      height: 20,
+      width: 20,
     },
   }));
 
@@ -43,7 +42,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   selectedAttachments,
   documentRevision,
   onSelectedAttachmentsChange,
-  onHeaderChecked,
+  onHeaderCheck,
 }) => {
   const { getFieldProps, setFieldValue, submitForm } = useFormikContext();
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
@@ -55,7 +54,7 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       onSelectedAttachmentsChange({});
-      onHeaderChecked(false);
+      onHeaderCheck(false);
       setIsDownloading(false);
     },
     onError: () => {
@@ -64,11 +63,11 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
   });
 
   const handleDelete = () => {
-    let filtered = attachments?.filter((item) => !selectedAttachmentsData.includes(item.id));
-    if(selectedAttachmentsCount === 0) {
-      filtered = [];
-    }
-    if(documentRevision?.id) {
+    const filtered = !selectedAttachmentsCount
+      ? []
+      : attachments?.filter((item) => !selectedAttachmentsData.includes(item.id));
+
+    if (documentRevision?.id) {
       setIsDownloading(true);
       async.start(
         deleteAttachmentsAction,
@@ -80,20 +79,26 @@ const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
       setFieldValue('attachments', filtered);
       submitForm();
       onSelectedAttachmentsChange({});
-      onHeaderChecked(false);
+      onHeaderCheck(false);
     }
   };
 
   const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === attachments?.length ? 'common.delete.all.files' : 'common.delete.selected.files';
 
-  if(isEmpty(attachments)) {
+  if (isEmpty(attachments)) {
     return null;
   }
 
   return (
     <Tooltip title={translate(toolTipText)}>
-      <IconButton onClick={() => handleDelete()} className={classes.deleteButton}>
-      {isDownloading ? <CircularProgress className={classes.icon} /> : <FontAwesomeIcon icon={regular('trash-can')} className={classes.deleteIcon} />}
+      <IconButton
+        className={classes.deleteButton}
+        onClick={() => handleDelete()}
+      >
+        {isDownloading
+          ? <CircularProgress className={classes.icon} />
+          : <FontAwesomeIcon icon={regular('trash-can')} className={classes.deleteIcon} />
+        }
       </IconButton>
     </Tooltip>
   );

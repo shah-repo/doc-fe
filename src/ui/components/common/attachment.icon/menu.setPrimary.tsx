@@ -15,15 +15,14 @@ import { Colors } from '../../../layout/theme-next';
 import { toastError } from '../../notifications';
 import Text from '../../Text';
 
-const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    starIcon: {
-      color: Colors.primary,
-      height: 16,
-      width: 16,
-      marginRight: theme.spacing(2),
-    },
-  }));
+const styles = makeStyles((theme: Theme) => createStyles({
+  starIcon: {
+    color: Colors.primary,
+    height: 16,
+    width: 16,
+    marginRight: theme.spacing(2),
+  },
+}));
 
 interface Props {
   handleClose?: any

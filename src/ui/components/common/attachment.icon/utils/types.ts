@@ -15,17 +15,17 @@ export interface AttachmentIconDispatchProps {
   download: typeof attachmentsActions.download
 }
 
-export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
+interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   attachment?: Attachment
   extension?: string
   size?: RenderSize
   disabled?: boolean
-  handleRemove?: (attachment: Attachment) => () => any
-  handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => any
+  handleRemove?: (attachment: Attachment) => () => void
+  handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => void
   handleContextMenu?: (file: Attachment) => (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void
-  handleViewFile?: (attachment: Attachment) => () => any
+  handleViewFile?: (attachment: Attachment) => () => void
   value?: Attachment[]
-  handleIconClick?: (attachment: Attachment) => any
+  handleIconClick?: (attachment: Attachment) => void
   canDeleteFile?: boolean
   isNewVersion?: boolean
   documentRevision?: DocumentRevision
@@ -39,12 +39,12 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isPrimary?: boolean
   isTransferred?: boolean
   isRedlineFirst?: boolean
-  handleIconClick?: (attachment: Attachment) => any
+  handleIconClick?: (attachment: Attachment) => void
   docRevId?: string
   selectedAttachments?: {[id: string]: boolean | number[]}
   onSelectedAttachmentsChange?: (selectedAttachments: {[id: string]: boolean | number[]}) => void
-  onHeaderChecked?: (value: boolean) => void
-  headerChecked?: boolean
+  onHeaderCheck?: (value: boolean) => void
+  isHeaderChecked?: boolean
 }
 
 export interface AttachmentMenuProps {

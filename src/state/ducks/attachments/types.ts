@@ -9,7 +9,7 @@ export interface Attachment {
   s3link: string
   s3linkCleanCopy?: string
   isLoading?: boolean
-  owner?: User
+  owner?: User & { user?: User }
   lineType: string
   documentRevision?: DocumentRevision
   fileSizeS3Link: number
