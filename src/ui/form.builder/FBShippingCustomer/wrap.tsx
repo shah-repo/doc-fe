@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { FB } from '..';
@@ -15,7 +14,6 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
   const Comp = (props: T) => {
     const { name } = props;
     const { workspaceState, formState } = FB.useStores();
-    const defaultValue = formState?.getFieldValue(name) ?? '';
     const [latestRevisionSummary, setLatestRevisionSummary]
       = useState<CustomerRevisionInfo>();
     const customerId = useObserver(
@@ -24,8 +22,6 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
         || workspaceState?.formInputSync.get(name)
         || workspaceState?.formInput?.shippingCustomer,
     );
-    const isCustomerFieldEmpty = isEmpty(formState?.getFieldValue(name));
-    console.log('customerId', customerId, isCustomerFieldEmpty, defaultValue);
 
     const [autocompleteKey, setAutocompleteKey]
       = useState<string | undefined>(customerId);
@@ -82,11 +78,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     return Component({
       ...props,
       updateLatestAvailableRevision,
-      latestRevisionSummary: latestRevisionSummary ?? {
-        hasObsoleteRevision: false,
-        hasReleasedRevision: true,
-        revisionDetails: { name: 'Latest' },
-      },
+      latestRevisionSummary: latestRevisionSummary,
       resetOBSCustomerSelection,
       autocompleteKey: autocompleteKey,
       defaultValue: { value: customerId },
