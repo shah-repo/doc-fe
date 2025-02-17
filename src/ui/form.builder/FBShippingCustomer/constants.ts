@@ -3,5 +3,3 @@ export const SHIPPING_ADDRESS_FIELDS = {
   ATTENTION: 'shippingAddressAttention',
   CONTACT: 'shippingAddressContact',
 };
-
-export const SHIPPING_CUSTOMER_FIELD = 'customer';
