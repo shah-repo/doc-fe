@@ -21,9 +21,9 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
   const classes = useStyles();
   return (
     <Grid container className={classes.grid}>
-      <Grid item xs="auto" className={classes.shippingInfo}>
+      {(latestRevisionSummary?.hasObsoleteRevision || latestRevisionSummary?.hasReleasedRevision) && <Grid item xs="auto" className={classes.shippingInfo}>
         <span className={classes.infoIcon}>
-          {latestRevisionSummary.hasReleasedRevision && (
+          {latestRevisionSummary?.hasReleasedRevision && (
             <Tooltip
               arrow
               title="Released revision available"
@@ -38,7 +38,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
               />
             </Tooltip>
           )}
-          {latestRevisionSummary.hasObsoleteRevision && (
+          {latestRevisionSummary?.hasObsoleteRevision && (
             <Tooltip arrow title="OBS revision available" placement="top-start">
               <FontAwesomeIcon
                 className={classes.infoIcon}
@@ -49,7 +49,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
             </Tooltip>
           )}
         </span>
-      </Grid>
+      </Grid>}
       <Grid item xs>
         <FBAutocompleteAsync
           {...props}

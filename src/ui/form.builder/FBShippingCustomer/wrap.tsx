@@ -1,7 +1,7 @@
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { FB } from '..';
-import { ShippingActions } from '../../../state/ducks/Shipping';
+import { allocationActions } from '../../../state/ducks/Allocation';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
@@ -27,7 +27,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       = useState<string | undefined>(customerId);
 
     const fetchLatestRevisionSummary = useActionCreator(
-      ShippingActions.fetchLatestRevisionDetailsByRevId,
+      allocationActions.fetchLatestRevisionDetailsByRevId,
     );
     const latestRevisionSummaryAsync = useAsync<CustomerRevisionInfo>({
       onSuccess: (data) => {
@@ -55,7 +55,6 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     }, [customerId]);
 
     const clearAddressFields = () => {
-      // TODO handle Once API Done
       formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.ADDRESS, {});
       formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.ATTENTION, {});
       formState?.setFieldValue(SHIPPING_ADDRESS_FIELDS.CONTACT, {});
