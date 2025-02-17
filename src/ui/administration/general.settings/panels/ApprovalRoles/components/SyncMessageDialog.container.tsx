@@ -71,6 +71,10 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     && !dam?.isSynced
     && isOwner;
 
+  if(dam?.isSynced) {
+    localStorage.removeItem(OUT_OF_SYNC_ALERT_DATA_KEY);
+  }
+
   const getSyncMessageTranslation = (isSubLabel = false): string | undefined => {
     const addToDam = generalSettings?.approvalRoles?.addToDam ?? [];
     const removeFromDam = generalSettings?.approvalRoles?.removeFromDam;
