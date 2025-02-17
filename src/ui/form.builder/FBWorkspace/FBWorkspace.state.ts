@@ -17,7 +17,7 @@ import FBStore from '../FBStore/FBStore';
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = 'none';
-  @observable approvals?: FBInlineApprovalBody[];
+  @observable public approvals?: FBInlineApprovalBody[];
   @observable loadAudit = false;
   @observable revisionChangeType?: RevisionChangeType;
   // Buffer between _formState loading and documentRevApi loading until we switch
@@ -221,10 +221,6 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
-  @action public setApprovals = (approvals?: FBInlineApprovalBody[]) => {
-    set(this, 'approvals', approvals);
-  };
-
   public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {
     this.loadAudit = false;
     const { id, mode, autosave, isPreview } = this;
@@ -287,7 +283,7 @@ class FBWorkspaceState extends FBSchemaState {
         this.documentRevApi.onSuccess();
         FBDataStore.setRefreshData(data);
         this.loading = false;
-        this.setApprovals(data?.approvals as FBInlineApprovalBody[]);
+        this.approvals = data?.approvals as FBInlineApprovalBody[];
       }
     });
   };
