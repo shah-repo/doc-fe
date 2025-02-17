@@ -1,6 +1,6 @@
 import { cloneDeep, includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
-import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
+import { FBInlineApprovalBody, FBInlineApprovalOptions, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { appGlobals } from '../../../appGlobals';
 import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
 import { GroupTag, UserState } from '../../../state/ducks/auth/types';
@@ -18,6 +18,7 @@ import FBStore from '../FBStore/FBStore';
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = 'none';
   @observable approvals?: FBInlineApprovalBody[];
+  @observable options?: FBInlineApprovalOptions[];
   @observable loadAudit = false;
   @observable revisionChangeType?: RevisionChangeType;
   // Buffer between _formState loading and documentRevApi loading until we switch
@@ -221,6 +222,12 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
+  @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
+    set(this, 'approvals', approvals);
+
+  @action public setOptions = (options?: FBInlineApprovalOptions[]) =>
+    set(this, 'options', options);
+
   public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {
     this.loadAudit = false;
     const { id, mode, autosave, isPreview } = this;
@@ -283,6 +290,10 @@ class FBWorkspaceState extends FBSchemaState {
         this.documentRevApi.onSuccess();
         FBDataStore.setRefreshData(data);
         this.loading = false;
+        console.log({ data });
+        this.setApprovals(data?.approvals as FBInlineApprovalBody[]);
+        // need some thing like this
+        // this.setOptions(data?.approvals as FBInlineApprovalOptions[]);
       }
     });
   };
