@@ -25,7 +25,7 @@ interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   handleContextMenu?: (file: Attachment) => (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void
   handleViewFile?: (attachment: Attachment) => () => void
   value?: Attachment[]
-  handleIconClick?: (attachment: Attachment) => void
+  handleIconClick?: (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => void
   canDeleteFile?: boolean
   isNewVersion?: boolean
   documentRevision?: DocumentRevision
@@ -39,7 +39,6 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isPrimary?: boolean
   isTransferred?: boolean
   isRedlineFirst?: boolean
-  handleIconClick?: (attachment: Attachment) => void
   docRevId?: string
   selectedAttachments?: {[id: string]: boolean | number[]}
   onSelectedAttachmentsChange?: (selectedAttachments: {[id: string]: boolean | number[]}) => void
