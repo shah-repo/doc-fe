@@ -111,7 +111,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       redlineWarningDialogHandler.open();
     }
   };
-  //  Need to change on API when docRevision is not available, waiting for BE changes to deploy
+
   const handleSelectedDownload = (attachments: string[]) => () => {
     const isRedlineAttachmentExist = attachmentsData.filter(item => attachments.includes(item.id) && item.lineType === LINE_TYPES.RED_LINE);
     if (isDocumentRevisionInDraft(docRevStatus) || isEmpty(isRedlineAttachmentExist)) {
