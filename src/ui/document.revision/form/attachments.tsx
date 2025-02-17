@@ -14,7 +14,6 @@ import Colors from '../../layout/theme/utils/colors';
 interface Props {
   isDisabled: boolean
   isNewVersion: boolean
-  isAttachmentEmpty: boolean
   labeld?: string
   docRevId: string
   containsRedline: boolean
@@ -41,7 +40,6 @@ const styles = makeStyles(() =>
 const Attachments: React.FunctionComponent<Props> = ({
   isDisabled = false,
   isNewVersion,
-  isAttachmentEmpty,
   docRevId,
   containsRedline,
   docRevStatus,

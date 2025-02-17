@@ -1,8 +1,7 @@
-import { Theme } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { createStyles, makeStyles } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
-export const useStyles = makeStyles((theme: Theme) => createStyles({
+export const useStyles = makeStyles((theme) => createStyles({
   starIcon: {
     color: Colors.primary,
     height: 16,
