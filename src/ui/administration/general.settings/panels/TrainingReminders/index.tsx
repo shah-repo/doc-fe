@@ -17,10 +17,12 @@ import { SettingsPanelProps } from '../../types';
 import useStyle from './styles';
 
 const erroMessage = (customDays: number) => {
-  if(isEmpty(String(customDays))) {
+  const value = String(customDays);
+
+  if(!value || isEmpty(value)) {
     return translate('validator.must.be.number');
   }
-  else if(String(customDays).includes('-')) {
+  else if(value.includes('-')) {
     return translate('validators.positive.number');
   }
   else if(customDays === 0) {
@@ -37,10 +39,9 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
     color: 'primary',
     className: classes.marginRight,
   };
+  const daysValue = getFieldProps('trainingReminders.customDaysDueOn.days').value;
   const disabledCheckboxProps = { ...checkboxProps, disabled: true };
-  const showError = isEmpty(String(getFieldProps('trainingReminders.customDaysDueOn.days').value))
-    || getFieldProps('trainingReminders.customDaysDueOn.days').value === 0
-    || String(getFieldProps('trainingReminders.customDaysDueOn.days').value).includes('-');
+  const showError = isEmpty(String(daysValue)) || daysValue === 0 || String(daysValue).includes('-');
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.training.reminders')}>
@@ -69,7 +70,7 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
           <FormField
             required
             error={showError}
-            helperText={showError ? erroMessage(getFieldProps('trainingReminders.customDaysDueOn.days').value) : ''}>
+            helperText={showError ? erroMessage(daysValue) : ''}>
             <Box>
               <Checkbox
                 className={classes.marginRight}
