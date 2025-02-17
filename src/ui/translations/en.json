@@ -1540,6 +1540,8 @@
   "form.builder.shipping.items.lot": "Lot",
   "form.builder.shipping.items.quantity": "Quantity",
   "form.builder.shipping.items.comments": "Comments",
+  "form.builder.shipping.obs.rev.available.message": "OBS revision available",
+  "form.builder.shipping.released.rev.available.message": "Released revision available",
   "form.builder.equipments.label": "EQ Status",
   "form.builder.related.equipments.title": "Related Equipment",
   "form.builder.related.equipments.add.last": "Add new using last selected form",

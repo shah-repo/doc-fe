@@ -2,6 +2,7 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import React from 'react';
+import { translate } from '../../../common/intl';
 import { Colors } from '../../layout/theme-next';
 import FBAutocompleteAsync from '../FBAutocompleteAsync/FBAutocompleteAsync';
 import { FBAutocompleteAsyncOption } from '../FBAutocompleteAsync/FBAutocompleteAsync.types';
@@ -17,39 +18,50 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
   defaultValue,
   ...props
 }) => {
-  console.log('FBShippingCustomer', props);
   const classes = useStyles();
+  const { hasObsoleteRevision, hasReleasedRevision }
+    = latestRevisionSummary ?? {};
   return (
     <Grid container className={classes.grid}>
-      {(latestRevisionSummary?.hasObsoleteRevision || latestRevisionSummary?.hasReleasedRevision) && <Grid item xs="auto" className={classes.shippingInfo}>
-        <span className={classes.infoIcon}>
-          {latestRevisionSummary?.hasReleasedRevision && (
-            <Tooltip
-              arrow
-              title="Released revision available"
-              placement="top-start"
-            >
-              <FontAwesomeIcon
-                data-cy="new-revision-available"
-                color={Colors.primaryLight}
-                className={classes.infoIcon}
-                onClick={updateLatestAvailableRevision}
-                icon={solid('circle-exclamation')}
-              />
-            </Tooltip>
-          )}
-          {latestRevisionSummary?.hasObsoleteRevision && (
-            <Tooltip arrow title="OBS revision available" placement="top-start">
-              <FontAwesomeIcon
-                className={classes.infoIcon}
-                onClick={resetOBSCustomerSelection}
-                color={Colors.error}
-                icon={solid('triangle-exclamation')}
-              />
-            </Tooltip>
-          )}
-        </span>
-      </Grid>}
+      {(hasObsoleteRevision || hasReleasedRevision) && (
+        <Grid item xs="auto" className={classes.shippingInfo}>
+          <span className={classes.infoIcon}>
+            {hasReleasedRevision && (
+              <Tooltip
+                arrow
+                title={translate(
+                  'form.builder.shipping.released.rev.available.message',
+                )}
+                placement="top-start"
+              >
+                <FontAwesomeIcon
+                  data-cy="new-revision-available"
+                  color={Colors.primaryLight}
+                  className={classes.infoIcon}
+                  onClick={updateLatestAvailableRevision}
+                  icon={solid('circle-exclamation')}
+                />
+              </Tooltip>
+            )}
+            {hasObsoleteRevision && (
+              <Tooltip
+                arrow
+                title={translate(
+                  'form.builder.shipping.obs.rev.available.message',
+                )}
+                placement="top-start"
+              >
+                <FontAwesomeIcon
+                  className={classes.infoIcon}
+                  onClick={resetOBSCustomerSelection}
+                  color={Colors.error}
+                  icon={solid('triangle-exclamation')}
+                />
+              </Tooltip>
+            )}
+          </span>
+        </Grid>
+      )}
       <Grid item xs>
         <FBAutocompleteAsync
           {...props}
