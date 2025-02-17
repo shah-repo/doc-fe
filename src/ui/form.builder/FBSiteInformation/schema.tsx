@@ -2,6 +2,7 @@ import React from 'react';
 import { ColumnDefinition } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { ActionsCellTemplate } from './components/ActionsCellTemplate';
 import { ApprovedToReceiveCell } from './components/ApprovedToReceiveCell';
+import { CustomHeaderTooltipCell } from './components/HeaderCell';
 import { PrimaryCell } from './components/PrimaryCell';
 import { SiteAddressCell } from './components/SiteAddressCell';
 import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
@@ -77,6 +78,9 @@ export const buildSchema = ({
       field: 'approvedToReceive',
       title: 'form.builder.site.information.grid.heading.approved.to.receive',
       filterable: false,
+      headerCell: (props) => <CustomHeaderTooltipCell
+        {...props}
+        content="form.builder.site.information.grid.heading.approved.to.receive" />,
       template: (props) => <ApprovedToReceiveCell {...props} onClick={onRowClick} />,
       width: 150,
     },
