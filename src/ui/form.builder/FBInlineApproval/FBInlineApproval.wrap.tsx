@@ -83,7 +83,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     React.useEffect(() => reaction(
       () => workspaceState?.approvals,
       (data) => {
-        if (!difference(inlineApprovalState?.approvals, data || [])) {
+        if (!difference(inlineApprovalState?.approvals, data ?? [])) {
           return;
         }
         const fieldApprovals = filter(data, { fieldId: name });
@@ -91,18 +91,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-
-    // React.useEffect(() => reaction(
-    //   () => FBDataStore?.refreshData,
-    //   (data) => {
-    //     if (!difference(inlineApprovalState?.approvals, data?.approvals as FBInlineApprovalBody[] || [])) {
-    //       return;
-    //     }
-    //     const fieldApprovals = filter(data?.approvals, { fieldId: name });
-    //     inlineApprovalState?.setApprovals(fieldApprovals as FBInlineApprovalBody[]);
-    //   },
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // ), []);
 
     // On transition
     React.useEffect(() => reaction(
@@ -232,7 +220,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       const { id } = workspaceState || {};
       if (!id) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
-      console.log('afterCallIsComplete');
       dispatch(documentRevisionsActions.loadAudit(id));
     }
 

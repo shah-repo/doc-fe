@@ -222,11 +222,9 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
-  @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
+  @action public setApprovals = (approvals?: FBInlineApprovalBody[]) => {
     set(this, 'approvals', approvals);
-
-  @action public setOptions = (options?: FBInlineApprovalOptions[]) =>
-    set(this, 'options', options);
+  };
 
   public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {
     this.loadAudit = false;
@@ -290,10 +288,7 @@ class FBWorkspaceState extends FBSchemaState {
         this.documentRevApi.onSuccess();
         FBDataStore.setRefreshData(data);
         this.loading = false;
-        console.log({ data });
         this.setApprovals(data?.approvals as FBInlineApprovalBody[]);
-        // need some thing like this
-        // this.setOptions(data?.approvals as FBInlineApprovalOptions[]);
       }
     });
   };
