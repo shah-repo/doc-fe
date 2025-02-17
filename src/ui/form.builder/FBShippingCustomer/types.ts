@@ -19,5 +19,4 @@ export interface CustomerRevisionInfo {
   hasObsoleteRevision: boolean
   hasReleasedRevision: boolean
   revisionDetails: Partial<DocumentRevision>
-  // {revId, documentId, docId, name/title, status, revision} used this for display purpose
 }
