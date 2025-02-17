@@ -93,7 +93,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   const documentTypeId = formValues.values.document?.documentType?.id || '';
   const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length);
   const isCurrentUserOperator = React.useContext(isOperator);
   const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner && !documentRevision.isBeingEditedAfterRelease;
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
@@ -345,7 +344,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                         isDisabled={isDisabledInput}
                                         isNewVersion={false}
                                         docRevId={docRevId}
-                                        isAttachmentEmpty={isAttachmentEmpty}
                                         containsRedline={false}
                                         docRevStatus={documentRevision?.status}
                                         documentRevision={documentRevision}

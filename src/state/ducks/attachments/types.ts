@@ -1,4 +1,5 @@
 import { Id, Nullable, User } from '../common/types';
+import { Employee } from '../company/types';
 import { DocumentRevision } from '../documentRevisions/types';
 import { ADD_WATERMARK, CLEAR_WATERMARKS, REMOVE_WATERMARK } from './constants';
 
@@ -9,7 +10,7 @@ export interface Attachment {
   s3link: string
   s3linkCleanCopy?: string
   isLoading?: boolean
-  owner?: User & { user?: User }
+  owner?: Employee
   lineType: string
   documentRevision?: DocumentRevision
   fileSizeS3Link: number
