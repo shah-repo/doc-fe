@@ -15,7 +15,7 @@ export default makeStyles((theme) => ({
     display: 'flex',
     paddingLeft: theme.spacing(4),
     textAlign: 'center',
-    border: '1px solid #DBE0EB',
+    border: `1px solid ${Colors.tableStroke}`,
     borderTopWidth: '0px',
     height: 46,
     backgroundColor: Colors.white,
@@ -70,5 +70,14 @@ export default makeStyles((theme) => ({
   dragIcon: {
     width: 16,
     height: 16,
+  },
+  checkbox: {
+    paddingLeft: '20px !important',
+  },
+  dragCell: {
+    textOverflow: 'initial !important',
+  },
+  dragElement: {
+    cursor: 'move',
   },
 }));

@@ -1,4 +1,3 @@
-import { createStyles, makeStyles } from '@material-ui/styles';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import React from 'react';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
@@ -14,6 +13,7 @@ import FileOwnerCellTemplate from './components/FileOwnerCellTemplate';
 import FileSizeCellTemplate from './components/FileSizeCellTemplate';
 import FileUploadDateCellTemplate from './components/FileUploadDateCellTemplate';
 import SelectFilter from './components/SelectFilter';
+import styles from './styles';
 
 interface SchemaOptions {
   isHeaderChecked: boolean
@@ -24,13 +24,6 @@ interface SchemaOptions {
   onDelete?: (attachment: Attachment) => () => void
   handleHeaderCheckedChange: (event: CheckboxChangeEvent) => void
 }
-
-const styles = makeStyles(() =>
-  createStyles({
-    checkbox: {
-      paddingLeft: '20px !important',
-    },
-  }));
 
 export const buildSchema = ({
   isHeaderChecked,

@@ -75,7 +75,7 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
       {isUserDocumentOwner && (
         <MenuItem onClick={onDelete?.(attachment)}>
           <FontAwesomeIcon icon={regular('trash-can')} className={cx(classes.menuIcons, classes.menuDeleteIcon)} />
-          <Text message={translate('attachment.menu.delete')} />
+          <Text message={translate('common.delete')} />
         </MenuItem>
       )}
       {showSetAsPrimary && !isNewDocument && (

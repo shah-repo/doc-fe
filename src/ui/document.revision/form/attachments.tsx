@@ -32,7 +32,7 @@ const styles = makeStyles(() =>
       flex: '100%',
       display: 'flex',
       justifyContent: 'flex-start',
-      fontSize: '12px',
+      fontSize: 12,
       fontWeight: 600,
       color: Colors.almost_black,
     },
