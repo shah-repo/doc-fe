@@ -92,6 +92,7 @@ export const styles = makeStyles((theme) => ({
     '&, & *': {
       cursor: 'pointer',
     },
+    marginLeft: theme.spacing(-1.375),
   },
   uploadFieldIcon: {
     transform: 'rotate(45deg)',
