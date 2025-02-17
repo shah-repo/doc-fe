@@ -1,52 +1,15 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, createStyles, IconButton, makeStyles, Theme, Tooltip } from '@material-ui/core';
+import { Box, IconButton, Tooltip } from '@material-ui/core';
 import React from 'react';
 import { translate } from '../../../../common/intl';
-import Colors from '../../../layout/theme-next/colors';
 import Text from '../../Text';
+import styles from './styles';
 
 interface Props {
   selectedAttachments: {[id: string]: boolean | number[]}
   onClearSelection: () => void
 }
-
-const styles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  clearSelectionButton: {
-    paddingTop: 0,
-    paddingBottom: 0,
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
-  clearSelectionIcon: {
-    height: 12,
-    width: 12,
-  },
-  aiButton: {
-    display: 'none',
-    marginLeft: theme.spacing(1.5),
-    padding: theme.spacing(0.5),
-    background: `linear-gradient(226.32deg, ${Colors.secondary} 17.49%, ${Colors.primaryGradient} 44.44%, ${Colors.primary} 93.06%)`,
-  },
-  aiIcon: {
-    color: Colors.white,
-    height: 12,
-    width: 12,
-  },
-  hr: {
-    margin: theme.spacing(0, 0, 0, 1.5),
-    height: 17,
-  },
-  attachmentCount: {
-    color: Colors.primary,
-    fontWeight: 700,
-  },
-}));
 
 const AttachmentSelectItems: React.FunctionComponent<Props> = ({
   selectedAttachments,
