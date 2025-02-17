@@ -1,4 +1,5 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import React, { MouseEvent, MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
@@ -123,6 +124,7 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
 
   const blockEditing = (e: MouseEvent) => e.stopPropagation();
 
+  const expandableContentClass = cx(classes.expandableContent, isExpanded ? classes.expanded : classes.textContent);
   return (
     <>
       <div
@@ -178,15 +180,14 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
               titleId={docTitle}
             />
           </div>
+
           <div className={cx(classes.contentCell, classes.textCell)}>
-            <div className={cx(classes.expandableContent, isExpanded ? classes.expanded : classes.textContent)}
-              data-cy="view-description-of-change">
+            <div className={expandableContentClass} data-cy="view-description-of-change">
               {descriptionOfChange}
             </div>
           </div>
           <div className={cx(classes.contentCell, classes.textCell)}>
-            <div className={cx(classes.expandableContent, isExpanded ? classes.expanded : classes.textContent)}
-              data-cy="view-justification-of-change">
+            <div className={expandableContentClass} data-cy="view-justification-of-change">
               {justificationOfChange}
             </div>
           </div>
@@ -255,7 +256,7 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
           <Button onClick={toggleItem} className={classes.DescButton} kind="outlined" size="small">
             {translate(isExpanded ? 'common.show.less' : 'common.show.more')}
             <span className={classes.iconSpacing}>
-              {isExpanded ? <FontAwesomeIcon icon={solid('chevron-up')} /> : <FontAwesomeIcon icon={solid('chevron-down')} />}
+              <FontAwesomeIcon icon={isExpanded ? solid('chevron-up') : solid('chevron-down')} />
             </span>
           </Button>
         </div>
