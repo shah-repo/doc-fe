@@ -71,7 +71,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     && !dam?.isSynced
     && isOwner;
 
-  if(dam?.isSynced) {
+  if (dam?.isSynced) {
     localStorage.removeItem(OUT_OF_SYNC_ALERT_DATA_KEY);
   }
 
@@ -227,7 +227,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   return (
     <SyncMessageDialog
       isOpen={isSyncMessageOpen}
-      closeDialog={() => onCloseDialogClick()}
+      closeDialog={onCloseDialogClick}
       dialogContent={getSyncLabel()}
       dam={dam}
     />
