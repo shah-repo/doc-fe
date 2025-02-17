@@ -23,6 +23,7 @@ const DEFAULTS = {
   DATADOG_SAMPLE_RATE: '0',
   CONSOLE_TOAST: false,
   PREVENT_DOC_TYPE_MANAGEMENT_EDIT: false,
+  TM_URL: '',
 };
 
 type ConfigKey = keyof typeof DEFAULTS;
@@ -79,6 +80,10 @@ class Config {
     });
 
     return `${this.SignUpDomainUrl}/signup?${params}`;
+  }
+
+  public static get TMUrl () {
+    return this.get('TM_URL');
   }
 
   public static get Theme () {

@@ -43,6 +43,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
   const dialog = useDialog();
   const showErrors = false;
   const loadFromBk = useRef<boolean>(false);
+  const currentIndex = useRef<number>(0);
   const openMaxSizeExceededDialog = useDialog();
 
   const asyncUploadFile = useAsync({
@@ -51,6 +52,10 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
 
   const asyncSkipAttachment = useAsync({
     onSuccess: () => handleNext(),
+  });
+
+  const asyncDeleteAttachment = useAsync({
+    onSuccess: () => setFiles(files.filter((_, i) => i !== currentIndex.current)),
   });
 
   const handleFilesDrop = (acceptedFilesWithPreview: FileWithPreview[]) => {
@@ -78,8 +83,12 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
     asyncUploadFile.start(uploadFileDataAction, { file: values.files && values.files.length > 0 ? values.files[0] : null, link: values.link ? values.link : null, bulkImportId: (bulkImport as BulkImport)?.id }, asyncUploadFile);
   };
 
-  const handleRemoveFile = (index: number) => {
-    setFiles(files.filter((_, i) => i !== index));
+  const handleRemoveFile = (index: number, setFieldValue: (field: string, value: FileWithPreview[]) => void) => {
+    currentIndex.current = index;
+    dispatch(setIsLoading(true));
+    asyncDeleteAttachment.start(patchBkSkipAttachment, { bulkImportId: bulkImport?.id, data: { attachmentId: null, zipFile: null } }, asyncDeleteAttachment);
+    // Clear the files array in Formik state
+    setFieldValue('files', []);
   };
 
   const handleConfirmOpen = () => {
@@ -159,31 +168,33 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = ({ children, handleNex
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}>
-        <Form>
-          <InputField
-            name="link"
-            size="sm"
-            label="bulkImport.uploadFromLink"
-            inputProps={{ id: 'link', placeholder: 's3://bulk-import-test/eco' }}
-            inputStyleProps={classes.linkInput}
-            labelProps={{ color: 'black', fontSize: 14, fontWeight: 600 }}
-          />
-          <Box my={2} display="flex" alignItems="center">
-            <Divider style={{ flex: 1 }} />
-            <Typography variant="h6" className={classes.or}>
-              <Text translation="common.or" />
-            </Typography>
-            <Divider style={{ flex: 1 }} />
-          </Box>
-          <Typography className={classes.dropzoneLabel}><Text translation="common.file.OrUploadFromFiles" /></Typography>
-          <DropzoneField name="files" onDropCallback={handleFilesDrop} className={classes.dropzopne} accept={{ 'application/zip': ['.zip'] }} onMaxSizeExceeded={onMaxSizeExceeded}>
-            <Typography variant="body2" className={classes.textDropZone}>
-              <span><Text translation="dropzone.noDrag.textOr" /><span className={classes.browseText}><Text translation="dropzone.noDrag.subText" /></span></span>
-            </Typography>
-          </DropzoneField>
-          <ListFiles files={files} handleRemoveFile={handleRemoveFile} />
-          {children}
-        </Form>
+        {({ setFieldValue }) => (
+          <Form>
+            <InputField
+              name="link"
+              size="sm"
+              label="bulkImport.uploadFromLink"
+              inputProps={{ id: 'link', placeholder: 's3://bulk-import-test/eco' }}
+              inputStyleProps={classes.linkInput}
+              labelProps={{ color: 'black', fontSize: 14, fontWeight: 600 }}
+            />
+            <Box my={2} display="flex" alignItems="center">
+              <Divider style={{ flex: 1 }} />
+              <Typography variant="h6" className={classes.or}>
+                <Text translation="common.or" />
+              </Typography>
+              <Divider style={{ flex: 1 }} />
+            </Box>
+            <Typography className={classes.dropzoneLabel}><Text translation="common.file.OrUploadFromFiles" /></Typography>
+            <DropzoneField name="files" onDropCallback={handleFilesDrop} className={classes.dropzopne} accept={{ 'application/zip': ['.zip'] }} onMaxSizeExceeded={onMaxSizeExceeded}>
+              <Typography variant="body2" className={classes.textDropZone}>
+                <span><Text translation="dropzone.noDrag.textOr" /><span className={classes.browseText}><Text translation="dropzone.noDrag.subText" /></span></span>
+              </Typography>
+            </DropzoneField>
+            <ListFiles files={files} handleRemoveFile={(index) => handleRemoveFile(index, setFieldValue)} />
+            {children}
+          </Form>
+        )}
       </Formik>
     );
   };
