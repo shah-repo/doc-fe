@@ -26,8 +26,7 @@ interface Props {
   currentDocumentType?: DocumentType
   renderAsButton?: boolean
   hasBuildType?: boolean
-  isWO?: boolean
-  isWOForm?: boolean
+  isAssignBtnShown?: boolean
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
@@ -38,8 +37,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   currentDocumentType,
   renderAsButton,
   hasBuildType,
-  isWO,
-  isWOForm,
+  isAssignBtnShown,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const dispatch = useDispatch();
@@ -51,7 +49,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
   let label = isTypeMpiOutput ? 'record.complete.step' : 'record.submit.for.approval';
 
-  if (isWO && !isWOForm) {
+  if (isAssignBtnShown) {
     label = 'record.assign';
   }
 
