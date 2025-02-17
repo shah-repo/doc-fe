@@ -88,6 +88,8 @@ export const useStyles = makeStyles((theme) => ({
     verticalAlign: 'middle',
     height: 20,
     width: 20,
+    maxHeight: 20,
+    maxWidth: 20,
   },
   deleteIcon: {
     color: Colors.reject,
