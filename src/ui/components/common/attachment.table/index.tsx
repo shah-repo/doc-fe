@@ -9,6 +9,7 @@ import { AttachmentType } from '../../../../state/ducks/attachments/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Attachment } from '../../../change.request/form/types';
 import KendoDataGrid from '../../KendoDataGrid/KendoDataGrid';
+import { DragContext } from './components/DragCell';
 import { DATA_ITEM_KEY, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import styles from './styles';
@@ -28,14 +29,6 @@ interface Props {
   isHeaderChecked?: boolean
 }
 
-interface ContextProps {
-  reorder: (dataItem: any) => void
-  dragStart: (dataItem: any) => void
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const MyContext = React.createContext<ContextProps>({ reorder: (dataItem) => { }, dragStart: (dataItem) => { } });
-
 const AttachmentTable: React.FC<Props> = ({
   attachments,
   documentRevision,
@@ -50,7 +43,7 @@ const AttachmentTable: React.FC<Props> = ({
 }) => {
   const classes = styles();
   const [attachmentsData, setAttachmentsData] = React.useState(attachments ?? []);
-  const [activeItem, setActiveItem] = React.useState<any | null>(null);
+  const [activeItem, setActiveItem] = React.useState<Attachment | null>(null);
 
   const reorder = (item: Attachment) => {
     if (activeItem === item) {
@@ -122,7 +115,7 @@ const AttachmentTable: React.FC<Props> = ({
   }, [attachments]);
 
   return (
-    <MyContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
+    <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
       <DragAndDrop>
         <KendoDataGrid
           className={classes.grid}
@@ -144,7 +137,7 @@ const AttachmentTable: React.FC<Props> = ({
           onSelectionChange={onSelectionChange}
         />
       </DragAndDrop>
-    </MyContext.Provider>
+    </DragContext.Provider>
   );
 };
 
