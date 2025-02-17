@@ -13,7 +13,7 @@ import FileOwnerCellTemplate from './components/FileOwnerCellTemplate';
 import FileSizeCellTemplate from './components/FileSizeCellTemplate';
 import FileUploadDateCellTemplate from './components/FileUploadDateCellTemplate';
 import SelectFilter from './components/SelectFilter';
-import styles from './styles';
+import { useStyles } from './styles';
 
 interface SchemaOptions {
   isHeaderChecked: boolean
@@ -34,7 +34,7 @@ export const buildSchema = ({
   onView,
   handleHeaderCheckedChange,
 }: SchemaOptions): Array<ColumnDefinition<Attachment>> => {
-  const classes = styles();
+  const classes = useStyles();
 
   return [
     {

@@ -1,13 +1,6 @@
-import { Theme } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/styles';
 import { Checkbox, CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import React from 'react';
-
-const styles = makeStyles((theme: Theme) => createStyles({
-  headerCheckbox: {
-    marginLeft: theme.spacing(1),
-  },
-}));
+import { useStyles } from '../styles';
 
 interface Props {
   isHeaderChecked: boolean
@@ -16,7 +9,7 @@ interface Props {
 
 const SelectFilter: React.FC<Props> = (props) => {
   const { isHeaderChecked, handleHeaderCheckedChange } = props;
-  const classes = styles();
+  const classes = useStyles();
 
   return (
     <Checkbox

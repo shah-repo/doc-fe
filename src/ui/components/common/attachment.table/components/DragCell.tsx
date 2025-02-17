@@ -4,7 +4,7 @@ import { noop } from 'lodash';
 import React from 'react';
 import { Attachment } from '../../../../change.request/form/types';
 import { CustomGridCellProps } from '../../../KendoDataGrid/KendoDataGrid.types';
-import styles from '../styles';
+import { useStyles } from '../styles';
 
 interface DragContextProps {
   reorder: (dataItem: Attachment) => void
@@ -17,7 +17,7 @@ interface Props extends CustomGridCellProps {
 }
 
 const DragCell: React.FC<Props> = (props) => {
-  const classes = styles();
+  const classes = useStyles();
   const context = React.useContext(DragContext);
 
   return (

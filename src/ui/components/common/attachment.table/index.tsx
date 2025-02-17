@@ -12,7 +12,7 @@ import KendoDataGrid from '../../KendoDataGrid/KendoDataGrid';
 import { DragContext } from './components/DragCell';
 import { DATA_ITEM_KEY, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
-import styles from './styles';
+import { useStyles } from './styles';
 
 const idGetter = getter(DATA_ITEM_KEY);
 
@@ -41,7 +41,7 @@ const AttachmentTable: React.FC<Props> = ({
   onSelectedAttachmentsChange,
   onHeaderCheck,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [attachmentsData, setAttachmentsData] = React.useState(attachments ?? []);
   const [activeItem, setActiveItem] = React.useState<Attachment | null>(null);
 

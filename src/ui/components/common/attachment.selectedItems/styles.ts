@@ -1,12 +1,7 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import Colors from '../../../layout/theme-next/colors';
 
-interface Props {
-  selectedAttachments: {[id: string]: boolean | number[]}
-  onClearSelection: () => void
-}
-
-const styles = makeStyles((theme: Theme) => createStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     display: 'flex',
     alignItems: 'center',
@@ -42,5 +37,3 @@ const styles = makeStyles((theme: Theme) => createStyles({
     fontWeight: 700,
   },
 }));
-
-export default styles;

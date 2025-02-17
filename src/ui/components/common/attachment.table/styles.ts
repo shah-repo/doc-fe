@@ -92,4 +92,7 @@ export const useStyles = makeStyles((theme) => ({
   deleteIcon: {
     color: Colors.reject,
   },
+  headerCheckbox: {
+    marginLeft: theme.spacing(1),
+  },
 }));

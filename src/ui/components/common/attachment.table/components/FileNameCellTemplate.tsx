@@ -9,7 +9,7 @@ import { Attachment } from '../../../../change.request/form/types';
 import useOverflow from '../../../../hooks/useOverflow';
 import { EMPTY_VALUE_PLACEHOLDER } from '../../../KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../KendoDataGrid/KendoDataGrid.types';
-import useStyles from '../styles';
+import { useStyles } from '../styles';
 
 interface Props extends CellTemplateProps<Attachment> {
   documentRevision?: DocumentRevision

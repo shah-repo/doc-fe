@@ -74,7 +74,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
         </Typography>
         <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
         <AttachmentDownloadAllButton
-          {...{ selectedAttachments, documentRevision, isAttachmentEmpty, docRevStatus }}
+          {...{ selectedAttachments, documentRevision, docRevStatus }}
           docRevId={docRevId ?? ''}
           containsRedline={containsRedline ?? false}
         />

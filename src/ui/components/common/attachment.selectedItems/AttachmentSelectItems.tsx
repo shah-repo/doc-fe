@@ -4,7 +4,7 @@ import { Box, IconButton, Tooltip } from '@material-ui/core';
 import React from 'react';
 import { translate } from '../../../../common/intl';
 import Text from '../../Text';
-import styles from './styles';
+import { useStyles } from './styles';
 
 interface Props {
   selectedAttachments: {[id: string]: boolean | number[]}
@@ -15,7 +15,7 @@ const AttachmentSelectItems: React.FunctionComponent<Props> = ({
   selectedAttachments,
   onClearSelection,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const selectedAttachmentsCount = Object.values(selectedAttachments).filter(value => value === true).length;
 
   if (selectedAttachmentsCount === 0) {
