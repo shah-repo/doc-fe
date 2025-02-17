@@ -28,6 +28,14 @@ interface Props {
   isHeaderChecked?: boolean
 }
 
+interface ContextProps {
+  reorder: (dataItem: any) => void
+  dragStart: (dataItem: any) => void
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const MyContext = React.createContext<ContextProps>({ reorder: (dataItem) => { }, dragStart: (dataItem) => { } });
+
 const AttachmentTable: React.FC<Props> = ({
   attachments,
   documentRevision,
@@ -42,7 +50,7 @@ const AttachmentTable: React.FC<Props> = ({
 }) => {
   const classes = styles();
   const [attachmentsData, setAttachmentsData] = React.useState(attachments ?? []);
-  const [activeItem, setActiveItem] = React.useState < any | null > (null);
+  const [activeItem, setActiveItem] = React.useState<any | null>(null);
 
   const reorder = (item: Attachment) => {
     if (activeItem === item) {

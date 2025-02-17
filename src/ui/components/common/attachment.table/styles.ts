@@ -71,30 +71,4 @@ export default makeStyles((theme) => ({
     width: 16,
     height: 16,
   },
-  grid: {
-    '.k-grid': {
-      borderRadius: '0 !important',
-      borderBottomWidth: 0,
-    },
-    '& .k-grid-container:last-child': {
-      borderRadius: '0 !important',
-    },
-  },
-  viewContainer: {
-    display: 'flex',
-    paddingLeft: theme.spacing(4),
-    textAlign: 'center',
-    border: '1px solid #DBE0EB',
-    borderTopWidth: '0px',
-    height: 46,
-    backgroundColor: Colors.white,
-    borderBottomLeftRadius: '6px',
-    borderBottomRightRadius: '6px',
-  },
-  toggleButton: {
-    backgroundColor: Colors.primaryBg,
-    color: Colors.primary,
-    borderRadius: 25,
-    textTransform: 'none',
-  },
 }));
