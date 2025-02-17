@@ -60,7 +60,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     ?? formInput?.[FBDAMFields.DAM]
     ?? [],
   ) as FBApprovalMatrixItem[];
-  const showAlertDialog = localStorage.getItem(OUT_OF_SYNC_ALERT_DATA_KEY) as unknown as Dam; // @todo
+  const showAlertDialog = localStorage.getItem(OUT_OF_SYNC_ALERT_DATA_KEY) as unknown as Dam;
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
   const dispatch = useDispatch();
