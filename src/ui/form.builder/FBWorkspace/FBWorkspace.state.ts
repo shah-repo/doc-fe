@@ -1,6 +1,6 @@
 import { cloneDeep, includes, isArray, isEmpty, isUndefined, map, omit, size, union } from 'lodash';
 import { action, computed, get, observable, set } from 'mobx';
-import { FBInlineApprovalBody, FBInlineApprovalOptions, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
+import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from '..';
 import { appGlobals } from '../../../appGlobals';
 import { getPayloadBasedOnWorkOrderType } from '../../../common/utils/helpers';
 import { GroupTag, UserState } from '../../../state/ducks/auth/types';
@@ -18,7 +18,6 @@ import FBStore from '../FBStore/FBStore';
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = 'none';
   @observable approvals?: FBInlineApprovalBody[];
-  @observable options?: FBInlineApprovalOptions[];
   @observable loadAudit = false;
   @observable revisionChangeType?: RevisionChangeType;
   // Buffer between _formState loading and documentRevApi loading until we switch

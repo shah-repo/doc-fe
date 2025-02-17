@@ -83,7 +83,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     React.useEffect(() => reaction(
       () => workspaceState?.approvals,
       (data) => {
-        if (!difference(inlineApprovalState?.approvals, data ?? [])) {
+        if (!difference(inlineApprovalState?.approvals, data || [])) {
           return;
         }
         const fieldApprovals = filter(data, { fieldId: name });
