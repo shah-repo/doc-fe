@@ -42,7 +42,7 @@ const AttachmentTable: React.FC<Props> = ({
   onHeaderCheck,
 }) => {
   const classes = useStyles();
-  const [attachmentsData, setAttachmentsData] = React.useState(attachments ?? []);
+  const [attachmentsData, setAttachmentsData] = React.useState(attachments);
   const [activeItem, setActiveItem] = React.useState<Attachment | null>(null);
 
   const reorder = (item: Attachment) => {
@@ -125,7 +125,7 @@ const AttachmentTable: React.FC<Props> = ({
           hasBoxScrollbars
           resizable
           schema={schema}
-          data={attachmentsData ?? []}
+          data={attachmentsData}
           selectedField={SELECTED_FIELD}
           dataItemKey={DATA_ITEM_KEY}
           selectable={{
