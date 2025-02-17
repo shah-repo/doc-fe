@@ -2,11 +2,11 @@ import { Box, createStyles, makeStyles, Typography } from '@material-ui/core';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import AttachmentDeleteAllButton from '../../components/common/attachment.deleteAll/AttachmentDeleteAllButton';
-import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
 import AttachmentField from '../../components/common/attachment.field/container';
 import AttachmentIconField from '../../components/common/attachment.icon/container';
 import AttachmentSelectItems from '../../components/common/attachment.selectedItems/AttachmentSelectItems';
+import AttachmentDeleteAllButton from '../../components/common/attachment.table/components/AttachmentDeleteAllButton';
+import AttachmentDownloadAllButton from '../../components/common/attachment.table/components/AttachmentDownloadAllButton';
 import Text from '../../components/Text';
 import { useAttachments } from '../../hooks/docCustomization/useCustomization';
 import Colors from '../../layout/theme/utils/colors';
@@ -81,13 +81,8 @@ const Attachments: React.FunctionComponent<Props> = ({
         </Typography>
         <Box display="flex" alignItems="center">
           <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
-          <AttachmentDeleteAllButton {...{ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision, onSelectedAttachmentsChange, onHeaderCheck }} />
-          <AttachmentDownloadAllButton
-            {...{ selectedAttachments, documentRevision }}
-            isAttachmentEmpty = {isAttachmentEmpty}
-            docRevId = {docRevId}
-            containsRedline={containsRedline}
-            docRevStatus = {docRevStatus} />
+          <AttachmentDeleteAllButton {...{ docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision, onSelectedAttachmentsChange, onHeaderCheck }} />
+          <AttachmentDownloadAllButton {...{ docRevId, containsRedline, docRevStatus, selectedAttachments, documentRevision }} />
         </Box>
       </Box>
       <AttachmentField name="attachments" component="field" disabled={isDisabled} />

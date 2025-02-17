@@ -1,27 +1,27 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, createStyles, IconButton, makeStyles, Theme, Tooltip } from '@material-ui/core';
+import { CircularProgress, IconButton, Tooltip } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty, isUndefined } from 'lodash';
 import React, { useState } from 'react';
-import { translate } from '../../../../common/intl';
-import { attachmentsActions } from '../../../../state/ducks/attachments';
-import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
-import { Attachment, AttachmentDownloadResponse } from '../../../../state/ducks/attachments/types';
-import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
-import { AsyncStatus } from '../../../../state/types';
-import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from '../../../documentRevision/helpers/documentRevisionStatus';
-import useActionCreator from '../../../hooks/useActionCreator';
-import useAsync from '../../../hooks/useAsync';
-import useDialog from '../../../hooks/useDialog';
-import { Translation } from '../../../translations/types';
-import { toastError } from '../../notifications';
-import PasswordDialog from '../../password/dialog';
-import { Password } from '../../password/types';
-import AttachmentRedLineWarningDialog from '../attachment.redline.warning/dialog';
+import { translate } from '../../../../../common/intl';
+import { attachmentsActions } from '../../../../../state/ducks/attachments';
+import { LINE_TYPES } from '../../../../../state/ducks/attachments/constants';
+import { Attachment, AttachmentDownloadResponse } from '../../../../../state/ducks/attachments/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../../state/ducks/documentRevisions/types';
+import { AsyncStatus } from '../../../../../state/types';
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from '../../../../documentRevision/helpers/documentRevisionStatus';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import useDialog from '../../../../hooks/useDialog';
+import { Translation } from '../../../../translations/types';
+import { toastError } from '../../../notifications';
+import PasswordDialog from '../../../password/dialog';
+import { Password } from '../../../password/types';
+import AttachmentRedLineWarningDialog from '../../attachment.redline.warning/dialog';
+import { useStyles } from '../styles';
 
 interface Props {
-  isAttachmentEmpty: boolean
   docRevId: string
   containsRedline: boolean
   docRevStatus: DocumentRevisionStatus
@@ -29,24 +29,7 @@ interface Props {
   documentRevision?: DocumentRevision
 }
 
-const styles = makeStyles((theme: Theme) => createStyles({
-  icon: {
-    verticalAlign: 'middle',
-    maxHeight: 20,
-    maxWidth: 20,
-  },
-  downloadButton: {
-    padding: 0,
-    marginLeft: theme.spacing(1.5),
-  },
-  downloadIcon: {
-    height: 20,
-    width: 20,
-  },
-}));
-
 const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
-  isAttachmentEmpty,
   docRevId,
   containsRedline,
   docRevStatus,
@@ -71,7 +54,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   const redlineWarningDialogHandler = useDialog();
   const selectedAttachmentsCount = Object.values(selectedAttachments ?? {}).filter(value => value === true).length;
   const attachments = selectedAttachments && Object.keys(selectedAttachments).filter(key => selectedAttachments[key]);
-  const classes = styles({ isAttachmentEmpty });
+  const classes = useStyles();
   const { getFieldProps } = useFormikContext();
   const attachmentsData = (
     documentRevision?.attachments ?? getFieldProps('attachments').value ?? []
@@ -170,15 +153,15 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       />
       <Tooltip title={translate(isDownloadAll ? 'common.download.all.files' : 'common.download.selected.files')}>
         <IconButton
-          className={classes.downloadButton}
+          className={classes.actionButton}
           onClick={isDownloadAll
             ? handleAllDownload(docRevId, undefined)
             : handleSelectedDownload(attachments ?? [])
           }
         >
           {isDownloading
-            ? <CircularProgress className={classes.icon} />
-            : <FontAwesomeIcon icon={regular('arrow-down-to-line')} className={classes.downloadIcon} />
+            ? <CircularProgress className={classes.actionButtonIcon} />
+            : <FontAwesomeIcon icon={regular('arrow-down-to-line')} className={classes.actionButtonIcon} />
           }
         </IconButton>
       </Tooltip>

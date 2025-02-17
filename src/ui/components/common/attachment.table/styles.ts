@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
-export default makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   grid: {
     '.k-grid': {
       borderRadius: '0 !important',
@@ -79,5 +79,17 @@ export default makeStyles((theme) => ({
   },
   dragElement: {
     cursor: 'move',
+  },
+  actionButton: {
+    padding: 0,
+    marginLeft: theme.spacing(1.5),
+  },
+  actionButtonIcon: {
+    verticalAlign: 'middle',
+    height: 20,
+    width: 20,
+  },
+  deleteIcon: {
+    color: Colors.reject,
   },
 }));

@@ -19,7 +19,7 @@ import MenuItemSetPrimary from '../../attachment.icon/menu.setPrimary';
 import HeaderMenu from '../../header/Menu';
 import { WATERMARK_FILES } from '../../view.file/utils/constants';
 import { checkIfFileIsViewable } from '../../view.file/utils/helpers';
-import useStyles from '../styles';
+import { useStyles } from '../styles';
 
 interface Props extends CellTemplateProps<Attachment> {
   documentRevision?: DocumentRevision

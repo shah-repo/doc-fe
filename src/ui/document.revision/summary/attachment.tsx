@@ -2,9 +2,9 @@ import { Box, Typography } from '@material-ui/core';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
 import AttachmentField from '../../components/common/attachment.icon/container';
 import AttachmentSelectItems from '../../components/common/attachment.selectedItems/AttachmentSelectItems';
+import AttachmentDownloadAllButton from '../../components/common/attachment.table/components/AttachmentDownloadAllButton';
 import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
 
