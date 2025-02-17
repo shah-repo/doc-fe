@@ -1,10 +1,11 @@
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
-import { FB } from '..';
+import { FB, FBAutocompleteAsyncOption } from '..';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import { SHIPPING_ADDRESS_FIELDS } from './constants';
 import { CustomerRevisionInfo, FBShippingCustomerProps } from './types';
 
@@ -69,6 +70,8 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     };
 
     const resetOBSCustomerSelection = () => {
+      FBAutocompleteAsyncStore.reset(FBAutocompleteAsyncOption.shippingInformation);
+      setLatestRevisionSummary(undefined);
       formState?.setFieldValue(name, '');
       setAutocompleteKey('');
       clearAddressFields();
@@ -80,7 +83,6 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       latestRevisionSummary: latestRevisionSummary,
       resetOBSCustomerSelection,
       autocompleteKey: autocompleteKey,
-      defaultValue: { value: customerId },
     });
   };
 
