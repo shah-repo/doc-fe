@@ -100,7 +100,6 @@ export default makeStyles((theme) =>
     enclosingDiv: {
       gridColumn: '1 / -1',
       color: Colors.textBlack,
-      position: 'relative',
       flexWrap: 'wrap',
       backgroundColor: Colors.white,
       borderBottom: `1px solid ${Colors.tableStroke}`,
@@ -311,9 +310,9 @@ export default makeStyles((theme) =>
     showMoreContainer: {
       display: 'flex',
       cursor: 'pointer',
-      justifyContent: 'center',
-      marginTop: theme.spacing(-2),
-      marginLeft: theme.spacing(84),
+      alignItems: 'center',
+      marginTop: theme.spacing(0.5),
+      marginLeft: theme.spacing(75),
     },
     DescButton: {
       height: 22,
