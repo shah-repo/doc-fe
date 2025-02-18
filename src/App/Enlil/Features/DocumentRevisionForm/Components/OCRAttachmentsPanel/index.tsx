@@ -74,7 +74,6 @@ const AttachmentsPanel: React.FC = () => {
       const attachment = attachments[index];
       const data = {
         DocumentType: DOC_TYPE_GROUP.LHR,
-        // Sending now dummy values for FormID and Revision since we are currently supporting one Form/Revision per company
         FormID: 'FormID',
         Revision: 'Revision',
         AttachmentUSID: attachment.id,

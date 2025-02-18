@@ -1,20 +1,20 @@
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { OCRFilePresenterProps } from '.';
 import { PDF, SUPPORTED_IMAGE_FILES } from '../../../../../../../../ui/components/common/view.file/utils/constants';
 import { FB, FBFilePresenterDownloadType, FBFilePresenterState } from '../../../../../../../../ui/form.builder';
+import { OCRFilePresenterProps } from './types';
 
 export const withOCRFilePresenter = (
   Component: React.FC<OCRFilePresenterProps>,
 ) => {
   const Comp = ({
     handleDownload,
-    loadFIle,
+    loadFile,
     filePresenterState,
     file,
     setFile,
-    loading,
+    isLoading,
     isSupportedFileType,
     ...props
   }: OCRFilePresenterProps) => {
@@ -22,7 +22,7 @@ export const withOCRFilePresenter = (
     isSupportedFileType = [...SUPPORTED_IMAGE_FILES, PDF].includes(file.type);
 
     useObserver(() => {
-      loading = filePresenterState?.loading;
+      isLoading = filePresenterState?.loading;
     });
 
     React.useEffect(() => {
@@ -54,7 +54,7 @@ export const withOCRFilePresenter = (
       handleLoaded();
     };
 
-    loadFIle = () => {
+    loadFile = () => {
       if (!isSupportedFileType) {
         return;
       }
@@ -66,16 +66,16 @@ export const withOCRFilePresenter = (
     };
 
     useEffect(() => {
-      loadFIle?.();
+      loadFile?.();
     }, []);
 
     return Component({
       ...(props),
       filePresenterState,
       handleDownload,
-      loadFIle,
+      loadFile,
       file,
-      loading,
+      isLoading,
       isSupportedFileType,
     });
   };

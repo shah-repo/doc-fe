@@ -1,3 +1,5 @@
+import { CompositeFilterDescriptor } from '@progress/kendo-data-query';
+
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
 export const STEP_FIELD = 'step';
@@ -6,7 +8,7 @@ export const TYPE_OPTIONS = [
   { label: 'Equipment', value: 'equipment' },
   { label: 'Material', value: 'material' },
 ];
-export const DEFAULT_FILTER = {
+export const DEFAULT_FILTER: CompositeFilterDescriptor = {
   logic: 'and',
   filters: [],
 };

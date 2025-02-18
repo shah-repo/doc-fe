@@ -1,39 +1,21 @@
-import { LinearProgress, makeStyles } from '@material-ui/core';
-import React, { Dispatch, SetStateAction } from 'react';
+import { LinearProgress } from '@material-ui/core';
+import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import {
-  FBAttachment,
-  FBFilePresenterDownloadType,
-  FBFilePresenterState,
   FBFilePreview,
 } from '../../../../../../../../ui/form.builder';
+import useStyle from './styles';
+import { OCRFilePresenterProps } from './types';
 import { withOCRFilePresenter } from './wrap';
-
-export interface OCRFilePresenterProps {
-  loadFIle?: () => void
-  handleDownload?: (type: FBFilePresenterDownloadType) => void
-  handleRemove?: () => void
-  setFile?: Dispatch<SetStateAction<FBAttachment>>
-  filePresenterState?: FBFilePresenterState
-  loading?: boolean
-  file: FBAttachment
-  isSupportedFileType?: boolean
-}
-
-const useStyle = makeStyles((theme) => ({
-  progress: {
-    marginTop: theme.spacing(0.5),
-  },
-}));
 
 const OCRFilePresenter: React.FC<OCRFilePresenterProps> = ({
   file,
-  loading,
+  isLoading,
   isSupportedFileType,
 }) => {
   const classes = useStyle();
 
-  if (loading) {
+  if (isLoading) {
     return <LinearProgress className={classes.progress} />;
   }
 

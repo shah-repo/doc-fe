@@ -1,11 +1,10 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../../../ui/layout/theme-next';
-import { NextTheme } from '../../../../../../ui/layout/theme-next/provider';
 
 const DRAWER_WIDTH = 285;
 const DOC_PREVIEW_WIDTH = 500;
 
-export default makeStyles((theme: NextTheme) =>
+export default makeStyles((theme) =>
   createStyles({
     root: {
       zIndex: 1202,

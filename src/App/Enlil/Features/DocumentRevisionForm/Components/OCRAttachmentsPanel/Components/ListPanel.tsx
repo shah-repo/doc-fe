@@ -9,9 +9,9 @@ import {
 import cx from 'classnames';
 import React from 'react';
 import { translate } from '../../../../../../../common/intl';
-import Config from '../../../../../../../config';
 import { Checkbox } from '../../../../../../../ui/components/forms/fields-next';
 import { FBAttachment } from '../../../../../../../ui/form.builder';
+import { isSupportedFileType } from '../utils';
 import useStyles from './styles';
 
 interface ListPanelProps {
@@ -42,10 +42,6 @@ const ListPanel: React.FC<ListPanelProps> = ({
 
     setCheckedIndices(newChecked);
     onSelectionChange(newChecked);
-  };
-
-  const isSupportedFileType = (fileType: string): boolean => {
-    return Config.ocrSupportedFileTypes.includes(fileType?.toLowerCase());
   };
 
   const handleItemClick = (
