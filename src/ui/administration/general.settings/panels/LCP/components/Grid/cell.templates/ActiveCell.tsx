@@ -11,7 +11,16 @@ interface ActiveCellProps extends CellTemplateProps<LCP> {
 }
 
 export const ActiveCell: React.FC<ActiveCellProps> = ({ dataItem, colSpan, style, field, dataIndex, hasEditLCPPermission, selectedPartGroups, className, onChange }) => {
-  const dataCy = getCellDataCyBasedOnParentDocType(selectedPartGroups, dataItem.documentTypeId, field, dataItem.internalType);
+  const dataCy = React.useMemo(
+    () =>
+      getCellDataCyBasedOnParentDocType(
+        selectedPartGroups,
+        dataItem.documentTypeId,
+        field,
+        dataItem.internalType,
+      ),
+    [selectedPartGroups, dataItem, field],
+  );
 
   const handleChange = (event, checked: boolean) => {
     onChange?.({

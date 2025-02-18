@@ -48,6 +48,7 @@ class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     'headquarterAddress',
     'shippingItems',
     'shippingAddress',
+    'shippingCustomer',
   ];
 
   public autocompleteApi = new FBAutocompleteAsyncState();

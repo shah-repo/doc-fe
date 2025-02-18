@@ -1,34 +1,53 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
+import { process, State } from '@progress/kendo-data-query';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
-import { GridToolbar } from '@progress/kendo-react-grid';
+import { GridDataStateChangeEvent, GridFilterChangeEvent, GridPageChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { find, map, pick } from 'lodash';
 import { useObserver } from 'mobx-react';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
+import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
-import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
+import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
+import {
+  ColumnDefinition,
+  DataGridProps,
+} from '../../components/KendoDataGrid/KendoDataGrid.types';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import ColumnShowHideMenu from '../../components/common/kendo/ColumnShowHideMenu';
 import { KendoColumn } from '../../components/common/kendo/types';
 import { Button } from '../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
-import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
-import { ColumnDefinition, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
 import { toastError } from '../../components/notifications';
 import { StyleTooltip } from '../../dashboard.new/line.items/common/StyleTooltip';
-import { FBSection } from '../../form.builder';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBSection } from '../../form.builder';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
-import { ColumnMenuContext, CustomColumnMenu } from './components/cells/CustomColumnMenu';
-import { COLUMN_LOCK_FIELDS, DATA_ITEM_KEY, EXCEL_FILE_NAME, FIELDS_TO_PICK, SELECTED_FIELD } from './constants';
+import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { UnitOption } from '../FBPartVendors/types';
+import {
+  ColumnMenuContext,
+  CustomColumnMenu,
+} from './components/cells/CustomColumnMenu';
+import {
+  COLUMN_LOCK_FIELDS,
+  DATA_ITEM_KEY,
+  DEFAULT_FILTER,
+  EXCEL_FILE_NAME,
+  FIELDS_TO_PICK,
+  PAGE_SIZE,
+  ROW_HEIGHT,
+  SELECTED_FIELD,
+} from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { CustomTreeListColumnProps, EditableLHRSummaryItem, EditableLHRSummaryItemEditEvent, LHRSummaryItem } from './types';
@@ -39,7 +58,7 @@ interface props {
   isDisabled?: boolean
 }
 
-const FBLHRSummary: React.FunctionComponent<props> = ({
+const FBLHRSummary: React.FunctionComponent<props> = memo(({
   isShowOnly,
   isDisabled,
 }) => {
@@ -50,12 +69,30 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
   const [editedLHRSummaryItem, setEditedLHRSummaryItem]
     = React.useState<EditableLHRSummaryItem>();
   const [data, setData] = React.useState<EditableLHRSummaryItem[]>([]);
+  const [origionalData, setOrigionalData] = React.useState<EditableLHRSummaryItem[]>([]);
   const fetchLHRSummary = useActionCreator(lhrSummaryActions.fetchLHRSummary);
   const addLHRSummary = useActionCreator(lhrSummaryActions.addLHRSummary);
   const updateLHRSummary = useActionCreator(lhrSummaryActions.updateLHRSummary);
   const deleteLHRSummary = useActionCreator(lhrSummaryActions.deleteLHRSummary);
   const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
   const isVoided = Boolean(_documentRevisionFormState?.documentRevision?.displayStatus?.includes(DocumentRevisionStatusDisplay.Voided));
+  const [skip, setSkip] = React.useState(0);
+  const isAddButtonVisible = !isShowOnly && !isDisabled;
+
+  const onPageChange = ({ page: { skip } }: GridPageChangeEvent) => {
+    setSkip(skip);
+  };
+
+  const [dataState, setDataState] = useState<State>({
+    filter: {
+      logic: 'and',
+      filters: [],
+    },
+    skip: 0,
+    take: PAGE_SIZE,
+    group: [],
+    sort: [],
+  });
 
   if (isVoided) {
     return null;
@@ -63,10 +100,27 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const LHRSummaryAsync = useAsync({
     onSuccess: (data) => {
-      data && setData(processData(data as EditableLHRSummaryItem[], availableUsers));
+      const updatedData = processData(data as EditableLHRSummaryItem[], availableUsers);
+      data && setData(updatedData);
+      setOrigionalData(updatedData);
     },
     onError: toastError,
   });
+
+  const unitsAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+    optionId: FBAutocompleteAsyncOption.unitMeasures,
+  });
+
+  const units = useObserver(
+    () => {
+      const asyncData = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.unitMeasures) as Map<string, UnitOption>;
+      return asyncData ? Array.from(asyncData.values()).map(item => item.text) : [];
+    },
+  );
+
+  useEffect(() => {
+    unitsAsync.load();
+  }, [unitsAsync]);
 
   useEffect(() => {
     if (isShowOnly) {
@@ -78,12 +132,12 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
 
   const fetchLHRSummaryData = () => {
     const docRevId = _documentRevisionFormState?.documentRevision?.id;
-    if (!docRevId) {
-      return;
-    }
+    if (!docRevId) return;
 
-    LHRSummaryAsync.start(fetchLHRSummary, docRevId, LHRSummaryAsync);
-    dispatch(documentRevisionsActions.loadAudit(docRevId));
+    batch(() => {
+      LHRSummaryAsync.start(fetchLHRSummary, docRevId, LHRSummaryAsync);
+      dispatch(documentRevisionsActions.loadAudit(docRevId));
+    });
   };
 
   const addLHRSummaryAsync = useAsync({
@@ -159,7 +213,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     }
 
     const { stepOrMPI } = dataItem;
-    const step = stepOrMPI?.split('/')?.[0];
+    const step = stepOrMPI?.split('/')?.[0] ?? '';
     const mpiId = stepOrMPI?.split('/')?.[1];
 
     setEditedLHRSummaryItem({
@@ -179,10 +233,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     }
 
     deleteLHRSummaryAsync.start(deleteLHRSummary, _documentRevisionFormState?.documentRevision?.id, editedLHRSummaryItem?.id, deleteLHRSummaryAsync);
-  };
-
-  const getColumns = () => {
-    return columns.filter(({ show }) => show);
   };
 
   const onAddItem = () => {
@@ -209,6 +259,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       ncmr: '',
       comments: '',
       enteredBy: '',
+      unit: '',
       recordCreationDate: new Date().toISOString(),
       customRecordCreationDate: new Date().toISOString(),
       [MODE_FIELD]: Mode.add,
@@ -229,6 +280,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     }
 
     const editedRow = React.cloneElement(row, {
+      ...row.props,
       className: cx(row.props.className, classes.updatingRow),
     });
 
@@ -259,12 +311,17 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     onConfirm: submitForm,
     onDiscard: ondiscardLHRSummaryItem,
     onDelete: onDeleteLHRSummary,
+    units,
   });
 
   const [columns, setColumns]
-    = React.useState<Array<ColumnDefinition<EditableLHRSummaryItem>>>(schema);
+    = useState<Array<ColumnDefinition<EditableLHRSummaryItem>>>(schema);
 
-  const onLock = React.useCallback(
+  const visibleColumns = useMemo(() => {
+    return columns.filter(({ show }) => show);
+  }, [columns]);
+
+  const onLock = useCallback(
     ({ field, locked }: CustomTreeListColumnProps) => {
       const index = columns.findIndex((c) => c.field === field);
       const column = columns[index];
@@ -283,7 +340,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
     [columns],
   );
 
-  const onColumnShowHide = ({ field }: KendoColumn) => {
+  const onColumnShowHide = useCallback(({ field }: KendoColumn) => {
     const dataColumns = map(columns, (column: ColumnDefinition<EditableLHRSummaryItem>) => {
       if (column.field === field) {
         column.show = !column.show;
@@ -292,14 +349,38 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       return column;
     });
     setColumns(dataColumns);
-  };
+  }, [columns],
+  );
 
   const _export = React.useRef<ExcelExport | null>(null);
   const exportToExcel = () => {
     if (_export.current !== null) {
-      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers), getExcelColumns(getColumns()) as ExcelExportColumnProps[]);
+      _export.current.save(getExcelData(LHRSummaryItemList, availableUsers), getExcelColumns(visibleColumns) as ExcelExportColumnProps[]);
     }
   };
+
+  const onDataStateChange = ({ dataState }: GridDataStateChangeEvent) => {
+    setDataState(dataState);
+    const processedData = process(origionalData, dataState);
+    setData(processedData.data);
+    return dataState;
+  };
+
+  const onFilerChange = ({ filter }: GridFilterChangeEvent) => {
+    setSkip(0);
+    const updatedDataState = {
+      ...dataState,
+      filter: filter ?? DEFAULT_FILTER,
+    };
+    setDataState(updatedDataState);
+    const processedData = process(origionalData, updatedDataState);
+    setData(filter ? processedData.data : origionalData);
+  };
+
+  const slicedData = useMemo(
+    () => LHRSummaryItemList.slice(skip, skip + PAGE_SIZE),
+    [LHRSummaryItemList, skip, PAGE_SIZE],
+  );
 
   return (
     <>
@@ -307,38 +388,66 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
         label={translate('lhr.summary.table.title')}
         data-cy="lhr-summary-title"
       >
-        {(!isShowOnly && !isDisabled) && (
-          <Button
-            kind="ghost"
-            size="small"
-            style={{ float: 'right' }}
-            startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
-            onClick={onAddItem}
-            data-cy="lhr-summary-header-add-btn"
-          >
-            {translate('lhr.summary.add.item')}
-          </Button>
+        {isAddButtonVisible && (
+          <>
+            <Tooltip
+              title={translate('lhr.summary.add.item')}
+              placement="top"
+              arrow
+            >
+              <Button
+                kind="ghost"
+                size="small"
+                className={classes.addButton}
+                startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+                onClick={onAddItem}
+                data-cy="lhr-summary-header-add-btn"
+              >
+                {translate('lhr.summary.add.item')}
+              </Button>
+            </Tooltip>
+            <Tooltip title={translate('common.reload')} placement="top" arrow>
+              <IconButton
+                size="small"
+                data-cy="reload-btn"
+                className={classes.reloadButton}
+                onClick={fetchLHRSummaryData}
+              >
+                <FontAwesomeIcon icon={solid('arrow-rotate-left')} />
+              </IconButton>
+            </Tooltip>
+          </>
         )}
       </FBSection>
       <ColumnMenuContext.Provider
         value={{
-          columns: getColumns(),
+          columns: visibleColumns,
           onLock,
         }}
       >
         <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>
           <KendoDataGrid<EditableLHRSummaryItem>
+            {...dataState}
             style={{ overflow: 'auto', maxHeight: size?.height ? `${size.height - 160}px` : '100px' }}
-            data={LHRSummaryItemList}
-            schema={getColumns()}
+            data={slicedData}
+            schema={visibleColumns}
             fullWidth
             className={classes.rootLHRSummaryTable}
-            hasBoxScrollbars
+            rowHeight={ROW_HEIGHT}
+            take={PAGE_SIZE}
+            pageSize={PAGE_SIZE}
+            total={LHRSummaryItemList?.length}
+            skip={skip}
+            scrollable="virtual"
             onRowClick={onEditLHRSummaryItem}
+            onDataStateChange={onDataStateChange}
+            onPageChange={onPageChange}
+            onFilterChange={onFilerChange}
+            hasBoxScrollbars
             columnMenu={(props) => (
               <CustomColumnMenu
                 {...props}
-                columns={getColumns()}
+                columns={visibleColumns}
                 {...{
                   onLock,
                 }}
@@ -391,7 +500,7 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
           </KendoDataGrid>
         </ExcelExport>
       </ColumnMenuContext.Provider>
-      {(!isShowOnly && !isDisabled) && (
+      {isAddButtonVisible && (
         <Button
           kind="add"
           fullWidth
@@ -404,6 +513,6 @@ const FBLHRSummary: React.FunctionComponent<props> = ({
       )}
     </>
   );
-};
+});
 
-export default FBLHRSummary;
+export default memo(FBLHRSummary);
