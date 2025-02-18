@@ -115,7 +115,7 @@ export function DocumentTypePresenter ({
             onRowClick={onRowClick}
             queryUrl={queryUrl}
             defaultPayloadData={{
-              documentTypeCategory: 'Record',
+              documentTypeCategory: DocumentCategory.Record,
               status: documentRevisionQueryStatus(),
             }}
             documentTypeCategory={documentTypeCategory}

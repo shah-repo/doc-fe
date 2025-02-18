@@ -90,6 +90,7 @@ export enum DocumentCategory {
   Parts = 'Parts',
   EB = 'EB',
   Receive = 'Receive',
+  Record ='Record',
 }
 export enum RevisionChangeType {
   NextRevision = 'NEXT_REVISION',

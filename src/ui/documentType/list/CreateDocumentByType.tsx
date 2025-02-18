@@ -387,7 +387,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       </Grid>
       {errorMessage && (
         <div
-          style={{ color: 'red' }}
+          className={classes.errorBlock}
           id="DocumentByTypeListPresenter-showError"
         >
           <Text

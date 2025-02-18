@@ -1,7 +1,6 @@
 import { makeStyles } from '@material-ui/core';
-import { NextTheme } from '../../layout/theme-next/provider';
 
-export default makeStyles((theme: NextTheme) => ({
+export default makeStyles((theme) => ({
   divider: {
     height: 30,
     marginRight: theme.spacing(1.5),

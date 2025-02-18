@@ -43,5 +43,8 @@ export default makeStyles((theme: Theme) =>
       backgroundColor: Colors.white,
       color: Colors.navy,
     },
+    errorBlock: {
+      color: 'red',
+    },
   }),
 );
