@@ -2340,6 +2340,8 @@
   "common.withdraw": "Withdraw",
   "common.or": "OR",
   "common.rev": "Rev.",
+  "common.show.more": "Show more",
+  "common.show.less": "Show less",
   "commom.quick.view": "Quick View",
   "attachment.table.file.name": "Filename",
   "attachment.table.extension": "Extension",
