@@ -49,6 +49,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     refID: {
       textDecoration: 'none',
+      marginRight: theme.spacing(1),
     },
   }),
 );
