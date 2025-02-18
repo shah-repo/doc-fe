@@ -15,7 +15,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     handleSave,
     disabled,
     name = '',
-    mode = 'none',
+    mode = FBApprovalMatrixFieldModes.NONE,
     isInputOwner,
     data,
     withoutStatus,
@@ -66,9 +66,13 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       withoutStatus = status === DocumentRevisionStatus.Deprecated
         || approvalMatrix.some(item => isUndefined(get(item, 'docType.active', undefined)));
 
-      const matrix = withoutStatus
-        ? (approvalMatrix ?? []).map(item => set(item, 'docType.active', undefined))
-        : approvalMatrix;
+      const matrix = (approvalMatrix ?? []).map(item => {
+        if (withoutStatus) {
+          set(item, 'docType.active', undefined);
+        }
+        item.docType.updatedCategory = isEmpty(item.docType.category) ? DEFAULT_CATEGORY_LABEL : item.docType.category;
+        return item;
+      });
 
       data = {
         ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,

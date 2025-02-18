@@ -1,10 +1,9 @@
-import { Box, makeStyles } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import React from 'react';
-import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps, DocumentOption, EditableTrainee } from '../types';
 import { getOptionLabel } from '../utils';
 import { AutocompleteCellTemplate } from './AutocompleteCellTemplate';
@@ -13,16 +12,6 @@ interface Props extends CustomTemplateProps {
   options?: DocumentOption[]
   fieldToEdit?: string
 }
-
-const useStyles = makeStyles({
-  wrap: {
-    maxWidth: '100%',
-    display: '-webkit-box',
-    overflow: 'hidden',
-    '-webkit-line-clamp': 2,
-    '-webkit-box-orient': 'vertical',
-  },
-});
 
 const getValue = (item?: DocumentOption) => {
   if (!item) {
@@ -43,7 +32,6 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values } = useFormikContext<EditableTrainee>() ?? {};
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const classes = useStyles();
   const targetField = fieldToEdit ?? field;
 
   const source = isEditMode ? values : dataItem;
@@ -58,12 +46,11 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
       <AutocompleteCellTemplate
         {...props}
         getOptionLabel={getOptionLabel}
-        renderStoredValue={displayValue}
-        options={options}
+        renderStoredValue={() => displayValue}
+        options={options ?? []}
         getValue={getValue}
         getKey={getKey}
-        renderOption={(option) => <div className={classes.wrap}>{getOptionLabel(option)}</div>}
-        getOptionDisabled={false}
+        getOptionDisabled={() => false}
       />
     );
   }

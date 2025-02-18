@@ -1,10 +1,23 @@
 import { LCP, LCPResponse } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
+import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
 import { GroupTag, Permission } from '../auth/types';
-import { Nullable, User } from '../common/types';
+import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
+import { EquipmentStatus, LotStatus } from '../documentRevisions/types';
+import { MaterialFlowAclRule } from '../materialFlowAcl/types';
+import {
+  AUTOSAVE_CONFIG,
+  REDLINE_CONFIG,
+  SELECT_COMPANY,
+  SET_AUTOSAVE_CONFIG,
+  SET_COMPANY_MINE,
+  SET_GENERAL_SETTINGS,
+  SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
+  UPDATE_NAVIGATION_ITEM,
+  UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
+} from './constants';
 
 export interface WhiteLabelingColors {
   defaultBackground: string
@@ -39,7 +52,7 @@ export interface CompanyLocation {
   id: string
   name: string
   active: boolean
-  includedInTotalQty: boolean
+  includedInTotalQty?: boolean
 }
 
 export interface Company {
@@ -55,7 +68,7 @@ export interface Company {
   teamId: string
   addresses: string[]
   acctCodes: string[]
-  locations: CompanyLocation[]
+  locations?: CompanyLocation[]
   navigation: NavigationItem[]
   employees?: Employee[]
   scheduledForDeletion: boolean
@@ -92,14 +105,6 @@ export interface CompanyMineRequest {
 export type SelectCompanyState = Company;
 
 export type NavigationItemType = 'LINK' | 'MENU' | 'CATEGORY';
-interface AllocationOrderType {
-  fifo: string
-  lifo: string
-}
-interface ExpiredLotType {
-  warning: string
-  error: string
-}
 
 export enum NavigationItems {
   LINK = 'LINK',
@@ -130,6 +135,7 @@ export interface NavigationItem {
   menu?: NavigationItem[]
   icon?: string
   category?: string
+  isNew?: boolean
   restrictedToUsersWithTags?: GroupTag[]
   restrictedToUserPermissions?: Permission[]
   isOpen?: boolean
@@ -189,24 +195,88 @@ export interface EquipmentLocation {
   active: boolean
 }
 
+export interface EquipmentFamilyEquipmentStatus {
+  name: EquipmentStatus
+  isActive: boolean
+}
+
+interface ApprovalRoleItem {
+  id: string
+  name: string
+}
+
+export interface ApprovalRole extends ApprovalRoleItem {
+  isActive: boolean
+}
+
+export interface Dam {
+  documentRevision: {
+    id: string
+    displayRevision: string
+    displayStatus: string
+  }
+  document: {
+    id: string
+    docId: string
+  }
+  isSynced: boolean
+}
+
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
+  equipmentStatuses: EquipmentFamilyEquipmentStatus[]
+}
+
+enum SystemTransactionsEvent {
+  CreateFromReceiving='createFromReceiving',
+}
+
+export interface SystemTransactionsRule {
+  id: string
+  isActive: boolean
+  event: SystemTransactionsEvent
+  action: LotTransferType
+  from: string
+  to: string | null
+  lotStatus: LotStatus | null
 }
 
 interface AllocationConfig {
-  sortOrderByReleaseDate: AllocationOrderType
-  expiredLotsPrompt: ExpiredLotType
+  sortOrderByReleaseDate: AllocationOrder
+  expiredLotsPrompt: ExpiredLotTypes
 }
+
+interface TrainingReminders {
+  customDaysDueOn: { isActive: boolean, days: number }
+  isSevenDaysDueOnCountdownActive: boolean
+  isAssignedActive: boolean
+  isOverdueActive: boolean
+  isAssignedCcActive: boolean
+  isSevenDaysDueOnCcActive: boolean
+  isThreeDaysDueOnCcActive: boolean
+  isTodayDueOnCcActive: boolean
+  isOverdueCcActive: boolean
+}
+
 export interface GeneralSettings {
-  zebraPrint: Nullable<ZebraPrintSettings[]>
-  equipmentFamily: EquipmentFamilySettings
-  approvalRequestAdmin: boolean
-  shouldAutoUpdateLotStatus: boolean
   allocationConfig: AllocationConfig
-  lifecyclePhases?: {categories: LCPResponse[]}
-  lifecyclePhasesProcessedPayload: LCP[]
+  approvalRequestAdmin: boolean
+  equipmentFamily: EquipmentFamilySettings
+  isMaterialFlowAclEnabled: boolean
+  lifecyclePhases?: { categories: LCPResponse[] } | LCP[]
+  materialFlowACLs: MaterialFlowAclRule[]
+  shouldAutoUpdateLotStatus: boolean
   shouldNotifyLcpMismatch: NotifyPartLCP
+  systemTransactions: SystemTransactionsRule[]
+  zebraPrint: ZebraPrintSettings[] | null
+  trainingReminders: TrainingReminders
+  approvalRoles: {
+    approvalRoles: ApprovalRole[]
+    addToDam: ApprovalRoleItem[]
+    removeFromDam: ApprovalRoleItem[]
+    dam: Dam
+  }
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
@@ -216,7 +286,39 @@ export interface GeneralSettingsState extends GeneralSettings, AsyncState {
   updatedAt?: string
 }
 
+export enum PremiumFeature {
+  AI = 'AI',
+  Analytics = 'ANALYTICS',
+  OCR = 'OCR',
+}
+
+export interface PremiumFeatureSubscriptionPayload {
+  isEnabled: boolean
+}
+
+export interface PremiumFeatureSubscription extends PremiumFeatureSubscriptionPayload {
+  id: string
+  companyId: string
+  premiumFeature: PremiumFeature
+  publicConfig?: Record<string, unknown>
+  createdAt: string
+  updatedAt: string
+}
+
+export interface PremiumFeatureSubscriptionsState extends AsyncState {
+  list: PremiumFeatureSubscription[]
+}
+
 export interface GeneralSettingsAction {
   type: typeof SET_GENERAL_SETTINGS
   payload: GeneralSettings
+}
+
+export interface SetPremiumFeatureSubscriptionsAction {
+  type: typeof SET_PREMIUM_FEATURE_SUBSCRIPTIONS
+  payload: PremiumFeatureSubscription[]
+}
+export interface UpdatePremiumFeatureSubscriptionAction {
+  type: typeof UPDATE_PREMIUM_FEATURE_SUBSCRIPTION
+  payload: PremiumFeatureSubscription
 }

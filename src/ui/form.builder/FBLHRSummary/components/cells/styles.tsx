@@ -45,6 +45,7 @@ export const styles = makeStyles((theme) => ({
   link: {
     color: `${Colors.primaryDark} !important`,
     cursor: 'Pointer',
+    overflow: 'hidden',
     textDecoration: 'initial !important',
     '&:hover': {
       textDecoration: 'underline !important',

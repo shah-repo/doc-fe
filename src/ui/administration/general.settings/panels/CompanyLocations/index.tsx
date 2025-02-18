@@ -1,14 +1,14 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { isEmpty, kebabCase, omit, unionBy } from 'lodash';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
 import { getHasPermission } from '../../../../../common/utils/selectors';
 import { Permission } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { CompanyLocation, GeneralSettings } from '../../../../../state/ducks/company/types';
-import { MODE_FIELD, Mode } from '../../../../components/KendoDataGrid/constants';
+import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { toastError } from '../../../../components/notifications';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
@@ -19,24 +19,21 @@ import { buildSchema } from './schema';
 import { EditableCompanyLocation } from './types';
 
 const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
-  const { values } = useFormikContext<GeneralSettings>();
+  const { submitForm: submitSettingsForm } = useFormikContext<GeneralSettings>();
   const companyMine = useSelector(companySelectors.getCompanyMine);
   const isActive = useSelector(getHasPermission(Permission.COMPANY_UPDATE_LOCATIONS));
   const locations = companyMine.locations;
 
-  const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations);
+  const [locationsData, setLocationsData] = React.useState<CompanyLocation[]>(locations ?? []);
   const [editedLocation, setEditedLocation] = React.useState<EditableCompanyLocation>();
 
   const discardLocation = () => setEditedLocation(undefined);
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
-  const dispatch = useDispatch();
 
   const async = useAsync({
-    onSuccess: () => {
-      dispatch(companyActions.updateGeneralSettings(values));
-    },
+    onSuccess: submitSettingsForm,
     onError: (error) => {
-      setLocationsData(locations);
+      setLocationsData(locations ?? []);
       toastError(error);
     },
   });
@@ -50,7 +47,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
-      const isDuplicate = locations.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
+      const isDuplicate = locations?.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
       if (isEmpty(values.name)) {
         error.name = 'validators.required';
       }
@@ -68,7 +65,9 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { setValues, submitForm } = formik;
 
   const changeLocationActiveState = (location: EditableCompanyLocation, state: boolean) => {
-    const updatedLocations = locations.map(it => it.id === location.id ? { ...it, active: state } : it);
+    const updatedLocations = locations
+      ?.map(it => it.id === location.id ? { ...it, active: state } : it)
+      ?? [];
     updateLocations(updatedLocations);
   };
 
@@ -77,7 +76,7 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   }, [editedLocation, setValues]);
 
   useEffect(() => {
-    setLocationsData(locations);
+    setLocationsData(locations ?? []);
   }, [locations]);
 
   const addLocation = () => {
@@ -88,7 +87,6 @@ const CompanyLocationSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       active: true,
       [MODE_FIELD]: Mode.add,
     });
-    props.onToggle(true);
   };
 
   const mappedLocations = locationsData?.map((location) => {

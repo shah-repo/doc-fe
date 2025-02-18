@@ -1,5 +1,5 @@
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import { isEmpty } from 'lodash';
+import { debounce, isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FB } from '..';
@@ -17,6 +17,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     datePickerState,
     onDatePickerClick,
     onDatePickerClose,
+    onDatePickerClear,
     onChange,
     editorProperties,
     name = '',
@@ -32,20 +33,20 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const { id, isOutput } = workspaceState || {};
     const [approvalRequest, setApprovalRequest] = useState<ChangeRequest>();
 
-    function save (date?: string) {
+    const save = debounce((date?: string) => {
       if (!date) { return; }
       formState?.setFieldValue(name, date);
       formState?.validate();
+
       const isUnderWorkspace = workspaceState?.getSchemaItem(name);
       if (!isUnderWorkspace) { return; }
 
       if (workspaceState?.isChangeRequest) {
         submitForm();
-        return;
       }
 
       workspaceState?.saveDocRev(formState?.getValues());
-    }
+    }, 100);
 
     SM.reaction(
       () => workspaceState?.changeRequest,
@@ -98,11 +99,29 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       save(moment.tz(value || '', 'MM/DD/YYYY', TIME_ZONE).startOf('day').toISOString());
     };
 
+    onDatePickerClear = () => {
+      datePickerState?.setValue(null);
+      formState?.setFieldValue(name, null);
+      formState?.validate();
+
+      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+      if (!isUnderWorkspace) {
+        return;
+      }
+
+      if (workspaceState?.isChangeRequest) {
+        submitForm();
+      }
+
+      workspaceState?.saveDocRev(formState?.getValues());
+    };
+
     return Component({
       ...(props as T),
       datePickerState,
       onDatePickerClick,
       onDatePickerClose,
+      onDatePickerClear,
       onChange,
       editorProperties,
       disablePastDates,

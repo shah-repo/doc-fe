@@ -15,7 +15,7 @@ import { getLatestRevisionId } from '../../document.revision/utils/helpers';
 import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
 import FBStore from '../FBStore/FBStore';
-import { DocumentRevisionOption, FBLotTransactionsProps, LotTransfer } from './types';
+import { DocumentRevisionOption, FBLotTransactionsProps, LotTransfer, LotTransferType } from './types';
 import { shapeQuantity } from './utils';
 
 const prepareTransfers = (transfers: LotTransfer[] = []) => orderBy(transfers, 'date', 'desc');
@@ -85,6 +85,7 @@ export const withFBLotTransactions = <T extends FBLotTransactionsProps>(
 
     const prepareLotTransfer = (transfer: LotTransfer) => ({
       ...transfer,
+      to: transfer.type === LotTransferType.Scrap ? undefined : transfer.to,
       quantity: shapeQuantity(transfer.quantity, transfer.type),
       by: currentEmployeeId,
     });

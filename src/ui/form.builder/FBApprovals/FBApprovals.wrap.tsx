@@ -4,7 +4,7 @@ import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from '..';
+import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransition, FBRequiredApprover } from '..';
 import { SM } from '../../../App';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { Approval } from '../../../state/ducks/common/types';
@@ -16,7 +16,7 @@ import { store } from '../../../state/store';
 import { checkIsDocumentReceivable, checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentAlphaReleased } from '../../documentRevision/helpers/revisionStage';
 import FBStore from '../FBStore/FBStore';
-import { FBApprovalsProps, FBApprovalsStatusEndpoint } from './FBApprovals.types';
+import { FBApprovalsProps } from './FBApprovals.types';
 
 export const withFBApprovals = <T extends FBApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -97,7 +97,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     );
     dialogState = FB.useRef(FBDialogState);
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
+    approvalTransition = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => {
       if (!approvalId) { return; }
       approvalsState?.applyTransition(transition, approvalId, { password });
     };
@@ -302,12 +302,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     if (isApproved) {
       if (approvals?.length) {
-        approvalApprovedGroup = approvals.reduce((list, approval) => {
+        approvalApprovedGroup = approvals.reduce((list: string[], approval) => {
           if (approval.status !== ApprovalStatus.Approved) {
             return list;
           }
           return union(list, approval.approverGroups);
-        }, []);
+        }, []) as unknown as string[];
       } else {
         groups = {};
       }

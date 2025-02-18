@@ -26,7 +26,7 @@ export interface DialogProps extends Omit<MuiDialogProps, 'title' | 'onClose'> {
   cancelLabel?: React.ReactNode | Translation
   confirmProps?: PropsWithDataset<ButtonProps>
   cancelProps?: PropsWithDataset<ButtonProps>
-  onConfirm?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onConfirm?: (event: React.MouseEvent<HTMLElement>) => void
   onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void
   onClose?: {
     bivarianceHack: (event: {}, reason: DialogCloseReason) => void

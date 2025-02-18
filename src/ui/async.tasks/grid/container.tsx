@@ -109,10 +109,15 @@ RouteComponentProps
         taskType: type,
         currentDate: selectedDate,
       }));
+    } else if ([SQS_TYPES.SEND_EMAILS_FOR_TRAINING_RECORDS_DUE_DATES].includes(SQS_TYPES[type])) {
+      setPayload(JSON.stringify({
+        taskType: type,
+        currentDate: selectedDate,
+      }));
     } else if ([SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS].includes(SQS_TYPES[type])) {
       setPayload(JSON.stringify({
         taskType: type,
-        processedAtTimestamp: selectedDate,
+        // processedAtTimestamp: selectedDate,
       }));
     } else {
       setPayload(JSON.stringify({
@@ -127,14 +132,6 @@ RouteComponentProps
       taskType: type,
       passwordUpdatedAt: data?.passwordUpdatedAt,
       passwordLastEmailSentAt: data?.passwordLastEmailSentAt,
-      userEmails: data?.userEmails ? data.userEmails.split(',') : [],
-    }));
-    openApproveDialog();
-  };
-  const handlePasswordExpirationEmailSpecificFormSubmit = (data: any) => {
-    setPayload(JSON.stringify({
-      taskType: type,
-      processedAtTimestamp: data?.processedAtTimestamp,
       userEmails: data?.userEmails ? data.userEmails.split(',') : [],
     }));
     openApproveDialog();
@@ -173,17 +170,6 @@ RouteComponentProps
     }
     openApproveDialog();
   };
-  const handleTimeTravelUser = (values: TimeTravelProps) => {
-    if ([SQS_TYPES.TIME_TRAVEL_USER].includes(SQS_TYPES[type])) {
-      setPayload(
-        JSON.stringify({
-          taskType: type,
-          timeTravel: values,
-        }),
-      );
-    }
-    openApproveDialog();
-  };
   const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
     const updatedPayload = JSON.parse(payload);
     if ([SQS_TYPES.TIME_TRAVEL_USER_SESSION].includes(SQS_TYPES[type])) {
@@ -212,12 +198,10 @@ RouteComponentProps
       handleEmptyFormSubmit={handleEmptyFormSubmit}
       handleDateFormSubmit={handleDateFormSubmit}
       handlePasswordExpirationFormSubmit={handlePasswordExpirationFormSubmit}
-      handlePasswordExpirationEmailSpecificFormSubmit={handlePasswordExpirationEmailSpecificFormSubmit}
       handleuuidFormSubmit={handleuuidFormSubmit}
       handleEmailFormSubmit={handleEmailFormSubmit}
       handleTimeTravelFormSubmit={handleTimeTravelFormSubmit}
       handleTimeTravelCompany={handleTimeTravelCompany}
-      handleTimeTravelUser={handleTimeTravelUser}
       onSubmit={onSubmit}
     />
   );

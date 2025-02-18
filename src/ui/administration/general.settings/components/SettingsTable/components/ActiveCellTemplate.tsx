@@ -1,13 +1,14 @@
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../../../../components/KendoDataGrid/constants';
 import { Checkbox, FormikField } from '../../../../../components/forms/fields-next';
+import { Mode, MODE_FIELD } from '../../../../../components/KendoDataGrid/constants';
+import { CellTemplateProps, EditableItem } from '../../../../../components/KendoDataGrid/KendoDataGrid.types';
+import useStyles from '../styles';
 
-interface EditableItemWithActiveField extends EditableItem {
-  active: boolean
-}
+type EditableItemWithActiveField =
+  EditableItem & { active: boolean, isActive?: never }
+  | EditableItem & { isActive: boolean, active?: never };
 
 interface Props<T extends EditableItemWithActiveField> extends CellTemplateProps<T> {
   onActiveStateChange?: (item: T, active: boolean) => void
@@ -21,12 +22,17 @@ function ActiveCellTemplate<T extends EditableItemWithActiveField> ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getFieldProps, getFieldMeta } = useFormikContext();
 
+  const classes = useStyles();
+
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   return (
     <Box display="flex" justifyContent="center">
       {isEditMode && (
-        <FormikField name={field}>
+        <FormikField
+          name={field}
+          className={classes.activeCheckbox}
+        >
           <Checkbox
             checked={Boolean(getFieldMeta(field).value)}
             {...getFieldProps(field)}
@@ -35,7 +41,7 @@ function ActiveCellTemplate<T extends EditableItemWithActiveField> ({
       )}
       {!isEditMode && (
         <Checkbox
-          checked={dataItem.active}
+          checked={dataItem.active ?? dataItem.isActive}
           onChange={(e, checked) => onActiveStateChange?.(dataItem, checked)}
           disabled={!onActiveStateChange}
         />

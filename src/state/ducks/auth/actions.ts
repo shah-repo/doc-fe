@@ -9,8 +9,8 @@ import { ApiAction, Handlers } from '../../types';
 import { companyActions } from '../company';
 import { Employee } from '../company/types';
 import { userManagementActions } from '../userManagement';
-import { AUTH_AWS_IOT_URL, AUTH_USER, CHANGE_PASSWORD_URL, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SEND_PASSWORD_RESET_EMAIL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from './constants';
-import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoginRequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from './types';
+import { AUTH_AWS_IOT_URL, AUTH_USER, CHANGE_PASSWORD_URL, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SEND_PASSWORD_RESET_EMAIL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, SSO_CALLBACK_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from './constants';
+import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoginRequestBody, LoginSSORequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from './types';
 
 const authSignup = (): SignupAction => ({
   type: SIGNUP_URL,
@@ -106,6 +106,19 @@ const login = (
     handlers,
   });
 
+const loginSSO = (
+  loginValues: LoginSSORequestBody,
+  handlers: Handlers,
+): ApiAction<AuthResponse> =>
+  apiActionWithCallbacks({
+    url: SSO_CALLBACK_URL,
+    method: 'get',
+    params: loginValues,
+    includeAuthorization: false,
+    onSuccess: onLoginSuccessCallback,
+    handlers,
+  });
+
 const signup = (
   loginValues: LoginRequestBody,
   handlers: Handlers,
@@ -173,7 +186,6 @@ const resetPassword = (
     method: 'post',
     data: values,
     handlers,
-    includeAuthorization: false,
   });
 
 const loginWithCode = (
@@ -195,13 +207,13 @@ const loginWithCode = (
   });
 
 const resendSignupEmail = (
-  email: string,
+  userDto: { name: string, email: string },
   handlers: Handlers,
 ): ApiAction<Partial<AuthResponse>> =>
   apiActionWithCallbacks({
     url: RESEND_SIGNUP_EMAIL_URL,
     method: 'post',
-    data: { email },
+    data: userDto,
     handlers,
   });
 
@@ -298,6 +310,7 @@ export default {
   logoutUser,
   login,
   logout,
+  loginSSO,
   loginWithCode,
   getIotCreds,
   loadUserGroups,

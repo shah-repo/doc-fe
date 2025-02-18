@@ -141,14 +141,14 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
         <div className={classes.actionLabel}>
           <OverflowingContent>{translate(displayValue?.label)}</OverflowingContent>
         </div>
-          <Box>
-            {isOnOrderPOActionColumn && openedPOsAvailable && (
-              <FontAwesomeIcon
-                icon={solid('circle')}
-                onClick={handleClickPOs}
-                className={cx(classes.dot, classes.poPreviewDot)}
-              />
-            )}
+        <Box>
+          {isOnOrderPOActionColumn && openedPOsAvailable && (
+            <FontAwesomeIcon
+              icon={solid('circle')}
+              onClick={handleClickPOs}
+              className={cx(classes.dot, classes.poPreviewDot)}
+            />
+          )}
           {showCopyButton && (
             <span ref={copyIconRef} onClick={handleCopy}>
               <Tooltip
@@ -161,8 +161,8 @@ export const DropDownCellTemplate: React.FC<Props> = (props) => {
                   className={classes.copyIcon}
                 /></Tooltip>
             </span>)}
-          </Box>
         </Box>
+      </Box>
       <Dialog
         title={translate(
           'approvalRequest.material.disposition.po.preview.title',

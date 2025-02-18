@@ -36,12 +36,12 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
     defaultValue = formState?.getFieldValue(name) || defaultValue;
 
     controls = map(options as FBOption[], (option, index) => {
-      const [value, message] = at(option, [optionValueKey, optionLabelKey]);
-      let attr = message;
+      const [value, message] = at(option, [optionValueKey as any, optionLabelKey]);
+      let attr = message as string;
       if (isTranslation(attr)) {
-        attr = intl.formatMessage({ id: message });
+        attr = intl.formatMessage({ id: message as string });
       }
-      formState?.setValidationAttributeName(value, attr);
+      formState?.setValidationAttributeName(value as string, attr);
       return (
         <FormControlLabel
           key={`fb-${value}-${index}`}
@@ -54,7 +54,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
               {...(controlValue && { checked: controlValue === value })}
             />}
           {...{ value }}
-          label={<Text {...{ message }} />}
+          label={<Text {...{ message: message as string }} />}
         />
       );
     });

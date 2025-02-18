@@ -1,8 +1,8 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Tooltip, Typography } from '@material-ui/core';
 import cx from 'classnames';
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, RefObject, useRef } from 'react';
 import { translate } from '../../../../../common/intl';
 import { Button, IconButton } from '../../../../components/forms/fields-next';
 import useSticky from '../../../../hooks/useSticky';
@@ -14,34 +14,51 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   info,
   children,
   containerRef,
+  expanded,
   onToggle,
   onAddNew,
+  isOutOfSync,
   ...props
 }) => {
   const classes = useStyles();
   const [stickyRef, isSticky] = useSticky(containerRef);
+  const isAddPending = useRef(false);
 
   const handleAddNew: MouseEventHandler = (e) => {
     e.stopPropagation();
-    onAddNew?.();
+    if (expanded) {
+      onAddNew?.();
+      return;
+    }
+    onToggle();
+    isAddPending.current = true;
+  };
+
+  const handleOnEntered = () => {
+    if (isAddPending.current) {
+      isAddPending.current = false;
+      onAddNew?.();
+    }
   };
 
   return (
     <ExpansionPanel
       {...props}
+      expanded={expanded}
       className={classes.root}
       TransitionProps={{
         mountOnEnter: true,
         unmountOnExit: true,
+        onEntered: handleOnEntered,
         ...props.TransitionProps,
       }}
     >
       <ExpansionPanelSummary
-        ref={stickyRef}
-        onClick={() => onToggle()}
+        ref={stickyRef as RefObject<HTMLDivElement>}
+        onClick={onToggle}
         classes={{
           root: cx(classes.summary, { [classes.stickySummary]: isSticky }),
-          content: classes.content,
+          content: cx(classes.content, { [classes.settingOutOfSync]: isOutOfSync }),
           expandIcon: classes.icon,
         }}
         expandIcon={(
@@ -56,6 +73,13 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         )}
       >
         <Typography variant="h2" className={classes.title}>{title}</Typography>
+        {isOutOfSync && (
+          <Tooltip title={translate('administration.general.settings.approvalRoles.sync.message.dialog.out.of.sync.with.dam')}>
+            <div className={classes.outOfSyncBox}>
+              <FontAwesomeIcon className={classes.outOfSyncIcon} icon={regular('rotate-exclamation')} />
+            </div>
+          </Tooltip>
+        )}
         {info && <Typography className={classes.info}>{info}</Typography>}
         {onAddNew && (
           <Button

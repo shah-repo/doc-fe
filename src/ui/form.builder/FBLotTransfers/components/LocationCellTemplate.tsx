@@ -2,17 +2,18 @@ import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { CompanyLocation, CustomTemplateProps, EditableLotTransfer } from '../types';
+import { CompanyLocation, CustomTemplateProps, EditableLotTransfer, LotTransferType } from '../types';
 
 interface Props extends CustomTemplateProps {
   options: CompanyLocation[]
+  allowedOptions: string[]
+  isAclEnabled: boolean
 }
 
-export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, onClick }) => {
+export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options, isAclEnabled, allowedOptions, onClick }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableLotTransfer>();
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
@@ -24,6 +25,9 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
   const defaultValue = (isEditMode ? values[field] : dataItem[field]) as string;
   const value = options.find((loc) => loc.id === defaultValue);
 
+  const isScrapAction = values.type === LotTransferType.Scrap;
+  const isDisabled = field === 'to' && isScrapAction;
+
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete
   if (isEditMode && !isEmpty(values)) {
     return (
@@ -34,9 +38,10 @@ export const LocationCellTemplate: React.FC<Props> = ({ dataItem, field, options
         <Autocomplete
           {...getFieldProps(field)}
           blurOnSelect
-          options={options.filter(loc => loc.active)}
+          options={options.filter(loc => loc.active && (!isAclEnabled || allowedOptions.includes(loc.id)))}
           getOptionLabel={(option: CompanyLocation) => option.name}
-          value={value}
+          value={isDisabled ? null : value}
+          disabled={isDisabled}
           onChange={handleChange}
           size="small"
         />

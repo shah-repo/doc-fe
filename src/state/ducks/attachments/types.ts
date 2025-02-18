@@ -1,6 +1,6 @@
 import { Id, Nullable, User } from '../common/types';
 import { DocumentRevision } from '../documentRevisions/types';
-import { ADD_WATERMARK, REMOVE_WATERMARK } from './constants';
+import { ADD_WATERMARK, CLEAR_WATERMARKS, REMOVE_WATERMARK } from './constants';
 
 export interface Attachment {
   id: string
@@ -67,5 +67,9 @@ interface RemoveWatermarkAction {
   type: typeof REMOVE_WATERMARK
   payload: string
 }
-export type WatermarkActions = AddWatermarkAction & RemoveWatermarkAction;
+interface ClearWatermarkAction {
+  type: typeof CLEAR_WATERMARKS
+  payload: string
+}
+export type WatermarkActions = AddWatermarkAction | RemoveWatermarkAction | ClearWatermarkAction;
 export type WatermarkState = string[];

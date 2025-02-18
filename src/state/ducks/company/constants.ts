@@ -3,10 +3,8 @@ import {
   CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_TYPE_MANAGEMENT_URL,
-  GROUP_MANAGEMENT_ROOT_URL,
   HOME_URL,
   PAGE_DETAILS_MANAGEMENT_URL,
-  USER_MANAGEMENT_ROOT_URL,
 } from '../../../ui/constants/urls';
 import { GroupTag } from '../auth/types';
 import { NavigationItem } from './types';
@@ -18,6 +16,8 @@ export const AUTOSAVE_CONFIG = 'company/AUTOSAVE_CONFIG';
 export const SET_AUTOSAVE_CONFIG = 'company/SET_AUTOSAVE_CONFIG';
 export const REDLINE_CONFIG = 'company/REDLINE_CONFIG';
 export const SET_GENERAL_SETTINGS = 'company/SET_GENERAL_SETTINGS';
+export const SET_PREMIUM_FEATURE_SUBSCRIPTIONS = 'company/SET_PREMIUM_FEATURE_SUBSCRIPTIONS';
+export const UPDATE_PREMIUM_FEATURE_SUBSCRIPTION = 'company/UPDATE_PREMIUM_FEATURE_SUBSCRIPTION';
 
 export const WHITE_LABEL_DEFAULT = {
   logo: '',
@@ -131,20 +131,6 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
   },
   {
-    label: 'Group Management',
-    type: 'LINK',
-    path: GROUP_MANAGEMENT_ROOT_URL,
-    icon: '/navigation_icons/group-management.svg',
-    restrictedToUsersWithTags: [GroupTag.GROUP_MANAGEMENT],
-  },
-  {
-    label: 'User Management',
-    type: 'LINK',
-    path: USER_MANAGEMENT_ROOT_URL,
-    icon: '/navigation_icons/user-management.svg',
-    restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
-  },
-  {
     label: 'Document Type Management',
     type: 'LINK',
     path: DOCUMENT_TYPE_MANAGEMENT_URL,
@@ -166,3 +152,5 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
   },
 ];
+
+export const OMIT_FIELDS = ['id', 'materialFlowACLs', 'statusCode', 'approvalRoles'];

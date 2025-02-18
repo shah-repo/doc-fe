@@ -1,7 +1,7 @@
 import React from 'react';
 import { Employee } from '../../../../../../state/ducks/company/types';
 import { AvatarComponent } from '../../../../../components/common/kendo.column.templates/UserAvatar';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps } from '../types';
 import { AutocompleteCellTemplate } from './AutocompleteCellTemplate';
 

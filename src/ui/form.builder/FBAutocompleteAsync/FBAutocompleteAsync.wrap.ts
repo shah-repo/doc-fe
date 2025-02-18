@@ -86,11 +86,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
       const slicedOptions = autocompleteAsyncState?.sliceData ?? autocompleteAsyncState?.data;
 
-      loading = (
+      loading = Boolean(
         loading
         || FBAutocompleteAsyncStore.loading.get(optionId)
         || autocompleteAsyncState?.autocompleteValueApi.loading
-        || autocompleteAsyncState.loading
+        || autocompleteAsyncState?.loading,
       );
 
       if (slicedOptions) {

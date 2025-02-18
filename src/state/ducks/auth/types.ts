@@ -1,10 +1,15 @@
 import { Nullable } from '../common/types';
 import { Employee } from '../company/types';
-import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from './constants';
+import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, SSO_REDIRECT_PARAM, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from './constants';
 
 export interface LoginRequestBody {
   email: string
   password: string
+}
+
+export interface LoginSSORequestBody {
+  code: string
+  [SSO_REDIRECT_PARAM]?: string
 }
 
 export interface ForgotPassword {
@@ -29,6 +34,22 @@ export interface LoginWithCodeRequestBody {
 
 export interface LogoutRequestBody {
   AccessToken: string
+}
+
+interface Credentials {
+  AccessKeyId: string
+  SecretAccessKey: string
+  SessionToken: string
+  Expiration: string
+}
+
+export interface IotCredentials {
+  credentials: Credentials
+  endpoint: string
+  environment: string
+  companyId: string
+  employeeId: string
+  region: string
 }
 
 export interface AuthResponse {
@@ -113,22 +134,6 @@ export interface UserState {
   initialColor: string
 }
 
-export interface IotCredentials {
-  credentials: Credentials
-  endpoint: string
-  environment: string
-  companyId: string
-  employeeId: string
-  region: string
-}
-
-interface Credentials {
-  AccessKeyId: string
-  SecretAccessKey: string
-  SessionToken: string
-  Expiration: string
-}
-
 export interface AuthProps {
   currentUserEmail: string
 }
@@ -179,6 +184,9 @@ export enum Permission {
   CR_OWNER_AS_APPROVER = 'CR_OWNER_AS_APPROVER',
   CR_ON_APPROVER_LIST = 'CR_ON_APPROVER_LIST',
   DOCUMENT_OWNER_CHANGE = 'DOCUMENT_OWNER_CHANGE',
+  // Settings
+  COMPANY_SETTINGS_GET = 'COMPANY_SETTINGS_GET',
+  COMPANY_SETTINGS_UPDATE = 'COMPANY_SETTINGS_UPDATE',
   // Company data
   // COMPANY_DATA = "COMPANY_DATA",
   // Employee
@@ -228,6 +236,10 @@ export enum Permission {
   EDIT_EQ_STATUS = 'EDIT_EQ_STATUS',
   // BULK_IMPORT
   BULK_IMPORT = 'BULK_IMPORT',
+  // TRAINING
+  GROUP_TRAINING_CREATE = 'GROUP_TRAINING_CREATE',
+  // REDLINE FILE ACCESS
+  CAN_ACCESS_REDLINE_ATTACHMENTS = 'CAN_ACCESS_REDLINE_ATTACHMENTS',
 }
 
 export enum GroupTag {
@@ -236,6 +248,7 @@ export enum GroupTag {
   OWNERSHIP_CHANGE = 'OWNERSHIP_CHANGE',
   QMS_DEFAULT = 'QMS_DEFAULT',
   GROUP_MANAGEMENT = 'GROUP_MANAGEMENT',
+  ADMIN_MANAGEMENT = 'ADMIN_MANAGEMENT',
   FB_COMPONENT_PURCHASE_ORDER = 'FB_COMPONENT_PURCHASE_ORDER',
   FB_COMPONENT_RECEIVE_PURCHASE_ORDER = 'FB_COMPONENT_RECEIVE_PURCHASE_ORDER',
   FB_COMPONENT_INLINE_APPROVAL = 'FB_COMPONENT_INLINE_APPROVAL',
@@ -251,6 +264,8 @@ export enum GroupTag {
   PAGE_DETAILS_MANAGEMENT = 'PAGE_DETAILS_MANAGEMENT',
   ASYNC_TASKS_UI = 'ASYNC_TASKS_UI',
   PO_ADMIN = 'PO_ADMIN',
+  CUSTOMER_MODULE_ACCESS= 'CUSTOMER_MODULE_ACCESS',
+  SHIPPING_MODULE_ACCESS= 'SHIPPING_MODULE_ACCESS',
 }
 
 export enum GroupType{

@@ -1,40 +1,46 @@
-import { Box, Paper, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { translate } from '../../../common/intl';
 import { logo } from '../../../common/utils/helpers';
 import { authActions } from '../../../state/ducks/auth';
 import FBStore from '../../form.builder/stores/ui/FBStore';
-import { styles } from './ResetPasswordSuccessful.styles';
+import useStyles from './ResetPassword.styles';
 
-const UserLocked: React.FunctionComponent<{}> = () => {
-  const classes = styles();
+const UserLocked: React.FC = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(authActions.logout());
     FBStore.clearStores();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(authActions.logout());
+  }, [dispatch]);
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
+      <div className={classes.header}>
         <img
           src={logo}
           alt="Logo"
           className={classes.logo}
         />
-        <Box display="flex" textAlign="center" mb={5} data-cy="UserLocked-lockedInfo">
-          <Typography variant="h5"className={classes.lockedInfo}>
-            Your account has been locked.
-          </Typography>
-        </Box>
-        <Box display="flex" textAlign="center" mb={5} data-cy="UserLocked-infoLink">
-          <Typography variant="h5"className={classes.lockedInfo}>
-          Please contact your Company Admin for Enlil to reset your password.
-          </Typography>
-        </Box>
-      </Paper>
+      </div>
+      <div className={classes.content}>
+        <div className={classes.form}>
+          <div className={classes.formTitle}>
+            <div data-cy="reset-password-successful-title">
+              <Typography variant="h1" className={classes.title}>
+                {translate('user.locked.title')}
+              </Typography>
+            </div>
+            <div data-cy="user-locked-info-link">
+              <Typography variant="h2" className={classes.info}>
+                {translate('user.locked.info')}
+              </Typography>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

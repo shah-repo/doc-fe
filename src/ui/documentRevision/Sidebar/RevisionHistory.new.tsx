@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Box,
-  LinearProgress,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from '@material-ui/core';
+import { Avatar, Box, LinearProgress, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -35,7 +27,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ docum
     loadDocumentAction();
   }, [loadDocumentAction, documentId]);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadDocumentAsyncState);
-  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const loading = loadAsyncState.status && ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
   return (
     <Box>
       {loading && <LinearProgress style={{ width: '100%' }} />}

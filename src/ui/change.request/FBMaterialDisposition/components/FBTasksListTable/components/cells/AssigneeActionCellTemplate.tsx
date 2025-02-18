@@ -11,10 +11,10 @@ import {
 } from '../../../../../../../common/utils/date';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { Button } from '../../../../../../components/forms/fields-next';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../../components/KendoDataGrid/constants';
 import {
-  EmployeeStatus,
   EMPLOYEE_RESPONSE_FIELD,
-  EMPTY_VALUE_PLACEHOLDER,
+  EmployeeStatus,
 } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 import { styles } from './styles';

@@ -2,10 +2,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { SM } from '../../App';
 import { SearchPage } from '../../App/Enlil/Features/Search';
+import { authSelectors } from '../../state/ducks/auth';
+import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
+import PremiumFeaturesPage from '../administration/premium.settings';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
 import BulkImportProgressPage from '../bulkImport/container.progress';
@@ -15,6 +18,7 @@ import ChangeRequestListContainer from '../change.request/grid/container';
 import WatermarkFooterContainer from '../components/watermarkFooter/container';
 import {
   ASYNC_TASKS_URL,
+  BULK_IMPORT_EDIT_URL,
   BULK_IMPORT_PROGRESS_URL,
   BULK_IMPORT_URL,
   CHANGE_REQUEST_CREATE_URL,
@@ -29,13 +33,14 @@ import {
   DOCUMENT_TYPE_MANAGEMENT_URL,
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
-  GROUP_MANAGEMENT_ROOT_URL,
   HOME_URL,
+  NO_ACCESS,
   PAGE_DETAILS_MANAGEMENT_URL,
+  PREMIUM_FEATURES_URL,
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
   TRAINING_URL,
-  USER_MANAGEMENT_ROOT_URL,
+  USER_GROUP_URL,
 } from '../constants/urls';
 import DashboardLayout from '../dashboard.new/Dashboard.layout';
 import DashboardContainer from '../dashboard/Dashboard.container';
@@ -45,13 +50,12 @@ import { DocumentTypeManagementContainer } from '../document.type.management/ken
 import DocumentRevisionCreateContainer from '../documentRevision/DocumentRevisionCreate.container';
 import { IS_SIDEBAR_EXPANDED } from '../documentRevision/Sidebar/constants';
 import DocumentTypeListContainer from '../documentType/grid/container';
-import GroupManagementListContainer from '../group.management/kendo/container';
+import NoAccessScreen from '../noAccessScreen';
 import PageDetailsManagementContainer from '../page.details.management/list/container';
 import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
 import SlackContainer from '../slack/Container';
 import TrainingDetailContainer from '../training/TrainingDetail.container';
 import TrainingListContainer from '../training/grid/container';
-import UserManagementListContainer from '../user.management/kendo/container';
 import DataFetcherContainer from './DataFetcher.container';
 import HeaderContainer from './Header.container';
 import useStyles from './Layout.styles';
@@ -59,25 +63,39 @@ import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
 
-const Layout: React.FunctionComponent = () => {
-  const isExpanded = localStorage.getItem(IS_SIDEBAR_EXPANDED) ? localStorage.getItem(IS_SIDEBAR_EXPANDED) !== '0' : false;
-  const [isOpened, setOpen] = React.useState(isMobile() ? false : isExpanded);
-  const classes = useStyles({ isDashboard: SM.isHomeURL, isOpened: isOpened });
-  const handleDrawerOpen = () => {
-    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isOpened ? '1' : '0');
-    setOpen(!isOpened);
+const Layout: React.FC = () => {
+  const isMobileView = isMobile();
+  const defaultSidebarExpandedValue = isMobileView ? false : localStorage.getItem(IS_SIDEBAR_EXPANDED) === '1';
+  const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(defaultSidebarExpandedValue);
+  const classes = useStyles();
+  const toggleSidebar = () => {
+    localStorage.setItem(IS_SIDEBAR_EXPANDED, !isSidebarExpanded ? '1' : '0');
+    setIsSidebarExpanded(prev => !prev);
   };
+  const canAccessNavigation = useSelector(authSelectors.hasCompanies);
 
   return (
     <>
       <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
-      <HeaderContainer className={classes.mobileLayout} isOpened={isOpened} handleDrawerOpen={handleDrawerOpen} />
-      <Navigation handleDrawerOpen={handleDrawerOpen} open={isOpened} />
+      <HeaderContainer
+        isSidebarExpanded={isSidebarExpanded && canAccessNavigation}
+        onSidebarToggle={toggleSidebar}
+        canAccessNavigation={canAccessNavigation}
+      />
+      {canAccessNavigation && (
+        <Navigation isOpen={(isSidebarExpanded || isMobileView) && canAccessNavigation} onSidebarToggle={toggleSidebar} />
+      )}
       <SocketsContainer />
       <WatermarkFooterContainer />
-      <main className={cx(classes.root, classes.mobileLayout)} >
+      <main className={cx(
+        classes.root,
+        {
+          [classes.withSidebarExpanded]: isSidebarExpanded,
+          [classes.fullWidth]: !canAccessNavigation,
+        },
+      )} >
         <DataFetcherContainer />
         <Switch>
           <Route
@@ -127,14 +145,6 @@ const Layout: React.FunctionComponent = () => {
             component={TrainingListContainer}
           />
           <Route
-            path={USER_MANAGEMENT_ROOT_URL}
-            component={UserManagementListContainer}
-          />
-          <Route
-            path={GROUP_MANAGEMENT_ROOT_URL}
-            component={GroupManagementListContainer}
-          />
-          <Route
             path={SLACK_ROOT_URL}
             component={SlackContainer}
           />
@@ -167,13 +177,30 @@ const Layout: React.FunctionComponent = () => {
             component={GeneralSettingsPage}
           />
           <Route
+            path={PREMIUM_FEATURES_URL}
+            component={PremiumFeaturesPage}
+          />
+          <Route
             path={BULK_IMPORT_URL}
             component={BulkImportPage}
             exact
           />
           <Route
+            path={BULK_IMPORT_EDIT_URL}
+            component={BulkImportPage}
+          />
+          <Route
+            path={USER_GROUP_URL}
+            component={UserGroupManagment}
+          />
+          <Route
             path={BULK_IMPORT_PROGRESS_URL}
             component={BulkImportProgressPage}
+            exact
+          />
+          <Route
+            path={NO_ACCESS}
+            component={NoAccessScreen}
             exact
           />
           <Redirect to={HOME_URL} />

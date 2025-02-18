@@ -26,7 +26,7 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick,
   };
   return (
     column.cell
-      ? <column.cell {...props} column={column} field={field} onClick={onCellClick} />
+      ? <column.cell {...props} column={column} field={field} onClick={(e) => onCellClick(e as GridRowClickEvent)} />
       : (
         <GridCell
           {...props}
@@ -39,7 +39,7 @@ const CustomGridCell: React.FC<CustomGridCellProps> = ({ column, field, onClick,
                   ['data-cy' as string]: `cell-${kebabCase(column.id)}`,
                 },
                 column.template
-                  ? column.template({ ...props, column, field, onClick: onCellClick })
+                  ? column.template({ ...props, column, field, onClick: (e) => onCellClick(e as GridRowClickEvent) })
                   : undefined,
               );
             }

@@ -4,8 +4,7 @@ import React from 'react';
 import { translate } from '../../../../../common/intl';
 import OverflowingContent from '../../../../change.request/FBMaterialDisposition/components/commonCells/OveflowContent';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
-import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
-import { EMPTY_VALUE_PLACEHOLDER } from '../../constants';
+import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
 import { CustomTemplateProps } from '../../types';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {

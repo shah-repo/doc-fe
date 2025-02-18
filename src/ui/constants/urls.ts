@@ -32,11 +32,10 @@ export const RESET_PASSWORD_SUCCESSFUL_URL = '/reset_password_successful/';
 export const STATUS = '/status';
 export const MAINTENANCE = '/maintenance';
 export const USER_LOCKED = '/locked';
+export const NO_ACCESS = '/no-access';
 export const EXPORTED_FILE_DOWNLOAD = '/exported_file_download';
 
 export const SUPPLIER_SURVEY_URL = '/supplier_survey/:token';
-
-export const USER_MANAGEMENT_ROOT_URL = '/user_management';
 
 export const SLACK_ROOT_URL = '/slack';
 export const SLACK_COMPANY_URL = `${SLACK_ROOT_URL}/company`;
@@ -48,8 +47,6 @@ export const DOCUMENT_TYPE_MANAGEMENT_URL = '/document_type_management';
 
 export const DOCUMENT_BY_CATEGORY_ROOT_URL = '/document_by_category';
 export const DOCUMENT_BY_CATEGORY_LIST_URL = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/:categoryName`;
-
-export const GROUP_MANAGEMENT_ROOT_URL = '/group_management';
 
 export const COMPANY_MINE_URL = '/company/mine';
 
@@ -63,15 +60,26 @@ export const GLOBAL_SEARCH_URL = '/search';
 
 export const GENERAL_SETTINGS_URL = '/general_settings';
 
-export const COMPANY_SETTINGS_URL = '/company/settings';
+export const PREMIUM_FEATURES_URL = '/premium_feature';
 
+export const USER_GROUP_URL = '/user_group';
+export const USER_GROUPS_URL = '/user_group/group';
+
+export const COMPANY_SETTINGS_URL = '/company/settings';
 export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
 
-export const BULK_IMPORT_URL = '/bulk_import/create';
+export const PREMIUM_FEATURE_SUBSCRIPTIONS_URL = '/premium_feature_subscriptions';
+export const PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL = `${PREMIUM_FEATURE_SUBSCRIPTIONS_URL}/:id`;
 
+export const BULK_IMPORT_URL = '/bulk_import/create';
 export const BULK_IMPORT_PROGRESS_URL = '/bulk_import';
+export const BULK_IMPORT_EDIT_BASE_URL = `${BULK_IMPORT_PROGRESS_URL}/edit/`;
+export const BULK_IMPORT_EDIT_URL = `${BULK_IMPORT_EDIT_BASE_URL}:bulkImportId`;
 
 export const LIFE_CYCLE_URL = '/lifecycle';
 export const LIFE_CYCLE_PHASES_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/baseOptions`;
 export const LIFE_CYCLE_DOC_REV_OPTIONS_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/docRevOptions`;
 export const LIFE_CYCLE_DOC_TYPES_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/documentTypeOptions`;
+
+export const CREATE_APPROVAL_ROLES_URL = '/approval_roles';
+export const UPDATE_APPROVAL_ROLES_URL = `${CREATE_APPROVAL_ROLES_URL}/:id`;

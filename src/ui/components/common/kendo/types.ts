@@ -41,7 +41,7 @@ export interface KendoColumn {
   width?: number | string
   reorderable?: boolean
   orderIndex?: number
-  columnMenu?: GridColumnMenuProps
+  columnMenu?: ComponentType<GridColumnMenuProps>
   filterable?: boolean
   disabled?: boolean
   resizable?: boolean

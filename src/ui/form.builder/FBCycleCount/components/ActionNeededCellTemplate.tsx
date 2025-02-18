@@ -1,14 +1,14 @@
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import React, { ChangeEvent } from 'react';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { EMPTY_VALUE_PLACEHOLDER, MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import OverflowContent from '../../../components/OverflowContent';
 import { Autocomplete, FormikField } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
-import { ACTION_NEEDED_OPTIONS, EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { CustomTemplateProps, EditableCycleCount } from '../types';
-import OverflowContent from '../../../components/OverflowContent';
-import cx from 'classnames';
+import { ACTION_NEEDED_OPTIONS } from '../constants';
 import useStyles from '../styles';
+import { CustomTemplateProps, EditableCycleCount } from '../types';
 
 const Editor: React.FC<CustomTemplateProps> = ({ field }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method

@@ -6,7 +6,7 @@ import { ApplicationState } from '../../state/reducers';
 
 const useGetHasPermission = (
   permission: Permission,
-) => {
+): boolean => {
   const selectGetHasPermission = useMemo(() => authSelectors.makeGetHasPermission(), []);
   return useSelector(
     (state: ApplicationState) => selectGetHasPermission(state, permission),

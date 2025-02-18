@@ -134,14 +134,18 @@ export const styles = makeStyles((theme) => ({
   },
   attachmentName: {
     display: 'flex',
-    '& svg:first-child': {
-      transform: 'rotate(45deg)',
-      height: '0.7em',
-      width: '0.7em',
-    },
-    '& svg:last-child': {
-      height: '1em',
-      width: '1em',
-    },
+    overflow: 'hidden',
+  },
+  attachmentIcon: {
+    width: 14,
+    height: 14,
+  },
+  attchmentNameWrapper: {
+    overflow: 'hidden',
+    margin: theme.spacing(0, 0.75),
+  },
+  redLine: {
+    color: Colors.latest_red_varient,
+    borderBottom: `1px solid ${Colors.latest_red_varient}`,
   },
 }));

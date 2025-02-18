@@ -1,6 +1,6 @@
 import { translate } from '../../../common/intl';
 import { MODE_FIELD } from '../../components/KendoDataGrid/constants';
-import { LotTransferType } from './types';
+import { AclRuleFieldsToCheck, LotTransferType } from './types';
 
 export const EMPLOYEE_FIELD = 'employeeName';
 export const BUILD_FIELD = 'buildName';
@@ -16,7 +16,6 @@ export const INITIAL_QUANTITY_FIELD = 'lot_usable_quantity';
 export const TRANSFERS_FIELD = 'lot_transfers';
 export const MAX_DECIMALS = 12;
 
-export const EMPTY_VALUE_PLACEHOLDER = '-';
 export const DEDUCTABLE_TRANSFER_TYPES = [LotTransferType.Allocate, LotTransferType.Transfer, LotTransferType.Scrap];
 export const INCREMENTABLE_LOT_TRANSFER_TYPES = [LotTransferType.Return, LotTransferType.Backflush];
 
@@ -24,3 +23,5 @@ export const TRANSFER_TYPE_OPTIONS = Object.values(LotTransferType).map((value) 
   value,
   label: translate(`form.builder.lot.transfers.type.${value}`),
 }));
+
+export const RULE_FIELDS_TO_CHECK: AclRuleFieldsToCheck[] = ['type', 'from', 'to'];

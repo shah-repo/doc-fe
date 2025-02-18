@@ -2,10 +2,17 @@ import { Button, LinearProgress } from '@material-ui/core';
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
+import { Provider } from 'react-redux';
+import { store } from '../../state/store';
 import { AsyncStatus } from '../../state/types';
 import AsyncGate, { AsyncGateProps } from './AsyncGate';
 
 jest.mock('./Text', () => () => null);
+
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn().mockReturnValue({ status: 'SUCCESS' }),
+}));
 
 describe('AsyncGate component unit tests', () => {
   const TestComponent = () => <div>TEST</div>;
@@ -23,9 +30,11 @@ describe('AsyncGate component unit tests', () => {
   });
 
   const getWrapper = (props: AsyncGateProps): ReactWrapper => mount((
-    <AsyncGate {...props}>
-      <TestComponent />
-    </AsyncGate>
+    <Provider store={store}>
+      <AsyncGate {...props}>
+        <TestComponent />
+      </AsyncGate>
+    </Provider>
   ));
 
   it('does not call asyncAction on start by default', () => {

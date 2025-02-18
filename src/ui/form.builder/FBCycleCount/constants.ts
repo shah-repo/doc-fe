@@ -5,8 +5,6 @@ export const CYCLE_COUNT_FREQUENCY_KEY = 'cycle-count-frequency';
 export const LOT_CYCLE_COUNT_KEY = 'lot-cycle-count';
 export const LOT_PART_SELECT_KEY = 'lot_part';
 
-export const EMPTY_VALUE_PLACEHOLDER = '-';
-
 export const EMPLOYEE_FIELD = 'employeeName';
 export const DATE_FIELD = 'dateFormatted';
 

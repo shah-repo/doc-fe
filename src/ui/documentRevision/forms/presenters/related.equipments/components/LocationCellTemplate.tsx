@@ -1,10 +1,10 @@
-import React from 'react';
 import { get } from 'lodash';
-import { CustomTemplateProps } from '../types';
+import React from 'react';
 import { EquipmentLocation } from '../../../../../../state/ducks/company/types';
-import { AutocompleteCellTemplate } from './AutocompleteCellTemplate';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../../../components/OverflowContent';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
+import { CustomTemplateProps } from '../types';
+import { AutocompleteCellTemplate } from './AutocompleteCellTemplate';
 
 interface Props extends CustomTemplateProps {
   options: EquipmentLocation[]

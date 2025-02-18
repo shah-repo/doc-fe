@@ -188,12 +188,12 @@ export const withFBApprovers = <T extends FBApproversProps>(
 
     if (isApproved) {
       if (approvals?.length) {
-        approvalApprovedGroup = approvals.reduce((list, approval) => {
+        approvalApprovedGroup = approvals.reduce((list: string[], approval) => {
           if (approval.status !== ApprovalStatus.Approved) {
             return list;
           }
           return union(list, approval.approverGroups);
-        }, []);
+        }, []) as unknown as string[];
       } else {
         groups = {};
       }

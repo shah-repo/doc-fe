@@ -1,15 +1,15 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { makeStyles, Tooltip } from '@material-ui/core';
 import { get } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { translate } from '../../../../../../common/intl';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
-import { CustomTemplateProps } from '../types';
-import { translate } from '../../../../../../common/intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { makeStyles, Tooltip } from '@material-ui/core';
 import { Colors } from '../../../../../layout/theme-next';
-import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
+import { CustomTemplateProps } from '../types';
 
 const styles = makeStyles(() => ({
   container: {

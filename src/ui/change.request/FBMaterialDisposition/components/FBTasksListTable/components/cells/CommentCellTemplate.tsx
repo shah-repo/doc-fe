@@ -4,8 +4,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { authSelectors } from '../../../../../../../state/ducks/auth';
 import { FormikField, TextField } from '../../../../../../components/forms/fields-next';
+import { EMPTY_VALUE_PLACEHOLDER } from '../../../../../../components/KendoDataGrid/constants';
 import OverflowingContent from '../../../commonCells/OveflowContent';
-import { COMMENTS_FIELD, EmployeeStatus, EMPLOYEE_RESPONSE_FIELD, EMPTY_VALUE_PLACEHOLDER } from '../../constants';
+import { COMMENTS_FIELD, EMPLOYEE_RESPONSE_FIELD, EmployeeStatus } from '../../constants';
 import { CustomTemplateProps } from '../../types';
 import { styles } from './styles';
 

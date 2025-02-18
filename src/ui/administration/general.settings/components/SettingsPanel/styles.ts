@@ -79,6 +79,19 @@ export default makeStyles(theme => ({
       position: 'sticky',
       top: 64,
       zIndex: 1,
+      borderRadius: 0,
     },
+  },
+  settingOutOfSync: {
+    justifyContent: 'normal',
+  },
+  outOfSyncBox: {
+    cursor: 'default',
+  },
+  outOfSyncIcon: {
+    margin: theme.spacing(0.5, 0, 0, 1),
+    color: Colors.error,
+    width: 20,
+    height: 20,
   },
 }));

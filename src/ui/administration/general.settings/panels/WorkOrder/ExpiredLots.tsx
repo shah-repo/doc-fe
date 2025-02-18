@@ -36,7 +36,7 @@ const ExpiredLots: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const handleChange = (event: React.ChangeEvent<{}>, value: OptionType) => {
-    setValue(value);
+    setValue(value as any);
     setFieldValue(NOTIFY_PART_LCP_KEY, value.value);
   };
 

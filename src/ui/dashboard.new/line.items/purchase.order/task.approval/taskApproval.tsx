@@ -15,19 +15,21 @@ import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { Nullable } from '../../../../../state/ducks/common/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
-import Text from '../../../../components/Text';
 import { getInitalsFromName } from '../../../../components/icons/avatar/helpers';
 import { toastSuccess } from '../../../../components/notifications';
+import Text from '../../../../components/Text';
+import { BULK_IMPORT_PROGRESS_URL } from '../../../../constants/urls';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import useActionCreator from '../../../../hooks/useActionCreator';
 import useAsync from '../../../../hooks/useAsync';
 import useDialog from '../../../../hooks/useDialog';
 import Colors from '../../../../layout/theme/utils/colors';
+import { Translation } from '../../../../translations/types';
 import DismissAction from '../../common/DismissAction';
 import DocId from '../../common/DocId/presenter';
 import DocTitle from '../../common/DocTitle/presenter';
-import { StyleTooltip } from '../../common/StyleTooltip';
 import { StyledListItem } from '../../common/StyledListItem';
+import { StyleTooltip } from '../../common/StyleTooltip';
 import ApproveDialogueContainer from './POApprovalDialogContainer';
 import useStyles from './taskApproval.styles';
 interface Props {
@@ -49,6 +51,9 @@ interface Props {
   pinLineItem?: (id: string) => void
   unPinLineItem?: (pinnedItemId: string) => void
   dismissLineItem?: (id: string) => void
+}
+interface ResponseProps {
+  status: string
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -125,7 +130,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   };
 
   const rejectDialogAsync = useAsync({
-    onSuccess: (response) => {
+    onSuccess: (response?: ResponseProps) => {
       toastSuccess(
         <>
           <div style={{ display: 'flex' }}>
@@ -160,6 +165,8 @@ const TaskApprovalPresenter: React.FC<Props> = ({
 
   const isPinShown = pinLineItem && !pinned;
   const isUnpinShown = unPinLineItem && pinned;
+  const isBulkImport = docId.startsWith('BULKIMPORT-');
+  const redirectUrl = isBulkImport ? BULK_IMPORT_PROGRESS_URL : docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#';
 
   return (
     <>
@@ -230,11 +237,11 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <DocId
-                    url={docId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                    url={redirectUrl}
                     docId={docId}
                   />
                   <DocTitle
-                    url={docRevId ? documentVersionPath(docRevId || '', docDocumentId) : '#'}
+                    url={redirectUrl}
                     docRevVersion={docRevVersion}
                     docRevName={docRevName}
                   />

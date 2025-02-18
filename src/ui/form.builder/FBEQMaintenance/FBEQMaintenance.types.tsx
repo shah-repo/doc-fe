@@ -7,7 +7,6 @@ export type FBEQMaintenanceProps =
 & {
   handleAdd?: () => void
   complianceDueDate?: string
-  complianceStatus?: string
   isNewPMDisabled?: boolean
   isNewPMLoading?: boolean
   pmFormId?: string

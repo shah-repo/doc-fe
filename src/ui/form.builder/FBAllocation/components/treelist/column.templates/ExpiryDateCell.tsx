@@ -33,7 +33,7 @@ const ExpiryDateCellTemplate: ComponentType<CustomTreeListCellProps> = ({
         'data-grid-col-index': otherProps.colIndex,
         'aria-expanded': otherProps.expanded,
       }}
-      data-cy="unit-cell"
+      data-cy="expiry-date"
     >
       <span className={cx(classes.Cell, { [classes.expired]: isExpired && fieldValue })}>
         {fieldValue && getFormattedDateString(fieldValue, MomentFormats.MonthDateYearTwoDigit)}

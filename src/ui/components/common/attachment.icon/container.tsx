@@ -12,8 +12,8 @@ import { ApplicationState } from '../../../../state/reducers';
 import { AsyncStatus } from '../../../../state/types';
 import { FormHeaderSummaryContext } from '../../../document.revision/header/SummaryHeader';
 import { isOperator } from '../../../documentRevision/DocumentRevisionDisplay.container';
-import { documentRevisionStatusContextFromCR } from '../../../documentRevision/DocumentRevisionUpdate.container';
 import { documentRevisionStatusContextFromDocList } from '../../../documentRevision/DocumentRevisionsManager.container';
+import { documentRevisionStatusContextFromCR } from '../../../documentRevision/DocumentRevisionUpdate.container';
 import { documentTypeContext, isOwnerContext } from '../../../documentRevision/forms/DocumentRevisionForm.container';
 import FBDynamicValidatorStore from '../../../form.builder/stores/ui/FBDynamicValidatorStore';
 import FBStore from '../../../form.builder/stores/ui/FBStore';
@@ -36,8 +36,6 @@ import PresenterFactory from './presenter.factory';
 import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from './utils/types';
 import WatermarkContainer from './watermark/container';
 
-type DispatchProps = AttachmentIconDispatchProps;
-
 const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name = '',
   form,
@@ -46,6 +44,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   isNewVersion,
   documentRevision,
   docRevId,
+  isRedlineFirst,
   ...other
 }) => {
   const documentRevisionFromState = useSelector((state: ApplicationState) =>
@@ -147,7 +146,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
 
   const handleRemove = (attachment: Attachment) => () => {
     if (!form && !field) { return; }
-    const filtered = (field.value as Attachment[]).filter((a) => a.id !== attachment.id);
+    const filtered = (field?.value as Attachment[]).filter((a) => a.id !== attachment.id);
 
     if (FBStore.mode === 'form') {
       let values = {
@@ -162,7 +161,7 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       FBStore.setValues(values);
       FBDynamicValidatorStore.validate();
     }
-    form.setFieldValue(name, filtered);
+    form?.setFieldValue(name, filtered);
     submitForm();
   };
 
@@ -327,14 +326,15 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   const openWarningDialog = () => redlineWarningDialogHandler.open();
   const openFileView = () => dialogHandler.open();
 
-  const sortedAttachments = useMemo(() =>
-    attachments
-      .sort((a) => a.lineType === LINE_TYPES.CLEAN_COPY ? -1 : 0)
-      .sort((a) => a.id === documentRevision?.primaryAttachment?.id ? -1 : 0)
-  , [attachments, documentRevision]);
+  const sortedAttachments = useMemo(() => {
+    return attachments
+      .sort((a) => (a.lineType === (isRedlineFirst ? LINE_TYPES.RED_LINE : LINE_TYPES.CLEAN_COPY) ? -1 : 0))
+      .sort((a) => (a.id === documentRevision?.primaryAttachment?.id ? -1 : 0));
+  }, [attachments, documentRevision, isRedlineFirst]);
+
   const attachmentsRenderer = sortedAttachments.map((attachment) => {
     let showAttachment = true;
-    let canDeleteFile = true;
+    let canDeleteFile = false;
     if (isCurrentUserOperator && (documentType === 'LOT' || documentType === 'EB')) {
       const isOwnerOfFile = attachment.owner?.id === currentEmployeeId;
       showAttachment = isOwnerOfFile;
@@ -344,7 +344,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
       showAttachment = true;
       canDeleteFile = true;
     }
-
     if (!showAttachment) {
       return null;
     }
@@ -420,6 +419,6 @@ const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerPr
   );
 };
 
-export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
+export default connect<{}, AttachmentIconDispatchProps, {}, ApplicationState>(null, {
   download: attachmentsActions.download,
 })(withFormik(AttachmentIconContainer));

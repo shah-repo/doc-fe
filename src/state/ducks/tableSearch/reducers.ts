@@ -3,7 +3,7 @@ import { LOGOUT_USER, USERS_ME_URL } from '../auth/constants';
 import { User } from '../auth/types';
 import { GetEmployeeResponse } from '../userManagement/types';
 import { EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO, TABLE_CLEAR_ALL, TABLE_DATA_SET, TABLE_FORCE_UPDATE_SET, TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from './constants';
-import { EditActiveStatusAction, TableDataSetAction, TableSearchByIdState, TableSearchClearAction, TableSearchClearAllAction, TableSearchDataState, TableSearchForceUpdateAction, TableSearchSetAction, TableSortAction } from './types';
+import { EditActiveStatusAction, EditGroupsAction, EditUserInfoAction, LogoutUserAction, TableDataSetAction, TableSearchByIdState, TableSearchClearAction, TableSearchClearAllAction, TableSearchDataState, TableSearchForceUpdateAction, TableSearchSetAction, TableSortAction, UsersMeAction } from './types';
 
 export const DEFAULT_TABLE_SEARCH = {
   queryDict: {},
@@ -11,13 +11,14 @@ export const DEFAULT_TABLE_SEARCH = {
   scrollToIndex: 0,
   forceUpdate: false,
 };
-type TableSearchActions = TableSearchSetAction &
-TableSearchClearAction &
-TableSearchForceUpdateAction &
-TableSortAction &
-TableSearchClearAllAction;
+type TableSearchActions = TableSearchSetAction |
+TableSearchClearAction |
+TableSearchForceUpdateAction |
+TableSortAction |
+TableSearchClearAllAction |
+LogoutUserAction;
 
-type TableDataActions = TableDataSetAction<any> & EditActiveStatusAction & TableSearchClearAllAction;
+type TableDataActions = TableDataSetAction<any> | EditActiveStatusAction | TableSearchClearAllAction | LogoutUserAction | EditGroupsAction | EditUserInfoAction | UsersMeAction;
 
 const criteria = (
   state: TableSearchByIdState = {},

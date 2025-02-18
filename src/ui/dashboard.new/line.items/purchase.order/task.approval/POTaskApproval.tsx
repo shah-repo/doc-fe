@@ -197,6 +197,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const handleDownloadClick = () => {
     setDownloadPdfMobile(true);
   };
+
   const handleDownloadClose = () => {
     setDownloadPdfMobile(false);
   };

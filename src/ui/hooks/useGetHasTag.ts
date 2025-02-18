@@ -6,7 +6,7 @@ import { ApplicationState } from '../../state/reducers';
 
 const useGetHasTag = (
   tag: GroupTag,
-) => {
+): boolean => {
   const selectGetHasTag = useMemo(() => authSelectors.makeGetHasTag(), []);
   return useSelector(
     (state: ApplicationState) => selectGetHasTag(state, tag),
