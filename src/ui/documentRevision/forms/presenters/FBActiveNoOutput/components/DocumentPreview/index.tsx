@@ -94,7 +94,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(documentType.groupOptions);
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length);
   const isCurrentUserOperator = useContext(isOperator);
   const isDisabledInput = formik.values.id !== undefined && isCurrentUserOperator && !isOwner;
   const isOutput = true;
@@ -304,7 +303,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                               isDisabled={isDisabledInput}
                               isNewVersion={false}
                               docRevId={docRevId || ''}
-                              isAttachmentEmpty={isAttachmentEmpty}
                               containsRedline={false}
                               docRevStatus={documentRevision?.status}
                               documentRevision={documentRevision}

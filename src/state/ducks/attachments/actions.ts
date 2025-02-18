@@ -73,6 +73,16 @@ const downloadAllAttachmentsPassword = (
   handlers,
 });
 
+const downloadSelectedAttachments = (
+  attachmentIds: string[],
+  handlers: Handlers<AttachmentDownloadResponse>,
+): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+  url: `${ATTACHMENT_ROOT_URL}/file_url`,
+  method: 'get',
+  params: { attachmentIds },
+  handlers,
+});
+
 const requestWatermarkedFile = (
   data: WatermarkRequestBody,
   handlers: Handlers,
@@ -188,6 +198,7 @@ export default {
   downloadRedLine,
   downloadAllAttachments,
   downloadAllAttachmentsPassword,
+  downloadSelectedAttachments,
   requestWatermarkedFile,
   checkWatermarkStatus,
   addWatermark,
