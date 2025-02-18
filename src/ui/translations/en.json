@@ -1522,6 +1522,7 @@
   "form.builder.site.information.grid.heading.zip.code": "Zip code",
   "form.builder.site.information.grid.heading.country": "Country",
   "form.builder.site.information.grid.heading.approved.to.receive": "Approved To Receive",
+  "form.builder.site.information.grid.heading.siteInformation": "Site Information Item",
   "form.builder.contact.grid.heading.isPrimary": "Primary",
   "form.builder.contact.grid.heading.isShipping": "Shipping",
   "form.builder.contact.grid.heading.isAttention": "Attention",
