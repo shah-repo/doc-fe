@@ -2,6 +2,7 @@ import { FormikProvider, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import * as Yup from 'yup';
 import { GroupTag } from '../../../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../../../state/ducks/company';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
@@ -23,6 +24,13 @@ const GeneralSettingsContainer: React.FC = () => {
 
   const formik = useFormik<GeneralSettings>({
     initialValues,
+    validationSchema: Yup.object().shape({
+    trainingReminders: Yup.object({
+      customDaysDueOn: Yup.object({
+        days: Yup.number().required('common.required').min(1),
+      }),
+    }),
+    }),
     onSubmit: (values: GeneralSettings) => {
       dispatch(companyActions.updateGeneralSettings(values));
     },
