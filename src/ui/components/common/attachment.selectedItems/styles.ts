@@ -1,7 +1,7 @@
-import { createStyles, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import Colors from '../../../layout/theme-next/colors';
 
-export const useStyles = makeStyles((theme) => createStyles({
+export const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     alignItems: 'center',

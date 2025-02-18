@@ -1,4 +1,4 @@
-import { Box, createStyles, makeStyles, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
@@ -9,7 +9,7 @@ import AttachmentDeleteAllButton from '../../components/common/attachment.table/
 import AttachmentDownloadAllButton from '../../components/common/attachment.table/components/AttachmentDownloadAllButton';
 import Text from '../../components/Text';
 import { useAttachments } from '../../hooks/docCustomization/useCustomization';
-import Colors from '../../layout/theme/utils/colors';
+import { useStyles } from './styles';
 
 interface Props {
   isDisabled: boolean
@@ -22,21 +22,6 @@ interface Props {
   documentTypeId: string
 }
 
-const styles = makeStyles(() =>
-  createStyles({
-    attachmentHeaderContainer: {
-      display: 'flex',
-    },
-    attachmentHeadText: {
-      flex: '100%',
-      display: 'flex',
-      justifyContent: 'flex-start',
-      fontSize: 12,
-      fontWeight: 600,
-      color: Colors.almost_black,
-    },
-  }));
-
 const Attachments: React.FunctionComponent<Props> = ({
   isDisabled = false,
   isNewVersion,
@@ -47,7 +32,7 @@ const Attachments: React.FunctionComponent<Props> = ({
   documentTypeId,
   labeld,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const { isVisible, label } = useAttachments(documentTypeId);
   const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
   const [isHeaderChecked, setIsHeaderChecked] = React.useState(false);

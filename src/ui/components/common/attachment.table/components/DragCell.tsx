@@ -25,7 +25,6 @@ const DragCell: React.FC<Props> = (props) => {
       className={classes.dragCell}
       onDragOver={(e) => {
         context.reorder(props.dataItem);
-
         e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
       }}
