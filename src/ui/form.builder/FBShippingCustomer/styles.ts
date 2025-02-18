@@ -1,8 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
-import { NextTheme } from '../../layout/theme-next/provider';
 
-export default makeStyles((theme: NextTheme) =>
+export default makeStyles((theme) =>
   createStyles({
     grid: {
       width: '100%',

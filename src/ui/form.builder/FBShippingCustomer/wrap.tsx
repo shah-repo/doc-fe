@@ -15,8 +15,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
   const Comp = (props: T) => {
     const { name } = props;
     const { workspaceState, formState } = FB.useStores();
-    const [latestRevisionSummary, setLatestRevisionSummary]
-      = useState<CustomerRevisionInfo>();
+    const [latestRevisionSummary, setLatestRevisionSummary] = useState<CustomerRevisionInfo>();
     const customerId = useObserver(
       () =>
         formState?.getFieldValue(name)
@@ -24,8 +23,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
         || workspaceState?.formInput?.shippingCustomer,
     );
 
-    const [autocompleteKey, setAutocompleteKey]
-      = useState<string | undefined>(customerId);
+    const [autocompleteKey, setAutocompleteKey] = useState<string | undefined>(customerId);
 
     const fetchLatestRevisionSummary = useActionCreator(
       allocationActions.fetchLatestRevisionDetailsByRevId,

@@ -80,9 +80,7 @@ export const buildSchema = ({
       field: 'approvedToReceive',
       title: 'form.builder.site.information.grid.heading.approved.to.receive',
       filterable: false,
-      headerCell: (props) => <CustomHeaderTooltipCell
-        {...props}
-        content="form.builder.site.information.grid.heading.approved.to.receive" />,
+      headerCell: (props) => <CustomHeaderTooltipCell {...props} content="form.builder.site.information.grid.heading.approved.to.receive" />,
       template: (props) => <ApprovedToReceiveCell {...props} onClick={onRowClick} />,
       width: 150,
     },
