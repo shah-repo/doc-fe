@@ -117,6 +117,19 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
+const getGeneralSettingsWithHandler = (
+  handlers: Handlers,
+): ApiAction => {
+  return apiActionWithCallbacks({
+    url: COMPANY_SETTINGS_URL,
+    handlers,
+    method: 'get',
+    onSuccess: (data, dispatch) => {
+      dispatch(setGeneralSettings(data));
+    },
+  });
+};
+
 const setPremiumFeatureSubscriptionsAction = (subscriptions: PremiumFeatureSubscription[]): SetPremiumFeatureSubscriptionsAction => ({
   type: SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   payload: subscriptions,
@@ -252,6 +265,7 @@ export default {
   setAutosaveConfig,
   redlineConfig,
   getGeneralSettings,
+  getGeneralSettingsWithHandler,
   updateGeneralSettings,
   getPremiumFeatureSubscriptions,
   updatePremiumFeatureSubscription,
