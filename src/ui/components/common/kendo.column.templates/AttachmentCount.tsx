@@ -2,6 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import cx from 'classnames';
+import { get } from 'lodash';
 import React, { useCallback } from 'react';
 import { CustomGridCellProps } from '../kendo/types';
 import useStyles from './AttachmentCount.styles';
@@ -21,7 +22,7 @@ export const AttachmentCount: React.FunctionComponent<CustomGridCellProps> = ({
   }
 
   const classes = useStyles();
-  const attachmentLength = (dataItem[field ?? ''] ?? 0) as number;
+  const attachmentLength = get(dataItem, field, 0) as number;
   const isAttachmentsExist = attachmentLength > 0;
   const cellClickEvent = () => cellRowClick?.({ dataItem });
 
