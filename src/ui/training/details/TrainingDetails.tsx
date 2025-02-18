@@ -27,7 +27,7 @@ interface TrainingDetailsProps {
 
 const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog, training }) => {
   const classes = styles();
-  const { id: documentRevisionId, documentId, displayRevision, document } = training.documentRevision ?? {};
+  const { id: documentRevisionId, documentId, displayRevision } = training.documentRevision ?? {};
   const referencesIds = training.trainingPlan?.sourceReferencesIds ?? [];
   const references = training.trainingPlan?.sourceReferences ?? [];
   const attachments = training.attachments ?? references.reduce(
@@ -90,7 +90,7 @@ const TrainingDetails: React.FunctionComponent<TrainingDetailsProps> = ({ dialog
                 <ReferenceLink
                   className={referenceClassName}
                   label={translate('common.displayRevision', {
-                    docId: document?.docId,
+                    docId: training.trainingPlan?.document.docId,
                     displayRevision: displayRevision,
                   })}
                   documentId={documentId}
