@@ -241,7 +241,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                               containsRedline={false}
                                               label="Supporting Documents"
                                               docRevStatus={documentRevision.status}
-                                              {...{ isDownloadAllVisible }}
+                                              {...{ isDownloadAllVisible, documentRevision }}
                                             />
                                           </>
                                         </Formik>

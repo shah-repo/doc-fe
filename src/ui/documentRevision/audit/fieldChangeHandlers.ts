@@ -55,6 +55,14 @@ export const handleSiteInformationChange = (change: Audit, fbLabel: FBLabel): Ch
     };
   }
 
+  if (change.type === 'OBJECT_EDITED' && change.field === 'formInput.siteInformation') {
+    fbLabel = translate('form.builder.site.information.grid.heading.siteInformation');
+    change = {
+      ...change,
+      type: 'OBJECT_DELETED',
+    };
+  }
+
   return { change, fbLabel };
 };
 

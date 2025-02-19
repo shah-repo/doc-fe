@@ -51,6 +51,7 @@ enum Colors {
   darkGray='#F5F5F5',
   lightGray='#C8CACF',
   lightGray2='#C4C4C4',
+  lightGray3='#CCD4D9',
   black='#000',
 
   // Statuses

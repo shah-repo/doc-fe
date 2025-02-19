@@ -17,9 +17,7 @@ import FileIcon from './icon';
 import { styles } from './utils/styles';
 import { AttachmentIconProps } from './utils/types';
 
-const AttachmentIconPresenter: React.FunctionComponent<
-AttachmentIconProps
-> = ({
+const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProps> = ({
   attachment,
   size,
   handleRemove,

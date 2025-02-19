@@ -44,7 +44,6 @@ export interface FormHeaderContext {
 
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
 export let isOwnerContext = React.createContext<boolean>(false);
-export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
 interface OwnProps {
   initialValues: DocumentRevisionFormValues
@@ -237,7 +236,6 @@ DocumentRevisionFormContainerProps
   const isDisabled: boolean = initialValues.id !== undefined;
 
   isOwnerContext = React.createContext(isOwner || (documentRevision.isBeingEditedAfterRelease ?? false));
-  documentTypeContext = React.createContext(documentTypeAcronym);
   FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
     documentRevision,
     canChangeOwnerShip,

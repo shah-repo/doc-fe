@@ -5,9 +5,10 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { AutoSizer, AutoSizerProps } from 'react-virtualized';
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SM, SMBox, SMForm, SMTabs, SMTemplate } from '../../..';
-import { getHasPermission } from '../../../../common/utils/selectors';
+import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../../../common/utils/selectors';
 import { clearPOSavedInfo, getPOSavedInfo } from '../../../../indexDb';
 import { GroupTag, Permission } from '../../../../state/ducks/auth/types';
+import { PremiumFeature } from '../../../../state/ducks/company/types';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DOC_TYPE_GROUP, DocumentGroupType, TabInfo, TabTypeOptions, WorkOrderTypes } from '../../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, SmartReferenceType } from '../../../../state/ducks/documentRevisions/types';
@@ -25,7 +26,7 @@ import DocumentRevisionFormPresenter from '../../../../ui/documentRevision/forms
 import LHRBanner from '../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner';
 import RedlineBanner from '../../../../ui/documentRevision/forms/presenters/redline/Redline.banner';
 import UpgradeToLatestContainer from '../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container';
-import { checkIsDocumentChangeRequest, checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentChangeRequest, checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPaperLHR, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentWOByGroupOrOptions } from '../../../../ui/documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionHasOutput } from '../../../../ui/documentRevision/helpers/documentRevisionStatus';
 import { FBBOM, FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from '../../../../ui/form.builder';
 import FBAllocationTreeList from '../../../../ui/form.builder/FBAllocation/components/treelist';
@@ -36,6 +37,7 @@ import useGetHasTag from '../../../../ui/hooks/useGetHasTag';
 import Colors from '../../../../ui/layout/theme/utils/colors';
 import { withSMTabs } from '../../../Shifamed/Components/SMTabs/SMTabs.hoc';
 import FBTrainingInfoContainer from '../DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container';
+import AttachmentsPanel from './Components/OCRAttachmentsPanel';
 import { withDocumentRevisionFormWrap } from './DocumentRevisionForm.wrap';
 
 const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> = ({
@@ -81,6 +83,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const outputTypeGroupOptions = get(outputDocumentType, 'groupOptions');
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isPaperLHR = checkIsDocumentPaperLHR(groupOptions);
   const isDAM = checkIsDocumentDAM(groupOptions);
   const isPO = checkIsDocumentPO(groupOptions);
   const isPart = checkIsDocumentPart(groupOptions);
@@ -95,7 +98,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   let tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
   const documentTypeId = formValues.values.document?.documentType?.id || '';
   const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments?.length);
   const isCurrentUserOperator = React.useContext(isOperator);
   const isDisabledInput = formValues.values.id !== undefined && isCurrentUserOperator && !isOwner && !documentRevision.isBeingEditedAfterRelease;
   const isUserAdminEnforce = useGetHasTag(GroupTag.PO_ADMIN);
@@ -103,6 +105,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const isPOEditState = isUserAdminEnforce && SM.isNewVersion && isPO && hasOutput;
   const inRestrictedEditMode = disableOtherFieldsChangeControl(documentRevision);
   const hasPermissionToEditBOM = useSelector(getHasPermission(Permission.EDIT_BOM));
+  const hasActiveOCRSubscription = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.OCR));
 
   const isRelatedTogetherPart = documentRevision?.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
   const isBomDisabled = isDisabledInput || inRestrictedEditMode || isPartForm || !hasPermissionToEditBOM || isRelatedTogetherPart;
@@ -198,6 +201,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     setReloadKey(prevKey => prevKey + 1);
   };
 
+  const getLeftSidePanel = () => {
+    if (isPaperLHR && hasActiveOCRSubscription) {
+      return AttachmentsPanel;
+    }
+
+    return DocumentRevisionLeftPanel;
+  };
+
   return (
     <>
       <SMForm
@@ -205,7 +216,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         templateBoxProps={{ stretchY: '100%', width: '100%' }}
         contentBoxProps={{ bgcolor: Colors.alabaster }}
         values={formValues.values}
-        leftSidebar={DocumentRevisionLeftPanel}
+        leftSidebar={getLeftSidePanel()}
         header={
           <DocumentRevisionHeader
             {...{ bannerPortal, shouldShowUpgrade, setDoNotPrompt }}
@@ -355,7 +366,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                           isDisabled={isDisabledInput}
                                           isNewVersion={false}
                                           docRevId={docRevId}
-                                          isAttachmentEmpty={isAttachmentEmpty}
                                           containsRedline={false}
                                           docRevStatus={documentRevision?.status}
                                           documentRevision={documentRevision}
