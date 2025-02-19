@@ -15,6 +15,7 @@ export enum GeneralSettingsTabs {
   ExpiredLots = 'Expired Lots',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
+  ApprovalRoles = 'Approval Roles',
   Locations = 'Locations',
   MaterialFlow = 'Material Flow',
   SystemTransactions = 'System Transactions Setup',
@@ -31,6 +32,7 @@ export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
   info?: string
   containerRef?: RefObject<HTMLElement>
+  isOutOfSync?: boolean
   onToggle: () => void
   onAddNew?: () => void
 }

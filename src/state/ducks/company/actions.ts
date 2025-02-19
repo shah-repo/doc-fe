@@ -5,10 +5,14 @@ import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration
 import { OptionType } from '../../../ui/administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
 import {
-  ASL_OPTIONS_OPTIONS_URL, COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL,
+  ASL_OPTIONS_OPTIONS_URL, COMPANY_MINE_URL, COMPANY_SETTINGS_URL,
+  CREATE_APPROVAL_ROLES_URL,
+  LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL,
   PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL,
   PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
-  SUPPLIERS_OPTIONS_URL, UPDATE_COMPANY_SETTINGS_URL,
+  SUPPLIERS_OPTIONS_URL,
+  UPDATE_APPROVAL_ROLES_URL,
+  UPDATE_COMPANY_SETTINGS_URL,
 } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, ApiActionMethod, Handlers } from '../../types';
@@ -165,6 +169,43 @@ const updateGeneralSettings = (
   });
 };
 
+const createApprovalRoles = (
+  body: { name: string, isActive: boolean },
+  handlers: Handlers,
+  method: ApiActionMethod = 'post',
+): ApiAction<GeneralSettingsState> => {
+  const url = CREATE_APPROVAL_ROLES_URL;
+  return apiActionWithCallbacks({
+    url,
+    method,
+    data: body,
+    asyncType: SET_GENERAL_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(getGeneralSettings());
+    },
+    handlers,
+  });
+};
+
+const updateApprovalRoles = (
+  id: string,
+  body: { isActive: boolean },
+  handlers: Handlers,
+  method: ApiActionMethod = 'patch',
+): ApiAction<GeneralSettingsState> => {
+  const url = generatePath(UPDATE_APPROVAL_ROLES_URL, { id });
+  return apiActionWithCallbacks({
+    url,
+    method,
+    data: body,
+    asyncType: SET_GENERAL_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(getGeneralSettings());
+    },
+    handlers,
+  });
+};
+
 const fetchLCPPhasesByGroup = (
   type = DOC_TYPE_GROUP.PART,
   handlers: Handlers,
@@ -234,4 +275,6 @@ export default {
   updateGeneralSettings,
   getPremiumFeatureSubscriptions,
   updatePremiumFeatureSubscription,
+  createApprovalRoles,
+  updateApprovalRoles,
 };

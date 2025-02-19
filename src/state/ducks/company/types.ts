@@ -202,6 +202,28 @@ export interface EquipmentFamilyEquipmentStatus {
   isActive: boolean
 }
 
+interface ApprovalRoleItem {
+  id: string
+  name: string
+}
+
+export interface ApprovalRole extends ApprovalRoleItem {
+  isActive: boolean
+}
+
+export interface Dam {
+  documentRevision: {
+    id: string
+    displayRevision: string
+    displayStatus: string
+  }
+  document: {
+    id: string
+    docId: string
+  }
+  isSynced: boolean
+}
+
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
@@ -253,6 +275,12 @@ export interface GeneralSettings {
   systemTransactions: SystemTransactionsRule[]
   zebraPrint: ZebraPrintSettings[] | null
   trainingReminders: TrainingReminders
+  approvalRoles: {
+    approvalRoles: ApprovalRole[]
+    addToDam: ApprovalRoleItem[]
+    removeFromDam: ApprovalRoleItem[]
+    dam: Dam
+  }
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {

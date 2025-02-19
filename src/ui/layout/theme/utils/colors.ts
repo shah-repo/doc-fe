@@ -30,6 +30,7 @@ enum Colors {
   whitest_grey='#EBEDF2',
   lightest_grey1='#CCD4D9',
   lightest_grey2= '#9A9FAB',
+  lightest_grey3= '#DBE0EB',
   athens_gray= '#F5F6F8',
   link_water = '#ccd4d9',
   platinum_grey = '#E2E2E2',

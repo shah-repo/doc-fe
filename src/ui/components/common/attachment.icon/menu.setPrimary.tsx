@@ -1,5 +1,6 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MenuItem from '@material-ui/core/MenuItem';
-import StarsRoundedIcon from '@material-ui/icons/StarsRounded';
 import React from 'react';
 import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
@@ -10,6 +11,7 @@ import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
 import { toastError } from '../../notifications';
 import Text from '../../Text';
+import { useStyles } from './styles';
 
 interface Props {
   handleClose?: any
@@ -22,6 +24,7 @@ const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
   attachment = {},
   documentRevision,
 }) => {
+  const classes = useStyles();
   const setAsPrimaryAction = useActionCreator(documentRevisionsActions.setPrimaryAttachment);
   const setAsPrimaryAsync = useAsync({
     onError: (error) => toastError(error as string),
@@ -47,12 +50,12 @@ const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
 
   const handleClick = () => {
     setAsPrimaryAsync.start(setAsPrimaryAction, documentRevision?.id, attachment.id, setAsPrimaryAsync);
-    handleClose();
+    handleClose?.();
   };
 
   return (
     <MenuItem data-cy="set.attachment.as.primary" onClick={handleClick}>
-      <StarsRoundedIcon color="primary" fontSize="small" style={{ marginRight: 5 }} />
+      <FontAwesomeIcon icon={solid('circle-star')} className={classes.starIcon} />
       <Text translation="attachment.set.as.primary" />
     </MenuItem>
   );

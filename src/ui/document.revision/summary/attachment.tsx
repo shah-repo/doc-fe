@@ -1,8 +1,10 @@
 import { Box, Typography } from '@material-ui/core';
+import { isEmpty } from 'lodash';
 import React from 'react';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import AttachmentDownloadAllButton from '../../components/common/attachment.downloadAll/AttachmentDownloadAllButton';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import AttachmentField from '../../components/common/attachment.icon/container';
+import AttachmentSelectItems from '../../components/common/attachment.selectedItems/AttachmentSelectItems';
+import AttachmentDownloadAllButton from '../../components/common/attachment.table/components/AttachmentDownloadAllButton';
 import Text from '../../components/Text';
 import Colors from '../../layout/theme/utils/colors';
 
@@ -12,15 +14,34 @@ export interface Props {
   containsRedline?: boolean
   label?: string
   docRevStatus: DocumentRevisionStatus
+  documentRevision?: DocumentRevision
 }
 
-export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label }) => {
+export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, docRevId, containsRedline, docRevStatus, label, documentRevision }) => {
+  const [selectedAttachments, setSelectedAttachments] = React.useState<{[id: string]: boolean | number[]}>({});
+  const [isHeaderChecked, setIsHeaderChecked] = React.useState(false);
+
+  const onHeaderCheck = (value: boolean) => {
+    setIsHeaderChecked(value);
+  };
+
+  const onSelectedAttachmentsChange = (selected: {[id: string]: boolean | number[]}) => {
+    if (isEmpty(selected)) {
+      return setSelectedAttachments({});
+    }
+    setSelectedAttachments((prevVal) => ({ ...prevVal, ...selected }));
+  };
+
+  const onClearSelection = () => {
+    setSelectedAttachments({});
+  };
+
   const classes = {
     buttonsContainer: {
       display: 'flex',
     },
     buttonLeft: {
-      flex: '0 0 50%',
+      flex: '100%',
       display: 'flex',
       justifyContent: 'flex-start',
       fontWeight: 600,
@@ -29,7 +50,6 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
     },
 
     buttonRight: {
-      flex: '0 0 50%',
       display: isAttachmentEmpty ? 'none' : 'flex',
       justifyContent: 'flex-end',
       paddingRight: '25px',
@@ -45,19 +65,25 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
       <Text message="common.no.attachments" />
     </Typography>
   );
+
   return (
     <Box pl={0} width="100%">
       <Box display="flex">
         <Typography variant="h6" style = {classes.buttonLeft}>
-          <Text message={label || 'common.attachments' } />
+          <Text message={label ?? 'common.attachments' } />
         </Typography>
+        <AttachmentSelectItems {...{ onClearSelection, selectedAttachments }} />
         <AttachmentDownloadAllButton
-          isAttachmentEmpty = {isAttachmentEmpty}
-          docRevId = {docRevId ?? ''}
-          containsRedline = {containsRedline ?? false}
-          docRevStatus = {docRevStatus} />
+          {...{ selectedAttachments, documentRevision, docRevStatus }}
+          docRevId={docRevId ?? ''}
+          containsRedline={containsRedline ?? false}
+        />
       </Box>
-      <AttachmentField name="attachments" disabled={true} docRevId={docRevId} />
+      <AttachmentField
+        name="attachments"
+        disabled
+        {...{ docRevId, selectedAttachments, onSelectedAttachmentsChange, isHeaderChecked, onHeaderCheck }}
+      />
       {emptyAttachmentsRenderer}
     </Box>
   );

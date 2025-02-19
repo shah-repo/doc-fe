@@ -1,0 +1,88 @@
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CircularProgress, IconButton, Tooltip } from '@material-ui/core';
+import cx from 'classnames';
+import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { translate } from '../../../../../common/intl';
+import { documentRevisionsActions } from '../../../../../state/ducks/documentRevisions';
+import { DocumentRevision } from '../../../../../state/ducks/documentRevisions/types';
+import useActionCreator from '../../../../hooks/useActionCreator';
+import useAsync from '../../../../hooks/useAsync';
+import { useStyles } from '../styles';
+
+interface Props {
+  selectedAttachments: {[id: string]: boolean | number[]}
+  documentRevision: DocumentRevision
+  onSelectedAttachmentsChange: (selectedAttachments: {[id: string]: boolean | number[]}) => void
+  onHeaderCheck: (value: boolean) => void
+}
+
+const AttachmentDeleteAllButton: React.FunctionComponent<Props> = ({
+  selectedAttachments,
+  documentRevision,
+  onSelectedAttachmentsChange,
+  onHeaderCheck,
+}) => {
+  const { getFieldProps, setFieldValue, submitForm } = useFormikContext();
+  const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
+  const selectedAttachmentsCount = Object.values(selectedAttachments).filter(value => value === true).length;
+  const selectedAttachmentsData = selectedAttachments && Object.keys(selectedAttachments).filter(key => selectedAttachments[key]);
+  const classes = useStyles();
+  const deleteAttachmentsAction = useActionCreator(documentRevisionsActions.save);
+  const attachments = documentRevision?.attachments ?? getFieldProps('attachments').value;
+  const async = useAsync<DocumentRevision>({
+    onSuccess: () => {
+      onSelectedAttachmentsChange({});
+      onHeaderCheck(false);
+      setIsDownloading(false);
+    },
+    onError: () => {
+      setIsDownloading(false);
+    },
+  });
+
+  const handleDelete = () => {
+    const filtered = !selectedAttachmentsCount
+      ? []
+      : attachments?.filter((item) => !selectedAttachmentsData.includes(item.id));
+
+    if (documentRevision?.id) {
+      setIsDownloading(true);
+      async.start(
+        deleteAttachmentsAction,
+        documentRevision?.id,
+        { attachments: filtered },
+        async,
+      );
+    } else {
+      setFieldValue('attachments', filtered);
+      submitForm();
+      onSelectedAttachmentsChange({});
+      onHeaderCheck(false);
+    }
+  };
+
+  const toolTipText = selectedAttachmentsCount === 0 || selectedAttachmentsCount === attachments?.length ? 'common.delete.all.files' : 'common.delete.selected.files';
+
+  if (isEmpty(attachments)) {
+    return null;
+  }
+
+  return (
+    <Tooltip title={translate(toolTipText)}>
+      <IconButton
+        className={classes.actionButton}
+        onClick={() => handleDelete()}
+      >
+        {isDownloading
+          ? <CircularProgress className={classes.actionButtonIcon} />
+          : <FontAwesomeIcon icon={regular('trash-can')} className={cx(classes.actionButtonIcon, classes.deleteIcon)} />
+        }
+      </IconButton>
+    </Tooltip>
+  );
+};
+
+export default AttachmentDeleteAllButton;

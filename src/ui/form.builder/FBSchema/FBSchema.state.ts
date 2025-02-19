@@ -54,6 +54,7 @@ import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
 import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
+import FBShippingCustomer from '../FBShippingCustomer';
 import FBShippingAddress from '../FBShippingInfo';
 import FBShippingItems from '../FBShippingItems';
 import FBSiteInformation from '../FBSiteInformation';
@@ -167,6 +168,7 @@ class FBSchemaState {
     supplierReferences: FBReferences,
     shippingItems: FBShippingItems,
     shippingAddress: FBShippingAddress,
+    shippingCustomer: FBShippingCustomer,
   };
 
   @observable public schema?: FBSchemaProps[];

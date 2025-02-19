@@ -18,7 +18,7 @@ export const withFBSiteInformation = <T extends FBSiteProps>(
       return orderBy(formValue ?? workspaceState?.formInputSync.get(name) ?? [], 'isPrimary', 'desc');
     }, [formValue, workspaceState?.formInputSync, name]);
 
-    const [sites, setSites] = useState<EditableSite[]>(initialSites);
+    const [sites, setSites] = useState<EditableSite[]>();
 
     useEffect(() => {
       setSites(initialSites);
