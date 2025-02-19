@@ -11,7 +11,7 @@ import { STATUS_TYPES_LABEL } from '../../state/ducks/dashboard.new/my.feeds/typ
 import { documentTypeSelectors } from '../../state/ducks/documentRevisions/documentType';
 import { DocumentRevision, DocumentRevisionStatus } from '../../state/ducks/documentRevisions/types';
 import { ApplicationState } from '../../state/reducers';
-import { checkIsDocumentPO } from '../../ui/documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentCustomers, checkIsDocumentPO, checkIsDocumentShipping } from '../../ui/documentRevision/helpers/checkDocumentGroup';
 import SummaryInfo from '../common/summary/SummaryInfo';
 import DateFormatter from '../components/Date';
 import Text from '../components/Text';
@@ -82,6 +82,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ''));
   const isPO = checkIsDocumentPO(documentType?.groupOptions);
+  const isTitleHidden = checkIsDocumentShipping(documentType?.groupOptions) || checkIsDocumentCustomers(documentType?.groupOptions);
 
   if (isRecord) {
     if (isReleased) {
@@ -114,7 +115,9 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
 
   const docIdLabel = (isRecordOrPO ? 'common.id' : 'common.docId') as Translation;
   let recordOwnerLabel = 'common.owner' as Translation;
-  const userName = ((isRecord && isReleased) ? documentRevision.approvals?.[0]?.approverName : documentRevision.owner.user.name) ?? '';
+  const userName = ((isRecord && isReleased)
+    ? documentRevision?.releasedBy?.user.name ?? documentRevision.owner.user.name
+    : documentRevision.owner.user.name) ?? '';
 
   if (isRecord && (isReleased || isVoided)) {
     recordOwnerLabel = isVoided ? 'record.voided.by' : 'record.released.by';
@@ -175,7 +178,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           label={docIdLabel}
           value={docId}
         />
-        {!isRecordOrPO && (
+        {!isRecordOrPO && !isTitleHidden && (
           <SummaryInfo label="common.title" value={documentRevision.name} />
         )}
         <SummaryInfo

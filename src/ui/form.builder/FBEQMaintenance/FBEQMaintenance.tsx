@@ -12,7 +12,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   preventativeFormOptions,
   getOptionLabel,
   complianceDueDate,
-  complianceStatus,
   name,
   disabled,
   isNewPMDisabled,
@@ -87,23 +86,21 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
         {...{ disabled, autosave }}
       />
       {!isEmpty(maintenanceHistory) && <FBEQMaintenanceHistory maintenanceHistory={maintenanceHistory} />}
-      {complianceDueDate
-      && <Box mb={3} data-cy="maintenance.status">
-        <FBText
-          boxProps={{ display: 'inline-flex' }}
-          locale={isTypePM ? 'form.builder.pm' : 'form.builder.cal'}
-        />
-        &nbsp;
-        {complianceStatus}
-        <span> - </span>
-        <FBText
-          boxProps={{ display: 'inline-flex' }}
-          locale="common.due.date"
-        />
-        <span>: </span>
-        {complianceDueDate}
-      </Box>
-      }
+      {complianceDueDate && (
+        <Box mb={3} data-cy="maintenance.status">
+          <FBText
+            boxProps={{ display: 'inline-flex' }}
+            locale={isTypePM ? 'form.builder.pm' : 'form.builder.cal'}
+          />
+          &nbsp;
+          <FBText
+            boxProps={{ display: 'inline-flex' }}
+            locale="document.equipment.cal.pm.up.to.date.next.date"
+          />
+          <span>: </span>
+          {complianceDueDate}
+        </Box>
+      )}
     </FBInput>
   );
 };

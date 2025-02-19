@@ -1,23 +1,21 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../layout/theme-next';
 
-const messageContainerBase = theme => ({
-  display: 'flex',
-  alignItems: 'center',
-  borderRadius: 5,
-  padding: theme.spacing(0.875, 0.625),
-  margin: `${theme.spacing(0)} auto ${theme.spacing(2.875)}px auto`,
-  width: 'fit-content',
-});
-
 export default makeStyles(theme => ({
   messageContainer: {
-    ...messageContainerBase(theme),
-    backgroundColor: Colors.successLight,
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 5,
+    padding: theme.spacing(0.875, 0.625),
+    margin: `${theme.spacing(0)} auto ${theme.spacing(2.875)}px auto`,
+    width: 'fit-content',
+    minHeight: 20,
   },
   messageContainerError: {
-    ...messageContainerBase(theme),
     backgroundColor: Colors.errorLight,
+  },
+  messageContainerSuccess: {
+    backgroundColor: Colors.successLight,
   },
   messageIconError: {
     color: Colors.error,

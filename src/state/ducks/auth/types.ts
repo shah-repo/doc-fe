@@ -1,10 +1,15 @@
 import { Nullable } from '../common/types';
 import { Employee } from '../company/types';
-import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from './constants';
+import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, SSO_REDIRECT_PARAM, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from './constants';
 
 export interface LoginRequestBody {
   email: string
   password: string
+}
+
+export interface LoginSSORequestBody {
+  code: string
+  [SSO_REDIRECT_PARAM]?: string
 }
 
 export interface ForgotPassword {
@@ -29,6 +34,22 @@ export interface LoginWithCodeRequestBody {
 
 export interface LogoutRequestBody {
   AccessToken: string
+}
+
+interface Credentials {
+  AccessKeyId: string
+  SecretAccessKey: string
+  SessionToken: string
+  Expiration: string
+}
+
+export interface IotCredentials {
+  credentials: Credentials
+  endpoint: string
+  environment: string
+  companyId: string
+  employeeId: string
+  region: string
 }
 
 export interface AuthResponse {
@@ -111,22 +132,6 @@ export interface UserState {
   passwordSoonToExpire: boolean
   daysUntilPasswordExpires: number
   initialColor: string
-}
-
-export interface IotCredentials {
-  credentials: Credentials
-  endpoint: string
-  environment: string
-  companyId: string
-  employeeId: string
-  region: string
-}
-
-interface Credentials {
-  AccessKeyId: string
-  SecretAccessKey: string
-  SessionToken: string
-  Expiration: string
 }
 
 export interface AuthProps {
@@ -231,6 +236,10 @@ export enum Permission {
   EDIT_EQ_STATUS = 'EDIT_EQ_STATUS',
   // BULK_IMPORT
   BULK_IMPORT = 'BULK_IMPORT',
+  // TRAINING
+  GROUP_TRAINING_CREATE = 'GROUP_TRAINING_CREATE',
+  // REDLINE FILE ACCESS
+  CAN_ACCESS_REDLINE_ATTACHMENTS = 'CAN_ACCESS_REDLINE_ATTACHMENTS',
 }
 
 export enum GroupTag {
@@ -255,6 +264,8 @@ export enum GroupTag {
   PAGE_DETAILS_MANAGEMENT = 'PAGE_DETAILS_MANAGEMENT',
   ASYNC_TASKS_UI = 'ASYNC_TASKS_UI',
   PO_ADMIN = 'PO_ADMIN',
+  CUSTOMER_MODULE_ACCESS= 'CUSTOMER_MODULE_ACCESS',
+  SHIPPING_MODULE_ACCESS= 'SHIPPING_MODULE_ACCESS',
 }
 
 export enum GroupType{

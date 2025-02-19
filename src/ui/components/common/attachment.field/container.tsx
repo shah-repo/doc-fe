@@ -1,4 +1,3 @@
-import { Box, CircularProgress } from '@material-ui/core';
 import { map, pick } from 'lodash';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -13,7 +12,7 @@ import { useFormContext } from '../../forms/FormContext';
 import { withFormik } from '../../hoc/formik';
 import { toastError } from '../../notifications';
 import Presenter from './presenter';
-import { FILE_UPLOAD_LIMIT, calculateTotalFileSize, handleFileSizeExceedLimit } from './utils';
+import { calculateTotalFileSize, FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from './utils';
 import { AttachmentContainerProps } from './utils/types';
 
 const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
@@ -38,9 +37,9 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
         return;
       }
       if (!multiple) {
-        return form.setFieldValue(name, attachment);
+        return form?.setFieldValue(name, attachment);
       }
-      const attachments: Attachment[] = field.value ? [...field.value] : [];
+      const attachments: Attachment[] = field?.value ? [...field.value] : [];
       attachment && attachments.push(attachment);
 
       FBStore.setValues({
@@ -59,7 +58,7 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
         });
         FBDynamicValidatorStore.validate();
       }
-      form.setFieldValue(name, attachments);
+      form?.setFieldValue(name, attachments);
       submitForm();
     },
     onError: (error) => {
@@ -124,32 +123,19 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
   };
 
   return (
-    <>
-      {isUploading
-      && <Box>
-        <CircularProgress color="secondary" />
-      </Box>}
-
-      {!isUploading
-      && <Box>
-        <Presenter
-          {
-            ...{
-              name,
-              isUploading,
-              upload,
-              component,
-              multiple,
-              form,
-              field,
-              onChange,
-            }
-          }
-          {...other}
-        />
-      </Box>
-      }
-    </>
+    <Presenter
+      {...{
+        name,
+        isUploading,
+        upload,
+        component,
+        multiple,
+        form,
+        field,
+        onChange,
+      }}
+      {...other}
+    />
   );
 };
 

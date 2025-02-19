@@ -25,7 +25,7 @@ import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import { TAX_RATE } from '../helpers/constants';
-import { checkServiceOrProductPartExists, formatCost, getPOLineItemsTotalAndForTaxAmount } from './helpers';
+import { checkServiceOrProductPartExists, formatCost, getDecimalLength, getPOLineItemsTotalAndForTaxAmount } from './helpers';
 import { FBPurchaseOrderTableProps } from './types';
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
@@ -106,16 +106,20 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     handleTaxChange = (ev: React.ChangeEvent<any>) => {
-      if (isPOEditState && !isTotalAmountUnderThreshold(null, getDecimalValue(ev, 6), null)) {
+      const { target: { value = 0 } = {} } = ev || {};
+      const decimalLength = getDecimalLength(value);
+      if (isPOEditState && !isTotalAmountUnderThreshold(null, getDecimalValue(ev, decimalLength), null)) {
         return;
       }
-      purchaseOrderState?.setTax(getDecimalValue(ev, 6));
+      purchaseOrderState?.setTax(getDecimalValue(ev, decimalLength));
     };
     handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
-      if (isPOEditState && !isTotalAmountUnderThreshold(null, null, getDecimalValue(ev, 6))) {
+      const { target: { value = 0 } = {} } = ev || {};
+      const decimalLength = getDecimalLength(value);
+      if (isPOEditState && !isTotalAmountUnderThreshold(null, null, getDecimalValue(ev, decimalLength))) {
         return;
       }
-      purchaseOrderState?.setTaxRate(getDecimalValue(ev, 6));
+      purchaseOrderState?.setTaxRate(getDecimalValue(ev, decimalLength));
     };
     handleShippingCostChange = (ev: React.ChangeEvent<any>) => {
       if (isPOEditState && !isTotalAmountUnderThreshold(getDecimalValue(ev), null, null)) {
@@ -259,7 +263,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
       const shippingCost = previousLineItemsLength ? getShippingCost(allItems.shippingCost) : 0;
       const totalAmount = tax + UpdatedLineItemsTotalObj.subTotal + shippingCost;
-      const totalInUSD = totalAmount * updatedValues.current?.exchangeRate ?? allItems.exchangeRate;
+      const totalInUSD = totalAmount * (updatedValues.current?.exchangeRate ?? allItems.exchangeRate);
 
       values.formInput[PO_ITEMS_COMPONENT_NAME] = {
         ...values?.formInput[PO_ITEMS_COMPONENT_NAME],

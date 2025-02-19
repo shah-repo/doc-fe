@@ -8,7 +8,7 @@ import { CustomTemplateProps, EditableTrainee } from '../types';
 
 interface OptionItem {
   id: string
-  active: boolean
+  active?: boolean
 }
 
 interface Props<T extends OptionItem> extends CustomTemplateProps {

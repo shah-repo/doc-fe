@@ -88,11 +88,11 @@ export default makeStyles<NextTheme>(theme => ({
   },
   [theme.media.mobile]: {
     header: {
-      flexWrap: 'wrap',
+      flexWrap: 'wrap' as const,
       space: 'nowrap',
     },
     actions: {
-      flexDirection: 'row-reverse',
+      flexDirection: 'row-reverse' as const,
     },
     sidebar: {
       display: 'none',

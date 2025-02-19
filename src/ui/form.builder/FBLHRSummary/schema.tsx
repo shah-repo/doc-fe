@@ -13,8 +13,9 @@ import { StatusCell } from './components/cells/StatusCell';
 import { StepCell } from './components/cells/StepCell';
 import { TextInputCellTemplate } from './components/cells/TextInputCellTemplate';
 import { TypeCell } from './components/cells/TypeCell';
+import { UnitCell } from './components/cells/UnitCell';
 import styles from './styles';
-import { EditableLHRSummaryItem, SchemaOptions } from './types';
+import { CustomTemplateProps, EditableLHRSummaryItem, SchemaOptions } from './types';
 
 export const buildSchema = ({
   actionsClass,
@@ -22,6 +23,7 @@ export const buildSchema = ({
   onConfirm,
   onDiscard,
   onDelete,
+  units,
 }: SchemaOptions): Array<ColumnDefinition<EditableLHRSummaryItem>> => {
   const classes = styles();
   return [
@@ -70,8 +72,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'expiryDate',
-      field: 'expiryDate',
+      id: 'customExpiryDate',
+      field: 'customExpiryDate',
       title: 'lhr.summary.grid.heading.expiry.date',
       show: true,
       selectable: false,
@@ -107,6 +109,15 @@ export const buildSchema = ({
       width: 201,
     },
     {
+      id: 'unit',
+      field: 'unit',
+      title: 'lhr.summary.grid.heading.unit',
+      show: true,
+      selectable: false,
+      template: (props: CustomTemplateProps) => <UnitCell {...props} units={units} onClick={onRowClick} />,
+      width: 201,
+    },
+    {
       id: 'lotStatus',
       field: 'lotStatus',
       title: 'lhr.summary.grid.heading.lotStatus',
@@ -116,8 +127,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      field: 'calDueDate',
-      id: 'calDueDate',
+      field: 'customCalDueDate',
+      id: 'customCalDueDate',
       selectable: false,
       title: 'lhr.summary.grid.heading.cal.due.date',
       show: true,
@@ -125,8 +136,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'pmDueDate',
-      field: 'pmDueDate',
+      id: 'customPmDueDate',
+      field: 'customPmDueDate',
       title: 'lhr.summary.grid.heading.pm.due.date',
       show: true,
       template: (props) => <DateCell {...props} onClick={onRowClick} />,
@@ -149,8 +160,8 @@ export const buildSchema = ({
       width: 201,
     },
     {
-      id: 'recordCreationDate',
-      field: 'recordCreationDate',
+      id: 'customRecordCreationDate',
+      field: 'customRecordCreationDate',
       title: 'lhr.summary.grid.heading.date',
       show: true,
       template: (props) => <DateCell {...props}

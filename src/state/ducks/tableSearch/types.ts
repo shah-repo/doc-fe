@@ -1,17 +1,8 @@
 import { TableDataProps, TablePanelStateProps } from '../../../ui/components/table/types';
+import { LOGOUT_USER, USERS_ME_URL } from '../auth/constants';
 import { User } from '../auth/types';
 import { GetEmployeeResponse } from '../userManagement/types';
-import {
-  EDIT_EMPLOYEE_ACTIVE_STATUS,
-  EDIT_EMPLOYEE_GROUPS,
-  EDIT_EMPLOYEE_USER_INFO,
-  TABLE_CLEAR_ALL,
-  TABLE_DATA_SET,
-  TABLE_FORCE_UPDATE_SET,
-  TABLE_SEARCH_CLEAR,
-  TABLE_SEARCH_SET,
-  TABLE_SORT,
-} from './constants';
+import { EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO, TABLE_CLEAR_ALL, TABLE_DATA_SET, TABLE_FORCE_UPDATE_SET, TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from './constants';
 
 export interface TableSearchSetAction {
   type: typeof TABLE_SEARCH_SET
@@ -32,6 +23,10 @@ export interface TableSearchClearAction {
 
 export interface TableSearchClearAllAction {
   type: typeof TABLE_CLEAR_ALL
+}
+
+export interface LogoutUserAction {
+  type: typeof LOGOUT_USER
 }
 
 export interface TableSearchForceUpdateAction {
@@ -66,5 +61,9 @@ export interface EditActiveStatusAction {
 
 export interface EditUserInfoAction {
   type: typeof EDIT_EMPLOYEE_USER_INFO
+  payload: User
+}
+export interface UsersMeAction {
+  type: typeof USERS_ME_URL
   payload: User
 }

@@ -1,12 +1,8 @@
-import { Grid } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { userManagementActions } from '../../../state/ducks/userManagement';
 import { GROUPS_URL } from '../../../state/ducks/userManagement/constants';
 import { GetEmployeeResponse, LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
-import {
-  TableDataProps,
-  TablePanelStateProps,
-} from '../../components/table/types';
+import { TableDataProps, TablePanelStateProps } from '../../components/table/types';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
@@ -65,11 +61,10 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
         asyncGetActiveEmployees,
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [didMount]);
   return (
-    <Grid container>
-      <KendoPanel<LoadCompanyGroup>
+    <>
+      <KendoPanel
         gridConfiguration={gridConfiguration}
         queryUrl={GROUPS_URL}
         tableName={tableName}
@@ -92,7 +87,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
         title="group.management.edit.group"
         activeEmployees={activeEmployees}
       />
-    </Grid>
+    </>
   );
 };
 

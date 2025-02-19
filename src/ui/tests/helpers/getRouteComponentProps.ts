@@ -1,6 +1,6 @@
 import { RouteComponentProps } from 'react-router-dom';
 
-const getRouteComponentProps = <P = {}>(params?: P): RouteComponentProps<P> => ({
+const getRouteComponentProps = <P = {}>(params?): RouteComponentProps => ({
   match: {
     isExact: true,
     params: params || {} as P,

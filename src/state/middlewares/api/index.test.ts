@@ -94,6 +94,7 @@ describe('api middleware test', () => {
         payload: {
           status: AsyncStatus.Active,
           message: '',
+          statusCode: 200,
         },
       };
 
@@ -122,6 +123,7 @@ describe('api middleware test', () => {
         payload: {
           status: AsyncStatus.Success,
           message: '',
+          statusCode: 200,
         },
       };
 
@@ -168,6 +170,7 @@ describe('api middleware test', () => {
         payload: {
           status: AsyncStatus.Active,
           message: '',
+          statusCode: 200,
         },
       };
 
@@ -180,6 +183,7 @@ describe('api middleware test', () => {
         payload: {
           status: AsyncStatus.Error,
           message: mockResponseError.message.join('; '),
+          statusCode: 400,
         },
       };
 
@@ -216,6 +220,7 @@ describe('api middleware test', () => {
       payload: {
         status: AsyncStatus.Error,
         message: mockResponseErrorString.message,
+        statusCode: 400,
       },
     };
 

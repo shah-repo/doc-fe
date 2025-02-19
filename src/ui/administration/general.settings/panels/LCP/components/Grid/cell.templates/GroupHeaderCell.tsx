@@ -2,12 +2,12 @@ import { light, regular, solid } from '@fortawesome/fontawesome-svg-core/import.
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Tooltip } from '@material-ui/core';
 import { GridRowProps } from '@progress/kendo-react-grid';
-import { kebabCase } from 'lodash';
-import * as React from 'react';
+import { kebabCase, replace, startsWith } from 'lodash';
+import React, { useCallback, useMemo } from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete, Checkbox, IconButton } from '../../../../../../../components/forms/fields-next';
 import useHover from '../../../../../../../hooks/useHover';
-import { EXPAND_FIELD } from '../constants';
+import { ADD_GROUP_ID, ADD_GROUP_NAME, EXPAND_FIELD } from '../constants';
 import { CustomGroupDataItem, CustomGroupOptions } from '../types';
 import { isGroupActivateOrDeactivate } from '../utils';
 import useStyles from './styles';
@@ -27,7 +27,7 @@ interface GroupHeaderCellProps extends GridRowProps {
   editGroup?: string
 }
 
-export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
+export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = React.memo((props) => {
   const {
     dataItem,
     onExpandChange,
@@ -41,7 +41,6 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
     partGroups,
     selectedPartGroups,
   } = props;
-  const groupLabel = dataItem.value;
   const classes = useStyles();
   const groupId = dataItem.groupId;
   const isEditMode = editGroup === groupId;
@@ -51,22 +50,46 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
   const displayGroupSelection = isEditModeAndHasEditLCPPermission && !isEditGroup;
   const [saveRef, isSaveHovered] = useHover<HTMLButtonElement>();
   const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
-
-  const handleGroupChange = (e, value: CustomGroupOptions) => {
-    onGroupChange(value, groupId);
-  };
-
   const documentTypeId = dataItem.items?.[0].documentTypeId;
   const isLCPActive = isGroupActivateOrDeactivate(dataItem.items, true);
   const isLCPDeactive = isGroupActivateOrDeactivate(dataItem.items, false);
-  const defaultValue = (partGroups?.length ? partGroups : selectedPartGroups)?.filter((groups: CustomGroupOptions) => documentTypeId === groups.value);
-  const displayValue = defaultValue?.map(data => data.label).join(', ');
-  const selectedIDs = selectedPartGroups?.map((group) => group.value);
-  const options = partGroups?.filter((group) => !selectedIDs.includes(group.value));
+  const defaultValue = useMemo(
+    () =>
+      (partGroups?.length ? partGroups : selectedPartGroups)?.filter(
+        (group: CustomGroupOptions) => documentTypeId === group.value,
+      ),
+    [partGroups, selectedPartGroups, documentTypeId],
+  );
+  const displayValue = useMemo(
+    () => defaultValue?.map((data) => data.label).join(', '),
+    [defaultValue],
+  );
+  const selectedIDs = useMemo(
+    () => selectedPartGroups?.map((group) => group.value),
+    [selectedPartGroups],
+  );
+  const options = useMemo(
+    () => partGroups?.filter((group) => !selectedIDs.includes(group.value)),
+    [partGroups, selectedIDs],
+  );
+  const updatedGroupId = useMemo(
+    () =>
+      startsWith(groupId, ADD_GROUP_ID)
+        ? replace(groupId, ADD_GROUP_NAME, 'ADD_')
+        : groupId,
+    [groupId],
+  );
+  const groupTypeAcronym = defaultValue?.[0]?.docTypeAcronym;
 
-  const handleChange = (event, checked: boolean) => {
-    onToggleGroupActivation({ ...dataItem, isLCPActive: checked });
-  };
+  const handleExpandChange = useCallback(() => onExpandChange(dataItem), [onExpandChange, dataItem]);
+  const handleToggleActivation = useCallback(
+    (event, checked: boolean) => onToggleGroupActivation({ ...dataItem, isLCPActive: checked }),
+    [onToggleGroupActivation, dataItem],
+  );
+  const handleGroupChange = useCallback(
+    (e, value: CustomGroupOptions) => onGroupChange(value, groupId),
+    [onGroupChange, groupId],
+  );
 
   return (
     <Grid container justify="space-between" alignItems="center">
@@ -77,12 +100,12 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
           alignItems="center"
           className={classes.editContainer}
         >
-          <Grid item alignItems="center" justify="center">
+          <Grid item alignItems="center" justify="center" data-cy={`${groupTypeAcronym}value`}>
             <FontAwesomeIcon
-              data-cy={`${groupLabel}-toggle-group`}
+              data-cy={`${groupTypeAcronym}toggle-group`}
               size="sm"
               className={classes.toggleExpandCollapse}
-              onClick={() => onExpandChange(dataItem)}
+              onClick={handleExpandChange}
               icon={
                 dataItem[EXPAND_FIELD]
                   ? regular('square-minus')
@@ -93,7 +116,8 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               checked={isLCPActive}
               disabled={hasEditLCPPermission ? displayGroupSelection : !isEditModeAndHasEditLCPPermission}
               className={classes.groupCheckBox}
-              onChange={handleChange}
+              onChange={handleToggleActivation}
+              data-cy={`${groupTypeAcronym}select`}
             />
             {!displayGroupSelection && displayValue}
           </Grid>
@@ -106,7 +130,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
                 getOptionSelected={(option, value) =>
                     option?.value === value?.value
                 }
-                data-cy={`${kebabCase(groupId)}-field`}
+                data-cy={`${kebabCase(updatedGroupId)}-field`}
                 onChange={handleGroupChange}
               />
             </Grid>
@@ -122,6 +146,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               ref={discardRef}
               onClick={() => onDiscardGroup(dataItem)}
               className={classes.editButtons}
+              data-cy={`${groupTypeAcronym}discard-group`}
             >
               <FontAwesomeIcon
                 icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')}
@@ -138,6 +163,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               ref={saveRef}
               className={classes.editButtons}
               onClick={() => onUpdateAddOrEditGroup(dataItem)}
+              data-cy={`${groupTypeAcronym}save-group`}
             >
               <FontAwesomeIcon
                 icon={isSaveHovered ? solid('square-check') : light('square-check')}
@@ -153,6 +179,7 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
               color="primary"
               className={classes.buttons}
               onClick={() => onEditGroup(dataItem)}
+              data-cy={`${groupTypeAcronym}edit-phase`}
             >
               <FontAwesomeIcon icon={regular('pen-to-square')} />
             </IconButton>
@@ -161,4 +188,4 @@ export const GroupHeaderCell: React.FC<GroupHeaderCellProps> = (props) => {
       </Grid>
     </Grid>
   );
-};
+});

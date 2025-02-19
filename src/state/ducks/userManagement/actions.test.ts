@@ -31,6 +31,7 @@ describe(' survey management actions test', () => {
       user: getUser(),
       groups: null,
     };
+
     const handlers: Handlers = {
       successHandler: getCallbackHandler(),
       errorHandler: getCallbackHandler<string>(),
@@ -85,6 +86,7 @@ describe(' survey management actions test', () => {
         },
       ],
     };
+
     const handlers: Handlers<Group[]> = {
       successHandler: getCallbackHandler<Group[]>(),
       errorHandler: getCallbackHandler<string>(),

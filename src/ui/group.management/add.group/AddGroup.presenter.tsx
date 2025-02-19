@@ -1,9 +1,8 @@
-import { Box, Button } from '@material-ui/core';
 import React from 'react';
+import { translate } from '../../../common/intl';
 import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
-import Text from '../../components/Text';
+import { Button } from '../../components/forms/fields-next';
 import AuditItemsContainer from '../audit.panel/container';
-import AddGroupStyles from './AddGroup.styles';
 import AddGroup from './Group';
 
 interface OwnProps {
@@ -21,28 +20,24 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
   closeDialog,
   activeEmployees,
 }) => {
-  const classes = AddGroupStyles();
-  // load history panel
   const [openHistoryPanel, setHistoryPanel] = React.useState<boolean>(false);
   const onHistoryPanelClick = () => { setHistoryPanel(!openHistoryPanel); };
   return (
-    <Box>
+    <>
       <Button
-        variant="contained"
+        kind="secondary"
         onClick={onHistoryPanelClick}
         data-cy="gm-open-history-panel"
-        className={classes.historyButton}
       >
-        <Text message="user.management.audit" />
+        {translate('user.management.audit')}
       </Button>
       <Button
-        variant="contained"
+        kind="primary"
         onClick={openDialog}
         id="Group-openDialog"
         data-cy="group-open-dialog"
-        className={classes.Button}
       >
-        <Text message="group.management.add.group" />
+        {translate('group.management.add.group')}
       </Button>
       <AddGroup
         isOpen={isOpen}
@@ -51,13 +46,13 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
         isCreateMode={true}
         activeEmployees={activeEmployees}
       />
-      {openHistoryPanel
-        && <AuditItemsContainer
+      {openHistoryPanel && (
+        <AuditItemsContainer
           openHistoryPanel={openHistoryPanel}
           closeHistoryPanel={onHistoryPanelClick}
         />
-      }
-    </Box>
+      )}
+    </>
   );
 };
 

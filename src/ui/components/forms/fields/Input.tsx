@@ -1,6 +1,6 @@
 import { BoxProps } from '@material-ui/core';
 import { InputBaseProps as MuiInputProps } from '@material-ui/core/InputBase';
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
+import { FieldConfig, Field as FormikField, FieldProps as FormikFieldProps } from 'formik';
 import * as React from 'react';
 import { RenderSize } from '../../../../state/ducks/common/types';
 import { useFormContext } from '../FormContext';

@@ -48,6 +48,7 @@ export default makeStyles((theme: NextTheme) => ({
     textOverflow: 'ellipsis',
     textWrap: 'nowrap',
   },
+  itemlistMobile: {},
   [theme.media.mobile]: {
     itemlistMobile: {
       flexWrap: 'wrap',

@@ -5,7 +5,7 @@ import { GridDataStateChangeEvent, GridItemChangeEvent, GridRowProps, GridToolba
 import cx from 'classnames';
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
 import { cloneDeep, last, pick, uniq, uniqBy } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../../../common/intl';
@@ -25,6 +25,7 @@ import useDialog from '../../../../../../hooks/useDialog';
 import { withThemeNext } from '../../../../../../layout/theme-next';
 import SettingsPanel from '../../../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../../../types';
+import { ColumnMenuContext, CustomGridColumnMenuColumnProps } from '../CustomColumnMenu';
 import { AddPhase } from './cell.templates/AddPhase';
 import { GroupHeaderCell } from './cell.templates/GroupHeaderCell';
 import { ADD_GROUP_ID, ADD_GROUP_NAME, DATA_GROUP, DATA_ITEM_KEY, EDIT_FIELD, EXPAND_FIELD, initialDataState, LCP_KEYS, NO, PARTS_GROUP_ID, REQUEST_PAYLOAD_KEYS } from './constants';
@@ -101,7 +102,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   });
 
   useEffect(() => {
-    const data = processRealData(formValues?.lifecyclePhases?.categories);
+    const data = processRealData((formValues?.lifecyclePhases as any)?.categories);
     updateStateGridData(data.phases);
     setSelectedPartGroups(data.groups);
     fetchLCPDocTypesAsync.start(
@@ -241,9 +242,10 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const onUpdateAddOrEditGroup = (dataItem: CustomGroupDataItem) => {
+    const flattenedData = resultState?.data?.flatMap((group: CustomGroupDataItem) => group.items);
     setEditGroup('');
     setSelectedDocType(undefined);
-    updateSettingsObj(data);
+    updateSettingsObj(flattenedData);
   };
 
   const getGroupByCategory = useCallback(
@@ -272,7 +274,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     [getGroupByCategory],
   );
 
-  const addPhase = (dataItem: LCP) => {
+  const addPhase = useCallback((dataItem: LCP) => {
     setPrevData(cloneDeep(data));
     const selectedPhaseCategory = data?.filter(phase => phase.category === dataItem.category);
     const enlilTypeOptions = uniq(selectedPhaseCategory?.map(phase => phase.internalType));
@@ -305,7 +307,9 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
     setData(newData);
     setAddNewPhase(newPhase);
     setResultState(processWithGroups(newData, initialDataState));
-  };
+  },
+  [data, initialDataState],
+  );
 
   const onTogglePhaseItem = (dataItem: LCP) => {
     if (dataItem.isActive) {
@@ -348,14 +352,16 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         item.displayOrder = index + 1;
       });
 
-      const displayOrderMap = sortedItems.reduce((acc, item) => {
-        acc[item.id] = item.displayOrder;
+      const displayOrderMap = sortedItems?.reduce((acc, item: LCP) => {
+        if (item?.id) {
+          acc[item?.id] = item.displayOrder;
+        }
         return acc;
       }, {});
 
-      const displayOrderUpdatedData = updatedData?.map(phase => ({
+      const displayOrderUpdatedData = updatedData?.map((phase: LCP) => ({
         ...phase,
-        displayOrder: displayOrderMap[phase?.id] ?? phase.displayOrder,
+        displayOrder: phase?.id ? displayOrderMap[phase?.id] : phase.displayOrder,
       }));
 
       const sortedOrderUpdatedData = sortPhasesByDisplayOrder(displayOrderUpdatedData);
@@ -378,6 +384,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   const schema: Array<ColumnDefinition<LCP>> = LCPSchema({
     onConfirm: submitForm,
     onDiscard: onDiscardPhase,
+    selectedPartGroups,
     hasEditLCPPermission,
   });
 
@@ -392,12 +399,20 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
   }, [addNewPhase, resetForm]);
 
   const rowRender: DataGridProps<LCP>['rowRender'] = (row: React.ReactElement, rowProps: GridRowProps) => {
-    const fieldCount = rowProps.dataItem.fieldCount ?? columns?.length;
-    if (rowProps.rowType === 'groupHeader') {
-      const groupId = rowProps.dataItem.groupId as string;
+    const { dataItem, rowType } = rowProps;
+    const fieldCount = dataItem.fieldCount ?? columns?.length;
+    const groupId = dataItem.groupId as string;
+    const itemId = dataItem?.id;
+    const itemCategory = dataItem?.category;
+    const isGroupUpdating = editGroup === getGroupIdByCategory(itemCategory);
+    const isLastRow = isLastGroupRow(itemId, itemCategory);
+
+    if (rowType === 'groupHeader') {
       return React.cloneElement(row, {
         ...rowProps,
-        className: cx(row.props.className, { updatingRow: editGroup === groupId }, { groupLastRow: groupId === ADD_GROUP_ID && rowProps.dataItem.items.length === 1 }),
+        className: cx(row.props.className,
+          { updatingRow: editGroup === groupId },
+          { groupLastRow: groupId === ADD_GROUP_ID && dataItem.items.length === 1 }),
         children: (
           <td colSpan={fieldCount} className="groupHeader">
             <GroupHeaderCell
@@ -417,16 +432,12 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       });
     }
 
-    if (rowProps.dataItem.isAdd) {
+    if (dataItem.isAdd) {
       // hide other elements while adding the row
       return <React.Fragment />;
     }
 
-    const isGroupUpdating = editGroup === getGroupIdByCategory(rowProps.dataItem.category);
-    const itemId = rowProps?.dataItem?.id;
-    const itemCategory = rowProps?.dataItem?.category;
-
-    if (rowProps.dataItem.isAddPhase) {
+    if (dataItem.isAddPhase) {
       return <FormikProvider value={formik}>
         {React.cloneElement(row, {
           ...rowProps,
@@ -435,7 +446,7 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
       </FormikProvider>;
     }
 
-    if (isLastGroupRow(itemId, itemCategory) && !isGroupUpdating && hasEditLCPPermission) {
+    if (isLastRow && !isGroupUpdating && hasEditLCPPermission) {
       if (isGroupPhasesDeactivated(itemCategory)) {
         return <React.Fragment />;
       }
@@ -445,68 +456,81 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
           ...rowProps,
           children: (
             <td colSpan={fieldCount}>
-              <AddPhase {...rowProps} addPhase={addPhase} />
+              <AddPhase {...rowProps} addPhase={addPhase} selectedPartGroups={selectedPartGroups} />
             </td>
           ),
         }),
       ];
     }
 
-    rowProps.dataItem.isGroupDeactivated = isGroupPhasesDeactivated(itemCategory);
+    dataItem.isGroupDeactivated = isGroupPhasesDeactivated(itemCategory);
 
     return React.cloneElement(row, {
       ...rowProps,
-      className: cx(row.props.className, { updatingRow: isGroupUpdating }, { groupLastRow: isLastGroupRow(itemId, itemCategory) && isGroupUpdating }),
+      className: cx(row.props.className,
+        { updatingRow: isGroupUpdating },
+        { groupLastRow: isLastRow && isGroupUpdating }),
     });
   };
 
   const onGroupsToggle = React.useCallback((isExpandAll?) => {
-    const dataStateWithoutPaging = processWithGroups((data ?? []), {
-      group: dataState.group,
-    });
-
     setCollapsedState(
-      isExpandAll ? [] : getGroupIds({ data: dataStateWithoutPaging.data }),
+      isExpandAll ? [] : getGroupIds({ data: resultState?.data }),
     );
-  }, [collapsedState, dataState]);
+  }, [collapsedState, resultState]);
 
   const getUpdatedStateDataByEditInfo = useCallback((resultState?: DataResult) => {
-    resultState?.data?.forEach((group: CustomGroupDataItem) => {
-      group.items?.forEach((data) => {
-        data[EDIT_FIELD] = group.groupId === editGroup;
-        return data;
-      });
-      return group;
-    });
-    return sortGroups(resultState?.data ?? [], selectedDocType?.categoryUniqId);
+    const updatedData = resultState?.data?.map((group: CustomGroupDataItem) => ({
+      ...group,
+      items: group.items?.map((data) => ({
+        ...data,
+        [EDIT_FIELD]: group.groupId === editGroup,
+      })),
+    }));
+    return sortGroups(updatedData ?? [], selectedDocType?.categoryUniqId);
   }, [editGroup, resultState]);
 
   const onItemChange = (e: GridItemChangeEvent) => {
-    resultState?.data?.forEach((group: CustomGroupDataItem) => {
-      if (group.groupId === getGroupIdByCategory(e.dataItem.category)) {
-      group.items?.forEach((data) => {
-        if (data.id === e.dataItem.id) {
-          if (e.field === LCP_KEYS.isActive) {
-            onTogglePhaseItem(e.dataItem);
-          } else {
-            data.isUserModified = true;
-            data[e.field || ''] = e.value;
-          }
-        }
-        return data;
-      });
+    if (!resultState?.data) return;
+
+    const updatedData = resultState.data.map((group: CustomGroupDataItem) => {
+      if (group.groupId !== getGroupIdByCategory(e.dataItem.category)) {
+        return group;
       }
-      return group;
+
+      const updatedItems = group.items?.map((item) => {
+        if (item.id !== e.dataItem.id) {
+          return item;
+        }
+
+        if (e.field === LCP_KEYS.isActive) {
+          onTogglePhaseItem(e.dataItem);
+          return item;
+        }
+
+        return {
+          ...item,
+          isUserModified: true,
+          [e.field || '']: e.value,
+        };
+      });
+
+      return {
+        ...group,
+        items: updatedItems,
+      };
     });
 
-    setResultState(resultState);
+    setResultState((prevState) => ({
+      ...(prevState as DataResult),
+      data: updatedData,
+    }));
   };
 
-  const addLCP = () => {
+  const addLCP = useCallback(() => {
     setPrevData(cloneDeep(data));
-    const newData = [
-      ...(data ?? []),
-      {
+    setData((prevData = []) => {
+      const newItem = {
         id: uuidv4(),
         internalType: '',
         displayLabel: '',
@@ -519,61 +543,94 @@ const LCPGrid: React.FC<SettingsPanelProps> = (props) => {
         isAdd: true,
         isUserAdded: true,
         isUserModified: false,
-      },
-    ];
-    setData(newData);
-    setEditGroup(ADD_GROUP_ID);
-    setResultState(processWithGroups(newData, initialDataState));
-  };
+      };
+      const updatedData = [...prevData, newItem];
+      setEditGroup(ADD_GROUP_ID);
+      setResultState(processWithGroups(updatedData, initialDataState));
+      return updatedData;
+    });
+  }, [data, initialDataState]);
 
-  const newData = setExpandedState({
-    data: getUpdatedStateDataByEditInfo(resultState),
-    collapsedIds: collapsedState,
-  });
+  const memoizedUpdatedStateData = useMemo(() => {
+    return getUpdatedStateDataByEditInfo(resultState);
+  }, [resultState, editGroup, selectedDocType?.categoryUniqId]);
+
+  const newData = useMemo(() => {
+    return setExpandedState({
+      data: memoizedUpdatedStateData,
+      collapsedIds: collapsedState,
+    });
+  }, [memoizedUpdatedStateData, collapsedState]);
+
+  const onLock = React.useCallback(
+    ({ field, locked }: CustomGridColumnMenuColumnProps) => {
+      const index = columns.findIndex((c) => c.field === field);
+      const column = columns[index];
+
+      if (column) {
+        const newColumns = [...columns];
+        newColumns.splice(index, 1, {
+          ...column,
+          locked: !locked,
+          reorderable: locked,
+          orderIndex: !locked ? 0 : undefined,
+        });
+        setColumns(newColumns);
+      }
+    },
+    [columns],
+  );
 
   return <SettingsPanel {...props} title={translate('administration.general.settings.lcp')} onAddNew={hasEditLCPPermission ? addLCP : undefined}>
     <Grid item>
-      <KendoDataGrid<EditableLCP>
-        {...dataState}
-        data={newData}
-        schema={getColumns()}
-        onDataStateChange={onDataStateChange}
-        total={resultState?.total}
-        group={DATA_GROUP}
-        fullWidth
-        className={classes.rootMDTable}
-        hasBoxScrollbars
-        dataItemKey={DATA_ITEM_KEY}
-        skipDataProcessing
-        filterable={true}
-        groupable={true}
-        navigatable={true}
-        expandField={EXPAND_FIELD}
-        rowRender={rowRender}
-        loading={fetchLCPDocTypesAsync.isLoading}
-        onItemChange={onItemChange}
+      <ColumnMenuContext.Provider
+        value={{
+          columns: getColumns(),
+          onLock,
+        }}
       >
-        <GridToolbar>
-          <Grid container justify="flex-start"
-            className={classes.toolbarContainer}
-          >
-            <Grid
-              item
-              data-cy="collapse-expand-collapse"
-              className={classes.toggleExpandCollapse}
-              alignItems="center"
-              justify="center"
+        <KendoDataGrid<EditableLCP>
+          {...dataState}
+          data={newData}
+          schema={getColumns()}
+          onDataStateChange={onDataStateChange}
+          total={resultState?.total}
+          group={DATA_GROUP}
+          fullWidth
+          className={classes.rootMDTable}
+          hasBoxScrollbars
+          dataItemKey={DATA_ITEM_KEY}
+          skipDataProcessing
+          filterable={true}
+          groupable={true}
+          navigatable={true}
+          expandField={EXPAND_FIELD}
+          rowRender={rowRender}
+          loading={fetchLCPDocTypesAsync.isLoading}
+          onItemChange={onItemChange}
+        >
+          <GridToolbar>
+            <Grid container justify="flex-start"
+              className={classes.toolbarContainer}
             >
-              <span onClick={() => onGroupsToggle(true)}>
-                {translate('common.expand.all')} {' / '}
-              </span>
-              <span onClick={() => onGroupsToggle()}>
-                {translate('common.collapse.all')}
-              </span>
+              <Grid
+                item
+                data-cy="collapse-expand-collapse"
+                className={classes.toggleExpandCollapse}
+                alignItems="center"
+                justify="center"
+              >
+                <span onClick={() => onGroupsToggle(true)}>
+                  {translate('common.expand.all')} {' / '}
+                </span>
+                <span onClick={() => onGroupsToggle()}>
+                  {translate('common.collapse.all')}
+                </span>
+              </Grid>
             </Grid>
-          </Grid>
-        </GridToolbar>
-      </KendoDataGrid>
+          </GridToolbar>
+        </KendoDataGrid>
+      </ColumnMenuContext.Provider>
     </Grid>
     <Grid item>
       {hasEditLCPPermission && <AddButton

@@ -1,11 +1,6 @@
 export const dropDownOptions = [
   { value: 'TIME_TRAVEL_USER_SESSION', text: 'TIME_TRAVEL_USER_SESSION' },
-  { value: 'TIME_TRAVEL_USER', text: 'TIME_TRAVEL_USER' },
   { value: 'TIME_TRAVEL_COMPANY', text: 'TIME_TRAVEL_COMPANY' },
-  {
-    value: 'UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE',
-    text: 'UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE',
-  },
   {
     value: 'RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE',
     text: 'RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE',
@@ -17,10 +12,6 @@ export const dropDownOptions = [
   {
     value: 'SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS',
     text: 'SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS',
-  },
-  {
-    value: 'SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC',
-    text: 'SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC',
   },
   {
     value: 'RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES',
@@ -50,7 +41,6 @@ export const dropDownOptions = [
     text: 'SEND_PASSWORD_EXPIRATION_EMAILS',
   },
   { value: 'PRECALC_PAGE_DETAILS', text: 'PRECALC_PAGE_DETAILS' },
-  { value: 'UNLOCK_USER_AND_SET_DEFAULT_PASSWORD', text: 'UNLOCK_USER_AND_SET_DEFAULT_PASSWORD' },
 ];
 
 export const AsyncStatus = [

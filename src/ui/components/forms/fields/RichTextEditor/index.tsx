@@ -5,7 +5,7 @@ import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { Editor, EditorProps } from 'react-draft-wysiwyg';
+import { Editor, EditorProps, EditorState } from 'react-draft-wysiwyg';
 import useDebounce from 'use-debounce/lib/useDebounce';
 import '../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { RenderSize } from '../../../../../state/ducks/common/types';
@@ -55,7 +55,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   // Disabled because of ENC-7826
   /*   let timeout;
   const [timeoutID, setTimeoutID] = useState<number>(); */
-  const [value, setValue] = useState();
+  const [value, setValue] = useState<EditorState>();
   const [toolbarHidden, setToolbarHidden] = useState(toggleToolbar);
   const [toolbarHiddenDebounced, setToolbarHiddenDebounced] = useState(toggleToolbar);
 
@@ -84,7 +84,6 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     if (!value) {
       return;
     }
-
     const html = draftToHtml(convertToRaw(value.getCurrentContent())).trim();
     const fieldValue = html === '<p></p>' ? '' : html.replace(/ins>/g, 'u>');
     form.setFieldValue(field.name, fieldValue);

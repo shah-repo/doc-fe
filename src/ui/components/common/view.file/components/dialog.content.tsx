@@ -58,7 +58,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
 
   return (
     <MuiDialogContent
-      className={classes.content}
+      className={classes.dialogContent}
       classes={{ root: classes.contentRoot }}
       onClick={handleClick}
     >

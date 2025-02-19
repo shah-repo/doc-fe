@@ -1,13 +1,17 @@
-import { Button, Divider, Grid, Typography } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Divider, Grid, Typography } from '@material-ui/core';
 import cx from 'classnames';
-import { isEmpty, map, some } from 'lodash';
+import { isEmpty, some } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { AutoSizer } from 'react-virtualized';
+import { translate } from '../../../common/intl';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import { ApplicationState } from '../../../state/reducers';
+import { Button } from '../../components/forms/fields-next';
 import { useFormContext } from '../../components/forms/FormContext';
 import Text from '../../components/Text';
 import { FBFormState } from '../../form.builder';
@@ -39,11 +43,12 @@ const TopSection: React.FunctionComponent<{
   showEditRow,
 }) => {
   const classes = useStyles();
+
   return (
-    <div>
-      <Grid className={classes.gridCenterAlign} container>
+    <>
+      <Grid container justify="space-between" alignItems="center">
         <Grid item>
-          <Typography variant="h6" id="sectionTitle" component="div" className={classes.sectionTitle}>
+          <Typography variant="h6" id="sectionTitle" component="div" className={classes.title}>
             <Text translation="approvalRequest.items.section.heading" />
           </Typography>
         </Grid>
@@ -51,37 +56,41 @@ const TopSection: React.FunctionComponent<{
         <Grid item>
           <Typography>
             <Button
+              kind="ghost"
+              size="small"
+              startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+              onClick={isButtonShown ? showEditRow : undefined}
               data-cy="approvalRequest.items.button.addText"
-              className={classes.btnMargin}
               disabled={!isButtonShown}
-              color="primary"
-              startIcon={<AddCircleIcon color={!isButtonShown ? 'disabled' : 'primary'} />}
-              onClick={isButtonShown ? showEditRow : (e) => e.preventDefault()}
             >
-              <Text translation="approvalRequest.items.button.addText" />
+              {translate('approvalRequest.items.button.addText')}
             </Button>
           </Typography>
         </Grid>
       </Grid>
-      <Divider className={classes.dividerStyle} />
-    </div>
+      <Divider className={classes.divider} />
+    </>
   );
 };
 
-const ItemsAndDetails: React.FunctionComponent<{
+interface Props {
   changeRequest?: ChangeRequest
   formState: FBFormState
   handleAdd: () => void
   handleRemove: (docRevId: string) => void
   handleUpdate: () => void
   itemsAndDetailsState: ItemsAndDetailsState
-}> = ({
+  itemToAdd?: string
+}
+
+const ItemsAndDetails: React.FC<Props> = ({
   changeRequest,
   formState,
   handleAdd,
   handleRemove,
   handleUpdate,
   itemsAndDetailsState,
+  itemToAdd,
 }) => {
   const classes = useStyles();
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
@@ -92,23 +101,26 @@ const ItemsAndDetails: React.FunctionComponent<{
   );
 
   useEffect(() => {
-    if (itemsAndDetailsState.approvalRequstItemInEditMode !== '') {
-      formState.setFieldValue('proposedDocumentRevision', { id: itemsAndDetailsState.approvalRequstItemInEditMode });
+    if (itemToAdd !== '') {
+      formState.setFieldValue(
+        'proposedDocumentRevision',
+        { id: itemToAdd },
+      );
       showEditRow();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemsAndDetailsState.approvalRequstItemInEditMode]);
+  }, [itemToAdd]);
 
   const showEditRow = () => {
     setIsEditRowVisible(true);
     itemsAndDetailsState.setViewItemActionsVisibility(false);
-    if (itemsAndDetailsState.approvalRequstItemInEditMode === '') {
+    if (itemToAdd === '') {
       removePrePopulatedField();
     }
   };
 
   function disabledOptions (): string[] {
-    return map(itemsAndDetailsState?.approvalRequestItemsList, 'proposedDocumentRevision.id');
+    return itemsAndDetailsState?.approvalRequestItemsList.map(item => item.docRevId);
   }
 
   function resetAndCancelEdit () {
@@ -139,37 +151,58 @@ const ItemsAndDetails: React.FunctionComponent<{
   }
 
   return useObserver(() => (
-    <div className={cx(classes.tabContent, {
-      [classes.tabContentInactive]: itemsAndDetailsState.loadingState,
-    })}>
-      { itemsAndDetailsState.loadingState && <Loader /> }
-      <TopSection showEditRow={showEditRow} isButtonShown={itemsAndDetailsState.viewItemActionsVisible && !isEditing} />
-      <ApprovalRequestGridHeader isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted} />
-      { isEditRowVisible && <ApprovalRequestEditGridItem
-        {...{ formState }}
-        disabledOptions={disabledOptions()}
-        addRevisionToChangeRequest={addRevisionToChangeRequest}
-        resetAndCancelEdit={resetAndCancelEdit}
-        isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
-        documentRevision={documentRevision}
-      />}
-      {
-        itemsAndDetailsState.approvalRequestItemsList.map((entry: ApprovalRequestGridItem) => (
-          <ApprovalRequestItem
-            key={`fb-document-revision-${entry.id}`}
-            entry={entry}
-            revision= {documentRevision?.revision}
-            {...{ formState }}
-            disabledOptions={disabledOptions}
-            handleRemove = {handleRemove}
-            handleUpdate = {handleUpdate}
-            viewItemActionsVisible = {itemsAndDetailsState.viewItemActionsVisible}
-            itemsAndDetailsState = {itemsAndDetailsState}
-            isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
-            isDeletionDisabled={isEditing}
-          />
-        ))
-      }
+    <div className={cx(classes.tabContent, { [classes.tabContentInactive]: itemsAndDetailsState.loadingState })}>
+      {itemsAndDetailsState.loadingState && <Loader />}
+      <TopSection
+        showEditRow={showEditRow}
+        isButtonShown={itemsAndDetailsState.viewItemActionsVisible && !isEditing}
+      />
+      <AutoSizer disableHeight>
+        {({ width }) => (
+          <div className={cx(classes.tableContainer, 'containing-box-scrollbar')} style={{ width }}>
+            <div
+              className={cx(
+                classes.table,
+                {
+                  [classes.tableWithSubstitution]: changeRequest?.isLineItemPartCanBeSubstituted,
+                },
+              )}
+            >
+              <ApprovalRequestGridHeader
+                isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
+              />
+              <div className={classes.tableContent}>
+                {isEditRowVisible && (
+                  <ApprovalRequestEditGridItem
+                    {...{ formState }}
+                    disabledOptions={disabledOptions()}
+                    addRevisionToChangeRequest={addRevisionToChangeRequest}
+                    resetAndCancelEdit={resetAndCancelEdit}
+                    isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
+                    documentRevision={documentRevision}
+                    isAddingNewItem
+                  />
+                )}
+                {itemsAndDetailsState.approvalRequestItemsList.map((entry: ApprovalRequestGridItem) => (
+                  <ApprovalRequestItem
+                    {...{ formState }}
+                    key={`fb-document-revision-${entry.id}`}
+                    entry={entry}
+                    revision={documentRevision?.revision}
+                    disabledOptions={disabledOptions}
+                    handleRemove={handleRemove}
+                    handleUpdate={handleUpdate}
+                    viewItemActionsVisible={itemsAndDetailsState.viewItemActionsVisible}
+                    itemsAndDetailsState={itemsAndDetailsState}
+                    isLineItemPartCanBeSubstituted={changeRequest?.isLineItemPartCanBeSubstituted}
+                    isDeletionDisabled={isEditing}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </AutoSizer>
     </div>
   ));
 };

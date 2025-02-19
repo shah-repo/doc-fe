@@ -6,12 +6,12 @@ import HeaderField from '../../../../components/common/header.field/field';
 import Container, { Props } from './Container';
 
 describe('Container tests', () => {
-  const getWrapper = (props: Partial<Props> = {}) => shallow(
+  const getWrapper = (props: Props) => shallow(
     <Container {...props} />,
   );
 
   it('Displays correctly', () => {
-    const wrapper = getWrapper();
+    const wrapper = getWrapper({} as Props);
     expect(wrapper.find(ErrorMessage)).toHaveLength(1);
     expect(wrapper.find(HeaderField)).toHaveLength(1);
     expect(wrapper.find(FieldArray)).toHaveLength(1);

@@ -9,15 +9,15 @@ import { DOC_TYPE_GROUP_OPTION } from '../../../state/ducks/documentRevisions/do
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from '../../../state/ducks/documentRevisions/types';
 import { EditableMDItem } from '../../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/types';
 import { EditableTLItem } from '../../change.request/FBMaterialDisposition/components/FBTasksListTable/types';
+import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../FBInput/FBInput.wrap';
 import FBDataStore from '../FBStore/FBDataStore';
 import FBStore from '../FBStore/FBStore';
-import { FBEndpoint } from '../defaults/FBEndpoint';
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = 'none';
-  @observable approvals?: FBInlineApprovalBody[];
+  @observable public approvals?: FBInlineApprovalBody[];
   @observable loadAudit = false;
   @observable revisionChangeType?: RevisionChangeType;
   // Buffer between _formState loading and documentRevApi loading until we switch
@@ -283,6 +283,7 @@ class FBWorkspaceState extends FBSchemaState {
         this.documentRevApi.onSuccess();
         FBDataStore.setRefreshData(data);
         this.loading = false;
+        this.approvals = data?.approvals as FBInlineApprovalBody[];
       }
     });
   };

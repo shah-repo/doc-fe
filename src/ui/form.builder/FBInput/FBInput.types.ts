@@ -75,6 +75,8 @@ export type FBInputType =
   | 'poapprovals'
   | 'lhrbuild'
   | 'purchaseordersummary'
+  | 'siteInformation'
+  | 'headquarterAddress'
   | 'downloadsheet'
   | 'lotTransfers'
   | 'lotQuantity'
@@ -87,7 +89,12 @@ export type FBInputType =
   | 'tasksListTable'
   | 'workOrderLhrTable'
   | 'woApprovals'
+  | 'shippingCustomer'
   | 'workOrderType'
+  | 'shippingInformation'
+  | 'headquarterAddress'
+  | 'shippingItems'
+  | 'shippingAddress'
   ;
 
 export type FBInputProps =

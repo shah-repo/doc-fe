@@ -16,6 +16,8 @@ export const AUTOSAVE_CONFIG = 'company/AUTOSAVE_CONFIG';
 export const SET_AUTOSAVE_CONFIG = 'company/SET_AUTOSAVE_CONFIG';
 export const REDLINE_CONFIG = 'company/REDLINE_CONFIG';
 export const SET_GENERAL_SETTINGS = 'company/SET_GENERAL_SETTINGS';
+export const SET_PREMIUM_FEATURE_SUBSCRIPTIONS = 'company/SET_PREMIUM_FEATURE_SUBSCRIPTIONS';
+export const UPDATE_PREMIUM_FEATURE_SUBSCRIPTION = 'company/UPDATE_PREMIUM_FEATURE_SUBSCRIPTION';
 
 export const WHITE_LABEL_DEFAULT = {
   logo: '',
@@ -150,3 +152,5 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
   },
 ];
+
+export const OMIT_FIELDS = ['id', 'materialFlowACLs', 'statusCode', 'approvalRoles'];

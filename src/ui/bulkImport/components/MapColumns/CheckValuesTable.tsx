@@ -8,16 +8,20 @@ import cx from 'classnames';
 import { noop } from 'lodash';
 import React, { ComponentType, ReactNode, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { translate } from '../../../../common/intl';
 import { validateDateFormats } from '../../../../common/utils/date';
-import { setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
-import { getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
-import { BulkImport, TableErrorDetail, TableErrorValidation, TableRow } from '../../../../state/ducks/bulkImport/types';
+import { patchBulkImport, setDataTable, setIsLoading, setOnlyErrorsTable, setShowTable, setUnsavedChanges, updateRowFieldTable } from '../../../../state/ducks/bulkImport/actions';
+import { getHasUnsavedChanges, getIsLoading, getShowErrorsOnly, getTableDataFiltered } from '../../../../state/ducks/bulkImport/selectors';
+import { BulkImport, TableErrorDetail, TableErrorValidation, TableRowWithIdx } from '../../../../state/ducks/bulkImport/types';
 import StyledKendoGrid from '../../../components/StyledKendoGrid/StyledKendoGrid';
 import Text from '../../../components/Text';
+import Loader from '../../../components/common/kendo/Loader';
+import { AlertDialog } from '../../../components/dialogs';
 import { Button, Switch } from '../../../components/forms/fields-next';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import useDialog from '../../../hooks/useDialog';
 import MessageInformation from '../MessageInformation';
 import StepTitle from '../StepTitle';
 import useStyles from './styles';
@@ -28,6 +32,7 @@ interface CheckValuesTableProps {
   bulkImport?: BulkImport
   handleNext: () => void
   handleBack: () => void
+  handleCancel: () => void
 }
 
 interface CustomDataItem {
@@ -47,6 +52,12 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
   const [cellValue, setCellValue] = useState(dataItem[field]);
   const error = dataItem.errors?.find(error => error.column === field);
   const isErrorShown = error && !error?.edited;
+
+  // Update cellValue when dataItem[field] changes
+  useEffect(() => {
+    if (dataItem[field] === cellValue) return;
+    setCellValue(dataItem[field]);
+  }, [dataItem, field]);
 
   const handleErrorField = () => {
     setIsEditing(true);
@@ -72,27 +83,33 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
     } else {
       // validate if the value is the same as requiered or if have - star with the value
       if (error?.help?.data?.length) {
-        isValid = error?.help?.data.some(entry => entry === valueCheck);
+        isValid = error?.help?.data.some(entry => valueCheck.startsWith(entry));
       }
-
       // At the moment format is only for dates
       if (isValid && error?.help?.format?.length) {
-        const dateFormats = error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
-        const datePattern = new RegExp(`^(${dateFormats.join('|')})$`);
+        const areRegex = error?.help?.format[0].startsWith('^') && error?.help?.format[0].endsWith('$');
+
+        const formats = areRegex ? error?.help?.format : error?.help?.format.map(fmt => fmt.replace(/Y/g, '\\d').replace(/M|D/g, '\\d'));
+        const datePattern = new RegExp(areRegex ? formats.join('|') : `^(${formats.join('|')})$`);
+
         isValid = datePattern.test(valueCheck);
 
-        if (isValid) {
+        if (isValid && !areRegex) {
           isValid = validateDateFormats(valueCheck, error?.help?.format);
         }
       }
     }
 
-    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: props.dataIndex, isEdited: isValid }));
+    dispatch(updateRowFieldTable({ cellValue: valueCheck, field, dataIndex: dataItem.idx as number, isEdited: isValid }));
   };
 
   const content = (
     <Box className={cx(classes.cell, { [classes.errorCell]: isErrorShown })}>
-      {cellValue}
+      <span
+        className={classes.tableText}
+      >
+        {cellValue}
+      </span>
       {isErrorShown && (
         <Tooltip
           title={
@@ -137,10 +154,13 @@ const CustomCell: React.FC<CustomCellProps> = ({ dataItem, field, ...props }): J
 // Create an array of mock data items
 const PAGE_SIZES = [12, 24, 50, 100];
 const BUTTON_COUNT = 4;
+const NO_FILTERS_COLUMN = ['REVISION'];
 
-const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleBack, bulkImport }) => {
+const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleBack, handleCancel, bulkImport }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const history = useHistory();
+  const openLeaveDialog = useDialog();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [dataState, setDataState] = useState<State>({
@@ -148,22 +168,32 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     take: pageSize,
     sort: [],
   });
-  const [data, setData] = useState<TableRow[]>([]);
-  const [errorCount, setErrorCount] = useState(0);
-  const tableData = useSelector(getTableDataFiltered);
+  const [data, setData] = useState<TableRowWithIdx[]>([]);
+  const [errorCount, setErrorCount] = useState<number>(0);
+  const [forceLoading, setForceLoading] = useState<boolean>(true);
+  const [columnOrder, setColumnOrder] = useState<string[]>([]);
+  const [filter, setFilter] = useState<CompositeFilterDescriptor>();
+  const tableData: TableRowWithIdx[] = useSelector(getTableDataFiltered);
   const showErrorsOnly = useSelector(getShowErrorsOnly);
   const uploadFileDataAction = useActionCreator(setDataTable);
+  const patchBulkImportData = useActionCreator(patchBulkImport);
   const excelExportRef = useRef<ExcelExport | null>(null);
-  const [filter, setFilter] = React.useState<CompositeFilterDescriptor>();
+  const currentDestination = useRef<string | null>(null);
+  const isLoading = useSelector(getIsLoading);
+  const hasUnsavedChanges = useSelector(getHasUnsavedChanges);
+  const tableLoading = forceLoading || isLoading;
+  const tableHeadersFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors' && key !== 'idx') : [];
 
   const dataStateChange = (event: GridDataStateChangeEvent) => {
+    setForceLoading(true);
     setDataState(event.dataState);
     const processedData = process(tableData, event.dataState);
     setData(processedData.data);
+    setForceLoading(false);
   };
 
   const filterChange = (event: GridFilterChangeEvent) => {
-    const newData = filterBy(tableData, event.filter);
+    const newData: TableRowWithIdx[] = filterBy(tableData, event.filter);
     setFilter(event.filter);
     setData(newData.slice(page * pageSize, (page + 1) * pageSize));
   };
@@ -185,25 +215,111 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
     excelExportRef.current.save(options);
   };
 
-  const asyncSetDataTable = useAsync({
+  const asyncNextClick = useAsync({
     onSuccess: () => {
       dispatch(setShowTable(false));
       handleNext();
     },
   });
 
+  const asyncSetDataTable = useAsync({
+    onSuccess: () => {
+      asyncNextClick.start(patchBulkImportData, { bulkImportId: bulkImport?.id, data: { process: { step: 3, totalExcelErrors: errorCount } } }, asyncNextClick);
+    },
+  });
+
+  const genericAsync = useAsync();
+
+  const asyncSetDataTableErrors = useAsync({
+    onSuccess: () => {
+      genericAsync.start(patchBulkImportData, { bulkImportId: bulkImport?.id, data: { process: { totalExcelErrors: errorCount } } }, genericAsync);
+    },
+  });
+
+  const handlePrevious = () => {
+    if (hasUnsavedChanges) {
+      currentDestination.current = null;
+      openLeaveDialog.open();
+      return;
+    }
+    handleBack();
+  };
+
+  const handleSaveChanges = () => {
+    dispatch(setUnsavedChanges(false));
+    genericAsync.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, genericAsync);
+    asyncSetDataTableErrors.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTableErrors);
+  };
+
+  const handleCloseLeaveDialog = () => {
+    currentDestination.current = null; // Reset destination if user cancels
+    openLeaveDialog.close();
+  };
+
+  const handleOpenLeaveDialog = () => {
+    if (currentDestination.current) {
+      history.push(currentDestination.current); // Navigate to saved destination
+    } else { // if currentDestination.current is null is because is a goBack
+      handleBack();
+    }
+    openLeaveDialog.close();
+    dispatch(setUnsavedChanges(false));
+  };
+
+  const confirmLeavePage = (event: BeforeUnloadEvent) => {
+    if (hasUnsavedChanges) {
+      event.preventDefault();
+    }
+  };
+
   const handlePageChange = (event: GridPageChangeEvent) => {
     setPage(event.page.skip / event.page.take);
     setPageSize(event.page.take);
-    setData(tableData.slice(event.page.skip, event.page.skip + event.page.take));
+    const newData = tableData.slice(event.page.skip, event.page.skip + event.page.take);
+    setData(newData);
   };
 
   const triggerNext = () => {
+    dispatch(setUnsavedChanges(false));
     dispatch(setIsLoading(true));
     asyncSetDataTable.start(uploadFileDataAction, { data: tableData, bulkImportId: bulkImport?.id }, asyncSetDataTable);
   };
 
-  const updateShowErrorOnly = () => dispatch(setOnlyErrorsTable(!showErrorsOnly));
+  const updateShowErrorOnly = () => {
+    setForceLoading(true);
+    dispatch(setOnlyErrorsTable(!showErrorsOnly));
+  };
+
+  const handleColumnReorder = (event: any) => {
+    // We use the forceLoading to be able to update the table
+    setForceLoading(true);
+    // Sort columns based on the `orderIndex` property
+    const newOrder = [...event.columns].sort((a, b) => a.orderIndex - b.orderIndex).map(col => col.field);
+
+    setColumnOrder(newOrder); // Update state with the new order
+    setForceLoading(false);
+  };
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', confirmLeavePage);
+
+    return () => {
+      window.removeEventListener('beforeunload', confirmLeavePage);
+    };
+  }, [hasUnsavedChanges]);
+
+  useEffect(() => {
+    const unblock = history.block((nextLocation) => {
+      if (hasUnsavedChanges && !currentDestination.current) {
+        currentDestination.current = nextLocation.pathname;
+        openLeaveDialog.open();
+        return false; // Block the navigation
+      }
+      return true; // Allow the navigation
+    });
+
+    return () => unblock(); // Clean up listener on component unmount
+  }, [history, hasUnsavedChanges, openLeaveDialog]);
 
   useEffect(() => {
     setData(tableData.slice(page, pageSize));
@@ -211,22 +327,24 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
       // Check if item has errors and it's an array
       if (Array.isArray(item.errors)) {
         // Filter errors that are not edited and count them
-        const uneditedErrors = item.errors.filter(error => !error.edited).length;
-        return acc + uneditedErrors;
+        const hasUneditedError = item.errors.some(error => !error.edited);
+        return acc + (hasUneditedError ? 1 : 0);
       }
       return acc;
     }, 0);
     setErrorCount(count);
+    setForceLoading(false);
+    if (count === 0 && showErrorsOnly) {
+      dispatch(setOnlyErrorsTable(false));
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableData]);
-
-  const tableDataFiltered = tableData.length > 0 ? Object.keys(tableData[0]).filter(key => key !== 'errors') : [];
+  }, [tableData, showErrorsOnly]);
 
   return (
     <>
       <StepTitle title="bulkImport.mapColumns.table.title" subTitle="bulkImport.mapColumns.table.subTitle" />
       <Box className={classes.informationHeader}>
-        <MessageInformation showError={errorCount > 0} message={errorCount > 0 ? `${errorCount} ${translate('common.table.rowsErrors')}` : translate('common.table.noRowsErrors')} />
+        <MessageInformation hideMessage={!tableData.length} showError={errorCount > 0} message={errorCount > 0 ? `${errorCount} ${translate('common.table.rowsErrors')}` : translate('common.table.noRowsErrors')} />
         <Box className={classes.actionsHeader}>
           <Switch checked={showErrorsOnly && errorCount !== 0} onChange={updateShowErrorOnly} disabled={errorCount === 0} />
           <Typography className={classes.switchLabel}><Text translation="common.table.onlyShowRowsErrors" /></Typography>
@@ -239,37 +357,48 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
           </Button>
         </Box>
       </Box>
-      <ExcelExport
-        data={tableData}
-        ref={excelExportRef}
-        fileName={`${bulkImport?.processType || 'export'}.xlsx`}
-      >
-        <StyledKendoGrid
-          data={data}
-          {...dataState}
-          skip={page * pageSize}
-          take={pageSize}
-          total={data.length}
-          editField="inEdit"
-          pageable={{
-            buttonCount: BUTTON_COUNT,
-            pageSizes: PAGE_SIZES,
-          }}
-          sortable
-          resizable
-          reorderable
-          filterable
-          filter={filter}
-          onPageChange={handlePageChange}
-          onDataStateChange={dataStateChange}
-          onFilterChange={filterChange}
+      {tableLoading && <Loader />}
+      { !tableLoading
+        && <ExcelExport
+          data={tableData}
+          ref={excelExportRef}
+          fileName={`${bulkImport?.processType || 'export'}.xlsx`}
         >
-          {tableDataFiltered.map((key, idx) => (
-            <GridColumn width={150} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
-          ))}
-        </StyledKendoGrid>
-      </ExcelExport>
+          <StyledKendoGrid
+            data={data}
+            {...dataState}
+            skip={page * pageSize}
+            take={pageSize}
+            total={tableData.length}
+            editField="inEdit"
+            pageable={{
+              buttonCount: BUTTON_COUNT,
+              pageSizes: PAGE_SIZES,
+            }}
+            sortable
+            resizable
+            reorderable
+            filterable
+            filter={filter}
+            onPageChange={handlePageChange}
+            onDataStateChange={dataStateChange}
+            onColumnReorder={handleColumnReorder}
+            onFilterChange={filterChange}
+          >
+            {(columnOrder.length > 0 ? columnOrder : tableHeadersFiltered).map((key, idx) => (
+              <GridColumn width={150} sortable={!NO_FILTERS_COLUMN.includes(key)} filter="text" key={idx} field={key} title={key} cell={CustomCell as ComponentType<GridCellProps>} />
+            ))}
+          </StyledKendoGrid>
+        </ExcelExport>
+      }
       <Box className={classes.actionsContainer}>
+        <Button
+          kind="secondary"
+          className={classes.buttonsCancel}
+          onClick={handleCancel}
+        >
+          <Text translation="bulkImport.delete" />
+        </Button>
         <Box className={classes.buttonsFooterContainer}>
           <Button
             onClick={exportToExcel}
@@ -278,21 +407,36 @@ const CheckValuesTable: React.FC<CheckValuesTableProps> = ({ handleNext, handleB
             <Text translation="common.export.xls" />
           </Button>
           <Button
-            onClick={handleBack}
+            onClick={handlePrevious}
             kind="outlined"
             className={classes.button}
           >
             <Text translation="common.previous" />
           </Button>
           <Button
+            onClick={handleSaveChanges}
+            className={classes.button}
+            disabled={!hasUnsavedChanges}
+          >
+            <Text translation="common.save.changes" />
+          </Button>
+          <Button
             onClick={triggerNext}
             className={classes.button}
-            disabled={tableData.length === 0 }
+            disabled={tableData.length === 0}
           >
             <Text translation="common.next" />
           </Button>
         </Box>
       </Box>
+      <AlertDialog
+        handler={openLeaveDialog}
+        cancelLabel="common.no.go.back"
+        onConfirm={handleOpenLeaveDialog}
+        onCancel={handleCloseLeaveDialog}
+      >
+        <p>{translate('bulkImport.unsavedChangesLeave')}</p>
+      </AlertDialog>
     </>
   );
 };

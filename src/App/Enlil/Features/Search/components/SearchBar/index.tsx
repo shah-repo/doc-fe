@@ -23,7 +23,13 @@ import useStyles from './styles';
 
 const MIN_QUERY_LENGTH = 3;
 
-const SearchBar: React.FC = () => {
+interface Props {
+  canSearch: boolean
+}
+
+const SearchBar: React.FC<Props> = ({
+  canSearch,
+}) => {
   const history = useHistory() as History;
   const classes = useStyles();
   const fieldRef = useRef<HTMLDivElement>();
@@ -184,11 +190,12 @@ const SearchBar: React.FC = () => {
     <Autocomplete
       loading={isLoading}
       disablePortal
+      disabled={!canSearch}
       options={options}
       filterOptions={(options: Option[]) => options}
       ref={fieldRef}
       placeholder={translate(isFocused ? 'keyword.to.search' : 'common.search')}
-      className={cx(classes.root, classes.searchBarResponsive, { [classes.rootFocused]: isFocused })}
+      className={cx(classes.root, { [classes.rootFocused]: isFocused })}
       onFocus={handleFocus}
       onBlur={handleBlur}
       noOptionsText={translate('nothing.found')}
@@ -215,6 +222,7 @@ const SearchBar: React.FC = () => {
       }}
       onChange={handleSearch}
       value=""
+      size="small"
     />
   );
 };

@@ -20,6 +20,7 @@ export const withFBSelect = <T extends FBSelectProps>(
     const { formState } = FB.useStores();
 
     const formValue = formState?.getFieldValue(name);
+
     defaultValue = find(options as Array<Record<any, any>>, (o) => o[optionValueKey] === formValue);
     isUndefined(menuItems)
       && (menuItems = map(options as Array<Record<any, any>>, (option, index) => {

@@ -6,6 +6,7 @@ import React, { useCallback } from 'react';
 import { translate } from '../../../../common/intl';
 import { IconButton } from '../../../components/forms/fields-next';
 import useHover from '../../../hooks/useHover';
+import { withThemeNext } from '../../../layout/theme-next';
 import { MODE_FIELD, Mode } from '../constants';
 import useStyles from '../styles';
 
@@ -19,16 +20,23 @@ export interface ActionsProps {
   isSubmitDisabled?: boolean
   deleteTooltipText?: string
   scrollBehavior?: ScrollBehavior
+  customDataCy?: {
+    confirm?: string
+    discard?: string
+    delete?: string
+  }
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: () => void
 }
 
+// TODO create generic actions component with popper and remove dataItem prop
 const Actions: React.FC<ActionsProps> = ({
   dataItem,
   scrollBehavior = 'auto',
   isDeleteDisabled,
   isSubmitDisabled,
+  customDataCy,
   deleteTooltipText,
   onConfirm,
   onDiscard,
@@ -64,7 +72,7 @@ const Actions: React.FC<ActionsProps> = ({
         >
           <div>
             <IconButton
-              data-cy="action-delete"
+              data-cy={customDataCy?.delete ?? 'action-delete'}
               kind="action"
               size="small"
               onClick={onDelete}
@@ -86,7 +94,7 @@ const Actions: React.FC<ActionsProps> = ({
           arrow
         >
           <IconButton
-            data-cy="action-discard"
+            data-cy={customDataCy?.discard ?? 'action-discard'}
             kind="action"
             size="small"
             onClick={onDiscard}
@@ -102,7 +110,7 @@ const Actions: React.FC<ActionsProps> = ({
           arrow
         >
           <IconButton
-            data-cy="action-save"
+            data-cy={customDataCy?.confirm ?? 'action-save'}
             kind="action"
             size="small"
             onClick={onConfirm}
@@ -116,4 +124,4 @@ const Actions: React.FC<ActionsProps> = ({
   );
 };
 
-export default Actions;
+export default withThemeNext(Actions);

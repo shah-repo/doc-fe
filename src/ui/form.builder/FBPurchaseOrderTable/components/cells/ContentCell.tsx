@@ -12,7 +12,7 @@ const ContentCell: CellComponent<FBPurchaseOrderItem> = ({
   children,
   ...props
 }) => {
-  const value: unknown = children ?? (dataItem[field] as ReactNode);
+  const value: ReactNode = children ?? (dataItem[field] as ReactNode);
   const dataCy = props['data-cy'] ?? kebabCase(field ?? column.id);
 
   return (

@@ -1,48 +1,66 @@
 import { useFormikContext } from 'formik';
-import { kebabCase } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../../../../common/intl';
 import { Autocomplete, FormikField } from '../../../../../../../components/forms/fields-next';
 import { OptionType } from '../../../../../../../components/forms/fields/Autocomplete/types';
-import { CellTemplateProps } from '../../../../../../../components/KendoDataGrid/KendoDataGrid.types';
 import { DEFAULT_OPTIONS, EDIT_FIELD, LCP_KEYS, PART_PURCHASE_OPTIONS } from '../constants';
-import { LCP } from '../types';
+import { CustomCellProps } from '../types';
+import { getCellDataCyBasedOnParentDocType } from '../utils';
 
-export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
+export const DropdownCell: React.FC<CustomCellProps> = ({
   dataItem,
   field,
   colSpan,
   dataIndex,
   style,
   className,
+  partGroups,
   onChange,
   ...rest
 }) => {
   const isEditMode = dataItem[EDIT_FIELD] || dataItem.isAddPhase;
   const { getFieldProps, setFieldValue } = useFormikContext();
 
-  const getOptions = () => {
-    return field === LCP_KEYS.isAllowedToBuy ? PART_PURCHASE_OPTIONS : DEFAULT_OPTIONS;
-  };
+  const options = React.useMemo(
+    () => (field === LCP_KEYS.isAllowedToBuy ? PART_PURCHASE_OPTIONS : DEFAULT_OPTIONS),
+    [field],
+  );
 
-  const options = getOptions();
-  const value = options.find((option) => option.value === dataItem[field]) ?? options[0];
-  const dataCy = `${kebabCase(field)}-td`;
+  const value = React.useMemo(
+    () => options.find((option) => option.value === dataItem[field]) ?? options[0],
+    [options, dataItem, field],
+  );
 
+  const dataCy = React.useMemo(
+    () =>
+      getCellDataCyBasedOnParentDocType(
+        partGroups,
+        dataItem.documentTypeId,
+        field,
+        dataItem.internalType,
+      ),
+    [partGroups, dataItem, field],
+  );
+
+  const handleChange = React.useCallback(
+    (e, value: OptionType) => {
+      if (dataItem.isAddPhase) {
+        setFieldValue(field, value.value);
+        return;
+      }
+      onChange?.({
+        dataIndex,
+        dataItem,
+        syntheticEvent: e.syntheticEvent,
+        field,
+        value: value.value,
+      });
+    },
+    [dataItem, dataIndex, field, onChange, setFieldValue],
+  );
   if (!isEditMode) {
-    return <td data-cy={dataCy}>{value?.label}</td>;
+    return <td data-cy={`${dataCy}value`}>{value?.label}</td>;
   }
-
-  const handleChange = (e, value: OptionType) => {
-    setFieldValue(field, value.value);
-    onChange?.({
-      dataIndex,
-      dataItem,
-      syntheticEvent: e.syntheticEvent,
-      field,
-      value: value.value,
-    });
-  };
 
   return (
     <td
@@ -50,7 +68,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
       style={style}
       role="gridcell"
       className={className}
-      data-cy={dataCy}
+      data-cy={`${dataCy}td`}
     >
       <FormikField
         name={field}
@@ -61,7 +79,7 @@ export const DropdownCell: React.FC<CellTemplateProps<LCP>> = ({
           disableClearable
           placeholder={translate('common.select')}
           options={options}
-          data-cy={`${kebabCase(field)}-field`}
+          data-cy={`${dataCy}field`}
           value={value}
           getOptionLabel={(option: OptionType) => option.label}
           onChange={handleChange}
