@@ -36,6 +36,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     const intl = useIntl();
     const previousAuditsRef = useRef<FBAuditData[] | undefined>([]);
     const previousUpdatedAuditsRef = useRef<FBAuditData[] | undefined>([]);
+    const auditMapRef = useRef<Map<string, FBAuditData>>(new Map());
 
     function underApproval (): string[] | undefined {
       if (!name) { return; }
@@ -53,6 +54,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
     const formInputAudit = useCallback((audits?: FBAuditData[]): FBAuditData[] | undefined => {
       if (!audits || !isApproved()) { return; }
+      const currentMap = auditMapRef.current;
       const underApprovalFields = underApproval();
       const grouped = groupBy(audits, (audit) => {
         const fieldName = audit.field.split('.')[1]?.split('[')[0];
@@ -260,16 +262,25 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           autocompleteasync: () => isAutocomplete(),
           default: () => undefined,
         };
+        const uniqueKey = v[0].id;
+
+        if (currentMap.has(uniqueKey)) {
+          return currentMap.get(uniqueKey);
+        }
 
         const desc = (description[type || ''] || description.default)();
         if (!desc) { return; }
-        return {
+
+        const auditEntry = {
           ownerName: v[0].owner.user.name,
           formattedTime: getFormattedDateString(v[0].timestamp, MomentFormats.DateTimeAlt),
           description: desc,
           timestamp: v[0].timestamp,
           type,
         };
+
+        currentMap.set(uniqueKey, auditEntry as FBAuditData);
+        return auditEntry;
       });
 
       const compactMapped = sortBy(compact(mapped), 'timestamp');
