@@ -262,24 +262,25 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           autocompleteasync: () => isAutocomplete(),
           default: () => undefined,
         };
-        const uniqueKey = v[0].id;
 
-        if (currentMap.has(uniqueKey)) {
-          return currentMap.get(uniqueKey);
+        const { id, owner, timestamp } = v[0] ?? {};
+
+        if (currentMap.has(id)) {
+          return currentMap.get(id);
         }
 
         const desc = (description[type || ''] || description.default)();
         if (!desc) { return; }
 
         const auditEntry = {
-          ownerName: v[0].owner.user.name,
-          formattedTime: getFormattedDateString(v[0].timestamp, MomentFormats.DateTimeAlt),
+          ownerName: owner.user.name,
+          formattedTime: getFormattedDateString(timestamp, MomentFormats.DateTimeAlt),
           description: desc,
-          timestamp: v[0].timestamp,
+          timestamp: timestamp,
           type,
         };
 
-        currentMap.set(uniqueKey, auditEntry as FBAuditData);
+        currentMap.set(id, auditEntry as FBAuditData);
         return auditEntry;
       });
 
