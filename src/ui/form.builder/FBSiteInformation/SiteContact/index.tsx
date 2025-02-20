@@ -41,7 +41,7 @@ const SiteContact = forwardRef<BooleanRef, SiteContactProps>(({
   const isSiteAdded = editedSiteContact?.[MODE_FIELD] === Mode.add;
 
   const onToggleEdit = (isEdit: boolean) => {
-    if (isEditingRef && typeof isEditingRef !== 'function') {
+    if (isEditingRef?.current !== undefined) {
       isEditingRef.current = isEdit;
     }
   };
