@@ -333,7 +333,6 @@ export default makeStyles((theme) =>
       display: 'flex',
       alignItems: 'center',
     },
-
     expandableContent: {
       overflow: 'hidden',
       maxHeight: 60,
@@ -346,6 +345,5 @@ export default makeStyles((theme) =>
       maxHeight: 200,
       display: 'unset',
     },
-
   }),
 );
