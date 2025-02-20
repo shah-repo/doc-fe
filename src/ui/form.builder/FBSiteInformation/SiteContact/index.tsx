@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { forwardRef, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../common/intl';
 import { Button } from '../../../components/forms/fields-next';
@@ -15,19 +15,21 @@ import { FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import {
+  BooleanRef,
   EditableSiteContact,
   siteContact,
   SiteContactEditEvent,
   SiteContactProps,
 } from './types';
 
-const SiteContact: React.FC<SiteContactProps> = ({
+const SiteContact = forwardRef<BooleanRef, SiteContactProps>(({
   name,
   isDisabled,
   sites,
   dataItem,
   setSites,
-}) => {
+}, ref) => {
+  const isEditingRef = ref as BooleanRef;
   const classes = useStyles();
   const { formState, workspaceState } = FB.useStores();
   const isActive = !isDisabled;
@@ -37,8 +39,19 @@ const SiteContact: React.FC<SiteContactProps> = ({
   const [editedSiteContact, setEditedSite]
     = useState<Partial<EditableSiteContact>>();
   const isSiteAdded = editedSiteContact?.[MODE_FIELD] === Mode.add;
-  const editContact = ({ dataItem }: SiteContactEditEvent) =>
+
+  const onToggleEdit = (isEdit: boolean) => {
+    if (isEditingRef && typeof isEditingRef !== 'function') {
+      isEditingRef.current = isEdit;
+    }
+  };
+
+  const editContact = ({ dataItem }: SiteContactEditEvent) => {
+    if (isEditingRef?.current) { return; }
     setEditedSite(dataItem);
+    onToggleEdit(true);
+  };
+
   const isInEditMode = editedSiteContact !== undefined;
   const handleRowClick = isActive && !isInEditMode ? editContact : undefined;
 
@@ -91,14 +104,20 @@ const SiteContact: React.FC<SiteContactProps> = ({
     resetForm({ values: editedSiteContact ?? {} });
   }, [editedSiteContact, setValues, resetForm]);
 
-  const createSiteContact = () =>
+  const createSiteContact = () => {
+    if (isEditingRef?.current) { return; }
     setEditedSite({
       id: uuidv4(),
       isPrimary: siteContact.length === 0,
       [MODE_FIELD]: Mode.add,
     });
+    onToggleEdit(true);
+  };
 
-  const onDiscardSiteContact = () => setEditedSite(undefined);
+  const onDiscardSiteContact = () => {
+    setEditedSite(undefined);
+    onToggleEdit(false);
+  };
 
   const onDeleteSiteContact = useCallback(
     (dataItem: EditableSiteContact) => {
@@ -181,7 +200,7 @@ const SiteContact: React.FC<SiteContactProps> = ({
           kind="add"
           fullWidth
           attached
-          disabled={isInEditMode}
+          disabled={isInEditMode || isEditingRef?.current}
           onClick={createSiteContact}
           data-cy="add-contact-button"
         >
@@ -190,6 +209,6 @@ const SiteContact: React.FC<SiteContactProps> = ({
       )}
     </Box>
   );
-};
+});
 
 export default memo(SiteContact);

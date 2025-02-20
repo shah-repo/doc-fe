@@ -1,3 +1,4 @@
+import { MutableRefObject } from 'react';
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { EditableSite, Site } from '../types';
@@ -20,6 +21,8 @@ export interface SiteContactProps {
   sites: Site[]
   setSites: React.Dispatch<React.SetStateAction<EditableSite[]>>
 }
+
+export type BooleanRef = MutableRefObject<boolean> | null;
 
 export interface siteContact {
   id: string
