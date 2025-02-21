@@ -255,8 +255,10 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
   }
 
   const displayMPIId = (mpiRevId?: string) => {
+    const dataCy = 'step-mpi-field';
+
     if (mpiRevId && showErrors) {
-      return <WarningCell onClick={handleClick} documentNumber={mpiRevId} />;
+      return <WarningCell onClick={handleClick} documentNumber={mpiRevId} dataCy={dataCy} />;
     }
 
     return (
@@ -264,7 +266,7 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
         title={mpiRevId}
         onClick={() => onClick?.({ dataItem })}
         placement="top"
-        data-cy="step-mpi-field"
+        data-cy={dataCy}
         interactive
         className={classes.mpi}
         arrow

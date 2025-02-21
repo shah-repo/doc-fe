@@ -8,11 +8,13 @@ import useStyles from './styles';
 interface WarningCellProps {
   documentNumber: string
   onClick?: () => void
+  dataCy: string
 }
 
 const WarningCell: React.FC<WarningCellProps> = ({
   documentNumber,
   onClick,
+  dataCy,
 }) => {
   const classes = useStyles();
   const title = translate('lhr.summary.record.does.not.exist.error.message', {
@@ -21,7 +23,7 @@ const WarningCell: React.FC<WarningCellProps> = ({
 
   return (
     <Tooltip title={title} placement="top" arrow>
-      <Box className={classes.container} onClick={onClick}>
+      <Box className={classes.container} onClick={onClick} data-cy={dataCy}>
         <Typography className={classes.textBlock}>{documentNumber}</Typography>
         <FontAwesomeIcon
           icon={regular('triangle-exclamation')}
