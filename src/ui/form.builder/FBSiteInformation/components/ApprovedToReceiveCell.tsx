@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, Popper } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import { kebabCase } from 'lodash';
 import React from 'react';
@@ -8,15 +8,17 @@ import {
   FormikField,
 } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { APPROVED_TO_RECEIVE_OPTIONS } from '../constants';
 import { CustomSiteTemplateProps } from '../types';
+import styles from './styles';
 const Editor: React.FC<CustomSiteTemplateProps> = ({
   dataItem,
   dataIndex,
   field,
   onChange,
 }) => {
+  const classes = styles();
   const { getFieldProps, setFieldValue } = useFormikContext();
   const handleChange = (e, value: OptionType) => {
     setFieldValue(field, value.value);
@@ -44,6 +46,21 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({
         options={APPROVED_TO_RECEIVE_OPTIONS}
         data-cy={`${kebabCase(field)}-field`}
         value={value}
+        PopperComponent={({ style, ...props }) => (
+          <Popper
+            {...props}
+            style={{ ...style }}
+            className={classes.popper}
+            modifiers={{
+              keepTogether: {
+                enabled: true,
+              },
+              preventOverflow: {
+                enabled: true,
+              },
+            }}
+          />
+        )}
         getOptionLabel={(option: OptionType) => option.label}
         onChange={handleChange}
         size="small"
