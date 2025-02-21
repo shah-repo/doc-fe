@@ -11,14 +11,14 @@ import { OptionType } from '../../../components/forms/fields/Autocomplete/types'
 import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import { APPROVED_TO_RECEIVE_OPTIONS } from '../constants';
 import { CustomSiteTemplateProps } from '../types';
-import styles from './styles';
+import useStyles from './styles';
 const Editor: React.FC<CustomSiteTemplateProps> = ({
   dataItem,
   dataIndex,
   field,
   onChange,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const { getFieldProps, setFieldValue } = useFormikContext();
   const handleChange = (e, value: OptionType) => {
     setFieldValue(field, value.value);
