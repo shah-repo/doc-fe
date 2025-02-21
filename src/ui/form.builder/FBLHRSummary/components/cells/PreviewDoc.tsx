@@ -31,9 +31,9 @@ export const PreviewDoc: React.FC<props> = ({
   const { docId, documentId, displayRevision, value, displayStatus }
     = detailsObj ?? {};
   const dataCy = `${kebabCase(field)}-cell`;
-  const { showErrors } = useContext(ColumnMenuContext);
+  const { hasErrors } = useContext(ColumnMenuContext);
 
-  if (!documentId && value && showErrors) {
+  if (!documentId && value && hasErrors) {
     return (
       <WarningCell
         onClick={() => onClick?.({ dataItem })}

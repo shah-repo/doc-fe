@@ -14,7 +14,7 @@ interface CustomColumnMenuProps extends GridColumnMenuProps {
 interface ColumnMenuContextProps {
   columns: Array<ColumnDefinition<EditableLHRSummaryItem>>
   onLock: (params) => void
-  showErrors: boolean
+  hasErrors: boolean
 }
 
 export const ColumnMenuContext = React.createContext<ColumnMenuContextProps>({} as ColumnMenuContextProps);

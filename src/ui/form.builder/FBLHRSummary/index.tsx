@@ -449,7 +449,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
         value={{
           columns: visibleColumns,
           onLock,
-          showErrors: hasActiveOCRSubscription && isAddButtonVisible,
+          hasErrors: hasActiveOCRSubscription && isAddButtonVisible,
         }}
       >
         <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>

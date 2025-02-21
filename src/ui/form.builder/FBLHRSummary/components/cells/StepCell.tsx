@@ -246,7 +246,7 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
   const { docId, documentId, displayRevision, value, displayStatus } = dataItem?.stepOrMpiDetails ?? {};
   const step = dataItem.step;
   const mpiRevId = value?.split('/')[1];
-  const { showErrors } = useContext(ColumnMenuContext);
+  const { hasErrors } = useContext(ColumnMenuContext);
 
   const handleClick = () => onClick?.({ dataItem });
 
@@ -257,7 +257,7 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
   const displayMPIId = (mpiRevId?: string) => {
     const dataCy = 'step-mpi-field';
 
-    if (mpiRevId && showErrors) {
+    if (mpiRevId && hasErrors) {
       return (
         <WarningCell
           onClick={handleClick}
