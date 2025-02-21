@@ -17,8 +17,8 @@ const WarningCell: React.FC<WarningCellProps> = ({
   dataCy,
 }) => {
   const classes = useStyles();
-  const title = translate('lhr.summary.record.does.not.exist.error.message', {
-    document: documentNumber,
+  const title = translate('lhr.summary.record.not.found.error.message', {
+    documentNumber,
   });
 
   return (

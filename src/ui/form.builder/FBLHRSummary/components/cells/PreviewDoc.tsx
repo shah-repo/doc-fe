@@ -34,7 +34,13 @@ export const PreviewDoc: React.FC<props> = ({
   const { showErrors } = useContext(ColumnMenuContext);
 
   if (!documentId && value && showErrors) {
-    return <WarningCell onClick={() => onClick?.({ dataItem })} documentNumber={value} dataCy={dataCy} />;
+    return (
+      <WarningCell
+        onClick={() => onClick?.({ dataItem })}
+        documentNumber={value}
+        dataCy={dataCy}
+      />
+    );
   }
 
   if (!documentId) {
