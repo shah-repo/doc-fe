@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
+import { Box, Grid, Tooltip, Typography } from '@material-ui/core';
 import { process, State } from '@progress/kendo-data-query';
 import { ExcelExport, ExcelExportColumnProps } from '@progress/kendo-react-excel-export';
 import { GridDataStateChangeEvent, GridFilterChangeEvent, GridPageChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
@@ -14,8 +14,10 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { SM } from '../../../App';
 import { translate } from '../../../common/intl';
+import { hasActivePremiumFeatureSubscription } from '../../../common/utils/selectors';
 import { lhrSummaryActions } from '../../../state/ducks/LHRSummary';
 import { changeRequestsSelectors } from '../../../state/ducks/changeRequest';
+import { PremiumFeature } from '../../../state/ducks/company/types';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatusDisplay } from '../../../state/ducks/documentRevisions/types';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
@@ -78,6 +80,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
   const isVoided = Boolean(_documentRevisionFormState?.documentRevision?.displayStatus?.includes(DocumentRevisionStatusDisplay.Voided));
   const [skip, setSkip] = React.useState(0);
   const isAddButtonVisible = !isShowOnly && !isDisabled;
+  const hasActiveOCRSubscription = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.OCR));
 
   const onPageChange = ({ page: { skip } }: GridPageChangeEvent) => {
     setSkip(skip);
@@ -382,6 +385,20 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
     [LHRSummaryItemList, skip, PAGE_SIZE],
   );
 
+  const errorRowsCount = useMemo(() => {
+    const checkDetails = (item: EditableLHRSummaryItem) => {
+      return [
+        item.stepOrMpiDetails,
+        item.issueDetails,
+        item.lotOrEquipmentDetails,
+        item.plannedDetails,
+        item.actualDetails,
+      ].some(details => details && !details.documentId && details.value);
+    };
+
+    return LHRSummaryItemList.filter(checkDetails).length;
+  }, [LHRSummaryItemList]);
+
   return (
     <>
       <FBSection
@@ -407,15 +424,24 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
               </Button>
             </Tooltip>
             <Tooltip title={translate('common.reload')} placement="top" arrow>
-              <IconButton
+              <Button
+                kind="ghost"
                 size="small"
-                data-cy="reload-btn"
-                className={classes.reloadButton}
+                className={classes.addButton}
+                startIcon={<FontAwesomeIcon icon={solid('arrow-rotate-left')} />}
                 onClick={fetchLHRSummaryData}
+                data-cy="reload-btn"
               >
-                <FontAwesomeIcon icon={solid('arrow-rotate-left')} />
-              </IconButton>
+                {translate('common.refresh')}
+              </Button>
             </Tooltip>
+            {errorRowsCount > 0 && hasActiveOCRSubscription && <Box className={classes.container}>
+              <FontAwesomeIcon
+                icon={solid('triangle-exclamation')}
+                className={classes.errorIcon}
+              />
+              <Typography className={classes.textBlock}>{translate('lhr.summary.total.warning.rows.warning.message', { rows: errorRowsCount })}</Typography>
+            </Box>}
           </>
         )}
       </FBSection>
@@ -423,6 +449,7 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
         value={{
           columns: visibleColumns,
           onLock,
+          showErrors: hasActiveOCRSubscription,
         }}
       >
         <ExcelExport ref={_export} fileName={EXCEL_FILE_NAME}>

@@ -2,11 +2,12 @@ import { Box, CircularProgress, Grid, TextField as MuiTextField, Popper } from '
 import Autocomplete, { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { useFormikContext } from 'formik';
 import { debounce, isEmpty } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FBAutocompleteAsyncOption } from '../../..';
 import { translate } from '../../../../../common/intl';
 import { lhrSummaryActions } from '../../../../../state/ducks/LHRSummary';
+import WarningCell from '../../../../components/common/kendo/WarningCell';
 import { FormikField, TextField } from '../../../../components/forms/fields-next';
 import { OptionType } from '../../../../components/forms/fields/Autocomplete/types';
 import { Mode, MODE_FIELD } from '../../../../components/KendoDataGrid/constants';
@@ -17,6 +18,7 @@ import useAsync from '../../../../hooks/useAsync';
 import { LHR_SUMARY_FIELDS, LIMIT, MIN_SEARCH_TERM_LENGTH, STEP_FIELD } from '../../constants';
 import { CustomTemplateProps, EditableLHRSummaryItem, LHRSummaryOptionsResponse } from '../../types';
 import { getDisplayDocument } from '../../utils';
+import { ColumnMenuContext } from './CustomColumnMenu';
 import { InvalidDocIndicator } from './InvalidDocIndicator';
 import { styles } from './styles';
 
@@ -244,12 +246,33 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
   const { docId, documentId, displayRevision, value, displayStatus } = dataItem?.stepOrMpiDetails ?? {};
   const step = dataItem.step;
   const mpiRevId = value?.split('/')[1];
+  const { showErrors } = useContext(ColumnMenuContext);
 
   const handleClick = () => onClick?.({ dataItem });
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
+
+  const displayMPIId = (mpiRevId?: string) => {
+    if (mpiRevId && showErrors) {
+      return <WarningCell onClick={handleClick} documentNumber={mpiRevId} />;
+    }
+
+    return (
+      <OverflowTooltip
+        title={mpiRevId}
+        onClick={() => onClick?.({ dataItem })}
+        placement="top"
+        data-cy="step-mpi-field"
+        interactive
+        className={classes.mpi}
+        arrow
+      >
+        {mpiRevId}
+      </OverflowTooltip>
+    );
+  };
 
   return (
     <>
@@ -290,19 +313,7 @@ export const StepCell: React.FC<CustomTemplateProps> = (props) => {
               <InvalidDocIndicator status={displayStatus} dataCy="step-mpi-invalid-indicator" />
             </Box>
           </span>
-        ) : (
-          <OverflowTooltip
-            title={mpiRevId}
-            onClick={() => onClick?.({ dataItem })}
-            placement="top"
-            data-cy="step-mpi-field"
-            interactive
-            className={classes.mpi}
-            arrow
-          >
-            {mpiRevId}
-          </OverflowTooltip>
-        )}
+        ) : displayMPIId(mpiRevId)}
       </span>
     </>
   );

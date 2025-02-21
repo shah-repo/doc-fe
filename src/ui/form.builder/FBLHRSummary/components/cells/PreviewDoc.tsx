@@ -1,12 +1,14 @@
 import { Box } from '@material-ui/core';
 import { kebabCase } from 'lodash';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import WarningCell from '../../../../components/common/kendo/WarningCell';
 import OverflowTooltip from '../../../../components/OverflowTooltip';
 import { documentVersionPath } from '../../../../document.revision/utils/paths';
 import { EMPTY_PLACEHOLDER } from '../../constants';
 import { DetailsObj, EditableLHRSummaryItem, EditableLHRSummaryItemEditEvent } from '../../types';
 import { getDisplayDocument } from '../../utils';
+import { ColumnMenuContext } from './CustomColumnMenu';
 import { InvalidDocIndicator } from './InvalidDocIndicator';
 import { styles } from './styles';
 
@@ -29,6 +31,11 @@ export const PreviewDoc: React.FC<props> = ({
   const { docId, documentId, displayRevision, value, displayStatus }
     = detailsObj ?? {};
   const dataCy = `${kebabCase(field)}-cell`;
+  const { showErrors } = useContext(ColumnMenuContext);
+
+  if (!documentId && value && showErrors) {
+    return <WarningCell onClick={() => onClick?.({ dataItem })} documentNumber={value} />;
+  }
 
   if (!documentId) {
     const fieldValue = value ?? EMPTY_PLACEHOLDER;
