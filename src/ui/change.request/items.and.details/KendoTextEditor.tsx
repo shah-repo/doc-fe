@@ -1,6 +1,6 @@
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { Field, FieldProps, useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
+import React, { ChangeEvent, FocusEvent, useEffect } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useIntl } from 'react-intl';
 import { translate } from '../../../common/intl';
@@ -31,18 +31,30 @@ const KendoTextEditor: React.FunctionComponent<KendoTextEditorProps> = ({
 
   useEffect(formik.resetForm, []);
 
-  const onChange = (evt) => {
-    if (!name) { return; }
-    const updatedValue = (evt?.currentTarget?.value ?? '') as string;
+  const updateFieldValues = (
+    event: ChangeEvent<HTMLTextAreaElement> | FocusEvent<HTMLTextAreaElement>,
+    updateFormik: boolean,
+  ) => {
+    if (!name) return;
+
+    const updatedValue = event?.currentTarget?.value ?? '';
+
     formState?.setFieldValue(name, updatedValue);
+    if (updateFormik) {
+      formik.setFieldValue(name, updatedValue);
+    }
   };
+
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => updateFieldValues(event, false);
+  const handleInputBlur = (event: FocusEvent<HTMLTextAreaElement>) => updateFieldValues(event, true);
 
   const textEditorRenderComponent = ({ field }: FieldProps) => {
     const value = fieldValue ?? field?.value;
     return (<>
       <TextareaAutosize
         defaultValue={value}
-        onChange={onChange}
+        onBlur={handleInputBlur}
+        onChange={handleInputChange}
         className={classes.textArea}
         data-cy={name}
         name={name}
