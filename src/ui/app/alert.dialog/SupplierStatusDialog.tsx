@@ -86,6 +86,11 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                   } />
                 </Typography>
               }
+              { data.isWarning && !data.isError
+                && <Box className={classes.topSpacing}>
+                  <Text translation="common.continue.text" />
+                </Box>
+              }
             </Grid>
           </Grid>
         </DialogContentText>

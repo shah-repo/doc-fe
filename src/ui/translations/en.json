@@ -2312,5 +2312,6 @@
   "common.withdraw": "Withdraw",
   "common.or": "OR",
   "common.rev": "Rev.",
+  "common.continue.text": "Are you sure you want to continue?",
   "purchaseOrder.supplierStatus.dialog.general": "All Items in {phases} need to have an approved supplier"
 }
