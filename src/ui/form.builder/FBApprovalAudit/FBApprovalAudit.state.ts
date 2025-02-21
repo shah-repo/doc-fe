@@ -44,6 +44,7 @@ class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     'unitMeasures',
     'cycleCount',
     'traineeList',
+    'supplierSupportingDocs',
   ];
 
   public autocompleteApi = new FBAutocompleteAsyncState();

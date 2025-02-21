@@ -4,10 +4,10 @@ import { find } from 'lodash';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { changeRequestsSelectors } from '../../../../state/ducks/changeRequest';
-import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
-import OverflowTooltip from '../../../components/OverflowTooltip';
 import { Autocomplete } from '../../../components/forms/fields-next';
 import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { CustomTemplateProps, EditableCertification } from '../types';
 
 export const UploadedByCell: React.FC<CustomTemplateProps> = ({
@@ -39,6 +39,7 @@ export const UploadedByCell: React.FC<CustomTemplateProps> = ({
     }
     setSelectedUser(value);
     setFieldValue(field, value?.value);
+    setFieldValue('uploadedByName', value?.label);
   };
 
   return (
