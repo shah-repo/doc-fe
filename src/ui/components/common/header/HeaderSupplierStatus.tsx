@@ -98,17 +98,18 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
     { status: nextStatus.current },
   );
 
-  const emptyStatusLabel = translate('form.builder.supplier.status.default.label');
+  const statusToShow = () => {
+    return statusLabel || translate('form.builder.supplier.status.default.label');
+  };
 
   return (
     <>
-      <HeaderStatusButton
+      { isSupplierStatusEditable && <HeaderStatusButton
         onItemSelect={confirmUpdate}
-        label={statusLabel ?? emptyStatusLabel}
+        label={statusToShow()}
         options={options}
-        disabled={!isSupplierStatusEditable}
         data-cy="supplier-status"
-      />
+      /> }
       <AlertDialog
         handler={confirmationDialog}
         onConfirm={updateLotStatus.current ?? noop}
