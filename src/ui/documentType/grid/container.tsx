@@ -25,6 +25,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
 import { RouteParams } from '../utils/types';
+import { cellOverflowFields, ownerFieldsMapping } from './constants';
 import { columnSearchConfiguration, getStaticColumns } from './helpers';
 import { DocumentTypePresenter } from './presenter';
 
@@ -131,10 +132,6 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.queryDict, categoryName]);
 
-  const ownerFieldsMapping = {
-    'owner.user.name': ['owner.user.avatar', 'owner.user.initialColor'],
-  };
-  const overflowCellFields = ['precalc.partNumberTitle', 'precalc.partNumberDescription', 'precalc.shippingItemsPart'];
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: string | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
@@ -164,7 +161,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT_WITH_CURRENCY;
     } else if (upDateField === 'precalc.po_amount') {
       dynamicCellTemplate = KendoCellTemplates.PO_AMOUNT;
-    } else if (overflowCellFields.includes(upDateField)) {
+    } else if (cellOverflowFields.includes(upDateField)) {
       dynamicCellTemplate = KendoCellTemplates.OVERFLOW_CELL;
     } else {
       dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
