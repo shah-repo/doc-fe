@@ -394,9 +394,7 @@ export function KendoGrid<T extends any> ({
     }
   }, [context?.query]);
 
-  const getKeywordSearchValue = (
-    filters?: Array<CompositeFilterDescriptor | FilterDescriptor>,
-  ): string => (filters?.find((filter) => 'field' in filter && filter.field === SEARCH_KEYWORD_FIELD_KEY) as FilterDescriptor)?.value ?? '';
+  const getKeywordSearchValue = (filters?: Array<CompositeFilterDescriptor | FilterDescriptor>): string => (filters?.find((filter) => 'field' in filter && filter.field === SEARCH_KEYWORD_FIELD_KEY) as FilterDescriptor)?.value ?? '';
 
   useEffect(() => {
     if (!context) return;
@@ -430,28 +428,22 @@ export function KendoGrid<T extends any> ({
   const clearSearchFilter = () => {
     const updatedDataState = { ...dataState };
     if (updatedDataState.filter?.filters) {
-      updatedDataState.filter.filters = (
-        updatedDataState.filter.filters as FilterDescriptor[]
-      ).filter(
-        (filter: FilterDescriptor) => filter.field !== SEARCH_KEYWORD_FIELD_KEY,
-      );
+      updatedDataState.filter.filters = (updatedDataState.filter.filters as FilterDescriptor[]).filter((filter: FilterDescriptor) => filter.field !== SEARCH_KEYWORD_FIELD_KEY);
     }
     setDateStateAndDispatchByUpdatedState(updatedDataState);
   };
 
   const setDateStateAndDispatchByUpdatedState = (updatedDataState: State) => {
     setDataState(updatedDataState);
-    dispatch(
-      tableSearchActions.setSearchCriteria(
-        {
-          ...tableCriteria,
-          queryDict: {
-            dataState: updatedDataState,
-          },
+    dispatch(tableSearchActions.setSearchCriteria(
+      {
+        ...tableCriteria,
+        queryDict: {
+          dataState: updatedDataState,
         },
-        tableName,
-      ),
-    );
+      },
+      tableName,
+    ));
   };
 
   const updateDataColumnsState = (dataColumns: KendoColumnProps[]) => {
