@@ -44,7 +44,6 @@ export interface FormHeaderContext {
 
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
 export let isOwnerContext = React.createContext<boolean>(false);
-export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
 interface OwnProps {
   initialValues: DocumentRevisionFormValues
@@ -169,10 +168,6 @@ DocumentRevisionFormContainerProps
         documentRevision.approvals = FBDataStore.poApprovals as Approval[];
       }
 
-      if (isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema)) {
-        documentRevision.approvals = FBDataStore.inlineApprovals as Approval[];
-      }
-
       if (FBDataStore?.refreshData?.lotStatus) {
         documentRevision.lotStatus = FBDataStore?.refreshData?.lotStatus;
       }
@@ -237,7 +232,6 @@ DocumentRevisionFormContainerProps
   const isDisabled: boolean = initialValues.id !== undefined;
 
   isOwnerContext = React.createContext(isOwner || (documentRevision.isBeingEditedAfterRelease ?? false));
-  documentTypeContext = React.createContext(documentTypeAcronym);
   FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
     documentRevision,
     canChangeOwnerShip,

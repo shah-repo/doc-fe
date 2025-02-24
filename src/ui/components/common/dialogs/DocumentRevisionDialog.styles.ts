@@ -27,4 +27,7 @@ export const styles = makeStyles((theme) => ({
     borderRadius: 6,
     margin: theme.spacing(0, 1.25),
   },
+  updateContainer: {
+    height: '80vh',
+  },
 }));

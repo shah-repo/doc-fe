@@ -52,6 +52,11 @@ export default makeStyles((theme) => ({
   createdDatePaper: {
     marginLeft: theme.spacing(-8.75),
   },
+  reloadButton: {
+    float: 'right',
+    padding: theme.spacing(0.75),
+    color: Colors.primary,
+  },
   actionsCell: {
     overflow: 'visible !important',
     position: 'sticky',
@@ -63,5 +68,27 @@ export default makeStyles((theme) => ({
     '& > div': {
       borderLeft: `1px solid ${Colors.primaryLight} !important`,
     },
+  },
+  addButton: {
+    float: 'right',
+  },
+  container: {
+    width: 'fit-content',
+    float: 'right',
+    padding: theme.spacing(1),
+    backgroundColor: Colors.errorLight,
+    display: 'flex',
+    borderRadius: 5,
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  textBlock: {
+    fontSize: 14,
+    color: Colors.textBlack,
+    marginLeft: theme.spacing(1),
+  },
+  errorIcon: {
+    color: Colors.error,
   },
 }));

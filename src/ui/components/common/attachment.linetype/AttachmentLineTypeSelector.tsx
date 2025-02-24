@@ -1,8 +1,7 @@
-import { Box, Button, Dialog, DialogContent, Link, makeStyles } from '@material-ui/core';
+import { Box, Button, CircularProgress, Dialog, DialogContent, Link, makeStyles } from '@material-ui/core';
 import { AttachFile } from '@material-ui/icons';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { FieldInputProps, Formik, FormikProps } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
 import { LINE_TYPES } from '../../../../state/ducks/attachments/constants';
@@ -66,7 +65,7 @@ const styles = makeStyles((theme) => {
     },
     icon: ({ isField }: AttachmentStyleProps) => ({
       display: isField ? 'inherited' : 'none',
-      marginRight: theme.spacing(1),
+      marginLeft: theme.spacing(1),
       width: 20,
       height: 20,
     }),
@@ -111,9 +110,15 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   const renderForm = () => (
     <AttachmentLineTypeForm
       {...{ field, upload, form, name, multiple, disabled, isUploading, onChange, documentTypeCanRedline }}
-      onCancel= {closeDialog}
+      onCancel={closeDialog}
     />
   );
+
+  useEffect(() => {
+    if (isUploading) {
+      dialog.close();
+    }
+  }, [isUploading]);
 
   return (
     <>
@@ -148,7 +153,10 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
         && <Button
           color="primary"
           disableRipple
-          startIcon={<AttachFileIcon />}
+          startIcon={isUploading
+            ? <CircularProgress className={classes.icon} size={20} />
+            : <AttachFile className={classes.icon} />
+          }
           onClick={openDialog}
           id="AttachmentFieldPresenter-linkButton"
           className={classes.linkButton}
