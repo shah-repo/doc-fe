@@ -58,7 +58,7 @@ interface GroupManagementProps {
   onSelect
   refreshTable: boolean
   canCreateGroups: boolean
-  activeEmployees?: GetEmployeeResponse[]
+  activeEmployees?: GetEmployeeResponse
 }
 
 let call: CancelTokenSource;
