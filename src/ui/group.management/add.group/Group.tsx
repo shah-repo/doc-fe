@@ -15,7 +15,7 @@ interface Props {
   selectedGroup?: LoadCompanyGroup
   title: any
   isCreateMode?: boolean
-  activeEmployees?: GetEmployeeResponse
+  activeEmployees?: GetEmployeeResponse[]
 }
 
 const AddGroup: React.FunctionComponent<Props> = ({

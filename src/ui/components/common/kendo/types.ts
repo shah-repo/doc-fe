@@ -4,6 +4,7 @@ import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridPagerSetti
 import { schema } from 'normalizr';
 import { ComponentType } from 'react';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { GetEmployeeResponse } from '../../../../state/ducks/userManagement/types';
 import { DTMCellTemplates } from '../../../document.type.management/kendo/config';
 import { KendoGridFilterCell } from '../../KendoGrid/interfaces';
 
@@ -90,6 +91,7 @@ export interface KendoPanelProps<T> {
   documentTypeOptions?: DocumentTypeOptions[]
   currentUserEmail?: string
   exportDataChanges?: (data: T[]) => void
+  activeEmployees?: GetEmployeeResponse[]
 }
 
 export interface CustomGridCellProps extends GridCellProps {
