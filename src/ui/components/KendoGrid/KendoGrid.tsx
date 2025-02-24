@@ -401,9 +401,7 @@ export function KendoGrid<T extends any> ({
   useEffect(() => {
     if (!context) return;
     const { query, setDefaultQuery } = context;
-    const defaultSearchQuery = getKeywordSearchValue(
-      dataState?.filter?.filters,
-    );
+    const defaultSearchQuery = getKeywordSearchValue(dataState?.filter?.filters);
 
     if (defaultSearchQuery !== query) {
       setDefaultQuery?.(defaultSearchQuery);
