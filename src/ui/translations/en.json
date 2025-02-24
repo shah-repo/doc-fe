@@ -2173,7 +2173,7 @@
     "administration.premium.feature.table.popup.title": "Enlil premium feature",
     "administration.premium.features.notice": "Enlil team will contact your executives to get approval and inform them about the additional cost for this premium service.\n\nYou can start using the feature right now, you will be able to turn it off later.",
     "administration.premium.features.ocr.title": "Optical Character Recognition (OCR)",
-    "administration.premium.features.ocr.description": "To grant access to these features, please eanble the subscription.",
+    "administration.premium.features.ocr.description": "The OCR feature enables the ability to digitize paper records for intelligent error checking, searching and analytics.",
     "administration.premium.features.ocr.notice": "Thank you for opting into in the OCR functionality.",
     "administration.premium.features.ocr.info": "This is a paid service, your bill will be adjusted based on the privileges assigned to users in Enlil as per your terms of service contract.",
     "administration.general.settings.title": "General Settings",
