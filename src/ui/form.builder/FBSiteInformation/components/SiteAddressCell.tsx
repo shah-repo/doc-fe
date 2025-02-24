@@ -31,7 +31,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
     <Grid container spacing={2} direction="row" alignItems="center">
       <Grid item>
         <Tooltip arrow placement="top" title={translate('customer.site.information.same.as.hq.label')} >
-          <SwitchControl checked={selected} onChange={handleChange} label="" />
+          <span><SwitchControl checked={selected} onChange={handleChange} label="" /></span>
         </Tooltip>
       </Grid>
       <Grid item>
@@ -41,6 +41,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
             defaultValue={undefined}
             type="text"
             size="small"
+            readOnly={selected}
           />
         </FormikField>
       </Grid>

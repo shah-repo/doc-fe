@@ -22,4 +22,11 @@ export default makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  popper: {
+    zIndex: 1500,
+    '&[x-out-of-boundaries]': {
+      visibility: 'hidden',
+      pointerEvents: 'none',
+    },
+  },
 }));
