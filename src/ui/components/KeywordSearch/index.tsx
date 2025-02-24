@@ -18,9 +18,7 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ tableName }) => {
   const classes = useStyles();
   const [searchText, setSearchText] = useState<QueryType>('');
-  const { setQuery, defaultQuery, setDefaultQuery } = useContext(
-    SearchContext,
-  ) as SearchContextType;
+  const { setQuery, defaultQuery, setDefaultQuery } = useContext(SearchContext) as SearchContextType;
 
   useEffect(() => {
     setSearchText(undefined);

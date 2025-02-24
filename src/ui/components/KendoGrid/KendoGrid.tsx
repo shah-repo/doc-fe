@@ -411,11 +411,7 @@ export function KendoGrid<T extends any> ({
   const onSearch = (searchText: string) => {
     const updatedDataState = { ...dataState };
     if (updatedDataState.filter?.filters) {
-      const existingFilter = (
-        updatedDataState.filter.filters as FilterDescriptor[]
-      ).find(
-        (filter: FilterDescriptor) => filter.field === SEARCH_KEYWORD_FIELD_KEY,
-      );
+      const existingFilter = (updatedDataState.filter.filters as FilterDescriptor[]).find((filter: FilterDescriptor) => filter.field === SEARCH_KEYWORD_FIELD_KEY);
 
       if (existingFilter) {
         existingFilter.value = searchText;
