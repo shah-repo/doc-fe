@@ -62,7 +62,7 @@ const AddGroup: React.FunctionComponent<Props> = ({
       <GroupContentContainer
         selectedGroup={selectedGroup}
         isCreateMode={isCreateMode}
-        employees={activeEmployees}
+        employees={activeEmployees || []}
         handleTableRefresh={handleTableRefresh}
         closeDialog={closeDialog}
         currentEmployeePermissions={currentEmployeePermissions}

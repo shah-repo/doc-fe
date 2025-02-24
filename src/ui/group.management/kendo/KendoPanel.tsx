@@ -393,7 +393,7 @@ export function KendoPanel ({
     <NameCell {...props} />;
 
   const employeeCell = (props: GridCellProps) =>
-    <EmployeesCell {...props} employees={activeEmployees} />;
+    <EmployeesCell {...props} employees={activeEmployees || []} />;
 
   const groupCell = (props: GridCellProps) =>
     <GroupCell {...props} isOfficial={Official} setOfficial={setOfficial} />;
