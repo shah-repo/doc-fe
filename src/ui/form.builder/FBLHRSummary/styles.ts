@@ -72,4 +72,23 @@ export default makeStyles((theme) => ({
   addButton: {
     float: 'right',
   },
+  container: {
+    width: 'fit-content',
+    float: 'right',
+    padding: theme.spacing(1),
+    backgroundColor: Colors.errorLight,
+    display: 'flex',
+    borderRadius: 5,
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  textBlock: {
+    fontSize: 14,
+    color: Colors.textBlack,
+    marginLeft: theme.spacing(1),
+  },
+  errorIcon: {
+    color: Colors.error,
+  },
 }));
