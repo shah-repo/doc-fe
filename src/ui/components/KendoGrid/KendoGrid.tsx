@@ -396,13 +396,7 @@ export function KendoGrid<T extends any> ({
 
   const getKeywordSearchValue = (
     filters?: Array<CompositeFilterDescriptor | FilterDescriptor>,
-  ): string =>
-    (
-      filters?.find(
-        (filter) =>
-          'field' in filter && filter.field === SEARCH_KEYWORD_FIELD_KEY,
-      ) as FilterDescriptor
-    )?.value ?? '';
+  ): string => (filters?.find((filter) => 'field' in filter && filter.field === SEARCH_KEYWORD_FIELD_KEY) as FilterDescriptor)?.value ?? '';
 
   useEffect(() => {
     if (!context) return;
