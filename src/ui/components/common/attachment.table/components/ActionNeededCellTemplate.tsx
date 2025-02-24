@@ -54,6 +54,7 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
     <HeaderMenu
       columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem)}
       menuIconButtonClass={classes.iconButton}
+      dataCy={`${attachment?.name}-menu`}
       icon={<FontAwesomeIcon className={cx('k-icon', classes.icon)} icon={solid('ellipsis-vertical')} />}
     >
       <MenuItem onClick={() => onDownloadAttachment?.(attachment)}>

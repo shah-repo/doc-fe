@@ -125,6 +125,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       keepMounted={true}
       open={Boolean(anchorEl)}
       onClose={handleClose}
+      data-cy={`${fileName}-menu`}
     >
       {renderDownloadFile}
       {renderDownloadCleanCopy}
