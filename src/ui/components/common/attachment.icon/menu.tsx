@@ -1,5 +1,6 @@
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { kebabCase } from 'lodash';
 import React, { useMemo } from 'react';
 import { Attachment, AttachmentType } from '../../../../state/ducks/attachments/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
@@ -125,7 +126,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       keepMounted={true}
       open={Boolean(anchorEl)}
       onClose={handleClose}
-      data-cy={`${fileName}-menu`}
+      data-cy={`${kebabCase(fileName)}-menu`}
     >
       {renderDownloadFile}
       {renderDownloadCleanCopy}

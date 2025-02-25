@@ -54,7 +54,7 @@ const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <MenuItem data-cy="attachment.set.attachment.as.primary" onClick={handleClick}>
+    <MenuItem data-cy="set-attachment-as-primary" onClick={handleClick}>
       <FontAwesomeIcon icon={solid('circle-star')} className={classes.starIcon} />
       <Text translation="attachment.set.as.primary" />
     </MenuItem>
