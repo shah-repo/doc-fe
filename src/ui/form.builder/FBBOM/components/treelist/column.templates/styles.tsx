@@ -160,7 +160,7 @@ export const styles = makeStyles((theme) => ({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    maxWidth: 150,
+    maxWidth: 90,
   },
   whiteDot: {
     width: '4px',
