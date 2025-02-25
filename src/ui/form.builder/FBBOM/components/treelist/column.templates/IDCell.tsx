@@ -460,24 +460,39 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
       <Observer>
         {() => (
           <>
-            {!isEditMode && _documentRevisionFormState?.isDiffViewEnabled && dataItem?.replacementStatus
-            && <Grid
-              container
-              className={classes.replacedDocRevInfo}
-              wrap="nowrap"
-              justify="flex-end"
-              alignItems="center"
-            >
-              <span className={classes.replacedDocRevInfoTitle} >{translate('bom.replaced.doc.rev')}</span>&nbsp;
-              <FontAwesomeIcon icon={solid('arrow-right')} />&nbsp;{replaceDocumentRevision?.document?.docId}
-              <Grid item className={classes.whiteDot} />
-              <Grid item>
-                <Text
-                  translation="form.builder.header.rev"
-                  values={{ revision: replaceDocumentRevision?.displayRevision }}
-                />
-              </Grid>
-            </Grid>}
+            {!isEditMode && _documentRevisionFormState?.isDiffViewEnabled && dataItem?.replacementStatus && (
+              <Tooltip
+                arrow
+                placement="top"
+                title={`${translate('bom.replaced.doc.rev.message', {
+                  docId: `${replaceDocumentRevision?.document?.docId}-004`,
+                  revId: replaceDocumentRevision?.displayRevision,
+                })}`}
+              >
+                <Grid
+                  container
+                  className={classes.replacedDocRevInfo}
+                  justify="flex-end"
+                  alignItems="center"
+                  spacing={1}
+                >
+                  <Grid item className={classes.replacedDocRevInfoTitle}>
+                    {translate('bom.replaced.doc.rev')}
+                  </Grid>
+                  <Grid item>
+                    <FontAwesomeIcon icon={solid('arrow-right')} />
+                  </Grid>
+                  <Grid item>{replaceDocumentRevision?.document?.docId}-004</Grid>
+                  <Grid item className={classes.whiteDot} />
+                  <Grid item>
+                    <Text
+                      translation="form.builder.header.rev"
+                      values={{ revision: replaceDocumentRevision?.displayRevision }}
+                    />
+                  </Grid>
+                </Grid>
+              </Tooltip>
+            )}
           </>
         )}
       </Observer>
