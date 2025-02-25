@@ -3,7 +3,7 @@ import { GridDetailRowProps } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { FormikProvider, useFormik } from 'formik';
 import { omit } from 'lodash';
-import React, { lazy, memo, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { lazy, memo, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
 import { Button } from '../../components/forms/fields-next';
@@ -16,6 +16,7 @@ import FBSection from '../FBSection/FBSection';
 import FB from '../helpers/FB';
 import { EXPAND_FIELD, FIELDS_TO_OMIT } from './constants';
 import { buildSchema } from './schema';
+import { BooleanRef } from './SiteContact/types';
 import useStyles from './styles';
 import { EditableSite, FBSiteProps, Site, SiteEditEvent } from './types';
 import { withFBSiteInformation } from './wrap';
@@ -34,8 +35,12 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
   const [editedSite, setEditedSite] = useState<Partial<EditableSite>>();
   const [expandedSiteIDs, setExpandedSiteIDs] = useState<string[]>();
 
+  const isEditingRef = useRef<BooleanRef>(null);
   const isSiteAdded = editedSite?.[MODE_FIELD] === Mode.add;
-  const editContact = ({ dataItem }: SiteEditEvent) => setEditedSite(dataItem);
+  const editContact = ({ dataItem }: SiteEditEvent) => {
+    if (isEditingRef?.current) { return; }
+    setEditedSite(dataItem);
+  };
   const isInEditMode = editedSite !== undefined;
   const handleRowClick = isActive && !isInEditMode ? editContact : undefined;
 
@@ -79,7 +84,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
     resetForm({ values: editedSite ?? {} });
   }, [editedSite, setValues, resetForm]);
 
-  const createSite = () => setEditedSite({
+  const createSite = () => !isEditingRef?.current && setEditedSite({
     id: uuidv4(),
     isPrimary: sites.length === 0,
     [MODE_FIELD]: Mode.add,
@@ -133,6 +138,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
   }, [workspaceState?.formInput, editedSite]);
 
   const handleDataItemExpanded = useCallback((dataItem: EditableSite) => {
+    if (isEditingRef.current) { return; }
     const selectedId = dataItem.id;
     setExpandedSiteIDs((prevIds = []) =>
       prevIds.includes(selectedId)
@@ -172,7 +178,7 @@ const FBSiteInformation: React.FC<FBSiteProps> = ({
   const DetailComponent = memo((props: GridDetailRowProps) => {
     return (
       <Suspense fallback={<div>{translate('common.loading')}</div>}>
-        <LazyDetailComponent {...props} name={name} sites={sites} setSites={setSites} isDisabled={disabled || Boolean(editedSite)} />
+        <LazyDetailComponent {...props} ref={isEditingRef} name={name} sites={sites} setSites={setSites} isDisabled={disabled || Boolean(editedSite)} />
       </Suspense>
     );
   });

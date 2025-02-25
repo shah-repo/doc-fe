@@ -59,6 +59,7 @@ export default makeStyles(theme => ({
     border: `1px solid ${Colors.error}`,
     borderRadius: 4,
     display: 'flex',
+    padding: theme.spacing(0, 2.375, 0, 1),
   },
   warningIcon: {
     color: Colors.error,

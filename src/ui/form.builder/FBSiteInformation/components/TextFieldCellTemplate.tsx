@@ -5,10 +5,10 @@ import { MODE_FIELD, Mode } from '../../../components/KendoDataGrid/constants';
 import OverflowContent from '../../../components/OverflowContent';
 import { FormikField, TextField } from '../../../components/forms/fields-next';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
-import { CustomSiteTemplateProps } from '../types';
+import { CustomSiteTemplateProps, EditableSite } from '../types';
 
 const Editor: React.FC<CustomSiteTemplateProps> = memo(({ field }) => {
-  const { getFieldProps } = useFormikContext();
+  const { getFieldProps, values } = useFormikContext<EditableSite>();
 
   return (
     <FormikField
@@ -18,6 +18,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = memo(({ field }) => {
         {...getFieldProps(field)}
         defaultValue={undefined}
         size="small"
+        readOnly={values?.isSameAsHQ}
       />
     </FormikField>
   );
