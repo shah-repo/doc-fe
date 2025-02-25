@@ -335,7 +335,7 @@ export default makeStyles((theme) =>
     },
     expandableContent: {
       overflow: 'hidden',
-      maxHeight: 60,
+      maxHeight: '4.29em',
       transition: 'max-height 0.3s ease-in-out',
       display: '-webkit-box',
       '-webkit-line-clamp': '3',
