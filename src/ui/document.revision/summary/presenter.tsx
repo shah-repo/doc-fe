@@ -223,6 +223,7 @@ const Presenter: React.FunctionComponent<Props> = ({
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
+              documentRevision={dataProp}
             />
           )
           : attachments && (
@@ -231,6 +232,7 @@ const Presenter: React.FunctionComponent<Props> = ({
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
+              documentRevision={dataProp}
             />
           )}
         {renderTrainingControl}

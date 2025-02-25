@@ -3,7 +3,7 @@ import CachedIcon from '@material-ui/icons/Cached';
 import { RenderInputParams } from '@material-ui/lab/Autocomplete';
 import { get, includes } from 'lodash';
 import { Observer } from 'mobx-react';
-import React from 'react';
+import React, { memo } from 'react';
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from '..';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { DOC_TYPE_GROUP, WO_PART_KEY_NAME } from '../../../state/ducks/documentRevisions/documentType/types';
@@ -208,4 +208,4 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   );
 };
 
-export default withFBAutocomplete(FBAutocomplete);
+export default memo(withFBAutocomplete(FBAutocomplete));
