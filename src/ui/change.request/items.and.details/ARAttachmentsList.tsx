@@ -59,6 +59,8 @@ const ARAttachmentsList: React.FC<ARAttachmentsListProps> = ({
         title={translate('ar.attachment.dialog.title', { titleId })}
         open={attachmentsDialog.isOpen}
         onClose={attachmentsDialog.close}
+        fullWidth
+        maxWidth="lg"
       >
         <div className={classes.attachmentsDialogContainer}>
           <LegacyThemeWrapper>
