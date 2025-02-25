@@ -22,7 +22,6 @@ import { Autocomplete, FormikField } from '../../../../../components/forms/field
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
-import Text from '../../../../../components/Text';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import { isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
@@ -354,7 +353,10 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
 
   const isFinalLevel = (i: number) => i === level.length - 1;
   const isPrevLevel = (i: number) => i === level.length - 2;
-  const { displayRevision, document } = replaceDocumentRevision ?? {};
+  const prevRevInfo = translate('bom.replaced.doc.rev.message', {
+    docId: `${replaceDocumentRevision?.document?.docId}`,
+    revId: replaceDocumentRevision?.displayRevision,
+  });
 
   return (
     <td
@@ -465,10 +467,9 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
               <Tooltip
                 arrow
                 placement="top"
-                title={`${translate('bom.replaced.doc.rev.message', {
-                  docId: `${document?.docId}`,
-                  revId: displayRevision,
-                })}`}
+                title={translate('bom.replaced.doc.rev.tooltip.message', {
+                  docInfo: prevRevInfo,
+                })}
               >
                 <Grid
                   container
@@ -483,14 +484,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
                   <Grid item>
                     <FontAwesomeIcon icon={solid('arrow-right')} />
                   </Grid>
-                  <Grid item className={classes.ellipsisText}>{document?.docId}</Grid>
-                  <Grid item className={classes.whiteDot} />
-                  <Grid item>
-                    <Text
-                      translation="form.builder.header.rev"
-                      values={{ revision: displayRevision }}
-                    />
-                  </Grid>
+                  <Grid item className={classes.ellipsisText}>{prevRevInfo}</Grid>
                 </Grid>
               </Tooltip>
             )}
