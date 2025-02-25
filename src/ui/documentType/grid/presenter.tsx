@@ -93,7 +93,7 @@ export function DocumentTypePresenter ({
 
   return (
     <Grid container>
-      <SearchContext.Provider value={{ query, defaultQuery, setQuery, setDefaultQuery }}>
+      <SearchContext.Provider value={{ query, defaultQuery, setQuery, setDefaultQuery, isKeywordSearchEnabled }}>
         <Grid item xs={12} className={classes.headerGridItem}>
           <CreateDocumentByType
             {...createDocumentProps}
