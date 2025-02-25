@@ -258,7 +258,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     setFBValue();
 
     if(isUndefined(documentRevision)) {
-      formik.setFieldValue('attachments', _formState?.getValue('attachments'));
+      const attachments = _formState?.getValue('attachments');
+      if(!isEmpty(attachments)) {
+        formik.setFieldValue('attachments', attachments);
+      }
     }
 
     formik.submitForm();
