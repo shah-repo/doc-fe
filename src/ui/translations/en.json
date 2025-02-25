@@ -2369,7 +2369,7 @@
     "attachment.table.uploaded.by": "Uploaded by",
     "attachment.table.uploaded.date": "Uploaded Date",
     "attachment.table.file.size": "File Size",
-    "attachment.menu.download.file": "Download Attached",
+    "attachment.menu.download.file": "Download Attachment",
     "attachment.menu.download.as.pdf": "Download as PDF",
     "attachment.menu.view": "View",
     "attachment.header.selected": "Selected"
