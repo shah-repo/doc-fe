@@ -354,6 +354,7 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
 
   const isFinalLevel = (i: number) => i === level.length - 1;
   const isPrevLevel = (i: number) => i === level.length - 2;
+  const { displayRevision, document } = replaceDocumentRevision ?? {};
 
   return (
     <td
@@ -465,8 +466,8 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
                 arrow
                 placement="top"
                 title={`${translate('bom.replaced.doc.rev.message', {
-                  docId: `${replaceDocumentRevision?.document?.docId}-004`,
-                  revId: replaceDocumentRevision?.displayRevision,
+                  docId: `${document?.docId}`,
+                  revId: displayRevision,
                 })}`}
               >
                 <Grid
@@ -482,12 +483,12 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
                   <Grid item>
                     <FontAwesomeIcon icon={solid('arrow-right')} />
                   </Grid>
-                  <Grid item>{replaceDocumentRevision?.document?.docId}-004</Grid>
+                  <Grid item className={classes.ellipsisText}>{document?.docId}</Grid>
                   <Grid item className={classes.whiteDot} />
                   <Grid item>
                     <Text
                       translation="form.builder.header.rev"
-                      values={{ revision: replaceDocumentRevision?.displayRevision }}
+                      values={{ revision: displayRevision }}
                     />
                   </Grid>
                 </Grid>
