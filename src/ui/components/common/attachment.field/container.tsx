@@ -1,4 +1,3 @@
-import { Box, CircularProgress } from '@material-ui/core';
 import { map, pick } from 'lodash';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -124,32 +123,19 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
   };
 
   return (
-    <>
-      {isUploading
-      && <Box>
-        <CircularProgress color="secondary" />
-      </Box>}
-
-      {!isUploading
-      && <Box>
-        <Presenter
-          {
-            ...{
-              name,
-              isUploading,
-              upload,
-              component,
-              multiple,
-              form,
-              field,
-              onChange,
-            }
-          }
-          {...other}
-        />
-      </Box>
-      }
-    </>
+    <Presenter
+      {...{
+        name,
+        isUploading,
+        upload,
+        component,
+        multiple,
+        form,
+        field,
+        onChange,
+      }}
+      {...other}
+    />
   );
 };
 

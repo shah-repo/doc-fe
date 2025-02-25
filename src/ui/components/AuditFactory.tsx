@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { SM } from '../../App';
 import { translate } from '../../common/intl';
-import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
+import { MomentFormats, getFormattedDateString } from '../../common/utils/date';
 import { convertHtmlEntities } from '../../common/utils/helpers';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit, LifecyclePhaseOptionType, POLineItem } from '../../state/ducks/audit/types';
@@ -22,9 +22,9 @@ import { ASLStatus } from '../administration/general.settings/panels/SupplierSet
 import { getMDOptionLabels } from '../change.request/FBMaterialDisposition/components/FBMaterialDispositionTable/constants';
 import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefaultValue, getWOAuditDefaultValue } from '../common/utils/audit';
 import Text from '../components/Text';
-import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../documentRevision/forms/presenters/related.parts/helper';
-import { checkIsDocumentWO, IRevIdMapper } from '../documentRevision/helpers/checkDocumentGroup';
-import { FBPurchaseOrderItemType } from '../form.builder';
+import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
+import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
+import { FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -34,6 +34,8 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditShippingItems from './AuditShippingItems';
+import AuditSiteInformations from './AuditSiteInformations';
 import AuditSupplierCertifications from './AuditSupplierCertifications';
 import AuditTraineeList from './AuditTraineeList';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
@@ -190,6 +192,18 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       supplierSupportingDocs () {
         return <AuditSupplierCertifications {...{ audit, dataCy, auditValue, previousValue }} />;
+      },
+      siteInformation () {
+        return <AuditSiteInformations {...{ audit, dataCy, auditValue }} />;
+      },
+      shippingItems () {
+        return <AuditShippingItems {...{ audit, dataCy, auditValue }} />;
+      },
+      shippingCustomer () {
+        if (audit.fbSchemaItem) {
+          audit.fbSchemaItem.optionId = FBAutocompleteAsyncOption.shippingInformation;
+        }
+        return <AuditAutocomplete audit={audit} />;
       },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };

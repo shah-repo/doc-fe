@@ -1,5 +1,5 @@
-import { ExpansionPanelProps, SwitchProps } from '@material-ui/core';
-import { RefObject } from 'react';
+import { ExpansionPanelProps, FormControlLabelProps, SwitchProps } from '@material-ui/core';
+import { ReactNode, RefObject } from 'react';
 
 export enum GeneralSettingsTabs {
   Printing = 'Printing',
@@ -15,6 +15,7 @@ export enum GeneralSettingsTabs {
   ExpiredLots = 'Expired Lots',
   Integrations = 'Intergrations',
   EF = 'Equipment Family',
+  ApprovalRoles = 'Approval Roles',
   Locations = 'Locations',
   MaterialFlow = 'Material Flow',
   SystemTransactions = 'System Transactions Setup',
@@ -31,12 +32,14 @@ export interface SettingsPanelProps extends ExpansionPanelProps {
   title: string
   info?: string
   containerRef?: RefObject<HTMLElement>
+  isOutOfSync?: boolean
   onToggle: () => void
   onAddNew?: () => void
 }
 
 export interface SwitchControlProps extends SwitchProps {
-  label: string
+  label: ReactNode
+  labelProps?: Partial<FormControlLabelProps>
 }
 
 export interface HeaderLastSavedProps {
