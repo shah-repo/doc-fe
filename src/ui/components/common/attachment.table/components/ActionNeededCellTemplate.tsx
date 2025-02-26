@@ -2,7 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Divider, MenuItem } from '@material-ui/core';
 import cx from 'classnames';
-import { get } from 'lodash';
+import { get, kebabCase } from 'lodash';
 import React, { useMemo } from 'react';
 import { translate } from '../../../../../common/intl';
 import { LINE_TYPES } from '../../../../../state/ducks/attachments/constants';
@@ -40,10 +40,11 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
     ? documentRevisionSummary?.id as string
     : undefined;
 
-  const canSetAsPrimary = isDocumentRevisionInStatus(
+  const requiredStatus = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
     documentRevision?.status,
-  ) && documentRevision?.document?.canAccess && attachment.lineType !== LINE_TYPES.RED_LINE;
+  );
+  const canSetAsPrimary = requiredStatus && documentRevision?.document?.canAccess && attachment.lineType !== LINE_TYPES.RED_LINE;
   const isDocumentPage = Boolean(React.useContext(FormHeaderContext));
   const isNewDocument = isDocumentPage && !documentRevision?.id;
   const showSetAsPrimary = attachment.id !== documentRevision?.primaryAttachment?.id && canSetAsPrimary && !isNewDocument && isDocumentPage;
@@ -54,6 +55,7 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
     <HeaderMenu
       columnMenuItemClasses={cx('k-grid-columnmenu-popup', classes.columnMenuItem)}
       menuIconButtonClass={classes.iconButton}
+      dataCy={`${kebabCase(attachment?.name)}-menu`}
       icon={<FontAwesomeIcon className={cx('k-icon', classes.icon)} icon={solid('ellipsis-vertical')} />}
     >
       <MenuItem onClick={() => onDownloadAttachment?.(attachment)}>
@@ -72,7 +74,7 @@ const ActionNeededCellTemplate: React.FC<Props> = (props) => {
           <Text message={translate('attachment.menu.view')} />
         </MenuItem>
       )}
-      {isUserDocumentOwner && (
+      {isUserDocumentOwner && requiredStatus && (
         <MenuItem onClick={onDelete?.(attachment)}>
           <FontAwesomeIcon icon={regular('trash-can')} className={cx(classes.menuIcons, classes.menuDeleteIcon)} />
           <Text message={translate('common.delete')} />
