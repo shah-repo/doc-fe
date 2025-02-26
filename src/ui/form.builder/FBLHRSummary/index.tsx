@@ -401,28 +401,17 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
 
   return (
     <>
-      <FBSection
-        label={translate('lhr.summary.table.title')}
-        data-cy="lhr-summary-title"
-      >
+      <FBSection label={translate('lhr.summary.table.title')} data-cy="lhr-summary-title">
         {isAddButtonVisible && (
-          <>
-            <Tooltip
-              title={translate('lhr.summary.add.item')}
-              placement="top"
-              arrow
-            >
-              <Button
-                kind="ghost"
-                size="small"
-                className={classes.addButton}
-                startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
-                onClick={onAddItem}
-                data-cy="lhr-summary-header-add-btn"
-              >
-                {translate('lhr.summary.add.item')}
-              </Button>
-            </Tooltip>
+          <Box className={classes.rightSection}>
+            {errorRowsCount > 0 && hasActiveOCRSubscription && (
+              <Grid className={classes.container}>
+                <FontAwesomeIcon icon={solid('triangle-exclamation')} className={classes.errorIcon} />
+                <Typography className={classes.textBlock}>
+                  {translate('lhr.summary.total.warning.rows.warning.message', { rows: errorRowsCount })}
+                </Typography>
+              </Grid>
+            )}
             <Tooltip title={translate('common.reload')} placement="top" arrow>
               <Button
                 kind="ghost"
@@ -435,14 +424,19 @@ const FBLHRSummary: React.FunctionComponent<props> = memo(({
                 {translate('common.refresh')}
               </Button>
             </Tooltip>
-            {errorRowsCount > 0 && hasActiveOCRSubscription && <Box className={classes.container}>
-              <FontAwesomeIcon
-                icon={solid('triangle-exclamation')}
-                className={classes.errorIcon}
-              />
-              <Typography className={classes.textBlock}>{translate('lhr.summary.total.warning.rows.warning.message', { rows: errorRowsCount })}</Typography>
-            </Box>}
-          </>
+            <Tooltip title={translate('lhr.summary.add.item')} placement="top" arrow>
+              <Button
+                kind="ghost"
+                size="small"
+                className={classes.addButton}
+                startIcon={<FontAwesomeIcon icon={solid('circle-plus')} />}
+                onClick={onAddItem}
+                data-cy="lhr-summary-header-add-btn"
+              >
+                {translate('lhr.summary.add.item')}
+              </Button>
+            </Tooltip>
+          </Box>
         )}
       </FBSection>
       <ColumnMenuContext.Provider
