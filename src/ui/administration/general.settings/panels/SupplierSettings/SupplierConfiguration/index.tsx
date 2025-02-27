@@ -114,7 +114,7 @@ const SupplierConfiguration: React.FC<SettingsPanelProps> = (props) => {
     validate: (values: Partial<EditableSupplierConfig>) => {
       const error: Record<string, string> = {};
       if (isEmpty(values.text)) {
-        error.name = 'validators.required';
+        error.text = 'validators.required';
       }
       return error;
     },
