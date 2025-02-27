@@ -1289,6 +1289,7 @@
     "form.builder.view.step": "View Step",
     "form.builder.units.ounce": "ounce",
     "form.builder.currency": "Currency: ",
+    "form.builder.SGD.to.USD": "1 SGD = {rate} USD",
     "form.builder.CHF.to.USD": "1 CHF = {rate} USD",
     "form.builder.EUR.to.USD": "1 Euro = {rate} USD",
     "form.builder.CAD.to.USD": "1 CAD = {rate} USD",
