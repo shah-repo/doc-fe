@@ -2,13 +2,16 @@ import { useFormikContext } from 'formik';
 import { get, last, remove } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { FB, FBDialogState, FBInputType, FBPOReceiveCreateLot, FBPOReceiveCreateLotActions, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from '..';
 import { stripTags } from '../../../common/utils/helpers';
 import { DOC_TYPE_GROUP } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { poReceiveActions } from '../../../state/ducks/poReceive';
 import { toastError } from '../../components/notifications';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 
 export const withFBPOReceive = <T extends FBPOReceiveProps>(
   Component: React.FunctionComponent<T>,
@@ -124,9 +127,48 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       return modifiedTabIdSchema;
     }
 
-    onChange = (_ev, value: DocumentRevision) => {
-      poReceiveState?.setPOId(value?.id);
+    const [autocompleteKey, setAutocompleteKey] = useState<boolean>(Boolean(name));
+    const validatePO = useActionCreator(poReceiveActions.validatePO);
+
+    const validatePOAsync = useAsync({
+      onSuccess: () => {
+        poReceiveState?.setPOId(poReceiveState.poId);
+        submitForm(poReceiveState.poId);
+      },
+      onError: (message) => {
+        formState?.omitFieldValue(`porec-${name}`);
+        setAutocompleteKey(prev => !prev);
+        poReceiveState.updatePOId(undefined);
+        toastError(message);
+      },
+    });
+
+    const submitForm = (value?: string) => {
+      formState?.setFieldValue(name, { id: value });
+      formState?.setFieldAutosave(name);
+      formik?.submitForm();
     };
+
+    onChange = (_ev, value: DocumentRevision) => {
+      if (value === null) {
+      poReceiveState?.setPOId();
+      submitForm('');
+      }
+
+      poReceiveState.updatePOId(value?.id);
+    };
+
+    React.useEffect(() => reaction(
+      () => poReceiveState.poId,
+      (value) => {
+        if (!value) {
+          return;
+        }
+
+        validatePOAsync.start(validatePO, value, validatePOAsync);
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     React.useEffect(() => {
       if (name && !workspaceState?.isRevised) {
@@ -134,16 +176,6 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [receivedItems]);
-
-    React.useEffect(() => reaction(
-      () => formState?.inputState.get(`porec-${name}`)?.value,
-      (value) => {
-        formState?.setFieldValue(name, { id: value });
-        formState?.setFieldAutosave(name);
-        formik?.submitForm();
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
 
     getOptionLabel = (option: DocumentRevision) => `${option.document?.docId} ${stripTags(option.description)}`;
 
@@ -155,6 +187,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     return Component({
       ...(props as T),
       poReceiveState,
+      autocompleteKey,
       dialogState,
       getOptionLabel,
       onChange,

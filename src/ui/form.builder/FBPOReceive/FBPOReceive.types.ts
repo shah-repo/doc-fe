@@ -8,6 +8,7 @@ export type FBPOReceiveProps =
 & {
   dialogState?: FBDialogState
   poReceiveState?: FBPOReceiveState
+  autocompleteKey?: boolean
   po?: DocumentRevision
   schema?: FBSchemaProps[]
   loading?: boolean
