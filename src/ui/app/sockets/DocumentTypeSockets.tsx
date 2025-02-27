@@ -25,7 +25,7 @@ const DocumentTypeSockets: React.FunctionComponent = () => {
   useMqttSubscription('+/document_type/+/created', loadData);
   useMqttSubscription('+/document_type/+/updated', loadData);
   useMqttSubscription('+/document_type/+/deleted', loadData);
-
+  useMqttSubscription('+/dam/+/release', loadData);
   return null;
 };
 
