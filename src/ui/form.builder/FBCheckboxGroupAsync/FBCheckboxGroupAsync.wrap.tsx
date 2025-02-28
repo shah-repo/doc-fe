@@ -72,7 +72,7 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value, checked } = event.target;
-      const option = options?.find((opt) => opt.id === value);
+      const option = options?.find((opt: CheckBoxOptionType) => opt?.id === value);
       const optionText = option?.text ?? '';
       const selectedValues = formState?.getFieldValue(name, []) as OptionType[];
       const updatedValues = checked
