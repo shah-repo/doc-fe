@@ -308,11 +308,8 @@ export default makeStyles((theme) =>
       transition: 'max-height 0.4s ease',
     },
     showMoreContainer: {
-      display: 'flex',
       cursor: 'pointer',
       alignItems: 'center',
-      marginTop: theme.spacing(0.5),
-      marginLeft: theme.spacing(75),
     },
     DescButton: {
       height: 22,
