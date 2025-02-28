@@ -62,6 +62,7 @@ export const styles = makeStyles((theme) => ({
     '& span': {
       cursor: 'pointer',
     },
+    marginLeft: theme.spacing(1.5),
   },
   assigneeAction: {
     display: 'flex',

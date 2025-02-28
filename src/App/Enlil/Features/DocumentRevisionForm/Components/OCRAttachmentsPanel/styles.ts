@@ -54,8 +54,7 @@ export default makeStyles((theme) =>
       height: 45,
     },
     panelButton: {
-      paddingX: theme.spacing(1.875),
-      paddingTop: theme.spacing(2.5),
+      padding: theme.spacing(2.5, 1.75, 0),
     },
     panelPreview: {
       height: 40,

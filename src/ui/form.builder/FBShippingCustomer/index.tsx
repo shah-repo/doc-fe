@@ -23,7 +23,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
     = latestRevisionSummary ?? {};
   return (
     <Grid container className={classes.grid}>
-      {(hasObsoleteRevision || hasReleasedRevision) && (
+      {(hasObsoleteRevision || hasReleasedRevision) && !props.disabled && (
         <Grid item xs="auto" className={classes.shippingInfo}>
           <span className={classes.infoIcon}>
             {hasReleasedRevision && (
