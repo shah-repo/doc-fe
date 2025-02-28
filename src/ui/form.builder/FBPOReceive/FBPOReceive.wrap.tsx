@@ -59,7 +59,11 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const handleLot = (e: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => {
       e.stopPropagation();
       if (item?.status && ![DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated].includes(item?.status)) {
-        toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error' }));
+        if (item?.status === DocumentRevisionStatus.Canceled) {
+          toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error.for.canceled.part' }));
+        } else {
+          toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error' }));
+        }
       } else {
         dialogState?.config({
           open: true,
