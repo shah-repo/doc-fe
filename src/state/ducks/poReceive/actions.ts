@@ -7,8 +7,8 @@ const validatePO = (
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `${PO_ROOT_URL}/${poId}/validate`,
-    method: 'get',
+    url: `${PO_ROOT_URL}/${poId}/validate_canceled_parts`,
+    method: 'post',
     handlers,
   });
 
