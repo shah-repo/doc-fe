@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType, LifecyclePhaseOptionType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { companyActions } from '../../../state/ducks/company';
@@ -17,16 +17,16 @@ import { LCPDocRevOptions } from '../../administration/general.settings/panels/L
 import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
-import Text from '../../components/Text';
 import { toastError } from '../../components/notifications';
+import Text from '../../components/Text';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
-import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presenters/related.parts/helper';
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
+import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
 import { CUSTOM_BOOLEAN_FIELD, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
@@ -416,6 +416,38 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               fieldType: isAttachment ? intl.formatMessage({ id: 'common.attachment' }) : fieldType,
               stepLabel,
             });
+        }
+      }
+
+      if (fbType === 'supplierContacts') {
+        const field = change.field.split('.').pop() as string;
+        if (['id'].includes(field)) {
+          return;
+        }
+
+        if (['STRING_EDITED', 'STRING_DELETED', 'STRING_NEW'].includes(change.type)) {
+          console.log(change.field);
+          const fieldName = translate(`formInput.supplier-contacts[].${field}`);
+          fbLabel = translate('formInput.supplier-contacts.audit.item', {
+            field: fieldName,
+          });
+        }
+      }
+
+      if (fbType === 'partVendors') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        const parentField = fieldParts.at(-2) as string;
+        if (['id', 'currency', 'primary'].includes(field)) {
+          return;
+        }
+        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
+          const fieldName = translate(`form.builder.part.vendors.${fieldFullName}`);
+          fbLabel = translate('form.builder.part.vendors.audit.item', {
+            label: fbLabel as string,
+            field: fieldName,
+          });
         }
       }
 

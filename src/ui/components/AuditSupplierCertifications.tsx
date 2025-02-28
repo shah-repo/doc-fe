@@ -33,17 +33,17 @@ const AuditSupplierCertifications: React.FC<Props> = ({
 
   const addedOrUpdatedField = (fieldName: string, newValue: string | undefined, prevValue: string | undefined): ReactNode => {
     if (newValue && !prevValue) {
-      const fieldTranslation: Translation = `documentRevision.audit.supplier.${fieldName}` as unknown as Translation;
+      const fieldTranslation: Translation = `documentRevision.audit.supplier.certifications.${fieldName}` as unknown as Translation;
       return (
         <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ value: newValue }} /></p>
       );
     } else if (newValue && prevValue) {
-      const fieldTranslation: Translation = `documentRevision.audit.supplier.${fieldName}.updated` as unknown as Translation;
+      const fieldTranslation: Translation = `documentRevision.audit.supplier.certifications.${fieldName}.updated` as unknown as Translation;
       return (
         <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ value: newValue, prevValue }} /></p>
       );
     } else if (!newValue && prevValue) {
-      const fieldTranslation: Translation = `documentRevision.audit.supplier.${fieldName}.removed` as unknown as Translation;
+      const fieldTranslation: Translation = `documentRevision.audit.supplier.certifications.${fieldName}.removed` as unknown as Translation;
       return (
         <p><Text dataCy={dataCy} translation={fieldTranslation} values={{ prevValue }} /></p>
       );
@@ -62,19 +62,19 @@ const AuditSupplierCertifications: React.FC<Props> = ({
       return (
         <>
           <p>{certificateId
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certificate" values={{ value: certificateId }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.certificate" values={{ value: certificateId }} />
           }</p>
           <p>{type
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.type" values={{ value: type }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.type" values={{ value: type }} />
           }</p>
           <p>{expiryDate
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.expiryDate" values={{ value: expiryDate }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.expiryDate" values={{ value: expiryDate }} />
           }</p>
           <p>{uploadedByName
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.uploadedBy" values={{ value: uploadedByName }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.uploadedBy" values={{ value: uploadedByName }} />
           }</p>
           <p>{attachmentNameArr.length > 0
-            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.attachments" values={{ value: attachmentNameArr.join(', ') }} />
+            && <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.attachments" values={{ value: attachmentNameArr.join(', ') }} />
           }</p>
         </>
       );
