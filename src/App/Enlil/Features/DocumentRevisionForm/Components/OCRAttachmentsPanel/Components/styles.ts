@@ -24,6 +24,9 @@ export default makeStyles((theme) =>
     },
     listItemIcon: {
       minWidth: 0,
+      alignSelf: 'flex-start',
+      marginTop: theme.spacing(0.75),
+      paddingRight: theme.spacing(0.5),
     },
     scoreChip: {
       backgroundColor: Colors.primaryLight,

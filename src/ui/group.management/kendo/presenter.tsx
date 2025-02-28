@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { userManagementActions } from '../../../state/ducks/userManagement';
 import { GROUPS_URL } from '../../../state/ducks/userManagement/constants';
-import { LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
+import { GetEmployeeResponse, LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
 import { TableDataProps, TablePanelStateProps } from '../../components/table/types';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
+import useDidMount from '../../hooks/useDidMount';
 import AddGroup from '../add.group/Group';
 import GroupsDisplay from '../display.groups/GroupsDisplay';
+import { DEFAULT_ACTIVE_EMPLOYEES } from '../utils/types';
 import gridConfiguration from './column.definition';
 import { KendoPanel } from './KendoPanel';
 
@@ -38,6 +43,25 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
     setRefreshTable(false);
     editGroupsDialog.close();
   };
+  const didMount = useDidMount();
+  const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
+    DEFAULT_ACTIVE_EMPLOYEES,
+  );
+  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
+  const asyncGetActiveEmployees = useAsync<GetEmployeeResponse[]>({
+    onSuccess: (data: GetEmployeeResponse[] = []) => {
+      setActiveEmployees(data);
+    },
+  });
+  useEffect(() => {
+    if (didMount) {
+      asyncGetActiveEmployees.start(
+        getEmployeeAction,
+        { active: true },
+        asyncGetActiveEmployees,
+      );
+    }
+  }, [didMount]);
   return (
     <>
       <KendoPanel
@@ -49,6 +73,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
         canCreateGroups={canCreateGroups}
         gridData={tableData}
         tableCriteria={tableCriteria}
+        activeEmployees={activeEmployees}
       />
       <GroupsDisplay
         closeDialog={previewGroupsDialog.close}
@@ -60,6 +85,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
         closeDialog={closeDialog}
         selectedGroup={selectedGroup}
         title="group.management.edit.group"
+        activeEmployees={activeEmployees}
       />
     </>
   );

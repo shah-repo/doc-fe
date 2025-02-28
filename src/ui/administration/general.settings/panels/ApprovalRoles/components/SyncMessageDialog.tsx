@@ -45,6 +45,7 @@ const SyncMessageDialog: React.FC<Props> = ({
                 <Link
                   className={classes.link}
                   to={documentVersionPath(dam?.documentRevision?.id ?? '', dam?.document?.id ?? '')}
+                  target="_blank"
                 >
                   {damDocId}
                 </Link>
