@@ -1,7 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
-import { isEmpty } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { v4 as generateUuid } from 'uuid';
@@ -17,7 +16,7 @@ import useDialog from '../../hooks/useDialog';
 import useTableCriteria from '../FBApprovalMatrixRoles/utils';
 import Grid from './components/Grid';
 import { GridProps } from './components/Grid/types';
-import { APPROVAL_MATRIX_TABLE_NAME, DEFAULT_CATEGORY_LABEL } from './constants';
+import { APPROVAL_MATRIX_TABLE_NAME } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
 import { withFBApprovalMatrix } from './wrap';
@@ -91,10 +90,6 @@ const FBApprovalMatrix: React.FC<FBApprovalMatrixProps> = (props) => {
       },
       {},
     ) as FBApprovalRolesStages,
-  });
-
-  approvalMatrix?.forEach((am) => {
-    am.docType.updatedCategory = isEmpty(am.docType.category) ? DEFAULT_CATEGORY_LABEL : am.docType.category;
   });
 
   return (
