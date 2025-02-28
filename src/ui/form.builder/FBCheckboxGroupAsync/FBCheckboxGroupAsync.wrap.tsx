@@ -12,7 +12,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
 import { withFBOption } from '../FBOption/FBOption.wrap';
-import { FBCheckboxGroupAsyncProps } from './FBCheckboxGroupAsync.types';
+import { CheckBoxOptionType, FBCheckboxGroupAsyncProps } from './FBCheckboxGroupAsync.types';
 
 const SUPPLIER_TYPE_NAME = 'supplier-type';
 
@@ -34,9 +34,21 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
 
-    options = useObserver(
-      () => workspaceState?.checkboxGroupsOptionsMap.get(name) ?? [],
-    );
+    options = useObserver(() => {
+      const rawOptions = workspaceState?.checkboxGroupsOptionsMap.get(name) ?? [] as CheckBoxOptionType[];
+      const uniqueOptionsList: CheckBoxOptionType[] = [];
+      const seenTexts = new Set<string>();
+
+      for (const item of rawOptions) {
+        if (!seenTexts.has(item.text)) {
+          seenTexts.add(item.text);
+          uniqueOptionsList.push(item);
+        }
+      }
+
+      return uniqueOptionsList;
+    });
+
     const fetchSupplierConfigOptions = useActionCreator(
       documentRevisionsActions.fetchSupplierConfigurationOptions,
     );
