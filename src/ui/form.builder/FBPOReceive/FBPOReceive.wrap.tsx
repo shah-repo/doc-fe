@@ -26,7 +26,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     disabled,
     loading,
     schema,
-    name = '',
+    name,
     po,
     ...props
   }: T) => {
@@ -132,14 +132,14 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
 
     const validatePOAsync = useAsync({
       onSuccess: () => {
-        poReceiveState?.setPOId(poReceiveState.poId);
-        submitForm(poReceiveState.poId);
+        poReceiveState?.setPOId(poReceiveState?.poId);
+        submitForm(poReceiveState?.poId);
       },
       onError: (message) => {
         formState?.omitFieldValue(`porec-${name}`);
         setAutocompleteKey(prev => !prev);
-        poReceiveState.updatePOId(undefined);
-        toastError(message ?? '');
+        poReceiveState?.updatePOId(undefined);
+        toastError(message);
       },
     });
 
@@ -155,7 +155,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       submitForm('');
       }
 
-      poReceiveState.updatePOId(value?.id);
+      poReceiveState?.updatePOId(value?.id);
     };
 
     React.useEffect(() => reaction(
