@@ -20,6 +20,7 @@ import { DateFilterTemplate } from '../../async.tasks/grid/filter.template/DateF
 import { AsyncStatus, dropDownOptions } from '../../async.tasks/grid/helper';
 import { changeRequestStatusOption } from '../../change.request/utils/helpers';
 import { ColumnMenu } from '../../document.revision/grid/cell.templates/ColumnMenu';
+import { ASLStatusFilterTemplate } from '../../document.revision/grid/filter.template/ASLStatusFilterTemplate';
 import { CompletedDateFilterTemplate } from '../../document.revision/grid/filter.template/CompletedDateFilterTemplate';
 import { DocumentTypeFilterTemplate } from '../../document.revision/grid/filter.template/DocumentTypeFilterTemplate';
 import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.template/DueOnDateFilterTemplate';
@@ -58,7 +59,6 @@ export function KendoGrid<T extends any> ({
   tableCriteria,
   schema,
   statuses = [],
-  aslStatuses = [],
   onRowClick,
   queryUrl,
   defaultPayloadData,
@@ -199,10 +199,9 @@ export function KendoGrid<T extends any> ({
     />
   );
 
-  const SupplierStatusFilter = (props: GridFilterCellProps) => (
-    <StatusFilterTemplate
+  const ASLSupplierStatusFilter = (props: GridFilterCellProps) => (
+    <ASLStatusFilterTemplate
       {...props}
-      data={aslStatuses}
       defaultItem={intl.formatMessage({
         id: TranslatedText[DisplayText.ALL],
       })}
@@ -336,7 +335,7 @@ export function KendoGrid<T extends any> ({
     [KendoGridFilterCell.TASKTYPE]: TaskTypeFilter,
     [KendoGridFilterCell.STATUS]: AsyncStatusFilter,
     [KendoGridFilterCell.ASYNC_CREATED_AT]: AsyncDateFilter,
-    [KendoGridFilterCell.SUPPLIER_STATUS]: SupplierStatusFilter,
+    [KendoGridFilterCell.SUPPLIER_STATUS]: ASLSupplierStatusFilter,
   };
 
   const headerCellMapping = {
