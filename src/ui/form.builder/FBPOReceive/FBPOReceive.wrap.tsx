@@ -26,7 +26,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     disabled,
     loading,
     schema,
-    name,
+    name = '',
     po,
     ...props
   }: T) => {
@@ -139,7 +139,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         formState?.omitFieldValue(`porec-${name}`);
         setAutocompleteKey(prev => !prev);
         poReceiveState.updatePOId(undefined);
-        toastError(message);
+        toastError(message ?? '');
       },
     });
 
@@ -159,7 +159,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     };
 
     React.useEffect(() => reaction(
-      () => poReceiveState.poId,
+      () => poReceiveState?.poId,
       (value) => {
         if (!value) {
           return;
