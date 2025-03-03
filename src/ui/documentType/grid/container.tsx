@@ -27,6 +27,7 @@ import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
 import { RouteParams } from '../utils/types';
 import { columnSearchConfiguration, getStaticColumns } from './helpers';
+import { DocTypeTableContext } from './interfaces';
 import { DocumentTypePresenter } from './presenter';
 
 const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<RouteParams>> = ({
@@ -46,12 +47,12 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const getStatuses = () => async.start(getStatusesAction, async, documentRevisionQueryStatus(), [], categoryName);
 
   // ASL Status
-  const [aslStatuses, saveAslStatuses] = useState<string[]>([]);
+  const [aslStatuses, saveAslStatuses] = useState<ASLStatus[]>([]);
   const fetchASLTypes = useActionCreator(documentRevisionsActions.fetchASLSuppliersListData);
 
   const supplierTypesAsync = useAsync<ASLStatus[]>({
     onSuccess: (aslStatusList) => {
-      saveAslStatuses((aslStatusList ?? []).map(item => item.displayLabel));
+      saveAslStatuses(aslStatusList ?? []);
     },
   });
 
@@ -183,7 +184,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = 'displayStatus';
-    } else if (columnDetails.searchOptions?.supplierStatusTemplate) {
+    } else if (columnDetails.searchOptions?.supplierStatusTemplate || upDateField === 'precalc.supplierStatus') {
       filterCellTemplate = KendoGridFilterCell.SUPPLIER_STATUS;
       dynamicCellTemplate = KendoCellTemplates.SUPPLIER_STATUS;
     } else if (columnDetails.searchOptions?.eqStatusTemplate) {
@@ -237,22 +238,23 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     history.push(urlPath);
   };
   return (
-    <DocumentTypePresenter
-      tableName={TABLE_NAME}
-      tableCriteria={tableCriteria}
-      schema={schema}
-      statuses={statuses}
-      aslStatuses={aslStatuses}
-      isByCategory={isByCategory}
-      documentCategory={documentCategory}
-      documentType={documentType}
-      headerColumns={columnDef}
-      columns={kendoColumnDef as KendoColumn[]}
-      onRowClick={onRowClick}
-      title={title}
-      queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
-      documentTypeCategory={isByCategory ? categoryName : documentType?.documentTypeAcronym}
-    />
+    <DocTypeTableContext.Provider value={{ aslStatuses }}>
+      <DocumentTypePresenter
+        tableName={TABLE_NAME}
+        tableCriteria={tableCriteria}
+        schema={schema}
+        statuses={statuses}
+        isByCategory={isByCategory}
+        documentCategory={documentCategory}
+        documentType={documentType}
+        headerColumns={columnDef}
+        columns={kendoColumnDef as KendoColumn[]}
+        onRowClick={onRowClick}
+        title={title}
+        queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
+        documentTypeCategory={isByCategory ? categoryName : documentType?.documentTypeAcronym}
+      />
+    </DocTypeTableContext.Provider>
   );
 };
 
