@@ -1,9 +1,12 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, ButtonProps, ListItemText, MenuItem } from '@material-ui/core';
+import { Box, ButtonProps, ListItemText, MenuItem, Typography } from '@material-ui/core';
 import { kebabCase } from 'lodash';
 import React from 'react';
-import { EquipmentStatus, LotStatus } from '../../../../state/ducks/documentRevisions/types';
+import {
+  EquipmentStatus,
+  LotStatus,
+} from '../../../../state/ducks/documentRevisions/types';
 import useMenu from '../../../hooks/useMenu';
 import { Button, SplitButtonMenu } from '../../forms/fields-next';
 import useStyles from './HeaderStatusButton.styles';
@@ -33,8 +36,11 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
   const dataCy = props['data-cy'] ?? 'status';
 
   const handleMenuClick = (value: StatusValue) => () => onItemSelect(value);
-
-  const Icon = <Box className={classes.buttonIcon}><FontAwesomeIcon icon={solid('chevron-down')} /></Box>;
+  const Icon = (
+    <Box className={classes.buttonIcon}>
+      <FontAwesomeIcon icon={solid('chevron-down')} />
+    </Box>
+  );
 
   return (
     <>
@@ -47,7 +53,9 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         onClick={!disabled ? optionsMenu.open : undefined}
         data-cy={`${dataCy}-button`}
       >
-        {label}
+        <Typography noWrap className={classes.buttonLabel}>
+          {label}
+        </Typography>
       </Button>
       {!disabled && (
         <SplitButtonMenu
@@ -57,13 +65,16 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
             ['data-cy' as string]: `${dataCy}-menu`,
           }}
         >
-          {options.map(option => (
+          {options.map((option: StatusOption) => (
             <MenuItem
               key={option.value}
               onClick={handleMenuClick(option.value)}
               data-cy={`${kebabCase(option.value)}-option`}
+              className={classes.menuItem}
             >
-              <ListItemText>{option.label}</ListItemText>
+              <ListItemText className={classes.menuItemText}>
+                {option.label}
+              </ListItemText>
             </MenuItem>
           ))}
         </SplitButtonMenu>
