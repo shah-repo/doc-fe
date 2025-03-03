@@ -1,3 +1,4 @@
+import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
 import { FB } from '..';
 import { translate } from '../../../common/intl';
@@ -17,7 +18,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
     const fetchReferences = useActionCreator(
       documentRevisionsActions.fetchReferencesTableData,
     );
-    const referenceFormInput = workspaceState?.formInputSync.get(name) ?? [];
+    const referenceFormInput = useObserver(() => workspaceState?.formInputSync.get(name) ?? []);
 
     const mergeArrays = (
       references: ProductORService[],
@@ -76,7 +77,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
         ),
         fetchOptionsDataAsync,
       );
-    }, [workspaceState?.documentId, workspaceState?.formInput?.[name]]);
+    }, [workspaceState?.documentId, workspaceState?.formInput?.[name], referenceFormInput]);
 
     return Component({
       ...(props as T),

@@ -179,6 +179,7 @@ const Editor: React.FC<CustomTemplateProps> = ({ dataItem, field }) => {
         {...{ onChange }}
         key={isEmpty(items) ? 'disabled' : 'enabled'}
         value={{ label: inputValue }}
+        freeSolo
         options={items}
         getOptionLabel={(option) => option.label ?? ''}
         filterOptions={(x) => x}

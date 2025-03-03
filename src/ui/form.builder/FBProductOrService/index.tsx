@@ -75,10 +75,10 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
       const addedAslItem = aslItems?.find(aslItem => aslItem.id === values.aslStatusId);
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedProductOrServices = isAddition
-        ? [...productOrServices, { ...values, ...{ aslDisplayLabel: addedAslItem?.displayLabel } }]
+        ? [...productOrServices, { ...values, ...{ aslDisplayLabel: addedAslItem?.displayLabel, title: values.revId ? '' : values.title } }]
         : productOrServices.map((productORService: ProductORService) =>
           productORService.id === values.id
-            ? { values, ...{ aslDisplayLabel: addedAslItem?.displayLabel } }
+            ? ({ ...values, ...{ aslDisplayLabel: addedAslItem?.displayLabel } })
             : productORService,
         );
 
