@@ -139,10 +139,9 @@ const AttachmentTable: React.FC<Props> = ({
   }, [selectedAttachments]);
 
   React.useEffect(() => {
-    setAttachmentsData(attachments);
+    const sortedAttachments = attachments.sort((a, b) => Number(a?.index) - Number(b?.index));
+    setAttachmentsData(sortedAttachments);
   }, [attachments]);
-
-  const sortedAttachments = [...attachmentsData].sort((a, b) => Number(a?.index) - Number(b?.index));
 
   return (
     <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart, onDrop: onDrop }}>
@@ -155,7 +154,7 @@ const AttachmentTable: React.FC<Props> = ({
           hasBoxScrollbars
           resizable
           schema={schema}
-          data={sortedAttachments}
+          data={attachmentsData}
           selectedField={SELECTED_FIELD}
           dataItemKey={DATA_ITEM_KEY}
           selectable={{
