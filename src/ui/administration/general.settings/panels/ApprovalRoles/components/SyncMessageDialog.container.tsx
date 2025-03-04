@@ -187,7 +187,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     updatedDAR = updatedDAR.filter(item => !removeFromDam.some(removeItem => removeItem.id === item.id));
   }
 
-  const onCloseDialogClick = () => {
+  const handleConfirm = () => {
     setIsSyncMessageOpen(false);
     if (isDraftOrPending) {
       documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDAR, [FBDAMFields.DAM]: updatedDAM };
@@ -220,7 +220,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     return (
       <SyncMessageDialog
         isOpen={isSyncMessageOpen}
-        closeDialog={onCloseDialogClick}
+        onConfirm={handleConfirm}
         dialogContent={getSyncLabel()}
         dam={dam}
       />
