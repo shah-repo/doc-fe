@@ -250,7 +250,7 @@ export const RefIDcell: React.FC<CustomTemplateProps> = (props) => {
               : '#'
           }
           onClick={(e) => {
-            e.preventDefault();
+            e.stopPropagation();
           }}
           data-cy="selected-reference-item-link"
         >
