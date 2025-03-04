@@ -47,7 +47,6 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   reloadComponent,
 }) => {
   const { _documentRevisionFormState } = SM.useStores();
-  const [isSyncMessageOpen, setIsSyncMessageOpen] = React.useState(false);
   const { formInput } = documentRevision;
   const generalSettings = useSelector(companySelectors.getGeneralSettings);
   const { addToDam = [], removeFromDam = [] } = generalSettings?.approvalRoles ?? {};
@@ -64,12 +63,18 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const dispatch = useDispatch();
   const isDraftOrPending = isDocumentRevisionInStatus([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange], documentRevision.status);
   const alertDialog = useDialog();
-  const isDamDocument = dam?.documentRevision?.id === documentRevision.id
-    || (dam?.document?.id === documentRevision.documentId && isDocumentRevisionReleased(documentRevision.status));
-  const showAsyncMessage = isDamDocument
-    && !isDocumentRevisionCanceled(documentRevision.status)
-    && !damIsSynced
-    && isOwner;
+  const needSyncMessage = isOwner && !damIsSynced;
+  const needAlertMessage = needSyncMessage
+    && dam?.document?.id === documentRevision.documentId
+    && isDocumentRevisionReleased(documentRevision.status);
+  const needDialogMessage = needSyncMessage
+    && dam?.documentRevision?.id === documentRevision.id
+    && !isDocumentRevisionCanceled(documentRevision.status);
+  const [isDialogMessageOpen, setIsDialogMessageOpen] = React.useState(needDialogMessage);
+
+  useEffect(() => {
+    setIsDialogMessageOpen(needDialogMessage);
+  }, [needDialogMessage]);
 
   const getSyncMessageTranslation = (isSubLabel = false): string | undefined => {
     const addToDam = generalSettings?.approvalRoles?.addToDam ?? [];
@@ -146,10 +151,6 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     }
   };
 
-  useEffect(() => {
-    setIsSyncMessageOpen(showAsyncMessage);
-  }, [showAsyncMessage]);
-
   if (!isEmptyArray(addToDam)) {
     let lastIndex = Math.max(...updatedDAR.map(item => item.index));
     if (lastIndex === Number.NEGATIVE_INFINITY || !lastIndex) {
@@ -188,7 +189,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   }
 
   const handleConfirm = () => {
-    setIsSyncMessageOpen(false);
+    setIsDialogMessageOpen(false);
     if (isDraftOrPending) {
       documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDAR, [FBDAMFields.DAM]: updatedDAM };
       _documentRevisionFormState?.setDocumentRevision(documentRevision);
@@ -212,14 +213,19 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     }
   }, []);
 
-  if (!showAsyncMessage) {
-    return null;
+  if (needAlertMessage) {
+    return (
+      <SyncMessageAlert
+        alertDialog={alertDialog}
+        dialogContent={getSyncLabel()}
+      />
+    );
   }
 
-  if (isSyncMessageOpen) {
+  if (needDialogMessage) {
     return (
       <SyncMessageDialog
-        isOpen={isSyncMessageOpen}
+        isOpen={isDialogMessageOpen}
         onConfirm={handleConfirm}
         dialogContent={getSyncLabel()}
         dam={dam}
@@ -227,7 +233,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     );
   }
 
-  return <SyncMessageAlert alertDialog={alertDialog} dialogContent={getSyncLabel()} />;
+  return null;
 };
 
 export default SyncMessageDialogContainer;
