@@ -20,6 +20,7 @@ import Text from '../../components/Text';
 import { toastError } from '../../components/notifications';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
+import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
@@ -98,13 +99,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
+      const lotTransfersBy = audit[groupId].some(item => item.nextValue === SERVER_AUTOMATION_LOT_TRANSFER_BY);
       const { owner, ownerUser, ownerThirdParty, ownerName } = change;
       const isPOAutoChange
         = change.field === 'poStatus' && ownerName === SERVER_OWNED;
       const changeOwner = find([owner, ownerUser, ownerThirdParty], 'user.name');
       let finalOwner = !isPOAutoChange && changeOwner ? changeOwner.user : { name: ownerName } as User;
 
-      if (ownerName === SERVER_OWNED) {
+      if (ownerName === SERVER_OWNED || lotTransfersBy) {
         finalOwner = { name: SERVER_OWNED } as User;
       }
 
