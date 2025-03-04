@@ -23,7 +23,12 @@ export const withFBShippingItems = <T extends FBShippingItemsProps>(
     };
 
     const updateShippingItem = (item: ShippingItem) => {
-      const newItems = unionBy([item], shippingItems, 'id');
+      const normalizedItem = {
+        ...item,
+        quantity: typeof item.quantity === 'number' ? item.quantity : undefined,
+      };
+
+      const newItems = unionBy([normalizedItem], shippingItems, 'id');
       updateState(newItems);
     };
 

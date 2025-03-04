@@ -67,7 +67,7 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
     },
   });
 
-  const handleUpload = (files: File[], lineType, cleanCopyRequired) => {
+  const handleUpload = (files: File[], lineType, cleanCopyRequired, index) => {
     if (files.length === 0) {
       return;
     }
@@ -81,8 +81,9 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
       return;
     }
     setIsUploading(true);
-    async.start(uploadAction, file, lineType, async, cleanCopyRequired);
-    handleUpload(files, lineType, cleanCopyRequired);
+    const attachmentIndex = index + 1;
+    async.start(uploadAction, file, lineType, index, async, cleanCopyRequired);
+    handleUpload(files, lineType, cleanCopyRequired, attachmentIndex);
   };
 
   const onChange = (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
@@ -119,7 +120,9 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
     if (filteredFiles.length === 0) {
       return;
     }
-    handleUpload(filteredFiles, lineType, cleanCopyRequired);
+    const attachments: Attachment[] = field?.value ? [...field.value] : [];
+    const index = attachments.length + 1;
+    handleUpload(filteredFiles, lineType, cleanCopyRequired, index);
   };
 
   return (

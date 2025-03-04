@@ -308,11 +308,8 @@ export default makeStyles((theme) =>
       transition: 'max-height 0.4s ease',
     },
     showMoreContainer: {
-      display: 'flex',
       cursor: 'pointer',
       alignItems: 'center',
-      marginTop: theme.spacing(0.5),
-      marginLeft: theme.spacing(75),
     },
     DescButton: {
       height: 22,
@@ -334,16 +331,16 @@ export default makeStyles((theme) =>
       alignItems: 'center',
     },
     expandableContent: {
-      '-webkit-line-clamp': '1',
-      '-webkit-box-orient': 'vertical',
       overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whitespace: 'nowrap',
-      maxHeight: 65,
+      maxHeight: '4.29em',
       transition: 'max-height 0.3s ease-in-out',
+      display: '-webkit-box',
+      '-webkit-line-clamp': '3',
+      '-webkit-box-orient': 'vertical',
     },
     expanded: {
       maxHeight: 200,
+      display: 'unset',
     },
   }),
 );

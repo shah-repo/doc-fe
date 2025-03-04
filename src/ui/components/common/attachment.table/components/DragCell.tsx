@@ -9,8 +9,9 @@ import { useStyles } from '../styles';
 interface DragContextProps {
   reorder: (dataItem: Attachment) => void
   dragStart: (dataItem: Attachment) => void
+  onDrop: () => void
 }
-export const DragContext = React.createContext<DragContextProps>({ reorder: noop, dragStart: noop });
+export const DragContext = React.createContext<DragContextProps>({ reorder: noop, dragStart: noop, onDrop: noop });
 
 interface Props extends CustomGridCellProps {
   dataItem: Attachment
@@ -32,6 +33,10 @@ const DragCell: React.FC<Props> = (props) => {
       <span
         className={classes.dragElement}
         draggable
+        onDrop={(e) => {
+          context.onDrop();
+          e.preventDefault();
+        }}
         onDragStart={(e) => {
           context.dragStart(props.dataItem);
           e.dataTransfer.setData('dragging', '');
