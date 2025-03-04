@@ -2,17 +2,19 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog, DialogContent, DialogTitle, Typography } from '@material-ui/core';
 import React from 'react';
+import { IconButton } from '../../../../../components/forms/fields-next';
 import Text from '../../../../../components/Text';
+import { DialogHandler } from '../../../../../hooks/useDialog';
 import useStyles from '../styles';
 
 interface Props {
-  isOpen: boolean
   dialogContent?: JSX.Element
+  alertDialog: DialogHandler
 }
 
 const SyncMessageAlert: React.FC<Props> = ({
-  isOpen = false,
   dialogContent,
+  alertDialog,
 }) => {
   const classes = useStyles();
   return (
@@ -26,7 +28,7 @@ const SyncMessageAlert: React.FC<Props> = ({
       disableBackdropClick
       style={{ position: 'initial' }}
       maxWidth="sm"
-      open={isOpen}
+      open={alertDialog.isOpen}
       scroll="paper"
     >
       <DialogTitle className={classes.dialogTitle} disableTypography>
@@ -34,6 +36,13 @@ const SyncMessageAlert: React.FC<Props> = ({
         <Typography className={classes.titleText}>
           <Text translation="dam.sync.message.out.of.sync" />
         </Typography>
+        <IconButton
+          kind="ghost"
+          className={classes.closeButton}
+          onClick={() => alertDialog.close()}
+        >
+          <FontAwesomeIcon icon={regular('xmark')} />
+        </IconButton>
       </DialogTitle>
       <DialogContent className={classes.alertContent}>
         {dialogContent}
