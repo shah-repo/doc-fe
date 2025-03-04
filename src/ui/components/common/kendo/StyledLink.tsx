@@ -17,7 +17,6 @@ const StyledLink = ({ to, onClick, children, ...props }) => {
   const classes = useStyles();
   const handleClick = (onClick?: (e: React.MouseEvent) => void) => {
     return (e: React.MouseEvent) => {
-      e.preventDefault();
       if (onClick) onClick(e);
     };
   };

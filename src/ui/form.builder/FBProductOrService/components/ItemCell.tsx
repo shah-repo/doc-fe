@@ -259,7 +259,7 @@ export const ItemCell: React.FC<CustomTemplateProps> = (props) => {
                   : '#'
               }
               onClick={(e) => {
-                e.preventDefault();
+                e.stopPropagation();
               }}
               data-cy="selected-product-or-service-link"
             >
