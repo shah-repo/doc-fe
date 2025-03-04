@@ -1,18 +1,16 @@
 import { Box } from '@material-ui/core';
 import { isEmptyArray } from 'formik';
-import { cloneDeep, isUndefined, pullAt, sortBy } from 'lodash';
+import { cloneDeep, pullAt, sortBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
 import { authSelectors } from '../../../../../../state/ducks/auth';
 import { companyActions, companySelectors } from '../../../../../../state/ducks/company';
-import { Dam } from '../../../../../../state/ducks/company/types';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import Text from '../../../../../components/Text';
-import { parseJSON } from '../../../../../document.type.management/transform';
-import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
+import { isDocumentRevisionCanceled, isDocumentRevisionInStatus, isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import { FBDAMFields } from '../../../../../form.builder';
 import { FBApprovalMatrixItem, FBApprovalRole } from '../../../../../form.builder/FBApprovalMatrixField/FBApprovalMatrixField.types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
@@ -20,8 +18,6 @@ import useAsync from '../../../../../hooks/useAsync';
 import useDialog from '../../../../../hooks/useDialog';
 import SyncMessageAlert from './SyncMessageAlert';
 import SyncMessageDialog from './SyncMessageDialog';
-
-const OUT_OF_SYNC_ALERT_DATA_KEY = 'outOfSyncAlertData';
 
 const SyncLabelElement: React.FC<{ label?: string, subLabel?: string }> = ({ label, subLabel }) => {
   return (
@@ -56,26 +52,24 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const generalSettings = useSelector(companySelectors.getGeneralSettings);
   const { addToDam = [], removeFromDam = [] } = generalSettings?.approvalRoles ?? {};
   const dam = generalSettings?.approvalRoles?.dam;
+  const damIsSynced = dam?.isSynced ?? true;
   let updatedDAR = cloneDeep(formInput?.[FBDAMFields.DAR] ?? []) as FBApprovalRole[];
   const updatedDAM = cloneDeep(
     formInput?.[FBDAMFields.DAM]?.approvalMatrix
     ?? formInput?.[FBDAMFields.DAM]
     ?? [],
   ) as FBApprovalMatrixItem[];
-  const showAlertDialog = parseJSON(localStorage.getItem(OUT_OF_SYNC_ALERT_DATA_KEY) ?? '') as unknown as Dam;
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
   const dispatch = useDispatch();
   const isDraftOrPending = isDocumentRevisionInStatus([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange], documentRevision.status);
   const alertDialog = useDialog();
-  const showAsyncMessage = dam?.documentRevision?.id === documentRevision?.id
-    && documentRevision.status !== DocumentRevisionStatus.Canceled
-    && !dam?.isSynced
+  const isDamDocument = dam?.documentRevision?.id === documentRevision.id
+    || (dam?.document?.id === documentRevision.documentId && isDocumentRevisionReleased(documentRevision.status));
+  const showAsyncMessage = isDamDocument
+    && !isDocumentRevisionCanceled(documentRevision.status)
+    && !damIsSynced
     && isOwner;
-
-  if (dam?.isSynced) {
-    localStorage.removeItem(OUT_OF_SYNC_ALERT_DATA_KEY);
-  }
 
   const getSyncMessageTranslation = (isSubLabel = false): string | undefined => {
     const addToDam = generalSettings?.approvalRoles?.addToDam ?? [];
@@ -153,10 +147,6 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    dispatch(companyActions.getGeneralSettings());
-  }, []);
-
-  useEffect(() => {
     setIsSyncMessageOpen(showAsyncMessage);
   }, [showAsyncMessage]);
 
@@ -202,11 +192,9 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     if (isDraftOrPending) {
       documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDAR, [FBDAMFields.DAM]: updatedDAM };
       _documentRevisionFormState?.setDocumentRevision(documentRevision);
-      localStorage.removeItem(OUT_OF_SYNC_ALERT_DATA_KEY);
       async.start(setDocumentRevision, documentRevision.id, { formInput: documentRevision.formInput }, async);
       reloadComponent?.();
     } else {
-      localStorage.setItem(OUT_OF_SYNC_ALERT_DATA_KEY, JSON.stringify(dam));
       alertDialog.open();
     }
   };
@@ -219,7 +207,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const setDocumentRevision = useActionCreator(documentRevisionsActions.save);
 
   useEffect(() => {
-    if (showAlertDialog && !showAlertDialog?.isSynced && isOwner && !isDraftOrPending) {
+    if (!damIsSynced && isOwner && !isDraftOrPending) {
       alertDialog.open();
     }
   }, []);
@@ -228,15 +216,15 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     return null;
   }
 
-  if (isSyncMessageOpen && isUndefined(showAlertDialog?.isSynced)) {
-  return (
-    <SyncMessageDialog
-      isOpen={isSyncMessageOpen}
-      closeDialog={onCloseDialogClick}
-      dialogContent={getSyncLabel()}
-      dam={dam}
-    />
-  );
+  if (isSyncMessageOpen) {
+    return (
+      <SyncMessageDialog
+        isOpen={isSyncMessageOpen}
+        closeDialog={onCloseDialogClick}
+        dialogContent={getSyncLabel()}
+        dam={dam}
+      />
+    );
   }
 
   return <SyncMessageAlert alertDialog={alertDialog} dialogContent={getSyncLabel()} />;
