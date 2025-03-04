@@ -74,4 +74,11 @@ export default makeStyles(theme => createStyles({
   activeCellInEdit: {
     marginTop: theme.spacing(1),
   },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    fontSize: 18,
+    color: Colors.black,
+  },
 }));
