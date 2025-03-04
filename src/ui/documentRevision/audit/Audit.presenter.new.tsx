@@ -89,6 +89,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     );
     supplierTypesAsync.start(
       fetchASLTypes,
+      false,
       supplierTypesAsync,
     );
   }, []);
