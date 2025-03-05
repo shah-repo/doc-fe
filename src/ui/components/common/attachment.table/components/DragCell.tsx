@@ -36,6 +36,7 @@ const DragCell: React.FC<Props> = (props) => {
         onDrop={(e) => {
           context.onDrop();
           e.preventDefault();
+          e.dataTransfer.getData('dragging');
         }}
         onDragStart={(e) => {
           context.dragStart(props.dataItem);
