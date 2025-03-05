@@ -77,7 +77,7 @@ export const withFBProductORService = <T extends FBProductORServiceProps>(
         ),
         fetchOptionsDataAsync,
       );
-    }, [workspaceState?.documentId, workspaceState?.formInput?.[name], referenceFormInput]);
+    }, [workspaceState?.documentId, workspaceState?.formInput?.[name]]);
 
     return Component({
       ...(props as T),
