@@ -62,19 +62,33 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const isOwner = documentRevision.owner.user.id === currentUserId;
   const dispatch = useDispatch();
   const isDraftOrPending = isDocumentRevisionInStatus([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange], documentRevision.status);
+  const isCancelled = isDocumentRevisionCanceled(documentRevision.status);
   const alertDialog = useDialog();
   const needSyncMessage = isOwner && !damIsSynced;
   const needAlertMessage = needSyncMessage
     && dam?.document?.id === documentRevision.documentId
-    && isDocumentRevisionReleased(documentRevision.status);
+    && !isDraftOrPending
+    && !isCancelled;
   const needDialogMessage = needSyncMessage
     && dam?.documentRevision?.id === documentRevision.id
-    && !isDocumentRevisionCanceled(documentRevision.status);
+    && isDraftOrPending;
   const [isDialogMessageOpen, setIsDialogMessageOpen] = React.useState(needDialogMessage);
+
+  useEffect(() => {
+    if (documentRevision.id) {
+      dispatch(companyActions.getGeneralSettings());
+    }
+  }, [documentRevision.id]);
 
   useEffect(() => {
     setIsDialogMessageOpen(needDialogMessage);
   }, [needDialogMessage]);
+
+  useEffect(() => {
+    if (needAlertMessage) {
+      alertDialog.open();
+    }
+  }, [needAlertMessage]);
 
   const getSyncMessageTranslation = (isSubLabel = false): string | undefined => {
     const addToDam = generalSettings?.approvalRoles?.addToDam ?? [];
@@ -190,13 +204,12 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
 
   const handleConfirm = () => {
     setIsDialogMessageOpen(false);
+
     if (isDraftOrPending) {
       documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDAR, [FBDAMFields.DAM]: updatedDAM };
       _documentRevisionFormState?.setDocumentRevision(documentRevision);
       async.start(setDocumentRevision, documentRevision.id, { formInput: documentRevision.formInput }, async);
       reloadComponent?.();
-    } else {
-      alertDialog.open();
     }
   };
 
@@ -206,12 +219,6 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     },
   });
   const setDocumentRevision = useActionCreator(documentRevisionsActions.save);
-
-  useEffect(() => {
-    if (!damIsSynced && isOwner && !isDraftOrPending) {
-      alertDialog.open();
-    }
-  }, []);
 
   if (needAlertMessage) {
     return (
