@@ -4,4 +4,4 @@ export const SHIPPING_ADDRESS_FIELDS = {
   CONTACT: 'shippingAddressContact',
 };
 
-export const SHIPPING_CUSTOMER_FIELD = 'customer';
+export const SHIPPING_CUSTOMER_FIELD = 'shippingCustomer';

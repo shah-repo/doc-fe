@@ -28,17 +28,22 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
   }, [values]);
 
   return (
-    <Grid container spacing={2} direction="row" alignItems="center">
+    <Grid container spacing={2} direction="row" alignItems="flex-start">
       <Grid item>
-        <SwitchControl checked={selected} onChange={handleChange} label="" />
+        <Tooltip arrow placement="top" title={translate('customer.site.information.same.as.hq.label')} >
+          <span><SwitchControl checked={selected} onChange={handleChange} label="" /></span>
+        </Tooltip>
       </Grid>
       <Grid item>
         <FormikField name={field}>
           <TextField
             {...getFieldProps(field)}
             defaultValue={undefined}
+            multiline
+            rows={3}
             type="text"
             size="small"
+            readOnly={selected}
           />
         </FormikField>
       </Grid>
