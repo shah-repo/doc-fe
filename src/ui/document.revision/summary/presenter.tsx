@@ -155,7 +155,7 @@ const Presenter: React.FunctionComponent<Props> = ({
 
   const lcp = dataProp?.lifecyclePhase as unknown as LCP;
   const contentRenderer = () => (
-    <Box minHeight={16} width="calc(100% - 8px)" className={classes.bottomSpace}>
+    <Box minHeight={16} width="calc(100% - 8px)">
       <Grid container>
         {
           isTrainingVisible && !isRecord

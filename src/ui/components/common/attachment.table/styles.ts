@@ -10,6 +10,7 @@ export const useStyles = makeStyles((theme) => ({
     '& .k-grid-container:last-child': {
       borderRadius: '0 !important',
     },
+    marginBottom: theme.spacing(3.75),
   },
   viewContainer: {
     display: 'flex',
