@@ -2,7 +2,7 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
 import React from 'react';
-import { translate } from '../../../../../common/intl';
+import { isTranslationExists, translate } from '../../../../../common/intl';
 import useHover from '../../../../hooks/useHover';
 import SwitchControl from '../../../general.settings/components/SwitchControl';
 import useStyles from './styles';
@@ -15,7 +15,11 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
   const classes = useStyles();
   const [hoverRef, isHover] = useHover();
 
-  const key = subscription.premiumFeature.toLowerCase();
+  const key = subscription.premiumFeature.toLowerCase().replaceAll('_', '.');
+
+  const infoText = isTranslationExists(`administration.premium.features.${key}.info`)
+    ? translate(`administration.premium.features.${key}.info`)
+    : translate('administration.premium.features.default.info');
 
   return (
     <SwitchControl
@@ -38,7 +42,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
             </div>
           </div>
           <Tooltip
-            title={translate(`administration.premium.features.${key}.info`)}
+            title={infoText}
             arrow
             placement="right"
             className={classes.subscriptionInfo}

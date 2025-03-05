@@ -395,8 +395,8 @@ export function KendoGrid<T extends any> ({
     );
 
   const clearFilter = () => {
-    context?.setDefaultQuery?.(undefined);
-    context?.setQuery?.(undefined);
+    context?.setDefaultQuery?.('');
+    context?.setQuery?.('');
     set(dataState, 'filter.filters', []);
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -413,9 +413,9 @@ export function KendoGrid<T extends any> ({
 
   useEffect(() => {
     if (!context) return;
-    const { query } = context;
+    const { query, isKeywordSearchEnabled } = context;
     if (query) {
-      onSearch(query);
+      isKeywordSearchEnabled && onSearch(query);
     } else if (query === '') {
       clearSearchFilter();
     }
@@ -425,13 +425,10 @@ export function KendoGrid<T extends any> ({
 
   useEffect(() => {
     if (!context) return;
-    const { query, setDefaultQuery } = context;
+    const { isKeywordSearchEnabled, setDefaultQuery } = context;
     const defaultSearchQuery = getKeywordSearchValue(dataState?.filter?.filters);
-
-    if (defaultSearchQuery !== query) {
-      setDefaultQuery?.(defaultSearchQuery);
-    }
-  }, []);
+    setDefaultQuery?.(isKeywordSearchEnabled ? defaultSearchQuery : undefined);
+  }, [tableName]);
 
   const onSearch = (searchText: string) => {
     const updatedDataState = { ...dataState };
@@ -458,6 +455,8 @@ export function KendoGrid<T extends any> ({
       updatedDataState.filter.filters = (updatedDataState.filter.filters as FilterDescriptor[]).filter((filter: FilterDescriptor) => filter.field !== SEARCH_KEYWORD_FIELD_KEY);
     }
     setDateStateAndDispatchByUpdatedState(updatedDataState);
+    context?.setQuery?.(undefined);
+    context?.setDefaultQuery?.(undefined);
   };
 
   const setDateStateAndDispatchByUpdatedState = (updatedDataState: State) => {

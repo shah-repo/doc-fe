@@ -17,3 +17,5 @@ export const intl = createIntl({ locale, messages: currentLocaleMessages }, cach
 
 export const translate = (id?: string, values?: Record<string, PrimitiveType>): string =>
   id ? intl.formatMessage({ id }, values) : '';
+
+export const isTranslationExists = (id: string): boolean => id in intl.messages;

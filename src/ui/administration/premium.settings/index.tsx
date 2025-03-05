@@ -4,7 +4,7 @@ import { Box, LinearProgress, Typography } from '@material-ui/core';
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { translate } from '../../../common/intl';
+import { isTranslationExists, translate } from '../../../common/intl';
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../state/ducks/company';
 import { PremiumFeatureSubscription } from '../../../state/ducks/company/types';
@@ -52,6 +52,12 @@ const PremiumFeaturesContainer: React.FC = () => {
     subscriptionsDialog.close();
   };
 
+  const shouldShowDialogNotice
+    = toggledSubscription.current
+      && isTranslationExists(
+        `administration.premium.features.${toggledSubscription.current.premiumFeature.toLowerCase()}.notice`,
+      );
+
   return (
     <Box className={classes.root}>
       <AlertDialog
@@ -63,7 +69,7 @@ const PremiumFeaturesContainer: React.FC = () => {
         iconClass={classes.dialogIcon}
       >
         <div data-cy="dialog-message" className={classes.noticeText}>
-          {toggledSubscription.current && (
+          {toggledSubscription.current && shouldShowDialogNotice && (
             <p>
               {translate(
                 `administration.premium.features.${toggledSubscription.current.premiumFeature.toLowerCase()}.notice`,

@@ -6,13 +6,17 @@ import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import { isNull } from 'lodash';
 import React from 'react';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
+import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Attachment } from '../../../change.request/form/types';
+import useActionCreator from '../../../hooks/useActionCreator';
+import useAsync from '../../../hooks/useAsync';
 import KendoDataGrid from '../../KendoDataGrid/KendoDataGrid';
 import { DragContext } from './components/DragCell';
 import { DATA_ITEM_KEY, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import { useStyles } from './styles';
+import { SM } from '../../../../App';
 
 const idGetter = getter(DATA_ITEM_KEY);
 
@@ -44,6 +48,14 @@ const AttachmentTable: React.FC<Props> = ({
   const classes = useStyles();
   const [attachmentsData, setAttachmentsData] = React.useState(attachments);
   const [activeItem, setActiveItem] = React.useState<Attachment | null>(null);
+  const reOrderAttachmentsAction = useActionCreator(documentRevisionsActions.save);
+  const { _formState } = SM.useStores();
+
+  const async = useAsync<DocumentRevision>({
+    onSuccess: (values?: DocumentRevision) => {
+      setAttachmentsData(values?.attachments ?? []);
+    },
+  });
 
   const reorder = (item: Attachment) => {
     if (activeItem === item) {
@@ -63,6 +75,22 @@ const AttachmentTable: React.FC<Props> = ({
   // Sets the item being dragged as the active item
   const dragStart = (dataItem: Attachment) => {
     setActiveItem(dataItem);
+  };
+
+  const onDrop = () => {
+    const reorderedData = attachmentsData.map((item, i) => {
+      return { ...item, index: i + 1 };
+    });
+    if(documentRevision?.id) {
+      async.start(
+        reOrderAttachmentsAction,
+        documentRevision?.id,
+        { attachments: reorderedData },
+        async,
+      );
+    } else {
+    _formState?.setValue('attachments', reorderedData);
+    }
   };
 
   const handleHeaderCheckedChange = (event: CheckboxChangeEvent) => {
@@ -114,8 +142,10 @@ const AttachmentTable: React.FC<Props> = ({
     setAttachmentsData(attachments);
   }, [attachments]);
 
+  const sortedAttachments = [...attachmentsData].sort((a, b) => Number(a?.index) - Number(b?.index));
+
   return (
-    <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart }}>
+    <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart, onDrop: onDrop }}>
       <DragAndDrop>
         <KendoDataGrid
           className={classes.grid}
@@ -125,7 +155,7 @@ const AttachmentTable: React.FC<Props> = ({
           hasBoxScrollbars
           resizable
           schema={schema}
-          data={attachmentsData}
+          data={sortedAttachments}
           selectedField={SELECTED_FIELD}
           dataItemKey={DATA_ITEM_KEY}
           selectable={{
