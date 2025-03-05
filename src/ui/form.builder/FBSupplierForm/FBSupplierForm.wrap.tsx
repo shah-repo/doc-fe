@@ -2,15 +2,12 @@ import { first } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps, SupplierPostBody } from '..';
-import { GroupTag } from '../../../state/ducks/auth/types';
-import { Id } from '../../../state/ducks/common/types';
-import { userManagementSelectors } from '../../../state/ducks/userManagement';
+import useDocTypeGroups from '../../hooks/useDocTypeGroups';
 
 export const withFBSupplierForm = <T extends FBSupplierFormProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     onDialogConfirm,
     onDialogClose,
@@ -20,7 +17,7 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     formAutocompleteDisabled,
     ...props
   }: T) => {
-    const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+    const getDocTypeGroups = useDocTypeGroups();
     // MARK: @config
     const { dialogState, supplierState } = FB.useStores();
     const formState = FB.useRef<FBFormState>(FBFormState, {});
@@ -35,15 +32,9 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     // MARK: @methods
     onDialogConfirm = () => {
       const formValue = formState.getValues();
-      if (supplierState?.documentTypeApi.data?.documentType.isQms) {
-        const securityGroups: Id[] = [];
-        groupOptions.forEach((group) => {
-          if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-            securityGroups.push({ id: group.value });
-          }
-        });
+      if (supplierState?.documentTypeApi.data?.documentType?.isQms) {
         formValue.document.securityList = {
-          securityGroups,
+          securityGroups: getDocTypeGroups(supplierState?.documentTypeApi.data?.documentType),
         };
       }
       supplierState?.addNewSupplier(formValue as SupplierPostBody);

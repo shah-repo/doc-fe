@@ -10,15 +10,14 @@ import { getFormattedDateString, MomentFormats } from '../../../common/utils/dat
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { documentTypeSelectors } from '../../../state/ducks/documentRevisions/documentType';
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../state/ducks/documentRevisions/types';
-import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { toastError } from '../../components/notifications';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
 import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
 import { checkIsDocumentEquipment } from '../../documentRevision/helpers/checkDocumentGroup';
-import { filterSecurityGroupsForQms } from '../../documentType/list/helpers';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
+import useDocTypeGroups from '../../hooks/useDocTypeGroups';
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>,
@@ -38,6 +37,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     ...props
   }: T) => {
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
+    const getDocTypeGroups = useDocTypeGroups();
 
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId, document: { status = '', document = null } = {} } = workspaceState || {};
@@ -85,7 +85,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         || Boolean(eqMaintenanceState?.newPMLoading);
     }
 
-    const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     const documentTypesById = useSelector(documentTypeSelectors.byId);
 
     const create = useActionCreator(documentRevisionsActions.create);
@@ -151,7 +150,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
           return async.errorHandler.execute(error as string);
         }
 
-        values.securityGroups = filterSecurityGroupsForQms(documentType.isQms, groupOptions);
+        values.securityGroups = getDocTypeGroups(documentType);
       }
 
       const body = toNewVersionRequestBody(values);
