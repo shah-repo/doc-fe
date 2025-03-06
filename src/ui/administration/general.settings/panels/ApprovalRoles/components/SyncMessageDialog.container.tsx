@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import { isEmptyArray } from 'formik';
-import { cloneDeep, pullAt, sortBy } from 'lodash';
+import { cloneDeep, isUndefined, pullAt, sortBy } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
@@ -11,11 +11,13 @@ import { Dam } from '../../../../../../state/ducks/company/types';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import Text from '../../../../../components/Text';
+import { parseJSON } from '../../../../../document.type.management/transform';
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import { FBDAMFields } from '../../../../../form.builder';
 import { FBApprovalMatrixItem, FBApprovalRole } from '../../../../../form.builder/FBApprovalMatrixField/FBApprovalMatrixField.types';
 import useActionCreator from '../../../../../hooks/useActionCreator';
 import useAsync from '../../../../../hooks/useAsync';
+import useDialog from '../../../../../hooks/useDialog';
 import SyncMessageAlert from './SyncMessageAlert';
 import SyncMessageDialog from './SyncMessageDialog';
 
@@ -60,12 +62,12 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     ?? formInput?.[FBDAMFields.DAM]
     ?? [],
   ) as FBApprovalMatrixItem[];
-  const showAlertDialog = localStorage.getItem(OUT_OF_SYNC_ALERT_DATA_KEY) as unknown as Dam;
+  const showAlertDialog = parseJSON(localStorage.getItem(OUT_OF_SYNC_ALERT_DATA_KEY) ?? '') as unknown as Dam;
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
   const dispatch = useDispatch();
   const isDraftOrPending = isDocumentRevisionInStatus([DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange], documentRevision.status);
-
+  const alertDialog = useDialog();
   const showAsyncMessage = dam?.documentRevision?.id === documentRevision?.id
     && documentRevision.status !== DocumentRevisionStatus.Canceled
     && !dam?.isSynced
@@ -205,6 +207,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       reloadComponent?.();
     } else {
       localStorage.setItem(OUT_OF_SYNC_ALERT_DATA_KEY, JSON.stringify(dam));
+      alertDialog.open();
     }
   };
 
@@ -215,14 +218,17 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   });
   const setDocumentRevision = useActionCreator(documentRevisionsActions.save);
 
-  if (showAlertDialog && !showAlertDialog?.isSynced && isOwner && !isDraftOrPending) {
-    return <SyncMessageAlert isOpen dialogContent={getSyncLabel()} />;
-  }
+  useEffect(() => {
+    if (showAlertDialog && !showAlertDialog?.isSynced && isOwner && !isDraftOrPending) {
+      alertDialog.open();
+    }
+  }, []);
 
   if (!showAsyncMessage) {
     return null;
   }
 
+  if (isSyncMessageOpen && isUndefined(showAlertDialog?.isSynced)) {
   return (
     <SyncMessageDialog
       isOpen={isSyncMessageOpen}
@@ -231,6 +237,9 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       dam={dam}
     />
   );
+  }
+
+  return <SyncMessageAlert alertDialog={alertDialog} dialogContent={getSyncLabel()} />;
 };
 
 export default SyncMessageDialogContainer;

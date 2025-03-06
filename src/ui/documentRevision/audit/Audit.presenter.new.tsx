@@ -89,6 +89,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     );
     supplierTypesAsync.start(
       fetchASLTypes,
+      false,
       supplierTypesAsync,
     );
   }, []);
@@ -426,11 +427,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
 
         if (['STRING_EDITED', 'STRING_DELETED', 'STRING_NEW'].includes(change.type)) {
-          console.log(change.field);
-          const fieldName = translate(`formInput.supplier-contacts[].${field}`);
-          fbLabel = translate('formInput.supplier-contacts.audit.item', {
-            field: fieldName,
-          });
+          fbLabel = translate(`formInput.supplier-contacts[].${field}`);
+        }
+
+        if (['isPrimary'].includes(field)) {
+          change = {
+            ...change,
+            updatedField: CUSTOM_BOOLEAN_FIELD,
+          };
         }
       }
 
@@ -554,7 +558,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
 
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
-        const isCustomBooleanField = change.field === CUSTOM_BOOLEAN_FIELD;
+        const isCustomBooleanField = [change.field, change.updatedField].includes(CUSTOM_BOOLEAN_FIELD);
+
+        if (isCustomBooleanField && fbType === 'supplierContacts') {
+          const field = change.field.split('.').pop() as string;
+          fbLabel = translate(`formInput.supplier-contacts[].${field}.${change.type}`);
+        }
 
         const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 

@@ -53,6 +53,7 @@ export interface Audit {
   relatedEntity?: DocumentRevision | Approval
   hasPoReceivedQtyFlag?: boolean
   crId?: string
+  updatedField?: string
 }
 
 export interface AuditActionPayload {
