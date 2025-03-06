@@ -89,7 +89,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   };
 
   const intl = useIntl();
-  const titlePlaceholder = intl.formatMessage({ id: 'form.builder.enter.title' });
+  const titlePlaceholder = placeholder ?? intl.formatMessage({ id: 'form.builder.enter.title' });
 
   return (
     <Field {...fieldProps} label={undefined} labelProps={labelProps}>

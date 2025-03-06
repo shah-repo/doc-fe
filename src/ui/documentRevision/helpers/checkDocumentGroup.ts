@@ -53,6 +53,7 @@ export const checkIsDocumentLHRT = checkDocumentGroupOptions.bind(this, DOC_TYPE
 export const checkIsDocumentWO = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.WORK_ORDER);
 export const checkIsDocumentOTHER = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.OTHER);
 export const checkIsDocumentES = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT_SPECIFICATION);
+export const checkIsDocumentSupplier = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.SUPPLIER);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);
