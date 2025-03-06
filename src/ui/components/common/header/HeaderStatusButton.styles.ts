@@ -14,6 +14,9 @@ export default makeStyles((theme: Theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    fontSize: 12,
+    fontWeight: 600,
+    color: Colors.textBlack,
   },
   buttonIcon: {
     height: 36,
