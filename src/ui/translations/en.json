@@ -1522,6 +1522,8 @@
   "form.builder.supplier.status.default.label": "Select status",
   "form.builder.header.supplier.status.label.active": "Active",
   "form.builder.header.supplier.status.label.inactive": "Inactive",
+  "form.builder.supplier.enter.title": "Click to Enter Supplier Name",
+  "form.builder.supplier.enter.description": "Click to Enter Supplier Contact Information",
   "form.builder.supplier.contacts.title": "Supplier Contacts",
   "form.builder.supplier.contacts.add": "Add Contact",
   "form.builder.supplier.contacts.grid.heading.name": "Name",
