@@ -1,4 +1,5 @@
 import { Chip } from '@material-ui/core';
+import { upperCase } from 'lodash';
 import React from 'react';
 import { STATUS_TYPES_LABEL } from '../../../state/ducks/dashboard.new/my.feeds/types';
 import { FormHeaderStatusClassMapping } from '../common/header/Helpers';
@@ -12,7 +13,7 @@ export default function StatusChip ({ status }: { status: string }) {
       className={`${classes.chip} ${
         classes[FormHeaderStatusClassMapping[status || '']]
       }`}
-      label={STATUS_TYPES_LABEL[status]}
+      label={STATUS_TYPES_LABEL[upperCase(status)]}
       data-cy="where-used-status"
     />
   );
