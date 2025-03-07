@@ -5,6 +5,7 @@ import { styles as useStyles } from '../styles/FBEditorCheckbox.styles';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { FBCheckboxGroupAsyncProps } from './FBCheckboxGroupAsync.types';
 import { withFBCheckboxGroupAsync } from './FBCheckboxGroupAsync.wrap';
+import OtherOptionField from './OtherOptionField';
 
 const FBCheckboxGroupAsync: React.FunctionComponent<
 FBCheckboxGroupAsyncProps
@@ -19,7 +20,7 @@ FBCheckboxGroupAsyncProps
     ),
   );
 
-  return (
+  return (<>
     <FBInput
       {...props}
       type="checkboxgroup"
@@ -27,6 +28,8 @@ FBCheckboxGroupAsyncProps
     >
       <FBCheckboxGroupChild {...props} {...{ row, controls }} />
     </FBInput>
+    <OtherOptionField name={props.name} />
+  </>
   );
 };
 
