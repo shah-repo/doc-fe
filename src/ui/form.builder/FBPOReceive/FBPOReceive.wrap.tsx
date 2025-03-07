@@ -63,7 +63,10 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       e.stopPropagation();
       if (item?.status && ![DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated].includes(item?.status)) {
         if (item?.status === DocumentRevisionStatus.Canceled) {
-          toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error.for.canceled.part' }));
+          const parts = item.partNumberDocId.split(' - ');
+          const partIdRev = `${parts[0]} rev ${parts[1]}`;
+
+          toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error.for.canceled.part' }, { partIdRev }));
         } else {
           toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error' }));
         }
