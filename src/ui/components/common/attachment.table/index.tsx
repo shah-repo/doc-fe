@@ -64,8 +64,8 @@ const AttachmentTable: React.FC<Props> = ({
     }
 
     const reorderedData = attachmentsData.slice();
-    const prevIndex = reorderedData.findIndex((p) => p === activeItem);
-    const nextIndex = reorderedData.findIndex((p) => p === item);
+    const prevIndex = reorderedData.findIndex((p) => p.id === activeItem?.id);
+    const nextIndex = reorderedData.findIndex((p) => p.id === item.id);
 
     if(isPrimary && nextIndex === 0) {
       return;
