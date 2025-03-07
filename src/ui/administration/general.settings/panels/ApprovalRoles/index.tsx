@@ -125,7 +125,6 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       >
         <FormikProvider value={formik}>
           <SettingsTable
-            isActive
             data={approvalRoleList}
             isEditing={editedApprovalRole !== undefined}
             schema={schema}
