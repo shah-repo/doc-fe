@@ -1,37 +1,34 @@
+import { Box } from '@material-ui/core';
+import { useObserver } from 'mobx-react';
 import React, { useMemo } from 'react';
 import { FB, FBTextField } from '..';
-import { SUPPLIER_TYPE_OTHER_FIELD_NAME } from './constant';
+import { FBCheckboxGroupAsyncProps } from './FBCheckboxGroupAsync.types';
 
 const OTHER_OPTION_VALUE = 'Other';
 
-interface OtherOptionFieldProps {
-  name?: string
-}
+const OtherOptionTextField: React.FC<FBCheckboxGroupAsyncProps> = ({ name = '', ...props }) => {
+  const { workspaceState } = FB.useStores();
+  const fieldName = `input-context-${name}`;
+  const selectedOptions = useObserver(() => workspaceState?.formInputSync?.get(name) ?? []);
 
-const OtherOptionField: React.FC<OtherOptionFieldProps> = ({ name = '' }) => {
-  const { formState, workspaceState } = FB.useStores();
+  const hasOtherOptionSelected = useMemo(
+    () => selectedOptions.some((item) => item.text === OTHER_OPTION_VALUE),
+    [selectedOptions],
+  );
 
-  const hasOtherOptionSelected = useMemo(() => {
-    const selectedOptions = workspaceState?.formInputSync?.get(name) ?? [];
-    const hasOther = selectedOptions?.some((item) => item.text === OTHER_OPTION_VALUE);
-    return hasOther;
-  }, [workspaceState?.checkboxGroupsOptionsMap, workspaceState?.formInputSync, name]);
-
-  console.log('hasOtherOptionSelected', hasOtherOptionSelected);
-  console.log('formState?.getFieldValue(name) :::', formState?.getFieldValue(name));
+  if (!hasOtherOptionSelected) return null;
 
   return (
-    <>
-      {hasOtherOptionSelected && (
-        <FBTextField
-          dataCy={SUPPLIER_TYPE_OTHER_FIELD_NAME}
-          label="form.builder.other"
-          name={SUPPLIER_TYPE_OTHER_FIELD_NAME}
-          placeholder="form.builder.other"
-        />
-      )}
-    </>
+    <Box mt={2}>
+      <FBTextField
+        {...props}
+        dataCy={fieldName}
+        label="form.builder.other"
+        name={fieldName}
+        placeholder="common.enter"
+      />
+    </Box>
   );
 };
 
-export default OtherOptionField;
+export default OtherOptionTextField;

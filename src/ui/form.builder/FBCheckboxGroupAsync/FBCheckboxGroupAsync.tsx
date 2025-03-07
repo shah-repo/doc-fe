@@ -28,7 +28,7 @@ FBCheckboxGroupAsyncProps
     >
       <FBCheckboxGroupChild {...props} {...{ row, controls }} />
     </FBInput>
-    <OtherOptionField name={props.name} />
+    <OtherOptionField {...props} />
   </>
   );
 };

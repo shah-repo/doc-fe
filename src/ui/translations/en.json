@@ -2428,6 +2428,7 @@
   "common.file.reUpload": "Re-upload File",
   "common.file.OrUploadFromFiles": "Upload zip file from computer",
   "common.template.reUpload": "Re-Upload Template",
+  "common.enter": "Enter",
   "common.selectOption": "Select an option",
   "common.allowed": "Allowed",
   "common.dataType": "Data Type",
