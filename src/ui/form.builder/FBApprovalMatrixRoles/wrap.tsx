@@ -15,7 +15,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     name,
     ...props
   }: T) => {
-    const { approvalMatrixFieldState } = FB.useStores();
+    const { approvalMatrixFieldState, workspaceState } = FB.useStores();
     const { asyncState } = React.useContext(FormHeaderContext) ?? {};
 
     const groups = useSelector(userManagementSelectors.getOfficialGroups).map((group) => ({
@@ -36,6 +36,16 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
       };
     });
 
+    const addRole = (role: FBApprovalRole) => {
+      const groups = role.groups.map(({ id }) => ({ id }));
+      approvalMatrixFieldState?.setMode(FBApprovalMatrixFieldModes.NONE);
+      approvalMatrixFieldState?.addApprovalRole({
+        ...role,
+        employees: [],
+        groups,
+      });
+    };
+
     const updateRole = (role: FBApprovalRole) => {
       const groups = role.groups.map(({ id }) => ({ id }));
       const updatedRoles = existingRoles.map((targetRole) => ({
@@ -46,15 +56,18 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
       approvalMatrixFieldState?.setApprovalRoles(updatedRoles);
     };
 
-    const disabled = asyncState?.status === AsyncStatus.Active;
+    const isLoading = useObserver(
+      () => asyncState?.status === AsyncStatus.Active || (workspaceState?.documentRevApi.loading ?? false),
+    );
 
     return Component({
       ...(props as T),
       name,
       groups,
       approvalRoles,
+      addRole,
       updateRole,
-      disabled,
+      isLoading,
     });
   };
 
