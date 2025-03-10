@@ -40,7 +40,7 @@ const DragCell: React.FC<Props> = (props) => {
         }}
         onDragStart={(e) => {
           context.dragStart(props.dataItem);
-          e.dataTransfer.setData('dragging', '');
+          e.dataTransfer.setData('dragging', props.dataItem.id);
         }}
       >
         <FontAwesomeIcon icon={regular('grip-dots-vertical')} className={classes.dragIcon} />
