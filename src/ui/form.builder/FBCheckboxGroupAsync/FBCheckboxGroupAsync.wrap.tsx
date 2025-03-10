@@ -8,6 +8,7 @@ import { documentRevisionsActions } from '../../../state/ducks/documentRevisions
 import { OptionType } from '../../administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
+import { checkIsDocumentForm } from '../../documentRevision/helpers/checkDocumentGroup';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
@@ -33,6 +34,7 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     const { formState, workspaceState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
+    const isDocumentForm = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions);
 
     options = useObserver(() => {
       const rawOptions = workspaceState?.checkboxGroupsOptionsMap.get(name) ?? [] as CheckBoxOptionType[];
@@ -83,16 +85,19 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
       workspaceState?.saveDocRev(formState?.getValues());
     };
 
+    console.log('isDocumentForm', isDocumentForm);
+
     useEffect(() => {
       const isSupplierType = name === SUPPLIER_TYPE_NAME;
-      if (!isSupplierType && !selectedTypes.length) {
+      if (!isSupplierType && !selectedTypes.length && !isDocumentForm) {
         workspaceState?.setCheckboxGroupsOptionsMap(name, []);
         return;
       }
       async.start(
         fetchSupplierConfigOptions,
         props.optionId,
-        isSupplierType ? [] : selectedTypes?.map((item) => item.id) || [],
+        isSupplierType || isDocumentForm ? [] : selectedTypes?.map((item) => item.id) || [],
+        isDocumentForm,
         async,
       );
     }, [selectedTypes]);
