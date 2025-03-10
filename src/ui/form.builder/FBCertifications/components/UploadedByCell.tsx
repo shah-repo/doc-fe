@@ -26,6 +26,10 @@ export const UploadedByCell: React.FC<CustomTemplateProps> = ({
   );
 
   if (isViewMode) {
+    if (!selectedUserInfo) {
+      return null;
+    }
+
     const { name, avatar, initialColor } = selectedUserInfo;
     return (
       <Box onClick={() => onClick?.({ dataItem })}>
