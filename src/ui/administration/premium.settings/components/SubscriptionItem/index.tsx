@@ -31,6 +31,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
         },
       }}
       checked={subscription.isEnabled}
+      className={classes.toggler}
       label={
         <>
           <div>

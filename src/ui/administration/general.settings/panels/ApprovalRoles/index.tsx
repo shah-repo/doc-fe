@@ -125,7 +125,6 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       >
         <FormikProvider value={formik}>
           <SettingsTable
-            isActive
             data={approvalRoleList}
             isEditing={editedApprovalRole !== undefined}
             schema={schema}
@@ -137,7 +136,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       {isOpen && (
         <SyncMessageDialog
           {...{ isOpen, dam }}
-          closeDialog={() => setIsOpen(false)}
+          onConfirm={() => setIsOpen(false)}
         />
       )}
     </>
