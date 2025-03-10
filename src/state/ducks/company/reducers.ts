@@ -236,7 +236,11 @@ const generalSettings = (
       return {
         ...state,
         ...action.payload,
-        approvalRoles: GENERAL_SETTINGS_DEFAULT_STATE.approvalRoles,
+        // @todo Temp rewrite approval rolse
+        approvalRoles: {
+          ...action.payload.approvalRoles,
+          isSynced: true,
+        },
       };
     default:
       return state;

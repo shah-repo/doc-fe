@@ -16,6 +16,9 @@ import SyncMessageDialog from './components/SyncMessageDialog';
 import { buildSchema } from './schema';
 import { EditableApprovalRole } from './types';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
   const approvalRoles = getFieldProps('approvalRoles.approvalRoles').value as ApprovalRole[];
@@ -143,4 +146,4 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   );
 };
 
-export default ApprovalRolesSettingsPanel;
+// export default ApprovalRolesSettingsPanel;
