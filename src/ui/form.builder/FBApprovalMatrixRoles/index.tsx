@@ -19,6 +19,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   approvalRoles = [],
   groups,
   disabled,
+  isLoading,
   addRole,
   updateRole,
 }) => {
@@ -102,6 +103,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
 
   const schema = createSchema({
     groups,
+    isLoading,
     actionsClass: classes.actionsCell,
     saveRole,
     discardRole,
@@ -141,7 +143,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
           fullWidth
           kind="add"
           data-cy="form-builder-add-another-role"
-          disabled={editedRole !== undefined}
+          disabled={editedRole !== undefined || isLoading}
           onClick={addNewRole}
         >
           <Text message="form.builder.add.another.role" />

@@ -27,4 +27,5 @@ export type FBApprovalMatrixRolesProps =
   approvalRoles?: ApprovalRole[]
   addRole?: (role: ApprovalRole) => void
   updateRole?: (role: ApprovalRole) => void
+  isLoading?: boolean
 };
