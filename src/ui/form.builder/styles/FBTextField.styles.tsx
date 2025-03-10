@@ -31,5 +31,4 @@ export const FBTextFieldStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1.5),
       marginTop: theme.spacing(1.5),
     },
-
   }));
