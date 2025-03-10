@@ -236,6 +236,7 @@ const generalSettings = (
       return {
         ...state,
         ...action.payload,
+        approvalRoles: GENERAL_SETTINGS_DEFAULT_STATE.approvalRoles,
       };
     default:
       return state;

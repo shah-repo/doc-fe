@@ -30,6 +30,11 @@ export default makeStyles(theme => ({
       padding: `${theme.spacing(0.5, 1.5)} !important`,
     },
   },
+  gridWithButton: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottom: 'none',
+  },
   actionsCell: {
     width: 0,
     overflow: 'visible !important',

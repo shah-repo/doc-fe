@@ -25,5 +25,6 @@ export type FBApprovalMatrixRolesProps =
 & {
   groups?: RoleGroup[]
   approvalRoles?: ApprovalRole[]
+  addRole?: (role: ApprovalRole) => void
   updateRole?: (role: ApprovalRole) => void
 };
