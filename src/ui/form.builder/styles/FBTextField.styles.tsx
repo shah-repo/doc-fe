@@ -1,7 +1,7 @@
-import { createStyles, makeStyles } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import Colors from '../../layout/theme/utils/colors';
 
-export const FBTextFieldStyles = makeStyles(() =>
+export const FBTextFieldStyles = makeStyles((theme: Theme) =>
   createStyles({
     textfield: (params?) => ({
       borderRadius: 3,
@@ -27,4 +27,9 @@ export const FBTextFieldStyles = makeStyles(() =>
         fontSize: 11,
       },
     },
+    preview: {
+      marginLeft: theme.spacing(1.5),
+      marginTop: theme.spacing(1.5),
+    },
+
   }));
