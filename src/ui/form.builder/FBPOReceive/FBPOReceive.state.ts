@@ -1,5 +1,5 @@
 import { Dictionary, template } from 'lodash';
-import { action, computed, observable, set } from 'mobx';
+import { action, computed } from 'mobx';
 import { useIntl } from 'react-intl';
 import { FBPurchaseOrderItem, FBSchemaProps, ReceiveQuantityBody } from '..';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -11,7 +11,6 @@ import { FBEditorElementType } from '../types/editor';
 class FBPOReceiveState extends FBRequest<DocumentRevision, any> {
   public receivedItems: FBRequest<any, Dictionary<number>> = new FBRequest();
   public receiveQuantityAPI = new FBRequest<null, ReceiveQuantityBody>(FBEndpoint.PatchDocumentRevision);
-  @observable public poId?: string;
 
   public constructor (id: string) {
     super();
@@ -55,16 +54,11 @@ class FBPOReceiveState extends FBRequest<DocumentRevision, any> {
     if (!id) {
       return;
     }
-    this.updatePOId(id);
     this.data = undefined;
     const urlTpl = template(FBEndpoint.FetchDocumentRevision);
     const url = urlTpl({ documentId: id });
     this.setUrl(url);
     await this.fetch();
-  };
-
-  @action public updatePOId = (id?: string) => {
-    set(this, 'poId', id);
   };
 
   public addReceiveQuantity = async (docRevId?: string, body?: ReceiveQuantityBody) => {
