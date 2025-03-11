@@ -86,22 +86,22 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
     if (log.type === LogEntryType.STRING_EDITED) {
       if (log.documentRevisionId && previousValue === DocumentRevisionStatus.Draft && nextValue === DocumentRevisionStatus.InReview) {
         // When is document revision and used to be draft and now is on review (Submitted for approval)
-        secondaryText = translate('bk.audit-log.submitted.for.approval');
-        stepChange = translate('bk.audit-log.step-5-approvals');
+        secondaryText = translate('bk.audit.log.submitted.for.approval');
+        stepChange = translate('bk.audit.log.step.5.approvals');
       } else if (log.documentRevisionId && previousValue === DocumentRevisionStatus.InReview && nextValue === DocumentRevisionStatus.Released) {
         // When is document revision and used to be in review and now is on released (Approved)
-        secondaryText = translate('bk.audit-log.approved');
-        stepChange = translate('bk.audit-log.step-5-approvals');
+        secondaryText = translate('bk.audit.log.approved');
+        stepChange = translate('bk.audit.log.step.5.approvals');
       } else if (log.approvalId && previousValue === ApprovalStatus.Pending && (nextValue === ApprovalStatus.Approved || nextValue === ApprovalStatus.Rejected)) {
         // when is a approval and it would be approved or rejected
         const getApprover = currentBulkImport?.documentRevision?.approvals?.find((approval) => approval.id === log.approvalId);
         if (getApprover) {
           const approverDetails = getUserDetails(getApprover?.approverId as string);
           secondaryText = translate(
-            nextValue === ApprovalStatus.Approved ? 'bk.audit-log.approved.by' : 'bk.audit-log.rejected.by',
+            nextValue === ApprovalStatus.Approved ? 'bk.audit.log.approved.by' : 'bk.audit.log.rejected.by',
             { approverName: approverDetails?.user?.name },
           );
-          stepChange = translate('bk.audit-log.step-5-approvals');
+          stepChange = translate('bk.audit.log.step.5.approvals');
         } else {
           skip = true;
         }
@@ -110,8 +110,8 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
       } else {
         // When bulk import change the status
         const nextStatus = bkStatusTextMap[nextValue as BkStatus] || nextValue;
-        secondaryText = translate('bk.audit-log.importing.status', { status: nextStatus });
-        stepChange = translate('bk.audit-log.step-6-importing');
+        secondaryText = translate('bk.audit.log.importing.status', { status: nextStatus });
+        stepChange = translate('bk.audit.log.step.6.importing');
       }
     } else if (log.type === LogEntryType.STRING_NEW && previousValue === 'undefined') {
       skip = true;
@@ -123,49 +123,49 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
   const getDescription = (log: MergedLog, currentBulkImport: BulkImport): Array<{ primaryText: string, secondaryText: string }> | null => {
     const previousValue: string = log.previousValue as string;
     const nextValue: string = log.nextValue as string;
-    let secondaryText = translate('bk.audit-log.changed.from.to', { previousValue, nextValue });
+    let secondaryText = translate('bk.audit.log.changed.from.to', { previousValue, nextValue });
     let stepChange = '';
     let skip = false;
 
     switch (log.fieldPath) {
       case BulkImportLogsEntries.PROCESS_TYPE:
-        secondaryText = translate('bk.audit-log.process.type.select', { nextValue });
-        stepChange = translate('bk.audit-log.step-1-import-details');
+        secondaryText = translate('bk.audit.log.process.type.select', { nextValue });
+        stepChange = translate('bk.audit.log.step.1.import.details');
         skip = true;
         break;
       case BulkImportLogsEntries.JOB_ID:
-        secondaryText = translate('bk.audit-log.job.new.import.started', { processType: currentBulkImport.processType });
-        stepChange = translate('bk.audit-log.step-1-import-details');
+        secondaryText = translate('bk.audit.log.job.new.import.started', { processType: currentBulkImport.processType });
+        stepChange = translate('bk.audit.log.step.1.import.details');
         break;
       case BulkImportLogsEntries.XLSX:
         if (log.type === LogEntryType.ARRAY_NEW) {
           const xlsxData = JSON.parse(nextValue);
           const matchedExcelFile = currentBulkImport.excelFile && currentBulkImport.excelFile.id === xlsxData.fileId;
           secondaryText = matchedExcelFile && currentBulkImport.excelFile
-            ? translate('bk.audit-log.file.uploaded', { fileName: currentBulkImport.excelFile.name, fileType: currentBulkImport.excelFile.type })
-            : translate('bk.audit-log.file.uploaded.id', { fileId: xlsxData.fileId });
-          stepChange = translate('bk.audit-log.step-2-upload-data');
+            ? translate('bk.audit.log.file.uploaded', { fileName: currentBulkImport.excelFile.name, fileType: currentBulkImport.excelFile.type })
+            : translate('bk.audit.log.file.uploaded.id', { fileId: xlsxData.fileId });
+          stepChange = translate('bk.audit.log.step.2.upload.data');
         }
         break;
       case BulkImportLogsEntries.ORIGINAL_HEADERS:
         if (log?.type === LogEntryType.OBJECT_EDITED) {
-          secondaryText = translate('bk.audit-log.select.headers');
-          stepChange = translate('bk.audit-log.step-3-map-columns');
+          secondaryText = translate('bk.audit.log.select.headers');
+          stepChange = translate('bk.audit.log.step.3.map.columns');
         }
         break;
       case BulkImportLogsEntries.DATA_ID:
         if (log.type === LogEntryType.STRING_EDITED) {
-          secondaryText = translate('bk.audit-log.edit.table.data');
-          stepChange = translate('bk.audit-log.step-3-edit-table-data');
+          secondaryText = translate('bk.audit.log.edit.table.data');
+          stepChange = translate('bk.audit.log.step.3.edit.table.data');
         }
         break;
       case BulkImportLogsEntries.ATTACHMENT_ID:
         if (log.type === LogEntryType.STRING_EDITED) {
           const matchedZipFile = currentBulkImport.zipFile && currentBulkImport.zipFile.id === nextValue;
           secondaryText = matchedZipFile && currentBulkImport.zipFile
-            ? translate('bk.audit-log.attachment.uploaded', { fileName: currentBulkImport.zipFile.name, fileType: currentBulkImport.zipFile.type })
-            : translate('bk.audit-log.attachment.uploaded.id', { fileId: nextValue });
-          stepChange = translate('bk.audit-log.step-4-upload-attachment');
+            ? translate('bk.audit.log.attachment.uploaded', { fileName: currentBulkImport.zipFile.name, fileType: currentBulkImport.zipFile.type })
+            : translate('bk.audit.log.attachment.uploaded.id', { fileId: nextValue });
+          stepChange = translate('bk.audit.log.step.4.upload.attachment');
         }
         break;
       case BulkImportLogsEntries.STATUS: {
@@ -185,9 +185,9 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         if (log.type === LogEntryType.STRING_NEW) {
           const approverDetails = getUserDetails(nextValue);
           secondaryText = approverDetails
-            ? translate('bk.audit-log.approver.assigned', { approverName: approverDetails?.user?.name })
-            : translate('bk.audit-log.approver.assigned.id', { approverId: nextValue });
-          stepChange = translate('bk.audit-log.step-5-approvals');
+            ? translate('bk.audit.log.approver.assigned', { approverName: approverDetails?.user?.name })
+            : translate('bk.audit.log.approver.assigned.id', { approverId: nextValue });
+          stepChange = translate('bk.audit.log.step.5.approvals');
         }
         break;
     }
@@ -197,8 +197,8 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
     }
 
     return [
-      { primaryText: translate('bk.audit-log.type-title'), secondaryText: stepChange },
-      { primaryText: translate('bk.audit-log.update-title'), secondaryText },
+      { primaryText: translate('bk.audit.log.type.title'), secondaryText: stepChange },
+      { primaryText: translate('bk.audit.log.update.title'), secondaryText },
     ];
   };
 
