@@ -1,7 +1,7 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@material-ui/core';
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { isTranslationExists, translate } from '../../../../../common/intl';
 import useHover from '../../../../hooks/useHover';
 import SwitchControl from '../../../general.settings/components/SwitchControl';
@@ -29,7 +29,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
         classes: {
           label: classes.togglerLabel,
         },
-        onClick: (e) => e.preventDefault(),
+        onClick: (e: MouseEvent<HTMLLabelElement>) => e.preventDefault(),
       }}
       checked={subscription.isEnabled}
       className={classes.toggler}
