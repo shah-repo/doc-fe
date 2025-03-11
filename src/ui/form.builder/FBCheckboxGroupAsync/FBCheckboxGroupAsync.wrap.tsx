@@ -29,6 +29,7 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     name = '',
     isInputOwner,
     options,
+    setSelectedCheckBoxOptions,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
@@ -80,8 +81,9 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
       const updatedValues = checked
         ? union(selectedValues, [{ id: value, text: optionText }])
         : selectedValues.filter((item) => item.id !== value);
-
-      formState?.setFieldValue(name, uniqBy(updatedValues, 'id'));
+      const uniqValues = uniqBy(updatedValues, 'id');
+      formState?.setFieldValue(name, uniqValues);
+      setSelectedCheckBoxOptions?.(uniqValues);
       workspaceState?.saveDocRev(formState?.getValues());
     };
 
