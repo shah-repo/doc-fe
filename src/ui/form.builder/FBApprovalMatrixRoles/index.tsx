@@ -26,15 +26,19 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   const classes = useStyles();
   const [editedRole, setEditedRole] = React.useState<EditableRole>();
 
-  const addNewRole = () => setEditedRole({
-    id: '',
-    name: '',
-    index: approvalRoles.length + 1,
-    groups: [],
-    employees: [],
-    [MODE_FIELD]: Mode.add,
-    [SEARCHABLE_GROUPS_FIELD]: '',
-  });
+  const addNewRole = () => {
+    const maxIndex = Math.max(0, ...approvalRoles.map(r => r.index));
+
+    return setEditedRole({
+      id: '',
+      name: '',
+      index: maxIndex + 1,
+      groups: [],
+      employees: [],
+      [MODE_FIELD]: Mode.add,
+      [SEARCHABLE_GROUPS_FIELD]: '',
+    });
+  };
 
   const editRole = ({ dataItem }: RoleEditEvent) => setEditedRole(dataItem);
 
