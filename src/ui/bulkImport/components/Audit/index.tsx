@@ -105,13 +105,14 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         } else {
           skip = true;
         }
-      } else if (previousValue === ApprovalStatus.Draft && nextValue === ApprovalStatus.Pending && !log.bulkImportId && !log.documentRevisionId) {
+      } else if ((log.nextValue === DocumentRevisionStatus.Draft) || (log.approvalId && log.nextValue === ApprovalStatus.Abandoned) || (previousValue === ApprovalStatus.Draft && nextValue === ApprovalStatus.Pending && log.approvalId)) {
         skip = true;
       } else {
         // When bulk import change the status
         const nextStatus = bkStatusTextMap[nextValue as BkStatus] || nextValue;
-        secondaryText = translate('bk.audit.log.importing.status', { status: nextStatus });
-        stepChange = translate('bk.audit.log.step.6.importing');
+        secondaryText = nextStatus === BkStatus.STARTED || nextStatus === BkStatus.IN_PROGRESS
+          ? translate('bk.audit.log.importing.status', { status: nextStatus }) : translate('bk.audit.log.import.status', { status: nextStatus });
+        stepChange = translate('bk.audit.log.step-6-importing');
       }
     } else if (log.type === LogEntryType.STRING_NEW && previousValue === 'undefined') {
       skip = true;
@@ -165,6 +166,12 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
           secondaryText = matchedZipFile && currentBulkImport.zipFile
             ? translate('bk.audit.log.attachment.uploaded', { fileName: currentBulkImport.zipFile.name, fileType: currentBulkImport.zipFile.type })
             : translate('bk.audit.log.attachment.uploaded.id', { fileId: nextValue });
+          stepChange = translate('bk.audit.log.step.4.upload.attachment');
+        }
+        break;
+      case BulkImportLogsEntries.ATTACHMENT_LINK:
+        if (log.type === LogEntryType.STRING_EDITED) {
+          secondaryText = translate('bk.audit.log.attachment.uploaded.link', { link: nextValue });
           stepChange = translate('bk.audit.log.step.4.upload.attachment');
         }
         break;
