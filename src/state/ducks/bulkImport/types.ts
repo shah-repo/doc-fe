@@ -482,3 +482,9 @@ export enum BkIconStatus {
   blank = 'blank',
   skip = 'skip',
 }
+
+export interface BulkImportsMapData {
+  bulkImportIds: Record<string, BulkImport>
+  documentRevisionIds: Record<string, BulkImport>
+  approvalIds: Record<string, BulkImport>
+}

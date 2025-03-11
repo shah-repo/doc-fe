@@ -1,6 +1,6 @@
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
-import { ApproverOption, BkStatus, BulkImport, BulkImportCustom, TableRow, TableRowWithIdx } from './types';
+import { ApproverOption, BkStatus, BulkImport, BulkImportCustom, BulkImportsMapData, TableRow, TableRowWithIdx } from './types';
 import { getBulkImportCustomData } from './utils';
 
 // STEPS
@@ -47,7 +47,7 @@ export const getApproversSelectList = (state: ApplicationState): ApproverOption[
 export const getBulkImports = (state: ApplicationState) => state.bulkImport.main.bulkImports;
 // We are going to create a map with the id of the BK and the jobId as they are never be similar Ex: JobId: DOCUMENT-001, BK id would be a uuid
 // We need this map to avoid multiple loops on the audit logs because we have the jobId or bulkImportId
-export const getBulkImportsMap = (state: ApplicationState) => {
+export const getBulkImportsMap = (state: ApplicationState): BulkImportsMapData => {
   const bulkImportIds: Record<string, BulkImport> = {};
   const documentRevisionIds: Record<string, BulkImport> = {};
   const approvalIds: Record<string, BulkImport> = {};
