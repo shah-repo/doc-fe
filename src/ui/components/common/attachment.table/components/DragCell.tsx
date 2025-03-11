@@ -29,15 +29,15 @@ const DragCell: React.FC<Props> = (props) => {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
       }}
+      onDrop={(e) => {
+        context.onDrop();
+        e.preventDefault();
+        e.dataTransfer.getData('dragging');
+      }}
     >
       <span
         className={classes.dragElement}
         draggable
-        onDrop={(e) => {
-          context.onDrop();
-          e.preventDefault();
-          e.dataTransfer.getData('dragging');
-        }}
         onDragStart={(e) => {
           context.dragStart(props.dataItem);
           e.dataTransfer.setData('dragging', props.dataItem.id);
