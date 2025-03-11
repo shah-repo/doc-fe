@@ -7,6 +7,7 @@ import qs from 'query-string';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { translate } from '../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import apiClient from '../../../../state/apiClient';
 import { bkStatusTextMap, BULK_IMPORT_AUDIT_URL } from '../../../../state/ducks/bulkImport/constants';
@@ -69,76 +70,77 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
   }, []);
 
   const getDescription = (log: MergedLog, currentBulkImport: BulkImport): Array<{ primaryText: string, secondaryText: string }> | null => {
-    let secondaryText = `Changed from ${log.previousValue} to ${log.nextValue}`; // Default secondary text
+    let secondaryText = translate('bk-audit-log.changed.from.to', { previousValue: log.previousValue as string, nextValue: log.nextValue as string });
     let stepChange = '';
-    // We need to skip some values if they come from BE
     let skip = false;
 
     switch (log.fieldPath) {
       case BulkImportLogsEntries.PROCESS_TYPE:
-        secondaryText = `Select process type: ${log.nextValue}`;
-        stepChange = 'Step 1 Import Details';
+        secondaryText = translate('bk-audit-log.process.type.select', { nextValue: log.nextValue as string });
+        stepChange = translate('bk-audit-log.step-1-import-details');
         skip = true;
         break;
       case BulkImportLogsEntries.JOB_ID:
-        secondaryText = `New "${currentBulkImport.processType}" import started`;
-        stepChange = 'Step 1: Import details';
+        secondaryText = translate('bk-audit-log.job.new.import.started', { processType: currentBulkImport.processType });
+        stepChange = translate('bk-audit-log.step-1-import-details');
         break;
       case BulkImportLogsEntries.XLSX:
         if (log.type === LogEntryType.ARRAY_NEW) {
           const xlsxData = JSON.parse(log?.nextValue as string);
           const matchedExcelFile = currentBulkImport.excelFile && currentBulkImport.excelFile.id === xlsxData.fileId;
           secondaryText = matchedExcelFile && currentBulkImport.excelFile
-            ? `File uploaded: ${currentBulkImport.excelFile.name}.${currentBulkImport.excelFile.type}`
-            : `File uploaded with id: ${xlsxData.fileId}`;
-          stepChange = 'Step 2: Upload Data';
+            ? translate('bk-audit-log.file.uploaded', { fileName: currentBulkImport.excelFile.name, fileType: currentBulkImport.excelFile.type })
+            : translate('bk-audit-log.file.uploaded.id', { fileId: xlsxData.fileId });
+          stepChange = translate('bk-audit-log.step-2-upload-data');
         }
         break;
       case BulkImportLogsEntries.ORIGINAL_HEADERS:
         if (log?.type === LogEntryType.OBJECT_EDITED) {
-          secondaryText = 'Select the headers';
-          stepChange = 'Step 3 Map Columns';
+          secondaryText = translate('bk-audit-log.select.headers');
+          stepChange = translate('bk-audit-log.step-3-map-columns');
         }
         break;
       case BulkImportLogsEntries.DATA_ID:
         if (log.type === LogEntryType.STRING_EDITED) {
-          secondaryText = 'Edit table data';
-          stepChange = 'Step 3 Edit table data';
+          secondaryText = translate('bk-audit-log.edit.table.data');
+          stepChange = translate('bk-audit-log.step-3-edit-table-data');
         }
         break;
       case BulkImportLogsEntries.ATTACHMENT_ID:
         if (log.type === LogEntryType.STRING_EDITED) {
           const matchedZipFile = currentBulkImport.zipFile && currentBulkImport.zipFile.id === log.nextValue;
           secondaryText = matchedZipFile && currentBulkImport.zipFile
-            ? `File uploaded: ${currentBulkImport.zipFile.name}.${currentBulkImport.zipFile.type}`
-            : `File uploaded id: ${log.nextValue}`;
-          stepChange = 'Step 4: Upload Attachment';
+            ? translate('bk-audit-log.attachment.uploaded', { fileName: currentBulkImport.zipFile.name, fileType: currentBulkImport.zipFile.type })
+            : translate('bk-audit-log.attachment.uploaded.id', { fileId: log.nextValue as string });
+          stepChange = translate('bk-audit-log.step-4-upload-attachment');
         }
         break;
       case BulkImportLogsEntries.STATUS:
         if (log.type === LogEntryType.STRING_EDITED) {
           if (log.documentRevisionId && log.previousValue === DocumentRevisionStatus.Draft && log.nextValue === DocumentRevisionStatus.InReview) {
-            secondaryText = 'Submitted for approval';
-            stepChange = 'Step 5: Approvals';
+            secondaryText = translate('bk-audit-log.submitted.for.approval');
+            stepChange = translate('bk-audit-log.step-5-approvals');
           } else if (log.documentRevisionId && log.previousValue === DocumentRevisionStatus.InReview && log.nextValue === DocumentRevisionStatus.Released) {
-            secondaryText = 'Approved';
-            stepChange = 'Step 5: Approvals';
+            secondaryText = translate('bk-audit-log.approved');
+            stepChange = translate('bk-audit-log.step-5-approvals');
           } else if (log.approvalId && log.previousValue === ApprovalStatus.Pending && (log.nextValue === ApprovalStatus.Approved || log.nextValue === ApprovalStatus.Rejected)) {
             const getApprover = currentBulkImport?.documentRevision?.approvals?.find((approval) => approval.id === log.approvalId);
             if (getApprover) {
               const approverDetails = getUserDetails(getApprover?.approverId as string);
-              secondaryText = `${log.nextValue === ApprovalStatus.Approved ? 'Approved' : 'Rejected'} by ${approverDetails?.user?.name}`;
-              stepChange = 'Step 5: Approvals';
+              secondaryText = translate(
+                log.nextValue === ApprovalStatus.Approved ? 'bk-audit-log.approved.by' : 'bk-audit-log.rejected.by',
+                { approverName: approverDetails?.user?.name },
+              );
+              stepChange = translate('bk-audit-log.step-5-approvals');
             } else {
               skip = true;
             }
           } else if (log.previousValue === ApprovalStatus.Draft && log.nextValue === ApprovalStatus.Pending && !log.bulkImportId && !log.documentRevisionId) {
             skip = true;
           } else {
-            // const previousStatus = bkStatusTextMap[log.previousValue as BkStatus] || log.previousValue;
             const nextStatus = bkStatusTextMap[log.nextValue as BkStatus] || log.nextValue;
-            secondaryText = `Importing ${nextStatus}`;
-            stepChange = 'Step 6: Importing';
+            secondaryText = translate('bk-audit-log.importing.status', { status: nextStatus as string });
+            stepChange = translate('bk-audit-log.step-6-importing');
           }
         } else if (log.type === LogEntryType.STRING_NEW && log.previousValue === 'undefined') {
           skip = true;
@@ -148,9 +150,9 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         if (log.type === LogEntryType.STRING_NEW) {
           const approverDetails = getUserDetails(log.nextValue as string);
           secondaryText = approverDetails
-            ? `Approver assigned: ${approverDetails?.user?.name}`
-            : `Approver assigned id: ${log.nextValue}`;
-          stepChange = 'Step 5: Approvals';
+            ? translate('bk-audit-log.approver.assigned', { approverName: approverDetails?.user?.name })
+            : translate('bk-audit-log.approver.assigned.id', { approverId: log.nextValue as string });
+          stepChange = translate('bk-audit-log.step-5-approvals');
         }
         break;
     }
@@ -160,8 +162,8 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
     }
 
     return [
-      { primaryText: 'Type: ', secondaryText: stepChange },
-      { primaryText: 'Update: ', secondaryText },
+      { primaryText: translate('bk-audit-log.type-title'), secondaryText: stepChange },
+      { primaryText: translate('bk-audit-log.update-title'), secondaryText },
     ];
   };
 
