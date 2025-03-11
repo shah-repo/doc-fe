@@ -351,6 +351,24 @@ export enum BkStatus {
   DELETED = 'DELETED',
 }
 
+export enum BulkImportLogsEntries {
+  PROCESS_TYPE = 'processType',
+  JOB_ID = 'jobId',
+  XLSX = 'xlsx',
+  ORIGINAL_HEADERS = 'originalHeaders',
+  DATA_ID = 'dataId',
+  ATTACHMENT_ID = 'attachmentId',
+  STATUS = 'status',
+  APPROVER = 'approver',
+}
+
+export enum LogEntryType {
+  ARRAY_NEW = 'ARRAY_NEW',
+  OBJECT_EDITED = 'OBJECT_EDITED',
+  STRING_EDITED = 'STRING_EDITED',
+  STRING_NEW = 'STRING_NEW',
+}
+
 interface Process {
   name: string
   step: number
@@ -463,4 +481,10 @@ export enum BkIconStatus {
   warning = 'warning',
   blank = 'blank',
   skip = 'skip',
+}
+
+export interface BulkImportsMapData {
+  bulkImportIds: Record<string, BulkImport>
+  documentRevisionIds: Record<string, BulkImport>
+  approvalIds: Record<string, BulkImport>
 }
