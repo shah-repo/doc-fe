@@ -29,7 +29,7 @@ const DragCell: React.FC<Props> = (props) => {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
       }}
-      onDrop={(e) => {
+      onDrop={(e: React.DragEvent<HTMLTableCellElement>) => {
         context.onDrop();
         e.preventDefault();
         e.dataTransfer.getData('dragging');
