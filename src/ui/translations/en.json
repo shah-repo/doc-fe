@@ -2392,7 +2392,7 @@
   "bk.audit.log.approved.by": "Approved by {approverName}",
   "bk.audit.log.rejected.by": "Rejected by {approverName}",
   "bk.audit.log.importing.status": "Importing {status}",
-  "bk.audit.log.import.status": "Importing {status}",
+  "bk.audit.log.import.status": "Import {status}",
   "bk.audit.log.approver.assigned": "Approver assigned: {approverName}",
   "bk.audit.log.approver.assigned.id": "Approver assigned id: {approverId}",
   "bk.audit.log.changed.from.to": "Changed from {previousValue} to {nextValue}",

@@ -116,6 +116,10 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
           ? translate('bk.audit.log.importing.status', { status: nextStatus }) : translate('bk.audit.log.import.status', { status: nextStatus });
         stepChange = translate('bk.audit.log.step-6-importing');
       }
+    } else if (log.bulkImportId && isStringNewType && nextValue === BkStatus.COMPLETED) {
+      // When bulk import change the status to COMPLETE
+      secondaryText = translate('bk.audit.log.import.status', { status: BkStatus.COMPLETED });
+      stepChange = translate('bk.audit.log.step-6-importing');
     } else if (isStringNewType && previousValue === 'undefined') {
       skip = true;
     }
