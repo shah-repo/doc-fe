@@ -52,12 +52,6 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const { addToDam = [], removeFromDam = [] } = generalSettings?.approvalRoles ?? {};
   const dam = generalSettings?.approvalRoles?.dam;
   const damIsSynced = dam?.isSynced ?? true;
-  let updatedDAR = cloneDeep(formInput?.[FBDAMFields.DAR] ?? []) as FBApprovalRole[];
-  const updatedDAM = cloneDeep(
-    formInput?.[FBDAMFields.DAM]?.approvalMatrix
-    ?? formInput?.[FBDAMFields.DAM]
-    ?? [],
-  ) as FBApprovalMatrixItem[];
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isOwner = documentRevision.owner.user.id === currentUserId;
   const dispatch = useDispatch();
@@ -165,52 +159,60 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     }
   };
 
-  if (!isEmptyArray(addToDam)) {
-    let lastIndex = Math.max(...updatedDAR.map(item => item.index));
-    if (lastIndex === Number.NEGATIVE_INFINITY || !lastIndex) {
-      lastIndex = 0;
-    }
-
-    addToDam?.forEach((item, index) => {
-      const newDarValue: FBApprovalRole = {
-        id: item.id,
-        name: item.name,
-        index: lastIndex + index + 1,
-        groups: [],
-        employees: [],
-      };
-      updatedDAR.push(newDarValue);
-    });
-    updatedDAM.forEach((item: FBApprovalMatrixItem) => {
-      for (let index = 0; index < addToDam?.length; index++) {
-        item.approvalRoles.admStage.push(false);
-        item.approvalRoles.stage1.push(false);
-        item.approvalRoles.stage2.push(false);
-        item.approvalRoles.stage3.push(false);
-      }
-    });
-  }
-
-  if (!isEmptyArray(removeFromDam)) {
-    const removingARIndexes = removeFromDam.map(ar => updatedDAR.findIndex(dar => dar.id === ar.id));
-    updatedDAM.forEach((item: FBApprovalMatrixItem) => {
-      item.approvalRoles.admStage = removeItemsAtIndices(item.approvalRoles.admStage, removingARIndexes);
-      item.approvalRoles.stage1 = removeItemsAtIndices(item.approvalRoles.stage1, removingARIndexes);
-      item.approvalRoles.stage2 = removeItemsAtIndices(item.approvalRoles.stage2, removingARIndexes);
-      item.approvalRoles.stage3 = removeItemsAtIndices(item.approvalRoles.stage3, removingARIndexes);
-    });
-    updatedDAR = updatedDAR.filter(item => !removeFromDam.some(removeItem => removeItem.id === item.id));
-  }
-
   const handleConfirm = () => {
     setIsDialogMessageOpen(false);
 
-    if (isDraftOrPending) {
-      documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDAR, [FBDAMFields.DAM]: updatedDAM };
-      _documentRevisionFormState?.setDocumentRevision(documentRevision);
-      async.start(setDocumentRevision, documentRevision.id, { formInput: documentRevision.formInput }, async);
-      reloadComponent?.();
+    if (!isDraftOrPending) {
+      return;
     }
+
+    let updatedDAR = cloneDeep(formInput?.[FBDAMFields.DAR] ?? []) as FBApprovalRole[];
+    const updatedDAM = cloneDeep(
+      formInput?.[FBDAMFields.DAM]?.approvalMatrix
+      ?? formInput?.[FBDAMFields.DAM]
+      ?? [],
+    ) as FBApprovalMatrixItem[];
+
+    if (!isEmptyArray(removeFromDam)) {
+      const removingARIndexes = removeFromDam.map(ar => updatedDAR.findIndex(dar => dar.id === ar.id));
+
+      updatedDAR = updatedDAR.filter(item => !removeFromDam.some(removeItem => removeItem.id === item.id));
+
+      updatedDAM.forEach((item) => {
+        item.approvalRoles.admStage = removeItemsAtIndices(item.approvalRoles.admStage, removingARIndexes);
+        item.approvalRoles.stage1 = removeItemsAtIndices(item.approvalRoles.stage1, removingARIndexes);
+        item.approvalRoles.stage2 = removeItemsAtIndices(item.approvalRoles.stage2, removingARIndexes);
+        item.approvalRoles.stage3 = removeItemsAtIndices(item.approvalRoles.stage3, removingARIndexes);
+      });
+    }
+
+    if (!isEmptyArray(addToDam)) {
+      const lastIndex = Math.max(0, ...updatedDAR.map(item => item.index));
+
+      addToDam?.forEach((item, index) => {
+        updatedDAR.push({
+          id: item.id,
+          name: item.name,
+          index: lastIndex + index + 1,
+          groups: [],
+          employees: [],
+        });
+
+        updatedDAM.forEach((item) => {
+          item.approvalRoles.admStage.push(false);
+          item.approvalRoles.stage1.push(false);
+          item.approvalRoles.stage2.push(false);
+          item.approvalRoles.stage3.push(false);
+        });
+      });
+    }
+
+    updatedDAR = updatedDAR.map((dar, index) => ({ ...dar, index }));
+
+    documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDAR, [FBDAMFields.DAM]: updatedDAM };
+    _documentRevisionFormState?.setDocumentRevision(documentRevision);
+    async.start(setDocumentRevision, documentRevision.id, { formInput: documentRevision.formInput }, async);
+    reloadComponent?.();
   };
 
   const async = useAsync({
