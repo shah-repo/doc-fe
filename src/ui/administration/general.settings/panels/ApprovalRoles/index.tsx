@@ -143,5 +143,4 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   );
 };
 
-// ts-unused-exports:disable-next-line
 export default ApprovalRolesSettingsPanel;

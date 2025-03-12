@@ -36,16 +36,6 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
       };
     });
 
-    const addRole = (role: FBApprovalRole) => {
-      const groups = role.groups.map(({ id }) => ({ id }));
-      approvalMatrixFieldState?.setMode(FBApprovalMatrixFieldModes.NONE);
-      approvalMatrixFieldState?.addApprovalRole({
-        ...role,
-        employees: [],
-        groups,
-      });
-    };
-
     const updateRole = (role: FBApprovalRole) => {
       const groups = role.groups.map(({ id }) => ({ id }));
       const updatedRoles = existingRoles.map((targetRole) => ({
@@ -65,7 +55,6 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
       name,
       groups,
       approvalRoles,
-      addRole,
       updateRole,
       isLoading,
     });
