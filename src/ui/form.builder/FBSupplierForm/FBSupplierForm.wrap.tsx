@@ -2,7 +2,9 @@ import { first } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
-import { FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps, SupplierPostBody } from '..';
+import { FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps } from '..';
+import { toNewVersionRequestBody } from '../../documentRevision/forms/transform';
+import { DocumentRevisionFormValues } from '../../documentRevision/forms/types';
 import useDocTypeGroups from '../../hooks/useDocTypeGroups';
 
 export const withFBSupplierForm = <T extends FBSupplierFormProps>(
@@ -31,13 +33,13 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
 
     // MARK: @methods
     onDialogConfirm = () => {
-      const formValue = formState.getValues();
+      const formValues = formState.getValues();
       if (supplierState?.documentTypeApi.data?.documentType?.isQms) {
-        formValue.document.securityList = {
+        formValues.document.securityList = {
           securityGroups: getDocTypeGroups(supplierState?.documentTypeApi.data?.documentType),
         };
       }
-      supplierState?.addNewSupplier(formValue as SupplierPostBody);
+      supplierState?.addNewSupplier(toNewVersionRequestBody(formValues as DocumentRevisionFormValues));
       onDialogClose?.();
     };
 
