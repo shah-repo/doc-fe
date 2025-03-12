@@ -243,5 +243,4 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   return null;
 };
 
-// ts-unused-exports:disable-next-line
 export default SyncMessageDialogContainer;
