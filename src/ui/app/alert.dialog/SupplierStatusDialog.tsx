@@ -67,24 +67,29 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                 <Text translation={title} />
               </Typography>
               {
-                data.errorItems.length > 0
-                && <Typography data-cy="dialog-message" className={classes.contentText}>
-                  <Text message={
-                    translate('purchaseOrder.supplierStatus.dialog.general', {
-                      phases: getConflictingPhases(data.errorItems),
-                    })
-                  } />
-                </Typography>
-              }
-              {
-                data.warningItems.length > 0 && data.errorItems.length === 0
-                && <Typography data-cy="dialog-message" className={classes.contentText}>
-                  <Text message={
-                    translate('purchaseOrder.supplierStatus.dialog.general', {
-                      phases: getConflictingPhases(data.warningItems),
-                    })
-                  } />
-                </Typography>
+                data.isSupplierUndefined ? (
+                  <Typography data-cy="dialog-message" className={classes.contentText}>
+                    <Text message={
+                      translate('purchaseOrder.supplierStatus.dialog.status')
+                    } />
+                  </Typography>
+                ) : data.errorItems.length > 0 ? (
+                  <Typography data-cy="dialog-message" className={classes.contentText}>
+                    <Text message={
+                      translate('purchaseOrder.supplierStatus.dialog.general', {
+                        phases: getConflictingPhases(data.errorItems),
+                      })
+                    } />
+                  </Typography>
+                ) : data.warningItems.length > 0 ? (
+                  <Typography data-cy="dialog-message" className={classes.contentText}>
+                    <Text message={
+                      translate('purchaseOrder.supplierStatus.dialog.general', {
+                        phases: getConflictingPhases(data.warningItems),
+                      })
+                    } />
+                  </Typography>
+                ) : null
               }
               { data.isWarning && !data.isError
                 && <Box className={classes.topSpacing}>

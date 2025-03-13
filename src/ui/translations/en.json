@@ -2313,5 +2313,6 @@
   "common.or": "OR",
   "common.rev": "Rev.",
   "common.continue.text": "Are you sure you want to continue?",
-  "purchaseOrder.supplierStatus.dialog.general": "All Items in {phases} need to have an approved supplier"
+  "purchaseOrder.supplierStatus.dialog.general": "All Items in {phases} need to have an approved supplier",
+  "purchaseOrder.supplierStatus.dialog.status": "Supplier status is not defined and can’t be added to the PO"
 }

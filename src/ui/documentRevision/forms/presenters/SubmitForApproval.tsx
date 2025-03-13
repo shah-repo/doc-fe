@@ -44,6 +44,7 @@ export interface IApprovalErrorResponse {
   itemsAsOfferingNotApproved: Array<{docId: string, displayRevision: string}>
   errorItems: IItem[]
   warningItems: IItem[]
+  isSupplierUndefined?: boolean
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
