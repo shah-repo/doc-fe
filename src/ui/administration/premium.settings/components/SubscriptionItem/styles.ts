@@ -7,6 +7,7 @@ export default makeStyles<NextTheme>(theme => createStyles({
     padding: theme.spacing(1.25, 0),
     alignItems: 'center',
     borderBottom: `1px solid ${Colors.stroke}`,
+    pointerEvents: 'none',
 
     '&:last-child': {
       borderBottom: 'none',
@@ -17,6 +18,9 @@ export default makeStyles<NextTheme>(theme => createStyles({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexGrow: 1,
+  },
+  toggler: {
+    pointerEvents: 'auto',
   },
   subscriptionTitle: {
     color: Colors.textBlack,
@@ -30,6 +34,7 @@ export default makeStyles<NextTheme>(theme => createStyles({
   },
   subscriptionInfo: {
     lineHeight: 1,
+    pointerEvents: 'auto',
   },
   infoIcon: {
     color: Colors.primaryLight,
@@ -41,6 +46,7 @@ export default makeStyles<NextTheme>(theme => createStyles({
       marginLeft: 0,
       display: 'flex',
       alignItems: 'center',
+      pointerEvents: 'none',
     },
   },
 }));

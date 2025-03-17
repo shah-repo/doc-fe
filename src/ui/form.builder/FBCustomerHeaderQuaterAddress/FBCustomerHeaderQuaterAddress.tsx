@@ -15,6 +15,8 @@ const FBCustomerHeaderQuaterAddress: React.FC<FBInputProps> = ({
           {...props}
           label={label}
           name={name}
+          multiline
+          rows={3}
           gutter={false}
           placeholder=""
         />

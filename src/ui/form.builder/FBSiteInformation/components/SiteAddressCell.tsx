@@ -28,7 +28,7 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
   }, [values]);
 
   return (
-    <Grid container spacing={2} direction="row" alignItems="center">
+    <Grid container spacing={2} direction="row" alignItems="flex-start">
       <Grid item>
         <Tooltip arrow placement="top" title={translate('customer.site.information.same.as.hq.label')} >
           <span><SwitchControl checked={selected} onChange={handleChange} label="" /></span>
@@ -39,6 +39,8 @@ const Editor: React.FC<CustomSiteTemplateProps> = ({ field, dataItem, onSameAsHQ
           <TextField
             {...getFieldProps(field)}
             defaultValue={undefined}
+            multiline
+            rows={3}
             type="text"
             size="small"
             readOnly={selected}

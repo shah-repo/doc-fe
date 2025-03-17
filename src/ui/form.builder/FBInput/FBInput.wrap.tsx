@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isNull, isString, isUndefined, last, map, size, union, uniqWith } from 'lodash';
 import { autorun, reaction } from 'mobx';
@@ -319,6 +320,7 @@ export const withFBInput = <T extends FBInputProps>(
     }
 
     if (isClone) {
+      const childClass = get(child, 'props.className');
       children = cloneElement(child as React.ReactElement, {
         name,
         disabled,
@@ -331,7 +333,7 @@ export const withFBInput = <T extends FBInputProps>(
         ...(workspaceState?.mode === 'preview'
             && name !== 'password'
             && formState?.workspaceMode !== 'form'
-            && { className: FBClasses.inputPreview }),
+            && { className: cx(FBClasses.inputPreview, childClass) }),
         ...(!isInputOwner && { className: FBClasses.nonOwner }),
       });
     }

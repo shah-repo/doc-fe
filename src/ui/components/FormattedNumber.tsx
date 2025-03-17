@@ -7,16 +7,22 @@ import {
 
 type Props = UnifiedNumberFormatOptions &
 CustomFormatConfig & { value: number };
-const SwissFrancsCurrencyValue = 'CHF';
-const SwissFrancsCurrencySymbol = '₣';
+
+const currencyMappings: Record<string, string> = {
+  CHF: '₣',
+  SGD: 'S$',
+};
 
 const FormattedNumber: React.FC<Props> = (props) => (
   <NumberFormatter {...props}>
     {(parts: string) => {
+      const currencyKey = Object.keys(currencyMappings).find((key) =>
+        parts.includes(key),
+      );
       return (
         <>
-          {parts?.includes(SwissFrancsCurrencyValue)
-            ? `${SwissFrancsCurrencySymbol}${parts.replace(`${SwissFrancsCurrencyValue}`, '').trim()}`
+          {currencyKey
+            ? `${currencyMappings[currencyKey]}${parts.replace(currencyKey, '').trim()}`
             : parts}
         </>
       );
