@@ -74,6 +74,7 @@ export enum STATUS_TYPES_LABEL {
   EDIT = 'EDIT',
   IN_PROGRESS = 'IN PROGRESS',
   DEPRECATED = 'DEPRECATED',
+  Archive = 'ARCHIVE',
 }
 
 export interface MyFeedsItems {

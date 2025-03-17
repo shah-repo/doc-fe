@@ -15,7 +15,6 @@ import { DOC_TYPE_GROUP_OPTION, DocumentType, DocumentTypeById, DocumentTypeById
 import { DocumentRevision, HeaderTableType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
 import { DocumentProposedId } from '../../../state/ducks/documents/types';
-import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ApplicationState } from '../../../state/reducers';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
 import SearchBar from '../../components/KeywordSearch';
@@ -33,9 +32,9 @@ import { useCreateDocumentByTypeButton } from '../../hooks/docCustomization/useC
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
+import useDocTypeGroups from '../../hooks/useDocTypeGroups';
 import FormListDialog from '../dialogs/FormListDialog/FormListDialog.presenter';
 import MultipleFormTemplateDialog from '../dialogs/MultipleFormTemplateDialog';
-import { filterSecurityGroupsForQms } from './helpers';
 import useStyles from './styles';
 
 interface MultipleFormInitialValues {
@@ -58,7 +57,7 @@ type DocCreator = (form: DocumentRevision) => void;
 
 export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
-  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+  const getDocTypeGroups = useDocTypeGroups();
   const history = useHistory();
   const { _documentRevisionFormState } = SM.useStores();
   const [form, setForm] = useState<DocumentRevision>();
@@ -88,9 +87,8 @@ export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
 
   const createDoc = (docId: string) => {
     const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision, selectedDocumentType);
-    const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes ?? [];
-    const isQms = (outputDocumentTypes[0] as unknown as DocumentType)?.isQms;
-    formValues.securityGroups = filterSecurityGroupsForQms(isQms, groupOptions);
+    const outputDocumentType = (form?.formTemplate?.outputDocumentTypes[0] ?? {}) as DocumentType;
+    formValues.securityGroups = getDocTypeGroups(outputDocumentType);
 
     const data = toNewVersionRequestBody(formValues);
     data.formDocument = { id: formValues?.formDocument?.id };

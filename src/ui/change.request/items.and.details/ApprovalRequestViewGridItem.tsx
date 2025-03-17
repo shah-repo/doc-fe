@@ -185,6 +185,14 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
             <div className={expandableContentClass} data-cy="view-description-of-change">
               {descriptionOfChange}
             </div>
+            <div className={cx(classes.showMoreContainer)}>
+              <Button onClick={toggleItem} className={classes.DescButton} kind="outlined" size="small">
+                {translate(isExpanded ? 'common.show.less' : 'common.show.more')}
+                <span className={classes.iconSpacing}>
+                  <FontAwesomeIcon icon={isExpanded ? solid('chevron-up') : solid('chevron-down')} />
+                </span>
+              </Button>
+            </div>
           </div>
           <div className={cx(classes.contentCell, classes.textCell)}>
             <div className={expandableContentClass} data-cy="view-justification-of-change">
@@ -251,16 +259,6 @@ const ApprovalRequestViewGridItem: React.FC<Props> = ({
             </div>
           </>
         )}
-
-        <div className={classes.showMoreContainer}>
-          <Button onClick={toggleItem} className={classes.DescButton} kind="outlined" size="small">
-            {translate(isExpanded ? 'common.show.less' : 'common.show.more')}
-            <span className={classes.iconSpacing}>
-              <FontAwesomeIcon icon={isExpanded ? solid('chevron-up') : solid('chevron-down')} />
-            </span>
-          </Button>
-        </div>
-
       </div>
       {whereUsedDialog.isOpen && (
         <WhereUsedDialog

@@ -7,6 +7,7 @@ export interface SearchContextType {
   defaultQuery?: QueryType
   setQuery?: Dispatch<SetStateAction<undefined | QueryType>>
   setDefaultQuery?: Dispatch<SetStateAction<undefined | QueryType>>
+  isKeywordSearchEnabled?: boolean
 }
 
 export const SearchContext = createContext<SearchContextType | undefined>(undefined);

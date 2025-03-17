@@ -60,12 +60,6 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
     },
   };
 
-  const emptyAttachmentsRenderer = isAttachmentEmpty && (
-    <Typography variant="h5" style={{ marginTop: '10px', fontSize: '14px', marginBottom: '30px' }}>
-      <Text message="common.no.attachments" />
-    </Typography>
-  );
-
   return (
     <Box pl={0} width="100%">
       <Box display="flex">
@@ -84,7 +78,6 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty, 
         disabled
         {...{ docRevId, selectedAttachments, onSelectedAttachmentsChange, isHeaderChecked, onHeaderCheck }}
       />
-      {emptyAttachmentsRenderer}
     </Box>
   );
 };

@@ -32,7 +32,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
     <FBInput {...props} {...{ error, defaultValue, isFbEditorField }}
       type={inputType} labelProps={FBFontStyle.labelProps}>
       {mode === 'preview' && (
-        <Box>{defaultValue}</Box>
+        <Box className={classes.preview}>{defaultValue}</Box>
       )}
       {mode !== 'preview' && (
         <TextField

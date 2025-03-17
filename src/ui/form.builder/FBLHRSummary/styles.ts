@@ -71,6 +71,7 @@ export default makeStyles((theme) => ({
   },
   addButton: {
     float: 'right',
+    padding: theme.spacing(0.75, 1),
   },
   container: {
     width: 'fit-content',
@@ -90,5 +91,11 @@ export default makeStyles((theme) => ({
   },
   errorIcon: {
     color: Colors.error,
+  },
+  rightSection: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    height: '100%',
   },
 }));

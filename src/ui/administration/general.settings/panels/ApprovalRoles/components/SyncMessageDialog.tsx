@@ -11,14 +11,14 @@ import useStyles from '../styles';
 interface Props {
   isOpen: boolean
   dam: Dam
-  closeDialog: () => void
+  onConfirm: () => void
   dialogContent?: JSX.Element
 }
 
 const SyncMessageDialog: React.FC<Props> = ({
   isOpen,
   dam,
-  closeDialog,
+  onConfirm,
   dialogContent,
 }) => {
   const classes = useStyles();
@@ -59,7 +59,7 @@ const SyncMessageDialog: React.FC<Props> = ({
         )}
       </DialogContent>
       <DialogActions className={classes.dialogAction}>
-        <Button onClick={closeDialog} className={classes.okBtn}>
+        <Button onClick={onConfirm} className={classes.okBtn}>
           <Text translation="common.ok" />
         </Button>
       </DialogActions>

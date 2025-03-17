@@ -22,5 +22,9 @@
   {
     "text": "CHF ₣",
     "value": "CHF"
+  },
+  {
+    "text": "SGD S$",
+    "value": "SGD"
   }
 ]
