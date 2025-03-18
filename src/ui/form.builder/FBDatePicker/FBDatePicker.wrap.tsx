@@ -4,7 +4,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FB } from '..';
 import { SM } from '../../../App';
-import { TIME_ZONE } from '../../../common/utils/date';
+import { convertDateToPST, MomentFormats } from '../../../common/utils/date';
 import { ChangeRequest } from '../../../state/ducks/changeRequest/types';
 import { useFormContext } from '../../components/forms/FormContext';
 import FBDatePickerState from './FBDatePicker.state';
@@ -67,7 +67,10 @@ export const withDatePicker = <T extends FBDatePickerProps>(
         && (approvalRequest ? !isEmpty(approvalRequest?.formDocument?.id) : isOutput);
 
       if (isUnderDefault) {
-        const nowDate = (new Date()).toISOString();
+        const nowDate = convertDateToPST(
+          moment().format(MomentFormats.MonthDateYearTwoDigit),
+          MomentFormats.MonthDateYearTwoDigit,
+        );
         datePickerState?.setValue(nowDate);
         save(nowDate);
       }
@@ -96,7 +99,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
 
     onChange = (_date: MaterialUiPickersDate | null, value?: string | null) => {
       datePickerState?.setValue(value);
-      save(moment.tz(value || '', 'MM/DD/YYYY', TIME_ZONE).startOf('day').toISOString());
+      save(convertDateToPST(value ?? '', MomentFormats.MonthDateYearTwoDigit));
     };
 
     onDatePickerClear = () => {

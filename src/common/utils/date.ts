@@ -51,3 +51,7 @@ export const toValidateIfDate = (value: moment.MomentInput) => moment(value, 'YY
 export const validateDateFormats = (date: string, formats: string[]): boolean => {
   return formats.some(fmt => moment(date, fmt, true).isValid());
 };
+
+export const convertDateToPST = (date: string, format: string): string => {
+  return moment.tz(date, format, TIME_ZONE).startOf('day').toISOString();
+};
