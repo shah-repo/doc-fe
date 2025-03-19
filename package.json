@@ -35,6 +35,7 @@
     "@progress/kendo-react-treelist": "^5.14.0",
     "@progress/kendo-react-treeview": "^4.13.0",
     "@progress/kendo-svg-icons": "^1.5.0",
+    "@sentry/react": "^9.6.0",
     "Base64": "^1.1.0",
     "aws-mqtt": "^1.0.0",
     "aws-sdk": "^2.580.0",
