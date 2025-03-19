@@ -19,12 +19,32 @@ Sentry.init({
   release: `doc-fe@${version}`,
   environment: Config.EnvironmentName,
   integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
     Sentry.browserProfilingIntegration(),
+    Sentry.browserSessionIntegration(),
+    Sentry.browserTracingIntegration(),
+    Sentry.captureConsoleIntegration(),
+    Sentry.contextLinesIntegration(),
+    Sentry.dedupeIntegration(),
+    Sentry.extraErrorDataIntegration(),
+    Sentry.functionToStringIntegration(),
+    Sentry.globalHandlersIntegration({ onerror: true, onunhandledrejection: true }),
+    Sentry.httpClientIntegration(),
+    Sentry.httpContextIntegration(),
+    Sentry.moduleMetadataIntegration(),
+    Sentry.replayIntegration({
+      // Additional SDK configuration goes in here, for example:
+      maskAllText: true,
+      blockAllMedia: true,
+    }),
+    Sentry.replayCanvasIntegration({
+      // Enabling the following will ensure your canvas elements are not forced
+      // into `preserveDrawingBuffer`.
+      enableManualSnapshot: true,
+    }),
     Sentry.captureConsoleIntegration(),
     Sentry.extraErrorDataIntegration(),
   ],
+  sampleRate: 0.25,
   // Tracing
   tracesSampleRate: 1.0, //  Capture 100% of the transactions
   // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
