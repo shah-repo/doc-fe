@@ -20,12 +20,14 @@ const StyledSubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
   label,
   dataCy,
   errors,
+  disabled,
   showNewButton = false,
   ...buttonProps
 }) => {
   const hasErrors = !isEmpty(errors);
   const isActive = asyncState.status === AsyncStatus.Active;
   const isHover = false;
+  const isDisabled = disabled ?? (hasErrors || isActive);
   const classes = FBButtonStyles({ isHover });
   if (showNewButton) {
     return (
@@ -33,7 +35,7 @@ const StyledSubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
         type="submit"
         color="primary"
         data-cy={dataCy}
-        disabled={hasErrors || isActive}
+        disabled={isDisabled}
         {...buttonProps}
       >
         <Text message={label} />
@@ -46,7 +48,7 @@ const StyledSubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
       variant="contained"
       color="secondary"
       data-cy={dataCy}
-      disabled={hasErrors || isActive}
+      disabled={isDisabled}
       classes={{
         root: classes.fbBtn,
       }}

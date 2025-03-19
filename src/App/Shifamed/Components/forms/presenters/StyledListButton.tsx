@@ -1,11 +1,14 @@
 import { Button, withStyles } from '@material-ui/core';
-import Colors from '../../../../../ui/layout/theme/utils/colors';
+import { Colors } from '../../../../../ui/layout/theme-next';
 
 const styles = () => ({
   root: {
     margin: 0,
     '&:hover': {
       backgroundColor: 'unset',
+    },
+    '&.Mui-disabled $label': {
+      color: Colors.textDisabled,
     },
   },
   label: {
@@ -16,7 +19,7 @@ const styles = () => ({
     fontSize: '12px',
     lineHeight: '15px',
     backgroundColor: Colors.white,
-    color: Colors.navy,
+    color: Colors.primary,
     borderRadius: '100px',
     minWidth: '72px',
   },

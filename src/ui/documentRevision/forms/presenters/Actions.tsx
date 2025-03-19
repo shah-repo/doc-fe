@@ -19,6 +19,7 @@ import { DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION } from '../../../../state/ducks/d
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from '../../../../state/ducks/documentRevisions/types';
 import { RELATED_PARTS_STATUS } from '../../../../state/ducks/relatedParts/types';
 import { ApplicationState } from '../../../../state/reducers';
+import { AsyncStatus } from '../../../../state/types';
 import HeaderEquipmentStatus, { shouldShowEQStatus } from '../../../components/common/header/HeaderEquipmentStatus';
 import HeaderLotStatus from '../../../components/common/header/HeaderLotStatus';
 import HeaderPOStatus from '../../../components/common/header/HeaderPOStatus';
@@ -94,6 +95,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = React.useContext(FormHeaderContext)!;
   const history = useHistory();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
+  const isActive = asyncState.status === AsyncStatus.Active;
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || '';
@@ -257,9 +259,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     }
     setFBValue();
 
-    if(isUndefined(documentRevision)) {
+    if (isUndefined(documentRevision)) {
       const attachments = _formState?.getValue('attachments');
-      if(!isEmpty(attachments)) {
+      if (!isEmpty(attachments)) {
         formik.setFieldValue('attachments', attachments);
       }
     }
@@ -536,7 +538,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               data-cy="DocumentRevisionForm-submit"
               disabled={
                 isCreateDocumentDisabled
-                  || _documentRevisionFormState?.disabledAction
+                  || _documentRevisionFormState?.disabledAction || isActive
               }
             />
           </>
