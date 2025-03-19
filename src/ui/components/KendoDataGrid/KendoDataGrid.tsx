@@ -212,7 +212,7 @@ function KendoDataGrid<T> ({
           ],
         },
       };
-      const processedData = process(data, finalDataState);
+      const processedData = data ? process(data, finalDataState) : [];
       return processedData;
     },
     [data, skipDataProcessing, dataState],

@@ -1,3 +1,4 @@
+import { FilterDescriptor } from '@progress/kendo-data-query';
 import { KendoGridFilterCellOperators } from '../../../ui/components/KendoGrid/interfaces';
 import { LIMIT } from '../../../ui/form.builder/FBLHRSummary/constants';
 import {
@@ -37,19 +38,31 @@ const fetchRecords = (
   searchStr,
   offset = 0,
   handlers: Handlers,
-): ApiAction =>
-  apiActionWithCallbacks({
+): ApiAction => {
+  const filters: FilterDescriptor[] = searchStr
+    ? [
+      {
+        field: 'document.docId',
+        operator: KendoGridFilterCellOperators.CONTAINS,
+        value: searchStr,
+      },
+      {
+        field: 'issue.name',
+        operator: KendoGridFilterCellOperators.CONTAINS,
+        value: searchStr,
+      },
+    ]
+    : [];
+
+  return apiActionWithCallbacks({
     url: DOCUMENT_REVISION_SEARCH_ROOT_URL,
     method: 'post',
     data: {
       documentTypeCategory: 'Record',
-      status: [DocumentRevisionStatus.Released, DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved],
+      status: [DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved],
       limit: LIMIT,
       offset: offset,
-      filters: [
-        { field: 'document.docId', operator: KendoGridFilterCellOperators.CONTAINS, value: searchStr },
-        { field: 'issue.name', operator: KendoGridFilterCellOperators.CONTAINS, value: searchStr },
-      ],
+      filters,
       sort: [],
       schema: [
         {
@@ -63,6 +76,7 @@ const fetchRecords = (
     },
     handlers,
   });
+};
 
 const addLHRSummary = (
   data: LHRSummaryRequestBody,

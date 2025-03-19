@@ -3,12 +3,48 @@ import qs from 'query-string';
 import { generatePath } from 'react-router-dom';
 import { GroupDocTypes, LCP, LCPDocRevOptions } from '../../../ui/administration/general.settings/panels/LCP/components/Grid/types';
 import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHelpers';
-import { COMPANY_MINE_URL, COMPANY_SETTINGS_URL, LIFE_CYCLE_DOC_REV_OPTIONS_URL, LIFE_CYCLE_DOC_TYPES_URL, LIFE_CYCLE_PHASES_URL, UPDATE_COMPANY_SETTINGS_URL } from '../../../ui/constants/urls';
+import {
+  COMPANY_MINE_URL,
+  COMPANY_SETTINGS_URL,
+  CREATE_APPROVAL_ROLES_URL,
+  LIFE_CYCLE_DOC_REV_OPTIONS_URL,
+  LIFE_CYCLE_DOC_TYPES_URL,
+  LIFE_CYCLE_PHASES_URL,
+  PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL,
+  PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
+  UPDATE_APPROVAL_ROLES_URL,
+  UPDATE_COMPANY_SETTINGS_URL,
+} from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, ApiActionMethod, Handlers } from '../../types';
 import { DOC_TYPE_GROUP } from '../documentRevisions/documentType/types';
-import { AUTOSAVE_CONFIG, OMIT_FIELDS, REDLINE_CONFIG, SELECT_COMPANY, SET_AUTOSAVE_CONFIG, SET_COMPANY_MINE, SET_GENERAL_SETTINGS, UPDATE_NAVIGATION_ITEM } from './constants';
-import { Company, CompanyMineAction, CompanyMineRequest, GeneralSettings, GeneralSettingsAction, GeneralSettingsState, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from './types';
+import {
+  AUTOSAVE_CONFIG,
+  OMIT_FIELDS,
+  REDLINE_CONFIG,
+  SELECT_COMPANY,
+  SET_AUTOSAVE_CONFIG,
+  SET_COMPANY_MINE,
+  SET_GENERAL_SETTINGS,
+  SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
+  UPDATE_NAVIGATION_ITEM,
+  UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
+} from './constants';
+import {
+  Company,
+  CompanyMineAction,
+  CompanyMineRequest,
+  GeneralSettings,
+  GeneralSettingsAction,
+  GeneralSettingsState,
+  NavigationMenu,
+  PremiumFeatureSubscription,
+  PremiumFeatureSubscriptionPayload,
+  SelectCompanyAction,
+  SetPremiumFeatureSubscriptionsAction,
+  UpdateNavigationMenuItem,
+  UpdatePremiumFeatureSubscriptionAction,
+} from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
   type: SELECT_COMPANY,
@@ -81,6 +117,40 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
+const setPremiumFeatureSubscriptionsAction = (subscriptions: PremiumFeatureSubscription[]): SetPremiumFeatureSubscriptionsAction => ({
+  type: SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
+  payload: subscriptions,
+});
+
+const updatePremiumFeatureSubscriptionAction = (subscription: PremiumFeatureSubscription): UpdatePremiumFeatureSubscriptionAction => ({
+  type: UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
+  payload: subscription,
+});
+
+const getPremiumFeatureSubscriptions = (): ApiAction<PremiumFeatureSubscription[], void> => apiAction({
+  url: PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
+  method: 'get',
+  onSuccess: (data, dispatch) => {
+    dispatch(setPremiumFeatureSubscriptionsAction(data));
+  },
+});
+
+const updatePremiumFeatureSubscription = (
+  id: string,
+  payload: PremiumFeatureSubscriptionPayload,
+  method: ApiActionMethod = 'patch',
+): ApiAction<PremiumFeatureSubscription> => {
+  return apiAction({
+    url: generatePath(PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL, { id }),
+    method,
+    data: payload,
+    asyncType: UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
+    onSuccess: (data, dispatch) => {
+      dispatch(updatePremiumFeatureSubscriptionAction(data));
+    },
+  });
+};
+
 const updateGeneralSettings = (
   body: GeneralSettings,
   id?: string,
@@ -97,6 +167,43 @@ const updateGeneralSettings = (
     onSuccess: (data, dispatch) => {
       dispatch(setGeneralSettings(data));
     },
+  });
+};
+
+const createApprovalRoles = (
+  body: { name: string, isActive: boolean },
+  handlers: Handlers,
+  method: ApiActionMethod = 'post',
+): ApiAction<GeneralSettingsState> => {
+  const url = CREATE_APPROVAL_ROLES_URL;
+  return apiActionWithCallbacks({
+    url,
+    method,
+    data: body,
+    asyncType: SET_GENERAL_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(getGeneralSettings());
+    },
+    handlers,
+  });
+};
+
+const updateApprovalRoles = (
+  id: string,
+  body: { isActive: boolean },
+  handlers: Handlers,
+  method: ApiActionMethod = 'patch',
+): ApiAction<GeneralSettingsState> => {
+  const url = generatePath(UPDATE_APPROVAL_ROLES_URL, { id });
+  return apiActionWithCallbacks({
+    url,
+    method,
+    data: body,
+    asyncType: SET_GENERAL_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(getGeneralSettings());
+    },
+    handlers,
   });
 };
 
@@ -146,4 +253,8 @@ export default {
   redlineConfig,
   getGeneralSettings,
   updateGeneralSettings,
+  getPremiumFeatureSubscriptions,
+  updatePremiumFeatureSubscription,
+  createApprovalRoles,
+  updateApprovalRoles,
 };

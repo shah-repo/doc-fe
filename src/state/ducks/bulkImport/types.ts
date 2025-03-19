@@ -290,6 +290,7 @@ export interface BulkImportCustom extends BulkImport {
   progress?: number
   icons?: IconsBk[]
   date?: string
+  currentProgressStep: number
 }
 
 export interface BulkImport {
@@ -350,6 +351,25 @@ export enum BkStatus {
   DELETED = 'DELETED',
 }
 
+export enum BulkImportLogsEntries {
+  PROCESS_TYPE = 'processType',
+  JOB_ID = 'jobId',
+  XLSX = 'xlsx',
+  ORIGINAL_HEADERS = 'originalHeaders',
+  DATA_ID = 'dataId',
+  ATTACHMENT_ID = 'attachmentId',
+  ATTACHMENT_LINK = 'attachmentLink',
+  STATUS = 'status',
+  APPROVER = 'approver',
+}
+
+export enum LogEntryType {
+  ARRAY_NEW = 'ARRAY_NEW',
+  OBJECT_EDITED = 'OBJECT_EDITED',
+  STRING_EDITED = 'STRING_EDITED',
+  STRING_NEW = 'STRING_NEW',
+}
+
 interface Process {
   name: string
   step: number
@@ -362,6 +382,7 @@ interface BkProcess {
   process: Process[]
   totalSteps: number
   step?: number
+  totalExcelErrors?: number
 }
 
 interface OriginalHeader {
@@ -453,4 +474,18 @@ export interface LogEntry extends Partial<Audit> {
   companyId: string
   attachmentId: string | null
   ownerEmail: string
+}
+
+export enum BkIconStatus {
+  check = 'check',
+  progress = 'progress',
+  warning = 'warning',
+  blank = 'blank',
+  skip = 'skip',
+}
+
+export interface BulkImportsMapData {
+  bulkImportIds: Record<string, BulkImport>
+  documentRevisionIds: Record<string, BulkImport>
+  approvalIds: Record<string, BulkImport>
 }

@@ -5,6 +5,7 @@ import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { Audit } from '../../state/ducks/audit/types';
 import { companySelectors } from '../../state/ducks/company';
 import { getAuditDefaultValue } from '../common/utils/audit';
+import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../form.builder/FBLotTransfers/constants';
 import { LotTransfer } from '../form.builder/FBLotTransfers/types';
 
 interface Props {
@@ -26,7 +27,7 @@ const AuditLotTransfer: React.FC<Props> = ({
 
   const auditFieldFactory: Record<string, () => ReactNode> = {
     type: () => translate(`form.builder.lot.transfers.type.${String(auditValue)}`),
-    by: () => employees?.find(employee => employee.id === auditValue)?.user?.name ?? translate('common.not.applicable'),
+    by: () => (auditValue === SERVER_AUTOMATION_LOT_TRANSFER_BY) ? translate('common.server.automation') : (employees?.find(employee => employee.id === auditValue)?.user?.name ?? translate('common.not.applicable')),
     date: () => getFormattedDateString(auditValue as string, MomentFormats.MonthDateYear),
     from: () => locationAuditValue(auditValue as string),
     to: () => locationAuditValue(auditValue as string),

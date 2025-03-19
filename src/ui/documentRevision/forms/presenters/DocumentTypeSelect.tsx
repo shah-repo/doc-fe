@@ -6,9 +6,7 @@ import { authSelectors } from '../../../../state/ducks/auth';
 import { documentTypeSelectors } from '../../../../state/ducks/documentRevisions/documentType';
 import { DocumentRevision, FBOutputDocumentType } from '../../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../../state/ducks/documents';
-import { userManagementSelectors } from '../../../../state/ducks/userManagement';
 import SelectField, { SelectOption } from '../../../components/forms/fields/Select';
-import { filterSecurityGroupsForQms } from '../../../documentType/list/helpers';
 import { FBEditorPropertiesType, FBSchemaProps } from '../../../form.builder';
 import { styles as FBAutoCompleteStyles } from '../../../form.builder/styles/FBAutocomplete.styles';
 import { FBWorkspaceMode } from '../../../form.builder/types/workspace';
@@ -16,6 +14,7 @@ import CustomLabelTooltip from '../../../hooks/docCustomization/CustomLabelToolt
 import { useDocumentTypeSelect } from '../../../hooks/docCustomization/useCustomization';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
+import useDocTypeGroups from '../../../hooks/useDocTypeGroups';
 import { DocumentCloneType } from '../../Clone.container';
 import { checkIsDocumentEditableSchema, checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from '../../helpers/checkDocumentGroup';
 import { getFBSchemeByDocType } from '../../helpers/getFBSchemeByDocType';
@@ -41,6 +40,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 }) => {
   const { isVisible, label, tooltipConfig, validation: validators } = useDocumentTypeSelect(documentTypeId);
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores() || {};
+  const getDocTypeGroups = useDocTypeGroups();
   const formik = useFormikContext();
   const classes = styles();
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
@@ -60,7 +60,6 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
   const documentTypes = getActiveDocumentTypes(useSelector(documentTypeSelectors.getDocumentTypeFormOptions));
   const documentTypesById = useSelector(documentTypeSelectors.byId);
-  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
   const isDocTypeDisabled = (type === 'newVersion' || isDocRevStatusDraft) || isDisabled;
   const isNewOutput = type === 'newOutput';
@@ -109,7 +108,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     }
     // Security groups
     if (type.isQms) {
-      const securityGroups = filterSecurityGroupsForQms(type.isQms, groupOptions);
+      const securityGroups = getDocTypeGroups(type);
       formik.setFieldValue('securityGroups', securityGroups);
     }
     formik.handleChange(event);

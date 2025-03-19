@@ -1,13 +1,15 @@
 import { Box } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
-import React from 'react';
-import { FB, FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from '..';
+import React, { lazy, Suspense } from 'react';
+import { FB, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from '..';
+import Loader from '../../components/common/kendo/Loader';
 import { isDocumentRevisionApproved } from '../../documentRevision/helpers/documentRevisionStatus';
 import Colors from '../../layout/theme/utils/colors';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { withFBInlineApproval } from './FBInlineApproval.wrap';
-import FBInlinePendingApprovalSocket from './FBInlinePendingApproval.socket';
+
+const LazyFBApprovalAudit = lazy(async () => await import('..').then(module => ({ default: module.FBApprovalAudit })));
 
 const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   onApproveClick,
@@ -67,6 +69,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       <FBAutocomplete
         {...{ label, disabled, options, loading }}
         name={`fb-ia-${name}`}
+        key={approvals.map(approval => approval.id).join('-')}
         multiple
         withState
         autosave={false}
@@ -78,7 +81,9 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       />
     )}
     <Box my={1}>
-      <FBApprovalAudit {...{ name, type, index }} />
+      <Suspense fallback={<Loader />}>
+        <LazyFBApprovalAudit {...{ name, type, index }} />
+      </Suspense>
     </Box>
     {shouldShowApprovals && (
       <Box mt={approvals.length ? 1 : 0}>
@@ -153,7 +158,6 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   return (
     <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
       <FBDialog />
-      <FBInlinePendingApprovalSocket />
       <FBInlineApprovalSocket {...{ name }} />
       <FBInput {...props} {...{ name, rules }} type="inlineapproval" labelProps={FBFontStyle.labelProps}>
         <FBInlineApprovalChild {...props} {...{ name }} />

@@ -49,16 +49,17 @@ export default makeStyles(theme => ({
     fontWeight: 400,
     padding: theme.spacing(0, 1),
     height: 30,
-    display: 'flex',
     alignItems: 'center',
     color: Colors.textBlack,
     position: 'relative',
-    overflow: 'hidden',
+    display: 'inline',
   },
   errorCell: {
     backgroundColor: Colors.errorHighlight,
     border: `1px solid ${Colors.error}`,
     borderRadius: 4,
+    display: 'flex',
+    padding: theme.spacing(0, 2.375, 0, 1),
   },
   warningIcon: {
     color: Colors.error,
@@ -117,5 +118,11 @@ export default makeStyles(theme => ({
   },
   tooltipContent: {
     gap: theme.spacing(1, 1),
+  },
+  tableText: {
+    width: '100%',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
 }));

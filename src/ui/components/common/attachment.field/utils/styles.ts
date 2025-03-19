@@ -8,6 +8,7 @@ export const styles = makeStyles((theme: Theme) => ({
     backgroundColor: isField ? Colors.white : 'transparent',
     borderRadius: isField ? '4px' : 'none',
     border: isField ? `1px solid ${Colors.medium_gray}` : 'none',
+    marginBottom: theme.spacing(1),
   }),
   link: ({ isField }: AttachmentStyleProps) => ({
     display: isField ? 'flex' : 'block',

@@ -23,3 +23,5 @@ export const SOLO_OPERATORS = [
   'isempty',
   'isnotempty',
 ];
+
+export const SEARCH_KEYWORD_FIELD_KEY = 'search_keyword_field';

@@ -100,7 +100,6 @@ export default makeStyles((theme) =>
     enclosingDiv: {
       gridColumn: '1 / -1',
       color: Colors.textBlack,
-      position: 'relative',
       flexWrap: 'wrap',
       backgroundColor: Colors.white,
       borderBottom: `1px solid ${Colors.tableStroke}`,
@@ -283,6 +282,65 @@ export default makeStyles((theme) =>
       margin: '0 0 0 auto',
       right: 0,
       top: 0,
+    },
+    showMoreRoot: {
+      height: 0,
+    },
+    truncate: {
+      fontWeight: 400,
+      fontSize: 14,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'pre-line',
+      display: '-webkit-box',
+      '-webkit-line-clamp': 4,
+      'line-clamp': 4,
+      '-webkit-box-orient': 'vertical',
+    },
+    isExpandeds: {
+      overflow: 'none',
+    },
+    textContainer: {
+      width: 300,
+      overflow: 'hidden',
+      fontSize: 14,
+      whitespace: 'break-spaces',
+      transition: 'max-height 0.4s ease',
+    },
+    showMoreContainer: {
+      cursor: 'pointer',
+      alignItems: 'center',
+    },
+    DescButton: {
+      height: 22,
+      position: 'absolute',
+      zIndex: 1,
+      border: 0,
+      backgroundColor: Colors.primaryBg,
+      fontSize: 12,
+      fontWeight: 400,
+      '&:hover': {
+        border: 0,
+        background: Colors.primary,
+        color: Colors.white,
+      },
+    },
+    iconSpacing: {
+      marginLeft: theme.spacing(0.5),
+      display: 'flex',
+      alignItems: 'center',
+    },
+    expandableContent: {
+      overflow: 'hidden',
+      maxHeight: '4.29em',
+      transition: 'max-height 0.3s ease-in-out',
+      display: '-webkit-box',
+      '-webkit-line-clamp': '3',
+      '-webkit-box-orient': 'vertical',
+    },
+    expanded: {
+      maxHeight: 200,
+      display: 'unset',
     },
   }),
 );

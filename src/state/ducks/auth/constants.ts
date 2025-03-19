@@ -11,6 +11,7 @@ export const PING_SERVER_GET_ASYNC = 'auth/PING_SERVER_GET_ASYNC';
 
 export const SSO_LOGIN_URL = '/auth/login/sso';
 export const SSO_CALLBACK_URL = `${SSO_LOGIN_URL}/callback`;
+export const SSO_REDIRECT_PARAM = 'customRedirectUrl';
 
 export const LOGIN_URL = '/auth/login';
 export const SIGNUP_URL = '/auth/sign_up';

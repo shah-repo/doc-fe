@@ -1,5 +1,5 @@
 import { FBApprovalRole, FBInputProps } from '..';
-import { ErrorField, ERROR_FIELD, Mode, MODE_FIELD, SEARCHABLE_GROUPS_FIELD } from './constants';
+import { ERROR_FIELD, ErrorField, Mode, MODE_FIELD, SEARCHABLE_GROUPS_FIELD } from './constants';
 
 export interface RoleGroup {
   id: string
@@ -27,4 +27,5 @@ export type FBApprovalMatrixRolesProps =
   approvalRoles?: ApprovalRole[]
   addRole?: (role: ApprovalRole) => void
   updateRole?: (role: ApprovalRole) => void
+  isLoading?: boolean
 };
