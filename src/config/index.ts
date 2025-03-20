@@ -166,8 +166,8 @@ class Config {
     return this.get('SENTRY_DSN');
   }
 
-  public static get sentryEnabled (): string {
-    return this.get('SENTRY_ENABLED');
+  public static get sentryEnabled ():  boolean {
+    return this.get('SENTRY_ENABLED') === 'true';
   }
 }
 
