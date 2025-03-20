@@ -44,7 +44,6 @@ export const VIEWABLE_FILES = [
 
 export const WATERMARK_FILES = [
   'txt',
-  'doc',
   'docx',
   'pdf',
 ];

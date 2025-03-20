@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { filter, get, isEmpty, join, map, union } from 'lodash';
+import { difference, isEmpty, map, union } from 'lodash';
 import { reaction, toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
@@ -75,33 +75,31 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
 
     // Handle image upload
     onFileUploadChange = (event: React.FormEvent<HTMLInputElement>) => {
-      const eventFiles = get(event, 'currentTarget.files', []);
-      const invalidFiles: string[] = [];
-      const duplicateNamedFiles: string[] = [];
+      if (!event.currentTarget.files) {
+        return;
+      }
+      const filesToUpload = Array.from(event.currentTarget.files);
 
-      const filesSize = calculateTotalFileSize(event?.currentTarget?.files);
-      const names = Array.from(event.currentTarget.files || []).map(file => file.name);
+      const filesSize = calculateTotalFileSize(filesToUpload);
       if (filesSize > FILE_UPLOAD_LIMIT) {
+        const names = filesToUpload.map(file => file.name);
         handleFileSizeExceedLimit(names, filesSize, event);
         return;
       }
-      const validFiles: File[] = filter(eventFiles, (file) => {
-        const fileName = get(file, 'name', '');
-        const name = fileName.split('.')[0];
 
-        const fileNameAlreadyExists = mediaAlbumFieldState?.existingFileNames.includes(name);
-        const type = fileName.split('.').pop();
-        (type === 'doc') && (invalidFiles.push(fileName));
-        (fileNameAlreadyExists) && (duplicateNamedFiles.push(fileName));
-        return type !== 'doc' && !fileNameAlreadyExists;
+      const duplicateFiles = filesToUpload.filter((file) => {
+        const name = file.name.substring(0, file.name.lastIndexOf('.'));
+        console.log(JSON.parse(JSON.stringify({
+          existing: mediaAlbumFieldState?.existingFileNames,
+          name,
+        })));
+        return mediaAlbumFieldState?.existingFileNames.includes(name);
       });
+      const validFiles = difference(filesToUpload, duplicateFiles);
 
-      if (!isEmpty(invalidFiles)) {
-        toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ', ')}`);
-      }
-
-      if (!isEmpty(duplicateNamedFiles)) {
-        toastError(`Files with duplicate names are not accepted. Invalid files: ${join(duplicateNamedFiles, ', ')}`);
+      if (duplicateFiles.length) {
+        const duplicateNamedFiles = duplicateFiles.map(file => file.name).join(', ');
+        toastError(`Files with duplicate names are not accepted. Invalid files: ${duplicateNamedFiles}`);
       }
       mediaAlbumFieldState?.upload(validFiles);
     };
