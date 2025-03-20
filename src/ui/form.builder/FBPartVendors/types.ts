@@ -19,6 +19,7 @@ export interface SchemaOptions {
 
 export enum Currency {
   USD = 'USD',
+  SAR = 'SAR',
 }
 
 export type FBPartVendorsProps =
