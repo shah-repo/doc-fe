@@ -95,7 +95,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = React.useContext(FormHeaderContext)!;
   const history = useHistory();
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
-  const isActive = asyncState.status === AsyncStatus.Active;
+  const isLoading = asyncState.status === AsyncStatus.Active;
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || '';
@@ -538,7 +538,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               data-cy="DocumentRevisionForm-submit"
               disabled={
                 isCreateDocumentDisabled
-                  || _documentRevisionFormState?.disabledAction || isActive
+                  || _documentRevisionFormState?.disabledAction || isLoading
               }
             />
           </>

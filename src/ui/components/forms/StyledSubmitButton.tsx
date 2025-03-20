@@ -25,9 +25,9 @@ const StyledSubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
   ...buttonProps
 }) => {
   const hasErrors = !isEmpty(errors);
-  const isActive = asyncState.status === AsyncStatus.Active;
+  const isLoading = asyncState.status === AsyncStatus.Active;
   const isHover = false;
-  const isDisabled = disabled ?? (hasErrors || isActive);
+  const isDisabled = disabled ?? (hasErrors || isLoading);
   const classes = FBButtonStyles({ isHover });
   if (showNewButton) {
     return (

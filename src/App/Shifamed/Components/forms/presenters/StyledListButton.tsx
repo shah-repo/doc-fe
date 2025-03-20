@@ -7,10 +7,12 @@ const styles = () => ({
     '&:hover': {
       backgroundColor: 'unset',
     },
-    '&.Mui-disabled $label': {
+    '&$disabled $label': {
       color: Colors.textDisabled,
+      backgroundColor: Colors.white,
     },
   },
+  disabled: {},
   label: {
     padding: '10.5px 20px',
     fontFamily: 'Sora',
