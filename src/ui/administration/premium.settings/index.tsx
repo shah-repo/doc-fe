@@ -86,6 +86,7 @@ const PremiumFeaturesContainer: React.FC = () => {
           <Typography
             variant="h1"
             className={classes.title}
+            data-cy="administration-pfo-title"
           >
             {translate('administration.premium.feature.title')}
             <NewBadge />
@@ -93,6 +94,7 @@ const PremiumFeaturesContainer: React.FC = () => {
           <Typography
             variant="subtitle1"
             className={classes.subtitle}
+            data-cy="administration-pfo-sub-title"
           >
             {translate('administration.premium.feature.subtitle')}
           </Typography>
@@ -110,7 +112,7 @@ const PremiumFeaturesContainer: React.FC = () => {
       <Box>
         <Box className={classes.description}>
           <FontAwesomeIcon className={classes.descriptionIcon} icon={solid('circle-info')} />
-          <Box>
+          <Box data-cy="administration-pfo-desc" >
             {translate('administration.premium.feature.description')}
           </Box>
         </Box>
@@ -118,6 +120,7 @@ const PremiumFeaturesContainer: React.FC = () => {
           <Typography
             variant="subtitle1"
             className={classes.panelTitle}
+            data-cy="administration-pfo-feature-pannel-title"
           >
             {translate('administration.premium.feature.table.title')}
           </Typography>
