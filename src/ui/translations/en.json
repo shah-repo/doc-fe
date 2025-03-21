@@ -62,6 +62,7 @@
   "navigation.group.management": "Group Management",
   "navigation.userGroup.management": "User / Group Management",
   "validators.required": "Required",
+  "validators.unique": "Must be unique",
   "validators.requiredAtLeastOne": "At least one input required",
   "validators.email": "Invalid email address",
   "validators.approversRequired": "At least one approver required",
