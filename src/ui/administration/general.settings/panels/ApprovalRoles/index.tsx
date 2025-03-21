@@ -17,7 +17,7 @@ import { buildSchema } from './schema';
 import { EditableApprovalRole } from './types';
 
 const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
-  const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
+  const { getFieldProps, values: formValues, dirty: parentDirty, setFieldValue } = useFormikContext<GeneralSettings>();
   const approvalRoles = getFieldProps('approvalRoles.approvalRoles').value as ApprovalRole[];
   const dam = getFieldProps('approvalRoles.dam').value as Dam;
   const [approvalRolesData, setApprovalRolesData] = React.useState(approvalRoles);
@@ -115,6 +115,14 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     mode,
     onConfirm: submitForm,
   });
+
+  useEffect(() => {
+    if (formik.dirty && !parentDirty) {
+      setFieldValue('dirty', formik.dirty);
+    } else if (!formik.dirty && parentDirty) {
+      setFieldValue('dirty', undefined);
+    }
+  }, [formik.dirty, parentDirty]);
 
   return (
     <>
