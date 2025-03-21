@@ -1,8 +1,16 @@
+import { makeStyles } from '@material-ui/core';
 import { get } from 'lodash';
 import React from 'react';
 import { formatNumberToCurrency } from '../../../dashboard.new/line.items/common/Utils';
 import Tooltip from '../kendo/Tooltip';
 import { CustomGridCellProps } from '../kendo/types';
+
+const useStyles = makeStyles({
+  formattedCurrency: {
+    direction: 'ltr',
+    unicodeBidi: 'bidi-override',
+  },
+});
 
 export const POAmount: React.FunctionComponent<CustomGridCellProps> = ({
   dataItem,
@@ -14,6 +22,7 @@ export const POAmount: React.FunctionComponent<CustomGridCellProps> = ({
   columnIndex,
   cellRowClick,
 }) => {
+  const classes = useStyles();
   let formattedValue = get(dataItem, field ?? '');
   const currency = get(dataItem, 'precalc.po_currency') as string;
 
@@ -40,7 +49,7 @@ export const POAmount: React.FunctionComponent<CustomGridCellProps> = ({
       data-grid-col-index={columnIndex}
       onClick={cellClickEvent}
     >
-      <Tooltip data={formattedValue} />
+      <Tooltip data={formattedValue} customClass={currency === 'SAR' ? classes.formattedCurrency : ''} />
     </td>
   );
 };

@@ -5,12 +5,11 @@ import {
   CustomFormatConfig,
   FormattedNumber as NumberFormatter,
 } from 'react-intl';
-import { Currency } from '../form.builder/FBPartVendors/types';
 
 type Props = UnifiedNumberFormatOptions &
 CustomFormatConfig & { value: number };
 
-export const currencyMappings: Record<string, string> = {
+const currencyMappings: Record<string, string> = {
   CHF: '₣',
   SGD: 'S$',
   SAR: '﷼',
@@ -34,7 +33,7 @@ const FormattedNumber: React.FC<Props> = (props) => {
           ? `${currencyMappings[currencyKey]}${parts.replace(currencyKey, '').trim()}`
           : parts;
 
-        return currencyKey === Currency.SAR ? (
+        return currencyKey === 'SAR' ? (
           <span className={classes.formattedCurrency}>{formattedCurrency}</span>
         ) : (
           <>{formattedCurrency}</>
