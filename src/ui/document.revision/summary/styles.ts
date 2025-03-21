@@ -15,4 +15,8 @@ export default (theme: Theme) =>
     bottomSpace: {
       marginBottom: theme.spacing(2),
     },
+    contentBox: {
+      minHeight: theme.spacing(2),
+      width: 'calc(100% - 8px)',
+    },
   });

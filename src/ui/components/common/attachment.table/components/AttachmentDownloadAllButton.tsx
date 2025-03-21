@@ -100,7 +100,12 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   };
 
   const handleAllDownload = (documentRevisionId: string, password: string | undefined) => () => {
-    if (isDocumentRevisionInDraft(docRevStatus) || isUndefined(documentRevision?.attachments)) {
+    const isRedlineAttachmentExist = attachmentsData.filter(item => item.lineType === LINE_TYPES.RED_LINE);
+    if (isDocumentRevisionInDraft(docRevStatus) && !isEmpty(isRedlineAttachmentExist) && (selectedAttachmentsCount === 1 || attachmentsData.length === 1)) {
+      const attachments = attachmentsData.map(item => item.id);
+      setIsDownloading(true);
+      async.start(downloadSelectedAttachments, attachments, async);
+    } else if (isDocumentRevisionInDraft(docRevStatus) || isUndefined(documentRevision?.attachments)) {
       setIsDownloading(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
     } else if (!containsRedline && isDocumentRevisionInStatusFlag(docRevStatus)) {

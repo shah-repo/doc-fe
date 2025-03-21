@@ -7,12 +7,15 @@ import qs from 'query-string';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { translate } from '../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
 import apiClient from '../../../../state/apiClient';
 import { bkStatusTextMap, BULK_IMPORT_AUDIT_URL } from '../../../../state/ducks/bulkImport/constants';
 import { getBulkImportsMap } from '../../../../state/ducks/bulkImport/selectors';
-import { BkStatus, BulkImport, LogEntry } from '../../../../state/ducks/bulkImport/types';
+import { BkStatus, BulkImport, BulkImportLogsEntries, LogEntry, LogEntryType } from '../../../../state/ducks/bulkImport/types';
+import { ApprovalStatus } from '../../../../state/ducks/common/types';
 import { companySelectors } from '../../../../state/ducks/company';
+import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT } from '../../../../state/ducks/userManagement/constants';
 import { AuditDetailsProps } from '../../../../state/ducks/userManagement/types';
 import { store } from '../../../../state/store';
@@ -66,78 +69,166 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getDescription = (log: MergedLog, currentBulkImport: BulkImport): Array<{ primaryText: string, secondaryText: string }> => {
-    let secondaryText = `Changed from ${log.previousValue} to ${log.nextValue}`; // Default secondary text
+  const getLogsStatusStepChange = (
+    log: MergedLog,
+    currentBulkImport: BulkImport,
+    previousValue: string,
+    nextValue: string,
+    isStringEditedType: boolean,
+    isStringNewType: boolean,
+  ): {
+    secondaryText: string
+    stepChange: string
+    skip: boolean
+  } => {
+    let secondaryText;
+    let stepChange;
+    let skip;
+
+    if (isStringEditedType) {
+      if (log.documentRevisionId && previousValue === DocumentRevisionStatus.Draft && nextValue === DocumentRevisionStatus.InReview) {
+        // When is document revision and used to be draft and now is on review (Submitted for approval)
+        secondaryText = translate('bk.audit.log.submitted.for.approval');
+        stepChange = translate('bk.audit.log.step.5.approvals');
+      } else if (log.documentRevisionId && previousValue === DocumentRevisionStatus.InReview && nextValue === DocumentRevisionStatus.Released) {
+        // When is document revision and used to be in review and now is on released (Approved)
+        secondaryText = translate('bk.audit.log.approved');
+        stepChange = translate('bk.audit.log.step.5.approvals');
+      } else if (log.approvalId && previousValue === ApprovalStatus.Pending && (nextValue === ApprovalStatus.Approved || nextValue === ApprovalStatus.Rejected)) {
+        // when is a approval and it would be approved or rejected
+        const getApprover = currentBulkImport?.documentRevision?.approvals?.find((approval) => approval.id === log.approvalId);
+        if (getApprover) {
+          const approverDetails = getUserDetails(getApprover?.approverId as string);
+          secondaryText = translate(
+            nextValue === ApprovalStatus.Approved ? 'bk.audit.log.approved.by' : 'bk.audit.log.rejected.by',
+            { approverName: approverDetails?.user?.name },
+          );
+          stepChange = translate('bk.audit.log.step.5.approvals');
+        } else {
+          skip = true;
+        }
+      } else if ((log.nextValue === DocumentRevisionStatus.Draft) || (log.approvalId && log.nextValue === ApprovalStatus.Abandoned) || (previousValue === ApprovalStatus.Draft && nextValue === ApprovalStatus.Pending && log.approvalId)) {
+        skip = true;
+      } else {
+        // When bulk import change the status
+        const nextStatus = bkStatusTextMap[nextValue as BkStatus] || nextValue;
+        secondaryText = [BkStatus.STARTED, BkStatus.IN_PROGRESS].includes(nextStatus as BkStatus)
+          ? translate('bk.audit.log.importing.status', { status: nextStatus }) : translate('bk.audit.log.import.status', { status: nextStatus });
+        stepChange = translate('bk.audit.log.step-6-importing');
+      }
+    } else if (log.bulkImportId && isStringNewType && nextValue === BkStatus.COMPLETED) {
+      // When bulk import change the status to COMPLETE
+      secondaryText = translate('bk.audit.log.import.status', { status: BkStatus.COMPLETED });
+      stepChange = translate('bk.audit.log.step-6-importing');
+    } else if (isStringNewType && previousValue === 'undefined') {
+      skip = true;
+    }
+
+    return { secondaryText, stepChange, skip };
+  };
+
+  const getDescription = (log: MergedLog, currentBulkImport: BulkImport): Array<{ primaryText: string, secondaryText: string }> | null => {
+    const previousValue: string = log.previousValue as string;
+    const nextValue: string = log.nextValue as string;
+    let secondaryText = translate('bk.audit.log.changed.from.to', { previousValue, nextValue });
     let stepChange = '';
+    let skip = false;
+    const isStringEditedType = log.type === LogEntryType.STRING_EDITED;
+    const isStringNewType = log.type === LogEntryType.STRING_NEW;
 
     switch (log.fieldPath) {
-      case 'processType':
-        secondaryText = `Select process type: ${log.nextValue}`;
-        stepChange = 'Step 1 Import Details';
+      case BulkImportLogsEntries.PROCESS_TYPE:
+        secondaryText = translate('bk.audit.log.process.type.select', { nextValue });
+        stepChange = translate('bk.audit.log.step.1.import.details');
+        skip = true;
         break;
-      case 'jobId':
-        secondaryText = `Created the bulk import job id: ${log.nextValue}`;
-        stepChange = 'Bulk Import Created';
+      case BulkImportLogsEntries.JOB_ID:
+        secondaryText = translate('bk.audit.log.job.new.import.started', { processType: currentBulkImport.processType });
+        stepChange = translate('bk.audit.log.step.1.import.details');
         break;
-      case 'xlsx':
-        if (log.type === 'ARRAY_NEW') {
-          const xlsxData = JSON.parse(log?.nextValue as string);
+      case BulkImportLogsEntries.XLSX:
+        if (log.type === LogEntryType.ARRAY_NEW) {
+          const xlsxData = JSON.parse(nextValue);
           const matchedExcelFile = currentBulkImport.excelFile && currentBulkImport.excelFile.id === xlsxData.fileId;
           secondaryText = matchedExcelFile && currentBulkImport.excelFile
-            ? `Uploaded Excel file: ${currentBulkImport.excelFile.name}.${currentBulkImport.excelFile.type}`
-            : `Upload a old xlsx file, field id: ${xlsxData.fileId}`;
-          stepChange = 'Step 2 Upload Data';
+            ? translate('bk.audit.log.file.uploaded', { fileName: currentBulkImport.excelFile.name, fileType: currentBulkImport.excelFile.type })
+            : translate('bk.audit.log.file.uploaded.id', { fileId: xlsxData.fileId });
+          stepChange = translate('bk.audit.log.step.2.upload.data');
         }
         break;
-      case 'originalHeaders':
-        if (log?.type === 'OBJECT_EDITED') {
-          secondaryText = 'Select the headers';
-          stepChange = 'Step 3 Map Columns';
+      case BulkImportLogsEntries.ORIGINAL_HEADERS:
+        if (log?.type === LogEntryType.OBJECT_EDITED) {
+          secondaryText = translate('bk.audit.log.select.headers');
+          stepChange = translate('bk.audit.log.step.3.map.columns');
         }
         break;
-      case 'dataId':
-        if (log.type === 'STRING_EDITED') {
-          secondaryText = 'Edit table data';
-          stepChange = 'Step 3 Edit table data';
+      case BulkImportLogsEntries.DATA_ID:
+        if (isStringEditedType) {
+          secondaryText = translate('bk.audit.log.edit.table.data');
+          stepChange = translate('bk.audit.log.step.3.edit.table.data');
         }
         break;
-      case 'attachmentId':
-        if (log.type === 'STRING_EDITED') {
-          const matchedZipFile = currentBulkImport.zipFile && currentBulkImport.zipFile.id === log.nextValue;
+      case BulkImportLogsEntries.ATTACHMENT_ID:
+        if (isStringEditedType) {
+          const matchedZipFile = currentBulkImport.zipFile && currentBulkImport.zipFile.id === nextValue;
           secondaryText = matchedZipFile && currentBulkImport.zipFile
-            ? `Uploaded zip file: ${currentBulkImport.zipFile.name}.${currentBulkImport.zipFile.type}`
-            : `Upload zip file id: ${log.nextValue}`;
-          stepChange = 'Step 4 Upload Attachment';
+            ? translate('bk.audit.log.attachment.uploaded', { fileName: currentBulkImport.zipFile.name, fileType: currentBulkImport.zipFile.type })
+            : translate('bk.audit.log.attachment.uploaded.id', { fileId: nextValue });
+          stepChange = translate('bk.audit.log.step.4.upload.attachment');
         }
         break;
-      case 'status':
-        if (log.type === 'STRING_EDITED') {
-          const previousStatus = bkStatusTextMap[log.previousValue as BkStatus] || log.previousValue;
-          const nextStatus = bkStatusTextMap[log.nextValue as BkStatus] || log.nextValue;
-          secondaryText = `Bulk import status changed from ${previousStatus} to ${nextStatus}`;
-          stepChange = 'Bulk import update';
+      case BulkImportLogsEntries.ATTACHMENT_LINK:
+        if (isStringEditedType) {
+          secondaryText = translate('bk.audit.log.attachment.uploaded.link', { link: nextValue });
+          stepChange = translate('bk.audit.log.step.4.upload.attachment');
         }
         break;
-      case 'approver':
-        if (log.type === 'STRING_NEW') {
-          const approverDetails = getUserDetails(log.nextValue as string);
+      case BulkImportLogsEntries.STATUS: {
+        const statusData = getLogsStatusStepChange(
+          log,
+          currentBulkImport,
+          previousValue,
+          nextValue,
+          isStringEditedType,
+          isStringNewType,
+        );
+
+        secondaryText = statusData.secondaryText;
+        stepChange = statusData.stepChange;
+        skip = statusData.skip;
+        break;
+      }
+      case BulkImportLogsEntries.APPROVER:
+        if (isStringNewType) {
+          const approverDetails = getUserDetails(nextValue);
           secondaryText = approverDetails
-            ? `Assigned approver: ${approverDetails?.user?.name}`
-            : `Assigned approver ID: ${log.nextValue}`;
-          stepChange = 'Approver Assigned';
+            ? translate('bk.audit.log.approver.assigned', { approverName: approverDetails?.user?.name })
+            : translate('bk.audit.log.approver.assigned.id', { approverId: nextValue });
+          stepChange = translate('bk.audit.log.step.5.approvals');
         }
         break;
     }
 
+    if (skip) {
+      return null;
+    }
+
     return [
-      { primaryText: 'Type: ', secondaryText: stepChange },
-      { primaryText: 'Update: ', secondaryText },
+      { primaryText: translate('bk.audit.log.type.title'), secondaryText: stepChange },
+      { primaryText: translate('bk.audit.log.update.title'), secondaryText },
     ];
   };
 
   const processLogs = (logs: MergedLog[]): AuditDetailsProps[] => {
     return logs.map((log) => {
-      const currentBulkImport: BulkImport = bulkImportsMaps[log.jobId ?? log.bulkImportId];
+      let currentBulkImport: BulkImport = bulkImportsMaps.bulkImportIds[log.jobId ?? log.bulkImportId];
+      if (!currentBulkImport) {
+        if (log.documentRevisionId) {
+          currentBulkImport = bulkImportsMaps.documentRevisionIds[log.documentRevisionId];
+        } else if (log.approvalId) {
+          currentBulkImport = bulkImportsMaps.approvalIds[log.approvalId];
+        }
+      }
       const ownerDetails = getUserDetails(log.ownerId) ?? {
         user: {
           name: intl.formatMessage({ id: 'common.server.automation' }),
@@ -145,7 +236,13 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         },
       };
 
-      const descriptions = [{ primaryText: 'Job ID:', secondaryText: `${currentBulkImport.jobId}` }, ...getDescription(log, currentBulkImport)];
+      const descriptionData = getDescription(log, currentBulkImport);
+
+      if (!descriptionData) {
+        return null;
+      }
+
+      const descriptions = [{ primaryText: 'Job ID:', secondaryText: `${currentBulkImport?.jobId}` }, ...descriptionData];
 
       return {
         descriptions,
@@ -154,7 +251,7 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         ownerDetails,
         timestamp: `${getFormattedDateString(log.timestamp, MomentFormats.BriefDateTime)}`,
       } as AuditDetailsProps;
-    });
+    }).filter(data => data !== null) as AuditDetailsProps[];
   };
 
   const fetchAuditRecords = () => {

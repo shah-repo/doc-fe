@@ -59,7 +59,14 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const handleLot = (e: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => {
       e.stopPropagation();
       if (item?.status && ![DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated].includes(item?.status)) {
-        toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error' }));
+        if (item?.status === DocumentRevisionStatus.Canceled) {
+          const parts = item.partNumberDocId.split(' - ');
+          const partIdRev = `${parts[0]} rev ${parts[1]}`;
+
+          toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error.for.canceled.part' }, { partIdRev }));
+        } else {
+          toastError(intl.formatMessage({ id: 'form.builder.po.create.a.lot.error' }));
+        }
       } else {
         dialogState?.config({
           open: true,
@@ -85,7 +92,12 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     }
 
     function setSchemaProps (schema?: FBSchemaProps[]): FBSchemaProps[] | undefined {
-      const id = workspaceState?.schema?.find((item) => item.type === 'poreceive')?.tabId;
+      const currentItem = workspaceState?.schema?.find((item) => item.type === 'poreceive');
+      const id = currentItem?.tabId;
+
+      if (!currentItem?.name || !workspaceState?.document?.formInput?.[currentItem.name]?.id) {
+        return;
+      }
 
       remove(schema || [], (item) => item?.type === 'poapprovals');
       if (!schema) { return; }
@@ -128,13 +140,6 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       poReceiveState?.setPOId(value?.id);
     };
 
-    React.useEffect(() => {
-      if (name && !workspaceState?.isRevised) {
-        formState?.setFieldValue(name, { ...formInput?.[name] });
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [receivedItems]);
-
     React.useEffect(() => reaction(
       () => formState?.inputState.get(`porec-${name}`)?.value,
       (value) => {
@@ -144,6 +149,13 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
+    React.useEffect(() => {
+      if (name && !workspaceState?.isRevised) {
+        formState?.setFieldValue(name, { ...formInput?.[name] });
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [receivedItems]);
 
     getOptionLabel = (option: DocumentRevision) => `${option.document?.docId} ${stripTags(option.description)}`;
 

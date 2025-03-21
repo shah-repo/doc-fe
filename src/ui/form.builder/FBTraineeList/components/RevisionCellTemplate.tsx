@@ -22,6 +22,7 @@ const getValue = (item?: DocumentOption) => {
     docId: item.docId,
     documentId: item.id,
     docRevId: item.documentRevisions?.[0]?.id,
+    displayRevision: item.displayRevision,
   };
 };
 
@@ -35,9 +36,7 @@ export const RevisionCellTemplate: React.FC<Props> = (props) => {
   const targetField = fieldToEdit ?? field;
 
   const source = isEditMode ? values : dataItem;
-  const defaultValue = get(source, `${targetField}.documentId`, '') as string;
-  const value = options?.find((revision) => revision.id === defaultValue);
-
+  const value = get(source, targetField) as DocumentOption;
   const displayValue = value ? getOptionLabel(value) : EMPTY_VALUE_PLACEHOLDER;
 
   // TODO recheck isEmpty condition after upgrading MUI Autocomplete

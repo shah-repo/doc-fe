@@ -48,7 +48,7 @@ class FBPOReceiveFormState {
     if (!this.documentId) {
       return;
     }
-    const securityGroups = filterSecurityGroupsForQms(this.lotDocType?.isQms, this.groupOptions);
+    const securityGroups = filterSecurityGroupsForQms(this.groupOptions, this.lotDocType?.isQms);
 
     const reqBody = toNewVersionRequestBody({
       // LOT must not have title

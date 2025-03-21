@@ -26,6 +26,8 @@ const DEFAULTS = {
   PREVENT_DOC_TYPE_MANAGEMENT_EDIT: false,
   OCR_SUPPORTED_FILE_TYPES: '',
   TM_URL: '',
+  SENTRY_DSN: '',
+  SENTRY_ENABLED: '',
 };
 
 type ConfigKey = keyof typeof DEFAULTS;
@@ -158,6 +160,14 @@ class Config {
 
   public static get ocrSupportedFileTypes (): string[] {
     return this.get('OCR_SUPPORTED_FILE_TYPES').toLowerCase().replaceAll(' ', '').split('-');
+  }
+
+  public static get sentryDSN (): string {
+    return this.get('SENTRY_DSN');
+  }
+
+  public static get sentryEnabled (): boolean {
+    return this.get('SENTRY_ENABLED') === 'true';
   }
 }
 
