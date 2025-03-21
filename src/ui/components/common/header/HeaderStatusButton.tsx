@@ -1,6 +1,6 @@
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, ButtonProps, ListItemText, MenuItem, Typography } from '@material-ui/core';
+import { Box, ButtonProps, ListItemText, MenuItem } from '@material-ui/core';
 import { kebabCase } from 'lodash';
 import React from 'react';
 import {
@@ -9,6 +9,7 @@ import {
 } from '../../../../state/ducks/documentRevisions/types';
 import useMenu from '../../../hooks/useMenu';
 import { Button, SplitButtonMenu } from '../../forms/fields-next';
+import OverflowTooltip from '../../OverflowTooltip';
 import useStyles from './HeaderStatusButton.styles';
 
 export type StatusValue = LotStatus | EquipmentStatus | string;
@@ -53,9 +54,9 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         onClick={!disabled ? optionsMenu.open : undefined}
         data-cy={`${dataCy}-button`}
       >
-        <Typography noWrap className={classes.buttonLabel}>
+        <OverflowTooltip arrow placement="top" title={label} wrapperClassName={classes.buttonLabel}>
           {label}
-        </Typography>
+        </OverflowTooltip>
       </Button>
       {!disabled && (
         <SplitButtonMenu
@@ -72,9 +73,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
               data-cy={`${kebabCase(option.value)}-option`}
               className={classes.menuItem}
             >
-              <ListItemText className={classes.menuItemText}>
-                {option.label}
-              </ListItemText>
+              <ListItemText className={classes.menuItemText}>{option.label}</ListItemText>
             </MenuItem>
           ))}
         </SplitButtonMenu>
