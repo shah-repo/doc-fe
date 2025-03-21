@@ -22,7 +22,6 @@ import { Autocomplete, FormikField } from '../../../../../components/forms/field
 import { OptionType } from '../../../../../components/forms/fields/Autocomplete/types';
 import { FormContext } from '../../../../../components/forms/FormContext';
 import { toastError } from '../../../../../components/notifications';
-import Text from '../../../../../components/Text';
 import { documentVersionPath } from '../../../../../document.revision/utils/paths';
 import { isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionPendingChange } from '../../../../../documentRevision/helpers/documentRevisionStatus';
 import MultipleFormTemplateDialog from '../../../../../documentType/dialogs/MultipleFormTemplateDialog';
@@ -354,6 +353,11 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
 
   const isFinalLevel = (i: number) => i === level.length - 1;
   const isPrevLevel = (i: number) => i === level.length - 2;
+  const { displayRevision, document } = replaceDocumentRevision ?? {};
+  const prevRevInfo = translate('bom.replaced.doc.rev.message', {
+    docId: document?.docId,
+    revId: displayRevision,
+  });
 
   return (
     <td
@@ -460,24 +464,32 @@ const IDCell: ComponentType<CustomTreeListCellProps> = ({ hasChildren, colSpan, 
       <Observer>
         {() => (
           <>
-            {!isEditMode && _documentRevisionFormState?.isDiffViewEnabled && dataItem?.replacementStatus
-            && <Grid
-              container
-              className={classes.replacedDocRevInfo}
-              wrap="nowrap"
-              justify="flex-end"
-              alignItems="center"
-            >
-              <span className={classes.replacedDocRevInfoTitle} >{translate('bom.replaced.doc.rev')}</span>&nbsp;
-              <FontAwesomeIcon icon={solid('arrow-right')} />&nbsp;{replaceDocumentRevision?.document?.docId}
-              <Grid item className={classes.whiteDot} />
-              <Grid item>
-                <Text
-                  translation="form.builder.header.rev"
-                  values={{ revision: replaceDocumentRevision?.displayRevision }}
-                />
-              </Grid>
-            </Grid>}
+            {!isEditMode && _documentRevisionFormState?.isDiffViewEnabled && dataItem?.replacementStatus && (
+              <Tooltip
+                arrow
+                placement="top"
+                title={translate('bom.replaced.doc.rev.tooltip.message', {
+                  docInfo: prevRevInfo,
+                })}
+              >
+                <Grid
+                  container
+                  className={classes.replacedDocRevInfo}
+                  justify="flex-end"
+                  alignItems="center"
+                  spacing={1}
+                >
+                  <Grid item className={classes.replacedDocRevInfoTitle}>
+                    {translate('bom.replaced.doc.rev')}
+                  </Grid>
+                  <Grid item>
+                    <FontAwesomeIcon icon={solid('arrow-right')} />
+                  </Grid>
+                  <Grid item className={classes.ellipsisText}>{document?.docId}</Grid>
+                  <Grid item>{translate('form.builder.header.rev', { revision: displayRevision })}</Grid>
+                </Grid>
+              </Tooltip>
+            )}
           </>
         )}
       </Observer>
