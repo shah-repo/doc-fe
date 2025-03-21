@@ -406,6 +406,7 @@
   "common.attachment": "Attachment",
   "common.attachments.poLine": "Attachments:",
   "common.attachment.exceeds.size.error": "File {name} size ({size}) exceeds the limit of {limit}",
+  "common.attachment.duplicate.error": "Files with duplicate names are not accepted. Invalid files: {duplicates}",
   "common.attachment.form.DOCERROR": ".doc files are not accepted. Please use .docx",
   "common.attachment.form.create.clean.copy.error": "Cannot create a clean copy from a non docx file",
   "common.attachment.redline.warning.download.label": "Yes, download it",

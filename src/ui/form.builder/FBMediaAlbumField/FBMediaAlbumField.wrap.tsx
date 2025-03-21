@@ -6,6 +6,7 @@ import { useObserver } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from '..';
+import { translate } from '../../../common/intl';
 import { companySelectors } from '../../../state/ducks/company';
 import { FILE_UPLOAD_LIMIT, calculateTotalFileSize, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
 import { toastError } from '../../components/notifications';
@@ -89,17 +90,13 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
 
       const duplicateFiles = filesToUpload.filter((file) => {
         const name = file.name.substring(0, file.name.lastIndexOf('.'));
-        console.log(JSON.parse(JSON.stringify({
-          existing: mediaAlbumFieldState?.existingFileNames,
-          name,
-        })));
         return mediaAlbumFieldState?.existingFileNames.includes(name);
       });
       const validFiles = difference(filesToUpload, duplicateFiles);
 
       if (duplicateFiles.length) {
-        const duplicateNamedFiles = duplicateFiles.map(file => file.name).join(', ');
-        toastError(`Files with duplicate names are not accepted. Invalid files: ${duplicateNamedFiles}`);
+        const duplicates = duplicateFiles.map(file => file.name).join(', ');
+        toastError(translate('common.attachment.duplicate.error', { duplicates }));
       }
       mediaAlbumFieldState?.upload(validFiles);
     };
