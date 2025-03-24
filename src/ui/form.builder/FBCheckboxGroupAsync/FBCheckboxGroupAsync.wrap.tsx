@@ -5,6 +5,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { FB } from '..';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { OptionType } from '../../administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
 import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
@@ -33,6 +34,8 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
+    const isMaintainOptionsStatus = workspaceState?.document?.status
+    && [DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview].includes(workspaceState?.document?.status);
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
     const isDocumentForm = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions);
@@ -68,6 +71,15 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
       onSuccess: (list) => {
         const optionsList
           = list?.map((item: OptionType) => ({ ...item, value: item.id })) || [];
+        if (isMaintainOptionsStatus) {
+          const existingSelections = formValue as Array<{id: string, text: string}>;
+          existingSelections.forEach(selection => {
+            const optionPresent = optionsList.find(option => option.id === selection.id);
+            if (!optionPresent) {
+              optionsList.push({ ...selection, value: selection.id });
+            }
+          });
+        }
         workspaceState?.setCheckboxGroupsOptionsMap(name, optionsList);
       },
       onError: toastError,
