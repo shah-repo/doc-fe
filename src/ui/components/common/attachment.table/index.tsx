@@ -50,7 +50,7 @@ const AttachmentTable: React.FC<Props> = ({
   const [activeItem, setActiveItem] = React.useState<Attachment | null>(null);
   const reOrderAttachmentsAction = useActionCreator(documentRevisionsActions.save);
   const { _formState } = SM.useStores();
-  const isReleased = documentRevision?.status === DocumentRevisionStatus.Released;
+  const isDisabled = documentRevision?.status === DocumentRevisionStatus.Released;
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (values?: DocumentRevision) => {
@@ -150,7 +150,7 @@ const AttachmentTable: React.FC<Props> = ({
   }, [attachments]);
 
   return (
-    <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart, onDrop: onDrop, isReleased }}>
+    <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart, onDrop: onDrop, isDisabled }}>
       <DragAndDrop>
         <KendoDataGrid
           className={classes.grid}

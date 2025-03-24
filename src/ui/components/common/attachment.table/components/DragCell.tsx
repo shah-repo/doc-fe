@@ -10,9 +10,9 @@ interface DragContextProps {
   reorder: (dataItem: Attachment) => void
   dragStart: (dataItem: Attachment) => void
   onDrop: () => void
-  isReleased?: boolean
+  isDisabled?: boolean
 }
-export const DragContext = React.createContext<DragContextProps>({ reorder: noop, dragStart: noop, onDrop: noop, isReleased: false });
+export const DragContext = React.createContext<DragContextProps>({ reorder: noop, dragStart: noop, onDrop: noop, isDisabled: false });
 
 interface Props extends CustomGridCellProps {
   dataItem: Attachment
@@ -36,7 +36,7 @@ const DragCell: React.FC<Props> = (props) => {
         e.dataTransfer.getData('dragging');
       }}
     >
-      {!context.isReleased && (
+      {!context.isDisabled && (
         <span
           className={classes.dragElement}
           draggable
