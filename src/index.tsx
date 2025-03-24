@@ -33,8 +33,8 @@ Sentry.init({
     Sentry.moduleMetadataIntegration(),
     Sentry.replayIntegration({
       // Additional SDK configuration goes in here, for example:
-      maskAllText: process.env.REACT_APP_ENV_NAME === 'PRODUCTION',
-      blockAllMedia: process.env.REACT_APP_ENV_NAME === 'PRODUCTION',
+      maskAllText: true,
+      blockAllMedia: true,
     }),
     Sentry.replayCanvasIntegration({
       // Enabling the following will ensure your canvas elements are not forced
