@@ -27,7 +27,6 @@ const DEFAULTS = {
   OCR_SUPPORTED_FILE_TYPES: '',
   TM_URL: '',
   SENTRY_DSN: '',
-  SENTRY_ENABLED: '',
 };
 
 type ConfigKey = keyof typeof DEFAULTS;
@@ -164,10 +163,6 @@ class Config {
 
   public static get sentryDSN (): string {
     return this.get('SENTRY_DSN');
-  }
-
-  public static get sentryEnabled (): string {
-    return this.get('SENTRY_ENABLED');
   }
 }
 
