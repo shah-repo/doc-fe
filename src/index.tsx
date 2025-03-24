@@ -3,16 +3,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Config from './config';
 import { initializeDataDog } from './config/datadog';
-import { initializeSentry } from './config/instrument';
 import * as serviceWorker from './serviceWorker';
 import AppContainer from './ui/app/App.container';
 
 if (Config.DatadogEnabled) {
   initializeDataDog();
-}
-
-if (Config.sentryEnabled) {
-  initializeSentry();
 }
 
 ReactDOM.render(<AppContainer />, document.getElementById('root'));
