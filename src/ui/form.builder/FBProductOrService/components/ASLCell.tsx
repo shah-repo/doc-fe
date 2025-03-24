@@ -6,6 +6,7 @@ import React from 'react';
 import useCommonStatusStyles from '../../../../../src/ui/components/common/kendo.column.templates/Status.styles';
 import { translate } from '../../../../common/intl';
 import { ASLStatus } from '../../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
+import { truncateByMaxChars } from '../../../components/common/header/Helpers';
 import {
   Autocomplete,
   FormikField,
@@ -16,6 +17,7 @@ import OverflowTooltip from '../../../components/OverflowTooltip';
 import {
   ASL_STATUS_CLASS_MAPPING,
   EMPTY_VALUE_PLACEHOLDER,
+  MAX_ASL_STATUS_CHAR_LIMIT,
 } from '../constants';
 import { CustomTemplateProps, EditableProductORService } from '../types';
 import useStyles from './Status.styles';
@@ -84,8 +86,11 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
   }
 
   if (defaultValue) {
+    const truncatedValue = truncateByMaxChars(defaultValue, MAX_ASL_STATUS_CHAR_LIMIT);
+    const forceTooltip = defaultValue.length > MAX_ASL_STATUS_CHAR_LIMIT;
+
     return (
-      <OverflowTooltip arrow placement="top" title={defaultValue}>
+      <OverflowTooltip arrow placement="top" title={defaultValue} forceTooltip={forceTooltip}>
         <Chip
           size="small"
           className={cx(
@@ -93,7 +98,7 @@ export const ASLCell: React.FC<CustomTemplateProps> = (props) => {
             classes.aslChipTextOverflow,
             statusClasses[ASL_STATUS_CLASS_MAPPING[statusClass]],
           )}
-          label={defaultValue}
+          label={truncatedValue}
         />
       </OverflowTooltip>
     );

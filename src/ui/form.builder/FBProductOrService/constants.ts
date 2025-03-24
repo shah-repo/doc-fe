@@ -17,3 +17,5 @@ export enum ASL_STATUS_CLASS_MAPPING {
   'Disqualify' = 'RED_STATUS',
   'Inactive' = 'GRAY_STATUS',
 }
+
+export const MAX_ASL_STATUS_CHAR_LIMIT = 25;

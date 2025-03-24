@@ -7,10 +7,12 @@ import {
   EquipmentStatus,
   LotStatus,
 } from '../../../../state/ducks/documentRevisions/types';
+import { MAX_ASL_STATUS_CHAR_LIMIT } from '../../../form.builder/FBProductOrService/constants';
 import useMenu from '../../../hooks/useMenu';
 import { Button, SplitButtonMenu } from '../../forms/fields-next';
 import OverflowTooltip from '../../OverflowTooltip';
 import useStyles from './HeaderStatusButton.styles';
+import { truncateByMaxChars } from './Helpers';
 
 export type StatusValue = LotStatus | EquipmentStatus | string;
 
@@ -55,7 +57,7 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
         data-cy={`${dataCy}-button`}
       >
         <OverflowTooltip arrow placement="top" title={label} wrapperClassName={classes.buttonLabel}>
-          {label}
+          {truncateByMaxChars(label, MAX_ASL_STATUS_CHAR_LIMIT)}
         </OverflowTooltip>
       </Button>
       {!disabled && (
@@ -73,7 +75,11 @@ const HeaderStatusButton: React.FC<HeaderStatusButtonProps> = ({
               data-cy={`${kebabCase(option.value)}-option`}
               className={classes.menuItem}
             >
-              <ListItemText className={classes.menuItemText}>{option.label}</ListItemText>
+              <ListItemText className={classes.menuItemText}>
+                <OverflowTooltip arrow placement="top" title={label}>
+                  {truncateByMaxChars(option.label, MAX_ASL_STATUS_CHAR_LIMIT)}
+                </OverflowTooltip>
+              </ListItemText>
             </MenuItem>
           ))}
         </SplitButtonMenu>

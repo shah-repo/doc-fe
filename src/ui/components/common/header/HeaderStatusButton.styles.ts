@@ -33,7 +33,7 @@ export default makeStyles((theme: Theme) => ({
     },
   },
   menuItem: {
-    maxWidth: 280,
+    maxWidth: 220,
     overflow: 'hidden',
   },
   menuItemText: {
