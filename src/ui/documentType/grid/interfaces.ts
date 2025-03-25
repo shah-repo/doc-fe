@@ -22,7 +22,7 @@ export interface KendoPresenterProps {
   documentCategory: PageDetails
 }
 
-export interface DocTypeTableContextType {
+interface DocTypeTableContextType {
   aslStatuses?: ASLStatus[]
 }
 
