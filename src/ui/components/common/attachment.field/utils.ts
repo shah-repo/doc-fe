@@ -11,7 +11,11 @@ const fileSize = (filesSize: number) => {
 
 const LIMIT = fileSize(FILE_UPLOAD_LIMIT);
 
-export const handleFileSizeExceedLimit = (names: string[], filesSize: number, event: React.FormEvent<HTMLInputElement>): void => {
+export const handleFileSizeExceedLimit = (
+  names: string[],
+  filesSize: number,
+  event: React.FormEvent<HTMLInputElement>,
+): void => {
   const formattedSize = fileSize(filesSize);
   event.currentTarget.value = '';
   names.forEach(name => {
@@ -24,5 +28,4 @@ export const handleFileSizeExceedLimit = (names: string[], filesSize: number, ev
   });
 };
 
-export const calculateTotalFileSize = (files: FileList | null): number => Array.from(files
-   ?? []).reduce((acc, file) => acc + file.size, 0);
+export const calculateTotalFileSize = (files: File[]): number => files?.reduce((acc, file) => acc + file.size, 0);

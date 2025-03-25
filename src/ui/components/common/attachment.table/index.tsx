@@ -58,13 +58,18 @@ const AttachmentTable: React.FC<Props> = ({
   });
 
   const reorder = (item: Attachment) => {
-    if (activeItem === item) {
+    const isPrimary = Boolean(documentRevision?.primaryAttachment?.id);
+    if (activeItem === item || (isPrimary && activeItem?.index === 0)) {
       return;
     }
 
     const reorderedData = attachmentsData.slice();
-    const prevIndex = reorderedData.findIndex((p) => p === activeItem);
-    const nextIndex = reorderedData.findIndex((p) => p === item);
+    const prevIndex = reorderedData.findIndex((p) => p.id === activeItem?.id);
+    const nextIndex = reorderedData.findIndex((p) => p.id === item.id);
+
+    if(isPrimary && nextIndex === 0) {
+      return;
+    }
 
     reorderedData.splice(prevIndex, 1);
     reorderedData.splice(nextIndex, 0, activeItem ?? reorderedData[0]);
@@ -139,10 +144,9 @@ const AttachmentTable: React.FC<Props> = ({
   }, [selectedAttachments]);
 
   React.useEffect(() => {
-    setAttachmentsData(attachments);
+    const sortedAttachments = attachments.sort((a, b) => Number(a?.index) - Number(b?.index));
+    setAttachmentsData(sortedAttachments);
   }, [attachments]);
-
-  const sortedAttachments = [...attachmentsData].sort((a, b) => Number(a?.index) - Number(b?.index));
 
   return (
     <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart, onDrop: onDrop }}>
@@ -155,7 +159,7 @@ const AttachmentTable: React.FC<Props> = ({
           hasBoxScrollbars
           resizable
           schema={schema}
-          data={sortedAttachments}
+          data={attachmentsData}
           selectedField={SELECTED_FIELD}
           dataItemKey={DATA_ITEM_KEY}
           selectable={{

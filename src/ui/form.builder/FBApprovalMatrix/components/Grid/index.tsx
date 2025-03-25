@@ -78,20 +78,30 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
       setActiveItem(cloneDeep(dataItem));
     }
   };
-  const requiredSchemaFields = schema.filter(column => column.required).map(column => column.field as string);
-
   const handleItemSave = (): void => {
     if (!activeItem) {
       return;
     }
 
-    const validationErrors = requiredSchemaFields.reduce((result, field) => {
+    const validationErrors = schema.reduce((result, column) => {
+      const field = String(column.field);
       const value = get(activeItem, field);
-      const error = !value ? 'validators.required' : undefined;
-      return {
-        ...result,
-        ...(error ? { [field]: error } : {}),
-      };
+
+      if (column.required && !value) {
+        return {
+          ...result,
+          [field]: 'validators.required',
+        };
+      }
+
+      if (field === 'docType.name' && originData.map((item) => get(item, field)).includes(value.trim())) {
+        return {
+          ...result,
+          [field]: 'validators.unique',
+        };
+      }
+
+      return result;
     }, {});
 
     const newData = data.map((dataItem) => {

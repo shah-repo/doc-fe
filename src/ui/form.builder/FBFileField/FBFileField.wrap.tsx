@@ -1,15 +1,14 @@
-import { filter, get, isEmpty, join } from 'lodash';
+import { isEmpty } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import React from 'react';
 import { FB, FBFileFieldProps, FBFileFieldState } from '..';
 import { calculateTotalFileSize, FILE_UPLOAD_LIMIT, handleFileSizeExceedLimit } from '../../components/common/attachment.field/utils';
-import { toastError } from '../../components/notifications';
 import { checkIsDocumentWO } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(
-  Component: React.FunctionComponent<T>,
-) => {
+  Component: React.FC<T>,
+): React.FC<T> => {
   const Comp = ({
     onUploadClick,
     onClick,
@@ -19,7 +18,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     ...props
   }: T) => {
     const { fileUploadState, workspaceState, formState } = FB.useStores();
-    const { id } = workspaceState || {};
+    const { id } = workspaceState ?? {};
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
     const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
     const isWORecord = checkIsDocumentWO(groupOptions) && isEmpty(workspaceState?.document?.formTemplate);
@@ -60,28 +59,20 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     };
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const eventFiles = get(event, 'currentTarget.files', []);
-      const invalidFiles: string[] = [];
-
-      const filesSize = calculateTotalFileSize(event?.currentTarget?.files);
-      const names = Array.from(event.currentTarget.files || []).map(file => file.name);
-      if (filesSize > FILE_UPLOAD_LIMIT) {
-        handleFileSizeExceedLimit(names, filesSize, event);
-
+      if (!event.currentTarget.files) {
         return;
       }
-      const validFiles: File[] = filter(eventFiles, (file) => {
-        const fileName = get(file, 'name', '');
-        const type = fileName.split('.').pop();
-        (type === 'doc') && (invalidFiles.push(fileName));
-        return type !== 'doc';
-      });
+      const filesToUpload = Array.from(event.currentTarget.files);
 
-      if (!isEmpty(invalidFiles)) {
-        toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ', ')}`);
+      const filesSize = calculateTotalFileSize(filesToUpload);
+      if (filesSize > FILE_UPLOAD_LIMIT) {
+        const names = filesToUpload.map(file => file.name);
+        handleFileSizeExceedLimit(names, filesSize, event);
+        return;
       }
+
       if (workspaceState?.mode !== 'preview' || isWORecord) {
-        fileFieldState?.upload(validFiles);
+        fileFieldState?.upload(filesToUpload);
       }
     };
 

@@ -142,7 +142,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           name={name}
           error={controlState.error}
           disabled={controlState.disabled}
-          placeholder={placeholder}
+          placeholder={props.value ? '' : placeholder}
         />
       )}
       ChipProps={ChipProps}

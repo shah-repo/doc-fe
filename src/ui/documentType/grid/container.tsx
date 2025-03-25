@@ -26,6 +26,7 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
 import { RouteParams } from '../utils/types';
+import { cellOverflowFields, ownerFieldsMapping } from './constants';
 import { columnSearchConfiguration, getStaticColumns } from './helpers';
 import { DocTypeTableContext } from './interfaces';
 import { DocumentTypePresenter } from './presenter';
@@ -149,19 +150,6 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.queryDict, categoryName]);
 
-  const ownerFieldsMapping = {
-    'owner.user.name': ['owner.user.avatar', 'owner.user.initialColor'],
-  };
-  const overflowCellFields = [
-    'precalc.partNumberTitle',
-    'precalc.partNumberDescription',
-    'precalc.supplierCertifications',
-    'precalc.supplierItemsApproved',
-    'formInput.supplier-type',
-    'supplierStatusId',
-    'name',
-  ];
-
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: string | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
@@ -198,7 +186,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     } else if (upDateField === 'precalc.supplierAttachmentsCount') {
       dynamicCellTemplate = KendoCellTemplates.ATTACHMENT_COUNT;
       dynamicHeaderCellTemplate = KendoGridHeaderCell.ATTACHMENT_COUNT;
-    } else if (overflowCellFields.includes(upDateField)) {
+    } else if (cellOverflowFields.includes(upDateField)) {
       dynamicCellTemplate = KendoCellTemplates.OVERFLOW_CELL;
     } else {
       dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;

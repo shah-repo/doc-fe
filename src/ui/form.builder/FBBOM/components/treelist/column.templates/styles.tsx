@@ -156,6 +156,12 @@ export const styles = makeStyles((theme) => ({
   replacedDocRevInfoTitle: {
     fontWeight: 600,
   },
+  ellipsisText: {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    maxWidth: 90,
+  },
   whiteDot: {
     width: '4px',
     height: '4px',

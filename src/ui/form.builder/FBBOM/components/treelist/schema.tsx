@@ -32,7 +32,7 @@ export const TreeListSchema = ({ openDetailDrawer, openARIDQuickView }) => {
     {
       field: 'customDocId',
       title: translate('bom.treelist.treeColumns.field.customDocId.title'),
-      width: 204,
+      width: 260,
       filter: TreeListTextFilter,
       expandable: true,
       locked: true,
