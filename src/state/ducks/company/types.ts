@@ -294,6 +294,7 @@ export enum PremiumFeature {
   AI = 'AI',
   Analytics = 'ANALYTICS',
   OCR = 'OCR',
+  VALIDATION_PACKAGE = 'VALIDATION_PACKAGE',
 }
 
 export interface PremiumFeatureSubscriptionPayload {

@@ -17,7 +17,7 @@ import { buildSchema } from './schema';
 import { EditableApprovalRole } from './types';
 
 const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
-  const { getFieldProps, values: formValues } = useFormikContext<GeneralSettings>();
+  const { getFieldProps, values: formValues, dirty: parentDirty, setFieldValue } = useFormikContext<GeneralSettings>();
   const approvalRoles = getFieldProps('approvalRoles.approvalRoles').value as ApprovalRole[];
   const dam = getFieldProps('approvalRoles.dam').value as Dam;
   const [approvalRolesData, setApprovalRolesData] = React.useState(approvalRoles);
@@ -116,6 +116,14 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     onConfirm: submitForm,
   });
 
+  useEffect(() => {
+    if (formik.dirty && !parentDirty) {
+      setFieldValue('dirty', formik.dirty);
+    } else if (!formik.dirty && parentDirty) {
+      setFieldValue('dirty', undefined);
+    }
+  }, [formik.dirty, parentDirty]);
+
   return (
     <>
       <SettingsPanel
@@ -125,7 +133,6 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       >
         <FormikProvider value={formik}>
           <SettingsTable
-            isActive
             data={approvalRoleList}
             isEditing={editedApprovalRole !== undefined}
             schema={schema}
@@ -137,11 +144,12 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       {isOpen && (
         <SyncMessageDialog
           {...{ isOpen, dam }}
-          closeDialog={() => setIsOpen(false)}
+          onConfirm={() => setIsOpen(false)}
         />
       )}
     </>
   );
 };
 
+// ts-unused-exports:disable-next-line
 export default ApprovalRolesSettingsPanel;

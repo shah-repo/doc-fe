@@ -12,7 +12,7 @@ export default function StatusChip ({ status }: { status: string }) {
       className={`${classes.chip} ${
         classes[FormHeaderStatusClassMapping[status || '']]
       }`}
-      label={STATUS_TYPES_LABEL[status]}
+      label={STATUS_TYPES_LABEL[status?.toUpperCase()]}
       data-cy="where-used-status"
     />
   );
