@@ -94,7 +94,11 @@ function Grid<T> (props: GridProps<T>): React.ReactElement {
         };
       }
 
-      if (field === 'docType.name' && originData.map((item) => get(item, field)).includes(value.trim())) {
+      if (
+        field === 'docType.name'
+        && activeItem[MODE_FIELD] === Mode.add
+        && originData.map((item) => get(item, field)).includes(value.trim())
+      ) {
         return {
           ...result,
           [field]: 'validators.unique',
