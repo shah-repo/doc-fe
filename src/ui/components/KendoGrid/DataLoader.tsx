@@ -7,6 +7,7 @@ import { redirectTo } from '../../../common/redirectHandler';
 import apiClient from '../../../state/apiClient';
 import { authActions } from '../../../state/ducks/auth';
 import { ANNOUNCEMENTS_BASE } from '../../../state/ducks/company/constants';
+import { DocumentCategory } from '../../../state/ducks/documentRevisions/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
 import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
 import { store } from '../../../state/store';
@@ -57,7 +58,7 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
   const odString = `${toODataString(updatedDataState)}&$table="${tableName}"`;
 
   React.useEffect(() => {
-    if (documentTypeCategory) {
+    if (documentTypeCategory === DocumentCategory.Supplier) {
       getAnnouncements(documentTypeCategory);
     }
   }, []);
