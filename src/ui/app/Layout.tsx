@@ -8,6 +8,7 @@ import { SearchPage } from '../../App/Enlil/Features/Search';
 import { authSelectors } from '../../state/ducks/auth';
 import BulkMigrationPage from '../administration/bulkMigration';
 import GeneralSettingsPage from '../administration/general.settings';
+import PremiumFeaturesPage from '../administration/premium.settings';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import AsyncTasksContainer from '../async.tasks/grid/container';
 import BulkImportPage from '../bulkImport/container';
@@ -37,6 +38,7 @@ import {
   HOME_URL,
   NO_ACCESS,
   PAGE_DETAILS_MANAGEMENT_URL,
+  PREMIUM_FEATURES_URL,
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
   TRAINING_URL,
@@ -63,7 +65,7 @@ import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
 
-const Layout: React.FunctionComponent = () => {
+const Layout: React.FC = () => {
   const isMobileView = isMobile();
   const defaultSidebarExpandedValue = isMobileView ? false : localStorage.getItem(IS_SIDEBAR_EXPANDED) === '1';
   const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(defaultSidebarExpandedValue);
@@ -175,6 +177,10 @@ const Layout: React.FunctionComponent = () => {
           <Route
             path={GENERAL_SETTINGS_URL}
             component={GeneralSettingsPage}
+          />
+          <Route
+            path={PREMIUM_FEATURES_URL}
+            component={PremiumFeaturesPage}
           />
           <Route
             path={BULK_IMPORT_URL}

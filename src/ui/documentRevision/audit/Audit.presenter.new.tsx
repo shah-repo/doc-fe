@@ -21,6 +21,7 @@ import Text from '../../components/Text';
 import { toastError } from '../../components/notifications';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
+import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
@@ -28,6 +29,7 @@ import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
 import { styles } from './Audit.presenter.styles.new';
+import { CUSTOM_BOOLEAN_FIELD, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
 interface OwnProps {
   audit: AuditGroupType
@@ -112,13 +114,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
+      const lotTransfersBy = audit[groupId].some(item => item.nextValue === SERVER_AUTOMATION_LOT_TRANSFER_BY);
       const { owner, ownerUser, ownerThirdParty, ownerName } = change;
       const isPOAutoChange
         = change.field === 'poStatus' && ownerName === SERVER_OWNED;
       const changeOwner = find([owner, ownerUser, ownerThirdParty], 'user.name');
       let finalOwner = !isPOAutoChange && changeOwner ? changeOwner.user : { name: ownerName } as User;
 
-      if (ownerName === SERVER_OWNED) {
+      if (ownerName === SERVER_OWNED || lotTransfersBy) {
         finalOwner = { name: SERVER_OWNED } as User;
       }
 
@@ -253,6 +256,33 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           });
         }
       }
+
+      if (fbType === 'siteInformation') {
+        const result = handleSiteInformationChange(change, fbLabel);
+        if (result) {
+          ({ change, fbLabel } = result);
+        } else return;
+      }
+
+      if (fbType === 'headquarterAddress') {
+        const result = handleSiteAddressChange(change, fbLabel);
+        if (result) {
+          ({ change, fbLabel } = result);
+        }
+      }
+
+      if (fbType === 'shippingAddress') {
+        const result = handleShippingAddressChange(change);
+        if (!result) return;
+      }
+
+      if (fbType === 'shippingItems') {
+        const result = handleShippingItemsChange(change, fbLabel);
+        if (result) {
+          ({ change, fbLabel } = result);
+        } else return;
+      }
+
       // LOT TRANSFERS
       if (fbType === 'lotTransfers') {
         const fieldParts = change.field.split('.');
@@ -488,7 +518,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           return;
         }
 
+        // for site contact info delete chage FbLable
+        if (change.field.includes('siteContact') && change.type === 'ARRAY_DELETED') {
+          fbLabel = `${fbLabel} Contact`;
+        }
+
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
+        const isCustomBooleanField = change.field === CUSTOM_BOOLEAN_FIELD;
+
         const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 
         singleFields.push(
@@ -528,7 +565,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   {labelToShow(change, groupKey, key, revIdRelatedTypeObj)}
                 </Typography>
               )}
-              {(isFBField || isSmartRef) && (
+              {isCustomBooleanField && (
+                <Typography className={classes.auditKey}>
+                  <span data-cy={`change-key-${groupKey}-${key}`}>
+                    {fbLabel}
+                  </span>
+                </Typography>
+              )}
+              {(isFBField || isSmartRef) && !isCustomBooleanField && (
                 <Typography
                   className={classes.auditKey}
                 >

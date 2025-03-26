@@ -15,9 +15,9 @@ import { DOC_TYPE_GROUP_OPTION, DocumentType, DocumentTypeById, DocumentTypeById
 import { DocumentRevision, HeaderTableType } from '../../../state/ducks/documentRevisions/types';
 import { documentsActions } from '../../../state/ducks/documents';
 import { DocumentProposedId } from '../../../state/ducks/documents/types';
-import { userManagementSelectors } from '../../../state/ducks/userManagement';
 import { ApplicationState } from '../../../state/reducers';
 import GridTitle from '../../components/KendoGrid/GridTitle/presenter';
+import SearchBar from '../../components/KeywordSearch';
 import Text from '../../components/Text';
 import ExportListIcon from '../../components/common/kendo/ExportListIcon';
 import { FormContext } from '../../components/forms/FormContext';
@@ -32,10 +32,10 @@ import { useCreateDocumentByTypeButton } from '../../hooks/docCustomization/useC
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDialog from '../../hooks/useDialog';
+import useDocTypeGroups from '../../hooks/useDocTypeGroups';
 import FormListDialog from '../dialogs/FormListDialog/FormListDialog.presenter';
 import MultipleFormTemplateDialog from '../dialogs/MultipleFormTemplateDialog';
-import { filterSecurityGroupsForQms } from './helpers';
-import { styles } from './styles';
+import useStyles from './styles';
 
 interface MultipleFormInitialValues {
   selectType: OptionType[]
@@ -49,13 +49,15 @@ interface Props {
   headers: HeaderTableType[]
   tableData: any[]
   isGrouped: boolean
+  isKeywordSearchEnabled?: boolean
+  tableName?: string
 }
 
 type DocCreator = (form: DocumentRevision) => void;
 
 export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
-  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+  const getDocTypeGroups = useDocTypeGroups();
   const history = useHistory();
   const { _documentRevisionFormState } = SM.useStores();
   const [form, setForm] = useState<DocumentRevision>();
@@ -85,9 +87,8 @@ export const useHandleCreateDoc = (selectedDocumentTypeId = ''): DocCreator => {
 
   const createDoc = (docId: string) => {
     const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision, selectedDocumentType);
-    const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes ?? [];
-    const isQms = (outputDocumentTypes[0] as unknown as DocumentType)?.isQms;
-    formValues.securityGroups = filterSecurityGroupsForQms(isQms, groupOptions);
+    const outputDocumentType = (form?.formTemplate?.outputDocumentTypes[0] ?? {}) as DocumentType;
+    formValues.securityGroups = getDocTypeGroups(outputDocumentType);
 
     const data = toNewVersionRequestBody(formValues);
     data.formDocument = { id: formValues?.formDocument?.id };
@@ -129,9 +130,11 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   headers,
   isGrouped,
   tableData,
+  isKeywordSearchEnabled,
+  tableName,
 }) => {
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
-  const classes = styles();
+  const classes = useStyles();
 
   const formDialog = useDialog();
   const multipleFormDialog = useDialog();
@@ -338,7 +341,16 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     <>
       <Grid container alignItems="center" justify="space-between">
         <Grid item>
-          <GridTitle title={title} />
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item>
+              <GridTitle title={title} />
+            </Grid>
+            {isKeywordSearchEnabled && title && (
+              <Grid item xs>
+                <SearchBar tableName={tableName} />
+              </Grid>
+            )}
+          </Grid>
         </Grid>
         <Grid item>
           <Button
@@ -366,26 +378,28 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
               id="DocumentByTypeListPresenter-openDocRev"
               data-cy="document-by-type-list-presenter-open-doc-rev"
             >
-              <Text
-                message={buttonLabel}
-                values={{ name: labelName }}
-              />
+              <Text message={buttonLabel} values={{ name: labelName }} />
             </Button>
           </CustomLabelTooltip>
         </Grid>
       </Grid>
-      {
-        errorMessage && (
-          <div style={{ color: 'red' }} id="DocumentByTypeListPresenter-showError">
-            <Text
-              message={errorMessage}
-              values={{ name: isByCategory ? selectedTypeLabel : labelName }}
-            />
-          </div>
-        )
-      }
+      {errorMessage && (
+        <div
+          className={classes.errorBlock}
+          id="DocumentByTypeListPresenter-showError"
+        >
+          <Text
+            message={errorMessage}
+            values={{ name: isByCategory ? selectedTypeLabel : labelName }}
+          />
+        </div>
+      )}
       <FormContext.Provider value={{ submitOnChange: false }}>
-        <Formik initialValues={initialValues} enableReinitialize onSubmit={handleDocTypeSelection}>
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={handleDocTypeSelection}
+        >
           {renderFormTemplateDialog}
         </Formik>
       </FormContext.Provider>

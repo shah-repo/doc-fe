@@ -1,0 +1,107 @@
+import React from 'react';
+import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGrid.types';
+import { ActionsCellTemplate } from './components/ActionsCellTemplate';
+import { PrimaryCell } from './components/PrimaryCell';
+import { TextFieldCellTemplate } from './components/TextFieldCellTemplate';
+import { EditableSiteContact, SchemaOptions } from './types';
+
+export const buildSchema = ({
+  isActive,
+  isInEditMode,
+  actionsClass,
+  onRowClick,
+  onConfirm,
+  onDiscard,
+  onDelete,
+}: SchemaOptions): Array<ColumnDefinition<EditableSiteContact>> => {
+  return [
+    {
+      id: 'isPrimary',
+      field: 'isPrimary',
+      filterable: false,
+      title: 'form.builder.contact.grid.heading.isPrimary',
+      template: (props) => (
+        <PrimaryCell
+          {...props}
+          isActive={isActive}
+          isInEditMode={isInEditMode}
+        />
+      ),
+      width: 80,
+    },
+    {
+      id: 'isShipping',
+      field: 'isShipping',
+      title: 'form.builder.contact.grid.heading.isShipping',
+      filterable: false,
+      template: (props) => (
+        <PrimaryCell
+          {...props}
+          isActive={isActive}
+          isInEditMode={isInEditMode}
+        />
+      ),
+      width: 80,
+    },
+    {
+      id: 'isAttention',
+      field: 'isAttention',
+      title: 'form.builder.contact.grid.heading.isAttention',
+      filterable: false,
+      template: (props) => (
+        <PrimaryCell
+          {...props}
+          isActive={isActive}
+          isInEditMode={isInEditMode}
+        />
+      ),
+      width: 80,
+    },
+    {
+      id: 'name',
+      field: 'name',
+      title: 'form.builder.contact.grid.heading.name',
+      filterable: false,
+      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      width: 200,
+    },
+    {
+      id: 'email',
+      field: 'email',
+      title: 'form.builder.contact.grid.heading.email',
+      filterable: false,
+      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      width: 200,
+    },
+    {
+      id: 'phoneNumber',
+      field: 'phoneNumber',
+      title: 'form.builder.contact.grid.heading.phone.number',
+      filterable: false,
+      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      width: 150,
+    },
+    {
+      id: 'other',
+      field: 'other',
+      title: 'form.builder.contact.grid.heading.other',
+      filterable: false,
+      template: (props) => <TextFieldCellTemplate {...props} onClick={onRowClick} />,
+      width: 150,
+    },
+    {
+      id: 'actions',
+      title: 'actions',
+      className: actionsClass,
+      template: (props) => (
+        <ActionsCellTemplate
+          {...props}
+          onConfirm={onConfirm}
+          onDiscard={onDiscard}
+          onDelete={onDelete}
+        />
+      ),
+      width: 1,
+    },
+  ];
+};

@@ -2,7 +2,8 @@ import { AllocationLOTBody, AllocationPartBody } from '../../../ui/form.builder/
 import { AllocationItem, LatestPartRevisionInfo } from '../../../ui/form.builder/FBAllocation/interface';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { ALLOCATION_LIST_ROOT_URL, LATEST_PART_REVISION_URL } from './constants';
+import { DocumentRevision } from '../documentRevisions/types';
+import { ALLOCATION_LIST_ROOT_URL, LATEST_CUSTOMER_REVISION_URL, LATEST_PART_REVISION_URL } from './constants';
 
 const loadAllocationList = (
   woId: string,
@@ -110,7 +111,18 @@ const fetchLatestPartRevision = (
     handlers,
   });
 
+const fetchLatestRevisionDetailsByRevId = (
+  revId: string,
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: `${LATEST_CUSTOMER_REVISION_URL}/${revId}`,
+    method: 'get',
+    handlers,
+  });
+
 export default {
+  fetchLatestRevisionDetailsByRevId,
   loadAllocationList,
   autoAssignLOT,
   addPart,

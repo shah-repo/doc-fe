@@ -1,58 +1,61 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, CircularProgress, Drawer, IconButton } from '@material-ui/core';
-import { flatten, map, slice } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios';
+import { isEmpty, map, values } from 'lodash';
+import qs from 'query-string';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { intl } from '../../../../common/intl';
+import { translate } from '../../../../common/intl';
 import { getFormattedDateString, MomentFormats } from '../../../../common/utils/date';
-import { bkStatusTextMap } from '../../../../state/ducks/bulkImport/constants';
-import { getBulkImports, getBulkImportsMap } from '../../../../state/ducks/bulkImport/selectors';
-import { BkStatus, LogEntry } from '../../../../state/ducks/bulkImport/types';
+import apiClient from '../../../../state/apiClient';
+import { bkStatusTextMap, BULK_IMPORT_AUDIT_URL } from '../../../../state/ducks/bulkImport/constants';
+import { getBulkImportsMap } from '../../../../state/ducks/bulkImport/selectors';
+import { BkStatus, BulkImport, BulkImportLogsEntries, LogEntry, LogEntryType } from '../../../../state/ducks/bulkImport/types';
+import { ApprovalStatus } from '../../../../state/ducks/common/types';
 import { companySelectors } from '../../../../state/ducks/company';
+import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
+import { UM_AUDIT_HISTORY_INITIAL_OFFSET, UM_AUDIT_HISTORY_LIMIT } from '../../../../state/ducks/userManagement/constants';
 import { AuditDetailsProps } from '../../../../state/ducks/userManagement/types';
+import { store } from '../../../../state/store';
 import Default from '../../../components/common/audit.history/Cards/Default';
 import LoadMoreButton from '../../../components/common/load.more.button/LoadMoreButton';
 import Text from '../../../components/Text';
 import styles from './styles';
 
-const PER_PAGE = 30;
+let call: CancelTokenSource;
 
-const fieldTypeConditions = {
-  processType: null, // No type requirement
-  jobId: null, // No type requirement
-  documentRevisionId: null, // No type requirement
-  xlsx: 'ARRAY_NEW',
-  originalHeaders: 'OBJECT_EDITED',
-  dataId: 'STRING_EDITED',
-  attachmentId: 'STRING_EDITED',
-  status: 'STRING_EDITED',
-  approver: 'STRING_NEW',
-};
-
-interface OwnProps {
+interface AuditHistoryProps {
   openHistoryPanel: boolean
   closeHistoryPanel: (panel: boolean) => void
 }
 
 interface MergedLog extends LogEntry {
+  bulkImport: BulkImport
+  bulkImportId: string
+  approvalId: string
   jobId: string
-  approvalId?: string
 }
 
-const AuditHistory: React.FunctionComponent<OwnProps> = ({
+const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
   openHistoryPanel,
   closeHistoryPanel,
 }) => {
+  const intl = useIntl();
+  const limit = UM_AUDIT_HISTORY_LIMIT;
   const classes = styles();
-  const bulkImports = useSelector(getBulkImports);
   const bulkImportsMaps = useSelector(getBulkImportsMap);
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const [isLoading, setIsLoading] = useState(false);
-  const [openDrawer, setOpenDrawer] = useState({ right: openHistoryPanel });
-  const [auditItems, setAuditItems] = useState<AuditDetailsProps[]>([]);
-  const [page, setPage] = useState(0);
-  const mergedLogsData = useRef<MergedLog[]>([]);
+  const [loadMore, setLoadMore] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [openDrawer, setOpenDrawer] = React.useState({ right: openHistoryPanel });
+  const [Items, setItems] = React.useState<AuditDetailsProps[]>([]);
+  const [page, setPage] = useState(UM_AUDIT_HISTORY_INITIAL_OFFSET);
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
+  const [overallLimit, setOverallLimit] = React.useState(0);
+  const [dataTotal, setDataTotal] = React.useState(0);
 
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
 
@@ -61,172 +64,185 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
     closeHistoryPanel(openDrawer.right);
   };
 
-  const filterAndSortLogs = (logs: MergedLog[]): MergedLog[] => {
-    const oldestXlsxLogs: Record<string, MergedLog> = {};
+  React.useEffect(() => {
+    fetchAuditRecords();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    const processedLogs = logs.filter((log) => {
-      const requiredType = fieldTypeConditions[log.fieldPath];
+  const getLogsStatusStepChange = (
+    log: MergedLog,
+    currentBulkImport: BulkImport,
+    previousValue: string,
+    nextValue: string,
+    isStringEditedType: boolean,
+    isStringNewType: boolean,
+  ): {
+    secondaryText: string
+    stepChange: string
+    skip: boolean
+  } => {
+    let secondaryText;
+    let stepChange;
+    let skip;
 
-      // If the fieldPath doesn't exist in fieldTypeConditions, skip this log
-      if (!(log.fieldPath in fieldTypeConditions)) return false;
-
-      // If there's a specific type requirement, check if the log type matches
-      if (requiredType && log.type !== requiredType) return false;
-
-      // filter specific types
-      if (log?.approvalId && log?.type === 'STRING_EDITED' && log?.fieldPath === 'status') return false;
-      if (log?.fieldPath === 'documentRevisionId') return false;
-
-      // Handle `xlsx` field logs by keeping only the oldest log per unique fileId (Because logs give a lot without upload a file, we use only the oldest one per file id)
-      if (log.fieldPath === 'xlsx' && log.type === 'ARRAY_NEW') {
-        try {
-          const xlsxData = JSON.parse(log.nextValue as string);
-          const fileId = xlsxData?.fileId;
-
-          // Continue only if fileId exists
-          if (fileId) {
-            // Store the log if it is the first log for this fileId or if it's older than the stored log
-            if (
-              !oldestXlsxLogs[fileId]
-              || (log.timestamp && oldestXlsxLogs[fileId].timestamp && new Date(log.timestamp ?? 0).getTime() < new Date(oldestXlsxLogs[fileId].timestamp ?? 0).getTime())
-            ) {
-              oldestXlsxLogs[fileId] = log; // Update the oldest log for this fileId
-            }
-          }
-        } catch (error) {
-          console.error('Failed to parse xlsx log data:', error);
-          return false; // Skip invalid entries
+    if (isStringEditedType) {
+      if (log.documentRevisionId && previousValue === DocumentRevisionStatus.Draft && nextValue === DocumentRevisionStatus.InReview) {
+        // When is document revision and used to be draft and now is on review (Submitted for approval)
+        secondaryText = translate('bk.audit.log.submitted.for.approval');
+        stepChange = translate('bk.audit.log.step.5.approvals');
+      } else if (log.documentRevisionId && previousValue === DocumentRevisionStatus.InReview && nextValue === DocumentRevisionStatus.Released) {
+        // When is document revision and used to be in review and now is on released (Approved)
+        secondaryText = translate('bk.audit.log.approved');
+        stepChange = translate('bk.audit.log.step.5.approvals');
+      } else if (log.approvalId && previousValue === ApprovalStatus.Pending && (nextValue === ApprovalStatus.Approved || nextValue === ApprovalStatus.Rejected)) {
+        // when is a approval and it would be approved or rejected
+        const getApprover = currentBulkImport?.documentRevision?.approvals?.find((approval) => approval.id === log.approvalId);
+        if (getApprover) {
+          const approverDetails = getUserDetails(getApprover?.approverId as string);
+          secondaryText = translate(
+            nextValue === ApprovalStatus.Approved ? 'bk.audit.log.approved.by' : 'bk.audit.log.rejected.by',
+            { approverName: approverDetails?.user?.name },
+          );
+          stepChange = translate('bk.audit.log.step.5.approvals');
+        } else {
+          skip = true;
         }
-
-        return false;
+      } else if ((log.nextValue === DocumentRevisionStatus.Draft) || (log.approvalId && log.nextValue === ApprovalStatus.Abandoned) || (previousValue === ApprovalStatus.Draft && nextValue === ApprovalStatus.Pending && log.approvalId)) {
+        skip = true;
+      } else {
+        // When bulk import change the status
+        const nextStatus = bkStatusTextMap[nextValue as BkStatus] || nextValue;
+        secondaryText = [BkStatus.STARTED, BkStatus.IN_PROGRESS].includes(nextStatus as BkStatus)
+          ? translate('bk.audit.log.importing.status', { status: nextStatus }) : translate('bk.audit.log.import.status', { status: nextStatus });
+        stepChange = translate('bk.audit.log.step-6-importing');
       }
+    } else if (log.bulkImportId && isStringNewType && nextValue === BkStatus.COMPLETED) {
+      // When bulk import change the status to COMPLETE
+      secondaryText = translate('bk.audit.log.import.status', { status: BkStatus.COMPLETED });
+      stepChange = translate('bk.audit.log.step-6-importing');
+    } else if (isStringNewType && previousValue === 'undefined') {
+      skip = true;
+    }
 
-      // If there's no type requirement, or if type matches, include the log
-      return true;
-    });
-
-    // Add the upload data values
-    const filteredLogs = [...processedLogs, ...Object.values(oldestXlsxLogs)];
-
-    // sort the logs to have the order per timestamp
-    return filteredLogs.sort((a: MergedLog, b: MergedLog) => {
-      const dateA = new Date(a.timestamp ?? 0);
-      const dateB = new Date(b.timestamp ?? 0);
-      return dateB.getTime() - dateA.getTime();
-    });
+    return { secondaryText, stepChange, skip };
   };
 
-  // Merges all logs from each bulkImport and sorts by timestamp (most recent first)
-  const mergeLogs = (bulkImports): MergedLog[] => {
-  // Merge all logs from each bulkImport
-    const mergedLogs: MergedLog[] = flatten(bulkImports.map((importItem) => {
-    // Extract logs from the main logs array
-      const mainLogs = importItem.logs.map((log) => ({
-        ...log,
-        jobId: importItem.jobId,
-      }));
-
-      // Extract logs from the documentRevision approvals
-      const approvalLogs = importItem?.documentRevision?.approvals
-        ? flatten(
-          importItem.documentRevision.approvals.map((approval) =>
-            approval.auditLogs.map((log) => ({
-              ...log,
-              jobId: importItem.jobId,
-              approverName: approval.approverName, // Add additional info if needed
-              approverEmail: approval.approverEmail,
-            })),
-          ),
-        )
-        : [];
-
-      // Combine main logs and approval logs
-      return [...mainLogs, ...approvalLogs];
-    }));
-
-    return mergedLogs;
-  };
-
-  const getDescription = (log: MergedLog): Array<{ primaryText: string, secondaryText: string }> => {
-    const currentBulkImport = bulkImportsMaps[log.jobId];
-    let secondaryText = `Changed from ${log.previousValue} to ${log.nextValue}`; // Default secondary text
+  const getDescription = (log: MergedLog, currentBulkImport: BulkImport): Array<{ primaryText: string, secondaryText: string }> | null => {
+    const previousValue: string = log.previousValue as string;
+    const nextValue: string = log.nextValue as string;
+    let secondaryText = translate('bk.audit.log.changed.from.to', { previousValue, nextValue });
     let stepChange = '';
+    let skip = false;
+    const isStringEditedType = log.type === LogEntryType.STRING_EDITED;
+    const isStringNewType = log.type === LogEntryType.STRING_NEW;
 
     switch (log.fieldPath) {
-      case 'processType':
-        secondaryText = `Select process type: ${log.nextValue}`;
-        stepChange = 'Step 1 Import Details';
+      case BulkImportLogsEntries.PROCESS_TYPE:
+        secondaryText = translate('bk.audit.log.process.type.select', { nextValue });
+        stepChange = translate('bk.audit.log.step.1.import.details');
+        skip = true;
         break;
-      case 'jobId':
-        secondaryText = `Created the bulk import job id: ${log.nextValue}`;
-        stepChange = 'Bulk Import Created';
+      case BulkImportLogsEntries.JOB_ID:
+        secondaryText = translate('bk.audit.log.job.new.import.started', { processType: currentBulkImport.processType });
+        stepChange = translate('bk.audit.log.step.1.import.details');
         break;
-      case 'xlsx':
-        if (log.type === 'ARRAY_NEW') {
-          const xlsxData = JSON.parse(log?.nextValue as string);
+      case BulkImportLogsEntries.XLSX:
+        if (log.type === LogEntryType.ARRAY_NEW) {
+          const xlsxData = JSON.parse(nextValue);
           const matchedExcelFile = currentBulkImport.excelFile && currentBulkImport.excelFile.id === xlsxData.fileId;
-          secondaryText = matchedExcelFile
-            ? `Uploaded Excel file: ${currentBulkImport.excelFile.name}.${currentBulkImport.excelFile.type}`
-            : `Upload a old xlsx file, field id: ${xlsxData.fileId}`;
-          stepChange = 'Step 2 Upload Data';
+          secondaryText = matchedExcelFile && currentBulkImport.excelFile
+            ? translate('bk.audit.log.file.uploaded', { fileName: currentBulkImport.excelFile.name, fileType: currentBulkImport.excelFile.type })
+            : translate('bk.audit.log.file.uploaded.id', { fileId: xlsxData.fileId });
+          stepChange = translate('bk.audit.log.step.2.upload.data');
         }
         break;
-      case 'originalHeaders':
-        if (log?.type === 'OBJECT_EDITED') {
-          secondaryText = 'Select the headers';
-          stepChange = 'Step 3 Map Columns';
+      case BulkImportLogsEntries.ORIGINAL_HEADERS:
+        if (log?.type === LogEntryType.OBJECT_EDITED) {
+          secondaryText = translate('bk.audit.log.select.headers');
+          stepChange = translate('bk.audit.log.step.3.map.columns');
         }
         break;
-      case 'dataId':
-        if (log.type === 'STRING_EDITED') {
-          secondaryText = 'Edit table data';
-          stepChange = 'Step 3 Edit table data';
+      case BulkImportLogsEntries.DATA_ID:
+        if (isStringEditedType) {
+          secondaryText = translate('bk.audit.log.edit.table.data');
+          stepChange = translate('bk.audit.log.step.3.edit.table.data');
         }
         break;
-      case 'attachmentId':
-        if (log.type === 'STRING_EDITED') {
-          const matchedZipFile = currentBulkImport.zipFile && currentBulkImport.zipFile.id === log.nextValue;
-          secondaryText = matchedZipFile
-            ? `Uploaded zip file: ${currentBulkImport.zipFile.name}.${currentBulkImport.zipFile.type}`
-            : `Upload zip file id: ${log.nextValue}`;
-          stepChange = 'Step 4 Upload Attachment';
+      case BulkImportLogsEntries.ATTACHMENT_ID:
+        if (isStringEditedType) {
+          const matchedZipFile = currentBulkImport.zipFile && currentBulkImport.zipFile.id === nextValue;
+          secondaryText = matchedZipFile && currentBulkImport.zipFile
+            ? translate('bk.audit.log.attachment.uploaded', { fileName: currentBulkImport.zipFile.name, fileType: currentBulkImport.zipFile.type })
+            : translate('bk.audit.log.attachment.uploaded.id', { fileId: nextValue });
+          stepChange = translate('bk.audit.log.step.4.upload.attachment');
         }
         break;
-      case 'status':
-        if (log.type === 'STRING_EDITED') {
-          const previousStatus = bkStatusTextMap[log.previousValue as BkStatus] || log.previousValue;
-          const nextStatus = bkStatusTextMap[log.nextValue as BkStatus] || log.nextValue;
-          secondaryText = `Bulk import status changed from ${previousStatus} to ${nextStatus}`;
-          stepChange = 'Bulk import update';
+      case BulkImportLogsEntries.ATTACHMENT_LINK:
+        if (isStringEditedType) {
+          secondaryText = translate('bk.audit.log.attachment.uploaded.link', { link: nextValue });
+          stepChange = translate('bk.audit.log.step.4.upload.attachment');
         }
         break;
-      case 'approver':
-        if (log.type === 'STRING_NEW') {
-          const approverDetails = getUserDetails(log.nextValue as string);
+      case BulkImportLogsEntries.STATUS: {
+        const statusData = getLogsStatusStepChange(
+          log,
+          currentBulkImport,
+          previousValue,
+          nextValue,
+          isStringEditedType,
+          isStringNewType,
+        );
+
+        secondaryText = statusData.secondaryText;
+        stepChange = statusData.stepChange;
+        skip = statusData.skip;
+        break;
+      }
+      case BulkImportLogsEntries.APPROVER:
+        if (isStringNewType) {
+          const approverDetails = getUserDetails(nextValue);
           secondaryText = approverDetails
-            ? `Assigned approver: ${approverDetails?.user?.name}`
-            : `Assigned approver ID: ${log.nextValue}`;
-          stepChange = 'Approver Assigned';
+            ? translate('bk.audit.log.approver.assigned', { approverName: approverDetails?.user?.name })
+            : translate('bk.audit.log.approver.assigned.id', { approverId: nextValue });
+          stepChange = translate('bk.audit.log.step.5.approvals');
         }
         break;
     }
 
+    if (skip) {
+      return null;
+    }
+
     return [
-      { primaryText: 'Type: ', secondaryText: stepChange },
-      { primaryText: 'Update: ', secondaryText },
+      { primaryText: translate('bk.audit.log.type.title'), secondaryText: stepChange },
+      { primaryText: translate('bk.audit.log.update.title'), secondaryText },
     ];
   };
 
   const processLogs = (logs: MergedLog[]): AuditDetailsProps[] => {
     return logs.map((log) => {
-      const ownerDetails = getUserDetails(log.ownerId) || {
+      let currentBulkImport: BulkImport = bulkImportsMaps.bulkImportIds[log.jobId ?? log.bulkImportId];
+      if (!currentBulkImport) {
+        if (log.documentRevisionId) {
+          currentBulkImport = bulkImportsMaps.documentRevisionIds[log.documentRevisionId];
+        } else if (log.approvalId) {
+          currentBulkImport = bulkImportsMaps.approvalIds[log.approvalId];
+        }
+      }
+      const ownerDetails = getUserDetails(log.ownerId) ?? {
         user: {
           name: intl.formatMessage({ id: 'common.server.automation' }),
           email: log.ownerEmail,
         },
       };
 
-      const descriptions = [{ primaryText: 'Job ID:', secondaryText: `${log.jobId}` }, ...getDescription(log)];
+      const descriptionData = getDescription(log, currentBulkImport);
+
+      if (!descriptionData) {
+        return null;
+      }
+
+      const descriptions = [{ primaryText: 'Job ID:', secondaryText: `${currentBulkImport?.jobId}` }, ...descriptionData];
 
       return {
         descriptions,
@@ -235,33 +251,53 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
         ownerDetails,
         timestamp: `${getFormattedDateString(log.timestamp, MomentFormats.BriefDateTime)}`,
       } as AuditDetailsProps;
-    });
+    }).filter(data => data !== null) as AuditDetailsProps[];
   };
 
   const fetchAuditRecords = () => {
-    setIsLoading(true);
-    const start = page * PER_PAGE;
-    const end = start + PER_PAGE;
-
-    // Get merged and sorted logs
-    mergedLogsData.current = mergeLogs(bulkImports);
-
-    // Filter logs based on allowed fieldPaths and specific types
-    const filteredLogs = filterAndSortLogs(mergedLogsData.current);
-
-    // Paginate the logs by slicing the merged and sorted logs
-    const nextLogs = slice(processLogs(filteredLogs), start, end);
-
-    // Append the new logs to the Items array
-    setAuditItems((prevItems) => [...prevItems, ...nextLogs]);
-    setPage((prevPage) => prevPage + 1);
-    setIsLoading(false);
+     call?.cancel();
+     call = axios.CancelToken.source();
+     setIsLoading(true);
+     setLoadMore(true);
+     setErrorMessage('');
+     setOverallLimit(overallLimit + UM_AUDIT_HISTORY_LIMIT);
+     const requestConfig: AxiosRequestConfig = {
+       method: 'get',
+       url: BULK_IMPORT_AUDIT_URL,
+       params: { offset: page, limit },
+       paramsSerializer: (params) => qs.stringify(params),
+       headers: {
+         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+       },
+       cancelToken: call.token,
+     };
+     apiClient
+       .request(requestConfig)
+       .then((resp) => resp)
+       .then(({ data }: { data: {results: MergedLog[], total: number }}) => {
+         const results = processLogs(data.results || []);
+         setItems((prevState: AuditDetailsProps[]) => [
+           ...prevState,
+           ...values(results),
+         ] as AuditDetailsProps[]);
+         setPage((prevPageNumber) => prevPageNumber + limit);
+         setIsLoading(false);
+         setShowLoadMoreButton(true);
+         setLoadMore(page + limit < data.total);
+         setDataTotal(data.total);
+       })
+       .catch((exception) => {
+         setIsLoading(false);
+         if (axios.isCancel(exception)) {
+           return;
+         }
+         if (exception?.response?.status === 504) {
+           setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
+         } else {
+           setErrorMessage(intl.formatMessage({ id: 'errors.somethingWentWrong' }));
+         }
+       });
   };
-
-  useEffect(() => {
-    // On initial load, fetch the first page of audit records
-    fetchAuditRecords();
-  }, [fetchAuditRecords]);
 
   const renderAuditRecords = () => (
     <>
@@ -287,7 +323,7 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
       </div>
       {isLoading && <Box position="absolute" top="50%" left="40%"><CircularProgress /></Box>}
       <Box className={classes.listItemContainer}>
-        {map(auditItems, (auditDetails, groupKey) => (
+        {map(Items, (auditDetails, groupKey) => (
           <Box key={groupKey} style={{ padding: 0 }}>
             <Default auditDetails={auditDetails} />
           </Box>
@@ -300,14 +336,17 @@ const AuditHistory: React.FunctionComponent<OwnProps> = ({
     <Drawer anchor="right" open={openDrawer.right} onClose={closeDrawer}>
       <Box className={classes.root}>
         {renderAuditRecords()}
-        <Box className={classes.listActions}>
-          <LoadMoreButton
-            disable={isLoading || auditItems.length >= mergedLogsData.current.length}
-            onLoadMore={fetchAuditRecords}
-            id="historyLoadMore"
-            className={classes.loadMore}
-          />
-        </Box>
+        {!isEmpty(errorMessage) && <div className={classes.errorMessage}>{errorMessage}</div>}
+        {showLoadMoreButton && (
+          <Box className={classes.listActions}>
+            <LoadMoreButton
+              disable={isLoading || !loadMore || overallLimit >= dataTotal}
+              onLoadMore={fetchAuditRecords}
+              id="historyLoadMore"
+              className={classes.loadMore}
+            />
+          </Box>
+        )}
       </Box>
     </Drawer>
   );

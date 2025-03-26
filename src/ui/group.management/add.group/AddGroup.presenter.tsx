@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../../common/intl';
+import { GetEmployeeResponse } from '../../../state/ducks/userManagement/types';
 import { Button } from '../../components/forms/fields-next';
 import AuditItemsContainer from '../audit.panel/container';
 import AddGroup from './Group';
@@ -8,6 +9,7 @@ interface OwnProps {
   isOpen: boolean
   openDialog: () => void
   closeDialog: () => void
+  activeEmployees?: GetEmployeeResponse[]
 }
 
 type Props = OwnProps;
@@ -16,6 +18,7 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
   isOpen,
   openDialog,
   closeDialog,
+  activeEmployees,
 }) => {
   const [openHistoryPanel, setHistoryPanel] = React.useState<boolean>(false);
   const onHistoryPanelClick = () => { setHistoryPanel(!openHistoryPanel); };
@@ -41,6 +44,7 @@ const AddGroupPresenter: React.FunctionComponent<Props> = ({
         closeDialog={closeDialog}
         title="group.management.create.group"
         isCreateMode={true}
+        activeEmployees={activeEmployees}
       />
       {openHistoryPanel && (
         <AuditItemsContainer

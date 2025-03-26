@@ -5,7 +5,7 @@ import formControlState from '@material-ui/core/FormControl/formControlState';
 import MuiAutocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import cx from 'classnames';
 import { omit } from 'lodash';
-import React, { useEffect, useMemo, useState, MutableRefObject } from 'react';
+import React, { MutableRefObject, useEffect, useMemo, useState } from 'react';
 import { TextField } from '..';
 import { withThemeNext } from '../../../../layout/theme-next';
 import useStyles from './Autocomplete.styles';
@@ -74,6 +74,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   filterOptions,
   getOptionLabel,
   ChipProps = { size: 'small' },
+  PopperComponent,
   ...props
 }, ref: MutableRefObject<HTMLDivElement>) => {
   const baseClasses = useStyles();
@@ -129,7 +130,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       }}
       getOptionLabel={getOptionLabel}
       filterOptions={filterOptions ?? internalFilterOptions}
-      PopperComponent={(props) => <AutocompletePopper {...props} />}
+      PopperComponent={PopperComponent ?? ((props) => <AutocompletePopper {...props} />)}
       renderInput={(params) => (
         <AutocompleteControl
           {...params}
@@ -141,7 +142,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           name={name}
           error={controlState.error}
           disabled={controlState.disabled}
-          placeholder={placeholder}
+          placeholder={props.value ? '' : placeholder}
         />
       )}
       ChipProps={ChipProps}

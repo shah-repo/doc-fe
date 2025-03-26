@@ -82,4 +82,16 @@ export default makeStyles(theme => ({
       borderRadius: 0,
     },
   },
+  settingOutOfSync: {
+    justifyContent: 'normal',
+  },
+  outOfSyncBox: {
+    cursor: 'default',
+  },
+  outOfSyncIcon: {
+    margin: theme.spacing(0.5, 0, 0, 1),
+    color: Colors.error,
+    width: 20,
+    height: 20,
+  },
 }));

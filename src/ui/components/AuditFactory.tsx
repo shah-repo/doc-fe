@@ -24,7 +24,7 @@ import { getASLStatusAuditDefaultValue, getAuditDefaultValue, getLCPAuditDefault
 import Text from '../components/Text';
 import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../documentRevision/forms/presenters/related.parts/helper';
 import { IRevIdMapper, checkIsDocumentWO } from '../documentRevision/helpers/checkDocumentGroup';
-import { FBPurchaseOrderItemType } from '../form.builder';
+import { FBAutocompleteAsyncOption, FBPurchaseOrderItemType } from '../form.builder';
 import { getDisplayDocumentByDetailsObj, getTypeOptionLabelByValue } from '../form.builder/FBLHRSummary/utils';
 import { Translation } from '../translations/types';
 import AuditAttachment from './AuditAttachment';
@@ -34,6 +34,8 @@ import AuditDownloadS3link from './AuditDownloadS3link';
 import AuditLotTransfer from './AuditLotTransfer';
 import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
+import AuditShippingItems from './AuditShippingItems';
+import AuditSiteInformations from './AuditSiteInformations';
 import AuditTraineeList from './AuditTraineeList';
 import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
@@ -186,6 +188,18 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
+      },
+      siteInformation () {
+        return <AuditSiteInformations {...{ audit, dataCy, auditValue }} />;
+      },
+      shippingItems () {
+        return <AuditShippingItems {...{ audit, dataCy, auditValue }} />;
+      },
+      shippingCustomer () {
+        if (audit.fbSchemaItem) {
+          audit.fbSchemaItem.optionId = FBAutocompleteAsyncOption.shippingInformation;
+        }
+        return <AuditAutocomplete audit={audit} />;
       },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };

@@ -124,9 +124,9 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
         {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }}
       >
         {open ? (
-          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
+          <CollapseIcon className={classes.icon} data-cy="collapse-icon" {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }} />
         ) : (
-          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
+          <ExpandIcon className={classes.icon} data-cy="expand-icon" {...isMobile() ? { onTouchStart: handleClick } : { onClick: handleClick }} />
         )}
         <ListItemAvatar>
           {approverAvatar ? (

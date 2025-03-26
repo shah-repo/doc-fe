@@ -10,6 +10,7 @@ import {
   NavigationItems,
   NavigationItemType,
 } from '../../state/ducks/company/types';
+import NewBadge from '../administration/premium.settings/components/NewBadge';
 import { DOCUMENT_BY_CATEGORY_ROOT_URL } from '../constants/urls';
 import { SIDE_BAR_TAB_INDEX } from '../documentRevision/Sidebar/constants';
 import styles from './NavigationLink.styles';
@@ -49,6 +50,7 @@ NavigationLinkPresenterProps
   currentPath,
   open,
   checkIfItemIsActive,
+  isNew,
 }) => {
   const isMenu = type === NavigationItems.MENU;
   const classes = styles({
@@ -98,14 +100,17 @@ NavigationLinkPresenterProps
       {open && (
         <ListItemText
           primary={
-            <Typography
-              component="span"
-              className={classNames(classes.itemText, {
-                [classes.childTextItem]: isChild && open,
-              })}
-            >
-              {label}
-            </Typography>
+            <>
+              <Typography
+                component="span"
+                className={classNames(classes.itemText, {
+                  [classes.childTextItem]: isChild && open,
+                })}
+              >
+                {label}
+              </Typography>
+              {isNew && <NewBadge />}
+            </>
           }
           onClick={toggleChildren}
         />
