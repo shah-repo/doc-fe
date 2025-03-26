@@ -5,7 +5,7 @@ import { AxiosRequestConfig } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { intl } from '../../../common/intl';
 import apiClient from '../../../state/apiClient';
-import { ANNOUNCEMENTS_BASE, ANNOUNCEMENTS_GET_DETAILS } from '../../../state/ducks/company/constants';
+import { ANNOUNCEMENTS_BASE } from '../../../state/ducks/company/constants';
 import { store } from '../../../state/store';
 import { toastError, toastSuccess } from '../../components/notifications';
 import Colors from '../../layout/theme/utils/colors';
@@ -71,7 +71,7 @@ const AnnouncementDetailsDialog: React.FC<{
 
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
-      url: `${ANNOUNCEMENTS_GET_DETAILS}/${announcement.id}`,
+      url: `${ANNOUNCEMENTS_BASE}/${announcement.id}/details`,
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },

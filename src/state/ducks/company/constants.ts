@@ -28,8 +28,7 @@ export const BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW = 'bulk_migration/previ
 export const BULK_MIGRATION_GET_SCAN_RESULTS = 'bulk_migration/getScanRevisions';
 export const BULK_MIGRATION_START_REVS_MIGRATION = 'bulk_migration/migrateDocRevs';
 
-export const ANNOUNCEMENTS_BASE = 'announcementHub';
-export const ANNOUNCEMENTS_GET_DETAILS = 'announcementHub/details';
+export const ANNOUNCEMENTS_BASE = 'announcement';
 
 export const WHITE_LABEL_DEFAULT = {
   logo: '',
