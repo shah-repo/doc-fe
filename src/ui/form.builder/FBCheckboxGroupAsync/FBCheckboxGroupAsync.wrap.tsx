@@ -38,7 +38,7 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     && [DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview].includes(workspaceState?.document?.status);
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
-    const isDocumentForm = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions);
+    const isDocumentForm = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions) || workspaceState?.isPreview;
 
     options = useObserver(() => {
       const rawOptions = workspaceState?.checkboxGroupsOptionsMap.get(name) ?? [] as CheckBoxOptionType[];
@@ -98,8 +98,6 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
       setSelectedCheckBoxOptions?.(uniqValues);
       workspaceState?.saveDocRev(formState?.getValues());
     };
-
-    console.log('isDocumentForm', isDocumentForm);
 
     useEffect(() => {
       const isSupplierType = name === SUPPLIER_TYPE_NAME;
