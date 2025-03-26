@@ -27,7 +27,6 @@ import { authActions } from '../../../state/ducks/auth';
 import { groupManagementActions } from '../../../state/ducks/groupManagement';
 import { GroupRequestBody } from '../../../state/ducks/groupManagement/types';
 import { tableSearchActions } from '../../../state/ducks/tableSearch';
-import { userManagementActions } from '../../../state/ducks/userManagement';
 import { GetEmployeeResponse, LoadCompanyGroup } from '../../../state/ducks/userManagement/types';
 import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
 import { store } from '../../../state/store';
@@ -42,12 +41,10 @@ import { toastError } from '../../components/notifications';
 import StyledKendoGrid from '../../components/StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../../components/table/ClearFilters';
 import { TablePanelStateProps } from '../../components/table/types';
-import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import useDidMount from '../../hooks/useDidMount';
 import useStyles from '../../user.management/kendo/styles';
 import AddGroupContainer from '../add.group/AddGroup.container';
-import { DEFAULT_ACTIVE_EMPLOYEES } from '../utils/types';
 import { CommandCell } from './cell.template/CommandCell';
 import { EmployeesCell } from './cell.template/EmployeesCell';
 import { GroupCell } from './cell.template/GroupCell';
@@ -61,6 +58,8 @@ interface GroupManagementProps {
   onSelect
   refreshTable: boolean
   canCreateGroups: boolean
+  activeEmployees?: GetEmployeeResponse[]
+
 }
 
 let call: CancelTokenSource;
@@ -74,6 +73,7 @@ export function KendoPanel ({
   onSelect,
   refreshTable,
   canCreateGroups,
+  activeEmployees,
 }: KendoPanelProps<Partial<LoadCompanyGroup>> & GroupManagementProps) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : '';
@@ -217,25 +217,7 @@ export function KendoPanel ({
   const [resultState, setResultState] = useState<DataResult>(
     processWithGroups(gridData, initialDataState),
   );
-  // EMPLOYEES
-  const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
-    DEFAULT_ACTIVE_EMPLOYEES,
-  );
-  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
-  const asyncGetActiveEmployees = useAsync<GetEmployeeResponse[]>({
-    onSuccess: (data: GetEmployeeResponse[] = []) => {
-      setActiveEmployees(data);
-    },
-  });
-  useEffect(() => {
-    if (didMount) {
-      asyncGetActiveEmployees.start(
-        getEmployeeAction,
-        { active: true },
-        asyncGetActiveEmployees,
-      );
-    }
-  }, [didMount]);
+
   useEffect(() => {
     if (didMount && refreshTable) {
       queryApi();
@@ -411,7 +393,7 @@ export function KendoPanel ({
     <NameCell {...props} />;
 
   const employeeCell = (props: GridCellProps) =>
-    <EmployeesCell {...props} employees={activeEmployees} />;
+    <EmployeesCell {...props} employees={activeEmployees || []} />;
 
   const groupCell = (props: GridCellProps) =>
     <GroupCell {...props} isOfficial={Official} setOfficial={setOfficial} />;
@@ -584,7 +566,7 @@ export function KendoPanel ({
           columns={columnDefinitions}
           isGrouped={(dataState?.group ?? []).length > 0}
         />
-        {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+        {canCreateGroups && <AddGroupContainer addGroup={addGroup} activeEmployees={activeEmployees} />}
       </div>
       <div className={classes.table}>
         <AutoSizer>{tableRenderer}</AutoSizer>

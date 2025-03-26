@@ -1,11 +1,11 @@
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, IconButton } from '@material-ui/core';
-import { DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
-import { GridCellProps, GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar, GridColumn as KendoColumn } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, isEmpty, isNull, map, set } from 'lodash';
-import React, { ComponentType, useCallback, useEffect, useState } from 'react';
+import React, { ComponentType, useCallback, useContext, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
@@ -38,6 +38,8 @@ import ColumnShowHideMenu from '../common/kendo/ColumnShowHideMenu';
 import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, orderByLockedState, pagerSettings, setColumnWidth, TranslatedText } from '../common/kendo/helpers';
 import NoDataFound from '../common/kendo/NoDataFound';
 import { KendoColumn as KendoColumnProps } from '../common/kendo/types';
+import { SEARCH_KEYWORD_FIELD_KEY } from '../KendoDataGrid/constants';
+import { SearchContext } from '../KeywordSearch/types';
 import { toastError, toastSuccess } from '../notifications';
 import StyledKendoGrid from '../StyledKendoGrid/StyledKendoGrid';
 import ClearFilters from '../table/ClearFilters';
@@ -67,6 +69,7 @@ export function KendoGrid<T extends any> ({
   const [columns, setColumns] = useState<KendoColumnProps[]>([]);
   const dispatch = useDispatch();
   const intl = useIntl();
+  const context = useContext(SearchContext);
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const [dataState, setDataState] = React.useState<State>(
     tableCriteria?.queryDict?.dataState,
@@ -363,7 +366,10 @@ export function KendoGrid<T extends any> ({
           />
         ),
     );
+
   const clearFilter = () => {
+    context?.setDefaultQuery?.('');
+    context?.setQuery?.('');
     set(dataState, 'filter.filters', []);
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -377,6 +383,68 @@ export function KendoGrid<T extends any> ({
       ),
     );
   };
+
+  useEffect(() => {
+    if (!context) return;
+    const { query, isKeywordSearchEnabled } = context;
+    if (query) {
+      isKeywordSearchEnabled && onSearch(query);
+    } else if (query === '') {
+      clearSearchFilter();
+    }
+  }, [context?.query]);
+
+  const getKeywordSearchValue = (filters?: Array<CompositeFilterDescriptor | FilterDescriptor>): string => (filters?.find((filter) => 'field' in filter && filter.field === SEARCH_KEYWORD_FIELD_KEY) as FilterDescriptor)?.value ?? '';
+
+  useEffect(() => {
+    if (!context) return;
+    const { isKeywordSearchEnabled, setDefaultQuery } = context;
+    const defaultSearchQuery = getKeywordSearchValue(dataState?.filter?.filters);
+    setDefaultQuery?.(isKeywordSearchEnabled ? defaultSearchQuery : undefined);
+  }, [tableName]);
+
+  const onSearch = (searchText: string) => {
+    const updatedDataState = { ...dataState };
+    if (updatedDataState.filter?.filters) {
+      const existingFilter = (updatedDataState.filter.filters as FilterDescriptor[]).find((filter: FilterDescriptor) => filter.field === SEARCH_KEYWORD_FIELD_KEY);
+
+      if (existingFilter) {
+        existingFilter.value = searchText;
+      } else {
+        updatedDataState.filter.filters.push({
+          field: SEARCH_KEYWORD_FIELD_KEY,
+          operator: 'contains',
+          value: searchText,
+        });
+      }
+    }
+    updatedDataState.skip = 0;
+    setDateStateAndDispatchByUpdatedState(updatedDataState);
+  };
+
+  const clearSearchFilter = () => {
+    const updatedDataState = { ...dataState };
+    if (updatedDataState.filter?.filters) {
+      updatedDataState.filter.filters = (updatedDataState.filter.filters as FilterDescriptor[]).filter((filter: FilterDescriptor) => filter.field !== SEARCH_KEYWORD_FIELD_KEY);
+    }
+    setDateStateAndDispatchByUpdatedState(updatedDataState);
+    context?.setQuery?.(undefined);
+    context?.setDefaultQuery?.(undefined);
+  };
+
+  const setDateStateAndDispatchByUpdatedState = (updatedDataState: State) => {
+    setDataState(updatedDataState);
+    dispatch(tableSearchActions.setSearchCriteria(
+      {
+        ...tableCriteria,
+        queryDict: {
+          dataState: updatedDataState,
+        },
+      },
+      tableName,
+    ));
+  };
+
   const updateDataColumnsState = (dataColumns: KendoColumnProps[]) => {
     setColumns(dataColumns);
     dispatch(

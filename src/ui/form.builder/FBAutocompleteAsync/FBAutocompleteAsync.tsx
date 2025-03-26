@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FBAutocomplete, FBAutocompleteAsyncProps } from '..';
 import { styles } from '../styles/FBAutocomplete.styles';
 import { withFBAutocompleteAsync } from './FBAutocompleteAsync.wrap';
@@ -46,4 +46,4 @@ FBAutocompleteAsyncProps
   </>
 );
 
-export default withFBAutocompleteAsync(FBAutocompleteAsync);
+export default memo(withFBAutocompleteAsync(FBAutocompleteAsync));

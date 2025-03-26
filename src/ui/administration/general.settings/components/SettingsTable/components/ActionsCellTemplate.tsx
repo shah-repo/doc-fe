@@ -7,6 +7,7 @@ interface Props<T extends EditableItem> extends CellTemplateProps<T> {
   scrollBehavior?: ScrollBehavior
   isLoading?: boolean
   isActive?: boolean
+  isEditButtonHidden?: boolean
   onEdit?: (item: T) => void
   onConfirm: () => void
   onDiscard: () => void
@@ -22,6 +23,7 @@ function ActionsCellTemplate<T extends EditableItem> ({
   onDelete,
   onConfirm,
   onDiscard,
+  isEditButtonHidden = false,
 }: Props<T>): React.ReactElement {
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
@@ -30,6 +32,10 @@ function ActionsCellTemplate<T extends EditableItem> ({
       requestAnimationFrame(() => node.scrollIntoView({ behavior: scrollBehavior, block: 'center' }));
     }
   }, [scrollBehavior]);
+
+  if (isEditButtonHidden && dataItem[MODE_FIELD] === Mode.show) {
+    return <></>;
+  }
 
   return (
     <>

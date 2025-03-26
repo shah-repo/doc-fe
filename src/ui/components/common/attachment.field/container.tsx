@@ -1,5 +1,4 @@
-import { Box, CircularProgress } from '@material-ui/core';
-import { map, pick } from 'lodash';
+import { difference, map, pick } from 'lodash';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { attachmentsActions } from '../../../../state/ducks/attachments';
@@ -68,8 +67,8 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
     },
   });
 
-  const handleUpload = (files: File[], lineType, cleanCopyRequired) => {
-    if (files.length === 0) {
+  const handleUpload = (files: File[], lineType: string, cleanCopyRequired: boolean, index: number) => {
+    if (!files.length) {
       return;
     }
 
@@ -82,74 +81,57 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
       return;
     }
     setIsUploading(true);
-    async.start(uploadAction, file, lineType, async, cleanCopyRequired);
-    handleUpload(files, lineType, cleanCopyRequired);
+    const attachmentIndex = index + 1;
+    async.start(uploadAction, file, lineType, index, async, cleanCopyRequired);
+    handleUpload(files, lineType, cleanCopyRequired, attachmentIndex);
   };
 
   const onChange = (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
-    let isUserAlertedNoDocFiles = false;
-    let isUserAlrtedCleanCopyMismatch = false;
-    const files = Array.from(event.currentTarget.files || []);
-    const filesSize = calculateTotalFileSize(event?.currentTarget?.files);
-    const names = files.map(file => file.name);
+    if (!event.currentTarget.files) {
+      return;
+    }
+    const filesToUpload = Array.from(event.currentTarget.files);
+
+    const filesSize = calculateTotalFileSize(filesToUpload);
     if (filesSize > FILE_UPLOAD_LIMIT) {
+      const names = filesToUpload.map(file => file.name);
       handleFileSizeExceedLimit(names, filesSize, event);
       return;
     }
 
-    const filteredFiles = files.filter(
+    const invalidCleanCopyFiles = filesToUpload.filter(
       (file) => {
         const type = file.name.split('.').pop();
-        if (type === 'doc') {
-          !isUserAlertedNoDocFiles
-           && toastError(intl.formatMessage({ id: 'common.attachment.form.DOCERROR' }));
-          isUserAlertedNoDocFiles = true;
-          return false;
-        }
-
-        if (type !== 'docx' && cleanCopyRequired) {
-          !isUserAlrtedCleanCopyMismatch
-          && toastError(intl.formatMessage({ id: 'common.attachment.form.Create.Clean.Copy.Error' }));
-          isUserAlrtedCleanCopyMismatch = true;
-          return false;
-        }
-        return true;
+        return type !== 'docx' && cleanCopyRequired;
       },
     );
+    const validFiles = difference(filesToUpload, invalidCleanCopyFiles);
 
-    if (filteredFiles.length === 0) {
+    if (invalidCleanCopyFiles.length) {
+      toastError(intl.formatMessage({ id: 'common.attachment.form.create.clean.copy.error' }));
+    }
+
+    if (!validFiles.length) {
       return;
     }
-    handleUpload(filteredFiles, lineType, cleanCopyRequired);
+    const index = (field?.value?.length ?? 0) + 1;
+    handleUpload(validFiles, lineType, cleanCopyRequired, index);
   };
 
   return (
-    <>
-      {isUploading
-      && <Box>
-        <CircularProgress color="secondary" />
-      </Box>}
-
-      {!isUploading
-      && <Box>
-        <Presenter
-          {
-            ...{
-              name,
-              isUploading,
-              upload,
-              component,
-              multiple,
-              form,
-              field,
-              onChange,
-            }
-          }
-          {...other}
-        />
-      </Box>
-      }
-    </>
+    <Presenter
+      {...{
+        name,
+        isUploading,
+        upload,
+        component,
+        multiple,
+        form,
+        field,
+        onChange,
+      }}
+      {...other}
+    />
   );
 };
 

@@ -1,6 +1,6 @@
-import { ProposedDocIdBody, SupplierPostBody } from '..';
+import { ProposedDocIdBody } from '..';
 import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionEditRequestBody } from '../../../state/ducks/documentRevisions/types';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
 
@@ -10,7 +10,7 @@ class FBSupplierState {
   // MARK: @config
 
   // MARK: @api
-  public newSupplierApi = new FBRequest<DocumentRevision, SupplierPostBody>(FBEndpoint.DocumentRevisionsUrl);
+  public newSupplierApi = new FBRequest<DocumentRevision, DocumentRevisionEditRequestBody>(FBEndpoint.DocumentRevisionsUrl);
   public proposedDocIdApi = new FBRequest<ProposedDocIdBody, null>(FBEndpoint.FetchDocId);
   public documentTypeApi = new FBRequest<DocumentTypeById, null>(FBEndpoint.FetchDocumentType);
 
@@ -19,7 +19,7 @@ class FBSupplierState {
   // MARK: @actions
 
   // MARK: @helpers
-  public addNewSupplier = (body: SupplierPostBody) => {
+  public addNewSupplier = (body: DocumentRevisionEditRequestBody) => {
     this.newSupplierApi.set({ body, method: 'post' });
   };
 

@@ -33,7 +33,7 @@ export interface ShippingItem {
   id: string
   part: {id: string, name: string, documentId: string}
   lot: {id: string, name: string, documentId: string}
-  quantity: number
+  quantity?: number
   comments: string
   createdDate: string
 }

@@ -1,5 +1,5 @@
 import { Button, withStyles } from '@material-ui/core';
-import Colors from '../../../../../ui/layout/theme/utils/colors';
+import { Colors } from '../../../../../ui/layout/theme-next';
 
 const styles = () => ({
   root: {
@@ -7,7 +7,12 @@ const styles = () => ({
     '&:hover': {
       backgroundColor: 'unset',
     },
+    '&$disabled $label': {
+      color: Colors.textDisabled,
+      backgroundColor: Colors.white,
+    },
   },
+  disabled: {},
   label: {
     padding: '10.5px 20px',
     fontFamily: 'Sora',
@@ -16,7 +21,7 @@ const styles = () => ({
     fontSize: '12px',
     lineHeight: '15px',
     backgroundColor: Colors.white,
-    color: Colors.navy,
+    color: Colors.primary,
     borderRadius: '100px',
     minWidth: '72px',
   },
