@@ -6,6 +6,7 @@ import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
+import Config from '../../config';
 import { authSelectors } from '../../state/ducks/auth';
 import { companySelectors } from '../../state/ducks/company';
 import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
@@ -35,6 +36,7 @@ import {
   DOCUMENT_REVISION_CREATE_URL,
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
+  DOCUMENT_REVISION_VERSION_URL,
   DOCUMENT_TYPE_MANAGEMENT_URL,
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
@@ -68,7 +70,7 @@ import Navigation from './Navigation';
 import PingServer from './PingServer';
 import SocketsContainer from './sockets/container';
 
-const Layout: React.FunctionComponent = () => {
+const Layout: React.FC = () => {
   const isMobileView = isMobile();
   const defaultSidebarExpandedValue = isMobileView ? false : localStorage.getItem(IS_SIDEBAR_EXPANDED) === '1';
   const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(defaultSidebarExpandedValue);
@@ -143,7 +145,7 @@ const Layout: React.FunctionComponent = () => {
           documentRevisionId={documentRevisionId}
           attachmentIds={attachmentIds}
           token={accessToken}
-          apiPath="https://api.ai.dev2.enlil.io/t4/v1"
+          apiPath={Config.ApiAIEndpoint}
         />
         <Switch>
           <Route
