@@ -76,6 +76,7 @@ export enum KendoGridFilterCell {
   DUE_ON= 'dueOn',
   CREATED_AT= 'createdAt',
   RELEASED_AT = 'releasedAt',
+  EXPIRED_AT = 'expiredAt',
   STATE = 'state',
   TASKTYPE = 'taskType',
   STATUS = 'status',

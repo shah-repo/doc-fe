@@ -25,6 +25,7 @@ import { CompletedDateFilterTemplate } from '../../document.revision/grid/filter
 import { DocumentTypeFilterTemplate } from '../../document.revision/grid/filter.template/DocumentTypeFilterTemplate';
 import { DueOnDateFilterTemplate } from '../../document.revision/grid/filter.template/DueOnDateFilterTemplate';
 import { EffectiveDateFilterTemplate } from '../../document.revision/grid/filter.template/EffectiveDateFilterTemplate';
+import { ExpirationDateFilterTemplate } from '../../document.revision/grid/filter.template/ExpirationDateFilterTemplate';
 import { InputFilterTemplate } from '../../document.revision/grid/filter.template/InputFilterTemplate';
 import { StatusFilterTemplate } from '../../document.revision/grid/filter.template/StatusFilterTemplate';
 import { createOption } from '../../form.builder/FBApprovalMatrix/components/Grid';
@@ -310,6 +311,14 @@ export function KendoGrid<T extends any> ({
   const InputFilter = (props: GridFilterCellProps) => (
     <InputFilterTemplate {...props} />
   );
+  const ExpirationDate = (props: GridFilterCellProps) => (
+    <ExpirationDateFilterTemplate
+      {...props}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
 
   const AttachmentsCountHeaderCell = (props: GridHeaderCellProps) => {
     return (
@@ -330,7 +339,8 @@ export function KendoGrid<T extends any> ({
     [KendoGridFilterCell.COMPLETED_AT]: CompletedDate,
     [KendoGridFilterCell.DUE_ON]: DueOnDate,
     [KendoGridFilterCell.CREATED_AT]: EffectiveDate,
-    [KendoGridFilterCell.RELEASED_AT]: EffectiveDate,
+    [KendoGridFilterCell.RELEASED_AT]: ExpirationDate,
+    [KendoGridFilterCell.EXPIRED_AT]: ExpirationDate,
     [KendoGridFilterCell.STATE]: StateFilter,
     [KendoGridFilterCell.TASKTYPE]: TaskTypeFilter,
     [KendoGridFilterCell.STATUS]: AsyncStatusFilter,

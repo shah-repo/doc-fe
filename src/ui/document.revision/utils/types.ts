@@ -41,3 +41,7 @@ export interface TrainingControlProps extends DataProps<TrainingRecord[]> {
   documentRevisionId: string
   docDetails: Partial<DocumentRevision>
 }
+
+export enum ExpirationDateOption {
+  LAST_TWO_MONTH = 'Last 60 days',
+}

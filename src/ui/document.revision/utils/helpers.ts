@@ -7,7 +7,7 @@ import { store } from '../../../state/store';
 import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
 import { generateRevisionNumber } from '../../documentRevision/helpers/generateRevisionNumber';
-import { CompletedOnDateOptions, ReleasedDateOptions } from './types';
+import { CompletedOnDateOptions, ExpirationDateOption, ReleasedDateOptions } from './types';
 
 export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
   const owner = get(documentRevision, 'owner.user.email');
@@ -81,6 +81,21 @@ export const trainingCompletedOnDateOption = () => [
     text: CompletedOnDateOptions.PENDING,
     // sending in the feature, BE will recognize pending
     value: moment().add(7, 'd').startOf('day').toISOString(),
+  },
+];
+
+export const expirationDateOption = () => [
+  {
+    text: ReleasedDateOptions.LAST_TWO_WEEKS,
+    value: moment().subtract(14, 'd').startOf('day').toISOString(),
+  },
+  {
+    text: ReleasedDateOptions.LAST_MONTH,
+    value: moment().subtract(30, 'd').startOf('day').toISOString(),
+  },
+  {
+    text: ExpirationDateOption.LAST_TWO_MONTH,
+    value: moment().subtract(60, 'd').startOf('day').toISOString(),
   },
 ];
 
