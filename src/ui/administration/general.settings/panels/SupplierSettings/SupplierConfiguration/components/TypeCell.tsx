@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { kebabCase } from 'lodash';
+import { get, kebabCase } from 'lodash';
 import React, { ChangeEvent } from 'react';
 import { translate } from '../../../../../../../common/intl';
 import {
@@ -21,7 +21,7 @@ const Editor: React.FC<CustomCellProps> = ({
   dataOptions,
   onChange,
 }) => {
-  const { getFieldProps, setFieldValue } = useFormikContext();
+  const { getFieldProps, setFieldValue, errors } = useFormikContext();
   const value = dataOptions?.find(
     (data: OptionType) => data.text === dataItem[field],
   );
@@ -39,7 +39,7 @@ const Editor: React.FC<CustomCellProps> = ({
   };
 
   return (
-    <FormikField name={field}>
+    <FormikField name={field} error={get(errors, field)}>
       <Autocomplete
         {...getFieldProps(field)}
         blurOnSelect

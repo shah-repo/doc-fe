@@ -91,7 +91,7 @@ const FBCertifications: React.FC<FBCertificationProps> = ({
   const createDraftCertification = () =>
     setEditedCertification({
       id: uuidv4(),
-      expiryDate: undefined,
+      expiryDate: null,
       [MODE_FIELD]: Mode.add,
     });
 

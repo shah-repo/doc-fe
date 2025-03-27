@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import striptags from 'striptags';
 import { translate } from '../../../common/intl';
-import { MomentFormats, getFormattedDateString } from '../../../common/utils/date';
+import { getFormattedDateString, MomentFormats } from '../../../common/utils/date';
 import { Audit, AuditGroupType, LifecyclePhaseOptionType } from '../../../state/ducks/audit/types';
 import { Approval, ApprovalStatus, User } from '../../../state/ducks/common/types';
 import { companyActions } from '../../../state/ducks/company';
@@ -17,17 +17,17 @@ import { LCPDocRevOptions } from '../../administration/general.settings/panels/L
 import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
-import Text from '../../components/Text';
 import { toastError } from '../../components/notifications';
+import Text from '../../components/Text';
 import { FBApprovalAuditState, FBFieldName, FBSchemaProps, FBText } from '../../form.builder';
 import { getDisplayDocumentByDetailsObj } from '../../form.builder/FBLHRSummary/utils';
 import { SERVER_AUTOMATION_LOT_TRANSFER_BY } from '../../form.builder/FBLotTransfers/constants';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
-import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
-import { RELATED_TYPE_VALUES_ENUM, getDynamicTextValue } from '../forms/presenters/related.parts/helper';
+import { getDynamicTextValue, RELATED_TYPE_VALUES_ENUM } from '../forms/presenters/related.parts/helper';
 import { IRevIdMapper, revIdRelatedTypeMapper } from '../helpers/checkDocumentGroup';
+import UserAvatarListItem from '../Sidebar/common/UserAvatarListItem';
 import { styles } from './Audit.presenter.styles.new';
 import { CUSTOM_BOOLEAN_FIELD, handleShippingAddressChange, handleShippingItemsChange, handleSiteAddressChange, handleSiteInformationChange } from './fieldChangeHandlers';
 
@@ -90,6 +90,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     );
     supplierTypesAsync.start(
       fetchASLTypes,
+      false,
       supplierTypesAsync,
     );
   }, []);
@@ -421,6 +422,41 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
 
+      if (fbType === 'supplierContacts') {
+        const field = change.field.split('.').pop() as string;
+        if (['id'].includes(field)) {
+          return;
+        }
+
+        if (['STRING_EDITED', 'STRING_DELETED', 'STRING_NEW'].includes(change.type)) {
+          fbLabel = translate(`formInput.supplier-contacts[].${field}`);
+        }
+
+        if (['isPrimary'].includes(field)) {
+          change = {
+            ...change,
+            updatedField: CUSTOM_BOOLEAN_FIELD,
+          };
+        }
+      }
+
+      if (fbType === 'partVendors') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        const parentField = fieldParts.at(-2) as string;
+        if (['id', 'currency', 'primary'].includes(field)) {
+          return;
+        }
+        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
+          const fieldName = translate(`form.builder.part.vendors.${fieldFullName}`);
+          fbLabel = translate('form.builder.part.vendors.audit.item', {
+            label: fbLabel as string,
+            field: fieldName,
+          });
+        }
+      }
+
       if (!isFBField && change.field.includes('attachments')) {
         if (change.field.endsWith('s3link') && (change.type === 'STRING_EDITED' || change.type === 'STRING_NEW')) {
           return;
@@ -524,7 +560,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
 
         const isArrayEdited = change.type.includes('ARRAY_EDITED');
-        const isCustomBooleanField = change.field === CUSTOM_BOOLEAN_FIELD;
+        const isCustomBooleanField = [change.field, change.updatedField].includes(CUSTOM_BOOLEAN_FIELD);
+
+        if (isCustomBooleanField && fbType === 'supplierContacts') {
+          const field = change.field.split('.').pop() as string;
+          fbLabel = translate(`formInput.supplier-contacts[].${field}.${change.type}`);
+        }
 
         const isDocIdORDescriptionChanged = isArrayEdited && change.nextValue !== change.previousValue;
 

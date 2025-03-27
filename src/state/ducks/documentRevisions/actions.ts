@@ -731,9 +731,10 @@ const updateSupplierStatus = (id: string, body: { lotStatus: LotStatus }): ApiAc
 const fetchSupplierConfigurationOptions = (
   optionId: string,
   ids: string[],
+  fetchFormOptions: boolean,
   handlers: Handlers,
 ): ApiAction<OptionType[]> => {
-  const params = qs.stringify({ supplierTypeIds: ids });
+  const params = qs.stringify({ supplierTypeIds: ids, fetchFormOptions });
   return apiActionWithCallbacks({
     url: `${SUPPLIER_CONFIGURATION_OPTIONS_URL}/${optionId}?${params}`,
     method: 'get',

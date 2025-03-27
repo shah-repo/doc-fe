@@ -36,9 +36,10 @@ import AuditPartVendors from './AuditPartVendors';
 import AuditProcedure from './AuditProcedure';
 import AuditShippingItems from './AuditShippingItems';
 import AuditSiteInformations from './AuditSiteInformations';
+import AuditSupplierCertifications from './AuditSupplierCertifications';
 import AuditTraineeList from './AuditTraineeList';
-import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
+import DateTime from './DateTime';
 import DialogOpener from './textDiff/DialogOpener';
 
 interface OwnProps {
@@ -188,6 +189,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       quantity () {
         return auditValue === 'null' ? '' : auditValue;
+      },
+      supplierSupportingDocs () {
+        return <AuditSupplierCertifications {...{ audit, dataCy, auditValue, previousValue }} />;
       },
       siteInformation () {
         return <AuditSiteInformations {...{ audit, dataCy, auditValue }} />;

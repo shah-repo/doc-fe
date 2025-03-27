@@ -33,11 +33,13 @@ const DocumentRevisionFormHeader: React.FunctionComponent<DocumentRevisionFormHe
           name="name"
           documentTypeId={documentTypeId}
           disabled={isDisabledInput || inRestrictedEditMode}
+          documentRevision={_documentRevisionFormState?.documentRevision}
         />
         <Description
           isQms={_documentRevisionFormState?.docInfo.isQms || false}
           documentTypeId={documentTypeId}
           isDisabled={isDisabledInput || inRestrictedEditMode}
+          documentRevision={_documentRevisionFormState?.documentRevision}
         />
       </Box>
     )}

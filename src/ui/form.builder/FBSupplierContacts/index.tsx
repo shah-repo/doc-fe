@@ -54,8 +54,18 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
         = workspaceState?.formInputSync.get(name) ?? [];
       const updatedContact = omit(values, FIELDS_TO_OMIT);
 
+      const updatedContactsAfterAddition = supplierContacts.length > 0
+        ? [
+          ...supplierContacts.map((contact) => ({
+            ...contact,
+            isPrimary: updatedContact.isPrimary ? false : contact.isPrimary,
+          })),
+          updatedContact,
+        ]
+        : [updatedContact];
+
       const updatedContacts = isAddition
-        ? [...supplierContacts, updatedContact]
+        ? updatedContactsAfterAddition
         : supplierContacts.map((contact: EditableSupplierContact) =>
           contact.id === values.id
             ? updatedContact
@@ -89,7 +99,6 @@ const FBSupplierContacts: React.FC<FBSupplierContactsProps> = ({
   const createDraftContact = () =>
     setEditedContact({
       id: uuidv4(),
-      isPrimary: contacts.length === 0,
       [MODE_FIELD]: Mode.add,
     });
 

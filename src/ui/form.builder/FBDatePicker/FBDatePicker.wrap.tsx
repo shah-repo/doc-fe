@@ -100,8 +100,8 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     };
 
     onDatePickerClear = () => {
-      datePickerState?.setValue(null);
-      formState?.setFieldValue(name, null);
+      datePickerState?.setValue(undefined);
+      formState?.omitFieldValue(name);
       formState?.validate();
 
       const isUnderWorkspace = workspaceState?.getSchemaItem(name);

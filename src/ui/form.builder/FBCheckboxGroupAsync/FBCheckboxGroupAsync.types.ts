@@ -23,6 +23,8 @@ Pick<FormGroupProps, 'row'> & {
   boxProps?: BoxProps
   labelProps?: BoxProps
   options?: CheckBoxOptionType[]
+  setSelectedCheckBoxOptions?: React.Dispatch<React.SetStateAction<OptionType[]>>
+  selectedCheckBoxOptions: OptionType[]
 };
 
 export interface CheckBoxOptionType extends OptionType {

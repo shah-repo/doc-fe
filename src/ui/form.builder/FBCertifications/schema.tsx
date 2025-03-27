@@ -38,7 +38,7 @@ export const buildSchema = ({
     },
     {
       id: 'uploaded-by',
-      field: 'uploadedBy',
+      field: 'uploadedById',
       title: 'form.builder.supplier.certifications.grid.heading.uploaded.by',
       filterable: false,
       template: (props) => <UploadedByCell {...props} onClick={onRowClick} />,

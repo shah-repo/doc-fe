@@ -1,5 +1,7 @@
+import { createContext } from 'react';
 import { DocumentType, PageDetails } from '../../../state/ducks/documentRevisions/documentType/types';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
 import { KendoColumn } from '../../components/common/kendo/types';
 import { TableColumnProps } from '../../components/table/column/types';
 import { TablePanelStateProps } from '../../components/table/types';
@@ -20,3 +22,9 @@ export interface KendoPresenterProps {
   documentType: DocumentType
   documentCategory: PageDetails
 }
+
+interface DocTypeTableContextType {
+  aslStatuses?: ASLStatus[]
+}
+
+export const DocTypeTableContext = createContext<DocTypeTableContextType | undefined>(undefined);

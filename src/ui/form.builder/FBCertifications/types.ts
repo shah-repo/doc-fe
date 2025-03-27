@@ -27,7 +27,7 @@ export interface Certification {
   phoneNumber?: string
   attachments: Attachment[]
   uploadedBy: string
-  expiryDate: string
+  expiryDate: string | null
 }
 
 export interface EditableCertification extends Certification {
