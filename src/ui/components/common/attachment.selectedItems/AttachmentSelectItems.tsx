@@ -1,8 +1,9 @@
 import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, IconButton, Tooltip } from '@material-ui/core';
-import React from 'react';
+import React, { useContext } from 'react';
 import { translate } from '../../../../common/intl';
+import { AiWidgetContext } from '../../../app/AiWidget';
 import Text from '../../Text';
 import { useStyles } from './styles';
 
@@ -16,6 +17,7 @@ const AttachmentSelectItems: React.FunctionComponent<Props> = ({
   onClearSelection,
 }) => {
   const classes = useStyles();
+  const aiWidgetContext = useContext(AiWidgetContext);
   const selectedAttachmentsCount = Object.values(selectedAttachments).filter(value => value === true).length;
 
   if (selectedAttachmentsCount === 0) {
@@ -27,7 +29,7 @@ const AttachmentSelectItems: React.FunctionComponent<Props> = ({
     .map(([id]) => id);
 
   const handleSummarizeAi = () => {
-    global.handleSummarizeAi(selectedIds);
+    aiWidgetContext?.summarizeAttachments(selectedIds);
   };
 
   return (

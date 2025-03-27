@@ -1,17 +1,11 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Widget as AiWidget, AppName, WidgetRef } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
-import Config from '../../config';
 import { authSelectors } from '../../state/ducks/auth';
-import { companySelectors } from '../../state/ducks/company';
-import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
-import { ApplicationState } from '../../state/reducers';
-import { store } from '../../state/store';
 import UserGroupManagment from '../administration/UserGroupManagement';
 import GeneralSettingsPage from '../administration/general.settings';
 import PremiumFeaturesPage from '../administration/premium.settings';
@@ -36,7 +30,6 @@ import {
   DOCUMENT_REVISION_CREATE_URL,
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
-  DOCUMENT_REVISION_VERSION_URL,
   DOCUMENT_TYPE_MANAGEMENT_URL,
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
@@ -63,6 +56,7 @@ import RemoteValidatorsLoader from '../remoteValidators/RemoteValidators';
 import SlackContainer from '../slack/Container';
 import TrainingDetailContainer from '../training/TrainingDetail.container';
 import TrainingListContainer from '../training/grid/container';
+import { AiWidgetProvider } from './AiWidget';
 import DataFetcherContainer from './DataFetcher.container';
 import HeaderContainer from './Header.container';
 import useStyles from './Layout.styles';
@@ -80,39 +74,6 @@ const Layout: React.FC = () => {
     setIsSidebarExpanded(prev => !prev);
   };
   const canAccessNavigation = useSelector(authSelectors.hasCompanies);
-  const userName = (useSelector(authSelectors.currentUserName) ?? '').trim();
-  const documentMatch = useRouteMatch(DOCUMENT_REVISION_VERSION_URL);
-  const companyId = useSelector(companySelectors.companyIdSelector);
-  const documentRevisionId = documentMatch?.params?.documentRevisionId;
-  const accessToken = `Bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
-  const documentRevision = useSelector(
-    (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
-      state,
-      documentRevisionId ?? '',
-    ),
-  );
-  const defaultAttachmentIds = documentRevision?.attachments?.map(item => item.id) ?? [];
-  const schema = documentRevision?.formDocument?.formTemplate?.schema ?? [];
-  const formInput = documentRevision?.formInput ?? {};
-  const fileUploadFields = schema
-    .filter(item => item.type === 'fileupload')
-    .map(item => item.name);
-  const uploadedFileIds = fileUploadFields.reduce((acc: string[], name) => {
-    if (!name) {
-      return acc;
-    }
-
-    const ids = (formInput[name] ?? []).map(item => item?.id) as string[];
-    acc.push(...ids);
-
-    return acc;
-  }, []);
-  const attachmentIds = [...defaultAttachmentIds, ...uploadedFileIds].filter(Boolean);
-  const widgetRef = useRef<WidgetRef>(null);
-
-  global.handleSummarizeAi = (attachmentIds: string[]) => {
-    widgetRef.current?.triggerSummarizeAttachments(attachmentIds);
-  };
 
   return (
     <>
@@ -135,126 +96,118 @@ const Layout: React.FC = () => {
           [classes.withSidebarExpanded]: isSidebarExpanded,
           [classes.fullWidth]: !canAccessNavigation,
         },
-      )} >
+      )}>
         <DataFetcherContainer />
-        <AiWidget
-          ref={widgetRef}
-          appName={AppName.D2M}
-          userName={userName}
-          companyId={companyId}
-          documentRevisionId={documentRevisionId}
-          attachmentIds={attachmentIds}
-          token={accessToken}
-          apiPath={Config.ApiAIEndpoint}
-        />
-        <Switch>
-          <Route
-            path={DOCUMENT_REVISION_LIST_URL}
-            exact
-            component={DocumentRevisionListContainer}
-          />
-          <Route
-            path={DOCUMENT_REVISION_CREATE_URL}
-            exact
-            component={DocumentRevisionCreateContainer}
-          />
-          <Route
-            path={DOCUMENT_REVISION_ROOT_URL}
-            component={DocumentRevisionContainer}
-          />
-          <Route
-            path={DASHBOARD_URL}
-            exact
-            component={DashboardContainer}
-          />
-          <Route
-            path={HOME_URL}
-            exact
-            component={DashboardLayout}
-          />
-          <Route
-            path={CHANGE_REQUEST_CREATE_URL}
-            exact
-            component={ChangeRequestCreateContainer}
-          />
-          <Route
-            path={CHANGE_REQUEST_ROOT_URL}
-            component={ChangeRequestContainer}
-          />
-          <Route
-            path={CHANGE_REQUEST_LIST_URL}
-            exact
-            component={ChangeRequestListContainer}
-          />
-          <Route
-            path={TRAINING_DETAIL_URL}
-            component={TrainingDetailContainer}
-          />
-          <Route
-            path={TRAINING_URL}
-            component={TrainingListContainer}
-          />
-          <Route
-            path={SLACK_ROOT_URL}
-            component={SlackContainer}
-          />
-          <Route
-            path={DOCUMENT_BY_TYPE_LIST_URL}
-            component={DocumentTypeListContainer}
-          />
-          <Route
-            path={DOCUMENT_BY_CATEGORY_LIST_URL}
-            component={DocumentTypeListContainer}
-          />
-          <Route
-            path={DOCUMENT_TYPE_MANAGEMENT_URL}
-            component={DocumentTypeManagementContainer}
-          />
-          <Route
-            path={PAGE_DETAILS_MANAGEMENT_URL}
-            component={PageDetailsManagementContainer}
-          />
-          <Route
-            path={ASYNC_TASKS_URL}
-            component={AsyncTasksContainer}
-          />
-          <Route
-            path={GLOBAL_SEARCH_URL}
-            component={SearchPage}
-          />
-          <Route
-            path={GENERAL_SETTINGS_URL}
-            component={GeneralSettingsPage}
-          />
-          <Route
-            path={PREMIUM_FEATURES_URL}
-            component={PremiumFeaturesPage}
-          />
-          <Route
-            path={BULK_IMPORT_URL}
-            component={BulkImportPage}
-            exact
-          />
-          <Route
-            path={BULK_IMPORT_EDIT_URL}
-            component={BulkImportPage}
-          />
-          <Route
-            path={USER_GROUP_URL}
-            component={UserGroupManagment}
-          />
-          <Route
-            path={BULK_IMPORT_PROGRESS_URL}
-            component={BulkImportProgressPage}
-            exact
-          />
-          <Route
-            path={NO_ACCESS}
-            component={NoAccessScreen}
-            exact
-          />
-          <Redirect to={HOME_URL} />
-        </Switch>
+        <AiWidgetProvider>
+          <Switch>
+            <Route
+              path={DOCUMENT_REVISION_LIST_URL}
+              exact
+              component={DocumentRevisionListContainer}
+            />
+            <Route
+              path={DOCUMENT_REVISION_CREATE_URL}
+              exact
+              component={DocumentRevisionCreateContainer}
+            />
+            <Route
+              path={DOCUMENT_REVISION_ROOT_URL}
+              component={DocumentRevisionContainer}
+            />
+            <Route
+              path={DASHBOARD_URL}
+              exact
+              component={DashboardContainer}
+            />
+            <Route
+              path={HOME_URL}
+              exact
+              component={DashboardLayout}
+            />
+            <Route
+              path={CHANGE_REQUEST_CREATE_URL}
+              exact
+              component={ChangeRequestCreateContainer}
+            />
+            <Route
+              path={CHANGE_REQUEST_ROOT_URL}
+              component={ChangeRequestContainer}
+            />
+            <Route
+              path={CHANGE_REQUEST_LIST_URL}
+              exact
+              component={ChangeRequestListContainer}
+            />
+            <Route
+              path={TRAINING_DETAIL_URL}
+              component={TrainingDetailContainer}
+            />
+            <Route
+              path={TRAINING_URL}
+              component={TrainingListContainer}
+            />
+            <Route
+              path={SLACK_ROOT_URL}
+              component={SlackContainer}
+            />
+            <Route
+              path={DOCUMENT_BY_TYPE_LIST_URL}
+              component={DocumentTypeListContainer}
+            />
+            <Route
+              path={DOCUMENT_BY_CATEGORY_LIST_URL}
+              component={DocumentTypeListContainer}
+            />
+            <Route
+              path={DOCUMENT_TYPE_MANAGEMENT_URL}
+              component={DocumentTypeManagementContainer}
+            />
+            <Route
+              path={PAGE_DETAILS_MANAGEMENT_URL}
+              component={PageDetailsManagementContainer}
+            />
+            <Route
+              path={ASYNC_TASKS_URL}
+              component={AsyncTasksContainer}
+            />
+            <Route
+              path={GLOBAL_SEARCH_URL}
+              component={SearchPage}
+            />
+            <Route
+              path={GENERAL_SETTINGS_URL}
+              component={GeneralSettingsPage}
+            />
+            <Route
+              path={PREMIUM_FEATURES_URL}
+              component={PremiumFeaturesPage}
+            />
+            <Route
+              path={BULK_IMPORT_URL}
+              component={BulkImportPage}
+              exact
+            />
+            <Route
+              path={BULK_IMPORT_EDIT_URL}
+              component={BulkImportPage}
+            />
+            <Route
+              path={USER_GROUP_URL}
+              component={UserGroupManagment}
+            />
+            <Route
+              path={BULK_IMPORT_PROGRESS_URL}
+              component={BulkImportProgressPage}
+              exact
+            />
+            <Route
+              path={NO_ACCESS}
+              component={NoAccessScreen}
+              exact
+            />
+            <Redirect to={HOME_URL} />
+          </Switch>
+        </AiWidgetProvider>
       </main>
     </>
   );
