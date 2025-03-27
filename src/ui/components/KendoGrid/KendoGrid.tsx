@@ -339,7 +339,7 @@ export function KendoGrid<T extends any> ({
     [KendoGridFilterCell.COMPLETED_AT]: CompletedDate,
     [KendoGridFilterCell.DUE_ON]: DueOnDate,
     [KendoGridFilterCell.CREATED_AT]: EffectiveDate,
-    [KendoGridFilterCell.RELEASED_AT]: ExpirationDate,
+    [KendoGridFilterCell.RELEASED_AT]: EffectiveDate,
     [KendoGridFilterCell.EXPIRED_AT]: ExpirationDate,
     [KendoGridFilterCell.STATE]: StateFilter,
     [KendoGridFilterCell.TASKTYPE]: TaskTypeFilter,
