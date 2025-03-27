@@ -9,7 +9,7 @@ export default makeStyles((theme: NextTheme) => createStyles({
     display: 'grid',
     gridGap: theme.spacing(2.5, 3),
     padding: theme.spacing(3, 3, 0),
-    gridTemplate: 'min-content min-content auto / 850px auto',
+    gridTemplate: 'min-content min-content auto / minmax(auto, 850px) auto',
   },
   actions: {
     display: 'flex',
@@ -30,13 +30,13 @@ export default makeStyles((theme: NextTheme) => createStyles({
     position: 'relative',
     display: 'flex',
     justifyContent: 'space-between',
-    gap: '5px',
+    gap: theme.spacing(0.5, 0.5),
   },
   title: {
     fontSize: 21,
     color: Colors.textBlack,
     display: 'flex',
-    gap: '5px',
+    gap: theme.spacing(0.5, 0.5),
     alignItems: 'center',
   },
   subtitle: {
@@ -46,34 +46,45 @@ export default makeStyles((theme: NextTheme) => createStyles({
     display: 'flex',
     backgroundColor: Colors.primaryBg,
     borderRadius: theme.spacing(1),
-    fontSize: '12px',
-    gap: '8px',
+    fontSize: 12,
+    gap: theme.spacing(1, 1),
     fontWeight: 400,
     padding: theme.spacing(1.5, 1.5, 1.5),
     marginBottom: theme.spacing(2.5),
   },
   descriptionIcon: {
-    paddingTop: theme.spacing(0.3),
     color: Colors.primaryLight,
+    marginTop: theme.spacing(0.25),
   },
-  togglerBox: {
-    padding: theme.spacing(2.5, 2.5, 2.5),
+  progress: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  subscriptionsList: {
+    padding: theme.spacing(2.5, 2.5, 1.5),
     border: `1px solid ${Colors.stroke}`,
     borderRadius: '10px',
   },
-  togglerText: {
+  panelTitle: {
     color: Colors.primary,
     fontWeight: 600,
-    fontSize: '16px',
+    fontSize: 16,
+    marginBottom: theme.spacing(0.5),
   },
-  togglerDescription: {
-    color: Colors.textGray,
-    marginTop: theme.spacing(0.5),
-    fontSize: '12px',
+  dialogIcon: {
+    color: Colors.primaryLight,
   },
-  togglerContainer: {
-    marginTop: theme.spacing(2.5),
-    display: 'flex',
+  noticeText: {
+    '& p': {
+      whiteSpace: 'pre-wrap',
+      marginBottom: theme.spacing(2.5),
+
+      '&:last-child': {
+        marginBottom: 0,
+      },
+    },
   },
   [theme.media.mobile]: {
     header: {
@@ -88,26 +99,5 @@ export default makeStyles((theme: NextTheme) => createStyles({
       display: 'block',
       paddingTop: theme.spacing(2.5),
     },
-    togglerContainer: {
-      marginTop: theme.spacing(2.5),
-      marginLeft: 0,
-      display: 'flex',
-      alignItems: 'center',
-    },
-  },
-  togglerIcon: {
-    color: Colors.primaryLight,
-    marginLeft: theme.spacing(1),
-    fontSize: '20px',
-  },
-  dialogIcon: {
-    color: Colors.primaryLight,
-  },
-  descriptionPlaceholder: {
-    fontSize: '12px',
-    fontWeight: 400,
-    lineHeight: '15px',
-    color: Colors.textGray,
-    marginTop: theme.spacing(0.5),
   },
 }));

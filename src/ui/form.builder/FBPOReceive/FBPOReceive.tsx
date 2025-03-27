@@ -7,6 +7,7 @@ import { withFBPOReceive } from './FBPOReceive.wrap';
 const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
   onChange,
   poReceiveState,
+  autocompleteKey,
   dialogState,
   initialValues,
   defaultValue,
@@ -24,6 +25,7 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
         <FBAutocompleteAsync
           {...{ onChange, defaultValue, gutter, disabled }}
           name={`porec-${name}`}
+          key={`${autocompleteKey}`}
           optionId={FBAutocompleteAsyncOption.POList}
           omitFormValue
           shouldReloadOnInit

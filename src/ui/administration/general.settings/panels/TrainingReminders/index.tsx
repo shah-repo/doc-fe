@@ -1,19 +1,34 @@
-import { Grid } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import { CheckboxProps as MuiCheckboxProps } from '@material-ui/core/Checkbox';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { translate } from '../../../../../common/intl';
 import { authSelectors } from '../../../../../state/ducks/auth';
 import { GroupTag } from '../../../../../state/ducks/auth/types';
 import { GeneralSettings } from '../../../../../state/ducks/company/types';
-import { Checkbox, TextField } from '../../../../components/forms/fields-next';
+import { Checkbox, FormField, TextField } from '../../../../components/forms/fields-next';
 import CheckboxField from '../../../../components/forms/fields/Checkbox';
 import Text from '../../../../components/Text';
 import SettingsPanel from '../../components/SettingsPanel';
 import { SettingsPanelProps } from '../../types';
 import useStyle from './styles';
+
+const erroMessage = (customDays: number) => {
+  const value = String(customDays);
+
+  if(!value || isEmpty(value)) {
+    return translate('validator.must.be.number');
+  }
+  else if(value.includes('-')) {
+    return translate('validators.positive.number');
+  }
+  else if(customDays === 0) {
+    return translate('validators.greater.than.zero');
+  }
+};
 
 const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
   const classes = useStyle();
@@ -24,7 +39,9 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
     color: 'primary',
     className: classes.marginRight,
   };
+  const daysValue = getFieldProps('trainingReminders.customDaysDueOn.days').value;
   const disabledCheckboxProps = { ...checkboxProps, disabled: true };
+  const showError = isEmpty(String(daysValue)) || daysValue === 0 || String(daysValue).includes('-');
 
   return (
     <SettingsPanel {...props} title={translate('administration.general.settings.training.reminders')}>
@@ -50,18 +67,25 @@ const TrainingReminders: React.FC<SettingsPanelProps> = (props) => {
           />
         </Grid>
         <Grid item className={classes.gridItem}>
-          <Checkbox
-            className={classes.marginRight}
-            {...getFieldProps('trainingReminders.customDaysDueOn.isActive')}
-            checked={values.trainingReminders.customDaysDueOn.isActive}
-          />
-          <TextField
-            className={classes.textArea}
-            {...getFieldProps('trainingReminders.customDaysDueOn.days')}
-            fullWidth={false}
-            type="number"
-          />
-          <Text message="administration.general.settings.training.reminders.custom.days" />
+          <FormField
+            required
+            error={showError}
+            helperText={showError ? erroMessage(daysValue) : ''}>
+            <Box>
+              <Checkbox
+                className={classes.marginRight}
+                {...getFieldProps('trainingReminders.customDaysDueOn.isActive')}
+                checked={values.trainingReminders.customDaysDueOn.isActive}
+              />
+              <TextField
+                className={classes.textArea}
+                {...getFieldProps('trainingReminders.customDaysDueOn.days')}
+                fullWidth={false}
+                type="number"
+              />
+              <Text message="administration.general.settings.training.reminders.custom.days" />
+            </Box>
+          </FormField>
         </Grid>
         <Grid item className={classes.gridItem}>
           <CheckboxField

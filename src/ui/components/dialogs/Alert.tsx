@@ -7,7 +7,6 @@ import { withThemeNext } from '../../layout/theme-next';
 import useStyles from './Alert.styles';
 import { AlertDialogProps } from './Alert.types';
 import Dialog from './Dialog';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const AlertDialog: React.FC<AlertDialogProps> = ({
   handler,
@@ -26,8 +25,8 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const warningIcon: IconProp = warning ? regular('circle-exclamation') : regular('triangle-exclamation');
-  const iconWarningClass = warning ? classes.iconWarning : classes.iconError;
+  const dialogIcon = icon ?? (warning ? regular('circle-exclamation') : regular('triangle-exclamation'));
+  const dialogIconClass = iconClass ?? (warning ? classes.iconWarning : classes.iconError);
 
   return (
     <Dialog
@@ -59,8 +58,8 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       <Box className={classes.content}>
         <Box className={classes.iconWrapper}>
           <FontAwesomeIcon
-            icon={icon ?? warningIcon}
-            className={iconClass ?? iconWarningClass}
+            icon={dialogIcon}
+            className={dialogIconClass}
           />
         </Box>
         <Box className={classes.contentWrapper}>

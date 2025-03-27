@@ -1,54 +1,46 @@
-import { createStyles, makeStyles } from '@material-ui/styles';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import React from 'react';
-import { DragCell } from '.';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
 import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
 import { Attachment } from '../../../change.request/form/types';
 import InputFilter from '../../../form.builder/FBApprovalMatrix/components/InputFilter';
 import { ColumnDefinition } from '../../KendoDataGrid/KendoDataGrid.types';
 import ActionNeededCellTemplate from './components/ActionNeededCellTemplate';
+import DragCell from './components/DragCell';
 import FileExtensionCellTemplate from './components/FileExtensionCellTemplate';
 import FileNameCellTemplate from './components/FileNameCellTemplate';
 import FileOwnerCellTemplate from './components/FileOwnerCellTemplate';
 import FileSizeCellTemplate from './components/FileSizeCellTemplate';
 import FileUploadDateCellTemplate from './components/FileUploadDateCellTemplate';
-import DateFilter from './filter/DateFilter';
-import FileSizeFilter from './filter/FileSizeFilter';
-import SelectFilter from './filter/SelectFilter';
+import SelectFilter from './components/SelectFilter';
+import { useStyles } from './styles';
 
 interface SchemaOptions {
-  headerChecked: boolean
+  isHeaderChecked: boolean
   documentRevision: DocumentRevision
-  onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => () => any
+  onDownloadAttachment?: (attachment: Attachment, type?: AttachmentType) => void
   onDownloadAsPDF?: (attachment: Attachment, attachmentType: AttachmentType) => void
-  onView?: (e: any) => void
-  onDelete?: (attachment: Attachment) => () => any
+  onView?: (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => void
+  onDelete?: (attachment: Attachment) => () => void
   handleHeaderCheckedChange: (event: CheckboxChangeEvent) => void
 }
 
-const styles = makeStyles(() =>
-  createStyles({
-    checkbox: {
-      paddingLeft: '20px !important',
-    },
-  }));
-
 export const buildSchema = ({
-  headerChecked,
+  isHeaderChecked,
   documentRevision,
   onDownloadAttachment,
   onDownloadAsPDF,
   onDelete,
   onView,
   handleHeaderCheckedChange,
-}: SchemaOptions): Array<ColumnDefinition<any>> => {
-  const classes = styles();
+}: SchemaOptions): Array<ColumnDefinition<Attachment>> => {
+  const classes = useStyles();
+
   return [
     {
       id: 'id',
       field: 'id',
-      cell: DragCell,
+      cell: (props) => <DragCell {...props} />,
       filterable: false,
       width: 30,
     },
@@ -56,7 +48,7 @@ export const buildSchema = ({
       id: 'id',
       field: 'selected',
       title: 'Select',
-      filterCell: (props) => <SelectFilter {...{ props, headerChecked, handleHeaderCheckedChange }} />,
+      filterCell: (props) => <SelectFilter {...{ props, isHeaderChecked, handleHeaderCheckedChange }} />,
       className: classes.checkbox,
       width: 65,
     },
@@ -65,7 +57,7 @@ export const buildSchema = ({
       field: 'name',
       title: 'attachment.table.file.name',
       filterCell: InputFilter,
-      template: (props) => <FileNameCellTemplate {...{ props, documentRevision, onView }} />,
+      template: (props) => <FileNameCellTemplate {...props} {...{ documentRevision, onView }} />,
       width: 250,
     },
     {
@@ -88,7 +80,7 @@ export const buildSchema = ({
       id: 'date',
       field: 'createdAt',
       title: 'attachment.table.uploaded.date',
-      filterCell: DateFilter,
+      filterCell: InputFilter,
       template: (props) => <FileUploadDateCellTemplate {...props} />,
       width: 100,
     },
@@ -96,7 +88,7 @@ export const buildSchema = ({
       id: 'fileSizeS3Link',
       field: 'fileSizeS3Link',
       title: 'attachment.table.file.size',
-      filterCell: FileSizeFilter,
+      filterCell: InputFilter,
       template: (props) => <FileSizeCellTemplate {...props} />,
       width: 100,
     },

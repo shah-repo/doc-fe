@@ -12,8 +12,9 @@ import {
   SET_AUTOSAVE_CONFIG,
   SET_COMPANY_MINE,
   SET_GENERAL_SETTINGS,
-  SET_PREMIUM_FEATURES_SETTINGS,
+  SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   UPDATE_NAVIGATION_ITEM,
+  UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
   WHITE_LABEL_DEFAULT,
 } from './constants';
 import {
@@ -25,14 +26,15 @@ import {
   GeneralSettingsAction,
   GeneralSettingsState,
   NotifyPartLCP,
-  PremiumFeaturesAction,
-  PremiumFeaturesState,
+  PremiumFeatureSubscriptionsState,
   RedlineAction,
   RedlineState,
   SelectCompanyAction,
   SelectCompanyState,
   SetAutosaveAction,
+  SetPremiumFeatureSubscriptionsAction,
   UpdateNavigationMenuItem,
+  UpdatePremiumFeatureSubscriptionAction,
 } from './types';
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
@@ -84,6 +86,23 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   shouldNotifyLcpMismatch: NotifyPartLCP.DO_NOTHING,
   systemTransactions: [],
   zebraPrint: [],
+  approvalRoles: {
+    approvalRoles: [],
+    addToDam: [],
+    removeFromDam: [],
+    dam: {
+      documentRevision: {
+        id: '',
+        displayRevision: '',
+        displayStatus: '',
+      },
+      document: {
+        id: '',
+        docId: '',
+      },
+      isSynced: true,
+    },
+  },
   status: AsyncStatus.Idle,
   message: '',
   trainingReminders: {
@@ -99,8 +118,8 @@ const GENERAL_SETTINGS_DEFAULT_STATE: GeneralSettingsState = {
   },
 };
 
-const PREMIUM_FEATURES_DEFAULT_STATE: PremiumFeaturesState = {
-  isAIEnabled: false,
+const PREMIUM_FEATURE_SUBSCRIPTIONS_DEFAULT_STATE: PremiumFeatureSubscriptionsState = {
+  list: [],
   status: AsyncStatus.Idle,
   message: '',
 };
@@ -223,15 +242,22 @@ const generalSettings = (
   }
 };
 
-const premiumFeatures = (
-  state: PremiumFeaturesState = PREMIUM_FEATURES_DEFAULT_STATE,
-  action: PremiumFeaturesAction,
+const premiumFeatureSubscriptions = (
+  state: PremiumFeatureSubscriptionsState = PREMIUM_FEATURE_SUBSCRIPTIONS_DEFAULT_STATE,
+  action: SetPremiumFeatureSubscriptionsAction | UpdatePremiumFeatureSubscriptionAction,
 ) => {
   switch (action.type) {
-    case SET_PREMIUM_FEATURES_SETTINGS:
+    case SET_PREMIUM_FEATURE_SUBSCRIPTIONS:
       return {
         ...state,
-        ...action.payload,
+        list: action.payload,
+      };
+    case UPDATE_PREMIUM_FEATURE_SUBSCRIPTION:
+      return {
+        ...state,
+        list: state.list.map(
+          subscription => subscription.id === action.payload.id ? action.payload : subscription,
+        ),
       };
     default:
       return state;
@@ -244,5 +270,5 @@ export default combineReducers({
   redlineConfig,
   autosaveConfig,
   generalSettings,
-  premiumFeatures,
+  premiumFeatureSubscriptions,
 });

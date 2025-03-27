@@ -14,8 +14,9 @@ import {
   SET_AUTOSAVE_CONFIG,
   SET_COMPANY_MINE,
   SET_GENERAL_SETTINGS,
-  SET_PREMIUM_FEATURES_SETTINGS,
+  SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   UPDATE_NAVIGATION_ITEM,
+  UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
 } from './constants';
 
 export interface WhiteLabelingColors {
@@ -134,6 +135,7 @@ export interface NavigationItem {
   menu?: NavigationItem[]
   icon?: string
   category?: string
+  isNew?: boolean
   restrictedToUsersWithTags?: GroupTag[]
   restrictedToUserPermissions?: Permission[]
   isOpen?: boolean
@@ -198,6 +200,28 @@ export interface EquipmentFamilyEquipmentStatus {
   isActive: boolean
 }
 
+interface ApprovalRoleItem {
+  id: string
+  name: string
+}
+
+export interface ApprovalRole extends ApprovalRoleItem {
+  isActive: boolean
+}
+
+export interface Dam {
+  documentRevision: {
+    id: string
+    displayRevision: string
+    displayStatus: string
+  }
+  document: {
+    id: string
+    docId: string
+  }
+  isSynced: boolean
+}
+
 interface EquipmentFamilySettings {
   autoSyncEnabled: boolean
   locations: EquipmentLocation[]
@@ -247,6 +271,12 @@ export interface GeneralSettings {
   systemTransactions: SystemTransactionsRule[]
   zebraPrint: ZebraPrintSettings[] | null
   trainingReminders: TrainingReminders
+  approvalRoles: {
+    approvalRoles: ApprovalRole[]
+    addToDam: ApprovalRoleItem[]
+    removeFromDam: ApprovalRoleItem[]
+    dam: Dam
+  }
 }
 
 export interface GeneralSettingsState extends GeneralSettings, AsyncState {
@@ -256,12 +286,28 @@ export interface GeneralSettingsState extends GeneralSettings, AsyncState {
   updatedAt?: string
 }
 
-export interface PremiumFeatures {
-  isAIEnabled: boolean
+export enum PremiumFeature {
+  AI = 'AI',
+  Analytics = 'ANALYTICS',
+  OCR = 'OCR',
+  VALIDATION_PACKAGE = 'VALIDATION_PACKAGE',
 }
 
-export interface PremiumFeaturesState extends PremiumFeatures, AsyncState {
-  updatedAt?: string
+export interface PremiumFeatureSubscriptionPayload {
+  isEnabled: boolean
+}
+
+export interface PremiumFeatureSubscription extends PremiumFeatureSubscriptionPayload {
+  id: string
+  companyId: string
+  premiumFeature: PremiumFeature
+  publicConfig?: Record<string, unknown>
+  createdAt: string
+  updatedAt: string
+}
+
+export interface PremiumFeatureSubscriptionsState extends AsyncState {
+  list: PremiumFeatureSubscription[]
 }
 
 export interface GeneralSettingsAction {
@@ -269,7 +315,11 @@ export interface GeneralSettingsAction {
   payload: GeneralSettings
 }
 
-export interface PremiumFeaturesAction {
-  type: typeof SET_PREMIUM_FEATURES_SETTINGS
-  payload: PremiumFeatures
+export interface SetPremiumFeatureSubscriptionsAction {
+  type: typeof SET_PREMIUM_FEATURE_SUBSCRIPTIONS
+  payload: PremiumFeatureSubscription[]
+}
+export interface UpdatePremiumFeatureSubscriptionAction {
+  type: typeof UPDATE_PREMIUM_FEATURE_SUBSCRIPTION
+  payload: PremiumFeatureSubscription
 }

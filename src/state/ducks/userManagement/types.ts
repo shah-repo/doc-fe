@@ -1,4 +1,5 @@
 import { Dictionary } from 'lodash';
+import { OptionType } from '../../../ui/components/forms/fields/Autocomplete/types';
 import { Group, GroupTag, GroupType, Permission } from '../auth/types';
 import { Id, Nullable, User } from '../common/types';
 import { Company, Employee } from '../company/types';
@@ -37,6 +38,9 @@ export interface LoadCompanyGroup {
   joinedParents: Group[]
   type?: GroupType
   inEdit?: boolean | string
+}
+
+export interface GroupOption extends Omit<LoadCompanyGroup, 'id' | 'company' | 'name' | 'employees'>, OptionType {
 }
 
 export interface EmployeeGroupsEditRequestBody {

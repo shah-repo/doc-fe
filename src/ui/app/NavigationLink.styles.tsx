@@ -37,7 +37,7 @@ export default makeStyles((theme: Theme) =>
       color: Colors.white,
       fontSize: 13,
       fontWeight: 400,
-      marginRight: '10px',
+      marginRight: theme.spacing(1.25),
     },
     menu: {
       borderbottom: '1px solid transparent',
@@ -46,10 +46,8 @@ export default makeStyles((theme: Theme) =>
       width: 16,
       height: 16,
       backgroundColor: Colors.white,
-      mask:
-        `url(${iconLink}) no-repeat center / contain`,
-      '-webkit-mask':
-        `url(${iconLink}) no-repeat center / contain`,
+      mask: `url(${iconLink}) no-repeat center / contain`,
+      '-webkit-mask': `url(${iconLink}) no-repeat center / contain`,
     }),
     iconActive: ({ iconLink, open, isParent }) => ({
       background: open || isParent ? `${Colors.white} !important` : `linear-gradient(0deg, ${Colors.cerulean_light_shade}, ${Colors.cerulean_light_shade})`,

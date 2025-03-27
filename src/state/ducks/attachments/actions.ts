@@ -5,10 +5,11 @@ import { EmployeeEditRequestBody } from '../auth/types';
 import { ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, PURCHASE_ORDER_ROOT_URL, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC } from './constants';
 import { Attachment, AttachmentDownloadResponse, AttachmentType, AvatarS3linkResponse, WatermarkRequest, WatermarkRequestBody } from './types';
 
-const upload = (file: File, lineType: string, handlers: Handlers<Attachment>, isCleanCopyRequired?): ApiAction => {
+const upload = (file: File, lineType: string, index: string, handlers: Handlers<Attachment>, isCleanCopyRequired?): ApiAction => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('lineType', lineType);
+  formData.append('index', index);
   const type = file.name.split('.').pop();
   isCleanCopyRequired = type === 'docx' && isCleanCopyRequired;
   formData.append('isCleanCopyRequired', isCleanCopyRequired?.toString());
@@ -74,13 +75,12 @@ const downloadAllAttachmentsPassword = (
 });
 
 const downloadSelectedAttachments = (
-  docRevId: string,
   attachmentIds: string[],
   handlers: Handlers<AttachmentDownloadResponse>,
 ): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-  url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_attachments`,
+  url: `${ATTACHMENT_ROOT_URL}/file_url`,
   method: 'get',
-  params: { attachmentIds: JSON.stringify(attachmentIds) },
+  params: { attachmentIds },
   handlers,
 });
 

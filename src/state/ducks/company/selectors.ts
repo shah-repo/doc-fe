@@ -1,10 +1,13 @@
 import { chain, filter, find, omit, pick } from 'lodash';
+import moment from 'moment';
 import { createSelector } from 'reselect';
 import { sortStringsByKey } from '../../../common/utils/helpers';
 import Config from '../../../config';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { ApplicationState } from '../../reducers';
+import { AsyncState } from '../../types';
 import { WHITE_LABEL_DEFAULT } from './constants';
+import { PremiumFeature, PremiumFeatureSubscription } from './types';
 
 const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
 const companyIdSelector = (state: ApplicationState) => state.company.companyMine.id;
@@ -76,11 +79,6 @@ const getGeneralSettings = (state: ApplicationState) => omit(
   ['id', 'companyId', 'createdAt', 'updatedAt', 'status', 'message'],
 );
 
-const getPremiumFeatures = (state: ApplicationState) => omit(
-  state.company.premiumFeatures,
-  ['status', 'message', 'updatedAt'],
-);
-
 const getGeneralSettingsId = (state: ApplicationState) => state.company.generalSettings.id;
 
 const getZebraPrintSettings = (state: ApplicationState) => state.company.generalSettings.zebraPrint;
@@ -89,17 +87,30 @@ const isAprovalRequestEditingEnabled = (state: ApplicationState) => state.compan
 
 const getGeneralSettingsUpdatedAt = (state: ApplicationState) => state.company.generalSettings.updatedAt;
 
-const getPremiumFeaturesUpdatedAt = (state: ApplicationState) => state.company.premiumFeatures.updatedAt;
-
 const getGeneralSettingsAsyncState = (state: ApplicationState) => ({
   status: state.company.generalSettings.status,
   message: state.company.generalSettings.message,
 });
 
-const getPremiumFeatureAsyncState = (state: ApplicationState) => ({
-  status: state.company.premiumFeatures.status,
-  message: state.company.premiumFeatures.message,
+const getPremiumFeatureSubscriptions = (state: ApplicationState): PremiumFeatureSubscription[] => state.company.premiumFeatureSubscriptions.list;
+
+const getPremiumFeatureSubscriptionsUpdatedAt = createSelector(
+  getPremiumFeatureSubscriptions,
+  (subscriptions) => moment.max(subscriptions.map(subscription => moment(subscription.updatedAt))),
+);
+
+const getSubscriptionsAsyncState = (state: ApplicationState): AsyncState => ({
+  status: state.company.premiumFeatureSubscriptions.status,
+  message: state.company.premiumFeatureSubscriptions.message,
 });
+
+const hasActivePremiumFeatureSubscription = createSelector(
+  getPremiumFeatureSubscriptions,
+  (state: ApplicationState, subscriptionType: PremiumFeature) => subscriptionType,
+  (subscriptions, subscriptionType) => subscriptions.some(
+    subscription => subscription.premiumFeature === subscriptionType && subscription.isEnabled,
+  ),
+);
 
 export default {
   getWhiteLabeling,
@@ -126,9 +137,10 @@ export default {
   getGeneralSettingsId,
   getGeneralSettingsAsyncState,
   getGeneralSettingsUpdatedAt,
-  getPremiumFeaturesUpdatedAt,
+  getPremiumFeatureSubscriptionsUpdatedAt,
   getZebraPrintSettings,
   isAprovalRequestEditingEnabled,
-  getPremiumFeatures,
-  getPremiumFeatureAsyncState,
+  getPremiumFeatureSubscriptions,
+  getSubscriptionsAsyncState,
+  hasActivePremiumFeatureSubscription,
 };

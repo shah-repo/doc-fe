@@ -6,10 +6,13 @@ import { getEmployeeNavigation } from '../../../ui/app/NavigationLocalStorageHel
 import {
   COMPANY_MINE_URL,
   COMPANY_SETTINGS_URL,
+  CREATE_APPROVAL_ROLES_URL,
   LIFE_CYCLE_DOC_REV_OPTIONS_URL,
   LIFE_CYCLE_DOC_TYPES_URL,
   LIFE_CYCLE_PHASES_URL,
-  SUBSCRIPTIONS_URL,
+  PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL,
+  PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
+  UPDATE_APPROVAL_ROLES_URL,
   UPDATE_COMPANY_SETTINGS_URL,
 } from '../../../ui/constants/urls';
 import { apiAction, apiActionWithCallbacks } from '../../factories';
@@ -23,8 +26,9 @@ import {
   SET_AUTOSAVE_CONFIG,
   SET_COMPANY_MINE,
   SET_GENERAL_SETTINGS,
-  SET_PREMIUM_FEATURES_SETTINGS,
+  SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   UPDATE_NAVIGATION_ITEM,
+  UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
 } from './constants';
 import {
   Company,
@@ -34,11 +38,12 @@ import {
   GeneralSettingsAction,
   GeneralSettingsState,
   NavigationMenu,
-  PremiumFeatures,
-  PremiumFeaturesAction,
-  PremiumFeaturesState,
+  PremiumFeatureSubscription,
+  PremiumFeatureSubscriptionPayload,
   SelectCompanyAction,
+  SetPremiumFeatureSubscriptionsAction,
   UpdateNavigationMenuItem,
+  UpdatePremiumFeatureSubscriptionAction,
 } from './types';
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
@@ -112,19 +117,39 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
-const setPremiumFeatures = (premiumFeatures: PremiumFeaturesState,
-): PremiumFeaturesAction => ({
-  type: SET_PREMIUM_FEATURES_SETTINGS,
-  payload: premiumFeatures,
+const setPremiumFeatureSubscriptionsAction = (subscriptions: PremiumFeatureSubscription[]): SetPremiumFeatureSubscriptionsAction => ({
+  type: SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
+  payload: subscriptions,
 });
 
-const getSubscriptions = (): ApiAction => apiAction({
-  url: SUBSCRIPTIONS_URL,
+const updatePremiumFeatureSubscriptionAction = (subscription: PremiumFeatureSubscription): UpdatePremiumFeatureSubscriptionAction => ({
+  type: UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
+  payload: subscription,
+});
+
+const getPremiumFeatureSubscriptions = (): ApiAction<PremiumFeatureSubscription[], void> => apiAction({
+  url: PREMIUM_FEATURE_SUBSCRIPTIONS_URL,
   method: 'get',
   onSuccess: (data, dispatch) => {
-    dispatch(setPremiumFeatures(data));
+    dispatch(setPremiumFeatureSubscriptionsAction(data));
   },
 });
+
+const updatePremiumFeatureSubscription = (
+  id: string,
+  payload: PremiumFeatureSubscriptionPayload,
+  method: ApiActionMethod = 'patch',
+): ApiAction<PremiumFeatureSubscription> => {
+  return apiAction({
+    url: generatePath(PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL, { id }),
+    method,
+    data: payload,
+    asyncType: UPDATE_PREMIUM_FEATURE_SUBSCRIPTION,
+    onSuccess: (data, dispatch) => {
+      dispatch(updatePremiumFeatureSubscriptionAction(data));
+    },
+  });
+};
 
 const updateGeneralSettings = (
   body: GeneralSettings,
@@ -145,18 +170,40 @@ const updateGeneralSettings = (
   });
 };
 
-const updateSubscriptions = (
-  body: PremiumFeatures,
-  method: ApiActionMethod = 'put',
-): ApiAction<PremiumFeaturesState> => {
-  return apiAction({
-    url: SUBSCRIPTIONS_URL,
+const createApprovalRoles = (
+  body: { name: string, isActive: boolean },
+  handlers: Handlers,
+  method: ApiActionMethod = 'post',
+): ApiAction<GeneralSettingsState> => {
+  const url = CREATE_APPROVAL_ROLES_URL;
+  return apiActionWithCallbacks({
+    url,
     method,
     data: body,
-    asyncType: SET_PREMIUM_FEATURES_SETTINGS,
+    asyncType: SET_GENERAL_SETTINGS,
     onSuccess: (data, dispatch) => {
-      dispatch(setPremiumFeatures(data));
+      dispatch(getGeneralSettings());
     },
+    handlers,
+  });
+};
+
+const updateApprovalRoles = (
+  id: string,
+  body: { isActive: boolean },
+  handlers: Handlers,
+  method: ApiActionMethod = 'patch',
+): ApiAction<GeneralSettingsState> => {
+  const url = generatePath(UPDATE_APPROVAL_ROLES_URL, { id });
+  return apiActionWithCallbacks({
+    url,
+    method,
+    data: body,
+    asyncType: SET_GENERAL_SETTINGS,
+    onSuccess: (data, dispatch) => {
+      dispatch(getGeneralSettings());
+    },
+    handlers,
   });
 };
 
@@ -206,6 +253,8 @@ export default {
   redlineConfig,
   getGeneralSettings,
   updateGeneralSettings,
-  getSubscriptions,
-  updateSubscriptions,
+  getPremiumFeatureSubscriptions,
+  updatePremiumFeatureSubscription,
+  createApprovalRoles,
+  updateApprovalRoles,
 };

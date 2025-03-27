@@ -52,9 +52,6 @@ export default makeStyles(theme => ({
     alignItems: 'center',
     color: Colors.textBlack,
     position: 'relative',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
     display: 'inline',
   },
   errorCell: {
@@ -62,6 +59,7 @@ export default makeStyles(theme => ({
     border: `1px solid ${Colors.error}`,
     borderRadius: 4,
     display: 'flex',
+    padding: theme.spacing(0, 2.375, 0, 1),
   },
   warningIcon: {
     color: Colors.error,
@@ -120,5 +118,11 @@ export default makeStyles(theme => ({
   },
   tooltipContent: {
     gap: theme.spacing(1, 1),
+  },
+  tableText: {
+    width: '100%',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
 }));

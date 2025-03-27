@@ -1,6 +1,6 @@
 import { SelectOption } from '../../../ui/components/forms/fields/Select';
 import { ApplicationState } from '../../reducers';
-import { ApproverOption, BkStatus, BulkImport, BulkImportCustom, TableRow, TableRowWithIdx } from './types';
+import { ApproverOption, BkStatus, BulkImport, BulkImportCustom, BulkImportsMapData, TableRow, TableRowWithIdx } from './types';
 import { getBulkImportCustomData } from './utils';
 
 // STEPS
@@ -45,10 +45,34 @@ export const getApproversSelectList = (state: ApplicationState): ApproverOption[
   }));
 // MAIN
 export const getBulkImports = (state: ApplicationState) => state.bulkImport.main.bulkImports;
-export const getBulkImportsMap = (state: ApplicationState) => state.bulkImport.main.bulkImports.reduce((acc, importItem) => {
-  acc[importItem.jobId] = importItem;
-  return acc;
-}, {});
+// We are going to create a map with the id of the BK and the jobId as they are never be similar Ex: JobId: DOCUMENT-001, BK id would be a uuid
+// We need this map to avoid multiple loops on the audit logs because we have the jobId or bulkImportId
+export const getBulkImportsMap = (state: ApplicationState): BulkImportsMapData => {
+  const bulkImportIds: Record<string, BulkImport> = {};
+  const documentRevisionIds: Record<string, BulkImport> = {};
+  const approvalIds: Record<string, BulkImport> = {};
+
+  state.bulkImport.main.bulkImports.forEach(({ id, jobId, documentRevision, ...rest }) => {
+    const bulkImport = { id, jobId, documentRevision, ...rest };
+    bulkImportIds[id] = bulkImportIds[jobId] = bulkImport;
+
+    if (documentRevision) {
+      documentRevisionIds[documentRevision.id] = bulkImport;
+
+      if (documentRevision.approvals) {
+        documentRevision.approvals.forEach(approval => {
+          approvalIds[approval.id] = bulkImport;
+        });
+      }
+    }
+  });
+
+  return {
+    bulkImportIds,
+    documentRevisionIds,
+    approvalIds,
+  };
+};
 export const getBulkImportsGroupByProcess = (state: ApplicationState): Record<string, BulkImportCustom[]> => {
   const filterDataType = state.bulkImport.main.selectedDataType;
   const filterStatus = state.bulkImport.main.selectedStatus;

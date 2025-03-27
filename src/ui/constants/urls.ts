@@ -66,10 +66,10 @@ export const USER_GROUP_URL = '/user_group';
 export const USER_GROUPS_URL = '/user_group/group';
 
 export const COMPANY_SETTINGS_URL = '/company/settings';
-
-export const SUBSCRIPTIONS_URL = '/company/subscriptions';
-
 export const UPDATE_COMPANY_SETTINGS_URL = '/company/settings/:id';
+
+export const PREMIUM_FEATURE_SUBSCRIPTIONS_URL = '/premium_feature_subscriptions';
+export const PREMIUM_FEATURE_SUBSCRIPTIONS_UPDATE_URL = `${PREMIUM_FEATURE_SUBSCRIPTIONS_URL}/:id`;
 
 export const BULK_IMPORT_URL = '/bulk_import/create';
 export const BULK_IMPORT_PROGRESS_URL = '/bulk_import';
@@ -80,3 +80,6 @@ export const LIFE_CYCLE_URL = '/lifecycle';
 export const LIFE_CYCLE_PHASES_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/baseOptions`;
 export const LIFE_CYCLE_DOC_REV_OPTIONS_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/docRevOptions`;
 export const LIFE_CYCLE_DOC_TYPES_URL = `${COMPANY_SETTINGS_URL}${LIFE_CYCLE_URL}/documentTypeOptions`;
+
+export const CREATE_APPROVAL_ROLES_URL = '/approval_roles';
+export const UPDATE_APPROVAL_ROLES_URL = `${CREATE_APPROVAL_ROLES_URL}/:id`;

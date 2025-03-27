@@ -84,8 +84,13 @@ export enum DocumentCategory {
   PurchaseOrder = 'Purchase Order',
   Supplier = 'Supplier',
   Equipment = 'Equipment',
+  EquipmentSpecification = 'Equipment Specification',
   TrainingCurriculums = 'Training Curriculums',
   Lot = 'Lot',
+  Parts = 'Parts',
+  EB = 'EB',
+  Receive = 'Receive',
+  Record ='Record',
 }
 export enum RevisionChangeType {
   NextRevision = 'NEXT_REVISION',

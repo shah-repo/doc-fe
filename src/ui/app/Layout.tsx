@@ -3,7 +3,7 @@ import { Widget as AiWidget, AppName, WidgetRef } from 'ai-widget';
 import cx from 'classnames';
 import isMobile from 'is-mobile';
 import React, { useRef } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { SearchPage } from '../../App/Enlil/Features/Search';
 import { authSelectors } from '../../state/ducks/auth';
@@ -35,7 +35,6 @@ import {
   DOCUMENT_REVISION_CREATE_URL,
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
-  DOCUMENT_REVISION_VERSION_URL,
   DOCUMENT_TYPE_MANAGEMENT_URL,
   GENERAL_SETTINGS_URL,
   GLOBAL_SEARCH_URL,
@@ -259,11 +258,4 @@ const Layout: React.FunctionComponent = () => {
   );
 };
 
-const mapStateToProps = (state: ApplicationState) => {
-  return {
-    isAIEnabled: state.company.premiumFeatures.isAIEnabled,
-    currentEmployeePermissions: state.auth.groups.permissions,
-  };
-};
-
-export default connect(mapStateToProps)(Layout);
+export default Layout;

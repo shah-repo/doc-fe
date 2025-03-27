@@ -1,19 +1,14 @@
 import { Box } from '@material-ui/core';
 import cx from 'classnames';
 import { kebabCase, omit } from 'lodash';
-import { useObserver } from 'mobx-react';
 import React from 'react';
-import { FB } from '..';
 import { translate } from '../../../common/intl';
-import { AsyncStatus } from '../../../state/types';
-import Loader from '../../components/common/kendo/Loader';
-import { Button } from '../../components/forms/fields-next';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridItemChangeEvent, DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { toastError } from '../../components/notifications';
 import Text from '../../components/Text';
-import { FormHeaderContext } from '../../documentRevision/forms/DocumentRevisionForm.container';
-import { APPROVAL_MATRIX_ROLE_TABLE_NAME, ERROR_FIELD, ErrorField, Mode, MODE_FIELD, SEARCHABLE_GROUPS_FIELD } from './constants';
+import { Button } from '../../components/forms/fields-next';
+import { toastError } from '../../components/notifications';
+import { APPROVAL_MATRIX_ROLE_TABLE_NAME, ERROR_FIELD, ErrorField, MODE_FIELD, Mode, SEARCHABLE_GROUPS_FIELD } from './constants';
 import createSchema from './schema';
 import useStyles from './styles';
 import { EditableRole, FBApprovalMatrixRolesProps, RoleEditEvent } from './types';
@@ -24,27 +19,26 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
   approvalRoles = [],
   groups,
   disabled,
+  isLoading,
   addRole,
   updateRole,
 }) => {
   const classes = useStyles();
-  const { workspaceState } = FB.useStores();
   const [editedRole, setEditedRole] = React.useState<EditableRole>();
-  const { asyncState } = React.useContext(FormHeaderContext) ?? {};
 
-  const isLoading = useObserver(
-    () => asyncState?.status === AsyncStatus.Active || workspaceState?.documentRevApi.loading || false,
-  );
+  const addNewRole = () => {
+    const maxIndex = Math.max(0, ...approvalRoles.map(r => r.index));
 
-  const addNewRole = () => setEditedRole({
-    id: '',
-    name: '',
-    index: approvalRoles.length + 1,
-    groups: [],
-    employees: [],
-    [MODE_FIELD]: Mode.add,
-    [SEARCHABLE_GROUPS_FIELD]: '',
-  });
+    return setEditedRole({
+      id: '',
+      name: '',
+      index: maxIndex + 1,
+      groups: [],
+      employees: [],
+      [MODE_FIELD]: Mode.add,
+      [SEARCHABLE_GROUPS_FIELD]: '',
+    });
+  };
 
   const editRole = ({ dataItem }: RoleEditEvent) => setEditedRole(dataItem);
 
@@ -72,6 +66,7 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
       setFieldError(ErrorField.name);
       return false;
     }
+
     return true;
   };
 
@@ -135,7 +130,6 @@ const FBApprovalMatrixRoles: React.FC<FBApprovalMatrixRolesProps> = ({
 
   return (
     <Box className={classes.root}>
-      {isLoading && <Loader />}
       <KendoDataGrid<EditableRole>
         schema={schema}
         data={roles}

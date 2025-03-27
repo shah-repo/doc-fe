@@ -1,3 +1,5 @@
+import { CompositeFilterDescriptor } from '@progress/kendo-data-query';
+
 export const SELECTED_FIELD = 'selected';
 export const DATA_ITEM_KEY = 'id';
 export const STEP_FIELD = 'step';
@@ -6,6 +8,10 @@ export const TYPE_OPTIONS = [
   { label: 'Equipment', value: 'equipment' },
   { label: 'Material', value: 'material' },
 ];
+export const DEFAULT_FILTER: CompositeFilterDescriptor = {
+  logic: 'and',
+  filters: [],
+};
 export const MIN_SEARCH_TERM_LENGTH = 3;
 export const LIMIT = 25;
 export const EMPTY_PLACEHOLDER = '-';
@@ -27,8 +33,10 @@ export const LHR_SUMARY_FIELDS = {
   recordCreationDate: 'recordCreationDate',
   customRecordCreationDate: 'customRecordCreationDate',
 };
-export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment', 'recordCreationDate'];
+export const FIELDS_TO_PICK = ['plannedId', 'actualId', 'startQuantity', 'endQuantity', 'lotStatus', 'expiryDate', 'issue', 'calDueDate', 'pmDueDate', 'comments', 'type', 'enteredBy', 'lotOrEquipment', 'recordCreationDate', 'unit'];
 export const COLUMN_LOCK_FIELDS = ['locked', 'reorderable', 'orderIndex', 'show'];
+export const PAGE_SIZE = 25;
+export const ROW_HEIGHT = 50;
 
 export enum DocType {
   equipment = 'equipment',
