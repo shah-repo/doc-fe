@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Dialog, DialogContent, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { AppBar, Box, Button, Dialog, DialogContent, FormControl, FormHelperText, Grid, IconButton, makeStyles, MenuItem, Select, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import { AxiosRequestConfig } from 'axios';
@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { intl } from '../../../common/intl';
 import apiClient from '../../../state/apiClient';
 import { ANNOUNCEMENTS_BASE } from '../../../state/ducks/company/constants';
+import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError, toastSuccess } from '../../components/notifications';
 import Colors from '../../layout/theme/utils/colors';
@@ -29,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: Colors.light_gray_blue,
     padding: '4px 8px',
   },
+  formControl: {
+    width: '400px',
+  },
 }));
 
 const AnnouncementDetailsDialog: React.FC<{
@@ -40,6 +44,9 @@ const AnnouncementDetailsDialog: React.FC<{
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [formRevsList, setFormRevsList] = useState<DocumentRevision[]>([]);
+  const [selectedFormRevToUpgrade, setSelectedFormRevToUpgrade] = useState<string>('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -81,13 +88,42 @@ const AnnouncementDetailsDialog: React.FC<{
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        const { announcementActionEntries, conflictingElementsMap, isFormUpgradeDone } = data as {
+        const { announcementActionEntries, formRevs } = data as {
           announcementActionEntries: IAnnouncementDetail[]
+          formRevs: DocumentRevision[]
+        };
+        setIsLoading(false);
+        setAnnouncementDetailRows(announcementActionEntries);
+        setFormRevsList(formRevs);
+      })
+      .catch((exception) => {
+        console.log(exception);
+        catchAxiosException(exception);
+      });
+  }
+
+  function handleFormRevSelectionToUpgrade (revIdSelected: string) {
+    setIsLoading(true);
+    setErrorMessage('');
+
+    setSelectedFormRevToUpgrade(revIdSelected);
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${ANNOUNCEMENTS_BASE}/${announcement.id}/${revIdSelected}/details`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        const { conflictingElementsMap, isFormUpgradeDone } = data as {
           conflictingElementsMap: { [key: string]: IConflictingItem }
           isFormUpgradeDone: boolean
         };
         setIsLoading(false);
-        setAnnouncementDetailRows(announcementActionEntries);
         setConflictingElementsMap(conflictingElementsMap);
         setIsFormUpgradeDone(isFormUpgradeDone ?? false);
       })
@@ -123,11 +159,15 @@ const AnnouncementDetailsDialog: React.FC<{
       return;
     }
 
+    if (!selectedFormRevToUpgrade) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
-      url: `${ANNOUNCEMENTS_BASE}/${announcement.id}/formUpgrade`,
+      url: `${ANNOUNCEMENTS_BASE}/${announcement.id}/${selectedFormRevToUpgrade}/formUpgrade`,
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
@@ -171,13 +211,34 @@ const AnnouncementDetailsDialog: React.FC<{
           </Grid>
 
           <Grid item xs={8}>
-            { announcement.canUpgradeForm && !isFormUpgradeDone
-            && <Box display="flex" style={{ gap: '4px' }} alignItems="center" justifyContent="center">
+            { announcement.canUpgradeForm
+            && <Box display="flex" style={{ gap: '6px' }} alignItems="start" justifyContent="center">
               {isAnyConflictingElementsUnResolved && <InfoIndicator
                 type={IndicatorTypeEnum.WARNING}
                 text="The new set of options do not match the current number of options for certain existing elements. <br />This might cause inconsistencies & result in data loss. <br /><br />Please review and resolve the mismatch before proceeding." />}
+
+              <FormControl
+                className={classes.formControl}
+              >
+                <Select
+                  labelId="form-rev-upgrade-selector"
+                  value={selectedFormRevToUpgrade}
+                  onChange={(event) => handleFormRevSelectionToUpgrade(event.target.value as string)
+                  }
+                >
+                  {formRevsList.map((formRev) => (
+                    <MenuItem value={formRev.id} key={formRev.id}>
+                      <em>
+                        {formRev.document?.docId} • {formRev.name} • {formRev.displayRevision} • {formRev.displayStatus}
+                      </em>
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>Select form rev to upgrade</FormHelperText>
+              </FormControl>
+
               <Button variant="outlined" data-cy="upgrade-form" onClick={processFormUpgrade}
-                disabled={isAnyConflictingElementsUnResolved}> { isSubmitting ? 'Upgrading Form Rev' : 'Upgrade Form' } </Button>
+                disabled={isAnyConflictingElementsUnResolved || !selectedFormRevToUpgrade}> { isSubmitting ? 'Upgrading Form Rev' : 'Upgrade Form' } </Button>
               <InfoIndicator
                 type={IndicatorTypeEnum.INFO}
                 text={`A new Form revision would be created with combining these new elements with the existing schema.This Rev would be created in Draft.
