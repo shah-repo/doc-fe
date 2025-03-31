@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core';
-import { Colors } from '../../layout/theme-next';
+import { Colors as NextColors } from '../../layout/theme-next';
 import { NextTheme } from '../../layout/theme-next/provider';
+import Colors from '../../layout/theme/utils/colors';
 
 export default makeStyles<NextTheme>(theme => ({
   root: {
@@ -23,7 +24,7 @@ export default makeStyles<NextTheme>(theme => ({
     gridGap: theme.spacing(2.5, 3),
   },
   header: {
-    borderBottom: `1px solid ${Colors.stroke}`,
+    borderBottom: `1px solid ${NextColors.stroke}`,
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
@@ -37,13 +38,26 @@ export default makeStyles<NextTheme>(theme => ({
     flexDirection: 'column',
     marginTop: '16px',
   },
+  innerBox: {
+    display: 'flex',
+    gap: '8px',
+    marginBottom: '8px',
+  },
+  actionBox: {
+    marginTop: '16px',
+    gridGap: 0,
+    alignItems: 'center',
+  },
+  width40: {
+    width: '40%',
+  },
   title: {
     fontSize: 21,
     marginBottom: theme.spacing(0.5),
-    color: Colors.textBlack,
+    color: NextColors.textBlack,
   },
   subtitle: {
-    color: Colors.textGray,
+    color: NextColors.textGray,
   },
   smallText: {
     fontSize: 12,
@@ -79,22 +93,22 @@ export default makeStyles<NextTheme>(theme => ({
     borderRadius: 4,
     padding: theme.spacing(1, 1.25),
     marginBottom: theme.spacing(0.5),
-    color: Colors.textGray,
+    color: NextColors.textGray,
     fontSize: 12,
     minHeight: 0,
     cursor: 'pointer',
 
     '&.Mui-selected': {
-      backgroundColor: Colors.lightGray,
-      color: Colors.primaryDark,
+      backgroundColor: NextColors.lightGray,
+      color: NextColors.primaryDark,
       fontWeight: 600,
 
       '&:hover': {
-        backgroundColor: Colors.lightGray,
+        backgroundColor: NextColors.lightGray,
       },
     },
     '&:hover': {
-      backgroundColor: Colors.lightGray,
+      backgroundColor: NextColors.lightGray,
     },
   },
   panels: {
@@ -109,23 +123,42 @@ export default makeStyles<NextTheme>(theme => ({
       wordBreak: 'break-all',
       wordWrap: 'break-word',
       paddingBottom: theme.spacing(0.5),
-      borderBottom: `1px solid ${Colors.stroke}`,
+      borderBottom: `1px solid ${NextColors.stroke}`,
     },
   },
   marginBottom: {
     marginBottom: theme.spacing(1),
   },
-  formControl: {
+  zeroMarginBottom: {
+    marginBottom: theme.spacing(0),
+  },
+  formControl40: {
     marginTop: theme.spacing(2),
+    width: '40%',
+  },
+  formControl60: {
+    marginTop: theme.spacing(2),
+    width: '60%',
   },
   popoverPaper: {
     padding: theme.spacing(1),
     maxWidth: '340px',
   },
+  promptUserMsgStyle: {
+    color: Colors.red,
+    backgroundColor: Colors.light_red,
+    padding: '8px',
+    textAlign: 'center',
+  },
+  errMsgStyle: {
+    color: Colors.red,
+    backgroundColor: Colors.light_red,
+    padding: '4px',
+  },
   mappingRuleSchemaItemBox: {
     position: 'relative',
     marginTop: '8px',
-    border: `1px solid ${Colors.textGray}`,
+    border: `1px solid ${NextColors.textGray}`,
     borderRadius: '2px',
     padding: '8px',
     width: '100%',
@@ -151,9 +184,9 @@ export default makeStyles<NextTheme>(theme => ({
     },
   },
   switchBase: {
-    color: Colors.statusDraftBorder,
+    color: NextColors.statusDraftBorder,
     '&$checked': {
-      color: Colors.statusDraftBorder,
+      color: NextColors.statusDraftBorder,
     },
   },
   /* Container to define the boundary */
@@ -161,6 +194,16 @@ export default makeStyles<NextTheme>(theme => ({
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
+  },
+
+  blackSpan: {
+    color: Colors.black,
+  },
+
+  refreshIconStyle: {
+    cursor: 'pointer',
+    marginLeft: '4px',
+    fontSize: '16px',
   },
 
   /* Circle path for the motion */
@@ -198,4 +241,45 @@ export default makeStyles<NextTheme>(theme => ({
       opacity: 1, // Fully visible
     },
   },
+  drawerDialog: {
+    width: '40vw', // Width of the side panel
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%', // Full height of the drawer
+  },
+  drawerDialogPaper: {
+    width: '40vw',
+  },
+  drawerContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1, // Allow sections to take full available height
+    padding: '16px',
+  },
+  drawerDialogCloseButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+  drawerList: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: '16px',
+    marginTop: '16px',
+    paddingLeft: '20px',
+  },
+  width100: {
+    width: '100%',
+  },
+  mappingTableRowHeight: {
+    height: '32px',
+  },
+  mappingTableCell: {
+    border: `1px solid ${Colors.dark_gray2}`,
+  },
+  boldWeight: {
+    fontWeight: 'bold',
+  },
+
 }));

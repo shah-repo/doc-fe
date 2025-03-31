@@ -20,7 +20,7 @@ const MigrationMappingDialog: React.FC<{
   updateScanMapping: (fromRevSchema: ISchemaItem[], toRevSchema: ISchemaItem[]) => void
   fromRev: DocumentRevision | undefined
   toRev: DocumentRevision | undefined
-  scanDetails: IBulkMigrationScanDetails | undefined
+  scanDetails: IBulkMigrationScanDetails | null
 }> = ({ isOpen, handleClose, updateScanMapping, fromRev, toRev, scanDetails }) => {
   const classes = useStyles();
 

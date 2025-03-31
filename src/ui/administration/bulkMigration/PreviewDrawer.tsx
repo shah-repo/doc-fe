@@ -98,7 +98,7 @@ const PreviewDrawer: React.FC<{
   isPreviewPanelVisible: boolean
   handleClosePreview: () => void
   toRevSchema: ISchemaItem[]
-  scanDetails: IBulkMigrationScanDetails | undefined
+  scanDetails: IBulkMigrationScanDetails | null
 }> = ({ isPreviewPanelVisible, handleClosePreview, toRevSchema, scanDetails }) => {
   const classes = useStyles();
 

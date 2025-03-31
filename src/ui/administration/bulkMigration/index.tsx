@@ -2,82 +2,62 @@
 import { Box, Button, FormControl, Grid, InputLabel, LinearProgress, MenuItem, Select, Typography } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SearchIcon from '@material-ui/icons/Search';
-import axios, { AxiosRequestConfig } from 'axios';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
-import { intl, translate } from '../../../common/intl';
+import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
-import { encodeString } from '../../../common/utils/helpers';
-import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_START_REVS_MIGRATION, BULK_MIGRATION_UPDATE_SCAN } from '../../../state/ducks/company/constants';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
-import { store } from '../../../state/store';
 import DateTime from '../../components/DateTime';
-import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
+import { toastError } from '../../components/notifications';
 import { FBButton } from '../../form.builder';
-import Colors from '../../layout/theme/utils/colors';
-import { IBulkMigrationDocumentType, IBulkMigrationScanDetails, INTERVAL_DURATION, ISchemaItem, ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
+import { INTERVAL_DURATION, ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
 import RevsTable from './RevsTable';
 import useStyles from './styles';
-
-// let call: CancelTokenSource;
+import { useBulkMigration } from './useBulkMigration';
 
 const BulkMigrationContainer: React.FC = () => {
   const classes = useStyles();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const [documentTypesList, setDocumentTypesList] = useState<IBulkMigrationDocumentType[]>([]);
-
-  const [fromDocumentTypeId, setFromDocumentTypeId] = useState<string>('');
-  const [fromFormRevId, setFromFormRevId] = useState<string>('');
-  const [toDocumentTypeId, setToDocumentTypeId] = useState<string>('');
-  const [toFormRevId, setToFormRevId] = useState<string>('');
-
-  const [fromFormRevsList, setFromFormRevsList] = useState<DocumentRevision[]>([]);
-  const [toFormRevsList, setToFormRevsList] = useState<DocumentRevision[]>([]);
-
-  const [eligibleRevsCount, setEligibleRevsCount] = useState<number>(0);
-  const [updateRevsTable, setUpdateRevsTable] = useState<number>(0);
-
-  const [scanDetails, setScanDetails] = useState<IBulkMigrationScanDetails>();
-  const [rerunScanDetails, setRerunScanDetails] = useState<{irrelevantRevsCount: number, newRevsCount: number}>({
-    irrelevantRevsCount: 0,
-    newRevsCount: 0,
-  });
+  const {
+    isLoading,
+    errorMessage,
+    documentTypesList,
+    fromFormRevsList,
+    toFormRevsList,
+    fromDocumentTypeId,
+    fromFormRevId,
+    toDocumentTypeId,
+    toFormRevId,
+    setFromDocumentTypeId,
+    setFromFormRevId,
+    setToDocumentTypeId,
+    setToFormRevId,
+    eligibleRevsCount,
+    rerunScanDetails,
+    updateRevsTable,
+    scanDetails,
+    isConfirmationDialogVisible,
+    fetchAllDocumentTypes,
+    fetchFormRevsForDocumentType,
+    fetchEligibleRevisionsOfRevType,
+    registerScanForRevisions,
+    getScanDetails,
+    startRevisionsScan,
+    updateScanMapping,
+    cancelScanForRevisions,
+    handleMigrationConfirmation,
+    confirmSubmission,
+    handleMigrationConfirmationDialogClose,
+  } = useBulkMigration();
 
   const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
-  const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
-
   const intervalRef = useRef<NodeJS.Timeout | null>(null); // Reference to store the interval ID.
 
   useEffect(() => {
     fetchAllDocumentTypes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function commonSetUp () {
-    // call?.cancel();
-    // call = axios.CancelToken.source();
-    setIsLoading(true);
-    setErrorMessage('');
-  }
-
-  function catchAxiosException (exception: any) {
-    setIsLoading(false);
-    if (axios.isCancel(exception)) {
-      return;
-    }
-    if (exception?.response?.status === 504) {
-      setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
-    } else {
-      toastInfo(exception?.response.data?.message);
-    }
-  }
 
   useEffect(() => {
     if (scanDetails?.status === MIGRATION_STATUS_ENUM.STARTED || scanDetails?.status === MIGRATION_STATUS_ENUM.IN_PROGRESS) {
@@ -99,234 +79,6 @@ const BulkMigrationContainer: React.FC = () => {
       }
     };
   }, [scanDetails]);
-
-  function fetchAllDocumentTypes () {
-    commonSetUp();
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: BULK_MIGRATION_GET_DOCUMENT_TYPES,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        // console.log(data);
-        setIsLoading(false);
-        setDocumentTypesList(data);
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
-
-  function fetchFormRevsForDocumentType (
-    documentTypeId: string,
-    section: string,
-  ) {
-    commonSetUp();
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: `${BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS}/${documentTypeId}?isGetNewSchema=${section === 'from' ? 'false' : 'true'}`,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        // console.log(data);
-        setIsLoading(false);
-
-        const { formRevs } = data;
-        if (section === 'from') {
-          setFromFormRevsList(formRevs);
-        } else if (section === 'to') {
-          setToFormRevsList(formRevs);
-        }
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
-
-  function fetchEligibleRevisionsOfRevType (formRevId: string) {
-    commonSetUp();
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: `${BULK_MIGRATION_GET_ELIGIBLE_REVS}/${formRevId}?isCountOnly=true`,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        // console.log(data);
-        setIsLoading(false);
-        setEligibleRevsCount(data);
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
-
-  function registerScanForRevisions () {
-    commonSetUp();
-    if (toFormRevId) {
-      const requestConfig: AxiosRequestConfig = {
-        method: 'post',
-        url: `${BULK_MIGRATION_REGISTER_SCAN}`,
-        data: {
-          fromDocumentTypeId,
-          fromFormRevId,
-          toDocumentTypeId,
-          toFormRevId,
-        },
-        headers: {
-          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-        },
-        // cancelToken: call.token,
-      };
-
-      apiClient
-        .request(requestConfig)
-        .then((resp) => resp)
-        .then(({ data }) => {
-          const { scanDetails, irrelevantRevsCount, newRevsCount } = data;
-          setIsLoading(false);
-          setScanDetails(scanDetails);
-          setRerunScanDetails({
-            irrelevantRevsCount, newRevsCount,
-          });
-        })
-        .catch((exception) => {
-          catchAxiosException(exception);
-        });
-    }
-  }
-
-  function getScanDetails () {
-    if (scanDetails?.id) {
-      const requestConfig: AxiosRequestConfig = {
-        method: 'get',
-        url: `${BULK_MIGRATION_GET_SCAN_DETAILS}/${scanDetails.id}`,
-        headers: {
-          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-        },
-        // cancelToken: call.token,
-      };
-
-      apiClient
-        .request(requestConfig)
-        .then((resp) => resp)
-        .then(({ data }) => {
-          setScanDetails(data);
-        })
-        .catch((exception) => {
-          catchAxiosException(exception);
-        });
-    }
-  }
-
-  function startRevisionsScan () {
-    if (!scanDetails?.toFormSchema?.length) {
-      toastError(`Mapping Logic has not been set. 
-        Click on "Mapping Logic" to define how the previous form schema maps to the current one`);
-      return;
-    }
-
-    commonSetUp();
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: `${BULK_MIGRATION_REGISTER_SCAN_FOR_RUN}/${scanDetails?.id}`,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-    };
-
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        console.log(data);
-        setIsLoading(false);
-        setScanDetails(data);
-        toastSuccess(
-          'Scan request has been submitted. Please check back in some time.',
-        );
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
-
-  function updateScanMapping (fromRevSchema: ISchemaItem[], toRevSchema: ISchemaItem[]) {
-    if (scanDetails) {
-      commonSetUp();
-      const requestConfig: AxiosRequestConfig = {
-        method: 'patch',
-        url: `${BULK_MIGRATION_UPDATE_SCAN}/${scanDetails.id}`,
-        data: {
-          fromFormSchema: fromRevSchema,
-          toFormSchema: toRevSchema,
-        },
-        headers: {
-          Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-        },
-        // cancelToken: call.token,
-      };
-
-      apiClient
-        .request(requestConfig)
-        .then((resp) => resp)
-        .then(({ data }) => {
-          setIsLoading(false);
-          toastSuccess(
-            'Scan mapping logic has been updated. Click Preview to see this logic in action.',
-          );
-          setScanDetails(data);
-          setUpdateRevsTable(updateRevsTable => updateRevsTable + 1);
-        })
-        .catch((exception) => {
-          catchAxiosException(exception);
-        });
-    }
-  }
-
-  function cancelScanForRevisions () {
-    commonSetUp();
-    const requestConfig: AxiosRequestConfig = {
-      method: 'post',
-      url: `${BULK_MIGRATION_CANCEL_SCAN}/${scanDetails?.id}`,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        setIsLoading(false);
-        setScanDetails(data);
-        toastSuccess('Scan request has been canceled. Please refresh.');
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
 
   function handleDocumentTypeChange (value: string, fieldName: string) {
     if (fieldName === 'fromDocumentTypeId') {
@@ -375,44 +127,6 @@ const BulkMigrationContainer: React.FC = () => {
   function handleSelectedRowsChange (selected: ISelectedDetails[]) {
     setSelectedRows(selected);
   }
-
-  const confirmSubmission = () => {
-    setIsConfirmationDialogVisible(true);
-  };
-
-  const handleMigrationConfirmationDialogClose = () => {
-    setIsConfirmationDialogVisible(false);
-  };
-
-  const handleMigrationConfirmation = (employeePassword: string) => {
-    // Take all the ones selected & send to BE
-    setIsLoading(true);
-    setErrorMessage('');
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'post',
-      url: `${BULK_MIGRATION_START_REVS_MIGRATION}/${scanDetails?.id}`,
-      data: {
-        revIds: selectedRows.map(entry => entry.id),
-        password: employeePassword,
-      },
-      headers: {
-        Authorization: `bearer_password ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}:${encodeString(employeePassword)}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        setIsLoading(false);
-        handleMigrationConfirmationDialogClose();
-        toastSuccess('Supplier Migration job request has been placed. Please check back in some time.');
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  };
 
   useEffect(() => {
     if (fromDocumentTypeId) {
@@ -472,7 +186,7 @@ const BulkMigrationContainer: React.FC = () => {
           </Grid>
           <Grid item xs={4}>
             {(rerunScanDetails.newRevsCount > 0 || rerunScanDetails.irrelevantRevsCount > 0) && scanDetails?.status !== MIGRATION_STATUS_ENUM.IN_PROGRESS
-              && <div style={{ color: Colors.red, backgroundColor: Colors.light_red, padding: '8px', textAlign: 'center' }}>{promptUserToRerunScan()}</div>
+              && <div className={classes.promptUserMsgStyle}>{promptUserToRerunScan()}</div>
             }
           </Grid>
           <Grid item xs={2}>
@@ -491,18 +205,14 @@ const BulkMigrationContainer: React.FC = () => {
             data-cy="saving-progress-bar"
           />
         )}
-        <Box
-          className={classes.flexBox}
-          style={{ justifyContent: 'space-between' }}
-        >
+        <Box className={classes.flexBox}>
           <Box className={classes.boxForSelection}>
             <Typography variant="h5"> Migrate From </Typography>
             <Typography variant="subtitle2"> Select the Document Type & Form Rev </Typography>
 
-            <Box style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+            <Box className={classes.innerBox}>
               <FormControl
-                className={classes.formControl}
-                style={{ width: '40%' }}
+                className={classes.formControl40}
               >
                 <InputLabel id="document-type-migrate-from"> Document Type </InputLabel>
                 <Select
@@ -527,8 +237,7 @@ const BulkMigrationContainer: React.FC = () => {
               </FormControl>
 
               <FormControl
-                className={classes.formControl}
-                style={{ width: '60%' }}
+                className={classes.formControl60}
               >
                 <InputLabel id="form-rev-migrate-from"> Form Rev Selection </InputLabel>
                 <Select
@@ -555,18 +264,15 @@ const BulkMigrationContainer: React.FC = () => {
             </Box>
             {fromDocumentTypeId && fromFormRevId && (
               <Typography variant="subtitle2">
-                  Eligible Revisions - <span style={{ color: Colors.black }}> {eligibleRevsCount} <RefreshIcon
-                  style={{ cursor: 'pointer', marginLeft: '4px', fontSize: '16px' }}
-                  onClick={e => fetchEligibleRevisionsOfRevType(fromFormRevId)}
-                /> </span>
+                  Eligible Revisions - <span className={classes.blackSpan}> {eligibleRevsCount}
+                  <RefreshIcon className={classes.refreshIconStyle}
+                    onClick={e => fetchEligibleRevisionsOfRevType(fromFormRevId)}
+                  /> </span>
               </Typography>
             )}
           </Box>
 
-          <Box
-            className={classes.flexBoxColumn}
-            style={{ marginTop: '16px', gridGap: 0, alignItems: 'center' }}
-          >
+          <Box className={cx(classes.actionBox, classes.flexBoxColumn)}>
             {scanDetails?.id && (
               <Box className={cx(classes.buttons, classes.flexBoxColumn)}>
                 {[MIGRATION_STATUS_ENUM.IN_PROGRESS, MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.MAPPING].includes(scanDetails.status)
@@ -577,13 +283,10 @@ const BulkMigrationContainer: React.FC = () => {
                       onClick={cancelScanForRevisions}
                       variant="outlined"
                       color="primary"
-                      style={{ marginBottom: '0px' }}
+                      className={classes.zeroMarginBottom}
                     />
                     <Typography variant="caption" className={classes.blinking}>{scanDetails.status}
-                      <RefreshIcon
-                        style={{ cursor: 'pointer', marginLeft: '4px', fontSize: '16px' }}
-                        onClick={getScanDetails}
-                      />
+                      <RefreshIcon className={classes.refreshIconStyle} onClick={getScanDetails} />
                     </Typography>
                   </>
                 }
@@ -642,10 +345,9 @@ const BulkMigrationContainer: React.FC = () => {
             <Typography variant="h5">Migrate To</Typography>
             <Typography variant="subtitle2">Select the Document Type & Form Rev</Typography>
 
-            <Box style={{ display: 'flex', gap: '8px' }}>
+            <Box className={classes.innerBox}>
               <FormControl
-                className={classes.formControl}
-                style={{ width: '40%' }}
+                className={classes.formControl40}
               >
                 <InputLabel id="document-type-migrate-to"> Document Type </InputLabel>
                 <Select
@@ -670,8 +372,7 @@ const BulkMigrationContainer: React.FC = () => {
               </FormControl>
 
               <FormControl
-                className={classes.formControl}
-                style={{ width: '60%' }}
+                className={classes.formControl60}
               >
                 <InputLabel id="form-rev-migrate-to"> Form Rev Selection </InputLabel>
                 <Select
@@ -700,7 +401,7 @@ const BulkMigrationContainer: React.FC = () => {
       </Box>
       <div className={classes.panels}>
         {!isEmpty(errorMessage) && (
-          <div style={{ color: Colors.red, backgroundColor: Colors.light_red, padding: '4px' }}>{errorMessage}</div>
+          <div className={classes.errMsgStyle}>{errorMessage}</div>
         )}
         {scanDetails?.id && ![MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
           && <Box>

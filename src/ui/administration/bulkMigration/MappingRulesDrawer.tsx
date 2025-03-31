@@ -1,42 +1,6 @@
-import { Box, Button, Drawer, makeStyles, Typography } from '@material-ui/core';
+import { Box, Button, Drawer, Typography } from '@material-ui/core';
 import React from 'react';
-
-const useStyles = makeStyles((theme) => ({
-  dialogDrawer: {
-    width: '40vw', // Width of the side panel
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%', // Full height of the drawer
-  },
-  dialogDrawerPaper: {
-    width: '40vw',
-  },
-  drawerContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: 1, // Allow sections to take full available height
-    padding: '16px',
-  },
-  dialogDrawerCloseButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-  list: {
-    display: 'flex',
-    flexDirection: 'column',
-    rowGap: '16px',
-    marginTop: '16px',
-    paddingLeft: '20px',
-  },
-  compactListItem: {
-    marginBottom: '4px',
-    '& .MuiListItemText-root': {
-      marginBottom: 0,
-    },
-  },
-}));
+import useStyles from './styles';
 
 const MappingRulesDrawer: React.FC<{
   isOpen: boolean
@@ -48,14 +12,14 @@ const MappingRulesDrawer: React.FC<{
       anchor="right"
       open={isOpen}
       onClose={handleClosePanel}
-      classes={{ paper: classes.dialogDrawerPaper }}
+      classes={{ paper: classes.drawerDialogPaper }}
     >
-      <Box className={classes.dialogDrawer}>
-        <Button onClick={handleClosePanel}>Close</Button>
+      <Box className={classes.drawerDialog}>
+        <Button onClick={handleClosePanel} className={classes.drawerDialogCloseButton}>Close</Button>
         <Box className={classes.drawerContent}>
           <Typography variant="h5"> Rules governing mapping, based on the type of the item. This is to minimize data loss.
           </Typography>
-          <ul className={classes.list}>
+          <ul className={classes.drawerList}>
             <li className={classes.compactListItem}>
               <b>Autocomplete type:</b> Must be mapped to an <code>autocomplete</code>, OR to a column in <code>object</code> | <code>array</code> type.
             </li>
