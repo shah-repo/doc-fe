@@ -8,5 +8,5 @@ source ~/.nvm/nvm.sh
 
 nvm install $NPM
 nvm use $NPM
-npm install -g yarn@1.22.19
+npm install -g yarn@1.22.19 typescript@4.4.4
 yarn cache clean
