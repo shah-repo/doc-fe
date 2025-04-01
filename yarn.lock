@@ -3583,7 +3583,7 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
-"ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git#^0.1.1":
+"ai-widget@git+ssh://git@bitbucket.org/shifamed/ai-widget.git#^0.1.3":
   version "0.1.3"
   resolved "git+ssh://git@bitbucket.org/shifamed/ai-widget.git#b91a1e60a801fc2858ab9e7069ee491ab6495ce4"
   dependencies:

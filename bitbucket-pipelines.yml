@@ -51,7 +51,7 @@ definitions:
           - typecheck-results/**
         script:
           - ./aws/bash_scripts/configure.sh
-          - yarn lint:tsc
+          - ./aws/bash_scripts/runTypecheck.sh
 
     - step: &RUN_LINTER
         <<: *COMMON
