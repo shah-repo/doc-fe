@@ -2,6 +2,7 @@
 import { AppBar, Box, Button, Chip, Dialog, DialogContent, FormControlLabel, IconButton, Switch, Toolbar, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -196,7 +197,7 @@ const MigrationMappingDialog: React.FC<{
   function showAllSelectOptions (schemaItem: ISchemaItem) {
     const options = schemaItem.options?.map((option, index) => option.value) ?? [];
     if (options?.length > 0) {
-      return <span style={{ fontSize: '84%', padding: '2px', backgroundColor: Colors.gray_goose }}> - [ {options?.join(' | ')} ]</span>;
+      return <span className={classes.mappingDialogSelectionOption}> - [ {options?.join(' | ')} ]</span>;
     } else {
       return <></>;
     }
@@ -223,15 +224,15 @@ const MigrationMappingDialog: React.FC<{
       onClose={handleClose}
       aria-labelledby="migration-mapping-title"
     >
-      <AppBar style={{ position: 'relative' }}>
-        <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <AppBar className={classes.relative}>
+        <Toolbar className={classes.spaceBetweenFlex}>
           <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />
           </IconButton>
           <Typography variant="h6">
             Migration Form Schema Fields Mapping
           </Typography>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', gap: '4px' }}>
+          <Box className={classes.spaceBetweenFlex}>
             <Button variant="text" color="secondary" onClick={showMappingRules}> Rules </Button>
             <Button color="primary" variant="contained" onClick={handleMappingSave}> Save </Button>
             { Array.isArray(scanDetails?.toFormSchema) && scanDetails?.toFormSchema?.length
@@ -257,8 +258,8 @@ const MigrationMappingDialog: React.FC<{
         </Toolbar>
       </AppBar>
       <DialogContent>
-        <ul style={{ marginTop: 0, marginBottom: '24px', paddingLeft: '20px', width: '80%' }}>
-          <li className={classes.compactListItem}>Click on a Schema Item on left. A <DoneAllIcon style={{ color: Colors.green, position: 'relative', top: '6px' }} /> would appear, indicating that this is selected.</li>
+        <ul className={classes.mappingDialogInstructions}>
+          <li className={classes.compactListItem}>Click on a Schema Item on left. A <DoneAllIcon className={classes.doneAllIcon} /> would appear, indicating that this is selected.</li>
           <li className={classes.compactListItem}>Clicking on any item in the <em>To Rev</em> area, maps the two fields together.</li>
           <li className={classes.compactListItem}>More than one item from the left can be mapped to items on the right.</li>
           <li className={classes.compactListItem}>Click <b>Save</b> to make the <b>Preview</b> button appear. You can adjust the mapping rules, save, and preview as needed until you're satisfied with the results. Once everything looks good, close this screen, select the revisions from the table, and click <b>Run Scan</b> to fetch all the eligible revisions for selection.
@@ -266,19 +267,15 @@ const MigrationMappingDialog: React.FC<{
         </ul>
         {/* <MappingRules /> */}
         <Typography variant="subtitle2">{unmappedCount} fields unmapped</Typography>
-        <Box style={{ display: 'flex', justifyContent: 'space-between' }} className={classes.mappingArea}>
+        <Box className={classes.mappingArea}>
           <ArcherContainer
             strokeColor={Colors.font_gray}
             strokeWidth={0.75}
-            style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
-            // endMarker={false}
+            className={cx(classes.spaceBetweenFlex, classes.width100)}
           >
             <Box style={{ width: '32%' }}>
-              <Typography variant="h5" style={{ display: 'inline-block', marginBottom: '8px', borderBottom: `1px solid ${Colors.gray}` }}>
-                From Revision</Typography> - {fromRev?.displayRevision}
-              <Box
-                style={getBoxStyle()}
-              >
+              <Typography variant="h5" className={classes.mappingAreaTitle}>From Revision</Typography> - {fromRev?.displayRevision}
+              <Box style={getBoxStyle()}>
                 {fromRevSchema
                   .filter(schemaItem => !schemaItem.deleted)
                   .map(schemaItem => {
@@ -289,13 +286,13 @@ const MigrationMappingDialog: React.FC<{
                           onClick={e => handleFromSchemaItemClick(schemaItem)}
                         >
                           <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
-                          <Typography variant="caption" display="block" style={{ textTransform: 'capitalize' }}>
+                          <Typography variant="caption" display="block" className={classes.capitalize}>
                             {schemaItem.type} { showAllSelectOptions(schemaItem) }
                           </Typography>
                           <Typography variant="caption" display="block"> {schemaItem.name} </Typography>
                           {
                             selectedSchemaItems?.map(selectedSchemaItems => selectedSchemaItems.name).includes(schemaItem.name)
-                          && <DoneAllIcon style={{ color: Colors.green, position: 'absolute', right: '6px', top: '2px' }} />
+                          && <DoneAllIcon className={classes.selectedFromSchemaItem} />
                           }
                         </Box>
                       </ArcherElement>
@@ -304,8 +301,7 @@ const MigrationMappingDialog: React.FC<{
               </Box>
             </Box>
             <Box style={{ width: '56%' }}>
-              <Typography variant="h5" style={{ display: 'inline-block', marginBottom: '8px', borderBottom: `1px solid ${Colors.gray}` }}>
-                To Revision</Typography>- {toRev?.displayRevision}
+              <Typography variant="h5" className={classes.mappingAreaTitle}>To Revision</Typography> - {toRev?.displayRevision}
               <Box style={getBoxStyle()}>
                 {toRevSchema
                   .filter(schemaItem => !schemaItem.deleted)
@@ -318,22 +314,18 @@ const MigrationMappingDialog: React.FC<{
                           sourceAnchor: 'left',
                         })) : []}
                       >
-                        <Box className={classes.mappingRuleSchemaItemBox}
+                        <Box className={cx(classes.mappingRuleSchemaItemBox, classes.toSchemaItem)}
                           style={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            gap: '8px',
                             backgroundColor: isDisabledSchemaItem(schemaItem) ? Colors.hint_gray : '',
-                            overflow: 'auto',
                           }}
                           onClick={e => handleToSchemaItemClick(schemaItem)}
                         >
-                          <Box style={{ width: '100%' }}>
-                            <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <Box className={classes.width100}>
+                            <Box className={classes.simpleFlex}>
                               <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
                               <Typography variant="caption" align="right"> {schemaItem.name} </Typography>
                             </Box>
-                            <Typography variant="caption" display="block" style={{ textTransform: 'capitalize' }}>
+                            <Typography variant="caption" display="block" className={classes.capitalize}>
                               {schemaItem.type} { showAllSelectOptions(schemaItem) }
                             </Typography>
                             {
@@ -360,7 +352,7 @@ const MigrationMappingDialog: React.FC<{
                                   label={mappedFromEntry.label}
                                   onDelete={e => handleMappedFromDelete(schemaItem, mappedFromEntry)}
                                   color="secondary"
-                                  style={{ padding: '0px 4px', height: '28px' }}
+                                  className={classes.chip}
                                 />
                               );
                             })

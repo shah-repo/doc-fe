@@ -3,11 +3,12 @@ import { useState } from 'react';
 import { intl } from '../../../common/intl';
 import { encodeString } from '../../../common/utils/helpers';
 import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_START_REVS_MIGRATION, BULK_MIGRATION_UPDATE_SCAN } from '../../../state/ducks/company/constants';
+import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_GET_SCAN_RESULTS, BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_START_REVS_MIGRATION, BULK_MIGRATION_UPDATE_SCAN } from '../../../state/ducks/company/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
-import { IBulkMigrationDocumentType, IBulkMigrationScanDetails, ISchemaItem, ISelectedDetails } from './interface';
+import { FBFormState } from '../../form.builder';
+import { IApprovalRequirements, IBulkMigrationDocumentType, IBulkMigrationScanDetails, ISchemaItem, ISelectedDetails, ISupplierScanResultRev, SortDirection } from './interface';
 
 export const useBulkMigration = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +34,18 @@ export const useBulkMigration = () => {
   });
 
   const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
+  const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
+
+  const [previewDocRevsList, setPreviewDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
+  const [filteredDocRevsList, setFilteredDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
+
+  const [newFormInput, setNewFormInput] = useState<{[key: string]: any}>();
+  const [fieldsUnmatched, setFieldsUnmatched] = useState<{[key: string]: any}>();
+
+  const [rowMapping, setRowMapping] = useState(false);
+
+  const [rows, setRows] = useState<ISupplierScanResultRev[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
 
   const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
   const confirmSubmission = () => {
@@ -318,6 +331,170 @@ export const useBulkMigration = () => {
       });
   };
 
+  function fetchApprovalRequirements (toDocumentTypeId: string) {
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS}/${toDocumentTypeId}`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        setApprovalRequirements(data);
+      })
+      .catch((exception) => {
+        catchAxiosException(exception);
+      });
+  }
+
+  function addUserToGroups () {
+    if (!approvalRequirements?.missingGroups?.length) {
+      return;
+    }
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'patch',
+      url: `${BULK_MIGRATION_ADD_USER_TO_GROUPS}/${toDocumentTypeId}`,
+      data: {
+        missingGroups: approvalRequirements?.missingGroups,
+      },
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        setApprovalRequirements(data);
+        toastSuccess('Automation user has been added to the required groups successfully');
+      })
+      .catch((exception) => {
+        catchAxiosException(exception);
+      });
+  }
+
+  function fetchAllEligibleRevisions () {
+    setIsLoading(true);
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW}/${scanDetails?.id}`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      // cancelToken: call.token,
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        setPreviewDocRevsList(data);
+        setFilteredDocRevsList(data);
+        setIsLoading(false);
+      })
+      .catch((exception) => {
+        setIsLoading(false);
+        toastError(exception?.response.data?.message);
+      });
+  }
+
+  function getPreviewForDocRev (docRevSelected: DocumentRevision, formState: FBFormState) {
+    setIsLoading(true);
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW}/${scanDetails?.id}/${docRevSelected.id}`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      // cancelToken: call.token,
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        const { newFormInput, fieldNamesUnmatched } = data;
+        setNewFormInput(newFormInput);
+        setFieldsUnmatched(fieldNamesUnmatched);
+
+        formState?.setValues(newFormInput);
+        setIsLoading(false);
+      })
+      .catch((exception) => {
+        setIsLoading(false);
+        toastError(exception?.response.data?.message);
+      });
+  }
+
+  function fetchScanSupplierRevisions (
+    scanId: string, page: number, rowsPerPage: number, orderBy: string, order: SortDirection, isShowActionableRows: boolean,
+    searchQueries: {[key: string]: string},
+  ) {
+    setIsLoading(true);
+    setErrorMessage('');
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'post',
+      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}
+      &sortOrder=${(order as string).toLocaleUpperCase()}&isShowActionableOnly=${isShowActionableRows}`,
+      data: {
+        searchQueries,
+      },
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+      // cancelToken: call.token,
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        setIsLoading(false);
+        const { items, totalCount }: {items: ISupplierScanResultRev[], totalCount: number} = data;
+
+        setRows(items);
+        setTotalCount(totalCount);
+      })
+      .catch((exception) => {
+        catchAxiosException(exception);
+      });
+  }
+
+  function getPreviewForDocRevRevsTable (
+    scanId: string, row: ISupplierScanResultRev, callbackFn: (row: ISupplierScanResultRev) => void,
+  ) {
+    setRowMapping(true);
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW}/${scanId}/${row.docRevId}`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+    apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => {
+        const { newFormInput, fieldNamesUnmatched } = data;
+        row.newFormInput = newFormInput;
+        row.fieldNamesUnmatched = fieldNamesUnmatched;
+        row.isMapped = true;
+        callbackFn(row);
+
+        setRowMapping(false);
+        return row;
+      })
+      .catch((exception) => {
+        setRowMapping(false);
+        toastError(exception?.response.data?.message);
+      });
+  }
+
   return {
     isLoading,
     errorMessage,
@@ -350,5 +527,20 @@ export const useBulkMigration = () => {
     isConfirmationDialogVisible,
     confirmSubmission,
     handleMigrationConfirmationDialogClose,
+    approvalRequirements,
+    fetchApprovalRequirements,
+    addUserToGroups,
+    previewDocRevsList,
+    filteredDocRevsList,
+    setFilteredDocRevsList,
+    newFormInput,
+    fieldsUnmatched,
+    fetchAllEligibleRevisions,
+    getPreviewForDocRev,
+    rowMapping,
+    getPreviewForDocRevRevsTable,
+    rows,
+    totalCount,
+    fetchScanSupplierRevisions,
   };
 };

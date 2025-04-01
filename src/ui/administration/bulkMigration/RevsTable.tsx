@@ -2,7 +2,6 @@ import { Box, Collapse, FormControlLabel, LinearProgress, ListItemText, Popover,
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
-import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -18,24 +17,19 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import TrackChangesIcon from '@material-ui/icons/TrackChanges';
-import { AxiosRequestConfig } from 'axios';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { ReactElement, useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 import { Link } from 'react-router-dom';
-import { intl } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
-import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW, BULK_MIGRATION_GET_SCAN_RESULTS } from '../../../state/ducks/company/constants';
-import { store } from '../../../state/store';
 import DateTime from '../../components/DateTime';
-import { toastError } from '../../components/notifications';
 import { documentVersionPath } from '../../document.revision/utils/paths';
 import UserAvatarListItem from '../../documentRevision/Sidebar/common/UserAvatarListItem';
-import { Colors } from '../../layout/theme-next';
 import UtilColors from '../../layout/theme/utils/colors';
 import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from './interface';
+import useStyles from './styles';
+import { useBulkMigration } from './useBulkMigration';
 
 const INITIAL_ROWS_COUNT = 25;
 
@@ -47,94 +41,7 @@ const headCells = [
   { id: 'proposedAction', disablePadding: false, label: 'Proposed Action', width: '10%' },
 ];
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    marginBottom: theme.spacing(4),
-    '& > *': {
-      borderBottom: 'unset',
-    },
-  },
-  paper: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
-  popoverPaper: {
-    padding: theme.spacing(1),
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1,
-  },
-  progress: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  primaryText: {
-    fontWeight: 600,
-    fontSize: '14px',
-    lineHeight: '21px',
-    color: UtilColors.dark_jungle_green,
-  },
-  flexBox: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'items-center',
-  },
-  flexBoxColumn: {
-    display: 'flex',
-    flexDirection: 'column',
-    gridGap: theme.spacing(0.25, 1),
-  },
-  dateTimeLabel: {
-    fontSize: 12,
-    padding: theme.spacing(0, 1),
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-        color: theme.palette.secondary.main,
-        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-      }
-      : {
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.secondary.dark,
-      },
-  '.MuiTablePagination-selectIcon': {
-    top: '0px',
-    left: '1px',
-  },
-  link: {
-    textDecoration: 'none',
-    color: 'inherit',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-  },
-  mappingSwitcher: {
-    '& span': {
-      fontSize: '12px',
-    },
-  },
-  switchBase: {
-    color: Colors.statusDraftBorder,
-    '&$checked': {
-      color: Colors.statusDraftBorder,
-    },
-  },
-}));
-
 const EnhancedTableHead: React.FC<{
-  classes: {[key: string]: any}
   onSelectAllClick: (event) => void
   order: SortDirection
   orderBy: string
@@ -143,8 +50,9 @@ const EnhancedTableHead: React.FC<{
   onRequestSort: (e, property: string) => void
   onSearchTextChange: (value: string, fieldName: string) => void
 }> = ({
-  classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, onSearchTextChange,
+  onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, onSearchTextChange,
 }) => {
+  const classes = useStyles();
   const searchTextChanged = (value: string, fieldName: string) => {
     onSearchTextChange(value, fieldName);
   };
@@ -153,8 +61,7 @@ const EnhancedTableHead: React.FC<{
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox" />
-        <TableCell
-          style={{ width: '8%', padding: '8px 4px' }}>
+        <TableCell className={classes.revsTableCheckboxCell}>
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -167,9 +74,10 @@ const EnhancedTableHead: React.FC<{
             key={headCell.id}
             align="left"
             sortDirection={orderBy === headCell.id ? order : false}
-            style={{ width: `${headCell.width}`, overflow: 'hidden', padding: '8px 4px' }}
+            style={{ width: `${headCell.width}` }}
+            className={classes.revsTableHeaderCell}
           >
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className={classes.simpleColumnFlex}>
               <div>
                 <span>{headCell.label}</span>
               </div>
@@ -198,7 +106,12 @@ const ExpandableRow: React.FC<{
   labelId, onIconHovered, handlePopoverClose, scanId,
 }) => {
   const [rowOpen, setRowOpen] = React.useState(false);
-  const [rowMapping, setRowMapping] = useState(false);
+
+  const {
+    rowMapping,
+    getPreviewForDocRevRevsTable,
+  } = useBulkMigration();
+
   const classes = useStyles();
 
   const getRowColor = (row: ISupplierScanResultRev) => {
@@ -230,11 +143,11 @@ const ExpandableRow: React.FC<{
             Completed At: <DateTime
             value={row.runDetails[0]?.completedAt}
             format={MomentFormats.BriefDateTime}
-            className={cx(classes.dateTimeLabel)}
+            className={cx(classes.revsTableDateTimeLabel)}
           /> • Started At: <DateTime
             value={row.runDetails[0]?.runAt}
             format={MomentFormats.BriefDateTime}
-            className={cx(classes.dateTimeLabel)}
+            className={cx(classes.revsTableDateTimeLabel)}
           />
         </>
         {
@@ -248,7 +161,7 @@ const ExpandableRow: React.FC<{
             Started At: <DateTime
                value={row.runDetails[0]?.runAt}
                format={MomentFormats.BriefDateTime}
-               className={cx(classes.dateTimeLabel)}
+               className={cx(classes.revsTableDateTimeLabel)}
              /> • In PROGRESS
            </>
       }
@@ -261,6 +174,10 @@ const ExpandableRow: React.FC<{
     onIconHovered(event, contentEl);
   };
 
+  const updateRow = (updatedRow: ISupplierScanResultRev) => {
+    row = updatedRow;
+  };
+
   const handleRowSelection = (event, row) => {
     row.isSelected = event.target.checked as boolean;
     handleSelection(event, row);
@@ -269,33 +186,6 @@ const ExpandableRow: React.FC<{
   const linkHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
   };
-
-  function getPreviewForDocRev () {
-    setRowMapping(true);
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: `${BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW}/${scanId}/${row.docRevId}`,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        const { newFormInput, fieldNamesUnmatched } = data;
-        row.newFormInput = newFormInput;
-        row.fieldNamesUnmatched = fieldNamesUnmatched;
-        row.isMapped = true;
-
-        setRowMapping(false);
-      })
-      .catch((exception) => {
-        setRowMapping(false);
-        toastError(exception?.response.data?.message);
-      });
-  }
 
   return (
     <React.Fragment>
@@ -314,7 +204,7 @@ const ExpandableRow: React.FC<{
         </TableCell>
         <TableCell padding="checkbox"
           onClick={(event) => row.status !== MIGRATION_STATUS_ENUM.COMPLETED && handleRowSelection(event, row)}>
-          <div style={{ display: 'flex', alignItems: 'center' }}
+          <div className={classes.checkboxRowContent}
             onMouseEnter={handleIconHover}
             onMouseLeave={handlePopoverClose}
           >
@@ -324,15 +214,15 @@ const ExpandableRow: React.FC<{
             /> }
             {
               (row.status === MIGRATION_STATUS_ENUM.COMPLETED || row.isAlreadyUpgraded)
-              && <DoneAllIcon style={{ color: Colors.success }} />
+              && <DoneAllIcon className={classes.checkboxRowContentDone} />
             }
             {
               row.status === MIGRATION_STATUS_ENUM.FAILED
-              && <ErrorIcon style={{ color: Colors.error }} />
+              && <ErrorIcon className={classes.checkboxRowContentFailed} />
             }
             {
               row.status === MIGRATION_STATUS_ENUM.IN_PROGRESS
-              && <HourglassEmptyIcon style={{ color: Colors.warning }} />
+              && <HourglassEmptyIcon className={classes.checkboxRowContentInProgress} />
             }
           </div>
         </TableCell>
@@ -347,7 +237,7 @@ const ExpandableRow: React.FC<{
           </Link>
         </TableCell>
         <TableCell align="left">
-          <p className={classes.flexBoxColumn}>
+          <p className={classes.revsTableFlexBoxColumn}>
             <span><b>{row.docRevName}</b></span>
             <span>Rev {row.displayRevision} • {row.displayStatus}</span>
           </p>
@@ -355,7 +245,7 @@ const ExpandableRow: React.FC<{
         <TableCell align="left">
           <ListItemText
             primary={(
-              <Typography data-cy="user-name" className={classes.primaryText}>{row.name}</Typography>)}
+              <Typography data-cy="user-name" className={classes.revsTablePrimaryText}>{row.name}</Typography>)}
             secondary={<></>}
           />
           { row.owner?.user && <UserAvatarListItem
@@ -364,15 +254,19 @@ const ExpandableRow: React.FC<{
             secondaryComponent={<></>}
           /> }
         </TableCell>
-        <TableCell align="left" style={{ overflow: 'hidden', wordWrap: 'break-word' }}>
+        <TableCell align="left" className={classes.tableCellHiddenOverflow}>
           {row.isMapped ? JSON.stringify(row.fieldNamesUnmatched)
-            : <>{ rowMapping ? <span>Mapping... </span>
-              : <span>NOT MAPPED <TrackChangesIcon onClick={getPreviewForDocRev} style={{ cursor: 'pointer' }} /></span>} </>}
+            : <>{
+              rowMapping ? <span>Mapping... </span> : <span>NOT MAPPED
+                <TrackChangesIcon onClick={e => getPreviewForDocRevRevsTable(scanId, row, updateRow)} className={classes.cursorPointer} /></span>
+            }
+            </>
+          }
         </TableCell>
-        <TableCell style={{ overflow: 'hidden', wordWrap: 'break-word' }}>{row.proposedAction}</TableCell>
+        <TableCell className={classes.tableCellHiddenOverflow}>{row.proposedAction}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+        <TableCell className={classes.zeroTopBottomPadding} colSpan={8}>
           <Collapse in={rowOpen} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
@@ -381,12 +275,12 @@ const ExpandableRow: React.FC<{
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{ width: '50%' }}>Original Form Input</TableCell>
-                    <TableCell style={{ width: '50%' }}>New Form Input </TableCell>
+                    <TableCell className={classes.width50}>Original Form Input</TableCell>
+                    <TableCell className={classes.width50}>New Form Input </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow style={{ verticalAlign: 'baseline' }}>
+                  <TableRow className={classes.verticalAlignTableRow}>
                     <TableCell align="left">
                       {row.originalFormInput && <ReactJson src={row.originalFormInput} collapsed={1} /> }
                       {!row.originalFormInput && <span>No FormInput</span> }
@@ -424,11 +318,13 @@ const RevsTable: React.FC<{
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(INITIAL_ROWS_COUNT);
 
-  const [rows, setRows] = useState<ISupplierScanResultRev[]>([]);
-  const [totalCount, setTotalCount] = useState<number>(0);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const {
+    isLoading,
+    errorMessage,
+    rows,
+    totalCount,
+    fetchScanSupplierRevisions,
+  } = useBulkMigration();
 
   const [isShowActionableRows, setIsShowActionableRows] = useState<boolean>(true);
 
@@ -445,53 +341,12 @@ const RevsTable: React.FC<{
     setPopoverContent(<></>);
   };
 
-  function catchAxiosException (exception: any) {
-    setIsLoading(false);
-    if (exception?.response?.status === 504) {
-      setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
-    } else {
-      toastError(exception?.response.data?.message);
-      setErrorMessage(exception?.response.data?.message);
-    }
-  }
-
   useEffect(() => {
     if (scanId) {
-      fetchScanSupplierRevisions();
+      fetchScanSupplierRevisions(scanId, page, rowsPerPage, orderBy, order, isShowActionableRows, searchQueries);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateRevsTable, scanId, searchQueries, page, rowsPerPage, orderBy, order, isShowActionableRows]);
-
-  function fetchScanSupplierRevisions () {
-    setIsLoading(true);
-    setErrorMessage('');
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'post',
-      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}
-      &sortOrder=${(order as string).toLocaleUpperCase()}&isShowActionableOnly=${isShowActionableRows}`,
-      data: {
-        searchQueries,
-      },
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        setIsLoading(false);
-        const { items, totalCount }: {items: ISupplierScanResultRev[], totalCount: number} = data;
-
-        setRows(items);
-        setTotalCount(totalCount);
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -551,21 +406,19 @@ const RevsTable: React.FC<{
   const isSelected = (id: string) => selected.findIndex(entry => entry.id === id) > -1;
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper} style={{ maxHeight: '60vh', overflow: 'hidden', overflowY: 'auto' }}>
+    <div className={classes.revsTableRoot}>
+      <Paper className={classes.revsTablePaper}>
         {!isEmpty(errorMessage) && (
-          <div style={{ color: UtilColors.red, backgroundColor: UtilColors.light_red, padding: '4px' }}>{errorMessage}</div>
+          <div className={classes.errMsgStyle}>{errorMessage}</div>
         )}
         <Toolbar
-          className={cx(classes.root, classes.flexBox, {
-            [classes.highlight]: selected.length > 0,
+          className={cx(classes.revsTableRoot, classes.revsTableFlexBox, classes.marginBottom8, {
+            [classes.revsTableSelectedHighlight]: selected.length > 0,
           })}
-          style={{ marginBottom: '4px' }}
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Supplier Revs <RefreshIcon
-              style={{ cursor: 'pointer', marginLeft: '4px', fontSize: '16px' }}
-              onClick={fetchScanSupplierRevisions}
+            Supplier Revs <RefreshIcon className={classes.revsTableRefreshIcon}
+              onClick={e => fetchScanSupplierRevisions(scanId, page, rowsPerPage, orderBy, order, isShowActionableRows, searchQueries)}
             />
             <Typography color="inherit" variant="subtitle1" component="div">
               {selected.length} selected
@@ -599,16 +452,15 @@ const RevsTable: React.FC<{
           />
         </Toolbar>
         <div>
-          {isLoading && <LinearProgress className={classes.progress} data-cy="saving-progress-bar" />}
+          {isLoading && <LinearProgress className={classes.revsTableProgress} data-cy="saving-progress-bar" />}
           <Table
-            style={{ width: '100%', tableLayout: 'fixed' }}
+            className={classes.revsTableFixedLayout}
             aria-labelledby="tableTitle"
             size="medium"
             aria-label="Supplier Revs Table"
             stickyHeader
           >
             <EnhancedTableHead
-              classes={classes}
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
@@ -631,17 +483,12 @@ const RevsTable: React.FC<{
                   />
                 );
               })}
-              {/* {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
             </TableBody>
           </Table>
           <Popover
-            style={{ pointerEvents: 'none' }}
+            className={classes.noPointerEvents}
             classes={{
-              paper: classes.popoverPaper,
+              paper: classes.revsTablePopoverPaper,
             }}
             open={Boolean(anchorEl)}
             anchorEl={anchorEl}

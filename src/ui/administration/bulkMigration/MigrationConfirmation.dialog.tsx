@@ -1,18 +1,14 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, TextField, Typography } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import WarningIcon from '@material-ui/icons/Warning';
-import { AxiosRequestConfig } from 'axios';
+import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
-import { intl } from '../../../common/intl';
-import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS } from '../../../state/ducks/company/constants';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import { store } from '../../../state/store';
-import { toastError, toastSuccess } from '../../components/notifications';
 import { FBButton } from '../../form.builder';
-import Colors from '../../layout/theme/utils/colors';
-import { IApprovalRequirementGroup, IApprovalRequirements, ISelectedDetails } from './interface';
+import { IApprovalRequirementGroup, ISelectedDetails } from './interface';
+import useStyles from './styles';
+import { useBulkMigration } from './useBulkMigration';
 
 const MigrationConfirmationDialog: React.FC<{
   isOpen: boolean
@@ -22,7 +18,13 @@ const MigrationConfirmationDialog: React.FC<{
   toDocumentTypeId: string
   toFormRev?: DocumentRevision
 }> = ({ isOpen, handleClose, selectedDetails, handleConfirmation, toDocumentTypeId, toFormRev }) => {
-  const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
+  const classes = useStyles();
+
+  const {
+    approvalRequirements,
+    fetchApprovalRequirements,
+    addUserToGroups,
+  } = useBulkMigration();
   const [toFormReleasedError, setToFormReleasedError] = useState<string>('');
 
   const employeePassword = useRef<string>('');
@@ -36,71 +38,12 @@ const MigrationConfirmationDialog: React.FC<{
     actionCountMap[detail.action] += 1;
   });
 
-  function catchAxiosException (exception: any) {
-    // setIsLoading(false);
-    if (exception?.response?.status === 504) {
-      toastError(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
-    } else {
-      toastError(exception?.response.data?.message);
-    }
-  }
-
   useEffect(() => {
     if (toDocumentTypeId) {
       fetchApprovalRequirements(toDocumentTypeId);
       isToFormRevReleased();
     }
   }, [toDocumentTypeId]);
-
-  function fetchApprovalRequirements (toDocumentTypeId: string) {
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: `${BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS}/${toDocumentTypeId}`,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        // console.log(data);
-        setApprovalRequirements(data);
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
-
-  function addUserToGroups () {
-    if (!approvalRequirements?.missingGroups?.length) {
-      return;
-    }
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'patch',
-      url: `${BULK_MIGRATION_ADD_USER_TO_GROUPS}/${toDocumentTypeId}`,
-      data: {
-        missingGroups: approvalRequirements?.missingGroups,
-      },
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-      // cancelToken: call.token,
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        // console.log(data);
-        setApprovalRequirements(data);
-        toastSuccess('Automation user has been added to the required groups successfully');
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
 
   function handleEmployeeConfirmation () {
     handleConfirmation(employeePassword.current);
@@ -140,40 +83,34 @@ const MigrationConfirmationDialog: React.FC<{
       <DialogTitle id="alert-dialog-title">Supplier Revisions Migration Summary</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          <Typography variant="h5" style={{ marginBottom: '8px' }}>{selectedDetails.length} Supplier revisions selected</Typography>
+          <Typography variant="h5" className={classes.marginBottom8}>{selectedDetails.length} Supplier revisions selected</Typography>
           {Object.keys(actionCountMap).map(key => {
             return <Typography variant="subtitle2">{key} - {actionCountMap[key]} revisions</Typography>;
           })}
-          <Typography variant="body2" style={{ marginTop: '16px' }}>
+          <Typography variant="body2" className={classes.marginTop16}>
             This will fire a <b>JOB request</b>, which might take 10 mins or more, depending on the network congestion.
           </Typography>
         </DialogContentText>
 
-        <Box style={{ padding: '8px', marginTop: '8px' }}>
+        <Box className={cx(classes.padding8, classes.marginTop8)}>
           {approvalRequirements && (
-            <Box
-              style={{
-                padding: '12px',
-                backgroundColor: Colors.background_blue,
-                borderRadius: '4px',
-              }}
-            >
-              <Typography variant="body2" style={{ marginBottom: '4px', color: Colors.light_gray_II }}>
+            <Box className={classes.approvalRequirementsBox}>
+              <Typography variant="body2" className={classes.approvalRequirementsBoxText}>
                 For revisions, that are already Released, migration would create a new Revision and automate its approval & release, using <i>the current user</i>
-                <span style={{ fontWeight: 'bold', color: Colors.bright_blue, display: 'block' }}>
+                <span className={classes.approvalRequirementsBoxEmail}>
                   {approvalRequirements.email}
                 </span>
               </Typography>
-              <Typography variant="body2" style={{ margin: '8px 0px 4px 0px', color: Colors.light_gray_II }}>
+              <Typography variant="body2" className={classes.approvalRequirementsBoxText}>
                 Based on the Document Type selected, this user <b>should be a part of the groups</b> listed below, without
                 which the process will fail.
               </Typography>
-              <Box py={1} mt={0.3} display="flex" style={{ gap: '8px' }}>
+              <Box className={classes.approvalRequirementsRequiredGroupsBox}>
                 {approvalRequirements.requiredGroups.map((group) => {
                   return (
                     <Box ml={1} display="flex" key={group.id}>
-                      {isApprovalRequirementFulfilled(group) && <CheckCircleIcon style={{ color: Colors.green }} />}
-                      {!isApprovalRequirementFulfilled(group) && <WarningIcon style={{ color: Colors.red }} />}
+                      {isApprovalRequirementFulfilled(group) && <CheckCircleIcon className={classes.greenCheckCircle} />}
+                      {!isApprovalRequirementFulfilled(group) && <WarningIcon className={classes.redWarning} />}
                       <Box ml={0.5}>
                         <Typography variant="subtitle2">{group.name}</Typography>
                       </Box>
@@ -187,43 +124,33 @@ const MigrationConfirmationDialog: React.FC<{
                 onClick={addUserToGroups}
                 variant="outlined"
                 color="primary"
-                style={{ marginBottom: '0px' }}
+                className={classes.zeroMarginBottom}
               />}
             </Box>
           )}
         </Box>
 
         {!isEmpty(toFormReleasedError) && (
-          <div style={{ color: Colors.red, backgroundColor: Colors.light_red, padding: '4px' }}>{toFormReleasedError}</div>
+          <div className={classes.errMsgStyle}>{toFormReleasedError}</div>
         )}
 
         {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError)
           && <>
             <p>Are you sure you want to revise these Suppliers? Please provide the password to confirm.</p>
-
-            <FormControl
-              style={{ width: '100%' }}
-            >
+            <FormControl className={classes.width100}>
               <TextField
                 id="current-employee-password"
                 label="Employee Password"
                 type="password"
                 onChange={e => setEmployeePassword(e.target.value)}
-                style={{ width: '100%', border: '0px', borderBottom: `1px solid ${Colors.gray_goose}` }}
+                className={classes.employeePasswordText}
               />
             </FormControl>
-            {/* <InputField
-              name="password"
-              label="transition.action.password"
-              dataCy="transition.action.password"
-              inputProps={{ type: 'password' }}
-              validate={validator(required)}
-            /> */}
           </>
         }
 
       </DialogContent>
-      <DialogActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <DialogActions className={classes.spaceBetweenFlex}>
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>

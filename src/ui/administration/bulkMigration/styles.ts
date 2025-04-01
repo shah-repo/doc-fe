@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { lighten, makeStyles } from '@material-ui/core';
 import { Colors as NextColors } from '../../layout/theme-next';
 import { NextTheme } from '../../layout/theme-next/provider';
 import Colors from '../../layout/theme/utils/colors';
@@ -170,6 +170,8 @@ export default makeStyles<NextTheme>(theme => ({
     },
   },
   mappingArea: {
+    display: 'flex',
+    justifyContent: 'space-between',
     '& > div > div': {
       display: 'flex',
       flexDirection: 'row',
@@ -269,17 +271,321 @@ export default makeStyles<NextTheme>(theme => ({
     marginTop: '16px',
     paddingLeft: '20px',
   },
-  width100: {
-    width: '100%',
-  },
   mappingTableRowHeight: {
     height: '32px',
   },
   mappingTableCell: {
     border: `1px solid ${Colors.dark_gray2}`,
   },
+  approvalRequirementsBox: {
+    padding: '12px',
+    backgroundColor: Colors.background_blue,
+    borderRadius: '4px',
+  },
+  approvalRequirementsBoxText: {
+    marginBottom: '4px',
+    color: Colors.light_gray_II,
+  },
+  approvalRequirementsBoxEmail: {
+    fontWeight: 'bold',
+    color: Colors.bright_blue,
+    display: 'block',
+  },
+  approvalRequirementsRequiredGroupsBox: {
+    padding: '8px',
+    marginTop: '2px',
+    display: 'flex',
+    gap: '8px',
+  },
+  employeePasswordText: {
+    width: '100%',
+    border: '0px',
+    borderBottom: `1px solid ${Colors.gray_goose}`,
+  },
+  spaceBetweenFlex: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: '4px',
+  },
+  simpleFlex: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  simpleColumnFlex: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   boldWeight: {
     fontWeight: 'bold',
   },
+  marginBottom8: {
+    marginBottom: '8px',
+  },
+  marginTop8: {
+    marginTop: '8px',
+  },
+  marginTop16: {
+    marginTop: '16px',
+  },
+  padding8: {
+    paddingTop: '8px',
+  },
+  greenCheckCircle: {
+    color: Colors.green,
+  },
+  redWarning: {
+    color: Colors.red,
+  },
+  relative: {
+    position: 'relative',
+  },
+  width100: {
+    width: '100%',
+  },
+  width50: {
+    width: '50%',
+  },
+  capitalize: {
+    textTransform: 'capitalize',
+  },
+  textRightAlign: {
+    textAlign: 'right',
+  },
+  verticalAlignTableRow: {
+    verticalAlign: 'baseline',
+  },
+  mappingDialogSelectionOption: {
+    fontSize: '84%',
+    padding: '2px',
+    backgroundColor: Colors.gray_goose,
+  },
+  mappingDialogInstructions: {
+    marginTop: 0,
+    marginBottom: '24px',
+    paddingLeft: '20px',
+    width: '80%',
+  },
+  mappingAreaTitle: {
+    display: 'inline-block',
+    marginBottom: '8px',
+    borderBottom: `1px solid ${Colors.gray}`,
+  },
+  toSchemaItem: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '8px',
+    overflow: 'auto',
+  },
+  selectedFromSchemaItem: {
+    color: Colors.green,
+    position: 'absolute',
+    right: '6px',
+    top: '2px',
+  },
+  doneAllIcon: {
+    color: Colors.green,
+    position: 'relative',
+    top: '6px',
+  },
+  chip: {
+    padding: '0px 4px',
+    height: '28px',
+    margin: '0 4px 4px 0',
+  },
+  previewDrawerProgress: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  previewDrawerDialog: {
+    width: '80vw', // Width of the side panel
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%', // Full height of the drawer
+  },
+  previewDrawerDialogPaper: {
+    width: '80vw',
+  },
+  previewDrawerContent: {
+    display: 'flex',
+    flexGrow: 1, // Allow sections to take full available height
+    flexDirection: 'row',
+  },
+  previewDrawerLeftSection: {
+    width: '25%', // Left section takes 25% width
+    borderRight: `1px solid ${theme.palette.divider}`,
+    padding: theme.spacing(2),
+    boxSizing: 'border-box',
+    height: '92vh',
+    overflow: 'auto',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  previewDrawerRightSection: {
+    width: '75%', // Right section takes 75% width
+    padding: theme.spacing(2),
+    boxSizing: 'border-box',
+    height: '92vh',
+  },
+  rightSectionFieldsUnmatched: {
+    height: '20%',
+    overflow: 'auto',
+  },
+  rightSectionMappingView: {
+    height: '75%',
+    overflow: 'auto',
+  },
+  previewDrawerDialogCloseButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+  previewDrawerLeftSectionListItem: {
+    borderRadius: 4,
+    padding: theme.spacing(1, 1.25),
+    marginBottom: theme.spacing(0.5),
+    color: NextColors.textGray,
+    fontSize: 12,
+    minHeight: 0,
+    cursor: 'pointer',
 
+    '&.Mui-selected': {
+      backgroundColor: NextColors.lightGray,
+      color: NextColors.primaryDark,
+      fontWeight: 600,
+
+      '&:hover': {
+        backgroundColor: NextColors.lightGray,
+      },
+    },
+    '&:hover': {
+      backgroundColor: NextColors.lightGray,
+    },
+  },
+  previewDrawerMappingRuleSchemaItemBox: {
+    position: 'relative',
+    marginTop: '8px',
+    borderRadius: '2px',
+    padding: '8px',
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '8px',
+    overflow: 'auto',
+  },
+  revsTableRoot: {
+    width: '100%',
+    marginBottom: theme.spacing(4),
+    '& > *': {
+      borderBottom: 'unset',
+    },
+  },
+  revsTablePaper: {
+    width: '100%',
+    marginBottom: theme.spacing(2),
+    maxHeight: '60vh',
+    overflow: 'hidden',
+    overflowY: 'auto',
+  },
+  revsTablePopoverPaper: {
+    padding: theme.spacing(1),
+  },
+  revsTableProgress: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  revsTablePrimaryText: {
+    fontWeight: 600,
+    fontSize: '14px',
+    lineHeight: '21px',
+    color: Colors.dark_jungle_green,
+  },
+  revsTableFlexBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'items-center',
+  },
+  revsTableFlexBoxColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    gridGap: theme.spacing(0.25, 1),
+  },
+  revsTableDateTimeLabel: {
+    fontSize: 12,
+    padding: theme.spacing(0, 1),
+  },
+  revsTableSelectedHighlight:
+    theme.palette.type === 'light'
+      ? {
+        color: theme.palette.secondary.main,
+        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+      }
+      : {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.dark,
+      },
+  '.MuiTablePagination-selectIcon': {
+    top: '0px',
+    left: '1px',
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+  revsTableCheckboxCell: {
+    width: '8%',
+    padding: '8px 4px',
+  },
+  revsTableHeaderCell: {
+    overflow: 'hidden',
+    padding: '8px 4px',
+  },
+  checkboxRowContent: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  checkboxRowContentDone: {
+    color: NextColors.success,
+  },
+  checkboxRowContentFailed: {
+    color: NextColors.error,
+  },
+  checkboxRowContentInProgress: {
+    color: NextColors.warning,
+  },
+  deleteIcon: {
+    cursor: 'pointer',
+    color: Colors.red,
+    marginRight: '4px',
+  },
+  tableCellHiddenOverflow: {
+    overflow: 'hidden',
+    wordWrap: 'break-word',
+  },
+  zeroTopBottomPadding: {
+    paddingBottom: 0,
+    paddingTop: 0,
+  },
+  revsTableRefreshIcon: {
+    cursor: 'pointer',
+    marginLeft: '4px',
+    fontSize: '16px',
+  },
+  cursorPointer: {
+    cursor: 'pointer',
+  },
+  revsTableFixedLayout: {
+    width: '100%',
+    tableLayout: 'fixed',
+  },
+  noPointerEvents: {
+    pointerEvents: 'none',
+  },
 }));

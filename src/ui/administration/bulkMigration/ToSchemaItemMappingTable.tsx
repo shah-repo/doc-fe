@@ -10,8 +10,8 @@ import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toastError } from '../../components/notifications';
-import Colors from '../../layout/theme/utils/colors';
 import { IMappedFrom, IRowData, ISchemaItem } from './interface';
+import useStyles from './styles';
 import { validateTableMappings } from './utils';
 
 const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
@@ -22,6 +22,7 @@ const ToSchemaItemMappingTable: React.FC<{
   selectedSchemaItems: ISchemaItem[]
   isSingleRow?: boolean
 }> = ({ schemaItem, handleMappingChange, selectedSchemaItems, isSingleRow }) => {
+  const classes = useStyles();
   const [rows, setRows] = useState<IRowData[]>(schemaItem.tableMappings ?? []);
 
   // const widthPercent = Math.floor((100 - ADD_ROW_COLUMN_WIDTH_PERCENT) / (schemaItem.fieldNames?.length ?? 1));
@@ -136,9 +137,7 @@ const ToSchemaItemMappingTable: React.FC<{
   }
 
   return (
-    <Table
-      // style={{ width: '100%', tableLayout: 'fixed' }}
-      style={{ width: '100%' }}
+    <Table className={classes.width100}
       size="small"
       aria-label="Mapping Table"
     >
@@ -147,7 +146,6 @@ const ToSchemaItemMappingTable: React.FC<{
           <TableCell style={{ width: `${ADD_ROW_COLUMN_WIDTH_PERCENT}` }} >No. </TableCell>
           {schemaItem.fieldNames?.map(fieldName => {
             return (
-              // <TableCell style={{ width: `${widthPercent}`, overflow: 'hidden', overflowWrap: 'break-word' }}>{fieldName}</TableCell>
               <TableCell key={`header-${fieldName}`}>{fieldName}</TableCell>
             );
           })}
@@ -156,13 +154,13 @@ const ToSchemaItemMappingTable: React.FC<{
       </TableHead>
       <TableBody>
         {rows.map((row, index) => (
-          <TableRow key={index} style={{ height: '32px' }}>
-            <TableCell style={{ border: `1px solid ${Colors.dark_gray2}` }}>
+          <TableRow key={index} className={classes.mappingTableRowHeight}>
+            <TableCell className={classes.mappingTableCell}>
               {index + 1}.
             </TableCell>
             {schemaItem.fieldNames?.map(fieldName => {
               return (
-                <TableCell style={{ border: `1px solid ${Colors.dark_gray2}` }}
+                <TableCell className={classes.mappingTableCell}
                   onClick={e => handleRowCellClicked(e, row, fieldName, schemaItem)}
                   contentEditable = {!Array.isArray(row[fieldName])}
                   suppressContentEditableWarning
@@ -175,7 +173,7 @@ const ToSchemaItemMappingTable: React.FC<{
                         label={entry.label}
                         onDelete={e => handleRowCellClearMapping(row, fieldName, entry)}
                         color="secondary"
-                        style={{ padding: '0px 4px', height: '28px', margin: '0 4px 4px 0' }}
+                        className={classes.chip}
                         key={entry.label}
                       />
                     );
@@ -183,9 +181,9 @@ const ToSchemaItemMappingTable: React.FC<{
                 </TableCell>
               );
             })}
-            { !isSingleRow && <TableCell style={{ border: `1px solid ${Colors.dark_gray2}` }}>
-              { index > 0 && <DeleteIcon onClick={e => deleteRow(row)} style={{ cursor: 'pointer', color: Colors.red, marginRight: '4px' }} /> }
-              <PlaylistAddIcon onClick={addNewRow} style={{ cursor: 'pointer' }} />
+            { !isSingleRow && <TableCell className={classes.mappingTableCell}>
+              { index > 0 && <DeleteIcon onClick={e => deleteRow(row)} className={classes.deleteIcon} /> }
+              <PlaylistAddIcon onClick={addNewRow} className={classes.cursorPointer} />
             </TableCell> }
           </TableRow>
         ))}
