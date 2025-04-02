@@ -105,10 +105,5 @@ export interface IRowData {
   [key: string]: any
 }
 
-export enum IReferenceDataType {
-  ARRAY = 'array',
-  OBJECT = 'object',
-}
-
 export type SortDirection = 'asc' | 'desc' | undefined;
 export const INTERVAL_DURATION = 10000;
