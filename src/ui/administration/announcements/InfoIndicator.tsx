@@ -1,29 +1,9 @@
-import { Box, makeStyles, Popover, Typography } from '@material-ui/core';
+import { Box, Popover, Typography } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import WarningIcon from '@material-ui/icons/Warning';
 import React from 'react';
-import Colors from '../../layout/theme/utils/colors';
 import { IndicatorTypeEnum } from './interface';
-
-const useStyles = makeStyles((theme) => ({
-  popoverPaper: {
-    padding: theme.spacing(1),
-    maxWidth: '400px',
-    backgroundColor: Colors.platinum_gray,
-  },
-  warningIcon: {
-    color: Colors.error_red,
-  },
-  popoverText: {
-    marginTop: '4px',
-    fontSize: 'small',
-  },
-  warningText: {
-    color: Colors.latest_red_varient,
-    marginTop: '4px',
-    fontSize: 'small',
-  },
-}));
+import useStyles from './styles';
 
 const InfoIndicator: React.FC<{type: IndicatorTypeEnum, text: string}> = ({ type, text }) => {
   const classes = useStyles();
@@ -48,7 +28,7 @@ const InfoIndicator: React.FC<{type: IndicatorTypeEnum, text: string}> = ({ type
           />
         }
         {type === IndicatorTypeEnum.WARNING
-          && <WarningIcon className={classes.warningIcon}
+          && <WarningIcon className={classes.infoIndicatorWarningIcon}
             onMouseEnter={handlePopoverOpen}
             onMouseLeave={handlePopoverClose}
           />
@@ -56,7 +36,7 @@ const InfoIndicator: React.FC<{type: IndicatorTypeEnum, text: string}> = ({ type
         <Popover
           style={{ pointerEvents: 'none' }}
           classes={{
-            paper: classes.popoverPaper,
+            paper: classes.infoIndicatorPopoverPaper,
           }}
           open={Boolean(anchorEl)}
           anchorEl={anchorEl}
@@ -65,7 +45,7 @@ const InfoIndicator: React.FC<{type: IndicatorTypeEnum, text: string}> = ({ type
           onClose={handlePopoverClose}
           disableRestoreFocus
         >
-          <Typography className={type === IndicatorTypeEnum.INFO ? classes.popoverText : classes.warningText}
+          <Typography className={type === IndicatorTypeEnum.INFO ? classes.infoIndicatorPopoverText : classes.infoIndicatorWarningText}
             component="span"
             dangerouslySetInnerHTML={{ __html: text }}
           />

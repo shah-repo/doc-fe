@@ -70,6 +70,7 @@ export const useBulkMigration = () => {
       setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
     } else {
       toastInfo(exception?.response.data?.message);
+      setErrorMessage(exception?.response.data?.message);
     }
   }
 

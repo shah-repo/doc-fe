@@ -1,41 +1,13 @@
-import { Box, Card, CardContent, FormControlLabel, Grid, makeStyles, Radio, RadioGroup, Typography } from '@material-ui/core';
+import { Box, Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@material-ui/core';
 import Markdown from 'markdown-to-jsx';
 import React, { useState } from 'react';
 import { FBOption } from '../../../../src/ui/form.builder/index';
 import Text from '../../components/Text';
 import { FBSchemaState } from '../../form.builder';
 import { FBInputProps } from '../../form.builder/types/common';
-import { NextTheme } from '../../layout/theme-next/provider';
-import Colors from '../../layout/theme/utils/colors';
 import { Translation } from '../../translations/types';
 import { IAnnouncementDetail, IConflictingItem, IFormBuilder, SELECTED_RESOLUTION_ENUM } from './interface';
-
-const useStyles = makeStyles<NextTheme>(theme => ({
-  root: {
-    width: '100%',
-    backgroundColor: Colors.medium_gray,
-  },
-  title: {
-    fontSize: '14px',
-  },
-  cardHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-  },
-  textDescription: {
-    color: Colors.dark_gray,
-    fontSize: '13px',
-    paddingTop: '0',
-  },
-  componentDisplayBox: {
-    padding: theme.spacing(2),
-  },
-  optionsText: {
-    color: Colors.dark_gray,
-    fontSize: '13px',
-  },
-}));
+import useStyles from './styles';
 
 const AnnouncementDetail: React.FC<{
   announcementDetailRow: IAnnouncementDetail
@@ -89,19 +61,19 @@ const AnnouncementDetail: React.FC<{
 
   return (
     <Grid item lg={12} xl={6}>
-      <Card className={classes.root}>
+      <Card className={classes.announcementDetailRoot}>
         {formBuilder && <>
-          <CardContent className={classes.cardHeader}>
+          <CardContent className={classes.announcementDetailCardHeader}>
             <Typography variant="h5">
               <u>{formBuilder.defaultLabel}</u>
             </Typography>
-            <Typography style={{ color: Colors.font_gray, fontSize: '12px' }}>
+            <Typography className={classes.announcementDetailTabIndicatorText}>
               [ Added to <i><b><Text translation={getTabText(formBuilder.defaultTabId)} /></b></i> tab by default ]
             </Typography>
 
           </CardContent>
           {
-            announcementDetailRow.helpText && <CardContent className={classes.textDescription}>
+            announcementDetailRow.helpText && <CardContent className={classes.announcementDetailTextDescription}>
               <Markdown>{announcementDetailRow.helpText}</Markdown>
             </CardContent>
           }
@@ -109,30 +81,30 @@ const AnnouncementDetail: React.FC<{
             {componentToRender(getFormComponentDetails(formBuilder))}
           </Box>
           {
-            formBuilder.describingText && <CardContent className={classes.textDescription}>
+            formBuilder.describingText && <CardContent className={classes.announcementDetailTextDescription}>
               <Markdown>{formBuilder.describingText}</Markdown>
             </CardContent>
           }
         </>}
-        {!formBuilder && announcementDetailRow.helpText && <CardContent className={classes.textDescription}>
+        {!formBuilder && announcementDetailRow.helpText && <CardContent className={classes.announcementDetailTextDescription}>
           <Markdown>{announcementDetailRow.helpText}</Markdown>
         </CardContent>
         }
         {
           formBuilder && conflictingElementsMap[announcementDetailRow.id]?.options?.length
           && <RadioGroup name="selectedResolution" value={selectedOption} onChange={optionSelected}>
-            <Grid container style={{ backgroundColor: Colors.light_red, padding: '16px' }}>
-              <Grid item xs={6} style={{ padding: '16px' }}>
+            <Grid container className={classes.conflictingElementsMapContainer}>
+              <Grid item xs={6} className={classes.announcementDetailOptionsArea}>
                 <FormControlLabel value={SELECTED_RESOLUTION_ENUM.EXISTING} control={<Radio />}
-                  label="Existing Options" style={{ marginLeft: '-8px' }} />
-                <Typography className={classes.optionsText}>
+                  label="Existing Options" className={classes.announcementDetailOptionsHeading} />
+                <Typography className={classes.announcementDetailOptionsText}>
                   { (conflictingElementsMap[announcementDetailRow.id].options as FBOption[])?.map(option => option.text).join(', ') }
                 </Typography>
               </Grid>
-              <Grid item xs={6} style={{ padding: '16px' }}>
+              <Grid item xs={6} className={classes.announcementDetailOptionsArea}>
                 <FormControlLabel value={SELECTED_RESOLUTION_ENUM.NEW} control={<Radio />}
-                  label="New Options" style={{ marginLeft: '-8px' }} />
-                <Typography className={classes.optionsText}>
+                  label="New Options" className={classes.announcementDetailOptionsHeading} />
+                <Typography className={classes.announcementDetailOptionsText}>
                   { (formBuilder.options)?.map(option => option.text).join(', ') }
                 </Typography>
               </Grid>
