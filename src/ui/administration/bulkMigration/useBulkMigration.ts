@@ -378,12 +378,12 @@ export const useBulkMigration = () => {
       });
   }
 
-  function fetchAllEligibleRevisions () {
+  function fetchAllEligibleRevisions (scanDetailsId: string) {
     setIsLoading(true);
 
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
-      url: `${BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW}/${scanDetails?.id}`,
+      url: `${BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW}/${scanDetailsId}`,
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
@@ -403,12 +403,12 @@ export const useBulkMigration = () => {
       });
   }
 
-  function getPreviewForDocRev (docRevSelected: DocumentRevision, formState: FBFormState) {
+  function getPreviewForDocRev (scanDetailsId: string, docRevSelected: DocumentRevision, formState: FBFormState) {
     setIsLoading(true);
 
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
-      url: `${BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW}/${scanDetails?.id}/${docRevSelected.id}`,
+      url: `${BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW}/${scanDetailsId}/${docRevSelected.id}`,
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },

@@ -33,12 +33,16 @@ const PreviewDrawer: React.FC<{
   const formState = FB.useRef<FBFormState>(FBFormState, {});
 
   useEffect(() => {
-    fetchAllEligibleRevisions();
+    if (scanDetails?.id) {
+      fetchAllEligibleRevisions(scanDetails.id);
+    }
   }, []);
 
   const handlePreviewItemClick = (docRevSelected) => {
     setSelectedPreviewDocRev(docRevSelected);
-    getPreviewForDocRev(docRevSelected, formState);
+    if (scanDetails?.id) {
+      getPreviewForDocRev(scanDetails.id, docRevSelected, formState);
+    }
   };
 
   function searchTextChanged (searchText: string) {

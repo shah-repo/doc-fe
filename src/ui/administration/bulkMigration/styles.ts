@@ -417,16 +417,17 @@ export default makeStyles<NextTheme>(theme => ({
     borderRight: `1px solid ${theme.palette.divider}`,
     padding: theme.spacing(2),
     boxSizing: 'border-box',
-    height: '92vh',
+    height: '96vh',
     overflow: 'auto',
     display: 'flex',
     justifyContent: 'space-between',
+    flexDirection: 'column',
   },
   previewDrawerRightSection: {
     width: '75%', // Right section takes 75% width
     padding: theme.spacing(2),
     boxSizing: 'border-box',
-    height: '92vh',
+    height: '96vh',
   },
   rightSectionFieldsUnmatched: {
     height: '20%',
