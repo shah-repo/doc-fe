@@ -27,7 +27,7 @@ const MappingRulesDrawer: React.FC<{
               <b>Checkbox Group:</b> Must be mapped to a <code>Checkbox Group</code>, OR to a column in <code>object</code> | <code>array</code> type.
             </li>
             <li className={classes.compactListItem}>
-              <b>Textfield and Text Editor:</b> When mapped to a reference data (<code>object</code>/<code>array</code>) type, they use an LLM model (<code>llama3</code>) to extract values.
+              <b>Textfield and Text Editor:</b> When mapped to a reference data (<code>object</code>/<code>array</code>) type, they use an AI-powered system to understand and extract structured values from the content.
               <ul>
                 <li>
                   <b>Comments Field:</b> If the data type has a <em>comments</em> field, the original value is mapped to it.

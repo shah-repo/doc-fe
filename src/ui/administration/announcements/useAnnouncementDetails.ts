@@ -26,8 +26,13 @@ export const useAnnouncementDetails = () => {
     if (exception?.response?.status === 504) {
       setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
     } else {
-      toastError(exception?.response.data?.message);
-      setErrorMessage(exception?.response.data?.message);
+      const errMessage = exception?.response.data?.message;
+      let errMsgToShow = errMessage;
+      if (Array.isArray(errMessage)) {
+        errMsgToShow = errMessage[0];
+      }
+      toastError(errMsgToShow);
+      setErrorMessage(errMsgToShow);
     }
   }
 
@@ -145,5 +150,7 @@ export const useAnnouncementDetails = () => {
     getAnnouncementDetails,
     handleFormRevSelectionToUpgrade,
     processFormUpgrade,
+    conflictingElementsMap,
+    setConflictingElementsMap,
   };
 };

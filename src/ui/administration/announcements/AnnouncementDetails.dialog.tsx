@@ -4,7 +4,7 @@ import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import React, { useEffect, useState } from 'react';
 import AnnouncementDetail from './AnnouncementDetail';
 import InfoIndicator from './InfoIndicator';
-import { IAnnouncement, IAnnouncementDetail, IConflictingItem, IndicatorTypeEnum, SELECTED_RESOLUTION_ENUM } from './interface';
+import { IAnnouncement, IAnnouncementDetail, IndicatorTypeEnum, SELECTED_RESOLUTION_ENUM } from './interface';
 import useStyles from './styles';
 import { useAnnouncementDetails } from './useAnnouncementDetails';
 import { updateNestedObject } from './utils';
@@ -24,12 +24,13 @@ const AnnouncementDetailsDialog: React.FC<{
     formRevsList,
     isFormUpgradeDone,
     selectedFormRevToUpgrade,
+    conflictingElementsMap,
+    setConflictingElementsMap,
     getAnnouncementDetails,
     handleFormRevSelectionToUpgrade,
     processFormUpgrade,
   } = useAnnouncementDetails();
 
-  const [conflictingElementsMap, setConflictingElementsMap] = useState<{ [key: string]: IConflictingItem }>({});
   const [isAnyConflictingElementsUnResolved, setIsAnyConflictingElementsUnResolved] = useState<boolean>(false);
 
   useEffect(() => {
