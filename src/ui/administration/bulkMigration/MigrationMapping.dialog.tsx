@@ -266,7 +266,7 @@ const MigrationMappingDialog: React.FC<{
           </li>
         </ul>
         {/* <MappingRules /> */}
-        <Typography variant="subtitle2">{unmappedCount} fields unmapped</Typography>
+        <Typography variant="subtitle2">{unmappedCount} fields unmapped | <b>{selectedSchemaItems.length}</b> fields selected</Typography>
         <Box className={classes.mappingArea}>
           <ArcherContainer
             strokeColor={Colors.font_gray}

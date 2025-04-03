@@ -52,12 +52,12 @@ export function validateTableMappings (
   let columnKeyWithAutocomplete;
   let columnKeyWithCheckbox;
 
-  for (const key of Object.keys(selectedRow)) {
-    if (key === 'id') {
+  for (const selectedRowKey of Object.keys(selectedRow)) {
+    if (selectedRowKey === 'id') {
       continue;
     }
 
-    const mappedEntries: IMappedFrom[] = selectedRow[key] ?? [];
+    const mappedEntries: IMappedFrom[] = selectedRow[selectedRowKey] ?? [];
 
     if (mappedEntries.length) {
       const hasAutocomplete = some(mappedEntries, { type: 'autocomplete' });
@@ -83,8 +83,8 @@ export function validateTableMappings (
       }
 
       if (hasAutocomplete) {
-        if (!columnKeyWithAutocomplete || columnKeyWithAutocomplete === key) {
-          columnKeyWithAutocomplete = key;
+        if (!columnKeyWithAutocomplete || columnKeyWithAutocomplete === selectedRowKey) {
+          columnKeyWithAutocomplete = selectedRowKey;
         } else {
           return {
             canMap: false,
@@ -94,8 +94,8 @@ export function validateTableMappings (
       }
 
       if (hasCheckboxgroup) {
-        if (!columnKeyWithCheckbox || columnKeyWithCheckbox === key) {
-          columnKeyWithCheckbox = key;
+        if (!columnKeyWithCheckbox || columnKeyWithCheckbox === selectedRowKey) {
+          columnKeyWithCheckbox = selectedRowKey;
         } else {
           return {
             canMap: false,
@@ -104,22 +104,23 @@ export function validateTableMappings (
         }
       }
     }
-
-    const keyAttributes = schemaValidationMap[mappedToSchemaItem.type!]?.[key];
-    if (keyAttributes?.isNotMappable) {
-      return {
-        canMap: false,
-        errMessage: 'This field is not mappable.',
-      };
-    }
-
-    if (keyAttributes?.shouldMapTo && keyAttributes.shouldMapTo !== selectedSchemaItem.type) {
-      return {
-        canMap: false,
-        errMessage: `This field should only be mapped to a ${keyAttributes.shouldMapTo}.`,
-      };
-    }
   }
+
+  const keyAttributes = schemaValidationMap[mappedToSchemaItem.type!]?.[key];
+  if (keyAttributes?.isNotMappable) {
+    return {
+      canMap: false,
+      errMessage: 'This field is not mappable.',
+    };
+  }
+
+  if (keyAttributes?.shouldMapTo && keyAttributes.shouldMapTo !== selectedSchemaItem.type) {
+    return {
+      canMap: false,
+      errMessage: `This field should only be mapped to a ${keyAttributes.shouldMapTo}.`,
+    };
+  }
+
   return { canMap, errMessage };
 }
 
