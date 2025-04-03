@@ -2,9 +2,12 @@ import { AppName, Widget, WidgetRef } from 'ai-widget';
 import React, { createContext, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
+import { getHasPermission, hasActivePremiumFeatureSubscription } from '../../common/utils/selectors';
 import Config from '../../config';
 import { authSelectors } from '../../state/ducks/auth';
+import { Permission } from '../../state/ducks/auth/types';
 import { companySelectors } from '../../state/ducks/company';
+import { PremiumFeature } from '../../state/ducks/company/types';
 import { documentRevisionsSelectors } from '../../state/ducks/documentRevisions';
 import { ApplicationState } from '../../state/reducers';
 import { store } from '../../state/store';
@@ -23,6 +26,9 @@ interface AiWidgetProviderProps {
 }
 
 export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) => {
+  const hasActiveAiFeature = useSelector(hasActivePremiumFeatureSubscription(PremiumFeature.AI));
+  const hasAiPermission = useSelector(getHasPermission(Permission.PREMIUM_AI));
+  const isWidgetActive = hasActiveAiFeature && hasAiPermission;
   const userName = (useSelector(authSelectors.currentUserName) ?? '').trim();
   const documentMatch = useRouteMatch(DOCUMENT_REVISION_VERSION_URL);
   const companyId = useSelector(companySelectors.companyIdSelector);
@@ -56,6 +62,10 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
   const summarizeAttachments = useCallback((attachmentIds: string[]) => {
     widgetRef.current?.triggerSummarizeAttachments(attachmentIds);
   }, []);
+
+  if (!isWidgetActive) {
+    return <>{children}</>;
+  }
 
   return (
     <AiWidgetContext.Provider value={{ summarizeAttachments }}>
