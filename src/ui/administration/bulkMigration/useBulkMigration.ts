@@ -69,8 +69,9 @@ export const useBulkMigration = () => {
     if (exception?.response?.status === 504) {
       setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
     } else {
-      toastInfo(exception?.response.data?.message);
-      setErrorMessage(exception?.response.data?.message);
+      const message: string = (exception?.response.data?.message as string) ?? 'Error processing request';
+      toastInfo(message);
+      setErrorMessage(message);
     }
   }
 
@@ -351,7 +352,7 @@ export const useBulkMigration = () => {
       });
   }
 
-  function addUserToGroups () {
+  function addUserToGroups (toDocumentTypeId: string) {
     if (!approvalRequirements?.missingGroups?.length) {
       return;
     }

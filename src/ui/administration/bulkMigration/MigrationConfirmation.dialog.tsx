@@ -121,7 +121,7 @@ const MigrationConfirmationDialog: React.FC<{
               {approvalRequirements?.missingGroups?.length > 0 && <FBButton
                 label="Add To Groups"
                 dataCy="automation-add-to-groups"
-                onClick={addUserToGroups}
+                onClick={e => addUserToGroups(toDocumentTypeId)}
                 variant="outlined"
                 color="primary"
                 className={classes.zeroMarginBottom}
