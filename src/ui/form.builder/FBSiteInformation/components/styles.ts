@@ -23,7 +23,7 @@ export default makeStyles(theme => ({
   },
   container: {
     display: 'flex',
-    gap: '35px',
+    gap: theme.spacing(4.375),
   },
   popper: {
     zIndex: 1500,
