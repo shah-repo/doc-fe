@@ -140,7 +140,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       datepicker () {
         return (
           <Box>
-            {getFormattedDateString(auditValue as string, MomentFormats.MonthDateYear)}
+            {getFormattedDateString(auditValue as string, MomentFormats.MonthDateYearTwoDigit)}
           </Box>
         );
       },
