@@ -13,7 +13,7 @@ import { useBulkMigration } from './useBulkMigration';
 const MigrationConfirmationDialog: React.FC<{
   isOpen: boolean
   handleClose: () => void
-  handleConfirmation: (password: string) => void
+  handleConfirmation: (selectedDetails: ISelectedDetails[], password: string) => void
   selectedDetails: ISelectedDetails[]
   toDocumentTypeId: string
   toFormRev?: DocumentRevision
@@ -46,7 +46,7 @@ const MigrationConfirmationDialog: React.FC<{
   }, [toDocumentTypeId]);
 
   function handleEmployeeConfirmation () {
-    handleConfirmation(employeePassword.current);
+    handleConfirmation(selectedDetails, employeePassword.current);
   }
 
   function setEmployeePassword (empPassword: string) {

@@ -303,7 +303,7 @@ export const useBulkMigration = () => {
       });
   }
 
-  const handleMigrationConfirmation = (employeePassword: string) => {
+  const handleMigrationConfirmation = (selectedRows: ISelectedDetails[], employeePassword: string) => {
     // Take all the ones selected & send to BE
     setIsLoading(true);
     setErrorMessage('');
