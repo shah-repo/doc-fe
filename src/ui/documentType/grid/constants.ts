@@ -11,7 +11,8 @@ export const cellOverflowFields = [
   'precalc.siteName',
   'formInput.customerName',
   'precalc.supplierCertifications',
-  'precalc.supplierItemsApproved',
-  'formInput.supplier-type',
+  'precalc.supplierItemsProvided',
+  'precalc.supplierType',
+  'precalc.primaryContactName',
   'name',
 ];

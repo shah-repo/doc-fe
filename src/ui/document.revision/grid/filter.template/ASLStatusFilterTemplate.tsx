@@ -53,20 +53,20 @@ export const ASLStatusFilterTemplate = ({ defaultItem, onChange, value }: Props)
       })),
     [docTypeTableContext?.aslStatuses],
   );
-
-  const filteredAslOptions = aslOptions?.filter((data) => data.isActive);
-  const updatedValue = aslOptions?.find((option) => option.aslStatusId === value);
+  const defaultValue = { label: defaultItem, value: '' };
+  const filteredAslOptions = [defaultValue, ...aslOptions?.filter((data) => data.isActive)];
+  const updatedValue = aslOptions?.find((option) => option.aslStatusId === value) ?? defaultValue;
 
   return (
     <div className="k-filtercell">
       <Autocomplete
-        key={isEmpty(updatedValue) ? 'disabled' : 'enabled'}
+        key={isEmpty(filteredAslOptions) ? 'disabled' : 'enabled'}
         blurOnSelect
         className={classes.statusDropDown}
         disableClearable
         placeholder={translate('common.select')}
         options={filteredAslOptions}
-        value={updatedValue ?? defaultItem}
+        value={updatedValue}
         getOptionLabel={(option: CustomOptionType) => option.label}
         onChange={onDropdownChange}
         renderOption={(option: CustomOptionType) => (
