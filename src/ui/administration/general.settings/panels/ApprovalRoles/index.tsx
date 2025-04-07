@@ -44,7 +44,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     initialValues: {},
     validate: (values) => {
       const error: Record<string, string> = {};
-      const isDuplicate = approvalRoles?.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase() && id !== values.id);
+      const isDuplicate = approvalRoles?.some(({ name, id }) => name.toLowerCase() === values.name.toLowerCase().trim() && id !== values.id);
       if (values.name && isDuplicate) {
         error.name = 'validator.approval.role.same.name.exist';
       }
