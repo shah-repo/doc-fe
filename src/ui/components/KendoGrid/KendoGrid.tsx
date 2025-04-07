@@ -10,6 +10,8 @@ import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AutoSizer, Size } from 'react-virtualized';
 import { translate } from '../../../common/intl';
+import { authSelectors } from '../../../state/ducks/auth';
+import { GroupTag } from '../../../state/ducks/auth/types';
 import { ChangeRequestStatus } from '../../../state/ducks/changeRequest/types';
 import { companySelectors } from '../../../state/ducks/company';
 import { DocumentCategory, DocumentRevisionStatus, DocumentRevisionStatusDisplay, EquipmentStatus, LotStatus, POStatusLabelMapping } from '../../../state/ducks/documentRevisions/types';
@@ -90,6 +92,9 @@ export function KendoGrid<T extends any> ({
     onSuccess: () => toastSuccess(intl.formatMessage({ id: 'common.send.to.print.success' })),
     onError: toastError,
   });
+
+  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
+  const canSeeAnnouncements = currentUserTags.includes(GroupTag.ADMIN_MANAGEMENT);
 
   useEffect(() => {
     if (didMount) {
@@ -613,7 +618,7 @@ export function KendoGrid<T extends any> ({
             </Grid>
             <Grid item={true} xs={4} style={{ textAlign: 'center' }}>
               {
-                announcements.length > 0
+                announcements.length > 0 && canSeeAnnouncements
                 && <AnnouncementIndicator announcement={announcements[0]} />
               }
             </Grid>

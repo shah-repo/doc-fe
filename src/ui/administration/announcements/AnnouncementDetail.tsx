@@ -11,9 +11,9 @@ import useStyles from './styles';
 
 const AnnouncementDetail: React.FC<{
   announcementDetailRow: IAnnouncementDetail
-  conflictingElementsMap: { [key: string]: IConflictingItem }
+  conflictingElements: { [key: string]: IConflictingItem }
   handleConflictResolution: (announcementDetailRow: IAnnouncementDetail, value: SELECTED_RESOLUTION_ENUM) => void
-}> = ({ announcementDetailRow, conflictingElementsMap, handleConflictResolution }) => {
+}> = ({ announcementDetailRow, conflictingElements, handleConflictResolution }) => {
   const classes = useStyles();
 
   const { formBuilder } = announcementDetailRow;
@@ -86,19 +86,22 @@ const AnnouncementDetail: React.FC<{
             </CardContent>
           }
         </>}
-        {!formBuilder && announcementDetailRow.helpText && <CardContent className={classes.announcementDetailTextDescription}>
+        {!formBuilder && announcementDetailRow.helpText
+        && <CardContent className={classes.announcementDetailTextDescription}>
           <Markdown>{announcementDetailRow.helpText}</Markdown>
         </CardContent>
         }
         {
-          formBuilder && conflictingElementsMap[announcementDetailRow.id]?.options?.length
+          formBuilder
+          && conflictingElements[announcementDetailRow.id]?.options?.length
+          && conflictingElements[announcementDetailRow.id]?.mustBeResolved
           && <RadioGroup name="selectedResolution" value={selectedOption} onChange={optionSelected}>
-            <Grid container className={classes.conflictingElementsMapContainer}>
+            <Grid container className={classes.conflictingElementsContainer}>
               <Grid item xs={6} className={classes.announcementDetailOptionsArea}>
                 <FormControlLabel value={SELECTED_RESOLUTION_ENUM.EXISTING} control={<Radio />}
                   label="Existing Options" className={classes.announcementDetailOptionsHeading} />
                 <Typography className={classes.announcementDetailOptionsText}>
-                  { (conflictingElementsMap[announcementDetailRow.id].options as FBOption[])?.map(option => option.text).join(', ') }
+                  { (conflictingElements[announcementDetailRow.id].options as FBOption[])?.map(option => option.text).join(', ') }
                 </Typography>
               </Grid>
               <Grid item xs={6} className={classes.announcementDetailOptionsArea}>

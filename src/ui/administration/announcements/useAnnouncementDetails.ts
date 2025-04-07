@@ -16,7 +16,7 @@ export const useAnnouncementDetails = () => {
   const [formRevsList, setFormRevsList] = useState<DocumentRevision[]>([]);
 
   const [selectedFormRevToUpgrade, setSelectedFormRevToUpgrade] = useState<string>('');
-  const [conflictingElementsMap, setConflictingElementsMap] = useState<{ [key: string]: IConflictingItem }>({});
+  const [conflictingElements, setConflictingElements] = useState<{ [key: string]: IConflictingItem }>({});
 
   const [isFormUpgradeDone, setIsFormUpgradeDone] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,12 +83,12 @@ export const useAnnouncementDetails = () => {
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        const { conflictingElementsMap, isFormUpgradeDone } = data as {
-          conflictingElementsMap: { [key: string]: IConflictingItem }
+        const { conflictingElements, isFormUpgradeDone } = data as {
+          conflictingElements: { [key: string]: IConflictingItem }
           isFormUpgradeDone: boolean
         };
         setIsLoading(false);
-        setConflictingElementsMap(conflictingElementsMap);
+        setConflictingElements(conflictingElements);
         setIsFormUpgradeDone(isFormUpgradeDone ?? false);
       })
       .catch((exception) => {
@@ -98,7 +98,8 @@ export const useAnnouncementDetails = () => {
   }
 
   function processFormUpgrade (announcementId: string) {
-    const isAnyUnresolved = Object.values(conflictingElementsMap).some(conflictingElement => !conflictingElement.isResolved);
+    const isAnyUnresolved = Object.values(conflictingElements)
+      .some(conflictingElement => !conflictingElement.isResolved && conflictingElement.mustBeResolved);
     if (isAnyUnresolved) {
       toastError('Please resolve all conflicts, before proceeding');
       return;
@@ -121,7 +122,7 @@ export const useAnnouncementDetails = () => {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
       data: {
-        conflictingElementsMap,
+        conflictingElements,
       },
     };
     apiClient
@@ -136,6 +137,7 @@ export const useAnnouncementDetails = () => {
       .catch((exception) => {
         console.log(exception);
         catchAxiosException(exception);
+        setIsSubmitting(false);
       });
   }
 
@@ -150,7 +152,7 @@ export const useAnnouncementDetails = () => {
     getAnnouncementDetails,
     handleFormRevSelectionToUpgrade,
     processFormUpgrade,
-    conflictingElementsMap,
-    setConflictingElementsMap,
+    conflictingElements,
+    setConflictingElements,
   };
 };

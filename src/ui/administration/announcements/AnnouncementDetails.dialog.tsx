@@ -24,8 +24,8 @@ const AnnouncementDetailsDialog: React.FC<{
     formRevsList,
     isFormUpgradeDone,
     selectedFormRevToUpgrade,
-    conflictingElementsMap,
-    setConflictingElementsMap,
+    conflictingElements,
+    setConflictingElements,
     getAnnouncementDetails,
     handleFormRevSelectionToUpgrade,
     processFormUpgrade,
@@ -40,18 +40,19 @@ const AnnouncementDetailsDialog: React.FC<{
   }, [announcement]);
 
   useEffect(() => {
-    if (Object.keys(conflictingElementsMap).length) {
-      const isAnyUnresolved = Object.values(conflictingElementsMap).some(conflictingElement => !conflictingElement.isResolved);
+    if (Object.keys(conflictingElements).length) {
+      const isAnyUnresolved = Object.values(conflictingElements)
+        .some(conflictingElement => !conflictingElement.isResolved && conflictingElement.mustBeResolved);
       setIsAnyConflictingElementsUnResolved(isAnyUnresolved);
     }
-  }, [conflictingElementsMap]);
+  }, [conflictingElements]);
 
   function handleConflictResolution (announcementDetailRow: IAnnouncementDetail, value: SELECTED_RESOLUTION_ENUM) {
-    const modifiedMap = updateNestedObject(conflictingElementsMap, announcementDetailRow.id, {
+    const modifiedMap = updateNestedObject(conflictingElements, announcementDetailRow.id, {
       isResolved: true,
       isSelected: value === SELECTED_RESOLUTION_ENUM.EXISTING,
     });
-    setConflictingElementsMap(modifiedMap);
+    setConflictingElements(modifiedMap);
   }
 
   return (
@@ -134,7 +135,7 @@ const AnnouncementDetailsDialog: React.FC<{
                 return (
                   <AnnouncementDetail key={announcementDetailRow.id}
                     announcementDetailRow={announcementDetailRow}
-                    conflictingElementsMap={conflictingElementsMap}
+                    conflictingElements={conflictingElements}
                     handleConflictResolution={handleConflictResolution}
                   />
                 );
