@@ -12,10 +12,11 @@ import { PrimarySupplierCellTemplate } from './components/PrimarySupplierCellTem
 import { PrimarySupplierTitle } from './components/PrimarySupplierTitle';
 import { SupplierCellTemplate } from './components/SupplierCellTemplate';
 import { SupplierPartNumberCellTemplate } from './components/SupplierPartNumberCellTemplate';
+import { SupplierStateCellTemplate } from './components/SupplierStateCellTemplate';
 import { SupplierStatusCellTemplate } from './components/SupplierStatusCellTemplate';
 import { UnitCostCellTemplate } from './components/UnitCostCellTemplate';
 import { UnitsCellTemplate } from './components/UnitsCellTemplate';
-import { SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
+import { SUPPLIER_FIELD, SUPPLIER_STATE_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
 import { EditableVendor, SchemaOptions } from './types';
 
 export const buildSchema = ({
@@ -82,6 +83,14 @@ export const buildSchema = ({
       filterCell: StatusFilter,
       template: (props) => <SupplierStatusCellTemplate {...props} onClick={onRowClick} />,
       width: 120,
+    },
+    {
+      id: 'state',
+      field: SUPPLIER_STATE_FIELD,
+      title: 'form.builder.part.vendors.vendor.state',
+      filterCell: InputFilter,
+      template: (props) => <SupplierStateCellTemplate {...props} onClick={onRowClick} />,
+      width: 200,
     },
     {
       id: 'part-number',

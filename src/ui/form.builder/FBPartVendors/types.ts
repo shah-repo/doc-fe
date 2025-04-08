@@ -78,7 +78,7 @@ export interface VendorEditEvent {
 type VendorOptionDocument = Pick<DocumentRevisionDocument, 'id' | 'docId' >;
 
 export type SupplierOption =
-& Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayStatus' | 'displayRevision'>
+& Pick<DocumentRevision, 'id' | 'docId' | 'name' | 'displayStatus' | 'displayRevision' | 'supplierStatusId'>
 & {
   document: VendorOptionDocument
   isUnselectable?: boolean

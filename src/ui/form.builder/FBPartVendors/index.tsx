@@ -7,17 +7,17 @@ import { omit } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../common/intl';
+import Dialog from '../../components/dialogs';
+import { Autocomplete, Button } from '../../components/forms/fields-next';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import { Mode, MODE_FIELD } from '../../components/KendoDataGrid/constants';
 import KendoDataGrid from '../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../components/KendoDataGrid/KendoDataGrid.types';
-import { MODE_FIELD, Mode } from '../../components/KendoDataGrid/constants';
 import Text from '../../components/Text';
-import Dialog from '../../components/dialogs';
-import PromptIfDirty from '../../components/forms/PromptIfDirty';
-import { Autocomplete, Button } from '../../components/forms/fields-next';
 import useDialog from '../../hooks/useDialog';
 import FBInput from '../FBInput/FBInput';
 import FBSection from '../FBSection/FBSection';
-import { FIELDS_TO_OMIT, SUPPLIER_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
+import { FIELDS_TO_OMIT, SUPPLIER_FIELD, SUPPLIER_STATE_FIELD, SUPPLIER_STATUS_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { EditableVendor, FBPartVendorsProps, Vendor, VendorEditEvent } from './types';
@@ -149,6 +149,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
     const supplier = suppliers.find((vendor) => vendor.id === item.vendor.id);
     const supplierName = supplier?.name ?? item.vendor?.name;
     const supplierStatus = supplier?.displayStatus ?? '';
+    const supplierState = supplier?.supplierStatusId ?? '';
 
     return [
       ...list,
@@ -156,6 +157,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
         ...(isVendorEdited ? editedVendor : item),
         [SUPPLIER_FIELD]: supplierName,
         [SUPPLIER_STATUS_FIELD]: supplierStatus,
+        [SUPPLIER_STATE_FIELD]: supplierState,
         [MODE_FIELD]: isVendorEdited ? Mode.edit : Mode.show,
       },
     ];
