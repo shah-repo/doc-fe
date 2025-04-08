@@ -199,6 +199,7 @@ export default makeStyles<NextTheme>(theme => ({
   },
 
   blackSpan: {
+    paddingLeft: theme.spacing(0.5),
     color: Colors.black,
   },
 
@@ -206,6 +207,15 @@ export default makeStyles<NextTheme>(theme => ({
     cursor: 'pointer',
     marginLeft: '4px',
     fontSize: '16px',
+  },
+  revsTableRefreshBox: {
+    display: 'flex',
+    alignItems: 'center',
+    flex: '1',
+  },
+  revsTableRefreshText: {
+    display: 'flex',
+    alignItems: 'center',
   },
 
   /* Circle path for the motion */
@@ -478,7 +488,6 @@ export default makeStyles<NextTheme>(theme => ({
   },
   revsTableRoot: {
     width: '100%',
-    marginBottom: theme.spacing(4),
     '& > *': {
       borderBottom: 'unset',
     },
@@ -562,7 +571,7 @@ export default makeStyles<NextTheme>(theme => ({
   deleteIcon: {
     cursor: 'pointer',
     color: Colors.red,
-    marginRight: '4px',
+    marginRight: theme.spacing(0.5),
   },
   tableCellHiddenOverflow: {
     overflow: 'hidden',
@@ -574,8 +583,8 @@ export default makeStyles<NextTheme>(theme => ({
   },
   revsTableRefreshIcon: {
     cursor: 'pointer',
-    marginLeft: '4px',
-    fontSize: '16px',
+    marginLeft: theme.spacing(0.5),
+    fontSize: 16,
   },
   cursorPointer: {
     cursor: 'pointer',

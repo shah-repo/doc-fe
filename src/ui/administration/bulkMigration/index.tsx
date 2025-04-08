@@ -263,12 +263,15 @@ const BulkMigrationContainer: React.FC = () => {
               </FormControl>
             </Box>
             {fromDocumentTypeId && fromFormRevId && (
-              <Typography variant="subtitle2">
-                  Eligible Revisions - <span className={classes.blackSpan}> {eligibleRevsCount}
-                  <RefreshIcon className={classes.refreshIconStyle}
+              <Box className={classes.revsTableRefreshBox}>
+                <Typography variant="subtitle2" id="elegible-revs" className={classes.revsTableRefreshText} component="div">
+                        Eligible Revisions - <span className={classes.blackSpan}> {eligibleRevsCount} </span>
+                  <RefreshIcon
+                    className={classes.revsTableRefreshIcon}
                     onClick={e => fetchEligibleRevisionsOfRevType(fromFormRevId)}
-                  /> </span>
-              </Typography>
+                  />
+                </Typography>
+              </Box>
             )}
           </Box>
 

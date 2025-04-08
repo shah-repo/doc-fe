@@ -407,31 +407,34 @@ const RevsTable: React.FC<{
 
   return (
     <Paper>
-      {!isEmpty(errorMessage) && (
-        <div className={classes.errMsgStyle}>{errorMessage}</div>
-      )}
+      {!isEmpty(errorMessage) && <div className={classes.errMsgStyle}>{errorMessage}</div>}
       <Toolbar
         className={cx(classes.revsTableRoot, classes.revsTableFlexBox, classes.marginBottom8, {
           [classes.revsTableSelectedHighlight]: selected.length > 0,
         })}
       >
-        <Typography variant="h6" id="tableTitle" component="div">
-            Supplier Revs <RefreshIcon className={classes.revsTableRefreshIcon}
-            onClick={e => fetchScanSupplierRevisions(scanId, page, rowsPerPage, orderBy, order, isShowActionableRows, searchQueries)}
-          />
-          <Typography color="inherit" variant="subtitle1" component="div">
-            {selected.length} selected
+        <Box className={classes.revsTableRefreshBox}>
+          <Typography variant="h6" id="tableTitle" className={classes.revsTableRefreshText} component="div">
+            Supplier Revs
+            <RefreshIcon
+              className={classes.revsTableRefreshIcon}
+              onClick={() => fetchScanSupplierRevisions(scanId, page, rowsPerPage, orderBy, order, isShowActionableRows, searchQueries)}
+            />
           </Typography>
-        </Typography>
-
+          {selected.length > 0 && (
+            <Typography color="inherit" variant="subtitle1" component="div" style={{ marginLeft: 16 }}>
+              {selected.length} selected
+            </Typography>
+          )}
+        </Box>
         <FormControlLabel
           control={
             <Switch
               size="small"
               checked={isShowActionableRows}
-              onChange={event => setIsShowActionableRows(event.target.checked)}
+              onChange={(event) => setIsShowActionableRows(event.target.checked)}
               color="primary"
-              classes= {{
+              classes={{
                 switchBase: classes.switchBase,
               }}
             />
@@ -440,7 +443,6 @@ const RevsTable: React.FC<{
           className={classes.mappingSwitcher}
           labelPlacement="bottom"
         />
-
         <TablePagination
           rowsPerPageOptions={[25, 50, 100]}
           count={totalCount}
@@ -474,8 +476,12 @@ const RevsTable: React.FC<{
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
-                <ExpandableRow row={row} handleSelection={handleSelection}
-                  isItemSelected={isItemSelected} labelId={labelId} key={row.docRevId}
+                <ExpandableRow
+                  row={row}
+                  handleSelection={handleSelection}
+                  isItemSelected={isItemSelected}
+                  labelId={labelId}
+                  key={row.docRevId}
                   onIconHovered={(event, content) => handlePopoverOpen(event, content)}
                   handlePopoverClose={handlePopoverClose}
                   scanId={scanId}
