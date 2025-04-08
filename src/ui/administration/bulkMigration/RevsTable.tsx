@@ -314,7 +314,6 @@ const RevsTable: React.FC<{
   const [searchQueries, setSearchQueries] = React.useState<{[key: string]: string}>({});
   const [order, setOrder] = React.useState<SortDirection>('desc');
   const [orderBy, setOrderBy] = React.useState('createdAt');
-  const [selected, setSelected] = useState<ISelectedDetails[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(INITIAL_ROWS_COUNT);
 
@@ -324,6 +323,8 @@ const RevsTable: React.FC<{
     rows,
     totalCount,
     fetchScanSupplierRevisions,
+    selected,
+    setSelected,
   } = useBulkMigration();
 
   const [isShowActionableRows, setIsShowActionableRows] = useState<boolean>(true);
