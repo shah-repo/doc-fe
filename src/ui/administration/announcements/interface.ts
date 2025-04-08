@@ -57,6 +57,7 @@ export interface IFormBuilder {
 export type IConflictingItem = FBSchemaProps & {
   isResolved?: boolean
   isSelected?: boolean
+  mustBeResolved?: boolean
 };
 
 export enum IndicatorTypeEnum {
