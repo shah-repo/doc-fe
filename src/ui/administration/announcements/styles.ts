@@ -33,7 +33,7 @@ export default makeStyles<NextTheme>(theme => ({
   componentDisplayBox: {
     padding: theme.spacing(2),
   },
-  conflictingElementsMapContainer: {
+  conflictingElementsContainer: {
     backgroundColor: Colors.light_red,
     padding: '16px',
   },

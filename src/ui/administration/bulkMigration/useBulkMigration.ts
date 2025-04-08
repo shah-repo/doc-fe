@@ -47,6 +47,7 @@ export const useBulkMigration = () => {
   const [rows, setRows] = useState<ISupplierScanResultRev[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
 
+  const [selected, setSelected] = useState<ISelectedDetails[]>([]);
   const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
   const confirmSubmission = () => {
     setIsConfirmationDialogVisible(true);
@@ -438,6 +439,7 @@ export const useBulkMigration = () => {
   ) {
     setIsLoading(true);
     setErrorMessage('');
+    setSelected([]);
 
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
@@ -543,6 +545,8 @@ export const useBulkMigration = () => {
     getPreviewForDocRevRevsTable,
     rows,
     totalCount,
+    selected,
+    setSelected,
     fetchScanSupplierRevisions,
   };
 };
