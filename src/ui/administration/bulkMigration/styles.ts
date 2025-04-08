@@ -55,9 +55,17 @@ export default makeStyles<NextTheme>(theme => ({
     fontSize: 21,
     marginBottom: theme.spacing(0.5),
     color: NextColors.textBlack,
+    fontWeight: 600,
   },
   subtitle: {
     color: NextColors.textGray,
+    fontWeight: 400,
+    fontSize: 14,
+  },
+  migrateInfo: {
+    color: NextColors.textBlack,
+    fontWeight: 600,
+    fontSize: 14,
   },
   smallText: {
     fontSize: 12,
@@ -212,6 +220,7 @@ export default makeStyles<NextTheme>(theme => ({
     display: 'flex',
     alignItems: 'center',
     flex: '1',
+    fontSize: 12,
   },
   revsTableRefreshText: {
     display: 'flex',

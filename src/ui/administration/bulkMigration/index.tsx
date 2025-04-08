@@ -181,7 +181,6 @@ const BulkMigrationContainer: React.FC = () => {
               <Typography variant="subtitle1" className={classes.subtitle}>
                 {translate('administration.bulk.migration.subtitle')}
               </Typography>
-              {/* <br className={classes.spaceTitle} /> */}
             </Box>
           </Grid>
           <Grid item xs={4}>
@@ -207,14 +206,14 @@ const BulkMigrationContainer: React.FC = () => {
         )}
         <Box className={classes.flexBox}>
           <Box className={classes.boxForSelection}>
-            <Typography variant="h5"> Migrate From </Typography>
-            <Typography variant="subtitle2"> Select the Document Type & Form Rev </Typography>
+            <Typography variant="h5" className={classes.migrateInfo}> Migrate From </Typography>
+            <Typography variant="subtitle2" className={classes.subtitle}> Select the Document Type & Form Rev </Typography>
 
             <Box className={classes.innerBox}>
               <FormControl
                 className={classes.formControl40}
               >
-                <InputLabel id="document-type-migrate-from"> Document Type </InputLabel>
+                <InputLabel id="document-type-migrate-from" className={classes.subtitle}> Document Type </InputLabel>
                 <Select
                   labelId="document-type-migrate-from"
                   value={fromDocumentTypeId}
@@ -226,10 +225,10 @@ const BulkMigrationContainer: React.FC = () => {
                   }
                 >
                   {documentTypesList.map((type) => (
-                    <MenuItem value={type.id} key={type.id}>
-                      <em>
+                    <MenuItem value={type.id} key={type.id} className={classes.subtitle}>
+                      <span>
                         {type.documentTypeName} - {type.documentTypeAcronym}
-                      </em>
+                      </span>
                     </MenuItem>
                   ))}
                 </Select>
@@ -239,7 +238,7 @@ const BulkMigrationContainer: React.FC = () => {
               <FormControl
                 className={classes.formControl60}
               >
-                <InputLabel id="form-rev-migrate-from"> Form Rev Selection </InputLabel>
+                <InputLabel id="form-rev-migrate-from" className={classes.subtitle}> Form Rev Selection </InputLabel>
                 <Select
                   labelId="form-rev-migrate-from"
                   value={fromFormRevId}
@@ -251,11 +250,11 @@ const BulkMigrationContainer: React.FC = () => {
                   }
                 >
                   {fromFormRevsList.map((formRev) => (
-                    <MenuItem value={formRev.id} key={formRev.id}>
-                      <em>
+                    <MenuItem value={formRev.id} key={formRev.id} className={classes.subtitle}>
+                      <span>
                         {formRev.document?.docId} • {formRev.name} •{' '}
                         {formRev.displayRevision} • {formRev.displayStatus}
-                      </em>
+                      </span>
                     </MenuItem>
                   ))}
                 </Select>
@@ -264,7 +263,7 @@ const BulkMigrationContainer: React.FC = () => {
             </Box>
             {fromDocumentTypeId && fromFormRevId && (
               <Box className={classes.revsTableRefreshBox}>
-                <Typography variant="subtitle2" id="elegible-revs" className={classes.revsTableRefreshText} component="div">
+                <Typography variant="subtitle2" id="eligible-revs" className={classes.revsTableRefreshText} component="div">
                         Eligible Revisions - <span className={classes.blackSpan}> {eligibleRevsCount} </span>
                   <RefreshIcon
                     className={classes.revsTableRefreshIcon}
@@ -345,14 +344,14 @@ const BulkMigrationContainer: React.FC = () => {
           </Box>
 
           <Box className={classes.boxForSelection}>
-            <Typography variant="h5">Migrate To</Typography>
-            <Typography variant="subtitle2">Select the Document Type & Form Rev</Typography>
+            <Typography variant="h5" className={classes.migrateInfo}>Migrate To</Typography>
+            <Typography variant="subtitle2" className={classes.subtitle}>Select the Document Type & Form Rev</Typography>
 
             <Box className={classes.innerBox}>
               <FormControl
                 className={classes.formControl40}
               >
-                <InputLabel id="document-type-migrate-to"> Document Type </InputLabel>
+                <InputLabel id="document-type-migrate-to" className={classes.subtitle}> Document Type </InputLabel>
                 <Select
                   labelId="document-type-migrate-to"
                   value={toDocumentTypeId}
@@ -364,10 +363,10 @@ const BulkMigrationContainer: React.FC = () => {
                   }
                 >
                   {documentTypesList.map((type) => (
-                    <MenuItem value={type.id} key={type.id}>
-                      <em>
+                    <MenuItem value={type.id} key={type.id} className={classes.subtitle}>
+                      <span>
                         {type.documentTypeName} - {type.documentTypeAcronym}
-                      </em>
+                      </span>
                     </MenuItem>
                   ))}
                 </Select>
@@ -377,7 +376,7 @@ const BulkMigrationContainer: React.FC = () => {
               <FormControl
                 className={classes.formControl60}
               >
-                <InputLabel id="form-rev-migrate-to"> Form Rev Selection </InputLabel>
+                <InputLabel id="form-rev-migrate-to" className={classes.subtitle}> Form Rev Selection </InputLabel>
                 <Select
                   labelId="form-rev-migrate-to"
                   value={toFormRevId}
@@ -389,11 +388,11 @@ const BulkMigrationContainer: React.FC = () => {
                   }
                 >
                   {toFormRevsList.map((formRev) => (
-                    <MenuItem value={formRev.id} key={formRev.id}>
-                      <em>
+                    <MenuItem value={formRev.id} key={formRev.id} className={classes.subtitle}>
+                      <span>
                         {formRev.document?.docId} • {formRev.name} •{' '}
                         {formRev.displayRevision} • {formRev.displayStatus}
-                      </em>
+                      </span>
                     </MenuItem>
                   ))}
                 </Select>

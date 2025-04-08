@@ -1,4 +1,4 @@
-import { Box, Collapse, FormControlLabel, LinearProgress, ListItemText, Popover, Switch, TextField } from '@material-ui/core';
+import { Box, Collapse, FormControlLabel, LinearProgress, ListItemText, Popover, styled, Switch, TextField } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
@@ -40,6 +40,13 @@ const headCells = [
   { id: 'fieldsUnmatched', disablePadding: false, label: 'Fields Unmatched', width: '26%' },
   { id: 'proposedAction', disablePadding: false, label: 'Proposed Action', width: '10%' },
 ];
+
+const StyledTablePagination = styled(TablePagination)(({ theme }) => ({
+  '& .MuiTablePagination-selectIcon': {
+    left: theme.spacing(3),
+    top: theme.spacing(1.2),
+  },
+}));
 
 const EnhancedTableHead: React.FC<{
   onSelectAllClick: (event) => void
@@ -443,7 +450,7 @@ const RevsTable: React.FC<{
           className={classes.mappingSwitcher}
           labelPlacement="bottom"
         />
-        <TablePagination
+        <StyledTablePagination
           rowsPerPageOptions={[25, 50, 100]}
           count={totalCount}
           rowsPerPage={rowsPerPage}
