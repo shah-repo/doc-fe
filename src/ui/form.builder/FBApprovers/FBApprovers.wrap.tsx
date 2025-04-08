@@ -44,8 +44,8 @@ export const withFBApprovers = <T extends FBApproversProps>(
     const fieldValue = formState?.getFieldValue(name);
     const hasFieldValue = !isEmpty(fieldValue);
     defaultValue = hasFieldValue
-      ? fieldValue.map((app) => app.approver || app)
-      : approvals?.map((app) => app.approver) || [];
+      ? fieldValue.map((app) => app.approver ?? app)
+      : approvals?.map((app) => app.approver) ?? [];
     const formValue = map(defaultValue, 'id');
     approversState = FB.useRef(FBApproversState, { documentRevisions, formValue });
 
