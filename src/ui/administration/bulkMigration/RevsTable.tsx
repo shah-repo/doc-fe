@@ -406,102 +406,100 @@ const RevsTable: React.FC<{
   const isSelected = (id: string) => selected.findIndex(entry => entry.id === id) > -1;
 
   return (
-    <div className={classes.revsTableRoot}>
-      <Paper className={classes.revsTablePaper}>
-        {!isEmpty(errorMessage) && (
-          <div className={classes.errMsgStyle}>{errorMessage}</div>
-        )}
-        <Toolbar
-          className={cx(classes.revsTableRoot, classes.revsTableFlexBox, classes.marginBottom8, {
-            [classes.revsTableSelectedHighlight]: selected.length > 0,
-          })}
-        >
-          <Typography variant="h6" id="tableTitle" component="div">
+    <Paper>
+      {!isEmpty(errorMessage) && (
+        <div className={classes.errMsgStyle}>{errorMessage}</div>
+      )}
+      <Toolbar
+        className={cx(classes.revsTableRoot, classes.revsTableFlexBox, classes.marginBottom8, {
+          [classes.revsTableSelectedHighlight]: selected.length > 0,
+        })}
+      >
+        <Typography variant="h6" id="tableTitle" component="div">
             Supplier Revs <RefreshIcon className={classes.revsTableRefreshIcon}
-              onClick={e => fetchScanSupplierRevisions(scanId, page, rowsPerPage, orderBy, order, isShowActionableRows, searchQueries)}
-            />
-            <Typography color="inherit" variant="subtitle1" component="div">
-              {selected.length} selected
-            </Typography>
+            onClick={e => fetchScanSupplierRevisions(scanId, page, rowsPerPage, orderBy, order, isShowActionableRows, searchQueries)}
+          />
+          <Typography color="inherit" variant="subtitle1" component="div">
+            {selected.length} selected
           </Typography>
+        </Typography>
 
-          <FormControlLabel
-            control={
-              <Switch
-                size="small"
-                checked={isShowActionableRows}
-                onChange={event => setIsShowActionableRows(event.target.checked)}
-                color="primary"
-                classes= {{
-                  switchBase: classes.switchBase,
-                }}
-              />
-            }
-            label="Actionable Rows"
-            className={classes.mappingSwitcher}
-            labelPlacement="bottom"
-          />
-
-          <TablePagination
-            rowsPerPageOptions={[25, 50, 100]}
-            count={totalCount}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
-        </Toolbar>
-        <div>
-          {isLoading && <LinearProgress className={classes.revsTableProgress} data-cy="saving-progress-bar" />}
-          <Table
-            className={classes.revsTableFixedLayout}
-            aria-labelledby="tableTitle"
-            size="medium"
-            aria-label="Supplier Revs Table"
-            stickyHeader
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              onSearchTextChange={handleSearchTextChange}
-              rowCount={rows.length}
+        <FormControlLabel
+          control={
+            <Switch
+              size="small"
+              checked={isShowActionableRows}
+              onChange={event => setIsShowActionableRows(event.target.checked)}
+              color="primary"
+              classes= {{
+                switchBase: classes.switchBase,
+              }}
             />
-            <TableBody>
-              {rows.map((row, index) => {
-                const isItemSelected = isSelected(row.docRevId);
-                const labelId = `enhanced-table-checkbox-${index}`;
+          }
+          label="Actionable Rows"
+          className={classes.mappingSwitcher}
+          labelPlacement="bottom"
+        />
 
-                return (
-                  <ExpandableRow row={row} handleSelection={handleSelection}
-                    isItemSelected={isItemSelected} labelId={labelId} key={row.docRevId}
-                    onIconHovered={(event, content) => handlePopoverOpen(event, content)}
-                    handlePopoverClose={handlePopoverClose}
-                    scanId={scanId}
-                  />
-                );
-              })}
-            </TableBody>
-          </Table>
-          <Popover
-            className={classes.noPointerEvents}
-            classes={{
-              paper: classes.revsTablePopoverPaper,
-            }}
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-            onClose={handlePopoverClose}
-            disableRestoreFocus
-          >
-            {popoverContent}
-          </Popover>
-        </div>
-      </Paper>
-    </div>
+        <TablePagination
+          rowsPerPageOptions={[25, 50, 100]}
+          count={totalCount}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </Toolbar>
+      <div className={classes.revsTableBody}>
+        {isLoading && <LinearProgress className={classes.revsTableProgress} data-cy="saving-progress-bar" />}
+        <Table
+          className={classes.revsTableFixedLayout}
+          aria-labelledby="tableTitle"
+          size="medium"
+          aria-label="Supplier Revs Table"
+          stickyHeader
+        >
+          <EnhancedTableHead
+            numSelected={selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            onSearchTextChange={handleSearchTextChange}
+            rowCount={rows.length}
+          />
+          <TableBody>
+            {rows.map((row, index) => {
+              const isItemSelected = isSelected(row.docRevId);
+              const labelId = `enhanced-table-checkbox-${index}`;
+
+              return (
+                <ExpandableRow row={row} handleSelection={handleSelection}
+                  isItemSelected={isItemSelected} labelId={labelId} key={row.docRevId}
+                  onIconHovered={(event, content) => handlePopoverOpen(event, content)}
+                  handlePopoverClose={handlePopoverClose}
+                  scanId={scanId}
+                />
+              );
+            })}
+          </TableBody>
+        </Table>
+        <Popover
+          className={classes.noPointerEvents}
+          classes={{
+            paper: classes.revsTablePopoverPaper,
+          }}
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+        >
+          {popoverContent}
+        </Popover>
+      </div>
+    </Paper>
   );
 };
 

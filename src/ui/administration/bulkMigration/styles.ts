@@ -483,10 +483,8 @@ export default makeStyles<NextTheme>(theme => ({
       borderBottom: 'unset',
     },
   },
-  revsTablePaper: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-    maxHeight: '60vh',
+  revsTableBody: {
+    maxHeight: '50vh',
     overflow: 'hidden',
     overflowY: 'auto',
   },
