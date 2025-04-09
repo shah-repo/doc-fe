@@ -1,11 +1,11 @@
-import { Box, Chip, CircularProgress } from '@material-ui/core';
+import { Chip, CircularProgress } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import useStyles from '../../../components/common/kendo.column.templates/Status.styles';
 import { statusClassMapping } from '../../../components/common/kendo/helpers';
-import Tooltip from '../../../components/common/kendo/Tooltip';
 import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import OverflowTooltip from '../../../components/OverflowTooltip';
 import { CustomTemplateProps, EditableVendor } from '../types';
 
 interface StatusChipProps {
@@ -18,18 +18,17 @@ const StatusChip: React.FC<StatusChipProps> = ({ value, onClick }) => {
   const statusClass = value ? statusClassMapping[value] as keyof typeof classes : '';
 
   return (
-    <Tooltip
-      data={value}
-      childrenElement={
-        <Box className={classes.wrapper} onClick={onClick}>
-          <Chip
-            size="small"
-            className={cx(classes.chip, classes[statusClass])}
-            label={value}
-          />
-        </Box>
-      }
-    />
+    <OverflowTooltip arrow placement="top" title={value}>
+      <Chip
+        size="small"
+        className={cx(
+          classes.chip,
+          classes[statusClass],
+          classes.aslChipTextOverflow,
+        )}
+        label={value}
+      />
+    </OverflowTooltip>
   );
 };
 
