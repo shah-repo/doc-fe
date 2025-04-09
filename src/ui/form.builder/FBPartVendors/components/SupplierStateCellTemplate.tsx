@@ -49,7 +49,7 @@ export const SupplierStateCellTemplate: React.FC<CustomTemplateProps> = (props) 
   const { field, dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  const value = dataItem[field] as string;
+  const value = (dataItem[field] as string) ?? 'N/A';
 
   if (isEditMode) {
     return <Editor {...props} />;
