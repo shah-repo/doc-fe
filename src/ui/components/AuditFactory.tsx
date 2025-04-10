@@ -36,6 +36,7 @@ import AuditProcedure from './AuditProcedure';
 import AuditShippingItems from './AuditShippingItems';
 import AuditSiteInformations from './AuditSiteInformations';
 import AuditTraineeList from './AuditTraineeList';
+import AuditWoLhr from './AuditWoLhr';
 import DateTime from './DateTime';
 import { getLotStatusLabel } from './common/header/HeaderLotStatus';
 import DialogOpener from './textDiff/DialogOpener';
@@ -198,6 +199,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           audit.fbSchemaItem.optionId = FBAutocompleteAsyncOption.shippingInformation;
         }
         return <AuditAutocomplete audit={audit} />;
+      },
+      workOrderLhrTable () {
+        return <AuditWoLhr {...{ audit, dataCy, auditValue }} />;
       },
       default () { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
