@@ -315,7 +315,19 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     }
 
     useObserver(() => {
-      if (FBStore.audit.data !== previousAuditsRef.current) {
+      const prevAuditDataLength = previousAuditsRef.current?.length ?? 0;
+      const auditDataLength = FBStore.audit.data?.length ?? 0;
+      const newAuditDatalength = prevAuditDataLength ? (auditDataLength - prevAuditDataLength) : 0;
+      const newAudits = FBStore.audit.data?.slice(0, newAuditDatalength);
+      const underApprovalFields = underApproval();
+
+      const shouldUpdate = previousAuditsRef.current?.length ? newAudits?.some((item) => {
+        const fieldName = item.field.split('.')[1]?.split('[')[0];
+        const cleanFieldName = fieldName?.replace(`${FBFieldName.Context}-`, '');
+        return underApprovalFields?.includes(cleanFieldName);
+      }) : true;
+
+      if (FBStore.audit.data?.length !== previousAuditsRef.current?.length && shouldUpdate) {
         previousAuditsRef.current = FBStore.audit.data;
         previousUpdatedAuditsRef.current = formInputAudit(FBStore.audit.data);
       }
