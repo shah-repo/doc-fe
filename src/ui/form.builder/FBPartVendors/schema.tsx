@@ -22,6 +22,7 @@ import { EditableVendor, SchemaOptions } from './types';
 export const buildSchema = ({
   units,
   statuses,
+  states,
   suppliers,
   isActive,
   isInEditMode,
@@ -46,6 +47,15 @@ export const buildSchema = ({
     <DropdownFilter
       {...props}
       data={statusOptions}
+      defaultItem={createOption(undefined, translate('common.all'))}
+    />
+  );
+
+  const stateOptions = (states ?? []).map(state => createOption(state.displayLabel, state.displayLabel));
+  const StateFilter: React.FC<GridFilterCellProps> = (props) => (
+    <DropdownFilter
+      {...props}
+      data={stateOptions}
       defaultItem={createOption(undefined, translate('common.all'))}
     />
   );
@@ -88,7 +98,7 @@ export const buildSchema = ({
       id: 'state',
       field: SUPPLIER_STATE_FIELD,
       title: 'form.builder.part.vendors.vendor.status',
-      filterCell: InputFilter,
+      filterCell: StateFilter,
       template: (props) => <SupplierStateCellTemplate {...props} onClick={onRowClick} />,
       width: 200,
     },

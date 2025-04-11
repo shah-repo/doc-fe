@@ -29,6 +29,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   disabled,
   units = [],
   statuses = [],
+  states = [],
   vendors = [],
   suppliers = [],
   deleteVendor,
@@ -133,6 +134,7 @@ const FBPartVendors: React.FC<FBPartVendorsProps> = ({
   const schema = buildSchema({
     units,
     statuses,
+    states,
     suppliers,
     isActive,
     isInEditMode,
