@@ -10,7 +10,7 @@ import useStyles from './styles';
 import { SubscriptionItemProps } from './types';
 
 const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
-  canUpdateFeatures,
+  isDisabled,
   subscription,
   onToggle,
 }) => {
@@ -37,7 +37,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
       checked={subscription.isEnabled}
       className={classes.toggler}
       data-cy={`administration-pfo-feature-${featureName}-toggler`}
-      disabled={!canUpdateFeatures}
+      disabled={!isDisabled}
       label={
         <>
           <div>
