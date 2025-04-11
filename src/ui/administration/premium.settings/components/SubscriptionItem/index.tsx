@@ -4,6 +4,8 @@ import { Tooltip } from '@material-ui/core';
 import { kebabCase } from 'lodash';
 import React, { MouseEvent } from 'react';
 import { isTranslationExists, translate } from '../../../../../common/intl';
+import { Permission } from '../../../../../state/ducks/auth/types';
+import useGetHasPermission from '../../../../hooks/useGetHasPermission';
 import useHover from '../../../../hooks/useHover';
 import SwitchControl from '../../../general.settings/components/SwitchControl';
 import useStyles from './styles';
@@ -18,6 +20,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
 
   const key = subscription.premiumFeature.toLowerCase().replaceAll('_', '.');
   const featureName = kebabCase(subscription.premiumFeature);
+  const canUpdateFeatures = useGetHasPermission(Permission.COMPANY_SETTINGS_UPDATE);
 
   const infoText = isTranslationExists(`administration.premium.features.${key}.info`)
     ? translate(`administration.premium.features.${key}.info`)
@@ -36,6 +39,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
       checked={subscription.isEnabled}
       className={classes.toggler}
       data-cy={`administration-pfo-feature-${featureName}-toggler`}
+      disabled={!canUpdateFeatures}
       label={
         <>
           <div>
