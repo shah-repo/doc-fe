@@ -1,4 +1,4 @@
-import { Chip, CircularProgress } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
@@ -49,14 +49,14 @@ export const SupplierStateCellTemplate: React.FC<CustomTemplateProps> = (props) 
   const { field, dataItem, onClick } = props;
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
-  const value = (dataItem[field] as string) ?? 'N/A';
+  const value = (dataItem[field] as string);
 
   if (isEditMode) {
     return <Editor {...props} />;
   }
 
   if (!value) {
-    return <CircularProgress size={16} />;
+    return <></>;
   }
 
   const handleClick = () => onClick?.({ dataItem });
