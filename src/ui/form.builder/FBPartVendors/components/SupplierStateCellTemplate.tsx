@@ -3,9 +3,9 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import useStyles from '../../../components/common/kendo.column.templates/Status.styles';
-import { statusClassMapping } from '../../../components/common/kendo/helpers';
 import { EMPTY_VALUE_PLACEHOLDER, Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
 import OverflowTooltip from '../../../components/OverflowTooltip';
+import { ASL_STATUS_CLASS_MAPPING } from '../../FBProductOrService/constants';
 import { CustomTemplateProps, EditableVendor } from '../types';
 
 interface StatusChipProps {
@@ -15,7 +15,7 @@ interface StatusChipProps {
 
 const StatusChip: React.FC<StatusChipProps> = ({ value, onClick }) => {
   const classes = useStyles();
-  const statusClass = value ? statusClassMapping[value] as keyof typeof classes : '';
+  const statusClass = value ? ASL_STATUS_CLASS_MAPPING[value] as keyof typeof classes : '';
 
   return (
     <OverflowTooltip arrow placement="top" title={value}>

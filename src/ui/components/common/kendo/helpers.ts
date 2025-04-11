@@ -191,7 +191,6 @@ export enum statusClassMapping {
   'Retired' = 'RED_STATUS',
   'Unplanned Downtime' = 'GRAY_STATUS',
   'Completed'= 'GREEN_STATUS',
-  'N/A' = 'GRAY_STATUS',
 }
 
 export const pagerSettings: GridPagerSettings = {
