@@ -258,6 +258,22 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
 
+      if (fbType === 'checkboxgroupasync') {
+        const fieldParts = change.field.split('.');
+        const field = fieldParts.at(-1) as string;
+        if (['id'].includes(field)) {
+          return;
+        }
+
+        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
+          const fieldName = translate(`form.builder.supplier.type.${field}`);
+          fbLabel = translate('form.builder.supplier.type.audit.item', {
+            label: fbLabel as string,
+            field: fieldName,
+          });
+        }
+      }
+
       if (fbType === 'siteInformation') {
         const result = handleSiteInformationChange(change, fbLabel);
         if (result) {
