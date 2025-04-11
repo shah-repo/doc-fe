@@ -1,61 +1,24 @@
 import { Box } from '@material-ui/core';
-import { useFormikContext } from 'formik';
-import { find } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { changeRequestsSelectors } from '../../../../state/ducks/changeRequest';
 import { ApplicationState } from '../../../../state/reducers';
+import { store } from '../../../../state/store';
 import { AvatarComponent } from '../../../components/common/kendo.column.templates/UserAvatar';
-import { Autocomplete } from '../../../components/forms/fields-next';
-import { OptionType } from '../../../components/forms/fields/Autocomplete/types';
-import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
-import { CustomTemplateProps, EditableCertification } from '../types';
+import { CustomTemplateProps } from '../types';
 
-export const UploadedByCell: React.FC<CustomTemplateProps> = ({
-  dataItem,
-  field,
-  onClick,
-}) => {
-  const availableUsers = useSelector(changeRequestsSelectors.getUsersList);
-  const getUserDetails = (userId: string) => find(availableUsers, { value: userId });
-  const user = useMemo(() => getUserDetails(dataItem[field] ?? ''), [dataItem, field]);
-  const [selectedUser, setSelectedUser] = useState(() => user ?? '');
-  const isViewMode = ![Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
-  const selectedUserInfo = useSelector((state: ApplicationState) =>
-    changeRequestsSelectors.getUserInfoById(state, user?.value),
-  );
+export const UploadedByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
+  const { id } = store.getState().auth.user ?? {};
+  const selectedUserInfo = useSelector((state: ApplicationState) => changeRequestsSelectors.getUserInfoById(state, id));
 
-  if (isViewMode) {
-    if (!selectedUserInfo) {
-      return null;
-    }
-
-    const { name, avatar, initialColor } = selectedUserInfo;
-    return (
-      <Box onClick={() => onClick?.({ dataItem })}>
-        <AvatarComponent {...{ name, avatar, initialColor }} />
-      </Box>
-    );
+  if (!selectedUserInfo) {
+    return null;
   }
 
-  const { setFieldValue } = useFormikContext<EditableCertification>();
-  const handleChange = (_, value?: OptionType) => {
-    if (!value?.value) {
-      return;
-    }
-    setSelectedUser(value);
-    setFieldValue(field, value?.value);
-    setFieldValue('uploadedByName', value?.label);
-  };
-
+  const { name, avatar, initialColor } = selectedUserInfo;
   return (
-    <Autocomplete
-      options={availableUsers}
-      defaultValue={selectedUser}
-      onChange={handleChange}
-      blurOnSelect
-      getOptionLabel={(option: OptionType) => option.label}
-      size="small"
-    />
+    <Box onClick={() => onClick?.({ dataItem })}>
+      <AvatarComponent {...{ name, avatar, initialColor }} />
+    </Box>
   );
 };
