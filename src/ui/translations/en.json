@@ -2180,7 +2180,7 @@
   "administration.premium.feature.table.title": "Features/Module",
   "administration.premium.feature.table.popup.title": "Enlil premium feature",
   "administration.premium.features.default.info": "This is a paid service, your bill will be adjusted in Enlil as per your terms of service contract.",
-  "administration.premium.features.ai.info":"To grant access to this feature, add users in the group management module with permission ‘PREMIUM_AI’.",
+  "administration.premium.features.ai.info": "To grant access to this feature, add users in the group management module with permission ‘PREMIUM_AI’.",
   "administration.premium.features.notice": "Enlil team will contact your executives to get approval and inform them about the additional cost for this premium service.\n\nYou can start using the feature right now, you will be able to turn it off later.",
   "administration.premium.features.ai.title": "AI Enablement",
   "administration.premium.features.ai.description": "The AI/ML Chatbot feature allows users to ask questions to Enlil’s private LLM and receive summarized responses.",
