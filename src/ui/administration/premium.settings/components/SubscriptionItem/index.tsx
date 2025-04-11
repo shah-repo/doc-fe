@@ -37,7 +37,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
       checked={subscription.isEnabled}
       className={classes.toggler}
       data-cy={`administration-pfo-feature-${featureName}-toggler`}
-      disabled={!isDisabled}
+      disabled={isDisabled}
       label={
         <>
           <div>
