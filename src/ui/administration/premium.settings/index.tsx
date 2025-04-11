@@ -5,7 +5,7 @@ import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { isTranslationExists, translate } from '../../../common/intl';
-import { GroupTag } from '../../../state/ducks/auth/types';
+import { GroupTag, Permission } from '../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../state/ducks/company';
 import { PremiumFeatureSubscription } from '../../../state/ducks/company/types';
 import { AsyncStatus } from '../../../state/types';
@@ -13,6 +13,7 @@ import { AlertDialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { HOME_URL } from '../../constants/urls';
 import useDialog from '../../hooks/useDialog';
+import useGetHasPermission from '../../hooks/useGetHasPermission';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { withThemeNext } from '../../layout/theme-next';
 import NewBadge from './components/NewBadge';
@@ -21,6 +22,7 @@ import useStyles from './styles';
 
 const PremiumFeaturesContainer: React.FC = () => {
   const canManageSettings = useGetHasTag(GroupTag.ADMIN_MANAGEMENT);
+  const canUpdateFeatures = useGetHasPermission(Permission.COMPANY_SETTINGS_UPDATE);
   const subscriptionsDialog = useDialog();
   const classes = useStyles();
   const asyncState = useSelector(companySelectors.getSubscriptionsAsyncState);
@@ -126,6 +128,7 @@ const PremiumFeaturesContainer: React.FC = () => {
           </Typography>
           {allSubscriptions.map(subscription => (
             <SubscriptionItem
+              canUpdateFeatures={canUpdateFeatures}
               subscription={subscription}
               onToggle={confirmToggling}
               key={subscription.premiumFeature}
