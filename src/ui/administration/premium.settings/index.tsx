@@ -128,7 +128,7 @@ const PremiumFeaturesContainer: React.FC = () => {
           </Typography>
           {allSubscriptions.map(subscription => (
             <SubscriptionItem
-              canUpdateFeatures={canUpdateFeatures}
+              isDisabled={canUpdateFeatures}
               subscription={subscription}
               onToggle={confirmToggling}
               key={subscription.premiumFeature}
