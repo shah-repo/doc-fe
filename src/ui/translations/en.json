@@ -1518,6 +1518,7 @@
   "form.builder.part.vendors.primary.delete.message": "You cannot delete Primary Supplier",
   "form.builder.part.vendors.vendor": "Supplier",
   "form.builder.part.vendors.vendor.status": "Supplier Status",
+  "form.builder.part.vendors.vendor.state": "Supplier State",
   "form.builder.part.vendors.partNumber": "Supplier Part Number",
   "form.builder.part.vendors.cost": "Unit Cost",
   "form.builder.part.vendors.unitsBuy": "Units (buy)",

@@ -440,23 +440,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
       }
 
-      if (fbType === 'partVendors') {
-        const fieldParts = change.field.split('.');
-        const field = fieldParts.at(-1) as string;
-        const parentField = fieldParts.at(-2) as string;
-        if (['id', 'currency', 'primary'].includes(field)) {
-          return;
-        }
-        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
-          const fieldFullName = ['docId', 'value', 'name'].includes(field) ? parentField : field;
-          const fieldName = translate(`form.builder.part.vendors.${fieldFullName}`);
-          fbLabel = translate('form.builder.part.vendors.audit.item', {
-            label: fbLabel as string,
-            field: fieldName,
-          });
-        }
-      }
-
       if (!isFBField && change.field.includes('attachments')) {
         if (change.field.endsWith('s3link') && (change.type === 'STRING_EDITED' || change.type === 'STRING_NEW')) {
           return;
