@@ -264,14 +264,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (['id'].includes(field)) {
           return;
         }
-
-        if (!['ARRAY_DELETED', 'ARRAY_NEW'].includes(change.type)) {
-          const fieldName = translate(`form.builder.supplier.type.${field}`);
-          fbLabel = translate('form.builder.supplier.type.audit.item', {
-            label: fbLabel as string,
-            field: fieldName,
-          });
-        }
       }
 
       if (fbType === 'siteInformation') {
@@ -546,7 +538,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // For inputs where the selected value is - Other, it shows an additional input field with a label of Note.
         // However there is no entry for this in the schema, & the incoming audit log still maps it to the original input,
         if (change.field.includes('input-context') && change.fbSchemaItem) {
-          fbLabel = 'Note';
+          const supplierFields = ['supplier-type', 'supplier-capabilities', 'supplier-services'];
+          if (supplierFields.some((field) => change.field.includes(field))) {
+            fbLabel = translate('form.builder.supplier.context.other', { field: fbLabel as string });
+          } else {
+            fbLabel = 'Note';
+          }
         }
 
         if (change.field.includes('lifecyclePhaseId') && change.type === 'OBJECT_NEW') {
