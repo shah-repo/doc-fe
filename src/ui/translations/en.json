@@ -1565,7 +1565,6 @@
   "form.builder.supplier.product.or.service.grid.heading.asl.status": "ASL Status",
   "form.builder.supplier.product.or.service.grid.heading.comments": "Comments",
   "form.builder.supplier.context.other": "{field} Other",
-  "form.builder.supplier.type.delete": "delete",
   "form.builder.wo.part.selector": "Item Selection",
   "form.builder.wo.part.quantity": "Quantity",
   "form.builder.wo.approvals": "Completed by",
