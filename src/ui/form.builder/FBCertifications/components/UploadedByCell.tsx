@@ -1,11 +1,13 @@
 import { Box } from '@material-ui/core';
+import { useFormikContext } from 'formik';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { changeRequestsSelectors } from '../../../../state/ducks/changeRequest';
 import { ApplicationState } from '../../../../state/reducers';
 import { store } from '../../../../state/store';
 import { AvatarComponent } from '../../../components/common/kendo.column.templates/UserAvatar';
-import { CustomTemplateProps } from '../types';
+import { Mode, MODE_FIELD } from '../../../components/KendoDataGrid/constants';
+import { CustomTemplateProps, EditableCertification } from '../types';
 
 export const UploadedByCell: React.FC<CustomTemplateProps> = ({ dataItem, field, onClick }) => {
   const { id } = store.getState().auth.user ?? {};
@@ -16,6 +18,13 @@ export const UploadedByCell: React.FC<CustomTemplateProps> = ({ dataItem, field,
   }
 
   const { name, avatar, initialColor } = selectedUserInfo;
+  const formik = useFormikContext<EditableCertification>();
+  const isAddition = dataItem[MODE_FIELD] === Mode.add;
+  if (isAddition && formik && formik.values?.[field] !== selectedUserInfo?.id) {
+    formik.setFieldValue(field, selectedUserInfo?.id);
+    formik.setFieldValue('uploadedByName', name);
+  }
+
   return (
     <Box onClick={() => onClick?.({ dataItem })}>
       <AvatarComponent {...{ name, avatar, initialColor }} />
