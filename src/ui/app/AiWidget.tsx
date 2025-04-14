@@ -16,6 +16,7 @@ import {
 } from '../constants/urls';
 
 interface AiWidgetContextType {
+  isWidgetActive: boolean
   summarizeAttachments: (attachmentIds: string[]) => void
 }
 
@@ -68,7 +69,7 @@ export const AiWidgetProvider: React.FC<AiWidgetProviderProps> = ({ children }) 
   }
 
   return (
-    <AiWidgetContext.Provider value={{ summarizeAttachments }}>
+    <AiWidgetContext.Provider value={{ summarizeAttachments, isWidgetActive }}>
       <Widget
         ref={widgetRef}
         appName={AppName.D2M}
