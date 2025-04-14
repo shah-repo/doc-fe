@@ -92,7 +92,7 @@ const SupplierStatusDialog: React.FunctionComponent<Props> = ({
                 ) : null
               }
               { data.isWarning && !data.isError
-                && <Box className={classes.topSpacing}>
+                && <Box className={cx(classes.topSpacing, classes.contentText)}>
                   <Text translation="supplier.status.warning.continue.message" />
                 </Box>
               }
