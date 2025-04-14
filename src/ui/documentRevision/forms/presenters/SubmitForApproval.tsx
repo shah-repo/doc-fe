@@ -125,14 +125,14 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           color="primary"
           onClick={isObsolete ? dialog.open : releaseRecord}
           id="ApproveAndRelease-button"
-          data-cy="approve-and-release-button"
+          data-cy="ApproveAndRelease-button"
         >
           <Text message={isObsolete ? 'common.void' : label} />
         </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
           <StyledMenuListItemText
             onClick={isObsolete ? dialog.open : releaseRecord}
             id="ApproveAndRelease-button"
-            data-cy="approve-and-release-button"
+            data-cy="ApproveAndRelease-button"
             primary={<Text message={isObsolete ? 'common.void' : label} />}
           />
         </StyledMenuListItem>
@@ -142,7 +142,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           variant="outlined"
           onClick={isObsolete ? dialog.open : releaseRecord}
           id="ApproveAndRelease-button"
-          data-cy="approve-and-release-button"
+          data-cy="ApproveAndRelease-button"
         >
           <Text message={isObsolete ? 'common.void' : label} />
         </Button>
