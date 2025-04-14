@@ -2,13 +2,15 @@ import React, { ReactNode, useMemo } from 'react';
 import { Audit } from '../../state/ducks/audit/types';
 import { getAuditDefaultValue } from '../common/utils/audit';
 
-interface Props {
+interface AuditCheckboxGroupAsyncProps {
   audit: Audit
   dataCy?: string
   auditValue?: string
 }
 
-const AuditCheckboxGroupAsync: React.FC<Props> = ({ audit, dataCy, auditValue }) => {
+export const SUPPLIER_ASSESSMENT_FIELDS = ['supplier-type', 'supplier-capabilities', 'supplier-services'];
+
+const AuditCheckboxGroupAsync: React.FC<AuditCheckboxGroupAsyncProps> = ({ audit, dataCy, auditValue }) => {
   const field = audit.field.split('.').at(-1) ?? '';
 
   const parseAuditValue = useMemo((): string | ReactNode => {
@@ -23,7 +25,7 @@ const AuditCheckboxGroupAsync: React.FC<Props> = ({ audit, dataCy, auditValue })
     return getAuditDefaultValue(auditValue);
   }, [audit.type, auditValue]);
 
-  const auditFields = new Set(['supplier-type', 'supplier-capabilities', 'supplier-services']);
+  const auditFields = new Set(SUPPLIER_ASSESSMENT_FIELDS);
   const value = auditFields.has(field) ? parseAuditValue : getAuditDefaultValue(auditValue);
 
   return <div data-cy={dataCy}>{value}</div>;

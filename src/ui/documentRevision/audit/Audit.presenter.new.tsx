@@ -15,6 +15,7 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { AsyncStatus } from '../../../state/types';
 import { LCPDocRevOptions } from '../../administration/general.settings/panels/LCP/components/Grid/types';
 import { ASLStatus } from '../../administration/general.settings/panels/SupplierSettings/ASLStatus/types';
+import { SUPPLIER_ASSESSMENT_FIELDS } from '../../components/AuditCheckboxGroupAsync';
 import AuditFactory from '../../components/AuditFactory';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
@@ -261,7 +262,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       if (fbType === 'checkboxgroupasync') {
         const fieldParts = change.field.split('.');
         const field = fieldParts.at(-1) as string;
-        if (['id'].includes(field)) {
+        if (field === 'id') {
           return;
         }
       }
@@ -538,8 +539,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // For inputs where the selected value is - Other, it shows an additional input field with a label of Note.
         // However there is no entry for this in the schema, & the incoming audit log still maps it to the original input,
         if (change.field.includes('input-context') && change.fbSchemaItem) {
-          const supplierFields = ['supplier-type', 'supplier-capabilities', 'supplier-services'];
-          if (supplierFields.some((field) => change.field.includes(field))) {
+          if (SUPPLIER_ASSESSMENT_FIELDS.some((field) => change.field.includes(field))) {
             fbLabel = translate('form.builder.supplier.context.other', { field: fbLabel as string });
           } else {
             fbLabel = 'Note';
