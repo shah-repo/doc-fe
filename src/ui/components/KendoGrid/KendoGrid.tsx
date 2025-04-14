@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, IconButton } from '@material-ui/core';
 import { CompositeFilterDescriptor, DataResult, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { setExpandedState, setGroupIds } from '@progress/kendo-react-data-tools';
-import { GridCellProps, GridColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridHeaderCellProps, GridNoRecords, GridToolbar, GridColumn as KendoColumn } from '@progress/kendo-react-grid';
+import { GridCellProps, GridColumn, GridColumn as KendoColumn, GridColumnReorderEvent, GridColumnResizeEvent, GridDataStateChangeEvent, GridExpandChangeEvent, GridFilterCellProps, GridHeaderCellProps, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
 import { cloneDeep, find, findIndex, isEmpty, isNull, map, set } from 'lodash';
 import React, { ComponentType, useCallback, useContext, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -340,12 +340,12 @@ export function KendoGrid<T extends any> ({
     [KendoGridFilterCell.DUE_ON]: DueOnDate,
     [KendoGridFilterCell.CREATED_AT]: EffectiveDate,
     [KendoGridFilterCell.RELEASED_AT]: EffectiveDate,
-    [KendoGridFilterCell.EXPIRED_AT]: ExpirationDate,
     [KendoGridFilterCell.STATE]: StateFilter,
     [KendoGridFilterCell.TASKTYPE]: TaskTypeFilter,
     [KendoGridFilterCell.STATUS]: AsyncStatusFilter,
     [KendoGridFilterCell.ASYNC_CREATED_AT]: AsyncDateFilter,
     [KendoGridFilterCell.SUPPLIER_STATUS]: ASLSupplierStatusFilter,
+    [KendoGridFilterCell.SUPPLIER_CERTIFICATIONS]: ExpirationDate,
   };
 
   const headerCellMapping = {

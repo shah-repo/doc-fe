@@ -7,7 +7,7 @@ import { store } from '../../../state/store';
 import { checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from '../../documentRevision/helpers/documentRevisionStatus';
 import { generateRevisionNumber } from '../../documentRevision/helpers/generateRevisionNumber';
-import { CompletedOnDateOptions, ExpirationDateOption, ReleasedDateOptions } from './types';
+import { CompletedOnDateOptions, ExpiryDateOptions, ReleasedDateOptions } from './types';
 
 export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
   const owner = get(documentRevision, 'owner.user.email');
@@ -86,16 +86,20 @@ export const trainingCompletedOnDateOption = () => [
 
 export const expirationDateOption = () => [
   {
-    text: ReleasedDateOptions.LAST_TWO_WEEKS,
-    value: moment().subtract(14, 'd').startOf('day').toISOString(),
+    text: ExpiryDateOptions.TWO_WEEKS,
+    value: '14',
   },
   {
-    text: ReleasedDateOptions.LAST_MONTH,
-    value: moment().subtract(30, 'd').startOf('day').toISOString(),
+    text: ExpiryDateOptions.ONE_MONTH,
+    value: '30',
   },
   {
-    text: ExpirationDateOption.LAST_TWO_MONTH,
-    value: moment().subtract(60, 'd').startOf('day').toISOString(),
+    text: ExpiryDateOptions.TWO_MONTHS,
+    value: '60',
+  },
+  {
+    text: ExpiryDateOptions.THREE_MONTHS,
+    value: '90',
   },
 ];
 

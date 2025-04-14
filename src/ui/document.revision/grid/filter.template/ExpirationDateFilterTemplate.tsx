@@ -23,7 +23,7 @@ export const ExpirationDateFilterTemplate = ({
   const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
     const isValueExists = hasValue(target.value);
     onChange({
-      value: isValueExists ? target.value : '',
+      value: isValueExists ? data[target.index]?.value : '',
       operator: isValueExists ? 'eq' : '',
       syntheticEvent,
     });
@@ -42,7 +42,7 @@ export const ExpirationDateFilterTemplate = ({
       <DropDownList
         data={data.map((el) => el.text)}
         onChange={onDropdownChange}
-        value={value || defaultItem}
+        value={value ? data.find(option => option.value === value)?.text : defaultItem}
         defaultItem={defaultItem}
       />
       <button

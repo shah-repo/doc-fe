@@ -76,11 +76,11 @@ export enum KendoGridFilterCell {
   DUE_ON= 'dueOn',
   CREATED_AT= 'createdAt',
   RELEASED_AT = 'releasedAt',
-  EXPIRED_AT = 'expiredAt',
   STATE = 'state',
   TASKTYPE = 'taskType',
   STATUS = 'status',
   SUPPLIER_STATUS = 'supplierStatusId',
+  SUPPLIER_CERTIFICATIONS = 'supplierCertifications',
   EQ_STATUS = 'eqStatus',
   ASYNC_CREATED_AT = 'createdAtt',
 }
