@@ -2188,7 +2188,7 @@
   "administration.premium.features.ocr.description": "The OCR feature enables the ability to digitize paper records for intelligent error checking, searching and analytics.",
   "administration.premium.features.ocr.notice": "Thank you for opting into in the OCR functionality.",
   "administration.premium.features.ai.notice": "Thank you for opting into the AI chatbot functionality.",
-  "administration.premium.features.validation_package.notice": "Thank you for opting into the System Feature Validation Package functionality.",
+  "administration.premium.features.validation.package.notice": "Thank you for opting into the System Feature Validation Package functionality.",
   "administration.premium.features.validation.package.title": "System Feature Validation Package",
   "administration.premium.features.validation.package.description": "Enlil is a validated system. The feature validation package provides evidence of documented user needs, system requirements, test protocol, test reports with testing evidence, Part 11 compliance bundle, and more.",
   "administration.general.settings.title": "General Settings",

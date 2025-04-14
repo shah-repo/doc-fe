@@ -4,6 +4,7 @@ import { Tooltip } from '@material-ui/core';
 import { kebabCase } from 'lodash';
 import React, { MouseEvent } from 'react';
 import { isTranslationExists, translate } from '../../../../../common/intl';
+import { dotCase } from '../../../../common/utils/helpers';
 import useHover from '../../../../hooks/useHover';
 import SwitchControl from '../../../general.settings/components/SwitchControl';
 import useStyles from './styles';
@@ -16,8 +17,8 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = ({
   const classes = useStyles();
   const [hoverRef, isHover] = useHover();
 
-  const key = subscription.premiumFeature.toLowerCase().replaceAll('_', '.');
   const featureName = kebabCase(subscription.premiumFeature);
+  const key = dotCase(subscription.premiumFeature);
 
   const infoText = isTranslationExists(`administration.premium.features.${key}.info`)
     ? translate(`administration.premium.features.${key}.info`)

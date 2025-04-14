@@ -9,6 +9,7 @@ import { GroupTag } from '../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../state/ducks/company';
 import { PremiumFeatureSubscription } from '../../../state/ducks/company/types';
 import { AsyncStatus } from '../../../state/types';
+import { dotCase } from '../../common/utils/helpers';
 import { AlertDialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { HOME_URL } from '../../constants/urls';
@@ -52,11 +53,10 @@ const PremiumFeaturesContainer: React.FC = () => {
     subscriptionsDialog.close();
   };
 
-  const shouldShowDialogNotice
-    = toggledSubscription.current
-      && isTranslationExists(
-        `administration.premium.features.${toggledSubscription.current.premiumFeature.toLowerCase()}.notice`,
-      );
+  const currentFeature = toggledSubscription.current?.premiumFeature;
+  const currentFeatureKey = dotCase(currentFeature);
+
+  const shouldShowDialogNotice = isTranslationExists(`administration.premium.features.${currentFeatureKey}.notice`);
 
   return (
     <Box className={classes.root}>
@@ -72,7 +72,7 @@ const PremiumFeaturesContainer: React.FC = () => {
           {toggledSubscription.current && shouldShowDialogNotice && (
             <p>
               {translate(
-                `administration.premium.features.${toggledSubscription.current.premiumFeature.toLowerCase()}.notice`,
+                `administration.premium.features.${currentFeatureKey}.notice`,
               )}
             </p>
           )}
