@@ -1,69 +1,77 @@
 import { Box, Button, Popover, Typography } from '@material-ui/core';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import Markdown from 'markdown-to-jsx';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { translate } from '../../../common/intl';
 import AnnouncementDetailsDialog from './AnnouncementDetails.dialog';
 import { ANNOUNCEMENT_TYPE_ENUM, IAnnouncement } from './interface';
 import useStyles from './styles';
 
-const AnnouncementIndicator: React.FC<{announcement: IAnnouncement}> = ({ announcement }) => {
+interface AnnouncementIndicatorProps {
+  announcement: IAnnouncement
+}
+
+const AnnouncementIndicator: React.FC<AnnouncementIndicatorProps> = ({ announcement }) => {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
-  // Popover
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handleAnnouncementPopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handlePopoverOpen = useCallback((event: React.MouseEvent<SVGSVGElement>) => {
+    setAnchorEl(event.currentTarget as unknown as HTMLElement);
+  }, []);
 
-  const handleAnnouncementPopoverClose = () => {
+  const handlePopoverClose = useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
 
-  // Announcement Details Dialog
-  const [isAnnouncementDetailsDialogVisible, setIsAnnouncementDetailsDialogVisible] = useState<boolean>(false);
-  const showAnnouncementDetails = () => {
-    setIsAnnouncementDetailsDialogVisible(true);
-    handleAnnouncementPopoverClose();
-  };
+  const handleDialogOpen = useCallback(() => {
+    setDialogOpen(true);
+    handlePopoverClose();
+  }, [handlePopoverClose]);
 
-  const handleAnnouncementDetailsDialogClose = () => {
-    setIsAnnouncementDetailsDialogVisible(false);
-  };
+  const handleDialogClose = useCallback(() => {
+    setDialogOpen(false);
+  }, []);
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'announcement-text-popover' : undefined;
-
-  function proceedToDetails () {
-    showAnnouncementDetails();
-  }
+  const isPopoverOpen = Boolean(anchorEl);
+  const popoverId = isPopoverOpen ? 'announcement-popover' : undefined;
 
   return (
     <>
       <Box>
-        <AnnouncementIcon aria-describedby={id}
-          onMouseEnter={handleAnnouncementPopoverOpen}
+        <AnnouncementIcon
+          aria-describedby={popoverId}
+          onMouseEnter={handlePopoverOpen}
+          data-cy="announcement-icon"
         />
         <Popover
-          classes={{
-            paper: classes.announcementPopoverPaper,
-          }}
-          id = {id}
-          open={open}
+          id={popoverId}
+          open={isPopoverOpen}
           anchorEl={anchorEl}
+          onClose={handlePopoverClose}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-          onClose={handleAnnouncementPopoverClose}
+          classes={{ paper: classes.announcementPopoverPaper }}
         >
-          <Typography variant="body2" className={classes.popoverText}>
+          <Typography variant="body2" className={classes.popoverText} data-cy="announcement-details">
             <Markdown>{announcement.text}</Markdown>
           </Typography>
-          <Button color="secondary" variant="outlined" onClick={proceedToDetails} fullWidth> View Details </Button>
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={handleDialogOpen}
+            fullWidth
+            data-cy="announcement-button"
+          >
+            {translate('supplier.announcement.view.details')}
+          </Button>
         </Popover>
       </Box>
-      {isAnnouncementDetailsDialogVisible && announcement.type === ANNOUNCEMENT_TYPE_ENUM.FORM_UPGRADE && (
+
+      {isDialogOpen && announcement.type === ANNOUNCEMENT_TYPE_ENUM.FORM_UPGRADE && (
         <AnnouncementDetailsDialog
-          isOpen={isAnnouncementDetailsDialogVisible}
-          handleClose={handleAnnouncementDetailsDialogClose}
+          isOpen={isDialogOpen}
+          handleClose={handleDialogClose}
           announcement={announcement}
         />
       )}
