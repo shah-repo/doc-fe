@@ -5,9 +5,10 @@ import { GridSelectionChangeEvent } from '@progress/kendo-react-grid';
 import { CheckboxChangeEvent } from '@progress/kendo-react-inputs';
 import { isNull } from 'lodash';
 import React from 'react';
+import { SM } from '../../../../App';
 import { AttachmentType } from '../../../../state/ducks/attachments/types';
 import { documentRevisionsActions } from '../../../../state/ducks/documentRevisions';
-import { DocumentRevision } from '../../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import { Attachment } from '../../../change.request/form/types';
 import useActionCreator from '../../../hooks/useActionCreator';
 import useAsync from '../../../hooks/useAsync';
@@ -16,7 +17,6 @@ import { DragContext } from './components/DragCell';
 import { DATA_ITEM_KEY, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import { useStyles } from './styles';
-import { SM } from '../../../../App';
 
 const idGetter = getter(DATA_ITEM_KEY);
 
@@ -50,6 +50,7 @@ const AttachmentTable: React.FC<Props> = ({
   const [activeItem, setActiveItem] = React.useState<Attachment | null>(null);
   const reOrderAttachmentsAction = useActionCreator(documentRevisionsActions.save);
   const { _formState } = SM.useStores();
+  const isDisabled = documentRevision?.status === DocumentRevisionStatus.Released;
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (values?: DocumentRevision) => {
@@ -67,7 +68,7 @@ const AttachmentTable: React.FC<Props> = ({
     const prevIndex = reorderedData.findIndex((p) => p.id === activeItem?.id);
     const nextIndex = reorderedData.findIndex((p) => p.id === item.id);
 
-    if(isPrimary && nextIndex === 0) {
+    if (isPrimary && nextIndex === 0) {
       return;
     }
 
@@ -86,7 +87,7 @@ const AttachmentTable: React.FC<Props> = ({
     const reorderedData = attachmentsData.map((item, i) => {
       return { ...item, index: i + 1 };
     });
-    if(documentRevision?.id) {
+    if (documentRevision?.id) {
       async.start(
         reOrderAttachmentsAction,
         documentRevision?.id,
@@ -149,7 +150,7 @@ const AttachmentTable: React.FC<Props> = ({
   }, [attachments]);
 
   return (
-    <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart, onDrop: onDrop }}>
+    <DragContext.Provider value={{ reorder: reorder, dragStart: dragStart, onDrop: onDrop, isDisabled }}>
       <DragAndDrop>
         <KendoDataGrid
           className={classes.grid}

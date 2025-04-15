@@ -6,6 +6,7 @@ import { ThemeEnv } from '../ui/layout/theme/utils/types';
 const DEFAULTS = {
   API_ENDPOINT: '/',
   OCR_API_ENDPOINT: '/',
+  AI_API_ENDPOINT: '/',
   WORKER_API_ENDPOINT: null,
   REFRESH_TOKEN_VALIDITY_DAYS: '30',
   SIGNUP_DOMAIN_URL: '/',
@@ -47,6 +48,10 @@ class Config {
 
   public static get ApiOCREndpoint () {
     return `${this.get('OCR_API_ENDPOINT')}/v1`;
+  }
+
+  public static get ApiAIEndpoint () {
+    return `${this.get('AI_API_ENDPOINT')}/v1`;
   }
 
   public static get WorkerApiEndpoint () {

@@ -7,18 +7,3 @@ export type FBSupplierProps =
   handleAdd: () => void
   isPreview?: boolean
 };
-
-export interface SupplierPostBody {
-  description: string
-  document: {
-    docId: string
-    documentType: {
-      id: string
-    }
-  }
-  formDocument: {
-    id: string
-  }
-  name: string
-  revisionStage: number
-}

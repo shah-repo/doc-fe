@@ -74,6 +74,8 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
     currentBulkImport: BulkImport,
     previousValue: string,
     nextValue: string,
+    isStringEditedType: boolean,
+    isStringNewType: boolean,
   ): {
     secondaryText: string
     stepChange: string
@@ -83,7 +85,7 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
     let stepChange;
     let skip;
 
-    if (log.type === LogEntryType.STRING_EDITED) {
+    if (isStringEditedType) {
       if (log.documentRevisionId && previousValue === DocumentRevisionStatus.Draft && nextValue === DocumentRevisionStatus.InReview) {
         // When is document revision and used to be draft and now is on review (Submitted for approval)
         secondaryText = translate('bk.audit.log.submitted.for.approval');
@@ -105,15 +107,20 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         } else {
           skip = true;
         }
-      } else if (previousValue === ApprovalStatus.Draft && nextValue === ApprovalStatus.Pending && !log.bulkImportId && !log.documentRevisionId) {
+      } else if ((log.nextValue === DocumentRevisionStatus.Draft) || (log.approvalId && log.nextValue === ApprovalStatus.Abandoned) || (previousValue === ApprovalStatus.Draft && nextValue === ApprovalStatus.Pending && log.approvalId)) {
         skip = true;
       } else {
         // When bulk import change the status
         const nextStatus = bkStatusTextMap[nextValue as BkStatus] || nextValue;
-        secondaryText = translate('bk.audit.log.importing.status', { status: nextStatus });
-        stepChange = translate('bk.audit.log.step.6.importing');
+        secondaryText = [BkStatus.STARTED, BkStatus.IN_PROGRESS].includes(nextStatus as BkStatus)
+          ? translate('bk.audit.log.importing.status', { status: nextStatus }) : translate('bk.audit.log.import.status', { status: nextStatus });
+        stepChange = translate('bk.audit.log.step-6-importing');
       }
-    } else if (log.type === LogEntryType.STRING_NEW && previousValue === 'undefined') {
+    } else if (log.bulkImportId && isStringNewType && nextValue === BkStatus.COMPLETED) {
+      // When bulk import change the status to COMPLETE
+      secondaryText = translate('bk.audit.log.import.status', { status: BkStatus.COMPLETED });
+      stepChange = translate('bk.audit.log.step-6-importing');
+    } else if (isStringNewType && previousValue === 'undefined') {
       skip = true;
     }
 
@@ -126,6 +133,8 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
     let secondaryText = translate('bk.audit.log.changed.from.to', { previousValue, nextValue });
     let stepChange = '';
     let skip = false;
+    const isStringEditedType = log.type === LogEntryType.STRING_EDITED;
+    const isStringNewType = log.type === LogEntryType.STRING_NEW;
 
     switch (log.fieldPath) {
       case BulkImportLogsEntries.PROCESS_TYPE:
@@ -154,17 +163,23 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         }
         break;
       case BulkImportLogsEntries.DATA_ID:
-        if (log.type === LogEntryType.STRING_EDITED) {
+        if (isStringEditedType) {
           secondaryText = translate('bk.audit.log.edit.table.data');
           stepChange = translate('bk.audit.log.step.3.edit.table.data');
         }
         break;
       case BulkImportLogsEntries.ATTACHMENT_ID:
-        if (log.type === LogEntryType.STRING_EDITED) {
+        if (isStringEditedType) {
           const matchedZipFile = currentBulkImport.zipFile && currentBulkImport.zipFile.id === nextValue;
           secondaryText = matchedZipFile && currentBulkImport.zipFile
             ? translate('bk.audit.log.attachment.uploaded', { fileName: currentBulkImport.zipFile.name, fileType: currentBulkImport.zipFile.type })
             : translate('bk.audit.log.attachment.uploaded.id', { fileId: nextValue });
+          stepChange = translate('bk.audit.log.step.4.upload.attachment');
+        }
+        break;
+      case BulkImportLogsEntries.ATTACHMENT_LINK:
+        if (isStringEditedType) {
+          secondaryText = translate('bk.audit.log.attachment.uploaded.link', { link: nextValue });
           stepChange = translate('bk.audit.log.step.4.upload.attachment');
         }
         break;
@@ -174,6 +189,8 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
           currentBulkImport,
           previousValue,
           nextValue,
+          isStringEditedType,
+          isStringNewType,
         );
 
         secondaryText = statusData.secondaryText;
@@ -182,7 +199,7 @@ const AuditHistory: React.FunctionComponent<AuditHistoryProps> = ({
         break;
       }
       case BulkImportLogsEntries.APPROVER:
-        if (log.type === LogEntryType.STRING_NEW) {
+        if (isStringNewType) {
           const approverDetails = getUserDetails(nextValue);
           secondaryText = approverDetails
             ? translate('bk.audit.log.approver.assigned', { approverName: approverDetails?.user?.name })

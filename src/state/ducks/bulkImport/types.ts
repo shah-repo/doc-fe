@@ -358,6 +358,7 @@ export enum BulkImportLogsEntries {
   ORIGINAL_HEADERS = 'originalHeaders',
   DATA_ID = 'dataId',
   ATTACHMENT_ID = 'attachmentId',
+  ATTACHMENT_LINK = 'attachmentLink',
   STATUS = 'status',
   APPROVER = 'approver',
 }
