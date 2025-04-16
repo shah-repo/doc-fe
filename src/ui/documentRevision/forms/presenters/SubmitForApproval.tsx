@@ -157,7 +157,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
         <SupplierStatusDialog
           dialog={supplierStatusDialog}
           data={errorResponse}
-          confirmAction={e => releaseRecord(e, true)} />
+          confirmAction={(e) => releaseRecord(e, true)} />
       )}
     </>
   );

@@ -78,11 +78,9 @@ const AnnouncementDetailsDialog: React.FC<{
   return (
     <Dialog fullScreen open={isOpen} onClose={handleClose} aria-labelledby="announcement-detail-title">
       <AppBar className={classes.announceDetailsAppBar} color="default">
-        <Grid container spacing={3} alignItems="center">
+        <Grid container justify="space-between" alignItems="center">
           <Grid item xs={3}>
-            <Box>
-              <Typography variant="h5">{announcement.name}</Typography>
-            </Box>
+            <Typography variant="h5">{announcement.name}</Typography>
           </Grid>
 
           <Grid item xs={8}>
@@ -150,7 +148,7 @@ const AnnouncementDetailsDialog: React.FC<{
             )}
           </Grid>
 
-          <Grid item xs={1} justify="flex-end">
+          <Grid item xs="auto" justify="flex-end">
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
               <CloseIcon />
             </IconButton>
