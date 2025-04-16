@@ -22,6 +22,7 @@ const BulkMigrationContainer: React.FC = () => {
 
   const {
     isLoading,
+    isScanRunning,
     errorMessage,
     documentTypesList,
     fromFormRevsList,
@@ -405,15 +406,13 @@ const BulkMigrationContainer: React.FC = () => {
         {!isEmpty(errorMessage) && (
           <div className={classes.errMsgStyle}>{errorMessage}</div>
         )}
-        {scanDetails?.id && ![MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
-          && <Box>
-            <RevsTable scanId={scanDetails.id} handleSelectedRowsChange={handleSelectedRowsChange} updateRevsTable={updateRevsTable} />
-          </Box>
+        {scanDetails?.id && !isScanRunning && <Box>
+          <RevsTable scanId={scanDetails.id} handleSelectedRowsChange={handleSelectedRowsChange} updateRevsTable={updateRevsTable} />
+        </Box>
         }
-        {scanDetails?.id && [MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
-          && <Box className={classes.searchIconContainer}>
-            <SearchIcon className={classes.searchIcon} />
-          </Box>
+        {scanDetails?.id && isScanRunning && <Box className={classes.searchIconContainer}>
+          <SearchIcon className={classes.searchIcon} />
+        </Box>
         }
       </div>
       {isMigrationMappingDialogVisible && fromFormRevId && toFormRevId && (

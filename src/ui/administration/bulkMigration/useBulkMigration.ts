@@ -24,6 +24,8 @@ export const useBulkMigration = () => {
   const [toDocumentTypeId, setToDocumentTypeId] = useState<string>('');
   const [toFormRevId, setToFormRevId] = useState<string>('');
 
+  const [isScanRunning, setIsScanRunning] = useState(false);
+
   const [eligibleRevsCount, setEligibleRevsCount] = useState<number>(0);
   const [updateRevsTable, setUpdateRevsTable] = useState<number>(0);
 
@@ -223,6 +225,8 @@ export const useBulkMigration = () => {
     }
 
     commonSetUp();
+    setIsScanRunning(true);
+
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
       url: `${BULK_MIGRATION_REGISTER_SCAN_FOR_RUN}/${scanDetails?.id}`,
@@ -235,15 +239,13 @@ export const useBulkMigration = () => {
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        console.log(data);
         setIsLoading(false);
+        setIsScanRunning(false);
         setScanDetails(data);
-        toastSuccess(
-          'Scan request has been submitted. Please check back in some time.',
-        );
       })
       .catch((exception) => {
         catchAxiosException(exception);
+        setIsScanRunning(false);
       });
   }
 
@@ -501,6 +503,7 @@ export const useBulkMigration = () => {
 
   return {
     isLoading,
+    isScanRunning,
     errorMessage,
     documentTypesList,
     fromFormRevsList,
