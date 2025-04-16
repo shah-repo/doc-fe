@@ -72,11 +72,9 @@ const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({
               </Typography>
               <Typography className={classes.announcementDetailTabIndicatorText}>
                 {translate('supplier.announcement.detail.tab.indicator.start.message')}{' '}
-                <i>
-                  <b>
-                    <Text translation={getTabText(formBuilder.defaultTabId)} />
-                  </b>
-                </i>{' '}
+                <b>
+                  <Text translation={getTabText(formBuilder.defaultTabId)} />
+                </b>{' '}
                 {translate('supplier.announcement.detail.tab.indicator.end.message')}
               </Typography>
             </CardContent>
@@ -124,9 +122,7 @@ const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({
                 </Typography>
               </Grid>
               <Typography variant="body2">
-                <i>
-                  {translate('supplier.announcement.detail.tab.helper.message')}
-                </i>
+                {translate('supplier.announcement.detail.tab.helper.message')}
               </Typography>
             </Grid>
           </RadioGroup>

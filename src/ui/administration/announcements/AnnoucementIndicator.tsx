@@ -1,5 +1,6 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Popover, Typography } from '@material-ui/core';
-import AnnouncementIcon from '@material-ui/icons/Announcement';
 import Markdown from 'markdown-to-jsx';
 import React, { useCallback, useState } from 'react';
 import { translate } from '../../../common/intl';
@@ -13,11 +14,11 @@ interface AnnouncementIndicatorProps {
 
 const AnnouncementIndicator: React.FC<AnnouncementIndicatorProps> = ({ announcement }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | SVGSVGElement>(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
 
   const handlePopoverOpen = useCallback((event: React.MouseEvent<SVGSVGElement>) => {
-    setAnchorEl(event.currentTarget as unknown as HTMLElement);
+    setAnchorEl(event.currentTarget);
   }, []);
 
   const handlePopoverClose = useCallback(() => {
@@ -34,18 +35,13 @@ const AnnouncementIndicator: React.FC<AnnouncementIndicatorProps> = ({ announcem
   }, []);
 
   const isPopoverOpen = Boolean(anchorEl);
-  const popoverId = isPopoverOpen ? 'announcement-popover' : undefined;
 
   return (
     <>
       <Box>
-        <AnnouncementIcon
-          aria-describedby={popoverId}
-          onMouseEnter={handlePopoverOpen}
-          data-cy="announcement-icon"
-        />
+        <FontAwesomeIcon icon={solid('bullhorn')} onMouseEnter={handlePopoverOpen} data-cy="announcement-icon" />
         <Popover
-          id={popoverId}
+          id={isPopoverOpen ? 'announcement-popover' : undefined}
           open={isPopoverOpen}
           anchorEl={anchorEl}
           onClose={handlePopoverClose}
@@ -53,18 +49,22 @@ const AnnouncementIndicator: React.FC<AnnouncementIndicatorProps> = ({ announcem
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           classes={{ paper: classes.announcementPopoverPaper }}
         >
-          <Typography variant="body2" className={classes.popoverText} data-cy="announcement-details">
-            <Markdown>{announcement.text}</Markdown>
-          </Typography>
-          <Button
-            color="secondary"
-            variant="outlined"
-            onClick={handleDialogOpen}
-            fullWidth
-            data-cy="announcement-button"
-          >
-            {translate('supplier.announcement.view.details')}
-          </Button>
+          <Box className={classes.textContainer}>
+            <Typography variant="body2" data-cy="announcement-details">
+              <Markdown>{announcement.text}</Markdown>
+            </Typography>
+            <Box className={classes.button}>
+              <Button
+                color="secondary"
+                variant="outlined"
+                onClick={handleDialogOpen}
+                fullWidth
+                data-cy="announcement-button"
+              >
+                {translate('supplier.announcement.view.details')}
+              </Button>
+            </Box>
+          </Box>
         </Popover>
       </Box>
 

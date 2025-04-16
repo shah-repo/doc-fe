@@ -8,9 +8,11 @@ export default makeStyles<NextTheme>(theme => ({
     maxWidth: '400px',
     backgroundColor: Colors.medium_gray,
   },
-  popoverText: {
-    marginTop: '4px',
-    marginBottom: '4px',
+  textContainer: {
+    padding: theme.spacing(2),
+  },
+  button: {
+    marginTop: theme.spacing(2),
   },
   announcementDetailRoot: {
     width: '100%',
