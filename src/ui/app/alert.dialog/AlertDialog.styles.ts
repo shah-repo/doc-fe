@@ -68,7 +68,7 @@ export const styles = makeStyles((theme: Theme) =>
     chipBox: {
       display: 'flex',
       flexWrap: 'wrap',
-      gap: '8px',
+      gap: theme.spacing(1),
       marginTop: theme.spacing(1.5),
       '& div': {
         borderRadius: theme.spacing(1.5),

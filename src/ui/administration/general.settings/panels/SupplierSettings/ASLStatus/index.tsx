@@ -20,7 +20,7 @@ import SettingsTable from '../../../components/SettingsTable';
 import { SettingsPanelProps } from '../../../types';
 import { ASL_DEFAULT_ORDER, ASL_MAX_DISPLAY_LABEL_LENGTH } from './constants';
 import { buildSchema } from './schema';
-import { ASLStatus, ASL_STATUS_KEYS, EditableASLStatus } from './types';
+import { ASL_STATUS_KEYS, ASLStatus, EditableASLStatus } from './types';
 
 const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
   const isActive = useSelector(
@@ -114,7 +114,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
         item[ASL_STATUS_KEYS.displayOrder] = index + 1;
       });
 
-      const displayOrderMap: Record<string, any> = {};
+      const displayOrderMap: Record<string, number> = {};
       sortedItems?.forEach((item) => {
         displayOrderMap[item.id] = item[ASL_STATUS_KEYS.displayOrder];
       });

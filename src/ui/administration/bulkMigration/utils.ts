@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { some } from 'lodash';
+import { translate } from '../../../common/intl';
 import { checkSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/transform';
 import Colors from '../../layout/theme/utils/colors';
 import { IMappedFrom, IRowData, ISchemaItem } from './interface';
@@ -23,10 +24,13 @@ export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISch
   let canMap = true;
 
   if (!toSchemaItem.referenceDataType) {
-    if (selectedSchemaItem.type !== toSchemaItem.type) {
+    const selectedType = selectedSchemaItem.type as string;
+    const targetType = toSchemaItem.type;
+
+    if (selectedType !== targetType) {
       return {
         canMap: false,
-        errMessage: `"${selectedSchemaItem.type as string}" can be mapped to another "${selectedSchemaItem.type as string}"`,
+        errMessage: translate('bulk.migration.mapping.message', { selectedType }),
       };
     }
 
@@ -34,7 +38,7 @@ export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISch
     if (!canMap) {
       return {
         canMap,
-        errMessage: `"${selectedSchemaItem.type as string}" can be mapped to another "${selectedSchemaItem.type as string}" with the same options.`,
+        errMessage: translate('bulk.migration.mapping.with.options.message', { selectedType }),
       };
     }
   }
@@ -67,7 +71,7 @@ export function validateTableMappings (
       if (hasAutocomplete && hasNonAutocomplete) {
         return {
           canMap: false,
-          errMessage: 'Within the same column cannot map autocomplete and non autocomplete fields',
+          errMessage: translate('bulk.migration.mapping.same.column.field.error.message', { type: 'autocomplete' }),
         };
       }
 
@@ -78,7 +82,7 @@ export function validateTableMappings (
       if (hasCheckboxgroup && hasNonCheckboxgroup) {
         return {
           canMap: false,
-          errMessage: 'Within the same column cannot map checkboxgroup and non checkboxgroup fields',
+          errMessage: translate('bulk.migration.mapping.same.column.field.error.message', { type: 'checkboxgroup' }),
         };
       }
 
@@ -88,7 +92,7 @@ export function validateTableMappings (
         } else {
           return {
             canMap: false,
-            errMessage: `In this table row, ${columnKeyWithAutocomplete} is already an autocomplete. Only one column can be an autocomplete`,
+            errMessage: translate('bulk.migration.mapping.same.row.field.error.message', { incomingType: columnKeyWithCheckbox, type: 'autocomplete' }),
           };
         }
       }
@@ -99,7 +103,7 @@ export function validateTableMappings (
         } else {
           return {
             canMap: false,
-            errMessage: `In this table row, ${columnKeyWithCheckbox} is already an checkboxgroup. Only one column can be an checkboxgroup`,
+            errMessage: translate('bulk.migration.mapping.same.row.field.error.message', { incomingType: columnKeyWithCheckbox, type: 'checkboxgroup' }),
           };
         }
       }
@@ -110,14 +114,14 @@ export function validateTableMappings (
   if (keyAttributes?.isNotMappable) {
     return {
       canMap: false,
-      errMessage: 'This field is not mappable.',
+      errMessage: translate('bulk.migration.mappable.error.message'),
     };
   }
 
   if (keyAttributes?.shouldMapTo && keyAttributes.shouldMapTo !== selectedSchemaItem.type) {
     return {
       canMap: false,
-      errMessage: `This field should only be mapped to a ${keyAttributes.shouldMapTo}.`,
+      errMessage: translate('bulk.migration.mappable.general.error.message', { shouldMapTo: keyAttributes.shouldMapTo }),
     };
   }
 

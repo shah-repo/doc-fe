@@ -4,20 +4,22 @@ import WarningIcon from '@material-ui/icons/Warning';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
+import { translate } from '../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { FBButton } from '../../form.builder';
 import { IApprovalRequirementGroup, ISelectedDetails } from './interface';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
 
-const MigrationConfirmationDialog: React.FC<{
+interface MigrationConfirmationDialogProps {
   isOpen: boolean
   handleClose: () => void
   handleConfirmation: (selectedDetails: ISelectedDetails[], password: string) => void
   selectedDetails: ISelectedDetails[]
   toDocumentTypeId: string
   toFormRev?: DocumentRevision
-}> = ({ isOpen, handleClose, selectedDetails, handleConfirmation, toDocumentTypeId, toFormRev }) => {
+}
+const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = ({ isOpen, handleClose, selectedDetails, handleConfirmation, toDocumentTypeId, toFormRev }) => {
   const classes = useStyles();
 
   const {
@@ -28,7 +30,6 @@ const MigrationConfirmationDialog: React.FC<{
   const [toFormReleasedError, setToFormReleasedError] = useState<string>('');
 
   const employeePassword = useRef<string>('');
-  // const [isLoading, setIsLoading] = useState(false);
 
   const actionCountMap: { [key: string]: number } = {};
   selectedDetails.forEach(detail => {
@@ -45,13 +46,13 @@ const MigrationConfirmationDialog: React.FC<{
     }
   }, [toDocumentTypeId]);
 
-  function handleEmployeeConfirmation () {
+  const handleEmployeeConfirmation = () => {
     handleConfirmation(selectedDetails, employeePassword.current);
-  }
+  };
 
-  function setEmployeePassword (empPassword: string) {
+  const setEmployeePassword = (empPassword: string) => {
     employeePassword.current = empPassword;
-  }
+  };
 
   const isApprovalRequirementFulfilled = (group: IApprovalRequirementGroup) => {
     return (
@@ -80,31 +81,26 @@ const MigrationConfirmationDialog: React.FC<{
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">Supplier Revisions Migration Summary</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{translate('bulk.migration.supplier.revisions.summary')}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          <Typography variant="h5" className={classes.marginBottom8}>{selectedDetails.length} Supplier revisions selected</Typography>
+          <Typography variant="h5" className={classes.marginBottom8}>{selectedDetails.length} {translate('bulk.migration.supplier.revisions.selected')}</Typography>
           {Object.keys(actionCountMap).map(key => {
-            return <Typography variant="subtitle2">{key} - {actionCountMap[key]} revisions</Typography>;
+            return <Typography variant="subtitle2">{translate('bulk.migration.map.revs', { key, number: actionCountMap[key] })}</Typography>;
           })}
-          <Typography variant="body2" className={classes.marginTop16}>
-            This will fire a <b>JOB request</b>, which might take 10 mins or more, depending on the network congestion.
-          </Typography>
+          <Typography variant="body2" className={classes.marginTop16} dangerouslySetInnerHTML={{ __html: translate('bulk.migration.job.delay.message') }} />
         </DialogContentText>
 
         <Box className={cx(classes.padding8, classes.marginTop8)}>
           {approvalRequirements && (
             <Box className={classes.approvalRequirementsBox}>
               <Typography variant="body2" className={classes.approvalRequirementsBoxText}>
-                For revisions, that are already Released, migration would create a new Revision and automate its approval & release, using <i>the current user</i>
+                {translate('bulk.migration.supplier.release.revision.message')}
                 <span className={classes.approvalRequirementsBoxEmail}>
                   {approvalRequirements.email}
                 </span>
               </Typography>
-              <Typography variant="body2" className={classes.approvalRequirementsBoxText}>
-                Based on the Document Type selected, this user <b>should be a part of the groups</b> listed below, without
-                which the process will fail.
-              </Typography>
+              <Typography variant="body2" className={classes.approvalRequirementsBoxText} dangerouslySetInnerHTML={{ __html: translate('bulk.migration.document.selected.groups.info.message') }} />
               <Box className={classes.approvalRequirementsRequiredGroupsBox}>
                 {approvalRequirements.requiredGroups.map((group) => {
                   return (
@@ -136,7 +132,7 @@ const MigrationConfirmationDialog: React.FC<{
 
         {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError)
           && <>
-            <p>Are you sure you want to revise these Suppliers? Please provide the password to confirm.</p>
+            <p>{translate('bulk.migration.supplier.revise.password.confirm.message')}</p>
             <FormControl className={classes.width100}>
               <TextField
                 id="current-employee-password"
@@ -152,11 +148,11 @@ const MigrationConfirmationDialog: React.FC<{
       </DialogContent>
       <DialogActions className={classes.spaceBetweenFlex}>
         <Button onClick={handleClose} color="primary">
-          Cancel
+          {translate('common.cancel')}
         </Button>
         {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError) && selectedDetails?.length
         && <Button onClick={handleEmployeeConfirmation} color="primary" autoFocus>
-          Confirm
+          {translate('common.confirm')}
         </Button>}
       </DialogActions>
     </Dialog>
