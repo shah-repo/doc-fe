@@ -15,6 +15,23 @@ export default makeStyles<NextTheme>(theme => ({
   rulesTitle: {
     flexGrow: 1,
   },
+  previewSection: {
+    height: 'calc(100vh - 70px)',
+    padding: theme.spacing(2),
+  },
+  previewMessageContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '70vh',
+  },
+  previewProgressIcon: {
+    verticalAlign: 'middle',
+    marginRight: theme.spacing(1),
+  },
+  grey: {
+    backgroundColor: Colors.hint_gray,
+  },
   flexBox: {
     display: 'flex',
     justifyContent: 'space-between',
