@@ -340,8 +340,12 @@ export default makeStyles<NextTheme>(theme => ({
   },
   spaceBetweenFlex: {
     display: 'flex',
-    justifyContent: 'space-between',
-    gap: '4px',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: theme.spacing(1),
+  },
+  buttonSpacing: {
+    marginLeft: theme.spacing(1),
   },
   simpleFlex: {
     display: 'flex',

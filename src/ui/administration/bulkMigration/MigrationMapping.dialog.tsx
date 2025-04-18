@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { AppBar, Box, Button, Chip, Dialog, DialogContent, FormControlLabel, IconButton, Switch, Toolbar, Typography } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { AppBar, Box, Chip, Dialog, DialogContent, Toolbar, Typography } from '@material-ui/core';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
+import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { Button, FormControlLabel, Switch } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import Colors from '../../layout/theme/utils/colors';
 import { IBulkMigrationScanDetails, IMappedFrom, IRowData, ISchemaItem } from './interface';
@@ -24,7 +25,6 @@ const MigrationMappingDialog: React.FC<{
   scanDetails: IBulkMigrationScanDetails | null
 }> = ({ isOpen, handleClose, updateScanMapping, fromRev, toRev, scanDetails }) => {
   const classes = useStyles();
-
   const [selectedSchemaItems, setSelectedSchemaItems] = useState<ISchemaItem[]>([]);
 
   const [fromRevSchema, setFromRevSchema] = useState<ISchemaItem[]>([]);
@@ -219,24 +219,16 @@ const MigrationMappingDialog: React.FC<{
   return (
     <Dialog
       fullScreen
-      // scroll="paper"
       open={isOpen}
       onClose={handleClose}
       aria-labelledby="migration-mapping-title"
     >
-      <AppBar className={classes.relative}>
-        <Toolbar className={classes.spaceBetweenFlex}>
-          <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="h6">
-            Migration Form Schema Fields Mapping
+      <AppBar position="static" color="default" elevation={0}>
+        <Toolbar>
+          <Typography variant="h6" className={classes.rulesTitle} style={{ flexGrow: 1 }}>
+            {translate('bulk.migration.form.schema.mapping.title')}
           </Typography>
           <Box className={classes.spaceBetweenFlex}>
-            <Button variant="text" color="secondary" onClick={showMappingRules}> Rules </Button>
-            <Button color="primary" variant="contained" onClick={handleMappingSave}> Save </Button>
-            { Array.isArray(scanDetails?.toFormSchema) && scanDetails?.toFormSchema?.length
-                && <Button variant="outlined" onClick={handleMappingPreview}> Preview </Button> }
             <FormControlLabel
               control={
                 <Switch
@@ -244,16 +236,57 @@ const MigrationMappingDialog: React.FC<{
                   checked={isShowRelationVisible}
                   onChange={event => setIsShowRelationVisible(event.target.checked)}
                   color="primary"
-                  classes= {{
-                    switchBase: classes.switchBase,
-                  }}
                 />
               }
-              label="Show Mappings"
-              className={classes.mappingSwitcher}
-              labelPlacement="bottom"
+              label={translate('bulk.migration.show.mappings')}
+              labelPlacement="start"
+              className={classes.buttonSpacing}
             />
-            <Button color="inherit" onClick={handleAutoMapping} variant="outlined"> Auto Map </Button>
+            <Button
+              size="small"
+              color="inherit"
+              variant="contained"
+              onClick={showMappingRules}
+              className={classes.buttonSpacing}
+            >
+              {translate('bulk.migration.rules')}
+            </Button>
+            <Button
+              size="small"
+              color="primary"
+              variant="contained"
+              onClick={handleMappingSave}
+              className={classes.buttonSpacing}
+            >
+              {translate('common.save')}
+            </Button>
+            {Array.isArray(scanDetails?.toFormSchema) && scanDetails?.toFormSchema?.length && (
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={handleMappingPreview}
+                className={classes.buttonSpacing}
+              >
+                {translate('bulk.migration.preview')}
+              </Button>
+            )}
+            <Button
+              size="small"
+              color="inherit"
+              variant="outlined"
+              onClick={handleAutoMapping}
+              className={classes.buttonSpacing}
+            >
+              {translate('bulk.migration.auto.map')}
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={handleClose}
+              className={classes.buttonSpacing}
+            >
+              {translate('common.close')}
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>
