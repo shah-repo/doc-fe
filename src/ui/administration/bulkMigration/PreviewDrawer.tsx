@@ -2,9 +2,11 @@ import { Box, Button, Drawer, LinearProgress, List, ListItem, ListItemText, Text
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import React, { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
+import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FB, FBFormState, FBInputProps, FBProvider, FBSchemaState } from '../../form.builder';
 import Colors from '../../layout/theme/utils/colors';
+import DialogHeader from './DrawerHeader';
 import { IBulkMigrationScanDetails, ISchemaItem } from './interface';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
@@ -113,14 +115,16 @@ const PreviewDrawer: React.FC<{
             </div>
             {/* Right Section */}
             <div className={classes.previewDrawerRightSection}>
-              {!selectedPreviewDocRev?.id
+              <DialogHeader title={translate('bulk.migration.mapping.preview')} onDialogClose={handleClosePreview} />
+              <Box style={{ padding: '16px' }}>
+                {!selectedPreviewDocRev?.id
                 && <Typography variant="h4" color="primary"> Click on a Document Revision from the left to see its preview here. </Typography>
-              }
-              {selectedPreviewDocRev?.id && isLoading
+                }
+                {selectedPreviewDocRev?.id && isLoading
                 && <Typography variant="h4" color="primary"> <HourglassFullIcon /> Generating Preview.... </Typography>
-              }
-              {
-                !isLoading && selectedPreviewDocRev?.id
+                }
+                {
+                  !isLoading && selectedPreviewDocRev?.id
               && <>
                 <Box className={classes.rightSectionFieldsUnmatched}>
                   { fieldsUnmatched && <>
@@ -151,7 +155,8 @@ const PreviewDrawer: React.FC<{
                   }
                 </Box>
               </>
-              }
+                }
+              </Box>
             </div>
           </Box>
         </Box>

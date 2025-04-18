@@ -12,6 +12,9 @@ export default makeStyles<NextTheme>(theme => ({
     gridGap: theme.spacing(2.5, 3),
     padding: theme.spacing(3, 3, 0),
   },
+  rulesTitle: {
+    flexGrow: 1,
+  },
   flexBox: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -262,20 +265,17 @@ export default makeStyles<NextTheme>(theme => ({
       opacity: 1, // Fully visible
     },
   },
-  drawerDialog: {
-    width: '40vw', // Width of the side panel
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%', // Full height of the drawer
-  },
   drawerDialogPaper: {
     width: '40vw',
-  },
-  drawerContent: {
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1, // Allow sections to take full available height
-    padding: '16px',
+  },
+  drawerDialogContent: {
+    flexGrow: 1,
+    fontSize: 14,
+    overflowY: 'auto',
+    padding: theme.spacing(2),
+    maxHeight: 'calc(100vh - 70px)',
   },
   drawerDialogCloseButton: {
     position: 'absolute',
