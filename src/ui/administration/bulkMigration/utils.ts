@@ -4,7 +4,7 @@ import { some } from 'lodash';
 import { translate } from '../../../common/intl';
 import { checkSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/transform';
 import Colors from '../../layout/theme/utils/colors';
-import { IMappedFrom, IRowData, ISchemaItem } from './interface';
+import { IMappedFrom, IMismatchResponse, IRowData, ISchemaItem } from './interface';
 
 const schemaValidationMap = {
   supplierContacts: {
@@ -210,4 +210,34 @@ export function autoMapArrays (
   }
 
   return { fromRevSchema, toRevSchema };
+}
+
+export function promptUserToRerunScan (rerunScanDetails: IMismatchResponse): {
+  msgParts: string[]
+  isPromptUserToScan: boolean
+} {
+  const msgParts: string[] = [];
+  let isPromptUserToScan = false;
+
+  if (rerunScanDetails.irrelevantScanIds?.length > 0) {
+    isPromptUserToScan = true;
+    msgParts.push(`${rerunScanDetails.irrelevantScanIds?.length} entries removed.`);
+  }
+
+  if (rerunScanDetails.mismatchingStatusScanIds?.length > 0) {
+    isPromptUserToScan = true;
+    msgParts.push(`${rerunScanDetails.mismatchingStatusScanIds?.length} status updated.`);
+  }
+
+  if (rerunScanDetails.newRevIds.length > 0) {
+    isPromptUserToScan = true;
+    msgParts.push(`${rerunScanDetails.newRevIds.length} entries added.`);
+  }
+
+  if (rerunScanDetails.alreadyUpgradedScanEntryIds && rerunScanDetails.alreadyUpgradedScanEntryIds.length > 0) {
+    isPromptUserToScan = true;
+    msgParts.push(`${rerunScanDetails.alreadyUpgradedScanEntryIds.length} entries already migrated.`);
+  }
+
+  return { msgParts, isPromptUserToScan };
 }

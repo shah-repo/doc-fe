@@ -4,13 +4,13 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import SearchIcon from '@material-ui/icons/Search';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
 import { FBButton } from '../../form.builder';
-import { INTERVAL_DURATION, ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
+import { ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
 import RevsTable from './RevsTable';
@@ -36,7 +36,7 @@ const BulkMigrationContainer: React.FC = () => {
     setToDocumentTypeId,
     setToFormRevId,
     eligibleRevsCount,
-    rerunScanDetails,
+    promptUserToRescanDetails,
     updateRevsTable,
     scanDetails,
     isConfirmationDialogVisible,
@@ -54,32 +54,10 @@ const BulkMigrationContainer: React.FC = () => {
   } = useBulkMigration();
 
   const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null); // Reference to store the interval ID.
 
   useEffect(() => {
     fetchAllDocumentTypes();
   }, []);
-
-  useEffect(() => {
-    if (scanDetails?.status === MIGRATION_STATUS_ENUM.STARTED || scanDetails?.status === MIGRATION_STATUS_ENUM.IN_PROGRESS) {
-      intervalRef.current = setInterval(() => {
-        getScanDetails();
-      }, INTERVAL_DURATION);
-    }
-
-    if (scanDetails?.status === MIGRATION_STATUS_ENUM.MAPPING && intervalRef.current) {
-      // Clear the interval when status becomes 'Mapping'
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-
-    // Cleanup function to clear the interval when component unmounts
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [scanDetails]);
 
   function handleDocumentTypeChange (value: string, fieldName: string) {
     if (fieldName === 'fromDocumentTypeId') {
@@ -157,19 +135,6 @@ const BulkMigrationContainer: React.FC = () => {
     setIsMigrationMappingDialogVisible(false);
   };
 
-  const promptUserToRerunScan = () => {
-    const msgParts: string[] = [];
-    if (rerunScanDetails.irrelevantRevsCount > 0) {
-      msgParts.push(`resolve ${rerunScanDetails.irrelevantRevsCount}`);
-    }
-
-    if (rerunScanDetails.newRevsCount > 0) {
-      msgParts.push(`include ${rerunScanDetails.newRevsCount} new revisions`);
-    }
-
-    return `Please rerun scan to ${msgParts.join(' and ')}`;
-  };
-
   return (
     <Box className={classes.root}>
       <Box className={classes.header}>
@@ -185,8 +150,8 @@ const BulkMigrationContainer: React.FC = () => {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            {(rerunScanDetails.newRevsCount > 0 || rerunScanDetails.irrelevantRevsCount > 0) && scanDetails?.status !== MIGRATION_STATUS_ENUM.IN_PROGRESS
-              && <div className={classes.promptUserMsgStyle}>{promptUserToRerunScan()}</div>
+            {promptUserToRescanDetails.isPromptUserToScan && scanDetails?.status !== MIGRATION_STATUS_ENUM.IN_PROGRESS
+              && <div className={classes.promptUserMsgStyle}>{`${promptUserToRescanDetails.msgParts.join(' ')}. Rerun scan to accommodate these changes.`}</div>
             }
           </Grid>
           <Grid item xs={2}>

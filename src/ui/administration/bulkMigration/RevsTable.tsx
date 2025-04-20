@@ -320,7 +320,7 @@ const RevsTable: React.FC<{
   const classes = useStyles();
   const [searchQueries, setSearchQueries] = React.useState<{[key: string]: string}>({});
   const [order, setOrder] = React.useState<SortDirection>('desc');
-  const [orderBy, setOrderBy] = React.useState('createdAt');
+  const [orderBy, setOrderBy] = React.useState('name');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(INITIAL_ROWS_COUNT);
 
