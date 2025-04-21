@@ -73,7 +73,7 @@ export const useBulkMigration = () => {
     if (exception?.response?.status === 504) {
       setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
     } else {
-      const message: string = (exception?.response.data?.message as string) ?? 'Error processing request';
+      const message: string = (exception?.response?.data?.message as string) ?? 'Error processing request';
       toastInfo(message);
       setErrorMessage(message);
     }
