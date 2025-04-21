@@ -11,6 +11,7 @@ import DateTime from '../../components/DateTime';
 import { toastError } from '../../components/notifications';
 import { FBButton } from '../../form.builder';
 import { INTERVAL_DURATION, ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
+import KendoRevsTable from './KendoRevsTable';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
 import RevsTable from './RevsTable';
@@ -407,7 +408,8 @@ const BulkMigrationContainer: React.FC = () => {
         )}
         {scanDetails?.id && ![MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
           && <Box>
-            <RevsTable scanId={scanDetails.id} handleSelectedRowsChange={handleSelectedRowsChange} updateRevsTable={updateRevsTable} />
+            {false && <RevsTable scanId={scanDetails?.id as string } handleSelectedRowsChange={handleSelectedRowsChange} updateRevsTable={updateRevsTable} />}
+            {true && <KendoRevsTable {...{ scanId: scanDetails?.id, updateRevsTable }} />}
           </Box>
         }
         {scanDetails?.id && [MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
