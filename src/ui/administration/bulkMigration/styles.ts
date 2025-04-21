@@ -390,6 +390,7 @@ export default makeStyles<NextTheme>(theme => ({
   },
   textRightAlign: {
     textAlign: 'right',
+    fontSize: 12,
   },
   verticalAlignTableRow: {
     verticalAlign: 'baseline',
@@ -625,5 +626,12 @@ export default makeStyles<NextTheme>(theme => ({
   },
   noPointerEvents: {
     pointerEvents: 'none',
+  },
+  listItemText: {
+    fontSize: 14,
+  },
+  clear: {
+    padding: 0,
+    cursor: 'pointer',
   },
 }));

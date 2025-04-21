@@ -1,7 +1,9 @@
-import { Box, Drawer, LinearProgress, List, ListItem, ListItemText, TextField, Typography } from '@material-ui/core';
+import { light, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Drawer, InputAdornment, LinearProgress, List, ListItem, ListItemText, TextField, Typography } from '@material-ui/core';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
@@ -43,6 +45,7 @@ const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
   } = useBulkMigration();
 
   const [selectedPreviewDocRev, setSelectedPreviewDocRev] = useState<PreviewDocRev>();
+  const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
     if (scanDetails?.id) {
@@ -57,16 +60,22 @@ const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
     }
   };
 
-  const searchTextChanged = (searchText: string) => {
-    if (!searchText) {
+  const searchTextChanged = useCallback((text: string) => {
+    setSearchText(text);
+    const trimmedText = text.trim().toLowerCase();
+
+    if (!trimmedText) {
       setFilteredDocRevsList(previewDocRevsList);
-    } else {
-      const filteredRevs = previewDocRevsList.filter(
-        (docRev) => docRev.document?.docId.includes(searchText) || docRev.name.includes(searchText),
-      );
-      setFilteredDocRevsList(filteredRevs);
+      return;
     }
-  };
+
+    const filtered = previewDocRevsList.filter(({ document, name }) => {
+      const docId = document?.docId?.toLowerCase() || '';
+      return docId.includes(trimmedText) || name.toLowerCase().includes(trimmedText);
+    });
+
+    setFilteredDocRevsList(filtered);
+  }, [previewDocRevsList]);
 
   const componentToRender = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
@@ -100,28 +109,56 @@ const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
                 size="small"
                 variant="outlined"
                 placeholder="Search"
+                value={searchText}
                 className={classes.width100}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FontAwesomeIcon icon={light('search')} />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <>
+                      {searchText && (
+                        <InputAdornment position="end" className={classes.clear}>
+                          <FontAwesomeIcon
+                            icon={regular('xmark')}
+                            onClick={() => searchTextChanged('')}
+                            aria-label="Clear search"
+                            data-cy="keyword-search-clear"
+                          />
+                        </InputAdornment>
+                      )}</>),
+                }}
                 onChange={(event) => searchTextChanged(event.target.value)}
               />
               {filteredDocRevsList.length > 0 && (
-                <List dense={true}>
-                  {filteredDocRevsList.map((docRev, index) => {
-                    const primaryText = `[${index + 1}] ${docRev.document?.docId} • ${docRev.name}`;
-                    const secondaryText = `Rev ${docRev.displayRevision} • ${docRev.displayStatus}`;
+                <List dense>
+                  {filteredDocRevsList.map((docRev) => {
+                    const { id, name, displayRevision, displayStatus, formInputKeysCount, document } = docRev;
+                    const revInfo = `${document?.docId} • ${name} Rev ${displayRevision} • ${displayStatus}`;
                     return (
                       <ListItem
                         className={classes.previewDrawerLeftSectionListItem}
-                        selected={docRev.id === selectedPreviewDocRev?.id}
+                        selected={id === selectedPreviewDocRev?.id}
                         onClick={() => handlePreviewItemClick(docRev)}
+                        key={revInfo}
                       >
-                        <ListItemText primary={primaryText} secondary={secondaryText} />
-                        <ListItemText className={classes.textRightAlign}>
-                          <Typography variant="caption">
-                            {translate('bulk.migration.mapping.preview.keys.mapped', {
-                              count: docRev.formInputKeysCount,
-                            })}
-                          </Typography>
-                        </ListItemText>
+                        <ListItemText
+                          className={classes.listItemText}
+                          primary={
+                            <Typography className={classes.listItemText}>
+                              {revInfo}
+                            </Typography>
+                          }
+                          secondary={
+                            <Typography variant="body2" noWrap>
+                              {translate('bulk.migration.mapping.preview.keys.mapped', {
+                                count: formInputKeysCount,
+                              })}
+                            </Typography>
+                          }
+                        />
                       </ListItem>
                     );
                   })}
