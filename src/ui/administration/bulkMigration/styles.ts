@@ -175,24 +175,25 @@ export default makeStyles<NextTheme>(theme => ({
   promptUserMsgStyle: {
     color: Colors.red,
     backgroundColor: Colors.light_red,
-    padding: '8px',
+    padding: theme.spacing(1),
     textAlign: 'center',
   },
   errMsgStyle: {
     color: Colors.red,
     backgroundColor: Colors.light_red,
-    padding: '4px',
+    padding: theme.spacing(0.5),
   },
   mappingRuleSchemaItemBox: {
     position: 'relative',
-    marginTop: '8px',
+    marginTop: theme.spacing(1),
     border: `1px solid ${NextColors.textGray}`,
     borderRadius: '2px',
-    padding: '8px',
+    padding: theme.spacing(1),
     width: '100%',
   },
   compactListItem: {
-    marginBottom: '4px',
+    marginBottom: theme.spacing(0.5),
+    fontSize: 14,
     '& .MuiListItemText-root': {
       marginBottom: 0,
     },
@@ -408,13 +409,15 @@ export default makeStyles<NextTheme>(theme => ({
   },
   mappingAreaTitle: {
     display: 'inline-block',
-    marginBottom: '8px',
-    borderBottom: `1px solid ${Colors.gray}`,
+    marginBottom: theme.spacing(1),
+    color: NextColors.textBlack,
+    fontWeight: 600,
+    fontSize: 14,
   },
   toSchemaItem: {
     display: 'flex',
     flexWrap: 'wrap',
-    gap: '8px',
+    gap: theme.spacing(1),
     overflow: 'auto',
   },
   selectedFromSchemaItem: {
@@ -633,5 +636,18 @@ export default makeStyles<NextTheme>(theme => ({
   clear: {
     padding: 0,
     cursor: 'pointer',
+  },
+  fromRevContainer: {
+    width: '32%',
+  },
+  toRevContainer: {
+    width: '56%',
+  },
+  mappingView: {
+    maxHeight: '72vh',
+    overflow: 'auto',
+  },
+  mappingInfo: {
+    marginBottom: theme.spacing(1),
   },
 }));
