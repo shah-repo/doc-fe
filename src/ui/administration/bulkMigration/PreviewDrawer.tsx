@@ -1,23 +1,38 @@
-import { Box, Button, Drawer, LinearProgress, List, ListItem, ListItemText, TextField, Typography } from '@material-ui/core';
+import { light, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Drawer, InputAdornment, LinearProgress, List, ListItem, ListItemText, TextField, Typography } from '@material-ui/core';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
-import React, { useEffect, useState } from 'react';
+import cx from 'classnames';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
+import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { FB, FBFormState, FBInputProps, FBProvider, FBSchemaState } from '../../form.builder';
-import Colors from '../../layout/theme/utils/colors';
+import DialogHeader from './DrawerHeader';
 import { IBulkMigrationScanDetails, ISchemaItem } from './interface';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
 import { isDisabledSchemaItem } from './utils';
 
-const PreviewDrawer: React.FC<{
+interface PreviewDrawerProps {
   isPreviewPanelVisible: boolean
   handleClosePreview: () => void
   toRevSchema: ISchemaItem[]
   scanDetails: IBulkMigrationScanDetails | null
-}> = ({ isPreviewPanelVisible, handleClosePreview, toRevSchema, scanDetails }) => {
-  const classes = useStyles();
+}
 
+interface PreviewDocRev extends DocumentRevision {
+  formInputKeysCount: number
+}
+
+const PreviewDrawer: React.FC<PreviewDrawerProps> = ({
+  isPreviewPanelVisible,
+  handleClosePreview,
+  toRevSchema,
+  scanDetails,
+}) => {
+  const classes = useStyles();
+  const formState = FB.useRef<FBFormState>(FBFormState, {});
   const {
     isLoading,
     previewDocRevsList,
@@ -29,8 +44,8 @@ const PreviewDrawer: React.FC<{
     getPreviewForDocRev,
   } = useBulkMigration();
 
-  const [selectedPreviewDocRev, setSelectedPreviewDocRev] = useState<DocumentRevision & {formInputKeysCount: number}>();
-  const formState = FB.useRef<FBFormState>(FBFormState, {});
+  const [selectedPreviewDocRev, setSelectedPreviewDocRev] = useState<PreviewDocRev>();
+  const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
     if (scanDetails?.id) {
@@ -38,25 +53,31 @@ const PreviewDrawer: React.FC<{
     }
   }, []);
 
-  const handlePreviewItemClick = (docRevSelected) => {
+  const handlePreviewItemClick = (docRevSelected: PreviewDocRev) => {
     setSelectedPreviewDocRev(docRevSelected);
     if (scanDetails?.id) {
       getPreviewForDocRev(scanDetails.id, docRevSelected, formState);
     }
   };
 
-  function searchTextChanged (searchText: string) {
-    if (!searchText) {
-      setFilteredDocRevsList(previewDocRevsList);
-    } else {
-      const filteredRevs = previewDocRevsList.filter(
-        docRev => docRev.document?.docId.includes(searchText) || docRev.name.includes(searchText),
-      );
-      setFilteredDocRevsList(filteredRevs);
-    }
-  }
+  const searchTextChanged = useCallback((text: string) => {
+    setSearchText(text);
+    const trimmedText = text.trim().toLowerCase();
 
-  function componentToRender (controlProps: FBInputProps): React.ReactNode | undefined {
+    if (!trimmedText) {
+      setFilteredDocRevsList(previewDocRevsList);
+      return;
+    }
+
+    const filtered = previewDocRevsList.filter(({ document, name }) => {
+      const docId = document?.docId?.toLowerCase() || '';
+      return docId.includes(trimmedText) || name.toLowerCase().includes(trimmedText);
+    });
+
+    setFilteredDocRevsList(filtered);
+  }, [previewDocRevsList]);
+
+  const componentToRender = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
     const schemaControl = FBSchemaState.control[type || ''];
     if (!schemaControl) {
@@ -66,12 +87,14 @@ const PreviewDrawer: React.FC<{
       key: `fb-control-${type}-${name}-${index}`,
       ...controlProps,
     });
-  }
+  };
 
   return (
-    <FBProvider {...{
-      formState,
-    }}>
+    <FBProvider
+      {...{
+        formState,
+      }}
+    >
       <Drawer
         anchor="right"
         open={isPreviewPanelVisible}
@@ -79,79 +102,128 @@ const PreviewDrawer: React.FC<{
         classes={{ paper: classes.previewDrawerDialogPaper }}
       >
         <Box className={classes.previewDrawerDialog}>
-          <Button onClick={handleClosePreview} className={classes.previewDrawerDialogCloseButton}>Close</Button>
-          {isLoading && (
-            <LinearProgress
-              className={classes.previewDrawerProgress}
-              data-cy="saving-progress-bar"
-            />
-          )}
           <Box className={classes.previewDrawerContent}>
             {/* Left Section */}
             <div className={classes.previewDrawerLeftSection}>
-              <TextField size="small" variant="outlined" placeholder="Search" className={classes.width100}
-                onChange={e => searchTextChanged(e.target.value)} />
-              {filteredDocRevsList.length > 0
-                && <List dense={true}>
-                  {filteredDocRevsList.map((docRev, index) => {
-                    const primaryText = `[${index + 1}] ${docRev.document?.docId} • ${docRev.name}`;
-                    const secondaryText = `Rev ${docRev.displayRevision} • ${docRev.displayStatus}`;
-                    return (<ListItem className={classes.previewDrawerLeftSectionListItem}
-                      selected={docRev.id === selectedPreviewDocRev?.id}
-                      onClick={e => handlePreviewItemClick(docRev)}
-                    >
-                      <ListItemText
-                        primary={primaryText}
-                        secondary={secondaryText}
-                      />
-                      <ListItemText className={classes.textRightAlign}>
-                        <Typography variant="caption">{docRev.formInputKeysCount} keys mapped</Typography>
-                      </ListItemText>
-                    </ListItem>);
+              <TextField
+                size="small"
+                variant="outlined"
+                placeholder="Search"
+                value={searchText}
+                className={classes.width100}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FontAwesomeIcon icon={light('search')} />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <>
+                      {searchText && (
+                        <InputAdornment position="end" className={classes.clear}>
+                          <FontAwesomeIcon
+                            icon={regular('xmark')}
+                            onClick={() => searchTextChanged('')}
+                            aria-label="Clear search"
+                            data-cy="keyword-search-clear"
+                          />
+                        </InputAdornment>
+                      )}</>),
+                }}
+                onChange={(event) => searchTextChanged(event.target.value)}
+              />
+              {filteredDocRevsList.length > 0 && (
+                <List dense>
+                  {filteredDocRevsList.map((docRev) => {
+                    const { id, name, displayRevision, displayStatus, formInputKeysCount, document } = docRev;
+                    const revInfo = `${document?.docId} • ${name} Rev ${displayRevision} • ${displayStatus}`;
+                    return (
+                      <ListItem
+                        className={classes.previewDrawerLeftSectionListItem}
+                        selected={id === selectedPreviewDocRev?.id}
+                        onClick={() => handlePreviewItemClick(docRev)}
+                        key={revInfo}
+                      >
+                        <ListItemText
+                          className={classes.listItemText}
+                          primary={
+                            <Typography className={classes.listItemText}>
+                              {revInfo}
+                            </Typography>
+                          }
+                          secondary={
+                            <Typography variant="body2" noWrap>
+                              {translate('bulk.migration.mapping.preview.keys.mapped', {
+                                count: formInputKeysCount,
+                              })}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    );
                   })}
-                </List>}
+                </List>
+              )}
             </div>
             {/* Right Section */}
             <div className={classes.previewDrawerRightSection}>
-              {!selectedPreviewDocRev?.id
-                && <Typography variant="h4" color="primary"> Click on a Document Revision from the left to see its preview here. </Typography>
-              }
-              {selectedPreviewDocRev?.id && isLoading
-                && <Typography variant="h4" color="primary"> <HourglassFullIcon /> Generating Preview.... </Typography>
-              }
-              {
-                !isLoading && selectedPreviewDocRev?.id
-              && <>
-                <Box className={classes.rightSectionFieldsUnmatched}>
-                  { fieldsUnmatched && <>
-                    <Typography variant="h5" className={classes.marginBottom8}> Fields Unmatched </Typography>
-                    <ReactJson src={fieldsUnmatched} collapsed={1} />
-                  </> }
-                </Box>
-                <Box className={classes.rightSectionMappingView}>
-                  { newFormInput
-                      && <>
-                        <Typography variant="h5" className={classes.marginBottom8}> Mapped Fields </Typography>
-                        {
-                          toRevSchema.filter(schemaItem => !schemaItem.deleted)
-                            .map(schemaItem => {
+              <DialogHeader title={translate('bulk.migration.mapping.preview')} onDialogClose={handleClosePreview} />
+              {isLoading && <LinearProgress className={classes.previewDrawerProgress} data-cy="saving-progress-bar" />}
+              <Box className={classes.previewSection}>
+                {((selectedPreviewDocRev?.id && isLoading) || !selectedPreviewDocRev?.id) && (
+                  <Box className={classes.previewMessageContainer}>
+                    {!selectedPreviewDocRev?.id && (
+                      <Typography variant="h5" align="center">
+                        {translate('bulk.migration.mapping.preview.selection.info.message')}
+                      </Typography>
+                    )}
+
+                    {selectedPreviewDocRev?.id && isLoading && (
+                      <Typography variant="h5" align="center">
+                        <HourglassFullIcon className={classes.previewProgressIcon} />
+                        {translate('bulk.migration.mapping.preview.selection.progress')}
+                      </Typography>
+                    )}
+                  </Box>
+                )}
+                {!isLoading && selectedPreviewDocRev?.id && (
+                  <>
+                    <Box className={classes.rightSectionFieldsUnmatched}>
+                      {fieldsUnmatched && (
+                        <>
+                          <Typography variant="h5" className={classes.marginBottom8}>
+                            {translate('bulk.migration.mapping.preview.selection.unmatched')}
+                          </Typography>
+                          <ReactJson src={fieldsUnmatched} collapsed={1} />
+                        </>
+                      )}
+                    </Box>
+                    <Box className={classes.rightSectionMappingView}>
+                      {newFormInput && (
+                        <>
+                          <Typography variant="h5" className={classes.marginBottom8}>
+                            {translate('bulk.migration.mapping.preview.selection.mapped.fields')}{' '}
+                          </Typography>
+                          {toRevSchema
+                            .filter((schemaItem) => !schemaItem.deleted)
+                            .map((schemaItem) => {
                               return (
-                                <Box className={classes.previewDrawerMappingRuleSchemaItemBox}
-                                  style={{
-                                    backgroundColor: isDisabledSchemaItem(schemaItem) ? Colors.hint_gray : '',
-                                  }}
+                                <Box
+                                  className={cx(classes.previewDrawerMappingRuleSchemaItemBox, {
+                                    grey: isDisabledSchemaItem(schemaItem),
+                                  })}
                                   key={schemaItem.name}
                                 >
                                   <Box className={classes.width100}>{componentToRender(schemaItem)}</Box>
                                 </Box>
                               );
-                            })
-                        }
-                      </>
-                  }
-                </Box>
-              </>
-              }
+                            })}
+                        </>
+                      )}
+                    </Box>
+                  </>
+                )}
+              </Box>
             </div>
           </Box>
         </Box>

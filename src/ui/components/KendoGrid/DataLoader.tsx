@@ -155,7 +155,6 @@ export const DataLoader: React.FC<DataLoaderProps> = ({
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
-      // cancelToken: call.token,
     };
 
     apiClient

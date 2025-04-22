@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Button, FormControl, Grid, InputLabel, LinearProgress, MenuItem, Select, Typography } from '@material-ui/core';
+import { Box, FormControl, Grid, LinearProgress, Typography } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SearchIcon from '@material-ui/icons/Search';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { translate } from '../../../common/intl';
 import { MomentFormats } from '../../../common/utils/date';
 import DateTime from '../../components/DateTime';
+import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { FBButton } from '../../form.builder';
-import { INTERVAL_DURATION, ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
-import KendoRevsTable from './KendoRevsTable';
+import { ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
 import RevsTable from './RevsTable';
@@ -23,6 +23,7 @@ const BulkMigrationContainer: React.FC = () => {
 
   const {
     isLoading,
+    isScanRunning,
     errorMessage,
     documentTypesList,
     fromFormRevsList,
@@ -36,7 +37,7 @@ const BulkMigrationContainer: React.FC = () => {
     setToDocumentTypeId,
     setToFormRevId,
     eligibleRevsCount,
-    rerunScanDetails,
+    promptUserToRescanDetails,
     updateRevsTable,
     scanDetails,
     isConfirmationDialogVisible,
@@ -54,32 +55,10 @@ const BulkMigrationContainer: React.FC = () => {
   } = useBulkMigration();
 
   const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null); // Reference to store the interval ID.
 
   useEffect(() => {
     fetchAllDocumentTypes();
   }, []);
-
-  useEffect(() => {
-    if (scanDetails?.status === MIGRATION_STATUS_ENUM.STARTED || scanDetails?.status === MIGRATION_STATUS_ENUM.IN_PROGRESS) {
-      intervalRef.current = setInterval(() => {
-        getScanDetails();
-      }, INTERVAL_DURATION);
-    }
-
-    if (scanDetails?.status === MIGRATION_STATUS_ENUM.MAPPING && intervalRef.current) {
-      // Clear the interval when status becomes 'Mapping'
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-
-    // Cleanup function to clear the interval when component unmounts
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [scanDetails]);
 
   function handleDocumentTypeChange (value: string, fieldName: string) {
     if (fieldName === 'fromDocumentTypeId') {
@@ -157,19 +136,6 @@ const BulkMigrationContainer: React.FC = () => {
     setIsMigrationMappingDialogVisible(false);
   };
 
-  const promptUserToRerunScan = () => {
-    const msgParts: string[] = [];
-    if (rerunScanDetails.irrelevantRevsCount > 0) {
-      msgParts.push(`resolve ${rerunScanDetails.irrelevantRevsCount}`);
-    }
-
-    if (rerunScanDetails.newRevsCount > 0) {
-      msgParts.push(`include ${rerunScanDetails.newRevsCount} new revisions`);
-    }
-
-    return `Please rerun scan to ${msgParts.join(' and ')}`;
-  };
-
   return (
     <Box className={classes.root}>
       <Box className={classes.header}>
@@ -185,8 +151,8 @@ const BulkMigrationContainer: React.FC = () => {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            {(rerunScanDetails.newRevsCount > 0 || rerunScanDetails.irrelevantRevsCount > 0) && scanDetails?.status !== MIGRATION_STATUS_ENUM.IN_PROGRESS
-              && <div className={classes.promptUserMsgStyle}>{promptUserToRerunScan()}</div>
+            {promptUserToRescanDetails.isPromptUserToScan && scanDetails?.status !== MIGRATION_STATUS_ENUM.IN_PROGRESS
+              && <div className={classes.promptUserMsgStyle}>{`${promptUserToRescanDetails.msgParts.join(' ')}. Rerun scan to accommodate these changes.`}</div>
             }
           </Grid>
           <Grid item xs={2}>
@@ -207,59 +173,34 @@ const BulkMigrationContainer: React.FC = () => {
         )}
         <Box className={classes.flexBox}>
           <Box className={classes.boxForSelection}>
-            <Typography variant="h5" className={classes.migrateInfo}> Migrate From </Typography>
-            <Typography variant="subtitle2" className={classes.subtitle}> Select the Document Type & Form Rev </Typography>
+            <Typography variant="h5" className={classes.migrateInfo}> {translate('bulk.migration.migrate.from')} </Typography>
+            <Typography variant="subtitle2" className={classes.subtitle}> {translate('bulk.migration.select.document.rev.info')} </Typography>
 
             <Box className={classes.innerBox}>
-              <FormControl
-                className={classes.formControl40}
-              >
-                <InputLabel id="document-type-migrate-from" className={classes.subtitle}> Document Type </InputLabel>
-                <Select
-                  labelId="document-type-migrate-from"
-                  value={fromDocumentTypeId}
-                  onChange={(event) =>
-                    handleDocumentTypeChange(
-                      event.target.value as string,
-                      'fromDocumentTypeId',
-                    )
+              <FormControl className={classes.formControl40} id="OwnerChangerPresenter-selectField">
+                <Autocomplete
+                  options={documentTypesList}
+                  getOptionLabel={(type) => `${type.documentTypeName} - ${type.documentTypeAcronym}`}
+                  placeholder={translate('bulk.migration.document.type')}
+                  data-cy="from-doc-type"
+                  value={documentTypesList.find((type) => type.id === fromDocumentTypeId) || null}
+                  onChange={(_, selectedOption) =>
+                    handleDocumentTypeChange(selectedOption?.id || '', 'fromDocumentTypeId')
                   }
-                >
-                  {documentTypesList.map((type) => (
-                    <MenuItem value={type.id} key={type.id} className={classes.subtitle}>
-                      <span>
-                        {type.documentTypeName} - {type.documentTypeAcronym}
-                      </span>
-                    </MenuItem>
-                  ))}
-                </Select>
-                {/* <FormHelperText>Some important helper text</FormHelperText> */}
+                />
               </FormControl>
-
-              <FormControl
-                className={classes.formControl60}
-              >
-                <InputLabel id="form-rev-migrate-from" className={classes.subtitle}> Form Rev Selection </InputLabel>
-                <Select
-                  labelId="form-rev-migrate-from"
-                  value={fromFormRevId}
-                  onChange={(event) =>
-                    handleFormRevSelection(
-                      event.target.value as string,
-                      'fromFormRevId',
-                    )
+              <FormControl className={classes.formControl60}>
+                <Autocomplete
+                  options={fromFormRevsList}
+                  placeholder={translate('bulk.migration.document.form.rev.selection')}
+                  getOptionLabel={(formRev) =>
+                    translate('bulk.migration.document.revision.options.label', { docId: formRev.document?.docId, name: formRev.name, revision: formRev.displayRevision, status: formRev.displayStatus })
                   }
-                >
-                  {fromFormRevsList.map((formRev) => (
-                    <MenuItem value={formRev.id} key={formRev.id} className={classes.subtitle}>
-                      <span>
-                        {formRev.document?.docId} • {formRev.name} •{' '}
-                        {formRev.displayRevision} • {formRev.displayStatus}
-                      </span>
-                    </MenuItem>
-                  ))}
-                </Select>
-                {/* <FormHelperText>Some important helper text</FormHelperText> */}
+                  value={fromFormRevsList.find((rev) => rev.id === fromFormRevId) || null}
+                  onChange={(_, selectedOption) =>
+                    handleFormRevSelection(selectedOption?.id || '', 'fromFormRevId')
+                  }
+                />
               </FormControl>
             </Box>
             {fromDocumentTypeId && fromFormRevId && (
@@ -278,8 +219,8 @@ const BulkMigrationContainer: React.FC = () => {
           <Box className={cx(classes.actionBox, classes.flexBoxColumn)}>
             {scanDetails?.id && (
               <Box className={cx(classes.buttons, classes.flexBoxColumn)}>
-                {[MIGRATION_STATUS_ENUM.IN_PROGRESS, MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.MAPPING].includes(scanDetails.status)
-                  && <>
+                {[MIGRATION_STATUS_ENUM.IN_PROGRESS, MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.MAPPING].includes(scanDetails.status) && (
+                  <>
                     <FBButton
                       label="Cancel Current Scan"
                       dataCy="supplier-migration-scan-cancel"
@@ -288,37 +229,16 @@ const BulkMigrationContainer: React.FC = () => {
                       color="primary"
                       className={classes.zeroMarginBottom}
                     />
-                    <Typography variant="caption" className={classes.blinking}>{scanDetails.status}
-                      <RefreshIcon className={classes.refreshIconStyle} onClick={getScanDetails} />
-                    </Typography>
-                  </>
-                }
-                {scanDetails.status === MIGRATION_STATUS_ENUM.COMPLETED && (
-                  <>
-                    <FBButton
-                      label="Run Scan"
-                      dataCy="bulk-migration-scan"
-                      onClick={startRevisionsScan}
-                      variant="outlined"
-                      color="primary"
-                    />
-                    <DateTime
-                      value={scanDetails.completedAt}
-                      format={MomentFormats.BriefDateTime}
-                      className={cx(classes.dateTimeLabel)}
-                    />
+                    <Box className={classes.revsTableRefreshBox}>
+                      <Typography variant="subtitle2" id="scan-revs" className={cx(classes.revsTableRefreshText, classes.blinking)} component="div">
+                        {scanDetails.status}
+                        <RefreshIcon className={classes.revsTableRefreshIcon} onClick={getScanDetails} />
+                      </Typography>
+                    </Box>
                   </>
                 )}
-                {[MIGRATION_STATUS_ENUM.INITIALIZED, MIGRATION_STATUS_ENUM.CANCELLED].includes(scanDetails.status)
-                    && <FBButton
-                      label="Run Scan"
-                      dataCy="bulk-migration-scan"
-                      variant="outlined"
-                      color="primary"
-                      onClick={startRevisionsScan}
-                    />
-                }
-                {scanDetails.status === MIGRATION_STATUS_ENUM.FAILED && (
+
+                {[MIGRATION_STATUS_ENUM.INITIALIZED, MIGRATION_STATUS_ENUM.CANCELLED, MIGRATION_STATUS_ENUM.FAILED, MIGRATION_STATUS_ENUM.COMPLETED].includes(scanDetails.status) && (
                   <>
                     <FBButton
                       label="Run Scan"
@@ -327,76 +247,54 @@ const BulkMigrationContainer: React.FC = () => {
                       variant="outlined"
                       color="primary"
                     />
-                      Last Failed at: <DateTime
-                      value={scanDetails.completedAt}
-                      format={MomentFormats.BriefDateTime}
-                      className={cx(classes.dateTimeLabel)}
-                    />
+                    {[MIGRATION_STATUS_ENUM.FAILED, MIGRATION_STATUS_ENUM.COMPLETED].includes(scanDetails.status) && (
+                      <span className={classes.dateTimeLabel}>
+                        {scanDetails.status === MIGRATION_STATUS_ENUM.FAILED ? 'Last Failed at:' : null}
+                        <DateTime
+                          value={scanDetails.completedAt}
+                          format={MomentFormats.BriefDateTime}
+                        />
+                      </span>
+                    )}
                   </>
                 )}
               </Box>
             )}
             {toFormRevId && fromFormRevId && (
-              <Box>
-                <Button variant="text" color="secondary"
-                  onClick={showMappingRules}> Mapping Logic </Button>
-              </Box>
+              <Box> <Button color="inherit" variant="contained"onClick={showMappingRules}> {translate('bulk.migration.mapping.logic')} </Button> </Box>
             )}
           </Box>
 
           <Box className={classes.boxForSelection}>
-            <Typography variant="h5" className={classes.migrateInfo}>Migrate To</Typography>
-            <Typography variant="subtitle2" className={classes.subtitle}>Select the Document Type & Form Rev</Typography>
+            <Typography variant="h5" className={classes.migrateInfo}>{translate('bulk.migration.migrate.to')} </Typography>
+            <Typography variant="subtitle2" className={classes.subtitle}>{translate('bulk.migration.select.document.rev.info')}</Typography>
 
             <Box className={classes.innerBox}>
-              <FormControl
-                className={classes.formControl40}
-              >
-                <InputLabel id="document-type-migrate-to" className={classes.subtitle}> Document Type </InputLabel>
-                <Select
-                  labelId="document-type-migrate-to"
-                  value={toDocumentTypeId}
-                  onChange={(event) =>
-                    handleDocumentTypeChange(
-                      event.target.value as string,
-                      'toDocumentTypeId',
-                    )
+              <FormControl className={classes.formControl40}>
+                <Autocomplete
+                  options={documentTypesList}
+                  getOptionLabel={(type) => `${type.documentTypeName} - ${type.documentTypeAcronym}`}
+                  placeholder={translate('bulk.migration.document.type')}
+                  data-cy="to-doc-type"
+                  value={documentTypesList.find((type) => type.id === toDocumentTypeId) || null}
+                  onChange={(_, selectedOption) =>
+                    handleDocumentTypeChange(selectedOption?.id || '', 'toDocumentTypeId')
                   }
-                >
-                  {documentTypesList.map((type) => (
-                    <MenuItem value={type.id} key={type.id} className={classes.subtitle}>
-                      <span>
-                        {type.documentTypeName} - {type.documentTypeAcronym}
-                      </span>
-                    </MenuItem>
-                  ))}
-                </Select>
-                {/* <FormHelperText>Some important helper text</FormHelperText> */}
+                />
               </FormControl>
 
-              <FormControl
-                className={classes.formControl60}
-              >
-                <InputLabel id="form-rev-migrate-to" className={classes.subtitle}> Form Rev Selection </InputLabel>
-                <Select
-                  labelId="form-rev-migrate-to"
-                  value={toFormRevId}
-                  onChange={(event) =>
-                    handleFormRevSelection(
-                      event.target.value as string,
-                      'toFormRevId',
-                    )
+              <FormControl className={classes.formControl60} id="form-rev-migrate-to">
+                <Autocomplete
+                  options={toFormRevsList}
+                  getOptionLabel={(formRev) =>
+                    translate('bulk.migration.document.revision.options.label', { docId: formRev.document?.docId, name: formRev.name, revision: formRev.displayRevision, status: formRev.displayStatus })
                   }
-                >
-                  {toFormRevsList.map((formRev) => (
-                    <MenuItem value={formRev.id} key={formRev.id} className={classes.subtitle}>
-                      <span>
-                        {formRev.document?.docId} • {formRev.name} •{' '}
-                        {formRev.displayRevision} • {formRev.displayStatus}
-                      </span>
-                    </MenuItem>
-                  ))}
-                </Select>
+                  placeholder={translate('bulk.migration.document.form.rev.selection')}
+                  value={toFormRevsList.find((rev) => rev.id === toFormRevId) || null}
+                  onChange={(_, selectedOption) =>
+                    handleFormRevSelection(selectedOption?.id || '', 'toFormRevId')
+                  }
+                />
               </FormControl>
             </Box>
           </Box>
@@ -406,16 +304,13 @@ const BulkMigrationContainer: React.FC = () => {
         {!isEmpty(errorMessage) && (
           <div className={classes.errMsgStyle}>{errorMessage}</div>
         )}
-        {scanDetails?.id && ![MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
-          && <Box>
-            {false && <RevsTable scanId={scanDetails?.id as string } handleSelectedRowsChange={handleSelectedRowsChange} updateRevsTable={updateRevsTable} />}
-            {true && <KendoRevsTable {...{ scanId: scanDetails?.id, updateRevsTable }} />}
-          </Box>
+        {scanDetails?.id && !isScanRunning && <Box>
+          <RevsTable scanId={scanDetails.id} handleSelectedRowsChange={handleSelectedRowsChange} updateRevsTable={updateRevsTable} />
+        </Box>
         }
-        {scanDetails?.id && [MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.IN_PROGRESS].includes(scanDetails?.status)
-          && <Box className={classes.searchIconContainer}>
-            <SearchIcon className={classes.searchIcon} />
-          </Box>
+        {scanDetails?.id && isScanRunning && <Box className={classes.searchIconContainer}>
+          <SearchIcon className={classes.searchIcon} />
+        </Box>
         }
       </div>
       {isMigrationMappingDialogVisible && fromFormRevId && toFormRevId && (

@@ -12,6 +12,26 @@ export default makeStyles<NextTheme>(theme => ({
     gridGap: theme.spacing(2.5, 3),
     padding: theme.spacing(3, 3, 0),
   },
+  rulesTitle: {
+    flexGrow: 1,
+  },
+  previewSection: {
+    height: 'calc(100vh - 70px)',
+    padding: theme.spacing(2),
+  },
+  previewMessageContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '70vh',
+  },
+  previewProgressIcon: {
+    verticalAlign: 'middle',
+    marginRight: theme.spacing(1),
+  },
+  grey: {
+    backgroundColor: Colors.hint_gray,
+  },
   flexBox: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -155,24 +175,25 @@ export default makeStyles<NextTheme>(theme => ({
   promptUserMsgStyle: {
     color: Colors.red,
     backgroundColor: Colors.light_red,
-    padding: '8px',
+    padding: theme.spacing(1),
     textAlign: 'center',
   },
   errMsgStyle: {
     color: Colors.red,
     backgroundColor: Colors.light_red,
-    padding: '4px',
+    padding: theme.spacing(0.5),
   },
   mappingRuleSchemaItemBox: {
     position: 'relative',
-    marginTop: '8px',
+    marginTop: theme.spacing(1),
     border: `1px solid ${NextColors.textGray}`,
     borderRadius: '2px',
-    padding: '8px',
+    padding: theme.spacing(1),
     width: '100%',
   },
   compactListItem: {
-    marginBottom: '4px',
+    marginBottom: theme.spacing(0.5),
+    fontSize: 14,
     '& .MuiListItemText-root': {
       marginBottom: 0,
     },
@@ -262,20 +283,17 @@ export default makeStyles<NextTheme>(theme => ({
       opacity: 1, // Fully visible
     },
   },
-  drawerDialog: {
-    width: '40vw', // Width of the side panel
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%', // Full height of the drawer
-  },
   drawerDialogPaper: {
     width: '40vw',
-  },
-  drawerContent: {
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1, // Allow sections to take full available height
-    padding: '16px',
+  },
+  drawerDialogContent: {
+    flexGrow: 1,
+    fontSize: 14,
+    overflowY: 'auto',
+    padding: theme.spacing(2),
+    maxHeight: 'calc(100vh - 70px)',
   },
   drawerDialogCloseButton: {
     position: 'absolute',
@@ -323,8 +341,12 @@ export default makeStyles<NextTheme>(theme => ({
   },
   spaceBetweenFlex: {
     display: 'flex',
-    justifyContent: 'space-between',
-    gap: '4px',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: theme.spacing(1),
+  },
+  buttonSpacing: {
+    marginLeft: theme.spacing(1),
   },
   simpleFlex: {
     display: 'flex',
@@ -369,6 +391,7 @@ export default makeStyles<NextTheme>(theme => ({
   },
   textRightAlign: {
     textAlign: 'right',
+    fontSize: 12,
   },
   verticalAlignTableRow: {
     verticalAlign: 'baseline',
@@ -386,13 +409,15 @@ export default makeStyles<NextTheme>(theme => ({
   },
   mappingAreaTitle: {
     display: 'inline-block',
-    marginBottom: '8px',
-    borderBottom: `1px solid ${Colors.gray}`,
+    marginBottom: theme.spacing(1),
+    color: NextColors.textBlack,
+    fontWeight: 600,
+    fontSize: 14,
   },
   toSchemaItem: {
     display: 'flex',
     flexWrap: 'wrap',
-    gap: '8px',
+    gap: theme.spacing(1),
     overflow: 'auto',
   },
   selectedFromSchemaItem: {
@@ -604,5 +629,25 @@ export default makeStyles<NextTheme>(theme => ({
   },
   noPointerEvents: {
     pointerEvents: 'none',
+  },
+  listItemText: {
+    fontSize: 14,
+  },
+  clear: {
+    padding: 0,
+    cursor: 'pointer',
+  },
+  fromRevContainer: {
+    width: '32%',
+  },
+  toRevContainer: {
+    width: '56%',
+  },
+  mappingView: {
+    maxHeight: '72vh',
+    overflow: 'auto',
+  },
+  mappingInfo: {
+    marginBottom: theme.spacing(1),
   },
 }));

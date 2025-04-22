@@ -222,7 +222,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                 <SupplierStatusDialog
                                   dialog={supplierStatusDialog as Dialog}
                                   data={errorResponse}
-                                  confirmAction={e => onConfirmClick?.(approval.id)} />
+                                  confirmAction={() => onConfirmClick?.(approval.id)} />
                               )}
                             </ListItem>
                           );

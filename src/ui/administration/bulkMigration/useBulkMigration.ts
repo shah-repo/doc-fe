@@ -8,7 +8,8 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { FBFormState } from '../../form.builder';
-import { IApprovalRequirements, IBulkMigrationDocumentType, IBulkMigrationScanDetails, ISchemaItem, ISelectedDetails, ISupplierScanResultRev, SortDirection } from './interface';
+import { IApprovalRequirements, IBulkMigrationDocumentType, IBulkMigrationScanDetails, IScanDetailsResult, ISchemaItem, ISelectedDetails, ISupplierScanResultRev, SortDirection } from './interface';
+import { promptUserToRerunScan } from './utils';
 
 export const useBulkMigration = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,13 +25,15 @@ export const useBulkMigration = () => {
   const [toDocumentTypeId, setToDocumentTypeId] = useState<string>('');
   const [toFormRevId, setToFormRevId] = useState<string>('');
 
+  const [isScanRunning, setIsScanRunning] = useState(false);
+
   const [eligibleRevsCount, setEligibleRevsCount] = useState<number>(0);
   const [updateRevsTable, setUpdateRevsTable] = useState<number>(0);
 
   const [scanDetails, setScanDetails] = useState<IBulkMigrationScanDetails | null>(null);
-  const [rerunScanDetails, setRerunScanDetails] = useState<{irrelevantRevsCount: number, newRevsCount: number}>({
-    irrelevantRevsCount: 0,
-    newRevsCount: 0,
+  const [promptUserToRescanDetails, setPromptUserToRescanDetails] = useState<{isPromptUserToScan: boolean, msgParts: string[]}>({
+    isPromptUserToScan: false,
+    msgParts: [],
   });
 
   const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
@@ -70,7 +73,7 @@ export const useBulkMigration = () => {
     if (exception?.response?.status === 504) {
       setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
     } else {
-      const message: string = (exception?.response.data?.message as string) ?? 'Error processing request';
+      const message: string = (exception?.response?.data?.message as string) ?? 'Error processing request';
       toastInfo(message);
       setErrorMessage(message);
     }
@@ -179,12 +182,16 @@ export const useBulkMigration = () => {
         .request(requestConfig)
         .then((resp) => resp)
         .then(({ data }) => {
-          const { scanDetails, irrelevantRevsCount, newRevsCount } = data;
+          const {
+            scanDetails, alreadyUpgradedScanEntryIds, irrelevantScanIds,
+            mismatchingStatusScanIds, newRevIds,
+          } = data as IScanDetailsResult;
           setIsLoading(false);
           setScanDetails(scanDetails);
-          setRerunScanDetails({
-            irrelevantRevsCount, newRevsCount,
-          });
+
+          const { msgParts, isPromptUserToScan }
+            = promptUserToRerunScan({ alreadyUpgradedScanEntryIds, irrelevantScanIds, mismatchingStatusScanIds, newRevIds });
+          setPromptUserToRescanDetails({ isPromptUserToScan, msgParts });
         })
         .catch((exception) => {
           catchAxiosException(exception);
@@ -223,6 +230,8 @@ export const useBulkMigration = () => {
     }
 
     commonSetUp();
+    setIsScanRunning(true);
+
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
       url: `${BULK_MIGRATION_REGISTER_SCAN_FOR_RUN}/${scanDetails?.id}`,
@@ -235,15 +244,14 @@ export const useBulkMigration = () => {
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        console.log(data);
         setIsLoading(false);
+        setIsScanRunning(false);
         setScanDetails(data);
-        toastSuccess(
-          'Scan request has been submitted. Please check back in some time.',
-        );
+        setPromptUserToRescanDetails({ isPromptUserToScan: false, msgParts: [] });
       })
       .catch((exception) => {
         catchAxiosException(exception);
+        setIsScanRunning(false);
       });
   }
 
@@ -443,8 +451,7 @@ export const useBulkMigration = () => {
 
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
-      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}
-      &sortOrder=${(order as string).toLocaleUpperCase()}&isShowActionableOnly=${isShowActionableRows}`,
+      url: `${BULK_MIGRATION_GET_SCAN_RESULTS}/${scanId}?offset=${page}&limit=${rowsPerPage}&orderBy=${orderBy}&sortOrder=${(order as string).toLocaleUpperCase()}&isShowActionableOnly=${isShowActionableRows}`,
       data: {
         searchQueries,
       },
@@ -501,6 +508,7 @@ export const useBulkMigration = () => {
 
   return {
     isLoading,
+    isScanRunning,
     errorMessage,
     documentTypesList,
     fromFormRevsList,
@@ -514,7 +522,7 @@ export const useBulkMigration = () => {
     setToDocumentTypeId,
     setToFormRevId,
     eligibleRevsCount,
-    rerunScanDetails,
+    promptUserToRescanDetails,
     updateRevsTable,
     scanDetails,
     selectedRows,

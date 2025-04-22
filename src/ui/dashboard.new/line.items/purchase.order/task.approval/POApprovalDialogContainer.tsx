@@ -2,6 +2,7 @@ import { ButtonProps } from '@material-ui/core/Button';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as SuccessIcon } from '../../../../../assets/images/success_iconn.svg';
+import { translate } from '../../../../../common/intl';
 import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
@@ -78,18 +79,25 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         dispatch(dashboardMyFeedsActions.loadMyFeedsList());
       }
     },
-    onError: (error) => {
+    onError: (error?: string) => {
       async.reset();
+      if (!error) {
+        toastError(translate('supplier.announcement.unknown.error.message'));
+        return;
+      }
+
       try {
-        const parsedError = JSON.parse(error as string);
-        if (parsedError.status === 412 && parsedError.response) {
-          setErrorResponse(parsedError.response as IApprovalErrorResponse);
+        const parsedError = JSON.parse(error);
+        const { status, response } = parsedError || {};
+
+        if (status === 412 && response) {
+          setErrorResponse(response as IApprovalErrorResponse);
           supplierStatusDialog.open();
         } else {
-          toastError(error as string);
+          toastError(error);
         }
-      } catch (err) {
-        toastError(error as string);
+      } catch {
+        toastError(error);
       }
     },
   });

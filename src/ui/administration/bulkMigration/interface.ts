@@ -105,5 +105,16 @@ export interface IRowData {
   [key: string]: any
 }
 
+export interface IMismatchResponse {
+  newRevIds: string[]
+  alreadyUpgradedScanEntryIds?: number[]
+  irrelevantScanIds: number[]
+  mismatchingStatusScanIds: number[]
+}
+
+export interface IScanDetailsResult extends IMismatchResponse {
+  scanDetails: IBulkMigrationScanDetails
+}
+
 export type SortDirection = 'asc' | 'desc' | undefined;
 export const INTERVAL_DURATION = 10000;

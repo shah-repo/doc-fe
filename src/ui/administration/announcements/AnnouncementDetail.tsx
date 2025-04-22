@@ -2,6 +2,7 @@ import { Box, Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, Typo
 import Markdown from 'markdown-to-jsx';
 import React, { useState } from 'react';
 import { FBOption } from '../../../../src/ui/form.builder/index';
+import { translate } from '../../../common/intl';
 import Text from '../../components/Text';
 import { FBSchemaState } from '../../form.builder';
 import { FBInputProps } from '../../form.builder/types/common';
@@ -9,114 +10,123 @@ import { Translation } from '../../translations/types';
 import { IAnnouncementDetail, IConflictingItem, IFormBuilder, SELECTED_RESOLUTION_ENUM } from './interface';
 import useStyles from './styles';
 
-const AnnouncementDetail: React.FC<{
+interface AnnouncementDetailProps {
   announcementDetailRow: IAnnouncementDetail
-  conflictingElements: { [key: string]: IConflictingItem }
-  handleConflictResolution: (announcementDetailRow: IAnnouncementDetail, value: SELECTED_RESOLUTION_ENUM) => void
-}> = ({ announcementDetailRow, conflictingElements, handleConflictResolution }) => {
-  const classes = useStyles();
+  conflictingElements: Record<string, IConflictingItem>
+  handleConflictResolution: (
+    row: IAnnouncementDetail,
+    value: SELECTED_RESOLUTION_ENUM
+  ) => void
+}
 
+const AnnouncementDetail: React.FC<AnnouncementDetailProps> = ({
+  announcementDetailRow,
+  conflictingElements,
+  handleConflictResolution,
+}) => {
+  const classes = useStyles();
   const { formBuilder } = announcementDetailRow;
   const [selectedOption, setSelectedOption] = useState<string>('');
 
-  function componentToRender (controlProps: FBInputProps): React.ReactNode | undefined {
+  const componentToRender = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
     const schemaControl = FBSchemaState.control[type || ''];
-    if (!schemaControl) {
-      return;
-    }
+    if (!schemaControl) return;
+
     return React.createElement(schemaControl, {
       key: `fb-control-${type}-${name}-${index}`,
       ...controlProps,
     });
-  }
+  };
 
-  function getFormComponentDetails (formBuilder: IFormBuilder) {
-    const details: Partial<FBInputProps> = {
-      name: formBuilder.keyName,
-      label: formBuilder.defaultLabel,
-      type: formBuilder.type,
-    };
+  const getFormComponentDetails = (formBuilder: IFormBuilder): Partial<FBInputProps> => ({
+    name: formBuilder.keyName,
+    label: formBuilder.defaultLabel,
+    type: formBuilder.type,
+    ...(formBuilder.optionId !== '-1' && { optionId: formBuilder.optionId }),
+    ...(formBuilder.options?.length && { options: formBuilder.options }),
+  });
 
-    if (formBuilder.optionId !== '-1') {
-      details.optionId = formBuilder.optionId;
-    }
-
-    if (formBuilder.options?.length) {
-      details.options = formBuilder.options;
-    }
-
-    return details;
-  }
-
-  function optionSelected (event: React.ChangeEvent<HTMLInputElement>) {
+  const handleOptionSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value as SELECTED_RESOLUTION_ENUM;
     setSelectedOption(value);
     handleConflictResolution(announcementDetailRow, value);
-  }
+  };
 
-  function getTabText (defaultTabId: string) {
-    return `tabId.${defaultTabId}` as Translation;
-  }
+  const getTabText = (defaultTabId: string): Translation => `tabId.${defaultTabId}` as Translation;
+  const conflictData = conflictingElements[announcementDetailRow.id];
+  const hasConflict = !!(
+    formBuilder
+    && conflictData?.options?.length
+    && conflictData?.mustBeResolved
+  );
 
   return (
     <Grid item lg={12} xl={6}>
       <Card className={classes.announcementDetailRoot}>
-        {formBuilder && <>
-          <CardContent className={classes.announcementDetailCardHeader}>
-            <Typography variant="h5">
-              <u>{formBuilder.defaultLabel}</u>
-            </Typography>
-            <Typography className={classes.announcementDetailTabIndicatorText}>
-              [ Added to <i><b><Text translation={getTabText(formBuilder.defaultTabId)} /></b></i> tab by default ]
-            </Typography>
-
+        {formBuilder && (
+          <>
+            <CardContent className={classes.announcementDetailCardHeader}>
+              <Typography variant="h5">
+                <u>{formBuilder.defaultLabel}</u>
+              </Typography>
+              <Typography className={classes.announcementDetailTabIndicatorText}>
+                {translate('supplier.announcement.detail.tab.indicator.start.message')}{' '}
+                <b>
+                  <Text translation={getTabText(formBuilder.defaultTabId)} />
+                </b>{' '}
+                {translate('supplier.announcement.detail.tab.indicator.end.message')}
+              </Typography>
+            </CardContent>
+            {announcementDetailRow.helpText && (
+              <CardContent className={classes.announcementDetailTextDescription}>
+                <Markdown>{announcementDetailRow.helpText}</Markdown>
+              </CardContent>
+            )}
+            <Box className={classes.componentDisplayBox}>{componentToRender(getFormComponentDetails(formBuilder))}</Box>
+            {formBuilder.describingText && (
+              <CardContent className={classes.announcementDetailTextDescription}>
+                <Markdown>{formBuilder.describingText}</Markdown>
+              </CardContent>
+            )}
+          </>
+        )}
+        {!formBuilder && announcementDetailRow.helpText && (
+          <CardContent className={classes.announcementDetailTextDescription}>
+            <Markdown>{announcementDetailRow.helpText}</Markdown>
           </CardContent>
-          {
-            announcementDetailRow.helpText && <CardContent className={classes.announcementDetailTextDescription}>
-              <Markdown>{announcementDetailRow.helpText}</Markdown>
-            </CardContent>
-          }
-          <Box className={classes.componentDisplayBox}>
-            {componentToRender(getFormComponentDetails(formBuilder))}
-          </Box>
-          {
-            formBuilder.describingText && <CardContent className={classes.announcementDetailTextDescription}>
-              <Markdown>{formBuilder.describingText}</Markdown>
-            </CardContent>
-          }
-        </>}
-        {!formBuilder && announcementDetailRow.helpText
-        && <CardContent className={classes.announcementDetailTextDescription}>
-          <Markdown>{announcementDetailRow.helpText}</Markdown>
-        </CardContent>
-        }
-        {
-          formBuilder
-          && conflictingElements[announcementDetailRow.id]?.options?.length
-          && conflictingElements[announcementDetailRow.id]?.mustBeResolved
-          && <RadioGroup name="selectedResolution" value={selectedOption} onChange={optionSelected}>
+        )}
+        {hasConflict && (
+          <RadioGroup name="selectedResolution" value={selectedOption} onChange={handleOptionSelect}>
             <Grid container className={classes.conflictingElementsContainer}>
               <Grid item xs={6} className={classes.announcementDetailOptionsArea}>
-                <FormControlLabel value={SELECTED_RESOLUTION_ENUM.EXISTING} control={<Radio />}
-                  label="Existing Options" className={classes.announcementDetailOptionsHeading} />
+                <FormControlLabel
+                  value={SELECTED_RESOLUTION_ENUM.EXISTING}
+                  control={<Radio />}
+                  label={translate('supplier.announcement.detail.existing.options')}
+                  className={classes.announcementDetailOptionsHeading}
+                />
                 <Typography className={classes.announcementDetailOptionsText}>
-                  { (conflictingElements[announcementDetailRow.id].options as FBOption[])?.map(option => option.text).join(', ') }
+                  {(conflictData.options as FBOption[])?.map((option) => option.text).join(', ')}
                 </Typography>
               </Grid>
               <Grid item xs={6} className={classes.announcementDetailOptionsArea}>
-                <FormControlLabel value={SELECTED_RESOLUTION_ENUM.NEW} control={<Radio />}
-                  label="New Options" className={classes.announcementDetailOptionsHeading} />
+                <FormControlLabel
+                  value={SELECTED_RESOLUTION_ENUM.NEW}
+                  control={<Radio />}
+                  label={translate('supplier.announcement.detail.new.options')}
+                  className={classes.announcementDetailOptionsHeading}
+                />
                 <Typography className={classes.announcementDetailOptionsText}>
-                  { (formBuilder.options)?.map(option => option.text).join(', ') }
+                  {formBuilder.options?.map((option) => option.text).join(', ')}
                 </Typography>
               </Grid>
               <Typography variant="body2">
-                <i>Please select one of the options to proceed. Note that if the new options are fewer than the current ones, it may result in data loss.</i>
+                {translate('supplier.announcement.detail.tab.helper.message')}
               </Typography>
             </Grid>
           </RadioGroup>
-        }
+        )}
       </Card>
     </Grid>
   );
