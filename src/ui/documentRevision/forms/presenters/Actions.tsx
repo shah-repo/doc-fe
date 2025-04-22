@@ -3,7 +3,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, makeStyles } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from 'lodash';
+import { get, isArray, isEmpty, isEqual, isUndefined, keys, map, omit } from 'lodash';
 import { Observer } from 'mobx-react';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -82,7 +82,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // of create button until correct doc id is generated
   const { isCreateDocumentDisabled, setDoNotPrompt, isSliderView, inDialog } = props;
   const { _formState, _documentRevisionFormState } = SM.useStores();
-  const { workspaceState } = FB.useStores();
+  const { formState, workspaceState } = FB.useStores();
   const printDialog = useDialog();
   const classes = styles();
   const {
@@ -118,10 +118,17 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const [isApproved, setIsApproved] = React.useState(false);
 
   React.useEffect(() => {
-    _formState?.validate((_valid) => {
+    map(schema, (schemaItem) => {
+      if (schemaItem.rules) {
+        const { name, rules } = schemaItem;
+        formState?.setFieldRules(name ?? '', rules);
+      }
+    });
+
+    formState?.validate((_valid) => {
       const validSchema = schema?.filter((schemaItem) => {
         if (schemaItem.validationMode === 'visibility' || schemaItem.validationMode === 'disabled') {
-          return !isUndefined(_formState.errors.get(schemaItem.name ?? ''));
+          return !isUndefined(formState?.errors.get(schemaItem.name ?? ''));
         }
         return true;
       });
@@ -129,7 +136,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       setIsApproved(isInlineFormApproved(documentRevision, _formState, validSchema));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_formState, schema, _formState?.Validator, _formState?.getValues()]);
+  }, [_formState, formState, schema, _formState?.Validator, _formState?.getValues()]);
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
