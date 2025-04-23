@@ -37,6 +37,7 @@ const BulkMigrationContainer: React.FC = () => {
     setToDocumentTypeId,
     setToFormRevId,
     eligibleRevsCount,
+    setEligibleRevsCount,
     promptUserToRescanDetails,
     updateRevsTable,
     scanDetails,
@@ -73,12 +74,17 @@ const BulkMigrationContainer: React.FC = () => {
     fieldName: string,
   ) {
     if (fieldName === 'fromFormRevId') {
-      // Get the number of eligible formRevisions
-      fetchEligibleRevisionsOfRevType(selectedFormRevId);
+      if (selectedFormRevId) {
+        // Get the number of eligible formRevisions
+        fetchEligibleRevisionsOfRevType(selectedFormRevId);
+      } else {
+        // When cleared
+        setEligibleRevsCount(0);
+      }
       setFromFormRevId(selectedFormRevId);
     }
 
-    if (fieldName === 'toFormRevId') {
+    if (fieldName === 'toFormRevId' && selectedFormRevId) {
       // If the from and to Document TypeId are the same, then the toFormRevId version must be greater
       if (validateFormRevVersionNumbersAndStatus(selectedFormRevId)) {
         setToFormRevId(selectedFormRevId);
