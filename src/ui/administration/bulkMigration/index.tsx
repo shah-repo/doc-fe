@@ -10,16 +10,18 @@ import { MomentFormats } from '../../../common/utils/date';
 import DateTime from '../../components/DateTime';
 import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
-import { FBButton } from '../../form.builder';
 import { ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
 import RevsTable from './RevsTable';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
+import { getRevById } from './utils';
 
 const BulkMigrationContainer: React.FC = () => {
   const classes = useStyles();
+  const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
+  const [isMigrationMappingDialogVisible, setIsMigrationMappingDialogVisible] = useState<boolean>(false);
 
   const {
     isLoading,
@@ -55,24 +57,19 @@ const BulkMigrationContainer: React.FC = () => {
     handleMigrationConfirmationDialogClose,
   } = useBulkMigration();
 
-  const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
-
   useEffect(() => {
     fetchAllDocumentTypes();
   }, []);
 
-  function handleDocumentTypeChange (value: string, fieldName: string) {
+  const handleDocumentTypeChange = (value: string, fieldName: string) => {
     if (fieldName === 'fromDocumentTypeId') {
       setFromDocumentTypeId(value);
     } else if (fieldName === 'toDocumentTypeId') {
       setToDocumentTypeId(value);
     }
-  }
+  };
 
-  function handleFormRevSelection (
-    selectedFormRevId: string,
-    fieldName: string,
-  ) {
+  const handleFormRevSelection = (selectedFormRevId: string, fieldName: string) => {
     if (fieldName === 'fromFormRevId') {
       if (selectedFormRevId) {
         // Get the number of eligible formRevisions
@@ -90,29 +87,28 @@ const BulkMigrationContainer: React.FC = () => {
         setToFormRevId(selectedFormRevId);
       }
     }
-  }
+  };
 
-  function validateFormRevVersionNumbersAndStatus (selectedFormRevId: string) {
+  const validateFormRevVersionNumbersAndStatus = (selectedFormRevId: string) => {
     let isValidated = true;
 
     if (fromDocumentTypeId === toDocumentTypeId) {
-      const fromFormRev = fromFormRevsList.find((formRev) => formRev.id === fromFormRevId);
+      const fromFormRev = getRevById(fromFormRevsList, fromFormRevId);
       const fromFormVersion = fromFormRev?.version ?? -1;
-
-      const toFormRev = toFormRevsList.find((formRev) => formRev.id === selectedFormRevId);
+      const toFormRev = getRevById(toFormRevsList, selectedFormRevId);
       const toFormVersion = toFormRev?.version ?? -1;
 
       if (fromFormRev?.document.docId === toFormRev?.document.docId && toFormVersion <= fromFormVersion) {
         isValidated = false;
-        toastError('Must migrate to a higher Form Rev');
+        toastError(translate('bulk.migration.higher.form.rev.error.message'));
       }
     }
     return isValidated;
-  }
+  };
 
-  function handleSelectedRowsChange (selected: ISelectedDetails[]) {
+  const handleSelectedRowsChange = (selected: ISelectedDetails[]) => {
     setSelectedRows(selected);
-  }
+  };
 
   useEffect(() => {
     if (fromDocumentTypeId) {
@@ -132,8 +128,6 @@ const BulkMigrationContainer: React.FC = () => {
     }
   }, [fromDocumentTypeId, toDocumentTypeId, fromFormRevId, toFormRevId]);
 
-  // Migration mapping Dialog
-  const [isMigrationMappingDialogVisible, setIsMigrationMappingDialogVisible] = useState<boolean>(false);
   const showMappingRules = () => {
     setIsMigrationMappingDialogVisible(true);
   };
@@ -142,45 +136,48 @@ const BulkMigrationContainer: React.FC = () => {
     setIsMigrationMappingDialogVisible(false);
   };
 
+  const fromRev = getRevById(fromFormRevsList, fromFormRevId);
+  const toRev = getRevById(toFormRevsList, toFormRevId);
+  const { status: scanStatus, id: scanId = '' } = scanDetails ?? {};
+
   return (
     <Box className={classes.root}>
       <Box className={classes.header}>
         <Grid container spacing={3}>
           <Grid item xs={6}>
-            <Box>
-              <Typography variant="h1" className={classes.title}>
-                {translate('administration.bulk.migration.title')}
-              </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
-                {translate('administration.bulk.migration.subtitle')}
-              </Typography>
-            </Box>
+            <Typography variant="h1" className={classes.title}>
+              {translate('administration.bulk.migration.title')}
+            </Typography>
+            <Typography variant="subtitle1" className={classes.subtitle}>
+              {translate('administration.bulk.migration.subtitle')}
+            </Typography>
           </Grid>
           <Grid item xs={4}>
-            {promptUserToRescanDetails.isPromptUserToScan && scanDetails?.status !== MIGRATION_STATUS_ENUM.IN_PROGRESS
-              && <div className={classes.promptUserMsgStyle}>{`${promptUserToRescanDetails.msgParts.join(' ')}. Rerun scan to accommodate these changes.`}</div>
-            }
+            {promptUserToRescanDetails.isPromptUserToScan && scanStatus !== MIGRATION_STATUS_ENUM.IN_PROGRESS && (
+              <div className={classes.promptUserMsgStyle}>
+                {translate('bulk.migration.re.scan.message', {
+                  msgParts: promptUserToRescanDetails.msgParts.join(' '),
+                })}
+              </div>
+            )}
           </Grid>
           <Grid item xs={2}>
-            { selectedRows.length > 0 && <FBButton
-              label="Migrate Revisions"
-              dataCy="migrate-revisions-btn"
-              onClick = {confirmSubmission}
-              variant="contained"
-              color="primary"
-            /> }
+            {selectedRows.length > 0 && (
+              <Button size="small" data-cy="migrate-revisions-btn" onClick={confirmSubmission} variant="contained" color="primary">
+                {translate('bulk.migration.migrate.revisions')}
+              </Button>
+            )}
           </Grid>
         </Grid>
-        {isLoading && (
-          <LinearProgress
-            className={classes.progress}
-            data-cy="saving-progress-bar"
-          />
-        )}
+        {isLoading && <LinearProgress className={classes.progress} data-cy="saving-progress-bar" />}
         <Box className={classes.flexBox}>
           <Box className={classes.boxForSelection}>
-            <Typography variant="h5" className={classes.migrateInfo}> {translate('bulk.migration.migrate.from')} </Typography>
-            <Typography variant="subtitle2" className={classes.subtitle}> {translate('bulk.migration.select.document.rev.info')} </Typography>
+            <Typography variant="h5" className={classes.migrateInfo}>
+              {translate('bulk.migration.migrate.from')}
+            </Typography>
+            <Typography variant="subtitle2" className={classes.subtitle}>
+              {translate('bulk.migration.select.document.rev.info')}
+            </Typography>
 
             <Box className={classes.innerBox}>
               <FormControl className={classes.formControl40} id="OwnerChangerPresenter-selectField">
@@ -200,22 +197,33 @@ const BulkMigrationContainer: React.FC = () => {
                   options={fromFormRevsList}
                   placeholder={translate('bulk.migration.document.form.rev.selection')}
                   getOptionLabel={(formRev) =>
-                    translate('bulk.migration.document.revision.options.label', { docId: formRev.document?.docId, name: formRev.name, revision: formRev.displayRevision, status: formRev.displayStatus })
+                    translate('bulk.migration.document.revision.options.label', {
+                      docId: formRev.document?.docId,
+                      name: formRev.name,
+                      revision: formRev.displayRevision,
+                      status: formRev.displayStatus,
+                    })
                   }
+                  data-cy="from-rev-selection"
                   value={fromFormRevsList.find((rev) => rev.id === fromFormRevId) || null}
-                  onChange={(_, selectedOption) =>
-                    handleFormRevSelection(selectedOption?.id || '', 'fromFormRevId')
-                  }
+                  onChange={(_, selectedOption) => handleFormRevSelection(selectedOption?.id || '', 'fromFormRevId')}
                 />
               </FormControl>
             </Box>
             {fromDocumentTypeId && fromFormRevId && (
               <Box className={classes.revsTableRefreshBox}>
-                <Typography variant="subtitle2" id="eligible-revs" className={classes.revsTableRefreshText} component="div">
-                        Eligible Revisions - <span className={classes.blackSpan}> {eligibleRevsCount} </span>
+                <Typography
+                  variant="subtitle2"
+                  id="eligible-revs"
+                  className={classes.revsTableRefreshText}
+                  component="div"
+                >
+                  {translate('bulk.migration.eligible.revisions')} -{' '}
+                  <span className={classes.blackSpan}> {eligibleRevsCount} </span>
                   <RefreshIcon
                     className={classes.revsTableRefreshIcon}
-                    onClick={e => fetchEligibleRevisionsOfRevType(fromFormRevId)}
+                    data-cy="refresh-eligible-revs"
+                    onClick={(e) => fetchEligibleRevisionsOfRevType(fromFormRevId)}
                   />
                 </Typography>
               </Box>
@@ -225,41 +233,60 @@ const BulkMigrationContainer: React.FC = () => {
           <Box className={cx(classes.actionBox, classes.flexBoxColumn)}>
             {scanDetails?.id && (
               <Box className={cx(classes.buttons, classes.flexBoxColumn)}>
-                {[MIGRATION_STATUS_ENUM.IN_PROGRESS, MIGRATION_STATUS_ENUM.STARTED, MIGRATION_STATUS_ENUM.MAPPING].includes(scanDetails.status) && (
+                {[
+                  MIGRATION_STATUS_ENUM.IN_PROGRESS,
+                  MIGRATION_STATUS_ENUM.STARTED,
+                  MIGRATION_STATUS_ENUM.MAPPING,
+                ].includes(scanStatus as MIGRATION_STATUS_ENUM) && (
                   <>
-                    <FBButton
-                      label="Cancel Current Scan"
-                      dataCy="supplier-migration-scan-cancel"
+                    <Button
+                      data-cy="supplier-migration-scan-cancel"
                       onClick={cancelScanForRevisions}
-                      variant="outlined"
+                      variant="contained"
                       color="primary"
+                      size="small"
                       className={classes.zeroMarginBottom}
-                    />
+                    >
+                      {translate('bulk.migration.cancel.current.scan')}
+                    </Button>
                     <Box className={classes.revsTableRefreshBox}>
-                      <Typography variant="subtitle2" id="scan-revs" className={cx(classes.revsTableRefreshText, classes.blinking)} component="div">
-                        {scanDetails.status}
+                      <Typography
+                        variant="subtitle2"
+                        id="scan-revs"
+                        className={cx(classes.revsTableRefreshText, classes.blinking)}
+                        component="div"
+                      >
+                        {scanStatus}
                         <RefreshIcon className={classes.revsTableRefreshIcon} onClick={getScanDetails} />
                       </Typography>
                     </Box>
                   </>
                 )}
 
-                {[MIGRATION_STATUS_ENUM.INITIALIZED, MIGRATION_STATUS_ENUM.CANCELLED, MIGRATION_STATUS_ENUM.FAILED, MIGRATION_STATUS_ENUM.COMPLETED].includes(scanDetails.status) && (
+                {[
+                  MIGRATION_STATUS_ENUM.INITIALIZED,
+                  MIGRATION_STATUS_ENUM.CANCELLED,
+                  MIGRATION_STATUS_ENUM.FAILED,
+                  MIGRATION_STATUS_ENUM.COMPLETED,
+                ].includes(scanStatus as MIGRATION_STATUS_ENUM) && (
                   <>
-                    <FBButton
-                      label="Run Scan"
-                      dataCy="bulk-migration-scan"
+                    <Button
+                      data-cy="bulk-migration-scan"
                       onClick={startRevisionsScan}
-                      variant="outlined"
+                      variant="contained"
                       color="primary"
-                    />
-                    {[MIGRATION_STATUS_ENUM.FAILED, MIGRATION_STATUS_ENUM.COMPLETED].includes(scanDetails.status) && (
+                      size="small"
+                    >
+                      {translate('bulk.migration.run.scan')}
+                    </Button>
+                    {[MIGRATION_STATUS_ENUM.FAILED, MIGRATION_STATUS_ENUM.COMPLETED].includes(
+                      scanStatus as MIGRATION_STATUS_ENUM,
+                    ) && (
                       <span className={classes.dateTimeLabel}>
-                        {scanDetails.status === MIGRATION_STATUS_ENUM.FAILED ? 'Last Failed at:' : null}
-                        <DateTime
-                          value={scanDetails.completedAt}
-                          format={MomentFormats.BriefDateTime}
-                        />
+                        {scanStatus === MIGRATION_STATUS_ENUM.FAILED
+                          ? translate('bulk.migration.scan.fail.message')
+                          : null}
+                        <DateTime value={scanDetails.completedAt} format={MomentFormats.BriefDateTime} />
                       </span>
                     )}
                   </>
@@ -267,13 +294,19 @@ const BulkMigrationContainer: React.FC = () => {
               </Box>
             )}
             {toFormRevId && fromFormRevId && (
-              <Box> <Button color="inherit" variant="contained"onClick={showMappingRules}> {translate('bulk.migration.mapping.logic')} </Button> </Box>
+              <Button size="small" color="secondary" data-cy="show-mappings" variant="contained" onClick={showMappingRules}>
+                {translate('bulk.migration.mapping.logic')}
+              </Button>
             )}
           </Box>
 
           <Box className={classes.boxForSelection}>
-            <Typography variant="h5" className={classes.migrateInfo}>{translate('bulk.migration.migrate.to')} </Typography>
-            <Typography variant="subtitle2" className={classes.subtitle}>{translate('bulk.migration.select.document.rev.info')}</Typography>
+            <Typography variant="h5" className={classes.migrateInfo}>
+              {translate('bulk.migration.migrate.to')}{' '}
+            </Typography>
+            <Typography variant="subtitle2" className={classes.subtitle}>
+              {translate('bulk.migration.select.document.rev.info')}
+            </Typography>
 
             <Box className={classes.innerBox}>
               <FormControl className={classes.formControl40}>
@@ -282,7 +315,7 @@ const BulkMigrationContainer: React.FC = () => {
                   getOptionLabel={(type) => `${type.documentTypeName} - ${type.documentTypeAcronym}`}
                   placeholder={translate('bulk.migration.document.type')}
                   data-cy="to-doc-type"
-                  value={documentTypesList.find((type) => type.id === toDocumentTypeId) || null}
+                  value={getRevById(documentTypesList, toDocumentTypeId) || null}
                   onChange={(_, selectedOption) =>
                     handleDocumentTypeChange(selectedOption?.id || '', 'toDocumentTypeId')
                   }
@@ -293,13 +326,17 @@ const BulkMigrationContainer: React.FC = () => {
                 <Autocomplete
                   options={toFormRevsList}
                   getOptionLabel={(formRev) =>
-                    translate('bulk.migration.document.revision.options.label', { docId: formRev.document?.docId, name: formRev.name, revision: formRev.displayRevision, status: formRev.displayStatus })
+                    translate('bulk.migration.document.revision.options.label', {
+                      docId: formRev.document?.docId,
+                      name: formRev.name,
+                      revision: formRev.displayRevision,
+                      status: formRev.displayStatus,
+                    })
                   }
+                  data-cy="to-rev-selection"
                   placeholder={translate('bulk.migration.document.form.rev.selection')}
-                  value={toFormRevsList.find((rev) => rev.id === toFormRevId) || null}
-                  onChange={(_, selectedOption) =>
-                    handleFormRevSelection(selectedOption?.id || '', 'toFormRevId')
-                  }
+                  value={toRev || null}
+                  onChange={(_, selectedOption) => handleFormRevSelection(selectedOption?.id || '', 'toFormRevId')}
                 />
               </FormControl>
             </Box>
@@ -307,38 +344,42 @@ const BulkMigrationContainer: React.FC = () => {
         </Box>
       </Box>
       <div className={classes.panels}>
-        {!isEmpty(errorMessage) && (
-          <div className={classes.errMsgStyle}>{errorMessage}</div>
+        {!isEmpty(errorMessage) && <div className={classes.errMsgStyle}>{errorMessage}</div>}
+        {scanDetails?.id && !isScanRunning && (
+          <Box>
+            <RevsTable
+              scanId={scanId}
+              handleSelectedRowsChange={handleSelectedRowsChange}
+              updateRevsTable={updateRevsTable}
+            />
+          </Box>
         )}
-        {scanDetails?.id && !isScanRunning && <Box>
-          <RevsTable scanId={scanDetails.id} handleSelectedRowsChange={handleSelectedRowsChange} updateRevsTable={updateRevsTable} />
-        </Box>
-        }
-        {scanDetails?.id && isScanRunning && <Box className={classes.searchIconContainer}>
-          <SearchIcon className={classes.searchIcon} />
-        </Box>
-        }
+        {scanDetails?.id && isScanRunning && (
+          <Box className={classes.searchIconContainer}>
+            <SearchIcon className={classes.searchIcon} />
+          </Box>
+        )}
       </div>
       {isMigrationMappingDialogVisible && fromFormRevId && toFormRevId && (
         <MigrationMappingDialog
           isOpen={isMigrationMappingDialogVisible}
           handleClose={handleMigrationMappingDialogClose}
-          fromRev={fromFormRevsList.find((rev) => rev.id === fromFormRevId)}
-          toRev={toFormRevsList.find((rev) => rev.id === toFormRevId)}
+          fromRev={fromRev}
+          toRev={toRev}
           updateScanMapping={updateScanMapping}
           scanDetails={scanDetails}
         />
       )}
-      {
-        isConfirmationDialogVisible && <MigrationConfirmationDialog
+      {isConfirmationDialogVisible && (
+        <MigrationConfirmationDialog
           isOpen={isConfirmationDialogVisible}
           handleClose={handleMigrationConfirmationDialogClose}
           selectedDetails={selectedRows}
           handleConfirmation={handleMigrationConfirmation}
           toDocumentTypeId={toDocumentTypeId}
-          toFormRev={toFormRevsList.find((formRev) => formRev.id === toFormRevId)}
+          toFormRev={toRev}
         />
-      }
+      )}
     </Box>
   );
 };

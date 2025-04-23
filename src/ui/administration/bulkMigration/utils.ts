@@ -212,6 +212,9 @@ export function autoMapArrays (
   return { fromRevSchema, toRevSchema };
 }
 
+export const getRevById = <T extends { id: string | number }>(list: T[], id: string | number): T | undefined =>
+  list.find((item) => item.id === id);
+
 export function promptUserToRerunScan (rerunScanDetails: IMismatchResponse): {
   msgParts: string[]
   isPromptUserToScan: boolean

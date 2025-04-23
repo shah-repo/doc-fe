@@ -105,8 +105,7 @@ export default makeStyles<NextTheme>(theme => ({
   },
   dateTimeLabel: {
     fontSize: 12,
-    position: 'relative',
-    top: -4,
+    margin: theme.spacing(0.5, 0),
   },
   progress: {
     position: 'absolute',
@@ -443,10 +442,11 @@ export default makeStyles<NextTheme>(theme => ({
     bottom: 0,
   },
   previewDrawerDialog: {
-    width: '80vw', // Width of the side panel
+    width: '80vw',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%', // Full height of the drawer
+    height: '100%',
+    background: Colors.alabaster,
   },
   previewDrawerDialogPaper: {
     width: '80vw',
