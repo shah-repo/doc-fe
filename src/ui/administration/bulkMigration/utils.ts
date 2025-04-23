@@ -229,12 +229,12 @@ export function promptUserToRerunScan (rerunScanDetails: IMismatchResponse): {
     msgParts.push(`${rerunScanDetails.mismatchingStatusScanIds?.length} status updated.`);
   }
 
-  if (rerunScanDetails.newRevIds.length > 0) {
+  if (rerunScanDetails.newRevIds?.length > 0) {
     isPromptUserToScan = true;
     msgParts.push(`${rerunScanDetails.newRevIds.length} entries added.`);
   }
 
-  if (rerunScanDetails.alreadyUpgradedScanEntryIds && rerunScanDetails.alreadyUpgradedScanEntryIds.length > 0) {
+  if (rerunScanDetails.alreadyUpgradedScanEntryIds && rerunScanDetails.alreadyUpgradedScanEntryIds?.length > 0) {
     isPromptUserToScan = true;
     msgParts.push(`${rerunScanDetails.alreadyUpgradedScanEntryIds.length} entries already migrated.`);
   }
