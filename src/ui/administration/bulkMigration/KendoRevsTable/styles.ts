@@ -18,8 +18,11 @@ export default makeStyles((theme) => ({
     },
 
   },
-  addButton: {
-    float: 'right',
+  noPointerEvents: {
+    pointerEvents: 'none',
+  },
+  revsTablePopoverPaper: {
+    padding: theme.spacing(1),
   },
   selectedRow: {
     backgroundColor: Colors.selected,

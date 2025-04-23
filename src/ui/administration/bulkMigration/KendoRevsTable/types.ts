@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, MouseEvent, ReactElement } from 'react';
 import { Attachment } from '../../../../state/ducks/attachments/types';
 import { User } from '../../../../state/ducks/common/types';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -18,27 +18,17 @@ export interface TasksListEditRequestBody {
   partOfId: string
 }
 
-// export interface EditableDocumentItem extends ISupplierScanResultRev {
-//   [MODE_FIELD]: Mode
-// }
-
-// export interface TLItemEditEvent {
-//   dataItem: EditableDocumentItem
-// }
-
 export interface SchemaOptions {
   isDisabled: boolean
   isClosed: boolean
   rowCount: number
   numSelected: number
+  handlePopoverClose: () => void
+  handlePopoverOpen: (event: MouseEvent<HTMLDivElement>, content: ReactElement) => void
   handleHeaderCheckedChange: (event: ChangeEvent<HTMLInputElement>) => void
-  // employeeStatusUpdates: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
-  // employeeEvidenceUpdates: (dataItem: ISupplierScanResultRev, employeeId: string, attachmentIds: Attachment[]) => void
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<ISupplierScanResultRev> {
-  isDisabled?: boolean
-  isClosed?: boolean
-  // employeeStatusUpdates?: (taskId: string, employeeResponse: EmployeeResponse[], employeeId: string) => void
-  // employeeEvidenceUpdates?: (dataItem: ISupplierScanResultRev, employeeId: string, attachmentIds: Attachment[]) => void
+  handlePopoverOpen: (event: MouseEvent<HTMLDivElement>, content: ReactElement) => void
+  handlePopoverClose: () => void
 }

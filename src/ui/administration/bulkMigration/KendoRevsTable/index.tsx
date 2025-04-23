@@ -1,10 +1,10 @@
-import { FormControlLabel, Grid, styled, Switch, TablePagination, Typography } from '@material-ui/core';
+import { FormControlLabel, Grid, Popover, styled, Switch, TablePagination, Typography } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { getter } from '@progress/kendo-data-query';
 import { getSelectedState, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { isEmpty, isNull, replace } from 'lodash';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, ReactElement, useEffect, useRef, useState } from 'react';
 import { translate } from '../../../../common/intl';
 import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
@@ -70,6 +70,18 @@ const KendoRevsTable: React.FunctionComponent<props> = (
   const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
   const [data, setData] = React.useState<ISupplierScanResultRev[]>(rows);
   const [selectedRows, setSelectedRows] = React.useState<{ [id: string]: boolean | number[] }>();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [popoverContent, setPopoverContent] = useState<ReactElement>(<></>);
+
+  const handlePopoverOpen = (event, content) => {
+    setAnchorEl(event.currentTarget);
+    setPopoverContent(content);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setPopoverContent(<></>);
+  };
 
   useEffect(() => {
     setData(rows);
@@ -120,7 +132,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     setSearchQueries(newSearchQueries);
   };
 
-  console.log({ handleSearchTextChange, handleRequestSort, handleChangePage, handleChangeRowsPerPage, setIsShowActionableRows });
+  console.log({ handleSearchTextChange, handleRequestSort });
 
   // const formik = useFormik({
   //   initialValues: {},
@@ -138,6 +150,8 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     rowCount: data.length,
     numSelected: selected.length,
     handleHeaderCheckedChange: handleSelectAllClick,
+    handlePopoverOpen,
+    handlePopoverClose,
   });
 
   const onSelectionChange = (event: GridSelectionChangeEvent) => {
@@ -268,6 +282,20 @@ const KendoRevsTable: React.FunctionComponent<props> = (
           </Grid>
         </GridToolbar>
       </KendoDataGrid>
+      <Popover
+        className={classes.noPointerEvents}
+        classes={{
+          paper: classes.revsTablePopoverPaper,
+        }}
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        {popoverContent}
+      </Popover>
     </div>
   );
 };

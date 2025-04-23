@@ -10,6 +10,8 @@ export const buildSchema = ({
   isClosed,
   rowCount,
   numSelected,
+  handlePopoverOpen,
+  handlePopoverClose,
   handleHeaderCheckedChange,
 }: SchemaOptions): Array<ColumnDefinition<ISupplierScanResultRev>> => {
   return [
@@ -18,7 +20,7 @@ export const buildSchema = ({
       field: 'selected',
       title: 'Select All',
       filterCell: (props) => <SelectFilter {...{ props, rowCount, numSelected, handleHeaderCheckedChange }} />,
-      template: CheckboxCell,
+      template: (props) => <CheckboxCell {...props} {...{ handlePopoverClose, handlePopoverOpen }} />,
       show: true,
       width: 65,
     },
