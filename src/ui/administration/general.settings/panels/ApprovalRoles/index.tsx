@@ -1,5 +1,5 @@
 import { FormikProvider, useFormik, useFormikContext } from 'formik';
-import { omit, pick } from 'lodash';
+import { get, omit, pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { translate } from '../../../../../common/intl';
@@ -86,13 +86,22 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
     setApprovalRolesData(approvalRoles);
   }, [approvalRoles]);
 
+  const getSettings = useActionCreator(companyActions.getGeneralSettingsWithHandler);
+
+  const asyncSettings = useAsync({
+    onSuccess: (values) => {
+      const dam = get(values, 'approvalRoles.dam') as Dam;
+      setIsOpen(!dam.isSynced);
+    },
+  });
+
   const async = useAsync({
     onError: (error) => {
       setApprovalRolesData(approvalRoles);
       toastError(error);
     },
     onSuccess: () => {
-      setIsOpen(true);
+      asyncSettings.start(getSettings, asyncSettings);
     },
   });
   const updateApprovalRolesAction = useActionCreator(companyActions.updateApprovalRoles);
