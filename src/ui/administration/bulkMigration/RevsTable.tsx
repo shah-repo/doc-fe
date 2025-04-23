@@ -90,6 +90,7 @@ const EnhancedTableHead: React.FC<{
               </div>
               {headCell.searchAllowed
               && <TextField size="small" variant="outlined" placeholder="Search"
+                name={`search-${headCell.id}`}
                 onChange={e => searchTextChanged(e.target.value, headCell.id)} />
               }
             </div>

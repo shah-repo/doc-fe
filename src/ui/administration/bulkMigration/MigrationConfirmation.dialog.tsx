@@ -141,6 +141,14 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
                 onChange={e => setEmployeePassword(e.target.value)}
                 className={classes.employeePasswordText}
               />
+              <TextField
+                id="current-employee-username"
+                type="text"
+                disabled
+                name="username"
+                autoComplete="username"
+                style={{ width: 0 }}
+              />
             </FormControl>
           </>
         }
@@ -150,7 +158,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
         <Button onClick={handleClose} color="primary">
           {translate('common.cancel')}
         </Button>
-        {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError) && selectedDetails?.length
+        {approvalRequirements?.missingGroups?.length === 0 && isEmpty(toFormReleasedError) && selectedDetails?.length > 0
         && <Button onClick={handleEmployeeConfirmation} color="primary" autoFocus>
           {translate('common.confirm')}
         </Button>}
