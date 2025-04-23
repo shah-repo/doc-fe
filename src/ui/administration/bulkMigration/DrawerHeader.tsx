@@ -19,7 +19,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onDialogClose }) => 
   return (
     <AppBar position="static" color="default" elevation={0}>
       <Toolbar>
-        <Typography variant="h6" className={classes.rulesTitle} style={{ flexGrow: 1 }}>
+        <Typography variant="h6" className={classes.rulesTitle}>
           {title}
         </Typography>
         <Tooltip title={translate('common.close')} placement="top" arrow>

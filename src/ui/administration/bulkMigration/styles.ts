@@ -650,4 +650,17 @@ export default makeStyles<NextTheme>(theme => ({
   mappingInfo: {
     marginBottom: theme.spacing(1),
   },
+  pointer: {
+    cursor: 'pointer',
+  },
+  groupNameContainer: {
+    marginLeft: theme.spacing(1),
+    display: 'flex',
+  },
+  groupName: {
+    marginLeft: theme.spacing(0.5),
+  },
+  username: {
+    width: 0,
+  },
 }));

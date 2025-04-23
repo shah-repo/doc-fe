@@ -25,7 +25,14 @@ interface MigrationMappingDialogProps {
   scanDetails: IBulkMigrationScanDetails | null
 }
 
-const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen, handleClose, updateScanMapping, fromRev, toRev, scanDetails }) => {
+const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
+  isOpen,
+  handleClose,
+  updateScanMapping,
+  fromRev,
+  toRev,
+  scanDetails,
+}) => {
   const classes = useStyles();
   const [selectedSchemaItems, setSelectedSchemaItems] = useState<ISchemaItem[]>([]);
   const [fromRevSchema, setFromRevSchema] = useState<ISchemaItem[]>([]);
@@ -38,19 +45,23 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
   useEffect(() => {
     if (fromRev?.id) {
       let revSchema = fromRev.formTemplate?.schema ?? [];
-      revSchema = revSchema.filter(schemaItem => !schemaItem.deleted && !schemaItem.hidden);
+      revSchema = revSchema.filter((schemaItem) => !schemaItem.deleted && !schemaItem.hidden);
       setFromRevSchema(revSchema);
     }
 
     if (toRev?.id) {
       let revSchema = toRev.formTemplate?.schema ?? [];
-      revSchema = revSchema.filter(schemaItem => !schemaItem.deleted && !schemaItem.hidden);
+      revSchema = revSchema.filter((schemaItem) => !schemaItem.deleted && !schemaItem.hidden);
       setToRevSchema(revSchema);
     }
 
     if (scanDetails?.id) {
-      if (scanDetails.fromFormSchema && Array.isArray(scanDetails.fromFormSchema)
-      && scanDetails.toFormSchema && Array.isArray(scanDetails.toFormSchema)) {
+      if (
+        scanDetails.fromFormSchema
+        && Array.isArray(scanDetails.fromFormSchema)
+        && scanDetails.toFormSchema
+        && Array.isArray(scanDetails.toFormSchema)
+      ) {
         setFromRevSchema(scanDetails.fromFormSchema);
         setToRevSchema(scanDetails.toFormSchema);
       }
@@ -59,7 +70,9 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
 
   useEffect(() => {
     if (fromRevSchema?.length) {
-      const unmappedItems = fromRevSchema.filter(fromRevSchemaItem => !fromRevSchemaItem.mappedToCount && !isDisabledSchemaItem(fromRevSchemaItem));
+      const unmappedItems = fromRevSchema.filter(
+        (fromRevSchemaItem) => !fromRevSchemaItem.mappedToCount && !isDisabledSchemaItem(fromRevSchemaItem),
+      );
       setUnmappedCount(unmappedItems.length);
     }
   }, [fromRevSchema]);
@@ -86,7 +99,10 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
 
   const handleAutoMapping = () => {
     // Schema items with the same name or label can be auto mapped.
-    const { fromRevSchema: modifiedFromRevSchema, toRevSchema: modifiedToRevSchema } = autoMapArrays(fromRevSchema, toRevSchema);
+    const { fromRevSchema: modifiedFromRevSchema, toRevSchema: modifiedToRevSchema } = autoMapArrays(
+      fromRevSchema,
+      toRevSchema,
+    );
     setFromRevSchema([...modifiedFromRevSchema]);
     setToRevSchema([...modifiedToRevSchema]);
   };
@@ -94,9 +110,9 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
   const handleFromSchemaItemClick = (schemaItem: ISchemaItem) => {
     // if (!isDisabledSchemaItem(schemaItem) && !schemaItem.isMapped) {
     if (!isDisabledSchemaItem(schemaItem)) {
-      const isAlreadyPresent = selectedSchemaItems?.findIndex(item => item.name === schemaItem.name) > -1;
+      const isAlreadyPresent = selectedSchemaItems?.findIndex((item) => item.name === schemaItem.name) > -1;
       if (isAlreadyPresent) {
-        const filteredSelectedSchemaItems = selectedSchemaItems?.filter(item => item.name !== schemaItem.name);
+        const filteredSelectedSchemaItems = selectedSchemaItems?.filter((item) => item.name !== schemaItem.name);
         setSelectedSchemaItems(filteredSelectedSchemaItems);
       } else {
         setSelectedSchemaItems([...selectedSchemaItems, schemaItem]);
@@ -111,22 +127,27 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
       }
     }
 
-    setToRevSchema(toRevSchema.map(toRevSchemaItem => {
-      if (toRevSchemaItem.name === schemaItem.name) {
-        if (!entryRemoved) {
-          const selectedSchemaItem = selectedSchemaItems[0];
-          if (!toRevSchemaItem.mappedFrom) {
-            toRevSchemaItem.mappedFrom = [];
+    setToRevSchema(
+      toRevSchema.map((toRevSchemaItem) => {
+        if (toRevSchemaItem.name === schemaItem.name) {
+          if (!entryRemoved) {
+            const selectedSchemaItem = selectedSchemaItems[0];
+            if (!toRevSchemaItem.mappedFrom) {
+              toRevSchemaItem.mappedFrom = [];
+            }
+            toRevSchemaItem.mappedFrom.push({
+              name: selectedSchemaItem.name!,
+              label: selectedSchemaItem.label!,
+              isShowDirectly: false,
+              type: selectedSchemaItem.type,
+            });
           }
-          toRevSchemaItem.mappedFrom.push(
-            { name: selectedSchemaItem.name!, label: selectedSchemaItem.label!, isShowDirectly: false, type: selectedSchemaItem.type },
-          );
-        }
 
-        toRevSchemaItem.tableMappings = tableMappings;
-      }
-      return toRevSchemaItem;
-    }));
+          toRevSchemaItem.tableMappings = tableMappings;
+        }
+        return toRevSchemaItem;
+      }),
+    );
 
     if (entryRemoved) {
       handleMappedFromDelete(schemaItem, entryRemoved);
@@ -145,16 +166,22 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
       const { canMap, errMessage } = canMapItems(selectedSchemaItem, toSchemaItem);
       if (canMap) {
         // push into mappedFrom on toRevSchema item to selectedSchemaName.name
-        setToRevSchema(toRevSchema.map(toRevSchemaItem => {
-          if (toRevSchemaItem.name === toSchemaItem.name) {
-            if (!toRevSchemaItem.mappedFrom) {
-              toRevSchemaItem.mappedFrom = [];
+        setToRevSchema(
+          toRevSchema.map((toRevSchemaItem) => {
+            if (toRevSchemaItem.name === toSchemaItem.name) {
+              if (!toRevSchemaItem.mappedFrom) {
+                toRevSchemaItem.mappedFrom = [];
+              }
+              toRevSchemaItem.mappedFrom.push({
+                name: selectedSchemaItem.name!,
+                label: selectedSchemaItem.label!,
+                isShowDirectly: true,
+                type: selectedSchemaItem.type,
+              });
             }
-            toRevSchemaItem.mappedFrom.push(
-              { name: selectedSchemaItem.name!, label: selectedSchemaItem.label!, isShowDirectly: true, type: selectedSchemaItem.type });
-          }
-          return toRevSchemaItem;
-        }));
+            return toRevSchemaItem;
+          }),
+        );
 
         // Set isMapped on fromRevSchema item to true
         setFromRevSchemaItemMapped(selectedSchemaItem);
@@ -166,31 +193,38 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
   };
 
   const handleMappedFromDelete = (schemaItem: ISchemaItem, mappedFromEntryToRemove: IMappedFrom) => {
-    setToRevSchema(toRevSchema.map(toRevSchemaItem => {
-      if (toRevSchemaItem.name === schemaItem.name) {
-        toRevSchemaItem.mappedFrom
-          = toRevSchemaItem.mappedFrom?.filter(mappedFromItem => mappedFromItem.name !== mappedFromEntryToRemove.name);
-      }
-      return toRevSchemaItem;
-    }));
-
-    setFromRevSchema(fromRevSchema.map(fromRevSchemaItem => {
-      if (fromRevSchemaItem.name === mappedFromEntryToRemove.name) {
-        if (fromRevSchemaItem.mappedToCount) {
-          fromRevSchemaItem.mappedToCount -= 1;
+    setToRevSchema(
+      toRevSchema.map((toRevSchemaItem) => {
+        if (toRevSchemaItem.name === schemaItem.name) {
+          toRevSchemaItem.mappedFrom = toRevSchemaItem.mappedFrom?.filter(
+            (mappedFromItem) => mappedFromItem.name !== mappedFromEntryToRemove.name,
+          );
         }
-      }
-      return fromRevSchemaItem;
-    }));
+        return toRevSchemaItem;
+      }),
+    );
+
+    setFromRevSchema(
+      fromRevSchema.map((fromRevSchemaItem) => {
+        if (fromRevSchemaItem.name === mappedFromEntryToRemove.name) {
+          if (fromRevSchemaItem.mappedToCount) {
+            fromRevSchemaItem.mappedToCount -= 1;
+          }
+        }
+        return fromRevSchemaItem;
+      }),
+    );
   };
 
   const setFromRevSchemaItemMapped = (selectedSchemaItem: ISchemaItem) => {
-    setFromRevSchema(fromRevSchema.map(fromRevSchemaItem => {
-      if (fromRevSchemaItem.name === selectedSchemaItem.name) {
-        fromRevSchemaItem.mappedToCount = (fromRevSchemaItem.mappedToCount ?? 0) + 1;
-      }
-      return fromRevSchemaItem;
-    }));
+    setFromRevSchema(
+      fromRevSchema.map((fromRevSchemaItem) => {
+        if (fromRevSchemaItem.name === selectedSchemaItem.name) {
+          fromRevSchemaItem.mappedToCount = (fromRevSchemaItem.mappedToCount ?? 0) + 1;
+        }
+        return fromRevSchemaItem;
+      }),
+    );
   };
 
   const showAllSelectOptions = (schemaItem: ISchemaItem) => {
@@ -198,21 +232,17 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
 
     return options?.length ? (
       <span className={classes.mappingDialogSelectionOption}>
-        {' - [ '}{options.join(' | ')}{']'}
+        {' - [ '}
+        {options.join(' | ')}]
       </span>
     ) : null;
   };
 
   return (
-    <Dialog
-      fullScreen
-      open={isOpen}
-      onClose={handleClose}
-      aria-labelledby="migration-mapping-title"
-    >
+    <Dialog fullScreen open={isOpen} onClose={handleClose} aria-labelledby="migration-mapping-title">
       <AppBar position="static" color="default" elevation={0}>
         <Toolbar>
-          <Typography variant="h6" className={classes.rulesTitle} style={{ flexGrow: 1 }}>
+          <Typography variant="h6" className={classes.rulesTitle}>
             {translate('bulk.migration.form.schema.mapping.title')}
           </Typography>
           <Box className={classes.spaceBetweenFlex}>
@@ -221,7 +251,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
                 <Switch
                   size="small"
                   checked={isShowRelationVisible}
-                  onChange={event => setIsShowRelationVisible(event.target.checked)}
+                  onChange={(event) => setIsShowRelationVisible(event.target.checked)}
                   color="primary"
                 />
               }
@@ -248,12 +278,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
               {translate('common.save')}
             </Button>
             {Array.isArray(scanDetails?.toFormSchema) && scanDetails?.toFormSchema?.length && (
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={handleMappingPreview}
-                className={classes.buttonSpacing}
-              >
+              <Button size="small" variant="outlined" onClick={handleMappingPreview} className={classes.buttonSpacing}>
                 {translate('bulk.migration.preview')}
               </Button>
             )}
@@ -266,12 +291,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
             >
               {translate('bulk.migration.auto.map')}
             </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={handleClose}
-              className={classes.buttonSpacing}
-            >
+            <Button size="small" variant="outlined" onClick={handleClose} className={classes.buttonSpacing}>
               {translate('common.close')}
             </Button>
           </Box>
@@ -279,14 +299,34 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
       </AppBar>
       <DialogContent>
         <ul className={classes.mappingDialogInstructions}>
-          <li className={classes.compactListItem}>Click on a Schema Item on left. A <DoneAllIcon className={classes.doneAllIcon} /> would appear, indicating that this is selected.</li>
-          <li className={classes.compactListItem}>Clicking on any item in the <em>To Rev</em> area, maps the two fields together.</li>
-          <li className={classes.compactListItem}>More than one item from the left can be mapped to items on the right.</li>
-          <li className={classes.compactListItem}>Click <b>Save</b> to make the <b>Preview</b> button appear. You can adjust the mapping rules, save, and preview as needed until you're satisfied with the results. Once everything looks good, close this screen, select the revisions from the table, and click <b>Run Scan</b> to fetch all the eligible revisions for selection.
+          <li className={classes.compactListItem}>
+            Click on a Schema Item on left. A <DoneAllIcon className={classes.doneAllIcon} /> would appear, indicating
+            that this is selected.
+          </li>
+          <li className={classes.compactListItem}>
+            Clicking on any item in the <em>To Rev</em> area, maps the two fields together.
+          </li>
+          <li className={classes.compactListItem}>
+            More than one item from the left can be mapped to items on the right.
+          </li>
+          <li className={classes.compactListItem}>
+            Click <b>Save</b> to make the <b>Preview</b> button appear. You can adjust the mapping rules, save, and
+            preview as needed until you're satisfied with the results. Once everything looks good, close this screen,
+            select the revisions from the table, and click <b>Run Scan</b> to fetch all the eligible revisions for
+            selection.
           </li>
         </ul>
         {/* <MappingRules /> */}
-        <Typography className={classes.mappingInfo} variant="subtitle2" dangerouslySetInnerHTML={{ __html: translate('bulk.migration.fields.and.mapping.selection.info', { count: unmappedCount, length: selectedSchemaItems.length }) }} />
+        <Typography
+          className={classes.mappingInfo}
+          variant="subtitle2"
+          dangerouslySetInnerHTML={{
+            __html: translate('bulk.migration.fields.and.mapping.selection.info', {
+              count: unmappedCount,
+              length: selectedSchemaItems.length,
+            }),
+          }}
+        />
         <Box className={classes.mappingArea}>
           <ArcherContainer
             strokeColor={Colors.font_gray}
@@ -294,26 +334,32 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
             className={cx(classes.spaceBetweenFlex, classes.width100)}
           >
             <Box className={classes.fromRevContainer}>
-              <Typography variant="h5" className={classes.mappingAreaTitle}>{translate('bulk.migration.form.revision', { revision: fromRev?.displayRevision })}</Typography>
+              <Typography variant="h5" className={classes.mappingAreaTitle}>
+                {translate('bulk.migration.form.revision', { revision: fromRev?.displayRevision })}
+              </Typography>
               <Box className={cx({ [classes.mappingView]: !isShowRelationVisible })}>
                 {fromRevSchema
-                  .filter(schemaItem => !schemaItem.deleted)
-                  .map(schemaItem => {
+                  .filter((schemaItem) => !schemaItem.deleted)
+                  .map((schemaItem) => {
                     return (
                       <ArcherElement id={`from-${schemaItem.name!}`} key={`from-${schemaItem.name!}`}>
-                        <Box className={classes.mappingRuleSchemaItemBox}
-                          style={{ backgroundColor: getFromSchemaItemBgColor(schemaItem), cursor: 'pointer' }}
-                          onClick={e => handleFromSchemaItemClick(schemaItem)}
+                        <Box
+                          className={cx(classes.mappingRuleSchemaItemBox, classes.pointer)}
+                          style={{ backgroundColor: getFromSchemaItemBgColor(schemaItem) }}
+                          onClick={(e) => handleFromSchemaItemClick(schemaItem)}
                         >
-                          <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
-                          <Typography variant="caption" display="block" className={classes.capitalize}>
-                            {schemaItem.type} { showAllSelectOptions(schemaItem) }
+                          <Typography variant="body2" color="primary">
+                            {schemaItem.label}
                           </Typography>
-                          <Typography variant="caption" display="block"> {schemaItem.name} </Typography>
-                          {
-                            selectedSchemaItems?.map(selectedSchemaItems => selectedSchemaItems.name).includes(schemaItem.name)
-                          && <DoneAllIcon className={classes.selectedFromSchemaItem} />
-                          }
+                          <Typography variant="caption" display="block" className={classes.capitalize}>
+                            {schemaItem.type} {showAllSelectOptions(schemaItem)}
+                          </Typography>
+                          <Typography variant="caption" display="block">
+                            {schemaItem.name}
+                          </Typography>
+                          {selectedSchemaItems
+                            ?.map((selectedSchemaItems) => selectedSchemaItems.name)
+                            .includes(schemaItem.name) && <DoneAllIcon className={classes.selectedFromSchemaItem} />}
                         </Box>
                       </ArcherElement>
                     );
@@ -321,63 +367,80 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
               </Box>
             </Box>
             <Box className={classes.toRevContainer}>
-              <Typography variant="h5" className={classes.mappingAreaTitle}>{translate('bulk.migration.form.revision', { revision: toRev?.displayRevision })}</Typography>
+              <Typography variant="h5" className={classes.mappingAreaTitle}>
+                {translate('bulk.migration.form.revision', { revision: toRev?.displayRevision })}
+              </Typography>
               <Box className={cx({ [classes.mappingView]: !isShowRelationVisible })}>
                 {toRevSchema
-                  .filter(schemaItem => !schemaItem.deleted)
-                  .map(schemaItem => {
+                  .filter((schemaItem) => !schemaItem.deleted)
+                  .map((schemaItem) => {
                     return (
-                      <ArcherElement id={`to-${schemaItem.name!}`} key={`to-${schemaItem.name}`}
-                        relations={isShowRelationVisible ? schemaItem.mappedFrom?.map(mappedFromEntry => ({
-                          targetId: `from-${mappedFromEntry.name}`,
-                          targetAnchor: 'right',
-                          sourceAnchor: 'left',
-                        })) : []}
+                      <ArcherElement
+                        id={`to-${schemaItem.name!}`}
+                        key={`to-${schemaItem.name}`}
+                        relations={
+                          isShowRelationVisible
+                            ? schemaItem.mappedFrom?.map((mappedFromEntry) => ({
+                              targetId: `from-${mappedFromEntry.name}`,
+                              targetAnchor: 'right',
+                              sourceAnchor: 'left',
+                            }))
+                            : []
+                        }
                       >
-                        <Box className={cx(classes.mappingRuleSchemaItemBox, classes.toSchemaItem, { [classes.grey]: isDisabledSchemaItem(schemaItem) })}
-                          style={{
-                            backgroundColor: isDisabledSchemaItem(schemaItem) ? Colors.hint_gray : '',
-                          }}
-                          onClick={e => handleToSchemaItemClick(schemaItem)}
+                        <Box
+                          className={cx(classes.mappingRuleSchemaItemBox, classes.toSchemaItem, {
+                            [classes.grey]: isDisabledSchemaItem(schemaItem),
+                          })}
+                          onClick={() => handleToSchemaItemClick(schemaItem)}
                         >
                           <Box className={classes.width100}>
                             <Box className={classes.simpleFlex}>
-                              <Typography variant="body2" color="primary"> {schemaItem.label} </Typography>
-                              <Typography variant="caption" align="right"> {schemaItem.name} </Typography>
+                              <Typography variant="body2" color="primary">
+                                {schemaItem.label}
+                              </Typography>
+                              <Typography variant="caption" align="right">
+                                {schemaItem.name}
+                              </Typography>
                             </Box>
                             <Typography variant="caption" display="block" className={classes.capitalize}>
-                              {schemaItem.type} { showAllSelectOptions(schemaItem) }
+                              {schemaItem.type} {showAllSelectOptions(schemaItem)}
                             </Typography>
-                            {
-                              schemaItem.referenceDataType === 'array'
-                               && <ToSchemaItemMappingTable schemaItem={schemaItem}
-                                 handleMappingChange={(row, entryRemoved) => handleRowColumnMapping(schemaItem, row, entryRemoved)}
-                                 selectedSchemaItems={selectedSchemaItems}
-                               />
-                            }
-                            {
-                              schemaItem.referenceDataType === 'object'
-                               && <ToSchemaItemMappingTable schemaItem={schemaItem}
-                                 handleMappingChange={(row, entryRemoved) => handleRowColumnMapping(schemaItem, row, entryRemoved)}
-                                 selectedSchemaItems={selectedSchemaItems}
-                                 isSingleRow={true}
-                               />
-                            }
+                            {schemaItem.referenceDataType === 'array' && (
+                              <ToSchemaItemMappingTable
+                                schemaItem={schemaItem}
+                                handleMappingChange={(row, entryRemoved) =>
+                                  handleRowColumnMapping(schemaItem, row, entryRemoved)
+                                }
+                                selectedSchemaItems={selectedSchemaItems}
+                              />
+                            )}
+                            {schemaItem.referenceDataType === 'object' && (
+                              <ToSchemaItemMappingTable
+                                schemaItem={schemaItem}
+                                handleMappingChange={(row, entryRemoved) =>
+                                  handleRowColumnMapping(schemaItem, row, entryRemoved)
+                                }
+                                selectedSchemaItems={selectedSchemaItems}
+                                isSingleRow
+                              />
+                            )}
                           </Box>
-                          {
-                            (schemaItem.mappedFrom ?? []).length > 0 && schemaItem.mappedFrom?.map(mappedFromEntry => {
+                          {(schemaItem.mappedFrom ?? []).length > 0
+                            && schemaItem.mappedFrom?.map((mappedFromEntry: IMappedFrom) => {
                               const { isShowDirectly, label } = mappedFromEntry;
-                              return isShowDirectly && (
-                                <Chip
-                                  key={label}
-                                  label={label}
-                                  onDelete={() => handleMappedFromDelete(schemaItem, mappedFromEntry)}
-                                  color="secondary"
-                                  className={classes.chip}
-                                />
+                              return (
+                                isShowDirectly && (
+                                  <Chip
+                                    key={label}
+                                    label={label}
+                                    onDelete={() => handleMappedFromDelete(schemaItem, mappedFromEntry)}
+                                    color="secondary"
+                                    className={classes.chip}
+                                  />
+                                )
                               );
-                            })
-                          }
+                            })}
                         </Box>
                       </ArcherElement>
                     );
@@ -387,17 +450,15 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({ isOpen,
           </ArcherContainer>
         </Box>
       </DialogContent>
-
-      {
-        isPreviewPanelVisible
-          && <PreviewDrawer isPreviewPanelVisible={isPreviewPanelVisible}
-            handleClosePreview={handleClosePreview} scanDetails={scanDetails}
-            toRevSchema={toRevSchema}
-          />
-      }
-      <MappingRulesDrawer isOpen={isMappingRulesPanelVisible}
-        handleClosePanel={handleCloseMappingRulesPanel}
-      />
+      {isPreviewPanelVisible && (
+        <PreviewDrawer
+          isPreviewPanelVisible={isPreviewPanelVisible}
+          handleClosePreview={handleClosePreview}
+          scanDetails={scanDetails}
+          toRevSchema={toRevSchema}
+        />
+      )}
+      <MappingRulesDrawer isOpen={isMappingRulesPanelVisible} handleClosePanel={handleCloseMappingRulesPanel} />
     </Dialog>
   );
 };
