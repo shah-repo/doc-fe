@@ -129,6 +129,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
   console.log({ handleSearchTextChange, handleRequestSort });
 
   const schema = buildSchema({
+    scanId,
     rowCount: data.length,
     numSelected: selected.length,
     handleHeaderCheckedChange: handleSelectAllClick,

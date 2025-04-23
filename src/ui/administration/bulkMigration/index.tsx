@@ -12,9 +12,9 @@ import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { FBButton } from '../../form.builder';
 import { ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
+import KendoRevsTable from './KendoRevsTable';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
-import RevsTable from './RevsTable';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
 
@@ -305,7 +305,7 @@ const BulkMigrationContainer: React.FC = () => {
           <div className={classes.errMsgStyle}>{errorMessage}</div>
         )}
         {scanDetails?.id && !isScanRunning && <Box>
-          <RevsTable scanId={scanDetails.id} handleSelectedRowsChange={handleSelectedRowsChange} updateRevsTable={updateRevsTable} />
+          <KendoRevsTable {...{ scanId: scanDetails?.id, updateRevsTable, handleSelectedRowsChange }} />
         </Box>
         }
         {scanDetails?.id && isScanRunning && <Box className={classes.searchIconContainer}>

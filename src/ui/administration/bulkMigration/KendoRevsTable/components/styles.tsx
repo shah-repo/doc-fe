@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
+import UtilColors from '../../../../layout/theme/utils/colors';
 
 export const styles = makeStyles((theme) => ({
   container: {
@@ -30,5 +31,30 @@ export const styles = makeStyles((theme) => ({
   },
   checkboxRowContentInProgress: {
     color: Colors.warning,
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+  revsTableFlexBoxColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    gridGap: theme.spacing(0.25, 1),
+  },
+  revsTablePrimaryText: {
+    fontWeight: 600,
+    fontSize: '14px',
+    lineHeight: '21px',
+    color: UtilColors.dark_jungle_green,
+  },
+  tableCellHiddenOverflow: {
+    overflow: 'hidden',
+    wordWrap: 'break-word',
+  },
+  cursorPointer: {
+    cursor: 'pointer',
   },
 }));

@@ -19,6 +19,7 @@ export interface TasksListEditRequestBody {
 }
 
 export interface SchemaOptions {
+  scanId: string
   rowCount: number
   numSelected: number
   handlePopoverClose: () => void

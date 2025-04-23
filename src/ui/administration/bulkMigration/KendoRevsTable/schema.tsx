@@ -2,11 +2,17 @@ import React from 'react';
 import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ISupplierScanResultRev } from '../interface';
 import CheckboxCell from './components/CheckboxCell';
+import { DocIdCellTemplate } from './components/DocIdCellTemplate';
 import { ExpandCollapseCell } from './components/ExpandCollapseCell';
+import { FieldsUnmatchedCellTemplate } from './components/FieldsUnmatchedCellTemplate';
+import { NameCellTemplate } from './components/NameCellTemplate';
+import { OwnerCellTemplate } from './components/OwnerCellTemplate';
 import SelectFilter from './components/SelectFilter';
+import { TextInputCellTemplate } from './components/TextInputCellTemplate';
 import { SchemaOptions } from './types';
 
 export const buildSchema = ({
+  scanId,
   rowCount,
   numSelected,
   handlePopoverOpen,
@@ -42,14 +48,15 @@ export const buildSchema = ({
       field: 'docId',
       title: 'administration.bulk.migration.rev.grid.heading.docId',
       show: true,
+      template: (props) => <DocIdCellTemplate {...props} />,
       width: 150,
     },
     {
-      id: 'name',
-      field: 'name',
+      id: 'docRevName',
+      field: 'docRevName',
       title: 'administration.bulk.migration.rev.grid.heading.name',
       show: true,
-      // template: (props) => <InstructionsCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <NameCellTemplate {...props} />,
       width: 250,
       sortable: false,
     },
@@ -58,16 +65,16 @@ export const buildSchema = ({
       field: 'owner',
       title: 'administration.bulk.migration.rev.grid.heading.owner',
       show: true,
-      // template: (props) => <AssignedTOCellTemplate {...props} onClick={onRowClick} />,
+      template: (props) => <OwnerCellTemplate {...props} />,
       width: 200,
     },
     {
-      id: 'fieldsUnmatched',
-      field: 'fieldsUnmatched',
+      id: 'fieldNamesUnmatched',
+      field: 'fieldNamesUnmatched',
       title: 'administration.bulk.migration.rev.grid.heading.fieldsUnmatched',
       show: true,
       filterable: false,
-      // template: (props) => <UploadEvidenceCellTemplate {...props} {...{ employeeEvidenceUpdates, isDisabled, isClosed }} />,
+      template: (props) => <FieldsUnmatchedCellTemplate {...props} scanId={scanId} />,
       width: 200,
     },
     {
@@ -76,7 +83,7 @@ export const buildSchema = ({
       title: 'administration.bulk.migration.rev.grid.heading.proposedAction',
       show: true,
       filterable: false,
-      // template: (props) => <CommentCellTemplate {...props} {...{ isDisabled, isClosed }} />,
+      template: (props) => <TextInputCellTemplate {...props} />,
       width: 200,
     },
   ];
