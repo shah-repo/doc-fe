@@ -1,5 +1,6 @@
-import { makeStyles } from '@material-ui/core';
-import { Colors } from '../../../layout/theme-next';
+import { lighten, makeStyles } from '@material-ui/core';
+import { Colors as NextColors } from '../../../layout/theme-next';
+import Colors from '../../../layout/theme/utils/colors';
 
 export default makeStyles((theme) => ({
   root: {
@@ -13,34 +14,59 @@ export default makeStyles((theme) => ({
     },
     '& .k-grid-header thead th': {
       textTransform: 'uppercase',
-      color: Colors.textBlack,
+      color: Colors.almost_black,
     },
 
   },
   addButton: {
     float: 'right',
   },
-  updatingRow: {
-    position: 'relative',
-    zIndex: 3,
-    outline: `1px solid ${Colors.primaryLight}`,
-    outlineOffset: -1,
-
-    '& td': {
-      verticalAlign: 'top !important',
-      whiteSpace: 'normal !important' as 'normal',
+  selectedRow: {
+    backgroundColor: Colors.selected,
+  },
+  errMsgStyle: {
+    color: Colors.red,
+    backgroundColor: Colors.light_red,
+    padding: theme.spacing(0.5),
+  },
+  revsTableSelectedHighlight:
+      theme.palette.type === 'light'
+        ? {
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+        }
+        : {
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark,
+        },
+  revsTableRefreshBox: {
+    display: 'flex',
+    alignItems: 'center',
+    flex: '1',
+    fontSize: 12,
+  },
+  revsTableActionableBox: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  revsTableRefreshText: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  revsTableRefreshIcon: {
+    cursor: 'pointer',
+    marginLeft: theme.spacing(0.5),
+    fontSize: 16,
+  },
+  mappingSwitcher: {
+    '& span': {
+      fontSize: '12px',
     },
   },
-  actionsCell: {
-    overflow: 'visible !important',
-    position: 'sticky',
-    right: 0,
-    width: '0 !important',
-    padding: '0 !important',
-    verticalAlign: 'bottom !important',
-
-    '& > div': {
-      borderLeft: `1px solid ${Colors.primaryLight} !important`,
+  switchBase: {
+    color: NextColors.statusDraftBorder,
+    '&$checked': {
+      color: NextColors.statusDraftBorder,
     },
   },
 }));

@@ -2397,6 +2397,7 @@
   "administration.general.settings.expired.lots.dropdown.option.error": "Error",
   "administration.bulk.migration.title": "Bulk Migration",
   "administration.bulk.migration.subtitle": "Revs, created of a particular revision of the form, can be migrated to a newer Form Rev, with a different schema.",
+  "administration.bulk.migration.supplier.rev.grid.title": "Supplier Revs",
   "administration.bulk.migration.rev.grid.heading.docId": "Doc Id",
   "administration.bulk.migration.rev.grid.heading.name": "Name",
   "administration.bulk.migration.rev.grid.heading.owner": "Owner",

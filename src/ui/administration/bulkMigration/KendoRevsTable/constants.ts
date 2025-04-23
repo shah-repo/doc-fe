@@ -1,2 +1,2 @@
-export const SELECTED_FIELD = 'selected';
+export const SELECTED_FIELD = 'isSelected';
 export const DATA_ITEM_KEY = 'id';

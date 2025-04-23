@@ -1,20 +1,32 @@
+import { FormControlLabel, Grid, styled, Switch, TablePagination, Typography } from '@material-ui/core';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { getter } from '@progress/kendo-data-query';
-import { getSelectedState, GridSelectionChangeEvent } from '@progress/kendo-react-grid';
-import { isNull } from 'lodash';
+import { getSelectedState, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
+import cx from 'classnames';
+import { isEmpty, isNull, replace } from 'lodash';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { translate } from '../../../../common/intl';
 import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
 import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../documentRevision/helpers/checkDocumentGroup';
 import { FB } from '../../../form.builder';
-import { ISelectedDetails, ISupplierScanResultRev, SortDirection } from '../interface';
+import UtilColors from '../../../layout/theme/utils/colors';
+import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
 import { DATA_ITEM_KEY, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 
 const idGetter = getter(DATA_ITEM_KEY);
+
+const StyledTablePagination = styled(TablePagination)(({ theme }) => ({
+  '& .MuiTablePagination-selectIcon': {
+    left: theme.spacing(3),
+    top: theme.spacing(1.2),
+  },
+}));
 
 interface props {
   scanId: string
@@ -43,15 +55,14 @@ const KendoRevsTable: React.FunctionComponent<props> = (
 
   const {
     isLoading,
-    // errorMessage,
+    errorMessage,
     rows,
-    // totalCount,
+    totalCount,
     fetchScanSupplierRevisions,
     selected,
     setSelected,
   } = useBulkMigration();
   const { workspaceState } = FB.useStores();
-  // const [data, setData] = React.useState<EditableDocumentItem[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
@@ -153,34 +164,38 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     return schema.filter(({ show }) => show || isAdditionalColumnsShown);
   };
 
+  const getRowColor = (row: ISupplierScanResultRev) => {
+    if (row.status === MIGRATION_STATUS_ENUM.IN_PROGRESS) {
+      return UtilColors.inProgress;
+    }
+
+    if (row.status === MIGRATION_STATUS_ENUM.FAILED) {
+      return UtilColors.failed;
+    }
+
+    if (row.status === MIGRATION_STATUS_ENUM.COMPLETED || row.isAlreadyUpgraded) {
+      return UtilColors.done;
+    }
+
+    if (row.isMapped) {
+      return UtilColors.alice_blue;
+    }
+
+    return UtilColors.default;
+  };
+
   const rowRender: DataGridProps<ISupplierScanResultRev>['rowRender'] = (row, { dataItem }) => {
-    // const item = dataItem as ISupplierScanResultRev;
-    // const isUpdating = [Mode.edit, Mode.add].includes(item[MODE_FIELD]);
+    const item = dataItem as ISupplierScanResultRev;
 
-    // if (isShowOnly) {
-    //   return (
-    //     <FormikProvider value={formik}>
-    //       {row}
-    //     </FormikProvider>
-    //   );
-    // }
+    const editedRow = React.cloneElement(
+      row,
+      {
+        className: cx(replace(row?.props?.className, 'k-alt', ''), { [classes.selectedRow]: item.isSelected }),
+        style: { ...row?.props?.style, backgroundColor: !item.isSelected ? getRowColor(item) : '' },
+      },
+    );
 
-    // if (!isUpdating) {
-    return row;
-    // }
-
-    // const editedRow = React.cloneElement(
-    //   row,
-    //   {
-    //     className: cx(row.props.className, classes.updatingRow),
-    //   },
-    // );
-
-    // return (
-    //   <FormikProvider value={formik}>
-    //     {editedRow}
-    //   </FormikProvider>
-    // );
+    return editedRow;
   };
 
   const RevList = data.map((item) => ({ ...item, [SELECTED_FIELD]: Boolean(selectedRows?.[idGetter(item)]) }));
@@ -203,7 +218,56 @@ const KendoRevsTable: React.FunctionComponent<props> = (
         containerRef={containerRef}
         resizable={true}
         onSelectionChange={onSelectionChange}
-      />
+      >
+        <GridToolbar >
+          {!isEmpty(errorMessage) && <div className={classes.errMsgStyle}>{errorMessage}</div>}
+          <Grid container justify="space-between"
+            className={cx({ [classes.revsTableSelectedHighlight]: selected.length > 0 })}
+          >
+            <Grid item className={classes.revsTableRefreshBox} >
+              <Typography variant="h6" id="tableTitle" className={classes.revsTableRefreshText} component="div">
+                {translate('administration.bulk.migration.supplier.rev.grid.title')}
+                <RefreshIcon
+                  className={classes.revsTableRefreshIcon}
+                  onClick={() => fetchScanSupplierRevisions(scanId, page, rowsPerPage, orderBy, order, isShowActionableRows, searchQueries)}
+                />
+              </Typography>
+              {selected.length > 0 && (
+                <Typography color="inherit" variant="subtitle1" component="div" style={{ marginLeft: 16 }}>
+                  {selected.length} selected
+                </Typography>
+              )}
+            </Grid>
+            <Grid item className={classes.revsTableActionableBox}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    size="small"
+                    checked={isShowActionableRows}
+                    onChange={(event) => setIsShowActionableRows(event.target.checked)}
+                    color="primary"
+                    classes={{
+                      switchBase: classes.switchBase,
+                    }}
+                  />
+                }
+                label="Actionable Rows"
+                className={classes.mappingSwitcher}
+                labelPlacement="bottom"
+              />
+              <StyledTablePagination
+                rowsPerPageOptions={[25, 50, 100]}
+                SelectProps={{ fullWidth: false }}
+                count={totalCount}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            </Grid>
+          </Grid>
+        </GridToolbar>
+      </KendoDataGrid>
     </div>
   );
 };
