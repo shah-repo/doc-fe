@@ -446,14 +446,13 @@ export default makeStyles<NextTheme>(theme => ({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    background: Colors.alabaster,
   },
   previewDrawerDialogPaper: {
     width: '80vw',
   },
   previewDrawerContent: {
     display: 'flex',
-    flexGrow: 1, // Allow sections to take full available height
+    flexGrow: 1,
     flexDirection: 'row',
   },
   previewDrawerLeftSection: {

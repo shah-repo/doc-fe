@@ -302,7 +302,7 @@ const BulkMigrationContainer: React.FC = () => {
 
           <Box className={classes.boxForSelection}>
             <Typography variant="h5" className={classes.migrateInfo}>
-              {translate('bulk.migration.migrate.to')}{' '}
+              {translate('bulk.migration.migrate.to')}
             </Typography>
             <Typography variant="subtitle2" className={classes.subtitle}>
               {translate('bulk.migration.select.document.rev.info')}

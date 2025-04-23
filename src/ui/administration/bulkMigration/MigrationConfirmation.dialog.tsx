@@ -134,7 +134,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
               </Box>
               {hasApprovalMissingGroups && (
                 <FBButton
-                  label="Add To Groups"
+                  label={translate('bulk.migration.add.to.groups')}
                   dataCy="automation-add-to-groups"
                   onClick={(e) => addUserToGroups(toDocumentTypeId)}
                   variant="outlined"
@@ -153,7 +153,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
             <FormControl className={classes.width100}>
               <TextField
                 id="current-employee-password"
-                label="Employee Password"
+                label={translate('bulk.migration.employee.password')}
                 type="password"
                 onChange={(e) => setEmployeePassword(e.target.value)}
                 className={classes.employeePasswordText}
