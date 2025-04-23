@@ -1,21 +1,17 @@
 import { FormControlLabel, Grid, Popover, styled, Switch, TablePagination, Typography } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { getter } from '@progress/kendo-data-query';
-import { getSelectedState, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
+import { getSelectedState, GridDetailRowProps, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { isEmpty, isNull, replace } from 'lodash';
-import React, { ChangeEvent, ReactElement, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, lazy, memo, ReactElement, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from '../../../../common/intl';
-import { ChangeRequestStatus } from '../../../../state/ducks/changeRequest/types';
-import { DocumentRevisionStatus } from '../../../../state/ducks/documentRevisions/types';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
-import { checkIsDocumentWO, checkIsTypeHaveOutput } from '../../../documentRevision/helpers/checkDocumentGroup';
-import { FB } from '../../../form.builder';
 import UtilColors from '../../../layout/theme/utils/colors';
 import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
-import { DATA_ITEM_KEY, SELECTED_FIELD } from './constants';
+import { DATA_ITEM_KEY, EXPAND_FIELD, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 
@@ -31,27 +27,21 @@ const StyledTablePagination = styled(TablePagination)(({ theme }) => ({
 interface props {
   scanId: string
   updateRevsTable: number
-  state?: ChangeRequestStatus | DocumentRevisionStatus
-  isShowOnly?: boolean
-  disabled?: boolean
-  label?: string
-  isAdditionalColumnsShown?: boolean
-  setDoNotPrompt?: (state: boolean) => void
+  handleSelectedRowsChange: (selected: ISelectedDetails[]) => void
 }
 
 const INITIAL_ROWS_COUNT = 25;
 
 const KendoRevsTable: React.FunctionComponent<props> = (
-  { scanId, updateRevsTable, label, state, isShowOnly = false, isAdditionalColumnsShown, setDoNotPrompt, disabled }) => {
+  { scanId, updateRevsTable, handleSelectedRowsChange }) => {
   const classes = useStyles();
-  isShowOnly = (isShowOnly || disabled) ?? false;
-
   const [searchQueries, setSearchQueries] = React.useState<{[key: string]: string}>({});
   const [order, setOrder] = React.useState<SortDirection>('desc');
   const [orderBy, setOrderBy] = React.useState('createdAt');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(INITIAL_ROWS_COUNT);
   const [isShowActionableRows, setIsShowActionableRows] = useState<boolean>(true);
+  const [expandedRevIDs, setExpandedRevIDs] = useState<string[]>();
 
   const {
     isLoading,
@@ -62,12 +52,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     selected,
     setSelected,
   } = useBulkMigration();
-  const { workspaceState } = FB.useStores();
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const groupOptions = workspaceState?.document?.document?.documentType?.groupOptions;
-  const isWORecord = checkIsDocumentWO(groupOptions) && !checkIsTypeHaveOutput(groupOptions);
-  const enbleTasksAdditionalColumns = isWORecord && DocumentRevisionStatus.Draft !== workspaceState?.document?.status;
   const [data, setData] = React.useState<ISupplierScanResultRev[]>(rows);
   const [selectedRows, setSelectedRows] = React.useState<{ [id: string]: boolean | number[] }>();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -83,13 +68,22 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     setPopoverContent(<></>);
   };
 
+  const handleDataItemExpanded = useCallback((dataItem: ISupplierScanResultRev) => {
+    const selectedId = dataItem.id;
+    setExpandedRevIDs((prevIds = []) =>
+      prevIds.includes(selectedId)
+        ? prevIds.filter(id => id !== selectedId)
+        : [...prevIds, selectedId],
+    );
+  }, []);
+
   useEffect(() => {
     setData(rows);
   }, [rows]);
 
-  if (enbleTasksAdditionalColumns) {
-    isAdditionalColumnsShown = true;
-  }
+  useEffect(() => {
+    handleSelectedRowsChange(selected);
+  }, [selected.length]);
 
   const handleSelectAllClick = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -134,24 +128,13 @@ const KendoRevsTable: React.FunctionComponent<props> = (
 
   console.log({ handleSearchTextChange, handleRequestSort });
 
-  // const formik = useFormik({
-  //   initialValues: {},
-  //   onSubmit: (values) => {
-  //     console.log({ values });
-  //   },
-  // });
-
-  const isWOReleased = isWORecord && DocumentRevisionStatus.Released === workspaceState?.document?.status;
-  const isWOVoided = isWORecord && DocumentRevisionStatus.Voided === workspaceState?.document?.status;
-  const isClosed = isWORecord ? (isWOReleased || isWOVoided) : Boolean(state && [DocumentRevisionStatus.Released, ChangeRequestStatus.Closed].includes(state));
   const schema = buildSchema({
-    isDisabled: isWORecord ? isWOReleased : ChangeRequestStatus.Closed === state,
-    isClosed,
     rowCount: data.length,
     numSelected: selected.length,
     handleHeaderCheckedChange: handleSelectAllClick,
     handlePopoverOpen,
     handlePopoverClose,
+    onDataItemExpanded: handleDataItemExpanded,
   });
 
   const onSelectionChange = (event: GridSelectionChangeEvent) => {
@@ -172,10 +155,6 @@ const KendoRevsTable: React.FunctionComponent<props> = (
       return selectedDetails;
     }, []);
     setSelected(newSelectedDetails);
-  };
-
-  const getColumns = () => {
-    return schema.filter(({ show }) => show || isAdditionalColumnsShown);
   };
 
   const getRowColor = (row: ISupplierScanResultRev) => {
@@ -212,14 +191,24 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     return editedRow;
   };
 
-  const RevList = data.map((item) => ({ ...item, [SELECTED_FIELD]: Boolean(selectedRows?.[idGetter(item)]) }));
+  const RevList = data.map((item) => ({ ...item, [SELECTED_FIELD]: Boolean(selectedRows?.[idGetter(item)]), [EXPAND_FIELD]: expandedRevIDs?.includes(item.id) }));
+
+  const LazyDetailComponent = lazy(async () => await import('./FormInputComparison'));
+
+  const DetailComponent = memo((props: GridDetailRowProps) => {
+    return (
+      <Suspense fallback={<div>{translate('common.loading')}</div>}>
+        <LazyDetailComponent {...props} />
+      </Suspense>
+    );
+  });
 
   return (
     <div ref={containerRef} className={classes.root} data-cy="tasks-list-table">
       <KendoDataGrid<ISupplierScanResultRev>
         style={{ overflow: 'auto', maxHeight: '50vh' }}
         data={RevList as ISupplierScanResultRev[]}
-        schema={getColumns()}
+        schema={schema}
         fullWidth
         className={classes.rootTasksList}
         hasBoxScrollbars
@@ -228,6 +217,8 @@ const KendoRevsTable: React.FunctionComponent<props> = (
         loading={isLoading}
         selectedField={SELECTED_FIELD}
         dataItemKey={DATA_ITEM_KEY}
+        detail={DetailComponent}
+        // expandField={EXPAND_FIELD}
         rowRender={rowRender}
         containerRef={containerRef}
         resizable={true}

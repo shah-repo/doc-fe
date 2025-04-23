@@ -19,16 +19,15 @@ export interface TasksListEditRequestBody {
 }
 
 export interface SchemaOptions {
-  isDisabled: boolean
-  isClosed: boolean
   rowCount: number
   numSelected: number
   handlePopoverClose: () => void
   handlePopoverOpen: (event: MouseEvent<HTMLDivElement>, content: ReactElement) => void
   handleHeaderCheckedChange: (event: ChangeEvent<HTMLInputElement>) => void
+  onDataItemExpanded?: (dataItem: ISupplierScanResultRev) => void
 }
 
 export interface CustomTemplateProps extends CellTemplateProps<ISupplierScanResultRev> {
-  handlePopoverOpen: (event: MouseEvent<HTMLDivElement>, content: ReactElement) => void
-  handlePopoverClose: () => void
+  handlePopoverOpen?: (event: MouseEvent<HTMLDivElement>, content: ReactElement) => void
+  handlePopoverClose?: () => void
 }

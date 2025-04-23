@@ -2,19 +2,32 @@ import React from 'react';
 import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import { ISupplierScanResultRev } from '../interface';
 import CheckboxCell from './components/CheckboxCell';
+import { ExpandCollapseCell } from './components/ExpandCollapseCell';
 import SelectFilter from './components/SelectFilter';
 import { SchemaOptions } from './types';
 
 export const buildSchema = ({
-  isDisabled,
-  isClosed,
   rowCount,
   numSelected,
   handlePopoverOpen,
   handlePopoverClose,
   handleHeaderCheckedChange,
+  onDataItemExpanded,
 }: SchemaOptions): Array<ColumnDefinition<ISupplierScanResultRev>> => {
   return [
+    {
+      id: '_expanded',
+      field: '_expanded',
+      filterable: false,
+      title: '',
+      template: (props) => (
+        <ExpandCollapseCell
+          {...props}
+          onDataItemExpanded={onDataItemExpanded}
+        />
+      ),
+      width: 60,
+    },
     {
       id: 'id',
       field: 'selected',
@@ -66,12 +79,5 @@ export const buildSchema = ({
       // template: (props) => <CommentCellTemplate {...props} {...{ isDisabled, isClosed }} />,
       width: 200,
     },
-    // {
-    //   id: 'assigneeAction',
-    //   title: 'approvalRequest.grid.heading.assignee.action',
-    //   show: false,
-    //   // template: (props) => <AssigneeActionCellTemplate {...props} {...{ employeeStatusUpdates, isDisabled, isClosed }} />,
-    //   width: 350,
-    // },
   ];
 };

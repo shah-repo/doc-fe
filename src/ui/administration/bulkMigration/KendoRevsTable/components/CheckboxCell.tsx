@@ -54,7 +54,7 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({ dataItem, dataIndex, sele
              </>
         }
       </>;
-    handlePopoverOpen(event, contentEl);
+    handlePopoverOpen?.(event, contentEl);
   };
 
   return (
