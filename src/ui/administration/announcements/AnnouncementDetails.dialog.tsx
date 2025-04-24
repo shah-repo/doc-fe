@@ -1,21 +1,19 @@
 import {
   AppBar,
   Box,
-  Button,
   Dialog,
   DialogContent,
   FormControl,
   FormHelperText,
   Grid,
   IconButton,
-  MenuItem,
-  Select,
   Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../common/intl';
+import { Autocomplete, Button } from '../../components/forms/fields-next';
 import AnnouncementDetail from './AnnouncementDetail';
 import InfoIndicator from './InfoIndicator';
 import { IAnnouncement, IAnnouncementDetail, IndicatorTypeEnum, SELECTED_RESOLUTION_ENUM } from './interface';
@@ -23,11 +21,13 @@ import useStyles from './styles';
 import { useAnnouncementDetails } from './useAnnouncementDetails';
 import { updateNestedObject } from './utils';
 
-const AnnouncementDetailsDialog: React.FC<{
+interface AnnouncementDetailsDialogProps {
   isOpen: boolean
   handleClose: () => void
   announcement: IAnnouncement
-}> = ({ isOpen, handleClose, announcement }) => {
+}
+
+const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ isOpen, handleClose, announcement }) => {
   const classes = useStyles();
 
   const {
@@ -94,41 +94,46 @@ const AnnouncementDetailsDialog: React.FC<{
                 )}
 
                 <FormControl className={classes.upgradeSelectionFormControl}>
-                  <Select
-                    labelId="form-rev-upgrade-selector"
-                    value={selectedFormRevToUpgrade}
-                    onChange={(event) => handleFormRevSelectionToUpgrade(event.target.value as string, announcement.id)}
-                  >
-                    {formRevsList.map((formRev) => (
-                      <MenuItem value={formRev.id} key={formRev.id}>
-                        <em>
-                          {formRev.document?.docId} • {formRev.name} • {formRev.displayRevision} •{' '}
-                          {formRev.displayStatus}
-                        </em>
-                      </MenuItem>
-                    ))}
-                  </Select>
+                  <Autocomplete
+                    options={formRevsList}
+                    placeholder={translate('bulk.migration.document.form.rev.selection')}
+                    getOptionLabel={(formRev) =>
+                      translate('bulk.migration.document.revision.options.label', {
+                        docId: formRev.document?.docId,
+                        name: formRev.name,
+                        revision: formRev.displayRevision,
+                        status: formRev.displayStatus,
+                      })
+                    }
+                    data-cy="from-rev-selection"
+                    value={formRevsList.find((rev) => rev.id === selectedFormRevToUpgrade) || null}
+                    onChange={(_, selectedOption) => handleFormRevSelectionToUpgrade(selectedOption?.id, announcement.id)}
+                  />
                   <FormHelperText>
                     {translate('supplier.announcement.details.upgrade.form.rev.helper.text')}
                   </FormHelperText>
                 </FormControl>
-
-                <Button
-                  variant="outlined"
-                  data-cy="upgrade-form"
-                  onClick={() => processFormUpgrade(announcement.id)}
-                  disabled={isAnyConflictingElementsUnResolved || !selectedFormRevToUpgrade}
-                >
-                  {translate(
-                    isSubmitting
-                      ? 'supplier.announcement.details.upgrade.form.rev'
-                      : 'supplier.announcement.details.upgrade.form',
-                  )}
-                </Button>
-                <InfoIndicator
-                  type={IndicatorTypeEnum.INFO}
-                  text={translate('supplier.announcement.details.upgrade.message')}
-                />
+                <Box className={classes.upgradeFormButtonContainer}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    data-cy="upgrade-form"
+                    className={classes.upgradeFormButton}
+                    onClick={() => processFormUpgrade(announcement.id)}
+                    disabled={isAnyConflictingElementsUnResolved || !selectedFormRevToUpgrade}
+                  >
+                    {translate(
+                      isSubmitting
+                        ? 'supplier.announcement.details.upgrade.form.rev'
+                        : 'supplier.announcement.details.upgrade.form',
+                    )}
+                  </Button>
+                  <InfoIndicator
+                    type={IndicatorTypeEnum.INFO}
+                    text={translate('supplier.announcement.details.upgrade.message')}
+                  />
+                </Box>
               </Box>
             )}
             {showUpgradeInfo && (
