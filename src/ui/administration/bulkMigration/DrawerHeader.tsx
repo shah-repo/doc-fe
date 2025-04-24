@@ -9,7 +9,7 @@ import useStyles from './styles';
 
 interface DialogHeaderProps {
   title: string
-  onDialogClose: () => void
+  onDialogClose?: () => void
 }
 
 const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onDialogClose }) => {
@@ -22,7 +22,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onDialogClose }) => 
         <Typography variant="h6" className={classes.rulesTitle}>
           {title}
         </Typography>
-        <Tooltip title={translate('common.close')} placement="top" arrow>
+        {onDialogClose && <Tooltip title={translate('common.close')} placement="top" arrow>
           <IconButton
             kind="simple"
             color="primary"
@@ -33,7 +33,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onDialogClose }) => 
           >
             <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
           </IconButton>
-        </Tooltip>
+        </Tooltip>}
       </Toolbar>
     </AppBar>
   );

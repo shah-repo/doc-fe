@@ -1,9 +1,8 @@
 import { lighten, makeStyles } from '@material-ui/core';
 import { Colors as NextColors } from '../../layout/theme-next';
-import { NextTheme } from '../../layout/theme-next/provider';
 import Colors from '../../layout/theme/utils/colors';
 
-export default makeStyles<NextTheme>(theme => ({
+export default makeStyles(theme => ({
   root: {
     width: '100%',
     height: '100%',
@@ -343,6 +342,10 @@ export default makeStyles<NextTheme>(theme => ({
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: theme.spacing(1),
+  },
+  dialogActions: {
+    padding: theme.spacing(1, 3),
+    background: NextColors.darkGray,
   },
   buttonSpacing: {
     marginLeft: theme.spacing(1),

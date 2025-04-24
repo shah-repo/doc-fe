@@ -4,9 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   FormControl,
-  TextField,
   Typography,
 } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -16,8 +14,9 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { translate } from '../../../common/intl';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
-import { Button } from '../../components/forms/fields-next';
+import { Button, TextField } from '../../components/forms/fields-next';
 import { FBButton } from '../../form.builder';
+import DialogHeader from './DrawerHeader';
 import { IApprovalRequirementGroup, ISelectedDetails } from './interface';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
@@ -85,7 +84,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{translate('bulk.migration.supplier.revisions.summary')}</DialogTitle>
+      <DialogHeader title={translate('bulk.migration.supplier.revisions.summary')} />
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           <Typography variant="h5" className={classes.marginBottom8}>
@@ -153,8 +152,9 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
             <FormControl className={classes.width100}>
               <TextField
                 id="current-employee-password"
-                label={translate('bulk.migration.employee.password')}
+                placeholder={translate('bulk.migration.employee.password')}
                 type="password"
+                size="small"
                 onChange={(e) => setEmployeePassword(e.target.value)}
                 className={classes.employeePasswordText}
               />
@@ -162,6 +162,8 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
                 id="current-employee-username"
                 type="text"
                 disabled
+                placeholder={translate('bulk.migration.employee.username')}
+                size="small"
                 name="username"
                 autoComplete="username"
                 className={classes.username}
@@ -170,7 +172,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
           </>
         )}
       </DialogContent>
-      <DialogActions className={classes.spaceBetweenFlex}>
+      <DialogActions className={cx(classes.spaceBetweenFlex, classes.dialogActions)}>
         <Button onClick={handleClose} color="inherit" variant="contained">
           {translate('common.cancel')}
         </Button>
