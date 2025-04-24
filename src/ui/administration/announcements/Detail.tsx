@@ -1,10 +1,10 @@
 import { Box, Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@material-ui/core';
 import Markdown from 'markdown-to-jsx';
 import React, { useState } from 'react';
-import { FBOption } from '../../../../src/ui/form.builder/index';
 import { translate } from '../../../common/intl';
 import Text from '../../components/Text';
 import { FBSchemaState } from '../../form.builder';
+import { FBOption } from '../../form.builder/index';
 import { FBInputProps } from '../../form.builder/types/common';
 import { Translation } from '../../translations/types';
 import { IAnnouncementDetail, IConflictingItem, IFormBuilder, SELECTED_RESOLUTION_ENUM } from './interface';

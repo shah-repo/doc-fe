@@ -14,11 +14,11 @@ import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../common/intl';
 import { Autocomplete, Button } from '../../components/forms/fields-next';
-import AnnouncementDetail from './AnnouncementDetail';
+import AnnouncementDetail from './Detail';
 import InfoIndicator from './InfoIndicator';
 import { IAnnouncement, IAnnouncementDetail, IndicatorTypeEnum, SELECTED_RESOLUTION_ENUM } from './interface';
 import useStyles from './styles';
-import { useAnnouncementDetails } from './useAnnouncementDetails';
+import { useAnnouncementDetails } from './useDetails';
 import { updateNestedObject } from './utils';
 
 interface AnnouncementDetailsDialogProps {

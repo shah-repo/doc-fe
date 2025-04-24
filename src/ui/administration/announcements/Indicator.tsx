@@ -4,7 +4,7 @@ import { Box, Button, Popover, Typography } from '@material-ui/core';
 import Markdown from 'markdown-to-jsx';
 import React, { useCallback, useState } from 'react';
 import { translate } from '../../../common/intl';
-import AnnouncementDetailsDialog from './AnnouncementDetails.dialog';
+import AnnouncementDetailsDialog from './DetailsDialog';
 import { ANNOUNCEMENT_TYPE_ENUM, IAnnouncement } from './interface';
 import useStyles from './styles';
 
