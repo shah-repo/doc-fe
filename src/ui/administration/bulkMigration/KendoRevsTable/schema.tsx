@@ -18,6 +18,7 @@ export const buildSchema = ({
   handlePopoverOpen,
   handlePopoverClose,
   handleHeaderCheckedChange,
+  handleRequestSort,
   onDataItemExpanded,
 }: SchemaOptions): Array<ColumnDefinition<ISupplierScanResultRev>> => {
   return [
@@ -32,7 +33,7 @@ export const buildSchema = ({
           onDataItemExpanded={onDataItemExpanded}
         />
       ),
-      width: 60,
+      width: 50,
     },
     {
       id: 'id',
@@ -41,7 +42,7 @@ export const buildSchema = ({
       filterCell: (props) => <SelectFilter {...{ props, rowCount, numSelected, handleHeaderCheckedChange }} />,
       template: (props) => <CheckboxCell {...props} {...{ handlePopoverClose, handlePopoverOpen }} />,
       show: true,
-      width: 65,
+      width: 90,
     },
     {
       id: 'docId',
@@ -49,7 +50,7 @@ export const buildSchema = ({
       title: 'administration.bulk.migration.rev.grid.heading.docId',
       show: true,
       template: (props) => <DocIdCellTemplate {...props} />,
-      width: 150,
+      width: 140,
     },
     {
       id: 'docRevName',
@@ -57,7 +58,7 @@ export const buildSchema = ({
       title: 'administration.bulk.migration.rev.grid.heading.name',
       show: true,
       template: (props) => <NameCellTemplate {...props} />,
-      width: 250,
+      width: 235,
       sortable: false,
     },
     {

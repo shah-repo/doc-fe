@@ -321,7 +321,7 @@ export const useBulkMigration = () => {
       method: 'post',
       url: `${BULK_MIGRATION_START_REVS_MIGRATION}/${scanDetails?.id}`,
       data: {
-        revIds: selectedRows.map(entry => entry.id),
+        revIds: selectedRows.map(entry => entry.docRevId),
         password: employeePassword,
       },
       headers: {

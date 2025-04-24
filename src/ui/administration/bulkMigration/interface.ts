@@ -72,7 +72,7 @@ export enum MIGRATION_STATUS_ENUM {
 }
 
 export interface ISelectedDetails {
-  id: string
+  docRevId: string
   action: REV_ACTION_OPTIONS
 }
 

@@ -1,5 +1,6 @@
 import { get } from 'lodash';
 import React from 'react';
+import OverflowContent from '../../../../components/OverflowContent';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 import { styles } from './styles';
@@ -12,7 +13,9 @@ export const NameCellTemplate: React.FC<CustomTemplateProps> = (props) => {
 
   return (
     <p className={classes.revsTableFlexBoxColumn}>
-      <span><b>{displayValue}</b></span>
+      <OverflowContent title={<b>{displayValue}</b>}>
+        <span><b>{displayValue}</b></span>
+      </OverflowContent>
       <span>Rev {displayRevision} • {displayStatus}</span>
     </p>
   );

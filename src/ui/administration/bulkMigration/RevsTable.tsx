@@ -371,7 +371,7 @@ const RevsTable: React.FC<{
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelectedDetails: ISelectedDetails[] = rows.map((n) => ({ id: n.docRevId, action: n.proposedAction }));
+      const newSelectedDetails: ISelectedDetails[] = rows.map((n) => ({ docRevId: n.docRevId, action: n.proposedAction }));
       setSelected(newSelectedDetails);
       return;
     }
@@ -379,11 +379,11 @@ const RevsTable: React.FC<{
   };
 
   const handleSelection = (event, row: ISupplierScanResultRev) => {
-    const selectedIndex = selected.findIndex(entry => entry.id === row.docRevId);
+    const selectedIndex = selected.findIndex(entry => entry.docRevId === row.docRevId);
     let newSelected: ISelectedDetails[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, { id: row.docRevId, action: row.proposedAction });
+      newSelected = newSelected.concat(selected, { docRevId: row.docRevId, action: row.proposedAction });
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -411,7 +411,7 @@ const RevsTable: React.FC<{
     setPage(0);
   };
 
-  const isSelected = (id: string) => selected.findIndex(entry => entry.id === id) > -1;
+  const isSelected = (id: string) => selected.findIndex(entry => entry.docRevId === id) > -1;
 
   return (
     <Paper>

@@ -11,9 +11,10 @@ export const styles = makeStyles((theme) => ({
     fontSize: 18,
     marginRight: theme.spacing(2),
     color: Colors.textBlack,
+    cursor: 'pointer',
   },
   headerCheckbox: {
-    marginLeft: theme.spacing(1),
+    display: 'flex',
   },
   revsTableDateTimeLabel: {
     fontSize: 12,
@@ -22,6 +23,7 @@ export const styles = makeStyles((theme) => ({
   checkboxRowContent: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   checkboxRowContentDone: {
     color: Colors.success,

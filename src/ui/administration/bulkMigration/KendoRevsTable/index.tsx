@@ -1,17 +1,17 @@
 import { FormControlLabel, Grid, Popover, Switch, Typography } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import { getter } from '@progress/kendo-data-query';
-import { getSelectedState, GridDetailRowProps, GridPageChangeEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
+import { CompositeFilterDescriptor, FilterDescriptor, getter } from '@progress/kendo-data-query';
+import { getSelectedState, GridDetailRowProps, GridFilterChangeEvent, GridPageChangeEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
-import { isEmpty, isNull, replace } from 'lodash';
-import React, { ChangeEvent, lazy, memo, ReactElement, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { debounce, isEmpty, isNull, replace } from 'lodash';
+import React, { ChangeEvent, ChangeEventHandler, lazy, memo, ReactElement, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { translate } from '../../../../common/intl';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import UtilColors from '../../../layout/theme/utils/colors';
 import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
-import { DATA_ITEM_KEY, EXPAND_FIELD, pagerSettings, SELECTED_FIELD } from './constants';
+import { DATA_ITEM_KEY, DEFAULT_FILTER, EXPAND_FIELD, pagerSettings, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { Page } from './types';
@@ -35,6 +35,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
   const [page, setPage] = React.useState<Page>({ skip: 0, pageNumber: 0, take: INITIAL_ROWS_COUNT });
   const [isShowActionableRows, setIsShowActionableRows] = useState<boolean>(true);
   const [expandedRevIDs, setExpandedRevIDs] = useState<string[]>([]);
+  const [filter, setFilter] = useState<CompositeFilterDescriptor>();
 
   const {
     isLoading,
@@ -75,7 +76,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
 
   const handleSelectAllClick = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelectedDetails: ISelectedDetails[] = data.map((n) => ({ id: n.docRevId, action: n.proposedAction }));
+      const newSelectedDetails: ISelectedDetails[] = data.map((n) => ({ docRevId: n.docRevId, action: n.proposedAction }));
       setSelected(newSelectedDetails);
       const newSelectedRows = data.reduce<{ [id: string]: boolean }>((selectedRows, item) => ({ ...selectedRows, [idGetter(item)]: true }), {});
       setSelectedRows(newSelectedRows);
@@ -98,20 +99,28 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     setPage({ skip, take, pageNumber });
   };
 
-  const handleRequestSort = (event, property) => {
+  const handleRequestSort = (event: ChangeEventHandler, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const handleSearchTextChange = (value: string, propertyId: string) => {
-    const newSearchQueries = {
-      ...searchQueries, [propertyId]: value,
-    };
-    setSearchQueries(newSearchQueries);
+  const searchTextChange = (searchQueries: {[key: string]: string}) => {
+    setSearchQueries(searchQueries);
   };
 
-  console.log({ handleSearchTextChange, handleRequestSort });
+  const debounceSearch = useCallback(debounce(searchTextChange, 1000, { leading: true, trailing: true }), []);
+
+  const filterChange = (event: GridFilterChangeEvent) => {
+    const { filter } = event;
+    const newSearchQueries = filter?.filters ? (filter?.filters as FilterDescriptor[]).reduce((queries, fiter) => {
+      const { field = '', value } = fiter;
+      return { ...queries, [field as string]: value };
+    }, {}) : {};
+
+    setFilter(filter ?? DEFAULT_FILTER);
+    debounceSearch(newSearchQueries);
+  };
 
   const schema = buildSchema({
     scanId,
@@ -120,6 +129,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     handleHeaderCheckedChange: handleSelectAllClick,
     handlePopoverOpen,
     handlePopoverClose,
+    handleRequestSort,
     onDataItemExpanded: handleDataItemExpanded,
   });
 
@@ -135,8 +145,8 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     });
     setSelectedRows(newSelectedState);
     const newSelectedDetails: ISelectedDetails[] = data.reduce<ISelectedDetails[]>((selectedDetails, item) => {
-      if (newSelectedState[item.id]) {
-        return [...selectedDetails, { id: item.docRevId, action: item.proposedAction }];
+      if (newSelectedState[item.docRevId]) {
+        return [...selectedDetails, { docRevId: item.docRevId, action: item.proposedAction }];
       }
       return selectedDetails;
     }, []);
@@ -192,7 +202,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
   return (
     <div ref={containerRef} className={classes.root} data-cy="tasks-list-table">
       <KendoDataGrid<ISupplierScanResultRev>
-        style={{ overflow: 'auto', maxHeight: '50vh' }}
+        style={{ overflow: 'auto', maxHeight: '53vh' }}
         data={RevList as ISupplierScanResultRev[]}
         schema={schema}
         fullWidth
@@ -214,6 +224,8 @@ const KendoRevsTable: React.FunctionComponent<props> = (
         skip={page.skip}
         take={page.take}
         total={totalCount}
+        onFilterChange={filterChange}
+        filter={filter}
       >
         <GridToolbar >
           {!isEmpty(errorMessage) && <div className={classes.errMsgStyle}>{errorMessage}</div>}

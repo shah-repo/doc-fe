@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, ReactElement } from 'react';
+import { ChangeEvent, ChangeEventHandler, MouseEvent, ReactElement } from 'react';
 import { Attachment } from '../../../../state/ducks/attachments/types';
 import { User } from '../../../../state/ducks/common/types';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
@@ -31,6 +31,7 @@ export interface SchemaOptions {
   handlePopoverClose: () => void
   handlePopoverOpen: (event: MouseEvent<HTMLDivElement>, content: ReactElement) => void
   handleHeaderCheckedChange: (event: ChangeEvent<HTMLInputElement>) => void
+  handleRequestSort: (event: ChangeEventHandler, property: string) => void
   onDataItemExpanded?: (dataItem: ISupplierScanResultRev) => void
 }
 
