@@ -522,6 +522,7 @@ export const useBulkMigration = () => {
     setToDocumentTypeId,
     setToFormRevId,
     eligibleRevsCount,
+    setEligibleRevsCount,
     promptUserToRescanDetails,
     updateRevsTable,
     scanDetails,

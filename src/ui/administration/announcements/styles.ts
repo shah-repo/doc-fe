@@ -1,11 +1,10 @@
 import { makeStyles } from '@material-ui/core';
-import { NextTheme } from '../../layout/theme-next/provider';
 import Colors from '../../layout/theme/utils/colors';
 
-export default makeStyles<NextTheme>(theme => ({
+export default makeStyles(theme => ({
   announcementPopoverPaper: {
     padding: theme.spacing(1),
-    maxWidth: '400px',
+    maxWidth: 400,
     backgroundColor: Colors.medium_gray,
   },
   textContainer: {
@@ -21,72 +20,88 @@ export default makeStyles<NextTheme>(theme => ({
   announcementDetailCardHeader: {
     display: 'flex',
     alignItems: 'center',
-    gap: '4px',
+    gap: theme.spacing(0.5),
   },
   announcementDetailTabIndicatorText: {
     color: Colors.font_gray,
-    fontSize: '12px',
+    fontSize: 12,
   },
   announcementDetailTextDescription: {
     color: Colors.dark_gray,
-    fontSize: '13px',
-    paddingTop: '0',
+    fontSize: 12,
+    paddingTop: theme.spacing(1),
   },
   componentDisplayBox: {
     padding: theme.spacing(2),
   },
   conflictingElementsContainer: {
     backgroundColor: Colors.light_red,
-    padding: '16px',
+    padding: theme.spacing(2),
   },
   announcementDetailOptionsArea: {
-    padding: '16px',
+    padding: theme.spacing(2),
   },
   announcementDetailOptionsHeading: {
-    marginLeft: '-8px',
+    marginLeft: theme.spacing(-1),
   },
   announcementDetailOptionsText: {
-    color: Colors.dark_gray,
-    fontSize: '13px',
+    color: Colors.gray,
+    fontSize: 12,
   },
   announceDetailsAppBar: {
     position: 'relative',
-    padding: '8px 16px',
+    padding: theme.spacing(1, 2),
   },
   errorDiv: {
     color: Colors.red,
     backgroundColor: Colors.light_red,
-    padding: '4px',
+    padding: theme.spacing(0.5),
   },
   infoDiv: {
     color: Colors.blue,
     backgroundColor: Colors.light_gray_blue,
-    padding: '4px 8px',
+    padding: theme.spacing(0.5, 1),
   },
   conflictingElementBox: {
-    gap: '6px',
+    gap: theme.spacing(0.75),
   },
   upgradeSelectionFormControl: {
-    width: '400px',
+    width: 400,
+    margin: theme.spacing(0.625),
   },
   infoText: {
-    marginBottom: '1em',
+    marginBottom: theme.spacing(2),
   },
   infoIndicatorPopoverPaper: {
     padding: theme.spacing(1),
-    maxWidth: '400px',
+    maxWidth: 400,
     backgroundColor: Colors.platinum_gray,
   },
   infoIndicatorWarningIcon: {
     color: Colors.error_red,
   },
+  infoIndicatorIcon: {
+    color: Colors.blue,
+  },
   infoIndicatorPopoverText: {
-    marginTop: '4px',
-    fontSize: 'small',
+    marginTop: theme.spacing(0.5),
+    fontSize: 12,
   },
   infoIndicatorWarningText: {
     color: Colors.latest_red_varient,
-    marginTop: '4px',
-    fontSize: 'small',
+    marginTop: theme.spacing(0.5),
+    fontSize: 12,
+  },
+  infoIcon: {
+    fontSize: 16,
+  },
+  upgradeFormButtonContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: theme.spacing(1.25),
+  },
+  upgradeFormButton: {
+    margin: theme.spacing(0, 0.625),
   },
 }));

@@ -1,7 +1,8 @@
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Popover, Typography } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
-import WarningIcon from '@material-ui/icons/Warning';
 import React from 'react';
+import useHover from '../../hooks/useHover';
 import { IndicatorTypeEnum } from './interface';
 import useStyles from './styles';
 
@@ -12,9 +13,10 @@ interface InfoIndicatorProps {
 
 const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [iconRef, iconRefHovered] = useHover<HTMLElement>();
 
-  const handlePopoverOpen = (event: React.MouseEvent<SVGSVGElement>) => {
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -23,16 +25,19 @@ const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text }) => {
   };
 
   const isInfo = type === IndicatorTypeEnum.INFO;
-  const IconComponent = isInfo ? InfoIcon : WarningIcon;
+
+  const icon = isInfo
+    ? iconRefHovered ? solid('circle-info') : regular('circle-info')
+    : iconRefHovered ? solid('triangle-exclamation') : regular('triangle-exclamation');
+
+  const iconClass = isInfo ? classes.infoIndicatorIcon : classes.infoIndicatorWarningIcon;
   const textClass = isInfo ? classes.infoIndicatorPopoverText : classes.infoIndicatorWarningText;
 
   return (
     <Box display="inline">
-      <IconComponent
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
-        className={!isInfo ? classes.infoIndicatorWarningIcon : undefined}
-      />
+      <span className={classes.infoIcon} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose} ref={iconRef}>
+        <FontAwesomeIcon icon={icon} className={iconClass} data-cy={`info-indicator-${type.toLowerCase()}`} />
+      </span>
       <Popover
         style={{ pointerEvents: 'none' }}
         classes={{ paper: classes.infoIndicatorPopoverPaper }}
@@ -44,11 +49,7 @@ const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text }) => {
         disableRestoreFocus
       >
         <Box p={1}>
-          <Typography
-            component="span"
-            className={textClass}
-            dangerouslySetInnerHTML={{ __html: text }}
-          />
+          <Typography component="span" className={textClass} dangerouslySetInnerHTML={{ __html: text }} />
         </Box>
       </Popover>
     </Box>

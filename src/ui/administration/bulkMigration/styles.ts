@@ -1,9 +1,8 @@
 import { lighten, makeStyles } from '@material-ui/core';
 import { Colors as NextColors } from '../../layout/theme-next';
-import { NextTheme } from '../../layout/theme-next/provider';
 import Colors from '../../layout/theme/utils/colors';
 
-export default makeStyles<NextTheme>(theme => ({
+export default makeStyles(theme => ({
   root: {
     width: '100%',
     height: '100%',
@@ -105,8 +104,7 @@ export default makeStyles<NextTheme>(theme => ({
   },
   dateTimeLabel: {
     fontSize: 12,
-    position: 'relative',
-    top: -4,
+    margin: theme.spacing(0.5, 0),
   },
   progress: {
     position: 'absolute',
@@ -345,6 +343,10 @@ export default makeStyles<NextTheme>(theme => ({
     flexWrap: 'wrap',
     gap: theme.spacing(1),
   },
+  dialogActions: {
+    padding: theme.spacing(1, 3),
+    background: NextColors.darkGray,
+  },
   buttonSpacing: {
     marginLeft: theme.spacing(1),
   },
@@ -443,17 +445,17 @@ export default makeStyles<NextTheme>(theme => ({
     bottom: 0,
   },
   previewDrawerDialog: {
-    width: '80vw', // Width of the side panel
+    width: '80vw',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%', // Full height of the drawer
+    height: '100%',
   },
   previewDrawerDialogPaper: {
     width: '80vw',
   },
   previewDrawerContent: {
     display: 'flex',
-    flexGrow: 1, // Allow sections to take full available height
+    flexGrow: 1,
     flexDirection: 'row',
   },
   previewDrawerLeftSection: {
@@ -649,5 +651,18 @@ export default makeStyles<NextTheme>(theme => ({
   },
   mappingInfo: {
     marginBottom: theme.spacing(1),
+  },
+  pointer: {
+    cursor: 'pointer',
+  },
+  groupNameContainer: {
+    marginLeft: theme.spacing(1),
+    display: 'flex',
+  },
+  groupName: {
+    marginLeft: theme.spacing(0.5),
+  },
+  username: {
+    width: 0,
   },
 }));
