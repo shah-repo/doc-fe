@@ -1,7 +1,7 @@
-import { FormControlLabel, Grid, Popover, styled, Switch, TablePagination, Typography } from '@material-ui/core';
+import { FormControlLabel, Grid, Popover, Switch, Typography } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { getter } from '@progress/kendo-data-query';
-import { getSelectedState, GridDetailRowProps, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
+import { getSelectedState, GridDetailRowProps, GridPageChangeEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { isEmpty, isNull, replace } from 'lodash';
 import React, { ChangeEvent, lazy, memo, ReactElement, Suspense, useCallback, useEffect, useRef, useState } from 'react';
@@ -11,18 +11,12 @@ import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.t
 import UtilColors from '../../../layout/theme/utils/colors';
 import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
-import { DATA_ITEM_KEY, EXPAND_FIELD, SELECTED_FIELD } from './constants';
+import { DATA_ITEM_KEY, EXPAND_FIELD, pagerSettings, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
+import { Page } from './types';
 
 const idGetter = getter(DATA_ITEM_KEY);
-
-const StyledTablePagination = styled(TablePagination)(({ theme }) => ({
-  '& .MuiTablePagination-selectIcon': {
-    left: theme.spacing(3),
-    top: theme.spacing(1.2),
-  },
-}));
 
 interface props {
   scanId: string
@@ -38,22 +32,20 @@ const KendoRevsTable: React.FunctionComponent<props> = (
   const [searchQueries, setSearchQueries] = React.useState<{[key: string]: string}>({});
   const [order, setOrder] = React.useState<SortDirection>('desc');
   const [orderBy, setOrderBy] = React.useState('createdAt');
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(INITIAL_ROWS_COUNT);
+  const [page, setPage] = React.useState<Page>({ skip: 0, pageNumber: 0, take: INITIAL_ROWS_COUNT });
   const [isShowActionableRows, setIsShowActionableRows] = useState<boolean>(true);
-  const [expandedRevIDs, setExpandedRevIDs] = useState<string[]>();
+  const [expandedRevIDs, setExpandedRevIDs] = useState<string[]>([]);
 
   const {
     isLoading,
     errorMessage,
-    rows,
+    rows: data,
     totalCount,
     fetchScanSupplierRevisions,
     selected,
     setSelected,
   } = useBulkMigration();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [data, setData] = React.useState<ISupplierScanResultRev[]>(rows);
   const [selectedRows, setSelectedRows] = React.useState<{ [id: string]: boolean | number[] }>();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popoverContent, setPopoverContent] = useState<ReactElement>(<></>);
@@ -69,17 +61,13 @@ const KendoRevsTable: React.FunctionComponent<props> = (
   };
 
   const handleDataItemExpanded = useCallback((dataItem: ISupplierScanResultRev) => {
-    const selectedId = dataItem.id;
+    const selectedId = dataItem.docRevId;
     setExpandedRevIDs((prevIds = []) =>
       prevIds.includes(selectedId)
         ? prevIds.filter(id => id !== selectedId)
         : [...prevIds, selectedId],
     );
   }, []);
-
-  useEffect(() => {
-    setData(rows);
-  }, [rows]);
 
   useEffect(() => {
     handleSelectedRowsChange(selected);
@@ -99,18 +87,15 @@ const KendoRevsTable: React.FunctionComponent<props> = (
 
   useEffect(() => {
     if (scanId) {
-      fetchScanSupplierRevisions(scanId, page, rowsPerPage, orderBy, order, isShowActionableRows, searchQueries);
+      fetchScanSupplierRevisions(scanId, page.pageNumber, page.take, orderBy, order, isShowActionableRows, searchQueries);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateRevsTable, scanId, searchQueries, page, rowsPerPage, orderBy, order, isShowActionableRows]);
+  }, [updateRevsTable, scanId, searchQueries, page, orderBy, order, isShowActionableRows]);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleChangePage = (event: GridPageChangeEvent) => {
+    const { page: { skip, take } } = event;
+    const pageNumber = skip / take;
+    setPage({ skip, take, pageNumber });
   };
 
   const handleRequestSort = (event, property) => {
@@ -192,7 +177,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     return editedRow;
   };
 
-  const RevList = data.map((item) => ({ ...item, [SELECTED_FIELD]: Boolean(selectedRows?.[idGetter(item)]), [EXPAND_FIELD]: expandedRevIDs?.includes(item.id) }));
+  const RevList = data.map((item) => ({ ...item, [SELECTED_FIELD]: Boolean(selectedRows?.[idGetter(item)]), [EXPAND_FIELD]: expandedRevIDs?.includes(item.docRevId) }));
 
   const LazyDetailComponent = lazy(async () => await import('./FormInputComparison'));
 
@@ -219,11 +204,16 @@ const KendoRevsTable: React.FunctionComponent<props> = (
         selectedField={SELECTED_FIELD}
         dataItemKey={DATA_ITEM_KEY}
         detail={DetailComponent}
-        // expandField={EXPAND_FIELD}
+        expandField={EXPAND_FIELD}
         rowRender={rowRender}
         containerRef={containerRef}
         resizable={true}
         onSelectionChange={onSelectionChange}
+        pageable={pagerSettings}
+        onPageChange={handleChangePage}
+        skip={page.skip}
+        take={page.take}
+        total={totalCount}
       >
         <GridToolbar >
           {!isEmpty(errorMessage) && <div className={classes.errMsgStyle}>{errorMessage}</div>}
@@ -235,7 +225,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
                 {translate('administration.bulk.migration.supplier.rev.grid.title')}
                 <RefreshIcon
                   className={classes.revsTableRefreshIcon}
-                  onClick={() => fetchScanSupplierRevisions(scanId, page, rowsPerPage, orderBy, order, isShowActionableRows, searchQueries)}
+                  onClick={() => fetchScanSupplierRevisions(scanId, page.pageNumber, page.take, orderBy, order, isShowActionableRows, searchQueries)}
                 />
               </Typography>
               {selected.length > 0 && (
@@ -260,15 +250,6 @@ const KendoRevsTable: React.FunctionComponent<props> = (
                 label="Actionable Rows"
                 className={classes.mappingSwitcher}
                 labelPlacement="bottom"
-              />
-              <StyledTablePagination
-                rowsPerPageOptions={[25, 50, 100]}
-                SelectProps={{ fullWidth: false }}
-                count={totalCount}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
               />
             </Grid>
           </Grid>

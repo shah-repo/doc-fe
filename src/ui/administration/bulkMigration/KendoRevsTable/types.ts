@@ -18,6 +18,12 @@ export interface TasksListEditRequestBody {
   partOfId: string
 }
 
+export interface Page {
+  skip: number
+  pageNumber: number
+  take: number
+}
+
 export interface SchemaOptions {
   scanId: string
   rowCount: number

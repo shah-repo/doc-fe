@@ -62,7 +62,7 @@ export const buildSchema = ({
     },
     {
       id: 'owner',
-      field: 'owner',
+      field: 'name',
       title: 'administration.bulk.migration.rev.grid.heading.owner',
       show: true,
       template: (props) => <OwnerCellTemplate {...props} />,
