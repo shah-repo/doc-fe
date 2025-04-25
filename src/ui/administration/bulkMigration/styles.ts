@@ -2,7 +2,7 @@ import { lighten, makeStyles } from '@material-ui/core';
 import { Colors as NextColors } from '../../layout/theme-next';
 import Colors from '../../layout/theme/utils/colors';
 
-export default makeStyles(theme => ({
+export default makeStyles((theme) => ({
   root: {
     width: '100%',
     height: '100%',
@@ -314,16 +314,19 @@ export default makeStyles(theme => ({
   },
   approvalRequirementsBox: {
     padding: '12px',
+    fontSize: 14,
     backgroundColor: Colors.background_blue,
     borderRadius: '4px',
   },
   approvalRequirementsBoxText: {
     marginBottom: '4px',
+    fontSize: 14,
     color: Colors.light_gray_II,
   },
   approvalRequirementsBoxEmail: {
     fontWeight: 'bold',
     color: Colors.bright_blue,
+    fontSize: 14,
     display: 'block',
   },
   approvalRequirementsRequiredGroupsBox: {
@@ -364,6 +367,9 @@ export default makeStyles(theme => ({
   marginBottom8: {
     marginBottom: '8px',
   },
+  marginY8: {
+    margin: theme.spacing(1, 0),
+  },
   marginTop8: {
     marginTop: '8px',
   },
@@ -375,9 +381,11 @@ export default makeStyles(theme => ({
   },
   greenCheckCircle: {
     color: Colors.green,
+    fontSize: 14,
   },
   redWarning: {
     color: Colors.red,
+    fontSize: 14,
   },
   relative: {
     position: 'relative',
@@ -691,5 +699,20 @@ export default makeStyles(theme => ({
   },
   username: {
     width: 0,
+  },
+  dialogContentText: {
+    fontWeight: 400,
+    fontSize: 14,
+    color: NextColors.textBlack,
+    'white-space': 'break-spaces',
+  },
+  selectedRevInfo: {
+    fontWeight: 600,
+    fontSize: 14,
+    color: NextColors.textBlack,
+    'white-space': 'break-spaces',
+  },
+  jobInfo: {
+    fontSize: 14,
   },
 }));
