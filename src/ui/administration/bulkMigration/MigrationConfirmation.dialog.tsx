@@ -1,3 +1,5 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Box,
   Dialog,
@@ -8,8 +10,6 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import WarningIcon from '@material-ui/icons/Warning';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
@@ -117,12 +117,14 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
                 />
                 <Box className={classes.approvalRequirementsRequiredGroupsBox}>
                   {approvalRequirements.requiredGroups.map((group: IApprovalRequirementGroup) => {
+                    const isFulfilled = isApprovalRequirementFulfilled(group);
+
                     return (
                       <Box key={group.id} className={classes.groupNameContainer}>
-                        {isApprovalRequirementFulfilled(group) && (
-                          <CheckCircleIcon className={classes.greenCheckCircle} />
-                        )}
-                        {!isApprovalRequirementFulfilled(group) && <WarningIcon className={classes.redWarning} />}
+                        <FontAwesomeIcon
+                          className={isFulfilled ? classes.greenCheckCircle : classes.redWarning}
+                          icon={isFulfilled ? solid('circle-check') : solid('triangle-exclamation')}
+                        />
                         <Box className={classes.groupName}>
                           <Typography variant="subtitle2">{group.name}</Typography>
                         </Box>
@@ -149,7 +151,9 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
           {!isEmpty(toFormReleasedError) && <div className={classes.errMsgStyle}>{toFormReleasedError}</div>}
           {hasApprovalMissingGroups && isEmpty(toFormReleasedError) && (
             <Box className={classes.marginTop16}>
-              <Typography className={classes.dialogContentText}>{translate('bulk.migration.supplier.revise.password.confirm.message')}</Typography>
+              <Typography className={classes.dialogContentText}>
+                {translate('bulk.migration.supplier.revise.password.confirm.message')}
+              </Typography>
               <FormControl className={cx(classes.width100, classes.marginTop8)}>
                 <TextField
                   id="current-employee-password"
