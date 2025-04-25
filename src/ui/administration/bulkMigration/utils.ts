@@ -30,6 +30,12 @@ export function canMapItems (
     const selectedType = selectedSchemaItem.type as string;
     const targetType = toSchemaItem.type;
 
+    const isCheckbox = selectedSchemaItem.type === MigrationSpecialFields.CHECKBOX_GROUP
+    && toSchemaItem.type === MigrationSpecialFields.CHECKBOX_GROUP;
+
+    const isSelect = selectedSchemaItem.type === MigrationSpecialFields.SELECT
+    && toSchemaItem.type === MigrationSpecialFields.SELECT;
+
     if (selectedType !== targetType) {
       return {
         canMap: false,
@@ -39,10 +45,6 @@ export function canMapItems (
 
     canMap = checkSpecialFields(selectedSchemaItem, toSchemaItem);
 
-    const isCheckbox = selectedSchemaItem.type === MigrationSpecialFields.CHECKBOX_GROUP
-      && toSchemaItem.type === MigrationSpecialFields.CHECKBOX_GROUP;
-    const isSelect = selectedSchemaItem.type === MigrationSpecialFields.SELECT
-      && toSchemaItem.type === MigrationSpecialFields.SELECT;
     if (!canMap) {
       if (isCheckbox || isSelect) {
         return {
@@ -174,8 +176,6 @@ export function autoMapArrays (
     }
   });
 
-  console.log(toRevSchemaIndex);
-
   // Iterate through fromRevSchema and update isMapped and mappedFrom
   for (const fromRevSchemaItem of fromRevSchema) {
     if (isDisabledSchemaItem(fromRevSchemaItem)) {
@@ -194,11 +194,9 @@ export function autoMapArrays (
 
     // The fields from the new schema that match.
     const matchingItems: ISchemaItem[] = matchingItemsFromLabel ?? matchingItemsFromName ?? [];
-    console.log(matchingItems);
 
     for (const matchingItem of matchingItems) {
       const isMatching = checkSpecialFields(fromRevSchemaItem, matchingItem);
-      console.log(fromRevSchemaItem, matchingItem, isMatching);
       if (!isMatching) {
         continue;
       }

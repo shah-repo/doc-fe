@@ -7,6 +7,7 @@ import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_CANCEL_SCAN, BULK_MIG
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
+import { SUPPLIERS_OPTIONS_URL } from '../../constants/urls';
 import { FBFormState } from '../../form.builder';
 import { IApprovalRequirements, IBulkMigrationDocumentType, IBulkMigrationScanDetails, IScanDetailsResult, ISchemaItem, ISelectedDetails, ISupplierScanResultRev, SortDirection } from './interface';
 import { promptUserToRerunScan } from './utils';
@@ -506,6 +507,21 @@ export const useBulkMigration = () => {
       });
   }
 
+  async function getConfiguredSupplierOptions (name: string): Promise<any> {
+    const type = name.split('-').length > 0 ? name.split('-')[1] : '';
+    const requestConfig: AxiosRequestConfig = {
+      method: 'get',
+      url: `${SUPPLIERS_OPTIONS_URL}/${type}`,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
+      },
+    };
+    return await apiClient
+      .request(requestConfig)
+      .then((resp) => resp)
+      .then(({ data }) => data);
+  }
+
   return {
     isLoading,
     isScanRunning,
@@ -557,5 +573,6 @@ export const useBulkMigration = () => {
     selected,
     setSelected,
     fetchScanSupplierRevisions,
+    getConfiguredSupplierOptions,
   };
 };

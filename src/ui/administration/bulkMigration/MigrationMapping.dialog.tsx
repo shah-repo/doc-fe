@@ -8,6 +8,7 @@ import { translate } from '../../../common/intl';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Button, FormControlLabel, Switch } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
+import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
 import Colors from '../../layout/theme/utils/colors';
 import InfoIndicator from '../announcements/InfoIndicator';
 import { IndicatorTypeEnum } from '../announcements/interface';
@@ -17,6 +18,7 @@ import OptionMapperDrawer from './OptionMapperDrawer';
 import PreviewDrawer from './PreviewDrawer';
 import useStyles from './styles';
 import ToSchemaItemMappingTable from './ToSchemaItemMappingTable';
+import { useBulkMigration } from './useBulkMigration';
 import { autoMapArrays, canMapItems, getFromSchemaItemBgColor, isDisabledSchemaItem } from './utils';
 
 interface MigrationMappingDialogProps {
@@ -27,6 +29,37 @@ interface MigrationMappingDialogProps {
   toRev: DocumentRevision | undefined
   scanDetails: IBulkMigrationScanDetails | null
 }
+
+const OptionsRenderer: React.FC<{
+  name: string | undefined
+}> = ({
+  name,
+}) => {
+  const classes = useStyles();
+  const {
+    getConfiguredSupplierOptions,
+  } = useBulkMigration();
+
+  const [optionsToRender, setOptionsToRender] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (name) {
+      fetchOptions(name);
+    }
+  }, [name]);
+
+  const fetchOptions = async (name) => {
+    const fetchedOptions = await getConfiguredSupplierOptions(name);
+    setOptionsToRender((fetchedOptions ?? []).map(option => option.text));
+  };
+
+  return optionsToRender?.length ? (
+    <span className={classes.mappingDialogSelectionOption}>
+      {' - [ '}
+      {optionsToRender.join(' | ')}]
+    </span>
+  ) : null;
+};
 
 const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
   isOpen,
@@ -251,7 +284,6 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
 
   const showAllSelectOptions = (schemaItem: ISchemaItem) => {
     const options = schemaItem.options?.map((option) => option.value).filter(Boolean);
-
     return options?.length ? (
       <span className={classes.mappingDialogSelectionOption}>
         {' - [ '}
@@ -436,7 +468,9 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
                               </Typography>
                             </Box>
                             <Typography variant="caption" display="block" className={classes.capitalize}>
-                              {schemaItem.type} {showAllSelectOptions(schemaItem)}
+                              {schemaItem.type}
+                              {schemaItem.type !== MigrationSpecialFields.CHECKBOX_GROUP_ASYNC
+                                ? showAllSelectOptions(schemaItem) : <OptionsRenderer name= {schemaItem.name} /> }
                             </Typography>
                             {schemaItem.referenceDataType === 'array' && (
                               <ToSchemaItemMappingTable
