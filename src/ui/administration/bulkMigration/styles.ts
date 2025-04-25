@@ -522,6 +522,33 @@ export default makeStyles(theme => ({
     gap: '8px',
     overflow: 'auto',
   },
+  optionMapperContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+  },
+  optionMapperDrawerListContainer: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    marginTop: '20px',
+  },
+  optionMapperDrawerOptionsList: {
+    width: '45%',
+    border: `1px solid ${Colors.gray}`,
+    overflowY: 'auto',
+  },
+  optionMapperDrawerListItem: {
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: Colors.default,
+    },
+  },
+  optionMapperDrawerSelectedListItem: {
+    backgroundColor: Colors.chinese_silver,
+  },
+  optionMapperDrawerMappedListItem: {
+    backgroundColor: Colors.pale_green,
+  },
   revsTableRoot: {
     width: '100%',
     '& > *': {
