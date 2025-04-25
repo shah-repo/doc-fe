@@ -2409,6 +2409,7 @@
   "administration.bulk.migration.title": "Bulk Migration",
   "administration.bulk.migration.subtitle": "Revs, created of a particular revision of the form, can be migrated to a newer Form Rev, with a different schema.",
   "administration.bulk.migration.supplier.rev.grid.title": "Supplier Revs",
+  "administration.bulk.migration.supplier.rev.selected": "{length} Selected",
   "administration.bulk.migration.rev.grid.cell.completedAt": "Completed At:",
   "administration.bulk.migration.rev.grid.cell.startedAt.prefix": "• Started At:",
   "administration.bulk.migration.rev.grid.cell.startedAt.suffix": "Started At:",

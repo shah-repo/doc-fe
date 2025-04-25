@@ -55,15 +55,20 @@ export default makeStyles((theme) => ({
   revsTableRefreshText: {
     display: 'flex',
     alignItems: 'center',
+    fontWeight: 600,
   },
   revsTableRefreshIcon: {
     cursor: 'pointer',
     marginLeft: theme.spacing(0.5),
-    fontSize: 16,
+    fontSize: 18,
   },
   mappingSwitcher: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    marginRight: theme.spacing(0),
     '& span': {
       fontSize: '12px',
+      fontWeight: 600,
     },
   },
   switchBase: {

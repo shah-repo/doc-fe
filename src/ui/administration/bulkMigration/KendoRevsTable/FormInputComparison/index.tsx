@@ -27,7 +27,7 @@ const FormInputComparison = forwardRef<BooleanRef, FormInputComparisonProps>(({
         data={[dataItem]}
       >
         <GridToolbar >
-          <Typography variant="h6" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom component="div">
             {translate('administration.bulk.migration.comparison.grid.title')}
           </Typography>
         </GridToolbar>

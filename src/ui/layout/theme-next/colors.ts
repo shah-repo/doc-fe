@@ -67,6 +67,7 @@ enum Colors {
   // Tables
   tableHeader='#F4F7FC',
   tableStroke='#DBE0EB',
+  tableDetailRow='#d1ebfe',
 
   // Header
   headerBg='#1533CD',

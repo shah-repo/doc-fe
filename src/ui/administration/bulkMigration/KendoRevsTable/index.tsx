@@ -231,7 +231,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
             className={cx({ [classes.revsTableSelectedHighlight]: selected.length > 0 })}
           >
             <Grid item className={classes.revsTableRefreshBox} >
-              <Typography variant="h6" id="tableTitle" className={classes.revsTableRefreshText} component="div">
+              <Typography variant="h4" id="tableTitle" className={classes.revsTableRefreshText} component="div">
                 {translate('administration.bulk.migration.supplier.rev.grid.title')}
                 <RefreshIcon
                   className={classes.revsTableRefreshIcon}
@@ -240,7 +240,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
               </Typography>
               {selected.length > 0 && (
                 <Typography color="inherit" variant="subtitle1" component="div" style={{ marginLeft: 16 }}>
-                  {selected.length} selected
+                  {translate('administration.bulk.migration.supplier.rev.selected', { length: selected.length })}
                 </Typography>
               )}
             </Grid>

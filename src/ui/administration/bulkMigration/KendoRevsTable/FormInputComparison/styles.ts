@@ -7,9 +7,14 @@ export default makeStyles(theme => ({
     margin: theme.spacing(3, 0),
   },
   detailsGrid: {
-    maxWidth: '55vw',
     '& .k-column-title': {
       fontSize: 12,
+    },
+    '& .k-grid-toolbar, thead tr': {
+      backgroundColor: Colors.tableDetailRow,
+      '&:hover': {
+        backgroundColor: Colors.tableDetailRow,
+      },
     },
     '& td': {
       height: ROW_HEIGHT,
