@@ -146,7 +146,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
         </Box>
 
         {!isEmpty(toFormReleasedError) && <div className={classes.errMsgStyle}>{toFormReleasedError}</div>}
-        {hasApprovalMissingGroups && isEmpty(toFormReleasedError) && (
+        {!hasApprovalMissingGroups && isEmpty(toFormReleasedError) && (
           <>
             <p>{translate('bulk.migration.supplier.revise.password.confirm.message')}</p>
             <FormControl className={classes.width100}>
@@ -176,7 +176,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
         <Button onClick={handleClose} color="inherit" variant="contained">
           {translate('common.cancel')}
         </Button>
-        {hasApprovalMissingGroups && isEmpty(toFormReleasedError) && selectedDetails?.length > 0 && (
+        {!hasApprovalMissingGroups && isEmpty(toFormReleasedError) && selectedDetails?.length > 0 && (
           <Button onClick={handleEmployeeConfirmation} color="primary" variant="contained" autoFocus>
             {translate('common.confirm')}
           </Button>
