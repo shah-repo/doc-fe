@@ -2,7 +2,7 @@ import { lighten, makeStyles } from '@material-ui/core';
 import { Colors as NextColors } from '../../layout/theme-next';
 import Colors from '../../layout/theme/utils/colors';
 
-export default makeStyles(theme => ({
+export default makeStyles((theme) => ({
   root: {
     width: '100%',
     height: '100%',
@@ -55,15 +55,15 @@ export default makeStyles(theme => ({
     width: '40%',
     display: 'flex',
     flexDirection: 'column',
-    marginTop: '16px',
+    marginTop: theme.spacing(2),
   },
   innerBox: {
     display: 'flex',
-    gap: '8px',
-    marginBottom: '8px',
+    gap: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   actionBox: {
-    marginTop: '16px',
+    marginTop: theme.spacing(2),
     gridGap: 0,
     alignItems: 'center',
   },
@@ -168,7 +168,7 @@ export default makeStyles(theme => ({
   },
   popoverPaper: {
     padding: theme.spacing(1),
-    maxWidth: '340px',
+    maxWidth: 340,
   },
   promptUserMsgStyle: {
     color: Colors.red,
@@ -185,7 +185,7 @@ export default makeStyles(theme => ({
     position: 'relative',
     marginTop: theme.spacing(1),
     border: `1px solid ${NextColors.textGray}`,
-    borderRadius: '2px',
+    borderRadius: theme.spacing(0.25),
     padding: theme.spacing(1),
     width: '100%',
   },
@@ -209,7 +209,7 @@ export default makeStyles(theme => ({
   },
   mappingSwitcher: {
     '& span': {
-      fontSize: '12px',
+      fontSize: 12,
     },
   },
   switchBase: {
@@ -232,8 +232,8 @@ export default makeStyles(theme => ({
 
   refreshIconStyle: {
     cursor: 'pointer',
-    marginLeft: '4px',
-    fontSize: '16px',
+    marginLeft: theme.spacing(0.5),
+    fontSize: 16,
   },
   revsTableRefreshBox: {
     display: 'flex',
@@ -253,7 +253,7 @@ export default makeStyles(theme => ({
   },
 
   searchIconSmall: {
-    fontSize: '16px',
+    fontSize: 16,
   },
 
   blinking: {
@@ -263,7 +263,7 @@ export default makeStyles(theme => ({
   /* Keyframes for the circular motion */
   '@keyframes circularMove': {
     '0%': {
-      transform: 'rotate(0deg) translate(32px) rotate(0deg)', // Adjust radius
+      transform: 'rotate(0deg) translate(32px) rotate(0deg)',
     },
     '100%': {
       transform: 'rotate(360deg) translate(32px) rotate(-360deg)',
@@ -272,13 +272,13 @@ export default makeStyles(theme => ({
 
   '@keyframes slowBlink': {
     '0%': {
-      opacity: 1, // Fully visible
+      opacity: 1,
     },
     '50%': {
-      opacity: 0.3, // Faded out
+      opacity: 0.3,
     },
     '100%': {
-      opacity: 1, // Fully visible
+      opacity: 1,
     },
   },
   drawerDialogPaper: {
@@ -302,35 +302,38 @@ export default makeStyles(theme => ({
   drawerList: {
     display: 'flex',
     flexDirection: 'column',
-    rowGap: '16px',
-    marginTop: '16px',
-    paddingLeft: '20px',
+    rowGap: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    paddingLeft: theme.spacing(2.5),
   },
   mappingTableRowHeight: {
-    height: '32px',
+    height: 32,
   },
   mappingTableCell: {
     border: `1px solid ${Colors.dark_gray2}`,
   },
   approvalRequirementsBox: {
-    padding: '12px',
+    padding: theme.spacing(1.5),
+    fontSize: 14,
     backgroundColor: Colors.background_blue,
     borderRadius: '4px',
   },
   approvalRequirementsBoxText: {
-    marginBottom: '4px',
+    marginBottom: theme.spacing(0.5),
+    fontSize: 14,
     color: Colors.light_gray_II,
   },
   approvalRequirementsBoxEmail: {
     fontWeight: 'bold',
     color: Colors.bright_blue,
+    fontSize: 14,
     display: 'block',
   },
   approvalRequirementsRequiredGroupsBox: {
-    padding: '8px',
-    marginTop: '2px',
+    padding: theme.spacing(1),
+    marginTop: theme.spacing(0.25),
     display: 'flex',
-    gap: '8px',
+    gap: theme.spacing(1),
   },
   employeePasswordText: {
     width: '100%',
@@ -362,22 +365,27 @@ export default makeStyles(theme => ({
     fontWeight: 'bold',
   },
   marginBottom8: {
-    marginBottom: '8px',
+    marginBottom: theme.spacing(1),
+  },
+  marginY8: {
+    margin: theme.spacing(1, 0),
   },
   marginTop8: {
-    marginTop: '8px',
+    marginTop: theme.spacing(1),
   },
   marginTop16: {
-    marginTop: '16px',
+    marginTop: theme.spacing(2),
   },
   padding8: {
-    paddingTop: '8px',
+    paddingTop: theme.spacing(1),
   },
   greenCheckCircle: {
     color: Colors.green,
+    fontSize: 15,
   },
   redWarning: {
     color: Colors.red,
+    fontSize: 15,
   },
   relative: {
     position: 'relative',
@@ -400,13 +408,13 @@ export default makeStyles(theme => ({
   },
   mappingDialogSelectionOption: {
     fontSize: '84%',
-    padding: '2px',
+    padding: theme.spacing(0.25),
     backgroundColor: Colors.gray_goose,
   },
   mappingDialogInstructions: {
     marginTop: 0,
-    marginBottom: '24px',
-    paddingLeft: '20px',
+    marginBottom: theme.spacing(3),
+    paddingLeft: theme.spacing(2.5),
     width: '80%',
   },
   mappingAreaTitle: {
@@ -425,8 +433,8 @@ export default makeStyles(theme => ({
   selectedFromSchemaItem: {
     color: Colors.green,
     position: 'absolute',
-    right: '6px',
-    top: '2px',
+    right: 6,
+    top: 2,
   },
   doneAllIcon: {
     color: Colors.green,
@@ -434,8 +442,8 @@ export default makeStyles(theme => ({
     top: '6px',
   },
   chip: {
-    padding: '0px 4px',
-    height: '28px',
+    padding: theme.spacing(0, 0.5),
+    height: 28,
     margin: '0 4px 4px 0',
   },
   previewDrawerProgress: {
@@ -459,7 +467,7 @@ export default makeStyles(theme => ({
     flexDirection: 'row',
   },
   previewDrawerLeftSection: {
-    width: '25%', // Left section takes 25% width
+    width: '25%',
     borderRight: `1px solid ${theme.palette.divider}`,
     padding: theme.spacing(2),
     boxSizing: 'border-box',
@@ -470,7 +478,7 @@ export default makeStyles(theme => ({
     flexDirection: 'column',
   },
   previewDrawerRightSection: {
-    width: '75%', // Right section takes 75% width
+    width: '75%',
     padding: theme.spacing(2),
     boxSizing: 'border-box',
     height: '96vh',
@@ -513,13 +521,13 @@ export default makeStyles(theme => ({
   },
   previewDrawerMappingRuleSchemaItemBox: {
     position: 'relative',
-    marginTop: '8px',
+    marginTop: theme.spacing(1),
     borderRadius: '2px',
-    padding: '8px',
+    padding: theme.spacing(1),
     width: '100%',
     display: 'flex',
     flexWrap: 'wrap',
-    gap: '8px',
+    gap: theme.spacing(1),
     overflow: 'auto',
   },
   optionMapperContent: {
@@ -530,7 +538,7 @@ export default makeStyles(theme => ({
   optionMapperDrawerListContainer: {
     display: 'flex',
     justifyContent: 'space-around',
-    marginTop: '20px',
+    marginTop: theme.spacing(2.5),
   },
   optionMapperDrawerOptionsList: {
     width: '45%',
@@ -571,7 +579,7 @@ export default makeStyles(theme => ({
   },
   revsTablePrimaryText: {
     fontWeight: 600,
-    fontSize: '14px',
+    fontSize: 14,
     lineHeight: '21px',
     color: Colors.dark_jungle_green,
   },
@@ -600,8 +608,8 @@ export default makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.dark,
       },
   '.MuiTablePagination-selectIcon': {
-    top: '0px',
-    left: '1px',
+    top: 0,
+    left: 1,
   },
   link: {
     textDecoration: 'none',
@@ -612,11 +620,11 @@ export default makeStyles(theme => ({
   },
   revsTableCheckboxCell: {
     width: '8%',
-    padding: '8px 4px',
+    padding: theme.spacing(1, 0.5),
   },
   revsTableHeaderCell: {
     overflow: 'hidden',
-    padding: '8px 4px',
+    padding: theme.spacing(1, 0.5),
   },
   checkboxRowContent: {
     display: 'flex',
@@ -691,5 +699,20 @@ export default makeStyles(theme => ({
   },
   username: {
     width: 0,
+  },
+  dialogContentText: {
+    fontWeight: 400,
+    fontSize: 14,
+    color: NextColors.textBlack,
+    'white-space': 'break-spaces',
+  },
+  selectedRevInfo: {
+    fontWeight: 600,
+    fontSize: 14,
+    color: NextColors.textBlack,
+    'white-space': 'break-spaces',
+  },
+  jobInfo: {
+    fontSize: 14,
   },
 }));
