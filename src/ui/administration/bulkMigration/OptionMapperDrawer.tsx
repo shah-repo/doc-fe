@@ -1,6 +1,7 @@
 import { Box, Button, DialogActions, Drawer, List, ListItem, ListItemText, Paper, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../common/intl';
+import CurrentMappings from './CurrentMappings';
 import DialogHeader from './DrawerHeader';
 import { IOption, ISchemaItem } from './interface';
 import useStyles from './styles';
@@ -131,12 +132,7 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
             </Paper>
           </Box>
 
-          <Box mt={2} display="flex" flexDirection="column" mx={3.5}>
-            <Typography variant="h5" className={classes.marginBottom8}>Current Mappings</Typography>
-            {Object.entries(localMapping).map(([from, to], index) => (
-              <Typography key={index} variant="subtitle2">{from} {'->'} {to.text}</Typography>
-            ))}
-          </Box>
+          <CurrentMappings localMapping={localMapping} />
         </Box>
 
         <DialogActions className={classes.spaceBetweenFlex}>

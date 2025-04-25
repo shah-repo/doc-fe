@@ -83,6 +83,9 @@ export default makeStyles(theme => ({
   infoIndicatorIcon: {
     color: Colors.blue,
   },
+  infoIndicatorWhite: {
+    color: Colors.white,
+  },
   infoIndicatorPopoverText: {
     marginTop: theme.spacing(0.5),
     fontSize: 12,

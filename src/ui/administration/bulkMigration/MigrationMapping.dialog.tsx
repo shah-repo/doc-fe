@@ -9,6 +9,8 @@ import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { Button, FormControlLabel, Switch } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import Colors from '../../layout/theme/utils/colors';
+import InfoIndicator from '../announcements/InfoIndicator';
+import { IndicatorTypeEnum } from '../announcements/interface';
 import { IBulkMigrationScanDetails, IMappedFrom, IOption, IRowData, ISchemaItem } from './interface';
 import MappingRulesDrawer from './MappingRulesDrawer';
 import OptionMapperDrawer from './OptionMapperDrawer';
@@ -258,6 +260,18 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
     ) : null;
   };
 
+  const showMappingIndicator = (mappedFromEntry: IMappedFrom) => {
+    if (!mappedFromEntry.localMapping) {
+      return <></>;
+    }
+
+    const text: string = Object.entries(mappedFromEntry.localMapping).map(
+      ([from, to]) => (`<p>${from} -> ${to.text}</p>`),
+    ).join(' ');
+
+    return <InfoIndicator text={text} type={IndicatorTypeEnum.INFO} style="white" />;
+  };
+
   return (
     <Dialog fullScreen open={isOpen} onClose={handleClose} aria-labelledby="migration-mapping-title">
       <AppBar position="static" color="default" elevation={0}>
@@ -450,6 +464,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
                               return (
                                 isShowDirectly && (
                                   <Chip
+                                    icon={showMappingIndicator(mappedFromEntry)}
                                     key={label}
                                     label={label}
                                     onDelete={() => handleMappedFromDelete(schemaItem, mappedFromEntry)}
