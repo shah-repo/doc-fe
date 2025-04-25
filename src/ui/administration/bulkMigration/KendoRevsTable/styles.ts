@@ -6,7 +6,7 @@ export default makeStyles((theme) => ({
   root: {
     margin: theme.spacing(3, 0),
   },
-  rootTasksList: {
+  rootRevsList: {
     '& .k-grid-container tbody td': {
       height: 52,
       padding: theme.spacing(1, 1.75),

@@ -1,6 +1,7 @@
 import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import { get } from 'lodash';
 import React from 'react';
+import { translate } from '../../../../../common/intl';
 import { ISupplierScanResultRev } from '../../interface';
 import { useBulkMigration } from '../../useBulkMigration';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
@@ -29,7 +30,7 @@ export const FieldsUnmatchedCellTemplate: React.FC<Props> = ({ field, scanId, da
     <div className={classes.tableCellHiddenOverflow}>
       {isMapped ? JSON.stringify(displayValue)
         : <>{
-          rowMapping ? <span>Mapping... </span> : <span>NOT MAPPED
+          rowMapping ? <span>{translate('administration.bulk.migration.rev.grid.cell.mapping')} </span> : <span>{translate('administration.bulk.migration.comparison.grid.cell.notMapped')}
             <TrackChangesIcon onClick={e => getPreviewForDocRevRevsTable(scanId, dataItem, updateRow)} className={classes.cursorPointer} /></span>
         }
         </>

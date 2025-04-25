@@ -11,7 +11,7 @@ import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.t
 import UtilColors from '../../../layout/theme/utils/colors';
 import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
-import { DATA_ITEM_KEY, DEFAULT_FILTER, EXPAND_FIELD, pagerSettings, SELECTED_FIELD } from './constants';
+import { DATA_ITEM_KEY, DEFAULT_FILTER, EXPAND_FIELD, INITIAL_ROWS_COUNT, pagerSettings, SELECTED_FIELD } from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { Page } from './types';
@@ -23,8 +23,6 @@ interface props {
   updateRevsTable: number
   handleSelectedRowsChange: (selected: ISelectedDetails[]) => void
 }
-
-const INITIAL_ROWS_COUNT = 25;
 
 const KendoRevsTable: React.FunctionComponent<props> = (
   { scanId, updateRevsTable, handleSelectedRowsChange }) => {
@@ -206,7 +204,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
         data={RevList as ISupplierScanResultRev[]}
         schema={schema}
         fullWidth
-        className={classes.rootTasksList}
+        className={classes.rootRevsList}
         hasBoxScrollbars
         scrollable="scrollable"
         filterable={true}

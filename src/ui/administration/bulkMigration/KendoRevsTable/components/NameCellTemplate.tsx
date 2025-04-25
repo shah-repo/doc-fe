@@ -1,5 +1,6 @@
 import { get } from 'lodash';
 import React from 'react';
+import { translate } from '../../../../../common/intl';
 import OverflowContent from '../../../../components/OverflowContent';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
@@ -16,7 +17,7 @@ export const NameCellTemplate: React.FC<CustomTemplateProps> = (props) => {
       <OverflowContent title={<b>{displayValue}</b>}>
         <span><b>{displayValue}</b></span>
       </OverflowContent>
-      <span>Rev {displayRevision} • {displayStatus}</span>
+      <span>{translate('administration.bulk.migration.rev.grid.cell.revision', { displayRevision, displayStatus })}</span>
     </p>
   );
 };
