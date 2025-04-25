@@ -100,6 +100,7 @@ export interface IMappedFrom {
   name: string
   type: any
   isShowDirectly: boolean
+  localMapping?: {[key: string]: IOption}
 }
 export interface IRowData {
   [key: string]: any
@@ -118,3 +119,8 @@ export interface IScanDetailsResult extends IMismatchResponse {
 
 export type SortDirection = 'asc' | 'desc' | undefined;
 export const INTERVAL_DURATION = 10000;
+
+export interface IOption {
+  text: string
+  value: string
+}

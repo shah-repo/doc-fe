@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { some } from 'lodash';
 import { translate } from '../../../common/intl';
+import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
 import { checkSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/transform';
 import Colors from '../../layout/theme/utils/colors';
 import { IMappedFrom, IMismatchResponse, IRowData, ISchemaItem } from './interface';
@@ -19,7 +20,9 @@ const schemaValidationMap = {
   },
 };
 
-export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISchemaItem): {canMap: boolean, errMessage: string} {
+export function canMapItems (
+  selectedSchemaItem: ISchemaItem, toSchemaItem: ISchemaItem,
+): {canMap: boolean, errMessage?: string, showOptionsMapper?: boolean} {
   const errMessage = '';
   let canMap = true;
 
@@ -35,7 +38,18 @@ export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISch
     }
 
     canMap = checkSpecialFields(selectedSchemaItem, toSchemaItem);
+
+    const isCheckbox = selectedSchemaItem.type === MigrationSpecialFields.CHECKBOX_GROUP
+      && toSchemaItem.type === MigrationSpecialFields.CHECKBOX_GROUP;
+    const isSelect = selectedSchemaItem.type === MigrationSpecialFields.SELECT
+      && toSchemaItem.type === MigrationSpecialFields.SELECT;
     if (!canMap) {
+      if (isCheckbox || isSelect) {
+        return {
+          canMap,
+          showOptionsMapper: true,
+        };
+      }
       return {
         canMap,
         errMessage: translate('bulk.migration.mapping.with.options.message', { selectedType }),
@@ -150,10 +164,11 @@ export function autoMapArrays (
     if (!isDisabledSchemaItem(item)) {
       if (item.name) toRevSchemaIndex[item.name] = [item];
       if (item.label && typeof item.label === 'string') {
-        if (toRevSchemaIndex[item.label.toLocaleLowerCase()]?.length) {
-          toRevSchemaIndex[item.label.toLocaleLowerCase()].push(item);
+        const lowercaseLabel = item.label.toLocaleLowerCase();
+        if (toRevSchemaIndex[lowercaseLabel]?.length) {
+          toRevSchemaIndex[lowercaseLabel].push(item);
         } else {
-          toRevSchemaIndex[item.label.toLocaleLowerCase()] = [item];
+          toRevSchemaIndex[lowercaseLabel] = [item];
         }
       }
     }
