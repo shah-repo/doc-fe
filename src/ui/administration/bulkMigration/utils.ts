@@ -189,7 +189,9 @@ export function autoMapArrays (
 
     let matchingItemsFromLabel: ISchemaItem[] = [];
     if (fromRevSchemaItem.label && typeof fromRevSchemaItem.label === 'string') {
-      matchingItemsFromLabel = toRevSchemaIndex[fromRevSchemaItem.label.toLocaleLowerCase()];
+      const formRevSchemaItemLabel
+        = fromRevSchemaItem.label.toLocaleLowerCase().replace(/:$/, '');
+      matchingItemsFromLabel = toRevSchemaIndex[formRevSchemaItemLabel];
     }
 
     // The fields from the new schema that match.

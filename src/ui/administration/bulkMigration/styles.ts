@@ -715,4 +715,8 @@ export default makeStyles((theme) => ({
   jobInfo: {
     fontSize: 14,
   },
+  isRequired: {
+    color: NextColors.error,
+    fontSize: 16,
+  },
 }));

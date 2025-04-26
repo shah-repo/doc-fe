@@ -304,6 +304,16 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
     return <InfoIndicator text={text} type={IndicatorTypeEnum.INFO} style="white" />;
   };
 
+  const checkIfRequired = (schemaItem: ISchemaItem) => {
+    if (!schemaItem.rules) {
+      return <></>;
+    }
+
+    if (schemaItem.rules?.startsWith('required')) {
+      return <span className={classes.isRequired}>*</span>;
+    }
+  };
+
   return (
     <Dialog fullScreen open={isOpen} onClose={handleClose} aria-labelledby="migration-mapping-title">
       <AppBar position="static" color="default" elevation={0}>
@@ -415,7 +425,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
                           onClick={(e) => handleFromSchemaItemClick(schemaItem)}
                         >
                           <Typography variant="body2" color="primary">
-                            {schemaItem.label}
+                            {schemaItem.label} {checkIfRequired(schemaItem) }
                           </Typography>
                           <Typography variant="caption" display="block" className={classes.capitalize}>
                             {schemaItem.type} {showAllSelectOptions(schemaItem)}
