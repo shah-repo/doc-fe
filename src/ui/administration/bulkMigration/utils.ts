@@ -20,6 +20,11 @@ const schemaValidationMap = {
   },
 };
 
+const OPTIONS_TYPES: string[] = [MigrationSpecialFields.CHECKBOX_GROUP,
+  MigrationSpecialFields.SELECT,
+  MigrationSpecialFields.RADIO_GROUP,
+];
+
 export function canMapItems (
   selectedSchemaItem: ISchemaItem, toSchemaItem: ISchemaItem,
 ): {canMap: boolean, errMessage?: string, showOptionsMapper?: boolean} {
@@ -28,15 +33,10 @@ export function canMapItems (
 
   if (!toSchemaItem.referenceDataType) {
     const selectedType = selectedSchemaItem.type as string;
-    const targetType = toSchemaItem.type;
+    const targetType = toSchemaItem.type as string;
 
-    const isCheckbox = selectedSchemaItem.type === MigrationSpecialFields.CHECKBOX_GROUP
-    && toSchemaItem.type === MigrationSpecialFields.CHECKBOX_GROUP;
-
-    const isSelect = selectedSchemaItem.type === MigrationSpecialFields.SELECT
-    && toSchemaItem.type === MigrationSpecialFields.SELECT;
-
-    if (selectedType !== targetType) {
+    const hasOptions = OPTIONS_TYPES.includes(selectedType) && OPTIONS_TYPES.includes(targetType);
+    if (selectedType !== targetType && !hasOptions) {
       return {
         canMap: false,
         errMessage: translate('bulk.migration.mapping.message', { selectedType }),
@@ -46,7 +46,7 @@ export function canMapItems (
     canMap = checkSpecialFields(selectedSchemaItem, toSchemaItem);
 
     if (!canMap) {
-      if (isCheckbox || isSelect) {
+      if (hasOptions) {
         return {
           canMap,
           showOptionsMapper: true,
