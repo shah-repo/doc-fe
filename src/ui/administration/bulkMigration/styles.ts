@@ -719,4 +719,10 @@ export default makeStyles((theme) => ({
     color: NextColors.error,
     fontSize: 16,
   },
+  currentMappingsContainer: {
+    marginTop: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'column',
+    margin: theme.spacing(0, 3.5),
+  },
 }));

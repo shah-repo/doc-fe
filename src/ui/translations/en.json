@@ -400,6 +400,7 @@
   "bulk.migration.mapping.from.title": "<b>From</b> - {label}",
   "bulk.migration.mapping.to.title": "<b>To</b> - {label}",
   "bulk.migration.mapping.preview": "Preview",
+  "bulk.migration.current.mappings": "Current Mappings",
   "bulk.migration.mapping.preview.selection.info.message": "Click on a Document Revision from the left to see its preview here.",
   "bulk.migration.mapping.preview.selection.progress": "Generating Preview...",
   "bulk.migration.mapping.preview.selection.unmatched": "Fields Unmatched",
