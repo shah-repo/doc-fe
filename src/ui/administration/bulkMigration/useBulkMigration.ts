@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { intl } from '../../../common/intl';
 import { encodeString } from '../../../common/utils/helpers';
 import apiClient from '../../../state/apiClient';
-import { BULK_MIGRATION_ADD_USER_TO_GROUPS, BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_GET_SCAN_RESULTS, BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_START_REVS_MIGRATION, BULK_MIGRATION_UPDATE_SCAN } from '../../../state/ducks/company/constants';
+import { BULK_MIGRATION_CANCEL_SCAN, BULK_MIGRATION_GET_DOCUMENT_TYPES, BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS, BULK_MIGRATION_GET_ELIGIBLE_REVS, BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW, BULK_MIGRATION_GET_SCAN_DETAILS, BULK_MIGRATION_GET_SCAN_RESULTS, BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW, BULK_MIGRATION_REGISTER_SCAN, BULK_MIGRATION_REGISTER_SCAN_FOR_RUN, BULK_MIGRATION_START_REVS_MIGRATION, BULK_MIGRATION_UPDATE_SCAN } from '../../../state/ducks/company/constants';
 import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { SUPPLIERS_OPTIONS_URL } from '../../constants/urls';
 import { FBFormState } from '../../form.builder';
-import { IApprovalRequirements, IBulkMigrationDocumentType, IBulkMigrationScanDetails, IScanDetailsResult, ISchemaItem, ISelectedDetails, ISupplierScanResultRev, SortDirection } from './interface';
+import { IBulkMigrationDocumentType, IBulkMigrationScanDetails, IScanDetailsResult, ISchemaItem, ISelectedDetails, ISupplierScanResultRev, SortDirection } from './interface';
 import { promptUserToRerunScan } from './utils';
 
 export const useBulkMigration = () => {
@@ -38,7 +38,6 @@ export const useBulkMigration = () => {
   });
 
   const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
-  const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
 
   const [previewDocRevsList, setPreviewDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
   const [filteredDocRevsList, setFilteredDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
@@ -343,52 +342,6 @@ export const useBulkMigration = () => {
       });
   };
 
-  function fetchApprovalRequirements (toDocumentTypeId: string) {
-    const requestConfig: AxiosRequestConfig = {
-      method: 'get',
-      url: `${BULK_MIGRATION_GET_APPROVAL_REQUIREMENTS}/${toDocumentTypeId}`,
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        setApprovalRequirements(data);
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
-
-  function addUserToGroups (toDocumentTypeId: string) {
-    if (!approvalRequirements?.missingGroups?.length) {
-      return;
-    }
-
-    const requestConfig: AxiosRequestConfig = {
-      method: 'patch',
-      url: `${BULK_MIGRATION_ADD_USER_TO_GROUPS}/${toDocumentTypeId}`,
-      data: {
-        missingGroups: approvalRequirements?.missingGroups,
-      },
-      headers: {
-        Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
-      },
-    };
-    apiClient
-      .request(requestConfig)
-      .then((resp) => resp)
-      .then(({ data }) => {
-        setApprovalRequirements(data);
-        toastSuccess('Automation user has been added to the required groups successfully');
-      })
-      .catch((exception) => {
-        catchAxiosException(exception);
-      });
-  }
-
   function fetchAllEligibleRevisions (scanDetailsId: string) {
     setIsLoading(true);
 
@@ -556,9 +509,6 @@ export const useBulkMigration = () => {
     isConfirmationDialogVisible,
     confirmSubmission,
     handleMigrationConfirmationDialogClose,
-    approvalRequirements,
-    fetchApprovalRequirements,
-    addUserToGroups,
     previewDocRevsList,
     filteredDocRevsList,
     setFilteredDocRevsList,
