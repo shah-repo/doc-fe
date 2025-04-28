@@ -46,7 +46,6 @@ export const useAnnouncementDetails = () => {
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
-      // cancelToken: call.token,
     };
     apiClient
       .request(requestConfig)

@@ -25,8 +25,6 @@ const ToSchemaItemMappingTable: React.FC<{
   const classes = useStyles();
   const [rows, setRows] = useState<IRowData[]>(schemaItem.tableMappings ?? []);
 
-  // const widthPercent = Math.floor((100 - ADD_ROW_COLUMN_WIDTH_PERCENT) / (schemaItem.fieldNames?.length ?? 1));
-
   useEffect(() => {
     if (!rows.length) {
       addNewRow();

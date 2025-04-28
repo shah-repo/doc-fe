@@ -390,6 +390,8 @@
   "bulk.migration.mappable.general.error.message": "This field should only be mapped to a {shouldMapTo}.",
   "bulk.migration.supplier.revisions.summary": "Supplier Revisions Migration Summary",
   "bulk.migration.supplier.revisions.selected": " Supplier revisions selected",
+  "bulk.migration.scan.entries.message": "{count} entries {action}.",
+  "bulk.migration.scan.status.message": "{count} status updated.",
   "bulk.migration.job.delay.message": "This will fire a <b>JOB request</b>, which might take 10 mins or more, depending on the network congestion.",
   "bulk.migration.supplier.revise.password.confirm.message": "Are you sure you want to revise these Suppliers? \nPlease provide the password to confirm.",
   "bulk.migration.supplier.release.revision.message": " For revisions, that are already Released, migration would create a new Revision and automate its approval & release, using the current user",

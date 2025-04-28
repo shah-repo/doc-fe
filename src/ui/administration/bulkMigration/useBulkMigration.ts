@@ -88,13 +88,11 @@ export const useBulkMigration = () => {
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
-      // cancelToken: call.token,
     };
     apiClient
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        // console.log(data);
         setIsLoading(false);
         setDocumentTypesList(data);
       })
@@ -115,13 +113,11 @@ export const useBulkMigration = () => {
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
-      // cancelToken: call.token,
     };
     apiClient
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        // console.log(data);
         setIsLoading(false);
 
         const { formRevs } = data;
@@ -145,13 +141,11 @@ export const useBulkMigration = () => {
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
-      // cancelToken: call.token,
     };
     apiClient
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        // console.log(data);
         setIsLoading(false);
         setEligibleRevsCount(data);
       })
@@ -175,7 +169,6 @@ export const useBulkMigration = () => {
         headers: {
           Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
         },
-        // cancelToken: call.token,
       };
 
       apiClient
@@ -207,7 +200,6 @@ export const useBulkMigration = () => {
         headers: {
           Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
         },
-        // cancelToken: call.token,
       };
 
       apiClient
@@ -268,7 +260,6 @@ export const useBulkMigration = () => {
         headers: {
           Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
         },
-        // cancelToken: call.token,
       };
 
       apiClient
@@ -296,7 +287,6 @@ export const useBulkMigration = () => {
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
-      // cancelToken: call.token,
     };
 
     apiClient
@@ -327,7 +317,6 @@ export const useBulkMigration = () => {
       headers: {
         Authorization: `bearer_password ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}:${encodeString(employeePassword)}`,
       },
-      // cancelToken: call.token,
     };
     apiClient
       .request(requestConfig)
@@ -351,7 +340,6 @@ export const useBulkMigration = () => {
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
-      // cancelToken: call.token,
     };
     apiClient
       .request(requestConfig)
@@ -376,7 +364,6 @@ export const useBulkMigration = () => {
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
-      // cancelToken: call.token,
     };
     apiClient
       .request(requestConfig)
@@ -412,7 +399,6 @@ export const useBulkMigration = () => {
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
-      // cancelToken: call.token,
     };
     apiClient
       .request(requestConfig)
