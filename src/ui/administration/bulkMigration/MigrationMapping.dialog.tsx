@@ -197,15 +197,15 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
 
     const { canMap, errMessage, showOptionsMapper } = canMapItems(selectedSchemaItem, toSchemaItem);
     setIsOptionMapperVisible(showOptionsMapper ?? false);
-    setToSelectedSchemaItem(showOptionsMapper ? toSchemaItem : undefined);
+    setToSelectedSchemaItem(toSchemaItem);
 
     if (!canMap && showOptionsMapper) {
       return;
     }
 
-    if (canMap && selectedToSchemaItem) {
+    if (canMap && toSchemaItem) {
       // push into mappedFrom on toRevSchema item to selectedSchemaName.name
-      mapSelectedSchemaItemToSchemaItem(toSchemaItem, selectedToSchemaItem);
+      mapSelectedSchemaItemToSchemaItem(toSchemaItem, selectedSchemaItem);
     } else {
       toastError(errMessage);
     }
@@ -468,7 +468,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
                           <Box className={classes.width100}>
                             <Box className={classes.simpleFlex}>
                               <Typography variant="body2" color="primary">
-                                {schemaItem.label}
+                                {schemaItem.label} {checkIfRequired(schemaItem) }
                               </Typography>
                               <Typography variant="caption" align="right">
                                 {schemaItem.name}
