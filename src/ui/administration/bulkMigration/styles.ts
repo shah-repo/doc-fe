@@ -189,6 +189,9 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(1),
     width: '100%',
   },
+  rulesText: {
+    fontSize: 14,
+  },
   compactListItem: {
     marginBottom: theme.spacing(0.5),
     fontSize: 14,
