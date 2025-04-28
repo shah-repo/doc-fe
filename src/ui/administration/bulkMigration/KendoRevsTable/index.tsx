@@ -200,7 +200,6 @@ const KendoRevsTable: React.FunctionComponent<props> = (
   return (
     <div ref={containerRef} className={classes.root} data-cy="tasks-list-table">
       <KendoDataGrid<ISupplierScanResultRev>
-        style={{ overflow: 'auto', maxHeight: '53vh' }}
         data={RevList as ISupplierScanResultRev[]}
         schema={schema}
         fullWidth
@@ -239,7 +238,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
                 />
               </Typography>
               {selected.length > 0 && (
-                <Typography color="inherit" variant="subtitle1" component="div" style={{ marginLeft: 16 }}>
+                <Typography color="inherit" variant="subtitle1" component="div" className={classes.revsTableSelected}>
                   {translate('administration.bulk.migration.supplier.rev.selected', { length: selected.length })}
                 </Typography>
               )}

@@ -1,6 +1,7 @@
 import { Checkbox } from '@material-ui/core';
 import React, { ChangeEvent } from 'react';
-import { styles } from './styles';
+import { translate } from '../../../../../common/intl';
+import { styles as useStyles } from './styles';
 
 interface Props {
   rowCount: number
@@ -10,7 +11,7 @@ interface Props {
 
 const SelectFilter: React.FC<Props> = (props) => {
   const { handleHeaderCheckedChange, numSelected, rowCount } = props;
-  const classes = styles();
+  const classes = useStyles();
 
   return (
     <Checkbox
@@ -18,7 +19,7 @@ const SelectFilter: React.FC<Props> = (props) => {
       checked={rowCount > 0 && numSelected === rowCount}
       indeterminate={numSelected > 0 && numSelected < rowCount}
       onChange={handleHeaderCheckedChange}
-      inputProps={{ 'aria-label': 'Select All Suppliers' }}
+      inputProps={{ 'aria-label': translate('administration.bulk.migration.rev.grid.heading.selectAll') }}
     />
   );
 };

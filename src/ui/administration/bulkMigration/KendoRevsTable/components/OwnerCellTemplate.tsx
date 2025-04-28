@@ -13,7 +13,6 @@ export const OwnerCellTemplate: React.FC<CustomTemplateProps> = (props) => {
       <ListItemText
         primary={(
           <Typography data-cy="user-name" className={classes.revsTablePrimaryText}>{name}</Typography>)}
-        secondary={<></>}
       />
       { owner?.user && <UserAvatarListItem
         name={<div>{owner?.user.name}</div>}

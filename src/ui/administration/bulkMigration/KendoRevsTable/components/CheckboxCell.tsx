@@ -1,6 +1,5 @@
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import ErrorIcon from '@material-ui/icons/Error';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
+import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import React, { MouseEvent, ReactElement } from 'react';
 import { translate } from '../../../../../common/intl';
@@ -69,15 +68,15 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({ dataItem, dataIndex, sele
       /> }
       {
         (status === MIGRATION_STATUS_ENUM.COMPLETED || isAlreadyUpgraded)
-                && <DoneAllIcon className={classes.checkboxRowContentDone} />
+                && <FontAwesomeIcon size="xl" icon={solid('check-double')} className={classes.checkboxRowContentDone} />
       }
       {
         status === MIGRATION_STATUS_ENUM.FAILED
-                && <ErrorIcon className={classes.checkboxRowContentFailed} />
+                && <FontAwesomeIcon size="lg" icon={solid('circle-exclamation')} className={classes.checkboxRowContentFailed} />
       }
       {
         status === MIGRATION_STATUS_ENUM.IN_PROGRESS
-                && <HourglassEmptyIcon className={classes.checkboxRowContentInProgress} />
+                && <FontAwesomeIcon size="xl" icon={regular('hourglass')} className={classes.checkboxRowContentInProgress} />
       }
     </div>
   );

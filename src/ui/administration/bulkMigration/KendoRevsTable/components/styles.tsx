@@ -48,7 +48,7 @@ export const styles = makeStyles((theme) => ({
   },
   revsTablePrimaryText: {
     fontWeight: 600,
-    fontSize: '14px',
+    fontSize: 14,
     lineHeight: '21px',
     color: UtilColors.dark_jungle_green,
   },
@@ -58,5 +58,8 @@ export const styles = makeStyles((theme) => ({
   },
   cursorPointer: {
     cursor: 'pointer',
+  },
+  revsTableName: {
+    fontWeight: 'bold',
   },
 }));

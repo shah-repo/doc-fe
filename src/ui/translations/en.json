@@ -2418,6 +2418,7 @@
   "administration.bulk.migration.rev.grid.cell.error": "Something went wrong",
   "administration.bulk.migration.rev.grid.cell.mapping": "Mapping...",
   "administration.bulk.migration.rev.grid.cell.revision": "Rev {displayRevision} • {displayStatus}",
+  "administration.bulk.migration.rev.grid.heading.selectAll": "Select All",
   "administration.bulk.migration.rev.grid.heading.docId": "Doc Id",
   "administration.bulk.migration.rev.grid.heading.name": "Name",
   "administration.bulk.migration.rev.grid.heading.owner": "Owner",

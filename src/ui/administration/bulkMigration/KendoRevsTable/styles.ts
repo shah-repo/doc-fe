@@ -5,6 +5,9 @@ import Colors from '../../../layout/theme/utils/colors';
 export default makeStyles((theme) => ({
   root: {
     margin: theme.spacing(3, 0),
+    '& div div': {
+      maxHeight: '53vh',
+    },
   },
   rootRevsList: {
     '& .k-grid-container tbody td': {
@@ -62,12 +65,15 @@ export default makeStyles((theme) => ({
     marginLeft: theme.spacing(0.5),
     fontSize: 18,
   },
+  revsTableSelected: {
+    marginLeft: theme.spacing(2),
+  },
   mappingSwitcher: {
     display: 'flex',
     flexDirection: 'row-reverse',
     marginRight: theme.spacing(0),
     '& span': {
-      fontSize: '12px',
+      fontSize: 12,
       fontWeight: 600,
     },
   },

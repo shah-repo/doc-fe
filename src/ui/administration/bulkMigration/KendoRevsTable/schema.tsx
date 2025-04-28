@@ -38,7 +38,7 @@ export const buildSchema = ({
     {
       id: 'id',
       field: 'selected',
-      title: 'Select All',
+      title: 'administration.bulk.migration.rev.grid.heading.selectAll',
       filterCell: (props) => <SelectFilter {...{ props, rowCount, numSelected, handleHeaderCheckedChange }} />,
       template: (props) => <CheckboxCell {...props} {...{ handlePopoverClose, handlePopoverOpen }} />,
       show: true,
