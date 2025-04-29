@@ -28,18 +28,13 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     const { _formState, _tabsState } = SM.useStores();
     const leftPanelState = FB.useRef<FBLeftPanelState>(FBLeftPanelState);
     const editorState = FB.useRef<FBEditorState>(FBEditorState);
+    const formState = FB.useRef<FBFormState>(FBFormState, {});
     const { approvalMatrixFieldState } = FB.useStores();
     isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
     const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema: _documentRevisionFormState?.schema,
       mode: _formState?.mode,
       autosave: _formState?.autosave || false,
-    });
-    const formState = FB.useRef<FBFormState>(FBFormState, {
-      schema: _documentRevisionFormState.schema || documentRevision.schema,
-      initialValues: props?.formInput ?? {},
-      workspaceMode: workspaceState?.mode || 'form',
-      workspaceState,
     });
     const { document: { outputRevision = false } = {} } = workspaceState || {};
 

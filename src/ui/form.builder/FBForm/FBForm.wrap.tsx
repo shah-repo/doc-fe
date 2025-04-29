@@ -2,7 +2,7 @@ import { has } from 'lodash';
 import React, { useEffect } from 'react';
 import { FB, FBFormProps, FBFormState } from '..';
 import { SM } from '../../../App';
-import { checkIsDocumentReceivable, checkIsDocumentRecord } from '../../documentRevision/helpers/checkDocumentGroup';
+import { checkIsDocumentReceivable } from '../../documentRevision/helpers/checkDocumentGroup';
 
 export let FBFormStateContext = React.createContext<any>({});
 export const withFBForm = <T extends FBFormProps>(
@@ -19,15 +19,8 @@ export const withFBForm = <T extends FBFormProps>(
     children,
     ...props
   }: T) => {
-    const { workspaceState, formState: parentFormState } = FB.useStores();
+    const { workspaceState } = FB.useStores();
     const { _documentRevisionFormState } = SM.useStores();
-    const groupOptions = _documentRevisionFormState?.document?.documentType.groupOptions;
-    const isRecord = checkIsDocumentRecord(groupOptions);
-
-    if (isRecord) {
-      !formState && (formState = parentFormState);
-    }
-
     !formState && (formState = FB.useRef<FBFormState>(FBFormState, {
       schema,
       initialValues: initialValues?.formInput || initialValues,
