@@ -27,12 +27,15 @@ export const styles = makeStyles((theme) => ({
   },
   checkboxRowContentDone: {
     color: Colors.success,
+    marginLeft: theme.spacing(0.5),
   },
   checkboxRowContentFailed: {
     color: Colors.error,
+    marginLeft: theme.spacing(0.5),
   },
   checkboxRowContentInProgress: {
     color: Colors.warning,
+    marginLeft: theme.spacing(0.5),
   },
   link: {
     textDecoration: 'none',

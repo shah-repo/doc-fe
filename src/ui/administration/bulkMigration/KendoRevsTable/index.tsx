@@ -160,7 +160,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
       return UtilColors.failed;
     }
 
-    if (row.status === MIGRATION_STATUS_ENUM.COMPLETED || row.isAlreadyUpgraded) {
+    if (row.status === MIGRATION_STATUS_ENUM.COMPLETED) {
       return UtilColors.done;
     }
 

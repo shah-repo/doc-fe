@@ -13,7 +13,7 @@ import { styles } from './styles';
 
 const CheckboxCell: React.FC<CustomTemplateProps> = ({ dataItem, dataIndex, selectionChange, handlePopoverOpen, handlePopoverClose }) => {
   const classes = styles();
-  const { runDetails, status, isAlreadyUpgraded } = dataItem;
+  const { runDetails, status } = dataItem;
   const labelId = `enhanced-table-checkbox-${dataIndex}`;
 
   const handleIconHover = (event: MouseEvent<HTMLDivElement>) => {
@@ -61,13 +61,13 @@ const CheckboxCell: React.FC<CustomTemplateProps> = ({ dataItem, dataIndex, sele
       onMouseEnter={handleIconHover}
       onMouseLeave={handlePopoverClose}
     >
-      { status !== MIGRATION_STATUS_ENUM.COMPLETED && !isAlreadyUpgraded && <Checkbox
+      { status !== MIGRATION_STATUS_ENUM.COMPLETED && <Checkbox
         checked={dataItem[SELECTED_FIELD]}
         onChange={(event) => selectionChange?.({ syntheticEvent: event as React.SyntheticEvent })}
         inputProps={{ 'aria-labelledby': labelId }}
       /> }
       {
-        (status === MIGRATION_STATUS_ENUM.COMPLETED || isAlreadyUpgraded)
+        (status === MIGRATION_STATUS_ENUM.COMPLETED)
                 && <FontAwesomeIcon size="xl" icon={solid('check-double')} className={classes.checkboxRowContentDone} />
       }
       {
