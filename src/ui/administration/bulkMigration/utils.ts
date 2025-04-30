@@ -239,22 +239,22 @@ export function promptUserToRerunScan (rerunScanDetails: IMismatchResponse): {
 
   if (rerunScanDetails.irrelevantScanIds?.length > 0) {
     isPromptUserToScan = true;
-    msgParts.push(`${rerunScanDetails.irrelevantScanIds?.length} entries removed.`);
+    msgParts.push(translate('bulk.migration.scan.entries.message', { count: rerunScanDetails.irrelevantScanIds?.length, action: 'removed' }));
   }
 
   if (rerunScanDetails.mismatchingStatusScanIds?.length > 0) {
     isPromptUserToScan = true;
-    msgParts.push(`${rerunScanDetails.mismatchingStatusScanIds?.length} status updated.`);
+    msgParts.push(translate('bulk.migration.scan.status.message', { count: rerunScanDetails.mismatchingStatusScanIds?.length }));
   }
 
   if (rerunScanDetails.newRevIds?.length > 0) {
     isPromptUserToScan = true;
-    msgParts.push(`${rerunScanDetails.newRevIds.length} entries added.`);
+    msgParts.push(translate('bulk.migration.scan.entries.message', { count: rerunScanDetails.newRevIds.length, action: 'added' }));
   }
 
   if (rerunScanDetails.alreadyUpgradedScanEntryIds && rerunScanDetails.alreadyUpgradedScanEntryIds?.length > 0) {
     isPromptUserToScan = true;
-    msgParts.push(`${rerunScanDetails.alreadyUpgradedScanEntryIds.length} entries already migrated.`);
+    msgParts.push(translate('bulk.migration.scan.entries.message', { count: rerunScanDetails.newRevIds.length, action: 'already migrated' }));
   }
 
   return { msgParts, isPromptUserToScan };

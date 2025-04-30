@@ -14,12 +14,15 @@ import cx from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { translate } from '../../../common/intl';
+import { bulkMigrationActions } from '../../../state/ducks/bulk.migration';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { Button } from '../../components/forms/fields-next';
+import { toastError, toastSuccess } from '../../components/notifications';
+import useActionCreator from '../../hooks/useActionCreator';
+import useAsync from '../../hooks/useAsync';
 import DialogHeader from './DrawerHeader';
-import { IApprovalRequirementGroup, ISelectedDetails } from './interface';
+import { IApprovalRequirementGroup, IApprovalRequirements, ISelectedDetails } from './interface';
 import useStyles from './styles';
-import { useBulkMigration } from './useBulkMigration';
 
 interface MigrationConfirmationDialogProps {
   isOpen: boolean
@@ -38,10 +41,32 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
   toFormRev,
 }) => {
   const classes = useStyles();
-  const { approvalRequirements, fetchApprovalRequirements, addUserToGroups } = useBulkMigration();
   const [toFormReleasedError, setToFormReleasedError] = useState<string>('');
   const employeePassword = useRef<string>('');
   const actionCountMap: { [key: string]: number } = {};
+  const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
+
+  const fetchApprovalRequirements = useActionCreator(
+    bulkMigrationActions.fetchApprovalRequirements,
+  );
+  const addUserToGroups = useActionCreator(
+    bulkMigrationActions.addUserToGroups,
+  );
+
+  const approvalReqAsync = useAsync<IApprovalRequirements>({
+    onSuccess: (approvalRequirements) => {
+      setApprovalRequirements(approvalRequirements);
+    },
+    onError: toastError,
+  });
+
+  const addUserToGroupsAsync = useAsync<IApprovalRequirements>({
+    onSuccess: (approvalRequirements) => {
+      setApprovalRequirements(approvalRequirements);
+      toastSuccess('Automation user has been added to the required groups successfully');
+    },
+    onError: toastError,
+  });
 
   selectedDetails.forEach((detail: ISelectedDetails) => {
     if (!actionCountMap[detail.action]) {
@@ -52,17 +77,22 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
 
   useEffect(() => {
     if (toDocumentTypeId) {
-      fetchApprovalRequirements(toDocumentTypeId);
+      approvalReqAsync.start(fetchApprovalRequirements, toDocumentTypeId, approvalReqAsync);
       isToFormRevReleased();
     }
   }, [toDocumentTypeId]);
 
   const handleEmployeeConfirmation = () => {
+    handleClose();
     handleConfirmation(selectedDetails, employeePassword.current);
   };
 
   const setEmployeePassword = (empPassword: string) => {
     employeePassword.current = empPassword;
+  };
+
+  const onAddUserToGroup = () => {
+    addUserToGroupsAsync.start(addUserToGroups, toDocumentTypeId, approvalRequirements, addUserToGroupsAsync);
   };
 
   const isApprovalRequirementFulfilled = (group: IApprovalRequirementGroup) => {
@@ -76,6 +106,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
   };
 
   const hasApprovalMissingGroups = (approvalRequirements?.missingGroups ?? [])?.length > 0;
+  const isLoading = approvalReqAsync?.isLoading || addUserToGroupsAsync?.isLoading;
 
   return (
     <Dialog
@@ -83,8 +114,9 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      title="bulk.migration.supplier.revisions.summary"
     >
-      <DialogHeader title={translate('bulk.migration.supplier.revisions.summary')} />
+      <DialogHeader title={translate('bulk.migration.supplier.revisions.summary')} isLoading={isLoading} />
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           <Typography className={classes.selectedRevInfo} gutterBottom>
@@ -138,7 +170,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
                     variant="contained"
                     size="small"
                     data-cy="automation-add-to-groups"
-                    onClick={(e) => addUserToGroups(toDocumentTypeId)}
+                    onClick={onAddUserToGroup}
                     className={classes.zeroMarginBottom}
                   >
                     {translate('bulk.migration.add.to.groups')}

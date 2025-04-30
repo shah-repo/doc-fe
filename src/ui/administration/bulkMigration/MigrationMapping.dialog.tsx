@@ -374,25 +374,22 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
         </Toolbar>
       </AppBar>
       <DialogContent>
-        <ul className={classes.mappingDialogInstructions}>
-          <li className={classes.compactListItem}>
-            Click on a Schema Item on left. A <DoneAllIcon className={classes.doneAllIcon} /> would appear, indicating
-            that this is selected.
-          </li>
-          <li className={classes.compactListItem}>
-            Clicking on any item in the <em>To Rev</em> area, maps the two fields together.
-          </li>
-          <li className={classes.compactListItem}>
-            More than one item from the left can be mapped to items on the right.
-          </li>
-          <li className={classes.compactListItem}>
-            Click <b>Save</b> to make the <b>Preview</b> button appear. You can adjust the mapping rules, save, and
-            preview as needed until you're satisfied with the results. Once everything looks good, close this screen,
-            select the revisions from the table, and click <b>Run Scan</b> to fetch all the eligible revisions for
-            selection.
-          </li>
-        </ul>
-        {/* <MappingRules /> */}
+        <Box component="ul" className={classes.mappingDialogInstructions}>
+          <Box component="li" className={classes.compactListItem}>
+            {translate('bulk.migration.schema.field.mapping.instructions.step1')}
+            <DoneAllIcon className={classes.doneAllIcon} />
+            {translate('bulk.migration.schema.field.mapping.instructions.step2')}
+          </Box>
+          <Box component="li" className={classes.compactListItem}>
+            <Typography className={classes.rulesText} dangerouslySetInnerHTML={{ __html: translate('bulk.migration.schema.field.mapping.instructions.step3') }} />
+          </Box>
+          <Box component="li" className={classes.compactListItem}>
+            <Typography className={classes.rulesText} dangerouslySetInnerHTML={{ __html: translate('bulk.migration.schema.field.mapping.instructions.step4') }} />
+          </Box>
+          <Box component="li" className={classes.compactListItem}>
+            <Typography className={classes.rulesText} dangerouslySetInnerHTML={{ __html: translate('bulk.migration.schema.field.mapping.instructions.step5') }} />
+          </Box>
+        </Box>
         <Typography
           className={classes.mappingInfo}
           variant="subtitle2"

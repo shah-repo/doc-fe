@@ -1,20 +1,18 @@
-import { light, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { AppBar, Toolbar, Tooltip, Typography } from '@material-ui/core';
+import { AppBar, LinearProgress, Toolbar, Typography } from '@material-ui/core';
 import React from 'react';
-import { translate } from '../../../common/intl';
 import { IconButton } from '../../components/forms/fields-next';
-import useHover from '../../hooks/useHover';
 import useStyles from './styles';
 
 interface DialogHeaderProps {
   title: string
+  isLoading?: boolean
   onDialogClose?: () => void
 }
 
-const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onDialogClose }) => {
+const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onDialogClose, isLoading = false }) => {
   const classes = useStyles();
-  const [discardRef, isDiscardHovered] = useHover<HTMLButtonElement>();
 
   return (
     <AppBar position="static" color="default" elevation={0}>
@@ -22,19 +20,13 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onDialogClose }) => 
         <Typography variant="h6" className={classes.rulesTitle}>
           {title}
         </Typography>
-        {onDialogClose && <Tooltip title={translate('common.close')} placement="top" arrow>
-          <IconButton
-            kind="simple"
-            color="primary"
-            ref={discardRef}
-            onClick={onDialogClose}
-            iconSize={22}
-            data-cy="dialog-header"
-          >
-            <FontAwesomeIcon icon={isDiscardHovered ? solid('square-xmark') : light('square-xmark')} />
+        {onDialogClose && (
+          <IconButton kind="action" onClick={onDialogClose} data-cy="dialog-header">
+            <FontAwesomeIcon icon={regular('xmark')} />
           </IconButton>
-        </Tooltip>}
+        )}
       </Toolbar>
+      {isLoading && <LinearProgress />}
     </AppBar>
   );
 };

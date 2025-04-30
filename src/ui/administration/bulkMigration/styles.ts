@@ -189,6 +189,9 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(1),
     width: '100%',
   },
+  rulesText: {
+    fontSize: 14,
+  },
   compactListItem: {
     marginBottom: theme.spacing(0.5),
     fontSize: 14,
@@ -439,12 +442,12 @@ export default makeStyles((theme) => ({
   doneAllIcon: {
     color: Colors.green,
     position: 'relative',
-    top: '6px',
+    top: 6,
   },
   chip: {
     padding: theme.spacing(0, 0.5),
     height: 28,
-    margin: '0 4px 4px 0',
+    margin: theme.spacing(0, 0.5, 0.5, 0),
   },
   previewDrawerProgress: {
     position: 'absolute',
