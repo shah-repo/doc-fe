@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { some } from 'lodash';
 import { translate } from '../../../common/intl';
+import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
 import { checkSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/transform';
 import Colors from '../../layout/theme/utils/colors';
 import { IMappedFrom, IMismatchResponse, IRowData, ISchemaItem } from './interface';
@@ -19,15 +20,23 @@ const schemaValidationMap = {
   },
 };
 
-export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISchemaItem): {canMap: boolean, errMessage: string} {
+const OPTIONS_TYPES: string[] = [MigrationSpecialFields.CHECKBOX_GROUP,
+  MigrationSpecialFields.SELECT,
+  MigrationSpecialFields.RADIO_GROUP,
+];
+
+export function canMapItems (
+  selectedSchemaItem: ISchemaItem, toSchemaItem: ISchemaItem,
+): {canMap: boolean, errMessage?: string, showOptionsMapper?: boolean} {
   const errMessage = '';
   let canMap = true;
 
   if (!toSchemaItem.referenceDataType) {
     const selectedType = selectedSchemaItem.type as string;
-    const targetType = toSchemaItem.type;
+    const targetType = toSchemaItem.type as string;
 
-    if (selectedType !== targetType) {
+    const hasOptions = OPTIONS_TYPES.includes(selectedType) && OPTIONS_TYPES.includes(targetType);
+    if (selectedType !== targetType && !hasOptions) {
       return {
         canMap: false,
         errMessage: translate('bulk.migration.mapping.message', { selectedType }),
@@ -35,7 +44,14 @@ export function canMapItems (selectedSchemaItem: ISchemaItem, toSchemaItem: ISch
     }
 
     canMap = checkSpecialFields(selectedSchemaItem, toSchemaItem);
+
     if (!canMap) {
+      if (hasOptions) {
+        return {
+          canMap,
+          showOptionsMapper: true,
+        };
+      }
       return {
         canMap,
         errMessage: translate('bulk.migration.mapping.with.options.message', { selectedType }),
@@ -150,16 +166,15 @@ export function autoMapArrays (
     if (!isDisabledSchemaItem(item)) {
       if (item.name) toRevSchemaIndex[item.name] = [item];
       if (item.label && typeof item.label === 'string') {
-        if (toRevSchemaIndex[item.label.toLocaleLowerCase()]?.length) {
-          toRevSchemaIndex[item.label.toLocaleLowerCase()].push(item);
+        const lowercaseLabel = item.label.toLocaleLowerCase();
+        if (toRevSchemaIndex[lowercaseLabel]?.length) {
+          toRevSchemaIndex[lowercaseLabel].push(item);
         } else {
-          toRevSchemaIndex[item.label.toLocaleLowerCase()] = [item];
+          toRevSchemaIndex[lowercaseLabel] = [item];
         }
       }
     }
   });
-
-  console.log(toRevSchemaIndex);
 
   // Iterate through fromRevSchema and update isMapped and mappedFrom
   for (const fromRevSchemaItem of fromRevSchema) {
@@ -174,16 +189,16 @@ export function autoMapArrays (
 
     let matchingItemsFromLabel: ISchemaItem[] = [];
     if (fromRevSchemaItem.label && typeof fromRevSchemaItem.label === 'string') {
-      matchingItemsFromLabel = toRevSchemaIndex[fromRevSchemaItem.label.toLocaleLowerCase()];
+      const formRevSchemaItemLabel
+        = fromRevSchemaItem.label.toLocaleLowerCase().replace(/:$/, '');
+      matchingItemsFromLabel = toRevSchemaIndex[formRevSchemaItemLabel];
     }
 
     // The fields from the new schema that match.
     const matchingItems: ISchemaItem[] = matchingItemsFromLabel ?? matchingItemsFromName ?? [];
-    console.log(matchingItems);
 
     for (const matchingItem of matchingItems) {
       const isMatching = checkSpecialFields(fromRevSchemaItem, matchingItem);
-      console.log(fromRevSchemaItem, matchingItem, isMatching);
       if (!isMatching) {
         continue;
       }
@@ -224,22 +239,22 @@ export function promptUserToRerunScan (rerunScanDetails: IMismatchResponse): {
 
   if (rerunScanDetails.irrelevantScanIds?.length > 0) {
     isPromptUserToScan = true;
-    msgParts.push(`${rerunScanDetails.irrelevantScanIds?.length} entries removed.`);
+    msgParts.push(translate('bulk.migration.scan.entries.message', { count: rerunScanDetails.irrelevantScanIds?.length, action: 'removed' }));
   }
 
   if (rerunScanDetails.mismatchingStatusScanIds?.length > 0) {
     isPromptUserToScan = true;
-    msgParts.push(`${rerunScanDetails.mismatchingStatusScanIds?.length} status updated.`);
+    msgParts.push(translate('bulk.migration.scan.status.message', { count: rerunScanDetails.mismatchingStatusScanIds?.length }));
   }
 
   if (rerunScanDetails.newRevIds?.length > 0) {
     isPromptUserToScan = true;
-    msgParts.push(`${rerunScanDetails.newRevIds.length} entries added.`);
+    msgParts.push(translate('bulk.migration.scan.entries.message', { count: rerunScanDetails.newRevIds.length, action: 'added' }));
   }
 
   if (rerunScanDetails.alreadyUpgradedScanEntryIds && rerunScanDetails.alreadyUpgradedScanEntryIds?.length > 0) {
     isPromptUserToScan = true;
-    msgParts.push(`${rerunScanDetails.alreadyUpgradedScanEntryIds.length} entries already migrated.`);
+    msgParts.push(translate('bulk.migration.scan.entries.message', { count: rerunScanDetails.newRevIds.length, action: 'already migrated' }));
   }
 
   return { msgParts, isPromptUserToScan };

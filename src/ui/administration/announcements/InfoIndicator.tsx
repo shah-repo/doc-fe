@@ -9,9 +9,10 @@ import useStyles from './styles';
 interface InfoIndicatorProps {
   type: IndicatorTypeEnum
   text: string
+  style?: string
 }
 
-const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text }) => {
+const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text, style }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const [iconRef, iconRefHovered] = useHover<HTMLElement>();
@@ -30,7 +31,7 @@ const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text }) => {
     ? iconRefHovered ? solid('circle-info') : regular('circle-info')
     : iconRefHovered ? solid('triangle-exclamation') : regular('triangle-exclamation');
 
-  const iconClass = isInfo ? classes.infoIndicatorIcon : classes.infoIndicatorWarningIcon;
+  const iconClass = isInfo ? (style === 'white' ? classes.infoIndicatorWhite : classes.infoIndicatorIcon) : classes.infoIndicatorWarningIcon;
   const textClass = isInfo ? classes.infoIndicatorPopoverText : classes.infoIndicatorWarningText;
 
   return (
@@ -49,7 +50,7 @@ const InfoIndicator: React.FC<InfoIndicatorProps> = ({ type, text }) => {
         disableRestoreFocus
       >
         <Box p={1}>
-          <Typography component="span" className={textClass} dangerouslySetInnerHTML={{ __html: text }} />
+          <Typography component="div" className={textClass} dangerouslySetInnerHTML={{ __html: text }} />
         </Box>
       </Popover>
     </Box>

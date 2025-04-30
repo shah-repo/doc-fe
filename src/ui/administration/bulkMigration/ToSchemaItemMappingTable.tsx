@@ -19,13 +19,11 @@ const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
 const ToSchemaItemMappingTable: React.FC<{
   schemaItem: ISchemaItem
   handleMappingChange: (rows: IRowData[], entryRemoved?: IMappedFrom) => void
-  selectedSchemaItems: ISchemaItem[]
+  selectedSchemaItem: ISchemaItem | undefined
   isSingleRow?: boolean
-}> = ({ schemaItem, handleMappingChange, selectedSchemaItems, isSingleRow }) => {
+}> = ({ schemaItem, handleMappingChange, selectedSchemaItem, isSingleRow }) => {
   const classes = useStyles();
   const [rows, setRows] = useState<IRowData[]>(schemaItem.tableMappings ?? []);
-
-  // const widthPercent = Math.floor((100 - ADD_ROW_COLUMN_WIDTH_PERCENT) / (schemaItem.fieldNames?.length ?? 1));
 
   useEffect(() => {
     if (!rows.length) {
@@ -64,16 +62,9 @@ const ToSchemaItemMappingTable: React.FC<{
     event.preventDefault();
     event.stopPropagation();
 
-    if (!selectedSchemaItems.length) {
+    if (!selectedSchemaItem) {
       return;
     }
-
-    if (selectedSchemaItems.length > 1) {
-      toastError('Only a single field can be mapped to a table column');
-      return;
-    }
-
-    const selectedSchemaItem = selectedSchemaItems[0];
 
     if (selectedSchemaItem.referenceDataType) {
       toastError('Reference data type cannot be mapped to a column in the table. Please use direct mapping.');
