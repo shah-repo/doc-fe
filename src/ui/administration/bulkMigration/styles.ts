@@ -171,8 +171,8 @@ export default makeStyles((theme) => ({
     maxWidth: 340,
   },
   promptUserMsgStyle: {
-    color: Colors.red,
-    backgroundColor: Colors.light_red,
+    color: Colors.blue,
+    backgroundColor: Colors.light_gray_blue,
     padding: theme.spacing(1),
     textAlign: 'center',
   },
