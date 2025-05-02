@@ -49,7 +49,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
   const { _documentRevisionFormState } = SM.useStores();
   const { formInput } = documentRevision;
   const generalSettings = useSelector(companySelectors.getGeneralSettings);
-  const { addToDam = [], removeFromDam = [] } = generalSettings?.approvalRoles ?? {};
+  const { addToDam = [], removeFromDam = [], approvalRoles = [] } = generalSettings?.approvalRoles ?? {};
   const dam = generalSettings?.approvalRoles?.dam;
   const damIsSynced = dam?.isSynced ?? true;
   const currentUserId = useSelector(authSelectors.currentUserId);
@@ -190,10 +190,12 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       const lastIndex = Math.max(0, ...updatedDAR.map(item => item.index));
 
       addToDam?.forEach((item, index) => {
+        const itemIndex = approvalRoles.find(ar => ar.id === item.id)?.index ?? lastIndex + index + 1;
+
         updatedDAR.push({
           id: item.id,
           name: item.name,
-          index: lastIndex + index + 1,
+          index: itemIndex,
           groups: [],
           employees: [],
         });
@@ -207,7 +209,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
       });
     }
 
-    updatedDAR = updatedDAR.map((dar, index) => ({ ...dar, index }));
+    updatedDAR = updatedDAR.sort((a, b) => a.index - b.index);
 
     documentRevision.formInput = { ...formInput, [FBDAMFields.DAR]: updatedDAR, [FBDAMFields.DAM]: updatedDAM };
     _documentRevisionFormState?.setDocumentRevision(documentRevision);
