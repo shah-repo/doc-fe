@@ -1,12 +1,13 @@
 import { Box } from '@material-ui/core';
 import { isEmptyArray } from 'formik';
-import { cloneDeep, pullAt, sortBy } from 'lodash';
+import { cloneDeep, omit } from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SM } from '../../../../../../App';
 import { translate } from '../../../../../../common/intl';
 import { authSelectors } from '../../../../../../state/ducks/auth';
 import { companyActions, companySelectors } from '../../../../../../state/ducks/company';
+import { ApprovalRole } from '../../../../../../state/ducks/company/types';
 import { documentRevisionsActions } from '../../../../../../state/ducks/documentRevisions';
 import { DocumentRevision, DocumentRevisionStatus } from '../../../../../../state/ducks/documentRevisions/types';
 import Text from '../../../../../components/Text';
@@ -29,13 +30,6 @@ const SyncLabelElement: React.FC<{ label?: string, subLabel?: string }> = ({ lab
     </>
   );
 };
-
-function removeItemsAtIndices<T = unknown> (items: T[], indices: number[]): T[] {
-  const sortedIndices = sortBy(indices).reverse();
-  const newItems = [...items];
-  pullAt(newItems, sortedIndices);
-  return newItems;
-}
 
 interface Props {
   documentRevision: DocumentRevision
@@ -174,38 +168,35 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
     ) as FBApprovalMatrixItem[];
 
     if (!isEmptyArray(removeFromDam)) {
-      const removingARIndexes = removeFromDam.map(ar => updatedDAR.findIndex(dar => dar.id === ar.id));
-
       updatedDAR = updatedDAR.filter(item => !removeFromDam.some(removeItem => removeItem.id === item.id));
-
-      updatedDAM.forEach((item) => {
-        item.approvalRoles.admStage = removeItemsAtIndices(item.approvalRoles.admStage, removingARIndexes);
-        item.approvalRoles.stage1 = removeItemsAtIndices(item.approvalRoles.stage1, removingARIndexes);
-        item.approvalRoles.stage2 = removeItemsAtIndices(item.approvalRoles.stage2, removingARIndexes);
-        item.approvalRoles.stage3 = removeItemsAtIndices(item.approvalRoles.stage3, removingARIndexes);
-      });
     }
 
     if (!isEmptyArray(addToDam)) {
       const lastIndex = Math.max(0, ...updatedDAR.map(item => item.index));
 
       addToDam?.forEach((item, index) => {
-        const itemIndex = approvalRoles.find(ar => ar.id === item.id)?.index ?? lastIndex + index + 1;
-
-        updatedDAR.push({
+        const newRole: ApprovalRole = {
           id: item.id,
           name: item.name,
-          index: itemIndex,
+          index: lastIndex + index + 1,
           groups: [],
           employees: [],
-        });
+          isActive: false,
+        };
+        const roleToAdd = approvalRoles.find(ar => ar.id === item.id) ?? newRole;
 
-        updatedDAM.forEach((item) => {
-          item.approvalRoles.admStage.push(false);
-          item.approvalRoles.stage1.push(false);
-          item.approvalRoles.stage2.push(false);
-          item.approvalRoles.stage3.push(false);
-        });
+        updatedDAR.push(omit(roleToAdd, 'createdAt', 'updatedAt', 'companyId'));
+
+        const stagesLength = updatedDAM[0].approvalRoles.admStage.length ?? 0;
+
+        if (roleToAdd.index >= stagesLength) {
+          updatedDAM.forEach((item) => {
+            item.approvalRoles.admStage.push(false);
+            item.approvalRoles.stage1.push(false);
+            item.approvalRoles.stage2.push(false);
+            item.approvalRoles.stage3.push(false);
+          });
+        }
       });
     }
 
