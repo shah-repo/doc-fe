@@ -34,7 +34,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
         ...role,
         groups: foundGroups ?? [],
       };
-    });
+    }).sort((a, b) => a.index - b.index);
 
     const updateRole = (role: FBApprovalRole) => {
       const groups = role.groups.map(({ id }) => ({ id }));

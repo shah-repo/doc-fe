@@ -77,7 +77,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       data = {
         ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
         approvalMatrix: matrix,
-        approvalRoles,
+        approvalRoles: approvalRoles.sort((a, b) => a.index - b.index),
       };
     });
 
