@@ -185,7 +185,7 @@ const SyncMessageDialogContainer: React.FC<Props> = ({
         };
         const roleToAdd = approvalRoles.find(ar => ar.id === item.id) ?? newRole;
 
-        updatedDAR.push(omit(roleToAdd, 'createdAt', 'updatedAt', 'companyId'));
+        updatedDAR.push(omit(roleToAdd, 'createdAt', 'updatedAt', 'companyId', 'isActive'));
 
         const stagesLength = updatedDAM[0].approvalRoles.admStage.length ?? 0;
 
