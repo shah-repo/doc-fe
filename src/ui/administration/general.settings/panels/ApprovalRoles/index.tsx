@@ -81,6 +81,8 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       name: '',
       index: lastIndex + 1,
       isActive: true,
+      employees: [],
+      groups: [],
       [MODE_FIELD]: Mode.add,
     });
   };

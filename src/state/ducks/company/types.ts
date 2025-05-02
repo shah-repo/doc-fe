@@ -2,7 +2,7 @@ import { LCP, LCPResponse } from '../../../ui/administration/general.settings/pa
 import { LotTransferType } from '../../../ui/form.builder/FBLotTransfers/types';
 import { ThemeEnv } from '../../../ui/layout/theme/utils/types';
 import { AsyncState } from '../../types';
-import { GroupTag, Permission } from '../auth/types';
+import { Group, GroupTag, Permission } from '../auth/types';
 import { User } from '../common/types';
 import { DocumentType } from '../documentRevisions/documentType/types';
 import { EquipmentStatus, LotStatus } from '../documentRevisions/types';
@@ -204,6 +204,8 @@ interface ApprovalRoleItem {
   id: string
   name: string
   index: number
+  employees: Employee[]
+  groups: Group[]
 }
 
 export interface ApprovalRole extends ApprovalRoleItem {
