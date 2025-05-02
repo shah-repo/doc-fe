@@ -5,6 +5,7 @@ import { v4 as generateUuid } from 'uuid';
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixFieldModes, FBApprovalMatrixItem } from '..';
 import { SM } from '../../../App';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
+import { MODE_FIELD } from './components/Grid';
 import { DEFAULT_CATEGORY_LABEL } from './constants';
 import { FBApprovalMatrixProps } from './types';
 
@@ -40,7 +41,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
             ...omit(docType, 'updatedCategory'),
             acronym: docType.acronym.toUpperCase(),
           },
-          ...restItem,
+          ...omit(restItem, MODE_FIELD),
         });
       });
 
