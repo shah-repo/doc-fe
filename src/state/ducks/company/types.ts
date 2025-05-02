@@ -203,6 +203,7 @@ export interface EquipmentFamilyEquipmentStatus {
 interface ApprovalRoleItem {
   id: string
   name: string
+  index: number
 }
 
 export interface ApprovalRole extends ApprovalRoleItem {
