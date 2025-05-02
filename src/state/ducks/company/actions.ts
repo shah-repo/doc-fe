@@ -184,7 +184,7 @@ const updateGeneralSettings = (
 };
 
 const createApprovalRoles = (
-  body: { name: string, isActive: boolean },
+  body: { name: string, isActive: boolean, index: number },
   handlers: Handlers,
   method: ApiActionMethod = 'post',
 ): ApiAction<GeneralSettingsState> => {

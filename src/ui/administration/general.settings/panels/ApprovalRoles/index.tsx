@@ -59,7 +59,7 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
       discardApprovalRoles();
       formValues.approvalRoles.approvalRoles = updatedApprovalRoles;
       setApprovalRolesData(updatedApprovalRoles);
-      async.start(createApprovalRolesAction, pick(values, 'name', 'isActive'), async);
+      async.start(createApprovalRolesAction, pick(values, 'name', 'isActive', 'index'), async);
     },
   });
 
@@ -74,10 +74,15 @@ const ApprovalRolesSettingsPanel: React.FC<SettingsPanelProps> = (props) => {
   };
 
   const addApprovalRole = () => {
+    const lastIndex = Math.max(0, ...approvalRoles.map(item => item.index));
+
     setEditedApprovalRole({
       id: uuidv4(),
       name: '',
+      index: lastIndex + 1,
       isActive: true,
+      employees: [],
+      groups: [],
       [MODE_FIELD]: Mode.add,
     });
   };
