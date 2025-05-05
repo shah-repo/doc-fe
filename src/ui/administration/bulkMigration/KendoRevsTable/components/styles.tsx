@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 import UtilColors from '../../../../layout/theme/utils/colors';
 
-export default makeStyles((theme) => ({
+export default makeStyles(theme => ({
   container: {
     display: 'flex',
     justifyContent: 'center',
@@ -61,6 +61,16 @@ export default makeStyles((theme) => ({
   },
   cursorPointer: {
     cursor: 'pointer',
+  },
+  fieldsMappingIcon: {
+    cursor: 'pointer',
+    marginLeft: theme.spacing(1),
+    width: 17,
+    height: 17,
+  },
+  fieldsMappingContainer: {
+    display: 'inline-flex',
+    alignItems: 'center',
   },
   revsTableName: {
     fontWeight: 'bold',
