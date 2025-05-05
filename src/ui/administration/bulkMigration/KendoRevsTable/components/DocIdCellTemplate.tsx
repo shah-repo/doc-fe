@@ -10,7 +10,7 @@ export const DocIdCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const classes = useStyles();
   const { field, dataItem } = props;
   const { docRevId, documentId } = dataItem;
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
+  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER);
 
   const linkHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
