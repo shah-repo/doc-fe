@@ -1,40 +1,67 @@
 import { FormControlLabel, Grid, Popover, Switch, Typography } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { CompositeFilterDescriptor, FilterDescriptor, getter } from '@progress/kendo-data-query';
-import { getSelectedState, GridDetailRowProps, GridFilterChangeEvent, GridPageChangeEvent, GridSelectionChangeEvent, GridToolbar } from '@progress/kendo-react-grid';
+import {
+  getSelectedState,
+  GridDetailRowProps,
+  GridFilterChangeEvent,
+  GridPageChangeEvent,
+  GridSelectionChangeEvent,
+  GridToolbar,
+} from '@progress/kendo-react-grid';
 import cx from 'classnames';
 import { debounce, isEmpty, isNull, replace } from 'lodash';
-import React, { ChangeEvent, ChangeEventHandler, lazy, memo, ReactElement, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  lazy,
+  memo,
+  ReactElement,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { translate } from '../../../../common/intl';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import UtilColors from '../../../layout/theme/utils/colors';
 import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
-import { DATA_ITEM_KEY, DEFAULT_FILTER, EXPAND_FIELD, INITIAL_ROWS_COUNT, pagerSettings, SELECTED_FIELD } from './constants';
+import {
+  DATA_ITEM_KEY,
+  DEFAULT_FILTER,
+  EXPAND_FIELD,
+  INITIAL_ROWS_COUNT,
+  pagerSettings,
+  SELECTED_FIELD,
+} from './constants';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { Page } from './types';
 
 const idGetter = getter(DATA_ITEM_KEY);
 
-interface props {
+interface KendoRevsTableProps {
   scanId: string
   updateRevsTable: number
   handleSelectedRowsChange: (selected: ISelectedDetails[]) => void
 }
 
-const KendoRevsTable: React.FunctionComponent<props> = (
-  { scanId, updateRevsTable, handleSelectedRowsChange }) => {
+const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
+  scanId,
+  updateRevsTable,
+  handleSelectedRowsChange,
+}) => {
   const classes = useStyles();
-  const [searchQueries, setSearchQueries] = React.useState<{[key: string]: string}>({});
+  const [searchQueries, setSearchQueries] = React.useState<{ [key: string]: string }>({});
   const [order, setOrder] = React.useState<SortDirection>('desc');
   const [orderBy, setOrderBy] = React.useState('createdAt');
   const [page, setPage] = React.useState<Page>({ skip: 0, pageNumber: 0, take: INITIAL_ROWS_COUNT });
   const [isShowActionableRows, setIsShowActionableRows] = useState<boolean>(true);
   const [expandedRevIDs, setExpandedRevIDs] = useState<string[]>([]);
   const [filter, setFilter] = useState<CompositeFilterDescriptor>();
-
   const {
     isLoading,
     errorMessage,
@@ -62,9 +89,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
   const handleDataItemExpanded = useCallback((dataItem: ISupplierScanResultRev) => {
     const selectedId = dataItem.docRevId;
     setExpandedRevIDs((prevIds = []) =>
-      prevIds.includes(selectedId)
-        ? prevIds.filter(id => id !== selectedId)
-        : [...prevIds, selectedId],
+      prevIds.includes(selectedId) ? prevIds.filter((id) => id !== selectedId) : [...prevIds, selectedId],
     );
   }, []);
 
@@ -74,9 +99,15 @@ const KendoRevsTable: React.FunctionComponent<props> = (
 
   const handleSelectAllClick = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelectedDetails: ISelectedDetails[] = data.map((n) => ({ docRevId: n.docRevId, action: n.proposedAction }));
+      const newSelectedDetails: ISelectedDetails[] = data.map((n) => ({
+        docRevId: n.docRevId,
+        action: n.proposedAction,
+      }));
       setSelected(newSelectedDetails);
-      const newSelectedRows = data.reduce<{ [id: string]: boolean }>((selectedRows, item) => ({ ...selectedRows, [idGetter(item)]: true }), {});
+      const newSelectedRows = data.reduce<{ [id: string]: boolean }>(
+        (selectedRows, item) => ({ ...selectedRows, [idGetter(item)]: true }),
+        {},
+      );
       setSelectedRows(newSelectedRows);
       return;
     }
@@ -86,13 +117,23 @@ const KendoRevsTable: React.FunctionComponent<props> = (
 
   useEffect(() => {
     if (scanId) {
-      fetchScanSupplierRevisions(scanId, page.pageNumber, page.take, orderBy, order, isShowActionableRows, searchQueries);
+      fetchScanSupplierRevisions(
+        scanId,
+        page.pageNumber,
+        page.take,
+        orderBy,
+        order,
+        isShowActionableRows,
+        searchQueries,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateRevsTable, scanId, searchQueries, page, orderBy, order, isShowActionableRows]);
 
   const handleChangePage = (event: GridPageChangeEvent) => {
-    const { page: { skip, take } } = event;
+    const {
+      page: { skip, take },
+    } = event;
     const pageNumber = skip / take;
     setPage({ skip, take, pageNumber });
   };
@@ -103,7 +144,7 @@ const KendoRevsTable: React.FunctionComponent<props> = (
     setOrderBy(property);
   };
 
-  const searchTextChange = (searchQueries: {[key: string]: string}) => {
+  const searchTextChange = (searchQueries: { [key: string]: string }) => {
     setSearchQueries(searchQueries);
   };
 
@@ -111,10 +152,12 @@ const KendoRevsTable: React.FunctionComponent<props> = (
 
   const filterChange = (event: GridFilterChangeEvent) => {
     const { filter } = event;
-    const newSearchQueries = filter?.filters ? (filter?.filters as FilterDescriptor[]).reduce((queries, fiter) => {
-      const { field = '', value } = fiter;
-      return { ...queries, [field as string]: value };
-    }, {}) : {};
+    const newSearchQueries = filter?.filters
+      ? (filter?.filters as FilterDescriptor[]).reduce((queries, fiter) => {
+        const { field = '', value } = fiter;
+        return { ...queries, [field as string]: value };
+      }, {})
+      : {};
 
     setFilter(filter ?? DEFAULT_FILTER);
     debounceSearch(newSearchQueries);
@@ -174,18 +217,19 @@ const KendoRevsTable: React.FunctionComponent<props> = (
   const rowRender: DataGridProps<ISupplierScanResultRev>['rowRender'] = (row, { dataItem }) => {
     const item = dataItem as ISupplierScanResultRev;
 
-    const editedRow = React.cloneElement(
-      row,
-      {
-        className: cx(replace(row?.props?.className, 'k-alt', ''), { [classes.selectedRow]: item.isSelected }),
-        style: { ...row?.props?.style, backgroundColor: !item.isSelected ? getRowColor(item) : '' },
-      },
-    );
+    const editedRow = React.cloneElement(row, {
+      className: cx(replace(row?.props?.className, 'k-alt', ''), { [classes.selectedRow]: item.isSelected }),
+      style: { ...row?.props?.style, backgroundColor: !item.isSelected ? getRowColor(item) : '' },
+    });
 
     return editedRow;
   };
 
-  const RevList = data.map((item) => ({ ...item, [SELECTED_FIELD]: Boolean(selectedRows?.[idGetter(item)]), [EXPAND_FIELD]: expandedRevIDs?.includes(item.docRevId) }));
+  const RevList = data.map((item) => ({
+    ...item,
+    [SELECTED_FIELD]: Boolean(selectedRows?.[idGetter(item)]),
+    [EXPAND_FIELD]: expandedRevIDs?.includes(item.docRevId),
+  }));
 
   const LazyDetailComponent = lazy(async () => await import('./FormInputComparison'));
 
@@ -224,17 +268,29 @@ const KendoRevsTable: React.FunctionComponent<props> = (
         onFilterChange={filterChange}
         filter={filter}
       >
-        <GridToolbar >
+        <GridToolbar>
           {!isEmpty(errorMessage) && <div className={classes.errMsgStyle}>{errorMessage}</div>}
-          <Grid container justify="space-between"
+          <Grid
+            container
+            justify="space-between"
             className={cx({ [classes.revsTableSelectedHighlight]: selected.length > 0 })}
           >
-            <Grid item className={classes.revsTableRefreshBox} >
+            <Grid item className={classes.revsTableRefreshBox}>
               <Typography variant="h4" id="tableTitle" className={classes.revsTableRefreshText} component="div">
                 {translate('administration.bulk.migration.supplier.rev.grid.title')}
                 <RefreshIcon
                   className={classes.revsTableRefreshIcon}
-                  onClick={() => fetchScanSupplierRevisions(scanId, page.pageNumber, page.take, orderBy, order, isShowActionableRows, searchQueries)}
+                  onClick={() =>
+                    fetchScanSupplierRevisions(
+                      scanId,
+                      page.pageNumber,
+                      page.take,
+                      orderBy,
+                      order,
+                      isShowActionableRows,
+                      searchQueries,
+                    )
+                  }
                 />
               </Typography>
               {selected.length > 0 && (

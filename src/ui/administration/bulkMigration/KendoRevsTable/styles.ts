@@ -19,7 +19,6 @@ export default makeStyles((theme) => ({
       textTransform: 'uppercase',
       color: Colors.almost_black,
     },
-
   },
   noPointerEvents: {
     pointerEvents: 'none',
@@ -36,15 +35,15 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(0.5),
   },
   revsTableSelectedHighlight:
-      theme.palette.type === 'light'
-        ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-        : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
+    theme.palette.type === 'light'
+      ? {
+        color: theme.palette.secondary.main,
+        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+      }
+      : {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.dark,
+      },
   revsTableRefreshBox: {
     display: 'flex',
     alignItems: 'center',

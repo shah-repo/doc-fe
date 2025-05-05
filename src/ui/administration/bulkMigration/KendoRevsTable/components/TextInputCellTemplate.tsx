@@ -6,11 +6,7 @@ import { CustomTemplateProps } from '../types';
 
 export const TextInputCellTemplate: React.FC<CustomTemplateProps> = (props) => {
   const { field, dataItem } = props;
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as string;
+  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER);
 
-  return (
-    <OverflowContent>
-      {displayValue}
-    </OverflowContent>
-  );
+  return <OverflowContent>{displayValue}</OverflowContent>;
 };

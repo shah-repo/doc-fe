@@ -27,12 +27,7 @@ export const buildSchema = ({
       field: '_expanded',
       filterable: false,
       title: '',
-      template: (props) => (
-        <ExpandCollapseCell
-          {...props}
-          onDataItemExpanded={onDataItemExpanded}
-        />
-      ),
+      template: (props) => <ExpandCollapseCell {...props} onDataItemExpanded={onDataItemExpanded} />,
       width: 50,
     },
     {

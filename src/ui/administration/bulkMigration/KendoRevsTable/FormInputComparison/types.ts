@@ -5,7 +5,5 @@ import { ISupplierScanResultRev } from '../../interface';
 export interface FormInputComparisonProps {
   dataItem: ISupplierScanResultRev
 }
-
 export type BooleanRef = MutableRefObject<boolean> | null;
-
 export interface CustomTemplateProps extends CellTemplateProps<ISupplierScanResultRev> {}

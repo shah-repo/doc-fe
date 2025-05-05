@@ -5,17 +5,18 @@ import React from 'react';
 import { ISupplierScanResultRev } from '../../interface';
 import { EXPAND_FIELD } from '../constants';
 import { CustomTemplateProps } from '../types';
-import { styles } from './styles';
-interface Props extends CustomTemplateProps {
+import useStyles from './styles';
+
+interface ExpandCollapseCellProps extends CustomTemplateProps {
   onDataItemExpanded?: (dataItem: ISupplierScanResultRev) => void
 }
 
-export const ExpandCollapseCell: React.FC<Props> = (props) => {
+export const ExpandCollapseCell: React.FC<ExpandCollapseCellProps> = (props) => {
   const { dataItem, onDataItemExpanded } = props;
-  const classes = styles();
+  const classes = useStyles();
 
   return (
-    <Box className={classes.container} >
+    <Box className={classes.container}>
       <FontAwesomeIcon
         data-cy="minimize-row-button"
         icon={dataItem[EXPAND_FIELD] ? regular('square-minus') : solid('square-plus')}

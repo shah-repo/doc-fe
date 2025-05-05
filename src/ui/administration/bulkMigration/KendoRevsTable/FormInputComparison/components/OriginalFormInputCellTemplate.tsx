@@ -6,15 +6,12 @@ import { ISupplierScanResultRev } from '../../../interface';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 
-export const OriginalFormInputCellTemplate: React.FC<CustomTemplateProps> = (props) => {
-  const { field, dataItem } = props;
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as Pick<ISupplierScanResultRev, 'originalFormInput'>;
+export const OriginalFormInputCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
+  const formInput = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as ISupplierScanResultRev['originalFormInput'];
 
-  if (!displayValue) {
-    return (<span>{translate('administration.bulk.migration.comparison.grid.cell.noFormInput')}</span>);
+  if (!formInput) {
+    return <span>{translate('administration.bulk.migration.comparison.grid.cell.noFormInput')}</span>;
   }
 
-  return (
-    <ReactJson src={displayValue} collapsed={1} />
-  );
+  return <ReactJson src={formInput} collapsed={1} />;
 };

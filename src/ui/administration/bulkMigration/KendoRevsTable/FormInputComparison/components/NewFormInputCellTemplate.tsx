@@ -6,19 +6,20 @@ import { ISupplierScanResultRev } from '../../../interface';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 
-export const NewFormInputCellTemplate: React.FC<CustomTemplateProps> = (props) => {
-  const { field, dataItem } = props;
+export const NewFormInputCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   const { isMapped } = dataItem;
-  const displayValue = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as Pick<ISupplierScanResultRev, 'originalFormInput'>;
+  const formInput = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as ISupplierScanResultRev['originalFormInput'];
+  const noInput = !formInput;
+  const notMapped = !isMapped;
 
-  if (!displayValue || !isMapped) {
-    return (<>
-      {!displayValue && <span>{translate('administration.bulk.migration.comparison.grid.cell.noFormInput')}</span> }
-      {!isMapped && <span>{translate('administration.bulk.migration.comparison.grid.cell.notMapped')}</span> }
-    </>);
+  if (noInput || notMapped) {
+    return (
+      <>
+        {noInput && <span>{translate('administration.bulk.migration.comparison.grid.cell.noFormInput')}</span>}
+        {notMapped && <span>{translate('administration.bulk.migration.comparison.grid.cell.notMapped')}</span>}
+      </>
+    );
   }
 
-  return (
-    <ReactJson src={displayValue} collapsed={1} />
-  );
+  return <ReactJson src={formInput} collapsed={1} />;
 };

@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import { Colors } from '../../../../layout/theme-next';
 import UtilColors from '../../../../layout/theme/utils/colors';
 
-export const styles = makeStyles((theme) => ({
+export default makeStyles((theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'center',

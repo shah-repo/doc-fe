@@ -6,14 +6,9 @@ import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
 import { ISupplierScanResultRev } from '../../interface';
 import { buildSchema } from './schema';
 import useStyles from './styles';
-import {
-  BooleanRef,
-  FormInputComparisonProps,
-} from './types';
+import { BooleanRef, FormInputComparisonProps } from './types';
 
-const FormInputComparison = forwardRef<BooleanRef, FormInputComparisonProps>(({
-  dataItem,
-}, ref) => {
+const FormInputComparison = forwardRef<BooleanRef, FormInputComparisonProps>(({ dataItem }, ref) => {
   const classes = useStyles();
   const schema = buildSchema();
 
@@ -26,7 +21,7 @@ const FormInputComparison = forwardRef<BooleanRef, FormInputComparisonProps>(({
         schema={schema}
         data={[dataItem]}
       >
-        <GridToolbar >
+        <GridToolbar>
           <Typography variant="h5" gutterBottom component="div">
             {translate('administration.bulk.migration.comparison.grid.title')}
           </Typography>

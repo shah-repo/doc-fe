@@ -11,11 +11,7 @@ export const buildSchema = (): Array<ColumnDefinition<ISupplierScanResultRev>> =
       field: 'originalFormInput',
       filterable: false,
       title: 'administration.bulk.migration.comparison.grid.heading.originalFormInput',
-      template: (props) => (
-        <OriginalFormInputCellTemplate
-          {...props}
-        />
-      ),
+      template: (props) => <OriginalFormInputCellTemplate {...props} />,
       width: 350,
     },
     {
@@ -23,11 +19,7 @@ export const buildSchema = (): Array<ColumnDefinition<ISupplierScanResultRev>> =
       field: 'newFormInput',
       title: 'administration.bulk.migration.comparison.grid.heading.newFormInput',
       filterable: false,
-      template: (props) => (
-        <NewFormInputCellTemplate
-          {...props}
-        />
-      ),
+      template: (props) => <NewFormInputCellTemplate {...props} />,
       width: 350,
     },
   ];
