@@ -346,14 +346,7 @@ const BulkMigrationContainer: React.FC = () => {
       <div className={classes.panels}>
         {!isEmpty(errorMessage) && <div className={classes.errMsgStyle}>{errorMessage}</div>}
         {scanDetails?.id && !isScanRunning && (
-          <Box>
-            {/* <RevsTable
-              scanId={scanId}
-              handleSelectedRowsChange={handleSelectedRowsChange}
-              updateRevsTable={updateRevsTable}
-            /> */}
-            <KendoRevsTable {...{ scanId, updateRevsTable, handleSelectedRowsChange }} />
-          </Box>
+          <KendoRevsTable {...{ scanId, updateRevsTable, handleSelectedRowsChange }} />
         )}
         {scanDetails?.id && isScanRunning && (
           <Box className={classes.searchIconContainer}>
