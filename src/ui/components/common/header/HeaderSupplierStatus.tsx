@@ -127,4 +127,13 @@ const HeaderSupplierStatus: React.FC<HeaderSupplierStatusProps> = ({
   );
 };
 
+export function shouldShowHeaderStatus (documentRevision?: DocumentRevision): boolean {
+  if (!documentRevision) {
+    return false;
+  }
+
+  return ![DocumentRevisionStatus.Canceled, DocumentRevisionStatus.Deprecated,
+    DocumentRevisionStatus.Voided, DocumentRevisionStatus.Voided].includes(documentRevision.status);
+}
+
 export default withThemeNext(HeaderSupplierStatus);
