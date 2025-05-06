@@ -11,9 +11,9 @@ import DateTime from '../../components/DateTime';
 import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
 import { ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
+import KendoRevsTable from './KendoRevsTable';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
-import RevsTable from './RevsTable';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
 import { getRevById } from './utils';
@@ -346,13 +346,7 @@ const BulkMigrationContainer: React.FC = () => {
       <div className={classes.panels}>
         {!isEmpty(errorMessage) && <div className={classes.errMsgStyle}>{errorMessage}</div>}
         {scanDetails?.id && !isScanRunning && (
-          <Box>
-            <RevsTable
-              scanId={scanId}
-              handleSelectedRowsChange={handleSelectedRowsChange}
-              updateRevsTable={updateRevsTable}
-            />
-          </Box>
+          <KendoRevsTable {...{ scanId, updateRevsTable, handleSelectedRowsChange }} />
         )}
         {scanDetails?.id && isScanRunning && (
           <Box className={classes.searchIconContainer}>

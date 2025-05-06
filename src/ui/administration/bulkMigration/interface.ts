@@ -72,7 +72,7 @@ export enum MIGRATION_STATUS_ENUM {
 }
 
 export interface ISelectedDetails {
-  id: string
+  docRevId: string
   action: REV_ACTION_OPTIONS
 }
 
@@ -118,7 +118,6 @@ export interface IScanDetailsResult extends IMismatchResponse {
 }
 
 export type SortDirection = 'asc' | 'desc' | undefined;
-export const INTERVAL_DURATION = 10000;
 
 export interface IOption {
   text: string
