@@ -1525,6 +1525,7 @@
   "form.builder.customer.city.label": "City",
   "form.builder.customer.country.label": "Country",
   "form.builder.customer.zip.code.label": "Zip Code",
+  "form.builder.customer.state.label": "State",
   "form.builder.site.information.grid.heading.isPrimary": "Primary",
   "form.builder.site.information.grid.heading.same.as.hq": "Same as HQ",
   "form.builder.site.information.grid.heading.site.name": "Site Name",

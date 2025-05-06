@@ -8,9 +8,10 @@ const FBCustomerHeaderQuaterAddress: React.FC<FBInputProps> = ({
   label = '',
   ...props
 }) => {
+  console.log('FBCustomerHeaderQuaterAddress', props);
   return (
     <Grid container spacing={1}>
-      <Grid item md={6} xs={6}>
+      <Grid item md={4} xs={6}>
         <FBTextField
           {...props}
           label={label}
@@ -26,6 +27,15 @@ const FBCustomerHeaderQuaterAddress: React.FC<FBInputProps> = ({
           {...props}
           label={translate('form.builder.customer.city.label')}
           name={`${name}City`}
+          gutter={false}
+          placeholder=""
+        />
+      </Grid>
+      <Grid item md={2} xs={6}>
+        <FBTextField
+          {...props}
+          label={translate('form.builder.customer.state.label')}
+          name={`${name}State`}
           gutter={false}
           placeholder=""
         />

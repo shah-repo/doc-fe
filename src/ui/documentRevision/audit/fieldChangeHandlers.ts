@@ -71,6 +71,7 @@ export const handleSiteAddressChange = (change: Audit, fbLabel: FBLabel): Change
     City: 'form.builder.site.information.grid.heading.city',
     Country: 'form.builder.site.information.grid.heading.country',
     ZipCode: 'form.builder.site.information.grid.heading.zip.code',
+    State: 'form.builder.customer.state.label',
   };
 
   const fieldKey = Object.keys(fieldMap).find((key) =>
