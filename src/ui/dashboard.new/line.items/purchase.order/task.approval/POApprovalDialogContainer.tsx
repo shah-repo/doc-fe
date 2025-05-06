@@ -9,6 +9,7 @@ import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.ne
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
 import { documentRevisionsSelectors } from '../../../../../state/ducks/documentRevisions';
 import { TASK_APPROVAL_GET_ASYNC } from '../../../../../state/ducks/documentRevisions/constants';
+import { ErrorCodes } from '../../../../../state/ducks/documentRevisions/types';
 import SupplierStatusDialog from '../../../../app/alert.dialog/SupplierStatusDialog';
 import { toastError, toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
@@ -90,7 +91,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
         const parsedError = JSON.parse(error);
         const { status, response } = parsedError || {};
 
-        if (status === 412 && response) {
+        if (status === ErrorCodes.PRECONDITION_FAILED && response) {
           setErrorResponse(response as IApprovalErrorResponse);
           supplierStatusDialog.open();
         } else {

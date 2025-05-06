@@ -4,7 +4,7 @@ import { translate } from '../../../common/intl';
 import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
 import CurrentMappings from './CurrentMappings';
 import DialogHeader from './DrawerHeader';
-import { IOption, ISchemaItem } from './interface';
+import { IOption, ISchemaItem, ListType } from './interface';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
 
@@ -12,8 +12,8 @@ interface OptionMapperDrawerProps {
   isOptionMapperVisible: boolean
   handleCloseOptionMapper: () => void
   handleMappingConfirmation: (localMapping: {[key: string]: IOption}) => void
-  selectedSchemaItem: ISchemaItem | undefined
-  toRevSchemaItem: ISchemaItem | undefined
+  selectedSchemaItem?: ISchemaItem
+  toRevSchemaItem?: ISchemaItem
 }
 
 const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
@@ -24,14 +24,9 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
   toRevSchemaItem,
 }) => {
   const classes = useStyles();
-
-  const {
-    getConfiguredSupplierOptions,
-  } = useBulkMigration();
-
+  const { getConfiguredSupplierOptions } = useBulkMigration();
   const [checkboxFromOptions, setCheckboxFromOptions] = useState<IOption[]>([]);
   const [checkboxToOptions, setCheckboxToOptions] = useState<IOption[]>([]);
-
   const [fromSelectedOption, setFromSelectedOption] = useState<IOption | undefined>();
   const [localMapping, setLocalMapping] = useState<{[key: string]: IOption}>({});
 
@@ -79,7 +74,7 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
   };
 
   const getItemStyle = (option: IOption, listType: string) => {
-    if (listType === 'from') {
+    if (listType === ListType.FROM) {
       if (fromSelectedOption?.text === option.text) {
         return classes.optionMapperDrawerSelectedListItem;
       }
@@ -88,7 +83,7 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
       }
     }
 
-    if (listType === 'to') {
+    if (listType === ListType.TO) {
       if (isToOptionMapped(option)) {
         return classes.optionMapperDrawerMappedListItem;
       }
@@ -120,7 +115,7 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
                 {checkboxFromOptions.map((option, index) => (
                   <ListItem button key={option.text}
                     onClick={() => handleFromOptionClick(option)}
-                    className={getItemStyle(option, 'from')}
+                    className={getItemStyle(option, ListType.FROM)}
                   >
                     <ListItemText primary={option.text} />
                   </ListItem>
@@ -140,7 +135,7 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
                 {checkboxToOptions.map((option, index) => (
                   <ListItem button key={option.text}
                     onClick={() => handleToOptionClick(option)}
-                    className={getItemStyle(option, 'to')}
+                    className={getItemStyle(option, ListType.TO)}
                   >
                     <ListItemText primary={option.text} />
                   </ListItem>
@@ -157,7 +152,7 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
             {translate('common.cancel')}
           </Button>
           {Object.entries(localMapping).length > 0 && (
-            <Button onClick={e => handleMappingConfirmation(localMapping)} color="primary" variant="contained" autoFocus>
+            <Button onClick={() => handleMappingConfirmation(localMapping)} color="primary" variant="contained" autoFocus>
               {translate('common.confirm')}
             </Button>
           )}

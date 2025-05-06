@@ -10,7 +10,7 @@ import { MomentFormats } from '../../../common/utils/date';
 import DateTime from '../../components/DateTime';
 import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
-import { ISelectedDetails, MIGRATION_STATUS_ENUM } from './interface';
+import { ISelectedDetails, ListType, MIGRATION_STATUS_ENUM } from './interface';
 import KendoRevsTable from './KendoRevsTable';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
@@ -112,13 +112,13 @@ const BulkMigrationContainer: React.FC = () => {
 
   useEffect(() => {
     if (fromDocumentTypeId) {
-      fetchFormRevsForDocumentType(fromDocumentTypeId, 'from');
+      fetchFormRevsForDocumentType(fromDocumentTypeId, ListType.FROM);
     }
   }, [fromDocumentTypeId]);
 
   useEffect(() => {
     if (toDocumentTypeId) {
-      fetchFormRevsForDocumentType(toDocumentTypeId, 'to');
+      fetchFormRevsForDocumentType(toDocumentTypeId, ListType.TO);
     }
   }, [toDocumentTypeId]);
 

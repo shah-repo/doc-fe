@@ -9,7 +9,7 @@ import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { SUPPLIERS_OPTIONS_URL } from '../../constants/urls';
 import { FBFormState } from '../../form.builder';
-import { IBulkMigrationDocumentType, IBulkMigrationScanDetails, IScanDetailsResult, ISchemaItem, ISelectedDetails, ISupplierScanResultRev, SortDirection } from './interface';
+import { IBulkMigrationDocumentType, IBulkMigrationScanDetails, IScanDetailsResult, ISchemaItem, ISelectedDetails, ISupplierScanResultRev, ListType, SortDirection } from './interface';
 import { promptUserToRerunScan } from './utils';
 
 export const useBulkMigration = () => {
@@ -109,7 +109,7 @@ export const useBulkMigration = () => {
 
     const requestConfig: AxiosRequestConfig = {
       method: 'get',
-      url: `${BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS}/${documentTypeId}?isGetNewSchema=${section === 'from' ? 'false' : 'true'}`,
+      url: `${BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS}/${documentTypeId}?isGetNewSchema=${section === ListType.FROM ? 'false' : 'true'}`,
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },
@@ -121,9 +121,9 @@ export const useBulkMigration = () => {
         setIsLoading(false);
 
         const formRevs = data;
-        if (section === 'from') {
+        if (section === ListType.FROM) {
           setFromFormRevsList(formRevs);
-        } else if (section === 'to') {
+        } else if (section === ListType.TO) {
           setToFormRevsList(formRevs);
         }
       })

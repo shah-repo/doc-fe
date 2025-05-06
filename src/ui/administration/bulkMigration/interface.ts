@@ -11,6 +11,11 @@ export interface IBulkMigrationDocumentType {
   category: string
 }
 
+export enum ListType {
+  FROM = 'from',
+  TO = 'to',
+}
+
 export interface IBulkMigrationScanDetails {
   id: string
   fromDocumentTypeId: string

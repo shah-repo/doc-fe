@@ -4,6 +4,7 @@ import { action, computed, observable, set } from 'mobx';
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPOInlineApprovalUpdateBody, FBRequiredApprover } from '..';
 import { GroupType } from '../../../state/ducks/auth/types';
 import { ApprovalStatus } from '../../../state/ducks/common/types';
+import { ErrorCodes } from '../../../state/ducks/documentRevisions/types';
 import { IApprovalErrorResponse } from '../../documentRevision/forms/presenters/SubmitForApproval';
 import { FBEndpoint } from '../defaults/FBEndpoint';
 import FBRequest from '../FBApi/FBApi.request';
@@ -138,7 +139,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {'ids[]': strin
       if (error) {
         try {
           const parsedError = JSON.parse(JSON.stringify(error));
-          if (parsedError.status === 412 && parsedError.response) {
+          if (parsedError.status === ErrorCodes.PRECONDITION_FAILED && parsedError.response) {
             callback?.(parsedError.response);
           } else {
             return this.transitionApi.onError(error);
