@@ -14,13 +14,16 @@ export default makeStyles(theme => ({
     marginTop: theme.spacing(0.75),
   },
   expand: {
-    fontSize: 18,
-    marginRight: theme.spacing(2),
+    fontSize: 16,
     color: Colors.textBlack,
+  },
+  expandAll: {
+    cursor: 'pointer',
+    marginRight: theme.spacing(2.5),
   },
   container: {
     display: 'flex',
-    justifyContent: 'center',
+    gap: theme.spacing(4.5, 4.5),
   },
   popper: {
     zIndex: 1500,

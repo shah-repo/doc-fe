@@ -27,7 +27,6 @@ interface CustomOptionType extends OptionType {
 
 const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, isLoading }) => {
   const { values, getFieldProps, setFieldValue } = useFormikContext<EditableShippingItem>();
-  const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
   const { part } = values ?? {};
   const classes = useStyles();
 
@@ -65,7 +64,6 @@ const Editor: React.FC<Props> = ({ field, dataItem, fetchLotsByPartId, options, 
         options={renderOptions()}
         data-cy="lot-id-field"
         value={value}
-        disabled={isUpdateAction}
         getOptionLabel={(option) => option?.label ?? ''}
         onChange={handleChange}
         loading={isLoading}

@@ -9,13 +9,14 @@ import { EditableApprovalRole } from '../types';
 
 const ActiveCellTemplate: React.FC<CellTemplateProps<EditableApprovalRole>> = ({ dataItem, dataIndex, onChange }) => {
   const classes = useStyles();
+  const isAddMode = Mode.add === dataItem[MODE_FIELD];
   const isEditMode = [Mode.add, Mode.edit].includes(dataItem[MODE_FIELD]);
 
   return (
     <Box className={cx(classes.activeCell, { [classes.activeCellInEdit]: isEditMode })}>
       <Checkbox
         checked={dataItem.isActive}
-        disabled
+        disabled={isAddMode}
         onChange={(event) => onChange?.({ dataItem, dataIndex, syntheticEvent: event })}
       />
     </Box>

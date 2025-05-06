@@ -26,22 +26,22 @@ export const StatusCell: React.FC<CustomTemplateProps> = ({
 
   const displayStatus = getStatusLabel('', defaultValue, '');
 
-  if (defaultValue) {
-    return <Tooltip
-      data={displayStatus}
-      childrenElement={
-        <Chip
-          size="small"
-          data-cy="status-value"
-          className={cx(
-            classes.chip,
-            classes[statusClassMapping[displayStatus]],
-          )}
-          label={displayStatus}
-        />
-      }
-    />;
+  if (!defaultValue) {
+    return <>{EMPTY_VALUE_PLACEHOLDER}</>;
   }
 
-  return <>{EMPTY_VALUE_PLACEHOLDER}</>;
+  return <Tooltip
+    data={displayStatus}
+    childrenElement={
+      <Chip
+        size="small"
+        data-cy="status-value"
+        className={cx(
+          classes.chip,
+          classes[statusClassMapping[displayStatus]],
+        )}
+        label={displayStatus}
+      />
+    }
+  />;
 };

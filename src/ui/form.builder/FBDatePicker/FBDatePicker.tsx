@@ -8,7 +8,7 @@ import moment from 'moment';
 import React from 'react';
 import { FBInput } from '..';
 import { ReactComponent as DatePickerIcon } from '../../../assets/images/formBuilder/DatePickerIcon.svg';
-import { TIME_ZONE, getStartOfDayDateString } from '../../../common/utils/date';
+import { MomentFormats, TIME_ZONE, getStartOfDayDateString } from '../../../common/utils/date';
 import { FBFontStyle } from '../styles/FBFont.styles';
 import { FBTextFieldStyles } from '../styles/FBTextField.styles';
 import { FBDatePickerProps } from './FBDatePicker.types';
@@ -38,7 +38,7 @@ const DataPickerInput: React.FC<FBDatePickerProps> = ({
             invalidDateMessage=""
             variant="inline"
             inputVariant="outlined"
-            format="MM/DD/YYYY"
+            format={MomentFormats.MonthDateYearTwoDigit}
             autoOk={true}
             disablePast={disablePastDates}
             label=""
