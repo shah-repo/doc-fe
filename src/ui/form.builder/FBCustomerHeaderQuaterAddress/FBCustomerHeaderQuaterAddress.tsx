@@ -8,7 +8,6 @@ const FBCustomerHeaderQuaterAddress: React.FC<FBInputProps> = ({
   label = '',
   ...props
 }) => {
-  console.log('FBCustomerHeaderQuaterAddress', props);
   return (
     <Grid container spacing={1}>
       <Grid item md={4} xs={6}>
