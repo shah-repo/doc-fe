@@ -12,7 +12,7 @@ definitions:
   steps:
     - step: &COMMON
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-2.6
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/enlil:build-1.0
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -23,7 +23,7 @@ definitions:
 
     - step: &COMMON_BUILD
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-2.6
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/enlil:build-1.0
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -34,7 +34,7 @@ definitions:
 
     - step: &COMMON_DEPLOY
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-2.6
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/enlil:build-1.0
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -50,8 +50,8 @@ definitions:
         artifacts:
           - typecheck-results/**
         script:
-          - NODE_ENV=development yarn install --frozen-lockfile
-          - yarn lint:tsc
+          - ./aws/bash_scripts/configure.sh
+          - ./aws/bash_scripts/runTypecheck.sh
 
     - step: &RUN_LINTER
         <<: *COMMON
@@ -59,7 +59,7 @@ definitions:
         artifacts:
           - eslint-results/**
         script:
-          - NODE_ENV=development yarn install --frozen-lockfile
+          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/runUnusedExportsCheck.sh
           - ./aws/bash_scripts/runLinter.sh
 
@@ -72,7 +72,7 @@ definitions:
           - test-results/**
           - jest-config/**
         script:
-          - NODE_ENV=development yarn install --frozen-lockfile
+          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/runTests.sh
 
     #
@@ -82,6 +82,7 @@ definitions:
         <<: *COMMON_BUILD
         name: Building for Dev
         script:
+          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/build.sh "dev"
         artifacts:
           - compiled.tar.gz
@@ -91,6 +92,7 @@ definitions:
         name: Deploy to Dev
         deployment: Development
         script:
+          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/publish.sh "dev"
     #
     # DEMO
@@ -99,6 +101,7 @@ definitions:
         <<: *COMMON_BUILD
         name: Building for Demo
         script:
+          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/build.sh "demo"
         artifacts:
           - compiled.tar.gz
@@ -108,6 +111,7 @@ definitions:
         name: Deploy to Demo
         deployment: Demo
         script:
+          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/publish.sh "demo"
     #
     # PROD
@@ -116,6 +120,7 @@ definitions:
         <<: *COMMON_BUILD
         name: Building for Prod
         script:
+          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/build.sh "prod"
         artifacts:
           - compiled.tar.gz
@@ -125,6 +130,7 @@ definitions:
         name: Deploy to Prod
         deployment: Production
         script:
+          - ./aws/bash_scripts/configure.sh
           - ./aws/bash_scripts/publish.sh "prod"
         trigger: manual
 #
@@ -138,88 +144,3 @@ pipelines:
           - step: *RUN_TYPECHECK
           - step: *RUN_LINTER
           - step: *BUILD_DEV
-
-  custom:
-    build_and_deploy_with_options_and_no_tests:
-      - variables:
-          - name: Environment
-            default: dev
-            allowed-values:
-              - dev
-              - dev2
-              - dev3
-              - demo
-              - sandbox
-              - prod2
-              - prod3
-              - prod4
-      - step:
-          <<: *COMMON_BUILD
-          name: Building
-          script:
-            - ./aws/bash_scripts/build.sh "$Environment"
-          artifacts:
-            - compiled.tar.gz
-      - step:
-          <<: *COMMON_DEPLOY
-          name: Deploying
-          deployment: General
-          script:
-            - ./aws/bash_scripts/publish.sh "$Environment"
-
-    build_and_deploy_with_options:
-      - variables:
-          - name: Environment
-            default: dev
-            allowed-values:
-              - dev
-              - dev2
-              - dev3
-              - demo
-              - sandbox
-              - prod2
-              - prod3
-              - prod4
-      - parallel:
-          - step: *RUN_TESTS
-          - step: *RUN_TYPECHECK
-          - step: *RUN_LINTER
-          - step:
-              <<: *COMMON_BUILD
-              name: Building
-              script:
-                - ./aws/bash_scripts/build.sh "$Environment"
-              artifacts:
-                - compiled.tar.gz
-      - step:
-          <<: *COMMON_DEPLOY
-          name: Deploying
-          deployment: General
-          script:
-            - ./aws/bash_scripts/publish.sh "$Environment"
-
-  branches:
-    develop:
-      - parallel:
-          - step: *RUN_TESTS
-          - step: *RUN_TYPECHECK
-          - step: *RUN_LINTER
-          - step: *BUILD_DEV
-      - step: *DEPLOY_DEV
-
-    demo:
-      - parallel:
-          - step: *RUN_TESTS
-          - step: *RUN_TYPECHECK
-          - step: *RUN_LINTER
-          - step: *BUILD_DEMO
-      - step: *DEPLOY_DEMO
-
-    master:
-      - parallel:
-          - step: *RUN_TESTS
-          - step: *RUN_TYPECHECK
-          - step: *RUN_LINTER
-          - step: *BUILD_PROD
-      - step: *DEPLOY_PROD
-
