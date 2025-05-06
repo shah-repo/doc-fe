@@ -66,17 +66,20 @@ const FBProductORService: React.FC<FBProductORServiceProps> = ({
   });
 
   useEffect(() => {
-    fetchOptionsDataAsync.start(fetchASLItems, fetchOptionsDataAsync);
+    fetchOptionsDataAsync.start(fetchASLItems, false, fetchOptionsDataAsync);
   }, []);
 
   const formik = useFormik<Partial<EditableProductORService>>({
     initialValues: {},
     onSubmit: (values) => {
+      const addedAslItem = aslItems?.find(aslItem => aslItem.id === values.aslStatusId);
       const isAddition = values[MODE_FIELD] === Mode.add;
       const updatedProductOrServices = isAddition
-        ? [...productOrServices, values]
+        ? [...productOrServices, { ...values, ...{ aslDisplayLabel: addedAslItem?.displayLabel, title: values.revId ? '' : values.title } }]
         : productOrServices.map((productORService: ProductORService) =>
-          productORService.id === values.id ? values : productORService,
+          productORService.id === values.id
+            ? ({ ...values, ...{ aslDisplayLabel: addedAslItem?.displayLabel } })
+            : productORService,
         );
 
       const payload = updatedProductOrServices.map(

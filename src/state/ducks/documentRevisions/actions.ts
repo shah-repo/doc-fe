@@ -739,9 +739,10 @@ const updateSupplierStatus = (id: string, body: { lotStatus: LotStatus }): ApiAc
 const fetchSupplierConfigurationOptions = (
   optionId: string,
   ids: string[],
+  fetchFormOptions: boolean,
   handlers: Handlers,
 ): ApiAction<OptionType[]> => {
-  const params = qs.stringify({ supplierTypeIds: ids });
+  const params = qs.stringify({ supplierTypeIds: ids, fetchFormOptions });
   return apiActionWithCallbacks({
     url: `${SUPPLIER_CONFIGURATION_OPTIONS_URL}/${optionId}?${params}`,
     method: 'get',
@@ -809,10 +810,11 @@ const fetchReferencesTableData = (
 };
 
 const fetchASLSuppliersListData = (
+  filterInactive: boolean,
   handlers: Handlers,
 ): ApiAction<ASLStatus[]> => {
   return apiActionWithCallbacks({
-    url: `${ASL_SUPPLIER_LIST_URL}`,
+    url: `${ASL_SUPPLIER_LIST_URL}?filterInactive=${filterInactive}`,
     method: 'get',
     handlers,
   });

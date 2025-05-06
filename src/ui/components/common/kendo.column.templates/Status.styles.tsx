@@ -54,4 +54,10 @@ export default makeStyles((theme) => ({
   Inactive: {
     backgroundColor: Colors.font_gray,
   },
+  aslChipTextOverflow: {
+    maxWidth: '100%',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+  },
 }));
