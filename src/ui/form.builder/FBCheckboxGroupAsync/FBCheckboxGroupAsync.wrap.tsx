@@ -73,8 +73,8 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
           = list?.map((item: OptionType) => ({ ...item, value: item.id })) || [];
         if (isMaintainOptionsStatus) {
           const existingSelections = formValue as Array<{id: string, text: string}>;
-          existingSelections.forEach(selection => {
-            const optionPresent = optionsList.find(option => option.id === selection.id);
+          existingSelections?.forEach(selection => {
+            const optionPresent = optionsList?.find(option => option.id === selection.id);
             if (!optionPresent) {
               optionsList.push({ ...selection, value: selection.id });
             }

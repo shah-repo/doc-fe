@@ -13,6 +13,7 @@ export const SUPPLIER_FIELDS = {
   services: 'services',
   type: 'type',
 };
+
 export interface OptionType {
   id: string
   text: string

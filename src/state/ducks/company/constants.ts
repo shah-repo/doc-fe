@@ -162,4 +162,4 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
   },
 ];
 
-export const OMIT_FIELDS = ['id', 'materialFlowACLs', 'statusCode', 'approvalRoles'];
+export const OMIT_FIELDS = ['id', 'materialFlowACLs', 'statusCode', 'approvalRoles', 'dirty'];

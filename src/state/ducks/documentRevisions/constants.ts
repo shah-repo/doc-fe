@@ -50,3 +50,4 @@ export const ASL_SUPPLIER_LIST_URL = '/supplier/asl_configured';
 export const EQUIPMENT_ROOT_URL = '/equipment_status';
 export const LOT_OF_PARTS = '/document_revisions/lots_of_part';
 export const SUPPLIER_CONFIGURATION_OPTIONS_URL = '/supplier/selection_options';
+export const PARTS_URL = '/parts';
