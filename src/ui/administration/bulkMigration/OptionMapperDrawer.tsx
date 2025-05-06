@@ -1,10 +1,12 @@
 import { Box, Button, DialogActions, Drawer, List, ListItem, ListItemText, Paper, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { translate } from '../../../common/intl';
+import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
 import CurrentMappings from './CurrentMappings';
 import DialogHeader from './DrawerHeader';
 import { IOption, ISchemaItem } from './interface';
 import useStyles from './styles';
+import { useBulkMigration } from './useBulkMigration';
 
 interface OptionMapperDrawerProps {
   isOptionMapperVisible: boolean
@@ -23,11 +25,26 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
 }) => {
   const classes = useStyles();
 
+  const {
+    getConfiguredSupplierOptions,
+  } = useBulkMigration();
+
   const [checkboxFromOptions, setCheckboxFromOptions] = useState<IOption[]>([]);
   const [checkboxToOptions, setCheckboxToOptions] = useState<IOption[]>([]);
 
   const [fromSelectedOption, setFromSelectedOption] = useState<IOption | undefined>();
   const [localMapping, setLocalMapping] = useState<{[key: string]: IOption}>({});
+
+  useEffect(() => {
+    if (toRevSchemaItem?.type === MigrationSpecialFields.CHECKBOX_GROUP_ASYNC) {
+      fetchOptions(toRevSchemaItem.name);
+    }
+  }, [toRevSchemaItem]);
+
+  const fetchOptions = async (name) => {
+    const fetchedOptions = await getConfiguredSupplierOptions(name);
+    setCheckboxToOptions((fetchedOptions ?? []).map(option => ({ text: option.text, value: option.text })));
+  };
 
   useEffect(() => {
     if (selectedSchemaItem) {

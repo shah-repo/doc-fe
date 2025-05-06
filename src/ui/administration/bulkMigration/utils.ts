@@ -20,9 +20,13 @@ const schemaValidationMap = {
   },
 };
 
-const OPTIONS_TYPES: string[] = [MigrationSpecialFields.CHECKBOX_GROUP,
+const FROM_OPTIONS_TYPES: string[] = [MigrationSpecialFields.CHECKBOX_GROUP,
   MigrationSpecialFields.SELECT,
   MigrationSpecialFields.RADIO_GROUP,
+];
+
+const TO_OPTIONS_TYPES: string[] = [...FROM_OPTIONS_TYPES,
+  MigrationSpecialFields.CHECKBOX_GROUP_ASYNC,
 ];
 
 export function canMapItems (
@@ -35,7 +39,7 @@ export function canMapItems (
     const selectedType = selectedSchemaItem.type as string;
     const targetType = toSchemaItem.type as string;
 
-    const hasOptions = OPTIONS_TYPES.includes(selectedType) && OPTIONS_TYPES.includes(targetType);
+    const hasOptions = FROM_OPTIONS_TYPES.includes(selectedType) && TO_OPTIONS_TYPES.includes(targetType);
     if (selectedType !== targetType && !hasOptions) {
       return {
         canMap: false,

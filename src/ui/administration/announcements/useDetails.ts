@@ -116,7 +116,7 @@ export const useAnnouncementDetails = () => {
 
     const requestConfig: AxiosRequestConfig = {
       method: 'post',
-      url: `${ANNOUNCEMENTS_BASE}/${announcementId}/${selectedFormRevToUpgrade}/formUpgrade`,
+      url: `${ANNOUNCEMENTS_BASE}/${announcementId}/${selectedFormRevToUpgrade}/upgradeForm`,
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`,
       },

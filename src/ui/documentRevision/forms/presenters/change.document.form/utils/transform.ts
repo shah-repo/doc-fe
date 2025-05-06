@@ -34,12 +34,6 @@ export const checkSpecialFields = (item, targetField) => {
       // Target options must be a superset of source options
       const sourceValues = map(item.options as Array<{value: string}>, ({ value }) => value);
       const targetValues = map(targetField.options as Array<{value: string}>, ({ value }) => value);
-
-      if (targetField.type === MigrationSpecialFields.CHECKBOX_GROUP_ASYNC
-        && item.type === MigrationSpecialFields.CHECKBOX_GROUP) {
-        return true;
-      }
-
       return sourceValues.every((val) => targetValues.includes(val));
     }
     default:

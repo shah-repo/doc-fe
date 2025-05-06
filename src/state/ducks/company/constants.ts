@@ -13,17 +13,17 @@ export const SET_GENERAL_SETTINGS = 'company/SET_GENERAL_SETTINGS';
 export const SET_PREMIUM_FEATURE_SUBSCRIPTIONS = 'company/SET_PREMIUM_FEATURE_SUBSCRIPTIONS';
 export const UPDATE_PREMIUM_FEATURE_SUBSCRIPTION = 'company/UPDATE_PREMIUM_FEATURE_SUBSCRIPTION';
 
-export const BULK_MIGRATION_GET_DOCUMENT_TYPES = 'bulk_migration/getDocumentTypes';
-export const BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS = 'bulk_migration/getDocumentTypeFormDetails';
-export const BULK_MIGRATION_GET_ELIGIBLE_REVS = 'bulk_migration/getEligibleRevs';
-export const BULK_MIGRATION_GET_SCAN_DETAILS = 'bulk_migration/getScanDetails';
+export const BULK_MIGRATION_GET_DOCUMENT_TYPES = 'bulk_migration/documentTypes';
+export const BULK_MIGRATION_GET_DOCUMENT_TYPE_FORM_DETAILS = 'bulk_migration/documentTypeFormDetails';
+export const BULK_MIGRATION_GET_ELIGIBLE_REVS = 'bulk_migration/eligibleRevs';
+export const BULK_MIGRATION_GET_SCAN_DETAILS = 'bulk_migration/scanDetails';
 export const BULK_MIGRATION_REGISTER_SCAN = 'bulk_migration/registerScan';
 export const BULK_MIGRATION_UPDATE_SCAN = 'bulk_migration/updateScan';
+export const BULK_MIGRATION_REGISTER_SCAN_FOR_RUN = 'bulk_migration/startScan';
 export const BULK_MIGRATION_CANCEL_SCAN = 'bulk_migration/cancelScan';
-export const BULK_MIGRATION_REGISTER_SCAN_FOR_RUN = 'bulk_migration/registerScanForRun';
-export const BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW = 'bulk_migration/getScanRevisionsForPreview';
-export const BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW = 'bulk_migration/previewMapping';
-export const BULK_MIGRATION_GET_SCAN_RESULTS = 'bulk_migration/getScanRevisions';
+export const BULK_MIGRATION_GET_SCAN_REVISIONS_FOR_PREVIEW = 'bulk_migration/scanRevisionsForPreview';
+export const BULK_MIGRATION_GET_REVISION_MAPPING_PREVIEW = 'bulk_migration/mappingPreview';
+export const BULK_MIGRATION_GET_SCAN_RESULTS = 'bulk_migration/search';
 export const BULK_MIGRATION_START_REVS_MIGRATION = 'bulk_migration/migrateDocRevs';
 
 export const ANNOUNCEMENTS_BASE = 'announcement';
@@ -162,4 +162,4 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
   },
 ];
 
-export const OMIT_FIELDS = ['id', 'materialFlowACLs', 'statusCode', 'approvalRoles'];
+export const OMIT_FIELDS = ['id', 'materialFlowACLs', 'statusCode', 'approvalRoles', 'dirty'];

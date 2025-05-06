@@ -3,7 +3,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, makeStyles } from '@material-ui/core';
 import { useFormikContext } from 'formik';
-import { get, isArray, isEmpty, isEqual, isUndefined, keys, omit } from 'lodash';
+import { get, isArray, isEmpty, isEqual, isUndefined, keys, map, omit, set } from 'lodash';
 import { Observer } from 'mobx-react';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,7 +34,7 @@ import StyledSubmitButton from '../../../components/forms/StyledSubmitButton';
 import PrintLabelDetailsDialog from '../../../components/table/printLabel/PrintLabelDetailsDialog';
 import { DOCUMENT_REVISION_CREATE_URL } from '../../../constants/urls';
 import { documentVersionPath } from '../../../document.revision/utils/paths';
-import { FB } from '../../../form.builder';
+import { FB, FBFormState } from '../../../form.builder';
 import { FBFormStateContext } from '../../../form.builder/FBForm/FBForm.wrap';
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from '../../../form.builder/FBInput/FBInput.wrap';
 import FBDataStore from '../../../form.builder/FBStore/FBDataStore';
@@ -117,12 +117,29 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const [isInlineApproval, setInlineApproval] = React.useState(false);
   const [isApproved, setIsApproved] = React.useState(false);
+  const formState = FB.useRef<FBFormState>(FBFormState, {
+    schema: _documentRevisionFormState?.schema ?? documentRevision.schema,
+    initialValues: documentRevision?.formInput ?? {},
+    workspaceMode: workspaceState?.mode ?? 'form',
+    workspaceState,
+  });
 
   React.useEffect(() => {
-    _formState?.validate((_valid) => {
+    map(schema, (schemaItem) => {
+      if (schemaItem.rules) {
+        const { name, rules } = schemaItem;
+        formState?.setFieldRules(name ?? '', rules);
+      }
+    });
+
+    const formValues = Object.fromEntries(workspaceState?.formInputSync ?? new Map()) as Record<string, any>;
+    formState.setValues(formValues);
+    map(formValues, (v, k) => set(formState.validationValues, k, v));
+
+    formState?.validate((_valid) => {
       const validSchema = schema?.filter((schemaItem) => {
         if (schemaItem.validationMode === 'visibility' || schemaItem.validationMode === 'disabled') {
-          return !isUndefined(_formState.errors.get(schemaItem.name ?? ''));
+          return !isUndefined(formState.errors.get(schemaItem.name ?? ''));
         }
         return true;
       });
@@ -130,7 +147,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       setIsApproved(isInlineFormApproved(documentRevision, _formState, validSchema));
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_formState, schema, _formState?.Validator, _formState?.getValues()]);
+  }, [_formState, formState, schema, _formState?.Validator, _formState?.getValues()]);
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);

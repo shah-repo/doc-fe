@@ -120,7 +120,7 @@ export const useBulkMigration = () => {
       .then(({ data }) => {
         setIsLoading(false);
 
-        const { formRevs } = data;
+        const formRevs = data;
         if (section === 'from') {
           setFromFormRevsList(formRevs);
         } else if (section === 'to') {
