@@ -10,7 +10,7 @@ export interface RoleEditEvent {
   dataItem: EditableRole
 }
 
-interface ApprovalRole extends FBApprovalRole {
+export interface ApprovalRole extends FBApprovalRole {
   groups: RoleGroup[]
 }
 
@@ -25,7 +25,6 @@ export type FBApprovalMatrixRolesProps =
 & {
   groups?: RoleGroup[]
   approvalRoles?: ApprovalRole[]
-  addRole?: (role: ApprovalRole) => void
   updateRole?: (role: ApprovalRole) => void
   isLoading?: boolean
 };

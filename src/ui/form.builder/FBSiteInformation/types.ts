@@ -7,6 +7,7 @@ export interface SchemaOptions {
   isActive: boolean
   isInEditMode: boolean
   actionsClass: string
+  isExapandAll: boolean
   onConfirm?: () => void
   onDiscard?: () => void
   onDelete?: (dataItem: EditableSite) => void
@@ -14,6 +15,7 @@ export interface SchemaOptions {
   onPrimaryChange?: (id: string) => void
   onSameAsHQ?: (isSameAsHQ: boolean, currentSite: EditableSite) => void
   onDataItemExpanded?: (dataItem: EditableSite) => void
+  toggleExpandCollapseAll?: (toggle: boolean) => void
 }
 
 export type FBSiteProps =

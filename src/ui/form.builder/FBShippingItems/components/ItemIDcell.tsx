@@ -25,10 +25,10 @@ interface CustomOptionType extends OptionType {
 
 const Editor: React.FC<Props> = ({ dataItem, field, options, isLoading }) => {
   const { values, setFieldValue, getFieldProps } = useFormikContext<EditableShippingItem>();
-  const isUpdateAction = Mode.edit === dataItem[MODE_FIELD];
 
   const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
     setFieldValue(field, { id: value?.value, name: `${value?.docId}.${value.revision}`, documentId: value?.documentId });
+    setFieldValue('lot', '');
   };
 
   const renderOptions = (): CustomOptionType[] => {
@@ -52,7 +52,6 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, isLoading }) => {
         options={renderOptions()}
         disableClearable
         placeholder={translate('common.select')}
-        disabled={isUpdateAction}
         onChange={onChange}
         value={value}
         data-cy="item-id-field"

@@ -35,6 +35,11 @@ TrainingInfoContainerProps
             operator: 'eq',
             value: documentRevisionId,
           },
+          {
+            field: 'trainingPlan.employee.active',
+            operator: 'eq',
+            value: true,
+          },
         ],
         schema: [
           {

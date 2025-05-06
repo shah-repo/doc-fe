@@ -5,14 +5,16 @@ import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { isTranslationExists, translate } from '../../../common/intl';
-import { GroupTag } from '../../../state/ducks/auth/types';
+import { GroupTag, Permission } from '../../../state/ducks/auth/types';
 import { companyActions, companySelectors } from '../../../state/ducks/company';
 import { PremiumFeatureSubscription } from '../../../state/ducks/company/types';
 import { AsyncStatus } from '../../../state/types';
+import { dotCase } from '../../common/utils/helpers';
 import { AlertDialog } from '../../components/dialogs';
 import { Button } from '../../components/forms/fields-next';
 import { HOME_URL } from '../../constants/urls';
 import useDialog from '../../hooks/useDialog';
+import useGetHasPermission from '../../hooks/useGetHasPermission';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import { withThemeNext } from '../../layout/theme-next';
 import NewBadge from './components/NewBadge';
@@ -21,6 +23,7 @@ import useStyles from './styles';
 
 const PremiumFeaturesContainer: React.FC = () => {
   const canManageSettings = useGetHasTag(GroupTag.ADMIN_MANAGEMENT);
+  const canUpdateFeatures = useGetHasPermission(Permission.COMPANY_SETTINGS_UPDATE);
   const subscriptionsDialog = useDialog();
   const classes = useStyles();
   const asyncState = useSelector(companySelectors.getSubscriptionsAsyncState);
@@ -52,11 +55,10 @@ const PremiumFeaturesContainer: React.FC = () => {
     subscriptionsDialog.close();
   };
 
-  const shouldShowDialogNotice
-    = toggledSubscription.current
-      && isTranslationExists(
-        `administration.premium.features.${toggledSubscription.current.premiumFeature.toLowerCase()}.notice`,
-      );
+  const currentFeature = toggledSubscription.current?.premiumFeature;
+  const currentFeatureKey = dotCase(currentFeature);
+
+  const shouldShowDialogNotice = isTranslationExists(`administration.premium.features.${currentFeatureKey}.notice`);
 
   return (
     <Box className={classes.root}>
@@ -72,7 +74,7 @@ const PremiumFeaturesContainer: React.FC = () => {
           {toggledSubscription.current && shouldShowDialogNotice && (
             <p>
               {translate(
-                `administration.premium.features.${toggledSubscription.current.premiumFeature.toLowerCase()}.notice`,
+                `administration.premium.features.${currentFeatureKey}.notice`,
               )}
             </p>
           )}
@@ -86,6 +88,7 @@ const PremiumFeaturesContainer: React.FC = () => {
           <Typography
             variant="h1"
             className={classes.title}
+            data-cy="administration-pfo-title"
           >
             {translate('administration.premium.feature.title')}
             <NewBadge />
@@ -93,6 +96,7 @@ const PremiumFeaturesContainer: React.FC = () => {
           <Typography
             variant="subtitle1"
             className={classes.subtitle}
+            data-cy="administration-pfo-sub-title"
           >
             {translate('administration.premium.feature.subtitle')}
           </Typography>
@@ -110,7 +114,7 @@ const PremiumFeaturesContainer: React.FC = () => {
       <Box>
         <Box className={classes.description}>
           <FontAwesomeIcon className={classes.descriptionIcon} icon={solid('circle-info')} />
-          <Box>
+          <Box data-cy="administration-pfo-desc" >
             {translate('administration.premium.feature.description')}
           </Box>
         </Box>
@@ -118,11 +122,13 @@ const PremiumFeaturesContainer: React.FC = () => {
           <Typography
             variant="subtitle1"
             className={classes.panelTitle}
+            data-cy="administration-pfo-feature-pannel-title"
           >
             {translate('administration.premium.feature.table.title')}
           </Typography>
           {allSubscriptions.map(subscription => (
             <SubscriptionItem
+              isDisabled={!canUpdateFeatures}
               subscription={subscription}
               onToggle={confirmToggling}
               key={subscription.premiumFeature}

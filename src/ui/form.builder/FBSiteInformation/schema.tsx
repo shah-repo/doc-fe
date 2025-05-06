@@ -12,12 +12,14 @@ export const buildSchema = ({
   isActive,
   isInEditMode,
   actionsClass,
+  isExapandAll,
   onRowClick,
   onConfirm,
   onDiscard,
   onDelete,
   onSameAsHQ,
   onDataItemExpanded,
+  toggleExpandCollapseAll,
 }: SchemaOptions): Array<ColumnDefinition<EditableSite>> => {
   return [
     {
@@ -25,6 +27,7 @@ export const buildSchema = ({
       field: 'isPrimary',
       filterable: false,
       title: 'form.builder.site.information.grid.heading.isPrimary',
+      headerCell: (props) => <CustomHeaderTooltipCell {...props} isTooltipHidden isShowIcon {...{ isExapandAll, toggleExpandCollapseAll }} content="form.builder.site.information.grid.heading.isPrimary" />,
       template: (props) => (
         <PrimaryCell
           isActive={false}
@@ -33,7 +36,7 @@ export const buildSchema = ({
           onDataItemExpanded={onDataItemExpanded}
         />
       ),
-      width: 80,
+      width: 150,
     },
     {
       id: 'siteName',
