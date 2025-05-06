@@ -1531,6 +1531,7 @@
   "form.builder.site.information.grid.heading.site.name": "Site Name",
   "form.builder.site.information.grid.heading.site.address": "Site Address",
   "form.builder.site.information.grid.heading.city": "City",
+  "form.builder.site.information.grid.heading.state": "State",
   "form.builder.site.information.grid.heading.zip.code": "Zip code",
   "form.builder.site.information.grid.heading.country": "Country",
   "form.builder.site.information.grid.heading.approved.to.receive": "Approved To Receive",

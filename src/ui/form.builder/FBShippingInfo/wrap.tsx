@@ -37,7 +37,9 @@ export const withFBShippingAddress = <T extends FBShippingAddressProps>(
 
     const renderOptions = (shippingAddresses: ShippingAddress[]): CustomOptionType[] => {
       return shippingAddresses.map((address) => ({
-        label: `${address.siteName} (${address.siteAddress}, ${address.city} ${address.zipCode}, ${address.country})`,
+        label: `${address.siteName} (${address.siteAddress}, ${address.city}${
+          address.state ? ` ${address.state}` : ''
+        } ${address.zipCode}, ${address.country})`,
         value: address.id,
         siteContact: address.siteContact,
       }));
