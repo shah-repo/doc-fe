@@ -10,8 +10,10 @@ import { getFormattedDateString, MomentFormats } from '../../../common/utils/dat
 import { GroupTag } from '../../../state/ducks/auth/types';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import Text from '../../../ui/components/Text';
+import AlertDialog from '../../app/alert.dialog/AlertDialog';
 import { getInitalsFromName } from '../../components/icons/avatar/helpers';
 import { isDocumentRevisionReleased } from '../../documentRevision/helpers/documentRevisionStatus';
+import useDialog from '../../hooks/useDialog';
 import useGetHasTag from '../../hooks/useGetHasTag';
 import Colors from '../../layout/theme/utils/colors';
 import ApprovalsBlock from './ApprovalsBlock';
@@ -39,7 +41,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-
+  const alertDialog = useDialog();
+  const [selectedApprovalId, setSelectedApprovalId] = React.useState<string>();
   const approvalsByStatus = approvals?.reduce((list, approval) => {
     if (!approval.status) {
       return list;
@@ -61,9 +64,20 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
       ? isUserAdminEnforce
       : disabled;
 
+  const handleRejectPO = (id: string) => {
+    setSelectedApprovalId(id);
+    alertDialog.open();
+  };
+
   return (
     <FBProvider {...{ dialogState }}>
       <FBDialog />
+      <AlertDialog
+        dialog={alertDialog}
+        message="dashboard.po.reject.alert"
+        confirmAction={() => approvalTransition(FBApprovalsStatusEndpoint.REJECT, selectedApprovalId)}
+        cancelAction={alertDialog.close}
+      />
       <FBInput {...props} {...{ name }} type="poapprovals">
         <Box>
           <FBSection
@@ -178,7 +192,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                           label="common.reject"
                                           size="small"
                                           className={cx(classes.poButton, classes.poRejectButton)}
-                                          onClick={() => approvalTransition(FBApprovalsStatusEndpoint.REJECT, approval.id)}
+                                          onClick={() => handleRejectPO(approval.id)}
+                                          // onClick={() => approvalTransition(FBApprovalsStatusEndpoint.REJECT, approval.id)}
                                         />
                                         <FBButton
                                           label="form.builder.request.approve"
