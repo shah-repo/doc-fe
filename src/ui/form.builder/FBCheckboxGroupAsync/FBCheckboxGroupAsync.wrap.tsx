@@ -2,8 +2,8 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { at, map, union, uniqBy } from 'lodash';
 import { useObserver } from 'mobx-react';
 import React, { useEffect, useMemo } from 'react';
-import { useIntl } from 'react-intl';
 import { FB } from '..';
+import { translate } from '../../../common/intl';
 import { documentRevisionsActions } from '../../../state/ducks/documentRevisions';
 import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions/types';
 import { OptionType } from '../../administration/general.settings/panels/SupplierSettings/SupplierConfiguration/types';
@@ -37,11 +37,10 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     const isMaintainOptionsStatus = workspaceState?.document?.status
     && [DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview].includes(workspaceState?.document?.status);
     const formValue = formState?.getFieldValue(name) || defaultValue;
-    const intl = useIntl();
     const isDocumentForm = checkIsDocumentForm(workspaceState?.document?.document.documentType.groupOptions) || workspaceState?.isPreview;
 
     options = useObserver(() => {
-      const rawOptions = workspaceState?.checkboxGroupsOptionsMap.get(name) ?? [] as CheckBoxOptionType[];
+      const rawOptions = workspaceState?.checkboxGroupsOptionsMap.get(name) ?? [];
       const uniqueOptionsList: CheckBoxOptionType[] = [];
       const seenTexts = new Set<string>();
 
@@ -115,16 +114,13 @@ export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
     }, [selectedTypes]);
 
     controls = map(options, (option, index) => {
-      const [value, message] = at(option, [
-        optionValueKey as keyof typeof option,
-        optionLabelKey as keyof typeof option,
-      ]) as string[];
+      const [value, message] = at(option, [optionValueKey, optionLabelKey]) as string[];
       const defaultChecked = formValue?.some(
         (item) => item.id === value,
       ) as boolean;
       let attr = message;
       if (isTranslation(attr)) {
-        attr = intl.formatMessage({ id: message });
+        attr = translate(message);
       }
       formState?.setValidationAttributeName(value, attr);
       return (

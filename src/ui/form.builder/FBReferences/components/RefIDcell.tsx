@@ -231,31 +231,20 @@ export const RefIDcell: React.FC<CustomTemplateProps> = (props) => {
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => onOpenQuickView?.(evt, dataItem);
 
+  const { referenceDisplayName, documentId, referenceRevId } = dataItem ?? {};
+
   return (
-    <Grid
-      justify="flex-start"
-      alignItems="center"
-      container
-      onClick={handleClick}
-      data-cy="reference-cell"
-    >
+    <Grid justify="flex-start" alignItems="center" container onClick={handleClick} data-cy="reference-cell">
       <Grid item xs={10} className={classes.grid}>
-        <StyledLink
-          to={
-            dataItem?.documentId
-              ? documentVersionPath(
-                  dataItem?.referenceRevId,
-                  dataItem?.documentId,
-              )
-              : '#'
-          }
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          data-cy="selected-reference-item-link"
-        >
-          {dataItem.referenceDisplayName}
-        </StyledLink>
+        {documentId ? (
+          <StyledLink
+            to={documentVersionPath(referenceRevId, documentId)}
+            onClick={(e) => e.stopPropagation()}
+            data-cy="selected-reference-item-link"
+          >
+            {referenceDisplayName}
+          </StyledLink>
+        ) : referenceDisplayName }
       </Grid>
       <Grid item xs={2}>
         <span ref={viewIconRef} onClick={openQuickView}>
