@@ -88,7 +88,7 @@ const ASLStatusSettings: React.FC<SettingsPanelProps> = (props) => {
       }
 
       if ((values?.displayLabel?.length ?? 0) > ASL_MAX_DISPLAY_LABEL_LENGTH) {
-        error.displayLabel = translate('validator.asl.status.displayLabel.char.limit', { length: 255 });
+        error.displayLabel = translate('validator.asl.status.displayLabel.char.limit', { length: ASL_MAX_DISPLAY_LABEL_LENGTH });
       }
 
       return error;
