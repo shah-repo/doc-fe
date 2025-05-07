@@ -14,11 +14,11 @@ import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import { isTranslation } from '../../translations/types';
 import { withFBOption } from '../FBOption/FBOption.wrap';
-import { CheckBoxOptionType, FBCheckboxGroupAsyncProps } from './FBCheckboxGroupAsync.types';
+import { CheckBoxOptionType, FBSupplierCheckboxGroupAsyncProps } from './types';
 
 const SUPPLIER_TYPE_NAME = 'supplier-type';
 
-export const withFBCheckboxGroupAsync = <T extends FBCheckboxGroupAsyncProps>(
+export const withFBSupplierCheckboxGroupAsync = <T extends FBSupplierCheckboxGroupAsyncProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
