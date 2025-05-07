@@ -260,6 +260,7 @@ interface TrainingReminders {
   isThreeDaysDueOnCcActive: boolean
   isTodayDueOnCcActive: boolean
   isOverdueCcActive: boolean
+  isEmailSendingEnabled?: boolean
 }
 
 export interface GeneralSettings {

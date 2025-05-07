@@ -2201,6 +2201,8 @@
   "administration.general.settings.printing.table.column.name": "Name",
   "administration.general.settings.printing.table.column.actions": "Actions",
   "administration.general.settings.training.reminders": "Training Reminders",
+  "administration.general.settings.training.reminders.email.sending.title":"Enable training reminder emails in non-production environments",
+  "administration.general.settings.training.reminders.info":"Training reminder emails are not sent in non-production environments by default. If you enable this option, only users from this company will receive training reminder emails.",
   "administration.general.settings.training.reminders.sub.title": "Select how many notifications are required until training is due",
   "administration.general.settings.training.reminders.training.assigned": "Training Assigned",
   "administration.general.settings.training.reminders.seven.days": "7 days",
