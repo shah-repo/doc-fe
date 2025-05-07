@@ -38,7 +38,7 @@ interface Props {
   docDocumentId: string
   docRevId: string
   status: string
-  trId?: string
+  trainingId?: string
   timestamp: string
   dueOn: Nullable<string>
   trainingSourceReferences?: TrainingReference[]
@@ -67,7 +67,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
   dismissLineItem,
-  trId,
+  trainingId,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -157,7 +157,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   color="textSecondary"
                   noWrap
                 >
-                  {trId}
+                  {trainingId}
                 </Typography>
               </Grid>
               <Grid item={true}>
