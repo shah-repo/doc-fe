@@ -480,6 +480,7 @@ const LineItemsPresenter: React.FC<Props> = ({
                   unPinLineItem={unPinLineItem}
                   dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
+                  trId={pendingAction.trId}
                 />
               );
             case ActionTypes.APPROVAL_REQ_APPROVER:
