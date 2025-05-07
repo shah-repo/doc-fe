@@ -29,6 +29,7 @@ const Editor: React.FC<Props> = ({ dataItem, field, options, isLoading }) => {
 
   const onChange = (event: React.ChangeEvent<{}>, value: CustomOptionType) => {
     setFieldValue(field, { id: value?.value, name: `${value?.docId}.${value.revision}`, documentId: value?.documentId });
+    setFieldValue('lot', '');
   };
 
   const renderOptions = (): CustomOptionType[] => {

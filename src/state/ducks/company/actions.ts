@@ -117,6 +117,19 @@ const getGeneralSettings = (): ApiAction => apiAction({
   },
 });
 
+const getGeneralSettingsWithHandler = (
+  handlers: Handlers,
+): ApiAction => {
+  return apiActionWithCallbacks({
+    url: COMPANY_SETTINGS_URL,
+    handlers,
+    method: 'get',
+    onSuccess: (data, dispatch) => {
+      dispatch(setGeneralSettings(data));
+    },
+  });
+};
+
 const setPremiumFeatureSubscriptionsAction = (subscriptions: PremiumFeatureSubscription[]): SetPremiumFeatureSubscriptionsAction => ({
   type: SET_PREMIUM_FEATURE_SUBSCRIPTIONS,
   payload: subscriptions,
@@ -171,7 +184,7 @@ const updateGeneralSettings = (
 };
 
 const createApprovalRoles = (
-  body: { name: string, isActive: boolean },
+  body: { name: string, isActive: boolean, index: number },
   handlers: Handlers,
   method: ApiActionMethod = 'post',
 ): ApiAction<GeneralSettingsState> => {
@@ -252,6 +265,7 @@ export default {
   setAutosaveConfig,
   redlineConfig,
   getGeneralSettings,
+  getGeneralSettingsWithHandler,
   updateGeneralSettings,
   getPremiumFeatureSubscriptions,
   updatePremiumFeatureSubscription,

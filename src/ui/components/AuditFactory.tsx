@@ -140,7 +140,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       datepicker () {
         return (
           <Box>
-            {getFormattedDateString(auditValue as string, MomentFormats.MonthDateYear)}
+            {getFormattedDateString(auditValue as string, MomentFormats.MonthDateYearTwoDigit)}
           </Box>
         );
       },
@@ -226,6 +226,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
         break;
       case 'documentRevisions': {
+        if (!audit.nextValue) {
+          returnValue = <></>;
+          break;
+        }
         const { displayRevision, document, name } = audit.nextValue as DocumentRevision;
         const displayName = name ? ` - ${name}` : '';
         returnValue = (<div data-cy={dataCy}>{document?.docId} - Rev {displayRevision}{displayName}</div>);
