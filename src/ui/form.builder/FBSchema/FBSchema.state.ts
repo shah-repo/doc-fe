@@ -48,7 +48,6 @@ import FBRadioGroup from '../FBRadioGroup/FBRadioGroup';
 import FBRequestApproval from '../FBRequestApproval/FBRequestApproval';
 import FBSchemaSelect from '../FBSchemaSelect/FBSchemaSelect';
 import FBSection from '../FBSection/FBSection';
-import FBSelect from '../FBSelect/FBSelect';
 import FBSelectDocument from '../FBSelectDocument/FBSelectDocument';
 import FBShippingCustomer from '../FBShippingCustomer';
 import FBShippingAddress from '../FBShippingInfo';
@@ -97,7 +96,6 @@ class FBSchemaState {
     texteditor: FBTextEditor,
     datepicker: FBDatePicker,
     hyperlink: FBHyperlink,
-    select: FBSelect,
     radio: FBRadio,
     radiogroup: FBRadioGroup,
     fileupload: FBFileUpload,
@@ -160,6 +158,7 @@ class FBSchemaState {
     shippingItems: FBShippingItems,
     shippingAddress: FBShippingAddress,
     shippingCustomer: FBShippingCustomer,
+    select: FBShippingMethod,
     shippingMethod: FBShippingMethod,
   };
 
@@ -172,7 +171,11 @@ class FBSchemaState {
 
   public static component = (controlProps: FBInputProps): React.ReactNode | undefined => {
     const { type, name, index } = controlProps;
-    const schemaControl = FBSchemaState.control[type || ''];
+    let schemaControl = FBSchemaState.control[type || ''];
+
+    if (name === 'shipping-method-m9hkwfiy') {
+      schemaControl = FBShippingMethod;
+    }
     if (!schemaControl) {
       return;
     }

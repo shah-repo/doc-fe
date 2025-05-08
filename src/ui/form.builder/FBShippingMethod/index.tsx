@@ -6,8 +6,10 @@ import useStyles from './styles';
 
 const FBShippingMethod: React.FC<FBSelectProps> = (props) => {
   const classes = useStyles();
+  console.log('props', props);
   return (
     <Grid container className={classes.grid}>
+      <h1>Shipping Method</h1>
       <FBSelect {...props} />
     </Grid>
   );
