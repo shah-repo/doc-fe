@@ -9,8 +9,15 @@ const FBShippingMethod: React.FC<FBSelectProps> = (props) => {
   console.log('props', props);
   return (
     <Grid container className={classes.grid}>
-      <h1>Shipping Method</h1>
-      <FBSelect {...props} />
+      {/* <FBSelect {...props} /> */}
+      <Grid item xs>
+        <FBSelect
+          {...props}
+          defaultValue=""
+          withState
+          data-cy="shipping-method-field"
+        />
+      </Grid>
     </Grid>
   );
 };
