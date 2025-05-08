@@ -6,6 +6,7 @@ import { approvalsActions } from '../../../../../state/ducks/approvals';
 import { ChangeRequestTransition } from '../../../../../state/ducks/changeRequest/types';
 import { dashboardMyFeedsActions } from '../../../../../state/ducks/dashboard.new/my.feeds';
 import { dashboardTodoActions } from '../../../../../state/ducks/dashboard.new/todo';
+import AlertDialog from '../../../../app/alert.dialog/AlertDialog';
 import { toastSuccess } from '../../../../components/notifications';
 import Text from '../../../../components/Text';
 import useActionCreator from '../../../../hooks/useActionCreator';
@@ -13,7 +14,6 @@ import useAsync from '../../../../hooks/useAsync';
 import Colors from '../../../../layout/theme/utils/colors';
 import { Translation } from '../../../../translations/types';
 import ApproveDialog from '../../dialogs/transitionDialog/ApproveOrRejectDialog';
-import PoRejectDialog from '../../dialogs/transitionDialog/PoRejectDialog';
 import { PasswordFormValues } from '../../dialogs/transitionDialog/types';
 interface Props {
   approvalId: string
@@ -83,12 +83,12 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   };
   return (
     <>
-      { type && <PoRejectDialog
+      { type && <AlertDialog
         dialog={transitionDialog}
-        message={translationRejectMsg}
-        onSubmit={onReject}
+        message="dashboard.po.reject.alert"
+        confirmAction={onReject}
         cancelAction={transitionDialog.close}
-      />}
+      /> }
       { !type && <ApproveDialog
         onSubmit={onSubmit}
         asyncState={async.asyncState}

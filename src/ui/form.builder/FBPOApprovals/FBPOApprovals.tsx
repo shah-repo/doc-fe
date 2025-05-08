@@ -75,7 +75,12 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
       <AlertDialog
         dialog={alertDialog}
         message="dashboard.po.reject.alert"
-        confirmAction={() => approvalTransition(FBApprovalsStatusEndpoint.REJECT, selectedApprovalId)}
+        confirmAction={() => {
+          if (selectedApprovalId) {
+            approvalTransition(FBApprovalsStatusEndpoint.REJECT, selectedApprovalId);
+          }
+          setSelectedApprovalId(undefined);
+        }}
         cancelAction={alertDialog.close}
       />
       <FBInput {...props} {...{ name }} type="poapprovals">
@@ -193,7 +198,6 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                           size="small"
                                           className={cx(classes.poButton, classes.poRejectButton)}
                                           onClick={() => handleRejectPO(approval.id)}
-                                          // onClick={() => approvalTransition(FBApprovalsStatusEndpoint.REJECT, approval.id)}
                                         />
                                         <FBButton
                                           label="form.builder.request.approve"
