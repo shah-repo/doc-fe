@@ -33,7 +33,7 @@ export interface WhiteLabelingEnv {
   colors?: WhiteLabelingColors
 }
 
-export interface WhiteLabeling {
+interface WhiteLabeling {
   [ThemeEnv.DEV_THEME]?: WhiteLabelingEnv
   [ThemeEnv.DEMO_THEME]?: WhiteLabelingEnv
   [ThemeEnv.SANDBOX_THEME]?: WhiteLabelingEnv

@@ -18,7 +18,7 @@ import CompanyStageManagementPresenter from './CompanyStageManagement.presenter'
 
 const MAX_NUM_OF_REV_STAGES = 3;
 
-export interface FormikValues {
+interface FormikValues {
   numOfRevStages: string
   startRevisionNumber: string
 }
