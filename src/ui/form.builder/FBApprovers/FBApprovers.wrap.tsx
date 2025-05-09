@@ -42,10 +42,11 @@ export const withFBApprovers = <T extends FBApproversProps>(
     );
     // ENC-6598 - app.approver for new structure, app for old structure
     const fieldValue = formState?.getFieldValue(name);
-    const hasFieldValue = !isEmpty(fieldValue);
-    defaultValue = hasFieldValue
-      ? fieldValue.map((app) => app.approver ?? app)
-      : approvals?.map((app) => app.approver) ?? [];
+    const formInputApprovers = fieldValue?.map((app) => app.approver ?? app);
+    const existingApprovers = approvals
+      ?.filter(approval => approval.status !== ApprovalStatus.Abandoned)
+      .map(approval => approval.approver);
+    defaultValue = (fieldValue ? formInputApprovers : existingApprovers) ?? [];
     const formValue = map(defaultValue, 'id');
     approversState = FB.useRef(FBApproversState, { documentRevisions, formValue });
 
