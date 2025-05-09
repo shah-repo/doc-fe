@@ -1,19 +1,19 @@
 import { DocumentCategory } from '../../../state/ducks/documentRevisions/types';
 import { FBSchemaProps } from '../../form.builder';
 
-export enum ANNOUNCEMENT_TYPE_ENUM {
+export enum AnnouncementTypeEnum {
   INFO = 'INFO',
   FORM_UPGRADE = 'FORM_UPGRADE',
 }
 
-enum ANNOUNCEMENT_STATUS_ENUM {
+enum AnnouncementStatusEnum {
   REGISTERED = 'REGISTERED',
   FORM_REVISION_CREATED = 'FORM_REVISION_CREATED',
   VIEWED = 'VIEWED',
   COMPLETED = 'COMPLETED',
 }
 
-enum FORM_BUILDER_COMPONENT_TYPE_ENUM {
+enum FormBuilderComponentTypeEnum {
   PRIMITIVE = 'PRIMITIVE',
   ARRAY = 'ARRAY',
   OBJECT = 'OBJECT',
@@ -27,8 +27,8 @@ export interface IAnnouncement {
   id: string
   name: string
   text: string
-  type: ANNOUNCEMENT_TYPE_ENUM
-  status: ANNOUNCEMENT_STATUS_ENUM
+  type: AnnouncementTypeEnum
+  status: AnnouncementStatusEnum
   canUpgradeForm: boolean
   isMappingRequired: boolean
 }
@@ -43,7 +43,7 @@ export interface IAnnouncementDetail {
 }
 
 export interface IFormBuilder {
-  dataType: FORM_BUILDER_COMPONENT_TYPE_ENUM
+  dataType: FormBuilderComponentTypeEnum
   defaultLabel: string
   defaultTabId: string
   describingText: string

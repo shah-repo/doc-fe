@@ -2,10 +2,10 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Popover, Typography } from '@material-ui/core';
 import Markdown from 'markdown-to-jsx';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { translate } from '../../../common/intl';
 import AnnouncementDetailsDialog from './DetailsDialog';
-import { ANNOUNCEMENT_TYPE_ENUM, IAnnouncement } from './interface';
+import { AnnouncementTypeEnum, IAnnouncement } from './interface';
 import useStyles from './styles';
 
 interface AnnouncementIndicatorProps {
@@ -17,22 +17,22 @@ const AnnouncementIndicator: React.FC<AnnouncementIndicatorProps> = ({ announcem
   const [anchorEl, setAnchorEl] = useState<null | SVGSVGElement>(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
 
-  const handlePopoverOpen = useCallback((event: React.MouseEvent<SVGSVGElement>) => {
+  const handlePopoverOpen = (event: React.MouseEvent<SVGSVGElement>) => {
     setAnchorEl(event.currentTarget);
-  }, []);
+  };
 
-  const handlePopoverClose = useCallback(() => {
+  const handlePopoverClose = () => {
     setAnchorEl(null);
-  }, []);
+  };
 
-  const handleDialogOpen = useCallback(() => {
+  const handleDialogOpen = () => {
     setDialogOpen(true);
     handlePopoverClose();
-  }, [handlePopoverClose]);
+  };
 
-  const handleDialogClose = useCallback(() => {
+  const handleDialogClose = () => {
     setDialogOpen(false);
-  }, []);
+  };
 
   const isPopoverOpen = Boolean(anchorEl);
 
@@ -68,9 +68,9 @@ const AnnouncementIndicator: React.FC<AnnouncementIndicatorProps> = ({ announcem
         </Popover>
       </Box>
 
-      {isDialogOpen && announcement.type === ANNOUNCEMENT_TYPE_ENUM.FORM_UPGRADE && (
+      {isDialogOpen && announcement.type === AnnouncementTypeEnum.FORM_UPGRADE && (
         <AnnouncementDetailsDialog
-          isOpen={isDialogOpen}
+          isOpened={isDialogOpen}
           handleClose={handleDialogClose}
           announcement={announcement}
         />

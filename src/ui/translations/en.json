@@ -458,6 +458,8 @@
   "bulk.migration.schema.field.mapping.instructions.step3": "Clicking on any item in the <em>To Rev</em> area maps the two fields together.",
   "bulk.migration.schema.field.mapping.instructions.step4": "More than one item from the left can be mapped to items on the right.",
   "bulk.migration.schema.field.mapping.instructions.step5": "Click <b>Save</b> to make the <b>Preview</b> button appear. You can adjust the mapping rules, save, and preview as needed until you're satisfied. Once everything looks good, close this screen, select the revisions from the table, and click <b>Run Scan</b> to fetch eligible revisions.",
+  "bulk.migration.upgrade.revision.success.message": "Form has been upgraded to Rev {displayRevision} . Please review and approve for next steps.",
+  "bulk.migration.conflict.resolve.error.message": "Please resolve all conflicts, before proceeding",
   "cr.assessment.reasoning.design.not_affect_changes": "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
   "cr.assessment.reasoning.design.equivalent_changes": "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
   "cr.assessment.reasoning.process.equivalent_changes": "Changes do not affect bioburden, sterilization, or validated state and are covered by existing QC methods",

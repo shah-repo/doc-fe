@@ -1,9 +1,9 @@
-import { AxiosRequestConfig } from 'axios';
+import { AxiosError, AxiosRequestConfig } from 'axios';
 import { useState } from 'react';
-import { intl } from '../../../common/intl';
+import { intl, translate } from '../../../common/intl';
 import apiClient from '../../../state/apiClient';
 import { ANNOUNCEMENTS_BASE } from '../../../state/ducks/company/constants';
-import { DocumentRevision } from '../../../state/ducks/documentRevisions/types';
+import { DocumentRevision, ErrorCodes } from '../../../state/ducks/documentRevisions/types';
 import { store } from '../../../state/store';
 import { toastError, toastSuccess } from '../../components/notifications';
 import { IAnnouncementDetail, IConflictingItem } from './interface';
@@ -21,12 +21,12 @@ export const useAnnouncementDetails = () => {
   const [isFormUpgradeDone, setIsFormUpgradeDone] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function catchAxiosException (exception: any) {
+  function catchAxiosException (exception: AxiosError) {
     setIsLoading(false);
-    if (exception?.response?.status === 504) {
+    if (exception?.response?.status === ErrorCodes.GATEWAY_TIMEOUT) {
       setErrorMessage(intl.formatMessage({ id: 'api.error.gateway.timeout' }));
     } else {
-      const errMessage = exception?.response.data?.message;
+      const errMessage = exception?.response?.data?.message;
       let errMsgToShow = errMessage;
       if (Array.isArray(errMessage)) {
         errMsgToShow = errMessage[0];
@@ -60,7 +60,6 @@ export const useAnnouncementDetails = () => {
         setFormRevsList(formRevs);
       })
       .catch((exception) => {
-        console.log(exception);
         catchAxiosException(exception);
       });
   }
@@ -91,7 +90,6 @@ export const useAnnouncementDetails = () => {
         setIsFormUpgradeDone(isFormUpgradeDone ?? false);
       })
       .catch((exception) => {
-        console.log(exception);
         catchAxiosException(exception);
       });
   }
@@ -100,7 +98,7 @@ export const useAnnouncementDetails = () => {
     const isAnyUnresolved = Object.values(conflictingElements)
       .some(conflictingElement => !conflictingElement.isResolved && conflictingElement.mustBeResolved);
     if (isAnyUnresolved) {
-      toastError('Please resolve all conflicts, before proceeding');
+      toastError(translate('bulk.migration.conflict.resolve.error.message'));
       return;
     }
 
@@ -130,11 +128,10 @@ export const useAnnouncementDetails = () => {
       .then(({ data }) => {
         setIsSubmitting(false);
         toastSuccess(
-          `Form has been upgraded to Rev ${data.formRev?.displayRevision} . Please review and approve for next steps.`,
+          translate('bulk.migration.upgrade.revision.success.message', { displayRevision: data.formRev?.displayRevision }),
         );
       })
       .catch((exception) => {
-        console.log(exception);
         catchAxiosException(exception);
         setIsSubmitting(false);
       });

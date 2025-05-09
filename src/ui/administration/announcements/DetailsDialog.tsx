@@ -22,12 +22,12 @@ import { useAnnouncementDetails } from './useDetails';
 import { updateNestedObject } from './utils';
 
 interface AnnouncementDetailsDialogProps {
-  isOpen: boolean
+  isOpened: boolean
   handleClose: () => void
   announcement: IAnnouncement
 }
 
-const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ isOpen, handleClose, announcement }) => {
+const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ isOpened, handleClose, announcement }) => {
   const classes = useStyles();
 
   const {
@@ -54,12 +54,11 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ i
   }, [announcement]);
 
   useEffect(() => {
-    if (Object.keys(conflictingElements).length) {
-      const isAnyUnresolved = Object.values(conflictingElements).some(
-        (conflictingElement) => !conflictingElement.isResolved && conflictingElement.mustBeResolved,
-      );
-      setIsAnyConflictingElementsUnResolved(isAnyUnresolved);
-    }
+    const values = Object.values(conflictingElements);
+    const hasUnresolved = values?.some(
+      ({ isResolved, mustBeResolved }) => !isResolved && mustBeResolved,
+    );
+    setIsAnyConflictingElementsUnResolved(hasUnresolved);
   }, [conflictingElements]);
 
   const handleConflictResolution = (detailRow: IAnnouncementDetail, value: SELECTED_RESOLUTION_ENUM) => {
@@ -76,7 +75,7 @@ const AnnouncementDetailsDialog: React.FC<AnnouncementDetailsDialogProps> = ({ i
   const showUnresolvedWarning = showUpgradeSection && isAnyConflictingElementsUnResolved;
 
   return (
-    <Dialog fullScreen open={isOpen} onClose={handleClose} aria-labelledby="announcement-detail-title">
+    <Dialog fullScreen open={isOpened} onClose={handleClose} aria-labelledby="announcement-detail-title">
       <AppBar className={classes.announceDetailsAppBar} color="default">
         <Grid container justify="space-between" alignItems="center">
           <Grid item xs={3}>
