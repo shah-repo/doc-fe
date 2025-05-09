@@ -22,7 +22,7 @@ export const generateRevisionNumber = (
   isRecord = false,
   displayRevision?: string,
 ) => {
-  if (!revision || !revisionStage) {
+  if (revision === undefined || !revisionStage) {
     return '';
   }
   if (revisionChangeType === RevisionChangeType.Void) {
