@@ -3,13 +3,13 @@ import React from 'react';
 import FBSelect from '../FBSelect/FBSelect';
 import { FBSelectProps } from '../FBSelect/FBSelect.types';
 import useStyles from './styles';
+import { withFBShippingMethod } from './wrap';
 
 const FBShippingMethod: React.FC<FBSelectProps> = (props) => {
   const classes = useStyles();
   console.log('props', props);
   return (
     <Grid container className={classes.grid}>
-      {/* <FBSelect {...props} /> */}
       <Grid item xs>
         <FBSelect
           {...props}
@@ -22,4 +22,4 @@ const FBShippingMethod: React.FC<FBSelectProps> = (props) => {
   );
 };
 
-export default FBShippingMethod;
+export default withFBShippingMethod(FBShippingMethod);
