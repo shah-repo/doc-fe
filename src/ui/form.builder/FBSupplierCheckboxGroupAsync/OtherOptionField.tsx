@@ -1,11 +1,11 @@
 import { Box } from '@material-ui/core';
 import React, { FC, useMemo } from 'react';
 import { FBTextField } from '..';
-import { FBCheckboxGroupAsyncProps } from './FBCheckboxGroupAsync.types';
+import { FBSupplierCheckboxGroupAsyncProps } from './types';
 
 const OTHER_OPTION_VALUE = 'Other';
 
-const OtherOptionTextField: FC<FBCheckboxGroupAsyncProps> = ({ name = '', selectedCheckBoxOptions, ...props }) => {
+const OtherOptionTextField: FC<FBSupplierCheckboxGroupAsyncProps> = ({ name = '', selectedCheckBoxOptions, ...props }) => {
   const fieldName = `input-context-${name}`;
   const hasOtherOptionSelected = useMemo(
     () => Boolean(selectedCheckBoxOptions?.some((item) => item.text === OTHER_OPTION_VALUE)),

@@ -2,6 +2,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 import { Colors } from '../../layout/theme-next';
 
 const ROW_HEIGHT = 40;
+
 export default makeStyles((theme: Theme) => ({
   root: {
     margin: theme.spacing(3, 0),

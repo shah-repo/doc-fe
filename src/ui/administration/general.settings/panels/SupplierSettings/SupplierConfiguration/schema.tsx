@@ -27,8 +27,7 @@ export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
     {
       id: 'capabilities',
       field: 'capabilities',
-      title:
-        'administration.general.settings.suppliers.enlil.supplier.capabilities',
+      title: 'administration.general.settings.suppliers.enlil.supplier.capabilities',
       template: (props) => (
         <SupplierDropDownCell
           {...props}
@@ -39,8 +38,7 @@ export const buildSchema: SchemaBuilder<EditableSupplierConfig> = ({
     {
       id: 'services',
       field: 'services',
-      title:
-        'administration.general.settings.suppliers.enlil.supplier.services',
+      title: 'administration.general.settings.suppliers.enlil.supplier.services',
       template: (props) => (
         <SupplierDropDownCell
           {...props}
