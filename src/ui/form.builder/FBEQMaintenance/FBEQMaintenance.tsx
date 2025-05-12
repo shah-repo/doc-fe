@@ -24,6 +24,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   maintenanceHistory,
   docRevId,
   eqMaintenanceState,
+  isOverDue,
   ...props
 }) => {
   const classes = styles();
@@ -87,18 +88,34 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       />
       {!isEmpty(maintenanceHistory) && <FBEQMaintenanceHistory maintenanceHistory={maintenanceHistory} />}
       {complianceDueDate && (
-        <Box mb={3} data-cy="maintenance.status">
+        <Box mb={3} data-cy="maintenance.status" fontWeight="bold">
           <FBText
             boxProps={{ display: 'inline-flex' }}
-            locale={isTypePM ? 'form.builder.pm' : 'form.builder.cal'}
+            locale={isTypePM ? 'form.builder.pm' : 'document.equipment.cal'}
           />
           &nbsp;
           <FBText
             boxProps={{ display: 'inline-flex' }}
-            locale="document.equipment.cal.pm.up.to.date.next.date"
+            locale={
+              isOverDue
+                ? 'document.equipment.cal.pm.is.past.due'
+                : 'document.equipment.cal.pm.is.up.to.date'
+            }
           />
-          <span>: </span>
-          {complianceDueDate}
+          &nbsp;
+          <Box>
+            <FBText
+              boxProps={{ display: 'inline-flex' }}
+              locale={isTypePM ? 'form.builder.pm' : 'document.equipment.cal'}
+            />
+            &nbsp;
+            <FBText
+              boxProps={{ display: 'inline-flex' }}
+              locale="document.equipment.cal.pm.next.due.date"
+            />
+            <span>: </span>
+            {complianceDueDate}
+          </Box>
         </Box>
       )}
     </FBInput>
