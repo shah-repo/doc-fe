@@ -49,13 +49,13 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
     useEffect(() => {
       let previousCustomerId = '';
 
-      // Debounce the API call with 20s delay
+      // Debounce the API call with 10s delay
       const debouncedSaveDocRev = debounce((formValues, customerId, shippingMethod) => {
         workspaceState?.saveDocRev(formValues);
         previousCustomerId = customerId;
         formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
         formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
-      }, 20000);
+      }, 10000);
 
       return reaction(
         () => customersAsync.autocompleteValueApi.data,
@@ -64,12 +64,9 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
             const currentCustomerId = data.id;
             if (currentCustomerId !== previousCustomerId) {
               const shippingMethod = data?.formInput?.shippingMethod;
-              console.log('shippingMethod', shippingMethod, currentCustomerId);
-
               formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
-              console.log('formState?.getValues()', formState?.getValues());
-
-              // Debounced call (will wait 20s before executing)
+              console.log('shipping customer before saving the method values', formState?.getValues());
+              // Debounced call (will wait 10s before executing)
               debouncedSaveDocRev(formState?.getValues(), currentCustomerId, shippingMethod);
             }
           }

@@ -5,16 +5,14 @@ import useStyles from './styles';
 import { FBShippingMethodProps } from './types';
 import { withFBShippingMethod } from './wrap';
 
-const FBShippingMethod: React.FC<FBShippingMethodProps> = ({ customerId, ...props }) => {
+const FBShippingMethod: React.FC<FBShippingMethodProps> = ({ selectKey, ...props }) => {
   const classes = useStyles();
-  console.log('selected value ', customerId);
   return (
     <Grid container className={classes.grid}>
       <Grid item xs>
         <FBSelect
           {...props}
-          key={customerId ?? 'random'}
-          withState
+          key={`select-${selectKey ?? 'none' + Math.random()}}`}
           data-cy="shipping-method-field"
         />
       </Grid>
