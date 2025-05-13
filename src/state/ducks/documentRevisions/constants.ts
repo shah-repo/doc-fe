@@ -45,3 +45,4 @@ export const PO_ROOT_URL = '/purchase_order';
 export const LOT_ROOT_URL = '/lot';
 export const EQUIPMENT_ROOT_URL = '/equipment_status';
 export const LOT_OF_PARTS = '/document_revisions/lots_of_part';
+export const PARTS_URL = '/parts';
