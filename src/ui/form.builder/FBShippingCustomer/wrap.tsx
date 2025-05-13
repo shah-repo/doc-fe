@@ -1,11 +1,14 @@
+import { debounce, isEmpty } from 'lodash';
+import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
 import { useEffect, useState } from 'react';
-import { FB, FBAutocompleteAsyncOption } from '..';
+import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { toastError } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import FBAutocompleteAsyncStore from '../FBAutocompleteAsync/FBAutocompleteAsync.store';
+import { SHIPPING_METHOD_FIELD } from '../FBShippingMethod/constants';
 import { SHIPPING_ADDRESS_FIELDS } from './constants';
 import { CustomerRevisionInfo, FBShippingCustomerProps } from './types';
 
@@ -34,6 +37,57 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       },
       onError: toastError,
     });
+
+    const customersAsync = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+      optionId: FBAutocompleteAsyncOption.shippingInformation,
+    });
+
+    useEffect(() => {
+      customersAsync.load();
+    }, [customersAsync]);
+
+    useEffect(() => {
+      let previousCustomerId = '';
+
+      // Debounce the API call with 20s delay
+      const debouncedSaveDocRev = debounce((formValues, customerId, shippingMethod) => {
+        workspaceState?.saveDocRev(formValues);
+        previousCustomerId = customerId;
+        formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
+        formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+      }, 20000);
+
+      return reaction(
+        () => customersAsync.autocompleteValueApi.data,
+        (data) => {
+          if (data) {
+            const currentCustomerId = data.id;
+            if (currentCustomerId !== previousCustomerId) {
+              const shippingMethod = data?.formInput?.shippingMethod;
+              console.log('shippingMethod', shippingMethod, currentCustomerId);
+
+              formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
+              console.log('formState?.getValues()', formState?.getValues());
+
+              // Debounced call (will wait 20s before executing)
+              debouncedSaveDocRev(formState?.getValues(), currentCustomerId, shippingMethod);
+            }
+          }
+        },
+      );
+    }, []);
+
+    const onCustomerChange = () => {
+      const selectedCustomerId = formState?.getFieldValue(name);
+      console.log('selectedCustomerId', selectedCustomerId);
+
+      if (isEmpty(selectedCustomerId)) {
+        formState?.setFieldValue(SHIPPING_METHOD_FIELD, undefined);
+        formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+      } else {
+        customersAsync.fetchAutocompleteOption(selectedCustomerId, FBAutocompleteAsyncOption.shippingInformation);
+      }
+    };
 
     useEffect(() => {
       if (!FB.isUUID(customerId)) {
@@ -81,6 +135,7 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(
       latestRevisionSummary: latestRevisionSummary,
       resetOBSCustomerSelection,
       autocompleteKey: autocompleteKey,
+      onCustomerChange,
     });
   };
 

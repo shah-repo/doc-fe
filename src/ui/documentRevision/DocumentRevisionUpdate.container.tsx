@@ -14,6 +14,7 @@ import { FBDAMFields } from '../form.builder';
 import { FBEndpoint } from '../form.builder/defaults/FBEndpoint';
 import { AllocationCheckBoxOptions } from '../form.builder/FBAllocation/components/treelist/constants';
 import { FBFormStateContext } from '../form.builder/FBForm/FBForm.wrap';
+import { SHIPPING_CUSTOMER_FIELD } from '../form.builder/FBShippingInfo/constants';
 import FBDataStore from '../form.builder/FBStore/FBDataStore';
 import FBStore from '../form.builder/FBStore/FBStore';
 import useActionCreator from '../hooks/useActionCreator';
@@ -139,6 +140,15 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         [AllocationCheckBoxOptions.AUTO_ASSIGN]: FBDataStore?.refreshData?.formInput?.autoAssign,
       });
     }
+
+    if (!isEmpty(formInput) && SHIPPING_CUSTOMER_FIELD in formInput && isEmpty(formInput[SHIPPING_CUSTOMER_FIELD])) {
+      set(dataToSubmit, 'formInput', {
+        ...formInput,
+        shippingMethod: '',
+      });
+      console.log('making payload empty update container');
+    }
+
     if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)) {
       const approvalRoles = get(formInput, FBDAMFields.DAR);
       const rawApprovalMatrix = get(formInput, FBDAMFields.DAM);

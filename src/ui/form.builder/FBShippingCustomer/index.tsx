@@ -16,6 +16,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
   updateLatestAvailableRevision,
   autocompleteKey,
   defaultValue,
+  onCustomerChange,
   ...props
 }) => {
   const classes = useStyles();
@@ -69,6 +70,7 @@ const FBShippingCustomer: React.FC<FBShippingCustomerProps> = ({
           optionId={FBAutocompleteAsyncOption.shippingInformation}
           autosave
           defaultValue={defaultValue}
+          onChange={onCustomerChange}
           withState
           data-cy="shipping-address-field"
         />
