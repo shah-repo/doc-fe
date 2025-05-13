@@ -91,7 +91,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
         <Box mb={3} data-cy="maintenance.status" fontWeight="bold">
           <FBText
             boxProps={{ display: 'inline-flex' }}
-            locale={isTypePM ? 'form.builder.pm' : 'document.equipment.cal'}
+            locale={isTypePM ? 'form.builder.pm' : 'form.builder.cal'}
           />
           &nbsp;
           <FBText
@@ -106,7 +106,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
           <Box>
             <FBText
               boxProps={{ display: 'inline-flex' }}
-              locale={isTypePM ? 'form.builder.pm' : 'document.equipment.cal'}
+              locale={isTypePM ? 'form.builder.pm' : 'form.builder.cal'}
             />
             &nbsp;
             <FBText

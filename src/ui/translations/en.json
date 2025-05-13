@@ -719,7 +719,6 @@
   "document.equipment.cal.pm.next.due.date": "next due date",
   "document.equipment.cal.pm.is.past.due": "is past due",
   "document.equipment.cal.pm.is.up.to.date": "is up to date",
-  "document.equipment.cal": "Cal",
   "document.equipment.specification": "Equipment Specification",
   "document.equipment.specification.relatedParts.obsolete.message1": "You will be obsoleting equipment spec {esId} that has related equipment:",
   "document.equipment.specification.relatedParts.obsolete.message2": "Do you want to automatically obsolete the related equipment?",
