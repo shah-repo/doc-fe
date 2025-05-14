@@ -41,6 +41,7 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   id: '',
   name: '',
   numOfRevStages: 1,
+  startRevisionNumber: 1,
   users: [],
   documentTypes: [],
   whiteLabeling: {

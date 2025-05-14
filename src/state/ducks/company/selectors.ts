@@ -34,6 +34,7 @@ const getNavigationItemStatus = (state: ApplicationState, label: string) =>
   state.company.companyMine.navigation.find((item) => item.label === label);
 
 const getCompanyMaxRevisionStage = (state: ApplicationState) => state.company.companyMine.numOfRevStages;
+const getCompanyStartRevisionNumber = (state: ApplicationState) => state.company.companyMine.startRevisionNumber;
 const getAutosaveEnabled = (state: ApplicationState) => state.company.autosaveConfig.autosaveEnabled;
 const getRedlineActive = (state: ApplicationState) => state.company.redlineConfig.redlineActive;
 
@@ -124,6 +125,7 @@ export default {
   getNavigationItems,
   getNavigationItemStatus,
   getCompanyMaxRevisionStage,
+  getCompanyStartRevisionNumber,
   getAllWhiteLabeling,
   getAutosaveEnabled,
   getRedlineActive,
