@@ -1,7 +1,7 @@
 import { ApprovalRequirements } from '../../../ui/administration/bulkMigration/interface';
 import { apiActionWithCallbacks } from '../../factories';
 import { ApiAction, Handlers } from '../../types';
-import { ADD_USER_GROUPS, LOAD_APPROVAL_REQUIREMENTS } from './constants';
+import { ADD_USERS_TO_GROUPS, LOAD_APPROVAL_REQUIREMENTS } from './constants';
 
 const fetchApprovalRequirements = (toDocumentTypeId: string, handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
@@ -12,7 +12,7 @@ const fetchApprovalRequirements = (toDocumentTypeId: string, handlers: Handlers)
 
 const addUserToGroups = (toDocumentTypeId: string, approvalRequirements: ApprovalRequirements, handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
-    url: `/${ADD_USER_GROUPS}/${toDocumentTypeId}`,
+    url: `/${ADD_USERS_TO_GROUPS}/${toDocumentTypeId}`,
     method: 'patch',
     data: {
       missingGroups: approvalRequirements?.missingGroups,
