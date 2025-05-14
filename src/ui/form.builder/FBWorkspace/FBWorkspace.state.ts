@@ -224,7 +224,7 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
-  @action public setCheckboxGroupsOptionsMap = (name: string, value: any) => {
+  @action public setCheckboxGroupsOptionsMap = (name: string, value: CheckBoxOptionType[]) => {
     set(this.checkboxGroupsOptionsMap, name, value);
   };
 
