@@ -59,7 +59,7 @@
     "is-mobile": "^4.0.0",
     "jest-junit": "8.0.0",
     "lodash": "4.17.15",
-    "markdown-to-jsx": "^7.7.2",
+    "markdown-to-jsx": "^7.7.6",
     "mobx": "^5.14.0",
     "mobx-react": "6.1.4",
     "mobx-rest-axios-adapter": "2.1.1",
