@@ -9,14 +9,14 @@ import { store } from '../../../state/store';
 import { toastError, toastInfo, toastSuccess } from '../../components/notifications';
 import { SUPPLIERS_OPTIONS_URL } from '../../constants/urls';
 import { FBFormState } from '../../form.builder';
-import { IBulkMigrationDocumentType, IBulkMigrationScanDetails, IScanDetailsResult, ISchemaItem, ISelectedDetails, ISupplierScanResultRev, ListType, SortDirection } from './interface';
+import { BulkMigrationDocType, BulkMigrationScanDetails, DetailedScanResult, ISchemaItem, ListType, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from './interface';
 import { promptUserToRerunScan } from './utils';
 
 export const useBulkMigration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [documentTypesList, setDocumentTypesList] = useState<IBulkMigrationDocumentType[]>([]);
+  const [documentTypesList, setDocumentTypesList] = useState<BulkMigrationDocType[]>([]);
 
   const [fromFormRevsList, setFromFormRevsList] = useState<DocumentRevision[]>([]);
   const [toFormRevsList, setToFormRevsList] = useState<DocumentRevision[]>([]);
@@ -31,13 +31,13 @@ export const useBulkMigration = () => {
   const [eligibleRevsCount, setEligibleRevsCount] = useState<number>(0);
   const [updateRevsTable, setUpdateRevsTable] = useState<number>(0);
 
-  const [scanDetails, setScanDetails] = useState<IBulkMigrationScanDetails | null>(null);
+  const [scanDetails, setScanDetails] = useState<BulkMigrationScanDetails | null>(null);
   const [promptUserToRescanDetails, setPromptUserToRescanDetails] = useState<{isPromptUserToScan: boolean, msgParts: string[]}>({
     isPromptUserToScan: false,
     msgParts: [],
   });
 
-  const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
+  const [selectedRows, setSelectedRows] = useState<SelectedItemDetails[]>([]);
 
   const [previewDocRevsList, setPreviewDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
   const [filteredDocRevsList, setFilteredDocRevsList] = useState<Array<DocumentRevision & {formInputKeysCount: number}>>([]);
@@ -47,10 +47,10 @@ export const useBulkMigration = () => {
 
   const [rowMapping, setRowMapping] = useState(false);
 
-  const [rows, setRows] = useState<ISupplierScanResultRev[]>([]);
+  const [rows, setRows] = useState<SupplierScanResultRevision[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
 
-  const [selected, setSelected] = useState<ISelectedDetails[]>([]);
+  const [selected, setSelected] = useState<SelectedItemDetails[]>([]);
   const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
   const confirmSubmission = () => {
     setIsConfirmationDialogVisible(true);
@@ -178,7 +178,7 @@ export const useBulkMigration = () => {
           const {
             scanDetails, alreadyUpgradedScanEntryIds, irrelevantScanIds,
             mismatchingStatusScanIds, newRevIds,
-          } = data as IScanDetailsResult;
+          } = data as DetailedScanResult;
           setIsLoading(false);
           setScanDetails(scanDetails);
 
@@ -302,7 +302,7 @@ export const useBulkMigration = () => {
       });
   }
 
-  const handleMigrationConfirmation = (selectedRows: ISelectedDetails[], employeePassword: string) => {
+  const handleMigrationConfirmation = (selectedRows: SelectedItemDetails[], employeePassword: string) => {
     // Take all the ones selected & send to BE
     setIsLoading(true);
     setErrorMessage('');
@@ -405,7 +405,7 @@ export const useBulkMigration = () => {
       .then((resp) => resp)
       .then(({ data }) => {
         setIsLoading(false);
-        const { items, totalCount }: {items: ISupplierScanResultRev[], totalCount: number} = data;
+        const { items, totalCount }: {items: SupplierScanResultRevision[], totalCount: number} = data;
 
         setRows(items);
         setTotalCount(totalCount);
@@ -416,7 +416,7 @@ export const useBulkMigration = () => {
   }
 
   function getPreviewForDocRevRevsTable (
-    scanId: string, row: ISupplierScanResultRev, callbackFn: (row: ISupplierScanResultRev) => void,
+    scanId: string, row: SupplierScanResultRevision, callbackFn: (row: SupplierScanResultRevision) => void,
   ) {
     setRowMapping(true);
 

@@ -21,14 +21,14 @@ import { toastError, toastSuccess } from '../../components/notifications';
 import useActionCreator from '../../hooks/useActionCreator';
 import useAsync from '../../hooks/useAsync';
 import DialogHeader from './DrawerHeader';
-import { IApprovalRequirementGroup, IApprovalRequirements, ISelectedDetails } from './interface';
+import { ApprovalRequirementGroup, ApprovalRequirements, SelectedItemDetails } from './interface';
 import useStyles from './styles';
 
 interface MigrationConfirmationDialogProps {
   isOpen: boolean
   handleClose: () => void
-  handleConfirmation: (selectedDetails: ISelectedDetails[], password: string) => void
-  selectedDetails: ISelectedDetails[]
+  handleConfirmation: (selectedDetails: SelectedItemDetails[], password: string) => void
+  selectedDetails: SelectedItemDetails[]
   toDocumentTypeId: string
   toFormRev?: DocumentRevision
 }
@@ -44,7 +44,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
   const [toFormReleasedError, setToFormReleasedError] = useState<string>('');
   const employeePassword = useRef<string>('');
   const actionCountMap: { [key: string]: number } = {};
-  const [approvalRequirements, setApprovalRequirements] = useState<IApprovalRequirements>();
+  const [approvalRequirements, setApprovalRequirements] = useState<ApprovalRequirements>();
 
   const fetchApprovalRequirements = useActionCreator(
     bulkMigrationActions.fetchApprovalRequirements,
@@ -53,14 +53,14 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
     bulkMigrationActions.addUserToGroups,
   );
 
-  const approvalReqAsync = useAsync<IApprovalRequirements>({
+  const approvalReqAsync = useAsync<ApprovalRequirements>({
     onSuccess: (approvalRequirements) => {
       setApprovalRequirements(approvalRequirements);
     },
     onError: toastError,
   });
 
-  const addUserToGroupsAsync = useAsync<IApprovalRequirements>({
+  const addUserToGroupsAsync = useAsync<ApprovalRequirements>({
     onSuccess: (approvalRequirements) => {
       setApprovalRequirements(approvalRequirements);
       toastSuccess('Automation user has been added to the required groups successfully');
@@ -68,7 +68,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
     onError: toastError,
   });
 
-  selectedDetails.forEach((detail: ISelectedDetails) => {
+  selectedDetails.forEach((detail: SelectedItemDetails) => {
     if (!actionCountMap[detail.action]) {
       actionCountMap[detail.action] = 0;
     }
@@ -95,7 +95,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
     addUserToGroupsAsync.start(addUserToGroups, toDocumentTypeId, approvalRequirements, addUserToGroupsAsync);
   };
 
-  const isApprovalRequirementFulfilled = (group: IApprovalRequirementGroup) => {
+  const isApprovalRequirementFulfilled = (group: ApprovalRequirementGroup) => {
     return approvalRequirements?.missingGroups.findIndex((missingGroup) => group.id === missingGroup.id) === -1;
   };
 
@@ -148,7 +148,7 @@ const MigrationConfirmationDialog: React.FC<MigrationConfirmationDialogProps> = 
                   }}
                 />
                 <Box className={classes.approvalRequirementsRequiredGroupsBox}>
-                  {approvalRequirements.requiredGroups.map((group: IApprovalRequirementGroup) => {
+                  {approvalRequirements.requiredGroups.map((group: ApprovalRequirementGroup) => {
                     const isFulfilled = isApprovalRequirementFulfilled(group);
 
                     return (

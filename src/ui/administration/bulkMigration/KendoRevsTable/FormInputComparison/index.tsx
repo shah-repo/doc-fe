@@ -3,7 +3,7 @@ import { GridToolbar } from '@progress/kendo-react-grid';
 import React, { forwardRef, memo } from 'react';
 import { translate } from '../../../../../common/intl';
 import KendoDataGrid from '../../../../components/KendoDataGrid/KendoDataGrid';
-import { ISupplierScanResultRev } from '../../interface';
+import { SupplierScanResultRevision } from '../../interface';
 import { buildSchema } from './schema';
 import useStyles from './styles';
 import { BooleanRef, FormInputComparisonProps } from './types';
@@ -14,7 +14,7 @@ const FormInputComparison = forwardRef<BooleanRef, FormInputComparisonProps>(({ 
 
   return (
     <Box className={classes.root} data-cy="site-contact">
-      <KendoDataGrid<ISupplierScanResultRev>
+      <KendoDataGrid<SupplierScanResultRevision>
         className={classes.detailsGrid}
         fullWidth
         hasBoxScrollbars

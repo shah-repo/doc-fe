@@ -3,7 +3,7 @@ import { Employee } from '../../../state/ducks/company/types';
 import { DocumentTypeById } from '../../../state/ducks/documentRevisions/documentType/types';
 import { FBSchemaProps } from '../../form.builder';
 
-export interface IBulkMigrationDocumentType {
+export interface BulkMigrationDocType {
   id: string
   documentTypeName: string
   documentTypeAcronym: string
@@ -16,7 +16,7 @@ export enum ListType {
   TO = 'to',
 }
 
-export interface IBulkMigrationScanDetails {
+export interface BulkMigrationScanDetails {
   id: string
   fromDocumentTypeId: string
   toDocumentTypeId: string
@@ -28,7 +28,7 @@ export interface IBulkMigrationScanDetails {
   status: MIGRATION_STATUS_ENUM
 }
 
-export interface ISupplierScanResultRev {
+export interface SupplierScanResultRevision {
   id: string
   documentId: string
   docId: string
@@ -76,19 +76,19 @@ export enum MIGRATION_STATUS_ENUM {
   MAPPING = 'MAPPING',
 }
 
-export interface ISelectedDetails {
+export interface SelectedItemDetails {
   docRevId: string
   action: REV_ACTION_OPTIONS
 }
 
-export interface IApprovalRequirements {
+export interface ApprovalRequirements {
   email: string
-  requiredGroups: IApprovalRequirementGroup[]
-  missingGroups: IApprovalRequirementGroup[]
+  requiredGroups: ApprovalRequirementGroup[]
+  missingGroups: ApprovalRequirementGroup[]
   docFormWithAvailableForms: DocumentTypeById
 }
 
-export interface IApprovalRequirementGroup {
+export interface ApprovalRequirementGroup {
   id: string
   name: string
   permissions: Permission[]
@@ -96,35 +96,35 @@ export interface IApprovalRequirementGroup {
 
 export type ISchemaItem = FBSchemaProps & {
   mappedToCount?: number
-  mappedFrom?: IMappedFrom[]
-  tableMappings?: IRowData[]
+  mappedFrom?: SourceMapping[]
+  tableMappings?: TableRowData[]
 };
 
-export interface IMappedFrom {
+export interface SourceMapping {
   label: any
   name: string
   type: any
   isShowDirectly: boolean
-  localMapping?: {[key: string]: IOption}
+  localMapping?: {[key: string]: MappingOptions}
 }
-export interface IRowData {
+export interface TableRowData {
   [key: string]: any
 }
 
-export interface IMismatchResponse {
+export interface MismatchResponse {
   newRevIds: string[]
   alreadyUpgradedScanEntryIds?: number[]
   irrelevantScanIds: number[]
   mismatchingStatusScanIds: number[]
 }
 
-export interface IScanDetailsResult extends IMismatchResponse {
-  scanDetails: IBulkMigrationScanDetails
+export interface DetailedScanResult extends MismatchResponse {
+  scanDetails: BulkMigrationScanDetails
 }
 
 export type SortDirection = 'asc' | 'desc' | undefined;
 
-export interface IOption {
+export interface MappingOptions {
   text: string
   value: string
 }

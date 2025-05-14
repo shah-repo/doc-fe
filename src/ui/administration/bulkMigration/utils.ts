@@ -5,7 +5,7 @@ import { translate } from '../../../common/intl';
 import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
 import { checkSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/transform';
 import Colors from '../../layout/theme/utils/colors';
-import { IMappedFrom, IMismatchResponse, IRowData, ISchemaItem } from './interface';
+import { ISchemaItem, MismatchResponse, SourceMapping, TableRowData } from './interface';
 
 const schemaValidationMap = {
   supplierContacts: {
@@ -67,7 +67,7 @@ export function canMapItems (
 }
 
 export function validateTableMappings (
-  key: string, selectedSchemaItem: ISchemaItem, selectedRow: IRowData, mappedToSchemaItem: ISchemaItem,
+  key: string, selectedSchemaItem: ISchemaItem, selectedRow: TableRowData, mappedToSchemaItem: ISchemaItem,
 ): {canMap: boolean, errMessage: string} {
   const canMap = true;
   const errMessage = '';
@@ -81,7 +81,7 @@ export function validateTableMappings (
       continue;
     }
 
-    const mappedEntries: IMappedFrom[] = selectedRow[selectedRowKey] ?? [];
+    const mappedEntries: SourceMapping[] = selectedRow[selectedRowKey] ?? [];
 
     if (mappedEntries.length) {
       const hasAutocomplete = some(mappedEntries, { type: 'autocomplete' });
@@ -234,7 +234,7 @@ export function autoMapArrays (
 export const getRevById = <T extends { id: string | number }>(list: T[], id: string | number): T | undefined =>
   list.find((item) => item.id === id);
 
-export function promptUserToRerunScan (rerunScanDetails: IMismatchResponse): {
+export function promptUserToRerunScan (rerunScanDetails: MismatchResponse): {
   msgParts: string[]
   isPromptUserToScan: boolean
 } {

@@ -10,7 +10,7 @@ import { MomentFormats } from '../../../common/utils/date';
 import DateTime from '../../components/DateTime';
 import { Autocomplete, Button } from '../../components/forms/fields-next';
 import { toastError } from '../../components/notifications';
-import { ISelectedDetails, ListType, MIGRATION_STATUS_ENUM } from './interface';
+import { ListType, MIGRATION_STATUS_ENUM, SelectedItemDetails } from './interface';
 import KendoRevsTable from './KendoRevsTable';
 import MigrationConfirmationDialog from './MigrationConfirmation.dialog';
 import MigrationMappingDialog from './MigrationMapping.dialog';
@@ -20,7 +20,7 @@ import { getRevById } from './utils';
 
 const BulkMigrationContainer: React.FC = () => {
   const classes = useStyles();
-  const [selectedRows, setSelectedRows] = useState<ISelectedDetails[]>([]);
+  const [selectedRows, setSelectedRows] = useState<SelectedItemDetails[]>([]);
   const [isMigrationMappingDialogVisible, setIsMigrationMappingDialogVisible] = useState<boolean>(false);
 
   const {
@@ -106,7 +106,7 @@ const BulkMigrationContainer: React.FC = () => {
     return isValidated;
   };
 
-  const handleSelectedRowsChange = (selected: ISelectedDetails[]) => {
+  const handleSelectedRowsChange = (selected: SelectedItemDetails[]) => {
     setSelectedRows(selected);
   };
 

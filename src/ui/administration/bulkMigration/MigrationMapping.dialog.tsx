@@ -12,7 +12,7 @@ import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/
 import Colors from '../../layout/theme/utils/colors';
 import InfoIndicator from '../announcements/InfoIndicator';
 import { IndicatorTypeEnum } from '../announcements/interface';
-import { IBulkMigrationScanDetails, IMappedFrom, IOption, IRowData, ISchemaItem } from './interface';
+import { BulkMigrationScanDetails, ISchemaItem, MappingOptions, SourceMapping, TableRowData } from './interface';
 import MappingRulesDrawer from './MappingRulesDrawer';
 import OptionMapperDrawer from './OptionMapperDrawer';
 import PreviewDrawer from './PreviewDrawer';
@@ -27,7 +27,7 @@ interface MigrationMappingDialogProps {
   updateScanMapping: (fromRevSchema: ISchemaItem[], toRevSchema: ISchemaItem[]) => void
   fromRev: DocumentRevision | undefined
   toRev: DocumentRevision | undefined
-  scanDetails: IBulkMigrationScanDetails | null
+  scanDetails: BulkMigrationScanDetails | null
 }
 
 const OptionsRenderer: React.FC<{
@@ -156,7 +156,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
     }
   };
 
-  const handleRowColumnMapping = (schemaItem: ISchemaItem, tableMappings: IRowData[], entryRemoved?: IMappedFrom) => {
+  const handleRowColumnMapping = (schemaItem: ISchemaItem, tableMappings: TableRowData[], entryRemoved?: SourceMapping) => {
     if (!entryRemoved && !selectedSchemaItem) {
       return;
     }
@@ -211,7 +211,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
     }
   };
 
-  function handleMappingConfirmation (localMapping: {[key: string]: IOption}) {
+  function handleMappingConfirmation (localMapping: {[key: string]: MappingOptions}) {
     // With the localMapping in place, needs to be saved
     mapSelectedSchemaItemToSchemaItem(selectedToSchemaItem!, selectedSchemaItem!, localMapping);
 
@@ -222,7 +222,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
   function mapSelectedSchemaItemToSchemaItem (
     toSchemaItem: ISchemaItem,
     selectedSchemaItem: ISchemaItem,
-    localMapping?: {[key: string]: IOption},
+    localMapping?: {[key: string]: MappingOptions},
   ) {
     setToRevSchema(
       toRevSchema.map((toRevSchemaItem) => {
@@ -247,7 +247,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
     setSelectedSchemaItem(undefined);
   }
 
-  const handleMappedFromDelete = (schemaItem: ISchemaItem, mappedFromEntryToRemove: IMappedFrom) => {
+  const handleMappedFromDelete = (schemaItem: ISchemaItem, mappedFromEntryToRemove: SourceMapping) => {
     setToRevSchema(
       toRevSchema.map((toRevSchemaItem) => {
         if (toRevSchemaItem.name === schemaItem.name) {
@@ -292,7 +292,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
     ) : null;
   };
 
-  const showMappingIndicator = (mappedFromEntry: IMappedFrom) => {
+  const showMappingIndicator = (mappedFromEntry: SourceMapping) => {
     if (!mappedFromEntry.localMapping) {
       return <></>;
     }
@@ -500,7 +500,7 @@ const MigrationMappingDialog: React.FC<MigrationMappingDialogProps> = ({
                             )}
                           </Box>
                           {(schemaItem.mappedFrom ?? []).length > 0
-                            && schemaItem.mappedFrom?.map((mappedFromEntry: IMappedFrom) => {
+                            && schemaItem.mappedFrom?.map((mappedFromEntry: SourceMapping) => {
                               const { isShowDirectly, label } = mappedFromEntry;
                               return (
                                 isShowDirectly && (

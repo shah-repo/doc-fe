@@ -2,13 +2,13 @@ import { regular, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box } from '@material-ui/core';
 import React from 'react';
-import { ISupplierScanResultRev } from '../../interface';
+import { SupplierScanResultRevision } from '../../interface';
 import { EXPAND_FIELD } from '../constants';
 import { CustomTemplateProps } from '../types';
 import useStyles from './styles';
 
 interface ExpandCollapseCellProps extends CustomTemplateProps {
-  onDataItemExpanded?: (dataItem: ISupplierScanResultRev) => void
+  onDataItemExpanded?: (dataItem: SupplierScanResultRevision) => void
 }
 
 export const ExpandCollapseCell: React.FC<ExpandCollapseCellProps> = (props) => {

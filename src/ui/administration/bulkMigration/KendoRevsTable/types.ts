@@ -1,6 +1,6 @@
 import { ChangeEvent, ChangeEventHandler, MouseEvent, ReactElement } from 'react';
 import { CellTemplateProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
-import { ISupplierScanResultRev } from '../interface';
+import { SupplierScanResultRevision } from '../interface';
 
 export interface Page {
   skip: number
@@ -16,10 +16,10 @@ export interface SchemaOptions {
   handlePopoverOpen: (event: MouseEvent<HTMLDivElement>, content: ReactElement) => void
   handleHeaderCheckedChange: (event: ChangeEvent<HTMLInputElement>) => void
   handleRequestSort: (event: ChangeEventHandler, property: string) => void
-  onDataItemExpanded?: (dataItem: ISupplierScanResultRev) => void
+  onDataItemExpanded?: (dataItem: SupplierScanResultRevision) => void
 }
 
-export interface CustomTemplateProps extends CellTemplateProps<ISupplierScanResultRev> {
+export interface CustomTemplateProps extends CellTemplateProps<SupplierScanResultRevision> {
   handlePopoverOpen?: (event: MouseEvent<HTMLDivElement>, content: ReactElement) => void
   handlePopoverClose?: () => void
 }

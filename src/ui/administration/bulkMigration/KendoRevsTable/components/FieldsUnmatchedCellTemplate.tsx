@@ -4,7 +4,7 @@ import Box from '@material-ui/core/Box';
 import { get } from 'lodash';
 import React from 'react';
 import { translate } from '../../../../../common/intl';
-import { ISupplierScanResultRev } from '../../interface';
+import { SupplierScanResultRevision } from '../../interface';
 import { useBulkMigration } from '../../useBulkMigration';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
@@ -19,7 +19,7 @@ export const FieldsUnmatchedCellTemplate: React.FC<Props> = ({ field, scanId, da
   const { isMapped } = dataItem;
   const { rowMapping, getPreviewForDocRevRevsTable } = useBulkMigration();
 
-  const updateRow = (updatedRow: ISupplierScanResultRev) => {
+  const updateRow = (updatedRow: SupplierScanResultRevision) => {
     dataItem = updatedRow;
   };
 

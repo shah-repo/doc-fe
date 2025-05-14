@@ -10,7 +10,7 @@ import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toastError } from '../../components/notifications';
-import { IMappedFrom, IRowData, ISchemaItem } from './interface';
+import { ISchemaItem, SourceMapping, TableRowData } from './interface';
 import useStyles from './styles';
 import { validateTableMappings } from './utils';
 
@@ -18,12 +18,12 @@ const ADD_ROW_COLUMN_WIDTH_PERCENT = 4;
 
 const ToSchemaItemMappingTable: React.FC<{
   schemaItem: ISchemaItem
-  handleMappingChange: (rows: IRowData[], entryRemoved?: IMappedFrom) => void
+  handleMappingChange: (rows: TableRowData[], entryRemoved?: SourceMapping) => void
   selectedSchemaItem: ISchemaItem | undefined
   isSingleRow?: boolean
 }> = ({ schemaItem, handleMappingChange, selectedSchemaItem, isSingleRow }) => {
   const classes = useStyles();
-  const [rows, setRows] = useState<IRowData[]>(schemaItem.tableMappings ?? []);
+  const [rows, setRows] = useState<TableRowData[]>(schemaItem.tableMappings ?? []);
 
   useEffect(() => {
     if (!rows.length) {
@@ -41,7 +41,7 @@ const ToSchemaItemMappingTable: React.FC<{
     setRows([...rows, rowDetails]);
   }
 
-  function deleteRow (rowToDelete: IRowData) {
+  function deleteRow (rowToDelete: TableRowData) {
     const modifiedRows = rows.filter(row => row.id !== rowToDelete.id);
     Object.keys(rowToDelete).forEach(key => {
       const removedEntries = rowToDelete[key];
@@ -57,7 +57,7 @@ const ToSchemaItemMappingTable: React.FC<{
 
   function handleRowCellClicked (
     event: React.MouseEvent<HTMLTableCellElement, MouseEvent>,
-    selectedRow: IRowData, key: string, mappedToSchemaItem: ISchemaItem,
+    selectedRow: TableRowData, key: string, mappedToSchemaItem: ISchemaItem,
   ) {
     event.preventDefault();
     event.stopPropagation();
@@ -102,7 +102,7 @@ const ToSchemaItemMappingTable: React.FC<{
     handleMappingChange(modifiedRows);
   }
 
-  function handleRowCellClearMapping (selectedRow: IRowData, key: string, removedEntry) {
+  function handleRowCellClearMapping (selectedRow: TableRowData, key: string, removedEntry) {
     const modifiedRows = rows.map(row => {
       if (row.id === selectedRow.id) {
         row[key] = row[key].filter(entry => entry.name !== removedEntry.name);
@@ -114,7 +114,7 @@ const ToSchemaItemMappingTable: React.FC<{
     handleMappingChange(modifiedRows, removedEntry);
   }
 
-  function handleCellInput (event, selectedRow: IRowData, key: string) {
+  function handleCellInput (event, selectedRow: TableRowData, key: string) {
     const newValue = event.target.textContent;
     const modifiedRows = rows.map(row => {
       if (row.id === selectedRow.id) {

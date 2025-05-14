@@ -1,10 +1,10 @@
 import React from 'react';
 import { ColumnDefinition } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { ISupplierScanResultRev } from '../../interface';
+import { SupplierScanResultRevision } from '../../interface';
 import { NewFormInputCellTemplate } from './components/NewFormInputCellTemplate';
 import { OriginalFormInputCellTemplate } from './components/OriginalFormInputCellTemplate';
 
-export const buildSchema = (): Array<ColumnDefinition<ISupplierScanResultRev>> => {
+export const buildSchema = (): Array<ColumnDefinition<SupplierScanResultRevision>> => {
   return [
     {
       id: 'originalFormInput',

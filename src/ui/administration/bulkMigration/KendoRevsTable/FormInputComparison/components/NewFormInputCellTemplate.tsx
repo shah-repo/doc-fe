@@ -2,13 +2,13 @@ import { get } from 'lodash';
 import React from 'react';
 import ReactJson from 'react-json-view';
 import { translate } from '../../../../../../common/intl';
-import { ISupplierScanResultRev } from '../../../interface';
+import { SupplierScanResultRevision } from '../../../interface';
 import { EMPTY_VALUE_PLACEHOLDER } from '../constants';
 import { CustomTemplateProps } from '../types';
 
 export const NewFormInputCellTemplate: React.FC<CustomTemplateProps> = ({ field, dataItem }) => {
   const { isMapped } = dataItem;
-  const formInput = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as ISupplierScanResultRev['originalFormInput'];
+  const formInput = get(dataItem, field, EMPTY_VALUE_PLACEHOLDER) as SupplierScanResultRevision['originalFormInput'];
   const noInput = !formInput;
   const notMapped = !isMapped;
 

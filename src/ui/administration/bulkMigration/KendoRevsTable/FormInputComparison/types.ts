@@ -1,9 +1,9 @@
 import { MutableRefObject } from 'react';
 import { CellTemplateProps } from '../../../../components/KendoDataGrid/KendoDataGrid.types';
-import { ISupplierScanResultRev } from '../../interface';
+import { SupplierScanResultRevision } from '../../interface';
 
 export interface FormInputComparisonProps {
-  dataItem: ISupplierScanResultRev
+  dataItem: SupplierScanResultRevision
 }
 export type BooleanRef = MutableRefObject<boolean> | null;
-export interface CustomTemplateProps extends CellTemplateProps<ISupplierScanResultRev> {}
+export interface CustomTemplateProps extends CellTemplateProps<SupplierScanResultRevision> {}

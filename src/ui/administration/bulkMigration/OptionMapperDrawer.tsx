@@ -4,14 +4,14 @@ import { translate } from '../../../common/intl';
 import { MigrationSpecialFields } from '../../documentRevision/forms/presenters/change.document.form/utils/constants';
 import CurrentMappings from './CurrentMappings';
 import DialogHeader from './DrawerHeader';
-import { IOption, ISchemaItem, ListType } from './interface';
+import { ISchemaItem, ListType, MappingOptions } from './interface';
 import useStyles from './styles';
 import { useBulkMigration } from './useBulkMigration';
 
 interface OptionMapperDrawerProps {
   isOptionMapperVisible: boolean
   handleCloseOptionMapper: () => void
-  handleMappingConfirmation: (localMapping: {[key: string]: IOption}) => void
+  handleMappingConfirmation: (localMapping: {[key: string]: MappingOptions}) => void
   selectedSchemaItem?: ISchemaItem
   toRevSchemaItem?: ISchemaItem
 }
@@ -25,10 +25,10 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
 }) => {
   const classes = useStyles();
   const { getConfiguredSupplierOptions } = useBulkMigration();
-  const [checkboxFromOptions, setCheckboxFromOptions] = useState<IOption[]>([]);
-  const [checkboxToOptions, setCheckboxToOptions] = useState<IOption[]>([]);
-  const [fromSelectedOption, setFromSelectedOption] = useState<IOption | undefined>();
-  const [localMapping, setLocalMapping] = useState<{[key: string]: IOption}>({});
+  const [checkboxFromOptions, setCheckboxFromOptions] = useState<MappingOptions[]>([]);
+  const [checkboxToOptions, setCheckboxToOptions] = useState<MappingOptions[]>([]);
+  const [fromSelectedOption, setFromSelectedOption] = useState<MappingOptions | undefined>();
+  const [localMapping, setLocalMapping] = useState<{[key: string]: MappingOptions}>({});
 
   useEffect(() => {
     if (toRevSchemaItem?.type === MigrationSpecialFields.CHECKBOX_GROUP_ASYNC) {
@@ -43,11 +43,11 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
 
   useEffect(() => {
     if (selectedSchemaItem) {
-      setCheckboxFromOptions((selectedSchemaItem.options as unknown as IOption[]) ?? []);
+      setCheckboxFromOptions((selectedSchemaItem.options as unknown as MappingOptions[]) ?? []);
     }
 
     if (toRevSchemaItem) {
-      setCheckboxToOptions((toRevSchemaItem.options as unknown as IOption[]) ?? []);
+      setCheckboxToOptions((toRevSchemaItem.options as unknown as MappingOptions[]) ?? []);
     }
   }, [selectedSchemaItem, toRevSchemaItem]);
 
@@ -55,7 +55,7 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
     setFromSelectedOption(option);
   };
 
-  const handleToOptionClick = (option: IOption) => {
+  const handleToOptionClick = (option: MappingOptions) => {
     if (!fromSelectedOption) {
       return;
     }
@@ -65,15 +65,15 @@ const OptionMapperDrawer: React.FC<OptionMapperDrawerProps> = ({
     setFromSelectedOption(undefined);
   };
 
-  const isFromOptionMapped = (option: IOption) => {
+  const isFromOptionMapped = (option: MappingOptions) => {
     return Object.keys(localMapping).includes(option.text);
   };
 
-  const isToOptionMapped = (option: IOption) => {
+  const isToOptionMapped = (option: MappingOptions) => {
     return Object.values(localMapping).map(option => option.text).includes(option.text);
   };
 
-  const getItemStyle = (option: IOption, listType: string) => {
+  const getItemStyle = (option: MappingOptions, listType: string) => {
     if (listType === ListType.FROM) {
       if (fromSelectedOption?.text === option.text) {
         return classes.optionMapperDrawerSelectedListItem;

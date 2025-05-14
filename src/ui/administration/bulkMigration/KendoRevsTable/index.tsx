@@ -27,7 +27,7 @@ import { translate } from '../../../../common/intl';
 import KendoDataGrid from '../../../components/KendoDataGrid/KendoDataGrid';
 import { DataGridProps } from '../../../components/KendoDataGrid/KendoDataGrid.types';
 import UtilColors from '../../../layout/theme/utils/colors';
-import { ISelectedDetails, ISupplierScanResultRev, MIGRATION_STATUS_ENUM, SortDirection } from '../interface';
+import { MIGRATION_STATUS_ENUM, SelectedItemDetails, SortDirection, SupplierScanResultRevision } from '../interface';
 import { useBulkMigration } from '../useBulkMigration';
 import {
   DATA_ITEM_KEY,
@@ -46,7 +46,7 @@ const idGetter = getter(DATA_ITEM_KEY);
 interface KendoRevsTableProps {
   scanId: string
   updateRevsTable: number
-  handleSelectedRowsChange: (selected: ISelectedDetails[]) => void
+  handleSelectedRowsChange: (selected: SelectedItemDetails[]) => void
 }
 
 const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
@@ -86,7 +86,7 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
     setPopoverContent(<></>);
   };
 
-  const handleDataItemExpanded = useCallback((dataItem: ISupplierScanResultRev) => {
+  const handleDataItemExpanded = useCallback((dataItem: SupplierScanResultRevision) => {
     const selectedId = dataItem.docRevId;
     setExpandedRevIDs((prevIds = []) =>
       prevIds.includes(selectedId) ? prevIds.filter((id) => id !== selectedId) : [...prevIds, selectedId],
@@ -99,7 +99,7 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
 
   const handleSelectAllClick = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelectedDetails: ISelectedDetails[] = data.map((n) => ({
+      const newSelectedDetails: SelectedItemDetails[] = data.map((n) => ({
         docRevId: n.docRevId,
         action: n.proposedAction,
       }));
@@ -185,7 +185,7 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
       dataItemKey: DATA_ITEM_KEY,
     });
     setSelectedRows(newSelectedState);
-    const newSelectedDetails: ISelectedDetails[] = data.reduce<ISelectedDetails[]>((selectedDetails, item) => {
+    const newSelectedDetails: SelectedItemDetails[] = data.reduce<SelectedItemDetails[]>((selectedDetails, item) => {
       if (newSelectedState[item.docRevId]) {
         return [...selectedDetails, { docRevId: item.docRevId, action: item.proposedAction }];
       }
@@ -194,7 +194,7 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
     setSelected(newSelectedDetails);
   };
 
-  const getRowColor = (row: ISupplierScanResultRev) => {
+  const getRowColor = (row: SupplierScanResultRevision) => {
     if (row.status === MIGRATION_STATUS_ENUM.IN_PROGRESS) {
       return UtilColors.inProgress;
     }
@@ -214,8 +214,8 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
     return UtilColors.default;
   };
 
-  const rowRender: DataGridProps<ISupplierScanResultRev>['rowRender'] = (row, { dataItem }) => {
-    const item = dataItem as ISupplierScanResultRev;
+  const rowRender: DataGridProps<SupplierScanResultRevision>['rowRender'] = (row, { dataItem }) => {
+    const item = dataItem as SupplierScanResultRevision;
 
     const editedRow = React.cloneElement(row, {
       className: cx(replace(row?.props?.className, 'k-alt', ''), { [classes.selectedRow]: item.isSelected }),
@@ -243,8 +243,8 @@ const KendoRevsTable: React.FunctionComponent<KendoRevsTableProps> = ({
 
   return (
     <div ref={containerRef} className={classes.root} data-cy="tasks-list-table">
-      <KendoDataGrid<ISupplierScanResultRev>
-        data={RevList as ISupplierScanResultRev[]}
+      <KendoDataGrid<SupplierScanResultRevision>
+        data={RevList as SupplierScanResultRevision[]}
         schema={schema}
         fullWidth
         className={classes.rootRevsList}

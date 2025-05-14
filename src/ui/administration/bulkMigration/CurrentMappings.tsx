@@ -1,11 +1,11 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { translate } from '../../../common/intl';
-import { IOption } from './interface';
+import { MappingOptions } from './interface';
 import useStyles from './styles';
 
 interface CurrentMappingsProps {
-  localMapping: { [key: string]: IOption }
+  localMapping: { [key: string]: MappingOptions }
 }
 
 const CurrentMappings: React.FC<CurrentMappingsProps> = ({ localMapping }) => {
