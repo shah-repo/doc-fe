@@ -1,7 +1,7 @@
 import { debounce, isEmpty } from 'lodash';
 import { reaction } from 'mobx';
 import { useObserver } from 'mobx-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState } from '..';
 import { allocationActions } from '../../../state/ducks/Allocation';
 import { toastError } from '../../components/notifications';
@@ -16,6 +16,9 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
   const Comp = (props: T) => {
     const { name } = props;
     const { workspaceState, formState } = FB.useStores();
+    const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const previousCustomerIdRef = useRef<string>('');
+    const debouncedSaveDocRevRef = useRef<ReturnType<typeof debounce> | null>(null);
     const [latestRevisionSummary, setLatestRevisionSummary] = useState<CustomerRevisionInfo>();
     const customerId = useObserver(
       () =>
@@ -43,28 +46,42 @@ export const withFBShippingCustomer = <T extends FBShippingCustomerProps>(Compon
     }, [customersAsync]);
 
     useEffect(() => {
-      let previousCustomerId = '';
+      const updateCustomerShippingMethod = (customerId: string, shippingMethod: string) => {
+        const updateCustomerShippingMethod = () => {
+          if (!workspaceState?.loading) {
+            workspaceState?.saveDocRev(formState?.getValues());
+            previousCustomerIdRef.current = customerId;
+            formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
+            formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
+          } else {
+            debounceTimerRef.current = setTimeout(updateCustomerShippingMethod, 1000);
+          }
+        };
+        updateCustomerShippingMethod();
+      };
 
-      const debouncedSaveDocRev = debounce((formValues, customerId, shippingMethod) => {
-        workspaceState?.saveDocRev(formValues);
-        previousCustomerId = customerId;
-        formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
-        formState?.getInputState(SHIPPING_METHOD_FIELD)?.setRender();
-      }, 5000);
+      debouncedSaveDocRevRef.current = debounce(updateCustomerShippingMethod, 500, { leading: false, trailing: true });
 
-      return reaction(
+      const disposer = reaction(
         () => customersAsync.autocompleteValueApi.data,
         (data) => {
-          if (data) {
-            const currentCustomerId = data.id;
-            if (currentCustomerId !== previousCustomerId) {
-              const shippingMethod = data?.formInput?.shippingMethod;
-              formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
-              debouncedSaveDocRev(formState?.getValues(), currentCustomerId, shippingMethod);
-            }
-          }
+          if (!data) return;
+
+          const currentCustomerId = data.id;
+          if (currentCustomerId === previousCustomerIdRef.current) return;
+
+          const shippingMethod = data?.formInput?.shippingMethod;
+          formState?.setFieldValue(SHIPPING_METHOD_FIELD, shippingMethod);
+
+          debouncedSaveDocRevRef.current?.(currentCustomerId, shippingMethod);
         },
       );
+
+      return () => {
+        debouncedSaveDocRevRef.current?.cancel();
+        if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+        disposer();
+      };
     }, []);
 
     const onShippingCustomerChange = debounce(
