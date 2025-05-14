@@ -2457,6 +2457,7 @@
   "administration.bulk.migration.rev.grid.heading.selectAll": "Select All",
   "administration.bulk.migration.rev.grid.heading.docId": "Doc Id",
   "administration.bulk.migration.rev.grid.heading.name": "Name",
+  "administration.bulk.migration.rev.grid.heading.migration.status": "Migration Status",
   "administration.bulk.migration.rev.grid.heading.owner": "Owner",
   "administration.bulk.migration.rev.grid.heading.fieldsUnmatched": "Fields Unmatched",
   "administration.bulk.migration.rev.grid.heading.proposedAction": "Proposed Action",

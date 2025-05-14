@@ -1,6 +1,10 @@
+import { GridFilterCellProps } from '@progress/kendo-react-grid';
 import React from 'react';
+import { translate } from '../../../../common/intl';
+import { DropdownFilterTemplate } from '../../../components/common/kendo.column.templates/DropdownFilterTemplate';
 import { ColumnDefinition } from '../../../components/KendoDataGrid/KendoDataGrid.types';
-import { ISupplierScanResultRev } from '../interface';
+import { createOption } from '../../../form.builder/FBApprovalMatrix/components/Grid';
+import { ISupplierScanResultRev, MIGRATION_STATUS_ENUM } from '../interface';
 import CheckboxCell from './components/CheckboxCell';
 import { DocIdCellTemplate } from './components/DocIdCellTemplate';
 import { ExpandCollapseCell } from './components/ExpandCollapseCell';
@@ -21,6 +25,25 @@ export const buildSchema = ({
   handleRequestSort,
   onDataItemExpanded,
 }: SchemaOptions): Array<ColumnDefinition<ISupplierScanResultRev>> => {
+  const statuses = [
+    MIGRATION_STATUS_ENUM.INITIALIZED,
+    MIGRATION_STATUS_ENUM.STARTED,
+    MIGRATION_STATUS_ENUM.IN_PROGRESS,
+    MIGRATION_STATUS_ENUM.FAILED,
+    MIGRATION_STATUS_ENUM.CANCELLED,
+    MIGRATION_STATUS_ENUM.COMPLETED,
+    MIGRATION_STATUS_ENUM.MAPPING,
+  ];
+
+  const statusOptions = statuses.map(status => createOption(status, status));
+  const StatusFilter: React.FC<GridFilterCellProps> = (props) => (
+    <DropdownFilterTemplate
+      {...props}
+      data={statusOptions}
+      defaultItem={createOption('', translate('common.all'))}
+    />
+  );
+
   return [
     {
       id: '_expanded',
@@ -55,6 +78,13 @@ export const buildSchema = ({
       template: (props) => <NameCellTemplate {...props} />,
       width: 235,
       sortable: false,
+    },
+    {
+      id: 'status',
+      field: 'status',
+      title: 'administration.bulk.migration.rev.grid.heading.migration.status',
+      filterCell: StatusFilter,
+      width: 200,
     },
     {
       id: 'owner',
