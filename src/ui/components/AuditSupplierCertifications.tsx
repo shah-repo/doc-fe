@@ -2,11 +2,11 @@ import React, { ReactNode } from 'react';
 import { getFormattedDateString, MomentFormats } from '../../common/utils/date';
 import { Attachment } from '../../state/ducks/attachments/types';
 import { Audit } from '../../state/ducks/audit/types';
-import { getAuditDefaultValue } from '../common/utils/audit';
 import { Translation } from '../translations/types';
 import Text from './Text';
 
 interface ISupplierCertification {
+  id: string
   certificateId: string
   type: string
   expiryDate: string
@@ -57,16 +57,19 @@ const AuditSupplierCertifications: React.FC<Props> = ({
   };
 
   const auditFieldFactory = (): ReactNode => {
-    if (audit.type === 'OBJECT_DELETED') {
-      return getAuditDefaultValue(auditValue);
-    }
-
     const { certificateId, type, expiryDate, uploadedByName, attachments }
         = JSON.parse(auditValue ?? '{}') as ISupplierCertification;
     const {
-      certificateId: prevCertificateId, type: prevType, expiryDate: prevExpiryDate,
+      id: prevId, certificateId: prevCertificateId, type: prevType, expiryDate: prevExpiryDate,
       uploadedByName: prevUploadedByName, attachments: prevAttachments,
     } = JSON.parse(previousValue ?? '{}') as ISupplierCertification;
+
+    if (audit.type.includes('OBJECT_DELETED')) {
+      const identifyingData = prevCertificateId ?? prevId;
+      return <p>
+        <Text dataCy={dataCy} translation="documentRevision.audit.supplier.certifications.entry.removed" values={{ value: identifyingData }}
+        /></p>;
+    }
 
     const attachmentNameArr: string[] = attachments?.length
       ? attachments.map((attachment) => attachment.s3link?.split('/').pop() ?? '') : [];
